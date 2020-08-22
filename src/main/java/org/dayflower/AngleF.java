@@ -16,19 +16,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.macroing.dayflower;
+package org.dayflower;
 
-import static org.macroing.dayflower.Floats.PI_MULTIPLIED_BY_TWO;
-import static org.macroing.dayflower.Floats.asin;
-import static org.macroing.dayflower.Floats.atan;
-import static org.macroing.dayflower.Floats.atan2;
-import static org.macroing.dayflower.Floats.equal;
-import static org.macroing.dayflower.Floats.max;
-import static org.macroing.dayflower.Floats.min;
-import static org.macroing.dayflower.Floats.tan;
-import static org.macroing.dayflower.Floats.toDegrees;
-import static org.macroing.dayflower.Floats.toRadians;
-import static org.macroing.dayflower.Floats.wrapAround;
+import static org.dayflower.Floats.PI_MULTIPLIED_BY_TWO;
+import static org.dayflower.Floats.asin;
+import static org.dayflower.Floats.atan;
+import static org.dayflower.Floats.atan2;
+import static org.dayflower.Floats.equal;
+import static org.dayflower.Floats.max;
+import static org.dayflower.Floats.min;
+import static org.dayflower.Floats.tan;
+import static org.dayflower.Floats.toDegrees;
+import static org.dayflower.Floats.toRadians;
+import static org.dayflower.Floats.wrapAround;
 
 import java.util.Objects;
 

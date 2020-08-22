@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.macroing.dayflower;
+package org.dayflower;
 
-import static org.macroing.dayflower.Floats.equal;
-import static org.macroing.dayflower.Floats.sqrt;
+import static org.dayflower.Floats.equal;
+import static org.dayflower.Floats.sqrt;
 
 import java.util.Objects;
 

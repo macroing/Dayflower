@@ -344,6 +344,14 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+	public static Color3F multiplyAndSaturateNegative(final Color3F cLHS, final float sRHS) {
+		final float component1 = max(cLHS.component1 * sRHS, 0.0F);
+		final float component2 = max(cLHS.component2 * sRHS, 0.0F);
+		final float component3 = max(cLHS.component3 * sRHS, 0.0F);
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
 	public static Color3F negate(final Color3F c) {
 		final float component1 = -c.component1;
 		final float component2 = -c.component2;

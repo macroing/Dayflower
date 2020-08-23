@@ -62,12 +62,20 @@ public final class Floats {
 		return toFloat(Math.atan2(y, x));
 	}
 	
+	public static float ceil(final float value) {
+		return toFloat(Math.ceil(value));
+	}
+	
 	public static float cos(final float angleRadians) {
 		return toFloat(Math.cos(angleRadians));
 	}
 	
 	public static float exp(final float exponent) {
 		return toFloat(Math.exp(exponent));
+	}
+	
+	public static float floor(final float value) {
+		return toFloat(Math.floor(value));
 	}
 	
 	public static float lerp(final float value1, final float value2, final float t) {

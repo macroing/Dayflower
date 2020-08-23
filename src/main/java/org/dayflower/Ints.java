@@ -33,6 +33,19 @@ public final class Ints {
 		return Math.min(a, b);
 	}
 	
+	public static int requireRange(final int value, final int edgeA, final int edgeB, final String name) {
+		final int minimum = min(edgeA, edgeB);
+		final int maximum = max(edgeA, edgeB);
+		
+		if(value < minimum) {
+			throw new IllegalArgumentException(String.format("%s < %d: %s == %d", name, Integer.valueOf(minimum), name, Integer.valueOf(value)));
+		} else if(value > maximum) {
+			throw new IllegalArgumentException(String.format("%s > %d: %s == %d", name, Integer.valueOf(maximum), name, Integer.valueOf(value)));
+		} else {
+			return value;
+		}
+	}
+	
 	public static int saturate(final int value) {
 		return saturate(value, 0, 255);
 	}

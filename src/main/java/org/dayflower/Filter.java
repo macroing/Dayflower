@@ -18,6 +18,38 @@
  */
 package org.dayflower;
 
-public interface Filter {
+public abstract class Filter {
+	private final float resolutionX;
+	private final float resolutionXReciprocal;
+	private final float resolutionY;
+	private final float resolutionYReciprocal;
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	protected Filter(final float resolutionX, final float resolutionY) {
+		this.resolutionX = resolutionX;
+		this.resolutionY = resolutionY;
+		this.resolutionXReciprocal = 1.0F / this.resolutionX;
+		this.resolutionYReciprocal = 1.0F / this.resolutionY;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public abstract float evaluate(final float x, final float y);
+	
+	public final float getResolutionX() {
+		return this.resolutionX;
+	}
+	
+	public final float getResolutionXReciprocal() {
+		return this.resolutionXReciprocal;
+	}
+	
+	public final float getResolutionY() {
+		return this.resolutionY;
+	}
+	
+	public final float getResolutionYReciprocal() {
+		return this.resolutionYReciprocal;
+	}
 }

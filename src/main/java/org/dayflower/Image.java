@@ -18,16 +18,136 @@
  */
 package org.dayflower;
 
+import static org.dayflower.Floats.equal;
+import static org.dayflower.Ints.requireRange;
+
+import java.util.Objects;
+
 public final class Image {
-	
+	private final Pixel[] pixels;
+	private final int resolution;
+	private final int resolutionX;
+	private final int resolutionY;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public Image() {
+		this(800, 800);
+	}
+	
+	public Image(final int resolutionX, final int resolutionY) {
+		this(resolutionX, resolutionY, new Color3F());
+	}
+	
+	public Image(final int resolutionX, final int resolutionY, final Color3F color) {
+		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.pixels = new Pixel[this.resolution];
 		
+		Objects.requireNonNull(color, "color == null");
+		
+		for(int i = 0; i < this.pixels.length; i++) {
+			this.pixels[i] = new Pixel(color);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	public int getResolution() {
+		return this.resolution;
+	}
 	
+	public int getResolutionX() {
+		return this.resolutionX;
+	}
+	
+	public int getResolutionY() {
+		return this.resolutionY;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class Pixel {
+		private Color3F colorRGB;
+		private Color3F colorXYZ;
+		private Color3F splatXYZ;
+		private float filterWeightSum;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Pixel(final Color3F colorRGB) {
+			this(colorRGB, new Color3F(), new Color3F(), 0.0F);
+		}
+		
+		public Pixel(final Color3F colorRGB, final Color3F colorXYZ, final Color3F splatXYZ, final float filterWeightSum) {
+			this.colorRGB = Objects.requireNonNull(colorRGB, "colorRGB == null");
+			this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
+			this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
+			this.filterWeightSum = filterWeightSum;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Color3F getColorRGB() {
+			return this.colorRGB;
+		}
+		
+		public Color3F getColorXYZ() {
+			return this.colorXYZ;
+		}
+		
+		public Color3F getSplatXYZ() {
+			return this.splatXYZ;
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("new Pixel(%s, %s, %s, %+.10f)", this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum));
+		}
+		
+		@Override
+		public boolean equals(final Object object) {
+			if(object == this) {
+				return true;
+			} else if(!(object instanceof Pixel)) {
+				return false;
+			} else if(!Objects.equals(this.colorRGB, Pixel.class.cast(object).colorRGB)) {
+				return false;
+			} else if(!Objects.equals(this.colorXYZ, Pixel.class.cast(object).colorXYZ)) {
+				return false;
+			} else if(!Objects.equals(this.splatXYZ, Pixel.class.cast(object).splatXYZ)) {
+				return false;
+			} else if(!equal(this.filterWeightSum, Pixel.class.cast(object).filterWeightSum)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		public float getFilterWeightSum() {
+			return this.filterWeightSum;
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum));
+		}
+		
+		public void setColorRGB(final Color3F colorRGB) {
+			this.colorRGB = Objects.requireNonNull(colorRGB, "colorRGB == null");
+		}
+		
+		public void setColorXYZ(final Color3F colorXYZ) {
+			this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
+		}
+		
+		public void setFilterWeightSum(final float filterWeightSum) {
+			this.filterWeightSum = filterWeightSum;
+		}
+		
+		public void setSplatXYZ(final Color3F splatXYZ) {
+			this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
+		}
+	}
 }

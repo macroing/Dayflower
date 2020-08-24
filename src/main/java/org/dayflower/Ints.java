@@ -33,6 +33,10 @@ public final class Ints {
 		return Math.min(a, b);
 	}
 	
+	public static int modulo(final int value, final int maximumValue) {
+		return value < 0 ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
+	}
+	
 	public static int requireRange(final int value, final int edgeA, final int edgeB, final String name) {
 		final int minimum = min(edgeA, edgeB);
 		final int maximum = max(edgeA, edgeB);

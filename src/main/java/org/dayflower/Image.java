@@ -25,10 +25,19 @@ import static org.dayflower.Floats.floor;
 import static org.dayflower.Floats.max;
 import static org.dayflower.Floats.min;
 import static org.dayflower.Ints.min;
+import static org.dayflower.Ints.modulo;
 import static org.dayflower.Ints.requireRange;
 import static org.dayflower.Ints.toInt;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Objects;
+
+import javax.imageio.ImageIO;
 
 public final class Image {
 	private static final int FILTER_TABLE_SIZE = 16;
@@ -224,6 +233,41 @@ public final class Image {
 		}
 	}
 	
+	public void setColorRGB(final Color3F colorRGB, final int index) {
+		setColorRGB(colorRGB, index, false);
+	}
+	
+	public void setColorRGB(final Color3F colorRGB, final int index, final boolean isWrappingAround) {
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		final PixelOperation pixelOperation = isWrappingAround ? PixelOperation.WRAP_AROUND : PixelOperation.NO_CHANGE;
+		
+		final int indexTransformed = pixelOperation.getIndex(index, this.resolution);
+		
+		if(indexTransformed >= 0 && indexTransformed < this.resolution) {
+			this.pixels[indexTransformed].setColorRGB(colorRGB);
+		}
+	}
+	
+	public void setColorRGB(final Color3F colorRGB, final int x, final int y) {
+		setColorRGB(colorRGB, x, y, false);
+	}
+	
+	public void setColorRGB(final Color3F colorRGB, final int x, final int y, final boolean isWrappingAround) {
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		final PixelOperation pixelOperation = isWrappingAround ? PixelOperation.WRAP_AROUND : PixelOperation.NO_CHANGE;
+		
+		final int xTransformed = pixelOperation.getX(x, this.resolutionX);
+		final int yTransformed = pixelOperation.getY(y, this.resolutionY);
+		
+		if(xTransformed >= 0 && xTransformed < this.resolutionX && yTransformed >= 0 && yTransformed < this.resolutionY) {
+			final int index = yTransformed * this.resolutionX + xTransformed;
+			
+			this.pixels[index].setColorRGB(colorRGB);
+		}
+	}
+	
 	public void undoGammaCorrectionPBRT() {
 		for(final Pixel pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.undoGammaCorrectionPBRT(pixel.getColorRGB()));
@@ -237,6 +281,63 @@ public final class Image {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static Image read(final File file) {
+		return read(file, new MitchellFilter());
+	}
+	
+	public static Image read(final File file, final Filter filter) {
+		try {
+			final BufferedImage bufferedImage = doGetCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
+			
+			final int resolutionX = bufferedImage.getWidth();
+			final int resolutionY = bufferedImage.getHeight();
+			
+			return unpackFromARGB(resolutionX, resolutionY, DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData(), Objects.requireNonNull(filter, "filter == null"));
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	public static Image read(final String filename) {
+		return read(filename, new MitchellFilter());
+	}
+	
+	public static Image read(final String filename, final Filter filter) {
+		return read(new File(Objects.requireNonNull(filename, "filename == null")), Objects.requireNonNull(filter, "filter == null"));
+	}
+	
+	public static Image unpackFromARGB(final int resolutionX, final int resolutionY, final int[] imageARGB) {
+		return unpackFromARGB(resolutionX, resolutionY, imageARGB, new MitchellFilter());
+	}
+	
+	public static Image unpackFromARGB(final int resolutionX, final int resolutionY, final int[] imageARGB, final Filter filter) {
+		final Image image = new Image(resolutionX, resolutionY, new Color3F(), filter);
+		
+		for(int i = 0; i < image.resolution; i++) {
+			image.setColorRGB(Color3F.unpackFromARGB(imageARGB[i]), i);
+		}
+		
+		return image;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static BufferedImage doGetCompatibleBufferedImage(final BufferedImage bufferedImage) {
+		final int compatibleType = BufferedImage.TYPE_INT_ARGB;
+		
+		if(bufferedImage.getType() == compatibleType) {
+			return bufferedImage;
+		}
+		
+		final BufferedImage compatibleBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), compatibleType);
+		
+		final
+		Graphics2D graphics2D = compatibleBufferedImage.createGraphics();
+		graphics2D.drawImage(bufferedImage, 0, 0, null);
+		
+		return compatibleBufferedImage;
+	}
 	
 	private static Pixel[] doCreatePixels(final int resolutionX, final int resolutionY, final Color3F colorRGB) {
 		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
@@ -349,6 +450,54 @@ public final class Image {
 		
 		public void setSplatXYZ(final Color3F splatXYZ) {
 			this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static enum PixelOperation {
+		NO_CHANGE,
+		WRAP_AROUND;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private PixelOperation() {
+			
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public int getIndex(final int index, final int resolution) {
+			switch(this) {
+				case NO_CHANGE:
+					return index;
+				case WRAP_AROUND:
+					return modulo(index, resolution);
+				default:
+					return index;
+			}
+		}
+		
+		public int getX(final int x, final int resolutionX) {
+			switch(this) {
+				case NO_CHANGE:
+					return x;
+				case WRAP_AROUND:
+					return modulo(x, resolutionX);
+				default:
+					return x;
+			}
+		}
+		
+		public int getY(final int y, final int resolutionY) {
+			switch(this) {
+				case NO_CHANGE:
+					return y;
+				case WRAP_AROUND:
+					return modulo(y, resolutionY);
+				default:
+					return y;
+			}
 		}
 	}
 }

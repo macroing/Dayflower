@@ -25,7 +25,6 @@ import static org.dayflower.Floats.floor;
 import static org.dayflower.Floats.max;
 import static org.dayflower.Floats.min;
 import static org.dayflower.Ints.min;
-import static org.dayflower.Ints.modulo;
 import static org.dayflower.Ints.requireRange;
 import static org.dayflower.Ints.toInt;
 
@@ -234,13 +233,12 @@ public final class Image {
 	}
 	
 	public void setColorRGB(final Color3F colorRGB, final int index) {
-		setColorRGB(colorRGB, index, false);
+		setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
 	}
 	
-	public void setColorRGB(final Color3F colorRGB, final int index, final boolean isWrappingAround) {
+	public void setColorRGB(final Color3F colorRGB, final int index, final PixelOperation pixelOperation) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
-		
-		final PixelOperation pixelOperation = isWrappingAround ? PixelOperation.WRAP_AROUND : PixelOperation.NO_CHANGE;
+		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		
 		final int indexTransformed = pixelOperation.getIndex(index, this.resolution);
 		
@@ -250,13 +248,12 @@ public final class Image {
 	}
 	
 	public void setColorRGB(final Color3F colorRGB, final int x, final int y) {
-		setColorRGB(colorRGB, x, y, false);
+		setColorRGB(colorRGB, x, y, PixelOperation.NO_CHANGE);
 	}
 	
-	public void setColorRGB(final Color3F colorRGB, final int x, final int y, final boolean isWrappingAround) {
+	public void setColorRGB(final Color3F colorRGB, final int x, final int y, final PixelOperation pixelOperation) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
-		
-		final PixelOperation pixelOperation = isWrappingAround ? PixelOperation.WRAP_AROUND : PixelOperation.NO_CHANGE;
+		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		
 		final int xTransformed = pixelOperation.getX(x, this.resolutionX);
 		final int yTransformed = pixelOperation.getY(y, this.resolutionY);
@@ -282,11 +279,11 @@ public final class Image {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Image read(final File file) {
-		return read(file, new MitchellFilter());
+	public static Image load(final File file) {
+		return load(file, new MitchellFilter());
 	}
 	
-	public static Image read(final File file, final Filter filter) {
+	public static Image load(final File file, final Filter filter) {
 		try {
 			final BufferedImage bufferedImage = doGetCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 			
@@ -299,12 +296,12 @@ public final class Image {
 		}
 	}
 	
-	public static Image read(final String filename) {
-		return read(filename, new MitchellFilter());
+	public static Image load(final String filename) {
+		return load(filename, new MitchellFilter());
 	}
 	
-	public static Image read(final String filename, final Filter filter) {
-		return read(new File(Objects.requireNonNull(filename, "filename == null")), Objects.requireNonNull(filter, "filter == null"));
+	public static Image load(final String filename, final Filter filter) {
+		return load(new File(Objects.requireNonNull(filename, "filename == null")), Objects.requireNonNull(filter, "filter == null"));
 	}
 	
 	public static Image unpackFromARGB(final int resolutionX, final int resolutionY, final int[] imageARGB) {
@@ -366,138 +363,5 @@ public final class Image {
 		}
 		
 		return filterTable;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class Pixel {
-		private Color3F colorRGB;
-		private Color3F colorXYZ;
-		private Color3F splatXYZ;
-		private float filterWeightSum;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Pixel(final Color3F colorRGB) {
-			this(colorRGB, new Color3F(), new Color3F(), 0.0F);
-		}
-		
-		public Pixel(final Color3F colorRGB, final Color3F colorXYZ, final Color3F splatXYZ, final float filterWeightSum) {
-			this.colorRGB = Objects.requireNonNull(colorRGB, "colorRGB == null");
-			this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
-			this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
-			this.filterWeightSum = filterWeightSum;
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Color3F getColorRGB() {
-			return this.colorRGB;
-		}
-		
-		public Color3F getColorXYZ() {
-			return this.colorXYZ;
-		}
-		
-		public Color3F getSplatXYZ() {
-			return this.splatXYZ;
-		}
-		
-		@Override
-		public String toString() {
-			return String.format("new Pixel(%s, %s, %s, %+.10f)", this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum));
-		}
-		
-		@Override
-		public boolean equals(final Object object) {
-			if(object == this) {
-				return true;
-			} else if(!(object instanceof Pixel)) {
-				return false;
-			} else if(!Objects.equals(this.colorRGB, Pixel.class.cast(object).colorRGB)) {
-				return false;
-			} else if(!Objects.equals(this.colorXYZ, Pixel.class.cast(object).colorXYZ)) {
-				return false;
-			} else if(!Objects.equals(this.splatXYZ, Pixel.class.cast(object).splatXYZ)) {
-				return false;
-			} else if(!equal(this.filterWeightSum, Pixel.class.cast(object).filterWeightSum)) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		
-		public float getFilterWeightSum() {
-			return this.filterWeightSum;
-		}
-		
-		@Override
-		public int hashCode() {
-			return Objects.hash(this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum));
-		}
-		
-		public void setColorRGB(final Color3F colorRGB) {
-			this.colorRGB = Objects.requireNonNull(colorRGB, "colorRGB == null");
-		}
-		
-		public void setColorXYZ(final Color3F colorXYZ) {
-			this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
-		}
-		
-		public void setFilterWeightSum(final float filterWeightSum) {
-			this.filterWeightSum = filterWeightSum;
-		}
-		
-		public void setSplatXYZ(final Color3F splatXYZ) {
-			this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static enum PixelOperation {
-		NO_CHANGE,
-		WRAP_AROUND;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		private PixelOperation() {
-			
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public int getIndex(final int index, final int resolution) {
-			switch(this) {
-				case NO_CHANGE:
-					return index;
-				case WRAP_AROUND:
-					return modulo(index, resolution);
-				default:
-					return index;
-			}
-		}
-		
-		public int getX(final int x, final int resolutionX) {
-			switch(this) {
-				case NO_CHANGE:
-					return x;
-				case WRAP_AROUND:
-					return modulo(x, resolutionX);
-				default:
-					return x;
-			}
-		}
-		
-		public int getY(final int y, final int resolutionY) {
-			switch(this) {
-				case NO_CHANGE:
-					return y;
-				case WRAP_AROUND:
-					return modulo(y, resolutionY);
-				default:
-					return y;
-			}
-		}
 	}
 }

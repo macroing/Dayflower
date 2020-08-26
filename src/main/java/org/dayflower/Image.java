@@ -38,6 +38,14 @@ import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
+/**
+ * An {@code Image} is an image that can be drawn to.
+ * <p>
+ * This class stores individual pixels as {@link Pixel} instances.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Image {
 	private static final int FILTER_TABLE_SIZE = 16;
 	
@@ -68,9 +76,22 @@ public final class Image {
 		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = doCreatePixels(resolutionX, resolutionY, Objects.requireNonNull(colorRGB, "colorRGB == null"));
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGB);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
-		this.filterTable = doCreateFilterTable(filter);
+		this.filterTable = filter.createFilterTable();
+	}
+	
+	public Image(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs) {
+		this(resolutionX, resolutionY, colorRGBs, new MitchellFilter());
+	}
+	
+	public Image(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs, final Filter filter) {
+		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGBs);
+		this.filter = Objects.requireNonNull(filter, "filter == null");
+		this.filterTable = filter.createFilterTable();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +106,34 @@ public final class Image {
 	
 	public int getResolutionY() {
 		return this.resolutionY;
+	}
+	
+	public int[] toIntArrayPackedForm() {
+		return toIntArrayPackedForm(PackedIntComponentOrder.ARGB);
+	}
+	
+	public int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder) {
+		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");
+		
+		final int[] intArray = new int[this.resolution];
+		
+		for(int i = 0; i < this.resolution; i++) {
+			intArray[i] = this.pixels[i].getColorRGB().pack(packedIntComponentOrder);
+		}
+		
+		return intArray;
+	}
+	
+	public void clear() {
+		clear(new Color3F());
+	}
+	
+	public void clear(final Color3F colorRGB) {
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		for(final Pixel pixel : this.pixels) {
+			pixel.setColorRGB(colorRGB);
+		}
 	}
 	
 	public void filmAddColor(final float x, final float y, final Color3F colorXYZ, final float sampleWeight) {
@@ -312,7 +361,7 @@ public final class Image {
 		final Image image = new Image(resolutionX, resolutionY, new Color3F(), filter);
 		
 		for(int i = 0; i < image.resolution; i++) {
-			image.setColorRGB(Color3F.unpackFromARGB(imageARGB[i]), i);
+			image.setColorRGB(Color3F.unpack(imageARGB[i], PackedIntComponentOrder.ARGB), i);
 		}
 		
 		return image;
@@ -334,34 +383,5 @@ public final class Image {
 		graphics2D.drawImage(bufferedImage, 0, 0, null);
 		
 		return compatibleBufferedImage;
-	}
-	
-	private static Pixel[] doCreatePixels(final int resolutionX, final int resolutionY, final Color3F colorRGB) {
-		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
-		
-		for(int i = 0; i < pixels.length; i++) {
-			pixels[i] = new Pixel(colorRGB);
-		}
-		
-		return pixels;
-	}
-	
-	private static float[] doCreateFilterTable(final Filter filter) {
-		final float[] filterTable = new float[FILTER_TABLE_SIZE * FILTER_TABLE_SIZE];
-		
-		final float filterResolutionX = filter.getResolutionX();
-		final float filterResolutionY = filter.getResolutionY();
-		final float filterTableSizeReciprocal = 1.0F / FILTER_TABLE_SIZE;
-		
-		for(int i = 0, y = 0; y < FILTER_TABLE_SIZE; y++) {
-			for(int x = 0; x < FILTER_TABLE_SIZE; x++) {
-				final float filterX = (x + 0.5F) * filterResolutionX * filterTableSizeReciprocal;
-				final float filterY = (y + 0.5F) * filterResolutionY * filterTableSizeReciprocal;
-				
-				filterTable[i++] = filter.evaluate(filterX, filterY);
-			}
-		}
-		
-		return filterTable;
 	}
 }

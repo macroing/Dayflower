@@ -19,6 +19,8 @@
 package org.dayflower;
 
 import static org.dayflower.Floats.equal;
+import static org.dayflower.Ints.requireExact;
+import static org.dayflower.Ints.requireRange;
 
 import java.util.Objects;
 
@@ -102,5 +104,41 @@ public final class Pixel {
 	
 	public void setSplatXYZ(final Color3F splatXYZ) {
 		this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color3F colorRGB) {
+		requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
+		
+		for(int i = 0; i < pixels.length; i++) {
+			pixels[i] = new Pixel(colorRGB);
+		}
+		
+		return pixels;
+	}
+	
+	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs) {
+		requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		
+		Objects.requireNonNull(colorRGBs, "colorRGBs == null");
+		
+		requireExact(colorRGBs.length, resolutionX * resolutionY, "colorRGBs.length");
+		
+		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
+		
+		for(int i = 0; i < pixels.length; i++) {
+			pixels[i] = new Pixel(Objects.requireNonNull(colorRGBs[i], String.format("colorRGBs[%d] == null", Integer.valueOf(i))));
+		}
+		
+		return pixels;
 	}
 }

@@ -100,6 +100,42 @@ public final class Color3F {
 		return isGrayscale() && this.component1 >= 1.0F;
 	}
 	
+	public byte getAsByteB() {
+		return (byte)(getAsIntB() & 0xFF);
+	}
+	
+	public byte getAsByteComponent1() {
+		return (byte)(getAsIntComponent1() & 0xFF);
+	}
+	
+	public byte getAsByteComponent2() {
+		return (byte)(getAsIntComponent2() & 0xFF);
+	}
+	
+	public byte getAsByteComponent3() {
+		return (byte)(getAsIntComponent3() & 0xFF);
+	}
+	
+	public byte getAsByteG() {
+		return (byte)(getAsIntG() & 0xFF);
+	}
+	
+	public byte getAsByteR() {
+		return (byte)(getAsIntR() & 0xFF);
+	}
+	
+	public byte getAsByteX() {
+		return (byte)(getAsIntX() & 0xFF);
+	}
+	
+	public byte getAsByteY() {
+		return (byte)(getAsIntY() & 0xFF);
+	}
+	
+	public byte getAsByteZ() {
+		return (byte)(getAsIntZ() & 0xFF);
+	}
+	
 	public float average() {
 		return (this.component1 + this.component2 + this.component3) / 3.0F;
 	}
@@ -156,18 +192,57 @@ public final class Color3F {
 		return min(this.component1, this.component2, this.component3);
 	}
 	
+	public int getAsIntB() {
+		return toInt(Floats.saturate(getB()) * 255.0F + 0.5F);
+	}
+	
+	public int getAsIntComponent1() {
+		return toInt(Floats.saturate(getComponent1()) * 255.0F + 0.5F);
+	}
+	
+	public int getAsIntComponent2() {
+		return toInt(Floats.saturate(getComponent2()) * 255.0F + 0.5F);
+	}
+	
+	public int getAsIntComponent3() {
+		return toInt(Floats.saturate(getComponent3()) * 255.0F + 0.5F);
+	}
+	
+	public int getAsIntG() {
+		return toInt(Floats.saturate(getG()) * 255.0F + 0.5F);
+	}
+	
+	public int getAsIntR() {
+		return toInt(Floats.saturate(getR()) * 255.0F + 0.5F);
+	}
+	
+	public int getAsIntX() {
+		return toInt(Floats.saturate(getX()) * 255.0F + 0.5F);
+	}
+	
+	public int getAsIntY() {
+		return toInt(Floats.saturate(getY()) * 255.0F + 0.5F);
+	}
+	
+	public int getAsIntZ() {
+		return toInt(Floats.saturate(getZ()) * 255.0F + 0.5F);
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
 	}
 	
-	public int packToARGB() {
-		final int a = (toInt(Floats.saturate(1.0F)   * 255.0F + 0.5F) & 0xFF) << 24;
-		final int r = (toInt(Floats.saturate(getR()) * 255.0F + 0.5F) & 0xFF) << 16;
-		final int g = (toInt(Floats.saturate(getG()) * 255.0F + 0.5F) & 0xFF) <<  8;
-		final int b = (toInt(Floats.saturate(getB()) * 255.0F + 0.5F) & 0xFF) <<  0;
+	public int pack() {
+		return pack(PackedIntComponentOrder.ARGB);
+	}
+	
+	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
+		final int r = getAsIntR();
+		final int g = getAsIntG();
+		final int b = getAsIntB();
 		
-		return a | r | g | b;
+		return packedIntComponentOrder.pack(r, g, b);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -542,10 +617,14 @@ public final class Color3F {
 		return ColorSpace3F.SRGB.undoGammaCorrection(c);
 	}
 	
-	public static Color3F unpackFromARGB(final int colorARGB) {
-		final int r = (colorARGB >> 16) & 0xFF;
-		final int g = (colorARGB >>  8) & 0xFF;
-		final int b = (colorARGB >>  0) & 0xFF;
+	public static Color3F unpack(final int color) {
+		return unpack(color, PackedIntComponentOrder.ARGB);
+	}
+	
+	public static Color3F unpack(final int color, final PackedIntComponentOrder packedIntComponentOrder) {
+		final int r = packedIntComponentOrder.unpackR(color);
+		final int g = packedIntComponentOrder.unpackG(color);
+		final int b = packedIntComponentOrder.unpackB(color);
 		
 		return new Color3F(r, g, b);
 	}

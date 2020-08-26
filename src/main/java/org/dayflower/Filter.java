@@ -19,6 +19,10 @@
 package org.dayflower;
 
 public abstract class Filter {
+	private static final int FILTER_TABLE_SIZE = 16;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final float resolutionX;
 	private final float resolutionXReciprocal;
 	private final float resolutionY;
@@ -51,5 +55,24 @@ public abstract class Filter {
 	
 	public final float getResolutionYReciprocal() {
 		return this.resolutionYReciprocal;
+	}
+	
+	public final float[] createFilterTable() {
+		final float[] filterTable = new float[FILTER_TABLE_SIZE * FILTER_TABLE_SIZE];
+		
+		final float filterResolutionX = getResolutionX();
+		final float filterResolutionY = getResolutionY();
+		final float filterTableSizeReciprocal = 1.0F / FILTER_TABLE_SIZE;
+		
+		for(int i = 0, y = 0; y < FILTER_TABLE_SIZE; y++) {
+			for(int x = 0; x < FILTER_TABLE_SIZE; x++) {
+				final float filterX = (x + 0.5F) * filterResolutionX * filterTableSizeReciprocal;
+				final float filterY = (y + 0.5F) * filterResolutionY * filterTableSizeReciprocal;
+				
+				filterTable[i++] = evaluate(filterX, filterY);
+			}
+		}
+		
+		return filterTable;
 	}
 }

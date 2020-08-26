@@ -37,6 +37,14 @@ public final class Ints {
 		return value < 0 ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
 	}
 	
+	public static int requireExact(final int value, final int valueExpected, final String name) {
+		if(value != valueExpected) {
+			throw new IllegalArgumentException(String.format("%s != %d: %s == %d", name, Integer.valueOf(valueExpected), name, Integer.valueOf(value)));
+		}
+		
+		return value;
+	}
+	
 	public static int requireRange(final int value, final int edgeA, final int edgeB, final String name) {
 		final int minimum = min(edgeA, edgeB);
 		final int maximum = max(edgeA, edgeB);

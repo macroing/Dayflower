@@ -20,13 +20,18 @@ package org.dayflower.image;
 
 import static org.dayflower.util.Floats.sqrt;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public final class CatmullRomFilter extends Filter {
+//	TODO: Add Javadocs!
 	public CatmullRomFilter(final float resolutionX, final float resolutionY) {
 		super(resolutionX, resolutionY);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public float evaluate(final float x, final float y) {
 		final float a = x * x + y * y;

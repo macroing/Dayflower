@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public final class Ray3F {
-	
+//	TODO: Implement!
 }

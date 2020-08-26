@@ -20,16 +20,21 @@ package org.dayflower.image;
 
 import static org.dayflower.util.Floats.abs;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public final class MitchellFilter extends Filter {
 	private final float b;
 	private final float c;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public MitchellFilter() {
 		this(2.0F, 2.0F, 1.0F / 3.0F, 1.0F / 3.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public MitchellFilter(final float resolutionX, final float resolutionY, final float b, final float c) {
 		super(resolutionX, resolutionY);
 		
@@ -39,15 +44,18 @@ public final class MitchellFilter extends Filter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public float evaluate(final float x, final float y) {
 		return doMitchell(x * getResolutionXReciprocal(), this.b, this.c) * doMitchell(y * getResolutionYReciprocal(), this.b, this.c);
 	}
 	
+//	TODO: Add Javadocs!
 	public float getB() {
 		return this.b;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getC() {
 		return this.c;
 	}

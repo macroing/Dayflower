@@ -21,6 +21,9 @@ package org.dayflower.image;
 import static org.dayflower.util.Floats.exp;
 import static org.dayflower.util.Floats.max;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public final class GaussianFilter extends Filter {
 	private final float falloff;
 	private final float x;
@@ -28,10 +31,12 @@ public final class GaussianFilter extends Filter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public GaussianFilter() {
 		this(2.0F, 2.0F, 2.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public GaussianFilter(final float resolutionX, final float resolutionY, final float falloff) {
 		super(resolutionX, resolutionY);
 		
@@ -42,19 +47,23 @@ public final class GaussianFilter extends Filter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public float evaluate(final float x, final float y) {
 		return doGaussian(x, this.x, this.falloff) * doGaussian(y, this.y, this.falloff);
 	}
 	
+//	TODO: Add Javadocs!
 	public float getFalloff() {
 		return this.falloff;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getX() {
 		return this.x;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getY() {
 		return this.y;
 	}

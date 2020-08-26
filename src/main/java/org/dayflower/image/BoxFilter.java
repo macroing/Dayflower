@@ -18,17 +18,23 @@
  */
 package org.dayflower.image;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public final class BoxFilter extends Filter {
+//	TODO: Add Javadocs!
 	public BoxFilter() {
 		this(0.5F, 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public BoxFilter(final float resolutionX, final float resolutionY) {
 		super(resolutionX, resolutionY);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public float evaluate(final float x, final float y) {
 		return 1.0F;

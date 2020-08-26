@@ -23,8 +23,10 @@ import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.sin;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 
+//TODO: Add Javadocs!
 public final class Matrix44F {
 	private final float element11;
 	private final float element12;
@@ -45,10 +47,12 @@ public final class Matrix44F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public Matrix44F() {
 		this(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public Matrix44F(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float element41, final float element42, final float element43, final float element44) {
 		this.element11 = element11;
 		this.element12 = element12;
@@ -70,6 +74,7 @@ public final class Matrix44F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public String toString() {
 		final String row1 = String.format("%+.10f, %+.10f, %+.10f, %+.10f", Float.valueOf(this.element11), Float.valueOf(this.element12), Float.valueOf(this.element13), Float.valueOf(this.element14));
@@ -80,6 +85,7 @@ public final class Matrix44F {
 		return String.format("new Matrix44F(%s, %s, %s, %s)", row1, row2, row3, row4);
 	}
 	
+//	TODO: Add Javadocs!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -123,10 +129,12 @@ public final class Matrix44F {
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	public boolean isInvertible() {
 		return abs(determinant()) >= 1.0e-12F;
 	}
 	
+//	TODO: Add Javadocs!
 	public float determinant() {
 		final float a = this.element11 * this.element22 - this.element12 * this.element21;
 		final float b = this.element11 * this.element23 - this.element13 * this.element21;
@@ -144,70 +152,87 @@ public final class Matrix44F {
 		return a * l - b * k + c * j + d * i - e * h + f * g;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement11() {
 		return this.element11;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement12() {
 		return this.element12;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement13() {
 		return this.element13;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement14() {
 		return this.element14;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement21() {
 		return this.element21;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement22() {
 		return this.element22;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement23() {
 		return this.element23;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement24() {
 		return this.element24;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement31() {
 		return this.element31;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement32() {
 		return this.element32;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement33() {
 		return this.element33;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement34() {
 		return this.element34;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement41() {
 		return this.element41;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement42() {
 		return this.element42;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement43() {
 		return this.element43;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement44() {
 		return this.element44;
 	}
 	
+//	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
 		return Objects.hash(new Object[] {
@@ -220,10 +245,12 @@ public final class Matrix44F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F identity() {
 		return new Matrix44F();
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F inverse(final Matrix44F m) {
 		final float a = m.element11 * m.element22 - m.element12 * m.element21;
 		final float b = m.element11 * m.element23 - m.element13 * m.element21;
@@ -265,6 +292,7 @@ public final class Matrix44F {
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F multiply(final Matrix44F mLHS, final Matrix44F mRHS) {
 		final float element11 = mLHS.element11 * mRHS.element11 + mLHS.element12 * mRHS.element21 + mLHS.element13 * mRHS.element31 + mLHS.element14 * mRHS.element41;
 		final float element12 = mLHS.element11 * mRHS.element12 + mLHS.element12 * mRHS.element22 + mLHS.element13 * mRHS.element32 + mLHS.element14 * mRHS.element42;
@@ -286,6 +314,7 @@ public final class Matrix44F {
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F rotate(final AngleF a, final Vector3F v) {
 		final Vector3F vNormalized = Vector3F.normalize(v);
 		
@@ -313,10 +342,12 @@ public final class Matrix44F {
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F rotate(final AngleF a, final float x, final float y, final float z) {
 		return rotate(a, new Vector3F(x, y, z));
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F rotateX(final AngleF a) {
 		final float cos = cos(a.getRadians());
 		final float sin = sin(a.getRadians());
@@ -324,6 +355,7 @@ public final class Matrix44F {
 		return new Matrix44F(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F rotateY(final AngleF a) {
 		final float cos = cos(a.getRadians());
 		final float sin = sin(a.getRadians());
@@ -331,6 +363,7 @@ public final class Matrix44F {
 		return new Matrix44F(cos, 0.0F, sin, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, -sin, 0.0F, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F rotateZ(final AngleF a) {
 		final float cos = cos(a.getRadians());
 		final float sin = sin(a.getRadians());
@@ -338,26 +371,32 @@ public final class Matrix44F {
 		return new Matrix44F(cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F scale(final Vector3F v) {
 		return scale(v.getX(), v.getY(), v.getZ());
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F scale(final float s) {
 		return scale(s, s, s);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F scale(final float x, final float y, final float z) {
 		return new Matrix44F(x, 0.0F, 0.0F, 0.0F, 0.0F, y, 0.0F, 0.0F, 0.0F, 0.0F, z, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F translate(final Point3F p) {
 		return translate(p.getX(), p.getY(), p.getZ());
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F translate(final float x, final float y, final float z) {
 		return new Matrix44F(1.0F, 0.0F, 0.0F, x, 0.0F, 1.0F, 0.0F, y, 0.0F, 0.0F, 1.0F, z, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Matrix44F transpose(final Matrix44F m) {
 		final float element11 = m.element11;
 		final float element12 = m.element21;

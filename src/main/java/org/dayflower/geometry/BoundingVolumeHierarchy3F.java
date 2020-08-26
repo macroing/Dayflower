@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry;
 
-public final class BoundingVolumeHierarchy {
-	
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
+public final class BoundingVolumeHierarchy3F {
+//	TODO: Implement!
 }

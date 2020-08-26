@@ -21,17 +21,23 @@ package org.dayflower.image;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.max;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public final class TriangleFilter extends Filter {
+//	TODO: Add Javadocs!
 	public TriangleFilter() {
 		this(2.0F, 2.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public TriangleFilter(final float resolutionX, final float resolutionY) {
 		super(resolutionX, resolutionY);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public float evaluate(final float x, final float y) {
 		return max(0.0F, getResolutionX() - abs(x)) * max(0.0F, getResolutionY() - abs(y));

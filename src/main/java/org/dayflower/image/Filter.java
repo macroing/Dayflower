@@ -18,7 +18,11 @@
  */
 package org.dayflower.image;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public abstract class Filter {
+//	TODO: Add Javadocs!
 	public static final int FILTER_TABLE_SIZE = 16;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,6 +34,7 @@ public abstract class Filter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	protected Filter(final float resolutionX, final float resolutionY) {
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
@@ -39,24 +44,30 @@ public abstract class Filter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public abstract float evaluate(final float x, final float y);
 	
+//	TODO: Add Javadocs!
 	public final float getResolutionX() {
 		return this.resolutionX;
 	}
 	
+//	TODO: Add Javadocs!
 	public final float getResolutionXReciprocal() {
 		return this.resolutionXReciprocal;
 	}
 	
+//	TODO: Add Javadocs!
 	public final float getResolutionY() {
 		return this.resolutionY;
 	}
 	
+//	TODO: Add Javadocs!
 	public final float getResolutionYReciprocal() {
 		return this.resolutionYReciprocal;
 	}
 	
+//	TODO: Add Javadocs!
 	public final float[] createFilterTable() {
 		final float[] filterTable = new float[FILTER_TABLE_SIZE * FILTER_TABLE_SIZE];
 		

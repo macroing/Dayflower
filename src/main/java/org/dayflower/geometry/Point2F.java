@@ -27,22 +27,27 @@ import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 
+//TODO: Add Javadocs!
 public final class Point2F {
 	private final float element1;
 	private final float element2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public Point2F() {
 		this(0.0F, 0.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public Point2F(final Vector2F v) {
 		this(v.getElement1(), v.getElement2());
 	}
 	
+//	TODO: Add Javadocs!
 	public Point2F(final float element1, final float element2) {
 		this.element1 = element1;
 		this.element2 = element2;
@@ -50,11 +55,13 @@ public final class Point2F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public String toString() {
 		return String.format("new Point2F(%+.10f, %+.10f)", Float.valueOf(this.element1), Float.valueOf(this.element2));
 	}
 	
+//	TODO: Add Javadocs!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -70,30 +77,37 @@ public final class Point2F {
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement1() {
 		return this.element1;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getElement2() {
 		return this.element2;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getU() {
 		return this.element1;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getV() {
 		return this.element2;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getX() {
 		return this.element1;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getY() {
 		return this.element2;
 	}
 	
+//	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.element1), Float.valueOf(this.element2));
@@ -101,14 +115,17 @@ public final class Point2F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public static Point2F sampleConcentricDisk() {
 		return sampleConcentricDisk(random(), random());
 	}
 	
+//	TODO: Add Javadocs!
 	public static Point2F sampleConcentricDisk(final float u, final float v) {
 		return sampleConcentricDisk(u, v, 1.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Point2F sampleConcentricDisk(final float u, final float v, final float radius) {
 		if(equal(u, 0.0F) && equal(v, 0.0F)) {
 			return new Point2F();
@@ -136,10 +153,12 @@ public final class Point2F {
 		return new Point2F(element1, element2);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Point2F sampleDiskUniformDistribution() {
 		return sampleDiskUniformDistribution(random(), random());
 	}
 	
+//	TODO: Add Javadocs!
 	public static Point2F sampleDiskUniformDistribution(final float u, final float v) {
 		final float phi = PI_MULTIPLIED_BY_TWO * v;
 		final float r = sqrt(u);
@@ -150,10 +169,12 @@ public final class Point2F {
 		return new Point2F(element1, element2);
 	}
 	
+//	TODO: Add Javadocs!
 	public static float distance(final Point2F pEye, final Point2F pLookAt) {
 		return Vector2F.direction(pEye, pLookAt).length();
 	}
 	
+//	TODO: Add Javadocs!
 	public static float distanceSquared(final Point2F pEye, final Point2F pLookAt) {
 		return Vector2F.direction(pEye, pLookAt).lengthSquared();
 	}

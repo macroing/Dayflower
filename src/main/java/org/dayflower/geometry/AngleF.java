@@ -32,6 +32,14 @@ import static org.dayflower.util.Floats.wrapAround;
 
 import java.util.Objects;
 
+/**
+ * An {@code AngleF} encapsulates angles in forms such as degrees and radians using the data type {@code float}.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class AngleF {
 	private static final float DEGREES_MAXIMUM = 360.0F;
 	private static final float DEGREES_MAXIMUM_PITCH = 90.0F;
@@ -62,11 +70,24 @@ public final class AngleF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Returns a {@code String} representation of this {@code AngleF} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code AngleF} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("AngleF.degrees(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.degrees), Float.valueOf(this.degreesMinimum), Float.valueOf(this.degreesMaximum));
 	}
 	
+	/**
+	 * Compares {@code object} to this {@code AngleF} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code AngleF}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code AngleF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code AngleF}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -90,30 +111,65 @@ public final class AngleF {
 		}
 	}
 	
+	/**
+	 * Returns the angle in degrees.
+	 * 
+	 * @return the angle in degrees
+	 */
 	public float getDegrees() {
 		return this.degrees;
 	}
 	
+	/**
+	 * Returns the maximum angle in degrees.
+	 * 
+	 * @return the maximum angle in degrees
+	 */
 	public float getDegreesMaximum() {
 		return this.degreesMaximum;
 	}
 	
+	/**
+	 * Returns the minimum angle in degrees.
+	 * 
+	 * @return the minimum angle in degrees
+	 */
 	public float getDegreesMinimum() {
 		return this.degreesMinimum;
 	}
 	
+	/**
+	 * Returns the angle in radians.
+	 * 
+	 * @return the angle in radians
+	 */
 	public float getRadians() {
 		return this.radians;
 	}
 	
+	/**
+	 * Returns the maximum angle in radians.
+	 * 
+	 * @return the maximum angle in radians
+	 */
 	public float getRadiansMaximum() {
 		return this.radiansMaximum;
 	}
 	
+	/**
+	 * Returns the minimum angle in radians.
+	 * 
+	 * @return the minimum angle in radians
+	 */
 	public float getRadiansMinimum() {
 		return this.radiansMinimum;
 	}
 	
+	/**
+	 * Returns a hash code for this {@code AngleF} instance.
+	 * 
+	 * @return a hash code for this {@code AngleF} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.degrees), Float.valueOf(this.degreesMaximum), Float.valueOf(this.degreesMinimum), Float.valueOf(this.radians), Float.valueOf(this.radiansMaximum), Float.valueOf(this.radiansMinimum));
@@ -121,6 +177,18 @@ public final class AngleF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Adds {@code aRHS} to {@code aLHS}.
+	 * <p>
+	 * Returns a new {@code AngleF} instance with the result of the addition.
+	 * <p>
+	 * If either {@code aLHS} or {@code aRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param aLHS an {@code AngleF} instance
+	 * @param aRHS an {@code AngleF} instance
+	 * @return a new {@code AngleF} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, either {@code aLHS} or {@code aRHS} are {@code null}
+	 */
 	public static AngleF add(final AngleF aLHS, final AngleF aRHS) {
 		final float degreesMinimum = min(aLHS.degreesMinimum, aRHS.degreesMinimum);
 		final float degreesMaximum = max(aLHS.degreesMaximum, aRHS.degreesMaximum);
@@ -129,13 +197,34 @@ public final class AngleF {
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
 	
+	/**
+	 * Returns a new {@code AngleF} instance based on an angle in degrees.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * AngleF.degrees(degrees, 0.0F, 360.0F)
+	 * }
+	 * </pre>
+	 * 
+	 * @param degrees the angle in degrees
+	 * @return a new {@code AngleF} instance based on an angle in degrees
+	 */
 	public static AngleF degrees(final float degrees) {
 		return degrees(degrees, DEGREES_MINIMUM, DEGREES_MAXIMUM);
 	}
 	
-	public static AngleF degrees(final float degrees, final float degreesEdgeA, final float degreesEdgeB) {
-		final float newDegreesMinimum = min(degreesEdgeA, degreesEdgeB);
-		final float newDegreesMaximum = max(degreesEdgeA, degreesEdgeB);
+	/**
+	 * Returns a new {@code AngleF} instance based on an angle in degrees and an interval of valid degrees.
+	 * 
+	 * @param degrees the angle in degrees
+	 * @param degreesIntervalEndA the degrees that represents one of the ends of the interval of valid degrees
+	 * @param degreesIntervalEndB the degrees that represents one of the ends of the interval of valid degrees
+	 * @return a new {@code AngleF} instance based on an angle in degrees and an interval of valid degrees
+	 */
+	public static AngleF degrees(final float degrees, final float degreesIntervalEndA, final float degreesIntervalEndB) {
+		final float newDegreesMinimum = min(degreesIntervalEndA, degreesIntervalEndB);
+		final float newDegreesMaximum = max(degreesIntervalEndA, degreesIntervalEndB);
 		final float newDegrees = wrapAround(degrees, newDegreesMinimum, newDegreesMaximum);
 		
 		final float newRadians = toRadians(newDegrees);
@@ -145,18 +234,55 @@ public final class AngleF {
 		return new AngleF(newDegrees, newDegreesMinimum, newDegreesMaximum, newRadians, newRadiansMinimum, newRadiansMaximum);
 	}
 	
+	/**
+	 * Returns a field of view (FOV) {@code AngleF} based on {@code focalDistance} and {@code resolution}.
+	 * <p>
+	 * This method allows you to use {@code resolution} in either X- or Y-direction. So, either width or height.
+	 * 
+	 * @param focalDistance the focal distance (also known as focal length}
+	 * @param resolution the resolution in X- or Y-direction (width or height)
+	 * @return a field of view (FOV) {@code AngleF} based on {@code focalDistance} and {@code resolution}
+	 */
 	public static AngleF fieldOfView(final float focalDistance, final float resolution) {
 		return radians(2.0F * atan(resolution * 0.5F / focalDistance));
 	}
 	
-	public static AngleF fieldOfViewX(final AngleF aFieldOfViewY, final float resolutionX, final float resolutionY) {
-		return radians(2.0F * atan(tan(aFieldOfViewY.radians * 0.5F) * (resolutionX / resolutionY)));
+	/**
+	 * Returns a horizontal field of view (FOV) {@code AngleF} based on {@code fieldOfViewY}, {@code resolutionX} and {@code resolutionY}.
+	 * <p>
+	 * If {@code fieldOfViewY} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param fieldOfViewY the vertical field of view
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a horizontal field of view (FOV) {@code AngleF} based on {@code fieldOfViewY}, {@code resolutionX} and {@code resolutionY}
+	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewY} is {@code null}
+	 */
+	public static AngleF fieldOfViewX(final AngleF fieldOfViewY, final float resolutionX, final float resolutionY) {
+		return radians(2.0F * atan(tan(fieldOfViewY.radians * 0.5F) * (resolutionX / resolutionY)));
 	}
 	
-	public static AngleF fieldOfViewY(final AngleF aFieldOfViewX, final float resolutionX, final float resolutionY) {
-		return radians(2.0F * atan(tan(aFieldOfViewX.radians * 0.5F) * (resolutionY / resolutionX)));
+	/**
+	 * Returns a vertical field of view (FOV) {@code AngleF} based on {@code fieldOfViewX}, {@code resolutionX} and {@code resolutionY}.
+	 * <p>
+	 * If {@code fieldOfViewX} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param fieldOfViewX the horizontal field of view
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a vertical field of view (FOV) {@code AngleF} based on {@code fieldOfViewX}, {@code resolutionX} and {@code resolutionY}
+	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewX} is {@code null}
+	 */
+	public static AngleF fieldOfViewY(final AngleF fieldOfViewX, final float resolutionX, final float resolutionY) {
+		return radians(2.0F * atan(tan(fieldOfViewX.radians * 0.5F) * (resolutionY / resolutionX)));
 	}
 	
+	/**
+	 * Returns a new {@code AngleF} instance that represents half of {@code a}.
+	 * 
+	 * @param a an {@code AngleF} instance
+	 * @return a new {@code AngleF} instance that represents half of {@code a}
+	 */
 	public static AngleF half(final AngleF a) {
 		final float degreesMinimum = a.degreesMinimum;
 		final float degreesMaximum = a.degreesMaximum;
@@ -165,21 +291,61 @@ public final class AngleF {
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
 	
+	/**
+	 * Returns a new pitch {@code AngleF} instance based on {@code eye} and {@code lookAt}.
+	 * <p>
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye the {@link Point3F} on which the "eye" is positioned
+	 * @param lookAt the {@code Point3F} to which the "eye" is looking
+	 * @return a new pitch {@code AngleF} instance based on {@code eye} and {@code lookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
+	 */
 	public static AngleF pitch(final Point3F eye, final Point3F lookAt) {
 		return pitch(Vector3F.directionNormalized(eye, lookAt));
 	}
 	
+	/**
+	 * Returns a new pitch {@code AngleF} instance based on {@code direction}.
+	 * <p>
+	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param direction a normalized direction {@link Vector3F}
+	 * @return a new pitch {@code AngleF} instance based on {@code direction}
+	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
+	 */
 	public static AngleF pitch(final Vector3F direction) {
 		return degrees(toDegrees(asin(direction.getY())), DEGREES_MINIMUM_PITCH, DEGREES_MAXIMUM_PITCH);
 	}
 	
+	/**
+	 * Returns a new {@code AngleF} instance based on an angle in radians.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * AngleF.radians(radians, 0.0F, PI * 2.0F)
+	 * }
+	 * </pre>
+	 * 
+	 * @param radians the angle in radians
+	 * @return a new {@code AngleF} instance based on an angle in radians
+	 */
 	public static AngleF radians(final float radians) {
 		return radians(radians, RADIANS_MINIMUM, RADIANS_MAXIMUM);
 	}
 	
-	public static AngleF radians(final float radians, final float radiansEdgeA, final float radiansEdgeB) {
-		final float newRadiansMinimum = min(radiansEdgeA, radiansEdgeB);
-		final float newRadiansMaximum = max(radiansEdgeA, radiansEdgeB);
+	/**
+	 * Returns a new {@code AngleF} instance based on an angle in radians and an interval of valid radians.
+	 * 
+	 * @param radians the angle in radians
+	 * @param radiansIntervalEndA the radians that represents one of the ends of the interval of valid radians
+	 * @param radiansIntervalEndB the radians that represents one of the ends of the interval of valid radians
+	 * @return a new {@code AngleF} instance based on an angle in radians and an interval of valid radians
+	 */
+	public static AngleF radians(final float radians, final float radiansIntervalEndA, final float radiansIntervalEndB) {
+		final float newRadiansMinimum = min(radiansIntervalEndA, radiansIntervalEndB);
+		final float newRadiansMaximum = max(radiansIntervalEndA, radiansIntervalEndB);
 		final float newRadians = wrapAround(radians, newRadiansMinimum, newRadiansMaximum);
 		
 		final float newDegrees = toDegrees(newRadians);
@@ -189,6 +355,18 @@ public final class AngleF {
 		return new AngleF(newDegrees, newDegreesMinimum, newDegreesMaximum, newRadians, newRadiansMinimum, newRadiansMaximum);
 	}
 	
+	/**
+	 * Subtracts {@code aRHS} from {@code aLHS}.
+	 * <p>
+	 * Returns a new {@code AngleF} instance with the result of the subtraction.
+	 * <p>
+	 * If either {@code aLHS} or {@code aRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param aLHS an {@code AngleF} instance
+	 * @param aRHS an {@code AngleF} instance
+	 * @return a new {@code AngleF} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, either {@code aLHS} or {@code aRHS} are {@code null}
+	 */
 	public static AngleF subtract(final AngleF aLHS, final AngleF aRHS) {
 		final float degreesMinimum = min(aLHS.degreesMinimum, aRHS.degreesMinimum);
 		final float degreesMaximum = max(aLHS.degreesMaximum, aRHS.degreesMaximum);
@@ -197,10 +375,29 @@ public final class AngleF {
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
 	
+	/**
+	 * Returns a new yaw {@code AngleF} instance based on {@code eye} and {@code lookAt}.
+	 * <p>
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye the {@link Point3F} on which the "eye" is positioned
+	 * @param lookAt the {@code Point3F} to which the "eye" is looking
+	 * @return a new yaw {@code AngleF} instance based on {@code eye} and {@code lookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
+	 */
 	public static AngleF yaw(final Point3F eye, final Point3F lookAt) {
 		return yaw(Vector3F.directionNormalized(eye, lookAt));
 	}
 	
+	/**
+	 * Returns a new yaw {@code AngleF} instance based on {@code direction}.
+	 * <p>
+	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param direction a normalized direction {@link Vector3F}
+	 * @return a new yaw {@code AngleF} instance based on {@code direction}
+	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
+	 */
 	public static AngleF yaw(final Vector3F direction) {
 		return degrees(toDegrees(atan2(direction.getX(), direction.getZ())));
 	}

@@ -18,6 +18,9 @@
  */
 package org.dayflower.scene;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public abstract class BXDF {
-	
+//	TODO: Implement!
 }

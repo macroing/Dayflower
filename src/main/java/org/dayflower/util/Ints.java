@@ -18,6 +18,9 @@
  */
 package org.dayflower.util;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public final class Ints {
 	private Ints() {
 		
@@ -25,18 +28,22 @@ public final class Ints {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public static int max(final int a, final int b) {
 		return Math.max(a, b);
 	}
 	
+//	TODO: Add Javadocs!
 	public static int min(final int a, final int b) {
 		return Math.min(a, b);
 	}
 	
+//	TODO: Add Javadocs!
 	public static int modulo(final int value, final int maximumValue) {
 		return value < 0 ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
 	}
 	
+//	TODO: Add Javadocs!
 	public static int requireExact(final int value, final int valueExpected, final String name) {
 		if(value != valueExpected) {
 			throw new IllegalArgumentException(String.format("%s != %d: %s == %d", name, Integer.valueOf(valueExpected), name, Integer.valueOf(value)));
@@ -45,6 +52,7 @@ public final class Ints {
 		return value;
 	}
 	
+//	TODO: Add Javadocs!
 	public static int requireRange(final int value, final int edgeA, final int edgeB, final String name) {
 		final int minimum = min(edgeA, edgeB);
 		final int maximum = max(edgeA, edgeB);
@@ -58,10 +66,12 @@ public final class Ints {
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	public static int saturate(final int value) {
 		return saturate(value, 0, 255);
 	}
 	
+//	TODO: Add Javadocs!
 	public static int saturate(final int value, final int edgeA, final int edgeB) {
 		final int minimum = min(edgeA, edgeB);
 		final int maximum = max(edgeA, edgeB);
@@ -75,6 +85,7 @@ public final class Ints {
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	public static int toInt(final float value) {
 		return (int)(value);
 	}

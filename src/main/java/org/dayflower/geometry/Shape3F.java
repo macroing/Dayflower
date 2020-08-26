@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry;
 
-public interface Shape {
-	
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
+public interface Shape3F {
+//	TODO: Implement!
 }

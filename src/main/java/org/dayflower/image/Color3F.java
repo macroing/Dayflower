@@ -27,11 +27,13 @@ import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Ints.toInt;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.util.Floats;
 import org.dayflower.util.Ints;
 
+//TODO: Add Javadocs!
 public final class Color3F {
 	private final float component1;
 	private final float component2;
@@ -39,24 +41,29 @@ public final class Color3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public Color3F() {
 		this(0.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public Color3F(final float component) {
 		this(component, component, component);
 	}
 	
+//	TODO: Add Javadocs!
 	public Color3F(final float component1, final float component2, final float component3) {
 		this.component1 = component1;
 		this.component2 = component2;
 		this.component3 = component3;
 	}
 	
+//	TODO: Add Javadocs!
 	public Color3F(final int component) {
 		this(component, component, component);
 	}
 	
+//	TODO: Add Javadocs!
 	public Color3F(final int component1, final int component2, final int component3) {
 		this.component1 = Ints.saturate(component1) / 255.0F;
 		this.component2 = Ints.saturate(component2) / 255.0F;
@@ -65,11 +72,13 @@ public final class Color3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public String toString() {
 		return String.format("new Color3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
 	}
 	
+//	TODO: Add Javadocs!
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -87,159 +96,198 @@ public final class Color3F {
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	public boolean hasNaNs() {
 		return isNaN(this.component1) || isNaN(this.component2) || isNaN(this.component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public boolean isBlack() {
 		return isGrayscale() && equal(this.component1, 0.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public boolean isGrayscale() {
 		return equal(this.component1, this.component2, this.component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public boolean isWhite() {
 		return isGrayscale() && this.component1 >= 1.0F;
 	}
 	
+//	TODO: Add Javadocs!
 	public byte getAsByteB() {
 		return (byte)(getAsIntB() & 0xFF);
 	}
 	
+//	TODO: Add Javadocs!
 	public byte getAsByteComponent1() {
 		return (byte)(getAsIntComponent1() & 0xFF);
 	}
 	
+//	TODO: Add Javadocs!
 	public byte getAsByteComponent2() {
 		return (byte)(getAsIntComponent2() & 0xFF);
 	}
 	
+//	TODO: Add Javadocs!
 	public byte getAsByteComponent3() {
 		return (byte)(getAsIntComponent3() & 0xFF);
 	}
 	
+//	TODO: Add Javadocs!
 	public byte getAsByteG() {
 		return (byte)(getAsIntG() & 0xFF);
 	}
 	
+//	TODO: Add Javadocs!
 	public byte getAsByteR() {
 		return (byte)(getAsIntR() & 0xFF);
 	}
 	
+//	TODO: Add Javadocs!
 	public byte getAsByteX() {
 		return (byte)(getAsIntX() & 0xFF);
 	}
 	
+//	TODO: Add Javadocs!
 	public byte getAsByteY() {
 		return (byte)(getAsIntY() & 0xFF);
 	}
 	
+//	TODO: Add Javadocs!
 	public byte getAsByteZ() {
 		return (byte)(getAsIntZ() & 0xFF);
 	}
 	
+//	TODO: Add Javadocs!
 	public float average() {
 		return (this.component1 + this.component2 + this.component3) / 3.0F;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getB() {
 		return this.component3;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getComponent1() {
 		return this.component1;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getComponent2() {
 		return this.component2;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getComponent3() {
 		return this.component3;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getG() {
 		return this.component2;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getR() {
 		return this.component1;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getX() {
 		return this.component1;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getY() {
 		return this.component2;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getZ() {
 		return this.component3;
 	}
 	
+//	TODO: Add Javadocs!
 	public float lightness() {
 		return (maximum() + minimum()) / 2.0F;
 	}
 	
+//	TODO: Add Javadocs!
 	public float luminance() {
 		return this.component1 * 0.212671F + this.component2 * 0.715160F + this.component3 * 0.072169F;
 	}
 	
+//	TODO: Add Javadocs!
 	public float maximum() {
 		return max(this.component1, this.component2, this.component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public float minimum() {
 		return min(this.component1, this.component2, this.component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public int getAsIntB() {
 		return toInt(Floats.saturate(getB()) * 255.0F + 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public int getAsIntComponent1() {
 		return toInt(Floats.saturate(getComponent1()) * 255.0F + 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public int getAsIntComponent2() {
 		return toInt(Floats.saturate(getComponent2()) * 255.0F + 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public int getAsIntComponent3() {
 		return toInt(Floats.saturate(getComponent3()) * 255.0F + 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public int getAsIntG() {
 		return toInt(Floats.saturate(getG()) * 255.0F + 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public int getAsIntR() {
 		return toInt(Floats.saturate(getR()) * 255.0F + 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public int getAsIntX() {
 		return toInt(Floats.saturate(getX()) * 255.0F + 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public int getAsIntY() {
 		return toInt(Floats.saturate(getY()) * 255.0F + 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public int getAsIntZ() {
 		return toInt(Floats.saturate(getZ()) * 255.0F + 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
 	}
 	
+//	TODO: Add Javadocs!
 	public int pack() {
 		return pack(PackedIntComponentOrder.ARGB);
 	}
 	
+//	TODO: Add Javadocs!
 	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = getAsIntR();
 		final int g = getAsIntG();
@@ -250,6 +298,7 @@ public final class Color3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public static Color3F add(final Color3F cLHS, final Color3F cRHS) {
 		final float component1 = cLHS.component1 + cRHS.component1;
 		final float component2 = cLHS.component2 + cRHS.component2;
@@ -258,6 +307,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F addSample(final Color3F cLHS, final Color3F cRHS, final int samples) {
 		final float component1 = cLHS.component1 + ((cRHS.component1 - cLHS.component1) / samples);
 		final float component2 = cLHS.component2 + ((cRHS.component2 - cLHS.component2) / samples);
@@ -266,14 +316,17 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F blend(final Color3F cLHS, final Color3F cRHS) {
 		return blend(cLHS, cRHS, 0.5F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F blend(final Color3F cLHS, final Color3F cRHS, final float t) {
 		return blend(cLHS, cRHS, t, t, t);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F blend(final Color3F cLHS, final Color3F cRHS, final float tComponent1, final float tComponent2, final float tComponent3) {
 		final float component1 = lerp(cLHS.component1, cRHS.component1, tComponent1);
 		final float component2 = lerp(cLHS.component2, cRHS.component2, tComponent2);
@@ -282,6 +335,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F convertRGBToXYZUsingPBRT(final Color3F c) {
 		final float x = 0.412453F * c.getR() + 0.357580F * c.getG() + 0.180423F * c.getB();
 		final float y = 0.212671F * c.getR() + 0.715160F * c.getG() + 0.072169F * c.getB();
@@ -290,10 +344,12 @@ public final class Color3F {
 		return new Color3F(x, y, z);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F convertRGBToXYZUsingSRGB(final Color3F c) {
 		return ColorSpace3F.SRGB.convertRGBToXYZ(c);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F convertXYZToRGBUsingPBRT(final Color3F c) {
 		final float r = +3.240479F * c.getX() - 1.537150F * c.getY() - 0.498535F * c.getZ();
 		final float g = -0.969256F * c.getX() + 1.875991F * c.getY() + 0.041556F * c.getZ();
@@ -302,10 +358,12 @@ public final class Color3F {
 		return new Color3F(r, g, b);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F convertXYZToRGBUsingSRGB(final Color3F c) {
 		return ColorSpace3F.SRGB.convertXYZToRGB(c);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F divide(final Color3F cLHS, final Color3F cRHS) {
 		final float component1 = cLHS.component1 / cRHS.component1;
 		final float component2 = cLHS.component2 / cRHS.component2;
@@ -314,6 +372,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F divide(final Color3F cLHS, final float sRHS) {
 		final float component1 = cLHS.component1 / sRHS;
 		final float component2 = cLHS.component2 / sRHS;
@@ -322,38 +381,47 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F grayscaleAverage(final Color3F c) {
 		return new Color3F(c.average());
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F grayscaleComponent1(final Color3F c) {
 		return new Color3F(c.component1);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F grayscaleComponent2(final Color3F c) {
 		return new Color3F(c.component2);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F grayscaleComponent3(final Color3F c) {
 		return new Color3F(c.component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F grayscaleLightness(final Color3F c) {
 		return new Color3F(c.lightness());
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F grayscaleLuminance(final Color3F c) {
 		return new Color3F(c.luminance());
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F grayscaleMaximum(final Color3F c) {
 		return new Color3F(c.maximum());
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F grayscaleMinimum(final Color3F c) {
 		return new Color3F(c.minimum());
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F invert(final Color3F c) {
 		final float component1 = 1.0F - c.component1;
 		final float component2 = 1.0F - c.component2;
@@ -362,6 +430,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F maximum(final Color3F cA, final Color3F cB) {
 		final float component1 = max(cA.component1, cB.component1);
 		final float component2 = max(cA.component2, cB.component2);
@@ -370,6 +439,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F maximumTo1(final Color3F c) {
 		final float maximum = c.maximum();
 		
@@ -384,6 +454,7 @@ public final class Color3F {
 		return c;
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F minimum(final Color3F cA, final Color3F cB) {
 		final float component1 = min(cA.component1, cB.component1);
 		final float component2 = min(cA.component2, cB.component2);
@@ -392,6 +463,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F minimumTo0(final Color3F c) {
 		final float minimum = c.minimum();
 		
@@ -406,6 +478,7 @@ public final class Color3F {
 		return c;
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F multiply(final Color3F cLHS, final Color3F cRHS) {
 		final float component1 = cLHS.component1 * cRHS.component1;
 		final float component2 = cLHS.component2 * cRHS.component2;
@@ -414,6 +487,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F multiply(final Color3F cLHS, final float sRHS) {
 		final float component1 = cLHS.component1 * sRHS;
 		final float component2 = cLHS.component2 * sRHS;
@@ -422,6 +496,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F multiplyAndSaturateNegative(final Color3F cLHS, final float sRHS) {
 		final float component1 = max(cLHS.component1 * sRHS, 0.0F);
 		final float component2 = max(cLHS.component2 * sRHS, 0.0F);
@@ -430,6 +505,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F negate(final Color3F c) {
 		final float component1 = -c.component1;
 		final float component2 = -c.component2;
@@ -438,6 +514,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F normalize(final Color3F c) {
 		final float sum = c.component1 + c.component2 + c.component3;
 		
@@ -454,6 +531,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F random() {
 		final float component1 = Floats.random();
 		final float component2 = Floats.random();
@@ -462,6 +540,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F randomComponent1() {
 		final float component1 = Floats.random();
 		final float component2 = 0.0F;
@@ -470,6 +549,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F randomComponent2() {
 		final float component1 = 0.0F;
 		final float component2 = Floats.random();
@@ -478,6 +558,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F randomComponent3() {
 		final float component1 = 0.0F;
 		final float component2 = 0.0F;
@@ -486,6 +567,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F redoGammaCorrectionPBRT(final Color3F c) {
 		final float component1 = c.component1 <= 0.0031308F ? 12.92F * c.component1 : 1.055F * pow(c.component1, 1.0F / 2.4F) - 0.055F;
 		final float component2 = c.component2 <= 0.0031308F ? 12.92F * c.component2 : 1.055F * pow(c.component2, 1.0F / 2.4F) - 0.055F;
@@ -494,14 +576,17 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F redoGammaCorrectionSRGB(final Color3F c) {
 		return ColorSpace3F.SRGB.redoGammaCorrection(c);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F saturate(final Color3F c) {
 		return saturate(c, 0.0F, 1.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F saturate(final Color3F c, final float edgeA, final float edgeB) {
 		final float component1 = Floats.saturate(c.component1, edgeA, edgeB);
 		final float component2 = Floats.saturate(c.component2, edgeA, edgeB);
@@ -510,6 +595,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F sepia(final Color3F c) {
 		final float component1 = c.component1 * 0.393F + c.component2 * 0.769F + c.component3 * 0.189F;
 		final float component2 = c.component1 * 0.349F + c.component2 * 0.686F + c.component3 * 0.168F;
@@ -518,6 +604,7 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F subtract(final Color3F cLHS, final Color3F cRHS) {
 		final float component1 = cLHS.component1 - cRHS.component1;
 		final float component2 = cLHS.component2 - cRHS.component2;
@@ -526,10 +613,12 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F toneMapFilmicCurve(final Color3F color, final float exposure, final float a, final float b, final float c, final float d, final float e) {
 		return toneMapFilmicCurve(color, exposure, a, b, c, d, e, 0.0F, Float.MIN_VALUE);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F toneMapFilmicCurve(final Color3F color, final float exposure, final float a, final float b, final float c, final float d, final float e, final float subtract, final float minimum) {
 		final float component11 = max(color.component1 * exposure - subtract, minimum);
 		final float component21 = max(color.component2 * exposure - subtract, minimum);
@@ -542,16 +631,19 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F toneMapFilmicCurveACES2(final Color3F color, final float exposure) {
 //		Source: https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
 		return toneMapFilmicCurve(color, exposure, 2.51F, 0.03F, 2.43F, 0.59F, 0.14F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F toneMapFilmicCurveGammaCorrection22(final Color3F color, final float exposure) {
 //		Source: http://filmicworlds.com/blog/why-a-filmic-curve-saturates-your-blacks/
 		return toneMapFilmicCurve(color, exposure, 6.2F, 0.5F, 6.2F, 1.7F, 0.06F, 0.004F, 0.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F toneMapReinhard(final Color3F c, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
@@ -566,6 +658,7 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F toneMapReinhardModifiedVersion1(final Color3F c, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
@@ -582,6 +675,7 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F toneMapReinhardModifiedVersion2(final Color3F c, final float exposure) {
 		final float component11 = c.component1 * exposure;
 		final float component21 = c.component2 * exposure;
@@ -594,6 +688,7 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F toneMapUnreal3(final Color3F c, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
@@ -608,6 +703,7 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F undoGammaCorrectionPBRT(final Color3F c) {
 		final float component1 = c.component1 <= 0.04045F ? c.component1 * 1.0F / 12.92F : pow((c.component1 + 0.055F) * 1.0F / 1.055F, 2.4F);
 		final float component2 = c.component2 <= 0.04045F ? c.component2 * 1.0F / 12.92F : pow((c.component2 + 0.055F) * 1.0F / 1.055F, 2.4F);
@@ -616,14 +712,17 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F undoGammaCorrectionSRGB(final Color3F c) {
 		return ColorSpace3F.SRGB.undoGammaCorrection(c);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F unpack(final int color) {
 		return unpack(color, PackedIntComponentOrder.ARGB);
 	}
 	
+//	TODO: Add Javadocs!
 	public static Color3F unpack(final int color, final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = packedIntComponentOrder.unpackR(color);
 		final int g = packedIntComponentOrder.unpackG(color);

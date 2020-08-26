@@ -22,15 +22,20 @@ import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.sin;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public final class LanczosSincFilter extends Filter {
 	private final float tau;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public LanczosSincFilter() {
 		this(4.0F, 4.0F, 3.0F);
 	}
 	
+//	TODO: Add Javadocs!
 	public LanczosSincFilter(final float resolutionX, final float resolutionY, final float tau) {
 		super(resolutionX, resolutionY);
 		
@@ -39,11 +44,13 @@ public final class LanczosSincFilter extends Filter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public float evaluate(final float x, final float y) {
 		return doLanczosSinc(x * getResolutionXReciprocal(), this.tau) * doLanczosSinc(y * getResolutionYReciprocal(), this.tau);
 	}
 	
+//	TODO: Add Javadocs!
 	public float getTau() {
 		return this.tau;
 	}

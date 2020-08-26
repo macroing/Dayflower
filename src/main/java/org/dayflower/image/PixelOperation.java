@@ -20,8 +20,14 @@ package org.dayflower.image;
 
 import static org.dayflower.util.Ints.modulo;
 
+import java.lang.reflect.Field;
+
+//TODO: Add Javadocs!
 public enum PixelOperation {
+//	TODO: Add Javadocs!
 	NO_CHANGE,
+	
+//	TODO: Add Javadocs!
 	WRAP_AROUND;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,6 +38,7 @@ public enum PixelOperation {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public int getIndex(final int index, final int resolution) {
 		switch(this) {
 			case NO_CHANGE:
@@ -43,6 +50,7 @@ public enum PixelOperation {
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	public int getX(final int x, final int resolutionX) {
 		switch(this) {
 			case NO_CHANGE:
@@ -54,6 +62,7 @@ public enum PixelOperation {
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	public int getY(final int y, final int resolutionY) {
 		switch(this) {
 			case NO_CHANGE:

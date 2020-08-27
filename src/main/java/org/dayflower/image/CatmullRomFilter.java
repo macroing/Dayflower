@@ -20,18 +20,36 @@ package org.dayflower.image;
 
 import static org.dayflower.util.Floats.sqrt;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code CatmullRomFilter} is an implementation of {@link Filter} that represents a Catmull-Rom filter.
+ * <p>
+ * This class is immutable and therefore also suitable for concurrent use without external synchronization.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class CatmullRomFilter extends Filter {
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code CatmullRomFilter} instance given {@code resolutionX} and {@code resolutionY}.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 */
 	public CatmullRomFilter(final float resolutionX, final float resolutionY) {
 		super(resolutionX, resolutionY);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates this {@code CatmullRomFilter} instance given {@code x} and {@code y}.
+	 * <p>
+	 * Returns the evaluated value.
+	 * 
+	 * @param x the X-coordinate
+	 * @param y the Y-coordinate
+	 * @return the evaluated value
+	 */
 	@Override
 	public float evaluate(final float x, final float y) {
 		final float a = x * x + y * y;

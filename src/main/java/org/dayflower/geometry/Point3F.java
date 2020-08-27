@@ -27,9 +27,9 @@ import java.util.Objects;
 
 //TODO: Add Javadocs!
 public final class Point3F {
-	private final float element1;
-	private final float element2;
-	private final float element3;
+	private final float component1;
+	private final float component2;
+	private final float component3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -40,14 +40,14 @@ public final class Point3F {
 	
 //	TODO: Add Javadocs!
 	public Point3F(final Vector3F v) {
-		this(v.getElement1(), v.getElement2(), v.getElement3());
+		this(v.getComponent1(), v.getComponent2(), v.getComponent3());
 	}
 	
 //	TODO: Add Javadocs!
-	public Point3F(final float element1, final float element2, final float element3) {
-		this.element1 = element1;
-		this.element2 = element2;
-		this.element3 = element3;
+	public Point3F(final float component1, final float component2, final float component3) {
+		this.component1 = component1;
+		this.component2 = component2;
+		this.component3 = component3;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ public final class Point3F {
 //	TODO: Add Javadocs!
 	@Override
 	public String toString() {
-		return String.format("new Point3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.element1), Float.valueOf(this.element2), Float.valueOf(this.element3));
+		return String.format("new Point3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
 	}
 	
 //	TODO: Add Javadocs!
@@ -65,11 +65,11 @@ public final class Point3F {
 			return true;
 		} else if(!(object instanceof Point3F)) {
 			return false;
-		} else if(!equal(this.element1, Point3F.class.cast(object).element1)) {
+		} else if(!equal(this.component1, Point3F.class.cast(object).component1)) {
 			return false;
-		} else if(!equal(this.element2, Point3F.class.cast(object).element2)) {
+		} else if(!equal(this.component2, Point3F.class.cast(object).component2)) {
 			return false;
-		} else if(!equal(this.element3, Point3F.class.cast(object).element3)) {
+		} else if(!equal(this.component3, Point3F.class.cast(object).component3)) {
 			return false;
 		} else {
 			return true;
@@ -77,165 +77,165 @@ public final class Point3F {
 	}
 	
 //	TODO: Add Javadocs!
-	public float getElement1() {
-		return this.element1;
+	public float getComponent1() {
+		return this.component1;
 	}
 	
 //	TODO: Add Javadocs!
-	public float getElement2() {
-		return this.element2;
+	public float getComponent2() {
+		return this.component2;
 	}
 	
 //	TODO: Add Javadocs!
-	public float getElement3() {
-		return this.element3;
+	public float getComponent3() {
+		return this.component3;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getU() {
-		return this.element1;
+		return this.component1;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getV() {
-		return this.element2;
+		return this.component2;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getW() {
-		return this.element3;
+		return this.component3;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getX() {
-		return this.element1;
+		return this.component1;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getY() {
-		return this.element2;
+		return this.component2;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getZ() {
-		return this.element3;
+		return this.component3;
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.element1), Float.valueOf(this.element2), Float.valueOf(this.element3));
+		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 	public static Point3F add(final Point3F pLHS, final Vector3F vRHS) {
-		final float element1 = pLHS.element1 + vRHS.getElement1();
-		final float element2 = pLHS.element2 + vRHS.getElement2();
-		final float element3 = pLHS.element3 + vRHS.getElement3();
+		final float component1 = pLHS.component1 + vRHS.getComponent1();
+		final float component2 = pLHS.component2 + vRHS.getComponent2();
+		final float component3 = pLHS.component3 + vRHS.getComponent3();
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F centroid(final Point3F pA, final Point3F pB, final Point3F pC) {
-		final float element1 = (pA.element1 + pB.element1 + pC.element1) / 3.0F;
-		final float element2 = (pA.element2 + pB.element2 + pC.element2) / 3.0F;
-		final float element3 = (pA.element3 + pB.element3 + pC.element3) / 3.0F;
+		final float component1 = (pA.component1 + pB.component1 + pC.component1) / 3.0F;
+		final float component2 = (pA.component2 + pB.component2 + pC.component2) / 3.0F;
+		final float component3 = (pA.component3 + pB.component3 + pC.component3) / 3.0F;
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F maximum() {
-		final float element1 = Float.MAX_VALUE;
-		final float element2 = Float.MAX_VALUE;
-		final float element3 = Float.MAX_VALUE;
+		final float component1 = Float.MAX_VALUE;
+		final float component2 = Float.MAX_VALUE;
+		final float component3 = Float.MAX_VALUE;
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F maximum(final Point3F pA, final Point3F pB) {
-		final float element1 = max(pA.element1, pB.element1);
-		final float element2 = max(pA.element2, pB.element2);
-		final float element3 = max(pA.element3, pB.element3);
+		final float component1 = max(pA.component1, pB.component1);
+		final float component2 = max(pA.component2, pB.component2);
+		final float component3 = max(pA.component3, pB.component3);
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F maximum(final Point3F pA, final Point3F pB, final Point3F pC) {
-		final float element1 = max(pA.element1, pB.element1, pC.element1);
-		final float element2 = max(pA.element2, pB.element2, pC.element2);
-		final float element3 = max(pA.element3, pB.element3, pC.element3);
+		final float component1 = max(pA.component1, pB.component1, pC.component1);
+		final float component2 = max(pA.component2, pB.component2, pC.component2);
+		final float component3 = max(pA.component3, pB.component3, pC.component3);
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F midpoint(final Point3F pA, final Point3F pB) {
-		final float element1 = (pA.element1 + pB.element1) * 0.5F;
-		final float element2 = (pA.element2 + pB.element2) * 0.5F;
-		final float element3 = (pA.element3 + pB.element3) * 0.5F;
+		final float component1 = (pA.component1 + pB.component1) * 0.5F;
+		final float component2 = (pA.component2 + pB.component2) * 0.5F;
+		final float component3 = (pA.component3 + pB.component3) * 0.5F;
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F minimum() {
-		final float element1 = Float.MIN_VALUE;
-		final float element2 = Float.MIN_VALUE;
-		final float element3 = Float.MIN_VALUE;
+		final float component1 = Float.MIN_VALUE;
+		final float component2 = Float.MIN_VALUE;
+		final float component3 = Float.MIN_VALUE;
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F minimum(final Point3F pA, final Point3F pB) {
-		final float element1 = min(pA.element1, pB.element1);
-		final float element2 = min(pA.element2, pB.element2);
-		final float element3 = min(pA.element3, pB.element3);
+		final float component1 = min(pA.component1, pB.component1);
+		final float component2 = min(pA.component2, pB.component2);
+		final float component3 = min(pA.component3, pB.component3);
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F minimum(final Point3F pA, final Point3F pB, final Point3F pC) {
-		final float element1 = min(pA.element1, pB.element1, pC.element1);
-		final float element2 = min(pA.element2, pB.element2, pC.element2);
-		final float element3 = min(pA.element3, pB.element3, pC.element3);
+		final float component1 = min(pA.component1, pB.component1, pC.component1);
+		final float component2 = min(pA.component2, pB.component2, pC.component2);
+		final float component3 = min(pA.component3, pB.component3, pC.component3);
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F subtract(final Point3F pLHS, final Vector3F vRHS) {
-		final float element1 = pLHS.element1 - vRHS.getElement1();
-		final float element2 = pLHS.element2 - vRHS.getElement2();
-		final float element3 = pLHS.element3 - vRHS.getElement3();
+		final float component1 = pLHS.component1 - vRHS.getComponent1();
+		final float component2 = pLHS.component2 - vRHS.getComponent2();
+		final float component3 = pLHS.component3 - vRHS.getComponent3();
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F transform(final Matrix44F mLHS, final Point3F pRHS) {
-		final float element1 = mLHS.getElement11() * pRHS.element1 + mLHS.getElement12() * pRHS.element2 + mLHS.getElement13() * pRHS.element3 + mLHS.getElement14();
-		final float element2 = mLHS.getElement21() * pRHS.element1 + mLHS.getElement22() * pRHS.element2 + mLHS.getElement23() * pRHS.element3 + mLHS.getElement24();
-		final float element3 = mLHS.getElement31() * pRHS.element1 + mLHS.getElement32() * pRHS.element2 + mLHS.getElement33() * pRHS.element3 + mLHS.getElement34();
+		final float component1 = mLHS.getElement11() * pRHS.component1 + mLHS.getElement12() * pRHS.component2 + mLHS.getElement13() * pRHS.component3 + mLHS.getElement14();
+		final float component2 = mLHS.getElement21() * pRHS.component1 + mLHS.getElement22() * pRHS.component2 + mLHS.getElement23() * pRHS.component3 + mLHS.getElement24();
+		final float component3 = mLHS.getElement31() * pRHS.component1 + mLHS.getElement32() * pRHS.component2 + mLHS.getElement33() * pRHS.component3 + mLHS.getElement34();
 		
-		return new Point3F(element1, element2, element3);
+		return new Point3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Point3F transformAndDivide(final Matrix44F mLHS, final Point3F pRHS) {
-		final float element1 = mLHS.getElement11() * pRHS.element1 + mLHS.getElement12() * pRHS.element2 + mLHS.getElement13() * pRHS.element3 + mLHS.getElement14();
-		final float element2 = mLHS.getElement21() * pRHS.element1 + mLHS.getElement22() * pRHS.element2 + mLHS.getElement23() * pRHS.element3 + mLHS.getElement24();
-		final float element3 = mLHS.getElement31() * pRHS.element1 + mLHS.getElement32() * pRHS.element2 + mLHS.getElement33() * pRHS.element3 + mLHS.getElement34();
-		final float element4 = mLHS.getElement41() * pRHS.element1 + mLHS.getElement42() * pRHS.element2 + mLHS.getElement43() * pRHS.element3 + mLHS.getElement44();
+		final float component1 = mLHS.getElement11() * pRHS.component1 + mLHS.getElement12() * pRHS.component2 + mLHS.getElement13() * pRHS.component3 + mLHS.getElement14();
+		final float component2 = mLHS.getElement21() * pRHS.component1 + mLHS.getElement22() * pRHS.component2 + mLHS.getElement23() * pRHS.component3 + mLHS.getElement24();
+		final float component3 = mLHS.getElement31() * pRHS.component1 + mLHS.getElement32() * pRHS.component2 + mLHS.getElement33() * pRHS.component3 + mLHS.getElement34();
+		final float component4 = mLHS.getElement41() * pRHS.component1 + mLHS.getElement42() * pRHS.component2 + mLHS.getElement43() * pRHS.component3 + mLHS.getElement44();
 		
-		return equal(element4, 1.0F) || equal(element4, 0.0F) ? new Point3F(element1, element2, element3) : new Point3F(element1 / element4, element2 / element4, element3 / element4);
+		return equal(component4, 1.0F) || equal(component4, 0.0F) ? new Point3F(component1, component2, component3) : new Point3F(component1 / component4, component2 / component4, component3 / component4);
 	}
 	
 //	TODO: Add Javadocs!

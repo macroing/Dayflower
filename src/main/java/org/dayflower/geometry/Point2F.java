@@ -32,8 +32,8 @@ import java.util.Objects;
 
 //TODO: Add Javadocs!
 public final class Point2F {
-	private final float element1;
-	private final float element2;
+	private final float component1;
+	private final float component2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -44,13 +44,13 @@ public final class Point2F {
 	
 //	TODO: Add Javadocs!
 	public Point2F(final Vector2F v) {
-		this(v.getElement1(), v.getElement2());
+		this(v.getComponent1(), v.getComponent2());
 	}
 	
 //	TODO: Add Javadocs!
-	public Point2F(final float element1, final float element2) {
-		this.element1 = element1;
-		this.element2 = element2;
+	public Point2F(final float component1, final float component2) {
+		this.component1 = component1;
+		this.component2 = component2;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ public final class Point2F {
 //	TODO: Add Javadocs!
 	@Override
 	public String toString() {
-		return String.format("new Point2F(%+.10f, %+.10f)", Float.valueOf(this.element1), Float.valueOf(this.element2));
+		return String.format("new Point2F(%+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2));
 	}
 	
 //	TODO: Add Javadocs!
@@ -68,9 +68,9 @@ public final class Point2F {
 			return true;
 		} else if(!(object instanceof Point2F)) {
 			return false;
-		} else if(!equal(this.element1, Point2F.class.cast(object).element1)) {
+		} else if(!equal(this.component1, Point2F.class.cast(object).component1)) {
 			return false;
-		} else if(!equal(this.element2, Point2F.class.cast(object).element2)) {
+		} else if(!equal(this.component2, Point2F.class.cast(object).component2)) {
 			return false;
 		} else {
 			return true;
@@ -78,39 +78,39 @@ public final class Point2F {
 	}
 	
 //	TODO: Add Javadocs!
-	public float getElement1() {
-		return this.element1;
+	public float getComponent1() {
+		return this.component1;
 	}
 	
 //	TODO: Add Javadocs!
-	public float getElement2() {
-		return this.element2;
+	public float getComponent2() {
+		return this.component2;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getU() {
-		return this.element1;
+		return this.component1;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getV() {
-		return this.element2;
+		return this.component2;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getX() {
-		return this.element1;
+		return this.component1;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getY() {
-		return this.element2;
+		return this.component2;
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.element1), Float.valueOf(this.element2));
+		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,19 +138,19 @@ public final class Point2F {
 			final float phi = PI_DIVIDED_BY_4 * (b / a);
 			final float r = radius * a;
 			
-			final float element1 = cos(phi) * r;
-			final float element2 = sin(phi) * r;
+			final float component1 = cos(phi) * r;
+			final float component2 = sin(phi) * r;
 			
-			return new Point2F(element1, element2);
+			return new Point2F(component1, component2);
 		}
 		
 		final float phi = PI_DIVIDED_BY_2 - (PI_DIVIDED_BY_4 * (a / b));
 		final float r = radius * b;
 		
-		final float element1 = cos(phi) * r;
-		final float element2 = sin(phi) * r;
+		final float component1 = cos(phi) * r;
+		final float component2 = sin(phi) * r;
 		
-		return new Point2F(element1, element2);
+		return new Point2F(component1, component2);
 	}
 	
 //	TODO: Add Javadocs!
@@ -163,10 +163,10 @@ public final class Point2F {
 		final float phi = PI_MULTIPLIED_BY_2 * v;
 		final float r = sqrt(u);
 		
-		final float element1 = cos(phi) * r;
-		final float element2 = sin(phi) * r;
+		final float component1 = cos(phi) * r;
+		final float component2 = sin(phi) * r;
 		
-		return new Point2F(element1, element2);
+		return new Point2F(component1, component2);
 	}
 	
 //	TODO: Add Javadocs!

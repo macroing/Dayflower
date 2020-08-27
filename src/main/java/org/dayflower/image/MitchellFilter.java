@@ -20,21 +20,42 @@ package org.dayflower.image;
 
 import static org.dayflower.util.Floats.abs;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code MitchellFilter} is an implementation of {@link Filter} that represents a Mitchell filter.
+ * <p>
+ * This class is immutable and therefore also suitable for concurrent use without external synchronization.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class MitchellFilter extends Filter {
 	private final float b;
 	private final float c;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code MitchellFilter} given {@code 2.0F}, {@code 2.0F}, {@code 1.0F / 3.0F} and {@code 1.0F / 3.0F}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MitchellFilter(2.0F, 2.0F, 1.0F / 3.0F, 1.0F / 3.0F);
+	 * }
+	 * </pre>
+	 */
 	public MitchellFilter() {
 		this(2.0F, 2.0F, 1.0F / 3.0F, 1.0F / 3.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code MitchellFilter} given {@code resolutionX}, {@code resolutionY}, {@code b} and {@code c}.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param b the B-coefficient to use
+	 * @param c the C-coefficient to use
+	 */
 	public MitchellFilter(final float resolutionX, final float resolutionY, final float b, final float c) {
 		super(resolutionX, resolutionY);
 		
@@ -44,18 +65,34 @@ public final class MitchellFilter extends Filter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates this {@code MitchellFilter} instance given {@code x} and {@code y}.
+	 * <p>
+	 * Returns the evaluated value.
+	 * 
+	 * @param x the X-coordinate
+	 * @param y the Y-coordinate
+	 * @return the evaluated value
+	 */
 	@Override
 	public float evaluate(final float x, final float y) {
 		return doMitchell(x * getResolutionXReciprocal(), this.b, this.c) * doMitchell(y * getResolutionYReciprocal(), this.b, this.c);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the B-coefficient.
+	 * 
+	 * @return the B-coefficient
+	 */
 	public float getB() {
 		return this.b;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the C-coefficient.
+	 * 
+	 * @return the C-coefficient
+	 */
 	public float getC() {
 		return this.c;
 	}

@@ -26,8 +26,8 @@ import java.util.Objects;
 
 //TODO: Add Javadocs!
 public final class Vector2F {
-	private final float element1;
-	private final float element2;
+	private final float component1;
+	private final float component2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -38,13 +38,13 @@ public final class Vector2F {
 	
 //	TODO: Add Javadocs!
 	public Vector2F(final Point2F p) {
-		this(p.getElement1(), p.getElement2());
+		this(p.getComponent1(), p.getComponent2());
 	}
 	
 //	TODO: Add Javadocs!
-	public Vector2F(final float element1, final float element2) {
-		this.element1 = element1;
-		this.element2 = element2;
+	public Vector2F(final float component1, final float component2) {
+		this.component1 = component1;
+		this.component2 = component2;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ public final class Vector2F {
 //	TODO: Add Javadocs!
 	@Override
 	public String toString() {
-		return String.format("new Vector2F(%+.10f, %+.10f)", Float.valueOf(this.element1), Float.valueOf(this.element2));
+		return String.format("new Vector2F(%+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2));
 	}
 	
 //	TODO: Add Javadocs!
@@ -62,9 +62,9 @@ public final class Vector2F {
 			return true;
 		} else if(!(object instanceof Vector2F)) {
 			return false;
-		} else if(!equal(this.element1, Vector2F.class.cast(object).element1)) {
+		} else if(!equal(this.component1, Vector2F.class.cast(object).component1)) {
 			return false;
-		} else if(!equal(this.element2, Vector2F.class.cast(object).element2)) {
+		} else if(!equal(this.component2, Vector2F.class.cast(object).component2)) {
 			return false;
 		} else {
 			return true;
@@ -72,33 +72,33 @@ public final class Vector2F {
 	}
 	
 //	TODO: Add Javadocs!
-	public float getElement1() {
-		return this.element1;
+	public float getComponent1() {
+		return this.component1;
 	}
 	
 //	TODO: Add Javadocs!
-	public float getElement2() {
-		return this.element2;
+	public float getComponent2() {
+		return this.component2;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getU() {
-		return this.element1;
+		return this.component1;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getV() {
-		return this.element2;
+		return this.component2;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getX() {
-		return this.element1;
+		return this.component1;
 	}
 	
 //	TODO: Add Javadocs!
 	public float getY() {
-		return this.element2;
+		return this.component2;
 	}
 	
 //	TODO: Add Javadocs!
@@ -108,55 +108,55 @@ public final class Vector2F {
 	
 //	TODO: Add Javadocs!
 	public float lengthSquared() {
-		return this.element1 * this.element1 + this.element2 * this.element2;
+		return this.component1 * this.component1 + this.component2 * this.component2;
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.element1), Float.valueOf(this.element2));
+		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 	public static Vector2F add(final Vector2F vLHS, final Vector2F vRHS) {
-		final float element1 = vLHS.element1 + vRHS.element1;
-		final float element2 = vLHS.element2 + vRHS.element2;
+		final float component1 = vLHS.component1 + vRHS.component1;
+		final float component2 = vLHS.component2 + vRHS.component2;
 		
-		return new Vector2F(element1, element2);
+		return new Vector2F(component1, component2);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector2F direction(final Point2F pEye, final Point2F pLookAt) {
-		final float element1 = pLookAt.getElement1() - pEye.getElement1();
-		final float element2 = pLookAt.getElement2() - pEye.getElement2();
+		final float component1 = pLookAt.getComponent1() - pEye.getComponent1();
+		final float component2 = pLookAt.getComponent2() - pEye.getComponent2();
 		
-		return new Vector2F(element1, element2);
+		return new Vector2F(component1, component2);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector2F divide(final Vector2F vLHS, final float sRHS) {
-		final float element1 = vLHS.element1 / sRHS;
-		final float element2 = vLHS.element2 / sRHS;
+		final float component1 = vLHS.component1 / sRHS;
+		final float component2 = vLHS.component2 / sRHS;
 		
-		return new Vector2F(element1, element2);
+		return new Vector2F(component1, component2);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector2F multiply(final Vector2F vLHS, final float sRHS) {
-		final float element1 = vLHS.element1 * sRHS;
-		final float element2 = vLHS.element2 * sRHS;
+		final float component1 = vLHS.component1 * sRHS;
+		final float component2 = vLHS.component2 * sRHS;
 		
-		return new Vector2F(element1, element2);
+		return new Vector2F(component1, component2);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector2F negate(final Vector2F v) {
-		final float element1 = -v.element1;
-		final float element2 = -v.element2;
+		final float component1 = -v.component1;
+		final float component2 = -v.component2;
 		
-		return new Vector2F(element1, element2);
+		return new Vector2F(component1, component2);
 	}
 	
 //	TODO: Add Javadocs!
@@ -166,14 +166,14 @@ public final class Vector2F {
 	
 //	TODO: Add Javadocs!
 	public static Vector2F subtract(final Vector2F vLHS, final Vector2F vRHS) {
-		final float element1 = vLHS.element1 - vRHS.element1;
-		final float element2 = vLHS.element2 - vRHS.element2;
+		final float component1 = vLHS.component1 - vRHS.component1;
+		final float component2 = vLHS.component2 - vRHS.component2;
 		
-		return new Vector2F(element1, element2);
+		return new Vector2F(component1, component2);
 	}
 	
 //	TODO: Add Javadocs!
 	public static float dotProduct(final Vector2F vLHS, final Vector2F vRHS) {
-		return vLHS.element1 * vRHS.element1 + vLHS.element2 * vRHS.element2;
+		return vLHS.component1 * vRHS.component1 + vLHS.component2 * vRHS.component2;
 	}
 }

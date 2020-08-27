@@ -18,23 +18,50 @@
  */
 package org.dayflower.image;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code BoxFilter} is an implementation of {@link Filter} that represents a Box filter.
+ * <p>
+ * This class is immutable and therefore also suitable for concurrent use without external synchronization.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class BoxFilter extends Filter {
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code BoxFilter} instance given {@code 0.5F} and {@code 0.5F}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new BoxFilter(0.5F, 0.5F);
+	 * }
+	 * </pre>
+	 */
 	public BoxFilter() {
 		this(0.5F, 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code BoxFilter} instance given {@code resolutionX} and {@code resolutionY}.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 */
 	public BoxFilter(final float resolutionX, final float resolutionY) {
 		super(resolutionX, resolutionY);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates this {@code BoxFilter} instance given {@code x} and {@code y}.
+	 * <p>
+	 * Returns the evaluated value.
+	 * 
+	 * @param x the X-coordinate
+	 * @param y the Y-coordinate
+	 * @return the evaluated value
+	 */
 	@Override
 	public float evaluate(final float x, final float y) {
 		return 1.0F;

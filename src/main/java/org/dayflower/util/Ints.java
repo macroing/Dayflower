@@ -29,6 +29,18 @@ public final class Ints {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
+	public static int abs(final int value) {
+		return Math.abs(value);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int floorToInt(final float value) {
+		final int i = (int)(value);
+		
+		return value < i ? i - 1 : i;
+	}
+	
+//	TODO: Add Javadocs!
 	public static int max(final int a, final int b) {
 		return Math.max(a, b);
 	}

@@ -33,51 +33,98 @@ import static org.dayflower.util.Floats.sqrt;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Vector3F} denotes a 3-dimensional vector with three components, of type {@code float}.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Vector3F {
-	private final float element1;
-	private final float element2;
-	private final float element3;
+	private final float component1;
+	private final float component2;
+	private final float component3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Vector3F} instance given the component values {@code 0.0F}, {@code 0.0F} and {@code 0.0F}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Vector3F(0.0F, 0.0F, 0.0F);
+	 * }
+	 * </pre>
+	 */
 	public Vector3F() {
 		this(0.0F, 0.0F, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Vector3F} instance given the component values {@code p.getComponent1()}, {@code p.getComponent2()} and {@code p.getComponent3()}.
+	 * <p>
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Vector3F(p.getComponent1(), p.getComponent2(), p.getComponent3());
+	 * }
+	 * </pre>
+	 * 
+	 * @param p a {@link Point3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
+	 */
 	public Vector3F(final Point3F p) {
-		this(p.getElement1(), p.getElement2(), p.getElement3());
+		this(p.getComponent1(), p.getComponent2(), p.getComponent3());
 	}
 	
-//	TODO: Add Javadocs!
-	public Vector3F(final float element1, final float element2, final float element3) {
-		this.element1 = element1;
-		this.element2 = element2;
-		this.element3 = element3;
+	/**
+	 * Constructs a new {@code Vector3F} instance given the component values {@code component1}, {@code component2} and {@code component3}.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
+	public Vector3F(final float component1, final float component2, final float component3) {
+		this.component1 = component1;
+		this.component2 = component2;
+		this.component3 = component3;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code Vector3F} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Vector3F} instance
+	 */
 	@Override
 	public String toString() {
-		return String.format("new Vector3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.element1), Float.valueOf(this.element2), Float.valueOf(this.element3));
+		return String.format("new Vector3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code Vector3F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Vector3F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Vector3F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Vector3F}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Vector3F)) {
 			return false;
-		} else if(!equal(this.element1, Vector3F.class.cast(object).element1)) {
+		} else if(!equal(this.component1, Vector3F.class.cast(object).component1)) {
 			return false;
-		} else if(!equal(this.element2, Vector3F.class.cast(object).element2)) {
+		} else if(!equal(this.component2, Vector3F.class.cast(object).component2)) {
 			return false;
-		} else if(!equal(this.element3, Vector3F.class.cast(object).element3)) {
+		} else if(!equal(this.component3, Vector3F.class.cast(object).component3)) {
 			return false;
 		} else {
 			return true;
@@ -92,7 +139,7 @@ public final class Vector3F {
 			return 1.0F;
 		}
 		
-		return saturate(this.element1 / sinTheta, -1.0F, 1.0F);
+		return saturate(this.component1 / sinTheta, -1.0F, 1.0F);
 	}
 	
 //	TODO: Add Javadocs!
@@ -102,7 +149,7 @@ public final class Vector3F {
 	
 //	TODO: Add Javadocs!
 	public float cosTheta() {
-		return this.element3;
+		return this.component3;
 	}
 	
 //	TODO: Add Javadocs!
@@ -115,59 +162,103 @@ public final class Vector3F {
 		return cosTheta() * cosTheta();
 	}
 	
-//	TODO: Add Javadocs!
-	public float getElement1() {
-		return this.element1;
+	/**
+	 * Returns the value of component 1.
+	 * 
+	 * @return the value of component 1
+	 */
+	public float getComponent1() {
+		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
-	public float getElement2() {
-		return this.element2;
+	/**
+	 * Returns the value of component 2.
+	 * 
+	 * @return the value of component 2
+	 */
+	public float getComponent2() {
+		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
-	public float getElement3() {
-		return this.element3;
+	/**
+	 * Returns the value of component 3.
+	 * 
+	 * @return the value of component 3
+	 */
+	public float getComponent3() {
+		return this.component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component.
+	 * 
+	 * @return the value of the U-component
+	 */
 	public float getU() {
-		return this.element1;
+		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the V-component.
+	 * 
+	 * @return the value of the V-component
+	 */
 	public float getV() {
-		return this.element2;
+		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the W-component.
+	 * 
+	 * @return the value of the W-component
+	 */
 	public float getW() {
-		return this.element3;
+		return this.component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component.
+	 * 
+	 * @return the value of the X-component
+	 */
 	public float getX() {
-		return this.element1;
+		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component.
+	 * 
+	 * @return the value of the Y-component
+	 */
 	public float getY() {
-		return this.element2;
+		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Z-component.
+	 * 
+	 * @return the value of the Z-component
+	 */
 	public float getZ() {
-		return this.element3;
+		return this.component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the length of this {@code Vector3F} instance.
+	 * 
+	 * @return the length of this {@code Vector3F} instance
+	 */
 	public float length() {
 		return sqrt(lengthSquared());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the squared length of this {@code Vector3F} instance.
+	 * 
+	 * @return the squared length of this {@code Vector3F} instance
+	 */
 	public float lengthSquared() {
-		return this.element1 * this.element1 + this.element2 * this.element2 + this.element3 * this.element3;
+		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3;
 	}
 	
 //	TODO: Add Javadocs!
@@ -178,7 +269,7 @@ public final class Vector3F {
 			return 0.0F;
 		}
 		
-		return saturate(this.element2 / sinTheta, -1.0F, 1.0F);
+		return saturate(this.component2 / sinTheta, -1.0F, 1.0F);
 	}
 	
 //	TODO: Add Javadocs!
@@ -206,58 +297,86 @@ public final class Vector3F {
 		return sinThetaSquared() / cosThetaSquared();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code Vector3F} instance.
+	 * 
+	 * @return a hash code for this {@code Vector3F} instance
+	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.element1), Float.valueOf(this.element2), Float.valueOf(this.element3));
+		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds the component values of {@code vRHS} to the component values of {@code vLHS}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the addition.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector addition is performed componentwise.
+	 * 
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return a new {@code Vector3F} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
 	public static Vector3F add(final Vector3F vLHS, final Vector3F vRHS) {
-		final float element1 = vLHS.element1 + vRHS.element1;
-		final float element2 = vLHS.element2 + vRHS.element2;
-		final float element3 = vLHS.element3 + vRHS.element3;
+		final float component1 = vLHS.component1 + vRHS.component1;
+		final float component2 = vLHS.component2 + vRHS.component2;
+		final float component3 = vLHS.component3 + vRHS.component3;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector3F computeV(final Vector3F w) {
 		final Vector3F wNormalized = normalize(w);
 		
-		final float absWNormalizedElement1 = abs(wNormalized.element1);
-		final float absWNormalizedElement2 = abs(wNormalized.element2);
-		final float absWNormalizedElement3 = abs(wNormalized.element3);
+		final float absWNormalizedComponent1 = abs(wNormalized.component1);
+		final float absWNormalizedComponent2 = abs(wNormalized.component2);
+		final float absWNormalizedComponent3 = abs(wNormalized.component3);
 		
-		if(absWNormalizedElement1 < absWNormalizedElement2 && absWNormalizedElement1 < absWNormalizedElement3) {
-			return normalize(new Vector3F(0.0F, wNormalized.element3, -wNormalized.element2));
+		if(absWNormalizedComponent1 < absWNormalizedComponent2 && absWNormalizedComponent1 < absWNormalizedComponent3) {
+			return normalize(new Vector3F(0.0F, wNormalized.component3, -wNormalized.component2));
 		}
 		
-		if(absWNormalizedElement2 < absWNormalizedElement3) {
-			return normalize(new Vector3F(wNormalized.element3, 0.0F, -wNormalized.element1));
+		if(absWNormalizedComponent2 < absWNormalizedComponent3) {
+			return normalize(new Vector3F(wNormalized.component3, 0.0F, -wNormalized.component1));
 		}
 		
-		return normalize(new Vector3F(wNormalized.element2, -wNormalized.element1, 0.0F));
+		return normalize(new Vector3F(wNormalized.component2, -wNormalized.component1, 0.0F));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the cross product of {@code vLHS} and {@code vRHS}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the operation.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return a new {@code Vector3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
 	public static Vector3F crossProduct(final Vector3F vLHS, final Vector3F vRHS) {
-		final float element1 = vLHS.element2 * vRHS.element3 - vLHS.element3 * vRHS.element2;
-		final float element2 = vLHS.element3 * vRHS.element1 - vLHS.element1 * vRHS.element3;
-		final float element3 = vLHS.element1 * vRHS.element2 - vLHS.element2 * vRHS.element1;
+		final float component1 = vLHS.component2 * vRHS.component3 - vLHS.component3 * vRHS.component2;
+		final float component2 = vLHS.component3 * vRHS.component1 - vLHS.component1 * vRHS.component3;
+		final float component3 = vLHS.component1 * vRHS.component2 - vLHS.component2 * vRHS.component1;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector3F direction(final Point3F pEye, final Point3F pLookAt) {
-		final float element1 = pLookAt.getElement1() - pEye.getElement1();
-		final float element2 = pLookAt.getElement2() - pEye.getElement2();
-		final float element3 = pLookAt.getElement3() - pEye.getElement3();
+		final float component1 = pLookAt.getComponent1() - pEye.getComponent1();
+		final float component2 = pLookAt.getComponent2() - pEye.getComponent2();
+		final float component3 = pLookAt.getComponent3() - pEye.getComponent3();
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
@@ -276,11 +395,11 @@ public final class Vector3F {
 		final float sinPhi = sin(phi);
 		final float sinTheta = sin(theta);
 		
-		final float element1 = -sinPhi * cosTheta;
-		final float element2 = cosPhi;
-		final float element3 = sinPhi * sinTheta;
+		final float component1 = -sinPhi * cosTheta;
+		final float component2 = cosPhi;
+		final float component3 = sinPhi * sinTheta;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
@@ -290,11 +409,11 @@ public final class Vector3F {
 	
 //	TODO: Add Javadocs!
 	public static Vector3F divide(final Vector3F vLHS, final float sRHS) {
-		final float element1 = vLHS.element1 / sRHS;
-		final float element2 = vLHS.element2 / sRHS;
-		final float element3 = vLHS.element3 / sRHS;
+		final float component1 = vLHS.component1 / sRHS;
+		final float component2 = vLHS.component2 / sRHS;
+		final float component3 = vLHS.component3 / sRHS;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
@@ -309,37 +428,57 @@ public final class Vector3F {
 	
 //	TODO: Add Javadocs!
 	public static Vector3F multiply(final Vector3F vLHS, final float sRHS) {
-		final float element1 = vLHS.element1 * sRHS;
-		final float element2 = vLHS.element2 * sRHS;
-		final float element3 = vLHS.element3 * sRHS;
+		final float component1 = vLHS.component1 * sRHS;
+		final float component2 = vLHS.component2 * sRHS;
+		final float component3 = vLHS.component3 * sRHS;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector3F negate(final Vector3F v) {
-		final float element1 = -v.element1;
-		final float element2 = -v.element2;
-		final float element3 = -v.element3;
+		final float component1 = -v.component1;
+		final float component2 = -v.component2;
+		final float component3 = -v.component3;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
-	public static Vector3F normal(final Point3F pA, final Point3F pB, final Point3F pC) {
-		final Vector3F edgeAB = directionNormalized(pA, pB);
-		final Vector3F edgeAC = directionNormalized(pA, pC);
+	/**
+	 * Returns a new {@code Vector3F} instance denoting the normal of the plane defined by the {@link Point3F} instances {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3F} instance, corresponding to one of the three points in the plane
+	 * @param b a {@code Point3F} instance, corresponding to one of the three points in the plane
+	 * @param c a {@code Point3F} instance, corresponding to one of the three points in the plane
+	 * @return a new {@code Vector3F} instance denoting the normal of the plane defined by the {@code Point3F} instances {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
+	public static Vector3F normal(final Point3F a, final Point3F b, final Point3F c) {
+		final Vector3F edgeAB = directionNormalized(a, b);
+		final Vector3F edgeAC = directionNormalized(a, c);
 		
 		return crossProduct(edgeAB, edgeAC);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance denoting the normalized normal of the plane defined by the {@link Point3F} instances {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3F} instance, corresponding to one of the three points in the plane
+	 * @param b a {@code Point3F} instance, corresponding to one of the three points in the plane
+	 * @param c a {@code Point3F} instance, corresponding to one of the three points in the plane
+	 * @return a new {@code Vector3F} instance denoting the normalized normal of the plane defined by the {@code Point3F} instances {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
 	public static Vector3F normal(final Vector3F normalA, final Vector3F normalB, final Vector3F normalC, final Point3F barycentricCoordinates) {
-		final float element1 = normalA.element1 * barycentricCoordinates.getU() + normalB.element1 * barycentricCoordinates.getV() + normalC.element1 * barycentricCoordinates.getW();
-		final float element2 = normalA.element2 * barycentricCoordinates.getU() + normalB.element2 * barycentricCoordinates.getV() + normalC.element2 * barycentricCoordinates.getW();
-		final float element3 = normalA.element3 * barycentricCoordinates.getU() + normalB.element3 * barycentricCoordinates.getV() + normalC.element3 * barycentricCoordinates.getW();
+		final float component1 = normalA.component1 * barycentricCoordinates.getU() + normalB.component1 * barycentricCoordinates.getV() + normalC.component1 * barycentricCoordinates.getW();
+		final float component2 = normalA.component2 * barycentricCoordinates.getU() + normalB.component2 * barycentricCoordinates.getV() + normalC.component2 * barycentricCoordinates.getW();
+		final float component3 = normalA.component3 * barycentricCoordinates.getU() + normalB.component3 * barycentricCoordinates.getV() + normalC.component3 * barycentricCoordinates.getW();
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
@@ -377,201 +516,386 @@ public final class Vector3F {
 		return normalize(reflection(direction, normal, isFacingSurface));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a cone with a uniform distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param cosThetaMax the maximum cos theta value
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleConeUniformDistribution(final float u, final float v, final float cosThetaMax) {
 		final float cosTheta = u * (cosThetaMax - 1.0F) + 1.0F;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
-		final float element1 = cos(phi) * sinTheta;
-		final float element2 = sin(phi) * sinTheta;
-		final float element3 = cosTheta;
+		final float component1 = cos(phi) * sinTheta;
+		final float component2 = sin(phi) * sinTheta;
+		final float component3 = cosTheta;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a hemisphere with a cosine distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector3F.sampleHemisphereCosineDistribution(Floats.random(), Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleHemisphereCosineDistribution() {
 		return sampleHemisphereCosineDistribution(random(), random());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a hemisphere with a cosine distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleHemisphereCosineDistribution(final float u, final float v) {
 		final Point2F p = Point2F.sampleConcentricDisk(u, v);
 		
-		final float element1 = p.getElement1();
-		final float element2 = p.getElement2();
-		final float element3 = sqrt(max(0.0F, 1.0F - element1 * element1 - element2 * element2));
+		final float component1 = p.getComponent1();
+		final float component2 = p.getComponent2();
+		final float component3 = sqrt(max(0.0F, 1.0F - component1 * component1 - component2 * component2));
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a hemisphere with a power-cosine distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector3F.sampleHemispherePowerCosineDistribution(Floats.random(), Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleHemispherePowerCosineDistribution() {
 		return sampleHemispherePowerCosineDistribution(random(), random());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a hemisphere with a power-cosine distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector3F.sampleHemispherePowerCosineDistribution(u, v, 20.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleHemispherePowerCosineDistribution(final float u, final float v) {
 		return sampleHemispherePowerCosineDistribution(u, v, 20.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a hemisphere with a power-cosine distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param exponent the exponent to use
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleHemispherePowerCosineDistribution(final float u, final float v, final float exponent) {
 		final float cosTheta = pow(1.0F - u, 1.0F / (exponent + 1.0F));
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
-		final float element1 = cos(phi) * sinTheta;
-		final float element2 = sin(phi) * sinTheta;
-		final float element3 = cosTheta;
+		final float component1 = cos(phi) * sinTheta;
+		final float component2 = sin(phi) * sinTheta;
+		final float component3 = cosTheta;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a hemisphere with a uniform distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector3F.sampleHemisphereUniformDistribution(Floats.random(), Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleHemisphereUniformDistribution() {
 		return sampleHemisphereUniformDistribution(random(), random());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a hemisphere with a uniform distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleHemisphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
-		final float element1 = cos(phi) * sinTheta;
-		final float element2 = sin(phi) * sinTheta;
-		final float element3 = cosTheta;
+		final float component1 = cos(phi) * sinTheta;
+		final float component2 = sin(phi) * sinTheta;
+		final float component3 = cosTheta;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a sphere with a uniform distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector3F.sampleSphereUniformDistribution(Floats.random(), Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleSphereUniformDistribution() {
 		return sampleSphereUniformDistribution(random(), random());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a direction on a sphere with a uniform distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
 	public static Vector3F sampleSphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = 1.0F - 2.0F * u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
-		final float element1 = cos(phi) * sinTheta;
-		final float element2 = sin(phi) * sinTheta;
-		final float element3 = cosTheta;
+		final float component1 = cos(phi) * sinTheta;
+		final float component2 = sin(phi) * sinTheta;
+		final float component3 = cosTheta;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Subtracts the component values of {@code vRHS} from the component values of {@code vLHS}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the subtraction.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector subtraction is performed componentwise.
+	 * 
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return a new {@code Vector3F} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
 	public static Vector3F subtract(final Vector3F vLHS, final Vector3F vRHS) {
-		final float element1 = vLHS.element1 - vRHS.element1;
-		final float element2 = vLHS.element2 - vRHS.element2;
-		final float element3 = vLHS.element3 - vRHS.element3;
+		final float component1 = vLHS.component1 - vRHS.component1;
+		final float component2 = vLHS.component2 - vRHS.component2;
+		final float component3 = vLHS.component3 - vRHS.component3;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector3F transform(final Matrix44F mLHS, final Vector3F vRHS) {
-		final float element1 = mLHS.getElement11() * vRHS.element1 + mLHS.getElement12() * vRHS.element2 + mLHS.getElement13() * vRHS.element3;
-		final float element2 = mLHS.getElement21() * vRHS.element1 + mLHS.getElement22() * vRHS.element2 + mLHS.getElement23() * vRHS.element3;
-		final float element3 = mLHS.getElement31() * vRHS.element1 + mLHS.getElement32() * vRHS.element2 + mLHS.getElement33() * vRHS.element3;
+		final float component1 = mLHS.getElement11() * vRHS.component1 + mLHS.getElement12() * vRHS.component2 + mLHS.getElement13() * vRHS.component3;
+		final float component2 = mLHS.getElement21() * vRHS.component1 + mLHS.getElement22() * vRHS.component2 + mLHS.getElement23() * vRHS.component3;
+		final float component3 = mLHS.getElement31() * vRHS.component1 + mLHS.getElement32() * vRHS.component2 + mLHS.getElement33() * vRHS.component3;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector3F transform(final Vector3F vLHS, final OrthoNormalBasis33F oRHS) {
-		final float element1 = vLHS.element1 * oRHS.getU().element1 + vLHS.element2 * oRHS.getV().element1 + vLHS.element3 * oRHS.getW().element1;
-		final float element2 = vLHS.element1 * oRHS.getU().element2 + vLHS.element2 * oRHS.getV().element2 + vLHS.element3 * oRHS.getW().element2;
-		final float element3 = vLHS.element1 * oRHS.getU().element3 + vLHS.element2 * oRHS.getV().element3 + vLHS.element3 * oRHS.getW().element3;
+		final float component1 = vLHS.component1 * oRHS.getU().component1 + vLHS.component2 * oRHS.getV().component1 + vLHS.component3 * oRHS.getW().component1;
+		final float component2 = vLHS.component1 * oRHS.getU().component2 + vLHS.component2 * oRHS.getV().component2 + vLHS.component3 * oRHS.getW().component2;
+		final float component3 = vLHS.component1 * oRHS.getU().component3 + vLHS.component2 * oRHS.getV().component3 + vLHS.component3 * oRHS.getW().component3;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector3F transformReverse(final Vector3F vLHS, final OrthoNormalBasis33F oRHS) {
-		final float element1 = dotProduct(vLHS, oRHS.getU());
-		final float element2 = dotProduct(vLHS, oRHS.getV());
-		final float element3 = dotProduct(vLHS, oRHS.getW());
+		final float component1 = dotProduct(vLHS, oRHS.getU());
+		final float component2 = dotProduct(vLHS, oRHS.getV());
+		final float component3 = dotProduct(vLHS, oRHS.getW());
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
 	public static Vector3F transformTranspose(final Matrix44F mLHS, final Vector3F vRHS) {
-		final float element1 = mLHS.getElement11() * vRHS.element1 + mLHS.getElement21() * vRHS.element2 + mLHS.getElement31() * vRHS.element3;
-		final float element2 = mLHS.getElement12() * vRHS.element1 + mLHS.getElement22() * vRHS.element2 + mLHS.getElement32() * vRHS.element3;
-		final float element3 = mLHS.getElement13() * vRHS.element1 + mLHS.getElement23() * vRHS.element2 + mLHS.getElement33() * vRHS.element3;
+		final float component1 = mLHS.getElement11() * vRHS.component1 + mLHS.getElement21() * vRHS.component2 + mLHS.getElement31() * vRHS.component3;
+		final float component2 = mLHS.getElement12() * vRHS.component1 + mLHS.getElement22() * vRHS.component2 + mLHS.getElement32() * vRHS.component3;
+		final float component3 = mLHS.getElement13() * vRHS.component1 + mLHS.getElement23() * vRHS.component2 + mLHS.getElement33() * vRHS.component3;
 		
-		return new Vector3F(element1, element2, element3);
+		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(1.0F, 0.0F, 0.0F)}.
+	 * 
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(1.0F, 0.0F, 0.0F)}
+	 */
 	public static Vector3F u() {
 		return u(1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(u, 0.0F, 0.0F)}.
+	 * 
+	 * @param u the value of the U-component
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(u, 0.0F, 0.0F)}
+	 */
 	public static Vector3F u(final float u) {
 		return new Vector3F(u, 0.0F, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 1.0F, 0.0F)}.
+	 * 
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 1.0F, 0.0F)}
+	 */
 	public static Vector3F v() {
 		return v(1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, v, 0.0F)}.
+	 * 
+	 * @param v the value of the V-component
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, v, 0.0F)}
+	 */
 	public static Vector3F v(final float v) {
 		return new Vector3F(0.0F, v, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, 1.0F)}.
+	 * 
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, 1.0F)}
+	 */
 	public static Vector3F w() {
 		return w(1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, w)}.
+	 * 
+	 * @param w the value of the W-component
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, w)}
+	 */
 	public static Vector3F w(final float w) {
 		return new Vector3F(0.0F, 0.0F, w);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(1.0F, 0.0F, 0.0F)}.
+	 * 
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(1.0F, 0.0F, 0.0F)}
+	 */
 	public static Vector3F x() {
 		return x(1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(x, 0.0F, 0.0F)}.
+	 * 
+	 * @param x the value of the X-component
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(x, 0.0F, 0.0F)}
+	 */
 	public static Vector3F x(final float x) {
 		return new Vector3F(x, 0.0F, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 1.0F, 0.0F)}.
+	 * 
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 1.0F, 0.0F)}
+	 */
 	public static Vector3F y() {
 		return y(1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, y, 0.0F)}.
+	 * 
+	 * @param y the value of the Y-component
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, y, 0.0F)}
+	 */
 	public static Vector3F y(final float y) {
 		return new Vector3F(0.0F, y, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, 1.0F)}.
+	 * 
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, 1.0F)}
+	 */
 	public static Vector3F z() {
 		return z(1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, z)}.
+	 * 
+	 * @param z the value of the Z-component
+	 * @return a new {@code Vector3F} instance equivalent to {@code new Vector3F(0.0F, 0.0F, z)}
+	 */
 	public static Vector3F z(final float z) {
 		return new Vector3F(0.0F, 0.0F, z);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the dot product of {@code vLHS} and {@code vRHS}.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return the dot product of {@code vLHS} and {@code vRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
 	public static float dotProduct(final Vector3F vLHS, final Vector3F vRHS) {
-		return vLHS.element1 * vRHS.element1 + vLHS.element2 * vRHS.element2 + vLHS.element3 * vRHS.element3;
+		return vLHS.component1 * vRHS.component1 + vLHS.component2 * vRHS.component2 + vLHS.component3 * vRHS.component3;
 	}
 }

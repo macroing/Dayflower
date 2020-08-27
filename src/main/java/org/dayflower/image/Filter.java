@@ -18,11 +18,16 @@
  */
 package org.dayflower.image;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code Filter} represents a filter.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public abstract class Filter {
-//	TODO: Add Javadocs!
+	/**
+	 * The size of the table created by {@link #createFilterTable()}.
+	 */
 	public static final int FILTER_TABLE_SIZE = 16;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +39,12 @@ public abstract class Filter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Filter} instance given {@code resolutionX} and {@code resolutionY}.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 */
 	protected Filter(final float resolutionX, final float resolutionY) {
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
@@ -44,30 +54,58 @@ public abstract class Filter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates this {@code Filter} instance given {@code x} and {@code y}.
+	 * <p>
+	 * Returns the evaluated value.
+	 * 
+	 * @param x the X-coordinate
+	 * @param y the Y-coordinate
+	 * @return the evaluated value
+	 */
 	public abstract float evaluate(final float x, final float y);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the resolution of the X-axis.
+	 * 
+	 * @return the resolution of the X-axis
+	 */
 	public final float getResolutionX() {
 		return this.resolutionX;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the reciprocal (or inverse) value of the resolution of the X-axis.
+	 * 
+	 * @return the reciprocal (or inverse) value of the resolution of the X-axis
+	 */
 	public final float getResolutionXReciprocal() {
 		return this.resolutionXReciprocal;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the resolution of the Y-axis.
+	 * 
+	 * @return the resolution of the Y-axis
+	 */
 	public final float getResolutionY() {
 		return this.resolutionY;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the reciprocal (or inverse) value of the resolution of the Y-axis.
+	 * 
+	 * @return the reciprocal (or inverse) value of the resolution of the Y-axis
+	 */
 	public final float getResolutionYReciprocal() {
 		return this.resolutionYReciprocal;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a table with cached values.
+	 * 
+	 * @return a table with cached values
+	 */
 	public final float[] createFilterTable() {
 		final float[] filterTable = new float[FILTER_TABLE_SIZE * FILTER_TABLE_SIZE];
 		

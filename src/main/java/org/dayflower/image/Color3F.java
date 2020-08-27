@@ -35,6 +35,11 @@ import org.dayflower.util.Ints;
 
 //TODO: Add Javadocs!
 public final class Color3F {
+//	TODO: Add Javadocs!
+	public static final Color3F BLACK = new Color3F();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final float component1;
 	private final float component2;
 	private final float component3;

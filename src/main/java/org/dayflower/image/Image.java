@@ -58,22 +58,78 @@ public final class Image {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Image} instance filled with {@code Color3F.BLACK}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Image(800, 800);
+	 * }
+	 * </pre>
+	 */
 	public Image() {
 		this(800, 800);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Image} instance filled with {@code Color3F.BLACK}.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Image(resolutionX, resolutionY, Color3F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
 	public Image(final int resolutionX, final int resolutionY) {
-		this(resolutionX, resolutionY, new Color3F());
+		this(resolutionX, resolutionY, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Image} instance filled with {@code colorRGB}.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Image(resolutionX, resolutionY, colorRGB, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGB the {@link Color3F} to fill the {@code Image} with
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 */
 	public Image(final int resolutionX, final int resolutionY, final Color3F colorRGB) {
 		this(resolutionX, resolutionY, colorRGB, new MitchellFilter());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Image} instance filled with {@code colorRGB}.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGB} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGB the {@link Color3F} to fill the {@code Image} with
+	 * @param filter the {@link Filter} to use
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code filter} are {@code null}
+	 */
 	public Image(final int resolutionX, final int resolutionY, final Color3F colorRGB, final Filter filter) {
 		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
@@ -83,12 +139,44 @@ public final class Image {
 		this.filterTable = filter.createFilterTable();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Image} instance filled with the {@code Color3F} instances in the array {@code colorRGBs}.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Image(resolutionX, resolutionY, colorRGBs, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBs the {@link Color3F} instances to fill the {@code Image} with
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or at least one of its elements are {@code null}
+	 */
 	public Image(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs) {
 		this(resolutionX, resolutionY, colorRGBs, new MitchellFilter());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Image} instance filled with the {@code Color3F} instances in the array {@code colorRGBs}.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBs}, at least one of its elements or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBs the {@link Color3F} instances to fill the {@code Image} with
+	 * @param filter the {@link Filter} to use
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, at least one of its elements or {@code filter} are {@code null}
+	 */
 	public Image(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs, final Filter filter) {
 		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
@@ -100,27 +188,212 @@ public final class Image {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code BufferedImage} representation of this {@code Image} instance.
+	 * 
+	 * @return a {@code BufferedImage} representation of this {@code Image} instance
+	 */
+	public BufferedImage toBufferedImage() {
+		final BufferedImage bufferedImage = new BufferedImage(this.resolutionX, this.resolutionY, BufferedImage.TYPE_INT_ARGB);
+		
+		final int[] dataSource = toIntArrayPackedForm();
+		final int[] dataTarget = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
+		
+		System.arraycopy(dataSource, 0, dataTarget, 0, dataSource.length);
+		
+		return bufferedImage;
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 */
+	public Color3F getColorRGB(final float x, final float y) {
+		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
+	public Color3F getColorRGB(final float x, final float y, final PixelOperation pixelOperation) {
+		final int minimumX = toInt(floor(x));
+		final int maximumX = toInt(ceil(x));
+		
+		final int minimumY = toInt(floor(y));
+		final int maximumY = toInt(ceil(y));
+		
+		if(minimumX == maximumX && minimumY == maximumY) {
+			return getColorRGB(minimumX, minimumY, pixelOperation);
+		}
+		
+		final Color3F color00 = getColorRGB(minimumX, minimumY, pixelOperation);
+		final Color3F color01 = getColorRGB(maximumX, minimumY, pixelOperation);
+		final Color3F color10 = getColorRGB(minimumX, maximumY, pixelOperation);
+		final Color3F color11 = getColorRGB(maximumX, maximumY, pixelOperation);
+		
+		final float xFactor = x - minimumX;
+		final float yFactor = y - minimumY;
+		
+		final Color3F color = Color3F.blend(Color3F.blend(color00, color01, xFactor), Color3F.blend(color10, color11, xFactor), yFactor);
+		
+		return color;
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(index, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param index the index of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code index}
+	 */
+	public Color3F getColor(final int index) {
+		return getColorRGB(index, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param index the index of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code index}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
+	public Color3F getColorRGB(final int index, final PixelOperation pixelOperation) {
+		return doGetColorRGBOrDefault(pixelOperation.getIndex(index, this.resolution), Color3F.BLACK);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 */
+	public Color3F getColorRGB(final int x, final int y) {
+		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
+	public Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
+		return doGetColorRGBOrDefault(pixelOperation.getX(x, this.resolutionX), pixelOperation.getY(y, this.resolutionY), Color3F.BLACK);
+	}
+	
+	/**
+	 * Returns the resolution of this {@code Image} instance.
+	 * <p>
+	 * The resolution of {@code image} can be computed by:
+	 * <pre>
+	 * {@code
+	 * int resolution = image.getResolutionX() * image.getResolutionY();
+	 * }
+	 * </pre>
+	 * 
+	 * @return the resolution of this {@code Image} instance
+	 */
 	public int getResolution() {
 		return this.resolution;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the resolution of the X-axis of this {@code Image} instance.
+	 * <p>
+	 * The resolution of the X-axis is also known as the width.
+	 * 
+	 * @return the resolution of the X-axis of this {@code Image} instance
+	 */
 	public int getResolutionX() {
 		return this.resolutionX;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the resolution of the Y-axis of this {@code Image} instance.
+	 * <p>
+	 * The resolution of the Y-axis is also known as the height.
+	 * 
+	 * @return the resolution of the Y-axis of this {@code Image} instance
+	 */
 	public int getResolutionY() {
 		return this.resolutionY;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns an {@code int[]} representation of this {@code Image} instance in a packed form.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.toIntArrayPackedForm(PackedIntComponentOrder.ARGB);
+	 * }
+	 * </pre>
+	 * 
+	 * @return an {@code int[]} representation of this {@code Image} instance in a packed form
+	 */
 	public int[] toIntArrayPackedForm() {
 		return toIntArrayPackedForm(PackedIntComponentOrder.ARGB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns an {@code int[]} representation of this {@code Image} instance in a packed form.
+	 * <p>
+	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder}
+	 * @return an {@code int[]} representation of this {@code Image} instance in a packed form
+	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
+	 */
 	public int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder) {
 		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");
 		
@@ -133,12 +406,28 @@ public final class Image {
 		return intArray;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Clears this {@code Image} instance with a {@link Color3F} of {@code Color3F.BLACK}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.clear(Color3F.BLACK);
+	 * }
+	 * </pre>
+	 */
 	public void clear() {
-		clear(new Color3F());
+		clear(Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Clears this {@code Image} instance with a {@link Color3F} of {@code colorRGB}.
+	 * <p>
+	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorRGB the {@code Color3F} to clear with
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 */
 	public void clear(final Color3F colorRGB) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		
@@ -286,26 +575,56 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Redoes gamma correction on this {@code Image} instance using PBRT.
+	 */
 	public void redoGammaCorrectionPBRT() {
 		for(final Pixel pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.redoGammaCorrectionPBRT(pixel.getColorRGB()));
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Redoes gamma correction on this {@code Image} instance using SRGB.
+	 */
 	public void redoGammaCorrectionSRGB() {
 		for(final Pixel pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.redoGammaCorrectionSRGB(pixel.getColorRGB()));
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
+	 * <p>
+	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param index the index of the pixel
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 */
 	public void setColorRGB(final Color3F colorRGB, final int index) {
 		setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
+	 * <p>
+	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param index the index of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
+	 */
 	public void setColorRGB(final Color3F colorRGB, final int index, final PixelOperation pixelOperation) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
@@ -317,12 +636,40 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
+	 * <p>
+	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.setColor(colorRGB, x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 */
 	public void setColorRGB(final Color3F colorRGB, final int x, final int y) {
 		setColorRGB(colorRGB, x, y, PixelOperation.NO_CHANGE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
+	 * <p>
+	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
+	 */
 	public void setColorRGB(final Color3F colorRGB, final int x, final int y, final PixelOperation pixelOperation) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
@@ -337,14 +684,18 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Undoes gamma correction on this {@code Image} instance using PBRT.
+	 */
 	public void undoGammaCorrectionPBRT() {
 		for(final Pixel pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.undoGammaCorrectionPBRT(pixel.getColorRGB()));
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Undoes gamma correction on this {@code Image} instance using SRGB.
+	 */
 	public void undoGammaCorrectionSRGB() {
 		for(final Pixel pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.undoGammaCorrectionSRGB(pixel.getColorRGB()));
@@ -353,12 +704,46 @@ public final class Image {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Loads an {@code Image} from the file represented by {@code file}.
+	 * <p>
+	 * Returns a new {@code Image} instance.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Image.load(file, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param file a {@code File} that represents the file to load from
+	 * @return a new {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
 	public static Image load(final File file) {
 		return load(file, new MitchellFilter());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Loads an {@code Image} from the file represented by {@code file}.
+	 * <p>
+	 * Returns a new {@code Image} instance.
+	 * <p>
+	 * If either {@code file} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} that represents the file to load from
+	 * @param filter the {@link Filter} to use
+	 * @return a new {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code filter} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
 	public static Image load(final File file, final Filter filter) {
 		try {
 			final BufferedImage bufferedImage = doGetCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
@@ -396,6 +781,16 @@ public final class Image {
 		}
 		
 		return image;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Color3F doGetColorRGBOrDefault(final int index, final Color3F colorRGB) {
+		return index >= 0 && index < this.resolution ? this.pixels[index].getColorRGB() : colorRGB;
+	}
+	
+	private Color3F doGetColorRGBOrDefault(final int x, final int y, final Color3F colorRGB) {
+		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? this.pixels[y * this.resolutionX + x].getColorRGB() : colorRGB;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

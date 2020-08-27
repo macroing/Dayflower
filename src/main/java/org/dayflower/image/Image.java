@@ -547,14 +547,7 @@ public final class Image {
 	public void flipX() {
 		for(int xL = 0, xR = this.resolutionX - 1; xL < xR; xL++, xR--) {
 			for(int y = 0; y < this.resolutionY; y++) {
-				final int indexL = y * this.resolutionX + xL;
-				final int indexR = y * this.resolutionX + xR;
-				
-				final Pixel pixelL = this.pixels[indexL];
-				final Pixel pixelR = this.pixels[indexR];
-				
-				this.pixels[indexL] = pixelR;
-				this.pixels[indexR] = pixelL;
+				Pixel.swap(this.pixels[y * this.resolutionX + xL], this.pixels[y * this.resolutionX + xR]);
 			}
 		}
 	}
@@ -563,14 +556,7 @@ public final class Image {
 	public void flipY() {
 		for(int yT = 0, yB = this.resolutionY - 1; yT < yB; yT++, yB--) {
 			for(int x = 0; x < this.resolutionX; x++) {
-				final int indexT = yT * this.resolutionX + x;
-				final int indexB = yB * this.resolutionX + x;
-				
-				final Pixel pixelT = this.pixels[indexT];
-				final Pixel pixelB = this.pixels[indexB];
-				
-				this.pixels[indexT] = pixelB;
-				this.pixels[indexB] = pixelT;
+				Pixel.swap(this.pixels[yT * this.resolutionX + x], this.pixels[yB * this.resolutionX + x]);
 			}
 		}
 	}

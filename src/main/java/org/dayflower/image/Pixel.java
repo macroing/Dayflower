@@ -31,20 +31,21 @@ public final class Pixel {
 	private Color3F colorXYZ;
 	private Color3F splatXYZ;
 	private float filterWeightSum;
+	private int index;
+	private int x;
+	private int y;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public Pixel(final Color3F colorRGB) {
-		this(colorRGB, new Color3F(), new Color3F(), 0.0F);
-	}
-	
-//	TODO: Add Javadocs!
-	public Pixel(final Color3F colorRGB, final Color3F colorXYZ, final Color3F splatXYZ, final float filterWeightSum) {
+	public Pixel(final Color3F colorRGB, final Color3F colorXYZ, final Color3F splatXYZ, final float filterWeightSum, final int index, final int x, final int y) {
 		this.colorRGB = Objects.requireNonNull(colorRGB, "colorRGB == null");
 		this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
 		this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
 		this.filterWeightSum = filterWeightSum;
+		this.index = index;
+		this.x = x;
+		this.y = y;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +68,7 @@ public final class Pixel {
 //	TODO: Add Javadocs!
 	@Override
 	public String toString() {
-		return String.format("new Pixel(%s, %s, %s, %+.10f)", this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum));
+		return String.format("new Pixel(%s, %s, %s, %+.10f, %d, %d, %d)", this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
 	}
 	
 //	TODO: Add Javadocs!
@@ -85,6 +86,12 @@ public final class Pixel {
 			return false;
 		} else if(!equal(this.filterWeightSum, Pixel.class.cast(object).filterWeightSum)) {
 			return false;
+		} else if(this.index != Pixel.class.cast(object).index) {
+			return false;
+		} else if(this.x != Pixel.class.cast(object).x) {
+			return false;
+		} else if(this.y != Pixel.class.cast(object).y) {
+			return false;
 		} else {
 			return true;
 		}
@@ -96,9 +103,24 @@ public final class Pixel {
 	}
 	
 //	TODO: Add Javadocs!
+	public int getIndex() {
+		return this.index;
+	}
+	
+//	TODO: Add Javadocs!
+	public int getX() {
+		return this.x;
+	}
+	
+//	TODO: Add Javadocs!
+	public int getY() {
+		return this.y;
+	}
+	
+//	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum));
+		return Objects.hash(this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
 	}
 	
 //	TODO: Add Javadocs!
@@ -117,8 +139,23 @@ public final class Pixel {
 	}
 	
 //	TODO: Add Javadocs!
+	public void setIndex(final int index) {
+		this.index = requireRange(index, 0, Integer.MAX_VALUE, "index");
+	}
+	
+//	TODO: Add Javadocs!
 	public void setSplatXYZ(final Color3F splatXYZ) {
 		this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
+	}
+	
+//	TODO: Add Javadocs!
+	public void setX(final int x) {
+		this.x = requireRange(x, 0, Integer.MAX_VALUE, "x");
+	}
+	
+//	TODO: Add Javadocs!
+	public void setY(final int y) {
+		this.y = requireRange(y, 0, Integer.MAX_VALUE, "y");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,7 +171,11 @@ public final class Pixel {
 		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
 		
 		for(int i = 0; i < pixels.length; i++) {
-			pixels[i] = new Pixel(colorRGB);
+			final int index = i;
+			final int x = index % resolutionX;
+			final int y = index / resolutionX;
+			
+			pixels[i] = new Pixel(colorRGB, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
 		}
 		
 		return pixels;
@@ -153,9 +194,49 @@ public final class Pixel {
 		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
 		
 		for(int i = 0; i < pixels.length; i++) {
-			pixels[i] = new Pixel(Objects.requireNonNull(colorRGBs[i], String.format("colorRGBs[%d] == null", Integer.valueOf(i))));
+			final int index = i;
+			final int x = index % resolutionX;
+			final int y = index / resolutionX;
+			
+			pixels[i] = new Pixel(Objects.requireNonNull(colorRGBs[i], String.format("colorRGBs[%d] == null", Integer.valueOf(i))), Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
 		}
 		
 		return pixels;
+	}
+	
+//	TODO: Add Javadocs!
+	public static void swap(final Pixel pixelA, final Pixel pixelB) {
+		final Color3F colorRGBA = pixelA.getColorRGB();
+		final Color3F colorRGBB = pixelB.getColorRGB();
+		final Color3F colorXYZA = pixelA.getColorXYZ();
+		final Color3F colorXYZB = pixelB.getColorXYZ();
+		final Color3F splatXYZA = pixelA.getSplatXYZ();
+		final Color3F splatXYZB = pixelB.getSplatXYZ();
+		
+		final float filterWeightSumA = pixelA.getFilterWeightSum();
+		final float filterWeightSumB = pixelB.getFilterWeightSum();
+		
+		final int indexA = pixelA.getIndex();
+		final int indexB = pixelB.getIndex();
+		final int xA = pixelA.getX();
+		final int xB = pixelB.getX();
+		final int yA = pixelA.getY();
+		final int yB = pixelB.getY();
+		
+		pixelA.setColorRGB(colorRGBB);
+		pixelA.setColorXYZ(colorXYZB);
+		pixelA.setSplatXYZ(splatXYZB);
+		pixelA.setFilterWeightSum(filterWeightSumB);
+		pixelA.setIndex(indexB);
+		pixelA.setX(xB);
+		pixelA.setY(yB);
+		
+		pixelB.setColorRGB(colorRGBA);
+		pixelB.setColorXYZ(colorXYZA);
+		pixelB.setSplatXYZ(splatXYZA);
+		pixelB.setFilterWeightSum(filterWeightSumA);
+		pixelB.setIndex(indexA);
+		pixelB.setX(xA);
+		pixelB.setY(yA);
 	}
 }

@@ -18,10 +18,18 @@
  */
 package org.dayflower.geometry;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * An {@code OrthoNormalBasis33F} denotes an orthonormal basis constructed by three 3-dimensional vectors of type {@code float}.
+ * <p>
+ * The 3-dimensional vectors used by this class are represented by {@link Vector3F}.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class OrthoNormalBasis33F {
 	private final Vector3F u;
 	private final Vector3F v;
@@ -29,26 +37,65 @@ public final class OrthoNormalBasis33F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code OrthoNormalBasis33F} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new OrthoNormalBasis33F(Vector3F.w(), Vector3F.v(), Vector3F.u());
+	 * }
+	 * </pre>
+	 */
 	public OrthoNormalBasis33F() {
 		this(Vector3F.w(), Vector3F.v(), Vector3F.u());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code OrthoNormalBasis33F} instance given {@code w}.
+	 * <p>
+	 * If {@code w} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * <strong>Note:</strong> This constructor does normalize {@code w}.
+	 * 
+	 * @param w a {@link Vector3F} pointing in the W-direction
+	 * @throws NullPointerException thrown if, and only if, {@code w} is {@code null}
+	 */
 	public OrthoNormalBasis33F(final Vector3F w) {
 		this.w = Vector3F.normalize(w);
 		this.v = Vector3F.normalize(Vector3F.computeV(this.w));
 		this.u = Vector3F.crossProduct(this.v, this.w);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code OrthoNormalBasis33F} instance given {@code w} and {@code v}.
+	 * <p>
+	 * If either {@code w} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * <strong>Note:</strong> This constructor does normalize both {@code w} and {@code v}.
+	 * 
+	 * @param w a {@link Vector3F} pointing in the W-direction
+	 * @param v a {@code Vector3F} pointing in the V-direction to some degree
+	 * @throws NullPointerException thrown if, and only if, either {@code w} or {@code v} are {@code null}
+	 */
 	public OrthoNormalBasis33F(final Vector3F w, final Vector3F v) {
 		this.w = Vector3F.normalize(w);
-		this.u = Vector3F.normalize(Vector3F.crossProduct(v, this.w));
+		this.u = Vector3F.normalize(Vector3F.crossProduct(Vector3F.normalize(v), this.w));
 		this.v = Vector3F.crossProduct(this.w, this.u);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code OrthoNormalBasis33F} instance given {@code w}, {@code v} and {@code u}.
+	 * <p>
+	 * If either {@code w}, {@code v} or {@code u} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * <strong>Note:</strong> This constructor does not normalize {@code w}, {@code v} or {@code u}.
+	 * 
+	 * @param w a {@link Vector3F} pointing in the W-direction
+	 * @param v a {@code Vector3F} pointing in the V-direction
+	 * @param u a {@code Vector3F} pointing in the U-direction
+	 * @throws NullPointerException thrown if, and only if, either {@code w}, {@code v} or {@code u} are {@code null}
+	 */
 	public OrthoNormalBasis33F(final Vector3F w, final Vector3F v, final Vector3F u) {
 		this.w = Objects.requireNonNull(w, "w == null");
 		this.v = Objects.requireNonNull(v, "v == null");
@@ -57,28 +104,51 @@ public final class OrthoNormalBasis33F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code OrthoNormalBasis33F} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code OrthoNormalBasis33F} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new OrthoNormalBasis33F(%s, %s, %s)", this.w, this.v, this.u);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Vector3F} pointing in the U-direction.
+	 * 
+	 * @return the {@code Vector3F} pointing in the U-direction
+	 */
 	public Vector3F getU() {
 		return this.u;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Vector3F} pointing in the V-direction.
+	 * 
+	 * @return the {@code Vector3F} pointing in the V-direction
+	 */
 	public Vector3F getV() {
 		return this.v;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Vector3F} pointing in the W-direction.
+	 * 
+	 * @return the {@code Vector3F} pointing in the W-direction
+	 */
 	public Vector3F getW() {
 		return this.w;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code OrthoNormalBasis33F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code OrthoNormalBasis33F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code OrthoNormalBasis33F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code OrthoNormalBasis33F}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -96,7 +166,11 @@ public final class OrthoNormalBasis33F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code OrthoNormalBasis33F} instance.
+	 * 
+	 * @return a hash code for this {@code OrthoNormalBasis33F} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.u, this.v, this.w);
@@ -104,22 +178,63 @@ public final class OrthoNormalBasis33F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Flips the U-direction of {@code o}.
+	 * <p>
+	 * Returns a new {@code OrthoNormalBasis33F} with the U-direction flipped.
+	 * <p>
+	 * If {@code o} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param o the {@code OrthoNormalBasis33F} instance to flip the U-direction for
+	 * @return a new {@code OrthoNormalBasis33F} with the U-direction flipped
+	 * @throws NullPointerException thrown if, and only if, {@code o} is {@code null}
+	 */
 	public static OrthoNormalBasis33F flipU(final OrthoNormalBasis33F o) {
 		return new OrthoNormalBasis33F(o.w, o.v, Vector3F.negate(o.u));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Flips the V-direction of {@code o}.
+	 * <p>
+	 * Returns a new {@code OrthoNormalBasis33F} with the V-direction flipped.
+	 * <p>
+	 * If {@code o} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param o the {@code OrthoNormalBasis33F} instance to flip the V-direction for
+	 * @return a new {@code OrthoNormalBasis33F} with the V-direction flipped
+	 * @throws NullPointerException thrown if, and only if, {@code o} is {@code null}
+	 */
 	public static OrthoNormalBasis33F flipV(final OrthoNormalBasis33F o) {
 		return new OrthoNormalBasis33F(o.w, Vector3F.negate(o.v), o.u);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Flips the W-direction of {@code o}.
+	 * <p>
+	 * Returns a new {@code OrthoNormalBasis33F} with the W-direction flipped.
+	 * <p>
+	 * If {@code o} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param o the {@code OrthoNormalBasis33F} instance to flip the W-direction for
+	 * @return a new {@code OrthoNormalBasis33F} with the W-direction flipped
+	 * @throws NullPointerException thrown if, and only if, {@code o} is {@code null}
+	 */
 	public static OrthoNormalBasis33F flipW(final OrthoNormalBasis33F o) {
 		return new OrthoNormalBasis33F(Vector3F.negate(o.w), o.v, o.u);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a transformation.
+	 * <p>
+	 * Returns a new {@code OrthoNormalBasis33F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code mLHS} or {@code oRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mLHS the {@link Matrix44F} instance to perform the transformation with
+	 * @param oRHS the {@code OrthoNormalBasis33F} to transform
+	 * @return a new {@code OrthoNormalBasis33F} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code oRHS} are {@code null}
+	 */
 	public static OrthoNormalBasis33F transform(final Matrix44F mLHS, final OrthoNormalBasis33F oRHS) {
 		final Vector3F u = Vector3F.transform(mLHS, oRHS.u);
 		final Vector3F v = Vector3F.transform(mLHS, oRHS.v);
@@ -128,7 +243,18 @@ public final class OrthoNormalBasis33F {
 		return new OrthoNormalBasis33F(w, v, u);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a transformation in transpose order.
+	 * <p>
+	 * Returns a new {@code OrthoNormalBasis33F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code mLHS} or {@code oRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mLHS the {@link Matrix44F} instance to perform the transformation with
+	 * @param oRHS the {@code OrthoNormalBasis33F} to transform
+	 * @return a new {@code OrthoNormalBasis33F} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code oRHS} are {@code null}
+	 */
 	public static OrthoNormalBasis33F transformTranspose(final Matrix44F mLHS, final OrthoNormalBasis33F oRHS) {
 		final Vector3F u = Vector3F.transformTranspose(mLHS, oRHS.u);
 		final Vector3F v = Vector3F.transformTranspose(mLHS, oRHS.v);

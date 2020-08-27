@@ -19,7 +19,7 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_TWO;
+import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
@@ -267,7 +267,7 @@ public final class Vector3F {
 	
 //	TODO: Add Javadocs!
 	public static Vector3F directionSpherical(final float u, final float v) {
-		final float theta = u * PI_MULTIPLIED_BY_TWO;
+		final float theta = u * PI_MULTIPLIED_BY_2;
 		final float phi = v * PI;
 		
 		final float cosPhi = cos(phi);
@@ -381,7 +381,7 @@ public final class Vector3F {
 	public static Vector3F sampleConeUniformDistribution(final float u, final float v, final float cosThetaMax) {
 		final float cosTheta = u * (cosThetaMax - 1.0F) + 1.0F;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_TWO * v;
+		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
 		final float element1 = cos(phi) * sinTheta;
 		final float element2 = sin(phi) * sinTheta;
@@ -420,7 +420,7 @@ public final class Vector3F {
 	public static Vector3F sampleHemispherePowerCosineDistribution(final float u, final float v, final float exponent) {
 		final float cosTheta = pow(1.0F - u, 1.0F / (exponent + 1.0F));
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_TWO * v;
+		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
 		final float element1 = cos(phi) * sinTheta;
 		final float element2 = sin(phi) * sinTheta;
@@ -438,7 +438,7 @@ public final class Vector3F {
 	public static Vector3F sampleHemisphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_TWO * v;
+		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
 		final float element1 = cos(phi) * sinTheta;
 		final float element2 = sin(phi) * sinTheta;
@@ -456,7 +456,7 @@ public final class Vector3F {
 	public static Vector3F sampleSphereUniformDistribution(final float u, final float v) {
 		final float cosTheta = 1.0F - 2.0F * u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = PI_MULTIPLIED_BY_TWO * v;
+		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
 		final float element1 = cos(phi) * sinTheta;
 		final float element2 = sin(phi) * sinTheta;

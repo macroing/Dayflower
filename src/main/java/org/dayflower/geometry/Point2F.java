@@ -18,9 +18,9 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.PI_DIVIDED_BY_FOUR;
-import static org.dayflower.util.Floats.PI_DIVIDED_BY_TWO;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_TWO;
+import static org.dayflower.util.Floats.PI_DIVIDED_BY_2;
+import static org.dayflower.util.Floats.PI_DIVIDED_BY_4;
+import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.random;
@@ -135,7 +135,7 @@ public final class Point2F {
 		final float b = v * 2.0F - 1.0F;
 		
 		if(a * a > b * b) {
-			final float phi = PI_DIVIDED_BY_FOUR * (b / a);
+			final float phi = PI_DIVIDED_BY_4 * (b / a);
 			final float r = radius * a;
 			
 			final float element1 = cos(phi) * r;
@@ -144,7 +144,7 @@ public final class Point2F {
 			return new Point2F(element1, element2);
 		}
 		
-		final float phi = PI_DIVIDED_BY_TWO - (PI_DIVIDED_BY_FOUR * (a / b));
+		final float phi = PI_DIVIDED_BY_2 - (PI_DIVIDED_BY_4 * (a / b));
 		final float r = radius * b;
 		
 		final float element1 = cos(phi) * r;
@@ -160,7 +160,7 @@ public final class Point2F {
 	
 //	TODO: Add Javadocs!
 	public static Point2F sampleDiskUniformDistribution(final float u, final float v) {
-		final float phi = PI_MULTIPLIED_BY_TWO * v;
+		final float phi = PI_MULTIPLIED_BY_2 * v;
 		final float r = sqrt(u);
 		
 		final float element1 = cos(phi) * r;

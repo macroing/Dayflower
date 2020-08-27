@@ -18,7 +18,7 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_TWO;
+import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.asin;
 import static org.dayflower.util.Floats.atan;
 import static org.dayflower.util.Floats.atan2;
@@ -45,7 +45,7 @@ public final class AngleF {
 	private static final float DEGREES_MAXIMUM_PITCH = 90.0F;
 	private static final float DEGREES_MINIMUM = 0.0F;
 	private static final float DEGREES_MINIMUM_PITCH = -90.0F;
-	private static final float RADIANS_MAXIMUM = PI_MULTIPLIED_BY_TWO;
+	private static final float RADIANS_MAXIMUM = PI_MULTIPLIED_BY_2;
 	private static final float RADIANS_MINIMUM = 0.0F;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

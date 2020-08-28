@@ -33,10 +33,79 @@ import java.util.Objects;
 import org.dayflower.util.Floats;
 import org.dayflower.util.Ints;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Color3F} encapsulates a color.
+ * <p>
+ * This class is immutable and therefore suitable for concurrent use without external synchronization.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Color3F {
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code Color3F} denoting the color black.
+	 */
 	public static final Color3F BLACK = new Color3F();
+	
+	/**
+	 * A {@code Color3F} denoting the color blue.
+	 */
+	public static final Color3F BLUE = new Color3F(0.0F, 0.0F, 1.0F);
+	
+	/**
+	 * A {@code Color3F} denoting the color copper.
+	 */
+	public static final Color3F COPPER = new Color3F(0.72F, 0.45F, 0.2F);
+	
+	/**
+	 * A {@code Color3F} denoting the color cyan.
+	 */
+	public static final Color3F CYAN = new Color3F(0.0F, 1.0F, 1.0F);
+	
+	/**
+	 * A {@code Color3F} denoting the color Aztek gold.
+	 */
+	public static final Color3F GOLD_AZTEK = new Color3F(0.76F, 0.6F, 0.33F);
+	
+	/**
+	 * A {@code Color3F} denoting the color metallic gold.
+	 */
+	public static final Color3F GOLD_METALLIC = new Color3F(0.83F, 0.69F, 0.22F);
+	
+	/**
+	 * A {@code Color3F} denoting the color gray.
+	 */
+	public static final Color3F GRAY = new Color3F(0.5F, 0.5F, 0.5F);
+	
+	/**
+	 * A {@code Color3F} denoting the color green.
+	 */
+	public static final Color3F GREEN = new Color3F(0.0F, 1.0F, 0.0F);
+	
+	/**
+	 * A {@code Color3F} denoting the color magenta.
+	 */
+	public static final Color3F MAGENTA = new Color3F(1.0F, 0.0F, 1.0F);
+	
+	/**
+	 * A {@code Color3F} denoting the color orange.
+	 */
+	public static final Color3F ORANGE = new Color3F(1.0F, 0.5F, 0.0F);
+	
+	/**
+	 * A {@code Color3F} denoting the color red.
+	 */
+	public static final Color3F RED = new Color3F(1.0F, 0.0F, 0.0F);
+	
+	/**
+	 * A {@code Color3F} denoting the color white.
+	 */
+	public static final Color3F WHITE = new Color3F(1.0F, 1.0F, 1.0F);
+	
+	/**
+	 * A {@code Color3F} denoting the color yellow.
+	 */
+	public static final Color3F YELLOW = new Color3F(1.0F, 1.0F, 0.0F);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -46,44 +115,103 @@ public final class Color3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Color3F} instance denoting the color black.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color3F(0.0F);
+	 * }
+	 * </pre>
+	 */
 	public Color3F() {
 		this(0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Color3F} instance denoting a grayscale color.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color3F(component, component, component);
+	 * }
+	 * </pre>
+	 * 
+	 * @param component the value of all components
+	 */
 	public Color3F(final float component) {
 		this(component, component, component);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Color3F} instance given the component values {@code component1}, {@code component2} and {@code component3}.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
 	public Color3F(final float component1, final float component2, final float component3) {
 		this.component1 = component1;
 		this.component2 = component2;
 		this.component3 = component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Color3F} instance denoting a grayscale color.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color3F(component, component, component);
+	 * }
+	 * </pre>
+	 * 
+	 * @param component the value of all components
+	 */
 	public Color3F(final int component) {
 		this(component, component, component);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Color3F} instance given the component values {@code component1}, {@code component2} and {@code component3}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color3F(Ints.saturate(component1) / 255.0F, Ints.saturate(component2) / 255.0F, Ints.saturate(component3) / 255.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
 	public Color3F(final int component1, final int component2, final int component3) {
-		this.component1 = Ints.saturate(component1) / 255.0F;
-		this.component2 = Ints.saturate(component2) / 255.0F;
-		this.component3 = Ints.saturate(component3) / 255.0F;
+		this(Ints.saturate(component1) / 255.0F, Ints.saturate(component2) / 255.0F, Ints.saturate(component3) / 255.0F);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code Color3F} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Color3F} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new Color3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code Color3F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Color3F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Color3F}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -101,198 +229,413 @@ public final class Color3F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, at least one of the component values of this {@code Color3F} instance is equal to {@code Float.NaN}, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color3F} instance is equal to {@code Float.NaN}, {@code false} otherwise
+	 */
 	public boolean hasNaNs() {
 		return isNaN(this.component1) || isNaN(this.component2) || isNaN(this.component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3F} instance is black, {@code false} otherwise.
+	 * <p>
+	 * A {@code Color3F} instance is black if all component values are {@code 0.0F}.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Color3F} instance is black, {@code false} otherwise
+	 */
 	public boolean isBlack() {
 		return isGrayscale() && equal(this.component1, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3F} instance is a grayscale color, {@code false} otherwise.
+	 * <p>
+	 * A {@code Color3F} instance is a grayscale color if all component values are equal.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Color3F} instance is a grayscale color, {@code false} otherwise
+	 */
 	public boolean isGrayscale() {
 		return equal(this.component1, this.component2, this.component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3F} instance is white, {@code false} otherwise.
+	 * <p>
+	 * A {@code Color3F} instance is white if all component values are equal and greater than or equal to {@code 1.0F}.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Color3F} instance is white, {@code false} otherwise
+	 */
 	public boolean isWhite() {
 		return isGrayscale() && this.component1 >= 1.0F;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the B-component as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the B-component as a {@code byte}
+	 */
 	public byte getAsByteB() {
 		return (byte)(getAsIntB() & 0xFF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of component 1 as a {@code byte}
+	 */
 	public byte getAsByteComponent1() {
 		return (byte)(getAsIntComponent1() & 0xFF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of component 2 as a {@code byte}
+	 */
 	public byte getAsByteComponent2() {
 		return (byte)(getAsIntComponent2() & 0xFF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of component 3 as a {@code byte}
+	 */
 	public byte getAsByteComponent3() {
 		return (byte)(getAsIntComponent3() & 0xFF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the G-component as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the G-component as a {@code byte}
+	 */
 	public byte getAsByteG() {
 		return (byte)(getAsIntG() & 0xFF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the R-component as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the R-component as a {@code byte}
+	 */
 	public byte getAsByteR() {
 		return (byte)(getAsIntR() & 0xFF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the X-component as a {@code byte}
+	 */
 	public byte getAsByteX() {
 		return (byte)(getAsIntX() & 0xFF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the Y-component as a {@code byte}
+	 */
 	public byte getAsByteY() {
 		return (byte)(getAsIntY() & 0xFF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Z-component as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the Z-component as a {@code byte}
+	 */
 	public byte getAsByteZ() {
 		return (byte)(getAsIntZ() & 0xFF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the average component value of this {@code Color3F} instance.
+	 * 
+	 * @return the average component value of this {@code Color3F} instance
+	 */
 	public float average() {
 		return (this.component1 + this.component2 + this.component3) / 3.0F;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the B-component.
+	 * 
+	 * @return the value of the B-component
+	 */
 	public float getB() {
 		return this.component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1.
+	 * 
+	 * @return the value of component 1
+	 */
 	public float getComponent1() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2.
+	 * 
+	 * @return the value of component 2
+	 */
 	public float getComponent2() {
 		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3.
+	 * 
+	 * @return the value of component 3
+	 */
 	public float getComponent3() {
 		return this.component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the G-component.
+	 * 
+	 * @return the value of the G-component
+	 */
 	public float getG() {
 		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the R-component.
+	 * 
+	 * @return the value of the R-component
+	 */
 	public float getR() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component.
+	 * 
+	 * @return the value of the X-component
+	 */
 	public float getX() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component.
+	 * 
+	 * @return the value of the Y-component
+	 */
 	public float getY() {
 		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Z-component.
+	 * 
+	 * @return the value of the Z-component
+	 */
 	public float getZ() {
 		return this.component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the lightness of this {@code Color3F} instance.
+	 * 
+	 * @return the lightness of this {@code Color3F} instance
+	 */
 	public float lightness() {
 		return (maximum() + minimum()) / 2.0F;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the relative luminance of this {@code Color3F} instance.
+	 * <p>
+	 * The algorithm used is only suitable for linear {@code Color3F} instances.
+	 * 
+	 * @return the relative luminance of this {@code Color3F} instance
+	 */
 	public float luminance() {
 		return this.component1 * 0.212671F + this.component2 * 0.715160F + this.component3 * 0.072169F;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the largest component value.
+	 * 
+	 * @return the largest component value
+	 */
 	public float maximum() {
 		return max(this.component1, this.component2, this.component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the smallest component value.
+	 * 
+	 * @return the smallest component value
+	 */
 	public float minimum() {
 		return min(this.component1, this.component2, this.component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the B-component as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the B-component as an {@code int}
+	 */
 	public int getAsIntB() {
 		return toInt(Floats.saturate(getB()) * 255.0F + 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of component 1 as an {@code int}
+	 */
 	public int getAsIntComponent1() {
 		return toInt(Floats.saturate(getComponent1()) * 255.0F + 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of component 2 as an {@code int}
+	 */
 	public int getAsIntComponent2() {
 		return toInt(Floats.saturate(getComponent2()) * 255.0F + 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of component 3 as an {@code int}
+	 */
 	public int getAsIntComponent3() {
 		return toInt(Floats.saturate(getComponent3()) * 255.0F + 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the G-component as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the G-component as an {@code int}
+	 */
 	public int getAsIntG() {
 		return toInt(Floats.saturate(getG()) * 255.0F + 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the R-component as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the R-component as an {@code int}
+	 */
 	public int getAsIntR() {
 		return toInt(Floats.saturate(getR()) * 255.0F + 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the X-component as an {@code int}
+	 */
 	public int getAsIntX() {
 		return toInt(Floats.saturate(getX()) * 255.0F + 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the Y-component as an {@code int}
+	 */
 	public int getAsIntY() {
 		return toInt(Floats.saturate(getY()) * 255.0F + 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Z-component as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the Z-component as an {@code int}
+	 */
 	public int getAsIntZ() {
 		return toInt(Floats.saturate(getZ()) * 255.0F + 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code Color3F} instance.
+	 * 
+	 * @return a hash code for this {@code Color3F} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2), Float.valueOf(this.component3));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns an {@code int} with the component values in a packed form.
+	 * <p>
+	 * This method assumes that the component values are within the range [0.0, 1.0]. Any component value outside of this range will be saturated or clamped.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * color3F.pack(PackedIntComponentOrder.ARGB);
+	 * }
+	 * </pre>
+	 * 
+	 * @return an {@code int} with the component values in a packed form
+	 */
 	public int pack() {
 		return pack(PackedIntComponentOrder.ARGB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns an {@code int} with the component values in a packed form.
+	 * <p>
+	 * This method assumes that the component values are within the range [0.0, 1.0]. Any component value outside of this range will be saturated or clamped.
+	 * <p>
+	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param packedIntComponentOrder the {@link PackedIntComponentOrder} to pack the component values with
+	 * @return an {@code int} with the component values in a packed form
+	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
+	 */
 	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = getAsIntR();
 		final int g = getAsIntG();
@@ -303,7 +646,18 @@ public final class Color3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds the component values of {@code cRHS} to the component values of {@code cLHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the addition.
+	 * <p>
+	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @return a new {@code Color3F} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 */
 	public static Color3F add(final Color3F cLHS, final Color3F cRHS) {
 		final float component1 = cLHS.component1 + cRHS.component1;
 		final float component2 = cLHS.component2 + cRHS.component2;
@@ -312,26 +666,92 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
-	public static Color3F addSample(final Color3F cLHS, final Color3F cRHS, final int samples) {
-		final float component1 = cLHS.component1 + ((cRHS.component1 - cLHS.component1) / samples);
-		final float component2 = cLHS.component2 + ((cRHS.component2 - cLHS.component2) / samples);
-		final float component3 = cLHS.component3 + ((cRHS.component3 - cLHS.component3) / samples);
+	/**
+	 * Adds the component values of {@code cRHS} to the component values of {@code cLHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the addition.
+	 * <p>
+	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method differs from {@link #add(Color3F, Color3F)} in that it assumes this {@code Color3F} instance to be an average color sample. It uses a stable moving average algorithm to compute a new average color sample as a result of adding
+	 * {@code cRHS}. This method is suitable for Monte Carlo-method based algorithms.
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param sampleCount the current sample count
+	 * @return a new {@code Color3F} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 */
+	public static Color3F addSample(final Color3F cLHS, final Color3F cRHS, final int sampleCount) {
+		final float component1 = cLHS.component1 + ((cRHS.component1 - cLHS.component1) / sampleCount);
+		final float component2 = cLHS.component2 + ((cRHS.component2 - cLHS.component2) / sampleCount);
+		final float component3 = cLHS.component3 + ((cRHS.component3 - cLHS.component3) / sampleCount);
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Blends the component values of {@code cLHS} and {@code cRHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the blend.
+	 * <p>
+	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.blend(cLHS, cRHS, 0.5F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @return a new {@code Color3F} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 */
 	public static Color3F blend(final Color3F cLHS, final Color3F cRHS) {
 		return blend(cLHS, cRHS, 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Blends the component values of {@code cLHS} and {@code cRHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the blend.
+	 * <p>
+	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.blend(cLHS, cRHS, t, t, t);
+	 * }
+	 * </pre>
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param t the factor to use for all components in the blending process
+	 * @return a new {@code Color3F} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 */
 	public static Color3F blend(final Color3F cLHS, final Color3F cRHS, final float t) {
 		return blend(cLHS, cRHS, t, t, t);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Blends the component values of {@code cLHS} and {@code cRHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the blend.
+	 * <p>
+	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param tComponent1 the factor to use for component 1 in the blending process
+	 * @param tComponent2 the factor to use for component 2 in the blending process
+	 * @param tComponent3 the factor to use for component 3 in the blending process
+	 * @return a new {@code Color3F} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 */
 	public static Color3F blend(final Color3F cLHS, final Color3F cRHS, final float tComponent1, final float tComponent2, final float tComponent3) {
 		final float component1 = lerp(cLHS.component1, cRHS.component1, tComponent1);
 		final float component2 = lerp(cLHS.component2, cRHS.component2, tComponent2);
@@ -368,7 +788,18 @@ public final class Color3F {
 		return ColorSpace3F.SRGB.convertXYZToRGB(c);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Divides the component values of {@code cLHS} with the component values of {@code cRHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the division.
+	 * <p>
+	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @return a new {@code Color3F} instance with the result of the division
+	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 */
 	public static Color3F divide(final Color3F cLHS, final Color3F cRHS) {
 		final float component1 = cLHS.component1 / cRHS.component1;
 		final float component2 = cLHS.component2 / cRHS.component2;
@@ -377,7 +808,18 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Divides the component values of {@code cLHS} with {@code sRHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the division.
+	 * <p>
+	 * If {@code cLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
+	 * @return a new {@code Color3F} instance with the result of the division
+	 * @throws NullPointerException thrown if, and only if, {@code cLHS} is {@code null}
+	 */
 	public static Color3F divide(final Color3F cLHS, final float sRHS) {
 		final float component1 = cLHS.component1 / sRHS;
 		final float component2 = cLHS.component2 / sRHS;
@@ -483,7 +925,18 @@ public final class Color3F {
 		return c;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Multiplies the component values of {@code cLHS} with the component values of {@code cRHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the multiplication.
+	 * <p>
+	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @return a new {@code Color3F} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 */
 	public static Color3F multiply(final Color3F cLHS, final Color3F cRHS) {
 		final float component1 = cLHS.component1 * cRHS.component1;
 		final float component2 = cLHS.component2 * cRHS.component2;
@@ -492,7 +945,18 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Multiplies the component values of {@code cLHS} with {@code sRHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the multiplication.
+	 * <p>
+	 * If {@code cLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
+	 * @return a new {@code Color3F} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, {@code cLHS} is {@code null}
+	 */
 	public static Color3F multiply(final Color3F cLHS, final float sRHS) {
 		final float component1 = cLHS.component1 * sRHS;
 		final float component2 = cLHS.component2 * sRHS;
@@ -501,7 +965,18 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Multiplies the component values of {@code cLHS} with {@code sRHS} and saturates or clamps all negative component values.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the multiplication.
+	 * <p>
+	 * If {@code cLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
+	 * @return a new {@code Color3F} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, {@code cLHS} is {@code null}
+	 */
 	public static Color3F multiplyAndSaturateNegative(final Color3F cLHS, final float sRHS) {
 		final float component1 = max(cLHS.component1 * sRHS, 0.0F);
 		final float component2 = max(cLHS.component2 * sRHS, 0.0F);
@@ -609,7 +1084,18 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Subtracts the component values of {@code cRHS} from the component values of {@code cLHS}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the subtraction.
+	 * <p>
+	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cLHS the {@code Color3F} instance on the left-hand side
+	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @return a new {@code Color3F} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 */
 	public static Color3F subtract(final Color3F cLHS, final Color3F cRHS) {
 		final float component1 = cLHS.component1 - cRHS.component1;
 		final float component2 = cLHS.component2 - cRHS.component2;

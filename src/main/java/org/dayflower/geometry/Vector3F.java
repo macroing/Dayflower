@@ -131,7 +131,11 @@ public final class Vector3F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle phi.
+	 * 
+	 * @return the cosine of the angle phi
+	 */
 	public float cosPhi() {
 		final float sinTheta = sinTheta();
 		
@@ -142,22 +146,38 @@ public final class Vector3F {
 		return saturate(this.component1 / sinTheta, -1.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle phi in squared form.
+	 * 
+	 * @return the cosine of the angle phi in squared form
+	 */
 	public float cosPhiSquared() {
 		return cosPhi() * cosPhi();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle theta.
+	 * 
+	 * @return the cosine of the angle theta
+	 */
 	public float cosTheta() {
 		return this.component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle theta in absolute form.
+	 * 
+	 * @return the cosine of the angle theta in absolute form
+	 */
 	public float cosThetaAbs() {
 		return abs(cosTheta());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle theta in squared form.
+	 * 
+	 * @return the cosine of the angle theta in squared form
+	 */
 	public float cosThetaSquared() {
 		return cosTheta() * cosTheta();
 	}
@@ -261,7 +281,11 @@ public final class Vector3F {
 		return this.component1 * this.component1 + this.component2 * this.component2 + this.component3 * this.component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the sine of the angle phi.
+	 * 
+	 * @return the sine of the angle phi
+	 */
 	public float sinPhi() {
 		final float sinTheta = sinTheta();
 		
@@ -272,27 +296,47 @@ public final class Vector3F {
 		return saturate(this.component2 / sinTheta, -1.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the sine of the angle phi in squared form.
+	 * 
+	 * @return the sine of the angle phi in squared form
+	 */
 	public float sinPhiSquared() {
 		return sinPhi() * sinPhi();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the sine of the angle theta.
+	 * 
+	 * @return the sine of the angle theta
+	 */
 	public float sinTheta() {
 		return sqrt(sinThetaSquared());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the sine of the angle theta in squared form.
+	 * 
+	 * @return the sine of the angle theta in squared form
+	 */
 	public float sinThetaSquared() {
 		return max(0.0F, 1.0F - cosThetaSquared());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the tangent of the angle theta.
+	 * 
+	 * @return the tangent of the angle theta
+	 */
 	public float tanTheta() {
 		return sinTheta() / cosTheta();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the tangent of the angle theta in squared form.
+	 * 
+	 * @return the tangent of the angle theta in squared form
+	 */
 	public float tanThetaSquared() {
 		return sinThetaSquared() / cosThetaSquared();
 	}
@@ -331,7 +375,15 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance denoting {@code V} in an orthonormal basis.
+	 * <p>
+	 * If {@code w} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param w the {@code Vector3F} instance that denotes {@code W} in an orthonormal basis
+	 * @return a new {@code Vector3F} instance denoting {@code V} in an orthonormal basis
+	 * @throws NullPointerException thrown if, and only if, {@code w} is {@code null}
+	 */
 	public static Vector3F computeV(final Vector3F w) {
 		final Vector3F wNormalized = normalize(w);
 		
@@ -370,7 +422,16 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance that is pointing in the direction of {@code pEye} to {@code pLookAt}.
+	 * <p>
+	 * If either {@code pEye} or {@code pLookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pEye a {@link Point3F} instance denoting the eye to look from
+	 * @param pLookAt a {@code Point3F} instance denoting the target to look at
+	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code pEye} to {@code pLookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code pEye} or {@code pLookAt} are {@code null}
+	 */
 	public static Vector3F direction(final Point3F pEye, final Point3F pLookAt) {
 		final float component1 = pLookAt.getComponent1() - pEye.getComponent1();
 		final float component2 = pLookAt.getComponent2() - pEye.getComponent2();
@@ -379,12 +440,27 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance that is pointing in the direction of {@code pEye} to {@code pLookAt} and is normalized.
+	 * <p>
+	 * If either {@code pEye} or {@code pLookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pEye a {@link Point3F} instance denoting the eye to look from
+	 * @param pLookAt a {@code Point3F} instance denoting the target to look at
+	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code pEye} to {@code pLookAt} and is normalized
+	 * @throws NullPointerException thrown if, and only if, either {@code pEye} or {@code pLookAt} are {@code null}
+	 */
 	public static Vector3F directionNormalized(final Point3F pEye, final Point3F pLookAt) {
 		return normalize(direction(pEye, pLookAt));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v}.
+	 * 
+	 * @param u the spherical U-coordinate
+	 * @param v the spherical V-coordinate
+	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v}
+	 */
 	public static Vector3F directionSpherical(final float u, final float v) {
 		final float theta = u * PI_MULTIPLIED_BY_2;
 		final float phi = v * PI;
@@ -402,12 +478,31 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v} and is normalized.
+	 * 
+	 * @param u the spherical U-coordinate
+	 * @param v the spherical V-coordinate
+	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v} and is normalized
+	 */
 	public static Vector3F directionSphericalNormalized(final float u, final float v) {
 		return normalize(directionSpherical(u, v));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Divides the component values of {@code vLHS} with {@code sRHS}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the division.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector division is performed componentwise.
+	 * 
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
+	 * @return a new {@code Vector3F} instance with the result of the division
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
 	public static Vector3F divide(final Vector3F vLHS, final float sRHS) {
 		final float component1 = vLHS.component1 / sRHS;
 		final float component2 = vLHS.component2 / sRHS;
@@ -426,7 +521,20 @@ public final class Vector3F {
 		return dotProduct(outgoing, incoming) > 0.999F ? normal : normalize(subtract(outgoing, incoming));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Multiplies the component values of {@code vLHS} with {@code sRHS}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the multiplication.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector multiplication is performed componentwise.
+	 * 
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
+	 * @return a new {@code Vector3F} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
 	public static Vector3F multiply(final Vector3F vLHS, final float sRHS) {
 		final float component1 = vLHS.component1 * sRHS;
 		final float component2 = vLHS.component2 * sRHS;
@@ -435,7 +543,17 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Negates the component values of {@code v}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the negation.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param v a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the result of the negation
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
 	public static Vector3F negate(final Vector3F v) {
 		final float component1 = -v.component1;
 		final float component2 = -v.component2;
@@ -462,6 +580,15 @@ public final class Vector3F {
 		return crossProduct(edgeAB, edgeAC);
 	}
 	
+//	TODO: Add Javadocs!
+	public static Vector3F normal(final Vector3F normalA, final Vector3F normalB, final Vector3F normalC, final Point3F barycentricCoordinates) {
+		final float component1 = normalA.component1 * barycentricCoordinates.getU() + normalB.component1 * barycentricCoordinates.getV() + normalC.component1 * barycentricCoordinates.getW();
+		final float component2 = normalA.component2 * barycentricCoordinates.getU() + normalB.component2 * barycentricCoordinates.getV() + normalC.component2 * barycentricCoordinates.getW();
+		final float component3 = normalA.component3 * barycentricCoordinates.getU() + normalB.component3 * barycentricCoordinates.getV() + normalC.component3 * barycentricCoordinates.getW();
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
 	/**
 	 * Returns a new {@code Vector3F} instance denoting the normalized normal of the plane defined by the {@link Point3F} instances {@code a}, {@code b} and {@code c}.
 	 * <p>
@@ -473,17 +600,8 @@ public final class Vector3F {
 	 * @return a new {@code Vector3F} instance denoting the normalized normal of the plane defined by the {@code Point3F} instances {@code a}, {@code b} and {@code c}
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-	public static Vector3F normal(final Vector3F normalA, final Vector3F normalB, final Vector3F normalC, final Point3F barycentricCoordinates) {
-		final float component1 = normalA.component1 * barycentricCoordinates.getU() + normalB.component1 * barycentricCoordinates.getV() + normalC.component1 * barycentricCoordinates.getW();
-		final float component2 = normalA.component2 * barycentricCoordinates.getU() + normalB.component2 * barycentricCoordinates.getV() + normalC.component2 * barycentricCoordinates.getW();
-		final float component3 = normalA.component3 * barycentricCoordinates.getU() + normalB.component3 * barycentricCoordinates.getV() + normalC.component3 * barycentricCoordinates.getW();
-		
-		return new Vector3F(component1, component2, component3);
-	}
-	
-//	TODO: Add Javadocs!
-	public static Vector3F normalNormalized(final Point3F pA, final Point3F pB, final Point3F pC) {
-		return normalize(normal(pA, pB, pC));
+	public static Vector3F normalNormalized(final Point3F a, final Point3F b, final Point3F c) {
+		return normalize(normal(a, b, c));
 	}
 	
 //	TODO: Add Javadocs!
@@ -491,7 +609,17 @@ public final class Vector3F {
 		return normalize(normal(normalA, normalB, normalC, barycentricCoordinates));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Normalizes the component values of {@code v}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the normalization.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param v a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the result of the normalization
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
 	public static Vector3F normalize(final Vector3F v) {
 		return divide(v, v.length());
 	}
@@ -735,7 +863,18 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Transforms the {@code Vector3F} {@code vRHS} with the {@link Matrix44F} {@code mLHS}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code mLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mLHS a {@code Matrix44F} instance
+	 * @param vRHS a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
+	 */
 	public static Vector3F transform(final Matrix44F mLHS, final Vector3F vRHS) {
 		final float component1 = mLHS.getElement11() * vRHS.component1 + mLHS.getElement12() * vRHS.component2 + mLHS.getElement13() * vRHS.component3;
 		final float component2 = mLHS.getElement21() * vRHS.component1 + mLHS.getElement22() * vRHS.component2 + mLHS.getElement23() * vRHS.component3;
@@ -744,7 +883,18 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Transforms the {@code Vector3F} {@code vRHS} with the {@link OrthoNormalBasis33F} {@code oRHS}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code vLHS} or {@code oRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vLHS a {@code Vector3F} instance
+	 * @param oRHS an {@code OrthoNormalBasis33F} instance
+	 * @return a new {@code Vector3F} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code oRHS} are {@code null}
+	 */
 	public static Vector3F transform(final Vector3F vLHS, final OrthoNormalBasis33F oRHS) {
 		final float component1 = vLHS.component1 * oRHS.getU().component1 + vLHS.component2 * oRHS.getV().component1 + vLHS.component3 * oRHS.getW().component1;
 		final float component2 = vLHS.component1 * oRHS.getU().component2 + vLHS.component2 * oRHS.getV().component2 + vLHS.component3 * oRHS.getW().component2;
@@ -753,7 +903,18 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Transforms the {@code Vector3F} {@code vRHS} with the {@link OrthoNormalBasis33F} {@code oRHS} in reverse order.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code vLHS} or {@code oRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vLHS a {@code Vector3F} instance
+	 * @param oRHS an {@code OrthoNormalBasis33F} instance
+	 * @return a new {@code Vector3F} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code oRHS} are {@code null}
+	 */
 	public static Vector3F transformReverse(final Vector3F vLHS, final OrthoNormalBasis33F oRHS) {
 		final float component1 = dotProduct(vLHS, oRHS.getU());
 		final float component2 = dotProduct(vLHS, oRHS.getV());
@@ -762,7 +923,18 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Transforms the {@code Vector3F} {@code vRHS} with the {@link Matrix44F} {@code mLHS} in transpose order.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code mLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mLHS a {@code Matrix44F} instance
+	 * @param vRHS a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code vRHS} are {@code null}
+	 */
 	public static Vector3F transformTranspose(final Matrix44F mLHS, final Vector3F vRHS) {
 		final float component1 = mLHS.getElement11() * vRHS.component1 + mLHS.getElement21() * vRHS.component2 + mLHS.getElement31() * vRHS.component3;
 		final float component2 = mLHS.getElement12() * vRHS.component1 + mLHS.getElement22() * vRHS.component2 + mLHS.getElement32() * vRHS.component3;

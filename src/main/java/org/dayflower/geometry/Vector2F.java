@@ -21,27 +21,61 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.sqrt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Vector2F} denotes a 2-dimensional vector with two components, of type {@code float}.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Vector2F {
 	private final float component1;
 	private final float component2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Vector2F} instance given the component values {@code 0.0F} and {@code 0.0F}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Vector2F(0.0F, 0.0F);
+	 * }
+	 * </pre>
+	 */
 	public Vector2F() {
 		this(0.0F, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Vector2F} instance given the component values {@code p.getComponent1()} and {@code p.getComponent2()}.
+	 * <p>
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Vector2F(p.getComponent1(), p.getComponent2());
+	 * }
+	 * </pre>
+	 * 
+	 * @param p a {@link Point2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
+	 */
 	public Vector2F(final Point2F p) {
 		this(p.getComponent1(), p.getComponent2());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Vector2F} instance given the component values {@code component1} and {@code component2}.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 */
 	public Vector2F(final float component1, final float component2) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -49,13 +83,24 @@ public final class Vector2F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code Vector2F} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Vector2F} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new Vector2F(%+.10f, %+.10f)", Float.valueOf(this.component1), Float.valueOf(this.component2));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code Vector2F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Vector2F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Vector2F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Vector2F}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -71,47 +116,83 @@ public final class Vector2F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1.
+	 * 
+	 * @return the value of component 1
+	 */
 	public float getComponent1() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2.
+	 * 
+	 * @return the value of component 2
+	 */
 	public float getComponent2() {
 		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component.
+	 * 
+	 * @return the value of the U-component
+	 */
 	public float getU() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the V-component.
+	 * 
+	 * @return the value of the V-component
+	 */
 	public float getV() {
 		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component.
+	 * 
+	 * @return the value of the X-component
+	 */
 	public float getX() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component.
+	 * 
+	 * @return the value of the Y-component
+	 */
 	public float getY() {
 		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the length of this {@code Vector2F} instance.
+	 * 
+	 * @return the length of this {@code Vector2F} instance
+	 */
 	public float length() {
 		return sqrt(lengthSquared());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the squared length of this {@code Vector2F} instance.
+	 * 
+	 * @return the squared length of this {@code Vector2F} instance
+	 */
 	public float lengthSquared() {
 		return this.component1 * this.component1 + this.component2 * this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code Vector2F} instance.
+	 * 
+	 * @return a hash code for this {@code Vector2F} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.component1), Float.valueOf(this.component2));
@@ -119,7 +200,20 @@ public final class Vector2F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds the component values of {@code vRHS} to the component values of {@code vLHS}.
+	 * <p>
+	 * Returns a new {@code Vector2F} instance with the result of the addition.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector addition is performed componentwise.
+	 * 
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vRHS the {@code Vector2F} instance on the right-hand side
+	 * @return a new {@code Vector2F} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
 	public static Vector2F add(final Vector2F vLHS, final Vector2F vRHS) {
 		final float component1 = vLHS.component1 + vRHS.component1;
 		final float component2 = vLHS.component2 + vRHS.component2;
@@ -127,7 +221,16 @@ public final class Vector2F {
 		return new Vector2F(component1, component2);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector2F} instance that is pointing in the direction of {@code pEye} to {@code pLookAt}.
+	 * <p>
+	 * If either {@code pEye} or {@code pLookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pEye a {@link Point2F} instance denoting the eye to look from
+	 * @param pLookAt a {@code Point2F} instance denoting the target to look at
+	 * @return a new {@code Vector2F} instance that is pointing in the direction of {@code pEye} to {@code pLookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code pEye} or {@code pLookAt} are {@code null}
+	 */
 	public static Vector2F direction(final Point2F pEye, final Point2F pLookAt) {
 		final float component1 = pLookAt.getComponent1() - pEye.getComponent1();
 		final float component2 = pLookAt.getComponent2() - pEye.getComponent2();
@@ -135,7 +238,20 @@ public final class Vector2F {
 		return new Vector2F(component1, component2);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Divides the component values of {@code vLHS} with {@code sRHS}.
+	 * <p>
+	 * Returns a new {@code Vector2F} instance with the result of the division.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector division is performed componentwise.
+	 * 
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
+	 * @return a new {@code Vector2F} instance with the result of the division
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
 	public static Vector2F divide(final Vector2F vLHS, final float sRHS) {
 		final float component1 = vLHS.component1 / sRHS;
 		final float component2 = vLHS.component2 / sRHS;
@@ -143,7 +259,20 @@ public final class Vector2F {
 		return new Vector2F(component1, component2);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Multiplies the component values of {@code vLHS} with {@code sRHS}.
+	 * <p>
+	 * Returns a new {@code Vector2F} instance with the result of the multiplication.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector multiplication is performed componentwise.
+	 * 
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param sRHS the scalar value on the right-hand side
+	 * @return a new {@code Vector2F} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
 	public static Vector2F multiply(final Vector2F vLHS, final float sRHS) {
 		final float component1 = vLHS.component1 * sRHS;
 		final float component2 = vLHS.component2 * sRHS;
@@ -151,7 +280,17 @@ public final class Vector2F {
 		return new Vector2F(component1, component2);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Negates the component values of {@code v}.
+	 * <p>
+	 * Returns a new {@code Vector2F} instance with the result of the negation.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param v a {@code Vector2F} instance
+	 * @return a new {@code Vector2F} instance with the result of the negation
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
 	public static Vector2F negate(final Vector2F v) {
 		final float component1 = -v.component1;
 		final float component2 = -v.component2;
@@ -159,12 +298,35 @@ public final class Vector2F {
 		return new Vector2F(component1, component2);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Normalizes the component values of {@code v}.
+	 * <p>
+	 * Returns a new {@code Vector2F} instance with the result of the normalization.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param v a {@code Vector2F} instance
+	 * @return a new {@code Vector2F} instance with the result of the normalization
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
 	public static Vector2F normalize(final Vector2F v) {
 		return divide(v, v.length());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Subtracts the component values of {@code vRHS} from the component values of {@code vLHS}.
+	 * <p>
+	 * Returns a new {@code Vector2F} instance with the result of the subtraction.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector subtraction is performed componentwise.
+	 * 
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vRHS the {@code Vector2F} instance on the right-hand side
+	 * @return a new {@code Vector2F} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
 	public static Vector2F subtract(final Vector2F vLHS, final Vector2F vRHS) {
 		final float component1 = vLHS.component1 - vRHS.component1;
 		final float component2 = vLHS.component2 - vRHS.component2;
@@ -172,7 +334,16 @@ public final class Vector2F {
 		return new Vector2F(component1, component2);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the dot product of {@code vLHS} and {@code vRHS}.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vRHS the {@code Vector2F} instance on the right-hand side
+	 * @return the dot product of {@code vLHS} and {@code vRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
 	public static float dotProduct(final Vector2F vLHS, final Vector2F vRHS) {
 		return vLHS.component1 * vRHS.component1 + vLHS.component2 * vRHS.component2;
 	}

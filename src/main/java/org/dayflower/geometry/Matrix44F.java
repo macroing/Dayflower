@@ -23,10 +23,18 @@ import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.sin;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Matrix44F} denotes a 4 x 4 matrix with 16 elements of type {@code float}.
+ * <p>
+ * The default order of this {@code Matrix44F} class is row-major.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Matrix44F {
 	private final float element11;
 	private final float element12;
@@ -47,12 +55,40 @@ public final class Matrix44F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Matrix44F} instance denoting the identity matrix.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Matrix44F(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
+	 * }
+	 * </pre>
+	 */
 	public Matrix44F() {
 		this(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Matrix44F} instance given its element values.
+	 * 
+	 * @param element11 the value of the element at index 0 or row 1 and column 1
+	 * @param element12 the value of the element at index 1 or row 1 and column 2
+	 * @param element13 the value of the element at index 2 or row 1 and column 3
+	 * @param element14 the value of the element at index 3 or row 1 and column 4
+	 * @param element21 the value of the element at index 4 or row 2 and column 1
+	 * @param element22 the value of the element at index 5 or row 2 and column 2
+	 * @param element23 the value of the element at index 6 or row 2 and column 3
+	 * @param element24 the value of the element at index 7 or row 2 and column 4
+	 * @param element31 the value of the element at index 8 or row 3 and column 1
+	 * @param element32 the value of the element at index 9 or row 3 and column 2
+	 * @param element33 the value of the element at index 10 or row 3 and column 3
+	 * @param element34 the value of the element at index 11 or row 3 and column 4
+	 * @param element41 the value of the element at index 12 or row 4 and column 1
+	 * @param element42 the value of the element at index 13 or row 4 and column 2
+	 * @param element43 the value of the element at index 14 or row 4 and column 3
+	 * @param element44 the value of the element at index 15 or row 4 and column 4
+	 */
 	public Matrix44F(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float element41, final float element42, final float element43, final float element44) {
 		this.element11 = element11;
 		this.element12 = element12;
@@ -74,7 +110,11 @@ public final class Matrix44F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code Matrix44F} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Matrix44F} instance
+	 */
 	@Override
 	public String toString() {
 		final String row1 = String.format("%+.10f, %+.10f, %+.10f, %+.10f", Float.valueOf(this.element11), Float.valueOf(this.element12), Float.valueOf(this.element13), Float.valueOf(this.element14));
@@ -85,7 +125,14 @@ public final class Matrix44F {
 		return String.format("new Matrix44F(%s, %s, %s, %s)", row1, row2, row3, row4);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code Matrix44F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Matrix44F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Matrix44F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Matrix44F}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -129,12 +176,20 @@ public final class Matrix44F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, this {@code Matrix44F} instance is invertible, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Matrix44F} instance is invertible, {@code false} otherwise
+	 */
 	public boolean isInvertible() {
 		return abs(determinant()) >= 1.0e-12F;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the determinant of this {@code Matrix44F} instance.
+	 * 
+	 * @return the determinant of this {@code Matrix44F} instance
+	 */
 	public float determinant() {
 		final float a = this.element11 * this.element22 - this.element12 * this.element21;
 		final float b = this.element11 * this.element23 - this.element13 * this.element21;
@@ -152,87 +207,229 @@ public final class Matrix44F {
 		return a * l - b * k + c * j + d * i - e * h + f * g;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index {@code index}.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than {@code 15}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index of the element whose value to return
+	 * @return the value of the element at index {@code index}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code 15}
+	 */
+	public float getElement(final int index) {
+		switch(index) {
+			case 0:
+				return this.element11;
+			case 1:
+				return this.element12;
+			case 2:
+				return this.element13;
+			case 3:
+				return this.element14;
+			case 4:
+				return this.element21;
+			case 5:
+				return this.element22;
+			case 6:
+				return this.element23;
+			case 7:
+				return this.element24;
+			case 8:
+				return this.element31;
+			case 9:
+				return this.element32;
+			case 10:
+				return this.element33;
+			case 11:
+				return this.element34;
+			case 12:
+				return this.element41;
+			case 13:
+				return this.element42;
+			case 14:
+				return this.element43;
+			case 15:
+				return this.element44;
+			default:
+				throw new IllegalArgumentException(String.format("Illegal index: index=%s", Integer.toString(index)));
+		}
+	}
+	
+	/**
+	 * Returns the value of the element at row {@code row} and column {@code column}.
+	 * <p>
+	 * If either {@code row} or {@code column} are less than {@code 1} or greater than {@code 4}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * <strong>Note:</strong> Both {@code row} and {@code column} starts at {@code 1}, rather than {@code 0}, as is sometimes the case.
+	 * 
+	 * @param row the row of the element whose value to return
+	 * @param column the column of the element whose value to return
+	 * @return the value of the element at row {@code row} and column {@code column}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code row} or {@code column} are less than {@code 1} or greater than {@code 4}
+	 */
+	public float getElement(final int row, final int column) {
+		if(row < 1 || row > 4) {
+			throw new IllegalArgumentException(String.format("Illegal row: row=%d", Integer.valueOf(row)));
+		}
+		
+		if(column < 1 || column > 4) {
+			throw new IllegalArgumentException(String.format("Illegal column: column=%d", Integer.valueOf(column)));
+		}
+		
+		final int index = (row - 1) * 4 + (column - 1);
+		
+		return getElement(index);
+	}
+	
+	/**
+	 * Returns the value of the element at index 0 or row 1 and column 1.
+	 * 
+	 * @return the value of the element at index 0 or row 1 and column 1
+	 */
 	public float getElement11() {
 		return this.element11;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 1 or row 1 and column 2.
+	 * 
+	 * @return the value of the element at index 1 or row 1 and column 2
+	 */
 	public float getElement12() {
 		return this.element12;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 2 or row 1 and column 3.
+	 * 
+	 * @return the value of the element at index 2 or row 1 and column 3
+	 */
 	public float getElement13() {
 		return this.element13;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 3 or row 1 and column 4.
+	 * 
+	 * @return the value of the element at index 3 or row 1 and column 4
+	 */
 	public float getElement14() {
 		return this.element14;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 4 or row 2 and column 1.
+	 * 
+	 * @return the value of the element at index 4 or row 2 and column 1
+	 */
 	public float getElement21() {
 		return this.element21;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 5 or row 2 and column 2.
+	 * 
+	 * @return the value of the element at index 5 or row 2 and column 2
+	 */
 	public float getElement22() {
 		return this.element22;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 6 or row 2 and column 3.
+	 * 
+	 * @return the value of the element at index 6 or row 2 and column 3
+	 */
 	public float getElement23() {
 		return this.element23;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 7 or row 2 and column 4.
+	 * 
+	 * @return the value of the element at index 7 or row 2 and column 4
+	 */
 	public float getElement24() {
 		return this.element24;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 8 or row 3 and column 1.
+	 * 
+	 * @return the value of the element at index 8 or row 3 and column 1
+	 */
 	public float getElement31() {
 		return this.element31;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 9 or row 3 and column 2.
+	 * 
+	 * @return the value of the element at index 9 or row 3 and column 2
+	 */
 	public float getElement32() {
 		return this.element32;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 10 or row 3 and column 3.
+	 * 
+	 * @return the value of the element at index 10 or row 3 and column 3
+	 */
 	public float getElement33() {
 		return this.element33;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 11 or row 3 and column 4.
+	 * 
+	 * @return the value of the element at index 11 or row 3 and column 4
+	 */
 	public float getElement34() {
 		return this.element34;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 12 or row 4 and column 1.
+	 * 
+	 * @return the value of the element at index 12 or row 4 and column 1
+	 */
 	public float getElement41() {
 		return this.element41;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 13 or row 4 and column 2.
+	 * 
+	 * @return the value of the element at index 13 or row 4 and column 2
+	 */
 	public float getElement42() {
 		return this.element42;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 14 or row 4 and column 3.
+	 * 
+	 * @return the value of the element at index 14 or row 4 and column 3
+	 */
 	public float getElement43() {
 		return this.element43;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the element at index 15 or row 4 and column 4.
+	 * 
+	 * @return the value of the element at index 15 or row 4 and column 4
+	 */
 	public float getElement44() {
 		return this.element44;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code Matrix44F} instance.
+	 * 
+	 * @return a hash code for this {@code Matrix44F} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(new Object[] {
@@ -245,12 +442,28 @@ public final class Matrix44F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Matrix44F} instance denoting the identity matrix.
+	 * 
+	 * @return a new {@code Matrix44F} instance denoting the identity matrix
+	 */
 	public static Matrix44F identity() {
 		return new Matrix44F();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Matrix44F} instance that is the inverse of {@code m}.
+	 * <p>
+	 * If {@code m} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code m} cannot be inverted, an {@code IllegalStateException} will be thrown.
+	 * <p>
+	 * To make sure {@code m} is invertible, consider calling {@link #isInvertible()}.
+	 * 
+	 * @return a new {@code Matrix44F} instance that is the inverse of {@code m}
+	 * @throws IllegalStateException thrown if, and only if, {@code m} cannot be inverted
+	 * @throws NullPointerException thrown if, and only if, {@code m} is {@code null}
+	 */
 	public static Matrix44F inverse(final Matrix44F m) {
 		final float a = m.element11 * m.element22 - m.element12 * m.element21;
 		final float b = m.element11 * m.element23 - m.element13 * m.element21;
@@ -292,7 +505,18 @@ public final class Matrix44F {
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Multiplies the element values of {@code mLHS} with the element values of {@code mRHS}.
+	 * <p>
+	 * Returns a new {@code Matrix44F} instance with the result of the multiplication.
+	 * <p>
+	 * If either {@code mLHS} or {@code mRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mLHS the {@code Matrix44F} instance on the left-hand side
+	 * @param mRHS the {@code Matrix44F} instance on the right-hand side
+	 * @return a new {@code Matrix44F} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code mRHS} are {@code null}
+	 */
 	public static Matrix44F multiply(final Matrix44F mLHS, final Matrix44F mRHS) {
 		final float element11 = mLHS.element11 * mRHS.element11 + mLHS.element12 * mRHS.element21 + mLHS.element13 * mRHS.element31 + mLHS.element14 * mRHS.element41;
 		final float element12 = mLHS.element11 * mRHS.element12 + mLHS.element12 * mRHS.element22 + mLHS.element13 * mRHS.element32 + mLHS.element14 * mRHS.element42;
@@ -314,7 +538,16 @@ public final class Matrix44F {
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that rotates along the axis represented by {@code v}.
+	 * <p>
+	 * If either {@code a} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a an {@link AngleF} instance
+	 * @param v a {@link Vector3F} instance that represents an axis
+	 * @return a {@code Matrix44F} instance that rotates along the axis represented by {@code v}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code v} are {@code null}
+	 */
 	public static Matrix44F rotate(final AngleF a, final Vector3F v) {
 		final Vector3F vNormalized = Vector3F.normalize(v);
 		
@@ -342,12 +575,48 @@ public final class Matrix44F {
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that rotates along the axis represented by {@code x}, {@code y} and {@code z}.
+	 * <p>
+	 * If {@code a} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix44F.rotate(a, new Vector3F(x, y, z));
+	 * }
+	 * </pre>
+	 * 
+	 * @param a an {@link AngleF} instance
+	 * @param x the component value along the X-axis
+	 * @param y the component value along the Y-axis
+	 * @param z the component value along the Z-axis
+	 * @return a {@code Matrix44F} instance that rotates along the axis represented by {@code x}, {@code y} and {@code z}
+	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
+	 */
 	public static Matrix44F rotate(final AngleF a, final float x, final float y, final float z) {
 		return rotate(a, new Vector3F(x, y, z));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that rotates along the X-axis.
+	 * <p>
+	 * If {@code a} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 * 1,   0,    0, 0
+	 * 0, cos, -sin, 0
+	 * 0, sin,  cos, 0
+	 * 0,   0,    0, 1
+	 * }
+	 * </pre>
+	 * 
+	 * @param a an {@link AngleF} instance
+	 * @return a {@code Matrix44F} instance that rotates along the X-axis
+	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
+	 */
 	public static Matrix44F rotateX(final AngleF a) {
 		final float cos = cos(a.getRadians());
 		final float sin = sin(a.getRadians());
@@ -355,7 +624,25 @@ public final class Matrix44F {
 		return new Matrix44F(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that rotates along the Y-axis.
+	 * <p>
+	 * If {@code a} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 *  cos, 0, sin, 0
+	 *    0, 1,   0, 0
+	 * -sin, 0, cos, 0
+	 *    0, 0,   0, 1
+	 * }
+	 * </pre>
+	 * 
+	 * @param a an {@link AngleF} instance
+	 * @return a {@code Matrix44F} instance that rotates along the Y-axis
+	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
+	 */
 	public static Matrix44F rotateY(final AngleF a) {
 		final float cos = cos(a.getRadians());
 		final float sin = sin(a.getRadians());
@@ -363,7 +650,25 @@ public final class Matrix44F {
 		return new Matrix44F(cos, 0.0F, sin, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, -sin, 0.0F, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that rotates along the Z-axis.
+	 * <p>
+	 * If {@code a} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 * cos, -sin, 0, 0
+	 * sin,  cos, 0, 0
+	 *   0,    0, 1, 0
+	 *   0,    0, 0, 1
+	 * }
+	 * </pre>
+	 * 
+	 * @param a an {@link AngleF} instance
+	 * @return a {@code Matrix44F} instance that rotates along the Z-axis
+	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
+	 */
 	public static Matrix44F rotateZ(final AngleF a) {
 		final float cos = cos(a.getRadians());
 		final float sin = sin(a.getRadians());
@@ -371,32 +676,115 @@ public final class Matrix44F {
 		return new Matrix44F(cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes.
+	 * <p>
+	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix44F.scale(v.getX(), v.getY(), v.getZ());
+	 * }
+	 * </pre>
+	 * 
+	 * @param v a {@link Vector3F} instance that contains the scale factors along the X-, Y- and Z-axes
+	 * @return a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes
+	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 */
 	public static Matrix44F scale(final Vector3F v) {
 		return scale(v.getX(), v.getY(), v.getZ());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix44F.scale(s, s, s);
+	 * }
+	 * </pre>
+	 * 
+	 * @param s the scale factor along the X-, Y- and Z-axes
+	 * @return a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes
+	 */
 	public static Matrix44F scale(final float s) {
 		return scale(s, s, s);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 * x, 0, 0, 0
+	 * 0, y, 0, 0
+	 * 0, 0, z, 0
+	 * 0, 0, 0, 1
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the scale factor along the X-axis
+	 * @param y the scale factor along the Y-axis
+	 * @param z the scale factor along the Z-axis
+	 * @return a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes
+	 */
 	public static Matrix44F scale(final float x, final float y, final float z) {
 		return new Matrix44F(x, 0.0F, 0.0F, 0.0F, 0.0F, y, 0.0F, 0.0F, 0.0F, 0.0F, z, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that translates along the X-, Y- and Z-axes.
+	 * <p>
+	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Matrix44F.translate(p.getX(), p.getY(), p.getZ());
+	 * }
+	 * </pre>
+	 * 
+	 * @param p a {@link Point3F} instance that contains the translation factors along the X-, Y- and Z-axes
+	 * @return a {@code Matrix44F} instance that translates along the X-, Y- and Z-axes
+	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
+	 */
 	public static Matrix44F translate(final Point3F p) {
 		return translate(p.getX(), p.getY(), p.getZ());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that translates along the X-, Y- and Z-axes.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 * 1, 0, 0, x
+	 * 0, 1, 0, y
+	 * 0, 0, 1, z
+	 * 0, 0, 0, 1
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the translation factor along the X-axis
+	 * @param y the translation factor along the Y-axis
+	 * @param z the translation factor along the Z-axis
+	 * @return a {@code Matrix44F} instance that translates along the X-, Y- and Z-axes
+	 */
 	public static Matrix44F translate(final float x, final float y, final float z) {
 		return new Matrix44F(1.0F, 0.0F, 0.0F, x, 0.0F, 1.0F, 0.0F, y, 0.0F, 0.0F, 1.0F, z, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Matrix44F} instance that is the transpose of {@code m}.
+	 * <p>
+	 * If {@code m} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @return a new {@code Matrix44F} instance that is the transpose of {@code m}
+	 * @throws NullPointerException thrown if, and only if, {@code m} is {@code null}
+	 */
 	public static Matrix44F transpose(final Matrix44F m) {
 		final float element11 = m.element11;
 		final float element12 = m.element21;

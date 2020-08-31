@@ -69,6 +69,11 @@ public final class Floats {
 	public static final float PI_MULTIPLIED_BY_2_RECIPROCAL = 1.0F / PI_MULTIPLIED_BY_2;
 	
 	/**
+	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, multiplied by 4.0.
+	 */
+	public static final float PI_MULTIPLIED_BY_4 = PI * 4.0F;
+	
+	/**
 	 * The reciprocal (or inverse) of {@link #PI}.
 	 */
 	public static final float PI_RECIPROCAL = 1.0F / PI;

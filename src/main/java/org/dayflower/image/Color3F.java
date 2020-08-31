@@ -647,366 +647,518 @@ public final class Color3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Adds the component values of {@code cRHS} to the component values of {@code cLHS}.
+	 * Adds the component values of {@code colorRHS} to the component values of {@code colorLHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the addition.
 	 * <p>
-	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param colorRHS the {@code Color3F} instance on the right-hand side
 	 * @return a new {@code Color3F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-	public static Color3F add(final Color3F cLHS, final Color3F cRHS) {
-		final float component1 = cLHS.component1 + cRHS.component1;
-		final float component2 = cLHS.component2 + cRHS.component2;
-		final float component3 = cLHS.component3 + cRHS.component3;
+	public static Color3F add(final Color3F colorLHS, final Color3F colorRHS) {
+		final float component1 = colorLHS.component1 + colorRHS.component1;
+		final float component2 = colorLHS.component2 + colorRHS.component2;
+		final float component3 = colorLHS.component3 + colorRHS.component3;
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 	/**
-	 * Adds the component values of {@code cRHS} to the component values of {@code cLHS}.
+	 * Adds the component values of {@code colorRHS} to the component values of {@code colorLHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the addition.
 	 * <p>
-	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * This method differs from {@link #add(Color3F, Color3F)} in that it assumes this {@code Color3F} instance to be an average color sample. It uses a stable moving average algorithm to compute a new average color sample as a result of adding
-	 * {@code cRHS}. This method is suitable for Monte Carlo-method based algorithms.
+	 * This method differs from {@link #add(Color3F, Color3F)} in that it assumes {@code colorLHS} to be an average color sample. It uses a stable moving average algorithm to compute a new average color sample as a result of adding {@code colorRHS}.
+	 * This method is suitable for Monte Carlo-method based algorithms.
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param colorRHS the {@code Color3F} instance on the right-hand side
 	 * @param sampleCount the current sample count
 	 * @return a new {@code Color3F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-	public static Color3F addSample(final Color3F cLHS, final Color3F cRHS, final int sampleCount) {
-		final float component1 = cLHS.component1 + ((cRHS.component1 - cLHS.component1) / sampleCount);
-		final float component2 = cLHS.component2 + ((cRHS.component2 - cLHS.component2) / sampleCount);
-		final float component3 = cLHS.component3 + ((cRHS.component3 - cLHS.component3) / sampleCount);
+	public static Color3F addSample(final Color3F colorLHS, final Color3F colorRHS, final int sampleCount) {
+		final float component1 = colorLHS.component1 + ((colorRHS.component1 - colorLHS.component1) / sampleCount);
+		final float component2 = colorLHS.component2 + ((colorRHS.component2 - colorLHS.component2) / sampleCount);
+		final float component3 = colorLHS.component3 + ((colorRHS.component3 - colorLHS.component3) / sampleCount);
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 	/**
-	 * Blends the component values of {@code cLHS} and {@code cRHS}.
+	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the blend.
 	 * <p>
-	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Color3F.blend(cLHS, cRHS, 0.5F);
+	 * Color3F.blend(colorLHS, colorRHS, 0.5F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param colorRHS the {@code Color3F} instance on the right-hand side
 	 * @return a new {@code Color3F} instance with the result of the blend
-	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-	public static Color3F blend(final Color3F cLHS, final Color3F cRHS) {
-		return blend(cLHS, cRHS, 0.5F);
+	public static Color3F blend(final Color3F colorLHS, final Color3F colorRHS) {
+		return blend(colorLHS, colorRHS, 0.5F);
 	}
 	
 	/**
-	 * Blends the component values of {@code cLHS} and {@code cRHS}.
+	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the blend.
 	 * <p>
-	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Color3F.blend(cLHS, cRHS, t, t, t);
+	 * Color3F.blend(colorLHS, colorRHS, t, t, t);
 	 * }
 	 * </pre>
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param colorRHS the {@code Color3F} instance on the right-hand side
 	 * @param t the factor to use for all components in the blending process
 	 * @return a new {@code Color3F} instance with the result of the blend
-	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-	public static Color3F blend(final Color3F cLHS, final Color3F cRHS, final float t) {
-		return blend(cLHS, cRHS, t, t, t);
+	public static Color3F blend(final Color3F colorLHS, final Color3F colorRHS, final float t) {
+		return blend(colorLHS, colorRHS, t, t, t);
 	}
 	
 	/**
-	 * Blends the component values of {@code cLHS} and {@code cRHS}.
+	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the blend.
 	 * <p>
-	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param colorRHS the {@code Color3F} instance on the right-hand side
 	 * @param tComponent1 the factor to use for component 1 in the blending process
 	 * @param tComponent2 the factor to use for component 2 in the blending process
 	 * @param tComponent3 the factor to use for component 3 in the blending process
 	 * @return a new {@code Color3F} instance with the result of the blend
-	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-	public static Color3F blend(final Color3F cLHS, final Color3F cRHS, final float tComponent1, final float tComponent2, final float tComponent3) {
-		final float component1 = lerp(cLHS.component1, cRHS.component1, tComponent1);
-		final float component2 = lerp(cLHS.component2, cRHS.component2, tComponent2);
-		final float component3 = lerp(cLHS.component3, cRHS.component3, tComponent3);
+	public static Color3F blend(final Color3F colorLHS, final Color3F colorRHS, final float tComponent1, final float tComponent2, final float tComponent3) {
+		final float component1 = lerp(colorLHS.component1, colorRHS.component1, tComponent1);
+		final float component2 = lerp(colorLHS.component2, colorRHS.component2, tComponent2);
+		final float component3 = lerp(colorLHS.component3, colorRHS.component3, tComponent3);
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
-	public static Color3F convertRGBToXYZUsingPBRT(final Color3F c) {
-		final float x = 0.412453F * c.getR() + 0.357580F * c.getG() + 0.180423F * c.getB();
-		final float y = 0.212671F * c.getR() + 0.715160F * c.getG() + 0.072169F * c.getB();
-		final float z = 0.019334F * c.getR() + 0.119193F * c.getG() + 0.950227F * c.getB();
+	/**
+	 * Converts {@code color} from the RGB-color space to the XYZ-color space using the algorithm provided by PBRT.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the conversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance in RGB-color space
+	 * @return a new {@code Color3F} instance with the result of the conversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F convertRGBToXYZUsingPBRT(final Color3F color) {
+		final float x = 0.412453F * color.getR() + 0.357580F * color.getG() + 0.180423F * color.getB();
+		final float y = 0.212671F * color.getR() + 0.715160F * color.getG() + 0.072169F * color.getB();
+		final float z = 0.019334F * color.getR() + 0.119193F * color.getG() + 0.950227F * color.getB();
 		
 		return new Color3F(x, y, z);
 	}
 	
-//	TODO: Add Javadocs!
-	public static Color3F convertRGBToXYZUsingSRGB(final Color3F c) {
-		return ColorSpace3F.SRGB.convertRGBToXYZ(c);
+	/**
+	 * Converts {@code color} from the RGB-color space to the XYZ-color space using sRGB.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the conversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance in RGB-color space
+	 * @return a new {@code Color3F} instance with the result of the conversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F convertRGBToXYZUsingSRGB(final Color3F color) {
+		return ColorSpace3F.SRGB.convertRGBToXYZ(color);
 	}
 	
-//	TODO: Add Javadocs!
-	public static Color3F convertXYZToRGBUsingPBRT(final Color3F c) {
-		final float r = +3.240479F * c.getX() - 1.537150F * c.getY() - 0.498535F * c.getZ();
-		final float g = -0.969256F * c.getX() + 1.875991F * c.getY() + 0.041556F * c.getZ();
-		final float b = +0.055648F * c.getX() - 0.204043F * c.getY() + 1.057311F * c.getZ();
+	/**
+	 * Converts {@code color} from the XYZ-color space to the RGB-color space using the algorithm provided by PBRT.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the conversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance in XYZ-color space
+	 * @return a new {@code Color3F} instance with the result of the conversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F convertXYZToRGBUsingPBRT(final Color3F color) {
+		final float r = +3.240479F * color.getX() - 1.537150F * color.getY() - 0.498535F * color.getZ();
+		final float g = -0.969256F * color.getX() + 1.875991F * color.getY() + 0.041556F * color.getZ();
+		final float b = +0.055648F * color.getX() - 0.204043F * color.getY() + 1.057311F * color.getZ();
 		
 		return new Color3F(r, g, b);
 	}
 	
-//	TODO: Add Javadocs!
-	public static Color3F convertXYZToRGBUsingSRGB(final Color3F c) {
-		return ColorSpace3F.SRGB.convertXYZToRGB(c);
+	/**
+	 * Converts {@code color} from the XYZ-color space to the RGB-color space using sRGB.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the conversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance in XYZ-color space
+	 * @return a new {@code Color3F} instance with the result of the conversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F convertXYZToRGBUsingSRGB(final Color3F color) {
+		return ColorSpace3F.SRGB.convertXYZToRGB(color);
 	}
 	
 	/**
-	 * Divides the component values of {@code cLHS} with the component values of {@code cRHS}.
+	 * Divides the component values of {@code colorLHS} with the component values of {@code colorRHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the division.
 	 * <p>
-	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param colorRHS the {@code Color3F} instance on the right-hand side
 	 * @return a new {@code Color3F} instance with the result of the division
-	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-	public static Color3F divide(final Color3F cLHS, final Color3F cRHS) {
-		final float component1 = cLHS.component1 / cRHS.component1;
-		final float component2 = cLHS.component2 / cRHS.component2;
-		final float component3 = cLHS.component3 / cRHS.component3;
+	public static Color3F divide(final Color3F colorLHS, final Color3F colorRHS) {
+		final float component1 = colorLHS.component1 / colorRHS.component1;
+		final float component2 = colorLHS.component2 / colorRHS.component2;
+		final float component3 = colorLHS.component3 / colorRHS.component3;
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 	/**
-	 * Divides the component values of {@code cLHS} with {@code sRHS}.
+	 * Divides the component values of {@code colorLHS} with {@code scalarRHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the division.
 	 * <p>
-	 * If {@code cLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param sRHS the scalar value on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param scalarRHS the scalar value on the right-hand side
 	 * @return a new {@code Color3F} instance with the result of the division
-	 * @throws NullPointerException thrown if, and only if, {@code cLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
-	public static Color3F divide(final Color3F cLHS, final float sRHS) {
-		final float component1 = cLHS.component1 / sRHS;
-		final float component2 = cLHS.component2 / sRHS;
-		final float component3 = cLHS.component3 / sRHS;
+	public static Color3F divide(final Color3F colorLHS, final float scalarRHS) {
+		final float component1 = colorLHS.component1 / scalarRHS;
+		final float component2 = colorLHS.component2 / scalarRHS;
+		final float component3 = colorLHS.component3 / scalarRHS;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color3F} instance based on {@code color.average()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a grayscale {@code Color3F} instance based on {@code color.average()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F grayscaleAverage(final Color3F color) {
+		return new Color3F(color.average());
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color3F} instance based on {@code color.getComponent1()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a grayscale {@code Color3F} instance based on {@code color.getComponent1()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F grayscaleComponent1(final Color3F color) {
+		return new Color3F(color.component1);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color3F} instance based on {@code color.getComponent2()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a grayscale {@code Color3F} instance based on {@code color.getComponent2()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F grayscaleComponent2(final Color3F color) {
+		return new Color3F(color.component2);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color3F} instance based on {@code color.getComponent3()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a grayscale {@code Color3F} instance based on {@code color.getComponent3()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F grayscaleComponent3(final Color3F color) {
+		return new Color3F(color.component3);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color3F} instance based on {@code color.lightness()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a grayscale {@code Color3F} instance based on {@code color.lightness()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F grayscaleLightness(final Color3F color) {
+		return new Color3F(color.lightness());
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color3F} instance based on {@code color.luminance()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a grayscale {@code Color3F} instance based on {@code color.luminance()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F grayscaleLuminance(final Color3F color) {
+		return new Color3F(color.luminance());
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color3F} instance based on {@code color.maximum()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a grayscale {@code Color3F} instance based on {@code color.maximum()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F grayscaleMaximum(final Color3F color) {
+		return new Color3F(color.maximum());
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color3F} instance based on {@code color.minimum()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a grayscale {@code Color3F} instance based on {@code color.minimum()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F grayscaleMinimum(final Color3F color) {
+		return new Color3F(color.minimum());
+	}
+	
+	/**
+	 * Inverts the component values of {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the inversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the inversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F invert(final Color3F color) {
+		final float component1 = 1.0F - color.component1;
+		final float component2 = 1.0F - color.component2;
+		final float component3 = 1.0F - color.component3;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Color3F} instance with the largest component values of {@code colorA} and {@code colorB}.
+	 * <p>
+	 * If either {@code colorA} or {@code colorB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorA a {@code Color3F} instance
+	 * @param colorB a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the largest component values of {@code colorA} and {@code colorB}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
+	 */
+	public static Color3F maximum(final Color3F colorA, final Color3F colorB) {
+		final float component1 = max(colorA.component1, colorB.component1);
+		final float component2 = max(colorA.component2, colorB.component2);
+		final float component3 = max(colorA.component3, colorB.component3);
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F grayscaleAverage(final Color3F c) {
-		return new Color3F(c.average());
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F grayscaleComponent1(final Color3F c) {
-		return new Color3F(c.component1);
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F grayscaleComponent2(final Color3F c) {
-		return new Color3F(c.component2);
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F grayscaleComponent3(final Color3F c) {
-		return new Color3F(c.component3);
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F grayscaleLightness(final Color3F c) {
-		return new Color3F(c.lightness());
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F grayscaleLuminance(final Color3F c) {
-		return new Color3F(c.luminance());
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F grayscaleMaximum(final Color3F c) {
-		return new Color3F(c.maximum());
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F grayscaleMinimum(final Color3F c) {
-		return new Color3F(c.minimum());
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F invert(final Color3F c) {
-		final float component1 = 1.0F - c.component1;
-		final float component2 = 1.0F - c.component2;
-		final float component3 = 1.0F - c.component3;
-		
-		return new Color3F(component1, component2, component3);
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F maximum(final Color3F cA, final Color3F cB) {
-		final float component1 = max(cA.component1, cB.component1);
-		final float component2 = max(cA.component2, cB.component2);
-		final float component3 = max(cA.component3, cB.component3);
-		
-		return new Color3F(component1, component2, component3);
-	}
-	
-//	TODO: Add Javadocs!
-	public static Color3F maximumTo1(final Color3F c) {
-		final float maximum = c.maximum();
+	public static Color3F maximumTo1(final Color3F color) {
+		final float maximum = color.maximum();
 		
 		if(maximum > 1.0F) {
-			final float component1 = c.component1 / maximum;
-			final float component2 = c.component2 / maximum;
-			final float component3 = c.component3 / maximum;
+			final float component1 = color.component1 / maximum;
+			final float component2 = color.component2 / maximum;
+			final float component3 = color.component3 / maximum;
 			
 			return new Color3F(component1, component2, component3);
 		}
 		
-		return c;
+		return color;
 	}
 	
-//	TODO: Add Javadocs!
-	public static Color3F minimum(final Color3F cA, final Color3F cB) {
-		final float component1 = min(cA.component1, cB.component1);
-		final float component2 = min(cA.component2, cB.component2);
-		final float component3 = min(cA.component3, cB.component3);
+	/**
+	 * Returns a new {@code Color3F} instance with the smallest component values of {@code colorA} and {@code colorB}.
+	 * <p>
+	 * If either {@code colorA} or {@code colorB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorA a {@code Color3F} instance
+	 * @param colorB a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the smallest component values of {@code colorA} and {@code colorB}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
+	 */
+	public static Color3F minimum(final Color3F colorA, final Color3F colorB) {
+		final float component1 = min(colorA.component1, colorB.component1);
+		final float component2 = min(colorA.component2, colorB.component2);
+		final float component3 = min(colorA.component3, colorB.component3);
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F minimumTo0(final Color3F c) {
-		final float minimum = c.minimum();
+	public static Color3F minimumTo0(final Color3F color) {
+		final float minimum = color.minimum();
 		
 		if(minimum < 0.0F) {
-			final float component1 = c.component1 + -minimum;
-			final float component2 = c.component2 + -minimum;
-			final float component3 = c.component3 + -minimum;
+			final float component1 = color.component1 + -minimum;
+			final float component2 = color.component2 + -minimum;
+			final float component3 = color.component3 + -minimum;
 			
 			return new Color3F(component1, component2, component3);
 		}
 		
-		return c;
+		return color;
 	}
 	
 	/**
-	 * Multiplies the component values of {@code cLHS} with the component values of {@code cRHS}.
+	 * Multiplies the component values of {@code colorLHS} with the component values of {@code colorRHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the multiplication.
 	 * <p>
-	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param colorRHS the {@code Color3F} instance on the right-hand side
 	 * @return a new {@code Color3F} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-	public static Color3F multiply(final Color3F cLHS, final Color3F cRHS) {
-		final float component1 = cLHS.component1 * cRHS.component1;
-		final float component2 = cLHS.component2 * cRHS.component2;
-		final float component3 = cLHS.component3 * cRHS.component3;
-		
-		return new Color3F(component1, component2, component3);
-	}
-	
-	/**
-	 * Multiplies the component values of {@code cLHS} with {@code sRHS}.
-	 * <p>
-	 * Returns a new {@code Color3F} instance with the result of the multiplication.
-	 * <p>
-	 * If {@code cLHS} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param sRHS the scalar value on the right-hand side
-	 * @return a new {@code Color3F} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, {@code cLHS} is {@code null}
-	 */
-	public static Color3F multiply(final Color3F cLHS, final float sRHS) {
-		final float component1 = cLHS.component1 * sRHS;
-		final float component2 = cLHS.component2 * sRHS;
-		final float component3 = cLHS.component3 * sRHS;
+	public static Color3F multiply(final Color3F colorLHS, final Color3F colorRHS) {
+		final float component1 = colorLHS.component1 * colorRHS.component1;
+		final float component2 = colorLHS.component2 * colorRHS.component2;
+		final float component3 = colorLHS.component3 * colorRHS.component3;
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 	/**
-	 * Multiplies the component values of {@code cLHS} with {@code sRHS} and saturates or clamps all negative component values.
+	 * Multiplies the component values of {@code colorLHS} with {@code scalarRHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the multiplication.
 	 * <p>
-	 * If {@code cLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param sRHS the scalar value on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param scalarRHS the scalar value on the right-hand side
 	 * @return a new {@code Color3F} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, {@code cLHS} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
-	public static Color3F multiplyAndSaturateNegative(final Color3F cLHS, final float sRHS) {
-		final float component1 = max(cLHS.component1 * sRHS, 0.0F);
-		final float component2 = max(cLHS.component2 * sRHS, 0.0F);
-		final float component3 = max(cLHS.component3 * sRHS, 0.0F);
+	public static Color3F multiply(final Color3F colorLHS, final float scalarRHS) {
+		final float component1 = colorLHS.component1 * scalarRHS;
+		final float component2 = colorLHS.component2 * scalarRHS;
+		final float component3 = colorLHS.component3 * scalarRHS;
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
-	public static Color3F negate(final Color3F c) {
-		final float component1 = -c.component1;
-		final float component2 = -c.component2;
-		final float component3 = -c.component3;
+	/**
+	 * Multiplies the component values of {@code colorLHS} with {@code scalarRHS} and saturates or clamps all negative component values.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the multiplication.
+	 * <p>
+	 * If {@code colorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param scalarRHS the scalar value on the right-hand side
+	 * @return a new {@code Color3F} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
+	 */
+	public static Color3F multiplyAndSaturateNegative(final Color3F colorLHS, final float scalarRHS) {
+		final float component1 = max(colorLHS.component1 * scalarRHS, 0.0F);
+		final float component2 = max(colorLHS.component2 * scalarRHS, 0.0F);
+		final float component3 = max(colorLHS.component3 * scalarRHS, 0.0F);
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
-	public static Color3F normalize(final Color3F c) {
-		final float sum = c.component1 + c.component2 + c.component3;
+	/**
+	 * Negates the component values of {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the negation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the negation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F negate(final Color3F color) {
+		final float component1 = -color.component1;
+		final float component2 = -color.component2;
+		final float component3 = -color.component3;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Normalizes the component values of {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the normalization.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the normalization
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F normalize(final Color3F color) {
+		final float sum = color.component1 + color.component2 + color.component3;
 		
 		if(sum < 1.0e-6F) {
-			return c;
+			return color;
 		}
 		
 		final float sumReciprocal = 1.0F / sum;
 		
-		final float component1 = c.component1 * sumReciprocal;
-		final float component2 = c.component2 * sumReciprocal;
-		final float component3 = c.component3 * sumReciprocal;
+		final float component1 = color.component1 * sumReciprocal;
+		final float component2 = color.component2 * sumReciprocal;
+		final float component3 = color.component3 * sumReciprocal;
 		
 		return new Color3F(component1, component2, component3);
 	}
@@ -1048,58 +1200,58 @@ public final class Color3F {
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F redoGammaCorrectionPBRT(final Color3F c) {
-		final float component1 = c.component1 <= 0.0031308F ? 12.92F * c.component1 : 1.055F * pow(c.component1, 1.0F / 2.4F) - 0.055F;
-		final float component2 = c.component2 <= 0.0031308F ? 12.92F * c.component2 : 1.055F * pow(c.component2, 1.0F / 2.4F) - 0.055F;
-		final float component3 = c.component3 <= 0.0031308F ? 12.92F * c.component3 : 1.055F * pow(c.component3, 1.0F / 2.4F) - 0.055F;
+	public static Color3F redoGammaCorrectionPBRT(final Color3F color) {
+		final float component1 = color.component1 <= 0.0031308F ? 12.92F * color.component1 : 1.055F * pow(color.component1, 1.0F / 2.4F) - 0.055F;
+		final float component2 = color.component2 <= 0.0031308F ? 12.92F * color.component2 : 1.055F * pow(color.component2, 1.0F / 2.4F) - 0.055F;
+		final float component3 = color.component3 <= 0.0031308F ? 12.92F * color.component3 : 1.055F * pow(color.component3, 1.0F / 2.4F) - 0.055F;
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F redoGammaCorrectionSRGB(final Color3F c) {
-		return ColorSpace3F.SRGB.redoGammaCorrection(c);
+	public static Color3F redoGammaCorrectionSRGB(final Color3F color) {
+		return ColorSpace3F.SRGB.redoGammaCorrection(color);
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F saturate(final Color3F c) {
-		return saturate(c, 0.0F, 1.0F);
+	public static Color3F saturate(final Color3F color) {
+		return saturate(color, 0.0F, 1.0F);
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F saturate(final Color3F c, final float edgeA, final float edgeB) {
-		final float component1 = Floats.saturate(c.component1, edgeA, edgeB);
-		final float component2 = Floats.saturate(c.component2, edgeA, edgeB);
-		final float component3 = Floats.saturate(c.component3, edgeA, edgeB);
+	public static Color3F saturate(final Color3F color, final float edgeA, final float edgeB) {
+		final float component1 = Floats.saturate(color.component1, edgeA, edgeB);
+		final float component2 = Floats.saturate(color.component2, edgeA, edgeB);
+		final float component3 = Floats.saturate(color.component3, edgeA, edgeB);
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F sepia(final Color3F c) {
-		final float component1 = c.component1 * 0.393F + c.component2 * 0.769F + c.component3 * 0.189F;
-		final float component2 = c.component1 * 0.349F + c.component2 * 0.686F + c.component3 * 0.168F;
-		final float component3 = c.component1 * 0.272F + c.component2 * 0.534F + c.component3 * 0.131F;
+	public static Color3F sepia(final Color3F color) {
+		final float component1 = color.component1 * 0.393F + color.component2 * 0.769F + color.component3 * 0.189F;
+		final float component2 = color.component1 * 0.349F + color.component2 * 0.686F + color.component3 * 0.168F;
+		final float component3 = color.component1 * 0.272F + color.component2 * 0.534F + color.component3 * 0.131F;
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 	/**
-	 * Subtracts the component values of {@code cRHS} from the component values of {@code cLHS}.
+	 * Subtracts the component values of {@code colorRHS} from the component values of {@code colorLHS}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code cLHS} or {@code cRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param cLHS the {@code Color3F} instance on the left-hand side
-	 * @param cRHS the {@code Color3F} instance on the right-hand side
+	 * @param colorLHS the {@code Color3F} instance on the left-hand side
+	 * @param colorRHS the {@code Color3F} instance on the right-hand side
 	 * @return a new {@code Color3F} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code cLHS} or {@code cRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
-	public static Color3F subtract(final Color3F cLHS, final Color3F cRHS) {
-		final float component1 = cLHS.component1 - cRHS.component1;
-		final float component2 = cLHS.component2 - cRHS.component2;
-		final float component3 = cLHS.component3 - cRHS.component3;
+	public static Color3F subtract(final Color3F colorLHS, final Color3F colorRHS) {
+		final float component1 = colorLHS.component1 - colorRHS.component1;
+		final float component2 = colorLHS.component2 - colorRHS.component2;
+		final float component3 = colorLHS.component3 - colorRHS.component3;
 		
 		return new Color3F(component1, component2, component3);
 	}
@@ -1135,12 +1287,12 @@ public final class Color3F {
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F toneMapReinhard(final Color3F c, final float exposure) {
+	public static Color3F toneMapReinhard(final Color3F color, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
-		final float component11 = c.component1 * exposure;
-		final float component21 = c.component2 * exposure;
-		final float component31 = c.component3 * exposure;
+		final float component11 = color.component1 * exposure;
+		final float component21 = color.component2 * exposure;
+		final float component31 = color.component3 * exposure;
 		
 		final float component12 = component11 / (1.0F + component11);
 		final float component22 = component21 / (1.0F + component21);
@@ -1150,14 +1302,14 @@ public final class Color3F {
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F toneMapReinhardModifiedVersion1(final Color3F c, final float exposure) {
+	public static Color3F toneMapReinhardModifiedVersion1(final Color3F color, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
 		final float lWhite = 4.0F;
 		
-		final float component11 = c.component1 * exposure;
-		final float component21 = c.component2 * exposure;
-		final float component31 = c.component3 * exposure;
+		final float component11 = color.component1 * exposure;
+		final float component21 = color.component2 * exposure;
+		final float component31 = color.component3 * exposure;
 		
 		final float component12 = component11 * (1.0F + component11 / (lWhite * lWhite)) / (1.0F + component11);
 		final float component22 = component21 * (1.0F + component21 / (lWhite * lWhite)) / (1.0F + component21);
@@ -1167,10 +1319,10 @@ public final class Color3F {
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F toneMapReinhardModifiedVersion2(final Color3F c, final float exposure) {
-		final float component11 = c.component1 * exposure;
-		final float component21 = c.component2 * exposure;
-		final float component31 = c.component3 * exposure;
+	public static Color3F toneMapReinhardModifiedVersion2(final Color3F color, final float exposure) {
+		final float component11 = color.component1 * exposure;
+		final float component21 = color.component2 * exposure;
+		final float component31 = color.component3 * exposure;
 		
 		final float component12 = 1.0F - exp(-component11 * exposure);
 		final float component22 = 1.0F - exp(-component21 * exposure);
@@ -1180,12 +1332,12 @@ public final class Color3F {
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F toneMapUnreal3(final Color3F c, final float exposure) {
+	public static Color3F toneMapUnreal3(final Color3F color, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
-		final float component11 = c.component1 * exposure;
-		final float component21 = c.component2 * exposure;
-		final float component31 = c.component3 * exposure;
+		final float component11 = color.component1 * exposure;
+		final float component21 = color.component2 * exposure;
+		final float component31 = color.component3 * exposure;
 		
 		final float component12 = component11 / (component11 + 0.155F) * 1.019F;
 		final float component22 = component21 / (component21 + 0.155F) * 1.019F;
@@ -1195,17 +1347,17 @@ public final class Color3F {
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F undoGammaCorrectionPBRT(final Color3F c) {
-		final float component1 = c.component1 <= 0.04045F ? c.component1 * 1.0F / 12.92F : pow((c.component1 + 0.055F) * 1.0F / 1.055F, 2.4F);
-		final float component2 = c.component2 <= 0.04045F ? c.component2 * 1.0F / 12.92F : pow((c.component2 + 0.055F) * 1.0F / 1.055F, 2.4F);
-		final float component3 = c.component3 <= 0.04045F ? c.component3 * 1.0F / 12.92F : pow((c.component3 + 0.055F) * 1.0F / 1.055F, 2.4F);
+	public static Color3F undoGammaCorrectionPBRT(final Color3F color) {
+		final float component1 = color.component1 <= 0.04045F ? color.component1 * 1.0F / 12.92F : pow((color.component1 + 0.055F) * 1.0F / 1.055F, 2.4F);
+		final float component2 = color.component2 <= 0.04045F ? color.component2 * 1.0F / 12.92F : pow((color.component2 + 0.055F) * 1.0F / 1.055F, 2.4F);
+		final float component3 = color.component3 <= 0.04045F ? color.component3 * 1.0F / 12.92F : pow((color.component3 + 0.055F) * 1.0F / 1.055F, 2.4F);
 		
 		return new Color3F(component1, component2, component3);
 	}
 	
 //	TODO: Add Javadocs!
-	public static Color3F undoGammaCorrectionSRGB(final Color3F c) {
-		return ColorSpace3F.SRGB.undoGammaCorrection(c);
+	public static Color3F undoGammaCorrectionSRGB(final Color3F color) {
+		return ColorSpace3F.SRGB.undoGammaCorrection(color);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1251,10 +1403,10 @@ public final class Color3F {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public Color3F convertRGBToXYZ(final Color3F c) {
-			final float r = c.getR();
-			final float g = c.getG();
-			final float b = c.getB();
+		public Color3F convertRGBToXYZ(final Color3F color) {
+			final float r = color.getR();
+			final float g = color.getG();
+			final float b = color.getB();
 			
 			final float x = this.matrixRGBToXYZ[0] * r + this.matrixRGBToXYZ[3] * g + this.matrixRGBToXYZ[6] * b;
 			final float y = this.matrixRGBToXYZ[1] * r + this.matrixRGBToXYZ[4] * g + this.matrixRGBToXYZ[7] * b;
@@ -1263,10 +1415,10 @@ public final class Color3F {
 			return new Color3F(x, y, z);
 		}
 		
-		public Color3F convertXYZToRGB(final Color3F c) {
-			final float x = c.getX();
-			final float y = c.getY();
-			final float z = c.getZ();
+		public Color3F convertXYZToRGB(final Color3F color) {
+			final float x = color.getX();
+			final float y = color.getY();
+			final float z = color.getZ();
 			
 			final float r = this.matrixXYZToRGB[0] * x + this.matrixXYZToRGB[1] * y + this.matrixXYZToRGB[2] * z;
 			final float g = this.matrixXYZToRGB[3] * x + this.matrixXYZToRGB[4] * y + this.matrixXYZToRGB[5] * z;
@@ -1275,18 +1427,18 @@ public final class Color3F {
 			return new Color3F(r, g, b);
 		}
 		
-		public Color3F redoGammaCorrection(final Color3F c) {
-			final float component1 = doRedoGammaCorrection(c.getComponent1());
-			final float component2 = doRedoGammaCorrection(c.getComponent2());
-			final float component3 = doRedoGammaCorrection(c.getComponent3());
+		public Color3F redoGammaCorrection(final Color3F color) {
+			final float component1 = doRedoGammaCorrection(color.getComponent1());
+			final float component2 = doRedoGammaCorrection(color.getComponent2());
+			final float component3 = doRedoGammaCorrection(color.getComponent3());
 			
 			return new Color3F(component1, component2, component3);
 		}
 		
-		public Color3F undoGammaCorrection(final Color3F c) {
-			final float component1 = doUndoGammaCorrection(c.getComponent1());
-			final float component2 = doUndoGammaCorrection(c.getComponent2());
-			final float component3 = doUndoGammaCorrection(c.getComponent3());
+		public Color3F undoGammaCorrection(final Color3F color) {
+			final float component1 = doUndoGammaCorrection(color.getComponent1());
+			final float component2 = doUndoGammaCorrection(color.getComponent2());
+			final float component3 = doUndoGammaCorrection(color.getComponent3());
 			
 			return new Color3F(component1, component2, component3);
 		}

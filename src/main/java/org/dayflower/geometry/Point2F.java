@@ -58,22 +58,22 @@ public final class Point2F {
 	}
 	
 	/**
-	 * Constructs a new {@code Point2F} instance given the component values {@code v.getComponent1()} and {@code v.getComponent2()}.
+	 * Constructs a new {@code Point2F} instance given the component values {@code vector.getComponent1()} and {@code vector.getComponent2()}.
 	 * <p>
-	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Point2F(v.getComponent1(), v.getComponent2());
+	 * new Point2F(vector.getComponent1(), vector.getComponent2());
 	 * }
 	 * </pre>
 	 * 
-	 * @param v a {@link Vector2F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 * @param vector a {@link Vector2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-	public Point2F(final Vector2F v) {
-		this(v.getComponent1(), v.getComponent2());
+	public Point2F(final Vector2F vector) {
+		this(vector.getComponent1(), vector.getComponent2());
 	}
 	
 	/**
@@ -301,30 +301,30 @@ public final class Point2F {
 	}
 	
 	/**
-	 * Returns the distance from {@code pEye} to {@code pLookAt}.
+	 * Returns the distance from {@code eye} to {@code lookAt}.
 	 * <p>
-	 * If either {@code pEye} or {@code pLookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pEye a {@code Point2F} instance
-	 * @param pLookAt a {@code Point2F} instance
-	 * @return the distance from {@code pEye} to {@code pLookAt}
-	 * @throws NullPointerException thrown if, and only if, either {@code pEye} or {@code pLookAt} are {@code null}
+	 * @param eye a {@code Point2F} instance denoting the eye to look from
+	 * @param lookAt a {@code Point2F} instance denoting the target to look at
+	 * @return the distance from {@code eye} to {@code lookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-	public static float distance(final Point2F pEye, final Point2F pLookAt) {
-		return Vector2F.direction(pEye, pLookAt).length();
+	public static float distance(final Point2F eye, final Point2F lookAt) {
+		return Vector2F.direction(eye, lookAt).length();
 	}
 	
 	/**
-	 * Returns the squared distance from {@code pEye} to {@code pLookAt}.
+	 * Returns the squared distance from {@code eye} to {@code lookAt}.
 	 * <p>
-	 * If either {@code pEye} or {@code pLookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pEye a {@code Point2F} instance
-	 * @param pLookAt a {@code Point2F} instance
-	 * @return the squared distance from {@code pEye} to {@code pLookAt}
-	 * @throws NullPointerException thrown if, and only if, either {@code pEye} or {@code pLookAt} are {@code null}
+	 * @param eye a {@code Point2F} instance denoting the eye to look from
+	 * @param lookAt a {@code Point2F} instance denoting the target to look at
+	 * @return the squared distance from {@code eye} to {@code lookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-	public static float distanceSquared(final Point2F pEye, final Point2F pLookAt) {
-		return Vector2F.direction(pEye, pLookAt).lengthSquared();
+	public static float distanceSquared(final Point2F eye, final Point2F lookAt) {
+		return Vector2F.direction(eye, lookAt).lengthSquared();
 	}
 }

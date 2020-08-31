@@ -52,22 +52,22 @@ public final class Vector2F {
 	}
 	
 	/**
-	 * Constructs a new {@code Vector2F} instance given the component values {@code p.getComponent1()} and {@code p.getComponent2()}.
+	 * Constructs a new {@code Vector2F} instance given the component values {@code point.getComponent1()} and {@code point.getComponent2()}.
 	 * <p>
-	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Vector2F(p.getComponent1(), p.getComponent2());
+	 * new Vector2F(point.getComponent1(), point.getComponent2());
 	 * }
 	 * </pre>
 	 * 
-	 * @param p a {@link Point2F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
+	 * @param point a {@link Point2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-	public Vector2F(final Point2F p) {
-		this(p.getComponent1(), p.getComponent2());
+	public Vector2F(final Point2F point) {
+		this(point.getComponent1(), point.getComponent2());
 	}
 	
 	/**
@@ -201,150 +201,150 @@ public final class Vector2F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Adds the component values of {@code vRHS} to the component values of {@code vLHS}.
+	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the addition.
 	 * <p>
-	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector addition is performed componentwise.
 	 * 
-	 * @param vLHS the {@code Vector2F} instance on the left-hand side
-	 * @param vRHS the {@code Vector2F} instance on the right-hand side
+	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector2F} instance on the right-hand side
 	 * @return a new {@code Vector2F} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-	public static Vector2F add(final Vector2F vLHS, final Vector2F vRHS) {
-		final float component1 = vLHS.component1 + vRHS.component1;
-		final float component2 = vLHS.component2 + vRHS.component2;
+	public static Vector2F add(final Vector2F vectorLHS, final Vector2F vectorRHS) {
+		final float component1 = vectorLHS.component1 + vectorRHS.component1;
+		final float component2 = vectorLHS.component2 + vectorRHS.component2;
 		
 		return new Vector2F(component1, component2);
 	}
 	
 	/**
-	 * Returns a new {@code Vector2F} instance that is pointing in the direction of {@code pEye} to {@code pLookAt}.
+	 * Returns a new {@code Vector2F} instance that is pointing in the direction of {@code eye} to {@code lookAt}.
 	 * <p>
-	 * If either {@code pEye} or {@code pLookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pEye a {@link Point2F} instance denoting the eye to look from
-	 * @param pLookAt a {@code Point2F} instance denoting the target to look at
-	 * @return a new {@code Vector2F} instance that is pointing in the direction of {@code pEye} to {@code pLookAt}
-	 * @throws NullPointerException thrown if, and only if, either {@code pEye} or {@code pLookAt} are {@code null}
+	 * @param eye a {@link Point2F} instance denoting the eye to look from
+	 * @param lookAt a {@code Point2F} instance denoting the target to look at
+	 * @return a new {@code Vector2F} instance that is pointing in the direction of {@code eye} to {@code lookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
-	public static Vector2F direction(final Point2F pEye, final Point2F pLookAt) {
-		final float component1 = pLookAt.getComponent1() - pEye.getComponent1();
-		final float component2 = pLookAt.getComponent2() - pEye.getComponent2();
+	public static Vector2F direction(final Point2F eye, final Point2F lookAt) {
+		final float component1 = lookAt.getComponent1() - eye.getComponent1();
+		final float component2 = lookAt.getComponent2() - eye.getComponent2();
 		
 		return new Vector2F(component1, component2);
 	}
 	
 	/**
-	 * Divides the component values of {@code vLHS} with {@code sRHS}.
+	 * Divides the component values of {@code vectorLHS} with {@code scalarRHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the division.
 	 * <p>
-	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector division is performed componentwise.
 	 * 
-	 * @param vLHS the {@code Vector2F} instance on the left-hand side
-	 * @param sRHS the scalar value on the right-hand side
+	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
+	 * @param scalarRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector2F} instance with the result of the division
-	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
-	public static Vector2F divide(final Vector2F vLHS, final float sRHS) {
-		final float component1 = vLHS.component1 / sRHS;
-		final float component2 = vLHS.component2 / sRHS;
+	public static Vector2F divide(final Vector2F vectorLHS, final float scalarRHS) {
+		final float component1 = vectorLHS.component1 / scalarRHS;
+		final float component2 = vectorLHS.component2 / scalarRHS;
 		
 		return new Vector2F(component1, component2);
 	}
 	
 	/**
-	 * Multiplies the component values of {@code vLHS} with {@code sRHS}.
+	 * Multiplies the component values of {@code vectorLHS} with {@code scalarRHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the multiplication.
 	 * <p>
-	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vectorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector multiplication is performed componentwise.
 	 * 
-	 * @param vLHS the {@code Vector2F} instance on the left-hand side
-	 * @param sRHS the scalar value on the right-hand side
+	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
+	 * @param scalarRHS the scalar value on the right-hand side
 	 * @return a new {@code Vector2F} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
-	public static Vector2F multiply(final Vector2F vLHS, final float sRHS) {
-		final float component1 = vLHS.component1 * sRHS;
-		final float component2 = vLHS.component2 * sRHS;
+	public static Vector2F multiply(final Vector2F vectorLHS, final float scalarRHS) {
+		final float component1 = vectorLHS.component1 * scalarRHS;
+		final float component2 = vectorLHS.component2 * scalarRHS;
 		
 		return new Vector2F(component1, component2);
 	}
 	
 	/**
-	 * Negates the component values of {@code v}.
+	 * Negates the component values of {@code vector}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the negation.
 	 * <p>
-	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param v a {@code Vector2F} instance
+	 * @param vector a {@code Vector2F} instance
 	 * @return a new {@code Vector2F} instance with the result of the negation
-	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-	public static Vector2F negate(final Vector2F v) {
-		final float component1 = -v.component1;
-		final float component2 = -v.component2;
+	public static Vector2F negate(final Vector2F vector) {
+		final float component1 = -vector.component1;
+		final float component2 = -vector.component2;
 		
 		return new Vector2F(component1, component2);
 	}
 	
 	/**
-	 * Normalizes the component values of {@code v}.
+	 * Normalizes the component values of {@code vector}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the normalization.
 	 * <p>
-	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param v a {@code Vector2F} instance
+	 * @param vector a {@code Vector2F} instance
 	 * @return a new {@code Vector2F} instance with the result of the normalization
-	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-	public static Vector2F normalize(final Vector2F v) {
-		return divide(v, v.length());
+	public static Vector2F normalize(final Vector2F vector) {
+		return divide(vector, vector.length());
 	}
 	
 	/**
-	 * Subtracts the component values of {@code vRHS} from the component values of {@code vLHS}.
+	 * Subtracts the component values of {@code vectorRHS} from the component values of {@code vectorLHS}.
 	 * <p>
 	 * Returns a new {@code Vector2F} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Vector subtraction is performed componentwise.
 	 * 
-	 * @param vLHS the {@code Vector2F} instance on the left-hand side
-	 * @param vRHS the {@code Vector2F} instance on the right-hand side
+	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector2F} instance on the right-hand side
 	 * @return a new {@code Vector2F} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-	public static Vector2F subtract(final Vector2F vLHS, final Vector2F vRHS) {
-		final float component1 = vLHS.component1 - vRHS.component1;
-		final float component2 = vLHS.component2 - vRHS.component2;
+	public static Vector2F subtract(final Vector2F vectorLHS, final Vector2F vectorRHS) {
+		final float component1 = vectorLHS.component1 - vectorRHS.component1;
+		final float component2 = vectorLHS.component2 - vectorRHS.component2;
 		
 		return new Vector2F(component1, component2);
 	}
 	
 	/**
-	 * Returns the dot product of {@code vLHS} and {@code vRHS}.
+	 * Returns the dot product of {@code vectorLHS} and {@code vectorRHS}.
 	 * <p>
-	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param vLHS the {@code Vector2F} instance on the left-hand side
-	 * @param vRHS the {@code Vector2F} instance on the right-hand side
-	 * @return the dot product of {@code vLHS} and {@code vRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 * @param vectorLHS the {@code Vector2F} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector2F} instance on the right-hand side
+	 * @return the dot product of {@code vectorLHS} and {@code vectorRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
 	 */
-	public static float dotProduct(final Vector2F vLHS, final Vector2F vRHS) {
-		return vLHS.component1 * vRHS.component1 + vLHS.component2 * vRHS.component2;
+	public static float dotProduct(final Vector2F vectorLHS, final Vector2F vectorRHS) {
+		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2;
 	}
 }

@@ -22,5 +22,43 @@ import java.lang.reflect.Field;
 
 //TODO: Add Javadocs!
 public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
-//	TODO: Implement!
+	@Override
+	public BoundingVolume3F transform(final Matrix44F matrix) {
+		return null;
+	}
+	
+	@Override
+	public Point3F getClosestPointTo(final Point3F point) {
+		return null;
+	}
+	
+	@Override
+	public Point3F getMaximum() {
+		return null;
+	}
+	
+	@Override
+	public Point3F getMinimum() {
+		return null;
+	}
+	
+	@Override
+	public boolean contains(final Point3F point) {
+		return false;
+	}
+	
+	@Override
+	public float getSurfaceArea() {
+		return 0.0F;
+	}
+	
+	@Override
+	public float getVolume() {
+		return 0.0F;
+	}
+	
+	@Override
+	public float intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return 0.0F;
+	}
 }

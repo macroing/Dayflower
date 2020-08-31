@@ -179,48 +179,48 @@ public final class OrthoNormalBasis33F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Flips the U-direction of {@code o}.
+	 * Flips the U-direction of {@code orthoNormalBasis}.
 	 * <p>
 	 * Returns a new {@code OrthoNormalBasis33F} with the U-direction flipped.
 	 * <p>
-	 * If {@code o} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code orthoNormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param o the {@code OrthoNormalBasis33F} instance to flip the U-direction for
+	 * @param orthoNormalBasis the {@code OrthoNormalBasis33F} instance to flip the U-direction for
 	 * @return a new {@code OrthoNormalBasis33F} with the U-direction flipped
-	 * @throws NullPointerException thrown if, and only if, {@code o} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code orthoNormalBasis} is {@code null}
 	 */
-	public static OrthoNormalBasis33F flipU(final OrthoNormalBasis33F o) {
-		return new OrthoNormalBasis33F(o.w, o.v, Vector3F.negate(o.u));
+	public static OrthoNormalBasis33F flipU(final OrthoNormalBasis33F orthoNormalBasis) {
+		return new OrthoNormalBasis33F(orthoNormalBasis.w, orthoNormalBasis.v, Vector3F.negate(orthoNormalBasis.u));
 	}
 	
 	/**
-	 * Flips the V-direction of {@code o}.
+	 * Flips the V-direction of {@code orthoNormalBasis}.
 	 * <p>
 	 * Returns a new {@code OrthoNormalBasis33F} with the V-direction flipped.
 	 * <p>
-	 * If {@code o} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code orthoNormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param o the {@code OrthoNormalBasis33F} instance to flip the V-direction for
+	 * @param orthoNormalBasis the {@code OrthoNormalBasis33F} instance to flip the V-direction for
 	 * @return a new {@code OrthoNormalBasis33F} with the V-direction flipped
-	 * @throws NullPointerException thrown if, and only if, {@code o} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code orthoNormalBasis} is {@code null}
 	 */
-	public static OrthoNormalBasis33F flipV(final OrthoNormalBasis33F o) {
-		return new OrthoNormalBasis33F(o.w, Vector3F.negate(o.v), o.u);
+	public static OrthoNormalBasis33F flipV(final OrthoNormalBasis33F orthoNormalBasis) {
+		return new OrthoNormalBasis33F(orthoNormalBasis.w, Vector3F.negate(orthoNormalBasis.v), orthoNormalBasis.u);
 	}
 	
 	/**
-	 * Flips the W-direction of {@code o}.
+	 * Flips the W-direction of {@code orthoNormalBasis}.
 	 * <p>
 	 * Returns a new {@code OrthoNormalBasis33F} with the W-direction flipped.
 	 * <p>
-	 * If {@code o} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code orthoNormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param o the {@code OrthoNormalBasis33F} instance to flip the W-direction for
+	 * @param orthoNormalBasis the {@code OrthoNormalBasis33F} instance to flip the W-direction for
 	 * @return a new {@code OrthoNormalBasis33F} with the W-direction flipped
-	 * @throws NullPointerException thrown if, and only if, {@code o} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code orthoNormalBasis} is {@code null}
 	 */
-	public static OrthoNormalBasis33F flipW(final OrthoNormalBasis33F o) {
-		return new OrthoNormalBasis33F(Vector3F.negate(o.w), o.v, o.u);
+	public static OrthoNormalBasis33F flipW(final OrthoNormalBasis33F orthoNormalBasis) {
+		return new OrthoNormalBasis33F(Vector3F.negate(orthoNormalBasis.w), orthoNormalBasis.v, orthoNormalBasis.u);
 	}
 	
 	/**
@@ -228,17 +228,17 @@ public final class OrthoNormalBasis33F {
 	 * <p>
 	 * Returns a new {@code OrthoNormalBasis33F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code mLHS} or {@code oRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code matrixLHS} or {@code orthoNormalBasisRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param mLHS the {@link Matrix44F} instance to perform the transformation with
-	 * @param oRHS the {@code OrthoNormalBasis33F} to transform
+	 * @param matrixLHS the {@link Matrix44F} instance to perform the transformation with
+	 * @param orthoNormalBasisRHS the {@code OrthoNormalBasis33F} to transform
 	 * @return a new {@code OrthoNormalBasis33F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code oRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthoNormalBasisRHS} are {@code null}
 	 */
-	public static OrthoNormalBasis33F transform(final Matrix44F mLHS, final OrthoNormalBasis33F oRHS) {
-		final Vector3F u = Vector3F.transform(mLHS, oRHS.u);
-		final Vector3F v = Vector3F.transform(mLHS, oRHS.v);
-		final Vector3F w = Vector3F.transform(mLHS, oRHS.w);
+	public static OrthoNormalBasis33F transform(final Matrix44F matrixLHS, final OrthoNormalBasis33F orthoNormalBasisRHS) {
+		final Vector3F u = Vector3F.transform(matrixLHS, orthoNormalBasisRHS.u);
+		final Vector3F v = Vector3F.transform(matrixLHS, orthoNormalBasisRHS.v);
+		final Vector3F w = Vector3F.transform(matrixLHS, orthoNormalBasisRHS.w);
 		
 		return new OrthoNormalBasis33F(w, v, u);
 	}
@@ -248,17 +248,17 @@ public final class OrthoNormalBasis33F {
 	 * <p>
 	 * Returns a new {@code OrthoNormalBasis33F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code mLHS} or {@code oRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code matrixLHS} or {@code orthoNormalBasisRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param mLHS the {@link Matrix44F} instance to perform the transformation with
-	 * @param oRHS the {@code OrthoNormalBasis33F} to transform
+	 * @param matrixLHS the {@link Matrix44F} instance to perform the transformation with
+	 * @param orthoNormalBasisRHS the {@code OrthoNormalBasis33F} to transform
 	 * @return a new {@code OrthoNormalBasis33F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code oRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthoNormalBasisRHS} are {@code null}
 	 */
-	public static OrthoNormalBasis33F transformTranspose(final Matrix44F mLHS, final OrthoNormalBasis33F oRHS) {
-		final Vector3F u = Vector3F.transformTranspose(mLHS, oRHS.u);
-		final Vector3F v = Vector3F.transformTranspose(mLHS, oRHS.v);
-		final Vector3F w = Vector3F.transformTranspose(mLHS, oRHS.w);
+	public static OrthoNormalBasis33F transformTranspose(final Matrix44F matrixLHS, final OrthoNormalBasis33F orthoNormalBasisRHS) {
+		final Vector3F u = Vector3F.transformTranspose(matrixLHS, orthoNormalBasisRHS.u);
+		final Vector3F v = Vector3F.transformTranspose(matrixLHS, orthoNormalBasisRHS.v);
+		final Vector3F w = Vector3F.transformTranspose(matrixLHS, orthoNormalBasisRHS.w);
 		
 		return new OrthoNormalBasis33F(w, v, u);
 	}

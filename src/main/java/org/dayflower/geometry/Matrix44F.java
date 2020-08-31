@@ -452,120 +452,120 @@ public final class Matrix44F {
 	}
 	
 	/**
-	 * Returns a new {@code Matrix44F} instance that is the inverse of {@code m}.
+	 * Returns a new {@code Matrix44F} instance that is the inverse of {@code matrix}.
 	 * <p>
-	 * If {@code m} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code matrix} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code m} cannot be inverted, an {@code IllegalStateException} will be thrown.
+	 * If {@code matrix} cannot be inverted, an {@code IllegalStateException} will be thrown.
 	 * <p>
-	 * To make sure {@code m} is invertible, consider calling {@link #isInvertible()}.
+	 * To make sure {@code matrix} is invertible, consider calling {@link #isInvertible()}.
 	 * 
-	 * @return a new {@code Matrix44F} instance that is the inverse of {@code m}
-	 * @throws IllegalStateException thrown if, and only if, {@code m} cannot be inverted
-	 * @throws NullPointerException thrown if, and only if, {@code m} is {@code null}
+	 * @return a new {@code Matrix44F} instance that is the inverse of {@code matrix}
+	 * @throws IllegalStateException thrown if, and only if, {@code matrix} cannot be inverted
+	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-	public static Matrix44F inverse(final Matrix44F m) {
-		final float a = m.element11 * m.element22 - m.element12 * m.element21;
-		final float b = m.element11 * m.element23 - m.element13 * m.element21;
-		final float c = m.element11 * m.element24 - m.element14 * m.element21;
-		final float d = m.element12 * m.element23 - m.element13 * m.element22;
-		final float e = m.element12 * m.element24 - m.element14 * m.element22;
-		final float f = m.element13 * m.element24 - m.element14 * m.element23;
-		final float g = m.element31 * m.element42 - m.element32 * m.element41;
-		final float h = m.element31 * m.element43 - m.element33 * m.element41;
-		final float i = m.element31 * m.element44 - m.element34 * m.element41;
-		final float j = m.element32 * m.element43 - m.element33 * m.element42;
-		final float k = m.element32 * m.element44 - m.element34 * m.element42;
-		final float l = m.element33 * m.element44 - m.element34 * m.element43;
+	public static Matrix44F inverse(final Matrix44F matrix) {
+		final float a = matrix.element11 * matrix.element22 - matrix.element12 * matrix.element21;
+		final float b = matrix.element11 * matrix.element23 - matrix.element13 * matrix.element21;
+		final float c = matrix.element11 * matrix.element24 - matrix.element14 * matrix.element21;
+		final float d = matrix.element12 * matrix.element23 - matrix.element13 * matrix.element22;
+		final float e = matrix.element12 * matrix.element24 - matrix.element14 * matrix.element22;
+		final float f = matrix.element13 * matrix.element24 - matrix.element14 * matrix.element23;
+		final float g = matrix.element31 * matrix.element42 - matrix.element32 * matrix.element41;
+		final float h = matrix.element31 * matrix.element43 - matrix.element33 * matrix.element41;
+		final float i = matrix.element31 * matrix.element44 - matrix.element34 * matrix.element41;
+		final float j = matrix.element32 * matrix.element43 - matrix.element33 * matrix.element42;
+		final float k = matrix.element32 * matrix.element44 - matrix.element34 * matrix.element42;
+		final float l = matrix.element33 * matrix.element44 - matrix.element34 * matrix.element43;
 		
 		final float determinant = a * l - b * k + c * j + d * i - e * h + f * g;
 		final float determinantReciprocal = 1.0F / determinant;
 		
 		if(abs(determinant) < 1.0e-12F) {
-			throw new IllegalArgumentException("The Matrix44F 'm' cannot be inverted!");
+			throw new IllegalArgumentException("The Matrix44F 'matrix' cannot be inverted!");
 		}
 		
-		final float element11 = (+m.element22 * l - m.element23 * k + m.element24 * j) * determinantReciprocal;
-		final float element12 = (-m.element12 * l + m.element13 * k - m.element14 * j) * determinantReciprocal;
-		final float element13 = (+m.element42 * f - m.element43 * e + m.element44 * d) * determinantReciprocal;
-		final float element14 = (-m.element32 * f + m.element33 * e - m.element34 * d) * determinantReciprocal;
-		final float element21 = (-m.element21 * l + m.element23 * i - m.element24 * h) * determinantReciprocal;
-		final float element22 = (+m.element11 * l - m.element13 * i + m.element14 * h) * determinantReciprocal;
-		final float element23 = (-m.element41 * f + m.element43 * c - m.element44 * b) * determinantReciprocal;
-		final float element24 = (+m.element31 * f - m.element33 * c + m.element34 * b) * determinantReciprocal;
-		final float element31 = (+m.element21 * k - m.element22 * i + m.element24 * g) * determinantReciprocal;
-		final float element32 = (-m.element11 * k + m.element12 * i - m.element14 * g) * determinantReciprocal;
-		final float element33 = (+m.element41 * e - m.element42 * c + m.element44 * a) * determinantReciprocal;
-		final float element34 = (-m.element31 * e + m.element32 * c - m.element34 * a) * determinantReciprocal;
-		final float element41 = (-m.element21 * j + m.element22 * h - m.element23 * g) * determinantReciprocal;
-		final float element42 = (+m.element11 * j - m.element12 * h + m.element13 * g) * determinantReciprocal;
-		final float element43 = (-m.element41 * d + m.element42 * b - m.element43 * a) * determinantReciprocal;
-		final float element44 = (+m.element31 * d - m.element32 * b + m.element33 * a) * determinantReciprocal;
+		final float element11 = (+matrix.element22 * l - matrix.element23 * k + matrix.element24 * j) * determinantReciprocal;
+		final float element12 = (-matrix.element12 * l + matrix.element13 * k - matrix.element14 * j) * determinantReciprocal;
+		final float element13 = (+matrix.element42 * f - matrix.element43 * e + matrix.element44 * d) * determinantReciprocal;
+		final float element14 = (-matrix.element32 * f + matrix.element33 * e - matrix.element34 * d) * determinantReciprocal;
+		final float element21 = (-matrix.element21 * l + matrix.element23 * i - matrix.element24 * h) * determinantReciprocal;
+		final float element22 = (+matrix.element11 * l - matrix.element13 * i + matrix.element14 * h) * determinantReciprocal;
+		final float element23 = (-matrix.element41 * f + matrix.element43 * c - matrix.element44 * b) * determinantReciprocal;
+		final float element24 = (+matrix.element31 * f - matrix.element33 * c + matrix.element34 * b) * determinantReciprocal;
+		final float element31 = (+matrix.element21 * k - matrix.element22 * i + matrix.element24 * g) * determinantReciprocal;
+		final float element32 = (-matrix.element11 * k + matrix.element12 * i - matrix.element14 * g) * determinantReciprocal;
+		final float element33 = (+matrix.element41 * e - matrix.element42 * c + matrix.element44 * a) * determinantReciprocal;
+		final float element34 = (-matrix.element31 * e + matrix.element32 * c - matrix.element34 * a) * determinantReciprocal;
+		final float element41 = (-matrix.element21 * j + matrix.element22 * h - matrix.element23 * g) * determinantReciprocal;
+		final float element42 = (+matrix.element11 * j - matrix.element12 * h + matrix.element13 * g) * determinantReciprocal;
+		final float element43 = (-matrix.element41 * d + matrix.element42 * b - matrix.element43 * a) * determinantReciprocal;
+		final float element44 = (+matrix.element31 * d - matrix.element32 * b + matrix.element33 * a) * determinantReciprocal;
 		
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
 	/**
-	 * Multiplies the element values of {@code mLHS} with the element values of {@code mRHS}.
+	 * Multiplies the element values of {@code matrixLHS} with the element values of {@code matrixRHS}.
 	 * <p>
 	 * Returns a new {@code Matrix44F} instance with the result of the multiplication.
 	 * <p>
-	 * If either {@code mLHS} or {@code mRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code matrixLHS} or {@code matrixRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param mLHS the {@code Matrix44F} instance on the left-hand side
-	 * @param mRHS the {@code Matrix44F} instance on the right-hand side
+	 * @param matrixLHS the {@code Matrix44F} instance on the left-hand side
+	 * @param matrixRHS the {@code Matrix44F} instance on the right-hand side
 	 * @return a new {@code Matrix44F} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code mRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code matrixRHS} are {@code null}
 	 */
-	public static Matrix44F multiply(final Matrix44F mLHS, final Matrix44F mRHS) {
-		final float element11 = mLHS.element11 * mRHS.element11 + mLHS.element12 * mRHS.element21 + mLHS.element13 * mRHS.element31 + mLHS.element14 * mRHS.element41;
-		final float element12 = mLHS.element11 * mRHS.element12 + mLHS.element12 * mRHS.element22 + mLHS.element13 * mRHS.element32 + mLHS.element14 * mRHS.element42;
-		final float element13 = mLHS.element11 * mRHS.element13 + mLHS.element12 * mRHS.element23 + mLHS.element13 * mRHS.element33 + mLHS.element14 * mRHS.element43;
-		final float element14 = mLHS.element11 * mRHS.element14 + mLHS.element12 * mRHS.element24 + mLHS.element13 * mRHS.element34 + mLHS.element14 * mRHS.element44;
-		final float element21 = mLHS.element21 * mRHS.element11 + mLHS.element22 * mRHS.element21 + mLHS.element23 * mRHS.element31 + mLHS.element24 * mRHS.element41;
-		final float element22 = mLHS.element21 * mRHS.element12 + mLHS.element22 * mRHS.element22 + mLHS.element23 * mRHS.element32 + mLHS.element24 * mRHS.element42;
-		final float element23 = mLHS.element21 * mRHS.element13 + mLHS.element22 * mRHS.element23 + mLHS.element23 * mRHS.element33 + mLHS.element24 * mRHS.element43;
-		final float element24 = mLHS.element21 * mRHS.element14 + mLHS.element22 * mRHS.element24 + mLHS.element23 * mRHS.element34 + mLHS.element24 * mRHS.element44;
-		final float element31 = mLHS.element31 * mRHS.element11 + mLHS.element32 * mRHS.element21 + mLHS.element33 * mRHS.element31 + mLHS.element34 * mRHS.element41;
-		final float element32 = mLHS.element31 * mRHS.element12 + mLHS.element32 * mRHS.element22 + mLHS.element33 * mRHS.element32 + mLHS.element34 * mRHS.element42;
-		final float element33 = mLHS.element31 * mRHS.element13 + mLHS.element32 * mRHS.element23 + mLHS.element33 * mRHS.element33 + mLHS.element34 * mRHS.element43;
-		final float element34 = mLHS.element31 * mRHS.element14 + mLHS.element32 * mRHS.element24 + mLHS.element33 * mRHS.element34 + mLHS.element34 * mRHS.element44;
-		final float element41 = mLHS.element41 * mRHS.element11 + mLHS.element42 * mRHS.element21 + mLHS.element43 * mRHS.element31 + mLHS.element44 * mRHS.element41;
-		final float element42 = mLHS.element41 * mRHS.element12 + mLHS.element42 * mRHS.element22 + mLHS.element43 * mRHS.element32 + mLHS.element44 * mRHS.element42;
-		final float element43 = mLHS.element41 * mRHS.element13 + mLHS.element42 * mRHS.element23 + mLHS.element43 * mRHS.element33 + mLHS.element44 * mRHS.element43;
-		final float element44 = mLHS.element41 * mRHS.element14 + mLHS.element42 * mRHS.element24 + mLHS.element43 * mRHS.element34 + mLHS.element44 * mRHS.element44;
+	public static Matrix44F multiply(final Matrix44F matrixLHS, final Matrix44F matrixRHS) {
+		final float element11 = matrixLHS.element11 * matrixRHS.element11 + matrixLHS.element12 * matrixRHS.element21 + matrixLHS.element13 * matrixRHS.element31 + matrixLHS.element14 * matrixRHS.element41;
+		final float element12 = matrixLHS.element11 * matrixRHS.element12 + matrixLHS.element12 * matrixRHS.element22 + matrixLHS.element13 * matrixRHS.element32 + matrixLHS.element14 * matrixRHS.element42;
+		final float element13 = matrixLHS.element11 * matrixRHS.element13 + matrixLHS.element12 * matrixRHS.element23 + matrixLHS.element13 * matrixRHS.element33 + matrixLHS.element14 * matrixRHS.element43;
+		final float element14 = matrixLHS.element11 * matrixRHS.element14 + matrixLHS.element12 * matrixRHS.element24 + matrixLHS.element13 * matrixRHS.element34 + matrixLHS.element14 * matrixRHS.element44;
+		final float element21 = matrixLHS.element21 * matrixRHS.element11 + matrixLHS.element22 * matrixRHS.element21 + matrixLHS.element23 * matrixRHS.element31 + matrixLHS.element24 * matrixRHS.element41;
+		final float element22 = matrixLHS.element21 * matrixRHS.element12 + matrixLHS.element22 * matrixRHS.element22 + matrixLHS.element23 * matrixRHS.element32 + matrixLHS.element24 * matrixRHS.element42;
+		final float element23 = matrixLHS.element21 * matrixRHS.element13 + matrixLHS.element22 * matrixRHS.element23 + matrixLHS.element23 * matrixRHS.element33 + matrixLHS.element24 * matrixRHS.element43;
+		final float element24 = matrixLHS.element21 * matrixRHS.element14 + matrixLHS.element22 * matrixRHS.element24 + matrixLHS.element23 * matrixRHS.element34 + matrixLHS.element24 * matrixRHS.element44;
+		final float element31 = matrixLHS.element31 * matrixRHS.element11 + matrixLHS.element32 * matrixRHS.element21 + matrixLHS.element33 * matrixRHS.element31 + matrixLHS.element34 * matrixRHS.element41;
+		final float element32 = matrixLHS.element31 * matrixRHS.element12 + matrixLHS.element32 * matrixRHS.element22 + matrixLHS.element33 * matrixRHS.element32 + matrixLHS.element34 * matrixRHS.element42;
+		final float element33 = matrixLHS.element31 * matrixRHS.element13 + matrixLHS.element32 * matrixRHS.element23 + matrixLHS.element33 * matrixRHS.element33 + matrixLHS.element34 * matrixRHS.element43;
+		final float element34 = matrixLHS.element31 * matrixRHS.element14 + matrixLHS.element32 * matrixRHS.element24 + matrixLHS.element33 * matrixRHS.element34 + matrixLHS.element34 * matrixRHS.element44;
+		final float element41 = matrixLHS.element41 * matrixRHS.element11 + matrixLHS.element42 * matrixRHS.element21 + matrixLHS.element43 * matrixRHS.element31 + matrixLHS.element44 * matrixRHS.element41;
+		final float element42 = matrixLHS.element41 * matrixRHS.element12 + matrixLHS.element42 * matrixRHS.element22 + matrixLHS.element43 * matrixRHS.element32 + matrixLHS.element44 * matrixRHS.element42;
+		final float element43 = matrixLHS.element41 * matrixRHS.element13 + matrixLHS.element42 * matrixRHS.element23 + matrixLHS.element43 * matrixRHS.element33 + matrixLHS.element44 * matrixRHS.element43;
+		final float element44 = matrixLHS.element41 * matrixRHS.element14 + matrixLHS.element42 * matrixRHS.element24 + matrixLHS.element43 * matrixRHS.element34 + matrixLHS.element44 * matrixRHS.element44;
 		
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}
 	
 	/**
-	 * Returns a {@code Matrix44F} instance that rotates along the axis represented by {@code v}.
+	 * Returns a {@code Matrix44F} instance that rotates along the axis represented by {@code vector}.
 	 * <p>
-	 * If either {@code a} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code angle} or {@code vector} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param a an {@link AngleF} instance
-	 * @param v a {@link Vector3F} instance that represents an axis
-	 * @return a {@code Matrix44F} instance that rotates along the axis represented by {@code v}
-	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code v} are {@code null}
+	 * @param angle an {@link AngleF} instance
+	 * @param vector a {@link Vector3F} instance that represents an axis
+	 * @return a {@code Matrix44F} instance that rotates along the axis represented by {@code vector}
+	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code vector} are {@code null}
 	 */
-	public static Matrix44F rotate(final AngleF a, final Vector3F v) {
-		final Vector3F vNormalized = Vector3F.normalize(v);
+	public static Matrix44F rotate(final AngleF angle, final Vector3F vector) {
+		final Vector3F vectorNormalized = Vector3F.normalize(vector);
 		
-		final float cos = cos(a.getRadians());
-		final float sin = sin(a.getRadians());
+		final float cos = cos(angle.getRadians());
+		final float sin = sin(angle.getRadians());
 		final float oneMinusCos = 1.0F - cos;
 		
-		final float element11 = oneMinusCos * vNormalized.getX() * vNormalized.getX() + cos;
-		final float element12 = oneMinusCos * vNormalized.getX() * vNormalized.getY() - sin * vNormalized.getZ();
-		final float element13 = oneMinusCos * vNormalized.getX() * vNormalized.getZ() + sin * vNormalized.getY();
+		final float element11 = oneMinusCos * vectorNormalized.getX() * vectorNormalized.getX() + cos;
+		final float element12 = oneMinusCos * vectorNormalized.getX() * vectorNormalized.getY() - sin * vectorNormalized.getZ();
+		final float element13 = oneMinusCos * vectorNormalized.getX() * vectorNormalized.getZ() + sin * vectorNormalized.getY();
 		final float element14 = 0.0F;
-		final float element21 = oneMinusCos * vNormalized.getX() * vNormalized.getY() + sin * vNormalized.getZ();
-		final float element22 = oneMinusCos * vNormalized.getY() * vNormalized.getY() + cos;
-		final float element23 = oneMinusCos * vNormalized.getY() * vNormalized.getZ() - sin * vNormalized.getX();
+		final float element21 = oneMinusCos * vectorNormalized.getX() * vectorNormalized.getY() + sin * vectorNormalized.getZ();
+		final float element22 = oneMinusCos * vectorNormalized.getY() * vectorNormalized.getY() + cos;
+		final float element23 = oneMinusCos * vectorNormalized.getY() * vectorNormalized.getZ() - sin * vectorNormalized.getX();
 		final float element24 = 0.0F;
-		final float element31 = oneMinusCos * vNormalized.getX() * vNormalized.getZ() - sin * vNormalized.getY();
-		final float element32 = oneMinusCos * vNormalized.getY() * vNormalized.getZ() + sin * vNormalized.getX();
-		final float element33 = oneMinusCos * vNormalized.getZ() * vNormalized.getZ() + cos;
+		final float element31 = oneMinusCos * vectorNormalized.getX() * vectorNormalized.getZ() - sin * vectorNormalized.getY();
+		final float element32 = oneMinusCos * vectorNormalized.getY() * vectorNormalized.getZ() + sin * vectorNormalized.getX();
+		final float element33 = oneMinusCos * vectorNormalized.getZ() * vectorNormalized.getZ() + cos;
 		final float element34 = 0.0F;
 		final float element41 = 0.0F;
 		final float element42 = 0.0F;
@@ -578,30 +578,30 @@ public final class Matrix44F {
 	/**
 	 * Returns a {@code Matrix44F} instance that rotates along the axis represented by {@code x}, {@code y} and {@code z}.
 	 * <p>
-	 * If {@code a} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix44F.rotate(a, new Vector3F(x, y, z));
+	 * Matrix44F.rotate(angle, new Vector3F(x, y, z));
 	 * }
 	 * </pre>
 	 * 
-	 * @param a an {@link AngleF} instance
+	 * @param angle an {@link AngleF} instance
 	 * @param x the component value along the X-axis
 	 * @param y the component value along the Y-axis
 	 * @param z the component value along the Z-axis
 	 * @return a {@code Matrix44F} instance that rotates along the axis represented by {@code x}, {@code y} and {@code z}
-	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-	public static Matrix44F rotate(final AngleF a, final float x, final float y, final float z) {
-		return rotate(a, new Vector3F(x, y, z));
+	public static Matrix44F rotate(final AngleF angle, final float x, final float y, final float z) {
+		return rotate(angle, new Vector3F(x, y, z));
 	}
 	
 	/**
 	 * Returns a {@code Matrix44F} instance that rotates along the X-axis.
 	 * <p>
-	 * If {@code a} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * The layout looks like this:
 	 * <pre>
@@ -613,13 +613,13 @@ public final class Matrix44F {
 	 * }
 	 * </pre>
 	 * 
-	 * @param a an {@link AngleF} instance
+	 * @param angle an {@link AngleF} instance
 	 * @return a {@code Matrix44F} instance that rotates along the X-axis
-	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-	public static Matrix44F rotateX(final AngleF a) {
-		final float cos = cos(a.getRadians());
-		final float sin = sin(a.getRadians());
+	public static Matrix44F rotateX(final AngleF angle) {
+		final float cos = cos(angle.getRadians());
+		final float sin = sin(angle.getRadians());
 		
 		return new Matrix44F(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -627,7 +627,7 @@ public final class Matrix44F {
 	/**
 	 * Returns a {@code Matrix44F} instance that rotates along the Y-axis.
 	 * <p>
-	 * If {@code a} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * The layout looks like this:
 	 * <pre>
@@ -639,13 +639,13 @@ public final class Matrix44F {
 	 * }
 	 * </pre>
 	 * 
-	 * @param a an {@link AngleF} instance
+	 * @param angle an {@link AngleF} instance
 	 * @return a {@code Matrix44F} instance that rotates along the Y-axis
-	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-	public static Matrix44F rotateY(final AngleF a) {
-		final float cos = cos(a.getRadians());
-		final float sin = sin(a.getRadians());
+	public static Matrix44F rotateY(final AngleF angle) {
+		final float cos = cos(angle.getRadians());
+		final float sin = sin(angle.getRadians());
 		
 		return new Matrix44F(cos, 0.0F, sin, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, -sin, 0.0F, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -653,7 +653,7 @@ public final class Matrix44F {
 	/**
 	 * Returns a {@code Matrix44F} instance that rotates along the Z-axis.
 	 * <p>
-	 * If {@code a} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * The layout looks like this:
 	 * <pre>
@@ -665,13 +665,13 @@ public final class Matrix44F {
 	 * }
 	 * </pre>
 	 * 
-	 * @param a an {@link AngleF} instance
+	 * @param angle an {@link AngleF} instance
 	 * @return a {@code Matrix44F} instance that rotates along the Z-axis
-	 * @throws NullPointerException thrown if, and only if, {@code a} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-	public static Matrix44F rotateZ(final AngleF a) {
-		final float cos = cos(a.getRadians());
-		final float sin = sin(a.getRadians());
+	public static Matrix44F rotateZ(final AngleF angle) {
+		final float cos = cos(angle.getRadians());
+		final float sin = sin(angle.getRadians());
 		
 		return new Matrix44F(cos, -sin, 0.0F, 0.0F, sin, cos, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F);
 	}
@@ -679,21 +679,21 @@ public final class Matrix44F {
 	/**
 	 * Returns a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes.
 	 * <p>
-	 * If {@code v} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix44F.scale(v.getX(), v.getY(), v.getZ());
+	 * Matrix44F.scale(vector.getX(), vector.getY(), vector.getZ());
 	 * }
 	 * </pre>
 	 * 
-	 * @param v a {@link Vector3F} instance that contains the scale factors along the X-, Y- and Z-axes
+	 * @param vector a {@link Vector3F} instance that contains the scale factors along the X-, Y- and Z-axes
 	 * @return a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes
-	 * @throws NullPointerException thrown if, and only if, {@code v} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
-	public static Matrix44F scale(final Vector3F v) {
-		return scale(v.getX(), v.getY(), v.getZ());
+	public static Matrix44F scale(final Vector3F vector) {
+		return scale(vector.getX(), vector.getY(), vector.getZ());
 	}
 	
 	/**
@@ -702,15 +702,15 @@ public final class Matrix44F {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix44F.scale(s, s, s);
+	 * Matrix44F.scale(scalar, scalar, scalar);
 	 * }
 	 * </pre>
 	 * 
-	 * @param s the scale factor along the X-, Y- and Z-axes
+	 * @param scalar the scale factor along the X-, Y- and Z-axes
 	 * @return a {@code Matrix44F} instance that scales along the X-, Y- and Z-axes
 	 */
-	public static Matrix44F scale(final float s) {
-		return scale(s, s, s);
+	public static Matrix44F scale(final float scalar) {
+		return scale(scalar, scalar, scalar);
 	}
 	
 	/**
@@ -738,21 +738,21 @@ public final class Matrix44F {
 	/**
 	 * Returns a {@code Matrix44F} instance that translates along the X-, Y- and Z-axes.
 	 * <p>
-	 * If {@code p} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Matrix44F.translate(p.getX(), p.getY(), p.getZ());
+	 * Matrix44F.translate(point.getX(), point.getY(), point.getZ());
 	 * }
 	 * </pre>
 	 * 
-	 * @param p a {@link Point3F} instance that contains the translation factors along the X-, Y- and Z-axes
+	 * @param point a {@link Point3F} instance that contains the translation factors along the X-, Y- and Z-axes
 	 * @return a {@code Matrix44F} instance that translates along the X-, Y- and Z-axes
-	 * @throws NullPointerException thrown if, and only if, {@code p} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
-	public static Matrix44F translate(final Point3F p) {
-		return translate(p.getX(), p.getY(), p.getZ());
+	public static Matrix44F translate(final Point3F point) {
+		return translate(point.getX(), point.getY(), point.getZ());
 	}
 	
 	/**
@@ -778,30 +778,30 @@ public final class Matrix44F {
 	}
 	
 	/**
-	 * Returns a new {@code Matrix44F} instance that is the transpose of {@code m}.
+	 * Returns a new {@code Matrix44F} instance that is the transpose of {@code matrix}.
 	 * <p>
-	 * If {@code m} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code matrix} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @return a new {@code Matrix44F} instance that is the transpose of {@code m}
-	 * @throws NullPointerException thrown if, and only if, {@code m} is {@code null}
+	 * @return a new {@code Matrix44F} instance that is the transpose of {@code matrix}
+	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
-	public static Matrix44F transpose(final Matrix44F m) {
-		final float element11 = m.element11;
-		final float element12 = m.element21;
-		final float element13 = m.element31;
-		final float element14 = m.element41;
-		final float element21 = m.element12;
-		final float element22 = m.element22;
-		final float element23 = m.element32;
-		final float element24 = m.element42;
-		final float element31 = m.element13;
-		final float element32 = m.element23;
-		final float element33 = m.element33;
-		final float element34 = m.element43;
-		final float element41 = m.element14;
-		final float element42 = m.element24;
-		final float element43 = m.element34;
-		final float element44 = m.element44;
+	public static Matrix44F transpose(final Matrix44F matrix) {
+		final float element11 = matrix.element11;
+		final float element12 = matrix.element21;
+		final float element13 = matrix.element31;
+		final float element14 = matrix.element41;
+		final float element21 = matrix.element12;
+		final float element22 = matrix.element22;
+		final float element23 = matrix.element32;
+		final float element24 = matrix.element42;
+		final float element31 = matrix.element13;
+		final float element32 = matrix.element23;
+		final float element33 = matrix.element33;
+		final float element34 = matrix.element43;
+		final float element41 = matrix.element14;
+		final float element42 = matrix.element24;
+		final float element43 = matrix.element34;
+		final float element44 = matrix.element44;
 		
 		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
 	}

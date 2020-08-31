@@ -277,20 +277,20 @@ public final class Point3F {
 	}
 	
 	/**
-	 * Returns a new {@code Point3F} instance that represents the centroid of {@code pointA}, {@code pointB} and {@code pointC}.
+	 * Returns a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b} and {@code c}.
 	 * <p>
-	 * If either {@code pointA}, {@code pointB} or {@code pointC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointA a {@code Point3F} instance
-	 * @param pointB a {@code Point3F} instance
-	 * @param pointC a {@code Point3F} instance
-	 * @return a new {@code Point3F} instance that represents the centroid of {@code pointA}, {@code pointB} and {@code pointC}
-	 * @throws NullPointerException thrown if, and only if, either {@code pointA}, {@code pointB} or {@code pointC} are {@code null}
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @param c a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-	public static Point3F centroid(final Point3F pointA, final Point3F pointB, final Point3F pointC) {
-		final float component1 = (pointA.component1 + pointB.component1 + pointC.component1) / 3.0F;
-		final float component2 = (pointA.component2 + pointB.component2 + pointC.component2) / 3.0F;
-		final float component3 = (pointA.component3 + pointB.component3 + pointC.component3) / 3.0F;
+	public static Point3F centroid(final Point3F a, final Point3F b, final Point3F c) {
+		final float component1 = (a.component1 + b.component1 + c.component1) / 3.0F;
+		final float component2 = (a.component2 + b.component2 + c.component2) / 3.0F;
+		final float component3 = (a.component3 + b.component3 + c.component3) / 3.0F;
 		
 		return new Point3F(component1, component2, component3);
 	}
@@ -309,56 +309,56 @@ public final class Point3F {
 	}
 	
 	/**
-	 * Returns a new {@code Point3F} instance with the largest component values of {@code pointA} and {@code pointB}.
+	 * Returns a new {@code Point3F} instance with the largest component values of {@code a} and {@code b}.
 	 * <p>
-	 * If either {@code pointA} or {@code pointB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointA a {@code Point3F} instance
-	 * @param pointB a {@code Point3F} instance
-	 * @return a new {@code Point3F} instance with the largest component values of {@code pointA} and {@code pointB}
-	 * @throws NullPointerException thrown if, and only if, either {@code pointA} or {@code pointB} are {@code null}
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance with the largest component values of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-	public static Point3F maximum(final Point3F pointA, final Point3F pointB) {
-		final float component1 = max(pointA.component1, pointB.component1);
-		final float component2 = max(pointA.component2, pointB.component2);
-		final float component3 = max(pointA.component3, pointB.component3);
+	public static Point3F maximum(final Point3F a, final Point3F b) {
+		final float component1 = max(a.component1, b.component1);
+		final float component2 = max(a.component2, b.component2);
+		final float component3 = max(a.component3, b.component3);
 		
 		return new Point3F(component1, component2, component3);
 	}
 	
 	/**
-	 * Returns a new {@code Point3F} instance with the largest component values of {@code pointA}, {@code pointB} and {@code pointC}.
+	 * Returns a new {@code Point3F} instance with the largest component values of {@code a}, {@code b} and {@code c}.
 	 * <p>
-	 * If either {@code pointA}, {@code pointB} or {@code pointC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointA a {@code Point3F} instance
-	 * @param pointB a {@code Point3F} instance
-	 * @param pointC a {@code Point3F} instance
-	 * @return a new {@code Point3F} instance with the largest component values of {@code pointA}, {@code pointB} and {@code pointC}
-	 * @throws NullPointerException thrown if, and only if, either {@code pointA}, {@code pointB} or {@code pointC} are {@code null}
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @param c a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance with the largest component values of {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-	public static Point3F maximum(final Point3F pointA, final Point3F pointB, final Point3F pointC) {
-		final float component1 = max(pointA.component1, pointB.component1, pointC.component1);
-		final float component2 = max(pointA.component2, pointB.component2, pointC.component2);
-		final float component3 = max(pointA.component3, pointB.component3, pointC.component3);
+	public static Point3F maximum(final Point3F a, final Point3F b, final Point3F c) {
+		final float component1 = max(a.component1, b.component1, c.component1);
+		final float component2 = max(a.component2, b.component2, c.component2);
+		final float component3 = max(a.component3, b.component3, c.component3);
 		
 		return new Point3F(component1, component2, component3);
 	}
 	
 	/**
-	 * Returns a new {@code Point3F} instance that represents the midpoint of {@code pointA} and {@code pointB}.
+	 * Returns a new {@code Point3F} instance that represents the midpoint of {@code a} and {@code b}.
 	 * <p>
-	 * If either {@code pointA} or {@code pointB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointA a {@code Point3F} instance
-	 * @param pointB a {@code Point3F} instance
-	 * @return a new {@code Point3F} instance that represents the midpoint of {@code pointA} and {@code pointB}
-	 * @throws NullPointerException thrown if, and only if, either {@code pointA} or {@code pointB} are {@code null}
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance that represents the midpoint of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-	public static Point3F midpoint(final Point3F pointA, final Point3F pointB) {
-		final float component1 = (pointA.component1 + pointB.component1) * 0.5F;
-		final float component2 = (pointA.component2 + pointB.component2) * 0.5F;
-		final float component3 = (pointA.component3 + pointB.component3) * 0.5F;
+	public static Point3F midpoint(final Point3F a, final Point3F b) {
+		final float component1 = (a.component1 + b.component1) * 0.5F;
+		final float component2 = (a.component2 + b.component2) * 0.5F;
+		final float component3 = (a.component3 + b.component3) * 0.5F;
 		
 		return new Point3F(component1, component2, component3);
 	}
@@ -377,38 +377,38 @@ public final class Point3F {
 	}
 	
 	/**
-	 * Returns a new {@code Point3F} instance with the smallest component values of {@code pointA} and {@code pointB}.
+	 * Returns a new {@code Point3F} instance with the smallest component values of {@code a} and {@code b}.
 	 * <p>
-	 * If either {@code pointA} or {@code pointB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointA a {@code Point3F} instance
-	 * @param pointB a {@code Point3F} instance
-	 * @return a new {@code Point3F} instance with the smallest component values of {@code pointA} and {@code pointB}
-	 * @throws NullPointerException thrown if, and only if, either {@code pointA} or {@code pointB} are {@code null}
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance with the smallest component values of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
-	public static Point3F minimum(final Point3F pointA, final Point3F pointB) {
-		final float component1 = min(pointA.component1, pointB.component1);
-		final float component2 = min(pointA.component2, pointB.component2);
-		final float component3 = min(pointA.component3, pointB.component3);
+	public static Point3F minimum(final Point3F a, final Point3F b) {
+		final float component1 = min(a.component1, b.component1);
+		final float component2 = min(a.component2, b.component2);
+		final float component3 = min(a.component3, b.component3);
 		
 		return new Point3F(component1, component2, component3);
 	}
 	
 	/**
-	 * Returns a new {@code Point3F} instance with the smallest component values of {@code pointA}, {@code pointB} and {@code pointC}.
+	 * Returns a new {@code Point3F} instance with the smallest component values of {@code a}, {@code b} and {@code c}.
 	 * <p>
-	 * If either {@code pointA}, {@code pointB} or {@code pointC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pointA a {@code Point3F} instance
-	 * @param pointB a {@code Point3F} instance
-	 * @param pointC a {@code Point3F} instance
-	 * @return a new {@code Point3F} instance with the smallest component values of {@code pointA}, {@code pointB} and {@code pointC}
-	 * @throws NullPointerException thrown if, and only if, either {@code pointA}, {@code pointB} or {@code pointC} are {@code null}
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @param c a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance with the smallest component values of {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
-	public static Point3F minimum(final Point3F pointA, final Point3F pointB, final Point3F pointC) {
-		final float component1 = min(pointA.component1, pointB.component1, pointC.component1);
-		final float component2 = min(pointA.component2, pointB.component2, pointC.component2);
-		final float component3 = min(pointA.component3, pointB.component3, pointC.component3);
+	public static Point3F minimum(final Point3F a, final Point3F b, final Point3F c) {
+		final float component1 = min(a.component1, b.component1, c.component1);
+		final float component2 = min(a.component2, b.component2, c.component2);
+		final float component3 = min(a.component3, b.component3, c.component3);
 		
 		return new Point3F(component1, component2, component3);
 	}

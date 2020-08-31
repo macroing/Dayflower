@@ -673,6 +673,23 @@ public final class Vector3F {
 	}
 	
 	/**
+	 * Returns a new {@code Vector3F} instance with the reciprocal (or inverse) component values of {@code vector}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the reciprocal (or inverse) component values of {@code vector}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector3F reciprocal(final Vector3F vector) {
+		final float component1 = 1.0F / vector.component1;
+		final float component2 = 1.0F / vector.component2;
+		final float component3 = 1.0F / vector.component3;
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Returns a new {@code Vector3F} instance that represents the reflection of {@code direction} with regards to {@code normal}.
 	 * <p>
 	 * If either {@code direction} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.

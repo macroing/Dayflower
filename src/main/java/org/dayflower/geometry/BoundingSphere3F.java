@@ -103,6 +103,15 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	}
 	
 	/**
+	 * Returns the center of this {@code BoundingSphere3F} instance.
+	 * 
+	 * @return the center of this {@code BoundingSphere3F} instance
+	 */
+	public Point3F getCenter() {
+		return this.center;
+	}
+	
+	/**
 	 * Returns a {@link Point3F} instance that represents the closest point to {@code point} and is contained in this {@code BoundingSphere3F} instance.
 	 * <p>
 	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -242,7 +251,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	@Override
 	public float intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F origin = ray.getOrigin();
-		final Point3F center = this.center;
+		final Point3F center = getCenter();
 		
 		final Vector3F direction = ray.getDirection();
 		final Vector3F centerToOrigin = Vector3F.direction(center, origin);
@@ -253,10 +262,10 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
 		final float c = centerToOrigin.lengthSquared() - radiusSquared;
 		
-		final float[] t = solveQuadraticSystem(a, b, c);
+		final float[] ts = solveQuadraticSystem(a, b, c);
 		
-		final float t0 = t[0];
-		final float t1 = t[1];
+		final float t0 = ts[0];
+		final float t1 = ts[1];
 		
 		if(Float.isNaN(t0) && Float.isNaN(t1)) {
 			return Float.NaN;

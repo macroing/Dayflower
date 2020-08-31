@@ -115,18 +115,18 @@ public final class Ray3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Transforms the {@code Ray3F} {@code rRHS} with the {@link Matrix44F} {@code mLHS}.
+	 * Transforms the {@code Ray3F} {@code rayRHS} with the {@link Matrix44F} {@code matrixLHS}.
 	 * <p>
 	 * Returns a new {@code Ray3F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code mLHS} or {@code rRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code matrixLHS} or {@code rayRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param mLHS a {@code Matrix44F} instance
-	 * @param rRHS a {@code Ray3F} instance
+	 * @param matrixLHS a {@code Matrix44F} instance
+	 * @param rayRHS a {@code Ray3F} instance
 	 * @return a new {@code Ray3F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code mLHS} or {@code rRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code rayRHS} are {@code null}
 	 */
-	public static Ray3F transform(final Matrix44F mLHS, final Ray3F rRHS) {
-		return new Ray3F(Point3F.transform(mLHS, rRHS.origin), Vector3F.transform(mLHS, rRHS.direction));
+	public static Ray3F transform(final Matrix44F matrixLHS, final Ray3F rayRHS) {
+		return new Ray3F(Point3F.transform(matrixLHS, rayRHS.origin), Vector3F.transform(matrixLHS, rayRHS.direction));
 	}
 }

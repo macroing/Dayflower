@@ -30,7 +30,6 @@ import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -511,14 +510,33 @@ public final class Vector3F {
 		return new Vector3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code Vector3F.negate(vLHS)} or {@code vLHS} as {@code Vector3F.dotProduct(vLHS, vRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return {@code Vector3F.negate(vLHS)} or {@code vLHS} as {@code Vector3F.dotProduct(vLHS, vRHS)} is less than {@code 0.0F} or greater than or equal to {@code 0.0F}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
 	public static Vector3F faceForward(final Vector3F vLHS, final Vector3F vRHS) {
 		return dotProduct(vLHS, vRHS) < 0.0F ? negate(vLHS) : vLHS;
 	}
 	
-//	TODO: Add Javadocs!
-	public static Vector3F half(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-		return dotProduct(outgoing, incoming) > 0.999F ? normal : normalize(subtract(outgoing, incoming));
+	/**
+	 * Returns {@code vN} or {@code Vector3F.normalize(Vector3F.subtract(vO, vI))} as {@code Vector3F.dotProduct(vO, vI)} is greater than {@code 0.999F} or less than or equal to {@code 0.999F}, respectively.
+	 * <p>
+	 * If either {@code vO}, {@code vN} or {@code vI} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vO a {@code Vector3F} instance that points in the opposite direction of the ray
+	 * @param vN a {@code Vector3F} instance that points in the direction of the surface normal
+	 * @param vI a {@code Vector3F} instance that points in the direction of the light source to the surface intersection point
+	 * @return {@code vN} or {@code Vector3F.normalize(Vector3F.subtract(vO, vI))} as {@code Vector3F.dotProduct(vO, vI)} is greater than {@code 0.999F} or less than or equal to {@code 0.999F}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vO}, {@code vN} or {@code vI} are {@code null}
+	 */
+	public static Vector3F half(final Vector3F vO, final Vector3F vN, final Vector3F vI) {
+		return dotProduct(vO, vI) > 0.999F ? vN : normalize(subtract(vO, vI));
 	}
 	
 	/**
@@ -580,7 +598,22 @@ public final class Vector3F {
 		return crossProduct(edgeAB, edgeAC);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes a normal vector from three other normal vectors via Barycentric interpolation.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the interpolated normal.
+	 * <p>
+	 * If either {@code normalA}, {@code normalB}, {@code normalC} or {@code barycentricCoordinates} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * <strong>Note:</strong> This method does not normalize {@code normalA}, {@code normalB} or {@code normalC}.
+	 * 
+	 * @param normalA a {@code Vector3F} instance denoting the normal of vertex {@code A} of a triangle
+	 * @param normalB a {@code Vector3F} instance denoting the normal of vertex {@code B} of a triangle
+	 * @param normalC a {@code Vector3F} instance denoting the normal of vertex {@code C} of a triangle
+	 * @param barycentricCoordinates a {@link Point3F} instance denoting the Barycentric coordinates
+	 * @return a new {@code Vector3F} instance with the interpolated normal
+	 * @throws NullPointerException thrown if, and only if, either {@code normalA}, {@code normalB}, {@code normalC} or {@code barycentricCoordinates} are {@code null}
+	 */
 	public static Vector3F normal(final Vector3F normalA, final Vector3F normalB, final Vector3F normalC, final Point3F barycentricCoordinates) {
 		final float component1 = normalA.component1 * barycentricCoordinates.getU() + normalB.component1 * barycentricCoordinates.getV() + normalC.component1 * barycentricCoordinates.getW();
 		final float component2 = normalA.component2 * barycentricCoordinates.getU() + normalB.component2 * barycentricCoordinates.getV() + normalC.component2 * barycentricCoordinates.getW();
@@ -604,7 +637,22 @@ public final class Vector3F {
 		return normalize(normal(a, b, c));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes a normalized normal vector from three other normal vectors via Barycentric interpolation.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the interpolated and normalized normal.
+	 * <p>
+	 * If either {@code normalA}, {@code normalB}, {@code normalC} or {@code barycentricCoordinates} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * <strong>Note:</strong> This method does not normalize {@code normalA}, {@code normalB} or {@code normalC}.
+	 * 
+	 * @param normalA a {@code Vector3F} instance denoting the normal of vertex {@code A} of a triangle
+	 * @param normalB a {@code Vector3F} instance denoting the normal of vertex {@code B} of a triangle
+	 * @param normalC a {@code Vector3F} instance denoting the normal of vertex {@code C} of a triangle
+	 * @param barycentricCoordinates a {@link Point3F} instance denoting the Barycentric coordinates
+	 * @return a new {@code Vector3F} instance with the interpolated and normalized normal
+	 * @throws NullPointerException thrown if, and only if, either {@code normalA}, {@code normalB}, {@code normalC} or {@code barycentricCoordinates} are {@code null}
+	 */
 	public static Vector3F normalNormalized(final Vector3F normalA, final Vector3F normalB, final Vector3F normalC, final Point3F barycentricCoordinates) {
 		return normalize(normal(normalA, normalB, normalC, barycentricCoordinates));
 	}
@@ -624,22 +672,80 @@ public final class Vector3F {
 		return divide(v, v.length());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance that represents the reflection of {@code direction} with regards to {@code normal}.
+	 * <p>
+	 * If either {@code direction} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector3F.reflection(direction, normal, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param direction the {@code Vector3F} instance that will be reflected with regards to {@code normal}
+	 * @param normal the {@code Vector3F} instance that represents the normal of the surface
+	 * @return a new {@code Vector3F} instance that represents the reflection of {@code direction} with regards to {@code normal}
+	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
+	 */
 	public static Vector3F reflection(final Vector3F direction, final Vector3F normal) {
 		return reflection(direction, normal, false);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance that represents the reflection of {@code direction} with regards to {@code normal}.
+	 * <p>
+	 * If either {@code direction} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code isFacingSurface} is {@code true}, it is assumed that {@code direction} is facing the surface. This is usually the case for the direction of a ray that intersects the surface. If {@code isFacingSurface} is {@code false}, it is assumed
+	 * that {@code direction} is pointing in the opposite direction. That is, the ray starts at the surface intersection point and is directed away from the surface.
+	 * 
+	 * @param direction the {@code Vector3F} instance that will be reflected with regards to {@code normal}
+	 * @param normal the {@code Vector3F} instance that represents the normal of the surface
+	 * @param isFacingSurface {@code true} if, and only if, {@code direction} is facing the surface, {@code false} otherwise
+	 * @return a new {@code Vector3F} instance that represents the reflection of {@code direction} with regards to {@code normal}
+	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
+	 */
 	public static Vector3F reflection(final Vector3F direction, final Vector3F normal, final boolean isFacingSurface) {
 		return isFacingSurface ? subtract(direction, multiply(normal, dotProduct(direction, normal) * 2.0F)) : subtract(multiply(normal, dotProduct(direction, normal) * 2.0F), direction);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance that represents the reflection of {@code direction} with regards to {@code normal} and is normalized.
+	 * <p>
+	 * If either {@code direction} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector3F.reflectionNormalized(direction, normal, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param direction the {@code Vector3F} instance that will be reflected with regards to {@code normal}
+	 * @param normal the {@code Vector3F} instance that represents the normal of the surface
+	 * @return a new {@code Vector3F} instance that represents the reflection of {@code direction} with regards to {@code normal} and is normalized
+	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
+	 */
 	public static Vector3F reflectionNormalized(final Vector3F direction, final Vector3F normal) {
 		return reflectionNormalized(direction, normal, false);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a new {@code Vector3F} instance that represents the reflection of {@code direction} with regards to {@code normal} and is normalized.
+	 * <p>
+	 * If either {@code direction} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code isFacingSurface} is {@code true}, it is assumed that {@code direction} is facing the surface. This is usually the case for the direction of a ray that intersects the surface. If {@code isFacingSurface} is {@code false}, it is assumed
+	 * that {@code direction} is pointing in the opposite direction. That is, the ray starts at the surface intersection point and is directed away from the surface.
+	 * 
+	 * @param direction the {@code Vector3F} instance that will be reflected with regards to {@code normal}
+	 * @param normal the {@code Vector3F} instance that represents the normal of the surface
+	 * @param isFacingSurface {@code true} if, and only if, {@code direction} is facing the surface, {@code false} otherwise
+	 * @return a new {@code Vector3F} instance that represents the reflection of {@code direction} with regards to {@code normal} and is normalized
+	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
+	 */
 	public static Vector3F reflectionNormalized(final Vector3F direction, final Vector3F normal, final boolean isFacingSurface) {
 		return normalize(reflection(direction, normal, isFacingSurface));
 	}

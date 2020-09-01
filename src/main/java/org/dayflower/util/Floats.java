@@ -321,6 +321,16 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns the probability density function (PDF) value for {@code cosThetaMax}.
+	 * 
+	 * @param cosThetaMax the maximum cos theta value
+	 * @return the probability density function (PDF) value for {@code cosThetaMax}
+	 */
+	public static float coneUniformDistributionProbabilityDensityFunction(final float cosThetaMax) {
+		return cosThetaMax >= 1.0F ? 0.0F : 1.0F / (2.0F * PI * (1.0F - cosThetaMax));
+	}
+	
+	/**
 	 * Returns the trigonometric cosine of {@code angleRadians}.
 	 * <p>
 	 * Special case:
@@ -510,6 +520,39 @@ public final class Floats {
 	 */
 	public static float min(final float a, final float b, final float c) {
 		return min(min(a, b), c);
+	}
+	
+	/**
+	 * Computes the balance heuristic for multiple importance sampling (MIS).
+	 * <p>
+	 * Returns the result of the computation.
+	 * 
+	 * @param probabilityDensityFunctionValueA a probability density function (PDF) value
+	 * @param probabilityDensityFunctionValueB a probability density function (PDF) value
+	 * @param sampleCountA a sample count
+	 * @param sampleCountB a sample count
+	 * @return the result of the computation
+	 */
+	public static float multipleImportanceSamplingBalanceHeuristic(final float probabilityDensityFunctionValueA, final float probabilityDensityFunctionValueB, final int sampleCountA, final int sampleCountB) {
+		return sampleCountA * probabilityDensityFunctionValueA / (sampleCountA * probabilityDensityFunctionValueA + sampleCountB * probabilityDensityFunctionValueB);
+	}
+	
+	/**
+	 * Computes the power heuristic for multiple importance sampling (MIS).
+	 * <p>
+	 * Returns the result of the computation.
+	 * 
+	 * @param probabilityDensityFunctionValueA a probability density function (PDF) value
+	 * @param probabilityDensityFunctionValueB a probability density function (PDF) value
+	 * @param sampleCountA a sample count
+	 * @param sampleCountB a sample count
+	 * @return the result of the computation
+	 */
+	public static float multipleImportanceSamplingPowerHeuristic(final float probabilityDensityFunctionValueA, final float probabilityDensityFunctionValueB, final int sampleCountA, final int sampleCountB) {
+		final float weightA = sampleCountA * probabilityDensityFunctionValueA;
+		final float weightB = sampleCountB * probabilityDensityFunctionValueB;
+		
+		return weightA * weightA / (weightA * weightA + weightB * weightB);
 	}
 	
 	/**

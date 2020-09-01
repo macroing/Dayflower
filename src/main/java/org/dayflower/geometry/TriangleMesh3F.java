@@ -19,8 +19,55 @@
 package org.dayflower.geometry;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 //TODO: Add Javadocs!
 public final class TriangleMesh3F implements Shape3F {
-//	TODO: Implement!
+//	TODO: Add Javadocs!
+	@Override
+	public BoundingVolume3F getBoundingVolume() {
+		return null;//TODO: Implement!
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
+		return null;//TODO: Implement!
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray) {
+		return intersection(ray, 0.0001F, Float.MAX_VALUE);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return null;//TODO: Implement!
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
+		return 0;//TODO: Implement!
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float getSurfaceArea() {
+		return 0;//TODO: Implement!
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float getSurfaceAreaProbabilityDensityFunctionValue() {
+		return 0;//TODO: Implement!
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float getVolume() {
+		return 0;//TODO: Implement!
+	}
 }

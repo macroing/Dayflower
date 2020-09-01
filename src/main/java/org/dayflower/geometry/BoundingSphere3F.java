@@ -21,6 +21,7 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.solveQuadraticSystem;
 
@@ -267,11 +268,11 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 		final float t0 = ts[0];
 		final float t1 = ts[1];
 		
-		if(Float.isNaN(t0) && Float.isNaN(t1)) {
+		if(isNaN(t0) && isNaN(t1)) {
 			return Float.NaN;
-		} else if(!Float.isNaN(t0) && t0 > tMinimum && t0 < tMaximum) {
+		} else if(!isNaN(t0) && t0 > tMinimum && t0 < tMaximum) {
 			return t0;
-		} else if(!Float.isNaN(t1) && t1 > tMinimum && t1 < tMaximum) {
+		} else if(!isNaN(t1) && t1 > tMinimum && t1 < tMaximum) {
 			return t1;
 		} else {
 			return Float.NaN;

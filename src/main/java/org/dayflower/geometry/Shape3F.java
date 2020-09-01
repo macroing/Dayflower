@@ -18,9 +18,100 @@
  */
 package org.dayflower.geometry;
 
-import java.lang.reflect.Field;
+import java.util.Optional;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Shape3F} denotes a 3-dimensional shape that uses the data type {@code float}.
+ * <p>
+ * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface Shape3F {
-//	TODO: Implement!
+	/**
+	 * Returns a {@link BoundingVolume3F} instance that contains this {@code Shape3F} instance.
+	 * 
+	 * @return a {@code BoundingVolume3F} instance that contains this {@code Shape3F} instance
+	 */
+	BoundingVolume3F getBoundingVolume();
+	
+	/**
+	 * Samples this {@code Shape3F} instance.
+	 * <p>
+	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
+	 * <p>
+	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param referencePoint the reference point on this {@code Shape3F} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3F} instance
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @return an optional {@code SurfaceSample3F} with the surface sample
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
+	 */
+	Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v);
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Shape3F} instance.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3F} instance that contains information about the intersection, if it was found.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
+	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	Optional<SurfaceIntersection3F> intersection(final Ray3F ray);
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Shape3F} instance.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3F} instance that contains information about the intersection, if it was found.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
+	
+	/**
+	 * Returns the probability density function (PDF) value for solid angle.
+	 * <p>
+	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param referencePoint the reference point on this {@code Shape3F} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3F} instance
+	 * @param point the point on this {@code Shape3F} instance
+	 * @param surfaceNormal the surface normal on this {@code Shape3F} instance
+	 * @return the probability density function (PDF) value for solid angle
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
+	 */
+	float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal);
+	
+	/**
+	 * Returns the surface area of this {@code Shape3F} instance.
+	 * 
+	 * @return the surface area of this {@code Shape3F} instance
+	 */
+	float getSurfaceArea();
+	
+	/**
+	 * Returns the surface area probability density function (PDF) value of this {@code Shape3F} instance.
+	 * 
+	 * @return the surface area probability density function (PDF) value of this {@code Shape3F} instance
+	 */
+	float getSurfaceAreaProbabilityDensityFunctionValue();
+	
+	/**
+	 * Returns the volume of this {@code Shape3F} instance.
+	 * 
+	 * @return the volume of this {@code Shape3F} instance
+	 */
+	float getVolume();
 }

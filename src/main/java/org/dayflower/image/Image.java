@@ -37,8 +37,15 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
+
+import org.dayflower.geometry.Line2I;
+import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.Rasterizer2I;
+import org.dayflower.geometry.Rectangle2I;
 
 /**
  * An {@code Image} is an image that can be drawn to.
@@ -331,6 +338,26 @@ public final class Image {
 		return doGetColorRGBOrDefault(pixelOperation.getX(x, this.resolutionX), pixelOperation.getY(y, this.resolutionY), Color3F.BLACK);
 	}
 	
+//	TODO: Add Javadocs!
+	public Optional<Pixel> getPixel(final int index) {
+		return getPixel(index, PixelOperation.NO_CHANGE);
+	}
+	
+//	TODO: Add Javadocs!
+	public Optional<Pixel> getPixel(final int index, final PixelOperation pixelOperation) {
+		return doGetOptionalPixel(pixelOperation.getIndex(index, this.resolution));
+	}
+	
+//	TODO: Add Javadocs!
+	public Optional<Pixel> getPixel(final int x, final int y) {
+		return getPixel(x, y, PixelOperation.NO_CHANGE);
+	}
+	
+//	TODO: Add Javadocs!
+	public Optional<Pixel> getPixel(final int x, final int y, final PixelOperation pixelOperation) {
+		return doGetOptionalPixel(pixelOperation.getX(x, this.resolutionX), pixelOperation.getY(y, this.resolutionY));
+	}
+	
 	/**
 	 * Returns the resolution of this {@code Image} instance.
 	 * <p>
@@ -433,6 +460,77 @@ public final class Image {
 		
 		for(final Pixel pixel : this.pixels) {
 			pixel.setColorRGB(colorRGB);
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public void drawLine(final Line2I line) {
+		drawLine(line, Color3F.BLACK);
+	}
+	
+//	TODO: Add Javadocs!
+	public void drawLine(final Line2I line, final Color3F colorRGB) {
+		Objects.requireNonNull(line, "line == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		drawLine(line, pixel -> colorRGB);
+	}
+	
+//	TODO: Add Javadocs!
+	public void drawLine(final Line2I line, final Function<Pixel, Color3F> function) {
+		Objects.requireNonNull(line, "line == null");
+		Objects.requireNonNull(function, "function == null");
+		
+		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
+		
+		final Point2I[] scanLine = Rasterizer2I.rasterize(line, rectangle);
+		
+		for(final Point2I point : scanLine) {
+			final Optional<Pixel> optionalPixel = getPixel(point.getX(), point.getY());
+			
+			if(optionalPixel.isPresent()) {
+				final
+				Pixel pixel = optionalPixel.get();
+				pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+			}
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public void drawRectangle(final Rectangle2I rectangle) {
+		drawRectangle(rectangle, Color3F.BLACK);
+	}
+	
+//	TODO: Add Javadocs!
+	public void drawRectangle(final Rectangle2I rectangle, final Color3F colorRGB) {
+		Objects.requireNonNull(rectangle, "rectangle == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		drawRectangle(rectangle, pixel -> colorRGB);
+	}
+	
+//	TODO: Add Javadocs!
+	public void drawRectangle(final Rectangle2I rectangle, final Function<Pixel, Color3F> function) {
+		Objects.requireNonNull(rectangle, "rectangle == null");
+		Objects.requireNonNull(function, "function == null");
+		
+		final int minimumX = rectangle.getA().getX();
+		final int minimumY = rectangle.getA().getY();
+		final int maximumX = rectangle.getC().getX();
+		final int maximumY = rectangle.getC().getY();
+		
+		for(int y = minimumY; y <= maximumY; y++) {
+			for(int x = minimumX; x <= maximumX; x++) {
+				if(x == minimumX || x == maximumX || y == minimumY || y == maximumY) {
+					final Optional<Pixel> optionalPixel = getPixel(x, y);
+					
+					if(optionalPixel.isPresent()) {
+						final
+						Pixel pixel = optionalPixel.get();
+						pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+					}
+				}
+			}
 		}
 	}
 	
@@ -777,6 +875,14 @@ public final class Image {
 	
 	private Color3F doGetColorRGBOrDefault(final int x, final int y, final Color3F colorRGB) {
 		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? this.pixels[y * this.resolutionX + x].getColorRGB() : colorRGB;
+	}
+	
+	private Optional<Pixel> doGetOptionalPixel(final int index) {
+		return index >= 0 && index < this.resolution ? Optional.of(this.pixels[index]) : Optional.empty();
+	}
+	
+	private Optional<Pixel> doGetOptionalPixel(final int x, final int y) {
+		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? Optional.of(this.pixels[y * this.resolutionX + x]) : Optional.empty();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

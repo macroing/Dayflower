@@ -18,8 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.geometry.Point3F.transform;
-import static org.dayflower.geometry.Vector3F.transformTranspose;
 import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
@@ -89,7 +87,7 @@ public final class SurfaceSample3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code objectToWorld} or {@code worldToObject} are {@code null}
 	 */
 	public SurfaceSample3F transformToObjectSpace(final Matrix44F objectToWorld, final Matrix44F worldToObject) {
-		return new SurfaceSample3F(transform(worldToObject, this.point), transformTranspose(objectToWorld, this.surfaceNormal), this.probabilityDensityFunctionValue);
+		return new SurfaceSample3F(Point3F.transform(worldToObject, this.point), Vector3F.transformTranspose(objectToWorld, this.surfaceNormal), this.probabilityDensityFunctionValue);
 	}
 	
 	/**
@@ -105,7 +103,7 @@ public final class SurfaceSample3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code objectToWorld} or {@code worldToObject} are {@code null}
 	 */
 	public SurfaceSample3F transformToWorldSpace(final Matrix44F objectToWorld, final Matrix44F worldToObject) {
-		return new SurfaceSample3F(transform(objectToWorld, this.point), transformTranspose(worldToObject, this.surfaceNormal), this.probabilityDensityFunctionValue);
+		return new SurfaceSample3F(Point3F.transform(objectToWorld, this.point), Vector3F.transformTranspose(worldToObject, this.surfaceNormal), this.probabilityDensityFunctionValue);
 	}
 	
 	/**

@@ -233,18 +233,13 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 		final float t1X = (maximum.getX() - origin.getX()) * directionReciprocal.getX();
 		final float t1Y = (maximum.getY() - origin.getY()) * directionReciprocal.getY();
 		final float t1Z = (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ();
+		
 		final float t0 = max(min(t0X, t1X), min(t0Y, t1Y), min(t0Z, t1Z));
 		final float t1 = min(max(t0X, t1X), max(t0Y, t1Y), max(t0Z, t1Z));
 		
-		if(t0 > t1) {
-			return Float.NaN;
-		} else if(t0 > tMinimum && t0 < tMaximum) {
-			return t0;
-		} else if(t1 > tMinimum && t1 < tMaximum) {
-			return t1;
-		} else {
-			return Float.NaN;
-		}
+		final float t = t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+		
+		return t;
 	}
 	
 	/**

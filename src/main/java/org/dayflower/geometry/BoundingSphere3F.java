@@ -268,15 +268,9 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 		final float t0 = ts[0];
 		final float t1 = ts[1];
 		
-		if(isNaN(t0) && isNaN(t1)) {
-			return Float.NaN;
-		} else if(!isNaN(t0) && t0 > tMinimum && t0 < tMaximum) {
-			return t0;
-		} else if(!isNaN(t1) && t1 > tMinimum && t1 < tMaximum) {
-			return t1;
-		} else {
-			return Float.NaN;
-		}
+		final float t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+		
+		return t;
 	}
 	
 	/**

@@ -18,14 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.geometry.Point3F.add;
-import static org.dayflower.geometry.Vector3F.direction;
-import static org.dayflower.geometry.Vector3F.directionNormalized;
-import static org.dayflower.geometry.Vector3F.dotProduct;
-import static org.dayflower.geometry.Vector3F.normalize;
-import static org.dayflower.geometry.Vector3F.sampleConeUniformDistribution;
-import static org.dayflower.geometry.Vector3F.sampleSphereUniformDistribution;
-import static org.dayflower.geometry.Vector3F.transform;
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
@@ -44,7 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A {@code Sphere3F} denotes a sphere that uses the data type {@code float}.
+ * A {@code Sphere3F} denotes a 3-dimensional sphere that uses the data type {@code float}.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
@@ -140,14 +132,14 @@ public final class Sphere3F implements Shape3F {
 		final float radiusSquared = getRadiusSquared();
 		
 		if(lengthSquared < radiusSquared * 1.00001F) {
-			final Vector3F surfaceNormal = sampleSphereUniformDistribution(u, v);
+			final Vector3F surfaceNormal = Vector3F.sampleSphereUniformDistribution(u, v);
 			
-			final Point3F point = add(center, surfaceNormal, radius);
+			final Point3F point = Point3F.add(center, surfaceNormal, radius);
 			
-			final Vector3F directionToSurface = direction(point, referencePoint);
-			final Vector3F directionToSurfaceNormalized = normalize(directionToSurface);
+			final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
+			final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
 			
-			final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(dotProduct(directionToSurfaceNormalized, surfaceNormal));
+			final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
 			
 			return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
 		}
@@ -157,18 +149,18 @@ public final class Sphere3F implements Shape3F {
 		
 		final OrthoNormalBasis33F orthoNormalBasis = new OrthoNormalBasis33F(directionToCenter);
 		
-		final Vector3F coneLocalSpace = sampleConeUniformDistribution(u, v, cosThetaMax);
-		final Vector3F coneGlobalSpace = normalize(transform(coneLocalSpace, orthoNormalBasis));
+		final Vector3F coneLocalSpace = Vector3F.sampleConeUniformDistribution(u, v, cosThetaMax);
+		final Vector3F coneGlobalSpace = Vector3F.normalize(Vector3F.transform(coneLocalSpace, orthoNormalBasis));
 		
 		final Ray3F ray = new Ray3F(referencePoint, coneGlobalSpace);
 		
 		final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = intersection(ray);
 		
-		final float t = optionalSurfaceIntersection.isPresent() ? optionalSurfaceIntersection.get().getT() : dotProduct(directionToCenter, coneGlobalSpace);
+		final float t = optionalSurfaceIntersection.isPresent() ? optionalSurfaceIntersection.get().getT() : Vector3F.dotProduct(directionToCenter, coneGlobalSpace);
 		
-		final Point3F point = add(ray.getOrigin(), ray.getDirection(), t);
+		final Point3F point = Point3F.add(ray.getOrigin(), ray.getDirection(), t);
 		
-		final Vector3F surfaceNormal = directionNormalized(center, point);
+		final Vector3F surfaceNormal = Vector3F.directionNormalized(center, point);
 		
 		final float probabilityDensityFunctionValue = coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
 		
@@ -210,12 +202,12 @@ public final class Sphere3F implements Shape3F {
 		final Point3F center = getCenter();
 		
 		final Vector3F direction = ray.getDirection();
-		final Vector3F centerToOrigin = direction(center, origin);
+		final Vector3F centerToOrigin = Vector3F.direction(center, origin);
 		
 		final float radiusSquared = getRadiusSquared();
 		
 		final float a = direction.lengthSquared();
-		final float b = 2.0F * dotProduct(centerToOrigin, direction);
+		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
 		final float c = centerToOrigin.lengthSquared() - radiusSquared;
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
@@ -229,9 +221,9 @@ public final class Sphere3F implements Shape3F {
 			return Optional.empty();
 		}
 		
-		final Point3F surfaceIntersectionPoint = add(origin, direction, t);
+		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);
 		
-		final Vector3F surfaceNormalG = directionNormalized(center, surfaceIntersectionPoint);
+		final Vector3F surfaceNormalG = Vector3F.directionNormalized(center, surfaceIntersectionPoint);
 		final Vector3F surfaceNormalS = surfaceNormalG;
 		
 		final OrthoNormalBasis33F orthoNormalBasisG = new OrthoNormalBasis33F(surfaceNormalG);
@@ -289,10 +281,10 @@ public final class Sphere3F implements Shape3F {
 	 * <p>
 	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param referencePoint the reference point on this {@code Shape3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3F} instance
-	 * @param point the point on this {@code Shape3F} instance
-	 * @param surfaceNormal the surface normal on this {@code Shape3F} instance
+	 * @param referencePoint the reference point on this {@code Sphere3F} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Sphere3F} instance
+	 * @param point the point on this {@code Sphere3F} instance
+	 * @param surfaceNormal the surface normal on this {@code Sphere3F} instance
 	 * @return the probability density function (PDF) value for solid angle
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
 	 */
@@ -302,16 +294,16 @@ public final class Sphere3F implements Shape3F {
 		
 		final Point3F center = getCenter();
 		
-		final Vector3F directionToCenter = direction(referencePoint, center);
+		final Vector3F directionToCenter = Vector3F.direction(referencePoint, center);
 		
 		final float lengthSquared = directionToCenter.lengthSquared();
 		final float radiusSquared = getRadiusSquared();
 		
 		if(lengthSquared < radiusSquared * 1.00001F) {
-			final Vector3F directionToSurface = direction(point, referencePoint);
-			final Vector3F directionToSurfaceNormalized = normalize(directionToSurface);
+			final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
+			final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
 			
-			final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(dotProduct(directionToSurfaceNormalized, surfaceNormal));
+			final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
 			
 			return probabilityDensityFunctionValue;
 		}

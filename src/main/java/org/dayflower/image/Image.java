@@ -426,6 +426,15 @@ public final class Image {
 	}
 	
 	/**
+	 * Returns a {@link Rectangle2I} with the bounds of this {@code Image} instance.
+	 * 
+	 * @return a {@code Rectangle2I} with the bounds of this {@code Image} instance
+	 */
+	public Rectangle2I getBounds() {
+		return new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
+	}
+	
+	/**
 	 * Returns the resolution of this {@code Image} instance.
 	 * <p>
 	 * The resolution of {@code image} can be computed by:
@@ -530,12 +539,103 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Draws {@code circle} to this {@code Image} instance with {@code Color3F.BLACK} as its color.
+	 * <p>
+	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * image.drawCircle(circle, Color3F.BLACK);
+	 * </pre>
+	 * 
+	 * @param circle the {@link Circle2I} to draw
+	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
+	 */
+	public void drawCircle(final Circle2I circle) {
+		drawCircle(circle, Color3F.BLACK);
+	}
+	
+	/**
+	 * Draws {@code circle} to this {@code Image} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * If either {@code circle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * image.drawCircle(circle, pixel -> colorRGB);
+	 * </pre>
+	 * 
+	 * @param circle the {@link Circle2I} to draw
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code colorRGB} are {@code null}
+	 */
+	public void drawCircle(final Circle2I circle, final Color3F colorRGB) {
+		Objects.requireNonNull(circle, "circle == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		drawCircle(circle, pixel -> colorRGB);
+	}
+	
+	/**
+	 * Draws {@code circle} to this {@code Image} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * <p>
+	 * If either {@code circle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param circle the {@link Circle2I} to draw
+	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code function} are {@code null} or {@code function} returns {@code null}
+	 */
+	public void drawCircle(final Circle2I circle, final Function<Pixel, Color3F> function) {
+		Objects.requireNonNull(circle, "circle == null");
+		Objects.requireNonNull(function, "function == null");
+		
+		for(int y = -circle.getRadius(); y <= circle.getRadius(); y++) {
+			for(int x = -circle.getRadius(); x <= circle.getRadius(); x++) {
+				if(x * x + y * y <= circle.getRadius() * circle.getRadius() && x * x + y * y > (circle.getRadius() - 1) * (circle.getRadius() - 1)) {
+					final Optional<Pixel> optionalPixel = getPixel(x + circle.getCenter().getX(), y + circle.getCenter().getY());
+					
+					if(optionalPixel.isPresent()) {
+						final
+						Pixel pixel = optionalPixel.get();
+						pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Draws {@code line} to this {@code Image} instance with {@code Color3F.BLACK} as its color.
+	 * <p>
+	 * If {@code line} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * image.drawLine(line, Color3F.BLACK);
+	 * </pre>
+	 * 
+	 * @param line the {@link Line2I} to draw
+	 * @throws NullPointerException thrown if, and only if, {@code line} is {@code null}
+	 */
 	public void drawLine(final Line2I line) {
 		drawLine(line, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Draws {@code line} to this {@code Image} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * If either {@code line} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * image.drawLine(line, pixel -> colorRGB);
+	 * </pre>
+	 * 
+	 * @param line the {@link Line2I} to draw
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code line} or {@code colorRGB} are {@code null}
+	 */
 	public void drawLine(final Line2I line, final Color3F colorRGB) {
 		Objects.requireNonNull(line, "line == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -543,7 +643,15 @@ public final class Image {
 		drawLine(line, pixel -> colorRGB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Draws {@code line} to this {@code Image} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * <p>
+	 * If either {@code line} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param line the {@link Line2I} to draw
+	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code line} or {@code function} are {@code null} or {@code function} returns {@code null}
+	 */
 	public void drawLine(final Line2I line, final Function<Pixel, Color3F> function) {
 		Objects.requireNonNull(line, "line == null");
 		Objects.requireNonNull(function, "function == null");
@@ -563,12 +671,37 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Draws {@code rectangle} to this {@code Image} instance with {@code Color3F.BLACK} as its color.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * image.drawRectangle(rectangle, Color3F.BLACK);
+	 * </pre>
+	 * 
+	 * @param rectangle the {@link Line2I} to draw
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 */
 	public void drawRectangle(final Rectangle2I rectangle) {
 		drawRectangle(rectangle, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Draws {@code rectangle} to this {@code Image} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * If either {@code rectangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * image.drawRectangle(rectangle, pixel -> colorRGB);
+	 * </pre>
+	 * 
+	 * @param rectangle the {@link Rectangle2I} to draw
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code colorRGB} are {@code null}
+	 */
 	public void drawRectangle(final Rectangle2I rectangle, final Color3F colorRGB) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -576,7 +709,15 @@ public final class Image {
 		drawRectangle(rectangle, pixel -> colorRGB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Draws {@code rectangle} to this {@code Image} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * <p>
+	 * If either {@code rectangle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle the {@link Rectangle2I} to draw
+	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code function} are {@code null} or {@code function} returns {@code null}
+	 */
 	public void drawRectangle(final Rectangle2I rectangle, final Function<Pixel, Color3F> function) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(function, "function == null");
@@ -601,12 +742,37 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Draws {@code triangle} to this {@code Image} instance with {@code Color3F.BLACK} as its color.
+	 * <p>
+	 * If {@code triangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * image.drawTriangle(triangle, Color3F.BLACK);
+	 * </pre>
+	 * 
+	 * @param triangle the {@link Triangle2I} to draw
+	 * @throws NullPointerException thrown if, and only if, {@code triangle} is {@code null}
+	 */
 	public void drawTriangle(final Triangle2I triangle) {
 		drawTriangle(triangle, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Draws {@code triangle} to this {@code Image} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * If either {@code triangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * image.drawTriangle(triangle, pixel -> colorRGB);
+	 * </pre>
+	 * 
+	 * @param triangle the {@link Triangle2I} to draw
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code colorRGB} are {@code null}
+	 */
 	public void drawTriangle(final Triangle2I triangle, final Color3F colorRGB) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -614,7 +780,15 @@ public final class Image {
 		drawTriangle(triangle, pixel -> colorRGB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Draws {@code triangle} to this {@code Image} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * <p>
+	 * If either {@code triangle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangle the {@link Triangle2I} to draw
+	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code function} are {@code null} or {@code function} returns {@code null}
+	 */
 	public void drawTriangle(final Triangle2I triangle, final Function<Pixel, Color3F> function) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(function, "function == null");
@@ -624,12 +798,37 @@ public final class Image {
 		drawLine(new Line2I(triangle.getC(), triangle.getA()), function);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code circle} in this {@code Image} instance with {@code Color3F.BLACK} as its color.
+	 * <p>
+	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * image.fillCircle(circle, Color3F.BLACK);
+	 * </pre>
+	 * 
+	 * @param circle the {@link Circle2I} to fill
+	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
+	 */
 	public void fillCircle(final Circle2I circle) {
 		fillCircle(circle, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code circle} in this {@code Image} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * If either {@code circle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * image.fillCircle(circle, pixel -> colorRGB);
+	 * </pre>
+	 * 
+	 * @param circle the {@link Circle2I} to fill
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code colorRGB} are {@code null}
+	 */
 	public void fillCircle(final Circle2I circle, final Color3F colorRGB) {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -637,7 +836,15 @@ public final class Image {
 		fillCircle(circle, pixel -> colorRGB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code circle} in this {@code Image} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * <p>
+	 * If either {@code circle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param circle the {@link Circle2I} to fill
+	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code function} are {@code null} or {@code function} returns {@code null}
+	 */
 	public void fillCircle(final Circle2I circle, final Function<Pixel, Color3F> function) {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(function, "function == null");
@@ -657,38 +864,93 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code sourceImage} in this {@code Image} instance.
+	 * <p>
+	 * If {@code sourceImage} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillImage(sourceImage, sourceImage.getBounds());
+	 * }
+	 * </pre>
+	 * 
+	 * @param sourceImage the {@code Image} to fill
+	 * @throws NullPointerException thrown if, and only if, {@code sourceImage} is {@code null}
+	 */
 	public void fillImage(final Image sourceImage) {
-		fillImage(sourceImage, new Rectangle2I(new Point2I(), new Point2I(sourceImage.resolutionX, sourceImage.resolutionY)));
+		fillImage(sourceImage, sourceImage.getBounds());
 	}
 	
-//	TODO: Add Javadocs!
-	public void fillImage(final Image sourceImage, final Rectangle2I sourceRectangle) {
-		fillImage(sourceImage, sourceRectangle, new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY)));
+	/**
+	 * Fills {@code sourceImage} in this {@code Image} instance.
+	 * <p>
+	 * If either {@code sourceImage} or {@code sourceRectangle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillImage(sourceImage, sourceRectangle, image.getBounds());
+	 * }
+	 * </pre>
+	 * 
+	 * @param sourceImage the {@code Image} to fill
+	 * @param sourceBounds a {@link Rectangle2I} that represents the bounds of the region in {@code sourceImage} to use
+	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage} or {@code sourceRectangle} are {@code null}
+	 */
+	public void fillImage(final Image sourceImage, final Rectangle2I sourceBounds) {
+		fillImage(sourceImage, sourceBounds, getBounds());
 	}
 	
-//	TODO: Add Javadocs!
-	public void fillImage(final Image sourceImage, final Rectangle2I sourceRectangle, final Rectangle2I targetRectangle) {
-		fillImage(sourceImage, sourceRectangle, targetRectangle, (sourcePixel, targetPixel) -> sourcePixel.getColorRGB());
+	/**
+	 * Fills {@code sourceImage} in this {@code Image} instance.
+	 * <p>
+	 * If either {@code sourceImage}, {@code sourceRectangle} or {@code targetRectangle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillImage(sourceImage, sourceRectangle, targetRectangle, (sourcePixel, targetPixel) -> sourcePixel.getColorRGB());
+	 * }
+	 * </pre>
+	 * 
+	 * @param sourceImage the {@code Image} to fill
+	 * @param sourceBounds a {@link Rectangle2I} that represents the bounds of the region in {@code sourceImage} to use
+	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code Image} instance to use
+	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage}, {@code sourceRectangle} or {@code targetRectangle} are {@code null}
+	 */
+	public void fillImage(final Image sourceImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds) {
+		fillImage(sourceImage, sourceBounds, targetBounds, (sourcePixel, targetPixel) -> sourcePixel.getColorRGB());
 	}
 	
-//	TODO: Add Javadocs!
-	public void fillImage(final Image sourceImage, final Rectangle2I sourceRectangle, final Rectangle2I targetRectangle, final BiFunction<Pixel, Pixel, Color3F> biFunction) {
+	/**
+	 * Fills {@code sourceImage} in this {@code Image} instance with {@link Color3F} instances returned by {@code biFunction} as its color.
+	 * <p>
+	 * If either {@code sourceImage}, {@code sourceRectangle}, {@code targetRectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sourceImage the {@code Image} to fill
+	 * @param sourceBounds a {@link Rectangle2I} that represents the bounds of the region in {@code sourceImage} to use
+	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code Image} instance to use
+	 * @param biFunction a {@code BiFunction} that returns {@code Color3F} instances to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage}, {@code sourceRectangle}, {@code targetRectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
+	 */
+	public void fillImage(final Image sourceImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds, final BiFunction<Pixel, Pixel, Color3F> biFunction) {
 		Objects.requireNonNull(sourceImage, "sourceImage == null");
-		Objects.requireNonNull(sourceRectangle, "sourceRectangle == null");
-		Objects.requireNonNull(targetRectangle, "targetRectangle == null");
+		Objects.requireNonNull(sourceBounds, "sourceBounds == null");
+		Objects.requireNonNull(targetBounds, "targetBounds == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
 		final Image targetImage = this;
 		
-		final int sourceMinimumX = sourceRectangle.getA().getX();
-		final int sourceMinimumY = sourceRectangle.getA().getY();
-		final int sourceMaximumX = sourceRectangle.getC().getX();
-		final int sourceMaximumY = sourceRectangle.getC().getY();
-		final int targetMinimumX = targetRectangle.getA().getX();
-		final int targetMinimumY = targetRectangle.getA().getY();
-		final int targetMaximumX = targetRectangle.getC().getX();
-		final int targetMaximumY = targetRectangle.getC().getY();
+		final int sourceMinimumX = sourceBounds.getA().getX();
+		final int sourceMinimumY = sourceBounds.getA().getY();
+		final int sourceMaximumX = sourceBounds.getC().getX();
+		final int sourceMaximumY = sourceBounds.getC().getY();
+		final int targetMinimumX = targetBounds.getA().getX();
+		final int targetMinimumY = targetBounds.getA().getY();
+		final int targetMaximumX = targetBounds.getC().getX();
+		final int targetMaximumY = targetBounds.getC().getY();
 		
 		for(int sourceY = sourceMinimumY, targetY = targetMinimumY; sourceY <= sourceMaximumY && targetY <= targetMaximumY; sourceY++, targetY++) {
 			for(int sourceX = sourceMinimumX, targetX = targetMinimumX; sourceX <= sourceMaximumX && targetX <= targetMaximumX; sourceX++, targetX++) {
@@ -707,12 +969,37 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code rectangle} in this {@code Image} instance with {@code Color3F.BLACK} as its color.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * image.fillRectangle(rectangle, Color3F.BLACK);
+	 * </pre>
+	 * 
+	 * @param rectangle the {@link Line2I} to fill
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 */
 	public void fillRectangle(final Rectangle2I rectangle) {
 		fillRectangle(rectangle, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code rectangle} in this {@code Image} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * If either {@code rectangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * image.fillRectangle(rectangle, pixel -> colorRGB);
+	 * </pre>
+	 * 
+	 * @param rectangle the {@link Rectangle2I} to fill
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code colorRGB} are {@code null}
+	 */
 	public void fillRectangle(final Rectangle2I rectangle, final Color3F colorRGB) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -720,7 +1007,15 @@ public final class Image {
 		fillRectangle(rectangle, pixel -> colorRGB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code rectangle} in this {@code Image} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * <p>
+	 * If either {@code rectangle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle the {@link Rectangle2I} to fill
+	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code function} are {@code null} or {@code function} returns {@code null}
+	 */
 	public void fillRectangle(final Rectangle2I rectangle, final Function<Pixel, Color3F> function) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(function, "function == null");
@@ -743,12 +1038,37 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code triangle} in this {@code Image} instance with {@code Color3F.BLACK} as its color.
+	 * <p>
+	 * If {@code triangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * image.fillTriangle(triangle, Color3F.BLACK);
+	 * </pre>
+	 * 
+	 * @param triangle the {@link Triangle2I} to fill
+	 * @throws NullPointerException thrown if, and only if, {@code triangle} is {@code null}
+	 */
 	public void fillTriangle(final Triangle2I triangle) {
 		fillTriangle(triangle, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code triangle} in this {@code Image} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * If either {@code triangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * image.fillTriangle(triangle, pixel -> colorRGB);
+	 * </pre>
+	 * 
+	 * @param triangle the {@link Triangle2I} to fill
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code colorRGB} are {@code null}
+	 */
 	public void fillTriangle(final Triangle2I triangle, final Color3F colorRGB) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
@@ -756,7 +1076,15 @@ public final class Image {
 		fillTriangle(triangle, pixel -> colorRGB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Fills {@code triangle} in this {@code Image} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * <p>
+	 * If either {@code triangle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangle the {@link Triangle2I} to fill
+	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code function} are {@code null} or {@code function} returns {@code null}
+	 */
 	public void fillTriangle(final Triangle2I triangle, final Function<Pixel, Color3F> function) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(function, "function == null");
@@ -858,7 +1186,9 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Clears the film.
+	 */
 	public void filmClear() {
 		for(final Pixel pixel : this.pixels) {
 			pixel.setColorXYZ(new Color3F());
@@ -867,7 +1197,11 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Renders the film to the image.
+	 * 
+	 * @param splatScale the splat scale to use
+	 */
 	public void filmRender(final float splatScale) {
 		for(final Pixel pixel : this.pixels) {
 			Color3F colorRGB = Color3F.convertXYZToRGBUsingPBRT(pixel.getColorXYZ());
@@ -885,7 +1219,9 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Flips this {@code Image} instance along the X-axis.
+	 */
 	public void flipX() {
 		for(int xL = 0, xR = this.resolutionX - 1; xL < xR; xL++, xR--) {
 			for(int y = 0; y < this.resolutionY; y++) {
@@ -894,7 +1230,9 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Flips this {@code Image} instance along the Y-axis.
+	 */
 	public void flipY() {
 		for(int yT = 0, yB = this.resolutionY - 1; yT < yB; yT++, yB--) {
 			for(int x = 0; x < this.resolutionX; x++) {
@@ -1125,12 +1463,46 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Loads an {@code Image} from the file represented by the filename {@code filename}.
+	 * <p>
+	 * Returns a new {@code Image} instance.
+	 * <p>
+	 * If {@code filename} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Image.load(filename, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param filename a {@code String} that represents the filename of the file to load from
+	 * @return a new {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code filename} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
 	public static Image load(final String filename) {
 		return load(filename, new MitchellFilter());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Loads an {@code Image} from the file represented by the filename {@code filename}.
+	 * <p>
+	 * Returns a new {@code Image} instance.
+	 * <p>
+	 * If either {@code filename} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param filename a {@code String} that represents the filename of the file to load from
+	 * @param filter the {@link Filter} to use
+	 * @return a new {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code filename} or {@code filter} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
 	public static Image load(final String filename, final Filter filter) {
 		return load(new File(Objects.requireNonNull(filename, "filename == null")), Objects.requireNonNull(filter, "filter == null"));
 	}

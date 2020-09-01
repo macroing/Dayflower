@@ -34,17 +34,25 @@ public final class ImageTest {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(final String[] args) {
+		doTestImageDrawCircle();
 //		doTestImageDrawLine();
 //		doTestImageDrawRectangle();
 //		doTestImageDrawTriangle();
 //		doTestImageFillCircle();
-		doTestImageFillImage();
+//		doTestImageFillImage();
 //		doTestImageFillRectangle();
 //		doTestImageFillTriangle();
 //		doTestImageSave();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	static void doTestImageDrawCircle() {
+		final
+		Image image = new Image(800, 800, Color3F.WHITE);
+		image.drawCircle(new Circle2I(new Point2I(60, 60), 40));
+		image.save("./generated/doTestImageDrawCircle.png");
+	}
 	
 	static void doTestImageDrawLine() {
 		final

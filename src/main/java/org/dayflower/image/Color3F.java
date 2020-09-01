@@ -641,7 +641,7 @@ public final class Color3F {
 		final int g = getAsIntG();
 		final int b = getAsIntB();
 		
-		return packedIntComponentOrder.pack(r, g, b);
+		return packedIntComponentOrder.pack(r, g, b, 255);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1372,6 +1372,17 @@ public final class Color3F {
 		final int b = packedIntComponentOrder.unpackB(color);
 		
 		return new Color3F(r, g, b);
+	}
+	
+//	TODO: Add Javadocs!
+	public static Color3F[] random(final int length) {
+		final Color3F[] colors = new Color3F[length];
+		
+		for(int i = 0; i < colors.length; i++) {
+			colors[i] = random();
+		}
+		
+		return colors;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

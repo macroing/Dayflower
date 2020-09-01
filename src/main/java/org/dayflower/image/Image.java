@@ -38,14 +38,17 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.geometry.Circle2I;
 import org.dayflower.geometry.Line2I;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Rasterizer2I;
 import org.dayflower.geometry.Rectangle2I;
+import org.dayflower.geometry.Triangle2I;
 
 /**
  * An {@code Image} is an image that can be drawn to.
@@ -300,7 +303,7 @@ public final class Image {
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
 	public Color3F getColorRGB(final int index, final PixelOperation pixelOperation) {
-		return doGetColorRGBOrDefault(pixelOperation.getIndex(index, this.resolution), Color3F.BLACK);
+		return getPixel(index, pixelOperation).map(pixel -> pixel.getColorRGB()).orElse(Color3F.BLACK);
 	}
 	
 	/**
@@ -335,27 +338,91 @@ public final class Image {
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
 	public Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
-		return doGetColorRGBOrDefault(pixelOperation.getX(x, this.resolutionX), pixelOperation.getY(y, this.resolutionY), Color3F.BLACK);
+		return getPixel(x, y, pixelOperation).map(pixel -> pixel.getColorRGB()).orElse(Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the optional {@link Pixel} located at {@code index}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getPixel(index, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param index the index of the {@code Pixel}
+	 * @return the optional {@code Pixel} located at {@code index}
+	 */
 	public Optional<Pixel> getPixel(final int index) {
 		return getPixel(index, PixelOperation.NO_CHANGE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the optional {@link Pixel} located at {@code index}.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param index the index of the {@code Pixel}
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the optional {@code Pixel} located at {@code index}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
 	public Optional<Pixel> getPixel(final int index, final PixelOperation pixelOperation) {
-		return doGetOptionalPixel(pixelOperation.getIndex(index, this.resolution));
+		final int resolution = this.resolution;
+		final int indexTransformed = pixelOperation.getIndex(index, resolution);
+		
+		if(indexTransformed >= 0 && indexTransformed < resolution) {
+			return Optional.of(this.pixels[indexTransformed]);
+		}
+		
+		return Optional.empty();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the optional {@link Pixel} located at {@code x} and {@code y}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getPixel(x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-coordinate of the {@code Pixel}
+	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @return the optional {@code Pixel} located at {@code x} and {@code y}
+	 */
 	public Optional<Pixel> getPixel(final int x, final int y) {
 		return getPixel(x, y, PixelOperation.NO_CHANGE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the optional {@link Pixel} located at {@code x} and {@code y}.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param x the X-coordinate of the {@code Pixel}
+	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the optional {@code Pixel} located at {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
 	public Optional<Pixel> getPixel(final int x, final int y, final PixelOperation pixelOperation) {
-		return doGetOptionalPixel(pixelOperation.getX(x, this.resolutionX), pixelOperation.getY(y, this.resolutionY));
+		final int resolutionX = this.resolutionX;
+		final int resolutionY = this.resolutionY;
+		final int xTransformed = pixelOperation.getX(x, resolutionX);
+		final int yTransformed = pixelOperation.getY(y, resolutionY);
+		
+		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
+			return Optional.of(this.pixels[y * resolutionX + x]);
+		}
+		
+		return Optional.empty();
 	}
 	
 	/**
@@ -535,6 +602,183 @@ public final class Image {
 	}
 	
 //	TODO: Add Javadocs!
+	public void drawTriangle(final Triangle2I triangle) {
+		drawTriangle(triangle, Color3F.BLACK);
+	}
+	
+//	TODO: Add Javadocs!
+	public void drawTriangle(final Triangle2I triangle, final Color3F colorRGB) {
+		Objects.requireNonNull(triangle, "triangle == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		drawTriangle(triangle, pixel -> colorRGB);
+	}
+	
+//	TODO: Add Javadocs!
+	public void drawTriangle(final Triangle2I triangle, final Function<Pixel, Color3F> function) {
+		Objects.requireNonNull(triangle, "triangle == null");
+		Objects.requireNonNull(function, "function == null");
+		
+		drawLine(new Line2I(triangle.getA(), triangle.getB()), function);
+		drawLine(new Line2I(triangle.getB(), triangle.getC()), function);
+		drawLine(new Line2I(triangle.getC(), triangle.getA()), function);
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillCircle(final Circle2I circle) {
+		fillCircle(circle, Color3F.BLACK);
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillCircle(final Circle2I circle, final Color3F colorRGB) {
+		Objects.requireNonNull(circle, "circle == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		fillCircle(circle, pixel -> colorRGB);
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillCircle(final Circle2I circle, final Function<Pixel, Color3F> function) {
+		Objects.requireNonNull(circle, "circle == null");
+		Objects.requireNonNull(function, "function == null");
+		
+		for(int y = -circle.getRadius(); y <= circle.getRadius(); y++) {
+			for(int x = -circle.getRadius(); x <= circle.getRadius(); x++) {
+				if(x * x + y * y <= circle.getRadius() * circle.getRadius()) {
+					final Optional<Pixel> optionalPixel = getPixel(x + circle.getCenter().getX(), y + circle.getCenter().getY());
+					
+					if(optionalPixel.isPresent()) {
+						final
+						Pixel pixel = optionalPixel.get();
+						pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+					}
+				}
+			}
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillImage(final Image sourceImage) {
+		fillImage(sourceImage, new Rectangle2I(new Point2I(), new Point2I(sourceImage.resolutionX, sourceImage.resolutionY)));
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillImage(final Image sourceImage, final Rectangle2I sourceRectangle) {
+		fillImage(sourceImage, sourceRectangle, new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY)));
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillImage(final Image sourceImage, final Rectangle2I sourceRectangle, final Rectangle2I targetRectangle) {
+		fillImage(sourceImage, sourceRectangle, targetRectangle, (sourcePixel, targetPixel) -> sourcePixel.getColorRGB());
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillImage(final Image sourceImage, final Rectangle2I sourceRectangle, final Rectangle2I targetRectangle, final BiFunction<Pixel, Pixel, Color3F> biFunction) {
+		Objects.requireNonNull(sourceImage, "sourceImage == null");
+		Objects.requireNonNull(sourceRectangle, "sourceRectangle == null");
+		Objects.requireNonNull(targetRectangle, "targetRectangle == null");
+		Objects.requireNonNull(biFunction, "biFunction == null");
+		
+		final Image targetImage = this;
+		
+		final int sourceMinimumX = sourceRectangle.getA().getX();
+		final int sourceMinimumY = sourceRectangle.getA().getY();
+		final int sourceMaximumX = sourceRectangle.getC().getX();
+		final int sourceMaximumY = sourceRectangle.getC().getY();
+		final int targetMinimumX = targetRectangle.getA().getX();
+		final int targetMinimumY = targetRectangle.getA().getY();
+		final int targetMaximumX = targetRectangle.getC().getX();
+		final int targetMaximumY = targetRectangle.getC().getY();
+		
+		for(int sourceY = sourceMinimumY, targetY = targetMinimumY; sourceY <= sourceMaximumY && targetY <= targetMaximumY; sourceY++, targetY++) {
+			for(int sourceX = sourceMinimumX, targetX = targetMinimumX; sourceX <= sourceMaximumX && targetX <= targetMaximumX; sourceX++, targetX++) {
+				final Optional<Pixel> sourceOptionalPixel = sourceImage.getPixel(sourceX, sourceY);
+				final Optional<Pixel> targetOptionalPixel = targetImage.getPixel(targetX, targetY);
+				
+				if(sourceOptionalPixel.isPresent() && targetOptionalPixel.isPresent()) {
+					final Pixel sourcePixel = sourceOptionalPixel.get();
+					final Pixel targetPixel = targetOptionalPixel.get();
+					
+					final Color3F colorRGB = biFunction.apply(sourcePixel, targetPixel);
+					
+					targetPixel.setColorRGB(colorRGB);
+				}
+			}
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillRectangle(final Rectangle2I rectangle) {
+		fillRectangle(rectangle, Color3F.BLACK);
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillRectangle(final Rectangle2I rectangle, final Color3F colorRGB) {
+		Objects.requireNonNull(rectangle, "rectangle == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		fillRectangle(rectangle, pixel -> colorRGB);
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillRectangle(final Rectangle2I rectangle, final Function<Pixel, Color3F> function) {
+		Objects.requireNonNull(rectangle, "rectangle == null");
+		Objects.requireNonNull(function, "function == null");
+		
+		final int minimumX = rectangle.getA().getX();
+		final int minimumY = rectangle.getA().getY();
+		final int maximumX = rectangle.getC().getX();
+		final int maximumY = rectangle.getC().getY();
+		
+		for(int y = minimumY; y <= maximumY; y++) {
+			for(int x = minimumX; x <= maximumX; x++) {
+				final Optional<Pixel> optionalPixel = getPixel(x, y);
+				
+				if(optionalPixel.isPresent()) {
+					final
+					Pixel pixel = optionalPixel.get();
+					pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+				}
+			}
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillTriangle(final Triangle2I triangle) {
+		fillTriangle(triangle, Color3F.BLACK);
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillTriangle(final Triangle2I triangle, final Color3F colorRGB) {
+		Objects.requireNonNull(triangle, "triangle == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		fillTriangle(triangle, pixel -> colorRGB);
+	}
+	
+//	TODO: Add Javadocs!
+	public void fillTriangle(final Triangle2I triangle, final Function<Pixel, Color3F> function) {
+		Objects.requireNonNull(triangle, "triangle == null");
+		Objects.requireNonNull(function, "function == null");
+		
+		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
+		
+		final Point2I[][] scanLines = Rasterizer2I.rasterize(triangle, rectangle);
+		
+		for(final Point2I[] scanLine : scanLines) {
+			for(final Point2I point : scanLine) {
+				final Optional<Pixel> optionalPixel = getPixel(point.getX(), point.getY());
+				
+				if(optionalPixel.isPresent()) {
+					final
+					Pixel pixel = optionalPixel.get();
+					pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+				}
+			}
+		}
+	}
+	
+//	TODO: Add Javadocs!
 	public void filmAddColor(final float x, final float y, final Color3F colorXYZ, final float sampleWeight) {
 		final Filter filter = this.filter;
 		
@@ -675,6 +919,46 @@ public final class Image {
 		for(final Pixel pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.redoGammaCorrectionSRGB(pixel.getColorRGB()));
 		}
+	}
+	
+	/**
+	 * Saves this {@code Image} as a .PNG image to the file represented by {@code file}.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} that represents the file to save to
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void save(final File file) {
+		try {
+			final File parentFile = file.getParentFile();
+			
+			if(parentFile != null && !parentFile.isDirectory()) {
+				parentFile.mkdirs();
+			}
+			
+			ImageIO.write(toBufferedImage(), "png", Objects.requireNonNull(file, "file == null"));
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
+	 * Saves this {@code Image} as a .PNG image to the file represented by the filename {@code filename}.
+	 * <p>
+	 * If {@code filename} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param filename a {@code String} that represents the filename of the file to save to
+	 * @throws NullPointerException thrown if, and only if, {@code filename} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public void save(final String filename) {
+		save(new File(Objects.requireNonNull(filename, "filename == null")));
 	}
 	
 	/**
@@ -851,6 +1135,36 @@ public final class Image {
 		return load(new File(Objects.requireNonNull(filename, "filename == null")), Objects.requireNonNull(filter, "filter == null"));
 	}
 	
+	/**
+	 * Returns a new {@code Image} instance filled with random {@link Color3F} instances.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Image.random(800, 800);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a new {@code Image} instance filled with random {@code Color3F} instances
+	 */
+	public static Image random() {
+		return random(800, 800);
+	}
+	
+	/**
+	 * Returns a new {@code Image} instance filled with random {@link Color3F} instances.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new {@code Image} instance filled with random {@code Color3F} instances
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	public static Image random(final int resolutionX, final int resolutionY) {
+		return new Image(resolutionX, resolutionY, Color3F.random(resolutionX * resolutionY));
+	}
+	
 //	TODO: Add Javadocs!
 	public static Image unpackFromARGB(final int resolutionX, final int resolutionY, final int[] imageARGB) {
 		return unpackFromARGB(resolutionX, resolutionY, imageARGB, new MitchellFilter());
@@ -865,24 +1179,6 @@ public final class Image {
 		}
 		
 		return image;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private Color3F doGetColorRGBOrDefault(final int index, final Color3F colorRGB) {
-		return index >= 0 && index < this.resolution ? this.pixels[index].getColorRGB() : colorRGB;
-	}
-	
-	private Color3F doGetColorRGBOrDefault(final int x, final int y, final Color3F colorRGB) {
-		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? this.pixels[y * this.resolutionX + x].getColorRGB() : colorRGB;
-	}
-	
-	private Optional<Pixel> doGetOptionalPixel(final int index) {
-		return index >= 0 && index < this.resolution ? Optional.of(this.pixels[index]) : Optional.empty();
-	}
-	
-	private Optional<Pixel> doGetOptionalPixel(final int x, final int y) {
-		return x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY ? Optional.of(this.pixels[y * this.resolutionX + x]) : Optional.empty();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

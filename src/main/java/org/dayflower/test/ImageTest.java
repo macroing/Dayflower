@@ -24,6 +24,7 @@ import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Rectangle2I;
 import org.dayflower.geometry.Triangle2I;
 import org.dayflower.image.Color3F;
+import org.dayflower.image.ConvolutionKernel33F;
 import org.dayflower.image.Image;
 
 public final class ImageTest {
@@ -34,7 +35,7 @@ public final class ImageTest {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(final String[] args) {
-		doTestImageDrawCircle();
+//		doTestImageDrawCircle();
 //		doTestImageDrawLine();
 //		doTestImageDrawRectangle();
 //		doTestImageDrawTriangle();
@@ -42,6 +43,7 @@ public final class ImageTest {
 //		doTestImageFillImage();
 //		doTestImageFillRectangle();
 //		doTestImageFillTriangle();
+		doTestImageMultiplyConvolutionKernel33F();
 //		doTestImageSave();
 	}
 	
@@ -101,6 +103,13 @@ public final class ImageTest {
 		Image image = new Image(800, 800, Color3F.WHITE);
 		image.fillTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
 		image.save("./generated/doTestImageFillTriangle.png");
+	}
+	
+	static void doTestImageMultiplyConvolutionKernel33F() {
+		final
+		Image image = Image.load("./generated/Image.jpg");
+		image.multiply(ConvolutionKernel33F.GAUSSIAN_BLUR);
+		image.save("./generated/doTestImageMultiplyConvolutionKernel33F.png");
 	}
 	
 	static void doTestImageSave() {

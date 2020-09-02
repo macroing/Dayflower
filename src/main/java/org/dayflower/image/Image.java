@@ -36,6 +36,7 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -80,6 +81,23 @@ public final class Image {
 	 */
 	public Image() {
 		this(800, 800);
+	}
+	
+	/**
+	 * Constructs a new {@code Image} instance from {@code image}.
+	 * <p>
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image an {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 */
+	public Image(final Image image) {
+		this.filter = image.filter;
+		this.pixels = Arrays.stream(image.pixels).map(pixel -> pixel.copy()).toArray(Pixel[]::new);
+		this.filterTable = image.filterTable.clone();
+		this.resolution = image.resolution;
+		this.resolutionX = image.resolutionX;
+		this.resolutionY = image.resolutionY;
 	}
 	
 	/**
@@ -286,7 +304,7 @@ public final class Image {
 	 * @param index the index of the pixel
 	 * @return the {@code Color3F} of the pixel represented by {@code index}
 	 */
-	public Color3F getColor(final int index) {
+	public Color3F getColorRGB(final int index) {
 		return getColorRGB(index, PixelOperation.NO_CHANGE);
 	}
 	
@@ -339,6 +357,15 @@ public final class Image {
 	 */
 	public Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
 		return getPixel(x, y, pixelOperation).map(pixel -> pixel.getColorRGB()).orElse(Color3F.BLACK);
+	}
+	
+	/**
+	 * Returns a copy of this {@code Image} instance.
+	 * 
+	 * @return a copy of this {@code Image} instance
+	 */
+	public Image copy() {
+		return new Image(this);
 	}
 	
 	/**
@@ -1271,6 +1298,50 @@ public final class Image {
 		for(int yT = 0, yB = this.resolutionY - 1; yT < yB; yT++, yB--) {
 			for(int x = 0; x < this.resolutionX; x++) {
 				Pixel.swap(this.pixels[yT * this.resolutionX + x], this.pixels[yB * this.resolutionX + x]);
+			}
+		}
+	}
+	
+	/**
+	 * Multiplies this {@code Image} instance with {@code convolutionKernel}.
+	 * <p>
+	 * If {@code convolutionKernel} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param convolutionKernel a {@link ConvolutionKernel33F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code convolutionKernel} is {@code null}
+	 */
+	public void multiply(final ConvolutionKernel33F convolutionKernel) {
+		final Color3F factor = new Color3F(convolutionKernel.getFactor());
+		final Color3F bias = new Color3F(convolutionKernel.getBias());
+		
+		final Image image = copy();
+		
+		for(int y = 0; y < this.resolutionY; y++) {
+			for(int x = 0; x < this.resolutionX; x++) {
+				Color3F colorRGB = Color3F.BLACK;
+				
+//				Row #1:
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + -1), convolutionKernel.getElement11()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + -1), convolutionKernel.getElement12()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + -1), convolutionKernel.getElement13()));
+				
+//				Row #2:
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +0), convolutionKernel.getElement21()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +0), convolutionKernel.getElement22()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +0), convolutionKernel.getElement23()));
+				
+//				Row #3:
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +1), convolutionKernel.getElement31()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +1), convolutionKernel.getElement32()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +1), convolutionKernel.getElement33()));
+				
+//				Multiply with the factor and add the bias:
+				colorRGB = Color3F.multiply(colorRGB, factor);
+				colorRGB = Color3F.add(colorRGB, bias);
+				colorRGB = Color3F.minimumTo0(colorRGB);
+				colorRGB = Color3F.maximumTo1(colorRGB);
+				
+				setColorRGB(colorRGB, x, y);
 			}
 		}
 	}

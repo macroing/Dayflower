@@ -98,6 +98,15 @@ public final class Pixel {
 	}
 	
 	/**
+	 * Returns a copy of this {@code Pixel} instance.
+	 * 
+	 * @return a copy of this {@code Pixel} instance
+	 */
+	public Pixel copy() {
+		return new Pixel(this.colorRGB, this.colorXYZ, this.splatXYZ, this.filterWeightSum, this.index, this.x, this.y);
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code Pixel} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code Pixel} instance

@@ -1321,12 +1321,61 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Applies a filmic curve tone map operator to {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.toneMapFilmicCurve(color, exposure, a, b, c, d, e, 0.0F, Float.MIN_VALUE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @param exposure the exposure to use
+	 * @param a a {@code float} value for the filmic curve itself
+	 * @param b a {@code float} value for the filmic curve itself
+	 * @param c a {@code float} value for the filmic curve itself
+	 * @param d a {@code float} value for the filmic curve itself
+	 * @param e a {@code float} value for the filmic curve itself
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F toneMapFilmicCurve(final Color3F color, final float exposure, final float a, final float b, final float c, final float d, final float e) {
 		return toneMapFilmicCurve(color, exposure, a, b, c, d, e, 0.0F, Float.MIN_VALUE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Applies a filmic curve tone map operator to {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method is implemented in the following way for each component:
+	 * <pre>
+	 * {@code
+	 * float component11 = Floats.max(color.getComponent1() * exposure - subtract, minimum);
+	 * float component12 = Floats.saturate((component11 * (a * component11 + b)) / (component11 * (c * component11 + d) + e));
+	 * }
+	 * </pre>
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @param exposure the exposure to use
+	 * @param a a {@code float} value for the filmic curve itself
+	 * @param b a {@code float} value for the filmic curve itself
+	 * @param c a {@code float} value for the filmic curve itself
+	 * @param d a {@code float} value for the filmic curve itself
+	 * @param e a {@code float} value for the filmic curve itself
+	 * @param subtract a value to subtract from the component values when they have been multiplied by {@code exposure}
+	 * @param minimum the minimum component value allowed
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F toneMapFilmicCurve(final Color3F color, final float exposure, final float a, final float b, final float c, final float d, final float e, final float subtract, final float minimum) {
 		final float component11 = max(color.component1 * exposure - subtract, minimum);
 		final float component21 = max(color.component2 * exposure - subtract, minimum);
@@ -1339,19 +1388,68 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
-//	TODO: Add Javadocs!
-	public static Color3F toneMapFilmicCurveACES2(final Color3F color, final float exposure) {
+	/**
+	 * Applies a modified ACES filmic curve tone map operator to {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.toneMapFilmicCurve(color, exposure, 2.51F, 0.03F, 2.43F, 0.59F, 0.14F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @param exposure the exposure to use
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F toneMapFilmicCurveACESModifiedVersion1(final Color3F color, final float exposure) {
 //		Source: https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
 		return toneMapFilmicCurve(color, exposure, 2.51F, 0.03F, 2.43F, 0.59F, 0.14F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Applies a filmic curve tone map operator to {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This tone map operator also performs gamma correction with a gamma of 2.2.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.toneMapFilmicCurve(color, exposure, 6.2F, 0.5F, 6.2F, 1.7F, 0.06F, 0.004F, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @param exposure the exposure to use
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F toneMapFilmicCurveGammaCorrection22(final Color3F color, final float exposure) {
 //		Source: http://filmicworlds.com/blog/why-a-filmic-curve-saturates-your-blacks/
 		return toneMapFilmicCurve(color, exposure, 6.2F, 0.5F, 6.2F, 1.7F, 0.06F, 0.004F, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Applies a Reinhard tone map operator to {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @param exposure the exposure to use
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F toneMapReinhard(final Color3F color, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
@@ -1366,7 +1464,18 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Applies a modified Reinhard tone map operator to {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @param exposure the exposure to use
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F toneMapReinhardModifiedVersion1(final Color3F color, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
@@ -1383,7 +1492,18 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Applies a modified Reinhard tone map operator to {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @param exposure the exposure to use
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F toneMapReinhardModifiedVersion2(final Color3F color, final float exposure) {
 		final float component11 = color.component1 * exposure;
 		final float component21 = color.component2 * exposure;
@@ -1396,7 +1516,18 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Applies an Unreal 3 tone map operator to {@code color}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @param exposure the exposure to use
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F toneMapUnreal3(final Color3F color, final float exposure) {
 //		Source: https://www.shadertoy.com/view/WdjSW3
 		
@@ -1445,12 +1576,33 @@ public final class Color3F {
 		return ColorSpace3F.SRGB.undoGammaCorrection(color);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Color3F} instance by unpacking {@code color} using {@code PackedIntComponentOrder.ARGB}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.unpack(color, PackedIntComponentOrder.ARGB);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color an {@code int} with the color in packed form
+	 * @return a {@code Color3F} instance by unpacking {@code color} using {@code PackedIntComponentOrder.ARGB}
+	 */
 	public static Color3F unpack(final int color) {
 		return unpack(color, PackedIntComponentOrder.ARGB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Color3F} instance by unpacking {@code color} using {@code packedIntComponentOrder}.
+	 * <p>
+	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color an {@code int} with the color in packed form
+	 * @param packedIntComponentOrder the {@link PackedIntComponentOrder} to unpack the component values with
+	 * @return a {@code Color3F} instance by unpacking {@code color} using {@code packedIntComponentOrder}
+	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
+	 */
 	public static Color3F unpack(final int color, final PackedIntComponentOrder packedIntComponentOrder) {
 		final int r = packedIntComponentOrder.unpackR(color);
 		final int g = packedIntComponentOrder.unpackG(color);
@@ -1459,7 +1611,15 @@ public final class Color3F {
 		return new Color3F(r, g, b);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Color3F[]} with a length of {@code length} and contains random {@code Color3F} instances.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the array
+	 * @return a {@code Color3F[]} with a length of {@code length} and contains random {@code Color3F} instances
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
 	public static Color3F[] random(final int length) {
 		final Color3F[] colors = new Color3F[requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		

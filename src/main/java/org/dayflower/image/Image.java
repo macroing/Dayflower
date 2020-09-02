@@ -26,6 +26,7 @@ import static org.dayflower.util.Floats.floor;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Ints.min;
+import static org.dayflower.util.Ints.requireExact;
 import static org.dayflower.util.Ints.requireRange;
 import static org.dayflower.util.Ints.toInt;
 
@@ -35,7 +36,6 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -1106,8 +1106,39 @@ public final class Image {
 		}
 	}
 	
-//	TODO: Add Javadocs!
-	public void filmAddColor(final float x, final float y, final Color3F colorXYZ, final float sampleWeight) {
+	/**
+	 * Adds {@code colorXYZ} to the {@link Pixel} instances located around {@code x} and {@code y}.
+	 * <p>
+	 * If {@code colorXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.filmAddColorXYZ(x, y, colorXYZ, 1.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-coordinate of the {@code Pixel}
+	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param colorXYZ the color to add
+	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
+	 */
+	public void filmAddColorXYZ(final float x, final float y, final Color3F colorXYZ) {
+		filmAddColorXYZ(x, y, colorXYZ, 1.0F);
+	}
+	
+	/**
+	 * Adds {@code colorXYZ} to the {@link Pixel} instances located around {@code x} and {@code y}.
+	 * <p>
+	 * If {@code colorXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param x the X-coordinate of the {@code Pixel}
+	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param colorXYZ the color to add
+	 * @param sampleWeight the sample weight to use
+	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
+	 */
+	public void filmAddColorXYZ(final float x, final float y, final Color3F colorXYZ, final float sampleWeight) {
 		final Filter filter = this.filter;
 		
 		final Pixel[] pixels = this.pixels;
@@ -1144,46 +1175,49 @@ public final class Image {
 			
 			for(int filterY = minimumFilterY; filterY <= maximumFilterY; filterY++) {
 				for(int filterX = minimumFilterX; filterX <= maximumFilterX; filterX++) {
-					final int filterTableIndex = filterOffsetY[filterY - minimumFilterY] * FILTER_TABLE_SIZE + filterOffsetX[filterX - minimumFilterX];
-					final int pixelIndex = filterY * resolutionX + filterX;
-					
-					final float filterWeight = filterTable[filterTableIndex];
-					
-					final Pixel pixel = pixels[pixelIndex];
-					
-					final Color3F oldColorXYZ = pixel.getColorXYZ();
-					final Color3F newColorXYZ = Color3F.add(oldColorXYZ, Color3F.multiply(colorXYZ, sampleWeight * filterWeight));
-					
-					final float oldFilterWeightSum = pixel.getFilterWeightSum();
-					final float newFilterWeightSum = oldFilterWeightSum + filterWeight;
-					
-					pixel.setColorXYZ(newColorXYZ);
-					pixel.setFilterWeightSum(newFilterWeightSum);
+					final
+					Pixel pixel = pixels[filterY * resolutionX + filterX];
+					pixel.addColorXYZ(colorXYZ, sampleWeight, filterTable[filterOffsetY[filterY - minimumFilterY] * FILTER_TABLE_SIZE + filterOffsetX[filterX - minimumFilterX]]);
 				}
 			}
 		}
 	}
 	
-//	TODO: Add Javadocs!
-	public void filmAddSplat(final float x, final float y, final Color3F splatXYZ) {
-		final Pixel[] pixels = this.pixels;
+	/**
+	 * Adds {@code splatXYZ} to the {@link Pixel} instance located at {@code x} and {@code y}.
+	 * <p>
+	 * If {@code splatXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.filmAddSplatXYZ(Ints.toInt(Floats.floor(x)), Ints.toInt(Floats.floor(y)), splatXYZ);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-coordinate of the {@code Pixel}
+	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param splatXYZ the splat to add
+	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
+	 */
+	public void filmAddSplatXYZ(final float x, final float y, final Color3F splatXYZ) {
+		filmAddSplatXYZ(toInt(floor(x)), toInt(floor(y)), splatXYZ);
+	}
+	
+	/**
+	 * Adds {@code splatXYZ} to the {@link Pixel} instance located at {@code x} and {@code y}.
+	 * <p>
+	 * If {@code splatXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param x the X-coordinate of the {@code Pixel}
+	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param splatXYZ the splat to add
+	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
+	 */
+	public void filmAddSplatXYZ(final int x, final int y, final Color3F splatXYZ) {
+		Objects.requireNonNull(splatXYZ, "splatXYZ == null");
 		
-		final int currentX = toInt(floor(x));
-		final int currentY = toInt(floor(y));
-		
-		final int resolutionX = this.resolutionX;
-		final int resolutionY = this.resolutionY;
-		
-		if(currentX >= 0 && currentX < resolutionX && currentY >= 0 && currentY < resolutionY) {
-			final int pixelIndex = currentY * resolutionX + currentX;
-			
-			final Pixel pixel = pixels[pixelIndex];
-			
-			final Color3F oldSplatXYZ = pixel.getSplatXYZ();
-			final Color3F newSplatXYZ = Color3F.add(oldSplatXYZ, splatXYZ);
-			
-			pixel.setSplatXYZ(newSplatXYZ);
-		}
+		getPixel(x, y).ifPresent(pixel -> pixel.addSplatXYZ(splatXYZ));
 	}
 	
 	/**
@@ -1537,14 +1571,54 @@ public final class Image {
 		return new Image(resolutionX, resolutionY, Color3F.random(resolutionX * resolutionY));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Unpacks {@code imageARGB} into an {@code Image} instance using {@code PackedIntComponentOrder.ARGB}.
+	 * <p>
+	 * Returns an {@code Image} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code imageARGB.length != resolutionX * resolutionY}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code imageARGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Image.unpackFromARGB(resolutionX, resolutionY, imageARGB, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param imageARGB an {@code int[]} with {@code int} values representing colors in packed form as ARGB
+	 * @return an {@code Image} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code imageARGB.length != resolutionX * resolutionY}
+	 * @throws NullPointerException thrown if, and only if, {@code imageARGB} is {@code null}
+	 */
 	public static Image unpackFromARGB(final int resolutionX, final int resolutionY, final int[] imageARGB) {
 		return unpackFromARGB(resolutionX, resolutionY, imageARGB, new MitchellFilter());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Unpacks {@code imageARGB} into an {@code Image} instance using {@code PackedIntComponentOrder.ARGB}.
+	 * <p>
+	 * Returns an {@code Image} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code imageARGB.length != resolutionX * resolutionY}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code imageARGB} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param imageARGB an {@code int[]} with {@code int} values representing colors in packed form as ARGB
+	 * @param filter the {@link Filter} to use
+	 * @return an {@code Image} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code imageARGB.length != resolutionX * resolutionY}
+	 * @throws NullPointerException thrown if, and only if, either {@code imageARGB} or {@code filter} are {@code null}
+	 */
 	public static Image unpackFromARGB(final int resolutionX, final int resolutionY, final int[] imageARGB, final Filter filter) {
 		final Image image = new Image(resolutionX, resolutionY, new Color3F(), filter);
+		
+		requireExact(imageARGB.length, resolutionX * resolutionY, "imageARGB.length");
 		
 		for(int i = 0; i < image.resolution; i++) {
 			image.setColorRGB(Color3F.unpack(imageARGB[i], PackedIntComponentOrder.ARGB), i);

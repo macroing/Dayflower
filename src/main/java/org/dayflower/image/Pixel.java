@@ -187,6 +187,33 @@ public final class Pixel {
 	}
 	
 	/**
+	 * Adds {@code colorXYZ} to the color of this {@code Pixel} instance that is used by the film.
+	 * <p>
+	 * If {@code colorXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorXYZ the color to add to this {@code Pixel} instance
+	 * @param sampleWeight the sample weight to use
+	 * @param filterWeight the filter weight to use
+	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
+	 */
+	public void addColorXYZ(final Color3F colorXYZ, final float sampleWeight, final float filterWeight) {
+		setColorXYZ(Color3F.add(getColorXYZ(), Color3F.multiply(Objects.requireNonNull(colorXYZ, "colorXYZ == null"), sampleWeight * filterWeight)));
+		setFilterWeightSum(getFilterWeightSum() + filterWeight);
+	}
+	
+	/**
+	 * Adds {@code splatXYZ} to the splat of this {@code Pixel} instance that is used by the film.
+	 * <p>
+	 * If {@code splatXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param splatXYZ the splat to add to this {@code Pixel} instance
+	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
+	 */
+	public void addSplatXYZ(final Color3F splatXYZ) {
+		setSplatXYZ(Color3F.add(getSplatXYZ(), Objects.requireNonNull(splatXYZ, "splatXYZ == null")));
+	}
+	
+	/**
 	 * Sets {@code colorRGB} as the color of this {@code Pixel} instance.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.

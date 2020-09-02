@@ -22,9 +22,12 @@ import static org.dayflower.util.Floats.toFloat;
 import static org.dayflower.util.Ints.abs;
 import static org.dayflower.util.Ints.toInt;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A class that performs rasterization on {@link Line2I} and {@link Triangle2I} instances.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Rasterizer2I {
 	private Rasterizer2I() {
 		
@@ -32,7 +35,18 @@ public final class Rasterizer2I {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Clips {@code line} against {@code rectangle} and rasterizes the result.
+	 * <p>
+	 * Returns a {@code Point2I[]} that represents a scanline.
+	 * <p>
+	 * If either {@code line} or {@code rectangle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param line the {@link Line2I} to rasterize
+	 * @param rectangle the {@link Rectangle2I} to clip against
+	 * @return a {@code Point2I[]} that represents a scanline
+	 * @throws NullPointerException thrown if, and only if, either {@code line} or {@code rectangle} are {@code null}
+	 */
 	public static Point2I[] rasterize(final Line2I line, final Rectangle2I rectangle) {
 		final int lAX = line.getA().getX();
 		final int lAY = line.getA().getY();
@@ -89,7 +103,18 @@ public final class Rasterizer2I {
 		return scanLine;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Clips {@code triangle} against {@code rectangle} and rasterizes the result.
+	 * <p>
+	 * Returns a {@code Point2I[][]} that represents scanlines.
+	 * <p>
+	 * If either {@code triangle} or {@code rectangle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param triangle the {@link Triangle2I} to rasterize
+	 * @param rectangle the {@link Rectangle2I} to clip against
+	 * @return a {@code Point2I[][]} that represents scanlines
+	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code rectangle} are {@code null}
+	 */
 	public static Point2I[][] rasterize(final Triangle2I triangle, final Rectangle2I rectangle) {
 		final Point2I[] vertices = new Point2I[] {triangle.getA(), triangle.getB(), triangle.getC()};
 		

@@ -28,7 +28,6 @@ import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Ints.toInt;
 import static org.dayflower.util.Ints.requireRange;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.util.Floats;
@@ -1010,7 +1009,32 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Restricts the component values of {@code color} by dividing them with the maximum component value that is greater than {@code 1.0}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the division, or {@code color} if no division occurred.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method can overflow if the delta between the minimum and maximum component values are large.
+	 * <p>
+	 * If at least one of the component values are negative, consider calling {@link #minimumTo0(Color3F)} before calling this method.
+	 * <p>
+	 * To use this method consider the following example:
+	 * <pre>
+	 * {@code
+	 * Color3F a = new Color3F(0.0F, 1.0F, 2.0F);
+	 * Color3F b = Color3F.maximumTo1(a);
+	 * 
+	 * //a.getComponent1() = 0.0F, a.getComponent2() = 1.0F, a.getComponent3() = 2.0F
+	 * //b.getComponent1() = 0.0F, b.getComponent2() = 0.5F, b.getComponent3() = 1.0F
+	 * }
+	 * </pre>
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the division, or {@code color} if no division occurred
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F maximumTo1(final Color3F color) {
 		final float maximum = color.maximum();
 		
@@ -1043,7 +1067,32 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Restricts the component values of {@code color} by adding the minimum component value that is less than {@code 0.0} to them.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the addition, or {@code color} if no addition occurred.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method can overflow if the delta between the minimum and maximum component values are large.
+	 * <p>
+	 * Consider calling {@link #maximumTo1(Color3F)} after a call to this method.
+	 * <p>
+	 * To use this method consider the following example:
+	 * <pre>
+	 * {@code
+	 * Color3F a = new Color3F(-2.0F, 0.0F, 1.0F);
+	 * Color3F b = Color3F.minimumTo0(a);
+	 * 
+	 * //a.getComponent1() = -2.0F, a.getComponent2() = 0.0F, a.getComponent3() = 1.0F
+	 * //b.getComponent1() =  0.0F, b.getComponent2() = 2.0F, b.getComponent3() = 3.0F
+	 * }
+	 * </pre>
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the addition, or {@code color} if no addition occurred
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F minimumTo0(final Color3F color) {
 		final float minimum = color.minimum();
 		
@@ -1278,12 +1327,41 @@ public final class Color3F {
 		return ColorSpace3F.SRGB.redoGammaCorrection(color);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Saturates or clamps {@code color} to the range {@code [0.0F, 1.0F]}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.saturate(color, 0.0F, 1.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F saturate(final Color3F color) {
 		return saturate(color, 0.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Saturates or clamps {@code color} to the range {@code [Floats.min(edgeA, edgeB), Floats.max(edgeA, edgeB)]}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @param edgeA the minimum or maximum component value
+	 * @param edgeB the maximum or minimum component value
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F saturate(final Color3F color, final float edgeA, final float edgeB) {
 		final float component1 = Floats.saturate(color.component1, edgeA, edgeB);
 		final float component2 = Floats.saturate(color.component2, edgeA, edgeB);
@@ -1292,7 +1370,17 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Converts {@code color} to its sepia-representation.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F sepia(final Color3F color) {
 		final float component1 = color.component1 * 0.393F + color.component2 * 0.769F + color.component3 * 0.189F;
 		final float component2 = color.component1 * 0.349F + color.component2 * 0.686F + color.component3 * 0.168F;

@@ -18,9 +18,14 @@
  */
 package org.dayflower.geometry;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code Shape2I} denotes a 2-dimensional shape that uses the data type {@code int}.
+ * <p>
+ * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface Shape2I {
-//	TODO: Implement!
+	
 }

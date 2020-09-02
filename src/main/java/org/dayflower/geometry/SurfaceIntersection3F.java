@@ -20,10 +20,16 @@ package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code SurfaceIntersection3F} denotes a surface intersection between a {@link Ray3F} instance and a {@link Shape3F} instance.
+ * <p>
+ * This class can be considered immutable and thread-safe if, and only if, its associated {@code Shape3F} instance is.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class SurfaceIntersection3F {
 	private final OrthoNormalBasis33F orthoNormalBasisG;
 	private final OrthoNormalBasis33F orthoNormalBasisS;
@@ -37,7 +43,24 @@ public final class SurfaceIntersection3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SurfaceIntersection3F} instance.
+	 * <p>
+	 * If either {@code orthoNormalBasisG}, {@code orthoNormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape}, {@code surfaceNormalG} or {@code surfaceNormalS} are {@code null}, a
+	 * {@code NullPointerException} will be thrown.
+	 * 
+	 * @param orthoNormalBasisG the {@link OrthoNormalBasis33F} instance that is used as the orthonormal basis for the geometry
+	 * @param orthoNormalBasisS the {@code OrthoNormalBasis33F} instance that is used as the orthonormal basis for shading
+	 * @param textureCoordinates the {@link Point2F} instance that is used as the texture coordinates
+	 * @param surfaceIntersectionPoint the {@link Point3F} instance that is used as the surface intersection point
+	 * @param ray the {@link Ray3F} instance that was used in the intersection operation
+	 * @param shape the {@link Shape3F} instance that was intersected
+	 * @param surfaceNormalG the {@link Vector3F} instance that is used as the surface normal for the geometry
+	 * @param surfaceNormalS the {@code Vector3F} instance that is used as the surface normal for shading
+	 * @param t the parametric {@code t} value that represents the distance to the intersection
+	 * @throws NullPointerException thrown if, and only if, either {@code orthoNormalBasisG}, {@code orthoNormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape}, {@code surfaceNormalG} or
+	 *                              {@code surfaceNormalS} are {@code null}
+	 */
 	public SurfaceIntersection3F(final OrthoNormalBasis33F orthoNormalBasisG, final OrthoNormalBasis33F orthoNormalBasisS, final Point2F textureCoordinates, final Point3F surfaceIntersectionPoint, final Ray3F ray, final Shape3F shape, final Vector3F surfaceNormalG, final Vector3F surfaceNormalS, final float t) {
 		this.orthoNormalBasisG = Objects.requireNonNull(orthoNormalBasisG, "orthoNormalBasisG == null");
 		this.orthoNormalBasisS = Objects.requireNonNull(orthoNormalBasisS, "orthoNormalBasisS == null");
@@ -52,53 +75,96 @@ public final class SurfaceIntersection3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link OrthoNormalBasis33F} instance that is used as the orthonormal basis for the geometry.
+	 * 
+	 * @return the {@code OrthoNormalBasis33F} instance that is used as the orthonormal basis for the geometry
+	 */
 	public OrthoNormalBasis33F getOrthoNormalBasisG() {
 		return this.orthoNormalBasisG;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link OrthoNormalBasis33F} instance that is used as the orthonormal basis for shading.
+	 * 
+	 * @return the {@code OrthoNormalBasis33F} instance that is used as the orthonormal basis for shading
+	 */
 	public OrthoNormalBasis33F getOrthoNormalBasisS() {
 		return this.orthoNormalBasisS;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Point2F} instance that is used as the texture coordinates.
+	 * 
+	 * @return the {@code Point2F} instance that is used as the texture coordinates
+	 */
 	public Point2F getTextureCoordinates() {
 		return this.textureCoordinates;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Point3F} instance that is used as the surface intersection point.
+	 * 
+	 * @return the {@code Point3F} instance that is used as the surface intersection point
+	 */
 	public Point3F getSurfaceIntersectionPoint() {
 		return this.surfaceIntersectionPoint;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Ray3F} instance that was used in the intersection operation.
+	 * 
+	 * @return the {@code Ray3F} instance that was used in the intersection operation
+	 */
 	public Ray3F getRay() {
 		return this.ray;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Shape3F} instance that was intersected.
+	 * 
+	 * @return the {@code Shape3F} instance that was intersected
+	 */
 	public Shape3F getShape() {
 		return this.shape;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code SurfaceIntersection3F} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code SurfaceIntersection3F} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new SurfaceIntersection3F(%s, %s, %s, %s, %s, %s, %s, %s, %+.10f)", this.orthoNormalBasisG, this.orthoNormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceNormalG, this.surfaceNormalS, Float.valueOf(this.t));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Vector3F} instance that is used as the surface normal for the geometry.
+	 * 
+	 * @return the {@code Vector3F} instance that is used as the surface normal for the geometry
+	 */
 	public Vector3F getSurfaceNormalG() {
 		return this.surfaceNormalG;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Vector3F} instance that is used as the surface normal for shading.
+	 * 
+	 * @return the {@code Vector3F} instance that is used as the surface normal for shading
+	 */
 	public Vector3F getSurfaceNormalS() {
 		return this.surfaceNormalS;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code SurfaceIntersection3F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SurfaceIntersection3F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code SurfaceIntersection3F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SurfaceIntersection3F}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -128,12 +194,20 @@ public final class SurfaceIntersection3F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the parametric {@code t} value that represents the distance to the intersection.
+	 * 
+	 * @return the parametric {@code t} value that represents the distance to the intersection
+	 */
 	public float getT() {
 		return this.t;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code SurfaceIntersection3F} instance.
+	 * 
+	 * @return a hash code for this {@code SurfaceIntersection3F} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.orthoNormalBasisG, this.orthoNormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceNormalG, this.surfaceNormalS, Float.valueOf(this.t));

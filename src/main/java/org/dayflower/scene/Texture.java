@@ -18,9 +18,26 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
+import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Texture} represents a texture of a surface.
+ * <p>
+ * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface Texture {
-//	TODO: Implement!
+	/**
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code surfaceIntersection}.
+	 * <p>
+	 * If {@code surfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceIntersection a {@link SurfaceIntersection3F} instance
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code surfaceIntersection}
+	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersection} is {@code null}
+	 */
+	Color3F getColor(final SurfaceIntersection3F surfaceIntersection);
 }

@@ -26,6 +26,7 @@ import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.util.Ints.requireRange;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -1163,7 +1164,18 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Color3F} instance with random component values.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color3F(Floats.random(), Floats.random(), Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color3F} instance with random component values
+	 */
 	public static Color3F random() {
 		final float component1 = Floats.random();
 		final float component2 = Floats.random();
@@ -1172,7 +1184,18 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Color3F} instance with a random component 1 value.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color3F(Floats.random(), 0.0F, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color3F} instance with a random component 1 value
+	 */
 	public static Color3F randomComponent1() {
 		final float component1 = Floats.random();
 		final float component2 = 0.0F;
@@ -1181,7 +1204,18 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Color3F} instance with a random component 2 value.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color3F(0.0F, Floats.random(), 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color3F} instance with a random component 2 value
+	 */
 	public static Color3F randomComponent2() {
 		final float component1 = 0.0F;
 		final float component2 = Floats.random();
@@ -1190,7 +1224,18 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Color3F} instance with a random component 3 value.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color3F(0.0F, 0.0F, Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color3F} instance with a random component 3 value
+	 */
 	public static Color3F randomComponent3() {
 		final float component1 = 0.0F;
 		final float component2 = 0.0F;
@@ -1199,7 +1244,17 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Redoes gamma correction on the component values of {@code color} using the algorithm provided by PBRT.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F redoGammaCorrectionPBRT(final Color3F color) {
 		final float component1 = color.component1 <= 0.0031308F ? 12.92F * color.component1 : 1.055F * pow(color.component1, 1.0F / 2.4F) - 0.055F;
 		final float component2 = color.component2 <= 0.0031308F ? 12.92F * color.component2 : 1.055F * pow(color.component2, 1.0F / 2.4F) - 0.055F;
@@ -1208,7 +1263,17 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Redoes gamma correction on the component values of {@code color} using sRGB.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F redoGammaCorrectionSRGB(final Color3F color) {
 		return ColorSpace3F.SRGB.redoGammaCorrection(color);
 	}
@@ -1346,7 +1411,17 @@ public final class Color3F {
 		return new Color3F(component12, component22, component32);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Undoes gamma correction on the component values of {@code color} using the algorithm provided by PBRT.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F undoGammaCorrectionPBRT(final Color3F color) {
 		final float component1 = color.component1 <= 0.04045F ? color.component1 * 1.0F / 12.92F : pow((color.component1 + 0.055F) * 1.0F / 1.055F, 2.4F);
 		final float component2 = color.component2 <= 0.04045F ? color.component2 * 1.0F / 12.92F : pow((color.component2 + 0.055F) * 1.0F / 1.055F, 2.4F);
@@ -1355,7 +1430,17 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Undoes gamma correction on the component values of {@code color} using sRGB.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
 	public static Color3F undoGammaCorrectionSRGB(final Color3F color) {
 		return ColorSpace3F.SRGB.undoGammaCorrection(color);
 	}
@@ -1376,7 +1461,7 @@ public final class Color3F {
 	
 //	TODO: Add Javadocs!
 	public static Color3F[] random(final int length) {
-		final Color3F[] colors = new Color3F[length];
+		final Color3F[] colors = new Color3F[requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
 		for(int i = 0; i < colors.length; i++) {
 			colors[i] = random();

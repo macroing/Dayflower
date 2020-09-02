@@ -24,7 +24,6 @@ import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.asinpi;
 import static org.dayflower.util.Floats.atan2;
-import static org.dayflower.util.Floats.coneUniformDistributionProbabilityDensityFunction;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.max;
@@ -132,7 +131,7 @@ public final class Sphere3F implements Shape3F {
 		final float radiusSquared = getRadiusSquared();
 		
 		if(lengthSquared < radiusSquared * 1.00001F) {
-			final Vector3F surfaceNormal = Vector3F.sampleSphereUniformDistribution(u, v);
+			final Vector3F surfaceNormal = SampleGeneratorF.sampleSphereUniformDistribution(u, v);
 			
 			final Point3F point = Point3F.add(center, surfaceNormal, radius);
 			
@@ -149,7 +148,7 @@ public final class Sphere3F implements Shape3F {
 		
 		final OrthoNormalBasis33F orthoNormalBasis = new OrthoNormalBasis33F(directionToCenter);
 		
-		final Vector3F coneLocalSpace = Vector3F.sampleConeUniformDistribution(u, v, cosThetaMax);
+		final Vector3F coneLocalSpace = SampleGeneratorF.sampleConeUniformDistribution(u, v, cosThetaMax);
 		final Vector3F coneGlobalSpace = Vector3F.normalize(Vector3F.transform(coneLocalSpace, orthoNormalBasis));
 		
 		final Ray3F ray = new Ray3F(referencePoint, coneGlobalSpace);
@@ -162,7 +161,7 @@ public final class Sphere3F implements Shape3F {
 		
 		final Vector3F surfaceNormal = Vector3F.directionNormalized(center, point);
 		
-		final float probabilityDensityFunctionValue = coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
+		final float probabilityDensityFunctionValue = SampleGeneratorF.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
 		
 		return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
 	}
@@ -310,7 +309,7 @@ public final class Sphere3F implements Shape3F {
 		
 		final float sinThetaMaxSquared = radiusSquared / lengthSquared;
 		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
-		final float probabilityDensityFunctionValue = coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
+		final float probabilityDensityFunctionValue = SampleGeneratorF.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
 		
 		return probabilityDensityFunctionValue;
 	}

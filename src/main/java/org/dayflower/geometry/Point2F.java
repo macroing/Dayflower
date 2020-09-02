@@ -18,14 +18,7 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.PI_DIVIDED_BY_2;
-import static org.dayflower.util.Floats.PI_DIVIDED_BY_4;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.random;
-import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
 
@@ -187,118 +180,6 @@ public final class Point2F {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Samples a point on a concentric disk.
-	 * <p>
-	 * Returns a {@code Point2F} instance with the sampled point.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Point2F.sampleConcentricDisk(Floats.random(), Floats.random());
-	 * }
-	 * </pre>
-	 * 
-	 * @return a {@code Point2F} instance with the sampled point
-	 */
-	public static Point2F sampleConcentricDisk() {
-		return sampleConcentricDisk(random(), random());
-	}
-	
-	/**
-	 * Samples a point on a concentric disk.
-	 * <p>
-	 * Returns a {@code Point2F} instance with the sampled point.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Point2F.sampleConcentricDisk(u, v, 1.0F);
-	 * }
-	 * </pre>
-	 * 
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @return a {@code Point2F} instance with the sampled point
-	 */
-	public static Point2F sampleConcentricDisk(final float u, final float v) {
-		return sampleConcentricDisk(u, v, 1.0F);
-	}
-	
-	/**
-	 * Samples a point on a concentric disk.
-	 * <p>
-	 * Returns a {@code Point2F} instance with the sampled point.
-	 * 
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param radius the radius of the disk
-	 * @return a {@code Point2F} instance with the sampled point
-	 */
-	public static Point2F sampleConcentricDisk(final float u, final float v, final float radius) {
-		if(equal(u, 0.0F) && equal(v, 0.0F)) {
-			return new Point2F();
-		}
-		
-		final float a = u * 2.0F - 1.0F;
-		final float b = v * 2.0F - 1.0F;
-		
-		if(a * a > b * b) {
-			final float phi = PI_DIVIDED_BY_4 * (b / a);
-			final float r = radius * a;
-			
-			final float component1 = cos(phi) * r;
-			final float component2 = sin(phi) * r;
-			
-			return new Point2F(component1, component2);
-		}
-		
-		final float phi = PI_DIVIDED_BY_2 - (PI_DIVIDED_BY_4 * (a / b));
-		final float r = radius * b;
-		
-		final float component1 = cos(phi) * r;
-		final float component2 = sin(phi) * r;
-		
-		return new Point2F(component1, component2);
-	}
-	
-	/**
-	 * Samples a point on a disk with a uniform distribution.
-	 * <p>
-	 * Returns a {@code Point2F} instance with the sampled point.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Point2F.sampleDiskUniformDistribution(Floats.random(), Floats.random());
-	 * }
-	 * </pre>
-	 * 
-	 * @return a {@code Point2F} instance with the sampled point
-	 */
-	public static Point2F sampleDiskUniformDistribution() {
-		return sampleDiskUniformDistribution(random(), random());
-	}
-	
-	/**
-	 * Samples a point on a disk with a uniform distribution.
-	 * <p>
-	 * Returns a {@code Point2F} instance with the sampled point.
-	 * 
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @return a {@code Point2F} instance with the sampled point
-	 */
-	public static Point2F sampleDiskUniformDistribution(final float u, final float v) {
-		final float phi = PI_MULTIPLIED_BY_2 * v;
-		final float r = sqrt(u);
-		
-		final float component1 = cos(phi) * r;
-		final float component2 = sin(phi) * r;
-		
-		return new Point2F(component1, component2);
-	}
 	
 	/**
 	 * Returns the distance from {@code eye} to {@code lookAt}.

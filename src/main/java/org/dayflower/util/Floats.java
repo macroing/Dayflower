@@ -321,16 +321,6 @@ public final class Floats {
 	}
 	
 	/**
-	 * Returns the probability density function (PDF) value for {@code cosThetaMax}.
-	 * 
-	 * @param cosThetaMax the maximum cos theta value
-	 * @return the probability density function (PDF) value for {@code cosThetaMax}
-	 */
-	public static float coneUniformDistributionProbabilityDensityFunction(final float cosThetaMax) {
-		return cosThetaMax >= 1.0F ? 0.0F : 1.0F / (2.0F * PI * (1.0F - cosThetaMax));
-	}
-	
-	/**
 	 * Returns the trigonometric cosine of {@code angleRadians}.
 	 * <p>
 	 * Special case:
@@ -520,39 +510,6 @@ public final class Floats {
 	 */
 	public static float min(final float a, final float b, final float c) {
 		return min(min(a, b), c);
-	}
-	
-	/**
-	 * Computes the balance heuristic for multiple importance sampling (MIS).
-	 * <p>
-	 * Returns the result of the computation.
-	 * 
-	 * @param probabilityDensityFunctionValueA a probability density function (PDF) value
-	 * @param probabilityDensityFunctionValueB a probability density function (PDF) value
-	 * @param sampleCountA a sample count
-	 * @param sampleCountB a sample count
-	 * @return the result of the computation
-	 */
-	public static float multipleImportanceSamplingBalanceHeuristic(final float probabilityDensityFunctionValueA, final float probabilityDensityFunctionValueB, final int sampleCountA, final int sampleCountB) {
-		return sampleCountA * probabilityDensityFunctionValueA / (sampleCountA * probabilityDensityFunctionValueA + sampleCountB * probabilityDensityFunctionValueB);
-	}
-	
-	/**
-	 * Computes the power heuristic for multiple importance sampling (MIS).
-	 * <p>
-	 * Returns the result of the computation.
-	 * 
-	 * @param probabilityDensityFunctionValueA a probability density function (PDF) value
-	 * @param probabilityDensityFunctionValueB a probability density function (PDF) value
-	 * @param sampleCountA a sample count
-	 * @param sampleCountB a sample count
-	 * @return the result of the computation
-	 */
-	public static float multipleImportanceSamplingPowerHeuristic(final float probabilityDensityFunctionValueA, final float probabilityDensityFunctionValueB, final int sampleCountA, final int sampleCountB) {
-		final float weightA = sampleCountA * probabilityDensityFunctionValueA;
-		final float weightB = sampleCountB * probabilityDensityFunctionValueB;
-		
-		return weightA * weightA / (weightA * weightA + weightB * weightB);
 	}
 	
 	/**
@@ -1081,7 +1038,7 @@ public final class Floats {
 	 * @return a {@code float} with noise computed by the Simplex algorithm using the coordinate X
 	 */
 	public static float simplexNoiseX(final float x) {
-		final int i0 = Ints.floorToInt(x);
+		final int i0 = doFastFloorToInt(x);
 		final int i1 = i0 + 1;
 		
 		final float x0 = x - i0;
@@ -1121,8 +1078,8 @@ public final class Floats {
 	public static float simplexNoiseXY(final float x, final float y) {
 		final float s = (x + y) * SIMPLEX_F2;
 		
-		final int i = Ints.floorToInt(x + s);
-		final int j = Ints.floorToInt(y + s);
+		final int i = doFastFloorToInt(x + s);
+		final int j = doFastFloorToInt(y + s);
 		
 		final float t = (i + j) * SIMPLEX_G2;
 		
@@ -1167,9 +1124,9 @@ public final class Floats {
 	public static float simplexNoiseXYZ(final float x, final float y, final float z) {
 		final float s = (x + y + z) * SIMPLEX_F3;
 		
-		final int i = Ints.floorToInt(x + s);
-		final int j = Ints.floorToInt(y + s);
-		final int k = Ints.floorToInt(z + s);
+		final int i = doFastFloorToInt(x + s);
+		final int j = doFastFloorToInt(y + s);
+		final int k = doFastFloorToInt(z + s);
 		
 		final float t = (i + j + k) * SIMPLEX_G3;
 		
@@ -1278,10 +1235,10 @@ public final class Floats {
 	public static float simplexNoiseXYZW(final float x, final float y, final float z, final float w) {
 		final float s = (x + y + z + w) * SIMPLEX_F4;
 		
-		final int i = Ints.floorToInt(x + s);
-		final int j = Ints.floorToInt(y + s);
-		final int k = Ints.floorToInt(z + s);
-		final int l = Ints.floorToInt(w + s);
+		final int i = doFastFloorToInt(x + s);
+		final int j = doFastFloorToInt(y + s);
+		final int k = doFastFloorToInt(z + s);
+		final int l = doFastFloorToInt(w + s);
 		
 		final float t = (i + j + k + l) * SIMPLEX_G4;
 		
@@ -1706,6 +1663,12 @@ public final class Floats {
 			+1.0F, +1.0F, +1.0F, +0.0F, +1.0F, +1.0F, -1.0F, +0.0F, +1.0F, -1.0F, +1.0F, +0.0F, +1.0F, -1.0F, -1.0F, +0.0F,
 			-1.0F, +1.0F, +1.0F, +0.0F, -1.0F, +1.0F, -1.0F, +0.0F, -1.0F, -1.0F, +1.0F, +0.0F, -1.0F, -1.0F, -1.0F, +0.0F
 		};
+	}
+	
+	private static int doFastFloorToInt(final float value) {
+		final int i = (int)(value);
+		
+		return value < i ? i - 1 : i;
 	}
 	
 	private static int[] doCreatePermutationsA() {

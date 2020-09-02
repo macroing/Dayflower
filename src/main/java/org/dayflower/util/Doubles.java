@@ -18,9 +18,22 @@
  */
 package org.dayflower.util;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * The class {@code Doubles} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.
+ * <p>
+ * You can think of this class as an extension of {@code Math}. It does what {@code Math} does for the {@code double}, {@code float} and {@code int} types, but for the {@code double} type only. In addition to this it also adds new methods.
+ * <p>
+ * This class does not contain all methods from {@code Math}. The methods in {@code Math} that deals with the {@code float} type can be found in the class {@link Floats}. The methods in {@code Math} that deals with the {@code int} type can be found
+ * in the class {@link Ints}.
+ * <p>
+ * The documentation in this class should be comprehensive. But some of the details covered in the documentation of the {@code Math} class may be missing. To get the full documentation for a particular method, you may want to look at the documentation
+ * of the corresponding method in the {@code Math} class. This is, of course, only true if the method you're looking at exists in the {@code Math} class.
+ * <p>
+ * Not all methods in the {@code Math} class that should be added to this class, may have been added yet.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public class Doubles {
 	private Doubles() {
 		

@@ -20,6 +20,7 @@ package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.atan2;
+import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
@@ -314,6 +315,92 @@ public final class Quaternion4F {
 		final float component4 = quaternionLHS.component4 / scalarRHS;
 		
 		return new Quaternion4F(component1, component2, component3, component4);
+	}
+	
+	/**
+	 * Returns a new {@code Quaternion4F} instance based on an {@link AngleF} instance and a {@link Vector3F} instance.
+	 * <p>
+	 * If either {@code angle} or {@code vector} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@code AngleF} instance
+	 * @param vector a {@code Vector3F} instance
+	 * @return a new {@code Quaternion4F} instance based on an {@code AngleF} instance and a {@code Vector3F} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code vector} are {@code null}
+	 */
+	public static Quaternion4F from(final AngleF angle, final Vector3F vector) {
+		final AngleF angleHalf = AngleF.half(angle);
+		
+		final float sin = sin(angleHalf.getRadians());
+		final float cos = cos(angleHalf.getRadians());
+		
+		final float component1 = vector.getComponent1() * sin;
+		final float component2 = vector.getComponent2() * sin;
+		final float component3 = vector.getComponent3() * sin;
+		final float component4 = cos;
+		
+		return new Quaternion4F(component1, component2, component3, component4);
+	}
+	
+	/**
+	 * Returns a new {@code Quaternion4F} instance based on a {@link Matrix44F} instance.
+	 * <p>
+	 * If {@code matrix} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param matrix a {@code Matrix44F} instance
+	 * @return a new {@code Quaternion4F} instance based on a {@code Matrix44F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
+	 */
+	public static Quaternion4F from(final Matrix44F matrix) {
+		final float element11 = matrix.getElement11();
+		final float element12 = matrix.getElement12();
+		final float element13 = matrix.getElement13();
+		final float element21 = matrix.getElement21();
+		final float element22 = matrix.getElement22();
+		final float element23 = matrix.getElement23();
+		final float element31 = matrix.getElement31();
+		final float element32 = matrix.getElement32();
+		final float element33 = matrix.getElement33();
+		
+		if(element11 + element22 + element33 > 0.0F) {
+			final float scalar = 0.5F / sqrt(element11 + element22 + element33 + 1.0F);
+			
+			final float component1 = (element23 - element32) * scalar;
+			final float component2 = (element31 - element13) * scalar;
+			final float component3 = (element12 - element21) * scalar;
+			final float component4 = 0.25F / scalar;
+			
+			return normalize(new Quaternion4F(component1, component2, component3, component4));
+		} else if(element11 > element22 && element11 > element33) {
+			final float scalar = 2.0F * sqrt(1.0F + element11 - element22 - element23);
+			final float scalarReciprocal = 1.0F / scalar;
+			
+			final float component1 = 0.25F * scalar;
+			final float component2 = (element21 + element12) * scalarReciprocal;
+			final float component3 = (element31 + element13) * scalarReciprocal;
+			final float component4 = (element23 - element32) * scalarReciprocal;
+			
+			return normalize(new Quaternion4F(component1, component2, component3, component4));
+		} else if(element22 > element33) {
+			final float scalar = 2.0F * sqrt(1.0F + element22 - element11 - element33);
+			final float scalarReciprocal = 1.0F / scalar;
+			
+			final float component1 = (element21 + element12) * scalarReciprocal;
+			final float component2 = 0.25F * scalar;
+			final float component3 = (element32 + element23) * scalarReciprocal;
+			final float component4 = (element31 - element13) * scalarReciprocal;
+			
+			return normalize(new Quaternion4F(component1, component2, component3, component4));
+		} else {
+			final float scalar = 2.0F * sqrt(1.0F + element33 - element11 - element22);
+			final float scalarReciprocal = 1.0F / scalar;
+			
+			final float component1 = (element31 + element13) * scalarReciprocal;
+			final float component2 = (element23 + element32) * scalarReciprocal;
+			final float component3 = 0.25F * scalar;
+			final float component4 = (element12 - element21) * scalarReciprocal;
+			
+			return normalize(new Quaternion4F(component1, component2, component3, component4));
+		}
 	}
 	
 //	TODO: Add Javadocs!

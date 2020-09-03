@@ -178,21 +178,21 @@ public final class AngleF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Adds {@code aRHS} to {@code aLHS}.
+	 * Adds {@code angleRHS} to {@code angleLHS}.
 	 * <p>
 	 * Returns a new {@code AngleF} instance with the result of the addition.
 	 * <p>
-	 * If either {@code aLHS} or {@code aRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code angleLHS} or {@code angleRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param aLHS an {@code AngleF} instance
-	 * @param aRHS an {@code AngleF} instance
+	 * @param angleLHS an {@code AngleF} instance
+	 * @param angleRHS an {@code AngleF} instance
 	 * @return a new {@code AngleF} instance with the result of the addition
-	 * @throws NullPointerException thrown if, and only if, either {@code aLHS} or {@code aRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code angleLHS} or {@code angleRHS} are {@code null}
 	 */
-	public static AngleF add(final AngleF aLHS, final AngleF aRHS) {
-		final float degreesMinimum = min(aLHS.degreesMinimum, aRHS.degreesMinimum);
-		final float degreesMaximum = max(aLHS.degreesMaximum, aRHS.degreesMaximum);
-		final float degrees = wrapAround(aLHS.degrees + aRHS.degrees, degreesMinimum, degreesMaximum);
+	public static AngleF add(final AngleF angleLHS, final AngleF angleRHS) {
+		final float degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
+		final float degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
+		final float degrees = wrapAround(angleLHS.degrees + angleRHS.degrees, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -278,15 +278,18 @@ public final class AngleF {
 	}
 	
 	/**
-	 * Returns a new {@code AngleF} instance that represents half of {@code a}.
+	 * Returns a new {@code AngleF} instance that represents half of {@code angle}.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param a an {@code AngleF} instance
-	 * @return a new {@code AngleF} instance that represents half of {@code a}
+	 * @param angle an {@code AngleF} instance
+	 * @return a new {@code AngleF} instance that represents half of {@code angle}
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
-	public static AngleF half(final AngleF a) {
-		final float degreesMinimum = a.degreesMinimum;
-		final float degreesMaximum = a.degreesMaximum;
-		final float degrees = wrapAround(a.degrees * 0.5F, degreesMinimum, degreesMaximum);
+	public static AngleF half(final AngleF angle) {
+		final float degreesMinimum = angle.degreesMinimum;
+		final float degreesMaximum = angle.degreesMaximum;
+		final float degrees = wrapAround(angle.degrees * 0.5F, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}
@@ -356,21 +359,21 @@ public final class AngleF {
 	}
 	
 	/**
-	 * Subtracts {@code aRHS} from {@code aLHS}.
+	 * Subtracts {@code angleRHS} from {@code angleLHS}.
 	 * <p>
 	 * Returns a new {@code AngleF} instance with the result of the subtraction.
 	 * <p>
-	 * If either {@code aLHS} or {@code aRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code angleLHS} or {@code angleRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param aLHS an {@code AngleF} instance
-	 * @param aRHS an {@code AngleF} instance
+	 * @param angleLHS an {@code AngleF} instance
+	 * @param angleRHS an {@code AngleF} instance
 	 * @return a new {@code AngleF} instance with the result of the subtraction
-	 * @throws NullPointerException thrown if, and only if, either {@code aLHS} or {@code aRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code angleLHS} or {@code angleRHS} are {@code null}
 	 */
-	public static AngleF subtract(final AngleF aLHS, final AngleF aRHS) {
-		final float degreesMinimum = min(aLHS.degreesMinimum, aRHS.degreesMinimum);
-		final float degreesMaximum = max(aLHS.degreesMaximum, aRHS.degreesMaximum);
-		final float degrees = wrapAround(aLHS.degrees - aRHS.degrees, degreesMinimum, degreesMaximum);
+	public static AngleF subtract(final AngleF angleLHS, final AngleF angleRHS) {
+		final float degreesMinimum = min(angleLHS.degreesMinimum, angleRHS.degreesMinimum);
+		final float degreesMaximum = max(angleLHS.degreesMaximum, angleRHS.degreesMaximum);
+		final float degrees = wrapAround(angleLHS.degrees - angleRHS.degrees, degreesMinimum, degreesMaximum);
 		
 		return degrees(degrees, degreesMinimum, degreesMaximum);
 	}

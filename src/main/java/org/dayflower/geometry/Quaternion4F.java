@@ -18,9 +18,13 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.atan2;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -312,6 +316,49 @@ public final class Quaternion4F {
 		return new Quaternion4F(component1, component2, component3, component4);
 	}
 	
+//	TODO: Add Javadocs!
+	public static Quaternion4F linearInterpolationNormalized(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS) {
+		return linearInterpolationNormalized(quaternionLHS, quaternionRHS, 0.5F);
+	}
+	
+//	TODO: Add Javadocs!
+	public static Quaternion4F linearInterpolationNormalized(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS, final float t) {
+		return linearInterpolationNormalized(quaternionLHS, quaternionRHS, t, false);
+	}
+	
+//	TODO: Add Javadocs!
+	public static Quaternion4F linearInterpolationNormalized(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS, final float t, final boolean isInterpolatingShortest) {
+		return normalize(add(multiply(subtract(isInterpolatingShortest && dotProduct(quaternionLHS, quaternionRHS) < 0.0F ? negate(quaternionRHS) : quaternionRHS, quaternionLHS), t), quaternionLHS));
+	}
+	
+//	TODO: Add Javadocs!
+	public static Quaternion4F linearInterpolationSpherical(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS) {
+		return linearInterpolationSpherical(quaternionLHS, quaternionRHS, 0.5F);
+	}
+	
+//	TODO: Add Javadocs!
+	public static Quaternion4F linearInterpolationSpherical(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS, final float t) {
+		return linearInterpolationSpherical(quaternionLHS, quaternionRHS, t, false);
+	}
+	
+//	TODO: Add Javadocs!
+	public static Quaternion4F linearInterpolationSpherical(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS, final float t, final boolean isInterpolatingShortest) {
+		final float cos = dotProduct(quaternionLHS, quaternionRHS);
+		
+		final float x = isInterpolatingShortest && cos < 0.0F ? -cos : cos;
+		final float y = sqrt(1.0F - x * x);
+		
+		final Quaternion4F quaternion1 = isInterpolatingShortest && cos < 0.0F ? negate(quaternionRHS) : quaternionRHS;
+		
+		if(abs(x) >= 1.0F - 1000.0F) {
+			return linearInterpolationNormalized(quaternionLHS, quaternion1, t);
+		}
+		
+		final float theta = atan2(y, x);
+		
+		return add(multiply(quaternionLHS, sin((1.0F - t) * theta) / y), multiply(quaternion1, sin(t * theta) / y));
+	}
+	
 	/**
 	 * Multiplies the component values of {@code quaternionLHS} with the component values of {@code quaternionRHS}.
 	 * <p>
@@ -402,6 +449,21 @@ public final class Quaternion4F {
 	}
 	
 	/**
+	 * Normalizes the component values of {@code quaternion}.
+	 * <p>
+	 * Returns a new {@code Quaternion4F} instance with the result of the normalization.
+	 * <p>
+	 * If {@code quaternion} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param quaternion a {@code Quaternion4F} instance
+	 * @return a new {@code Quaternion4F} instance with the result of the normalization
+	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
+	 */
+	public static Quaternion4F normalize(final Quaternion4F quaternion) {
+		return divide(quaternion, quaternion.length());
+	}
+	
+	/**
 	 * Subtracts the component values of {@code quaternionRHS} from the component values of {@code quaternionLHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4F} instance with the result of the subtraction.
@@ -422,5 +484,19 @@ public final class Quaternion4F {
 		final float component4 = quaternionLHS.component4 - quaternionRHS.component4;
 		
 		return new Quaternion4F(component1, component2, component3, component4);
+	}
+	
+	/**
+	 * Returns the dot product of {@code quaternionLHS} and {@code quaternionRHS}.
+	 * <p>
+	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param quaternionLHS the {@code Quaternion4F} instance on the left-hand side
+	 * @param quaternionRHS the {@code Quaternion4F} instance on the right-hand side
+	 * @return the dot product of {@code quaternionLHS} and {@code quaternionRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 */
+	public static float dotProduct(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS) {
+		return quaternionLHS.component1 * quaternionRHS.component1 + quaternionLHS.component2 * quaternionRHS.component2 + quaternionLHS.component3 * quaternionRHS.component3 + quaternionLHS.component4 * quaternionRHS.component4;
 	}
 }

@@ -23,7 +23,6 @@ import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.sin;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -444,40 +443,6 @@ public final class Matrix44F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a new {@code Matrix44F} instance from {@code orthoNormalBasis}.
-	 * <p>
-	 * If {@code orthoNormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param orthoNormalBasis an {@link OrthoNormalBasis33F} instance
-	 * @return a new {@code Matrix44F} instance from {@code orthoNormalBasis}
-	 * @throws NullPointerException thrown if, and only if, {@code orthoNormalBasis} is {@code null}
-	 */
-	public static Matrix44F from(final OrthoNormalBasis33F orthoNormalBasis) {
-		final Vector3F u = Vector3F.transform(Vector3F.u(), orthoNormalBasis);
-		final Vector3F v = Vector3F.transform(Vector3F.v(), orthoNormalBasis);
-		final Vector3F w = Vector3F.transform(Vector3F.w(), orthoNormalBasis);
-		
-		final float element11 = u.getX();
-		final float element12 = v.getX();
-		final float element13 = w.getX();
-		final float element14 = 0.0F;
-		final float element21 = u.getY();
-		final float element22 = v.getY();
-		final float element23 = w.getY();
-		final float element24 = 0.0F;
-		final float element31 = u.getZ();
-		final float element32 = v.getZ();
-		final float element33 = w.getZ();
-		final float element34 = 0.0F;
-		final float element41 = 0.0F;
-		final float element42 = 0.0F;
-		final float element43 = 0.0F;
-		final float element44 = 1.0F;
-		
-		return new Matrix44F(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
-	}
-	
-	/**
 	 * Returns a new {@code Matrix44F} instance denoting the identity matrix.
 	 * 
 	 * @return a new {@code Matrix44F} instance denoting the identity matrix
@@ -633,7 +598,32 @@ public final class Matrix44F {
 		return rotate(angle, new Vector3F(x, y, z));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that rotates using {@code orthoNormalBasis}.
+	 * <p>
+	 * If {@code orthoNormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param orthoNormalBasis an {@link OrthoNormalBasis33F} instance
+	 * @return a {@code Matrix44F} instance that rotates using {@code orthoNormalBasis}
+	 * @throws NullPointerException thrown if, and only if, {@code orthoNormalBasis} is {@code null}
+	 */
+	public static Matrix44F rotate(final OrthoNormalBasis33F orthoNormalBasis) {
+		final Vector3F u = Vector3F.transform(Vector3F.u(), orthoNormalBasis);
+		final Vector3F v = Vector3F.transform(Vector3F.v(), orthoNormalBasis);
+		final Vector3F w = Vector3F.transform(Vector3F.w(), orthoNormalBasis);
+		
+		return rotate(w, v, u);
+	}
+	
+	/**
+	 * Returns a {@code Matrix44F} instance that rotates using {@code quaternion}.
+	 * <p>
+	 * If {@code quaternion} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param quaternion a {@link Quaternion4F} instance
+	 * @return a {@code Matrix44F} instance that rotates using {@code quaternion}
+	 * @throws NullPointerException thrown if, and only if, {@code quaternion} is {@code null}
+	 */
 	public static Matrix44F rotate(final Quaternion4F quaternion) {
 		final float uX = 1.0F - 2.0F * (quaternion.getY() * quaternion.getY() + quaternion.getZ() * quaternion.getZ());
 		final float uY = 0.0F + 2.0F * (quaternion.getX() * quaternion.getY() - quaternion.getW() * quaternion.getZ());
@@ -652,7 +642,16 @@ public final class Matrix44F {
 		return rotate(w, v, u);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that rotates using {@code w} and {@code v}.
+	 * <p>
+	 * If either {@code w} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param w a {@link Vector3F} instance
+	 * @param v a {@code Vector3F} instance
+	 * @return a {@code Matrix44F} instance that rotates using {@code w} and {@code v}
+	 * @throws NullPointerException thrown if, and only if, either {@code w} or {@code v} are {@code null}
+	 */
 	public static Matrix44F rotate(final Vector3F w, final Vector3F v) {
 		final Vector3F wNormalized = Vector3F.normalize(w);
 		final Vector3F uNormalized = Vector3F.crossProduct(Vector3F.normalize(v), wNormalized);
@@ -661,18 +660,38 @@ public final class Matrix44F {
 		return rotate(wNormalized, vNormalized, uNormalized);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code Matrix44F} instance that rotates using {@code w}, {@code v} and {@code u}.
+	 * <p>
+	 * If either {@code w}, {@code v} or {@code u} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The layout looks like this:
+	 * <pre>
+	 * {@code
+	 * UX, VX, WX, 0
+	 * UY, VY, WY, 0
+	 * UZ, VZ, WZ, 0
+	 *  0,  0,  0, 1
+	 * }
+	 * </pre>
+	 * 
+	 * @param w a {@link Vector3F} instance
+	 * @param v a {@code Vector3F} instance
+	 * @param u a {@code Vector3F} instance
+	 * @return a {@code Matrix44F} instance that rotates using {@code w}, {@code v} and {@code u}
+	 * @throws NullPointerException thrown if, and only if, either {@code w}, {@code v} or {@code u} are {@code null}
+	 */
 	public static Matrix44F rotate(final Vector3F w, final Vector3F v, final Vector3F u) {
 		final float element11 = u.getX();
-		final float element12 = u.getY();
-		final float element13 = u.getZ();
+		final float element12 = v.getX();
+		final float element13 = w.getX();
 		final float element14 = 0.0F;
-		final float element21 = v.getX();
+		final float element21 = u.getY();
 		final float element22 = v.getY();
-		final float element23 = v.getZ();
+		final float element23 = w.getY();
 		final float element24 = 0.0F;
-		final float element31 = w.getX();
-		final float element32 = w.getY();
+		final float element31 = u.getZ();
+		final float element32 = v.getZ();
 		final float element33 = w.getZ();
 		final float element34 = 0.0F;
 		final float element41 = 0.0F;

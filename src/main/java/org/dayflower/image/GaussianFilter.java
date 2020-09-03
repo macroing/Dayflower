@@ -18,8 +18,11 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.exp;
 import static org.dayflower.util.Floats.max;
+
+import java.util.Objects;
 
 /**
  * A {@code GaussianFilter} is an implementation of {@link Filter} that represents a Gaussian filter.
@@ -68,6 +71,49 @@ public final class GaussianFilter extends Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code String} representation of this {@code GaussianFilter} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code GaussianFilter} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new GaussianFilter(%+.10f, %+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.falloff));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code GaussianFilter} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code GaussianFilter}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code GaussianFilter} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code GaussianFilter}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof GaussianFilter)) {
+			return false;
+		} else if(!equal(getResolutionX(), GaussianFilter.class.cast(object).getResolutionX())) {
+			return false;
+		} else if(!equal(getResolutionXReciprocal(), GaussianFilter.class.cast(object).getResolutionXReciprocal())) {
+			return false;
+		} else if(!equal(getResolutionY(), GaussianFilter.class.cast(object).getResolutionY())) {
+			return false;
+		} else if(!equal(getResolutionYReciprocal(), GaussianFilter.class.cast(object).getResolutionYReciprocal())) {
+			return false;
+		} else if(!equal(this.falloff, GaussianFilter.class.cast(object).falloff)) {
+			return false;
+		} else if(!equal(this.x, GaussianFilter.class.cast(object).x)) {
+			return false;
+		} else if(!equal(this.y, GaussianFilter.class.cast(object).y)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Evaluates this {@code GaussianFilter} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
@@ -88,6 +134,16 @@ public final class GaussianFilter extends Filter {
 	 */
 	public float getFalloff() {
 		return this.falloff;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code GaussianFilter} instance.
+	 * 
+	 * @return a hash code for this {@code GaussianFilter} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionXReciprocal()), Float.valueOf(getResolutionY()), Float.valueOf(getResolutionYReciprocal()), Float.valueOf(this.falloff), Float.valueOf(this.x), Float.valueOf(this.y));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

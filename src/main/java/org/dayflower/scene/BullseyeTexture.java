@@ -47,39 +47,59 @@ public final class BullseyeTexture implements Texture {
 	/**
 	 * Constructs a new {@code BullseyeTexture} instance.
 	 * <p>
-	 * If either {@code origin}, {@code textureA} or {@code textureB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureA} or {@code textureB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BullseyeTexture(origin, textureA, textureB, 1.0F);
+	 * new BullseyeTexture(textureA, textureB, new Point3F());
 	 * }
 	 * </pre>
 	 * 
-	 * @param origin a {@link Point3F} instance used as the origin for the bullseye pattern
 	 * @param textureA one of the two {@link Texture} instances to use
 	 * @param textureB one of the two {@code Texture} instances to use
-	 * @throws NullPointerException thrown if, and only if, either {@code origin}, {@code textureA} or {@code textureB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code textureA} or {@code textureB} are {@code null}
 	 */
-	public BullseyeTexture(final Point3F origin, final Texture textureA, final Texture textureB) {
-		this(origin, textureA, textureB, 1.0F);
+	public BullseyeTexture(final Texture textureA, final Texture textureB) {
+		this(textureA, textureB, new Point3F());
 	}
 	
 	/**
 	 * Constructs a new {@code BullseyeTexture} instance.
 	 * <p>
-	 * If either {@code origin}, {@code textureA} or {@code textureB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureA}, {@code textureB} or {@code origin} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new BullseyeTexture(textureA, textureB, origin, 1.0F);
+	 * }
+	 * </pre>
 	 * 
-	 * @param origin a {@link Point3F} instance used as the origin for the bullseye pattern
 	 * @param textureA one of the two {@link Texture} instances to use
 	 * @param textureB one of the two {@code Texture} instances to use
-	 * @param scale the scale for the bullseye pattern
-	 * @throws NullPointerException thrown if, and only if, either {@code origin}, {@code textureA} or {@code textureB} are {@code null}
+	 * @param origin a {@link Point3F} instance used as the origin for the bullseye pattern
+	 * @throws NullPointerException thrown if, and only if, either {@code textureA}, {@code textureB} or {@code origin} are {@code null}
 	 */
-	public BullseyeTexture(final Point3F origin, final Texture textureA, final Texture textureB, final float scale) {
-		this.origin = Objects.requireNonNull(origin, "origin == null");
+	public BullseyeTexture(final Texture textureA, final Texture textureB, final Point3F origin) {
+		this(textureA, textureB, origin, 1.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code BullseyeTexture} instance.
+	 * <p>
+	 * If either {@code textureA}, {@code textureB} or {@code origin} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureA one of the two {@link Texture} instances to use
+	 * @param textureB one of the two {@code Texture} instances to use
+	 * @param origin a {@link Point3F} instance used as the origin for the bullseye pattern
+	 * @param scale the scale for the bullseye pattern
+	 * @throws NullPointerException thrown if, and only if, either {@code textureA}, {@code textureB} or {@code origin} are {@code null}
+	 */
+	public BullseyeTexture(final Texture textureA, final Texture textureB, final Point3F origin, final float scale) {
 		this.textureA = Objects.requireNonNull(textureA, "textureA == null");
 		this.textureB = Objects.requireNonNull(textureB, "textureB == null");
+		this.origin = Objects.requireNonNull(origin, "origin == null");
 		this.scale = scale;
 	}
 	

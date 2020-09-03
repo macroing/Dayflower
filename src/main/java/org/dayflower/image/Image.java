@@ -462,6 +462,47 @@ public final class Image {
 	}
 	
 	/**
+	 * Returns a {@code String} representation of this {@code Image} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Image} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new Image(%d, %d, new Color3F[] {...}, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), this.filter);
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code Image} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Image}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Image} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Image}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof Image)) {
+			return false;
+		} else if(!Objects.equals(this.filter, Image.class.cast(object).filter)) {
+			return false;
+		} else if(!Arrays.equals(this.pixels, Image.class.cast(object).pixels)) {
+			return false;
+		} else if(!Arrays.equals(this.filterTable, Image.class.cast(object).filterTable)) {
+			return false;
+		} else if(this.resolution != Image.class.cast(object).resolution) {
+			return false;
+		} else if(this.resolutionX != Image.class.cast(object).resolutionX) {
+			return false;
+		} else if(this.resolutionY != Image.class.cast(object).resolutionY) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Returns the resolution of this {@code Image} instance.
 	 * <p>
 	 * The resolution of {@code image} can be computed by:
@@ -497,6 +538,16 @@ public final class Image {
 	 */
 	public int getResolutionY() {
 		return this.resolutionY;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code Image} instance.
+	 * 
+	 * @return a hash code for this {@code Image} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.filter, Integer.valueOf(Arrays.hashCode(this.pixels)), Integer.valueOf(Arrays.hashCode(this.filterTable)), Integer.valueOf(this.resolution), Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY));
 	}
 	
 	/**

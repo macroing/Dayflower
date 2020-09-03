@@ -18,6 +18,10 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.util.Floats.equal;
+
+import java.util.Objects;
+
 /**
  * A {@code BoxFilter} is an implementation of {@link Filter} that represents a Box filter.
  * <p>
@@ -54,6 +58,43 @@ public final class BoxFilter extends Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code String} representation of this {@code BoxFilter} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code BoxFilter} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new BoxFilter(%+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code BoxFilter} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BoxFilter}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code BoxFilter} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BoxFilter}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof BoxFilter)) {
+			return false;
+		} else if(!equal(getResolutionX(), BoxFilter.class.cast(object).getResolutionX())) {
+			return false;
+		} else if(!equal(getResolutionXReciprocal(), BoxFilter.class.cast(object).getResolutionXReciprocal())) {
+			return false;
+		} else if(!equal(getResolutionY(), BoxFilter.class.cast(object).getResolutionY())) {
+			return false;
+		} else if(!equal(getResolutionYReciprocal(), BoxFilter.class.cast(object).getResolutionYReciprocal())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Evaluates this {@code BoxFilter} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
@@ -65,5 +106,15 @@ public final class BoxFilter extends Filter {
 	@Override
 	public float evaluate(final float x, final float y) {
 		return 1.0F;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code BoxFilter} instance.
+	 * 
+	 * @return a hash code for this {@code BoxFilter} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionXReciprocal()), Float.valueOf(getResolutionY()), Float.valueOf(getResolutionYReciprocal()));
 	}
 }

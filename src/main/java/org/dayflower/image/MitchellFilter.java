@@ -19,6 +19,9 @@
 package org.dayflower.image;
 
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
+
+import java.util.Objects;
 
 /**
  * A {@code MitchellFilter} is an implementation of {@link Filter} that represents a Mitchell filter.
@@ -66,6 +69,47 @@ public final class MitchellFilter extends Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code String} representation of this {@code MitchellFilter} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code MitchellFilter} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new MitchellFilter(%+.10f, %+.10f, %+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.b), Float.valueOf(this.c));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code MitchellFilter} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MitchellFilter}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code MitchellFilter} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MitchellFilter}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof MitchellFilter)) {
+			return false;
+		} else if(!equal(getResolutionX(), MitchellFilter.class.cast(object).getResolutionX())) {
+			return false;
+		} else if(!equal(getResolutionXReciprocal(), MitchellFilter.class.cast(object).getResolutionXReciprocal())) {
+			return false;
+		} else if(!equal(getResolutionY(), MitchellFilter.class.cast(object).getResolutionY())) {
+			return false;
+		} else if(!equal(getResolutionYReciprocal(), MitchellFilter.class.cast(object).getResolutionYReciprocal())) {
+			return false;
+		} else if(!equal(this.b, MitchellFilter.class.cast(object).b)) {
+			return false;
+		} else if(!equal(this.c, MitchellFilter.class.cast(object).c)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Evaluates this {@code MitchellFilter} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
@@ -95,6 +139,16 @@ public final class MitchellFilter extends Filter {
 	 */
 	public float getC() {
 		return this.c;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code MitchellFilter} instance.
+	 * 
+	 * @return a hash code for this {@code MitchellFilter} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionXReciprocal()), Float.valueOf(getResolutionY()), Float.valueOf(getResolutionYReciprocal()), Float.valueOf(this.b), Float.valueOf(this.c));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

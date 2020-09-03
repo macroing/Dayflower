@@ -20,7 +20,10 @@ package org.dayflower.image;
 
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.sin;
+
+import java.util.Objects;
 
 /**
  * A {@code LanczosSincFilter} is an implementation of {@link Filter} that represents a Lanczos-Sinc filter.
@@ -65,6 +68,45 @@ public final class LanczosSincFilter extends Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code String} representation of this {@code LanczosSincFilter} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code LanczosSincFilter} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new LanczosSincFilter(%+.10f, %+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.tau));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code LanczosSincFilter} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LanczosSincFilter}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code LanczosSincFilter} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LanczosSincFilter}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof LanczosSincFilter)) {
+			return false;
+		} else if(!equal(getResolutionX(), LanczosSincFilter.class.cast(object).getResolutionX())) {
+			return false;
+		} else if(!equal(getResolutionXReciprocal(), LanczosSincFilter.class.cast(object).getResolutionXReciprocal())) {
+			return false;
+		} else if(!equal(getResolutionY(), LanczosSincFilter.class.cast(object).getResolutionY())) {
+			return false;
+		} else if(!equal(getResolutionYReciprocal(), LanczosSincFilter.class.cast(object).getResolutionYReciprocal())) {
+			return false;
+		} else if(!equal(this.tau, LanczosSincFilter.class.cast(object).tau)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Evaluates this {@code LanczosSincFilter} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
@@ -85,6 +127,16 @@ public final class LanczosSincFilter extends Filter {
 	 */
 	public float getTau() {
 		return this.tau;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code LanczosSincFilter} instance.
+	 * 
+	 * @return a hash code for this {@code LanczosSincFilter} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionXReciprocal()), Float.valueOf(getResolutionY()), Float.valueOf(getResolutionYReciprocal()), Float.valueOf(this.tau));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -18,7 +18,10 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.sqrt;
+
+import java.util.Objects;
 
 /**
  * A {@code CatmullRomFilter} is an implementation of {@link Filter} that represents a Catmull-Rom filter.
@@ -42,6 +45,43 @@ public final class CatmullRomFilter extends Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code String} representation of this {@code CatmullRomFilter} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code CatmullRomFilter} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new CatmullRomFilter(%+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code CatmullRomFilter} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code CatmullRomFilter}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code CatmullRomFilter} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CatmullRomFilter}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof CatmullRomFilter)) {
+			return false;
+		} else if(!equal(getResolutionX(), CatmullRomFilter.class.cast(object).getResolutionX())) {
+			return false;
+		} else if(!equal(getResolutionXReciprocal(), CatmullRomFilter.class.cast(object).getResolutionXReciprocal())) {
+			return false;
+		} else if(!equal(getResolutionY(), CatmullRomFilter.class.cast(object).getResolutionY())) {
+			return false;
+		} else if(!equal(getResolutionYReciprocal(), CatmullRomFilter.class.cast(object).getResolutionYReciprocal())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Evaluates this {@code CatmullRomFilter} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
@@ -57,5 +97,15 @@ public final class CatmullRomFilter extends Filter {
 		final float c = b < 2.0F ? b < 1.0F ? 3.0F * b * a - 5.0F * a + 2.0F : -b * a + 5.0F * a - 8.0F * b + 4.0F : 0.0F;
 		
 		return c;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code CatmullRomFilter} instance.
+	 * 
+	 * @return a hash code for this {@code CatmullRomFilter} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionXReciprocal()), Float.valueOf(getResolutionY()), Float.valueOf(getResolutionYReciprocal()));
 	}
 }

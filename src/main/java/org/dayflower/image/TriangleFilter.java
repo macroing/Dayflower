@@ -19,7 +19,10 @@
 package org.dayflower.image;
 
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.max;
+
+import java.util.Objects;
 
 /**
  * A {@code TriangleFilter} is an implementation of {@link Filter} that represents a Triangle filter.
@@ -57,6 +60,43 @@ public final class TriangleFilter extends Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code String} representation of this {@code TriangleFilter} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code TriangleFilter} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new TriangleFilter(%+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code TriangleFilter} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code TriangleFilter}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code TriangleFilter} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TriangleFilter}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof TriangleFilter)) {
+			return false;
+		} else if(!equal(getResolutionX(), TriangleFilter.class.cast(object).getResolutionX())) {
+			return false;
+		} else if(!equal(getResolutionXReciprocal(), TriangleFilter.class.cast(object).getResolutionXReciprocal())) {
+			return false;
+		} else if(!equal(getResolutionY(), TriangleFilter.class.cast(object).getResolutionY())) {
+			return false;
+		} else if(!equal(getResolutionYReciprocal(), TriangleFilter.class.cast(object).getResolutionYReciprocal())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Evaluates this {@code TriangleFilter} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
@@ -68,5 +108,15 @@ public final class TriangleFilter extends Filter {
 	@Override
 	public float evaluate(final float x, final float y) {
 		return max(0.0F, getResolutionX() - abs(x)) * max(0.0F, getResolutionY() - abs(y));
+	}
+	
+	/**
+	 * Returns a hash code for this {@code TriangleFilter} instance.
+	 * 
+	 * @return a hash code for this {@code TriangleFilter} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Float.valueOf(getResolutionX()), Float.valueOf(getResolutionXReciprocal()), Float.valueOf(getResolutionY()), Float.valueOf(getResolutionYReciprocal()));
 	}
 }

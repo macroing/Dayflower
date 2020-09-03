@@ -18,16 +18,86 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
+import java.util.Objects;
 
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code SurfaceNormalTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance based on the surface normal of a surface.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class SurfaceNormalTexture implements Texture {
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SurfaceNormalTexture} instance.
+	 */
+	public SurfaceNormalTexture() {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code surfaceIntersection}.
+	 * <p>
+	 * If {@code surfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceIntersection a {@link SurfaceIntersection3F} instance
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code surfaceIntersection}
+	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersection} is {@code null}
+	 */
 	@Override
 	public Color3F getColor(final SurfaceIntersection3F surfaceIntersection) {
-		return Color3F.BLACK;//TODO: Implement!
+		final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+		
+		final float r = (surfaceNormal.getX() + 1.0F) / 2.0F;
+		final float g = (surfaceNormal.getY() + 1.0F) / 2.0F;
+		final float b = (surfaceNormal.getZ() + 1.0F) / 2.0F;
+		
+		return new Color3F(r, g, b);
+	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code SurfaceNormalTexture} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code SurfaceNormalTexture} instance
+	 */
+	@Override
+	public String toString() {
+		return "new SurfaceNormalTexture()";
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code SurfaceNormalTexture} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SurfaceNormalTexture}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code SurfaceNormalTexture} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SurfaceNormalTexture}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof SurfaceNormalTexture)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns a hash code for this {@code SurfaceNormalTexture} instance.
+	 * 
+	 * @return a hash code for this {@code SurfaceNormalTexture} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash();
 	}
 }

@@ -18,9 +18,188 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.
+ * <p>
+ * This class is mutable and therefore not thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Scene {
-//	TODO: Implement!
+	private final Camera camera;
+	private final List<Light> lights;
+	private final List<Primitive> primitives;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code Scene} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Scene(new Camera());
+	 * }
+	 * </pre>
+	 */
+	public Scene() {
+		this(new Camera());
+	}
+	
+	/**
+	 * Constructs a new {@code Scene} instance.
+	 * <p>
+	 * If {@code camera} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param camera the {@link Camera} instance associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
+	 */
+	public Scene(final Camera camera) {
+		this.camera = Objects.requireNonNull(camera, "camera == null");
+		this.lights = new ArrayList<>();
+		this.primitives = new ArrayList<>();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the {@link Camera} instance associated with this {@code Scene} instance.
+	 * 
+	 * @return the {@code Camera} instance associated with this {@code Scene} instance
+	 */
+	public Camera getCamera() {
+		return this.camera;
+	}
+	
+	/**
+	 * Returns a {@code List} with all {@link Light} instances currently associated with this {@code Scene} instance.
+	 * <p>
+	 * Modifying the returned {@code List} will not affect this {@code Scene} instance.
+	 * 
+	 * @return a {@code List} with all {@code Light} instances currently associated with this {@code Scene} instance
+	 */
+	public List<Light> getLights() {
+		return new ArrayList<>(this.lights);
+	}
+	
+	/**
+	 * Returns a {@code List} with all {@link Primitive} instances currently associated with this {@code Scene} instance.
+	 * <p>
+	 * Modifying the returned {@code List} will not affect this {@code Scene} instance.
+	 * 
+	 * @return a {@code List} with all {@code Primitive} instances currently associated with this {@code Scene} instance
+	 */
+	public List<Primitive> getPrimitives() {
+		return new ArrayList<>(this.primitives);
+	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code Scene} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Scene} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new Scene(%s)", this.camera);
+	}
+	
+	/**
+	 * Adds {@code light} to this {@code Scene} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code light} was added, {@code false} otherwise.
+	 * <p>
+	 * If {@code light} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param light the {@link Light} instance to add
+	 * @return {@code true} if, and only if, {@code light} was added, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code light} is {@code null}
+	 */
+	public boolean addLight(final Light light) {
+		return this.lights.add(Objects.requireNonNull(light, "light == null"));
+	}
+	
+	/**
+	 * Adds {@code primitive} to this {@code Scene} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code primitive} was added, {@code false} otherwise.
+	 * <p>
+	 * If {@code primitive} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param primitive the {@link Primitive} instance to add
+	 * @return {@code true} if, and only if, {@code primitive} was added, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
+	 */
+	public boolean addPrimitive(final Primitive primitive) {
+		return this.primitives.add(Objects.requireNonNull(primitive, "primitive == null"));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code Scene} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Scene}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Scene} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Scene}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof Scene)) {
+			return false;
+		} else if(!Objects.equals(this.camera, Scene.class.cast(object).camera)) {
+			return false;
+		} else if(!Objects.equals(this.lights, Scene.class.cast(object).lights)) {
+			return false;
+		} else if(!Objects.equals(this.primitives, Scene.class.cast(object).primitives)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Removes {@code light} from this {@code Scene} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code light} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code light} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param light the {@link Light} instance to remove
+	 * @return {@code true} if, and only if, {@code light} was removed, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code light} is {@code null}
+	 */
+	public boolean removeLight(final Light light) {
+		return this.lights.remove(Objects.requireNonNull(light, "light == null"));
+	}
+	
+	/**
+	 * Removes {@code primitive} from this {@code Scene} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code primitive} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code primitive} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param primitive the {@link Primitive} instance to remove
+	 * @return {@code true} if, and only if, {@code primitive} was removed, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
+	 */
+	public boolean removePrimitive(final Primitive primitive) {
+		return this.primitives.remove(Objects.requireNonNull(primitive, "primitive == null"));
+	}
+	
+	/**
+	 * Returns a hash code for this {@code Scene} instance.
+	 * 
+	 * @return a hash code for this {@code Scene} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.camera, this.lights, this.primitives);
+	}
 }

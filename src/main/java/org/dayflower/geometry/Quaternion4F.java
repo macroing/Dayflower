@@ -25,7 +25,6 @@ import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -403,32 +402,132 @@ public final class Quaternion4F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a normalized linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
+	 * <p>
+	 * Returns a new {@code Quaternion4F} instance with the result of the operation.
+	 * <p>
+	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Quaternion4F.linearInterpolationNormalized(quaternionLHS, quaternionRHS, 0.5F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param quaternionLHS the {@code Quaternion4F} instance on the left-hand side
+	 * @param quaternionRHS the {@code Quaternion4F} instance on the right-hand side
+	 * @return a new {@code Quaternion4F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 */
 	public static Quaternion4F linearInterpolationNormalized(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS) {
 		return linearInterpolationNormalized(quaternionLHS, quaternionRHS, 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a normalized linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
+	 * <p>
+	 * Returns a new {@code Quaternion4F} instance with the result of the operation.
+	 * <p>
+	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Quaternion4F.linearInterpolationNormalized(quaternionLHS, quaternionRHS, t, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param quaternionLHS the {@code Quaternion4F} instance on the left-hand side
+	 * @param quaternionRHS the {@code Quaternion4F} instance on the right-hand side
+	 * @param t the factor
+	 * @return a new {@code Quaternion4F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 */
 	public static Quaternion4F linearInterpolationNormalized(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS, final float t) {
 		return linearInterpolationNormalized(quaternionLHS, quaternionRHS, t, false);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a normalized linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
+	 * <p>
+	 * Returns a new {@code Quaternion4F} instance with the result of the operation.
+	 * <p>
+	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param quaternionLHS the {@code Quaternion4F} instance on the left-hand side
+	 * @param quaternionRHS the {@code Quaternion4F} instance on the right-hand side
+	 * @param t the factor
+	 * @param isInterpolatingShortest {@code true} if, and only if, the shortest interpolation should be used, {@code false} otherwise
+	 * @return a new {@code Quaternion4F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 */
 	public static Quaternion4F linearInterpolationNormalized(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS, final float t, final boolean isInterpolatingShortest) {
 		return normalize(add(multiply(subtract(isInterpolatingShortest && dotProduct(quaternionLHS, quaternionRHS) < 0.0F ? negate(quaternionRHS) : quaternionRHS, quaternionLHS), t), quaternionLHS));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a spherical linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
+	 * <p>
+	 * Returns a new {@code Quaternion4F} instance with the result of the operation.
+	 * <p>
+	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Quaternion4F.linearInterpolationSpherical(quaternionLHS, quaternionRHS, 0.5F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param quaternionLHS the {@code Quaternion4F} instance on the left-hand side
+	 * @param quaternionRHS the {@code Quaternion4F} instance on the right-hand side
+	 * @return a new {@code Quaternion4F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 */
 	public static Quaternion4F linearInterpolationSpherical(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS) {
 		return linearInterpolationSpherical(quaternionLHS, quaternionRHS, 0.5F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a spherical linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
+	 * <p>
+	 * Returns a new {@code Quaternion4F} instance with the result of the operation.
+	 * <p>
+	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Quaternion4F.linearInterpolationSpherical(quaternionLHS, quaternionRHS, t, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param quaternionLHS the {@code Quaternion4F} instance on the left-hand side
+	 * @param quaternionRHS the {@code Quaternion4F} instance on the right-hand side
+	 * @param t the factor
+	 * @return a new {@code Quaternion4F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 */
 	public static Quaternion4F linearInterpolationSpherical(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS, final float t) {
 		return linearInterpolationSpherical(quaternionLHS, quaternionRHS, t, false);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a spherical linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
+	 * <p>
+	 * Returns a new {@code Quaternion4F} instance with the result of the operation.
+	 * <p>
+	 * If either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param quaternionLHS the {@code Quaternion4F} instance on the left-hand side
+	 * @param quaternionRHS the {@code Quaternion4F} instance on the right-hand side
+	 * @param t the factor
+	 * @param isInterpolatingShortest {@code true} if, and only if, the shortest interpolation should be used, {@code false} otherwise
+	 * @return a new {@code Quaternion4F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code quaternionLHS} or {@code quaternionRHS} are {@code null}
+	 */
 	public static Quaternion4F linearInterpolationSpherical(final Quaternion4F quaternionLHS, final Quaternion4F quaternionRHS, final float t, final boolean isInterpolatingShortest) {
 		final float cos = dotProduct(quaternionLHS, quaternionRHS);
 		

@@ -1398,6 +1398,70 @@ public final class Image {
 	}
 	
 	/**
+	 * Multiplies this {@code Image} instance with {@code convolutionKernel}.
+	 * <p>
+	 * If {@code convolutionKernel} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param convolutionKernel a {@link ConvolutionKernel55F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code convolutionKernel} is {@code null}
+	 */
+	public void multiply(final ConvolutionKernel55F convolutionKernel) {
+		final Color3F factor = new Color3F(convolutionKernel.getFactor());
+		final Color3F bias = new Color3F(convolutionKernel.getBias());
+		
+		final Image image = copy();
+		
+		for(int y = 0; y < this.resolutionY; y++) {
+			for(int x = 0; x < this.resolutionX; x++) {
+				Color3F colorRGB = Color3F.BLACK;
+				
+//				Row #1:
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + -2), convolutionKernel.getElement11()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + -2), convolutionKernel.getElement12()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + -2), convolutionKernel.getElement13()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + -2), convolutionKernel.getElement14()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + -2), convolutionKernel.getElement15()));
+				
+//				Row #2:
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + -1), convolutionKernel.getElement21()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + -1), convolutionKernel.getElement22()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + -1), convolutionKernel.getElement23()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + -1), convolutionKernel.getElement24()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + -1), convolutionKernel.getElement25()));
+				
+//				Row #3:
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + +0), convolutionKernel.getElement31()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +0), convolutionKernel.getElement32()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +0), convolutionKernel.getElement33()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +0), convolutionKernel.getElement34()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + +0), convolutionKernel.getElement35()));
+				
+//				Row #4:
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + +1), convolutionKernel.getElement41()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +1), convolutionKernel.getElement42()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +1), convolutionKernel.getElement43()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +1), convolutionKernel.getElement44()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + +1), convolutionKernel.getElement45()));
+				
+//				Row #5:
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + +2), convolutionKernel.getElement51()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +2), convolutionKernel.getElement52()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +2), convolutionKernel.getElement53()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +2), convolutionKernel.getElement54()));
+				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + +2), convolutionKernel.getElement55()));
+				
+//				Multiply with the factor and add the bias:
+				colorRGB = Color3F.multiply(colorRGB, factor);
+				colorRGB = Color3F.add(colorRGB, bias);
+				colorRGB = Color3F.minimumTo0(colorRGB);
+				colorRGB = Color3F.maximumTo1(colorRGB);
+				
+				setColorRGB(colorRGB, x, y);
+			}
+		}
+	}
+	
+	/**
 	 * Redoes gamma correction on this {@code Image} instance using PBRT.
 	 */
 	public void redoGammaCorrectionPBRT() {

@@ -20,7 +20,50 @@ package org.dayflower.scene;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Vector3F;
+
 //TODO: Add Javadocs!
-public final class AshikhminShirleyBRDF {
-//	TODO: Implement!
+public final class AshikhminShirleyBRDF implements BXDF {
+//	TODO: Add Javadocs!
+	@Override
+	public BXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
+		return evaluateSolidAngle(o, n, i, false);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public BXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+		return null;//TODO: Implement!
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public BXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+		return sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public BXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
+		return null;//TODO: Implement!
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public boolean isDiracDistribution() {
+		return false;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
+		return probabilityDensityFunctionSolidAngle(o, n, i, false);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+		return 0.0F;//TODO: Implement!
+	}
 }

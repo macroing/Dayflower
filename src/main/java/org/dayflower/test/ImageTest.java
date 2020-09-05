@@ -25,6 +25,7 @@ import org.dayflower.geometry.Rectangle2I;
 import org.dayflower.geometry.Triangle2I;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.ConvolutionKernel33F;
+import org.dayflower.image.ConvolutionKernel55F;
 import org.dayflower.image.Image;
 
 public final class ImageTest {
@@ -43,7 +44,8 @@ public final class ImageTest {
 //		doTestImageFillImage();
 //		doTestImageFillRectangle();
 //		doTestImageFillTriangle();
-		doTestImageMultiplyConvolutionKernel33F();
+//		doTestImageMultiplyConvolutionKernel33F();
+		doTestImageMultiplyConvolutionKernel55F();
 //		doTestImageSave();
 	}
 	
@@ -110,6 +112,13 @@ public final class ImageTest {
 		Image image = Image.load("./generated/Image.jpg");
 		image.multiply(ConvolutionKernel33F.GAUSSIAN_BLUR);
 		image.save("./generated/doTestImageMultiplyConvolutionKernel33F.png");
+	}
+	
+	static void doTestImageMultiplyConvolutionKernel55F() {
+		final
+		Image image = Image.load("./generated/Image.jpg");
+		image.multiply(ConvolutionKernel55F.GAUSSIAN_BLUR);
+		image.save("./generated/doTestImageMultiplyConvolutionKernel55F.png");
 	}
 	
 	static void doTestImageSave() {

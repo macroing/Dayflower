@@ -735,6 +735,28 @@ public final class Floats {
 	}
 	
 	/**
+	 * Checks that {@code value} is finite.
+	 * <p>
+	 * Returns {@code value}.
+	 * <p>
+	 * If either {@code Float.isInfinite(value)} or {@code Float.isNaN(value)} returns {@code true}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param value the value to check
+	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
+	 * @return {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code Float.isInfinite(value)} or {@code Float.isNaN(value)} returns {@code true}
+	 */
+	public static float requireFiniteValue(final float value, final String name) {
+		if(Float.isInfinite(value)) {
+			throw new IllegalArgumentException(String.format("Float.isInfinite(%s) == true", name));
+		} else if(Float.isNaN(value)) {
+			throw new IllegalArgumentException(String.format("Float.isNaN(%s) == true", name));
+		} else {
+			return value;
+		}
+	}
+	
+	/**
 	 * Returns a saturated (or clamped) value based on {@code value}.
 	 * <p>
 	 * Calling this method is equivalent to the following:

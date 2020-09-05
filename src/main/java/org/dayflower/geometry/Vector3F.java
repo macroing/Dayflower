@@ -808,41 +808,41 @@ public final class Vector3F {
 	}
 	
 	/**
-	 * Transforms the {@code Vector3F} {@code vectorRHS} with the {@link OrthoNormalBasis33F} {@code orthoNormalBasisRHS}.
+	 * Transforms the {@code Vector3F} {@code vectorRHS} with the {@link OrthonormalBasis33F} {@code orthonormalBasisRHS}.
 	 * <p>
 	 * Returns a new {@code Vector3F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code orthoNormalBasisRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param vectorLHS a {@code Vector3F} instance
-	 * @param orthoNormalBasisRHS an {@code OrthoNormalBasis33F} instance
+	 * @param orthonormalBasisRHS an {@code OrthonormalBasis33F} instance
 	 * @return a new {@code Vector3F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code orthoNormalBasisRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
-	public static Vector3F transform(final Vector3F vectorLHS, final OrthoNormalBasis33F orthoNormalBasisRHS) {
-		final float component1 = vectorLHS.component1 * orthoNormalBasisRHS.getU().component1 + vectorLHS.component2 * orthoNormalBasisRHS.getV().component1 + vectorLHS.component3 * orthoNormalBasisRHS.getW().component1;
-		final float component2 = vectorLHS.component1 * orthoNormalBasisRHS.getU().component2 + vectorLHS.component2 * orthoNormalBasisRHS.getV().component2 + vectorLHS.component3 * orthoNormalBasisRHS.getW().component2;
-		final float component3 = vectorLHS.component1 * orthoNormalBasisRHS.getU().component3 + vectorLHS.component2 * orthoNormalBasisRHS.getV().component3 + vectorLHS.component3 * orthoNormalBasisRHS.getW().component3;
+	public static Vector3F transform(final Vector3F vectorLHS, final OrthonormalBasis33F orthonormalBasisRHS) {
+		final float component1 = vectorLHS.component1 * orthonormalBasisRHS.getU().component1 + vectorLHS.component2 * orthonormalBasisRHS.getV().component1 + vectorLHS.component3 * orthonormalBasisRHS.getW().component1;
+		final float component2 = vectorLHS.component1 * orthonormalBasisRHS.getU().component2 + vectorLHS.component2 * orthonormalBasisRHS.getV().component2 + vectorLHS.component3 * orthonormalBasisRHS.getW().component2;
+		final float component3 = vectorLHS.component1 * orthonormalBasisRHS.getU().component3 + vectorLHS.component2 * orthonormalBasisRHS.getV().component3 + vectorLHS.component3 * orthonormalBasisRHS.getW().component3;
 		
 		return new Vector3F(component1, component2, component3);
 	}
 	
 	/**
-	 * Transforms the {@code Vector3F} {@code vectorRHS} with the {@link OrthoNormalBasis33F} {@code orthoNormalBasisRHS} in reverse order.
+	 * Transforms the {@code Vector3F} {@code vectorRHS} with the {@link OrthonormalBasis33F} {@code orthonormalBasisRHS} in reverse order.
 	 * <p>
 	 * Returns a new {@code Vector3F} instance with the result of the transformation.
 	 * <p>
-	 * If either {@code vectorLHS} or {@code orthoNormalBasisRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param vectorLHS a {@code Vector3F} instance
-	 * @param orthoNormalBasisRHS an {@code OrthoNormalBasis33F} instance
+	 * @param orthonormalBasisRHS an {@code OrthonormalBasis33F} instance
 	 * @return a new {@code Vector3F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code orthoNormalBasisRHS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
-	public static Vector3F transformReverse(final Vector3F vectorLHS, final OrthoNormalBasis33F orthoNormalBasisRHS) {
-		final float component1 = dotProduct(vectorLHS, orthoNormalBasisRHS.getU());
-		final float component2 = dotProduct(vectorLHS, orthoNormalBasisRHS.getV());
-		final float component3 = dotProduct(vectorLHS, orthoNormalBasisRHS.getW());
+	public static Vector3F transformReverse(final Vector3F vectorLHS, final OrthonormalBasis33F orthonormalBasisRHS) {
+		final float component1 = dotProduct(vectorLHS, orthonormalBasisRHS.getU());
+		final float component2 = dotProduct(vectorLHS, orthonormalBasisRHS.getV());
+		final float component3 = dotProduct(vectorLHS, orthonormalBasisRHS.getW());
 		
 		return new Vector3F(component1, component2, component3);
 	}

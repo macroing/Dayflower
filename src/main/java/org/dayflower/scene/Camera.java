@@ -24,19 +24,25 @@ import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 import static org.dayflower.util.Floats.tan;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.AngleF;
-import org.dayflower.geometry.OrthoNormalBasis33F;
+import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Camera} represents a camera.
+ * <p>
+ * This class is mutable and therefore not thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Camera {
 	private static final int LENS_FISHEYE = 1;
 	private static final int LENS_THIN = 2;
@@ -47,7 +53,7 @@ public final class Camera {
 	private AngleF fieldOfViewY;
 	private AngleF pitch;
 	private AngleF yaw;
-	private OrthoNormalBasis33F orthoNormalBasis;
+	private OrthonormalBasis33F orthonormalBasis;
 	private Point3F eye;
 	private boolean isWalkLockEnabled;
 	private float apertureRadius;
@@ -58,12 +64,28 @@ public final class Camera {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Camera} instance with an eye of {@code new Point3F()}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Camera(new Point3F());
+	 * }
+	 * </pre>
+	 */
 	public Camera() {
 		this(new Point3F());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Camera} instance with an eye of {@code eye}.
+	 * <p>
+	 * If {@code eye} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye a {@link Point3F} instance representing the eye that is associated with this {@code Camera} instance
+	 * @throws NullPointerException thrown if, and only if, {@code eye} is {@code null}
+	 */
 	public Camera(final Point3F eye) {
 //		Initialize the default parameters:
 		setApertureRadius(0.0F);
@@ -78,33 +100,59 @@ public final class Camera {
 		
 //		Initialize the default parameters that require other parameters to be set:
 		setFieldOfViewY();
-		setOrthoNormalBasis();
+		setOrthonormalBasis();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns an {@link AngleF} instance representing the field of view on the X-axis that is associated with this {@code Camera} instance.
+	 * 
+	 * @return an {@code AngleF} instance representing the field of view on the X-axis that is associated with this {@code Camera} instance
+	 */
 	public AngleF getFieldOfViewX() {
 		return this.fieldOfViewX;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns an {@link AngleF} instance representing the field of view on the Y-axis that is associated with this {@code Camera} instance.
+	 * 
+	 * @return an {@code AngleF} instance representing the field of view on the Y-axis that is associated with this {@code Camera} instance
+	 */
 	public AngleF getFieldOfViewY() {
 		return this.fieldOfViewY;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns an {@link AngleF} instance representing the pitch that is associated with this {@code Camera} instance.
+	 * 
+	 * @return an {@code AngleF} instance representing the pitch that is associated with this {@code Camera} instance
+	 */
 	public AngleF getPitch() {
 		return this.pitch;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns an {@link AngleF} instance representing the yaw that is associated with this {@code Camera} instance.
+	 * 
+	 * @return an {@code AngleF} instance representing the yaw that is associated with this {@code Camera} instance
+	 */
 	public AngleF getYaw() {
 		return this.yaw;
 	}
 	
-//	TODO: Add Javadocs!
-	public Optional<Ray3F> computePrimaryRay(final float pixelX, final float pixelY, final float sampleX, final float sampleY) {
+	/**
+	 * Creates a new primary {@link Ray3F} instance given {@code pixelX} and {@code pixelY} as the pixel coordinates and {@code sampleX} and {@code sampleY} as the sample coordinates within a pixel.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@code Ray3F} instance.
+	 * 
+	 * @param pixelX the X-coordinate of the pixel
+	 * @param pixelY the Y-coordinate of the pixel
+	 * @param sampleX the X-coordinate of the sample inside the pixel
+	 * @param sampleY the Y-coordinate of the sample inside the pixel
+	 * @return an {@code Optional} with an optional {@code Ray3F} instance
+	 */
+	public Optional<Ray3F> createPrimaryRay(final float pixelX, final float pixelY, final float sampleX, final float sampleY) {
 		final float apertureRadius = this.apertureRadius;
 		final float fieldOfViewX = tan(+this.fieldOfViewX.getRadians() * 0.5F);
 		final float fieldOfViewY = tan(-this.fieldOfViewY.getRadians() * 0.5F);
@@ -114,11 +162,11 @@ public final class Camera {
 		
 		final Point3F eye = this.eye;
 		
-		final OrthoNormalBasis33F orthoNormalBasis = this.orthoNormalBasis;
+		final OrthonormalBasis33F orthonormalBasis = this.orthonormalBasis;
 		
-		final Vector3F u = orthoNormalBasis.getU();
-		final Vector3F v = orthoNormalBasis.getV();
-		final Vector3F w = orthoNormalBasis.getW();
+		final Vector3F u = orthonormalBasis.getU();
+		final Vector3F v = orthonormalBasis.getV();
+		final Vector3F w = orthonormalBasis.getW();
 		
 		final float sx = 2.0F * ((pixelX + sampleX) / (resolutionX - 1.0F)) - 1.0F;
 		final float sy = 2.0F * ((pixelY + sampleY) / (resolutionY - 1.0F)) - 1.0F;
@@ -148,23 +196,42 @@ public final class Camera {
 		return Optional.of(ray);
 	}
 	
-//	TODO: Add Javadocs!
-	public OrthoNormalBasis33F getOrthoNormalBasis() {
-		return this.orthoNormalBasis;
+	/**
+	 * Returns an {@link OrthonormalBasis33F} instance representing the orthonormal basis that is associated with this {@code Camera} instance.
+	 * 
+	 * @return an {@code OrthonormalBasis33F} instance representing the orthonormal basis that is associated with this {@code Camera} instance
+	 */
+	public OrthonormalBasis33F getOrthonormalBasis() {
+		return this.orthonormalBasis;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Point3F} instance representing the eye that is associated with this {@code Camera} instance.
+	 * 
+	 * @return a {@code Point3F} instance representing the eye that is associated with this {@code Camera} instance
+	 */
 	public Point3F getEye() {
 		return this.eye;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code Camera} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Camera} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new Camera(%s)", this.eye);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code Camera} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Camera}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Camera} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Camera}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -179,7 +246,7 @@ public final class Camera {
 			return false;
 		} else if(!Objects.equals(this.yaw, Camera.class.cast(object).yaw)) {
 			return false;
-		} else if(!Objects.equals(this.orthoNormalBasis, Camera.class.cast(object).orthoNormalBasis)) {
+		} else if(!Objects.equals(this.orthonormalBasis, Camera.class.cast(object).orthonormalBasis)) {
 			return false;
 		} else if(!Objects.equals(this.eye, Camera.class.cast(object).eye)) {
 			return false;
@@ -200,52 +267,88 @@ public final class Camera {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the lens associated with this {@code Camera} instance is a fisheye lens, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the lens associated with this {@code Camera} instance is a fisheye lens, {@code false} otherwise
+	 */
 	public boolean isLensFisheye() {
 		return this.lens == LENS_FISHEYE;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the lens associated with this {@code Camera} instance is a thin lens, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the lens associated with this {@code Camera} instance is a thin lens, {@code false} otherwise
+	 */
 	public boolean isLensThin() {
 		return this.lens == LENS_THIN;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the walk lock state associated with this {@code Camera} instance.
+	 * 
+	 * @return the walk lock state associated with this {@code Camera} instance
+	 */
 	public boolean isWalkLockEnabled() {
 		return this.isWalkLockEnabled;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code float} representing the aperture radius that is associated with this {@code Camera} instance.
+	 * 
+	 * @return a {@code float} representing the aperture radius that is associated with this {@code Camera} instance
+	 */
 	public float getApertureRadius() {
 		return this.apertureRadius;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code float} representing the focal distance that is associated with this {@code Camera} instance.
+	 * 
+	 * @return a {@code float} representing the focal distance that is associated with this {@code Camera} instance
+	 */
 	public float getFocalDistance() {
 		return this.focalDistance;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code float} representing the resolution on the X-axis that is associated with this {@code Camera} instance.
+	 * 
+	 * @return a {@code float} representing the resolution on the X-axis that is associated with this {@code Camera} instance
+	 */
 	public float getResolutionX() {
 		return this.resolutionX;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code float} representing the resolution on the Y-axis that is associated with this {@code Camera} instance.
+	 * 
+	 * @return a {@code float} representing the resolution on the Y-axis that is associated with this {@code Camera} instance
+	 */
 	public float getResolutionY() {
 		return this.resolutionY;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code Camera} instance.
+	 * 
+	 * @return a hash code for this {@code Camera} instance
+	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.orthoNormalBasis, this.eye, Boolean.valueOf(this.isWalkLockEnabled), Float.valueOf(this.apertureRadius), Float.valueOf(this.focalDistance), Float.valueOf(this.resolutionX), Float.valueOf(this.resolutionY), Integer.valueOf(this.lens));
+		return Objects.hash(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.orthonormalBasis, this.eye, Boolean.valueOf(this.isWalkLockEnabled), Float.valueOf(this.apertureRadius), Float.valueOf(this.focalDistance), Float.valueOf(this.resolutionX), Float.valueOf(this.resolutionY), Integer.valueOf(this.lens));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Moves this {@code Camera} instance backward by {@code distance}.
+	 * 
+	 * @param distance the distance to move by
+	 */
 	public void moveBackward(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F w = this.orthoNormalBasis.getW();
+		final Vector3F w = this.orthonormalBasis.getW();
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		
@@ -256,11 +359,15 @@ public final class Camera {
 		this.eye = new Point3F(x, y, z);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Moves this {@code Camera} instance forward by {@code distance}.
+	 * 
+	 * @param distance the distance to move by
+	 */
 	public void moveForward(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F w = this.orthoNormalBasis.getW();
+		final Vector3F w = this.orthonormalBasis.getW();
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		
@@ -271,11 +378,15 @@ public final class Camera {
 		this.eye = new Point3F(x, y, z);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Moves this {@code Camera} instance left by {@code distance}.
+	 * 
+	 * @param distance the distance to move by
+	 */
 	public void moveLeft(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F u = this.orthoNormalBasis.getU();
+		final Vector3F u = this.orthonormalBasis.getU();
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		
@@ -286,11 +397,15 @@ public final class Camera {
 		this.eye = new Point3F(x, y, z);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Moves this {@code Camera} instance right by {@code distance}.
+	 * 
+	 * @param distance the distance to move by
+	 */
 	public void moveRight(final float distance) {
 		final Point3F eye = this.eye;
 		
-		final Vector3F u = this.orthoNormalBasis.getU();
+		final Vector3F u = this.orthonormalBasis.getU();
 		
 		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
 		
@@ -301,53 +416,98 @@ public final class Camera {
 		this.eye = new Point3F(x, y, z);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the aperture radius associated with this {@code Camera} instance to {@code apertureRadius}.
+	 * 
+	 * @param apertureRadius a {@code float} representing the aperture radius associated with this {@code Camera} instance
+	 */
 	public void setApertureRadius(final float apertureRadius) {
 		this.apertureRadius = apertureRadius;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the eye associated with this {@code Camera} instance to {@code eye}.
+	 * <p>
+	 * If {@code eye} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye a {@link Point3F} representing the eye associated with this {@code Camera} instance
+	 * @throws NullPointerException thrown if, and only if, {@code eye} is {@code null}
+	 */
 	public void setEye(final Point3F eye) {
 		this.eye = Objects.requireNonNull(eye, "eye == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the field of view on the X-axis associated with this {@code Camera} instance.
+	 * <p>
+	 * This method requires that the field of view on the Y-axis and the resolution (on both axes) are set.
+	 */
 	public void setFieldOfViewX() {
 		this.fieldOfViewX = AngleF.fieldOfViewX(this.fieldOfViewY, this.resolutionX, this.resolutionY);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the field of view on the X-axis associated with this {@code Camera} instance to {@code fieldOfViewX}.
+	 * <p>
+	 * If {@code fieldOfViewX} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param fieldOfViewX an {@link AngleF} representing the field of view on the X-axis associated with this {@code Camera} instance
+	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewX} is {@code null}
+	 */
 	public void setFieldOfViewX(final AngleF fieldOfViewX) {
 		this.fieldOfViewX = Objects.requireNonNull(fieldOfViewX, "fieldOfViewX == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the field of view on the Y-axis associated with this {@code Camera} instance.
+	 * <p>
+	 * This method requires that the field of view on the X-axis and the resolution (on both axes) are set.
+	 */
 	public void setFieldOfViewY() {
 		this.fieldOfViewY = AngleF.fieldOfViewY(this.fieldOfViewX, this.resolutionX, this.resolutionY);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the field of view on the Y-axis associated with this {@code Camera} instance to {@code fieldOfViewY}.
+	 * <p>
+	 * If {@code fieldOfViewY} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param fieldOfViewY an {@link AngleF} representing the field of view on the Y-axis associated with this {@code Camera} instance
+	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewY} is {@code null}
+	 */
 	public void setFieldOfViewY(final AngleF fieldOfViewY) {
 		this.fieldOfViewY = Objects.requireNonNull(fieldOfViewY, "fieldOfViewY == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the focal distance associated with this {@code Camera} instance to {@code focalDistance}.
+	 * 
+	 * @param focalDistance a {@code float} representing the focal distance associated with this {@code Camera} instance
+	 */
 	public void setFocalDistance(final float focalDistance) {
 		this.focalDistance = focalDistance;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the lens associated with this {@code Camera} instance to fisheye lens.
+	 */
 	public void setLensFisheye() {
 		this.lens = LENS_FISHEYE;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the lens associated with this {@code Camera} instance to thin lens.
+	 */
 	public void setLensThin() {
 		this.lens = LENS_THIN;
 	}
 	
-//	TODO: Add Javadocs!
-	public void setOrthoNormalBasis() {
+	/**
+	 * Sets the orthonormal basis associated with this {@code Camera} instance.
+	 * <p>
+	 * This method takes into account the pitch and yaw angles associated with this {@code Camera} instance when constructing the {@code OrthonormalBasis33F} instance.
+	 */
+	public void setOrthonormalBasis() {
 		final float pitch = this.pitch.getRadians();
 		final float yaw = this.yaw.getRadians();
 		
@@ -358,41 +518,83 @@ public final class Camera {
 		final Vector3F w = new Vector3F(x, y, z);
 		final Vector3F v = Vector3F.v();
 		
-		this.orthoNormalBasis = new OrthoNormalBasis33F(w, v);
+		this.orthonormalBasis = new OrthonormalBasis33F(w, v);
 	}
 	
-//	TODO: Add Javadocs!
-	public void setOrthoNormalBasis(final OrthoNormalBasis33F orthoNormalBasis) {
-		this.orthoNormalBasis = Objects.requireNonNull(orthoNormalBasis, "orthoNormalBasis == null");
+	/**
+	 * Sets the orthonormal basis associated with this {@code Camera} instance to {@code orthonormalBasis}.
+	 * <p>
+	 * If {@code orthonormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Make sure that {@code orthonormalBasis} takes into account the pitch and yaw angles associated with this {@code Camera} instance. If they're not, looking or moving around will not work.
+	 * <p>
+	 * Consider calling {@link #setOrthonormalBasis()} instead.
+	 * 
+	 * @param orthonormalBasis an {@link OrthonormalBasis33F} representing the orthonormal basis associated with this {@code Camera} instance
+	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
+	 */
+	public void setOrthonormalBasis(final OrthonormalBasis33F orthonormalBasis) {
+		this.orthonormalBasis = Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the pitch associated with this {@code Camera} instance to {@code pitch}.
+	 * <p>
+	 * If {@code pitch} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pitch an {@link AngleF} representing the pitch associated with this {@code Camera} instance
+	 * @throws NullPointerException thrown if, and only if, {@code pitch} is {@code null}
+	 */
 	public void setPitch(final AngleF pitch) {
 		this.pitch = Objects.requireNonNull(pitch, "pitch == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the resolution associated with this {@code Camera} instance to {@code resolutionX} and {@code resolutionY}.
+	 * 
+	 * @param resolutionX a {@code float} representing the resolution on the X-axis that is associated with this {@code Camera} instance
+	 * @param resolutionY a {@code float} representing the resolution on the Y-axis that is associated with this {@code Camera} instance
+	 */
 	public void setResolution(final float resolutionX, final float resolutionY) {
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the resolution on the X-axis associated with this {@code Camera} instance to {@code resolutionX}.
+	 * 
+	 * @param resolutionX a {@code float} representing the resolution on the X-axis that is associated with this {@code Camera} instance
+	 */
 	public void setResolutionX(final float resolutionX) {
 		this.resolutionX = resolutionX;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the resolution on the Y-axis associated with this {@code Camera} instance to {@code resolutionY}.
+	 * 
+	 * @param resolutionY a {@code float} representing the resolution on the Y-axis that is associated with this {@code Camera} instance
+	 */
 	public void setResolutionY(final float resolutionY) {
 		this.resolutionY = resolutionY;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the walk lock state associated with this {@code Camera} instance.
+	 * 
+	 * @param isWalkLockEnabled {@code true} if, and only if, walk lock should be enabled, {@code false} otherwise
+	 */
 	public void setWalkLockEnabled(final boolean isWalkLockEnabled) {
 		this.isWalkLockEnabled = isWalkLockEnabled;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the yaw associated with this {@code Camera} instance to {@code yaw}.
+	 * <p>
+	 * If {@code yaw} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param yaw an {@link AngleF} representing the yaw associated with this {@code Camera} instance
+	 * @throws NullPointerException thrown if, and only if, {@code yaw} is {@code null}
+	 */
 	public void setYaw(final AngleF yaw) {
 		this.yaw = Objects.requireNonNull(yaw, "yaw == null");
 	}

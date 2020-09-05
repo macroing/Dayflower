@@ -149,8 +149,8 @@ public final class Plane3F implements Shape3F {
 		final Vector3F surfaceNormalG = surfaceNormal;
 		final Vector3F surfaceNormalS = surfaceNormalG;
 		
-		final OrthoNormalBasis33F orthoNormalBasisG = new OrthoNormalBasis33F(surfaceNormalG);
-		final OrthoNormalBasis33F orthoNormalBasisS = orthoNormalBasisG;
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG);
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
 		final float x = abs(surfaceNormal.getX());
 		final float y = abs(surfaceNormal.getY());
@@ -184,7 +184,7 @@ public final class Plane3F implements Shape3F {
 		
 		final Point2F textureCoordinates = new Point2F(u, v);
 		
-		return Optional.of(new SurfaceIntersection3F(orthoNormalBasisG, orthoNormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceNormalG, surfaceNormalS, t));
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceNormalG, surfaceNormalS, t));
 	}
 	
 	/**

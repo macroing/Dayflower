@@ -146,10 +146,10 @@ public final class Sphere3F implements Shape3F {
 		final float sinThetaMaxSquared = radiusSquared / lengthSquared;
 		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
 		
-		final OrthoNormalBasis33F orthoNormalBasis = new OrthoNormalBasis33F(directionToCenter);
+		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(directionToCenter);
 		
 		final Vector3F coneLocalSpace = SampleGeneratorF.sampleConeUniformDistribution(u, v, cosThetaMax);
-		final Vector3F coneGlobalSpace = Vector3F.normalize(Vector3F.transform(coneLocalSpace, orthoNormalBasis));
+		final Vector3F coneGlobalSpace = Vector3F.normalize(Vector3F.transform(coneLocalSpace, orthonormalBasis));
 		
 		final Ray3F ray = new Ray3F(referencePoint, coneGlobalSpace);
 		
@@ -225,12 +225,12 @@ public final class Sphere3F implements Shape3F {
 		final Vector3F surfaceNormalG = Vector3F.directionNormalized(center, surfaceIntersectionPoint);
 		final Vector3F surfaceNormalS = surfaceNormalG;
 		
-		final OrthoNormalBasis33F orthoNormalBasisG = new OrthoNormalBasis33F(surfaceNormalG);
-		final OrthoNormalBasis33F orthoNormalBasisS = orthoNormalBasisG;
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG);
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
 		final Point2F textureCoordinates = new Point2F(0.5F + atan2(surfaceNormalG.getZ(), surfaceNormalG.getX()) * PI_MULTIPLIED_BY_2_RECIPROCAL, 0.5F - asinpi(surfaceNormalG.getY()));
 		
-		return Optional.of(new SurfaceIntersection3F(orthoNormalBasisG, orthoNormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceNormalG, surfaceNormalS, t));
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceNormalG, surfaceNormalS, t));
 	}
 	
 	/**

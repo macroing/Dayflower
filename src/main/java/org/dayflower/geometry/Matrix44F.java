@@ -599,18 +599,18 @@ public final class Matrix44F {
 	}
 	
 	/**
-	 * Returns a {@code Matrix44F} instance that rotates using {@code orthoNormalBasis}.
+	 * Returns a {@code Matrix44F} instance that rotates using {@code orthonormalBasis}.
 	 * <p>
-	 * If {@code orthoNormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code orthonormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param orthoNormalBasis an {@link OrthoNormalBasis33F} instance
-	 * @return a {@code Matrix44F} instance that rotates using {@code orthoNormalBasis}
-	 * @throws NullPointerException thrown if, and only if, {@code orthoNormalBasis} is {@code null}
+	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
+	 * @return a {@code Matrix44F} instance that rotates using {@code orthonormalBasis}
+	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
-	public static Matrix44F rotate(final OrthoNormalBasis33F orthoNormalBasis) {
-		final Vector3F u = Vector3F.transform(Vector3F.u(), orthoNormalBasis);
-		final Vector3F v = Vector3F.transform(Vector3F.v(), orthoNormalBasis);
-		final Vector3F w = Vector3F.transform(Vector3F.w(), orthoNormalBasis);
+	public static Matrix44F rotate(final OrthonormalBasis33F orthonormalBasis) {
+		final Vector3F u = Vector3F.transform(Vector3F.u(), orthonormalBasis);
+		final Vector3F v = Vector3F.transform(Vector3F.v(), orthonormalBasis);
+		final Vector3F w = Vector3F.transform(Vector3F.w(), orthonormalBasis);
 		
 		return rotate(w, v, u);
 	}

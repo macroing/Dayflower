@@ -31,8 +31,8 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class SurfaceIntersection3F {
-	private final OrthoNormalBasis33F orthoNormalBasisG;
-	private final OrthoNormalBasis33F orthoNormalBasisS;
+	private final OrthonormalBasis33F orthonormalBasisG;
+	private final OrthonormalBasis33F orthonormalBasisS;
 	private final Point2F textureCoordinates;
 	private final Point3F surfaceIntersectionPoint;
 	private final Ray3F ray;
@@ -46,11 +46,11 @@ public final class SurfaceIntersection3F {
 	/**
 	 * Constructs a new {@code SurfaceIntersection3F} instance.
 	 * <p>
-	 * If either {@code orthoNormalBasisG}, {@code orthoNormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape}, {@code surfaceNormalG} or {@code surfaceNormalS} are {@code null}, a
+	 * If either {@code orthonormalBasisG}, {@code orthonormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape}, {@code surfaceNormalG} or {@code surfaceNormalS} are {@code null}, a
 	 * {@code NullPointerException} will be thrown.
 	 * 
-	 * @param orthoNormalBasisG the {@link OrthoNormalBasis33F} instance that is used as the orthonormal basis for the geometry
-	 * @param orthoNormalBasisS the {@code OrthoNormalBasis33F} instance that is used as the orthonormal basis for shading
+	 * @param orthonormalBasisG the {@link OrthonormalBasis33F} instance that is used as the orthonormal basis for the geometry
+	 * @param orthonormalBasisS the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for shading
 	 * @param textureCoordinates the {@link Point2F} instance that is used as the texture coordinates
 	 * @param surfaceIntersectionPoint the {@link Point3F} instance that is used as the surface intersection point
 	 * @param ray the {@link Ray3F} instance that was used in the intersection operation
@@ -58,12 +58,12 @@ public final class SurfaceIntersection3F {
 	 * @param surfaceNormalG the {@link Vector3F} instance that is used as the surface normal for the geometry
 	 * @param surfaceNormalS the {@code Vector3F} instance that is used as the surface normal for shading
 	 * @param t the parametric {@code t} value that represents the distance to the intersection
-	 * @throws NullPointerException thrown if, and only if, either {@code orthoNormalBasisG}, {@code orthoNormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape}, {@code surfaceNormalG} or
+	 * @throws NullPointerException thrown if, and only if, either {@code orthonormalBasisG}, {@code orthonormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape}, {@code surfaceNormalG} or
 	 *                              {@code surfaceNormalS} are {@code null}
 	 */
-	public SurfaceIntersection3F(final OrthoNormalBasis33F orthoNormalBasisG, final OrthoNormalBasis33F orthoNormalBasisS, final Point2F textureCoordinates, final Point3F surfaceIntersectionPoint, final Ray3F ray, final Shape3F shape, final Vector3F surfaceNormalG, final Vector3F surfaceNormalS, final float t) {
-		this.orthoNormalBasisG = Objects.requireNonNull(orthoNormalBasisG, "orthoNormalBasisG == null");
-		this.orthoNormalBasisS = Objects.requireNonNull(orthoNormalBasisS, "orthoNormalBasisS == null");
+	public SurfaceIntersection3F(final OrthonormalBasis33F orthonormalBasisG, final OrthonormalBasis33F orthonormalBasisS, final Point2F textureCoordinates, final Point3F surfaceIntersectionPoint, final Ray3F ray, final Shape3F shape, final Vector3F surfaceNormalG, final Vector3F surfaceNormalS, final float t) {
+		this.orthonormalBasisG = Objects.requireNonNull(orthonormalBasisG, "orthonormalBasisG == null");
+		this.orthonormalBasisS = Objects.requireNonNull(orthonormalBasisS, "orthonormalBasisS == null");
 		this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
 		this.surfaceIntersectionPoint = Objects.requireNonNull(surfaceIntersectionPoint, "surfaceIntersectionPoint == null");
 		this.ray = Objects.requireNonNull(ray, "ray == null");
@@ -76,21 +76,21 @@ public final class SurfaceIntersection3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link OrthoNormalBasis33F} instance that is used as the orthonormal basis for the geometry.
+	 * Returns the {@link OrthonormalBasis33F} instance that is used as the orthonormal basis for the geometry.
 	 * 
-	 * @return the {@code OrthoNormalBasis33F} instance that is used as the orthonormal basis for the geometry
+	 * @return the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for the geometry
 	 */
-	public OrthoNormalBasis33F getOrthoNormalBasisG() {
-		return this.orthoNormalBasisG;
+	public OrthonormalBasis33F getOrthonormalBasisG() {
+		return this.orthonormalBasisG;
 	}
 	
 	/**
-	 * Returns the {@link OrthoNormalBasis33F} instance that is used as the orthonormal basis for shading.
+	 * Returns the {@link OrthonormalBasis33F} instance that is used as the orthonormal basis for shading.
 	 * 
-	 * @return the {@code OrthoNormalBasis33F} instance that is used as the orthonormal basis for shading
+	 * @return the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for shading
 	 */
-	public OrthoNormalBasis33F getOrthoNormalBasisS() {
-		return this.orthoNormalBasisS;
+	public OrthonormalBasis33F getOrthonormalBasisS() {
+		return this.orthonormalBasisS;
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public final class SurfaceIntersection3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new SurfaceIntersection3F(%s, %s, %s, %s, %s, %s, %s, %s, %+.10f)", this.orthoNormalBasisG, this.orthoNormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceNormalG, this.surfaceNormalS, Float.valueOf(this.t));
+		return String.format("new SurfaceIntersection3F(%s, %s, %s, %s, %s, %s, %s, %s, %+.10f)", this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceNormalG, this.surfaceNormalS, Float.valueOf(this.t));
 	}
 	
 	/**
@@ -171,9 +171,9 @@ public final class SurfaceIntersection3F {
 			return true;
 		} else if(!(object instanceof SurfaceIntersection3F)) {
 			return false;
-		} else if(!Objects.equals(this.orthoNormalBasisG, SurfaceIntersection3F.class.cast(object).orthoNormalBasisG)) {
+		} else if(!Objects.equals(this.orthonormalBasisG, SurfaceIntersection3F.class.cast(object).orthonormalBasisG)) {
 			return false;
-		} else if(!Objects.equals(this.orthoNormalBasisS, SurfaceIntersection3F.class.cast(object).orthoNormalBasisS)) {
+		} else if(!Objects.equals(this.orthonormalBasisS, SurfaceIntersection3F.class.cast(object).orthonormalBasisS)) {
 			return false;
 		} else if(!Objects.equals(this.textureCoordinates, SurfaceIntersection3F.class.cast(object).textureCoordinates)) {
 			return false;
@@ -210,6 +210,6 @@ public final class SurfaceIntersection3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.orthoNormalBasisG, this.orthoNormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceNormalG, this.surfaceNormalS, Float.valueOf(this.t));
+		return Objects.hash(this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceNormalG, this.surfaceNormalS, Float.valueOf(this.t));
 	}
 }

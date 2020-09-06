@@ -19,8 +19,18 @@
 package org.dayflower.scene;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
+
+import org.dayflower.geometry.Ray3F;
+import org.dayflower.image.Color3F;
 
 //TODO: Add Javadocs!
 public final class PerezBackground implements Background {
-//	TODO: Implement!
+//	TODO: Add Javadocs!
+	@Override
+	public Color3F radiance(final Ray3F ray) {
+		Objects.requireNonNull(ray, "ray == null");
+		
+		return Color3F.BLACK;//TODO: Implement!
+	}
 }

@@ -31,6 +31,7 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class Scene {
+	private final Background background;
 	private final Camera camera;
 	private final List<Light> lights;
 	private final List<Primitive> primitives;
@@ -43,29 +44,40 @@ public final class Scene {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Scene(new Camera());
+	 * new Scene(new ConstantBackground(), new Camera());
 	 * }
 	 * </pre>
 	 */
 	public Scene() {
-		this(new Camera());
+		this(new ConstantBackground(), new Camera());
 	}
 	
 	/**
 	 * Constructs a new {@code Scene} instance.
 	 * <p>
-	 * If {@code camera} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code background} or {@code camera} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param background the {@link Background} instance associated with this {@code Scene} instance
 	 * @param camera the {@link Camera} instance associated with this {@code Scene} instance
-	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code background} or {@code camera} are {@code null}
 	 */
-	public Scene(final Camera camera) {
+	public Scene(final Background background, final Camera camera) {
+		this.background = Objects.requireNonNull(background, "background == null");
 		this.camera = Objects.requireNonNull(camera, "camera == null");
 		this.lights = new ArrayList<>();
 		this.primitives = new ArrayList<>();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the {@link Background} instance associated with this {@code Scene} instance.
+	 * 
+	 * @return the {@code Background} instance associated with this {@code Scene} instance
+	 */
+	public Background getBackground() {
+		return this.background;
+	}
 	
 	/**
 	 * Returns the {@link Camera} instance associated with this {@code Scene} instance.

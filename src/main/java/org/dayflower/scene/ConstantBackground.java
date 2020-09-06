@@ -18,9 +18,106 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
+import java.util.Objects;
 
-//TODO: Add Javadocs!
+import org.dayflower.geometry.Ray3F;
+import org.dayflower.image.Color3F;
+
+/**
+ * A {@code ConstantBackground} is a {@link Background} implementation that returns a constant {@link Color3F} instance as radiance.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class ConstantBackground implements Background {
-//	TODO: Implement!
+	private final Color3F color;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code ConstantBackground} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ConstantBackground(new Color3F(135, 206, 235));
+	 * }
+	 * </pre>
+	 */
+	public ConstantBackground() {
+		this(new Color3F(135, 206, 235));
+	}
+	
+	/**
+	 * Constructs a new {@code ConstantBackground} instance.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public ConstantBackground(final Color3F color) {
+		this.color = Objects.requireNonNull(color, "color == null");
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray}
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public Color3F radiance(final Ray3F ray) {
+		Objects.requireNonNull(ray, "ray == null");
+		
+		return this.color;
+	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code ConstantBackground} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code ConstantBackground} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new ConstantBackground(%s)", this.color);
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code ConstantBackground} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ConstantBackground}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code ConstantBackground} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ConstantBackground}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof ConstantBackground)) {
+			return false;
+		} else if(!Objects.equals(this.color, ConstantBackground.class.cast(object).color)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns a hash code for this {@code ConstantBackground} instance.
+	 * 
+	 * @return a hash code for this {@code ConstantBackground} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.color);
+	}
 }

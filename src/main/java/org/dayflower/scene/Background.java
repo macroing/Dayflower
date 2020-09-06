@@ -18,9 +18,24 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
+import org.dayflower.geometry.Ray3F;
+import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Background} represents the background.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface Background {
-//	TODO: Implement!
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray}
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	Color3F radiance(final Ray3F ray);
 }

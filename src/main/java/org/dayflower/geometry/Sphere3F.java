@@ -43,6 +43,7 @@ import java.util.Optional;
  * @author J&#246;rgen Lundgren
  */
 public final class Sphere3F implements Shape3F {
+	private final BoundingVolume3F boundingVolume;
 	private final Point3F center;
 	private final float radius;
 	
@@ -90,6 +91,7 @@ public final class Sphere3F implements Shape3F {
 	public Sphere3F(final float radius, final Point3F center) {
 		this.radius = radius;
 		this.center = Objects.requireNonNull(center, "center == null");
+		this.boundingVolume = new BoundingSphere3F(this.radius, this.center);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +103,7 @@ public final class Sphere3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return new BoundingSphere3F(this.radius, this.center);
+		return this.boundingVolume;
 	}
 	
 	/**
@@ -266,6 +268,8 @@ public final class Sphere3F implements Shape3F {
 			return true;
 		} else if(!(object instanceof Sphere3F)) {
 			return false;
+		} else if(!Objects.equals(this.boundingVolume, Sphere3F.class.cast(object).boundingVolume)) {
+			return false;
 		} else if(!Objects.equals(this.center, Sphere3F.class.cast(object).center)) {
 			return false;
 		} else if(!equal(this.radius, Sphere3F.class.cast(object).radius)) {
@@ -369,6 +373,6 @@ public final class Sphere3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.center, Float.valueOf(this.radius));
+		return Objects.hash(this.boundingVolume, this.center, Float.valueOf(this.radius));
 	}
 }

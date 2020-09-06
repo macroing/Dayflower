@@ -182,6 +182,27 @@ public final class Point2F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Computes texture coordinates from three other texture coordinates via Barycentric interpolation.
+	 * <p>
+	 * Returns a new {@code Point2F} instance with the interpolated texture coordinates.
+	 * <p>
+	 * If either {@code textureCoordinatesA}, {@code textureCoordinatesB}, {@code textureCoordinatesC} or {@code barycentricCoordinates} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureCoordinatesA a {@code Point2F} instance denoting the texture coordinates of vertex {@code A} of a triangle
+	 * @param textureCoordinatesB a {@code Point2F} instance denoting the texture coordinates of vertex {@code B} of a triangle
+	 * @param textureCoordinatesC a {@code Point2F} instance denoting the texture coordinates of vertex {@code C} of a triangle
+	 * @param barycentricCoordinates a {@link Point3F} instance denoting the Barycentric coordinates
+	 * @return a new {@code Point2F} instance with the interpolated texture coordinates
+	 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinatesA}, {@code textureCoordinatesB}, {@code textureCoordinatesC} or {@code barycentricCoordinates} are {@code null}
+	 */
+	public static Point2F createTextureCoordinates(final Point2F textureCoordinatesA, final Point2F textureCoordinatesB, final Point2F textureCoordinatesC, final Point3F barycentricCoordinates) {
+		final float u = textureCoordinatesA.getU() * barycentricCoordinates.getU() + textureCoordinatesB.getU() * barycentricCoordinates.getV() + textureCoordinatesC.getU() * barycentricCoordinates.getW();
+		final float v = textureCoordinatesA.getV() * barycentricCoordinates.getU() + textureCoordinatesB.getV() * barycentricCoordinates.getV() + textureCoordinatesC.getV() * barycentricCoordinates.getW();
+		
+		return new Point2F(u, v);
+	}
+	
+	/**
 	 * Returns the distance from {@code eye} to {@code lookAt}.
 	 * <p>
 	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.

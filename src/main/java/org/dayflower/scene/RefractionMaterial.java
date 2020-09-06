@@ -21,6 +21,6 @@ package org.dayflower.scene;
 import java.lang.reflect.Field;
 
 //TODO: Add Javadocs!
-public interface Material {
+public final class RefractionMaterial implements Material {
 //	TODO: Implement!
 }

@@ -37,6 +37,20 @@ public final class ConstantTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Constructs a new {@code ConstantTexture} instance with {@code Color3F.GREEN} as its constant {@link Color3F} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ConstantTexture(Color3F.GREEN);
+	 * }
+	 * </pre>
+	 */
+	public ConstantTexture() {
+		this(Color3F.GREEN);
+	}
+	
+	/**
 	 * Constructs a new {@code ConstantTexture} instance with {@code color} as its constant {@link Color3F} instance.
 	 * <p>
 	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.

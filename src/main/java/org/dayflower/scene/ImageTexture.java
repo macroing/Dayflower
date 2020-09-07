@@ -27,7 +27,6 @@ import java.util.Objects;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
@@ -106,17 +105,17 @@ public final class ImageTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code surfaceIntersection}.
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
 	 * <p>
-	 * If {@code surfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param surfaceIntersection a {@link SurfaceIntersection3F} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code surfaceIntersection}
-	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersection} is {@code null}
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
-	public Color3F getColor(final SurfaceIntersection3F surfaceIntersection) {
-		final Point2F textureCoordinates = surfaceIntersection.getTextureCoordinates();
+	public Color3F getColor(final Intersection intersection) {
+		final Point2F textureCoordinates = intersection.getSurfaceIntersectionObjectSpace().getTextureCoordinates();
 		
 		final float cosAngleRadians = cos(this.angle.getRadians());
 		final float sinAngleRadians = sin(this.angle.getRadians());

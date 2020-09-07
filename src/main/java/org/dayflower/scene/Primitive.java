@@ -20,10 +20,13 @@ package org.dayflower.scene;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Sphere3F;
+import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.image.Color3F;
 
 //TODO: Add Javadocs!
@@ -79,7 +82,7 @@ public final class Primitive {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Primitive(material, shape, new ConstantTexture());
+	 * new Primitive(material, shape, new ConstantTexture(Color3F.GREEN));
 	 * }
 	 * </pre>
 	 * 
@@ -88,7 +91,7 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, either {@code material} or {@code shape} are {@code null}
 	 */
 	public Primitive(final Material material, final Shape3F shape) {
-		this(material, shape, new ConstantTexture());
+		this(material, shape, new ConstantTexture(Color3F.GREEN));
 	}
 	
 //	TODO: Add Javadocs!
@@ -144,6 +147,16 @@ public final class Primitive {
 	 */
 	public Matrix44F getWorldToObject() {
 		return this.worldToObject;
+	}
+	
+//	TODO: Add Javadocs!
+	public Optional<Intersection> intersection(final Ray3F rayWorldSpace) {
+		return intersection(rayWorldSpace, 0.0001F, Float.MAX_VALUE);
+	}
+	
+//	TODO: Add Javadocs!
+	public Optional<Intersection> intersection(final Ray3F rayWorldSpace, final float tMinimum, final float tMaximum) {
+		return this.shape.intersection(Ray3F.transform(this.worldToObject, rayWorldSpace), tMinimum, tMaximum).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace));
 	}
 	
 	/**

@@ -41,6 +41,20 @@ public final class Plane3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Constructs a new {@code Plane3F} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 0.0F, 0.0F));
+	 * }
+	 * </pre>
+	 */
+	public Plane3F() {
+		this(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F), new Point3F(1.0F, 0.0F, 0.0F));
+	}
+	
+	/**
 	 * Constructs a new {@code Plane3F} instance given the three {@link Point3F} instances {@code a}, {@code b} and {@code c}.
 	 * <p>
 	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.

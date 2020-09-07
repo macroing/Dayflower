@@ -236,9 +236,9 @@ public final class OrthonormalBasis33F {
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
 	public static OrthonormalBasis33F transform(final Matrix44F matrixLHS, final OrthonormalBasis33F orthonormalBasisRHS) {
-		final Vector3F u = Vector3F.transform(matrixLHS, orthonormalBasisRHS.u);
-		final Vector3F v = Vector3F.transform(matrixLHS, orthonormalBasisRHS.v);
-		final Vector3F w = Vector3F.transform(matrixLHS, orthonormalBasisRHS.w);
+		final Vector3F u = Vector3F.normalize(Vector3F.transform(matrixLHS, orthonormalBasisRHS.u));
+		final Vector3F v = Vector3F.normalize(Vector3F.transform(matrixLHS, orthonormalBasisRHS.v));
+		final Vector3F w = Vector3F.normalize(Vector3F.transform(matrixLHS, orthonormalBasisRHS.w));
 		
 		return new OrthonormalBasis33F(w, v, u);
 	}
@@ -256,9 +256,9 @@ public final class OrthonormalBasis33F {
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
 	public static OrthonormalBasis33F transformTranspose(final Matrix44F matrixLHS, final OrthonormalBasis33F orthonormalBasisRHS) {
-		final Vector3F u = Vector3F.transformTranspose(matrixLHS, orthonormalBasisRHS.u);
-		final Vector3F v = Vector3F.transformTranspose(matrixLHS, orthonormalBasisRHS.v);
-		final Vector3F w = Vector3F.transformTranspose(matrixLHS, orthonormalBasisRHS.w);
+		final Vector3F u = Vector3F.normalize(Vector3F.transformTranspose(matrixLHS, orthonormalBasisRHS.u));
+		final Vector3F v = Vector3F.normalize(Vector3F.transformTranspose(matrixLHS, orthonormalBasisRHS.v));
+		final Vector3F w = Vector3F.normalize(Vector3F.transformTranspose(matrixLHS, orthonormalBasisRHS.w));
 		
 		return new OrthonormalBasis33F(w, v, u);
 	}

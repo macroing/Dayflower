@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
@@ -211,5 +212,72 @@ public final class SurfaceIntersection3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceNormalG, this.surfaceNormalS, Float.valueOf(this.t));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Performs a transformation.
+	 * <p>
+	 * Returns a new {@code SurfaceIntersection3F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code surfaceIntersection} or {@code matrix} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix} cannot be inverted, an IllegalStateException will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SurfaceIntersection3F.transform(surfaceIntersection, matrix, Matrix44F.inverse(matrix));
+	 * }
+	 * </pre>
+	 * 
+	 * @param surfaceIntersection the {@code SurfaceIntersection3F} instance to transform
+	 * @param matrix the {@link Matrix44F} instance to perform the transformation with
+	 * @return a new {@code SurfaceIntersection3F} instance with the result of the transformation
+	 * @throws IllegalStateException thrown if, and only if, {@code matrix} cannot be inverted
+	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code matrix} are {@code null}
+	 */
+	public static SurfaceIntersection3F transform(final SurfaceIntersection3F surfaceIntersection, final Matrix44F matrix) {
+		return transform(surfaceIntersection, matrix, Matrix44F.inverse(matrix));
+	}
+	
+	/**
+	 * Performs a transformation.
+	 * <p>
+	 * Returns a new {@code SurfaceIntersection3F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code surfaceIntersection}, {@code matrix} or {@code matrixInverse} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceIntersection the {@code SurfaceIntersection3F} instance to transform
+	 * @param matrix the {@link Matrix44F} instance to perform the transformation with
+	 * @param matrixInverse the {@code Matrix44F} instance to perform the transformation with in inverse transpose order
+	 * @return a new {@code SurfaceIntersection3F} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection}, {@code matrix} or {@code matrixInverse} are {@code null}
+	 */
+	public static SurfaceIntersection3F transform(final SurfaceIntersection3F surfaceIntersection, final Matrix44F matrix, final Matrix44F matrixInverse) {
+		final OrthonormalBasis33F orthonormalBasisGWorldSpace = surfaceIntersection.orthonormalBasisG;
+		final OrthonormalBasis33F orthonormalBasisSWorldSpace = surfaceIntersection.orthonormalBasisS;
+		final OrthonormalBasis33F orthonormalBasisGObjectSpace = OrthonormalBasis33F.transformTranspose(matrixInverse, orthonormalBasisGWorldSpace);
+		final OrthonormalBasis33F orthonormalBasisSObjectSpace = OrthonormalBasis33F.transformTranspose(matrixInverse, orthonormalBasisSWorldSpace);
+		
+		final Point2F textureCoordinates = surfaceIntersection.textureCoordinates;
+		
+		final Point3F surfaceIntersectionPointWorldSpace = surfaceIntersection.surfaceIntersectionPoint;
+		final Point3F surfaceIntersectionPointObjectSpace = Point3F.transform(matrix, surfaceIntersectionPointWorldSpace);
+		
+		final Ray3F rayWorldSpace = surfaceIntersection.ray;
+		final Ray3F rayObjectSpace = Ray3F.transform(matrix, rayWorldSpace);
+		
+		final Shape3F shape = surfaceIntersection.shape;
+		
+		final Vector3F surfaceNormalGWorldSpace = surfaceIntersection.surfaceNormalG;
+		final Vector3F surfaceNormalSWorldSpace = surfaceIntersection.surfaceNormalS;
+		final Vector3F surfaceNormalGObjectSpace = Vector3F.transformTranspose(matrixInverse, surfaceNormalGWorldSpace);
+		final Vector3F surfaceNormalSObjectSpace = Vector3F.transformTranspose(matrixInverse, surfaceNormalSWorldSpace);
+		
+		final float tObjectSpace = abs(Point3F.distance(rayObjectSpace.getOrigin(), surfaceIntersectionPointObjectSpace));
+		
+		return new SurfaceIntersection3F(orthonormalBasisGObjectSpace, orthonormalBasisSObjectSpace, textureCoordinates, surfaceIntersectionPointObjectSpace, rayObjectSpace, shape, surfaceNormalGObjectSpace, surfaceNormalSObjectSpace, tObjectSpace);
 	}
 }

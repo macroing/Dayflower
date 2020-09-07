@@ -21,6 +21,9 @@ package org.dayflower.scene;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
+import org.dayflower.geometry.Ray3F;
 
 /**
  * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.
@@ -108,6 +111,21 @@ public final class Scene {
 	 */
 	public List<Primitive> getPrimitives() {
 		return new ArrayList<>(this.primitives);
+	}
+	
+	/**
+	 * Performs an intersection test between {@code rayWorldSpace} and this {@code Scene} instance.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@link Intersection} instance that contains information about the intersection, if it was found.
+	 * <p>
+	 * If {@code rayWorldSpace} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rayWorldSpace the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
+	 * @return an {@code Optional} with an optional {@code Intersection} instance that contains information about the intersection, if it was found
+	 * @throws NullPointerException thrown if, and only if, {@code rayWorldSpace} is {@code null}
+	 */
+	public Optional<Intersection> intersection(final Ray3F rayWorldSpace) {
+		return this.primitives.stream().map(primitive -> primitive.intersection(rayWorldSpace)).filter(optionalIntersection -> optionalIntersection.isPresent()).map(optionalIntersection -> optionalIntersection.get()).min((a, b) -> Float.compare(a.getSurfaceIntersectionObjectSpace().getT(), b.getSurfaceIntersectionObjectSpace().getT()));
 	}
 	
 	/**

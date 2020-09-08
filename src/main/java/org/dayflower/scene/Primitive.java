@@ -238,6 +238,16 @@ public final class Primitive {
 		}
 	}
 	
+//	TODO: Add Javadocs!
+	public boolean isIntersecting(final Ray3F rayWorldSpace) {
+		return isIntersecting(rayWorldSpace, 0.0001F, Float.MAX_VALUE);
+	}
+	
+//	TODO: Add Javadocs!
+	public boolean isIntersecting(final Ray3F rayWorldSpace, final float tMinimum, final float tMaximum) {
+		return this.shape.isIntersecting(Ray3F.transform(this.worldToObject, rayWorldSpace), tMinimum, tMaximum);
+	}
+	
 	/**
 	 * Returns a hash code for this {@code Primitive} instance.
 	 * 

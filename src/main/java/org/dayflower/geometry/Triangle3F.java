@@ -255,6 +255,76 @@ public final class Triangle3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Triangle3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Triangle3F} instance
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Triangle3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public boolean isIntersecting(final Ray3F ray) {
+		return isIntersecting(ray, 0.0001F, Float.MAX_VALUE);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Triangle3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Triangle3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Triangle3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public boolean isIntersecting(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Point3F a = this.a.getPosition();
+		final Point3F b = this.a.getPosition();
+		final Point3F c = this.c.getPosition();
+		
+		final Vector3F edgeAB = Vector3F.direction(a, b);
+		final Vector3F edgeAC = Vector3F.direction(a, c);
+		final Vector3F direction0 = ray.getDirection();
+		final Vector3F direction1 = Vector3F.crossProduct(direction0, edgeAC);
+		
+		final float determinant = Vector3F.dotProduct(edgeAB, direction1);
+		
+		if(determinant >= -0.0001F && determinant <= 0.0001F) {
+			return false;
+		}
+		
+		final Point3F origin = ray.getOrigin();
+		
+		final Vector3F direction2 = Vector3F.direction(a, origin);
+		
+		final float determinantReciprocal = 1.0F / determinant;
+		final float u = Vector3F.dotProduct(direction2, direction1) * determinantReciprocal;
+		
+		if(u < 0.0F || u > 1.0F) {
+			return false;
+		}
+		
+		final Vector3F direction3 = Vector3F.crossProduct(direction2, edgeAB);
+		
+		final float v = Vector3F.dotProduct(direction0, direction3) * determinantReciprocal;
+		
+		if(v < 0.0F || u + v > 1.0F) {
+			return false;
+		}
+		
+		final float t = Vector3F.dotProduct(edgeAC, direction3) * determinantReciprocal;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
 	 * Returns the probability density function (PDF) value for solid angle.
 	 * <p>
 	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.

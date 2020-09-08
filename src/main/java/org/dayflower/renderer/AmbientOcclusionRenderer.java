@@ -58,7 +58,9 @@ public final class AmbientOcclusionRenderer implements Renderer {
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
 		
-		for(int renderPass = 0; renderPass < renderPasses; renderPass++) {
+		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
+			long l1 = System.currentTimeMillis();
+			
 			for(int y = 0; y < resolutionY; y++) {
 				for(int x = 0; x < resolutionX; x++) {
 					final float sampleX = random();
@@ -77,12 +79,17 @@ public final class AmbientOcclusionRenderer implements Renderer {
 				}
 			}
 			
-			System.out.printf("Pass: %s/%s%n", Integer.toString(renderPass + 1), Integer.toString(renderPasses));
+			System.out.printf("Pass: %s/%s%n", Integer.toString(renderPass), Integer.toString(renderPasses));
 			
-			if(renderPass % renderPassesPerImageUpdate == 0 || renderPass + 1 == renderPasses) {
+			if(renderPass == 1 || renderPass % renderPassesPerImageUpdate == 0 || renderPass == renderPasses) {
 				image.filmRender(0.5F);
 				image.save("./generated/Image-Ambient-Occlusion.png");
 			}
+			
+			long l2 = System.currentTimeMillis();
+			long l3 = l2 - l1;
+			
+			System.out.println(l3 + " millis");
 		}
 	}
 	
@@ -113,7 +120,7 @@ public final class AmbientOcclusionRenderer implements Renderer {
 				
 				final Ray3F rayWorldSpaceShadow = new Ray3F(originWorldSpace, directionWorldSpace);
 				
-				if(!scene.intersection(rayWorldSpaceShadow).isPresent()) {
+				if(!scene.isIntersecting(rayWorldSpaceShadow)) {
 					radiance = Color3F.add(radiance, Color3F.WHITE);
 				}
 			}

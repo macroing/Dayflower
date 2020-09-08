@@ -275,6 +275,56 @@ public final class Plane3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Plane3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Plane3F} instance
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Plane3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public boolean isIntersecting(final Ray3F ray) {
+		return isIntersecting(ray, 0.0001F, Float.MAX_VALUE);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Plane3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Plane3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Plane3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public boolean isIntersecting(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Vector3F direction = ray.getDirection();
+		final Vector3F surfaceNormal = getSurfaceNormal();
+		
+		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
+		
+		if(equal(nDotD, 0.0F)) {
+			return false;
+		}
+		
+		final Point3F origin = ray.getOrigin();
+		final Point3F a = getA();
+		
+		final Vector3F originToA = Vector3F.direction(origin, a);
+		
+		final float t = Vector3F.dotProduct(originToA, surfaceNormal) / nDotD;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
 	 * Returns the probability density function (PDF) value for solid angle.
 	 * <p>
 	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.

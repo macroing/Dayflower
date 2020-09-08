@@ -194,6 +194,19 @@ public final class Scene {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code rayWorldSpace} intersects any {@link Primitive} instance in this {@code Scene} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code rayWorldSpace} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rayWorldSpace the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
+	 * @return {@code true} if, and only if, {@code rayWorldSpace} intersects any {@code Primitive} instance in this {@code Scene} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code rayWorldSpace} is {@code null}
+	 */
+	public boolean isIntersecting(final Ray3F rayWorldSpace) {
+		return this.primitives.stream().anyMatch(primitive -> primitive.isIntersecting(rayWorldSpace));
+	}
+	
+	/**
 	 * Removes {@code light} from this {@code Scene} instance, if present.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code light} was removed, {@code false} otherwise.

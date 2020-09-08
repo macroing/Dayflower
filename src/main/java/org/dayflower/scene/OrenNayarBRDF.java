@@ -18,9 +18,16 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
+import static org.dayflower.util.Floats.PI_RECIPROCAL;
+import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.max;
 
+import java.util.Objects;
+
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 
 /**
@@ -32,6 +39,42 @@ import org.dayflower.geometry.Vector3F;
  * @author J&#246;rgen Lundgren
  */
 public final class OrenNayarBRDF implements BXDF {
+	private final AngleF angle;
+	private final float a;
+	private final float b;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code OrenNayarBRDF} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new OrenNayarBRDF(AngleF.degrees(20.0F));
+	 * }
+	 * </pre>
+	 */
+	public OrenNayarBRDF() {
+		this(AngleF.degrees(20.0F));
+	}
+	
+	/**
+	 * Constructs a new {@code OrenNayarBRDF} instance.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 */
+	public OrenNayarBRDF(final AngleF angle) {
+		this.angle = Objects.requireNonNull(angle, "angle == null");
+		this.a = 1.0F - (angle.getRadians() * angle.getRadians() / (2.0F * (angle.getRadians() * angle.getRadians() + 0.33F)));
+		this.b = 0.45F * angle.getRadians() * angle.getRadians() / (angle.getRadians() * angle.getRadians() + 0.09F);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Evaluates the solid angle for {@code o}, {@code n} and {@code i}.
 	 * <p>
@@ -73,7 +116,36 @@ public final class OrenNayarBRDF implements BXDF {
 	 */
 	@Override
 	public BXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
-		return null;//TODO: Implement!
+		final float nDotI = Vector3F.dotProduct(n, i);
+		final float nDotO = Vector3F.dotProduct(n, o);
+		
+		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F();
+		
+		final Vector3F wI = Vector3F.normalize(Vector3F.transform(Vector3F.negate(i), orthonormalBasisLocal));
+		final Vector3F wO = Vector3F.normalize(Vector3F.transform(o, orthonormalBasisLocal));
+		
+		final float cosThetaAbsWI = wI.cosThetaAbs();
+		final float cosThetaAbsWO = wO.cosThetaAbs();
+		
+		final float sinThetaWI = wI.sinTheta();
+		final float sinThetaWO = wO.sinTheta();
+		
+		final float maxCos = sinThetaWI > 1.0e-4F && sinThetaWO > 1.0e-4F ? max(0.0F, wI.cosPhi() * wO.cosPhi() + wI.sinPhi() * wO.sinPhi()) : 0.0F;
+		
+		final float sinA = cosThetaAbsWI > cosThetaAbsWO ? sinThetaWO : sinThetaWI;
+		final float tanB = cosThetaAbsWI > cosThetaAbsWO ? sinThetaWI / cosThetaAbsWI : sinThetaWO / cosThetaAbsWO;
+		
+		final float a = this.a;
+		final float b = this.b;
+		final float c = (a + b * maxCos * sinA * tanB);
+		
+		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
+			return new BXDFResult(o, n, i, 0.0F,                           0.0F);
+		} else if(isProjected) {
+			return new BXDFResult(o, n, i, PI_RECIPROCAL * c,              PI_RECIPROCAL * c);
+		} else {
+			return new BXDFResult(o, n, i, PI_RECIPROCAL * c * abs(nDotI), PI_RECIPROCAL * c);
+		}
 	}
 	
 	/**
@@ -121,7 +193,74 @@ public final class OrenNayarBRDF implements BXDF {
 	 */
 	@Override
 	public BXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
-		return null;//TODO: Implement!
+		final float nDotO = Vector3F.dotProduct(n, o);
+		
+		final Vector3F iLocalSpace = Vector3F.negate(SampleGeneratorF.sampleHemisphereCosineDistribution(u, v));
+		final Vector3F iTransformed = Vector3F.transform(iLocalSpace, orthonormalBasis);
+		final Vector3F i = nDotO < 0.0F ? Vector3F.negate(iTransformed) : iTransformed;
+		
+		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F();
+		
+		final Vector3F wI = Vector3F.normalize(Vector3F.transform(Vector3F.negate(i), orthonormalBasisLocal));
+		final Vector3F wO = Vector3F.normalize(Vector3F.transform(o, orthonormalBasisLocal));
+		
+		final float cosThetaAbsWI = wI.cosThetaAbs();
+		final float cosThetaAbsWO = wO.cosThetaAbs();
+		
+		final float sinThetaWI = wI.sinTheta();
+		final float sinThetaWO = wO.sinTheta();
+		
+		final float maxCos = sinThetaWI > 1.0e-4F && sinThetaWO > 1.0e-4F ? max(0.0F, wI.cosPhi() * wO.cosPhi() + wI.sinPhi() * wO.sinPhi()) : 0.0F;
+		
+		final float sinA = cosThetaAbsWI > cosThetaAbsWO ? sinThetaWO : sinThetaWI;
+		final float tanB = cosThetaAbsWI > cosThetaAbsWO ? sinThetaWI / cosThetaAbsWI : sinThetaWO / cosThetaAbsWO;
+		
+		final float a = this.a;
+		final float b = this.b;
+		final float c = (a + b * maxCos * sinA * tanB);
+		
+		if(isProjected) {
+			return new BXDFResult(o, n, i, PI_RECIPROCAL * c, PI_RECIPROCAL * c);
+		}
+		
+		final float nDotI = Vector3F.dotProduct(n, i);
+		
+		return new BXDFResult(o, n, i, PI_RECIPROCAL * c * abs(nDotI), PI_RECIPROCAL * c);
+	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code OrenNayarBRDF} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code OrenNayarBRDF} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new OrenNayarBRDF(%s)", this.angle);
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code OrenNayarBRDF} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code OrenNayarBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarBRDF}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof OrenNayarBRDF)) {
+			return false;
+		} else if(!Objects.equals(this.angle, OrenNayarBRDF.class.cast(object).angle)) {
+			return false;
+		} else if(!equal(this.a, OrenNayarBRDF.class.cast(object).a)) {
+			return false;
+		} else if(!equal(this.b, OrenNayarBRDF.class.cast(object).b)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	/**
@@ -173,6 +312,45 @@ public final class OrenNayarBRDF implements BXDF {
 	 */
 	@Override
 	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
-		return 0.0F;//TODO: Implement!
+		final float nDotI = Vector3F.dotProduct(n, i);
+		final float nDotO = Vector3F.dotProduct(n, o);
+		
+		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F();
+		
+		final Vector3F wI = Vector3F.normalize(Vector3F.transform(Vector3F.negate(i), orthonormalBasisLocal));
+		final Vector3F wO = Vector3F.normalize(Vector3F.transform(o, orthonormalBasisLocal));
+		
+		final float cosThetaAbsWI = wI.cosThetaAbs();
+		final float cosThetaAbsWO = wO.cosThetaAbs();
+		
+		final float sinThetaWI = wI.sinTheta();
+		final float sinThetaWO = wO.sinTheta();
+		
+		final float maxCos = sinThetaWI > 1.0e-4F && sinThetaWO > 1.0e-4F ? max(0.0F, wI.cosPhi() * wO.cosPhi() + wI.sinPhi() * wO.sinPhi()) : 0.0F;
+		
+		final float sinA = cosThetaAbsWI > cosThetaAbsWO ? sinThetaWO : sinThetaWI;
+		final float tanB = cosThetaAbsWI > cosThetaAbsWO ? sinThetaWI / cosThetaAbsWI : sinThetaWO / cosThetaAbsWO;
+		
+		final float a = this.a;
+		final float b = this.b;
+		final float c = (a + b * maxCos * sinA * tanB);
+		
+		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
+			return 0.0F;
+		} else if(isProjected) {
+			return PI_RECIPROCAL * c;
+		} else {
+			return PI_RECIPROCAL * c * abs(nDotI);
+		}
+	}
+	
+	/**
+	 * Returns a hash code for this {@code OrenNayarBRDF} instance.
+	 * 
+	 * @return a hash code for this {@code OrenNayarBRDF} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.angle, Float.valueOf(this.a), Float.valueOf(this.b));
 	}
 }

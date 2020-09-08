@@ -18,9 +18,70 @@
  */
 package org.dayflower.scene;
 
+import static org.dayflower.util.Floats.equal;
+
 import java.lang.reflect.Field;
+import java.util.Objects;
+
+import org.dayflower.image.Color3F;
 
 //TODO: Add Javadocs!
 public final class OrenNayarMaterial implements Material {
-//	TODO: Implement!
+	private final BXDF selectedBXDF;
+	private final float selectedBXDFWeight;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public OrenNayarMaterial() {
+		this(new OrenNayarBRDF());
+	}
+	
+//	TODO: Add Javadocs!
+	public OrenNayarMaterial(final OrenNayarBRDF orenNayarBRDF) {
+		this.selectedBXDF = Objects.requireNonNull(orenNayarBRDF, "orenNayarBRDF == null");
+		this.selectedBXDFWeight = 1.0F;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	@Override
+	public Color3F emittance(final Intersection intersection) {
+		return intersection.getPrimitive().getTextureEmittance().getColor(intersection);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public MaterialResult evaluate(final Intersection intersection) {
+		return new MaterialResult(intersection.getPrimitive().getTextureAlbedo().getColor(intersection), this.selectedBXDF, this.selectedBXDFWeight);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public String toString() {
+		return String.format("new OrenNayarMaterial(%s)", this.selectedBXDF);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof OrenNayarMaterial)) {
+			return false;
+		} else if(!Objects.equals(this.selectedBXDF, OrenNayarMaterial.class.cast(object).selectedBXDF)) {
+			return false;
+		} else if(!equal(this.selectedBXDFWeight, OrenNayarMaterial.class.cast(object).selectedBXDFWeight)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.selectedBXDF, Float.valueOf(this.selectedBXDFWeight));
+	}
 }

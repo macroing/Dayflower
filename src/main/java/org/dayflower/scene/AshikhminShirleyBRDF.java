@@ -47,6 +47,20 @@ public final class AshikhminShirleyBRDF implements BXDF {
 	
 	/**
 	 * Constructs a new {@code AshikhminShirleyBRDF} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new AshikhminShirleyBRDF(0.05F);
+	 * }
+	 * </pre>
+	 */
+	public AshikhminShirleyBRDF() {
+		this(0.05F);
+	}
+	
+	/**
+	 * Constructs a new {@code AshikhminShirleyBRDF} instance.
 	 * 
 	 * @param roughness the roughness to use
 	 */

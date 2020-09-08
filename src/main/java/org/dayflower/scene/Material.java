@@ -20,7 +20,13 @@ package org.dayflower.scene;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.image.Color3F;
+
 //TODO: Add Javadocs!
 public interface Material {
-//	TODO: Implement!
+//	TODO: Add Javadocs!
+	Color3F emittance(final Intersection intersection);
+	
+//	TODO: Add Javadocs!
+	MaterialResult evaluate(final Intersection intersection);
 }

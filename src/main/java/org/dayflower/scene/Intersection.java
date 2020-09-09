@@ -45,10 +45,14 @@ public final class Intersection {
 		return this.primitive;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code Intersection} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Intersection} instance
+	 */
 	@Override
 	public String toString() {
-		return String.format("new Primitive(%s, %s)", this.primitive, this.surfaceIntersectionObjectSpace);
+		return String.format("new Intersection(%s, %s)", this.primitive, this.surfaceIntersectionObjectSpace);
 	}
 	
 //	TODO: Add Javadocs!
@@ -61,7 +65,14 @@ public final class Intersection {
 		return this.surfaceIntersectionWorldSpace;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code Intersection} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Intersection}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Intersection} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Intersection}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -79,7 +90,11 @@ public final class Intersection {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code Intersection} instance.
+	 * 
+	 * @return a hash code for this {@code Intersection} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.primitive, this.surfaceIntersectionObjectSpace, this.surfaceIntersectionWorldSpace);

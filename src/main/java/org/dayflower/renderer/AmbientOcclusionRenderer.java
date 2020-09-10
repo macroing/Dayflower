@@ -118,7 +118,7 @@ public final class AmbientOcclusionRenderer implements Renderer {
 				
 				final Ray3F rayWorldSpaceShadow = new Ray3F(originWorldSpace, directionWorldSpace);
 				
-				if(!scene.isIntersecting(rayWorldSpaceShadow)) {
+				if(!scene.intersects(rayWorldSpaceShadow)) {
 					radiance = Color3F.add(radiance, Color3F.WHITE);
 				}
 			}

@@ -289,8 +289,8 @@ public final class Sphere3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public boolean isIntersecting(final Ray3F ray) {
-		return isIntersecting(ray, 0.0001F, Float.MAX_VALUE);
+	public boolean intersects(final Ray3F ray) {
+		return intersects(ray, 0.0001F, Float.MAX_VALUE);
 	}
 	
 	/**
@@ -305,7 +305,7 @@ public final class Sphere3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public boolean isIntersecting(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F origin = ray.getOrigin();
 		final Point3F center = getCenter();
 		

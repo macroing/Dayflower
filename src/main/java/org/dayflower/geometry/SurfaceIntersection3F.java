@@ -22,6 +22,7 @@ import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A {@code SurfaceIntersection3F} denotes a surface intersection between a {@link Ray3F} instance and a {@link Shape3F} instance.
@@ -215,6 +216,31 @@ public final class SurfaceIntersection3F {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the closest {@code SurfaceIntersection3F} instance.
+	 * <p>
+	 * If either {@code optionalSurfaceIntersectionA} or {@code optionalSurfaceIntersectionB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param optionalSurfaceIntersectionA an {@code Optional} with an optional {@code SurfaceIntersection3F} instance
+	 * @param optionalSurfaceIntersectionB an {@code Optional} with an optional {@code SurfaceIntersection3F} instance
+	 * @return the closest {@code SurfaceIntersection3F} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code optionalSurfaceIntersectionA} or {@code optionalSurfaceIntersectionB} are {@code null}
+	 */
+	public static Optional<SurfaceIntersection3F> closest(final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionA, final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionB) {
+		final SurfaceIntersection3F surfaceIntersectionA = optionalSurfaceIntersectionA.orElse(null);
+		final SurfaceIntersection3F surfaceIntersectionB = optionalSurfaceIntersectionB.orElse(null);
+		
+		if(surfaceIntersectionA != null && surfaceIntersectionB != null) {
+			return Optional.of(surfaceIntersectionA.getT() <= surfaceIntersectionB.getT() ? surfaceIntersectionA : surfaceIntersectionB);
+		} else if(surfaceIntersectionA != null) {
+			return Optional.of(surfaceIntersectionA);
+		} else if(surfaceIntersectionB != null) {
+			return Optional.of(surfaceIntersectionB);
+		} else {
+			return Optional.empty();
+		}
+	}
 	
 	/**
 	 * Performs a transformation.

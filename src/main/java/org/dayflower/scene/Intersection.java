@@ -34,6 +34,7 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 public final class Intersection {
 	private final Primitive primitive;
 	private final SurfaceIntersection3F surfaceIntersectionObjectSpace;
+	private final SurfaceIntersection3F surfaceIntersectionWorldSpace;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -49,6 +50,7 @@ public final class Intersection {
 	public Intersection(final Primitive primitive, final SurfaceIntersection3F surfaceIntersectionObjectSpace) {
 		this.primitive = Objects.requireNonNull(primitive, "primitive == null");
 		this.surfaceIntersectionObjectSpace = Objects.requireNonNull(surfaceIntersectionObjectSpace, "surfaceIntersectionObjectSpace == null");
+		this.surfaceIntersectionWorldSpace = SurfaceIntersection3F.transform(surfaceIntersectionObjectSpace, primitive.getObjectToWorld(), primitive.getWorldToObject());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +89,7 @@ public final class Intersection {
 	 * @return the {@code SurfaceIntersection3F} instance associated with this {@code Intersection} instance in world space
 	 */
 	public SurfaceIntersection3F getSurfaceIntersectionWorldSpace() {
-		return SurfaceIntersection3F.transform(this.surfaceIntersectionObjectSpace, this.primitive.getObjectToWorld(), this.primitive.getWorldToObject());
+		return this.surfaceIntersectionWorldSpace;
 	}
 	
 	/**
@@ -108,6 +110,8 @@ public final class Intersection {
 			return false;
 		} else if(!Objects.equals(this.surfaceIntersectionObjectSpace, Intersection.class.cast(object).surfaceIntersectionObjectSpace)) {
 			return false;
+		} else if(!Objects.equals(this.surfaceIntersectionWorldSpace, Intersection.class.cast(object).surfaceIntersectionWorldSpace)) {
+			return false;
 		} else {
 			return true;
 		}
@@ -120,6 +124,6 @@ public final class Intersection {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.primitive, this.surfaceIntersectionObjectSpace);
+		return Objects.hash(this.primitive, this.surfaceIntersectionObjectSpace, this.surfaceIntersectionWorldSpace);
 	}
 }

@@ -232,8 +232,8 @@ public final class RectangularCuboid3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public boolean isIntersecting(final Ray3F ray) {
-		return isIntersecting(ray, 0.0001F, Float.MAX_VALUE);
+	public boolean intersects(final Ray3F ray) {
+		return intersects(ray, 0.0001F, Float.MAX_VALUE);
 	}
 	
 	/**
@@ -248,7 +248,7 @@ public final class RectangularCuboid3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public boolean isIntersecting(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F maximum = getMaximum();
 		final Point3F minimum = getMinimum();
 		final Point3F origin = ray.getOrigin();

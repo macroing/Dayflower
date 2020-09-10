@@ -125,7 +125,7 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code rayWorldSpace} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F rayWorldSpace) {
-		return this.primitives.stream().map(primitive -> primitive.intersection(rayWorldSpace)).filter(optionalIntersection -> optionalIntersection.isPresent()).map(optionalIntersection -> optionalIntersection.get()).min((a, b) -> Float.compare(a.getSurfaceIntersectionObjectSpace().getT(), b.getSurfaceIntersectionObjectSpace().getT()));
+		return this.primitives.stream().map(primitive -> primitive.intersection(rayWorldSpace)).filter(optionalIntersection -> optionalIntersection.isPresent()).map(optionalIntersection -> optionalIntersection.get()).min((a, b) -> Float.compare(a.getSurfaceIntersectionWorldSpace().getT(), b.getSurfaceIntersectionWorldSpace().getT()));
 	}
 	
 	/**
@@ -202,8 +202,8 @@ public final class Scene {
 	 * @return {@code true} if, and only if, {@code rayWorldSpace} intersects any {@code Primitive} instance in this {@code Scene} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code rayWorldSpace} is {@code null}
 	 */
-	public boolean isIntersecting(final Ray3F rayWorldSpace) {
-		return this.primitives.stream().anyMatch(primitive -> primitive.isIntersecting(rayWorldSpace));
+	public boolean intersects(final Ray3F rayWorldSpace) {
+		return this.primitives.stream().anyMatch(primitive -> primitive.intersects(rayWorldSpace));
 	}
 	
 	/**

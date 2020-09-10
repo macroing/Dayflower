@@ -89,7 +89,7 @@ public interface Shape3F {
 	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	boolean isIntersecting(final Ray3F ray);
+	boolean intersects(final Ray3F ray);
 	
 	/**
 	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise.
@@ -102,7 +102,7 @@ public interface Shape3F {
 	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	boolean isIntersecting(final Ray3F ray, final float tMinimum, final float tMaximum);
+	boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
 	/**
 	 * Returns the probability density function (PDF) value for solid angle.

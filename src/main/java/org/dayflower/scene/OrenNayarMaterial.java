@@ -20,24 +20,46 @@ package org.dayflower.scene;
 
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * An {@code OrenNayarMaterial} is an implementation of {@link Material} that uses an {@link OrenNayarBRDF} instance.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class OrenNayarMaterial implements Material {
 	private final BXDF selectedBXDF;
 	private final float selectedBXDFWeight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code OrenNayarMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new OrenNayarMaterial(new OrenNayarBRDF());
+	 * }
+	 * </pre>
+	 */
 	public OrenNayarMaterial() {
 		this(new OrenNayarBRDF());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code OrenNayarMaterial} instance.
+	 * <p>
+	 * If {@code orenNayarBRDF} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param orenNayarBRDF an {@link OrenNayarBRDF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code orenNayarBRDF} is {@code null}
+	 */
 	public OrenNayarMaterial(final OrenNayarBRDF orenNayarBRDF) {
 		this.selectedBXDF = Objects.requireNonNull(orenNayarBRDF, "orenNayarBRDF == null");
 		this.selectedBXDFWeight = 1.0F;
@@ -45,25 +67,52 @@ public final class OrenNayarMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code OrenNayarMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code OrenNayarMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
 		return intersection.getPrimitive().getTextureEmittance().getColor(intersection);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link MaterialResult} instance with information about this {@code OrenNayarMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code MaterialResult} instance with information about this {@code OrenNayarMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public MaterialResult evaluate(final Intersection intersection) {
 		return new MaterialResult(intersection.getPrimitive().getTextureAlbedo().getColor(intersection), this.selectedBXDF, this.selectedBXDFWeight);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code OrenNayarMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code OrenNayarMaterial} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new OrenNayarMaterial(%s)", this.selectedBXDF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code OrenNayarMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code OrenNayarMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -79,7 +128,11 @@ public final class OrenNayarMaterial implements Material {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code OrenNayarMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code OrenNayarMaterial} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.selectedBXDF, Float.valueOf(this.selectedBXDFWeight));

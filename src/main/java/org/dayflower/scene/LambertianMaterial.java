@@ -20,24 +20,46 @@ package org.dayflower.scene;
 
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code LambertianMaterial} is an implementation of {@link Material} that uses a {@link LambertianBRDF} instance.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class LambertianMaterial implements Material {
 	private final BXDF selectedBXDF;
 	private final float selectedBXDFWeight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code LambertianMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new LambertianMaterial(new LambertianBRDF());
+	 * }
+	 * </pre>
+	 */
 	public LambertianMaterial() {
 		this(new LambertianBRDF());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code LambertianMaterial} instance.
+	 * <p>
+	 * If {@code lambertianBRDF} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lambertianBRDF a {@link LambertianBRDF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lambertianBRDF} is {@code null}
+	 */
 	public LambertianMaterial(final LambertianBRDF lambertianBRDF) {
 		this.selectedBXDF = Objects.requireNonNull(lambertianBRDF, "lambertianBRDF == null");
 		this.selectedBXDFWeight = 1.0F;
@@ -45,25 +67,52 @@ public final class LambertianMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code LambertianMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code LambertianMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
 		return intersection.getPrimitive().getTextureEmittance().getColor(intersection);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link MaterialResult} instance with information about this {@code LambertianMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code MaterialResult} instance with information about this {@code LambertianMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public MaterialResult evaluate(final Intersection intersection) {
 		return new MaterialResult(intersection.getPrimitive().getTextureAlbedo().getColor(intersection), this.selectedBXDF, this.selectedBXDFWeight);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code LambertianMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code LambertianMaterial} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new LambertianMaterial(%s)", this.selectedBXDF);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code LambertianMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code LambertianMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -79,7 +128,11 @@ public final class LambertianMaterial implements Material {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code LambertianMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code LambertianMaterial} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.selectedBXDF, Float.valueOf(this.selectedBXDFWeight));

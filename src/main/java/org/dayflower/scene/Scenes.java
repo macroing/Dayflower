@@ -18,15 +18,18 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Plane3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Sphere3F;
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A class that consists exclusively of static methods that returns {@link Scene} instances.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Scenes {
 	private Scenes() {
 		
@@ -34,7 +37,11 @@ public final class Scenes {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Scene} instance.
+	 * 
+	 * @return a {@code Scene} instance
+	 */
 	public static Scene newDefaultScene() {
 		final
 		Scene scene = new Scene();

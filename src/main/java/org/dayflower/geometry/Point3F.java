@@ -123,6 +123,28 @@ public final class Point3F {
 	}
 	
 	/**
+	 * Returns the value of the component at index {@code index}.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than {@code 2}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index of the component whose value to return
+	 * @return the value of the component at index {@code index}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code 2}
+	 */
+	public float getComponent(final int index) {
+		switch(index) {
+			case 0:
+				return this.component1;
+			case 1:
+				return this.component2;
+			case 2:
+				return this.component3;
+			default:
+				throw new IllegalArgumentException(String.format("Illegal index: index=%s", Integer.toString(index)));
+		}
+	}
+	
+	/**
 	 * Returns the value of component 1.
 	 * 
 	 * @return the value of component 1

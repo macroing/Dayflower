@@ -73,6 +73,22 @@ public final class Point3F {
 	}
 	
 	/**
+	 * Constructs a new {@code Point3F} instance given the component values {@code component}, {@code component} and {@code component}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point3F(component, component, component);
+	 * }
+	 * </pre>
+	 * 
+	 * @param component the value for all components
+	 */
+	public Point3F(final float component) {
+		this(component, component, component);
+	}
+	
+	/**
 	 * Constructs a new {@code Point3F} instance given the component values {@code component1}, {@code component2} and {@code component3}.
 	 * 
 	 * @param component1 the value of component 1

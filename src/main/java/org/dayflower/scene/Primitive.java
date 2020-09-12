@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,10 +25,16 @@ import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Sphere3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Primitive} represents a primitive and is associated with a {@link Material} instance, a {@link Shape3F} instance and some other properties.
+ * <p>
+ * This class is mutable and therefore not thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Primitive {
 	private Material material;
 	private Matrix44F objectToWorld;
@@ -212,12 +217,34 @@ public final class Primitive {
 		return this.worldToObject;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Primitive} instance.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@link Intersection} instance that contains information about the intersection, if it was found.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Primitive} instance
+	 * @return an {@code Optional} with an optional {@code Intersection} instance that contains information about the intersection, if it was found
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public Optional<Intersection> intersection(final Ray3F rayWorldSpace) {
 		return intersection(rayWorldSpace, 0.0001F, Float.MAX_VALUE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Primitive} instance.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@link Intersection} instance that contains information about the intersection, if it was found.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Primitive} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return an {@code Optional} with an optional {@code Intersection} instance that contains information about the intersection, if it was found
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public Optional<Intersection> intersection(final Ray3F rayWorldSpace, final float tMinimum, final float tMaximum) {
 		return this.shape.intersection(Ray3F.transform(this.worldToObject, rayWorldSpace), tMinimum, tMaximum).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace));
 	}
@@ -301,12 +328,30 @@ public final class Primitive {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Primitive} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Primitive} instance
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Primitive} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public boolean intersects(final Ray3F rayWorldSpace) {
 		return intersects(rayWorldSpace, 0.0001F, Float.MAX_VALUE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Primitive} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Primitive} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Primitive} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public boolean intersects(final Ray3F rayWorldSpace, final float tMinimum, final float tMaximum) {
 		return this.shape.intersects(Ray3F.transform(this.worldToObject, rayWorldSpace), tMinimum, tMaximum);
 	}
@@ -321,38 +366,97 @@ public final class Primitive {
 		return Objects.hash(this.material, this.objectToWorld, this.worldToObject, this.shape, this.textureAlbedo, this.textureEmittance, this.textureNormal);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Material} instance associated with this {@code Primitive} instance to {@code material}.
+	 * <p>
+	 * If {@code material} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param material the {@code Material} instance associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, {@code material} is {@code null}
+	 */
 	public void setMaterial(final Material material) {
 		this.material = Objects.requireNonNull(material, "material == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Matrix44F} instance that is used to transform from object space to world space.
+	 * <p>
+	 * If {@code objectToWorld} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code objectToWorld} cannot be inverted, an {@code IllegalStateException} will be thrown.
+	 * <p>
+	 * This method will also set the {@code Matrix44F} instance that is used to transform from world space to object space.
+	 * 
+	 * @param objectToWorld the {@code Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
+	 * @throws IllegalStateException thrown if, and only if, {@code objectToWorld} cannot be inverted
+	 * @throws NullPointerException thrown if, and only if, {@code objectToWorld} is {@code null}
+	 */
 	public void setObjectToWorld(final Matrix44F objectToWorld) {
 		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
 		this.worldToObject = Matrix44F.inverse(objectToWorld);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Shape3F} instance associated with this {@code Primitive} instance to {@code shape}.
+	 * <p>
+	 * If {@code shape} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param shape the {@code Shape3F} instance associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
+	 */
 	public void setShape(final Shape3F shape) {
 		this.shape = Objects.requireNonNull(shape, "shape == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance to {@code textureAlbedo}.
+	 * <p>
+	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureAlbedo the {@code Texture} instance for the albedo color that is associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
+	 */
 	public void setTextureAlbedo(final Texture textureAlbedo) {
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Texture} instance for the emittance that is associated with this {@code Primitive} instance to {@code textureEmittance}.
+	 * <p>
+	 * If {@code textureEmittance} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, {@code textureEmittance} is {@code null}
+	 */
 	public void setTextureEmittance(final Texture textureEmittance) {
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Texture} instance for the normal that is associated with this {@code Primitive} instance to {@code textureNormal}.
+	 * <p>
+	 * If {@code textureNormal} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureNormal the {@code Texture} instance for the normal that is associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, {@code textureNormal} is {@code null}
+	 */
 	public void setTextureNormal(final Texture textureNormal) {
 		this.textureNormal = Objects.requireNonNull(textureNormal, "textureNormal == null");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the {@link Matrix44F} instance that is used to transform from world space to object space.
+	 * <p>
+	 * If {@code worldToObject} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code worldToObject} cannot be inverted, an {@code IllegalStateException} will be thrown.
+	 * <p>
+	 * This method will also set the {@code Matrix44F} instance that is used to transform from object space to world space.
+	 * 
+	 * @param worldToObject the {@code Matrix44F} instance that is used to transform from world space to object space and is associated with this {@code Primitive} instance
+	 * @throws IllegalStateException thrown if, and only if, {@code worldToObject} cannot be inverted
+	 * @throws NullPointerException thrown if, and only if, {@code worldToObject} is {@code null}
+	 */
 	public void setWorldToObject(final Matrix44F worldToObject) {
 		this.worldToObject = Objects.requireNonNull(worldToObject, "worldToObject == null");
 		this.objectToWorld = Matrix44F.inverse(worldToObject);

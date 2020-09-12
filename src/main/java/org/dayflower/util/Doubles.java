@@ -41,5 +41,189 @@ public class Doubles {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Implement!
+	/**
+	 * Returns the arc cosine of {@code value}.
+	 * <p>
+	 * The returned angle is in the range 0.0 through pi.
+	 * <p>
+	 * Special case:
+	 * <ul>
+	 * <li>If the argument is NaN or its absolute value is greater than 1, then the result is NaN.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param value the value whose arc cosine is to be returned
+	 * @return the arc cosine of {@code value}
+	 * @see Math#acos(double)
+	 */
+	public static double acos(final double value) {
+		return Math.acos(value);
+	}
+	
+	/**
+	 * Returns the trigonometric cosine of {@code angleRadians}.
+	 * <p>
+	 * Special case:
+	 * <ul>
+	 * <li>If the argument is NaN or an infinity, then the result is NaN.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param angleRadians an angle, in radians
+	 * @return the trigonometric cosine of {@code angleRadians}
+	 * @see Math#cos(double)
+	 */
+	public static double cos(final double angleRadians) {
+		return Math.cos(angleRadians);
+	}
+	
+	/**
+	 * Returns Euler's number {@code e} raised to the power of {@code exponent}.
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * <li>If the argument is NaN, the result is NaN.</li>
+	 * <li>If the argument is positive infinity, then the result is positive infinity.</li>
+	 * <li>If the argument is negative infinity, then the result is positive zero.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param exponent the exponent to raise {@code e} to
+	 * @return Euler's number {@code e} raised to the power of {@code exponent}
+	 * @see Math#exp(double)
+	 */
+	public static double exp(final double exponent) {
+		return Math.exp(exponent);
+	}
+	
+	/**
+	 * Returns the greater value of {@code a} and {@code b}.
+	 * <p>
+	 * The result is the argument closer to positive infinity.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value. If either value is NaN, then the result is NaN. Unlike the numerical comparison operators, this method considers negative zero to be strictly smaller than positive zero. If one
+	 * argument is positive zero and the other negative zero, the result is positive zero.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @return the greater value of {@code a} and {@code b}
+	 * @see Math#max(double, double)
+	 */
+	public static double max(final double a, final double b) {
+		return Math.max(a, b);
+	}
+	
+	/**
+	 * Returns the greater value of {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * The result is the argument closer to positive infinity.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value. If either value is NaN, then the result is NaN. Unlike the numerical comparison operators, this method considers negative zero to be strictly smaller than positive zero. If one
+	 * argument is positive zero and the two others negative zero, the result is positive zero.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @param c a value
+	 * @return the greater value of {@code a}, {@code b} and {@code c}
+	 */
+	public static double max(final double a, final double b, final double c) {
+		return max(max(a, b), c);
+	}
+	
+	/**
+	 * Returns the smaller value of {@code a} and {@code b}.
+	 * <p>
+	 * The result is the value closer to negative infinity.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value. If either value is NaN, then the result is NaN. Unlike the numerical comparison operators, this method considers negative zero to be strictly smaller than positive zero. If one
+	 * argument is positive zero and the other is negative zero, the result is negative zero.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @return the smaller value of {@code a} and {@code b}
+	 * @see Math#min(double, double)
+	 */
+	public static double min(final double a, final double b) {
+		return Math.min(a, b);
+	}
+	
+	/**
+	 * Returns the smaller value of {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * The result is the value closer to negative infinity.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value. If either value is NaN, then the result is NaN. Unlike the numerical comparison operators, this method considers negative zero to be strictly smaller than positive zero. If one
+	 * argument is positive zero and the others negative zero, the result is negative zero.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @param c a value
+	 * @return the smaller value of {@code a}, {@code b} and {@code c}
+	 */
+	public static double min(final double a, final double b, final double c) {
+		return min(min(a, b), c);
+	}
+	
+	/**
+	 * Returns a saturated (or clamped) value based on {@code value}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Doubles.saturate(value, 0.0D, 1.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @param value the value to saturate (or clamp)
+	 * @return a saturated (or clamped) value based on {@code value}
+	 */
+	public static double saturate(final double value) {
+		return saturate(value, 0.0D, 1.0D);
+	}
+	
+	/**
+	 * Returns a saturated (or clamped) value based on {@code value}.
+	 * <p>
+	 * If {@code value} is less than {@code min(edgeA, edgeB)}, {@code min(edgeA, edgeB)} will be returned. If {@code value} is greater than {@code max(edgeA, edgeB)}, {@code max(edgeA, edgeB)} will be returned. Otherwise {@code value} will be
+	 * returned.
+	 * 
+	 * @param value the value to saturate (or clamp)
+	 * @param edgeA the minimum or maximum value
+	 * @param edgeB the maximum or minimum value
+	 * @return a saturated (or clamped) value based on {@code value}
+	 */
+	public static double saturate(final double value, final double edgeA, final double edgeB) {
+		final double minimum = min(edgeA, edgeB);
+		final double maximum = max(edgeA, edgeB);
+		
+		if(value < minimum) {
+			return minimum;
+		} else if(value > maximum) {
+			return maximum;
+		} else {
+			return value;
+		}
+	}
+	
+	/**
+	 * Returns the trigonometric tangent of {@code angleRadians}.
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * <li>If the argument is NaN or an infinity, then the result is NaN.</li>
+	 * <li>If the argument is zero, then the result is a zero with the same sign as the argument.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param angleRadians an angle, in radians
+	 * @return the trigonometric tangent of {@code angleRadians}
+	 * @see Math#tan(double)
+	 */
+	public static double tan(final double angleRadians) {
+		return Math.tan(angleRadians);
+	}
 }

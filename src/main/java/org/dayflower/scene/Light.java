@@ -18,9 +18,12 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code Light} represents a light.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface Light {
 //	TODO: Implement!
 }

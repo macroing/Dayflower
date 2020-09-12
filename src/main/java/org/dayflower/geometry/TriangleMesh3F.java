@@ -19,12 +19,22 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.dayflower.geometry.Triangle3F.Vertex3F;
 
 /**
  * A {@code TriangleMesh3F} denotes a 3-dimensional triangle mesh that uses the data type {@code float}.
@@ -252,6 +262,141 @@ public final class TriangleMesh3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * TriangleMesh3F.readWavefrontObject(file, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param file a {@code File} instance
+	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static List<TriangleMesh3F> readWavefrontObject(final File file) {
+		return readWavefrontObject(file, false);
+	}
+	
+	/**
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} instance
+	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
+	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static List<TriangleMesh3F> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY) {
+		try {
+			System.out.printf("Loading triangle meshes from file '%s'...%n", file.getName());
+			
+			final DefaultObjectModel defaultObjectModel = DefaultObjectModel.parseDefaultObjectModel(Objects.requireNonNull(file, "file == null"), isFlippingTextureCoordinateY);
+			
+			final IndexedObjectModel indexedObjectModel = defaultObjectModel.toIndexedObjectModel();
+			
+			final List<Integer> indices = indexedObjectModel.getIndices();
+			final List<Point2F> textureCoordinates = indexedObjectModel.getTextureCoordinates();
+			final List<Point3F> positions = indexedObjectModel.getPositions();
+			final List<String> groupNames = indexedObjectModel.getGroupNames();
+			final List<String> materialNames = indexedObjectModel.getMaterialNames();
+			final List<String> objectNames = indexedObjectModel.getObjectNames();
+			final List<Vector3F> normals = indexedObjectModel.getNormals();
+			final List<Vector3F> tangents = indexedObjectModel.getTangents();
+			final List<Triangle3F> triangles = new ArrayList<>();
+			final List<TriangleMesh3F> triangleMeshes = new ArrayList<>();
+			
+			String previousGroupName = "";
+			String previousMaterialName = "";
+			String previousObjectName = "";
+			
+			for(int i = 0; i < indices.size(); i += 3) {
+				final int indexA = indices.get(i + 0).intValue();
+				final int indexB = indices.get(i + 1).intValue();
+				final int indexC = indices.get(i + 2).intValue();
+				
+				final String currentGroupName = groupNames.get(indexA);
+				final String currentMaterialName = materialNames.get(indexA);
+				final String currentObjectName = objectNames.get(indexA);
+				
+				if(!previousGroupName.equals(currentGroupName) || !previousMaterialName.equals(currentMaterialName)) {
+					if(triangles.size() > 0) {
+						triangleMeshes.add(new TriangleMesh3F(triangles));
+						triangles.clear();
+						
+						System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
+					}
+					
+					if(!previousGroupName.equals(currentGroupName)) {
+						previousGroupName = currentGroupName;
+					}
+					
+					if(!previousMaterialName.equals(currentMaterialName)) {
+						previousMaterialName = currentMaterialName;
+					}
+				}
+				
+				if(!previousObjectName.equals(currentObjectName)) {
+					previousObjectName = currentObjectName;
+				}
+				
+				final Point2F textureCoordinatesA = textureCoordinates.get(indexA);
+				final Point2F textureCoordinatesB = textureCoordinates.get(indexB);
+				final Point2F textureCoordinatesC = textureCoordinates.get(indexC);
+				
+				final Point3F positionA = positions.get(indexA);
+				final Point3F positionB = positions.get(indexB);
+				final Point3F positionC = positions.get(indexC);
+				
+				final Vector3F normalA = normals.get(indexA);
+				final Vector3F normalB = normals.get(indexB);
+				final Vector3F normalC = normals.get(indexC);
+				
+				final Vector3F tangentA = tangents.get(indexA);
+				final Vector3F tangentB = tangents.get(indexB);
+				final Vector3F tangentC = tangents.get(indexC);
+				
+				final Vertex3F a = new Vertex3F(textureCoordinatesA, positionA, normalA, tangentA);
+				final Vertex3F b = new Vertex3F(textureCoordinatesB, positionB, normalB, tangentB);
+				final Vertex3F c = new Vertex3F(textureCoordinatesC, positionC, normalC, tangentC);
+				
+				final Triangle3F triangle = new Triangle3F(a, b, c);
+				
+				triangles.add(triangle);
+			}
+			
+			if(triangles.size() > 0) {
+				triangleMeshes.add(new TriangleMesh3F(triangles));
+				triangles.clear();
+				
+				System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
+			}
+			
+			System.out.println(" - Done.");
+			
+			return triangleMeshes;
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static Node doCreateNode(final List<LeafNode> processableLeafNodes, final Point3F maximum, final Point3F minimum, final int depth) {
 		final int size = processableLeafNodes.size();
 		final int sizeHalf = size / 2;
@@ -406,6 +551,361 @@ public final class TriangleMesh3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private static final class DefaultObjectModel {
+		private final List<Point2F> textureCoordinates;
+		private final List<Point3F> positions;
+		private final List<String> groupNames;
+		private final List<String> materialNames;
+		private final List<String> objectNames;
+		private final List<Vector3F> normals;
+		private final List<Vertex> vertices;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public DefaultObjectModel() {
+			this.textureCoordinates = new ArrayList<>();
+			this.positions = new ArrayList<>();
+			this.groupNames = new ArrayList<>();
+			this.materialNames = new ArrayList<>();
+			this.objectNames = new ArrayList<>();
+			this.normals = new ArrayList<>();
+			this.vertices = new ArrayList<>();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public IndexedObjectModel toIndexedObjectModel() {
+			final IndexedObjectModel indexedObjectModel0 = new IndexedObjectModel();
+			final IndexedObjectModel indexedObjectModel1 = new IndexedObjectModel();
+			
+			final Map<Integer, Integer> normalModelIndices0 = new HashMap<>();
+			final Map<Integer, Integer> normalModelIndices1 = new HashMap<>();
+			final Map<Vertex, Integer> modelVertexIndices = new HashMap<>();
+			
+			boolean hasVNormals = false;
+			
+			for(int i = 0; i < this.vertices.size(); i++) {
+				final Vertex vertex = this.vertices.get(i);
+				
+				final Point2F textureCoordinates = vertex.hasTextureVertexIndex() ? this.textureCoordinates.get(vertex.getTextureVertexIndex()) : new Point2F();
+				
+				final Point3F position = vertex.hasGeometricVertexIndex() ? this.positions.get(vertex.getGeometricVertexIndex()) : new Point3F();
+				
+				final Vector3F normal = vertex.hasVertexNormalIndex() ? this.normals.get(vertex.getVertexNormalIndex()) : new Vector3F();
+				
+				if(vertex.hasVertexNormalIndex()) {
+					hasVNormals = true;
+				}
+				
+				final String groupName = this.groupNames.get(i);
+				final String materialName = this.materialNames.get(i);
+				final String objectName = this.objectNames.get(i);
+				
+				final Integer modelVertexIndex = modelVertexIndices.computeIfAbsent(vertex, keyVertex -> {
+					indexedObjectModel0.addGroupName(groupName);
+					indexedObjectModel0.addMaterialName(materialName);
+					indexedObjectModel0.addObjectName(objectName);
+					indexedObjectModel0.addPosition(position);
+					indexedObjectModel0.addTextureCoordinates(textureCoordinates);
+					
+					if(vertex.hasVertexNormalIndex()) {
+						indexedObjectModel0.addNormal(normal);
+					}
+					
+					return Integer.valueOf(indexedObjectModel0.getPositionCount() - 1);
+				});
+				
+				final Integer normalModelIndex = normalModelIndices0.computeIfAbsent(Integer.valueOf(vertex.getGeometricVertexIndex()), keyGeometricVertexIndex -> {
+					indexedObjectModel1.addGroupName(groupName);
+					indexedObjectModel1.addMaterialName(materialName);
+					indexedObjectModel1.addNormal(normal);
+					indexedObjectModel1.addObjectName(objectName);
+					indexedObjectModel1.addPosition(position);
+					indexedObjectModel1.addTangent(new Vector3F());
+					indexedObjectModel1.addTextureCoordinates(textureCoordinates);
+					
+					return Integer.valueOf(indexedObjectModel1.getPositionCount() - 1);
+				});
+				
+				indexedObjectModel0.addIndex(modelVertexIndex);
+				indexedObjectModel1.addIndex(normalModelIndex);
+				
+				normalModelIndices1.put(modelVertexIndex, normalModelIndex);
+			}
+			
+			if(!hasVNormals) {
+				indexedObjectModel1.calculateNormals();
+				
+				for(int i = 0; i < indexedObjectModel0.getPositionCount(); i++) {
+					indexedObjectModel0.addNormal(indexedObjectModel1.getNormal(normalModelIndices1.get(Integer.valueOf(i)).intValue()));
+				}
+			}
+			
+			indexedObjectModel1.calculateTangents();
+			
+			for(int i = 0; i < indexedObjectModel0.getPositionCount(); i++) {
+				indexedObjectModel0.addTangent(indexedObjectModel1.getTangent(normalModelIndices1.get(Integer.valueOf(i)).intValue()));
+			}
+			
+			return indexedObjectModel0;
+		}
+		
+		public void addGroupName(final String groupName) {
+			this.groupNames.add(Objects.requireNonNull(groupName, "groupName == null"));
+		}
+		
+		public void addMaterialName(final String materialName) {
+			this.materialNames.add(Objects.requireNonNull(materialName, "materialName == null"));
+		}
+		
+		public void addNormal(final Vector3F normal) {
+			this.normals.add(Objects.requireNonNull(normal, "normal == null"));
+		}
+		
+		public void addObjectName(final String objectName) {
+			this.objectNames.add(Objects.requireNonNull(objectName, "objectName == null"));
+		}
+		
+		public void addPosition(final Point3F position) {
+			this.positions.add(Objects.requireNonNull(position, "position == null"));
+		}
+		
+		public void addTextureCoordinates(final Point2F textureCoordinates) {
+			this.textureCoordinates.add(Objects.requireNonNull(textureCoordinates, "textureCoordinates == null"));
+		}
+		
+		public void addVertex(final Vertex vertex) {
+			this.vertices.add(Objects.requireNonNull(vertex, "vertex == null"));
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public static DefaultObjectModel parseDefaultObjectModel(final File file, final boolean isFlippingTextureCoordinateY) throws IOException {
+			final DefaultObjectModel defaultObjectModel = new DefaultObjectModel();
+			
+			String currentGroupName = "";
+			String currentMaterialName = "";
+			String currentObjectName = "";
+			
+			try(final BufferedReader bufferedReader = new BufferedReader(new FileReader(Objects.requireNonNull(file, "file == null")))) {
+				for(String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
+					final String[] elements = line.split("\\s+");
+					
+					if(elements.length > 0) {
+						switch(elements[0]) {
+							case "#":
+								continue;
+							case "f":
+								for(int i = 0; i < elements.length - 3; i++) {
+									defaultObjectModel.addGroupName(currentGroupName);
+									defaultObjectModel.addGroupName(currentGroupName);
+									defaultObjectModel.addGroupName(currentGroupName);
+									defaultObjectModel.addMaterialName(currentMaterialName);
+									defaultObjectModel.addMaterialName(currentMaterialName);
+									defaultObjectModel.addMaterialName(currentMaterialName);
+									defaultObjectModel.addObjectName(currentObjectName);
+									defaultObjectModel.addObjectName(currentObjectName);
+									defaultObjectModel.addObjectName(currentObjectName);
+									defaultObjectModel.addVertex(Vertex.parseVertex(elements[1 + 0]));
+									defaultObjectModel.addVertex(Vertex.parseVertex(elements[2 + i]));
+									defaultObjectModel.addVertex(Vertex.parseVertex(elements[3 + i]));
+								}
+								
+								break;
+							case "g":
+								currentGroupName = elements[1];
+								
+								break;
+							case "o":
+								currentObjectName = elements[1];
+								
+								break;
+							case "usemtl":
+								currentMaterialName = elements[1];
+								
+								break;
+							case "v":
+								defaultObjectModel.addPosition(new Point3F(Float.parseFloat(elements[1]), Float.parseFloat(elements[2]), Float.parseFloat(elements[3])));
+								
+								break;
+							case "vn":
+								defaultObjectModel.addNormal(new Vector3F(Float.parseFloat(elements[1]), Float.parseFloat(elements[2]), Float.parseFloat(elements[3])));
+								
+								break;
+							case "vt":
+								defaultObjectModel.addTextureCoordinates(new Point2F(Float.parseFloat(elements[1]), isFlippingTextureCoordinateY ? 1.0F - Float.parseFloat(elements[2]) : Float.parseFloat(elements[2])));
+								
+								break;
+							default:
+								break;
+						}
+					}
+				}
+			}
+			
+			return defaultObjectModel;
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class IndexedObjectModel {
+		private final List<Integer> indices;
+		private final List<Point2F> textureCoordinates;
+		private final List<Point3F> positions;
+		private final List<String> groupNames;
+		private final List<String> materialNames;
+		private final List<String> objectNames;
+		private final List<Vector3F> normals;
+		private final List<Vector3F> tangents;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public IndexedObjectModel() {
+			this.indices = new ArrayList<>();
+			this.textureCoordinates = new ArrayList<>();
+			this.positions = new ArrayList<>();
+			this.groupNames = new ArrayList<>();
+			this.materialNames = new ArrayList<>();
+			this.objectNames = new ArrayList<>();
+			this.normals = new ArrayList<>();
+			this.tangents = new ArrayList<>();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public List<Integer> getIndices() {
+			return this.indices;
+		}
+		
+		public List<Point2F> getTextureCoordinates() {
+			return this.textureCoordinates;
+		}
+		
+		public List<Point3F> getPositions() {
+			return this.positions;
+		}
+		
+		public List<String> getGroupNames() {
+			return this.groupNames;
+		}
+		
+		public List<String> getMaterialNames() {
+			return this.materialNames;
+		}
+		
+		public List<String> getObjectNames() {
+			return this.objectNames;
+		}
+		
+		public List<Vector3F> getNormals() {
+			return this.normals;
+		}
+		
+		public List<Vector3F> getTangents() {
+			return this.tangents;
+		}
+		
+		public Vector3F getNormal(final int index) {
+			return this.normals.get(index);
+		}
+		
+		public Vector3F getTangent(final int index) {
+			return this.tangents.get(index);
+		}
+		
+		public int getPositionCount() {
+			return this.positions.size();
+		}
+		
+		public void addGroupName(final String groupName) {
+			this.groupNames.add(Objects.requireNonNull(groupName, "groupName == null"));
+		}
+		
+		public void addIndex(final Integer index) {
+			this.indices.add(Objects.requireNonNull(index, "index == null"));
+		}
+		
+		public void addMaterialName(final String materialName) {
+			this.materialNames.add(Objects.requireNonNull(materialName, "materialName == null"));
+		}
+		
+		public void addNormal(final Vector3F normal) {
+			this.normals.add(Objects.requireNonNull(normal, "normal == null"));
+		}
+		
+		public void addObjectName(final String objectName) {
+			this.objectNames.add(Objects.requireNonNull(objectName, "objectName == null"));
+		}
+		
+		public void addPosition(final Point3F position) {
+			this.positions.add(Objects.requireNonNull(position, "position == null"));
+		}
+		
+		public void addTangent(final Vector3F tangent) {
+			this.tangents.add(Objects.requireNonNull(tangent, "tangent == null"));
+		}
+		
+		public void addTextureCoordinates(final Point2F textureCoordinates) {
+			this.textureCoordinates.add(Objects.requireNonNull(textureCoordinates, "textureCoordinates == null"));
+		}
+		
+		public void calculateNormals() {
+			for(int i = 0; i < this.indices.size(); i += 3) {
+				final int indexA = this.indices.get(i + 0).intValue();
+				final int indexB = this.indices.get(i + 1).intValue();
+				final int indexC = this.indices.get(i + 2).intValue();
+				
+				final Vector3F edgeAB = Vector3F.direction(this.positions.get(indexA), this.positions.get(indexB));
+				final Vector3F edgeAC = Vector3F.direction(this.positions.get(indexA), this.positions.get(indexC));
+				final Vector3F normal = Vector3F.normalize(Vector3F.crossProduct(edgeAB, edgeAC));
+				
+				this.normals.set(indexA, Vector3F.add(this.normals.get(indexA), normal));
+				this.normals.set(indexB, Vector3F.add(this.normals.get(indexB), normal));
+				this.normals.set(indexC, Vector3F.add(this.normals.get(indexC), normal));
+			}
+			
+			for(int i = 0; i < this.normals.size(); i++) {
+				this.normals.set(i, Vector3F.normalize(this.normals.get(i)));
+			}
+		}
+		
+		public void calculateTangents() {
+			for(int i = 0; i < this.indices.size(); i += 3) {
+				final int indexA = this.indices.get(i + 0).intValue();
+				final int indexB = this.indices.get(i + 1).intValue();
+				final int indexC = this.indices.get(i + 2).intValue();
+				
+				final Vector3F edgeAB = Vector3F.direction(this.positions.get(indexA), this.positions.get(indexB));
+				final Vector3F edgeAC = Vector3F.direction(this.positions.get(indexA), this.positions.get(indexC));
+				
+				final float deltaABU = this.textureCoordinates.get(indexB).getX() - this.textureCoordinates.get(indexA).getX();
+				final float deltaABV = this.textureCoordinates.get(indexB).getY() - this.textureCoordinates.get(indexA).getY();
+				final float deltaACU = this.textureCoordinates.get(indexC).getX() - this.textureCoordinates.get(indexA).getX();
+				final float deltaACV = this.textureCoordinates.get(indexC).getY() - this.textureCoordinates.get(indexA).getY();
+				
+				final float dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
+				final float fraction = equal(dividend, 0.0F) ? 0.0F : 1.0F / dividend;
+				
+				final float x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
+				final float y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
+				final float z = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
+				
+				final Vector3F tangent = new Vector3F(x, y, z);
+				
+				this.tangents.set(indexA, Vector3F.add(this.tangents.get(indexA), tangent));
+				this.tangents.set(indexB, Vector3F.add(this.tangents.get(indexB), tangent));
+				this.tangents.set(indexC, Vector3F.add(this.tangents.get(indexC), tangent));
+			}
+			
+			for(int i = 0; i < this.tangents.size(); i++) {
+				this.tangents.set(i, Vector3F.normalize(this.tangents.get(i)));
+			}
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static final class LeafNode extends Node {
 		private final List<Triangle3F> triangles;
 		
@@ -428,6 +928,7 @@ public final class TriangleMesh3F implements Shape3F {
 			Optional<SurfaceIntersection3F> optionalSurfaceIntersectionA = Optional.empty();
 			
 			if(getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
+				
 				for(final Triangle3F triangle : this.triangles) {
 					optionalSurfaceIntersectionA = SurfaceIntersection3F.closest(optionalSurfaceIntersectionA, triangle.intersection(ray, tMinimum, tMaximum));
 				}
@@ -567,6 +1068,82 @@ public final class TriangleMesh3F implements Shape3F {
 		@Override
 		public int hashCode() {
 			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.nodeL, this.nodeR);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class Vertex {
+		private final int geometricVertexIndex;
+		private final int textureVertexIndex;
+		private final int vertexNormalIndex;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Vertex(final int geometricVertexIndex, final int textureVertexIndex, final int vertexNormalIndex) {
+			this.geometricVertexIndex = geometricVertexIndex;
+			this.textureVertexIndex = textureVertexIndex;
+			this.vertexNormalIndex = vertexNormalIndex;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public boolean equals(final Object object) {
+			if(object == this) {
+				return true;
+			} else if(!(object instanceof Vertex)) {
+				return false;
+			} else if(this.geometricVertexIndex != Vertex.class.cast(object).geometricVertexIndex) {
+				return false;
+			} else if(this.textureVertexIndex != Vertex.class.cast(object).textureVertexIndex) {
+				return false;
+			} else if(this.vertexNormalIndex != Vertex.class.cast(object).vertexNormalIndex) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		public boolean hasGeometricVertexIndex() {
+			return this.geometricVertexIndex != Integer.MIN_VALUE;
+		}
+		
+		public boolean hasTextureVertexIndex() {
+			return this.textureVertexIndex != Integer.MIN_VALUE;
+		}
+		
+		public boolean hasVertexNormalIndex() {
+			return this.vertexNormalIndex != Integer.MIN_VALUE;
+		}
+		
+		public int getGeometricVertexIndex() {
+			return this.geometricVertexIndex;
+		}
+		
+		public int getTextureVertexIndex() {
+			return this.textureVertexIndex;
+		}
+		
+		public int getVertexNormalIndex() {
+			return this.vertexNormalIndex;
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(Integer.valueOf(this.geometricVertexIndex), Integer.valueOf(this.textureVertexIndex), Integer.valueOf(this.vertexNormalIndex));
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public static Vertex parseVertex(final String string) {
+			final String[] strings = string.split("/");
+			
+			final int geometricVertexIndex = strings.length > 0 && !strings[0].isEmpty() ? Integer.parseInt(strings[0]) - 1 : Integer.MIN_VALUE;
+			final int textureVertexIndex   = strings.length > 1 && !strings[1].isEmpty() ? Integer.parseInt(strings[1]) - 1 : Integer.MIN_VALUE;
+			final int vertexNormalIndex    = strings.length > 2 && !strings[2].isEmpty() ? Integer.parseInt(strings[2]) - 1 : Integer.MIN_VALUE;
+			
+			return new Vertex(geometricVertexIndex, textureVertexIndex, vertexNormalIndex);
 		}
 	}
 }

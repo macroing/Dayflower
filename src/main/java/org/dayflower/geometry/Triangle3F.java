@@ -124,7 +124,7 @@ public final class Triangle3F implements Shape3F {
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F a = this.a.getPosition();
-		final Point3F b = this.a.getPosition();
+		final Point3F b = this.b.getPosition();
 		final Point3F c = this.c.getPosition();
 		
 		final Vector3F edgeAB = Vector3F.direction(a, b);
@@ -165,7 +165,7 @@ public final class Triangle3F implements Shape3F {
 		
 		final float w = 1.0F - u - v;
 		
-		final Point3F barycentricCoordinates = new Point3F(u, v, w);
+		final Point3F barycentricCoordinates = new Point3F(w, u, v);
 		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction0, t);
 		
 		final Point2F textureCoordinates = Point2F.createTextureCoordinates(this.a.getTextureCoordinates(), this.b.getTextureCoordinates(), this.c.getTextureCoordinates(), barycentricCoordinates);

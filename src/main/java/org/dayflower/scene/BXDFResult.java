@@ -19,7 +19,6 @@
 package org.dayflower.scene;
 
 import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.requireFiniteValue;
 
 import java.util.Objects;
 
@@ -46,25 +45,20 @@ public final class BXDFResult {
 	 * Constructs a new {@code BXDFResult} instance.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If either {@code Float.isInfinite(probabilityDensityFunctionValue)}, {@code Float.isNaN(probabilityDensityFunctionValue)}, {@code Float.isInfinite(reflectance)} or {@code Float.isNaN(reflectance)} returns {@code true}, an
-	 * {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param o a {@link Vector3F} instance with the outgoing direction that is associated with this {@code BXDFResult} instance
 	 * @param n a {@code Vector3F} instance with the surface normal that is associated with this {@code BXDFResult} instance
 	 * @param i a {@code Vector3F} instance with the incoming direction that is associated with this {@code BXDFResult} instance
 	 * @param probabilityDensityFunctionValue the probability density function (PDF) value associated with this {@code BXDFResult} instance
 	 * @param reflectance the reflectance associated with this {@code BXDFResult} instance
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code Float.isInfinite(probabilityDensityFunctionValue)}, {@code Float.isNaN(probabilityDensityFunctionValue)}, {@code Float.isInfinite(reflectance)} or
-	 *                                  {@code Float.isNaN(reflectance)} returns {@code true}
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	public BXDFResult(final Vector3F o, final Vector3F n, final Vector3F i, final float probabilityDensityFunctionValue, final float reflectance) {
 		this.o = Objects.requireNonNull(o, "o == null");
 		this.n = Objects.requireNonNull(n, "n == null");
 		this.i = Objects.requireNonNull(i, "i == null");
-		this.probabilityDensityFunctionValue = requireFiniteValue(probabilityDensityFunctionValue, "probabilityDensityFunctionValue");
-		this.reflectance = requireFiniteValue(reflectance, "reflectance");
+		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
+		this.reflectance = reflectance;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,6 +131,15 @@ public final class BXDFResult {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the probability density function (PDF) value and the reflectance are represented by finite values, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the probability density function (PDF) value and the reflectance are represented by finite values, {@code false} otherwise
+	 */
+	public boolean isFinite() {
+		return Float.isFinite(this.probabilityDensityFunctionValue) && Float.isFinite(this.reflectance);
 	}
 	
 	/**

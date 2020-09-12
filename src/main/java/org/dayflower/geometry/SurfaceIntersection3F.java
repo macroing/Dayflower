@@ -299,8 +299,8 @@ public final class SurfaceIntersection3F {
 		
 		final Vector3F surfaceNormalGWorldSpace = surfaceIntersection.surfaceNormalG;
 		final Vector3F surfaceNormalSWorldSpace = surfaceIntersection.surfaceNormalS;
-		final Vector3F surfaceNormalGObjectSpace = Vector3F.transformTranspose(matrixInverse, surfaceNormalGWorldSpace);
-		final Vector3F surfaceNormalSObjectSpace = Vector3F.transformTranspose(matrixInverse, surfaceNormalSWorldSpace);
+		final Vector3F surfaceNormalGObjectSpace = Vector3F.normalize(Vector3F.transformTranspose(matrixInverse, surfaceNormalGWorldSpace));
+		final Vector3F surfaceNormalSObjectSpace = Vector3F.normalize(Vector3F.transformTranspose(matrixInverse, surfaceNormalSWorldSpace));
 		
 		final float tObjectSpace = abs(Point3F.distance(rayObjectSpace.getOrigin(), surfaceIntersectionPointObjectSpace));
 		

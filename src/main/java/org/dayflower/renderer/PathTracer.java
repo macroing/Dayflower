@@ -152,6 +152,10 @@ public final class PathTracer implements Renderer {
 				
 				final BXDFResult sampleBXDFResult = selectedBXDF.sampleSolidAngle(currentRayDirectionO, surfaceNormalS, orthonormalBasisS, random(), random());
 				
+				if(!sampleBXDFResult.isFinite()) {
+					break;
+				}
+				
 				final float samplePDFValue = sampleBXDFResult.getProbabilityDensityFunctionValue();
 				final float sampleReflectance = sampleBXDFResult.getReflectance();
 				

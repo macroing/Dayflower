@@ -16,64 +16,69 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.material;
 
 import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BXDF;
+import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
+import org.dayflower.scene.MaterialResult;
+import org.dayflower.scene.bxdf.RefractionBTDF;
 
 /**
- * An {@code OrenNayarMaterial} is an implementation of {@link Material} that uses an {@link OrenNayarBRDF} instance.
+ * A {@code RefractionMaterial} is an implementation of {@link Material} that uses a {@link RefractionBTDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class OrenNayarMaterial implements Material {
+public final class RefractionMaterial implements Material {
 	private final BXDF selectedBXDF;
 	private final float selectedBXDFWeight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code OrenNayarMaterial} instance.
+	 * Constructs a new {@code RefractionMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new OrenNayarMaterial(new OrenNayarBRDF());
+	 * new RefractionMaterial(new RefractionBTDF());
 	 * }
 	 * </pre>
 	 */
-	public OrenNayarMaterial() {
-		this(new OrenNayarBRDF());
+	public RefractionMaterial() {
+		this(new RefractionBTDF());
 	}
 	
 	/**
-	 * Constructs a new {@code OrenNayarMaterial} instance.
+	 * Constructs a new {@code RefractionMaterial} instance.
 	 * <p>
-	 * If {@code orenNayarBRDF} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code refractionBTDF} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param orenNayarBRDF an {@link OrenNayarBRDF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code orenNayarBRDF} is {@code null}
+	 * @param refractionBTDF a {@link RefractionBTDF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code refractionBTDF} is {@code null}
 	 */
-	public OrenNayarMaterial(final OrenNayarBRDF orenNayarBRDF) {
-		this.selectedBXDF = Objects.requireNonNull(orenNayarBRDF, "orenNayarBRDF == null");
+	public RefractionMaterial(final RefractionBTDF refractionBTDF) {
+		this.selectedBXDF = Objects.requireNonNull(refractionBTDF, "refractionBTDF == null");
 		this.selectedBXDFWeight = 1.0F;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code OrenNayarMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code RefractionMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code OrenNayarMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code RefractionMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -82,12 +87,12 @@ public final class OrenNayarMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@link MaterialResult} instance with information about this {@code OrenNayarMaterial} instance at {@code intersection}.
+	 * Returns a {@link MaterialResult} instance with information about this {@code RefractionMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code MaterialResult} instance with information about this {@code OrenNayarMaterial} instance at {@code intersection}
+	 * @return a {@code MaterialResult} instance with information about this {@code RefractionMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -96,32 +101,32 @@ public final class OrenNayarMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code OrenNayarMaterial} instance.
+	 * Returns a {@code String} representation of this {@code RefractionMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code OrenNayarMaterial} instance
+	 * @return a {@code String} representation of this {@code RefractionMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new OrenNayarMaterial(%s)", this.selectedBXDF);
+		return String.format("new RefractionMaterial(%s)", this.selectedBXDF);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code OrenNayarMaterial} instance for equality.
+	 * Compares {@code object} to this {@code RefractionMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code RefractionMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code OrenNayarMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code RefractionMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code RefractionMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof OrenNayarMaterial)) {
+		} else if(!(object instanceof RefractionMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.selectedBXDF, OrenNayarMaterial.class.cast(object).selectedBXDF)) {
+		} else if(!Objects.equals(this.selectedBXDF, RefractionMaterial.class.cast(object).selectedBXDF)) {
 			return false;
-		} else if(!equal(this.selectedBXDFWeight, OrenNayarMaterial.class.cast(object).selectedBXDFWeight)) {
+		} else if(!equal(this.selectedBXDFWeight, RefractionMaterial.class.cast(object).selectedBXDFWeight)) {
 			return false;
 		} else {
 			return true;
@@ -129,9 +134,9 @@ public final class OrenNayarMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code OrenNayarMaterial} instance.
+	 * Returns a hash code for this {@code RefractionMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code OrenNayarMaterial} instance
+	 * @return a hash code for this {@code RefractionMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

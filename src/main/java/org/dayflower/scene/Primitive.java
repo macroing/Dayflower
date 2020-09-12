@@ -24,8 +24,6 @@ import java.util.Optional;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
-import org.dayflower.geometry.Sphere3F;
-import org.dayflower.image.Color3F;
 
 /**
  * A {@code Primitive} represents a primitive and is associated with a {@link Material} instance, a {@link Shape3F} instance and some other properties.
@@ -45,102 +43,6 @@ public final class Primitive {
 	private Texture textureNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Constructs a new {@code Primitive} instance.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Primitive(new LambertianMaterial());
-	 * }
-	 * </pre>
-	 */
-	public Primitive() {
-		this(new LambertianMaterial());
-	}
-	
-	/**
-	 * Constructs a new {@code Primitive} instance.
-	 * <p>
-	 * If {@code material} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Primitive(material, new Sphere3F());
-	 * }
-	 * </pre>
-	 * 
-	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, {@code material} is {@code null}
-	 */
-	public Primitive(final Material material) {
-		this(material, new Sphere3F());
-	}
-	
-	/**
-	 * Constructs a new {@code Primitive} instance.
-	 * <p>
-	 * If either {@code material} or {@code shape} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Primitive(material, shape, new ConstantTexture(Color3F.GREEN));
-	 * }
-	 * </pre>
-	 * 
-	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
-	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code material} or {@code shape} are {@code null}
-	 */
-	public Primitive(final Material material, final Shape3F shape) {
-		this(material, shape, new ConstantTexture(Color3F.GREEN));
-	}
-	
-	/**
-	 * Constructs a new {@code Primitive} instance.
-	 * <p>
-	 * If either {@code material}, {@code shape} or {@code textureAlbedo} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Primitive(material, shape, textureAlbedo, new ConstantTexture());
-	 * }
-	 * </pre>
-	 * 
-	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
-	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
-	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape} or {@code textureAlbedo} are {@code null}
-	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo) {
-		this(material, shape, textureAlbedo, new ConstantTexture());
-	}
-	
-	/**
-	 * Constructs a new {@code Primitive} instance.
-	 * <p>
-	 * If either {@code material}, {@code shape}, {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Primitive(material, shape, textureAlbedo, textureEmittance, new ConstantTexture());
-	 * }
-	 * </pre>
-	 * 
-	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
-	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
-	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
-	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo} or {@code textureEmittance} are {@code null}
-	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance) {
-		this(material, shape, textureAlbedo, textureEmittance, new ConstantTexture());
-	}
 	
 	/**
 	 * Constructs a new {@code Primitive} instance.

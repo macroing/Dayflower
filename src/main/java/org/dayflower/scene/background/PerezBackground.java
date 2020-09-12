@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.background;
 
 import static org.dayflower.util.Doubles.acos;
 import static org.dayflower.util.Doubles.cos;
@@ -34,6 +34,7 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ChromaticSpectralCurve;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.Background;
 
 /**
  * A {@code PerezBackground} is a {@link Background} implementation of the Perez algorithm.

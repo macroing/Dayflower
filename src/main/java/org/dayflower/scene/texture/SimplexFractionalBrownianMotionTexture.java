@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.texture;
 
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.simplexFractionalBrownianMotionXYZ;
@@ -25,6 +25,8 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Texture;
 
 /**
  * A {@code SimplexFractionalBrownianMotionTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm.

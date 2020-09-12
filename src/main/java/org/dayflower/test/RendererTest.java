@@ -22,7 +22,6 @@ import org.dayflower.image.Image;
 import org.dayflower.renderer.AmbientOcclusionRenderer;
 import org.dayflower.renderer.PathTracer;
 import org.dayflower.renderer.Renderer;
-import org.dayflower.scene.Scenes;
 
 public final class RendererTest {
 	private RendererTest() {

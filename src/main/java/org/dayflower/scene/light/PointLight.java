@@ -16,12 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.light;
 
 import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.Light;
 
 /**
  * A {@code PointLight} is an implementation of {@link Light} that represents a point light.

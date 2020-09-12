@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.texture;
 
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Texture;
 
 /**
  * A {@code ConstantTexture} is a {@link Texture} implementation that returns a constant {@link Color3F} instance.

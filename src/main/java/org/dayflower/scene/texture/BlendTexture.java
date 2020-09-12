@@ -16,13 +16,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.texture;
 
 import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Texture;
 
 /**
  * A {@code BlendTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by blending the result of two other {@code Texture} instances.

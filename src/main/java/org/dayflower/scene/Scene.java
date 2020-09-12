@@ -44,20 +44,6 @@ public final class Scene {
 	/**
 	 * Constructs a new {@code Scene} instance.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Scene(new ConstantBackground(), new Camera());
-	 * }
-	 * </pre>
-	 */
-	public Scene() {
-		this(new ConstantBackground(), new Camera());
-	}
-	
-	/**
-	 * Constructs a new {@code Scene} instance.
-	 * <p>
 	 * If either {@code background} or {@code camera} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param background the {@link Background} instance associated with this {@code Scene} instance

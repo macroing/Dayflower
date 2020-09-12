@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.texture;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.cos;
@@ -31,6 +31,8 @@ import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.image.PixelOperation;
+import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Texture;
 
 /**
  * An {@code ImageTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from an {@link Image} instance.

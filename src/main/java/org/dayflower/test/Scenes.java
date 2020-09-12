@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.test;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
@@ -26,6 +26,16 @@ import org.dayflower.geometry.RectangularCuboid3F;
 import org.dayflower.geometry.Sphere3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.Camera;
+import org.dayflower.scene.Primitive;
+import org.dayflower.scene.Scene;
+import org.dayflower.scene.background.PerezBackground;
+import org.dayflower.scene.bxdf.AshikhminShirleyBRDF;
+import org.dayflower.scene.material.AshikhminShirleyMaterial;
+import org.dayflower.scene.material.LambertianMaterial;
+import org.dayflower.scene.texture.BullseyeTexture;
+import org.dayflower.scene.texture.CheckerboardTexture;
+import org.dayflower.scene.texture.ConstantTexture;
 
 /**
  * A class that consists exclusively of static methods that returns {@link Scene} instances.

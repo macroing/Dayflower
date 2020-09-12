@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.bxdf;
 
 import static org.dayflower.util.Floats.abs;
 
@@ -24,6 +24,8 @@ import java.util.Objects;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BXDF;
+import org.dayflower.scene.BXDFResult;
 
 /**
  * A {@code ReflectionBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) with perfect specular reflection.

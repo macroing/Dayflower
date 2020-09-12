@@ -29,15 +29,20 @@ import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ChromaticSpectralCurve;
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code PerezBackground} is a {@link Background} implementation of the Perez algorithm.
+ * <p>
+ * This class is mutable and therefore not thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class PerezBackground implements Background {
 	private static final int HISTOGRAM_RESOLUTION_X = 32;
 	private static final int HISTOGRAM_RESOLUTION_Y = 32;
@@ -58,30 +63,104 @@ public final class PerezBackground implements Background {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code PerezBackground} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PerezBackground(2.0F);
+	 * }
+	 * </pre>
+	 */
 	public PerezBackground() {
-		set();
+		this(2.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code PerezBackground} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PerezBackground(turbidity, new Vector3F(1.0F, 1.0F, -1.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param turbidity the turbidity associated with this {@code PerezBackground} instance
+	 */
+	public PerezBackground(final float turbidity) {
+		this(turbidity, new Vector3F(1.0F, 1.0F, -1.0F));
+	}
+	
+	/**
+	 * Constructs a new {@code PerezBackground} instance.
+	 * <p>
+	 * If {@code sunDirectionWorldSpace} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param turbidity the turbidity associated with this {@code PerezBackground} instance
+	 * @param sunDirectionWorldSpace the sun direction in world space associated with this {@code PerezBackground} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sunDirectionWorldSpace} is {@code null}
+	 */
+	public PerezBackground(final float turbidity, final Vector3F sunDirectionWorldSpace) {
+		set(turbidity, sunDirectionWorldSpace);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray}
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	@Override
 	public Color3F radiance(final Ray3F ray) {
 		return Color3F.minimumTo0(doRadiance(Vector3F.normalize(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis))));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the parameters for this {@code PerezBackground} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * perezBackground.set(2.0F);
+	 * }
+	 * </pre>
+	 */
 	public void set() {
 		set(2.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the parameters for this {@code PerezBackground} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * perezBackground.set(turbidity, new Vector3F(1.0F, 1.0F, -1.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param turbidity the turbidity associated with this {@code PerezBackground} instance
+	 */
 	public void set(final float turbidity) {
 		set(turbidity, new Vector3F(1.0F, 1.0F, -1.0F));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the parameters for this {@code PerezBackground} instance.
+	 * <p>
+	 * If {@code sunDirectionWorldSpace} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param turbidity the turbidity associated with this {@code PerezBackground} instance
+	 * @param sunDirectionWorldSpace the sun direction in world space associated with this {@code PerezBackground} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sunDirectionWorldSpace} is {@code null}
+	 */
 	public void set(final float turbidity, final Vector3F sunDirectionWorldSpace) {
 		doSetOrthonormalBasis();
 		doSetTurbidity(turbidity);

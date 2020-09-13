@@ -46,6 +46,6 @@ public final class RendererTest {
 	static void doTestPathTracer() {
 		final
 		Renderer renderer = new PathTracer();
-		renderer.render(new Image(800, 800), Scenes.newZealotScene());
+		renderer.render(new Image(800, 800), Scenes.newTerrainScene());
 	}
 }

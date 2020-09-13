@@ -89,6 +89,8 @@ public final class Plane3F implements Shape3F {
 	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
 	 * <p>
 	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Note: This method has not been implemented yet.
 	 * 
 	 * @param referencePoint the reference point on this {@code Plane3F} instance
 	 * @param referenceSurfaceNormal the reference surface normal on this {@code Plane3F} instance
@@ -102,7 +104,7 @@ public final class Plane3F implements Shape3F {
 		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
-		return Optional.empty();
+		return Optional.empty();//TODO: Implement!
 	}
 	
 	/**

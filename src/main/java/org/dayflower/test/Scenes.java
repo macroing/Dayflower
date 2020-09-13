@@ -23,14 +23,18 @@ import java.io.File;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Plane3F;
+import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.RectangularCuboid3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.ProceduralTerrain3F;
+import org.dayflower.geometry.Rectangle2I;
 import org.dayflower.geometry.Sphere3F;
 import org.dayflower.geometry.TriangleMesh3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.Color3F;
+import org.dayflower.image.Image;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
@@ -64,12 +68,40 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newDefaultScene() {
+		final Material material1 = new LambertianMaterial();
+		final Material material2 = new AshikhminShirleyMaterial();
+		final Material material3 = new AshikhminShirleyMaterial(0.02F);
+		final Material material4 = new AshikhminShirleyMaterial(0.02F);
+		
+		final Shape3F shape1 = new Plane3F();
+		final Shape3F shape2 = new Sphere3F(10.0F);
+		final Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F), new Point3F(1.0F));
+		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true).get(0);
+		
+		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
+		final Texture texture12 = new ConstantTexture();
+		final Texture texture13 = new ConstantTexture();
+		final Texture texture21 = new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.5F, 0.1F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F);
+		final Texture texture22 = new ConstantTexture();
+		final Texture texture23 = new ConstantTexture();
+		final Texture texture31 = new CheckerboardTexture(new Color3F(0.2F, 0.4F, 0.2F), new Color3F(0.6F, 0.8F, 0.6F), AngleF.degrees(90.0F), new Vector2F(1.5F, 1.5F));
+		final Texture texture32 = new ConstantTexture();
+		final Texture texture33 = new ConstantTexture();
+		final Texture texture41 = new ConstantTexture(new Color3F(0.5F));
+		final Texture texture42 = new ConstantTexture();
+		final Texture texture43 = new ConstantTexture();
+		
+		final Matrix44F matrix1 = Matrix44F.identity();
+		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		final Matrix44F matrix3 = Matrix44F.translate(-2.0F, 1.0F, 5.0F);
+		final Matrix44F matrix4 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(1.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(190.0F))), Matrix44F.scale(1.0F));
+		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
-		scene.addPrimitive(new Primitive(new AshikhminShirleyMaterial(),      new Sphere3F(10.0F),                                                                        new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.5F, 0.1F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F),                new ConstantTexture(), new ConstantTexture(), Matrix44F.translate(0.0F, 2.0F, 20.0F)));
-		scene.addPrimitive(new Primitive(new LambertianMaterial(),            new Plane3F(),                                                                              new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F)),                         new ConstantTexture(), new ConstantTexture(), Matrix44F.identity()));
-		scene.addPrimitive(new Primitive(new AshikhminShirleyMaterial(0.02F), new RectangularCuboid3F(new Point3F(-1.0F), new Point3F(1.0F)),                             new CheckerboardTexture(new Color3F(0.2F, 0.4F, 0.2F), new Color3F(0.6F, 0.8F, 0.6F), AngleF.degrees(90.0F), new Vector2F(1.5F, 1.5F)), new ConstantTexture(), new ConstantTexture(), Matrix44F.translate(-2.0F, 1.0F, 5.0F)));
-		scene.addPrimitive(new Primitive(new AshikhminShirleyMaterial(0.02F), TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true).get(0), new ConstantTexture(new Color3F(0.5F)),                                                                                                 new ConstantTexture(), new ConstantTexture(), Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(1.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(190.0F))), Matrix44F.scale(1.0F))));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material3, shape3, texture31, texture32, texture33, matrix3));
+		scene.addPrimitive(new Primitive(material4, shape4, texture41, texture42, texture43, matrix4));
 		
 		return scene;
 	}
@@ -105,14 +137,118 @@ public final class Scenes {
 	}
 	
 	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link BullseyeTexture}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code BullseyeTexture}
+	 */
+	public static Scene newShowcaseBullseyeTextureScene() {
+		final Material material1 = new LambertianMaterial();
+		final Material material2 = new LambertianMaterial();
+		
+		final Shape3F shape1 = new Plane3F();
+		final Shape3F shape2 = new Sphere3F(10.0F);
+		
+		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture12 = new ConstantTexture();
+		final Texture texture13 = new ConstantTexture();
+		final Texture texture21 = new BullseyeTexture(new Color3F(0.1F, 1.0F, 0.1F), new Color3F(0.1F, 0.1F, 1.0F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F);
+		final Texture texture22 = new ConstantTexture();
+		final Texture texture23 = new ConstantTexture();
+		
+		final Matrix44F matrix1 = Matrix44F.identity();
+		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link CheckerboardTexture}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code CheckerboardTexture}
+	 */
+	public static Scene newShowcaseCheckerboardTextureScene() {
+		final Material material1 = new LambertianMaterial();
+		final Material material2 = new LambertianMaterial();
+		
+		final Shape3F shape1 = new Plane3F();
+		final Shape3F shape2 = new Sphere3F(10.0F);
+		
+		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture12 = new ConstantTexture();
+		final Texture texture13 = new ConstantTexture();
+		final Texture texture21 = new CheckerboardTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), AngleF.degrees(90.0F), new Vector2F(5.0F, 5.0F));
+		final Texture texture22 = new ConstantTexture();
+		final Texture texture23 = new ConstantTexture();
+		
+		final Matrix44F matrix1 = Matrix44F.identity();
+		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link ImageTexture}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code ImageTexture}
+	 */
+	public static Scene newShowcaseImageTextureScene() {
+		final
+		Image image = new Image(800, 800, Color3F.WHITE);
+		image.fillRectangle(new Rectangle2I(new Point2I(300, 300), new Point2I(500, 500)), pixel -> Color3F.simplexFractionalBrownianMotion(new Color3F(0.75F, 0.5F, 0.75F), new Point2F(pixel.getX(), pixel.getY()), new Point2F(), new Point2F(800.0F, 800.0F)));
+		
+		final Material material1 = new LambertianMaterial();
+		final Material material2 = new LambertianMaterial();
+		
+		final Shape3F shape1 = new Plane3F();
+		final Shape3F shape2 = new Sphere3F(10.0F);
+		
+		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture12 = new ConstantTexture();
+		final Texture texture13 = new ConstantTexture();
+		final Texture texture21 = new ImageTexture(image, AngleF.degrees(90.0F));
+		final Texture texture22 = new ConstantTexture();
+		final Texture texture23 = new ConstantTexture();
+		
+		final Matrix44F matrix1 = Matrix44F.identity();
+		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 20.0F), Matrix44F.rotateY(AngleF.degrees(90.0F)));//Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		
+		return scene;
+	}
+	
+	/**
 	 * Returns a {@link Scene} instance.
 	 * 
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newTerrainScene() {
+		final Material material = new LambertianMaterial();
+		
+		final Shape3F shape = ProceduralTerrain3F.sin();
+		
+		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture2 = new ConstantTexture();
+		final Texture texture3 = new ConstantTexture();
+		
+		final Matrix44F matrix = Matrix44F.scale(1.0F);
+		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(10.0F, 4.0F, 10.0F)));
-		scene.addPrimitive(new Primitive(new LambertianMaterial(), ProceduralTerrain3F.sin(), new ConstantTexture(Color3F.GRAY), new ConstantTexture(), new ConstantTexture(), Matrix44F.scale(1.0F)));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
 		
 		return scene;
 	}
@@ -123,10 +259,26 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newZealotScene() {
+		final Material material1 = new LambertianMaterial();
+		final Material material2 = new AshikhminShirleyMaterial(0.02F);
+		
+		final Shape3F shape1 = new Plane3F();
+		final Shape3F shape2 = TriangleMesh3F.readWavefrontObject(new File("./resources/Zealot.obj"), true).get(0);
+		
+		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
+		final Texture texture12 = new ConstantTexture();
+		final Texture texture13 = new ConstantTexture();
+		final Texture texture21 = ImageTexture.load(new File("./resources/Zealot_albedo.png"));
+		final Texture texture22 = ImageTexture.load(new File("./resources/Zealot_emissive.png"));
+		final Texture texture23 = ImageTexture.load(new File("./resources/Zealot_normal.png"));
+		
+		final Matrix44F matrix1 = Matrix44F.identity();
+		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.05F));
+		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
-		scene.addPrimitive(new Primitive(new LambertianMaterial(),            new Plane3F(),                                                                       new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F)), new ConstantTexture(),                                          new ConstantTexture(),                                        Matrix44F.identity()));
-		scene.addPrimitive(new Primitive(new AshikhminShirleyMaterial(0.02F), TriangleMesh3F.readWavefrontObject(new File("./resources/Zealot.obj"), true).get(0), ImageTexture.load(new File("./resources/Zealot_albedo.png")),                                                   ImageTexture.load(new File("./resources/Zealot_emissive.png")), ImageTexture.load(new File("./resources/Zealot_normal.png")), Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.05F))));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
 		
 		return scene;
 	}

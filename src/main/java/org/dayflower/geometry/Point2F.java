@@ -19,6 +19,8 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.min;
 
 import java.util.Objects;
 
@@ -200,6 +202,100 @@ public final class Point2F {
 		final float v = textureCoordinatesA.getV() * barycentricCoordinates.getU() + textureCoordinatesB.getV() * barycentricCoordinates.getV() + textureCoordinatesC.getV() * barycentricCoordinates.getW();
 		
 		return new Point2F(u, v);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance with the largest component values.
+	 * 
+	 * @return a new {@code Point2F} instance with the largest component values
+	 */
+	public static Point2F maximum() {
+		final float component1 = Float.MAX_VALUE;
+		final float component2 = Float.MAX_VALUE;
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance with the largest component values of {@code a} and {@code b}.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2F} instance
+	 * @param b a {@code Point2F} instance
+	 * @return a new {@code Point2F} instance with the largest component values of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point2F maximum(final Point2F a, final Point2F b) {
+		final float component1 = max(a.component1, b.component1);
+		final float component2 = max(a.component2, b.component2);
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance with the largest component values of {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2F} instance
+	 * @param b a {@code Point2F} instance
+	 * @param c a {@code Point2F} instance
+	 * @return a new {@code Point2F} instance with the largest component values of {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
+	public static Point2F maximum(final Point2F a, final Point2F b, final Point2F c) {
+		final float component1 = max(a.component1, b.component1, c.component1);
+		final float component2 = max(a.component2, b.component2, c.component2);
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance with the smallest component values.
+	 * 
+	 * @return a new {@code Point2F} instance with the smallest component values
+	 */
+	public static Point2F minimum() {
+		final float component1 = Float.MIN_VALUE;
+		final float component2 = Float.MIN_VALUE;
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance with the smallest component values of {@code a} and {@code b}.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2F} instance
+	 * @param b a {@code Point2F} instance
+	 * @return a new {@code Point2F} instance with the smallest component values of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point2F minimum(final Point2F a, final Point2F b) {
+		final float component1 = min(a.component1, b.component1);
+		final float component2 = min(a.component2, b.component2);
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance with the smallest component values of {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2F} instance
+	 * @param b a {@code Point2F} instance
+	 * @param c a {@code Point2F} instance
+	 * @return a new {@code Point2F} instance with the smallest component values of {@code a}, {@code b} and {@code c}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
+	public static Point2F minimum(final Point2F a, final Point2F b, final Point2F c) {
+		final float component1 = min(a.component1, b.component1, c.component1);
+		final float component2 = min(a.component2, b.component2, c.component2);
+		
+		return new Point2F(component1, component2);
 	}
 	
 	/**

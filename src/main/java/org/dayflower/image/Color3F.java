@@ -25,11 +25,13 @@ import static org.dayflower.util.Floats.lerp;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.pow;
+import static org.dayflower.util.Floats.simplexFractionalBrownianMotionXY;
 import static org.dayflower.util.Ints.toInt;
 import static org.dayflower.util.Ints.requireRange;
 
 import java.util.Objects;
 
+import org.dayflower.geometry.Point2F;
 import org.dayflower.util.Floats;
 import org.dayflower.util.Ints;
 
@@ -1387,6 +1389,99 @@ public final class Color3F {
 		final float component3 = color.component1 * 0.272F + color.component2 * 0.534F + color.component3 * 0.131F;
 		
 		return new Color3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm.
+	 * <p>
+	 * If either {@code color} or {@code point} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.simplexFractionalBrownianMotion(color, point, new Point2F(800.0F, 800.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param color the base {@code Color3F} instance
+	 * @param point the current {@link Point2F} instance
+	 * @return a {@code Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm
+	 * @throws NullPointerException thrown if, and only if, either {@code color} or {@code point} are {@code null}
+	 */
+	public static Color3F simplexFractionalBrownianMotion(final Color3F color, final Point2F point) {
+		return simplexFractionalBrownianMotion(color, point, new Point2F(800.0F, 800.0F));
+	}
+	
+	/**
+	 * Returns a {@code Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm.
+	 * <p>
+	 * If either {@code color}, {@code point} or {@code pointEdgeA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.simplexFractionalBrownianMotion(color, point, pointEdgeA, new Point2F());
+	 * }
+	 * </pre>
+	 * 
+	 * @param color the base {@code Color3F} instance
+	 * @param point the current {@link Point2F} instance
+	 * @param pointEdgeA a {@code Point2F} instance denoting one of the edges
+	 * @return a {@code Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm
+	 * @throws NullPointerException thrown if, and only if, either {@code color}, {@code point} or {@code pointEdgeA} are {@code null}
+	 */
+	public static Color3F simplexFractionalBrownianMotion(final Color3F color, final Point2F point, final Point2F pointEdgeA) {
+		return simplexFractionalBrownianMotion(color, point, pointEdgeA, new Point2F());
+	}
+	
+	/**
+	 * Returns a {@code Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm.
+	 * <p>
+	 * If either {@code color}, {@code point}, {@code pointEdgeA} or {@code pointEdgeB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.simplexFractionalBrownianMotion(color, point, pointEdgeA, pointEdgeB, 5.0F, 0.5F, 16);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color the base {@code Color3F} instance
+	 * @param point the current {@link Point2F} instance
+	 * @param pointEdgeA a {@code Point2F} instance denoting one of the edges
+	 * @param pointEdgeB a {@code Point2F} instance denoting one of the edges
+	 * @return a {@code Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm
+	 * @throws NullPointerException thrown if, and only if, either {@code color}, {@code point}, {@code pointEdgeA} or {@code pointEdgeB} are {@code null}
+	 */
+	public static Color3F simplexFractionalBrownianMotion(final Color3F color, final Point2F point, final Point2F pointEdgeA, final Point2F pointEdgeB) {
+		return simplexFractionalBrownianMotion(color, point, pointEdgeA, pointEdgeB, 5.0F, 0.5F, 16);
+	}
+	
+	/**
+	 * Returns a {@code Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm.
+	 * <p>
+	 * If either {@code color}, {@code point}, {@code pointEdgeA} or {@code pointEdgeB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color the base {@code Color3F} instance
+	 * @param point the current {@link Point2F} instance
+	 * @param pointEdgeA a {@code Point2F} instance denoting one of the edges
+	 * @param pointEdgeB a {@code Point2F} instance denoting one of the edges
+	 * @param frequency the frequency to use
+	 * @param gain the gain to use
+	 * @param octaves the octaves to use
+	 * @return a {@code Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm
+	 * @throws NullPointerException thrown if, and only if, either {@code color}, {@code point}, {@code pointEdgeA} or {@code pointEdgeB} are {@code null}
+	 */
+	public static Color3F simplexFractionalBrownianMotion(final Color3F color, final Point2F point, final Point2F pointEdgeA, final Point2F pointEdgeB, final float frequency, final float gain, final int octaves) {
+		final Point2F pointEdgeMaximum = Point2F.maximum(pointEdgeA, pointEdgeB);
+		final Point2F pointEdgeMinimum = Point2F.minimum(pointEdgeA, pointEdgeB);
+		
+		final float x = (point.getX() - pointEdgeMinimum.getX()) / (pointEdgeMaximum.getX() - pointEdgeMinimum.getX());
+		final float y = (point.getY() - pointEdgeMinimum.getY()) / (pointEdgeMaximum.getY() - pointEdgeMinimum.getY());
+		
+		final float noise = simplexFractionalBrownianMotionXY(x, y, frequency, gain, 0.0F, 1.0F, octaves);
+		
+		return Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(color, noise)));
 	}
 	
 	/**

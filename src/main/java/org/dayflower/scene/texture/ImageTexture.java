@@ -44,6 +44,7 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.Color3F;
+import org.dayflower.image.Image;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 
@@ -64,6 +65,66 @@ public final class ImageTexture implements Texture {
 	private final int[] image;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code ImageTexture} instance.
+	 * <p>
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ImageTexture(image, AngleF.degrees(0.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param image an {@link Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 */
+	public ImageTexture(final Image image) {
+		this(image, AngleF.degrees(0.0F));
+	}
+	
+	/**
+	 * Constructs a new {@code ImageTexture} instance.
+	 * <p>
+	 * If either {@code image} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ImageTexture(image, angle, new Vector2F(1.0F, 1.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param image an {@link Image} instance
+	 * @param angle the {@link AngleF} instance to use
+	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
+	 */
+	public ImageTexture(final Image image, final AngleF angle) {
+		this(image, angle, new Vector2F(1.0F, 1.0F));
+	}
+	
+	/**
+	 * Constructs a new {@code ImageTexture} instance.
+	 * <p>
+	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
+	 * }
+	 * </pre>
+	 * 
+	 * @param image an {@link Image} instance
+	 * @param angle the {@link AngleF} instance to use
+	 * @param scale the {@link Vector2F} instance to use as the scale factor
+	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
+	 */
+	public ImageTexture(final Image image, final AngleF angle, final Vector2F scale) {
+		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
+	}
 	
 	/**
 	 * Constructs a new {@code ImageTexture} instance.

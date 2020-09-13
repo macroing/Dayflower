@@ -48,6 +48,83 @@ public final class BullseyeTexture implements Texture {
 	/**
 	 * Constructs a new {@code BullseyeTexture} instance.
 	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new BullseyeTexture(Color3F.GRAY, Color3F.WHITE);
+	 * }
+	 * </pre>
+	 */
+	public BullseyeTexture() {
+		this(Color3F.GRAY, Color3F.WHITE);
+	}
+	
+	/**
+	 * Constructs a new {@code BullseyeTexture} instance.
+	 * <p>
+	 * If either {@code colorA} or {@code colorB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new BullseyeTexture(colorA, colorB, new Point3F());
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorA one of the two {@link Color3F} instances to use
+	 * @param colorB one of the two {@code Color3F} instances to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
+	 */
+	public BullseyeTexture(final Color3F colorA, final Color3F colorB) {
+		this(colorA, colorB, new Point3F());
+	}
+	
+	/**
+	 * Constructs a new {@code BullseyeTexture} instance.
+	 * <p>
+	 * If either {@code colorA}, {@code colorB} or {@code origin} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new BullseyeTexture(colorA, colorB, origin, 1.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorA one of the two {@link Color3F} instances to use
+	 * @param colorB one of the two {@code Color3F} instances to use
+	 * @param origin a {@link Point3F} instance used as the origin for the bullseye pattern
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code origin} are {@code null}
+	 */
+	public BullseyeTexture(final Color3F colorA, final Color3F colorB, final Point3F origin) {
+		this(colorA, colorB, origin, 1.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code BullseyeTexture} instance.
+	 * <p>
+	 * If either {@code colorA}, {@code colorB} or {@code origin} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new BullseyeTexture(new ConstantTexture(colorA), new ConstantTexture(colorB), origin, scale);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorA one of the two {@link Color3F} instances to use
+	 * @param colorB one of the two {@code Color3F} instances to use
+	 * @param origin a {@link Point3F} instance used as the origin for the bullseye pattern
+	 * @param scale the scale for the bullseye pattern
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code origin} are {@code null}
+	 */
+	public BullseyeTexture(final Color3F colorA, final Color3F colorB, final Point3F origin, final float scale) {
+		this(new ConstantTexture(colorA), new ConstantTexture(colorB), origin, scale);
+	}
+	
+	/**
+	 * Constructs a new {@code BullseyeTexture} instance.
+	 * <p>
 	 * If either {@code textureA} or {@code textureB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:

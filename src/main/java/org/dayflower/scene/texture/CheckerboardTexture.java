@@ -49,6 +49,83 @@ public final class CheckerboardTexture implements Texture {
 	/**
 	 * Constructs a new {@code CheckerboardTexture} instance.
 	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new CheckerboardTexture(Color3F.GRAY, Color3F.WHITE);
+	 * }
+	 * </pre>
+	 */
+	public CheckerboardTexture() {
+		this(Color3F.GRAY, Color3F.WHITE);
+	}
+	
+	/**
+	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * <p>
+	 * If either {@code colorA} or {@code colorB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new CheckerboardTexture(colorA, colorB, AngleF.degrees(0.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorA one of the two {@link Color3F} instances to use
+	 * @param colorB one of the two {@code Color3F} instances to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
+	 */
+	public CheckerboardTexture(final Color3F colorA, final Color3F colorB) {
+		this(new ConstantTexture(colorA), new ConstantTexture(colorB), AngleF.degrees(0.0F));
+	}
+	
+	/**
+	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * <p>
+	 * If either {@code colorA}, {@code colorB} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new CheckerboardTexture(colorA, colorB, angle, new Vector2F(1.0F, 1.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorA one of the two {@link Color3F} instances to use
+	 * @param colorB one of the two {@code Color3F} instances to use
+	 * @param angle the {@link AngleF} instance to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code angle} are {@code null}
+	 */
+	public CheckerboardTexture(final Color3F colorA, final Color3F colorB, final AngleF angle) {
+		this(new ConstantTexture(colorA), new ConstantTexture(colorB), angle, new Vector2F(1.0F, 1.0F));
+	}
+	
+	/**
+	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * <p>
+	 * If either {@code colorA}, {@code colorB}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new CheckerboardTexture(new ConstantTexture(colorA), new ConstantTexture(colorB), angle, scale);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorA one of the two {@link Color3F} instances to use
+	 * @param colorB one of the two {@code Color3F} instances to use
+	 * @param angle the {@link AngleF} instance to use
+	 * @param scale the {@link Vector2F} instance to use as the scale factor
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB}, {@code angle} or {@code scale} are {@code null}
+	 */
+	public CheckerboardTexture(final Color3F colorA, final Color3F colorB, final AngleF angle, Vector2F scale) {
+		this(new ConstantTexture(colorA), new ConstantTexture(colorB), angle, scale);
+	}
+	
+	/**
+	 * Constructs a new {@code CheckerboardTexture} instance.
+	 * <p>
 	 * If either {@code textureA} or {@code textureB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:

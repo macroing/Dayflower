@@ -70,6 +70,22 @@ public final class AshikhminShirleyMaterial implements Material {
 		this.selectedBXDFWeight = 1.0F;
 	}
 	
+	/**
+	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new AshikhminShirleyMaterial(new AshikhminShirleyBRDF(roughness));
+	 * }
+	 * </pre>
+	 * 
+	 * @param roughness the roughness to use
+	 */
+	public AshikhminShirleyMaterial(final float roughness) {
+		this(new AshikhminShirleyBRDF(roughness));
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

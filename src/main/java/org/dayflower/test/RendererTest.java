@@ -21,6 +21,7 @@ package org.dayflower.test;
 import org.dayflower.image.Image;
 import org.dayflower.renderer.AmbientOcclusionRenderer;
 import org.dayflower.renderer.PathTracer;
+import org.dayflower.renderer.RayCaster;
 import org.dayflower.renderer.Renderer;
 
 public final class RendererTest {
@@ -32,7 +33,8 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionRenderer();
-		doTestPathTracer();
+//		doTestPathTracer();
+		doTestRayCaster();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,5 +49,11 @@ public final class RendererTest {
 		final
 		Renderer renderer = new PathTracer();
 		renderer.render(new Image(800, 800), Scenes.newZealotScene());
+	}
+	
+	static void doTestRayCaster() {
+		final
+		Renderer renderer = new RayCaster();
+		renderer.render(new Image(800, 800), Scenes.newDefaultScene());
 	}
 }

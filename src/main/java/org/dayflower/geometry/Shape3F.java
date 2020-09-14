@@ -138,4 +138,32 @@ public interface Shape3F {
 	 * @return the volume of this {@code Shape3F} instance
 	 */
 	float getVolume();
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Shape3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	float intersectionT(final Ray3F ray);
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Shape3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum);
 }

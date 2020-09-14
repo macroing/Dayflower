@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Floats.isNaN;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -281,47 +283,7 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F a = this.a.getPosition();
-		final Point3F b = this.a.getPosition();
-		final Point3F c = this.c.getPosition();
-		
-		final Vector3F edgeAB = Vector3F.direction(a, b);
-		final Vector3F edgeAC = Vector3F.direction(a, c);
-		final Vector3F direction0 = ray.getDirection();
-		final Vector3F direction1 = Vector3F.crossProduct(direction0, edgeAC);
-		
-		final float determinant = Vector3F.dotProduct(edgeAB, direction1);
-		
-		if(determinant >= -0.0001F && determinant <= 0.0001F) {
-			return false;
-		}
-		
-		final Point3F origin = ray.getOrigin();
-		
-		final Vector3F direction2 = Vector3F.direction(a, origin);
-		
-		final float determinantReciprocal = 1.0F / determinant;
-		final float u = Vector3F.dotProduct(direction2, direction1) * determinantReciprocal;
-		
-		if(u < 0.0F || u > 1.0F) {
-			return false;
-		}
-		
-		final Vector3F direction3 = Vector3F.crossProduct(direction2, edgeAB);
-		
-		final float v = Vector3F.dotProduct(direction0, direction3) * determinantReciprocal;
-		
-		if(v < 0.0F || u + v > 1.0F) {
-			return false;
-		}
-		
-		final float t = Vector3F.dotProduct(edgeAC, direction3) * determinantReciprocal;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return false;
-		}
-		
-		return true;
+		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -388,6 +350,80 @@ public final class Triangle3F implements Shape3F {
 	@Override
 	public float getVolume() {
 		return 0.0F;
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Triangle3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Triangle3F} instance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray) {
+		return intersectionT(ray, 0.0001F, Float.MAX_VALUE);
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Triangle3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Triangle3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Point3F a = this.a.getPosition();
+		final Point3F b = this.a.getPosition();
+		final Point3F c = this.c.getPosition();
+		
+		final Vector3F edgeAB = Vector3F.direction(a, b);
+		final Vector3F edgeAC = Vector3F.direction(a, c);
+		final Vector3F direction0 = ray.getDirection();
+		final Vector3F direction1 = Vector3F.crossProduct(direction0, edgeAC);
+		
+		final float determinant = Vector3F.dotProduct(edgeAB, direction1);
+		
+		if(determinant >= -0.0001F && determinant <= 0.0001F) {
+			return Float.NaN;
+		}
+		
+		final Point3F origin = ray.getOrigin();
+		
+		final Vector3F direction2 = Vector3F.direction(a, origin);
+		
+		final float determinantReciprocal = 1.0F / determinant;
+		final float u = Vector3F.dotProduct(direction2, direction1) * determinantReciprocal;
+		
+		if(u < 0.0F || u > 1.0F) {
+			return Float.NaN;
+		}
+		
+		final Vector3F direction3 = Vector3F.crossProduct(direction2, edgeAB);
+		
+		final float v = Vector3F.dotProduct(direction0, direction3) * determinantReciprocal;
+		
+		if(v < 0.0F || u + v > 1.0F) {
+			return Float.NaN;
+		}
+		
+		final float t = Vector3F.dotProduct(edgeAC, direction3) * determinantReciprocal;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return Float.NaN;
+		}
+		
+		return t;
 	}
 	
 	/**

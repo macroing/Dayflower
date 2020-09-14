@@ -18,10 +18,14 @@
  */
 package org.dayflower.scene;
 
+import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.isNaN;
+
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 
@@ -130,8 +134,8 @@ public final class Primitive {
 	 * @return an {@code Optional} with an optional {@code Intersection} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public Optional<Intersection> intersection(final Ray3F rayWorldSpace) {
-		return intersection(rayWorldSpace, 0.0001F, Float.MAX_VALUE);
+	public Optional<Intersection> intersection(final Ray3F ray) {
+		return intersection(ray, 0.0001F, Float.MAX_VALUE);
 	}
 	
 	/**
@@ -147,8 +151,8 @@ public final class Primitive {
 	 * @return an {@code Optional} with an optional {@code Intersection} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public Optional<Intersection> intersection(final Ray3F rayWorldSpace, final float tMinimum, final float tMaximum) {
-		return this.shape.intersection(Ray3F.transform(this.worldToObject, rayWorldSpace), tMinimum, tMaximum).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace));
+	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return this.shape.intersection(Ray3F.transform(this.worldToObject, ray), tMinimum, tMaximum).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace));
 	}
 	
 	/**
@@ -239,8 +243,8 @@ public final class Primitive {
 	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Primitive} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public boolean intersects(final Ray3F rayWorldSpace) {
-		return intersects(rayWorldSpace, 0.0001F, Float.MAX_VALUE);
+	public boolean intersects(final Ray3F ray) {
+		return intersects(ray, 0.0001F, Float.MAX_VALUE);
 	}
 	
 	/**
@@ -254,8 +258,54 @@ public final class Primitive {
 	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Primitive} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public boolean intersects(final Ray3F rayWorldSpace, final float tMinimum, final float tMaximum) {
-		return this.shape.intersects(Ray3F.transform(this.worldToObject, rayWorldSpace), tMinimum, tMaximum);
+	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return this.shape.intersects(Ray3F.transform(this.worldToObject, ray), tMinimum, tMaximum);
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Primitive} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Primitive} instance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public float intersectionT(final Ray3F ray) {
+		return intersectionT(ray, 0.0001F, Float.MAX_VALUE);
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Primitive} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Primitive} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Ray3F rayWorldSpace = ray;
+		final Ray3F rayObjectSpace = Ray3F.transform(this.worldToObject, rayWorldSpace);
+		
+		final float tObjectSpace = this.shape.intersectionT(rayObjectSpace, tMinimum, tMaximum);
+		
+		if(isNaN(tObjectSpace)) {
+			return Float.NaN;
+		}
+		
+		final Point3F surfaceIntersectionPointObjectSpace = Point3F.add(rayObjectSpace.getOrigin(), rayObjectSpace.getDirection(), tObjectSpace);
+		final Point3F surfaceIntersectionPointWorldSpace = Point3F.transform(this.objectToWorld, surfaceIntersectionPointObjectSpace);
+		
+		final float tWorldSpace = abs(Point3F.distance(rayWorldSpace.getOrigin(), surfaceIntersectionPointWorldSpace));
+		
+		return tWorldSpace;
 	}
 	
 	/**

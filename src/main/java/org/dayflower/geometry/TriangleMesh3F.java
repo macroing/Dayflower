@@ -20,6 +20,7 @@ package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.minOrNaN;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -248,6 +249,40 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public float getVolume() {
 		return 0.0F;
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code TriangleMesh3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code TriangleMesh3F} instance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray) {
+		return intersectionT(ray, 0.0001F, Float.MAX_VALUE);
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code TriangleMesh3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code TriangleMesh3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return this.node.intersectionT(ray, tMinimum, tMaximum);
 	}
 	
 	/**
@@ -925,16 +960,15 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		@Override
 		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			Optional<SurfaceIntersection3F> optionalSurfaceIntersectionA = Optional.empty();
+			Optional<SurfaceIntersection3F> optionalSurfaceIntersection = Optional.empty();
 			
 			if(getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
-				
 				for(final Triangle3F triangle : this.triangles) {
-					optionalSurfaceIntersectionA = SurfaceIntersection3F.closest(optionalSurfaceIntersectionA, triangle.intersection(ray, tMinimum, tMaximum));
+					optionalSurfaceIntersection = SurfaceIntersection3F.closest(optionalSurfaceIntersection, triangle.intersection(ray, tMinimum, tMaximum));
 				}
 			}
 			
-			return optionalSurfaceIntersectionA;
+			return optionalSurfaceIntersection;
 		}
 		
 		@Override
@@ -979,6 +1013,19 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
+		public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+			float t = Float.NaN;
+			
+			if(getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
+				for(final Triangle3F triangle : this.triangles) {
+					t = minOrNaN(t, triangle.intersectionT(ray, tMinimum, tMaximum));
+				}
+			}
+			
+			return t;
+		}
+		
+		@Override
 		public int hashCode() {
 			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.triangles);
 		}
@@ -1008,6 +1055,8 @@ public final class TriangleMesh3F implements Shape3F {
 		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
 		
 		public abstract float getSurfaceArea();
+		
+		public abstract float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum);
 		
 		public final int getDepth() {
 			return this.depth;
@@ -1063,6 +1112,11 @@ public final class TriangleMesh3F implements Shape3F {
 		@Override
 		public float getSurfaceArea() {
 			return this.nodeL.getSurfaceArea() + this.nodeR.getSurfaceArea();
+		}
+		
+		@Override
+		public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+			return getBoundingVolume().intersects(ray, tMinimum, tMaximum) ? minOrNaN(this.nodeL.intersectionT(ray, tMinimum, tMaximum), this.nodeR.intersectionT(ray, tMinimum, tMaximum)) : Float.NaN;
 		}
 		
 		@Override

@@ -249,30 +249,7 @@ public final class RectangularCuboid3F implements Shape3F {
 	 */
 	@Override
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F maximum = getMaximum();
-		final Point3F minimum = getMinimum();
-		final Point3F origin = ray.getOrigin();
-		
-		final Vector3F direction = ray.getDirection();
-		final Vector3F directionReciprocal = Vector3F.reciprocal(direction);
-		
-		final float t0X = (minimum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float t0Y = (minimum.getY() - origin.getY()) * directionReciprocal.getY();
-		final float t0Z = (minimum.getZ() - origin.getZ()) * directionReciprocal.getZ();
-		final float t1X = (maximum.getX() - origin.getX()) * directionReciprocal.getX();
-		final float t1Y = (maximum.getY() - origin.getY()) * directionReciprocal.getY();
-		final float t1Z = (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ();
-		
-		final float t0 = max(min(t0X, t1X), min(t0Y, t1Y), min(t0Z, t1Z));
-		final float t1 = min(max(t0X, t1X), max(t0Y, t1Y), max(t0Z, t1Z));
-		
-		final float t = t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
-		
-		if(isNaN(t)) {
-			return false;
-		}
-		
-		return true;
+		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -335,6 +312,59 @@ public final class RectangularCuboid3F implements Shape3F {
 		final float volume = x * y * z;
 		
 		return volume;
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code RectangularCuboid3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code RectangularCuboid3F} instance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray) {
+		return intersectionT(ray, 0.0001F, Float.MAX_VALUE);
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code RectangularCuboid3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code RectangularCuboid3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Point3F maximum = getMaximum();
+		final Point3F minimum = getMinimum();
+		final Point3F origin = ray.getOrigin();
+		
+		final Vector3F direction = ray.getDirection();
+		final Vector3F directionReciprocal = Vector3F.reciprocal(direction);
+		
+		final float t0X = (minimum.getX() - origin.getX()) * directionReciprocal.getX();
+		final float t0Y = (minimum.getY() - origin.getY()) * directionReciprocal.getY();
+		final float t0Z = (minimum.getZ() - origin.getZ()) * directionReciprocal.getZ();
+		final float t1X = (maximum.getX() - origin.getX()) * directionReciprocal.getX();
+		final float t1Y = (maximum.getY() - origin.getY()) * directionReciprocal.getY();
+		final float t1Z = (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ();
+		
+		final float t0 = max(min(t0X, t1X), min(t0Y, t1Y), min(t0Z, t1Z));
+		final float t1 = min(max(t0X, t1X), max(t0Y, t1Y), max(t0Z, t1Z));
+		
+		final float t = t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+		
+		return t;
 	}
 	
 	/**

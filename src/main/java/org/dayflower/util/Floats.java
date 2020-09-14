@@ -513,6 +513,33 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns the smaller value of {@code a} and {@code b}.
+	 * <p>
+	 * The result is the value closer to negative infinity.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value. If one value is NaN, then the result is the other value. Unlike the numerical comparison operators, this method considers negative zero to be strictly smaller than positive
+	 * zero. If one argument is positive zero and the other is negative zero, the result is negative zero.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @return the smaller value of {@code a} and {@code b}
+	 */
+	public static float minOrNaN(final float a, final float b) {
+		final boolean isNaNA = isNaN(a);
+		final boolean isNaNB = isNaN(b);
+		
+		if(!isNaNA && !isNaNB) {
+			return min(a, b);
+		} else if(!isNaNA) {
+			return a;
+		} else if(!isNaNB) {
+			return b;
+		} else {
+			return Float.NaN;
+		}
+	}
+	
+	/**
 	 * Returns the normalized representation of {@code value}.
 	 * <p>
 	 * If {@code value} is greater than or equal to {@code min(a, b)} and less than or equal to {@code max(a, b)}, the normalized representation of {@code value} will be between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive).

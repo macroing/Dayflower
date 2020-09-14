@@ -46,7 +46,7 @@ public final class Ray3F {
 	 */
 	public Ray3F(final Point3F origin, final Vector3F direction) {
 		this.origin = Objects.requireNonNull(origin, "origin == null");
-		this.direction = Objects.requireNonNull(direction, "direction == null");
+		this.direction = Vector3F.normalize(Objects.requireNonNull(direction, "direction == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

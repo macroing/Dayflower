@@ -258,6 +258,40 @@ public final class ProceduralTerrain3F implements Shape3F {
 	}
 	
 	/**
+	 * Performs an intersection test between {@code ray} and this {@code ProceduralTerrain3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code ProceduralTerrain3F} instance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray) {
+		return intersectionT(ray, 0.0001F, Float.MAX_VALUE);
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code ProceduralTerrain3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code ProceduralTerrain3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return doIntersection(ray);
+	}
+	
+	/**
 	 * Returns a hash code for this {@code ProceduralTerrain3F} instance.
 	 * 
 	 * @return a hash code for this {@code ProceduralTerrain3F} instance

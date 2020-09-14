@@ -20,6 +20,7 @@ package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isNaN;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -303,27 +304,7 @@ public final class Plane3F implements Shape3F {
 	 */
 	@Override
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Vector3F direction = ray.getDirection();
-		final Vector3F surfaceNormal = getSurfaceNormal();
-		
-		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
-		
-		if(equal(nDotD, 0.0F)) {
-			return false;
-		}
-		
-		final Point3F origin = ray.getOrigin();
-		final Point3F a = getA();
-		
-		final Vector3F originToA = Vector3F.direction(origin, a);
-		
-		final float t = Vector3F.dotProduct(originToA, surfaceNormal) / nDotD;
-		
-		if(t <= tMinimum || t >= tMaximum) {
-			return false;
-		}
-		
-		return true;
+		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -384,6 +365,60 @@ public final class Plane3F implements Shape3F {
 	@Override
 	public float getVolume() {
 		return 0.0F;
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Plane3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Plane3F} instance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray) {
+		return intersectionT(ray, 0.0001F, Float.MAX_VALUE);
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Plane3F} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Plane3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Vector3F direction = ray.getDirection();
+		final Vector3F surfaceNormal = getSurfaceNormal();
+		
+		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
+		
+		if(equal(nDotD, 0.0F)) {
+			return Float.NaN;
+		}
+		
+		final Point3F origin = ray.getOrigin();
+		final Point3F a = getA();
+		
+		final Vector3F originToA = Vector3F.direction(origin, a);
+		
+		final float t = Vector3F.dotProduct(originToA, surfaceNormal) / nDotD;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return Float.NaN;
+		}
+		
+		return t;
 	}
 	
 	/**

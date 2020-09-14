@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene;
 
+import static org.dayflower.util.Floats.minOrNaN;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -100,18 +102,18 @@ public final class Scene {
 	}
 	
 	/**
-	 * Performs an intersection test between {@code rayWorldSpace} and this {@code Scene} instance.
+	 * Performs an intersection test between {@code ray} and this {@code Scene} instance.
 	 * <p>
 	 * Returns an {@code Optional} with an optional {@link Intersection} instance that contains information about the intersection, if it was found.
 	 * <p>
-	 * If {@code rayWorldSpace} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param rayWorldSpace the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
+	 * @param ray the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
 	 * @return an {@code Optional} with an optional {@code Intersection} instance that contains information about the intersection, if it was found
-	 * @throws NullPointerException thrown if, and only if, {@code rayWorldSpace} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public Optional<Intersection> intersection(final Ray3F rayWorldSpace) {
-		return this.primitives.stream().map(primitive -> primitive.intersection(rayWorldSpace)).filter(optionalIntersection -> optionalIntersection.isPresent()).map(optionalIntersection -> optionalIntersection.get()).min((a, b) -> Float.compare(a.getSurfaceIntersectionWorldSpace().getT(), b.getSurfaceIntersectionWorldSpace().getT()));
+	public Optional<Intersection> intersection(final Ray3F ray) {
+		return this.primitives.stream().map(primitive -> primitive.intersection(ray)).filter(optionalIntersection -> optionalIntersection.isPresent()).map(optionalIntersection -> optionalIntersection.get()).min((a, b) -> Float.compare(a.getSurfaceIntersectionWorldSpace().getT(), b.getSurfaceIntersectionWorldSpace().getT()));
 	}
 	
 	/**
@@ -180,16 +182,16 @@ public final class Scene {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code rayWorldSpace} intersects any {@link Primitive} instance in this {@code Scene} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code ray} intersects any {@link Primitive} instance in this {@code Scene} instance, {@code false} otherwise.
 	 * <p>
-	 * If {@code rayWorldSpace} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param rayWorldSpace the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
-	 * @return {@code true} if, and only if, {@code rayWorldSpace} intersects any {@code Primitive} instance in this {@code Scene} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code rayWorldSpace} is {@code null}
+	 * @param ray the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
+	 * @return {@code true} if, and only if, {@code ray} intersects any {@code Primitive} instance in this {@code Scene} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public boolean intersects(final Ray3F rayWorldSpace) {
-		return this.primitives.stream().anyMatch(primitive -> primitive.intersects(rayWorldSpace));
+	public boolean intersects(final Ray3F ray) {
+		return this.primitives.stream().anyMatch(primitive -> primitive.intersects(ray));
 	}
 	
 	/**
@@ -220,6 +222,27 @@ public final class Scene {
 	 */
 	public boolean removePrimitive(final Primitive primitive) {
 		return this.primitives.remove(Objects.requireNonNull(primitive, "primitive == null"));
+	}
+	
+	/**
+	 * Performs an intersection test between {@code ray} and this {@code Scene} instance.
+	 * <p>
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Scene} instance
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public float intersectionT(final Ray3F ray) {
+		float t = Float.NaN;
+		
+		for(final Primitive primitive : this.primitives) {
+			t = minOrNaN(t, primitive.intersectionT(ray));
+		}
+		
+		return t;
 	}
 	
 	/**

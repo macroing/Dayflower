@@ -33,8 +33,8 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionRenderer();
-//		doTestPathTracer();
-		doTestRayCaster();
+		doTestPathTracer();
+//		doTestRayCaster();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ public final class RendererTest {
 	static void doTestPathTracer() {
 		final
 		Renderer renderer = new PathTracer();
-		renderer.render(new Image(800, 800), Scenes.newZealotScene());
+		renderer.render(new Image(800, 800), Scenes.newShowcaseShape3FTorus3FScene());
 	}
 	
 	static void doTestRayCaster() {

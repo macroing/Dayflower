@@ -341,7 +341,7 @@ public class Doubles {
 		final double cA = c * aReciprocal;
 		final double dA = d * aReciprocal;
 		final double eA = e * aReciprocal;
-		final double p = -0.375D * bASquared * cA;
+		final double p = -0.375D * bASquared + cA;
 		final double q = 0.125D * bASquared * bA - 0.5D * bA * cA + dA;
 		final double r = -0.01171875D * bASquared * bASquared + 0.0625D * bASquared * cA - 0.25D * bA * dA + eA;
 		final double z = solveCubicForQuartic(-0.5D * p, -r, 0.5D * r * p - 0.125D * q * q);

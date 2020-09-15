@@ -31,8 +31,12 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.ProceduralTerrain3F;
 import org.dayflower.geometry.Rectangle2I;
 import org.dayflower.geometry.Sphere3F;
+import org.dayflower.geometry.Torus3F;
+import org.dayflower.geometry.Triangle3F;
+import org.dayflower.geometry.Triangle3F.Vertex3F;
 import org.dayflower.geometry.TriangleMesh3F;
 import org.dayflower.geometry.Vector2F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.scene.Camera;
@@ -113,11 +117,182 @@ public final class Scenes {
 	}
 	
 	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link Plane3F}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code Plane3F}
+	 */
+	public static Scene newShowcaseShape3FPlane3FScene() {
+		final Material material = new LambertianMaterial();
+		
+		final Shape3F shape = new Plane3F();
+		
+		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture2 = new ConstantTexture();
+		final Texture texture3 = new ConstantTexture();
+		
+		final Matrix44F matrix = Matrix44F.identity();
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link ProceduralTerrain3F}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code ProceduralTerrain3F}
+	 */
+	public static Scene newShowcaseShape3FProceduralTerrain3FScene() {
+		final Material material = new LambertianMaterial();
+		
+		final Shape3F shape = ProceduralTerrain3F.sin();
+		
+		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture2 = new ConstantTexture();
+		final Texture texture3 = new ConstantTexture();
+		
+		final Matrix44F matrix = Matrix44F.scale(1.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(10.0F, 4.0F, 10.0F)));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link RectangularCuboid3F}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code RectangularCuboid3F}
+	 */
+	public static Scene newShowcaseShape3FRectangularCuboid3FScene() {
+		final Material material = new LambertianMaterial();
+		
+		final Shape3F shape = new RectangularCuboid3F(new Point3F(-5.0F), new Point3F(5.0F));
+		
+		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture2 = new ConstantTexture();
+		final Texture texture3 = new ConstantTexture();
+		
+		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link Sphere3F}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code Sphere3F}
+	 */
+	public static Scene newShowcaseShape3FSphere3FScene() {
+		final Material material = new LambertianMaterial();
+		
+		final Shape3F shape = new Sphere3F(10.0F);
+		
+		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture2 = new ConstantTexture();
+		final Texture texture3 = new ConstantTexture();
+		
+		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link Torus3F}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code Torus3F}
+	 */
+	public static Scene newShowcaseShape3FTorus3FScene() {
+		final Material material = new LambertianMaterial();
+		
+		final Shape3F shape = new Torus3F();
+		
+		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture2 = new ConstantTexture();
+		final Texture texture3 = new ConstantTexture();
+		
+		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 5.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link Triangle3F}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code Triangle3F}
+	 */
+	public static Scene newShowcaseShape3FTriangle3FScene() {
+		final Material material = new LambertianMaterial();
+		
+		final Point3F positionA = new Point3F(+0.0F, +5.0F, 0.0F);
+		final Point3F positionB = new Point3F(+5.0F, -5.0F, 0.0F);
+		final Point3F positionC = new Point3F(-5.0F, -5.0F, 0.0F);
+		
+		final Vector3F surfaceNormal = Vector3F.normalNormalized(positionA, positionB, positionC);
+		
+		final Vertex3F a = new Vertex3F(new Point2F(0.5F, 0.0F), positionA, surfaceNormal, new Vector3F());
+		final Vertex3F b = new Vertex3F(new Point2F(1.0F, 1.0F), positionB, surfaceNormal, new Vector3F());
+		final Vertex3F c = new Vertex3F(new Point2F(0.0F, 1.0F), positionC, surfaceNormal, new Vector3F());
+		
+		final Shape3F shape = new Triangle3F(a, b, c);
+		
+		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture2 = new ConstantTexture();
+		final Texture texture3 = new ConstantTexture();
+		
+		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link TriangleMesh3F}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code TriangleMesh3F}
+	 */
+	public static Scene newShowcaseShape3FTriangleMesh3FScene() {
+		final Material material = new LambertianMaterial();
+		
+		final Shape3F shape = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true).get(0);
+		
+		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture2 = new ConstantTexture();
+		final Texture texture3 = new ConstantTexture();
+		
+		final Matrix44F matrix = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(1.0F));
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		
+		return scene;
+	}
+	
+	/**
 	 * Returns a {@link Scene} instance used as a showcase for {@link BlendTexture}.
 	 * 
 	 * @return a {@code Scene} instance used as a showcase for {@code BlendTexture}
 	 */
-	public static Scene newShowcaseBlendTextureScene() {
+	public static Scene newShowcaseTextureBlendTextureScene() {
 		final Material material1 = new LambertianMaterial();
 		final Material material2 = new LambertianMaterial();
 		
@@ -147,7 +322,7 @@ public final class Scenes {
 	 * 
 	 * @return a {@code Scene} instance used as a showcase for {@code BullseyeTexture}
 	 */
-	public static Scene newShowcaseBullseyeTextureScene() {
+	public static Scene newShowcaseTextureBullseyeTextureScene() {
 		final Material material1 = new LambertianMaterial();
 		final Material material2 = new LambertianMaterial();
 		
@@ -177,7 +352,7 @@ public final class Scenes {
 	 * 
 	 * @return a {@code Scene} instance used as a showcase for {@code CheckerboardTexture}
 	 */
-	public static Scene newShowcaseCheckerboardTextureScene() {
+	public static Scene newShowcaseTextureCheckerboardTextureScene() {
 		final Material material1 = new LambertianMaterial();
 		final Material material2 = new LambertianMaterial();
 		
@@ -207,7 +382,7 @@ public final class Scenes {
 	 * 
 	 * @return a {@code Scene} instance used as a showcase for {@code ImageTexture}
 	 */
-	public static Scene newShowcaseImageTextureScene() {
+	public static Scene newShowcaseTextureImageTextureScene() {
 		final
 		Image image = new Image(800, 800, Color3F.WHITE);
 		image.fillRectangle(new Rectangle2I(new Point2I(300, 300), new Point2I(500, 500)), pixel -> Color3F.simplexFractionalBrownianMotion(new Color3F(0.75F, 0.5F, 0.75F), new Point2F(pixel.getX(), pixel.getY()), new Point2F(), new Point2F(800.0F, 800.0F)));
@@ -241,7 +416,7 @@ public final class Scenes {
 	 * 
 	 * @return a {@code Scene} instance used as a showcase for {@code SimplexFractionalBrownianMotionTexture}
 	 */
-	public static Scene newShowcaseSimplexFractionalBrownianMotionTextureScene() {
+	public static Scene newShowcaseTextureSimplexFractionalBrownianMotionTextureScene() {
 		final Material material1 = new LambertianMaterial();
 		final Material material2 = new LambertianMaterial();
 		
@@ -271,7 +446,7 @@ public final class Scenes {
 	 * 
 	 * @return a {@code Scene} instance used as a showcase for {@code SurfaceNormalTexture}
 	 */
-	public static Scene newShowcaseSurfaceNormalTextureScene() {
+	public static Scene newShowcaseTextureSurfaceNormalTextureScene() {
 		final Material material1 = new LambertianMaterial();
 		final Material material2 = new LambertianMaterial();
 		
@@ -301,7 +476,7 @@ public final class Scenes {
 	 * 
 	 * @return a {@code Scene} instance used as a showcase for {@code UVTexture}
 	 */
-	public static Scene newShowcaseUVTextureScene() {
+	public static Scene newShowcaseTextureUVTextureScene() {
 		final Material material1 = new LambertianMaterial();
 		final Material material2 = new LambertianMaterial();
 		
@@ -322,29 +497,6 @@ public final class Scenes {
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)));
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance.
-	 * 
-	 * @return a {@code Scene} instance
-	 */
-	public static Scene newTerrainScene() {
-		final Material material = new LambertianMaterial();
-		
-		final Shape3F shape = ProceduralTerrain3F.sin();
-		
-		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture2 = new ConstantTexture();
-		final Texture texture3 = new ConstantTexture();
-		
-		final Matrix44F matrix = Matrix44F.scale(1.0F);
-		
-		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(10.0F, 4.0F, 10.0F)));
-		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
 		
 		return scene;
 	}

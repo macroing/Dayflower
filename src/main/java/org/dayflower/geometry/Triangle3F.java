@@ -384,7 +384,7 @@ public final class Triangle3F implements Shape3F {
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F a = this.a.getPosition();
-		final Point3F b = this.a.getPosition();
+		final Point3F b = this.b.getPosition();
 		final Point3F c = this.c.getPosition();
 		
 		final Vector3F edgeAB = Vector3F.direction(a, b);

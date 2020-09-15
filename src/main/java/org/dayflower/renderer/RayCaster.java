@@ -171,15 +171,7 @@ public final class RayCaster implements Renderer {
 					
 					final Ray3F shadowRay = new Ray3F(origin, direction);
 					
-//					final Optional<Intersection> optionalShadowIntersection = scene.intersection(shadowRay);
-					
 					final float t = scene.intersectionT(shadowRay);
-//					final float t0 = optionalShadowIntersection.isPresent() ? optionalShadowIntersection.get().getSurfaceIntersectionWorldSpace().getT() : Float.NaN;
-					
-//					TODO: Find out why intersectionT(Ray3F) does not seem to work as expected. The result is different from intersection(Ray3F).
-//					if(Float.compare(t, t0) != 0) {
-//						System.out.println(t + "," + t0);
-//					}
 					
 					if(isNaN(t) || t * t > surfaceIntersectionPointToPosition.lengthSquared()) {
 						final float nDotL = Vector3F.dotProduct(surfaceNormalS, surfaceIntersectionPointToPositionNormalized);

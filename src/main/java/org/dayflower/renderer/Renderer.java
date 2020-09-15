@@ -18,16 +18,36 @@
  */
 package org.dayflower.renderer;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.image.Image;
 import org.dayflower.scene.Scene;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Renderer} is a renderer that can render a {@link Scene} instance to an {@link Image} instance.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface Renderer {
-//	TODO: Add Javadocs!
+	/**
+	 * Renders {@code scene} to {@code image}.
+	 * <p>
+	 * If either {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image the {@link Image} instance to render to
+	 * @param scene the {@link Scene} instance to render
+	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code scene} are {@code null}
+	 */
 	void render(final Image image, final Scene scene);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Renders {@code scene} to {@code image}.
+	 * <p>
+	 * If either {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image the {@link Image} instance to render to
+	 * @param scene the {@link Scene} instance to render
+	 * @param rendererConfiguration the {@link RendererConfiguration} instance to use
+	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
+	 */
 	void render(final Image image, final Scene scene, final RendererConfiguration rendererConfiguration);
 }

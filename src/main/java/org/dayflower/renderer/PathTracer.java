@@ -21,7 +21,6 @@ package org.dayflower.renderer;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.random;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
@@ -39,22 +38,53 @@ import org.dayflower.scene.MaterialResult;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code PathTracer} is a {@link Renderer} implementation that renders using Path Tracing.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class PathTracer implements Renderer {
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code PathTracer} instance.
+	 */
 	public PathTracer() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Renders {@code scene} to {@code image}.
+	 * <p>
+	 * If either {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * pathTracer.render(image, scene, new RendererConfiguration());
+	 * }
+	 * </pre>
+	 * 
+	 * @param image the {@link Image} instance to render to
+	 * @param scene the {@link Scene} instance to render
+	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code scene} are {@code null}
+	 */
 	@Override
 	public void render(final Image image, final Scene scene) {
 		render(image, scene, new RendererConfiguration());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Renders {@code scene} to {@code image}.
+	 * <p>
+	 * If either {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image the {@link Image} instance to render to
+	 * @param scene the {@link Scene} instance to render
+	 * @param rendererConfiguration the {@link RendererConfiguration} instance to use
+	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
+	 */
 	@Override
 	public void render(final Image image, final Scene scene, final RendererConfiguration rendererConfiguration) {
 		final int renderPasses = rendererConfiguration.getRenderPasses();

@@ -18,10 +18,14 @@
  */
 package org.dayflower.renderer;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code RendererConfiguration} is used to configure the rendering process of a {@link Renderer} instance.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class RendererConfiguration {
 	private int maximumBounce;
 	private int minimumBounceRussianRoulette;
@@ -31,24 +35,57 @@ public final class RendererConfiguration {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code RendererConfiguration} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RendererConfiguration(20, 5, 1000, 10, 10);
+	 * }
+	 * </pre>
+	 */
 	public RendererConfiguration() {
-		setMaximumBounce(20);
-		setMinimumBounceRussianRoulette(5);
-		setRenderPasses(1000);
-		setRenderPassesPerImageUpdate(10);
-		setSamples(10);
+		this(20, 5, 1000, 10, 10);
+	}
+	
+	/**
+	 * Constructs a new {@code RendererConfiguration} instance.
+	 * 
+	 * @param maximumBounce the maximum bounce
+	 * @param minimumBounceRussianRoulette the minimum bounce before Russian roulette termination occurs
+	 * @param renderPasses the render passes to perform
+	 * @param renderPassesPerImageUpdate the render passes to perform before the image is updated
+	 * @param samples the samples to use per render pass
+	 */
+	public RendererConfiguration(final int maximumBounce, final int minimumBounceRussianRoulette, final int renderPasses, final int renderPassesPerImageUpdate, final int samples) {
+		this.maximumBounce = maximumBounce;
+		this.minimumBounceRussianRoulette = minimumBounceRussianRoulette;
+		this.renderPasses = renderPasses;
+		this.renderPassesPerImageUpdate = renderPassesPerImageUpdate;
+		this.samples = samples;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code RendererConfiguration} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code RendererConfiguration} instance
+	 */
 	@Override
 	public String toString() {
-		return "new RendererConfiguration()";
+		return String.format("new RendererConfiguration(%d, %d, %d, %d, %d)", Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerImageUpdate), Integer.valueOf(this.samples));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code RendererConfiguration} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code RendererConfiguration}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code RendererConfiguration} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code RendererConfiguration}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -70,58 +107,102 @@ public final class RendererConfiguration {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the maximum bounce.
+	 * 
+	 * @return the maximum bounce
+	 */
 	public int getMaximumBounce() {
 		return this.maximumBounce;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the minimum bounce before Russian roulette termination occurs.
+	 * 
+	 * @return the minimum bounce before Russian roulette termination occurs
+	 */
 	public int getMinimumBounceRussianRoulette() {
 		return this.minimumBounceRussianRoulette;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the render passes to perform.
+	 * 
+	 * @return the render passes to perform
+	 */
 	public int getRenderPasses() {
 		return this.renderPasses;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the render passes to perform before the image is updated.
+	 * 
+	 * @return the render passes to perform before the image is updated
+	 */
 	public int getRenderPassesPerImageUpdate() {
 		return this.renderPassesPerImageUpdate;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the samples to use per render pass.
+	 * 
+	 * @return the samples to use per render pass
+	 */
 	public int getSamples() {
 		return this.samples;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code RendererConfiguration} instance.
+	 * 
+	 * @return a hash code for this {@code RendererConfiguration} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerImageUpdate), Integer.valueOf(this.samples));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the maximum bounce to {@code maximumBounce}.
+	 * 
+	 * @param maximumBounce the maximum bounce
+	 */
 	public void setMaximumBounce(final int maximumBounce) {
 		this.maximumBounce = maximumBounce;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the minimum bounce before Russian roulette termination occurs to {@code minimumBounceRussianRoulette}.
+	 * 
+	 * @param minimumBounceRussianRoulette the minimum bounce before Russian roulette termination occurs
+	 */
 	public void setMinimumBounceRussianRoulette(final int minimumBounceRussianRoulette) {
 		this.minimumBounceRussianRoulette = minimumBounceRussianRoulette;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the render passes to perform to {@code renderPasses}.
+	 * 
+	 * @param renderPasses the render passes to perform
+	 */
 	public void setRenderPasses(final int renderPasses) {
 		this.renderPasses = renderPasses;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the render passes to perform before the image is updated to {@code renderPassesPerImageUpdate}.
+	 * 
+	 * @param renderPassesPerImageUpdate the render passes to perform before the image is updated
+	 */
 	public void setRenderPassesPerImageUpdate(final int renderPassesPerImageUpdate) {
 		this.renderPassesPerImageUpdate = renderPassesPerImageUpdate;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the samples to use per render pass to {@code samples}.
+	 * 
+	 * @param samples the samples to use per render pass
+	 */
 	public void setSamples(final int samples) {
 		this.samples = samples;
 	}

@@ -21,7 +21,6 @@ package org.dayflower.renderer;
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.random;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
@@ -35,22 +34,53 @@ import org.dayflower.image.Image;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Scene;
 
-//TODO: Add Javadocs!
+/**
+ * An {@code AmbientOcclusionRenderer} is a {@link Renderer} implementation that renders using Ambient Occlusion.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class AmbientOcclusionRenderer implements Renderer {
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code AmbientOcclusionRenderer} instance.
+	 */
 	public AmbientOcclusionRenderer() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Renders {@code scene} to {@code image}.
+	 * <p>
+	 * If either {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * ambientOcclusionRenderer.render(image, scene, new RendererConfiguration());
+	 * }
+	 * </pre>
+	 * 
+	 * @param image the {@link Image} instance to render to
+	 * @param scene the {@link Scene} instance to render
+	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code scene} are {@code null}
+	 */
 	@Override
 	public void render(final Image image, final Scene scene) {
 		render(image, scene, new RendererConfiguration());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Renders {@code scene} to {@code image}.
+	 * <p>
+	 * If either {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image the {@link Image} instance to render to
+	 * @param scene the {@link Scene} instance to render
+	 * @param rendererConfiguration the {@link RendererConfiguration} instance to use
+	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
+	 */
 	@Override
 	public void render(final Image image, final Scene scene, final RendererConfiguration rendererConfiguration) {
 		final int renderPasses = rendererConfiguration.getRenderPasses();

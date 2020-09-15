@@ -40,23 +40,26 @@ public final class Scene {
 	private final Camera camera;
 	private final List<Light> lights;
 	private final List<Primitive> primitives;
+	private final String name;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code Scene} instance.
 	 * <p>
-	 * If either {@code background} or {@code camera} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code background}, {@code camera} or {@code name} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param background the {@link Background} instance associated with this {@code Scene} instance
 	 * @param camera the {@link Camera} instance associated with this {@code Scene} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code background} or {@code camera} are {@code null}
+	 * @param name the name associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code background}, {@code camera} or {@code name} are {@code null}
 	 */
-	public Scene(final Background background, final Camera camera) {
+	public Scene(final Background background, final Camera camera, final String name) {
 		this.background = Objects.requireNonNull(background, "background == null");
 		this.camera = Objects.requireNonNull(camera, "camera == null");
 		this.lights = new ArrayList<>();
 		this.primitives = new ArrayList<>();
+		this.name = Objects.requireNonNull(name, "name == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,13 +120,22 @@ public final class Scene {
 	}
 	
 	/**
+	 * Returns the name associated with this {@code Scene} instance.
+	 * 
+	 * @return the name associated with this {@code Scene} instance
+	 */
+	public String getName() {
+		return this.name;
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code Scene} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code Scene} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Scene(%s)", this.camera);
+		return String.format("new Scene(%s, %s, %s)", this.background, this.camera, this.name);
 	}
 	
 	/**
@@ -170,11 +182,15 @@ public final class Scene {
 			return true;
 		} else if(!(object instanceof Scene)) {
 			return false;
+		} else if(!Objects.equals(this.background, Scene.class.cast(object).background)) {
+			return false;
 		} else if(!Objects.equals(this.camera, Scene.class.cast(object).camera)) {
 			return false;
 		} else if(!Objects.equals(this.lights, Scene.class.cast(object).lights)) {
 			return false;
 		} else if(!Objects.equals(this.primitives, Scene.class.cast(object).primitives)) {
+			return false;
+		} else if(!Objects.equals(this.name, Scene.class.cast(object).name)) {
 			return false;
 		} else {
 			return true;
@@ -252,6 +268,6 @@ public final class Scene {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.camera, this.lights, this.primitives);
+		return Objects.hash(this.background, this.camera, this.lights, this.primitives, this.name);
 	}
 }

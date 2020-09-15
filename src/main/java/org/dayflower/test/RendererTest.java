@@ -48,7 +48,7 @@ public final class RendererTest {
 	static void doTestPathTracer() {
 		final
 		Renderer renderer = new PathTracer();
-		renderer.render(new Image(800, 800), Scenes.newShowcaseShape3FTorus3FScene());
+		renderer.render(new Image(800, 800), Scenes.newDefaultScene());
 	}
 	
 	static void doTestRayCaster() {

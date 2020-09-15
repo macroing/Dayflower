@@ -87,6 +87,8 @@ public final class PathTracer implements Renderer {
 	 */
 	@Override
 	public void render(final Image image, final Scene scene, final RendererConfiguration rendererConfiguration) {
+		final String filename = String.format("./generated/%s-%s.png", "PathTracer", scene.getName());
+		
 		final int renderPasses = rendererConfiguration.getRenderPasses();
 		final int renderPassesPerImageUpdate = rendererConfiguration.getRenderPassesPerImageUpdate();
 		final int resolutionX = image.getResolutionX();
@@ -120,7 +122,7 @@ public final class PathTracer implements Renderer {
 			
 			if(renderPass == 1 || renderPass % renderPassesPerImageUpdate == 0 || renderPass == renderPasses) {
 				image.filmRender(0.5F);
-				image.save("./generated/Image-Path-Tracer.png");
+				image.save(filename);
 			}
 		}
 	}

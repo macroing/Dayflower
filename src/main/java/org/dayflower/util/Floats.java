@@ -411,6 +411,18 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns {@code value} if, and only if, {@code value >= threshold}, {@code value + valueAdd} otherwise.
+	 * 
+	 * @param value the value to check
+	 * @param threshold the threshold to use
+	 * @param valueAdd the value that might be added to {@code value}
+	 * @return {@code value} if, and only if, {@code value >= threshold}, {@code value + valueAdd} otherwise
+	 */
+	public static float getOrAdd(final float value, final float threshold, final float valueAdd) {
+		return value < threshold ? value + valueAdd : value;
+	}
+	
+	/**
 	 * Performs a linear interpolation operation on the supplied values.
 	 * <p>
 	 * Returns the result of the linear interpolation operation.

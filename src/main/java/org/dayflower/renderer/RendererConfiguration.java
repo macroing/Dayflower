@@ -30,7 +30,7 @@ public final class RendererConfiguration {
 	private int maximumBounce;
 	private int minimumBounceRussianRoulette;
 	private int renderPasses;
-	private int renderPassesPerImageUpdate;
+	private int renderPassesPerDisplayUpdate;
 	private int samples;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,14 +55,14 @@ public final class RendererConfiguration {
 	 * @param maximumBounce the maximum bounce
 	 * @param minimumBounceRussianRoulette the minimum bounce before Russian roulette termination occurs
 	 * @param renderPasses the render passes to perform
-	 * @param renderPassesPerImageUpdate the render passes to perform before the image is updated
+	 * @param renderPassesPerDisplayUpdate the render passes to perform before the display is updated
 	 * @param samples the samples to use per render pass
 	 */
-	public RendererConfiguration(final int maximumBounce, final int minimumBounceRussianRoulette, final int renderPasses, final int renderPassesPerImageUpdate, final int samples) {
+	public RendererConfiguration(final int maximumBounce, final int minimumBounceRussianRoulette, final int renderPasses, final int renderPassesPerDisplayUpdate, final int samples) {
 		this.maximumBounce = maximumBounce;
 		this.minimumBounceRussianRoulette = minimumBounceRussianRoulette;
 		this.renderPasses = renderPasses;
-		this.renderPassesPerImageUpdate = renderPassesPerImageUpdate;
+		this.renderPassesPerDisplayUpdate = renderPassesPerDisplayUpdate;
 		this.samples = samples;
 	}
 	
@@ -75,7 +75,7 @@ public final class RendererConfiguration {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new RendererConfiguration(%d, %d, %d, %d, %d)", Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerImageUpdate), Integer.valueOf(this.samples));
+		return String.format("new RendererConfiguration(%d, %d, %d, %d, %d)", Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerDisplayUpdate), Integer.valueOf(this.samples));
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public final class RendererConfiguration {
 			return false;
 		} else if(this.renderPasses != RendererConfiguration.class.cast(object).renderPasses) {
 			return false;
-		} else if(this.renderPassesPerImageUpdate != RendererConfiguration.class.cast(object).renderPassesPerImageUpdate) {
+		} else if(this.renderPassesPerDisplayUpdate != RendererConfiguration.class.cast(object).renderPassesPerDisplayUpdate) {
 			return false;
 		} else if(this.samples != RendererConfiguration.class.cast(object).samples) {
 			return false;
@@ -135,12 +135,12 @@ public final class RendererConfiguration {
 	}
 	
 	/**
-	 * Returns the render passes to perform before the image is updated.
+	 * Returns the render passes to perform before the display is updated.
 	 * 
-	 * @return the render passes to perform before the image is updated
+	 * @return the render passes to perform before the display is updated
 	 */
-	public int getRenderPassesPerImageUpdate() {
-		return this.renderPassesPerImageUpdate;
+	public int getRenderPassesPerDisplayUpdate() {
+		return this.renderPassesPerDisplayUpdate;
 	}
 	
 	/**
@@ -159,7 +159,7 @@ public final class RendererConfiguration {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerImageUpdate), Integer.valueOf(this.samples));
+		return Objects.hash(Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerDisplayUpdate), Integer.valueOf(this.samples));
 	}
 	
 	/**
@@ -190,12 +190,12 @@ public final class RendererConfiguration {
 	}
 	
 	/**
-	 * Sets the render passes to perform before the image is updated to {@code renderPassesPerImageUpdate}.
+	 * Sets the render passes to perform before the display is updated to {@code renderPassesPerDisplayUpdate}.
 	 * 
-	 * @param renderPassesPerImageUpdate the render passes to perform before the image is updated
+	 * @param renderPassesPerDisplayUpdate the render passes to perform before the display is updated
 	 */
-	public void setRenderPassesPerImageUpdate(final int renderPassesPerImageUpdate) {
-		this.renderPassesPerImageUpdate = renderPassesPerImageUpdate;
+	public void setRenderPassesPerDisplayUpdate(final int renderPassesPerDisplayUpdate) {
+		this.renderPassesPerDisplayUpdate = renderPassesPerDisplayUpdate;
 	}
 	
 	/**

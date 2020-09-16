@@ -23,6 +23,7 @@ import static org.dayflower.util.Floats.random;
 
 import java.util.Optional;
 
+import org.dayflower.display.Display;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
@@ -55,42 +56,42 @@ public final class PathTracer implements Renderer {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Renders {@code scene} to {@code image}.
+	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
 	 * <p>
-	 * If either {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code display}, {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * pathTracer.render(image, scene, new RendererConfiguration());
+	 * pathTracer.render(display, image, scene, new RendererConfiguration());
 	 * }
 	 * </pre>
 	 * 
+	 * @param display the {@link Display} instance to display with
 	 * @param image the {@link Image} instance to render to
 	 * @param scene the {@link Scene} instance to render
-	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code scene} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image} or {@code scene} are {@code null}
 	 */
 	@Override
-	public void render(final Image image, final Scene scene) {
-		render(image, scene, new RendererConfiguration());
+	public void render(final Display display, final Image image, final Scene scene) {
+		render(display, image, scene, new RendererConfiguration());
 	}
 	
 	/**
-	 * Renders {@code scene} to {@code image}.
+	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
 	 * <p>
-	 * If either {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param display the {@link Display} instance to display with
 	 * @param image the {@link Image} instance to render to
 	 * @param scene the {@link Scene} instance to render
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance to use
-	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
 	 */
 	@Override
-	public void render(final Image image, final Scene scene, final RendererConfiguration rendererConfiguration) {
-		final String filename = String.format("./generated/%s-%s.png", "PathTracer", scene.getName());
-		
+	public void render(final Display display, final Image image, final Scene scene, final RendererConfiguration rendererConfiguration) {
 		final int renderPasses = rendererConfiguration.getRenderPasses();
-		final int renderPassesPerImageUpdate = rendererConfiguration.getRenderPassesPerImageUpdate();
+		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
 		
@@ -120,9 +121,10 @@ public final class PathTracer implements Renderer {
 			
 			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
 			
-			if(renderPass == 1 || renderPass % renderPassesPerImageUpdate == 0 || renderPass == renderPasses) {
+			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
 				image.filmRender(0.5F);
-				image.save(filename);
+				
+				display.update(image);
 			}
 		}
 	}

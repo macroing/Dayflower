@@ -18,11 +18,13 @@
  */
 package org.dayflower.test;
 
+import org.dayflower.display.FileDisplay;
 import org.dayflower.image.Image;
 import org.dayflower.renderer.AmbientOcclusionRenderer;
 import org.dayflower.renderer.PathTracer;
 import org.dayflower.renderer.RayCaster;
 import org.dayflower.renderer.Renderer;
+import org.dayflower.scene.Scene;
 
 public final class RendererTest {
 	private RendererTest() {
@@ -40,20 +42,18 @@ public final class RendererTest {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	static void doTestAmbientOcclusionRenderer() {
-		final
-		Renderer renderer = new AmbientOcclusionRenderer();
-		renderer.render(new Image(800, 800), Scenes.newDefaultScene());
+		doTestRenderer(new AmbientOcclusionRenderer(), Scenes.newDefaultScene());
 	}
 	
 	static void doTestPathTracer() {
-		final
-		Renderer renderer = new PathTracer();
-		renderer.render(new Image(800, 800), Scenes.newDefaultScene());
+		doTestRenderer(new PathTracer(), Scenes.newShowcaseMaterialRefractionMaterialScene());
 	}
 	
 	static void doTestRayCaster() {
-		final
-		Renderer renderer = new RayCaster();
-		renderer.render(new Image(800, 800), Scenes.newDefaultScene());
+		doTestRenderer(new RayCaster(), Scenes.newDefaultScene());
+	}
+	
+	static void doTestRenderer(final Renderer renderer, final Scene scene) {
+		renderer.render(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), scene.getName())), new Image(800, 800), scene);
 	}
 }

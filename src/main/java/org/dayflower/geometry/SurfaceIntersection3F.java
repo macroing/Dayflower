@@ -243,6 +243,42 @@ public final class SurfaceIntersection3F {
 	}
 	
 	/**
+	 * Orients {@code surfaceIntersection} based on {@code direction}.
+	 * <p>
+	 * Returns {@code surfaceIntersection} or an oriented version of it.
+	 * <p>
+	 * If either {@code surfaceIntersection} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceIntersection a {@code SurfaceIntersection3F} instance
+	 * @param direction a {@link Vector3F} instance
+	 * @return {@code surfaceIntersection} or an oriented version of it
+	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code direction} are {@code null}
+	 */
+	public static SurfaceIntersection3F orient(final SurfaceIntersection3F surfaceIntersection, final Vector3F direction) {
+		if(Vector3F.dotProduct(direction, surfaceIntersection.getSurfaceNormalG()) >= 0.0F) {
+			final OrthonormalBasis33F orthonormalBasisG = OrthonormalBasis33F.flipW(surfaceIntersection.orthonormalBasisG);
+			final OrthonormalBasis33F orthonormalBasisS = OrthonormalBasis33F.flipW(surfaceIntersection.orthonormalBasisS);
+			
+			final Point2F textureCoordinates = surfaceIntersection.textureCoordinates;
+			
+			final Point3F surfaceIntersectionPoint = surfaceIntersection.surfaceIntersectionPoint;
+			
+			final Ray3F ray = surfaceIntersection.ray;
+			
+			final Shape3F shape = surfaceIntersection.shape;
+			
+			final Vector3F surfaceNormalG = Vector3F.negate(surfaceIntersection.surfaceNormalG);
+			final Vector3F surfaceNormalS = Vector3F.negate(surfaceIntersection.surfaceNormalS);
+			
+			final float t = surfaceIntersection.t;
+			
+			return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, shape, surfaceNormalG, surfaceNormalS, t);
+		}
+		
+		return surfaceIntersection;
+	}
+	
+	/**
 	 * Performs a transformation.
 	 * <p>
 	 * Returns a new {@code SurfaceIntersection3F} instance with the result of the transformation.

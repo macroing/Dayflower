@@ -174,6 +174,10 @@ public final class PathTracer implements Renderer {
 				final Vector3F surfaceNormalGCorrectlyOriented = Vector3F.dotProduct(currentRayDirectionO, surfaceNormalG) < 0.0F ? Vector3F.negate(surfaceNormalG) : surfaceNormalG;
 				final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
 				
+//				if(Vector3F.dotProduct(currentRayDirectionO, surfaceNormalG) < 0.0F) {
+//					return Color3F.YELLOW;
+//				}
+				
 				if(currentBounce == 0 || currentBounce == currentBounceDiracDistribution) {
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, material.emittance(intersection)));
 				}

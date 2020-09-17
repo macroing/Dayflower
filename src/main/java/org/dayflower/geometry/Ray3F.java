@@ -43,6 +43,7 @@ public final class Ray3F {
 	 * 
 	 * @param origin a {@link Point3F} instance to represent the origin
 	 * @param direction a {@link Vector3F} instance to represent the direction
+	 * @throws NullPointerException thrown if, and only if, either {@code origin} or {@code direction} are {@code null}
 	 */
 	public Ray3F(final Point3F origin, final Vector3F direction) {
 		this.origin = Objects.requireNonNull(origin, "origin == null");

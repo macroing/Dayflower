@@ -18,6 +18,8 @@
  */
 package org.dayflower.util;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * The class {@code Doubles} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.
  * <p>
@@ -35,11 +37,86 @@ package org.dayflower.util;
  * @author J&#246;rgen Lundgren
  */
 public class Doubles {
+	/**
+	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter.
+	 */
+	public static final double PI = Math.PI;
+	
+	/**
+	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, divided by 180.0.
+	 */
+	public static final double PI_DIVIDED_BY_180 = PI / 180.0D;
+	
+	/**
+	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, divided by 2.0.
+	 */
+	public static final double PI_DIVIDED_BY_2 = PI / 2.0D;
+	
+	/**
+	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, divided by 4.0.
+	 */
+	public static final double PI_DIVIDED_BY_4 = PI / 4.0D;
+	
+	/**
+	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, multiplied by 2.0.
+	 */
+	public static final double PI_MULTIPLIED_BY_2 = PI * 2.0D;
+	
+	/**
+	 * The reciprocal (or inverse) of {@link #PI_MULTIPLIED_BY_2}.
+	 */
+	public static final double PI_MULTIPLIED_BY_2_RECIPROCAL = 1.0D / PI_MULTIPLIED_BY_2;
+	
+	/**
+	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter, multiplied by 4.0.
+	 */
+	public static final double PI_MULTIPLIED_BY_4 = PI * 4.0D;
+	
+	/**
+	 * The reciprocal (or inverse) of {@link #PI}.
+	 */
+	public static final double PI_RECIPROCAL = 1.0D / PI;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private Doubles() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code a} is equal to {@code b}, {@code false} otherwise.
+	 * 
+	 * @param a a {@code double} value
+	 * @param b a {@code double} value
+	 * @return {@code true} if, and only if, {@code a} is equal to {@code b}, {@code false} otherwise
+	 */
+	public static boolean equal(final double a, final double b) {
+		return Double.compare(a, b) == 0;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code a} is equal to {@code b} and {@code b} is equal to {@code c}, {@code false} otherwise.
+	 * 
+	 * @param a a {@code double} value
+	 * @param b a {@code double} value
+	 * @param c a {@code double} value
+	 * @return {@code true} if, and only if, {@code a} is equal to {@code b} and {@code b} is equal to {@code c}, {@code false} otherwise
+	 */
+	public static boolean equal(final double a, final double b, final double c) {
+		return equal(a, b) && equal(b, c);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code value} is {@code Double.NaN}, {@code false} otherwise.
+	 * 
+	 * @param value a {@code double} value
+	 * @return {@code true} if, and only if, {@code value} is {@code Double.NaN}, {@code false} otherwise
+	 */
+	public static boolean isNaN(final double value) {
+		return Double.isNaN(value);
+	}
 	
 	/**
 	 * Returns the absolute version of {@code value}.
@@ -89,6 +166,147 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns the arc sine of {@code value}.
+	 * <p>
+	 * The returned angle is in the range -pi / 2 through pi / 2.
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * <li>If the argument is NaN or its absolute value is greater than 1, then the result is NaN.</li>
+	 * <li>If the argument is zero, then the result is a zero with the same sign as the argument.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param value the value whose arc sine is to be returned
+	 * @return the arc sine of {@code value}
+	 * @see Math#asin(double)
+	 */
+	public static double asin(final double value) {
+		return Math.asin(value);
+	}
+	
+	/**
+	 * Returns the result of {@code asin(value)} divided by pi.
+	 * 
+	 * @param value the value whose arc sine divided by pi is to be returned
+	 * @return the result of {@code asin(value)} divided by pi
+	 * @see #asin(float)
+	 */
+	public static double asinpi(final double value) {
+		return asin(value) / PI;
+	}
+	
+	/**
+	 * Returns the arc tangent of {@code value}.
+	 * <p>
+	 * The returned angle is in the range -pi / 2 through pi / 2.
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * <li>If the argument is NaN, then the result is NaN.</li>
+	 * <li>If the argument is zero, then the result is a zero with the same sign as the argument.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param value the value whose arc tangent is to be returned
+	 * @return the arc tangent of {@code value}
+	 * @see Math#atan(double)
+	 */
+	public static double atan(final double value) {
+		return Math.atan(value);
+	}
+	
+	/**
+	 * Returns the angle <i>theta</i> from the conversion of rectangular coordinates (x, y) to polar coordinates (r, <i>theta</i>).
+	 * <p>
+	 * This method computes the phase <i>theta</i> by computing an arc tangent of y / x in the range of <i>-pi</i> to <i>pi</i>.
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * <li>If either argument is NaN, then the result is NaN.</li>
+	 * <li>If the first argument is positive zero and the second argument is positive, or the first argument is positive and finite and the second argument is positive infinity, then the result is positive zero.</li>
+	 * <li>If the first argument is negative zero and the second argument is positive, or the first argument is negative and finite and the second argument is positive infinity, then the result is negative zero.</li>
+	 * <li>If the first argument is positive zero and the second argument is negative, or the first argument is positive and finite and the second argument is negative infinity, then the result is the {@code float} value closest to pi.</li>
+	 * <li>If the first argument is negative zero and the second argument is negative, or the first argument is negative and finite and the second argument is negative infinity, then the result is the {@code float} value closest to -pi.</li>
+	 * <li>If the first argument is positive and the second argument is positive zero or negative zero, or the first argument is positive infinity and the second argument is finite, then the result is the {@code float} value closest to pi / 2.</li>
+	 * <li>If the first argument is negative and the second argument is positive zero or negative zero, or the first argument is negative infinity and the second argument is finite, then the result is the {@code float} value closest to -pi / 2.</li>
+	 * <li>If both arguments are positive infinity, then the result is the {@code float} value closest to pi / 4.</li>
+	 * <li>If the first argument is positive infinity and the second argument is negative infinity, then the result is the {@code float} value closest to 3 * pi / 4.</li>
+	 * <li>If the first argument is negative infinity and the second argument is positive infinity, then the result is the {@code float} value closest to -pi / 4.</li>
+	 * <li>If both arguments are negative infinity, then the result is the {@code float} value closest to -3 * pi / 4.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 2 ulps of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param y the ordinate coordinate
+	 * @param x the abscissa coordinate
+	 * @return the angle <i>theta</i> from the conversion of rectangular coordinates (x, y) to polar coordinates (r, <i>theta</i>)
+	 * @see Math#atan2(double, double)
+	 */
+	public static double atan2(final double y, final double x) {
+		return Math.atan2(y, x);
+	}
+	
+	/**
+	 * Returns the result of {@code atan2(y, x)} divided by (pi * 2).
+	 * 
+	 * @param y the ordinate coordinate
+	 * @param x the abscissa coordinate
+	 * @return the result of {@code atan2(y, x)} divided by (pi * 2)
+	 * @see #atan2(float, float)
+	 */
+	public static double atan2pi2(final double y, final double x) {
+		return atan2(y, x) / PI_MULTIPLIED_BY_2;
+	}
+	
+	/**
+	 * Performs a bilinear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns the result of the bilinear interpolation operation.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Doubles.lerp(Doubles.lerp(value00, value01, tX), Doubles.lerp(value10, value11, tX), tY);
+	 * }
+	 * </pre>
+	 * 
+	 * @param value00 a {@code double} value
+	 * @param value01 a {@code double} value
+	 * @param value10 a {@code double} value
+	 * @param value11 a {@code double} value
+	 * @param tX the X-axis factor
+	 * @param tY the Y-axis factor
+	 * @return the result of the bilinear interpolation operation
+	 * @see #lerp(float, float, float)
+	 */
+	public static double blerp(final double value00, final double value01, final double value10, final double value11, final double tX, final double tY) {
+		return lerp(lerp(value00, value01, tX), lerp(value10, value11, tX), tY);
+	}
+	
+	/**
+	 * Returns the smallest (closest to negative infinity) {@code double} value that is greater than or equal to {@code value} and is equal to a mathematical integer.
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * <li>If the argument value is already equal to a mathematical integer, then the result is the same as the argument.</li>
+	 * <li>If the argument is NaN or an infinity or positive zero or negative zero, then the result is the same as the argument.</li>
+	 * <li>If the argument value is less than zero but greater than -1.0, then the result is negative zero.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param value a value
+	 * @return the smallest (closest to negative infinity) {@code double} value that is greater than or equal to {@code value} and is equal to a mathematical integer
+	 * @see Math#ceil(double)
+	 */
+	public static double ceil(final double value) {
+		return Math.ceil(value);
+	}
+	
+	/**
 	 * Returns the trigonometric cosine of {@code angleRadians}.
 	 * <p>
 	 * Special case:
@@ -124,6 +342,104 @@ public class Doubles {
 	 */
 	public static double exp(final double exponent) {
 		return Math.exp(exponent);
+	}
+	
+	/**
+	 * Returns the largest (closest to positive infinity) {@code double} value that is less than or equal to {@code value} and is equal to a mathematical integer.
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * <li>If the argument value is already equal to a mathematical integer, then the result is the same as the argument.</li>
+	 * <li>If the argument is NaN or an infinity or positive zero or negative zero, then the result is the same as the argument.</li>
+	 * </ul>
+	 * 
+	 * @param value a value
+	 * @return the largest (closest to positive infinity) {@code double} value that is less than or equal to {@code value} and is equal to a mathematical integer
+	 * @see Math#floor(double)
+	 */
+	public static double floor(final double value) {
+		return Math.floor(value);
+	}
+	
+	/**
+	 * Returns the fractional part of {@code value}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Doubles.fractionalPart(value, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param value a value
+	 * @return the fractional part of {@code value}
+	 */
+	public static double fractionalPart(final double value) {
+		return fractionalPart(value, false);
+	}
+	
+	/**
+	 * Returns the fractional part of {@code value}.
+	 * <p>
+	 * The fractional part of {@code value} is calculated in the following way:
+	 * <pre>
+	 * {@code
+	 * double fractionalPart = value < 0.0D && isUsingCeilOnNegativeValue ? ceil(value) - value : value - floor(value);
+	 * }
+	 * </pre>
+	 * 
+	 * @param value a value
+	 * @param isUsingCeilOnNegativeValue {@code true} if, and only if, {@code Doubles.ceil(double)} should be used if {@code value} is negative, {@code false} otherwise
+	 * @return the fractional part of {@code value}
+	 */
+	public static double fractionalPart(final double value, final boolean isUsingCeilOnNegativeValue) {
+		return value < 0.0D && isUsingCeilOnNegativeValue ? ceil(value) - value : value - floor(value);
+	}
+	
+	/**
+	 * Returns {@code value} if, and only if, {@code value >= threshold}, {@code value + valueAdd} otherwise.
+	 * 
+	 * @param value the value to check
+	 * @param threshold the threshold to use
+	 * @param valueAdd the value that might be added to {@code value}
+	 * @return {@code value} if, and only if, {@code value >= threshold}, {@code value + valueAdd} otherwise
+	 */
+	public static double getOrAdd(final double value, final double threshold, final double valueAdd) {
+		return value < threshold ? value + valueAdd : value;
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns the result of the linear interpolation operation.
+	 * 
+	 * @param value0 a {@code double} value
+	 * @param value1 a {@code double} value
+	 * @param t the factor
+	 * @return the result of the linear interpolation operation
+	 */
+	public static double lerp(final double value1, final double value2, final double t) {
+		return (1.0D - t) * value1 + t * value2;
+	}
+	
+	/**
+	 * Returns the natural logarithm (base {@code e}) of the {@code double} value {@code value}.
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * <li>If the argument is NaN or less than zero, then the result is NaN.</li>
+	 * <li>If the argument is positive infinity, then the result is positive infinity.</li>
+	 * <li>If the argument is positive zero or negative zero, then the result is negative infinity.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param value a value
+	 * @return the natural logarithm (base {@code e}) of the {@code double} value {@code value}
+	 * @see Math#log(double)
+	 */
+	public static double log(final double value) {
+		return Math.log(value);
 	}
 	
 	/**
@@ -195,6 +511,51 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns the smaller value of {@code a} and {@code b}.
+	 * <p>
+	 * The result is the value closer to negative infinity.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value. If one value is NaN, then the result is the other value. Unlike the numerical comparison operators, this method considers negative zero to be strictly smaller than positive
+	 * zero. If one argument is positive zero and the other is negative zero, the result is negative zero.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @return the smaller value of {@code a} and {@code b}
+	 */
+	public static double minOrNaN(final double a, final double b) {
+		final boolean isNaNA = isNaN(a);
+		final boolean isNaNB = isNaN(b);
+		
+		if(!isNaNA && !isNaNB) {
+			return min(a, b);
+		} else if(!isNaNA) {
+			return a;
+		} else if(!isNaNB) {
+			return b;
+		} else {
+			return Double.NaN;
+		}
+	}
+	
+	/**
+	 * Returns the normalized representation of {@code value}.
+	 * <p>
+	 * If {@code value} is greater than or equal to {@code min(a, b)} and less than or equal to {@code max(a, b)}, the normalized representation of {@code value} will be between {@code 0.0D} (inclusive) and {@code 1.0D} (inclusive).
+	 * 
+	 * @param value the {@code double} value to normalize
+	 * @param a the {@code double} value that represents the minimum or maximum boundary
+	 * @param b the {@code double} value that represents the maximum or minimum boundary
+	 * @return the normalized representation of {@code value}
+	 */
+	public static double normalize(final double value, final double a, final double b) {
+		final double maximum = max(a, b);
+		final double minimum = min(a, b);
+		final double valueNormalized = (value - minimum) / (maximum - minimum);
+		
+		return valueNormalized;
+	}
+	
+	/**
 	 * Returns {@code base} raised to the power of {@code exponent}.
 	 * <p>
 	 * For the full documentation of this method, see {@link Math#pow(double, double)}.
@@ -206,6 +567,48 @@ public class Doubles {
 	 */
 	public static double pow(final double base, final double exponent) {
 		return Math.pow(base, exponent);
+	}
+	
+	/**
+	 * Returns a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code 1.0D} (exclusive).
+	 * 
+	 * @return a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code 1.0D} (exclusive)
+	 */
+	public static double random() {
+		return ThreadLocalRandom.current().nextDouble();
+	}
+	
+	/**
+	 * Returns the remainder of {@code x} and {@code y}.
+	 * 
+	 * @param x the left hand side of the remainder operation
+	 * @param y the right hand side of the remainder operation
+	 * @return the remainder of {@code x} and {@code y}
+	 */
+	public static double remainder(final double x, final double y) {
+		return x - (int)(x / y) * y;
+	}
+	
+	/**
+	 * Checks that {@code value} is finite.
+	 * <p>
+	 * Returns {@code value}.
+	 * <p>
+	 * If either {@code Double.isInfinite(value)} or {@code Double.isNaN(value)} returns {@code true}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param value the value to check
+	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
+	 * @return {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code Double.isInfinite(value)} or {@code Double.isNaN(value)} returns {@code true}
+	 */
+	public static double requireFiniteValue(final double value, final String name) {
+		if(Double.isInfinite(value)) {
+			throw new IllegalArgumentException(String.format("Double.isInfinite(%s) == true", name));
+		} else if(Double.isNaN(value)) {
+			throw new IllegalArgumentException(String.format("Double.isNaN(%s) == true", name));
+		} else {
+			return value;
+		}
 	}
 	
 	/**
@@ -250,6 +653,25 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns the trigonometric sine of {@code angleRadians}.
+	 * <p>
+	 * Special cases:
+	 * <ul>
+	 * <li>If the argument is NaN or an infinity, then the result is NaN.</li>
+	 * <li>If the argument is zero, then the result is a zero with the same sign as the argument.</li>
+	 * </ul>
+	 * <p>
+	 * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+	 * 
+	 * @param angleRadians an angle, in radians
+	 * @return the trigonometric sine of {@code angleRadians}
+	 * @see Math#sin(double)
+	 */
+	public static double sin(final double angleRadians) {
+		return Math.sin(angleRadians);
+	}
+	
+	/**
 	 * Solves the cubic system for the quartic system based on the values {@code p}, {@code q} and {@code r}.
 	 * <p>
 	 * Returns a {@code double} with the result of the operation.
@@ -281,6 +703,25 @@ public class Doubles {
 		final double q2 = r0 < 0.0D ? (q1 + q0 / q1) - e : -(q1 + q0 / q1) - e;
 		
 		return q2;
+	}
+	
+	/**
+	 * Performs a smoothstep operation on {@code value} and the edges {@code edgeA} and {@code edgeB}.
+	 * <p>
+	 * Returns a {@code double} value.
+	 * 
+	 * @param value a {@code double} value
+	 * @param edgeA one of the edges
+	 * @param edgeB one of the edges
+	 * @return a {@code double} value
+	 */
+	public static double smoothstep(final double value, final double edgeA, final double edgeB) {
+		final double minimumValue = min(edgeA, edgeB);
+		final double maximumValue = max(edgeA, edgeB);
+		
+		final double x = saturate((value - minimumValue) / (maximumValue - minimumValue), 0.0D, 1.0D);
+		
+		return x * x * (3.0D - 2.0D * x);
 	}
 	
 	/**
@@ -320,6 +761,110 @@ public class Doubles {
 	 */
 	public static double tan(final double angleRadians) {
 		return Math.tan(angleRadians);
+	}
+	
+	/**
+	 * Returns an approximately equivalent angle measured in degrees from an angle measured in radians.
+	 * <p>
+	 * The conversion from radians to degrees is generally inexact.
+	 * 
+	 * @param angleRadians an angle, in radians
+	 * @return an approximately equivalent angle measured in degrees from an angle measured in radians
+	 * @see Math#toDegrees(double)
+	 */
+	public static double toDegrees(final double angleRadians) {
+		return Math.toDegrees(angleRadians);
+	}
+	
+	/**
+	 * Returns a {@code double} representation of a {@code float} value.
+	 * 
+	 * @param value a {@code float} value
+	 * @return a {@code double} representation of a {@code float} value
+	 */
+	public static double toDouble(final float value) {
+		return value;
+	}
+	
+	/**
+	 * Returns a {@code double} representation of an {@code int} value.
+	 * 
+	 * @param value an {@code int} value
+	 * @return a {@code double} representation of an {@code int} value
+	 */
+	public static double toDouble(final int value) {
+		return value;
+	}
+	
+	/**
+	 * Returns an approximately equivalent angle measured in radians from an angle measured in degrees.
+	 * <p>
+	 * The conversion from degrees to radians is generally inexact.
+	 * 
+	 * @param angleDegrees an angle, in degrees
+	 * @return an approximately equivalent angle measured in radians from an angle measured in degrees
+	 * @see Math#toRadians(double)
+	 */
+	public static double toRadians(final double angleDegrees) {
+		return Math.toRadians(angleDegrees);
+	}
+	
+	/**
+	 * Returns {@code value} or its wrapped around representation.
+	 * <p>
+	 * If {@code value} is greater than or equal to {@code min(a, b)} and less than or equal to {@code max(a, b)}, {@code value} will be returned. Otherwise it will wrap around on either side until it is contained in the interval
+	 * {@code [min(a, b), max(a, b)]}.
+	 * 
+	 * @param value the value to potentially wrap around
+	 * @param a one of the values in the interval to wrap around
+	 * @param b one of the values in the interval to wrap around
+	 * @return {@code value} or its wrapped around representation
+	 */
+	public static double wrapAround(final double value, final double a, final double b) {
+		final double minimumValue = min(a, b);
+		final double maximumValue = max(a, b);
+		
+		double currentValue = value;
+		
+		while(currentValue < minimumValue || currentValue > maximumValue) {
+			if(currentValue < minimumValue) {
+				currentValue = maximumValue - (minimumValue - currentValue);
+			} else if(currentValue > maximumValue) {
+				currentValue = minimumValue + (currentValue - maximumValue);
+			}
+		}
+		
+		return currentValue;
+	}
+	
+	/**
+	 * Attempts to solve the quadratic system based on the values {@code a}, {@code b} and {@code c}.
+	 * <p>
+	 * Returns a {@code double[]}, with a length of {@code 2}, that contains the result.
+	 * <p>
+	 * If the quadratic system could not be solved, the result will contain the values {@code Double.NaN}.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @param c a value
+	 * @return a {@code double[]}, with a length of {@code 2}, that contains the result
+	 */
+	public static double[] solveQuadraticSystem(final double a, final double b, final double c) {
+		final double[] result = new double[] {Double.NaN, Double.NaN};
+		
+		final double discriminantSquared = b * b - 4.0D * a * c;
+		
+		if(discriminantSquared >= 0.0D) {
+			final double discriminant = sqrt(discriminantSquared);
+			final double quadratic = -0.5D * (b < 0.0D ? b - discriminant : b + discriminant);
+			final double result0 = quadratic / a;
+			final double result1 = equal(quadratic, 0.0D) ? result0 : c / quadratic;
+			
+			result[0] = min(result0, result1);
+			result[1] = max(result0, result1);
+		}
+		
+		return result;
 	}
 	
 	/**

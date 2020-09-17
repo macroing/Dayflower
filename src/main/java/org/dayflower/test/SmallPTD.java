@@ -18,30 +18,32 @@
  */
 package org.dayflower.test;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.abs;
-import static java.lang.Math.cos;
-import static java.lang.Math.max;
-import static java.lang.Math.pow;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
+import static org.dayflower.util.Doubles.PI;
+import static org.dayflower.util.Doubles.abs;
+import static org.dayflower.util.Doubles.cos;
+import static org.dayflower.util.Doubles.isNaN;
+import static org.dayflower.util.Doubles.max;
+import static org.dayflower.util.Doubles.pow;
+import static org.dayflower.util.Doubles.random;
+import static org.dayflower.util.Doubles.saturate;
+import static org.dayflower.util.Doubles.sin;
+import static org.dayflower.util.Doubles.sqrt;
 
-import java.util.concurrent.ThreadLocalRandom;
-
+import org.dayflower.geometry.Vector3D;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 
 public final class SmallPTD {
-	private static final Sphere[] SPHERES = {
-		new Sphere(1.0e5D, new Vec( 1.0e5D +  1.0D,   40.8D,           81.6D),          new Vec(),                    new Vec(0.75D, 0.25D, 0.25D),               Refl.DIFFUSE_LAMBERTIAN),
-		new Sphere(1.0e5D, new Vec(-1.0e5D + 99.0D,   40.8D,           81.6D),          new Vec(),                    new Vec(0.25D, 0.25D, 0.75D),               Refl.DIFFUSE_LAMBERTIAN),
-		new Sphere(1.0e5D, new Vec(  50.0D,           40.8D,          1.0e5D),          new Vec(),                    new Vec(0.75D, 0.75D, 0.75D),               Refl.DIFFUSE_LAMBERTIAN),
-		new Sphere(1.0e5D, new Vec(  50.0D,           40.8D,         -1.0e5D + 170.0D), new Vec(),                    new Vec(),                                  Refl.DIFFUSE_LAMBERTIAN),
-		new Sphere(1.0e5D, new Vec(  50.0D,          1.0e5D,           81.6D),          new Vec(),                    new Vec(0.75D, 0.75D, 0.75D),               Refl.DIFFUSE_LAMBERTIAN),
-		new Sphere(1.0e5D, new Vec(  50.0D,         -1.0e5D + 81.6D,   81.6D),          new Vec(),                    new Vec(0.75D, 0.75D, 0.75D),               Refl.DIFFUSE_LAMBERTIAN),
-		new Sphere( 16.5D, new Vec(  27.0D,           16.5D,           47.0D),          new Vec(),                    new Vec(1.0D, 1.0D, 1.0D).multiply(0.999D), Refl.GLOSSY_PHONG),
-		new Sphere( 16.5D, new Vec(  73.0D,           16.5D,           78.0D),          new Vec(),                    new Vec(1.0D, 1.0D, 1.0D).multiply(0.999D), Refl.REFLECTIVE_AND_REFRACTIVE),
-		new Sphere(600.0D, new Vec(  50.0D,          681.6D - 0.27D,   81.6D),          new Vec(12.0D, 12.0D, 12.0D), new Vec(),                                  Refl.DIFFUSE_LAMBERTIAN)
+	private static final Sphere3D[] SPHERES = {
+		new Sphere3D(1.0e5D, new Vector3D( 1.0e5D +  1.0D,   40.8D,           81.6D),          new Vector3D(),                    new Vector3D(0.750D, 0.250D, 0.250D), Material.DIFFUSE_LAMBERTIAN),
+		new Sphere3D(1.0e5D, new Vector3D(-1.0e5D + 99.0D,   40.8D,           81.6D),          new Vector3D(),                    new Vector3D(0.250D, 0.250D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
+		new Sphere3D(1.0e5D, new Vector3D(  50.0D,           40.8D,          1.0e5D),          new Vector3D(),                    new Vector3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
+		new Sphere3D(1.0e5D, new Vector3D(  50.0D,           40.8D,         -1.0e5D + 170.0D), new Vector3D(),                    new Vector3D(),                       Material.DIFFUSE_LAMBERTIAN),
+		new Sphere3D(1.0e5D, new Vector3D(  50.0D,          1.0e5D,           81.6D),          new Vector3D(),                    new Vector3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
+		new Sphere3D(1.0e5D, new Vector3D(  50.0D,         -1.0e5D + 81.6D,   81.6D),          new Vector3D(),                    new Vector3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
+		new Sphere3D( 16.5D, new Vector3D(  27.0D,           16.5D,           47.0D),          new Vector3D(),                    new Vector3D(0.999D, 0.999D, 0.999D), Material.GLOSSY_PHONG),
+		new Sphere3D( 16.5D, new Vector3D(  73.0D,           16.5D,           78.0D),          new Vector3D(),                    new Vector3D(0.999D, 0.999D, 0.999D), Material.REFLECTIVE_AND_REFRACTIVE),
+		new Sphere3D(600.0D, new Vector3D(  50.0D,          681.6D - 0.27D,   81.6D),          new Vector3D(12.0D, 12.0D, 12.0D), new Vector3D(),                       Material.DIFFUSE_LAMBERTIAN)
 	};
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,47 +54,47 @@ public final class SmallPTD {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Vec radiance(final Ray r, final int depth) {
+	public static Vector3D radiance(final Ray3D r, final int depth) {
 		final double[] t = new double[1];
 		
 		final int[] id = new int[1];
 		
 		if(!intersect(r, t, id)) {
-			return new Vec();
+			return new Vector3D();
 		}
 		
-		final Sphere sphere = SPHERES[id[0]];
+		final Sphere3D sphere = SPHERES[id[0]];
 		
-		final Vec x = r.o.add(r.d.multiply(t[0]));
-		final Vec n = x.subtract(sphere.p).normalize();
-		final Vec nl = n.dotProduct(r.d) < 0.0D ? n : n.multiply(-1.0D);
+		final Vector3D x = Vector3D.add(r.o, Vector3D.multiply(r.d, t[0]));
+		final Vector3D n = Vector3D.normalize(Vector3D.subtract(x, sphere.center));
+		final Vector3D nl = Vector3D.dotProduct(n, r.d) < 0.0D ? n : Vector3D.multiply(n, -1.0D);
 		
-		Vec f = sphere.c;
+		Vector3D f = sphere.albedo;
 		
 		final int currentDepth = depth + 1;
 		
 		if(currentDepth > 5) {
-			final double p = f.x > f.y && f.x > f.z ? f.x : f.y > f.z ? f.y : f.z;
+			final double p = f.getX() > f.getY() && f.getX() > f.getZ() ? f.getX() : f.getY() > f.getZ() ? f.getY() : f.getZ();
 			
 			if(random() < p) {
-				f = f.multiply(1.0D / p);
+				f = Vector3D.divide(f, p);
 			} else {
-				return sphere.e;
+				return sphere.emission;
 			}
 		}
 		
-		switch(sphere.refl) {
+		switch(sphere.material) {
 			case DIFFUSE_LAMBERTIAN: {
 				final double r1 = 2.0D * PI * random();
 				final double r2 = random();
 				final double r2s = sqrt(r2);
 				
-				final Vec w = nl;
-				final Vec u = (abs(w.x) > 0.1D ? new Vec(0.0D, 1.0D, 0.0D) : new Vec(1.0D, 0.0D, 0.0D)).crossProduct(w).normalize();
-				final Vec v = w.crossProduct(u);
-				final Vec d = u.multiply(cos(r1)).multiply(r2s).add(v.multiply(sin(r1)).multiply(r2s)).add(w.multiply(sqrt(1.0D - r2))).normalize();
+				final Vector3D w = nl;
+				final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.getX()) > 0.1D ? new Vector3D(0.0D, 1.0D, 0.0D) : new Vector3D(1.0D, 0.0D, 0.0D), w));
+				final Vector3D v = Vector3D.crossProduct(w, u);
+				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.add(Vector3D.multiply(Vector3D.multiply(u, cos(r1)), r2s), Vector3D.multiply(Vector3D.multiply(v, sin(r1)), r2s)), Vector3D.multiply(w, sqrt(1.0D - r2))));
 				
-				return sphere.e.add(f.multiply(radiance(new Ray(x, d), currentDepth)));
+				return Vector3D.add(sphere.emission, Vector3D.multiply(f, radiance(new Ray3D(x, d), currentDepth)));
 			}
 			case GLOSSY_PHONG: {
 				final double exponent = 20.0D;
@@ -100,80 +102,74 @@ public final class SmallPTD {
 				final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
 				final double phi = PI * 2.0D * random();
 				
-				final Vec s = new Vec(cos(phi) * sinTheta, sin(phi) * sinTheta, cosTheta);
-				final Vec w = r.d.subtract(n.multiply(2.0D).multiply(n.dotProduct(r.d))).normalize();
-				final Vec v = Vec.computeV(w);
-				final Vec u = v.crossProduct(w);
-//				final Vec u = (abs(w.x) > 0.1D ? new Vec(w.z, 0.0D, -w.x) : new Vec(0.0D, -w.z, w.y)).normalize();
-//				final Vec v = w.crossProduct(u);
-				final Vec d = new Vec(u.x * s.x + v.x * s.y + w.x * s.z, u.y * s.x + v.y * s.y + w.y * s.z, u.z * s.x + v.z * s.y + w.z * s.z).normalize();
+				final Vector3D s = new Vector3D(cos(phi) * sinTheta, sin(phi) * sinTheta, cosTheta);
+				final Vector3D w = Vector3D.normalize(Vector3D.subtract(r.d, Vector3D.multiply(Vector3D.multiply(n, 2.0D), Vector3D.dotProduct(n, r.d))));
+				final Vector3D v = Vector3D.computeV(w);
+				final Vector3D u = Vector3D.crossProduct(v, w);
+//				final Vector3D u = Vector3D.normalize(abs(w.getX()) > 0.1D ? new Vec(w.getZ(), 0.0D, -w.getX()) : new Vec(0.0D, -w.getZ(), w.getY())));
+//				final Vector3D v = Vector3D.crossProduct(w, u);
+				final Vector3D d = Vector3D.normalize(new Vector3D(u.getX() * s.getX() + v.getX() * s.getY() + w.getX() * s.getZ(), u.getY() * s.getX() + v.getY() * s.getY() + w.getY() * s.getZ(), u.getZ() * s.getX() + v.getZ() * s.getY() + w.getZ() * s.getZ()));
 				
-				return sphere.e.add(f.multiply(radiance(new Ray(x, d), currentDepth)));
+				return Vector3D.add(sphere.emission, Vector3D.multiply(f, radiance(new Ray3D(x, d), currentDepth)));
 			}
 			case REFLECTIVE: {
-				return sphere.e.add(f.multiply(radiance(new Ray(x, r.d.subtract(n.multiply(2.0D).multiply(n.dotProduct(r.d)))), currentDepth)));
+				final Vector3D d = Vector3D.subtract(r.d, Vector3D.multiply(Vector3D.multiply(n, 2.0D), Vector3D.dotProduct(n, r.d)));
+				
+				return Vector3D.add(sphere.emission, Vector3D.multiply(f, radiance(new Ray3D(x, d), currentDepth)));
 			}
 			case REFLECTIVE_AND_REFRACTIVE: {
-				final Ray reflRay = new Ray(x, r.d.subtract(n.multiply(2.0D).multiply(n.dotProduct(r.d))));
+				final Ray3D reflectionRay = new Ray3D(x, Vector3D.subtract(r.d, Vector3D.multiply(Vector3D.multiply(n, 2.0D), Vector3D.dotProduct(n, r.d))));
 				
-				final boolean into = n.dotProduct(nl) > 0.0D;
+				final boolean into = Vector3D.dotProduct(n, nl) > 0.0D;
 				
 				final double nc = 1.0D;
 				final double nt = 1.5D;
 				final double nnt = into ? nc / nt : nt / nc;
-				final double ddn = r.d.dotProduct(nl);
+				final double ddn = Vector3D.dotProduct(r.d, nl);
 				final double cos2t = 1.0D - nnt * nnt * (1.0D - ddn * ddn);
 				
 				if(cos2t < 0.0D) {
-					return sphere.e.add(f.multiply(radiance(reflRay, currentDepth)));
+					return Vector3D.add(sphere.emission, Vector3D.multiply(f, radiance(reflectionRay, currentDepth)));
 				}
 				
-				final Vec tDir = r.d.multiply(nnt).subtract(n.multiply((into ? 1.0D : -1.0D) * (ddn * nnt + sqrt(cos2t)))).normalize();
+				final Vector3D transmissionDirection = Vector3D.normalize(Vector3D.subtract(Vector3D.multiply(r.d, nnt), Vector3D.multiply(n, (into ? 1.0D : -1.0D) * (ddn * nnt + sqrt(cos2t)))));
 				
 				final double a = nt - nc;
 				final double b = nt + nc;
 				final double r0 = a * a / (b * b);
-				final double c = 1.0D - (into ? -ddn : tDir.dotProduct(n));
+				final double c = 1.0D - (into ? -ddn : Vector3D.dotProduct(transmissionDirection, n));
 				final double rE = r0 + (1.0D - r0) * c * c * c * c * c;
 				final double tR = 1.0D - rE;
 				final double p = 0.25D + 0.5D * rE;
 				final double rP = rE / p;
 				final double tP = tR / (1.0D - p);
 				
-				return sphere.e.add(f.multiply(currentDepth > 2 ? (random() < p ? radiance(reflRay, currentDepth).multiply(rP) : radiance(new Ray(x, tDir), currentDepth).multiply(tP)) : radiance(reflRay, currentDepth).multiply(rE).add(radiance(new Ray(x, tDir), currentDepth).multiply(tR))));
+				return Vector3D.add(sphere.emission, Vector3D.multiply(f, currentDepth > 2 ? (random() < p ? Vector3D.multiply(radiance(reflectionRay, currentDepth), rP) : Vector3D.multiply(radiance(new Ray3D(x, transmissionDirection), currentDepth), tP)) : Vector3D.add(Vector3D.multiply(radiance(reflectionRay, currentDepth), rE), Vector3D.multiply(radiance(new Ray3D(x, transmissionDirection), currentDepth), tR))));
 			}
 			default: {
-				return new Vec();
+				return new Vector3D();
 			}
 		}
 	}
 	
-	public static boolean intersect(final Ray r, final double[] t, final int[] id) {
+	public static boolean intersect(final Ray3D r, final double[] t, final int[] id) {
 		t[0] = Double.NaN;
 		
 		for(int i = 0; i < SPHERES.length; i++) {
 			final double currentT = SPHERES[i].intersect(r);
 			
-			if(!Double.isNaN(currentT) && (Double.isNaN(t[0]) || currentT < t[0])) {
+			if(!isNaN(currentT) && (isNaN(t[0]) || currentT < t[0])) {
 				t[0] = currentT;
 				
 				id[0] = i;
 			}
 		}
 		
-		return !Double.isNaN(t[0]);
-	}
-	
-	public static double clamp(final double v) {
-		return v < 0.0D ? 0.0D : v > 1.0D ? 1.0D : v;
-	}
-	
-	public static double random() {
-		return ThreadLocalRandom.current().nextDouble();
+		return !isNaN(t[0]);
 	}
 	
 	public static int toInt(final double v) {
-		return (int)(pow(clamp(v), 1.0D / 2.2D) * 255.0D + 0.5D);
+		return (int)(pow(saturate(v), 1.0D / 2.2D) * 255.0D + 0.5D);
 	}
 	
 	public static void main(final String[] args) {
@@ -181,35 +177,35 @@ public final class SmallPTD {
 		final int h = 768;
 		final int samps = 10;
 		
-		final Ray cam = new Ray(new Vec(50.0D, 52.0D, 295.6D), new Vec(0.0D, -0.042612D, -1.0D).normalize());
+		final Ray3D camera = new Ray3D(new Vector3D(50.0D, 52.0D, 295.6D), Vector3D.normalize(new Vector3D(0.0D, -0.042612D, -1.0D)));
 		
-		final Vec cx = new Vec(w * 0.5135D / h, 0.0D, 0.0D);
-		final Vec cy = cx.crossProduct(cam.d).normalize().multiply(0.5135D);
+		final Vector3D cx = new Vector3D(w * 0.5135D / h, 0.0D, 0.0D);
+		final Vector3D cy = Vector3D.multiply(Vector3D.normalize(Vector3D.crossProduct(cx, camera.d)), 0.5135D);
 		
-		final Vec[] c = new Vec[w * h];
+		final Vector3D[] colors = new Vector3D[w * h];
 		
-		for(int i = 0; i < c.length; i++) {
-			c[i] = new Vec();
+		for(int i = 0; i < colors.length; i++) {
+			colors[i] = new Vector3D();
 		}
 		
 		for(int y = 0; y < h; y++) {
 			for(int x = 0; x < w; x++) {
 				for(int sy = 0, i = (h - y - 1) * w + x; sy < 2; sy++) {
 					for(int sx = 0; sx < 2; sx++) {
-						Vec r = new Vec();
+						Vector3D radiance = new Vector3D();
 						
 						for(int s = 0; s < samps; s++) {
 							final double r1 = 2.0D * random();
-							final double dx = r1 < 1.0D ? sqrt(r1) - 1.0D : 1.0D - sqrt(2.0D - r1);
 							final double r2 = 2.0D * random();
+							final double dx = r1 < 1.0D ? sqrt(r1) - 1.0D : 1.0D - sqrt(2.0D - r1);
 							final double dy = r2 < 1.0D ? sqrt(r2) - 1.0D : 1.0D - sqrt(2.0D - r2);
 							
-							final Vec d = cx.multiply(((sx + 0.5D + dx) / 2.0D + x) / w - 0.5D).add(cy.multiply(((sy + 0.5D + dy) / 2.0D + y) / h - 0.5D)).add(cam.d);
+							final Vector3D d = Vector3D.add(Vector3D.add(Vector3D.multiply(cx, ((sx + 0.5D + dx) / 2.0D + x) / w - 0.5D), Vector3D.multiply(cy, ((sy + 0.5D + dy) / 2.0D + y) / h - 0.5D)), camera.d);
 							
-							r = r.add(radiance(new Ray(cam.o.add(d.multiply(140.0D)), d.normalize()), 0).multiply(1.0D / samps));
+							radiance = Vector3D.add(radiance, Vector3D.multiply(radiance(new Ray3D(Vector3D.add(camera.o, Vector3D.multiply(d, 140.0D)), Vector3D.normalize(d)), 0), 1.0D / samps));
 						}
 						
-						c[i] = c[i].add(new Vec(clamp(r.x), clamp(r.y), clamp(r.z)).multiply(0.25D));
+						colors[i] = Vector3D.add(colors[i], Vector3D.multiply(new Vector3D(saturate(radiance.getX()), saturate(radiance.getY()), saturate(radiance.getZ())), 0.25D));
 					}
 				}
 			}
@@ -217,8 +213,8 @@ public final class SmallPTD {
 		
 		final Image image = new Image(w, h);
 		
-		for(int i = 0; i < c.length; i++) {
-			image.setColorRGB(new Color3F(toInt(c[i].x), toInt(c[i].y), toInt(c[i].z)), i);
+		for(int i = 0; i < colors.length; i++) {
+			image.setColorRGB(new Color3F(toInt(colors[i].getX()), toInt(colors[i].getY()), toInt(colors[i].getZ())), i);
 		}
 		
 		image.save("./generated/SmallPT.png");
@@ -226,13 +222,13 @@ public final class SmallPTD {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final class Ray {
-		public final Vec d;
-		public final Vec o;
+	private static final class Ray3D {
+		public final Vector3D d;
+		public final Vector3D o;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public Ray(final Vec o, final Vec d) {
+		public Ray3D(final Vector3D o, final Vector3D d) {
 			this.o = o;
 			this.d = d;
 		}
@@ -240,31 +236,34 @@ public final class SmallPTD {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final class Sphere {
-		public final Refl refl;
-		public final Vec c;
-		public final Vec e;
-		public final Vec p;
-		public final double rad;
+	private static final class Sphere3D {
+		private static final double EPSILON = 1.0e-4D;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public Sphere(final double rad, final Vec p, final Vec e, final Vec c, final Refl refl) {
-			this.rad = rad;
-			this.p = p;
-			this.e = e;
-			this.c = c;
-			this.refl = refl;
+		public final Material material;
+		public final Vector3D albedo;
+		public final Vector3D center;
+		public final Vector3D emission;
+		public final double radius;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Sphere3D(final double radius, final Vector3D center, final Vector3D emission, final Vector3D albedo, final Material material) {
+			this.radius = radius;
+			this.center = center;
+			this.emission = emission;
+			this.albedo = albedo;
+			this.material = material;
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public double intersect(final Ray r) {
-			final Vec op = this.p.subtract(r.o);
+		public double intersect(final Ray3D r) {
+			final Vector3D op = Vector3D.subtract(this.center, r.o);
 			
-			final double eps = 1.0e-4D;
-			final double b = op.dotProduct(r.d);
-			final double det = b * b - op.dotProduct(op) + this.rad * this.rad;
+			final double b = Vector3D.dotProduct(op, r.d);
+			final double det = b * b - Vector3D.dotProduct(op, op) + this.radius * this.radius;
 			
 			if(det < 0.0D) {
 				return Double.NaN;
@@ -273,13 +272,13 @@ public final class SmallPTD {
 			final double detSqrt = sqrt(det);
 			final double t0 = b - detSqrt;
 			
-			if(t0 > eps) {
+			if(t0 > EPSILON) {
 				return t0;
 			}
 			
 			final double t1 = b + detSqrt;
 			
-			if(t1 > eps) {
+			if(t1 > EPSILON) {
 				return t1;
 			}
 			
@@ -289,77 +288,7 @@ public final class SmallPTD {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final class Vec {
-		public final double x;
-		public final double y;
-		public final double z;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Vec() {
-			this(0.0D, 0.0D, 0.0D);
-		}
-		
-		public Vec(final double x, final double y, final double z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public double dotProduct(final Vec v) {
-			return this.x * v.x + this.y * v.y + this.z * v.z;
-		}
-		
-		public Vec add(final Vec v) {
-			return new Vec(this.x + v.x, this.y + v.y, this.z + v.z);
-		}
-		
-		public Vec crossProduct(final Vec v) {
-			return new Vec(this.y * v.z - this.z * v.y, this.z * v.x - this.x * v.z, this.x * v.y - this.y * v.x);
-		}
-		
-		public Vec multiply(final double s) {
-			return new Vec(this.x * s, this.y * s, this.z * s);
-		}
-		
-		public Vec multiply(final Vec v) {
-			return new Vec(this.x * v.x, this.y * v.y, this.z * v.z);
-		}
-		
-		public Vec normalize() {
-			return multiply(1.0D / sqrt(this.x * this.x + this.y * this.y + this.z * this.z));
-		}
-		
-		public Vec subtract(final Vec v) {
-			return new Vec(this.x - v.x, this.y - v.y, this.z - v.z);
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public static Vec computeV(final Vec w) {
-			final Vec wNormalized = w.normalize();
-			
-			final double absX = abs(wNormalized.x);
-			final double absY = abs(wNormalized.y);
-			final double absZ = abs(wNormalized.z);
-			
-			if(absX < absY && absX < absZ) {
-				return new Vec(0.0D, wNormalized.z, -wNormalized.y).normalize();
-			}
-			
-			if(absY < absZ) {
-				return new Vec(wNormalized.z, 0.0D, -wNormalized.x).normalize();
-			}
-			
-			return new Vec(wNormalized.y, -wNormalized.x, 0.0D).normalize();
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static enum Refl {
+	private static enum Material {
 		DIFFUSE_LAMBERTIAN,
 		GLOSSY_PHONG,
 		REFLECTIVE,
@@ -367,7 +296,7 @@ public final class SmallPTD {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		private Refl() {
+		private Material() {
 			
 		}
 	}

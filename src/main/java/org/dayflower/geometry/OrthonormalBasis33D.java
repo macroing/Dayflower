@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -236,14 +235,13 @@ public final class OrthonormalBasis33D {
 	 * @return a new {@code OrthonormalBasis33D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
-//	TODO: Add!
-//	public static OrthonormalBasis33D transform(final Matrix44D matrixLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
-//		final Vector3D u = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.u));
-//		final Vector3D v = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.v));
-//		final Vector3D w = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.w));
+	public static OrthonormalBasis33D transform(final Matrix44D matrixLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
+		final Vector3D u = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.u));
+		final Vector3D v = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.v));
+		final Vector3D w = Vector3D.normalize(Vector3D.transform(matrixLHS, orthonormalBasisRHS.w));
 		
-//		return new OrthonormalBasis33D(w, v, u);
-//	}
+		return new OrthonormalBasis33D(w, v, u);
+	}
 	
 	/**
 	 * Performs a transformation in transpose order.
@@ -257,12 +255,11 @@ public final class OrthonormalBasis33D {
 	 * @return a new {@code OrthonormalBasis33D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code orthonormalBasisRHS} are {@code null}
 	 */
-//	TODO: Add!
-//	public static OrthonormalBasis33D transformTranspose(final Matrix44D matrixLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
-//		final Vector3D u = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.u));
-//		final Vector3D v = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.v));
-//		final Vector3D w = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.w));
+	public static OrthonormalBasis33D transformTranspose(final Matrix44D matrixLHS, final OrthonormalBasis33D orthonormalBasisRHS) {
+		final Vector3D u = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.u));
+		final Vector3D v = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.v));
+		final Vector3D w = Vector3D.normalize(Vector3D.transformTranspose(matrixLHS, orthonormalBasisRHS.w));
 		
-//		return new OrthonormalBasis33D(w, v, u);
-//	}
+		return new OrthonormalBasis33D(w, v, u);
+	}
 }

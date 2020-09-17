@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -128,8 +127,7 @@ public final class Ray3D {
 	 * @return a new {@code Ray3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code rayRHS} are {@code null}
 	 */
-//	TODO: Add!
-//	public static Ray3D transform(final Matrix44D matrixLHS, final Ray3D rayRHS) {
-//		return new Ray3D(Point3D.transform(matrixLHS, rayRHS.origin), Vector3D.transform(matrixLHS, rayRHS.direction));
-//	}
+	public static Ray3D transform(final Matrix44D matrixLHS, final Ray3D rayRHS) {
+		return new Ray3D(Point3D.transform(matrixLHS, rayRHS.origin), Vector3D.transform(matrixLHS, rayRHS.direction));
+	}
 }

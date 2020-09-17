@@ -28,7 +28,6 @@ import static org.dayflower.util.Doubles.saturate;
 import static org.dayflower.util.Doubles.sin;
 import static org.dayflower.util.Doubles.sqrt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -822,14 +821,13 @@ public final class Vector3D {
 	 * @return a new {@code Vector3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add!
-//	public static Vector3D transform(final Matrix44D matrixLHS, final Vector3D vectorRHS) {
-//		final double component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement12() * vectorRHS.component2 + matrixLHS.getElement13() * vectorRHS.component3;
-//		final double component2 = matrixLHS.getElement21() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2 + matrixLHS.getElement23() * vectorRHS.component3;
-//		final double component3 = matrixLHS.getElement31() * vectorRHS.component1 + matrixLHS.getElement32() * vectorRHS.component2 + matrixLHS.getElement33() * vectorRHS.component3;
+	public static Vector3D transform(final Matrix44D matrixLHS, final Vector3D vectorRHS) {
+		final double component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement12() * vectorRHS.component2 + matrixLHS.getElement13() * vectorRHS.component3;
+		final double component2 = matrixLHS.getElement21() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2 + matrixLHS.getElement23() * vectorRHS.component3;
+		final double component3 = matrixLHS.getElement31() * vectorRHS.component1 + matrixLHS.getElement32() * vectorRHS.component2 + matrixLHS.getElement33() * vectorRHS.component3;
 		
-//		return new Vector3D(component1, component2, component3);
-//	}
+		return new Vector3D(component1, component2, component3);
+	}
 	
 	/**
 	 * Transforms the {@code Vector3D} {@code vectorRHS} with the {@link OrthonormalBasis33D} {@code orthonormalBasisRHS}.
@@ -883,14 +881,13 @@ public final class Vector3D {
 	 * @return a new {@code Vector3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
 	 */
-//	TODO: Add!
-//	public static Vector3D transformTranspose(final Matrix44D matrixLHS, final Vector3D vectorRHS) {
-//		final double component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement21() * vectorRHS.component2 + matrixLHS.getElement31() * vectorRHS.component3;
-//		final double component2 = matrixLHS.getElement12() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2 + matrixLHS.getElement32() * vectorRHS.component3;
-//		final double component3 = matrixLHS.getElement13() * vectorRHS.component1 + matrixLHS.getElement23() * vectorRHS.component2 + matrixLHS.getElement33() * vectorRHS.component3;
+	public static Vector3D transformTranspose(final Matrix44D matrixLHS, final Vector3D vectorRHS) {
+		final double component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement21() * vectorRHS.component2 + matrixLHS.getElement31() * vectorRHS.component3;
+		final double component2 = matrixLHS.getElement12() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2 + matrixLHS.getElement32() * vectorRHS.component3;
+		final double component3 = matrixLHS.getElement13() * vectorRHS.component1 + matrixLHS.getElement23() * vectorRHS.component2 + matrixLHS.getElement33() * vectorRHS.component3;
 		
-//		return new Vector3D(component1, component2, component3);
-//	}
+		return new Vector3D(component1, component2, component3);
+	}
 	
 	/**
 	 * Returns a new {@code Vector3D} instance equivalent to {@code new Vector3D(1.0D, 0.0D, 0.0D)}.

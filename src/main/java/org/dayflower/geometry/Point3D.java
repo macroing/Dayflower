@@ -22,7 +22,6 @@ import static org.dayflower.util.Doubles.equal;
 import static org.dayflower.util.Doubles.max;
 import static org.dayflower.util.Doubles.min;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -504,14 +503,13 @@ public final class Point3D {
 	 * @return a new {@code Point3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
-//	TODO: Add!
-//	public static Point3D transform(final Matrix44D matrixLHS, final Point3D pointRHS) {
-//		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
-//		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
-//		final double component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34();
+	public static Point3D transform(final Matrix44D matrixLHS, final Point3D pointRHS) {
+		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
+		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
+		final double component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34();
 		
-//		return new Point3D(component1, component2, component3);
-//	}
+		return new Point3D(component1, component2, component3);
+	}
 	
 	/**
 	 * Transforms the {@code Point3D} {@code pointRHS} with the {@link Matrix44D} {@code matrixLHS} and divides the result.
@@ -525,15 +523,14 @@ public final class Point3D {
 	 * @return a new {@code Point3D} instance with the result of the transformation
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
 	 */
-//	TODO: Add!
-//	public static Point3D transformAndDivide(final Matrix44D matrixLHS, final Point3D pointRHS) {
-//		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
-//		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
-//		final double component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34();
-//		final double component4 = matrixLHS.getElement41() * pointRHS.component1 + matrixLHS.getElement42() * pointRHS.component2 + matrixLHS.getElement43() * pointRHS.component3 + matrixLHS.getElement44();
+	public static Point3D transformAndDivide(final Matrix44D matrixLHS, final Point3D pointRHS) {
+		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13() * pointRHS.component3 + matrixLHS.getElement14();
+		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23() * pointRHS.component3 + matrixLHS.getElement24();
+		final double component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34();
+		final double component4 = matrixLHS.getElement41() * pointRHS.component1 + matrixLHS.getElement42() * pointRHS.component2 + matrixLHS.getElement43() * pointRHS.component3 + matrixLHS.getElement44();
 		
-//		return equal(component4, 1.0D) || equal(component4, 0.0D) ? new Point3D(component1, component2, component3) : new Point3D(component1 / component4, component2 / component4, component3 / component4);
-//	}
+		return equal(component4, 1.0D) || equal(component4, 0.0D) ? new Point3D(component1, component2, component3) : new Point3D(component1 / component4, component2 / component4, component3 / component4);
+	}
 	
 	/**
 	 * Returns the distance from {@code eye} to {@code lookAt}.

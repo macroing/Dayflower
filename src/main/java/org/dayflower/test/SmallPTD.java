@@ -18,17 +18,13 @@
  */
 package org.dayflower.test;
 
-import static org.dayflower.util.Doubles.PI;
 import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.cos;
 import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Doubles.random;
-import static org.dayflower.util.Doubles.saturate;
-import static org.dayflower.util.Doubles.sin;
 import static org.dayflower.util.Doubles.solveQuadraticSystem;
 import static org.dayflower.util.Doubles.sqrt;
+
+import java.util.Objects;
 
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Point3D;
@@ -40,51 +36,41 @@ import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 
 public final class SmallPTD {
-	private static final Sphere3D[] SPHERES = {
-		new Sphere3D(1.0e5D, new Point3D( 1.0e5D +  1.0D,   40.8D,           81.6D),          new Color3D(),                    new Color3D(0.750D, 0.250D, 0.250D), Material.DIFFUSE_LAMBERTIAN),
-		new Sphere3D(1.0e5D, new Point3D(-1.0e5D + 99.0D,   40.8D,           81.6D),          new Color3D(),                    new Color3D(0.250D, 0.250D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
-		new Sphere3D(1.0e5D, new Point3D(  50.0D,           40.8D,          1.0e5D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
-		new Sphere3D(1.0e5D, new Point3D(  50.0D,           40.8D,         -1.0e5D + 170.0D), new Color3D(),                    new Color3D(),                       Material.DIFFUSE_LAMBERTIAN),
-		new Sphere3D(1.0e5D, new Point3D(  50.0D,          1.0e5D,           81.6D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
-		new Sphere3D(1.0e5D, new Point3D(  50.0D,         -1.0e5D + 81.6D,   81.6D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
-		new Sphere3D( 16.5D, new Point3D(  27.0D,           16.5D,           47.0D),          new Color3D(),                    new Color3D(0.999D, 0.999D, 0.999D), Material.GLOSSY_PHONG),
-		new Sphere3D( 16.5D, new Point3D(  73.0D,           16.5D,           78.0D),          new Color3D(),                    new Color3D(0.999D, 0.999D, 0.999D), Material.REFLECTIVE_AND_REFRACTIVE),
-		new Sphere3D(600.0D, new Point3D(  50.0D,          681.6D - 0.27D,   81.6D),          new Color3D(12.0D, 12.0D, 12.0D), new Color3D(),                       Material.DIFFUSE_LAMBERTIAN)
-	};
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private SmallPTD() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Color3D radiance(final Ray3D ray, final int depth) {
-		final double[] t = new double[1];
+	public static Color3D radiance(final Ray3D ray, final Scene scene, final int depth) {
+		final Intersection intersection = scene.intersection(ray);
 		
-		final int[] id = new int[1];
-		
-		if(!intersect(ray, t, id)) {
+		if(intersection == null) {
 			return new Color3D();
 		}
 		
-		final Sphere3D sphere = SPHERES[id[0]];
+		final Point3D origin = ray.getOrigin();
 		
-		final Point3D x = Point3D.add(ray.getOrigin(), ray.getDirection(), t[0]);
+		final Vector3D direction = ray.getDirection();
 		
-		final Vector3D n = Vector3D.normalize(Vector3D.direction(sphere.center, x));
-		final Vector3D nl = Vector3D.dotProduct(n, ray.getDirection()) < 0.0D ? n : Vector3D.multiply(n, -1.0D);
+		final Sphere3D sphere = intersection.getSphere();
 		
-		Color3D f = sphere.albedo;
+		final double t = intersection.getT();
+		
+		final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
+		
+		final Vector3D surfaceNormal = Vector3D.normalize(Vector3D.direction(sphere.center, surfaceIntersectionPoint));
+		final Vector3D surfaceNormalCorrectlyOriented = Vector3D.dotProduct(surfaceNormal, direction) < 0.0D ? surfaceNormal : Vector3D.multiply(surfaceNormal, -1.0D);
+		
+		Color3D albedo = sphere.albedo;
 		
 		final int currentDepth = depth + 1;
 		
 		if(currentDepth > 5) {
-			final double p = f.maximum();
+			final double p = albedo.maximum();
 			
 			if(random() < p) {
-				f = Color3D.divide(f, p);
+				albedo = Color3D.divide(albedo, p);
 			} else {
 				return sphere.emission;
 			}
@@ -92,111 +78,104 @@ public final class SmallPTD {
 		
 		switch(sphere.material) {
 			case DIFFUSE_LAMBERTIAN: {
-				final double r1 = 2.0D * PI * random();
-				final double r2 = random();
-				final double r2s = sqrt(r2);
-				
-				final Vector3D w = nl;
-				final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.getX()) > 0.1D ? new Vector3D(0.0D, 1.0D, 0.0D) : new Vector3D(1.0D, 0.0D, 0.0D), w));
+				final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution();
+				final Vector3D w = surfaceNormalCorrectlyOriented;
+				final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.getX()) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
 				final Vector3D v = Vector3D.crossProduct(w, u);
-				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.add(Vector3D.multiply(Vector3D.multiply(u, cos(r1)), r2s), Vector3D.multiply(Vector3D.multiply(v, sin(r1)), r2s)), Vector3D.multiply(w, sqrt(1.0D - r2))));
+				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
 				
-				return Color3D.add(sphere.emission, Color3D.multiply(f, radiance(new Ray3D(x, d), currentDepth)));
+				return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
 			}
 			case GLOSSY_PHONG: {
-				final double exponent = 20.0D;
-				final double cosTheta = pow(1.0D - random(), 1.0D / (exponent + 1.0D));
-				final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
-				final double phi = PI * 2.0D * random();
-				
-				final Vector3D s = new Vector3D(cos(phi) * sinTheta, sin(phi) * sinTheta, cosTheta);
-				final Vector3D w = Vector3D.normalize(Vector3D.subtract(ray.getDirection(), Vector3D.multiply(Vector3D.multiply(n, 2.0D), Vector3D.dotProduct(n, ray.getDirection()))));
+				final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(random(), random(), 20.0D);
+				final Vector3D w = Vector3D.normalize(Vector3D.subtract(direction, Vector3D.multiply(Vector3D.multiply(surfaceNormal, 2.0D), Vector3D.dotProduct(surfaceNormal, direction))));
 				final Vector3D v = Vector3D.computeV(w);
 				final Vector3D u = Vector3D.crossProduct(v, w);
-//				final Vector3D u = Vector3D.normalize(abs(w.getX()) > 0.1D ? new Vec(w.getZ(), 0.0D, -w.getX()) : new Vec(0.0D, -w.getZ(), w.getY())));
-//				final Vector3D v = Vector3D.crossProduct(w, u);
-				final Vector3D d = Vector3D.normalize(new Vector3D(u.getX() * s.getX() + v.getX() * s.getY() + w.getX() * s.getZ(), u.getY() * s.getX() + v.getY() * s.getY() + w.getY() * s.getZ(), u.getZ() * s.getX() + v.getZ() * s.getY() + w.getZ() * s.getZ()));
+				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
 				
-				return Color3D.add(sphere.emission, Color3D.multiply(f, radiance(new Ray3D(x, d), currentDepth)));
+				return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
 			}
 			case REFLECTIVE: {
-				final Vector3D d = Vector3D.subtract(ray.getDirection(), Vector3D.multiply(Vector3D.multiply(n, 2.0D), Vector3D.dotProduct(n, ray.getDirection())));
+				final Vector3D d = Vector3D.subtract(direction, Vector3D.multiply(Vector3D.multiply(surfaceNormal, 2.0D), Vector3D.dotProduct(surfaceNormal, direction)));
 				
-				return Color3D.add(sphere.emission, Color3D.multiply(f, radiance(new Ray3D(x, d), currentDepth)));
+				return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
 			}
 			case REFLECTIVE_AND_REFRACTIVE: {
-				final Ray3D reflectionRay = new Ray3D(x, Vector3D.subtract(ray.getDirection(), Vector3D.multiply(Vector3D.multiply(n, 2.0D), Vector3D.dotProduct(n, ray.getDirection()))));
+				final Vector3D reflectionDirection = Vector3D.subtract(direction, Vector3D.multiply(Vector3D.multiply(surfaceNormal, 2.0D), Vector3D.dotProduct(surfaceNormal, direction)));
 				
-				final boolean into = Vector3D.dotProduct(n, nl) > 0.0D;
+				final Ray3D reflectionRay = new Ray3D(surfaceIntersectionPoint, reflectionDirection);
+				
+				final boolean into = Vector3D.dotProduct(surfaceNormal, surfaceNormalCorrectlyOriented) > 0.0D;
 				
 				final double nc = 1.0D;
 				final double nt = 1.5D;
 				final double nnt = into ? nc / nt : nt / nc;
-				final double ddn = Vector3D.dotProduct(ray.getDirection(), nl);
+				final double ddn = Vector3D.dotProduct(direction, surfaceNormalCorrectlyOriented);
 				final double cos2t = 1.0D - nnt * nnt * (1.0D - ddn * ddn);
 				
 				if(cos2t < 0.0D) {
-					return Color3D.add(sphere.emission, Color3D.multiply(f, radiance(reflectionRay, currentDepth)));
+					return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(reflectionRay, scene, currentDepth)));
 				}
 				
-				final Vector3D transmissionDirection = Vector3D.normalize(Vector3D.subtract(Vector3D.multiply(ray.getDirection(), nnt), Vector3D.multiply(n, (into ? 1.0D : -1.0D) * (ddn * nnt + sqrt(cos2t)))));
+				final Vector3D transmissionDirection = Vector3D.normalize(Vector3D.subtract(Vector3D.multiply(direction, nnt), Vector3D.multiply(surfaceNormal, (into ? 1.0D : -1.0D) * (ddn * nnt + sqrt(cos2t)))));
+				
+				final Ray3D transmissionRay = new Ray3D(surfaceIntersectionPoint, transmissionDirection);
 				
 				final double a = nt - nc;
 				final double b = nt + nc;
 				final double r0 = a * a / (b * b);
-				final double c = 1.0D - (into ? -ddn : Vector3D.dotProduct(transmissionDirection, n));
-				final double rE = r0 + (1.0D - r0) * c * c * c * c * c;
-				final double tR = 1.0D - rE;
-				final double p = 0.25D + 0.5D * rE;
-				final double rP = rE / p;
-				final double tP = tR / (1.0D - p);
+				final double c = 1.0D - (into ? -ddn : Vector3D.dotProduct(transmissionDirection, surfaceNormal));
+				final double reflectance = r0 + (1.0D - r0) * c * c * c * c * c;
+				final double transmittance = 1.0D - reflectance;
+				final double probabilityRussianRoulette = 0.25D + 0.5D * reflectance;
+				final double probabilityReflection = reflectance / probabilityRussianRoulette;
+				final double probabilityTransmission = transmittance / (1.0D - probabilityRussianRoulette);
 				
-				return Color3D.add(sphere.emission, Color3D.multiply(f, currentDepth > 2 ? (random() < p ? Color3D.multiply(radiance(reflectionRay, currentDepth), rP) : Color3D.multiply(radiance(new Ray3D(x, transmissionDirection), currentDepth), tP)) : Color3D.add(Color3D.multiply(radiance(reflectionRay, currentDepth), rE), Color3D.multiply(radiance(new Ray3D(x, transmissionDirection), currentDepth), tR))));
+				final int type = currentDepth > 2 && random() < probabilityRussianRoulette ? 1 : currentDepth > 2 ? 2 : 3;
+				
+				switch(type) {
+					case 1:
+						return Color3D.add(sphere.emission, Color3D.multiply(albedo, Color3D.multiply(radiance(reflectionRay, scene, currentDepth), probabilityReflection)));
+					case 2:
+						return Color3D.add(sphere.emission, Color3D.multiply(albedo, Color3D.multiply(radiance(transmissionRay, scene, currentDepth), probabilityTransmission)));
+					case 3:
+						return Color3D.add(sphere.emission, Color3D.multiply(albedo, Color3D.add(Color3D.multiply(radiance(reflectionRay, scene, currentDepth), reflectance), Color3D.multiply(radiance(transmissionRay, scene, currentDepth), transmittance))));
+					default:
+						return Color3D.BLACK;
+				}
 			}
 			default: {
-				return new Color3D();
+				return Color3D.BLACK;
 			}
 		}
-	}
-	
-	public static boolean intersect(final Ray3D r, final double[] t, final int[] id) {
-		t[0] = Double.NaN;
-		
-		for(int i = 0; i < SPHERES.length; i++) {
-			final double currentT = SPHERES[i].intersect(r);
-			
-			if(!isNaN(currentT) && (isNaN(t[0]) || currentT < t[0])) {
-				t[0] = currentT;
-				
-				id[0] = i;
-			}
-		}
-		
-		return !isNaN(t[0]);
 	}
 	
 	public static void main(final String[] args) {
+		final int gridX = 2;
+		final int gridY = 2;
 		final int resolutionX = 1024;
 		final int resolutionY = 768;
 		final int samples = 10;
 		
 		final Camera camera = new Camera(resolutionX, resolutionY);
 		
+		final Scene scene = new Scene();
+		
 		final Color3D[] colors = Color3D.array(resolutionX * resolutionY);
 		
-		for(int y = 0; y < resolutionY; y++) {
-			for(int x = 0; x < resolutionX; x++) {
-				for(int sy = 0, i = (resolutionY - y - 1) * resolutionX + x; sy < 2; sy++) {
-					for(int sx = 0; sx < 2; sx++) {
+		for(int pixelY = 0; pixelY < resolutionY; pixelY++) {
+			for(int pixelX = 0; pixelX < resolutionX; pixelX++) {
+				for(int gridSampleY = 0, i = (resolutionY - pixelY - 1) * resolutionX + pixelX; gridSampleY < gridY; gridSampleY++) {
+					for(int gridSampleX = 0; gridSampleX < gridX; gridSampleX++) {
 						Color3D radiance = Color3D.BLACK;
 						
-						for(int s = 0; s < samples; s++) {
-							final Ray3D ray = camera.generatePrimaryRay(x, y, sx, sy);
+						for(int sample = 0; sample < samples; sample++) {
+							final Ray3D ray = camera.generatePrimaryRay(pixelX, pixelY, gridSampleX, gridSampleY);
 							
-							radiance = Color3D.add(radiance, Color3D.multiply(radiance(ray, 0), 1.0D / samples));
+							radiance = Color3D.add(radiance, Color3D.divide(radiance(ray, scene, 0), samples));
 						}
 						
-						colors[i] = Color3D.add(colors[i], Color3D.multiply(new Color3D(saturate(radiance.getX()), saturate(radiance.getY()), saturate(radiance.getZ())), 0.25D));
+						colors[i] = Color3D.add(colors[i], Color3D.divide(Color3D.saturate(radiance), gridX * gridY));
 					}
 				}
 			}
@@ -225,30 +204,123 @@ public final class SmallPTD {
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		public Camera(final double resolutionX, final double resolutionY) {
+			this(resolutionX, resolutionY, 0.5135D);
+		}
+		
+		public Camera(final double resolutionX, final double resolutionY, final double fieldOfView) {
 			this.eye = new Point3D(50.0D, 52.0D, 295.6D);
 			this.w = Vector3D.normalize(new Vector3D(0.0D, -0.042612D, -1.0D));
-			this.u = new Vector3D(resolutionX * 0.5135D / resolutionY, 0.0D, 0.0D);
-			this.v = Vector3D.multiply(Vector3D.normalize(Vector3D.crossProduct(this.u, this.w)), 0.5135D);
+			this.u = new Vector3D(fieldOfView * resolutionX / resolutionY, 0.0D, 0.0D);
+			this.v = Vector3D.multiply(Vector3D.normalize(Vector3D.crossProduct(this.u, this.w)), fieldOfView);
 			this.resolutionX = resolutionX;
 			this.resolutionY = resolutionY;
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public Ray3D generatePrimaryRay(final int x, final int y, final int sx, final int sy) {
-			final Point2D sample = SampleGeneratorD.sampleExactInverseTentFilter();
+		public Ray3D generatePrimaryRay(final double pixelX, final double pixelY, final double gridSampleU, final double gridSampleV) {
+			final Point2D sample = doSample(pixelX, pixelY, gridSampleU, gridSampleV);
 			
-			final Vector3D u = Vector3D.multiply(this.u, ((sx + 0.5D + sample.getU()) / 2.0D + x) / this.resolutionX - 0.5D);
-			final Vector3D v = Vector3D.multiply(this.v, ((sy + 0.5D + sample.getV()) / 2.0D + y) / this.resolutionY - 0.5D);
+			final Vector3D u = Vector3D.multiply(this.u, sample.getU());
+			final Vector3D v = Vector3D.multiply(this.v, sample.getV());
 			final Vector3D w = this.w;
 			
-			final Vector3D direction = Vector3D.add(Vector3D.add(u, v), w);
+			final Vector3D direction = Vector3D.add(u, v, w);
 			
 			final Point3D origin = Point3D.add(this.eye, Vector3D.multiply(direction, 140.0D));
 			
 			final Vector3D directionNormalized = Vector3D.normalize(direction);
 			
 			return new Ray3D(origin, directionNormalized);
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private Point2D doSample(final double pixelX, final double pixelY, final double gridSampleU, final double gridSampleV) {
+			/*
+			 * The list below shows some possible values assigned to either sampleU1 or sampleV1, both of which are in the range [-0.25D, +1.75D]:
+			 * 
+			 * sampleN1 #1: (0.0D + 0.5D + -1.0D) / 2.0D = -0.25D
+			 * sampleN1 #2: (1.0D + 0.5D + -1.0D) / 2.0D = +0.25D
+			 * sampleN1 #3: (2.0D + 0.5D + -1.0D) / 2.0D = +0.75D
+			 * sampleN1 #4: (0.0D + 0.5D + +1.0D) / 2.0D = +0.75D
+			 * sampleN1 #5: (1.0D + 0.5D + +1.0D) / 2.0D = +1.25D
+			 * sampleN1 #6: (2.0D + 0.5D + +1.0D) / 2.0D = +1.75D
+			 */
+			
+//			Generate a Point2D instance whose getU() and getV() methods returns a double in the range [-1.0D, +1.0D]:
+			final Point2D sample = SampleGeneratorD.sampleExactInverseTentFilter();
+			
+//			The variables gridSampleU and gridSampleV are in the range [0.0D, 2.0D]:
+			final double sampleU1 = (gridSampleU + 0.5D + sample.getU()) / 2.0D;
+			final double sampleV1 = (gridSampleV + 0.5D + sample.getV()) / 2.0D;
+			
+			final double sampleU2 = (sampleU1 + pixelX) / this.resolutionX - 0.5D;
+			final double sampleV2 = (sampleV1 + pixelY) / this.resolutionY - 0.5D;
+			
+			return new Point2D(sampleU2, sampleV2);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class Intersection {
+		private final Sphere3D sphere;
+		private final double t;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Intersection(final Sphere3D sphere, final double t) {
+			this.sphere = Objects.requireNonNull(sphere, "sphere == null");
+			this.t = t;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Sphere3D getSphere() {
+			return this.sphere;
+		}
+		
+		public double getT() {
+			return this.t;
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class Scene {
+		private final Sphere3D[] spheres;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Scene() {
+			this.spheres = new Sphere3D[] {
+				new Sphere3D(1.0e5D, new Point3D( 1.0e5D +  1.0D,   40.8D,           81.6D),          new Color3D(),                    new Color3D(0.750D, 0.250D, 0.250D), Material.DIFFUSE_LAMBERTIAN),
+				new Sphere3D(1.0e5D, new Point3D(-1.0e5D + 99.0D,   40.8D,           81.6D),          new Color3D(),                    new Color3D(0.250D, 0.250D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
+				new Sphere3D(1.0e5D, new Point3D(  50.0D,           40.8D,          1.0e5D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
+				new Sphere3D(1.0e5D, new Point3D(  50.0D,           40.8D,         -1.0e5D + 170.0D), new Color3D(),                    new Color3D(),                       Material.DIFFUSE_LAMBERTIAN),
+				new Sphere3D(1.0e5D, new Point3D(  50.0D,          1.0e5D,           81.6D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
+				new Sphere3D(1.0e5D, new Point3D(  50.0D,         -1.0e5D + 81.6D,   81.6D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
+				new Sphere3D( 16.5D, new Point3D(  27.0D,           16.5D,           47.0D),          new Color3D(),                    new Color3D(0.999D, 0.999D, 0.999D), Material.REFLECTIVE),
+				new Sphere3D( 16.5D, new Point3D(  73.0D,           16.5D,           78.0D),          new Color3D(),                    new Color3D(0.999D, 0.999D, 0.999D), Material.REFLECTIVE_AND_REFRACTIVE),
+				new Sphere3D(600.0D, new Point3D(  50.0D,          681.6D - 0.27D,   81.6D),          new Color3D(12.0D, 12.0D, 12.0D), new Color3D(),                       Material.DIFFUSE_LAMBERTIAN)
+			};
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Intersection intersection(final Ray3D ray) {
+			Intersection intersection = null;
+			
+			for(final Sphere3D sphere : this.spheres) {
+				final double t = sphere.intersection(ray);
+				
+				if(!isNaN(t) && (intersection == null || t < intersection.getT())) {
+					intersection = new Intersection(sphere, t);
+				}
+			}
+			
+			return intersection;
 		}
 	}
 	
@@ -277,11 +349,11 @@ public final class SmallPTD {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public double intersect(final Ray3D ray) {
-			return intersect(ray, EPSILON, Double.MAX_VALUE);
+		public double intersection(final Ray3D ray) {
+			return intersection(ray, EPSILON, Double.MAX_VALUE);
 		}
 		
-		public double intersect(final Ray3D ray, final double tMinimum, final double tMaximum) {
+		public double intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 			final Point3D origin = ray.getOrigin();
 			final Point3D center = this.center;
 			

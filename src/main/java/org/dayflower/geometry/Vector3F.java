@@ -373,6 +373,29 @@ public final class Vector3F {
 	}
 	
 	/**
+	 * Adds the component values of {@code vectorA}, {@code vectorB} and {@code vectorC}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the addition.
+	 * <p>
+	 * If either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Vector addition is performed componentwise.
+	 * 
+	 * @param vectorA a {@code Vector3F} instance
+	 * @param vectorB a {@code Vector3F} instance
+	 * @param vectorC a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorA}, {@code vectorB} or {@code vectorC} are {@code null}
+	 */
+	public static Vector3F add(final Vector3F vectorA, final Vector3F vectorB, final Vector3F vectorC) {
+		final float component1 = vectorA.component1 + vectorB.component1 + vectorC.component1;
+		final float component2 = vectorA.component2 + vectorB.component2 + vectorC.component2;
+		final float component3 = vectorA.component3 + vectorB.component3 + vectorC.component3;
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Returns a new {@code Vector3F} instance denoting {@code V} in an orthonormal basis.
 	 * <p>
 	 * If {@code w} is {@code null}, a {@code NullPointerException} will be thrown.

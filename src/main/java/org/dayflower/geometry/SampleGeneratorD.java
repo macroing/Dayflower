@@ -22,6 +22,7 @@ import static org.dayflower.util.Doubles.PI;
 import static org.dayflower.util.Doubles.PI_DIVIDED_BY_2;
 import static org.dayflower.util.Doubles.PI_DIVIDED_BY_4;
 import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2;
+import static org.dayflower.util.Doubles.PI_RECIPROCAL;
 import static org.dayflower.util.Doubles.cos;
 import static org.dayflower.util.Doubles.equal;
 import static org.dayflower.util.Doubles.max;
@@ -399,6 +400,18 @@ public final class SampleGeneratorD {
 	 */
 	public static double coneUniformDistributionProbabilityDensityFunction(final double cosThetaMax) {
 		return cosThetaMax >= 1.0D ? 0.0D : 1.0D / (2.0D * PI * (1.0D - cosThetaMax));
+	}
+	
+	/**
+	 * Returns the probability density function (PDF) value for {@code cosTheta}.
+	 * <p>
+	 * This method is used together with {@link #sampleHemisphereCosineDistribution(double, double)}.
+	 * 
+	 * @param cosTheta the cos theta value
+	 * @return the probability density function (PDF) value for {@code cosTheta}
+	 */
+	public static double hemisphereCosineDistributionProbabilityDensityFunction(final double cosTheta) {
+		return cosTheta * PI_RECIPROCAL;
 	}
 	
 	/**

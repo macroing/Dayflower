@@ -156,6 +156,43 @@ public final class SampleGeneratorD {
 	}
 	
 	/**
+	 * Samples a point using an exact inverse tent filter.
+	 * <p>
+	 * Returns a {@code Point2D} instance with the sampled point.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SampleGeneratorD.sampleExactInverseTentFilter(Doubles.random(), Doubles.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Point2D} instance with the sampled point
+	 */
+	public static Point2D sampleExactInverseTentFilter() {
+		return sampleExactInverseTentFilter(random(), random());
+	}
+	
+	/**
+	 * Samples a point using an exact inverse tent filter.
+	 * <p>
+	 * Returns a {@code Point2D} instance with the sampled point.
+	 * 
+	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @return a {@code Point2D} instance with the sampled point
+	 */
+	public static Point2D sampleExactInverseTentFilter(final double u, final double v) {
+		final double x = u * 2.0D;
+		final double y = v * 2.0D;
+		
+		final double component1 = x < 1.0D ? sqrt(x) - 1.0D : 1.0D - sqrt(2.0D - x);
+		final double component2 = y < 1.0D ? sqrt(y) - 1.0D : 1.0D - sqrt(2.0D - y);
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
 	 * Samples a direction on a cone with a uniform distribution.
 	 * <p>
 	 * Returns a {@code Vector3D} instance with the sampled direction.

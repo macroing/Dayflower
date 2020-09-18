@@ -1754,7 +1754,7 @@ public final class Image {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
 	public static Image random(final int resolutionX, final int resolutionY) {
-		return new Image(resolutionX, resolutionY, Color3F.random(resolutionX * resolutionY));
+		return new Image(resolutionX, resolutionY, Color3F.arrayRandom(resolutionX * resolutionY));
 	}
 	
 	/**

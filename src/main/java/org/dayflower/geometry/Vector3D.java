@@ -538,28 +538,6 @@ public final class Vector3D {
 	}
 	
 	/**
-	 * Multiplies the component values of {@code vectorLHS} with the component values of {@code vectorRHS}.
-	 * <p>
-	 * Returns a new {@code Vector3D} instance with the result of the multiplication.
-	 * <p>
-	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Vector multiplication is performed componentwise.
-	 * 
-	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
-	 * @param vectorRHS the {@code Vector3D} instance on the right-hand side
-	 * @return a new {@code Vector3D} instance with the result of the multiplication
-	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
-	 */
-	public static Vector3D multiply(final Vector3D vectorLHS, final Vector3D vectorRHS) {
-		final double component1 = vectorLHS.component1 * vectorRHS.component1;
-		final double component2 = vectorLHS.component2 * vectorRHS.component2;
-		final double component3 = vectorLHS.component3 * vectorRHS.component3;
-		
-		return new Vector3D(component1, component2, component3);
-	}
-	
-	/**
 	 * Multiplies the component values of {@code vectorLHS} with {@code scalarRHS}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the multiplication.

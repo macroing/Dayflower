@@ -31,6 +31,7 @@ import static org.dayflower.util.Ints.toInt;
 import static org.dayflower.util.Ints.requireRange;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import org.dayflower.geometry.Point2D;
 import org.dayflower.util.Doubles;
@@ -1808,22 +1809,68 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Returns a {@code Color3D[]} with a length of {@code length} and contains {@code Color3D.BLACK}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3D.array(length, () -> Color3D.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param length the length of the array
+	 * @return a {@code Color3D[]} with a length of {@code length} and contains {@code Color3D.BLACK}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static Color3D[] array(final int length) {
+		return array(length, () -> BLACK);
+	}
+	
+	/**
+	 * Returns a {@code Color3D[]} with a length of {@code length} and contains {@code Color3D} instances supplied by {@code supplier}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code supplier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param length the length of the array
+	 * @param supplier a {@code Supplier}
+	 * @return a {@code Color3D[]} with a length of {@code length} and contains {@code Color3D} instances supplied by {@code supplier}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code supplier} is {@code null}
+	 */
+	public static Color3D[] array(final int length, final Supplier<Color3D> supplier) {
+		final Color3D[] colors = new Color3D[requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Objects.requireNonNull(supplier, "supplier == null");
+		
+		for(int i = 0; i < colors.length; i++) {
+			colors[i] = Objects.requireNonNull(supplier.get());
+		}
+		
+		return colors;
+	}
+	
+	/**
 	 * Returns a {@code Color3D[]} with a length of {@code length} and contains random {@code Color3D} instances.
 	 * <p>
 	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3D.array(length, () -> Color3D.random());
+	 * }
+	 * </pre>
 	 * 
 	 * @param length the length of the array
 	 * @return a {@code Color3D[]} with a length of {@code length} and contains random {@code Color3D} instances
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
-	public static Color3D[] random(final int length) {
-		final Color3D[] colors = new Color3D[requireRange(length, 0, Integer.MAX_VALUE, "length")];
-		
-		for(int i = 0; i < colors.length; i++) {
-			colors[i] = random();
-		}
-		
-		return colors;
+	public static Color3D[] arrayRandom(final int length) {
+		return array(length, () -> random());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

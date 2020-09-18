@@ -156,6 +156,43 @@ public final class SampleGeneratorF {
 	}
 	
 	/**
+	 * Samples a point using an exact inverse tent filter.
+	 * <p>
+	 * Returns a {@code Point2F} instance with the sampled point.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SampleGeneratorF.sampleExactInverseTentFilter(Floats.random(), Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Point2F} instance with the sampled point
+	 */
+	public static Point2F sampleExactInverseTentFilter() {
+		return sampleExactInverseTentFilter(random(), random());
+	}
+	
+	/**
+	 * Samples a point using an exact inverse tent filter.
+	 * <p>
+	 * Returns a {@code Point2F} instance with the sampled point.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @return a {@code Point2F} instance with the sampled point
+	 */
+	public static Point2F sampleExactInverseTentFilter(final float u, final float v) {
+		final float x = u * 2.0F;
+		final float y = v * 2.0F;
+		
+		final float component1 = x < 1.0F ? sqrt(x) - 1.0F : 1.0F - sqrt(2.0F - x);
+		final float component2 = y < 1.0F ? sqrt(y) - 1.0F : 1.0F - sqrt(2.0F - y);
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
 	 * Samples a direction on a cone with a uniform distribution.
 	 * <p>
 	 * Returns a {@code Vector3F} instance with the sampled direction.

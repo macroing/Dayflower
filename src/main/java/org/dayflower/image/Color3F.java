@@ -26,6 +26,7 @@ import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.simplexFractionalBrownianMotionXY;
+import static org.dayflower.util.Floats.toFloat;
 import static org.dayflower.util.Ints.toInt;
 import static org.dayflower.util.Ints.requireRange;
 
@@ -36,7 +37,7 @@ import org.dayflower.util.Floats;
 import org.dayflower.util.Ints;
 
 /**
- * A {@code Color3F} encapsulates a color.
+ * A {@code Color3F} encapsulates a color using the data type {@code float}.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 
@@ -129,6 +130,18 @@ public final class Color3F {
 	 */
 	public Color3F() {
 		this(0.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code Color3F} instance from {@code color}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color3D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Color3F(final Color3D color) {
+		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()));
 	}
 	
 	/**
@@ -1481,7 +1494,7 @@ public final class Color3F {
 		
 		final float noise = simplexFractionalBrownianMotionXY(x, y, frequency, gain, 0.0F, 1.0F, octaves);
 		
-		return Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(color, noise)));
+		return maximumTo1(minimumTo0(multiply(color, noise)));
 	}
 	
 	/**

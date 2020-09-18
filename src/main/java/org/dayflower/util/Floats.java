@@ -1158,9 +1158,9 @@ public final class Floats {
 		final int ii = i & 0xFF;
 		final int jj = j & 0xFF;
 		
-		final int gi0 = PERMUTATIONS_B_MODULO_12[ii + PERMUTATIONS_B[jj]];
+		final int gi0 = PERMUTATIONS_B_MODULO_12[ii +  0 + PERMUTATIONS_B[jj +  0]];
 		final int gi1 = PERMUTATIONS_B_MODULO_12[ii + i1 + PERMUTATIONS_B[jj + j1]];
-		final int gi2 = PERMUTATIONS_B_MODULO_12[ii + 1 + PERMUTATIONS_B[jj + 1]];
+		final int gi2 = PERMUTATIONS_B_MODULO_12[ii +  1 + PERMUTATIONS_B[jj +  1]];
 		
 		final float t0 = 0.5F - x0 * x0 - y0 * y0;
 		final float n0 = t0 < 0.0F ? 0.0F : (t0 * t0) * (t0 * t0) * (SIMPLEX_GRADIENT_3[gi0 * 3 + 0] * x0 + SIMPLEX_GRADIENT_3[gi0 * 3 + 1] * y0);
@@ -1264,10 +1264,10 @@ public final class Floats {
 		final int jj = j & 0xFF;
 		final int kk = k & 0xFF;
 		
-		final int gi0 = PERMUTATIONS_B_MODULO_12[ii + PERMUTATIONS_B[jj + PERMUTATIONS_B[kk]]];
+		final int gi0 = PERMUTATIONS_B_MODULO_12[ii +  0 + PERMUTATIONS_B[jj +  0 + PERMUTATIONS_B[kk +  0]]];
 		final int gi1 = PERMUTATIONS_B_MODULO_12[ii + i1 + PERMUTATIONS_B[jj + j1 + PERMUTATIONS_B[kk + k1]]];
 		final int gi2 = PERMUTATIONS_B_MODULO_12[ii + i2 + PERMUTATIONS_B[jj + j2 + PERMUTATIONS_B[kk + k2]]];
-		final int gi3 = PERMUTATIONS_B_MODULO_12[ii + 1 + PERMUTATIONS_B[jj + 1 + PERMUTATIONS_B[kk + 1]]];
+		final int gi3 = PERMUTATIONS_B_MODULO_12[ii +  1 + PERMUTATIONS_B[jj +  1 + PERMUTATIONS_B[kk +  1]]];
 		
 		final float t0 = 0.6F - x0 * x0 - y0 * y0 - z0 * z0;
 		final float n0 = t0 < 0.0F ? 0.0F : (t0 * t0) * (t0 * t0) * (SIMPLEX_GRADIENT_3[gi0 * 3 + 0] * x0 + SIMPLEX_GRADIENT_3[gi0 * 3 + 1] * y0 + SIMPLEX_GRADIENT_3[gi0 * 3 + 2] * z0);
@@ -1384,11 +1384,11 @@ public final class Floats {
 		final int kk = k & 0xFF;
 		final int ll = l & 0xFF;
 		
-		final int gi0 = PERMUTATIONS_B[ii + PERMUTATIONS_B[jj + PERMUTATIONS_B[kk + PERMUTATIONS_B[ll]]]] % 32;
+		final int gi0 = PERMUTATIONS_B[ii +  0 + PERMUTATIONS_B[jj +  0 + PERMUTATIONS_B[kk +  0 + PERMUTATIONS_B[ll +  0]]]] % 32;
 		final int gi1 = PERMUTATIONS_B[ii + i1 + PERMUTATIONS_B[jj + j1 + PERMUTATIONS_B[kk + k1 + PERMUTATIONS_B[ll + l1]]]] % 32;
 		final int gi2 = PERMUTATIONS_B[ii + i2 + PERMUTATIONS_B[jj + j2 + PERMUTATIONS_B[kk + k2 + PERMUTATIONS_B[ll + l2]]]] % 32;
 		final int gi3 = PERMUTATIONS_B[ii + i3 + PERMUTATIONS_B[jj + j3 + PERMUTATIONS_B[kk + k3 + PERMUTATIONS_B[ll + l3]]]] % 32;
-		final int gi4 = PERMUTATIONS_B[ii + 1 + PERMUTATIONS_B[jj + 1 + PERMUTATIONS_B[kk + 1 + PERMUTATIONS_B[ll + 1]]]] % 32;
+		final int gi4 = PERMUTATIONS_B[ii +  1 + PERMUTATIONS_B[jj +  1 + PERMUTATIONS_B[kk +  1 + PERMUTATIONS_B[ll +  1]]]] % 32;
 		
 		final float t0 = 0.6F - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
 		final float n0 = t0 < 0.0F ? 0.0F : (t0 * t0) * (t0 * t0) * (SIMPLEX_GRADIENT_4[gi0 * 4 + 0] * x0 + SIMPLEX_GRADIENT_4[gi0 * 4 + 1] * y0 + SIMPLEX_GRADIENT_4[gi0 * 4 + 2] * z0 + SIMPLEX_GRADIENT_4[gi0 * 4 + 3] * w0);
@@ -1561,6 +1561,40 @@ public final class Floats {
 	}
 	
 	/**
+	 * Solves the cubic system for the quartic system based on the values {@code p}, {@code q} and {@code r}.
+	 * <p>
+	 * Returns a {@code float} with the result of the operation.
+	 * 
+	 * @param p a value
+	 * @param q a value
+	 * @param r a value
+	 * @return a {@code float} with the result of the operation
+	 */
+	public static float solveCubicForQuartic(final float p, final float q, final float r) {
+		final float pSquared = p * p;
+		final float q0 = (pSquared - 3.0F * q) / 9.0F;
+		final float q0Cubed = q0 * q0 * q0;
+		final float r0 = (p * (pSquared - 4.5F * q) + 13.5F * r) / 27.0F;
+		final float r0Squared = r0 * r0;
+		final float d = q0Cubed - r0Squared;
+		final float e = p / 3.0F;
+		
+		if(d >= 0.0F) {
+			final float d0 = r0 / sqrt(q0Cubed);
+			final float theta = acos(d0) / 3.0F;
+			final float q1 = -2.0F * sqrt(q0);
+			final float q2 = q1 * cos(theta) - e;
+			
+			return q2;
+		}
+		
+		final float q1 = pow(sqrt(r0Squared - q0Cubed) + abs(r0), 1.0F / 3.0F);
+		final float q2 = r0 < 0.0F ? (q1 + q0 / q1) - e : -(q1 + q0 / q1) - e;
+		
+		return q2;
+	}
+	
+	/**
 	 * Returns the correctly rounded positive square root of {@code value}.
 	 * <p>
 	 * Special cases:
@@ -1701,6 +1735,94 @@ public final class Floats {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * Attempts to solve the quartic system based on the values {@code a}, {@code b}, {@code c}, {@code d} and {@code e}.
+	 * <p>
+	 * Returns a {@code float[]}, with a length of {@code 0}, {@code 2} or {@code 4}, that contains the result.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @param c a value
+	 * @param d a value
+	 * @param e a value
+	 * @return a {@code float[]}, with a length of {@code 0}, {@code 2} or {@code 4}, that contains the result
+	 */
+	public static float[] solveQuartic(final float a, final float b, final float c, final float d, final float e) {
+		final float aReciprocal = 1.0F / a;
+		final float bA = b * aReciprocal;
+		final float bASquared = bA * bA;
+		final float cA = c * aReciprocal;
+		final float dA = d * aReciprocal;
+		final float eA = e * aReciprocal;
+		final float p = -0.375F * bASquared + cA;
+		final float q = 0.125F * bASquared * bA - 0.5F * bA * cA + dA;
+		final float r = -0.01171875F * bASquared * bASquared + 0.0625F * bASquared * cA - 0.25F * bA * dA + eA;
+		final float z = solveCubicForQuartic(-0.5F * p, -r, 0.5F * r * p - 0.125F * q * q);
+		
+		float d1 = 2.0F * z - p;
+		float d2;
+		
+		if(d1 < 0.0F) {
+			return new float[0];
+		} else if(d1 < 1.0e-10F) {
+			d2 = z * z - r;
+			
+			if(d2 < 0.0F) {
+				return new float[0];
+			}
+			
+			d2 = sqrt(d2);
+		} else {
+			d1 = sqrt(d1);
+			d2 = 0.5F * q / d1;
+		}
+		
+		final float q1 = d1 * d1;
+		final float q2 = -0.25F * bA;
+		final float pm = q1 - 4.0F * (z - d2);
+		final float pp = q1 - 4.0F * (z + d2);
+		
+		if(pm >= 0.0F && pp >= 0.0F) {
+			final float pmSqrt = sqrt(pm);
+			final float ppSqrt = sqrt(pp);
+			
+			final float[] results = new float[4];
+			
+			results[0] = -0.5F * (d1 + pmSqrt) + q2;
+			results[1] = -0.5F * (d1 - pmSqrt) + q2;
+			results[2] = +0.5F * (d1 + ppSqrt) + q2;
+			results[3] = +0.5F * (d1 - ppSqrt) + q2;
+			
+			for(int i = 1; i < 4; i++) {
+				for(int j = i; j > 0 && results[j - 1] > results[j]; j--) {
+					final float resultJ0 = results[j - 0];
+					final float resultJ1 = results[j - 1];
+					
+					results[j - 0] = resultJ1;
+					results[j - 1] = resultJ0;
+				}
+			}
+			
+			return results;
+		} else if(pm >= 0.0F) {
+			final float pmSqrt = sqrt(pm);
+			
+			return new float[] {
+				-0.5F * (d1 + pmSqrt) + q2,
+				-0.5F * (d1 - pmSqrt) + q2
+			};
+		} else if(pp >= 0.0F) {
+			final float ppSqrt = sqrt(pp);
+			
+			return new float[] {
+				+0.5F * (d1 - ppSqrt) + q2,
+				+0.5F * (d1 + ppSqrt) + q2
+			};
+		} else {
+			return new float[0];
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -206,6 +206,16 @@ public final class Ints {
 	}
 	
 	/**
+	 * Returns an {@code int} representation of a {@code double} value.
+	 * 
+	 * @param value a {@code double} value
+	 * @return an {@code int} representation of a {@code double} value
+	 */
+	public static int toInt(final double value) {
+		return (int)(value);
+	}
+	
+	/**
 	 * Returns an {@code int} representation of a {@code float} value.
 	 * 
 	 * @param value a {@code float} value

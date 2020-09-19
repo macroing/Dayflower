@@ -18,7 +18,6 @@
  */
 package org.dayflower.test;
 
-import static org.dayflower.util.Doubles.abs;
 import static org.dayflower.util.Doubles.isNaN;
 import static org.dayflower.util.Doubles.random;
 import static org.dayflower.util.Doubles.solveQuadraticSystem;
@@ -80,8 +79,8 @@ public final class SmallPTD {
 			case DIFFUSE_LAMBERTIAN: {
 				final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution();
 				final Vector3D w = surfaceNormalCorrectlyOriented;
-				final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.getX()) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
-				final Vector3D v = Vector3D.crossProduct(w, u);
+				final Vector3D v = Vector3D.computeV(w);
+				final Vector3D u = Vector3D.crossProduct(v, w);
 				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
 				
 				return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));

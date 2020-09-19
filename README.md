@@ -2,6 +2,8 @@ Dayflower
 =========
 Dayflower is a renderer written in Java.
 
+![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-001.png "Dayflower - Path Tracer")
+
 Getting Started
 ---------------
 To clone this repository, you can type the following in Git Bash.
@@ -9,6 +11,60 @@ To clone this repository, you can type the following in Git Bash.
 ```bash
 git clone https://github.com/macroing/Dayflower.git
 ```
+
+Supported Features
+------------------
+#### BRDF
+* Ashikhmin-Shirley
+* Lambertian
+* Oren-Nayar
+* Reflection
+
+#### BTDF
+* Refraction
+
+#### Background
+* Constant
+* Perez
+
+#### Camera Lens
+* Fisheye
+* Thin
+
+#### Filter
+* Box
+* Catmull Rom
+* Gaussian
+* Lanczos Sinc
+* Mitchell
+* Triangle
+
+#### Light
+* Point
+* Primitive
+
+#### Rendering Algorithms
+* Ambient Occlusion
+* Path Tracer
+* Ray Caster
+
+#### Shapes
+* Plane
+* Rectangular Cuboid
+* Sphere
+* Torus
+* Triangle
+* Triangle Mesh with Bounding Volume Hierarchy (BVH) based on the Surface Area Heuristic (SAH)
+
+#### Textures
+* Blend
+* Bullseye
+* Checkerboard
+* Constant
+* Image
+* Simplex Fractional Brownian Motion
+* Surface Normal
+* UV
 
 Dependencies
 ------------

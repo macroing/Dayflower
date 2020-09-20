@@ -253,6 +253,45 @@ public final class SampleGeneratorD {
 	}
 	
 	/**
+	 * Samples a direction on a hemisphere with a cosine distribution.
+	 * <p>
+	 * Returns a {@code Vector3D} instance with the sampled direction.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SampleGeneratorD.sampleHemisphereCosineDistribution2(Doubles.random(), Doubles.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Vector3D} instance with the sampled direction
+	 */
+	public static Vector3D sampleHemisphereCosineDistribution2() {
+		return sampleHemisphereCosineDistribution2(random(), random());
+	}
+	
+	/**
+	 * Samples a direction on a hemisphere with a cosine distribution.
+	 * <p>
+	 * Returns a {@code Vector3D} instance with the sampled direction.
+	 * 
+	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @return a {@code Vector3D} instance with the sampled direction
+	 */
+	public static Vector3D sampleHemisphereCosineDistribution2(final double u, final double v) {
+		final double sinTheta = sqrt(v);
+		final double cosTheta = sqrt(1.0D - v);
+		final double phi = PI_MULTIPLIED_BY_2 * u;
+		
+		final double component1 = cos(phi) * sinTheta;
+		final double component2 = sin(phi) * sinTheta;
+		final double component3 = cosTheta;
+		
+		return new Vector3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Samples a direction on a hemisphere with a power-cosine distribution.
 	 * <p>
 	 * Returns a {@code Vector3D} instance with the sampled direction.

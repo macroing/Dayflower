@@ -1144,6 +1144,27 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Multiplies the component values of {@code colorA} with the component values of {@code colorB} and its result with {@code scalarC}.
+	 * <p>
+	 * Returns a new {@code Color3D} instance with the result of the multiplication.
+	 * <p>
+	 * If either {@code colorA} or {@code colorB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorA a {@code Color3D} instance
+	 * @param colorB a {@code Color3D} instance
+	 * @param scalarC a scalar value
+	 * @return a new {@code Color3D} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
+	 */
+	public static Color3D multiply(final Color3D colorA, final Color3D colorB, final double scalarC) {
+		final double component1 = colorA.component1 * colorB.component1 * scalarC;
+		final double component2 = colorA.component2 * colorB.component2 * scalarC;
+		final double component3 = colorA.component3 * colorB.component3 * scalarC;
+		
+		return new Color3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Multiplies the component values of {@code colorLHS} with {@code scalarRHS}.
 	 * <p>
 	 * Returns a new {@code Color3D} instance with the result of the multiplication.

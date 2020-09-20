@@ -18,6 +18,7 @@
  */
 package org.dayflower.util;
 
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -80,6 +81,7 @@ public final class Floats {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private static final Random RANDOM = new Random(0L);
 	private static final float SIMPLEX_F2 = 0.3660254037844386F;
 	private static final float SIMPLEX_F3 = 1.0F / 3.0F;
 	private static final float SIMPLEX_F4 = 0.30901699437494745F;
@@ -759,7 +761,8 @@ public final class Floats {
 	 * @return a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive)
 	 */
 	public static float random() {
-		return ThreadLocalRandom.current().nextFloat();
+//		return ThreadLocalRandom.current().nextFloat();
+		return RANDOM.nextFloat();
 	}
 	
 	/**
@@ -1724,11 +1727,21 @@ public final class Floats {
 		
 		final float discriminantSquared = b * b - 4.0F * a * c;
 		
-		if(discriminantSquared >= 0.0F) {
+		if(equal(discriminantSquared, 0.0F)) {
+			final float q = -0.5F * b / a;
+			
+			final float result0 = q;
+			final float result1 = q;
+			
+			result[0] = result0;
+			result[1] = result1;
+		} else if(discriminantSquared > 0.0F) {
 			final float discriminant = sqrt(discriminantSquared);
-			final float quadratic = -0.5F * (b < 0.0F ? b - discriminant : b + discriminant);
-			final float result0 = quadratic / a;
-			final float result1 = equal(quadratic, 0.0F) ? result0 : c / quadratic;
+			
+			final float q = -0.5F * (b > 0.0F ? b + discriminant : b - discriminant);
+			
+			final float result0 = q / a;
+			final float result1 = c / q;
 			
 			result[0] = min(result0, result1);
 			result[1] = max(result0, result1);

@@ -18,6 +18,7 @@
  */
 package org.dayflower.util;
 
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -79,6 +80,7 @@ public class Doubles {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private static final Random RANDOM = new Random(0L);
 	private static final double SIMPLEX_F2 = 0.3660254037844386D;
 	private static final double SIMPLEX_F3 = 1.0D / 3.0D;
 	private static final double SIMPLEX_F4 = 0.30901699437494745D;
@@ -758,7 +760,8 @@ public class Doubles {
 	 * @return a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code 1.0D} (exclusive)
 	 */
 	public static double random() {
-		return ThreadLocalRandom.current().nextDouble();
+//		return ThreadLocalRandom.current().nextDouble();
+		return RANDOM.nextDouble();
 	}
 	
 	/**
@@ -1723,11 +1726,21 @@ public class Doubles {
 		
 		final double discriminantSquared = b * b - 4.0D * a * c;
 		
-		if(discriminantSquared >= 0.0D) {
+		if(equal(discriminantSquared, 0.0D)) {
+			final double q = -0.5D * b / a;
+			
+			final double result0 = q;
+			final double result1 = q;
+			
+			result[0] = result0;
+			result[1] = result1;
+		} else if(discriminantSquared > 0.0D) {
 			final double discriminant = sqrt(discriminantSquared);
-			final double quadratic = -0.5D * (b < 0.0D ? b - discriminant : b + discriminant);
-			final double result0 = quadratic / a;
-			final double result1 = equal(quadratic, 0.0D) ? result0 : c / quadratic;
+			
+			final double q = -0.5D * (b > 0.0D ? b + discriminant : b - discriminant);
+			
+			final double result0 = q / a;
+			final double result1 = c / q;
 			
 			result[0] = min(result0, result1);
 			result[1] = max(result0, result1);

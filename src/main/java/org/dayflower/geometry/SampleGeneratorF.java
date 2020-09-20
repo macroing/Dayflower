@@ -253,6 +253,45 @@ public final class SampleGeneratorF {
 	}
 	
 	/**
+	 * Samples a direction on a hemisphere with a cosine distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SampleGeneratorF.sampleHemisphereCosineDistribution2(Floats.random(), Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
+	public static Vector3F sampleHemisphereCosineDistribution2() {
+		return sampleHemisphereCosineDistribution2(random(), random());
+	}
+	
+	/**
+	 * Samples a direction on a hemisphere with a cosine distribution.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the sampled direction.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @return a {@code Vector3F} instance with the sampled direction
+	 */
+	public static Vector3F sampleHemisphereCosineDistribution2(final float u, final float v) {
+		final float sinTheta = sqrt(v);
+		final float cosTheta = sqrt(1.0F - v);
+		final float phi = PI_MULTIPLIED_BY_2 * u;
+		
+		final float component1 = cos(phi) * sinTheta;
+		final float component2 = sin(phi) * sinTheta;
+		final float component3 = cosTheta;
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Samples a direction on a hemisphere with a power-cosine distribution.
 	 * <p>
 	 * Returns a {@code Vector3F} instance with the sampled direction.

@@ -18,29 +18,29 @@
  */
 package org.dayflower.test;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.abs;
-import static java.lang.Math.cos;
-import static java.lang.Math.pow;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
-
-import java.util.concurrent.ThreadLocalRandom;
+import static org.dayflower.util.Doubles.PI;
+import static org.dayflower.util.Doubles.abs;
+import static org.dayflower.util.Doubles.cos;
+import static org.dayflower.util.Doubles.isNaN;
+import static org.dayflower.util.Doubles.pow;
+import static org.dayflower.util.Doubles.random;
+import static org.dayflower.util.Doubles.sin;
+import static org.dayflower.util.Doubles.sqrt;
 
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 
 public final class SmallPT {
 	private static final Sphere[] SPHERES = {
-		new Sphere(1.0e5D, new Vec(1.0e5D + 1.0D, 40.8D, 81.6D), new Vec(), new Vec(0.75D, 0.25D, 0.25D), Refl.DIFF),
-		new Sphere(1.0e5D, new Vec(-1.0e5D + 99.0D, 40.8D, 81.6D), new Vec(), new Vec(0.25D, 0.25D, 0.75D), Refl.DIFF),
-		new Sphere(1.0e5D, new Vec(50.0D, 40.8D, 1.0e5D), new Vec(), new Vec(0.75D, 0.75D, 0.75D), Refl.DIFF),
-		new Sphere(1.0e5D, new Vec(50.0D, 40.8D, -1.0e5D + 170.0D), new Vec(), new Vec(), Refl.DIFF),
-		new Sphere(1.0e5D, new Vec(50.0D, 1.0e5D, 81.6D), new Vec(), new Vec(0.75D, 0.75D, 0.75D), Refl.DIFF),
-		new Sphere(1.0e5D, new Vec(50.0D, -1.0e5D + 81.6D, 81.6D), new Vec(), new Vec(0.75D, 0.75D, 0.75D), Refl.DIFF),
-		new Sphere(16.5D, new Vec(27.0D, 16.5D, 47.0D), new Vec(), new Vec(1.0D, 1.0D, 1.0D).multiply(0.999D), Refl.SPEC),
-		new Sphere(16.5D, new Vec(73.0D, 16.5D, 78.0D), new Vec(), new Vec(1.0D, 1.0D, 1.0D).multiply(0.999D), Refl.REFR),
-		new Sphere(600.0D, new Vec(50.0D, 681.6D - 0.27D, 81.6D), new Vec(12.0D, 12.0D, 12.0D), new Vec(), Refl.DIFF)
+		new Sphere(1.0e5D, new Vec( 1.0e5D +  1.0D,   40.8D,           81.6D),          new Vec(),                    new Vec(0.75D, 0.25D, 0.25D),                  Refl.DIFF),
+		new Sphere(1.0e5D, new Vec(-1.0e5D + 99.0D,   40.8D,           81.6D),          new Vec(),                    new Vec(0.25D, 0.25D, 0.75D),                  Refl.DIFF),
+		new Sphere(1.0e5D, new Vec(  50.0D,           40.8D,          1.0e5D),          new Vec(),                    new Vec(0.75D, 0.75D, 0.75D),                  Refl.DIFF),
+		new Sphere(1.0e5D, new Vec(  50.0D,           40.8D,         -1.0e5D + 170.0D), new Vec(),                    new Vec(),                                     Refl.DIFF),
+		new Sphere(1.0e5D, new Vec(  50.0D,          1.0e5D,           81.6D),          new Vec(),                    new Vec(0.75D, 0.75D, 0.75D),                  Refl.DIFF),
+		new Sphere(1.0e5D, new Vec(  50.0D,         -1.0e5D + 81.6D,   81.6D),          new Vec(),                    new Vec(0.75D, 0.75D, 0.75D),                  Refl.DIFF),
+		new Sphere( 16.5D, new Vec(  27.0D,           16.5D,           47.0D),          new Vec(),                    new Vec( 1.0D,  1.0D,  1.0D).multiply(0.999D), Refl.SPEC),
+		new Sphere( 16.5D, new Vec(  73.0D,           16.5D,           78.0D),          new Vec(),                    new Vec( 1.0D,  1.0D,  1.0D).multiply(0.999D), Refl.REFR),
+		new Sphere(600.0D, new Vec(  50.0D,          681.6D - 0.27D,   81.6D),          new Vec(12.0D, 12.0D, 12.0D), new Vec(),                                     Refl.DIFF)
 	};
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,28 +52,22 @@ public final class SmallPT {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static boolean intersect(final Ray r, final double[] t, final int[] id) {
-		final double inf = 1.0e20D;
-		
-		t[0] = inf;
+		t[0] = Double.NaN;
 		
 		for(int i = 0; i < SPHERES.length; i++) {
-			final double d = SPHERES[i].intersect(r);
+			final double currentT = SPHERES[i].intersect(r);
 			
-			if(d > 0.0D && d < t[0]) {
-				t[0] = d;
+			if(!isNaN(currentT) && (isNaN(t[0]) || currentT < t[0])) {
+				t[0] = currentT;
 				id[0] = i;
 			}
 		}
 		
-		return t[0] < inf;
+		return !isNaN(t[0]);
 	}
 	
 	public static double clamp(final double v) {
 		return v < 0.0D ? 0.0D : v > 1.0D ? 1.0D : v;
-	}
-	
-	public static double random() {
-		return ThreadLocalRandom.current().nextDouble();
 	}
 	
 	public static int toInt(final double v) {
@@ -252,7 +246,7 @@ public final class SmallPT {
 			final double det = b * b - op.dotProduct(op) + this.rad * this.rad;
 			
 			if(det < 0.0D) {
-				return 0.0D;
+				return Double.NaN;
 			}
 			
 			final double detSqrt = sqrt(det);
@@ -268,7 +262,7 @@ public final class SmallPT {
 				return t1;
 			}
 			
-			return 0.0D;
+			return Double.NaN;
 		}
 	}
 	

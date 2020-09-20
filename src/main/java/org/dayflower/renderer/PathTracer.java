@@ -20,6 +20,7 @@ package org.dayflower.renderer;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.random;
+import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ import org.dayflower.display.Display;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
@@ -38,6 +40,12 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.MaterialResult;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.bxdf.Fresnel;
+import org.dayflower.scene.material.AshikhminShirleyMaterial;
+import org.dayflower.scene.material.LambertianMaterial;
+import org.dayflower.scene.material.OrenNayarMaterial;
+import org.dayflower.scene.material.ReflectionMaterial;
+import org.dayflower.scene.material.RefractionMaterial;
 
 /**
  * A {@code PathTracer} is a {@link Renderer} implementation that renders using Path Tracing.
@@ -108,7 +116,8 @@ public final class PathTracer implements Renderer {
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
 						
-						final Color3F colorRGB = doGetRadiance(ray, scene, rendererConfiguration);
+//						final Color3F colorRGB = doGetRadiance(ray, scene, rendererConfiguration);
+						final Color3F colorRGB = doGetRadiance2(ray, scene, rendererConfiguration);
 						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
 						
 						image.filmAddColorXYZ(x + sampleX, y + sampleY, colorXYZ);
@@ -215,6 +224,133 @@ public final class PathTracer implements Renderer {
 					}
 					
 					throughput = Color3F.divide(throughput, probability);
+				}
+				
+				currentBounce++;
+			} else {
+				radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.getBackground().radiance(currentRay)));
+				
+				break;
+			}
+		}
+		
+		return radiance;
+	}
+	
+	private static Color3F doGetRadiance2(final Ray3F ray, final Scene scene, final RendererConfiguration rendererConfiguration) {
+		final int maximumBounce = rendererConfiguration.getMaximumBounce();
+		final int minimumBounceRussianRoulette = rendererConfiguration.getMinimumBounceRussianRoulette();
+		
+		Color3F radiance = Color3F.BLACK;
+		Color3F throughput = Color3F.WHITE;
+		
+		Ray3F currentRay = ray;
+		
+		int currentBounce = 0;
+		
+		while(currentBounce < maximumBounce) {
+			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay);
+			
+			if(optionalIntersection.isPresent()) {
+				final Vector3F currentRayDirectionI = currentRay.getDirection();
+				
+				final Intersection intersection = optionalIntersection.get();
+				
+				final Primitive primitive = intersection.getPrimitive();
+				
+				final Material material = primitive.getMaterial();
+				
+				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+				
+				final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+				
+				final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
+				final Vector3F surfaceNormalSCorrectlyOriented = Vector3F.dotProduct(currentRayDirectionI, surfaceNormalS) < 0.0F ? surfaceNormalS : Vector3F.negate(surfaceNormalS);
+				
+				Color3F albedo = primitive.getTextureAlbedo().getColor(intersection);
+				Color3F emittance = primitive.getTextureEmittance().getColor(intersection);
+				
+				if(currentBounce >= minimumBounceRussianRoulette) {
+					final float probability = albedo.maximum();
+					
+					if(random() > probability) {
+						break;
+					}
+					
+					albedo = Color3F.divide(albedo, probability);
+				}
+				
+				radiance = Color3F.add(radiance, Color3F.multiply(throughput, emittance));
+				
+				if(material instanceof AshikhminShirleyMaterial) {
+					final Vector3F s = SampleGeneratorF.sampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
+					final Vector3F w = Vector3F.normalize(Vector3F.subtract(currentRayDirectionI, Vector3F.multiply(Vector3F.multiply(surfaceNormalS, 2.0F), Vector3F.dotProduct(surfaceNormalS, currentRayDirectionI))));
+					final Vector3F v = Vector3F.computeV(w);
+					final Vector3F u = Vector3F.crossProduct(v, w);
+					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
+					
+					currentRay = new Ray3F(surfaceIntersectionPoint, d);
+					
+					throughput = Color3F.multiply(throughput, albedo);
+				} else if(material instanceof LambertianMaterial || material instanceof OrenNayarMaterial) {
+					final Vector3F s = SampleGeneratorF.sampleHemisphereCosineDistribution2();
+					final Vector3F w = surfaceNormalSCorrectlyOriented;
+					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? Vector3F.y() : Vector3F.x(), w));
+					final Vector3F v = Vector3F.crossProduct(w, u);
+					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
+					
+					currentRay = new Ray3F(surfaceIntersectionPoint, d);
+					
+					throughput = Color3F.multiply(throughput, albedo);
+				} else if(material instanceof ReflectionMaterial) {
+					final Vector3F d = Vector3F.reflection(currentRayDirectionI, surfaceNormalS, true);
+					
+					currentRay = new Ray3F(surfaceIntersectionPoint, d);
+					
+					throughput = Color3F.multiply(throughput, albedo);
+				} else if(material instanceof RefractionMaterial) {
+					final Vector3F reflectionDirection = Vector3F.reflection(currentRayDirectionI, surfaceNormalS, true);
+					
+					final Ray3F reflectionRay = new Ray3F(surfaceIntersectionPoint, reflectionDirection);
+					
+					final boolean isEntering = Vector3F.dotProduct(surfaceNormalS, surfaceNormalSCorrectlyOriented) > 0.0F;
+					
+					final float etaA = 1.0F;
+					final float etaB = 1.5F;
+					final float eta = isEntering ? etaA / etaB : etaB / etaA;
+					
+					final float cosTheta = Vector3F.dotProduct(currentRayDirectionI, surfaceNormalSCorrectlyOriented);
+					final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
+					
+					if(cosTheta2Squared < 0.0F) {
+						currentRay = reflectionRay;
+						
+						throughput = Color3F.multiply(throughput, albedo);
+					} else {
+						final Vector3F transmissionDirection = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(currentRayDirectionI, eta), Vector3F.multiply(surfaceNormalS, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
+						
+						final Ray3F transmissionRay = new Ray3F(surfaceIntersectionPoint, transmissionDirection);
+						
+						final float a = etaB - etaA;
+						final float b = etaB + etaA;
+						
+						final float reflectance = Fresnel.dielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmissionDirection, surfaceNormalS), a * a / (b * b));
+						final float transmittance = 1.0F - reflectance;
+						
+						final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+						final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+						final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+						
+						if(random() < probabilityRussianRoulette) {
+							currentRay = reflectionRay;
+							
+							throughput = Color3F.multiply(throughput, probabilityRussianRouletteReflection);
+						} else {
+							currentRay = transmissionRay;
+							
+							throughput = Color3F.multiply(throughput, probabilityRussianRouletteTransmission);
+						}
+					}
 				}
 				
 				currentBounce++;

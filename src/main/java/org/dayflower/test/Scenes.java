@@ -256,9 +256,9 @@ public final class Scenes {
 		final Material material2 = new RefractionMaterial();
 		
 		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
+		final Shape3F shape2 = new Sphere3F(5.0F);
 		
-		final Texture texture11 = new ConstantTexture(Color3F.WHITE);
+		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
 		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new ConstantTexture(Color3F.WHITE);
@@ -266,10 +266,10 @@ public final class Scenes {
 		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 5.0F, 10.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialRefractionMaterial");
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 7.5F, 0.0F)), "ShowcaseMaterialRefractionMaterial");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
 		

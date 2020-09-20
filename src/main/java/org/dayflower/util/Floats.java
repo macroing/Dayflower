@@ -19,7 +19,6 @@
 package org.dayflower.util;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The class {@code Floats} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.

@@ -21,7 +21,7 @@ package org.dayflower.test;
 import static org.dayflower.util.Doubles.abs;
 import static org.dayflower.util.Doubles.isNaN;
 import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.min;
+import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Doubles.random;
 import static org.dayflower.util.Doubles.solveQuadraticSystem;
 import static org.dayflower.util.Doubles.sqrt;
@@ -51,34 +51,32 @@ public final class SmallPTD {
 			return Color3D.BLACK;
 		}
 		
-		final Point3D origin = ray.getOrigin();
-		
 		final Vector3D direction = ray.getDirection();
 		
 		final Sphere3D sphere = intersection.getSphere();
 		
-		final double t = intersection.getT();
+		final Point3D surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
-		final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
+		final Vector3D surfaceNormal = intersection.getSurfaceNormal();
+		final Vector3D surfaceNormalCorrectlyOriented = Vector3D.dotProduct(surfaceNormal, direction) < 0.0D ? surfaceNormal : Vector3D.negate(surfaceNormal);
 		
-		final Vector3D surfaceNormal = Vector3D.normalize(Vector3D.direction(sphere.center, surfaceIntersectionPoint));
-		final Vector3D surfaceNormalCorrectlyOriented = Vector3D.dotProduct(surfaceNormal, direction) < 0.0D ? surfaceNormal : Vector3D.multiply(surfaceNormal, -1.0D);
+		Color3D albedo = sphere.getAlbedo();
 		
-		Color3D albedo = sphere.albedo;
+		final Color3D emission = sphere.getEmission();
 		
 		final int currentDepth = depth + 1;
 		
 		if(currentDepth > 5) {
-			final double p = albedo.maximum();
+			final double probability = albedo.maximum();
 			
-			if(random() < p) {
-				albedo = Color3D.divide(albedo, p);
+			if(random() < probability) {
+				albedo = Color3D.divide(albedo, probability);
 			} else {
-				return sphere.emission;
+				return emission;
 			}
 		}
 		
-		switch(sphere.material) {
+		switch(sphere.getMaterial()) {
 			case DIFFUSE_LAMBERTIAN: {
 				final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution2();
 				final Vector3D w = surfaceNormalCorrectlyOriented;
@@ -86,13 +84,7 @@ public final class SmallPTD {
 				final Vector3D v = Vector3D.crossProduct(w, u);
 				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
 				
-//				final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution();
-//				final Vector3D w = surfaceNormalCorrectlyOriented;
-//				final Vector3D v = Vector3D.computeV(w);
-//				final Vector3D u = Vector3D.crossProduct(v, w);
-//				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
-				
-				return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
+				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
 			}
 			case GLOSSY_PHONG: {
 				final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(random(), random(), 20.0D);
@@ -101,15 +93,15 @@ public final class SmallPTD {
 				final Vector3D u = Vector3D.crossProduct(v, w);
 				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
 				
-				return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
+				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
 			}
 			case REFLECTIVE: {
-				final Vector3D d = Vector3D.subtract(direction, Vector3D.multiply(Vector3D.multiply(surfaceNormal, 2.0D), Vector3D.dotProduct(surfaceNormal, direction)));
+				final Vector3D d = Vector3D.reflection(direction, surfaceNormal, true);
 				
-				return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
+				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
 			}
 			case REFLECTIVE_AND_REFRACTIVE: {
-				final Vector3D reflectionDirection = Vector3D.subtract(direction, Vector3D.multiply(Vector3D.multiply(surfaceNormal, 2.0D), Vector3D.dotProduct(surfaceNormal, direction)));
+				final Vector3D reflectionDirection = Vector3D.reflection(direction, surfaceNormal, true);
 				
 				final Ray3D reflectionRay = new Ray3D(surfaceIntersectionPoint, reflectionDirection);
 				
@@ -118,11 +110,12 @@ public final class SmallPTD {
 				final double etaA = 1.0D;
 				final double etaB = 1.5D;
 				final double eta = into ? etaA / etaB : etaB / etaA;
+				
 				final double cosTheta = Vector3D.dotProduct(direction, surfaceNormalCorrectlyOriented);
 				final double cosTheta2Squared = 1.0D - eta * eta * (1.0D - cosTheta * cosTheta);
 				
 				if(cosTheta2Squared < 0.0D) {
-					return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(reflectionRay, scene, currentDepth)));
+					return Color3D.add(emission, Color3D.multiply(albedo, radiance(reflectionRay, scene, currentDepth)));
 				}
 				
 				final Vector3D transmissionDirection = Vector3D.normalize(Vector3D.subtract(Vector3D.multiply(direction, eta), Vector3D.multiply(surfaceNormal, (into ? 1.0D : -1.0D) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
@@ -131,11 +124,10 @@ public final class SmallPTD {
 				
 				final double a = etaB - etaA;
 				final double b = etaB + etaA;
-				final double r0 = a * a / (b * b);
-				final double cosTheta2 = Vector3D.dotProduct(transmissionDirection, surfaceNormal);
-				final double c = 1.0D - (into ? -cosTheta : cosTheta2);
-				final double reflectance = r0 + (1.0D - r0) * c * c * c * c * c;
+				
+				final double reflectance = fresnelDielectricSchlick(into ? -cosTheta : Vector3D.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
 				final double transmittance = 1.0D - reflectance;
+				
 				final double probabilityRussianRoulette = 0.25D + 0.5D * reflectance;
 				final double probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
 				final double probabilityRussianRouletteTransmission = transmittance / (1.0D - probabilityRussianRoulette);
@@ -144,14 +136,14 @@ public final class SmallPTD {
 				
 				switch(type) {
 					case 1:
-						return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(reflectionRay, scene, currentDepth), probabilityRussianRouletteReflection));
+						return Color3D.add(emission, Color3D.multiply(albedo, radiance(reflectionRay, scene, currentDepth), probabilityRussianRouletteReflection));
 					case 2:
-						return Color3D.add(sphere.emission, Color3D.multiply(albedo, radiance(transmissionRay, scene, currentDepth), probabilityRussianRouletteTransmission));
+						return Color3D.add(emission, Color3D.multiply(albedo, radiance(transmissionRay, scene, currentDepth), probabilityRussianRouletteTransmission));
 					case 3:
 						final Color3D radianceReflection = Color3D.multiply(radiance(reflectionRay, scene, currentDepth), reflectance);
 						final Color3D radianceTransmission = Color3D.multiply(radiance(transmissionRay, scene, currentDepth), transmittance);
 						
-						return Color3D.add(sphere.emission, Color3D.multiply(albedo, Color3D.add(radianceReflection, radianceTransmission)));
+						return Color3D.add(emission, Color3D.multiply(albedo, Color3D.add(radianceReflection, radianceTransmission)));
 					default:
 						return Color3D.BLACK;
 				}
@@ -160,6 +152,10 @@ public final class SmallPTD {
 				return Color3D.BLACK;
 			}
 		}
+	}
+	
+	public static double fresnelDielectricSchlick(final double cosTheta, final double f0) {
+		return f0 + (1.0D - f0) * pow(max(1.0D - cosTheta, 0.0D), 5.0D);
 	}
 	
 	public static void main(final String[] args) {
@@ -277,20 +273,32 @@ public final class SmallPTD {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class Intersection {
+		private final Point3D surfaceIntersectionPoint;
 		private final Sphere3D sphere;
+		private final Vector3D surfaceNormal;
 		private final double t;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public Intersection(final Sphere3D sphere, final double t) {
+		public Intersection(final Point3D surfaceIntersectionPoint, final Sphere3D sphere, final Vector3D surfaceNormal, final double t) {
+			this.surfaceIntersectionPoint = Objects.requireNonNull(surfaceIntersectionPoint, "surfaceIntersectionPoint == null");
 			this.sphere = Objects.requireNonNull(sphere, "sphere == null");
+			this.surfaceNormal = Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
 			this.t = t;
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		public Point3D getSurfaceIntersectionPoint() {
+			return this.surfaceIntersectionPoint;
+		}
+		
 		public Sphere3D getSphere() {
 			return this.sphere;
+		}
+		
+		public Vector3D getSurfaceNormal() {
+			return this.surfaceNormal;
 		}
 		
 		public double getT() {
@@ -328,7 +336,7 @@ public final class SmallPTD {
 				final double t = sphere.intersection(ray);
 				
 				if(!isNaN(t) && (intersection == null || t < intersection.getT())) {
-					intersection = new Intersection(sphere, t);
+					intersection = sphere.toIntersection(ray, t);
 				}
 			}
 			
@@ -343,11 +351,11 @@ public final class SmallPTD {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public final Color3D albedo;
-		public final Color3D emission;
-		public final Material material;
-		public final Point3D center;
-		public final double radius;
+		private final Color3D albedo;
+		private final Color3D emission;
+		private final Material material;
+		private final Point3D center;
+		private final double radius;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -361,26 +369,54 @@ public final class SmallPTD {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		public Color3D getAlbedo() {
+			return this.albedo;
+		}
+		
+		public Color3D getEmission() {
+			return this.emission;
+		}
+		
+		public Intersection toIntersection(final Ray3D ray, final double t) {
+			final Point3D origin = ray.getOrigin();
+			
+			final Vector3D direction = ray.getDirection();
+			
+			final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
+			
+			final Vector3D surfaceNormal = Vector3D.normalize(Vector3D.direction(getCenter(), surfaceIntersectionPoint));
+			
+			return new Intersection(surfaceIntersectionPoint, this, surfaceNormal, t);
+		}
+		
+		public Material getMaterial() {
+			return this.material;
+		}
+		
+		public Point3D getCenter() {
+			return this.center;
+		}
+		
+		public double getRadius() {
+			return this.radius;
+		}
+		
+		public double getRadiusSquared() {
+			return getRadius() * getRadius();
+		}
+		
 		public double intersection(final Ray3D ray) {
 			return intersection(ray, EPSILON, Double.MAX_VALUE);
 		}
 		
 		public double intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
-//			return doIntersectionGeometric(ray, tMinimum, tMaximum);
-			return doIntersectionSmallPT(ray, tMinimum, tMaximum);
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		@SuppressWarnings("unused")
-		private double doIntersectionAnalytic(final Ray3D ray, final double tMinimum, final double tMaximum) {
 			final Point3D origin = ray.getOrigin();
-			final Point3D center = this.center;
+			final Point3D center = getCenter();
 			
 			final Vector3D direction = ray.getDirection();
 			final Vector3D centerToOrigin = Vector3D.direction(center, origin);
 			
-			final double radiusSquared = this.radius * this.radius;
+			final double radiusSquared = getRadiusSquared();
 			
 			final double a = direction.lengthSquared();
 			final double b = 2.0D * Vector3D.dotProduct(centerToOrigin, direction);
@@ -392,86 +428,6 @@ public final class SmallPTD {
 			final double t1 = ts[1];
 			
 			final double t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-			
-			return t;
-		}
-		
-		@SuppressWarnings("unused")
-		private double doIntersectionGeometric(final Ray3D ray, final double tMinimum, final double tMaximum) {
-			final Point3D origin = ray.getOrigin();
-			final Point3D center = this.center;
-			
-			final Vector3D direction = ray.getDirection();
-			final Vector3D originToCenter = Vector3D.direction(origin, center);
-			
-			final double radiusSquared = this.radius * this.radius;
-			final double tca = Vector3D.dotProduct(originToCenter, direction);
-			final double dSquared = originToCenter.lengthSquared() - tca * tca;
-			
-			if(dSquared > radiusSquared) {
-				return Double.NaN;
-			}
-			
-			final double thc = sqrt(radiusSquared - dSquared);
-			final double t0 = min(tca - thc, tca + thc);
-			final double t1 = max(tca - thc, tca + thc);
-			final double t = t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
-			
-			return t;
-		}
-		
-		@SuppressWarnings("unused")
-		private double doIntersectionSmallPT(final Ray3D ray, final double tMinimum, final double tMaximum) {
-			final Point3D origin = ray.getOrigin();
-			final Point3D center = this.center;
-			
-			final Vector3D direction = ray.getDirection();
-			final Vector3D originToCenter = Vector3D.direction(origin, center);
-			
-			final double b = Vector3D.dotProduct(originToCenter, direction);
-			final double discriminantSquared = b * b - originToCenter.lengthSquared() + this.radius * this.radius;
-			
-			if(discriminantSquared < 0.0D) {
-				return Double.NaN;
-			}
-			
-			final double discriminant = sqrt(discriminantSquared);
-			final double t0 = b - discriminant;
-			
-			if(t0 > tMinimum) {
-				return t0;
-			}
-			
-			final double t1 = b + discriminant;
-			
-			if(t1 > tMinimum) {
-				return t1;
-			}
-			
-			return Double.NaN;
-		}
-		
-		@SuppressWarnings("unused")
-		private double doIntersectionSmallPT2(final Ray3D ray, final double tMinimum, final double tMaximum) {
-			final Point3D origin = ray.getOrigin();
-			final Point3D center = this.center;
-			
-			final Vector3D direction = ray.getDirection();
-			final Vector3D originToCenter = Vector3D.direction(origin, center);
-			
-			final double radiusSquared = this.radius * this.radius;
-			final double b = Vector3D.dotProduct(originToCenter, direction);
-			final double c = originToCenter.lengthSquared() - radiusSquared;
-			final double discriminantSquared = b * b - c;
-			
-			if(discriminantSquared < 0.0D) {
-				return Double.NaN;
-			}
-			
-			final double discriminant = sqrt(discriminantSquared);
-			final double t0 = b - discriminant;
-			final double t1 = b + discriminant;
-			final double t = t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Double.NaN;
 			
 			return t;
 		}

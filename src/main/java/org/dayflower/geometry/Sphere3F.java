@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Doubles.isNaN;
+import static org.dayflower.util.Doubles.solveQuadraticSystem;
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
@@ -458,4 +460,83 @@ public final class Sphere3F implements Shape3F {
 	public int hashCode() {
 		return Objects.hash(this.boundingVolume, this.center, Float.valueOf(this.radius));
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	private float doIntersectionTAnalytic(final Ray3F ray, final float tMinimum, final float tMaximum) {
+//		final Point3F origin = ray.getOrigin();
+//		final Point3F center = getCenter();
+//		
+//		final Vector3F direction = ray.getDirection();
+//		final Vector3F centerToOrigin = Vector3F.direction(center, origin);
+//		
+//		final float radiusSquared = getRadiusSquared();
+//		
+//		final float a = direction.lengthSquared();
+//		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
+//		final float c = centerToOrigin.lengthSquared() - radiusSquared;
+//		
+//		final float[] ts = solveQuadraticSystem(a, b, c);
+//		
+//		final float t0 = ts[0];
+//		final float t1 = ts[1];
+//		
+//		final float t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+//		
+//		return t;
+//	}
+	
+//	private float doIntersectionTGeometric1(final Ray3F ray, final float tMinimum, final float tMaximum) {
+//		final Point3F origin = ray.getOrigin();
+//		final Point3F center = getCenter();
+//		
+//		final Vector3F direction = ray.getDirection();
+//		final Vector3F originToCenter = Vector3F.direction(origin, center);
+//		
+//		final float radiusSquared = getRadiusSquared();
+//		
+//		final float b = Vector3F.dotProduct(originToCenter, direction);
+//		
+//		final float discriminantSquared = originToCenter.lengthSquared() - b * b;
+//		
+//		if(discriminantSquared > radiusSquared) {
+//			return Float.NaN;
+//		}
+//		
+//		final float discriminant = sqrt(radiusSquared - discriminantSquared);
+//		
+//		final float t0 = min(b - discriminant, b + discriminant);
+//		final float t1 = max(b - discriminant, b + discriminant);
+//		
+//		final float t = t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+//		
+//		return t;
+//	}
+	
+//	private float doIntersectionTGeometric2(final Ray3F ray, final float tMinimum, final float tMaximum) {
+//		final Point3F origin = ray.getOrigin();
+//		final Point3F center = getCenter();
+//		
+//		final Vector3F direction = ray.getDirection();
+//		final Vector3F originToCenter = Vector3F.direction(origin, center);
+//		
+//		final float radiusSquared = getRadiusSquared();
+//		
+//		final float b = Vector3F.dotProduct(originToCenter, direction);
+//		
+//		final float discriminantSquared = b * b - originToCenter.lengthSquared() + radiusSquared;
+//		
+//		if(discriminantSquared < 0.0F) {
+//			return Float.NaN;
+//		}
+//		
+//		final float discriminant = sqrt(discriminantSquared);
+//		
+//		final float t0 = min(b - discriminant, b + discriminant);
+//		final float t1 = max(b - discriminant, b + discriminant);
+//		
+//		final float t = t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+//		
+//		return t;
+//	}
 }

@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene.bxdf;
 
+import static org.dayflower.util.Doubles.max;
+import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.pow;
 
@@ -30,6 +32,11 @@ public final class Fresnel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static double dielectricSchlick(final double cosTheta, final double f0) {
+		return f0 + (1.0D - f0) * pow(max(1.0D - cosTheta, 0.0D), 5.0D);
+	}
 	
 //	TODO: Add Javadocs!
 	public static float dielectricSchlick(final float cosTheta, final float f0) {

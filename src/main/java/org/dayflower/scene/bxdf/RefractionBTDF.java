@@ -161,8 +161,7 @@ public final class RefractionBTDF implements BXDF {
 	 */
 	@Override
 	public BXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
-//		return doSampleSolidAngle(o, n, isProjected);
-		return doSampleSolidAngleFresnel(o, n, isProjected);
+		return doSampleSolidAngle3(o, n, isProjected);
 	}
 	
 	/**
@@ -266,7 +265,8 @@ public final class RefractionBTDF implements BXDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private BXDFResult doSampleSolidAngle(final Vector3F o, final Vector3F n, final boolean isProjected) {
+	@SuppressWarnings("unused")
+	private BXDFResult doSampleSolidAngle1(final Vector3F o, final Vector3F n, final boolean isProjected) {
 		final Vector3F d = Vector3F.negate(o);
 		
 		final float nDotD = Vector3F.dotProduct(n, d);
@@ -302,7 +302,8 @@ public final class RefractionBTDF implements BXDF {
 		return new BXDFResult(o, n, Vector3F.negate(i), abs(nDotI), 1.0F);
 	}
 	
-	private BXDFResult doSampleSolidAngleFresnel(final Vector3F o, final Vector3F n, final boolean isProjected) {
+	@SuppressWarnings("unused")
+	private BXDFResult doSampleSolidAngle2(final Vector3F o, final Vector3F n, final boolean isProjected) {
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		final Vector3F d = Vector3F.negate(o);
@@ -325,6 +326,29 @@ public final class RefractionBTDF implements BXDF {
 		
 		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (eta * cosTheta + sqrt(k)))));
 		
+		return isProjected ? new BXDFResult(o, n, Vector3F.negate(transmission), 1.0F, 1.0F) : new BXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), 1.0F);
+	}
+	
+	private BXDFResult doSampleSolidAngle3(final Vector3F o, final Vector3F n, final boolean isProjected) {
+		final Vector3F d = Vector3F.negate(o);
+		final Vector3F reflection = Vector3F.reflection(d, n, true);
+		final Vector3F nCorrectlyOriented = Vector3F.dotProduct(n, d) < 0.0F ? n : Vector3F.negate(n);
+		
+		final boolean isEntering = Vector3F.dotProduct(n, nCorrectlyOriented) > 0.0F;
+		
+		final float etaA = this.etaA;
+		final float etaB = this.etaB;
+		final float eta = isEntering ? etaA / etaB : etaB / etaA;
+		
+		final float cosTheta = Vector3F.dotProduct(d, nCorrectlyOriented);
+		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
+		
+		if(cosTheta2Squared < 0.0F) {
+			return isProjected ? new BXDFResult(o, n, Vector3F.negate(reflection), 1.0F, 1.0F) : new BXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), 1.0F);
+		}
+		
+		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
+		
 		final float a = etaB - etaA;
 		final float b = etaB + etaA;
 		
@@ -336,7 +360,7 @@ public final class RefractionBTDF implements BXDF {
 		final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 		
 		if(random() < probabilityRussianRoulette) {
-			return isProjected ? new BXDFResult(o, n, reflection, 1.0F, probabilityRussianRouletteReflection) : new BXDFResult(o, n, reflection, abs(Vector3F.dotProduct(n, reflection)), probabilityRussianRouletteReflection);
+			return isProjected ? new BXDFResult(o, n, Vector3F.negate(reflection), 1.0F, probabilityRussianRouletteReflection) : new BXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), probabilityRussianRouletteReflection);
 		}
 		
 		return isProjected ? new BXDFResult(o, n, Vector3F.negate(transmission), 1.0F, probabilityRussianRouletteTransmission) : new BXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), probabilityRussianRouletteTransmission);

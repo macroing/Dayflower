@@ -20,8 +20,6 @@ package org.dayflower.test;
 
 import static org.dayflower.util.Doubles.abs;
 import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Doubles.random;
 import static org.dayflower.util.Doubles.solveQuadraticSystem;
 import static org.dayflower.util.Doubles.sqrt;
@@ -36,6 +34,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.image.Color3D;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.scene.bxdf.Fresnel;
 
 public final class SmallPTD {
 	private SmallPTD() {
@@ -88,7 +87,7 @@ public final class SmallPTD {
 			}
 			case GLOSSY_PHONG: {
 				final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(random(), random(), 20.0D);
-				final Vector3D w = Vector3D.normalize(Vector3D.subtract(direction, Vector3D.multiply(Vector3D.multiply(surfaceNormal, 2.0D), Vector3D.dotProduct(surfaceNormal, direction))));
+				final Vector3D w = Vector3D.normalize(Vector3D.reflection(direction, surfaceNormal, true));
 				final Vector3D v = Vector3D.computeV(w);
 				final Vector3D u = Vector3D.crossProduct(v, w);
 				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
@@ -125,7 +124,7 @@ public final class SmallPTD {
 				final double a = etaB - etaA;
 				final double b = etaB + etaA;
 				
-				final double reflectance = fresnelDielectricSchlick(into ? -cosTheta : Vector3D.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
+				final double reflectance = Fresnel.dielectricSchlick(into ? -cosTheta : Vector3D.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
 				final double transmittance = 1.0D - reflectance;
 				
 				final double probabilityRussianRoulette = 0.25D + 0.5D * reflectance;
@@ -152,10 +151,6 @@ public final class SmallPTD {
 				return Color3D.BLACK;
 			}
 		}
-	}
-	
-	public static double fresnelDielectricSchlick(final double cosTheta, final double f0) {
-		return f0 + (1.0D - f0) * pow(max(1.0D - cosTheta, 0.0D), 5.0D);
 	}
 	
 	public static void main(final String[] args) {

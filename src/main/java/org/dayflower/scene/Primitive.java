@@ -28,6 +28,9 @@ import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.SurfaceSample3F;
+import org.dayflower.geometry.Vector3F;
+import org.dayflower.image.Color3F;
 
 /**
  * A {@code Primitive} represents a primitive and is associated with a {@link Material} instance, a {@link Shape3F} instance and some other properties.
@@ -97,6 +100,32 @@ public final class Primitive {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@link Color3F} instance representing the albedo of the surface at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance representing the albedo of the surface at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	public Color3F calculateAlbedo(final Intersection intersection) {
+		return this.textureAlbedo.getColor(Objects.requireNonNull(intersection, "intersection == null"));
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance representing the emittance of the surface at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance representing the emittance of the surface at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	public Color3F calculateEmittance(final Intersection intersection) {
+		return this.textureEmittance.getColor(Objects.requireNonNull(intersection, "intersection == null"));
+	}
+	
+	/**
 	 * Returns the {@link Material} instance associated with this {@code Primitive} instance.
 	 * 
 	 * @return the {@link Material} instance associated with this {@code Primitive} instance
@@ -153,6 +182,24 @@ public final class Primitive {
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		return this.shape.intersection(Ray3F.transform(this.worldToObject, ray), tMinimum, tMaximum).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace));
+	}
+	
+	/**
+	 * Samples this {@code Primitive} instance.
+	 * <p>
+	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
+	 * <p>
+	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param referencePoint the reference point on this {@code Primitive} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Primitive} instance
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @return an optional {@code SurfaceSample3F} with the surface sample
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
+	 */
+	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
+		return this.shape.sample(Point3F.transform(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), u, v).map(surfaceSample -> SurfaceSample3F.transform(surfaceSample, this.objectToWorld, this.worldToObject)).filter(surfaceSample -> Vector3F.dotProduct(surfaceSample.getSurfaceNormal(), Vector3F.direction(surfaceSample.getPoint(), referencePoint)) >= 0.0F);
 	}
 	
 	/**
@@ -260,6 +307,22 @@ public final class Primitive {
 	 */
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		return this.shape.intersects(Ray3F.transform(this.worldToObject, ray), tMinimum, tMaximum);
+	}
+	
+	/**
+	 * Returns the probability density function (PDF) value for solid angle.
+	 * <p>
+	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param referencePoint the reference point on this {@code Primitive} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Primitive} instance
+	 * @param point the point on this {@code Primitive} instance
+	 * @param surfaceNormal the surface normal on this {@code Primitive} instance
+	 * @return the probability density function (PDF) value for solid angle
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
+	 */
+	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
+		return this.shape.calculateProbabilityDensityFunctionValueForSolidAngle(Point3F.transform(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), Point3F.transform(this.worldToObject, point), Vector3F.transformTranspose(this.objectToWorld, surfaceNormal));
 	}
 	
 	/**

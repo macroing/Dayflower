@@ -46,6 +46,7 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.background.PerezBackground;
 import org.dayflower.scene.light.PointLight;
+import org.dayflower.scene.light.PrimitiveLight;
 import org.dayflower.scene.material.AshikhminShirleyMaterial;
 import org.dayflower.scene.material.LambertianMaterial;
 import org.dayflower.scene.material.OrenNayarMaterial;
@@ -72,6 +73,105 @@ public final class Scenes {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Scene} instance.
+	 * 
+	 * @return a {@code Scene} instance
+	 */
+	public static Scene newCornellBoxScene() {
+		final Material material01 = new LambertianMaterial();
+		final Material material02 = new LambertianMaterial();
+		final Material material03 = new LambertianMaterial();
+		final Material material04 = new LambertianMaterial();
+		final Material material05 = new LambertianMaterial();
+		final Material material06 = new LambertianMaterial();
+		final Material material07 = new AshikhminShirleyMaterial(0.02F);
+		final Material material08 = new AshikhminShirleyMaterial(0.05F);
+		final Material material09 = new LambertianMaterial();
+//		final Material material10 = new LambertianMaterial();
+		
+		final Shape3F shape01 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F,  1.0F), new Point3F(1.0F, 0.0F,  0.0F));
+		final Shape3F shape02 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F, -1.0F), new Point3F(1.0F, 0.0F,  0.0F));
+		final Shape3F shape03 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));
+		final Shape3F shape04 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));
+		final Shape3F shape05 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F, -1.0F));
+		final Shape3F shape06 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));
+		final Shape3F shape07 = new RectangularCuboid3F(new Point3F(-1.0F, -1.0F, -1.0F), new Point3F(1.0F, 1.0F, 1.0F));
+		final Shape3F shape08 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
+		final Shape3F shape09 = new Sphere3F(0.1F, new Point3F(0.0F, 0.0F, 0.0F));
+//		final Shape3F shape10 = new Sphere3F(0.1F, new Point3F(0.0F, 0.0F, 0.0F));
+		
+		final Texture texture011 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture012 = new ConstantTexture();
+		final Texture texture013 = new ConstantTexture();
+		final Texture texture021 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture022 = new ConstantTexture();
+		final Texture texture023 = new ConstantTexture();
+		final Texture texture031 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture032 = new ConstantTexture();
+		final Texture texture033 = new ConstantTexture();
+		final Texture texture041 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture042 = new ConstantTexture();
+		final Texture texture043 = new ConstantTexture();
+		final Texture texture051 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture052 = new ConstantTexture();
+		final Texture texture053 = new ConstantTexture();
+		final Texture texture061 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture062 = new ConstantTexture();
+		final Texture texture063 = new ConstantTexture();
+		final Texture texture071 = new CheckerboardTexture(new Color3F(1.0F, 0.2F, 0.2F), new Color3F(0.6F, 0.2F, 0.2F), AngleF.degrees(90.0F), new Vector2F(1.5F, 1.5F));
+		final Texture texture072 = new ConstantTexture();
+		final Texture texture073 = new ConstantTexture();
+		final Texture texture081 = new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F);
+		final Texture texture082 = new ConstantTexture();
+		final Texture texture083 = new ConstantTexture();
+		final Texture texture091 = new ConstantTexture(Color3F.WHITE);
+		final Texture texture092 = new ConstantTexture(new Color3F(100.0F));
+		final Texture texture093 = new ConstantTexture();
+//		final Texture texture101 = new ConstantTexture(Color3F.WHITE);
+//		final Texture texture102 = new ConstantTexture(new Color3F(100.0F));
+//		final Texture texture103 = new ConstantTexture();
+		
+		final Matrix44F matrix01 = Matrix44F.translate( 0.0F, 0.0F,  0.0F);
+		final Matrix44F matrix02 = Matrix44F.translate( 0.0F, 6.0F,  0.0F);
+		final Matrix44F matrix03 = Matrix44F.translate( 0.0F, 0.0F,  0.0F);
+		final Matrix44F matrix04 = Matrix44F.translate( 0.0F, 0.0F, 10.0F);
+		final Matrix44F matrix05 = Matrix44F.translate( 4.0F, 0.0F,  0.0F);
+		final Matrix44F matrix06 = Matrix44F.translate(-4.0F, 0.0F,  0.0F);
+		final Matrix44F matrix07 = Matrix44F.translate(-1.5F, 1.0F,  5.0F);
+		final Matrix44F matrix08 = Matrix44F.translate( 1.5F, 1.0F,  6.0F);
+		final Matrix44F matrix09 = Matrix44F.translate( 0.0F, 5.0F,  6.0F);
+//		final Matrix44F matrix10 = Matrix44F.translate( 0.0F, 5.0F, 10.0F);
+		
+		final Primitive primitive01 = new Primitive(material01, shape01, texture011, texture012, texture013, matrix01);
+		final Primitive primitive02 = new Primitive(material02, shape02, texture021, texture022, texture023, matrix02);
+		final Primitive primitive03 = new Primitive(material03, shape03, texture031, texture032, texture033, matrix03);
+		final Primitive primitive04 = new Primitive(material04, shape04, texture041, texture042, texture043, matrix04);
+		final Primitive primitive05 = new Primitive(material05, shape05, texture051, texture052, texture053, matrix05);
+		final Primitive primitive06 = new Primitive(material06, shape06, texture061, texture062, texture063, matrix06);
+		final Primitive primitive07 = new Primitive(material07, shape07, texture071, texture072, texture073, matrix07);
+		final Primitive primitive08 = new Primitive(material08, shape08, texture081, texture082, texture083, matrix08);
+		final Primitive primitive09 = new Primitive(material09, shape09, texture091, texture092, texture093, matrix09);
+//		final Primitive primitive10 = new Primitive(material10, shape10, texture101, texture102, texture103, matrix10);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "CornellBox");
+		scene.addLight(new PrimitiveLight(primitive09));
+//		scene.addLight(new PrimitiveLight(primitive10));
+		scene.addPrimitive(primitive01);
+		scene.addPrimitive(primitive02);
+		scene.addPrimitive(primitive03);
+		scene.addPrimitive(primitive04);
+		scene.addPrimitive(primitive05);
+		scene.addPrimitive(primitive06);
+		scene.addPrimitive(primitive07);
+		scene.addPrimitive(primitive08);
+		scene.addPrimitive(primitive09);
+//		scene.addPrimitive(primitive10);
+		
+		return scene;
+	}
 	
 	/**
 	 * Returns a {@link Scene} instance.

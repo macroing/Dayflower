@@ -30,17 +30,20 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.MaterialResult;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.bxdf.Fresnel;
+import org.dayflower.scene.light.PrimitiveLight;
 import org.dayflower.scene.material.AshikhminShirleyMaterial;
 import org.dayflower.scene.material.LambertianMaterial;
 import org.dayflower.scene.material.OrenNayarMaterial;
@@ -195,7 +198,98 @@ public final class PathTracer implements Renderer {
 				if(selectedBXDF.isDiracDistribution()) {
 					currentBounceDiracDistribution++;
 				} else {
-//					TODO: Add direct light sampling!
+					for(final Light light : scene.getLights()) {
+						if(light instanceof PrimitiveLight) {
+							final PrimitiveLight primitiveLight = PrimitiveLight.class.cast(light);
+							
+							final Primitive primitive0 = primitiveLight.getPrimitive();
+							
+							if(primitive == primitive0) {
+								continue;
+							}
+							
+							Color3F lightColor = Color3F.BLACK;
+							
+							final int lightSamples = 1;
+							
+							for(int i = 0; i < lightSamples; i++) {
+								final float lightSampleU = random();
+								final float lightSampleV = random();
+								
+								final Optional<SurfaceSample3F> optionalSurfaceSample = primitive0.sample(surfaceIntersectionPoint, surfaceNormalS, lightSampleU, lightSampleV);
+								
+								if(optionalSurfaceSample.isPresent()) {
+									final SurfaceSample3F surfaceSample = optionalSurfaceSample.get();
+									
+									final Point3F primitiveLightSampledPoint = surfaceSample.getPoint();
+									
+									float lightProbabilityDensityFunctionValue = surfaceSample.getProbabilityDensityFunctionValue();
+									
+									if(lightProbabilityDensityFunctionValue > 0.0F) {
+										final Vector3F primitiveLightDirectionIncoming = Vector3F.direction(primitiveLightSampledPoint, surfaceIntersectionPoint);
+										final Vector3F primitiveLightDirectionIncomingNormalized = Vector3F.normalize(primitiveLightDirectionIncoming);
+										final Vector3F primitiveLightDirectionOutgoingNormalized = Vector3F.negate(primitiveLightDirectionIncomingNormalized);
+										
+										final BXDFResult selectedBXDFResult = selectedBXDF.evaluateSolidAngle(currentRayDirectionO, surfaceNormalS, primitiveLightDirectionIncomingNormalized);
+										
+										final float selectedBXDFProbabilityDensityFunctionValue = selectedBXDFResult.getProbabilityDensityFunctionValue();
+										final float selectedBXDFReflectance = selectedBXDFResult.getReflectance();
+										
+										if(selectedBXDFProbabilityDensityFunctionValue > 0.0F && selectedBXDFReflectance > 0.0F) {
+											final Ray3F primitiveLightRay = new Ray3F(surfaceIntersectionPoint, primitiveLightDirectionOutgoingNormalized);
+											
+											final Optional<Intersection> optionalPrimitiveLightIntersection = scene.intersection(primitiveLightRay);
+											
+											if(optionalPrimitiveLightIntersection.isPresent()) {
+												final Intersection primitiveLightIntersection = optionalPrimitiveLightIntersection.get();
+												
+												if(primitive0 == primitiveLightIntersection.getPrimitive()) {
+													final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingBalanceHeuristic(lightProbabilityDensityFunctionValue, selectedBXDFProbabilityDensityFunctionValue, 1, 1);
+													
+													lightColor = Color3F.add(lightColor, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(Color3F.multiply(primitive0.calculateEmittance(primitiveLightIntersection), color), selectedBXDFReflectance), abs(Vector3F.dotProduct(primitiveLightDirectionOutgoingNormalized, surfaceNormalS))), multipleImportanceSampleWeightLight), lightProbabilityDensityFunctionValue * selectedBXDFWeight));
+												}
+											}
+										}
+									}
+									
+									final float selectedBXDFSampleU = random();
+									final float selectedBXDFSampleV = random();
+									
+									final BXDFResult selectedBXDFResult = selectedBXDF.sampleSolidAngle(currentRayDirectionO, surfaceNormalS, orthonormalBasisS, selectedBXDFSampleU, selectedBXDFSampleV);
+									
+									final Vector3F selectedBXDFIncoming = selectedBXDFResult.getI();
+									final Vector3F selectedBXDFOutgoing = Vector3F.negate(selectedBXDFIncoming);
+									
+									final float selectedBXDFProbabilityDensityFunctionValue = selectedBXDFResult.getProbabilityDensityFunctionValue();
+									final float selectedBXDFReflectance = selectedBXDFResult.getReflectance();
+									
+									if(selectedBXDFProbabilityDensityFunctionValue > 0.0F && selectedBXDFReflectance > 0.0F) {
+										final Ray3F primitiveLightRay = new Ray3F(surfaceIntersectionPoint, selectedBXDFOutgoing);
+										
+										final Optional<Intersection> optionalPrimitiveLightIntersection = scene.intersection(primitiveLightRay);
+										
+										if(optionalPrimitiveLightIntersection.isPresent()) {
+											final Intersection primitiveLightIntersection = optionalPrimitiveLightIntersection.get();
+											
+											if(primitive0 == primitiveLightIntersection.getPrimitive()) {
+												lightProbabilityDensityFunctionValue = primitive0.calculateProbabilityDensityFunctionValueForSolidAngle(primitiveLightRay.getOrigin(), primitiveLightRay.getDirection(), primitiveLightIntersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), primitiveLightIntersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalS());
+												
+												if(lightProbabilityDensityFunctionValue > 0.0F) {
+													final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(selectedBXDFProbabilityDensityFunctionValue, lightProbabilityDensityFunctionValue, 1, 1);
+													
+													lightColor = Color3F.add(lightColor, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(Color3F.multiply(primitive0.calculateEmittance(primitiveLightIntersection), color), selectedBXDFReflectance), abs(Vector3F.dotProduct(selectedBXDFOutgoing, surfaceNormalS))), multipleImportanceSampleWeightBRDF), selectedBXDFProbabilityDensityFunctionValue * selectedBXDFWeight));
+												}
+											}
+										}
+									}
+								}
+							}
+							
+							lightColor = Color3F.divide(lightColor, lightSamples);
+							
+							radiance = Color3F.add(radiance, Color3F.multiply(throughput, lightColor));
+						}
+					}
 				}
 				
 				final BXDFResult sampleBXDFResult = selectedBXDF.sampleSolidAngle(currentRayDirectionO, surfaceNormalS, orthonormalBasisS, random(), random());

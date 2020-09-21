@@ -75,38 +75,6 @@ public final class SurfaceSample3F {
 	}
 	
 	/**
-	 * Transforms this {@code SurfaceSample3F} instance from world space to object space.
-	 * <p>
-	 * Returns a new {@code SurfaceSample3F} instance with the result of the transformation.
-	 * <p>
-	 * If either {@code objectToWorld} or {@code worldToObject} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param objectToWorld a {@link Matrix44F} instance that transforms from object space to world space
-	 * @param worldToObject a {@code Matrix44F} instance that transforms from world space to object space
-	 * @return a new {@code SurfaceSample3F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code objectToWorld} or {@code worldToObject} are {@code null}
-	 */
-	public SurfaceSample3F transformToObjectSpace(final Matrix44F objectToWorld, final Matrix44F worldToObject) {
-		return new SurfaceSample3F(Point3F.transform(worldToObject, this.point), Vector3F.transformTranspose(objectToWorld, this.surfaceNormal), this.probabilityDensityFunctionValue);
-	}
-	
-	/**
-	 * Transforms this {@code SurfaceSample3F} instance from object space to world space.
-	 * <p>
-	 * Returns a new {@code SurfaceSample3F} instance with the result of the transformation.
-	 * <p>
-	 * If either {@code objectToWorld} or {@code worldToObject} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param objectToWorld a {@link Matrix44F} instance that transforms from object space to world space
-	 * @param worldToObject a {@code Matrix44F} instance that transforms from world space to object space
-	 * @return a new {@code SurfaceSample3F} instance with the result of the transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code objectToWorld} or {@code worldToObject} are {@code null}
-	 */
-	public SurfaceSample3F transformToWorldSpace(final Matrix44F objectToWorld, final Matrix44F worldToObject) {
-		return new SurfaceSample3F(Point3F.transform(objectToWorld, this.point), Vector3F.transformTranspose(worldToObject, this.surfaceNormal), this.probabilityDensityFunctionValue);
-	}
-	
-	/**
 	 * Returns the sampled surface normal.
 	 * 
 	 * @return the sampled surface normal
@@ -157,5 +125,58 @@ public final class SurfaceSample3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.point, this.surfaceNormal, Float.valueOf(this.probabilityDensityFunctionValue));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Performs a transformation.
+	 * <p>
+	 * Returns a new {@code SurfaceSample3F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code surfaceSample} or {@code matrix} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code matrix} cannot be inverted, an IllegalStateException will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SurfaceSample3F.transform(surfaceSample, matrix, Matrix44F.inverse(matrix));
+	 * }
+	 * </pre>
+	 * 
+	 * @param surfaceSample the {@code SurfaceSample3F} instance to transform
+	 * @param matrix the {@link Matrix44F} instance to perform the transformation with
+	 * @return a new {@code SurfaceSample3F} instance with the result of the transformation
+	 * @throws IllegalStateException thrown if, and only if, {@code matrix} cannot be inverted
+	 * @throws NullPointerException thrown if, and only if, either {@code surfaceSample} or {@code matrix} are {@code null}
+	 */
+	public static SurfaceSample3F transform(final SurfaceSample3F surfaceSample, final Matrix44F matrix) {
+		return transform(surfaceSample, matrix, Matrix44F.inverse(matrix));
+	}
+	
+	/**
+	 * Performs a transformation.
+	 * <p>
+	 * Returns a new {@code SurfaceSample3F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code surfaceSample}, {@code matrix} or {@code matrixInverse} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceSample the {@code SurfaceSample3F} instance to transform
+	 * @param matrix the {@link Matrix44F} instance to perform the transformation with
+	 * @param matrixInverse the {@code Matrix44F} instance to perform the transformation with in inverse transpose order
+	 * @return a new {@code SurfaceSample3F} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code surfaceSample}, {@code matrix} or {@code matrixInverse} are {@code null}
+	 */
+	public static SurfaceSample3F transform(final SurfaceSample3F surfaceSample, final Matrix44F matrix, final Matrix44F matrixInverse) {
+		final Point3F pointOldSpace = surfaceSample.point;
+		final Point3F pointNewSpace = Point3F.transform(matrix, pointOldSpace);
+		
+		final Vector3F surfaceNormalOldSpace = surfaceSample.surfaceNormal;
+		final Vector3F surfaceNormalNewSpace = Vector3F.transformTranspose(matrixInverse, surfaceNormalOldSpace);
+		
+		final float probabilityDensityFunctionValue = surfaceSample.probabilityDensityFunctionValue;
+		
+		return new SurfaceSample3F(pointNewSpace, surfaceNormalNewSpace, probabilityDensityFunctionValue);
 	}
 }

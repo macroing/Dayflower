@@ -22,6 +22,7 @@ import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
 
+import org.dayflower.geometry.AngleF;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
@@ -55,6 +56,25 @@ public final class OrenNayarMaterial implements Material {
 	 */
 	public OrenNayarMaterial() {
 		this(new OrenNayarBRDF());
+	}
+	
+	/**
+	 * Constructs a new {@code OrenNayarMaterial} instance.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new OrenNayarMaterial(new OrenNayarBRDF(angle));
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 */
+	public OrenNayarMaterial(final AngleF angle) {
+		this(new OrenNayarBRDF(angle));
 	}
 	
 	/**

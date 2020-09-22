@@ -46,7 +46,7 @@ public final class RendererTest {
 	}
 	
 	static void doTestPathTracer() {
-		doTestRenderer(new PathTracer(), Scenes.newCornellBoxScene());
+		doTestRenderer(new PathTracer(), Scenes.newDefaultScene());
 	}
 	
 	static void doTestRayCaster() {
@@ -54,6 +54,9 @@ public final class RendererTest {
 	}
 	
 	static void doTestRenderer(final Renderer renderer, final Scene scene) {
-		renderer.render(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), scene.getName())), new Image(800, 800), scene);
+		final int resolutionX = (int)(scene.getCamera().getResolutionX());
+		final int resolutionY = (int)(scene.getCamera().getResolutionY());
+		
+		renderer.render(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), scene.getName())), new Image(resolutionX, resolutionY), scene);
 	}
 }

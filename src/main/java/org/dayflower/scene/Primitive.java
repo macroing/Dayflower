@@ -326,6 +326,27 @@ public final class Primitive {
 	}
 	
 	/**
+	 * Returns the probability density function (PDF) value for solid angle.
+	 * <p>
+	 * If either {@code ray} or {@code intersection} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * primitive.calculateProbabilityDensityFunctionValueForSolidAngle(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalS());
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @param intersection an {@link Intersection} instance
+	 * @return the probability density function (PDF) value for solid angle
+	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code intersection} are {@code null}
+	 */
+	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Ray3F ray, final Intersection intersection) {
+		return calculateProbabilityDensityFunctionValueForSolidAngle(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalS());
+	}
+	
+	/**
 	 * Performs an intersection test between {@code ray} and this {@code Primitive} instance.
 	 * <p>
 	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.

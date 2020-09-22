@@ -42,7 +42,6 @@ import org.dayflower.scene.BXDFResult;
  */
 public final class AshikhminShirleyBRDF implements BXDF {
 	private final float exponent;
-	private final float fresnel;
 	private final float roughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +67,6 @@ public final class AshikhminShirleyBRDF implements BXDF {
 	 */
 	public AshikhminShirleyBRDF(final float roughness) {
 		this.exponent = 1.0F / (roughness * roughness);
-		this.fresnel = 1.0F;
 		this.roughness = roughness;
 	}
 	
@@ -128,9 +126,9 @@ public final class AshikhminShirleyBRDF implements BXDF {
 		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
 			return new BXDFResult(o, n, i, 0.0F, 0.0F);
 		} else if(isProjected) {
-			return new BXDFResult(o, n, i, d / (4.0F * abs(oDotH) * abs(nDotI)), d * f / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
+			return new BXDFResult(o, n, i, d / (4.0F * abs(oDotH) * abs(nDotI)), f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
 		} else {
-			return new BXDFResult(o, n, i, d / (4.0F * abs(oDotH)),              d * f / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
+			return new BXDFResult(o, n, i, d / (4.0F * abs(oDotH)),              f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
 		}
 	}
 	
@@ -218,8 +216,6 @@ public final class AshikhminShirleyBRDF implements BXDF {
 			return false;
 		} else if(!equal(this.exponent, AshikhminShirleyBRDF.class.cast(object).exponent)) {
 			return false;
-		} else if(!equal(this.fresnel, AshikhminShirleyBRDF.class.cast(object).fresnel)) {
-			return false;
 		} else if(!equal(this.roughness, AshikhminShirleyBRDF.class.cast(object).roughness)) {
 			return false;
 		} else {
@@ -299,6 +295,6 @@ public final class AshikhminShirleyBRDF implements BXDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.exponent), Float.valueOf(this.fresnel), Float.valueOf(this.roughness));
+		return Objects.hash(Float.valueOf(this.exponent), Float.valueOf(this.roughness));
 	}
 }

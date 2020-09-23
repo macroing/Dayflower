@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.isNaN;
 
 import java.util.Objects;
@@ -39,6 +40,17 @@ public final class Triangle3F implements Shape3F {
 	private final Vertex3F c;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code Triangle3F} instance.
+	 */
+	public Triangle3F() {
+		this.a = new Vertex3F(new Point2F(0.5F, 0.0F), new Point3F(+0.0F, +5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F)), new Vector3F());
+		this.b = new Vertex3F(new Point2F(1.0F, 1.0F), new Point3F(+5.0F, -5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F)), new Vector3F());
+		this.c = new Vertex3F(new Point2F(0.0F, 1.0F), new Point3F(-5.0F, -5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F)), new Vector3F());
+		this.boundingVolume = new AxisAlignedBoundingBox3F(Point3F.minimum(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()), Point3F.maximum(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()));
+		this.surfaceNormal = Vector3F.normalNormalized(this.a.getPosition(), this.b.getPosition(), this.c.getPosition());
+	}
 	
 	/**
 	 * Constructs a new {@code Triangle3F} instance.
@@ -76,8 +88,6 @@ public final class Triangle3F implements Shape3F {
 	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
 	 * <p>
 	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Note: This method has not been implemented yet.
 	 * 
 	 * @param referencePoint the reference point on this {@code Triangle3F} instance
 	 * @param referenceSurfaceNormal the reference surface normal on this {@code Triangle3F} instance
@@ -88,10 +98,32 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
-		return Optional.empty();//TODO: Implement!
+		final Point3F barycentricCoordinates = SampleGeneratorF.sampleTriangleUniformDistribution(u, v);
+		
+		final Point3F positionA = this.a.getPosition();
+		final Point3F positionB = this.b.getPosition();
+		final Point3F positionC = this.c.getPosition();
+		
+		final Vector3F normalA = this.a.getNormal();
+		final Vector3F normalB = this.b.getNormal();
+		final Vector3F normalC = this.c.getNormal();
+		
+		final float x = positionA.getX() * barycentricCoordinates.getX() + positionB.getX() * barycentricCoordinates.getY() + positionC.getX() * barycentricCoordinates.getZ();
+		final float y = positionA.getY() * barycentricCoordinates.getX() + positionB.getY() * barycentricCoordinates.getY() + positionC.getY() * barycentricCoordinates.getZ();
+		final float z = positionA.getZ() * barycentricCoordinates.getX() + positionB.getZ() * barycentricCoordinates.getY() + positionC.getZ() * barycentricCoordinates.getZ();
+		
+		final Point3F point = new Point3F(x, y, z);
+		
+		final Vector3F surfaceNormal = Vector3F.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
+		
+		final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
+		final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
+		
+		final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
+		
+		return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -290,8 +322,6 @@ public final class Triangle3F implements Shape3F {
 	 * Returns the probability density function (PDF) value for solid angle.
 	 * <p>
 	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Note: This method has not been implemented yet.
 	 * 
 	 * @param referencePoint the reference point on this {@code Triangle3F} instance
 	 * @param referenceSurfaceNormal the reference surface normal on this {@code Triangle3F} instance
@@ -302,12 +332,14 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		Objects.requireNonNull(point, "point == null");
-		Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
 		
-		return 0.0F;//TODO: Implement!
+		final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
+		final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
+		
+		final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
+		
+		return probabilityDensityFunctionValue;
 	}
 	
 	/**
@@ -330,14 +362,12 @@ public final class Triangle3F implements Shape3F {
 	
 	/**
 	 * Returns the surface area probability density function (PDF) value of this {@code Triangle3F} instance.
-	 * <p>
-	 * Note: This method has not been implemented yet.
 	 * 
 	 * @return the surface area probability density function (PDF) value of this {@code Triangle3F} instance
 	 */
 	@Override
 	public float getSurfaceAreaProbabilityDensityFunctionValue() {
-		return 0.0F;//TODO: Implement!
+		return 1.0F / getSurfaceArea();
 	}
 	
 	/**

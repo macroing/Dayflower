@@ -36,6 +36,7 @@ public final class ImageTest {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(final String[] args) {
+		doTestImageDifference();
 //		doTestImageDrawCircle();
 //		doTestImageDrawLine();
 //		doTestImageDrawRectangle();
@@ -45,11 +46,17 @@ public final class ImageTest {
 //		doTestImageFillRectangle();
 //		doTestImageFillTriangle();
 //		doTestImageMultiplyConvolutionKernel33F();
-		doTestImageMultiplyConvolutionKernel55F();
+//		doTestImageMultiplyConvolutionKernel55F();
 //		doTestImageSave();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	static void doTestImageDifference() {
+		final
+		Image image = Image.difference(Image.load("./generated/PathTracer-ShowcaseMaterialLambertianMaterial.png"), Image.load("./generated/PathTracer-ShowcaseMaterialOrenNayarMaterial.png"));
+		image.save("./generated/doTestImageDifference.png");
+	}
 	
 	static void doTestImageDrawCircle() {
 		final

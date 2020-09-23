@@ -194,6 +194,43 @@ public final class SampleGeneratorD {
 	}
 	
 	/**
+	 * Samples a point on a triangle with a uniform distribution.
+	 * <p>
+	 * Returns a {@link Point3D} instance with the sampled point.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SampleGeneratorD.sampleTriangleUniformDistribution(Doubles.random(), Doubles.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Point3D} instance with the sampled point
+	 */
+	public static Point3D sampleTriangleUniformDistribution() {
+		return sampleTriangleUniformDistribution(random(), random());
+	}
+	
+	/**
+	 * Samples a point on a triangle with a uniform distribution.
+	 * <p>
+	 * Returns a {@link Point3D} instance with the sampled point.
+	 * 
+	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @return a {@code Point3D} instance with the sampled point
+	 */
+	public static Point3D sampleTriangleUniformDistribution(final double u, final double v) {
+		final double sqrtU = sqrt(u);
+		
+		final double component1 = 1.0D - sqrtU;
+		final double component2 = v * sqrtU;
+		final double component3 = 1.0D - component1 - component2;
+		
+		return new Point3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Samples a direction on a cone with a uniform distribution.
 	 * <p>
 	 * Returns a {@code Vector3D} instance with the sampled direction.

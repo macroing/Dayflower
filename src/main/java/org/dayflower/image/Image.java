@@ -25,6 +25,7 @@ import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.floor;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
+import static org.dayflower.util.Ints.max;
 import static org.dayflower.util.Ints.min;
 import static org.dayflower.util.Ints.requireExact;
 import static org.dayflower.util.Ints.requireRange;
@@ -1629,6 +1630,32 @@ public final class Image {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns an {@code Image} that shows the difference between {@code imageA} and {@code imageB} with {@code Color3F.BLACK}.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param imageA an {@code Image} instance
+	 * @param imageB an {@code Image} instance
+	 * @return an {@code Image} that shows the difference between {@code imageA} and {@code imageB} with {@code Color3F.BLACK}
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static Image difference(final Image imageA, final Image imageB) {
+		final Image imageC = new Image(max(imageA.resolutionX, imageB.resolutionX), max(imageA.resolutionY, imageB.resolutionY));
+		
+		for(int y = 0; y < imageC.resolutionY; y++) {
+			for(int x = 0; x < imageC.resolutionX; x++) {
+				final Color3F colorA = imageA.getColorRGB(x, y);
+				final Color3F colorB = imageB.getColorRGB(x, y);
+				final Color3F colorC = colorA.equals(colorB) ? colorA : Color3F.BLACK;
+				
+				imageC.setColorRGB(colorC, x, y);
+			}
+		}
+		
+		return imageC;
+	}
 	
 	/**
 	 * Loads an {@code Image} from the file represented by {@code file}.

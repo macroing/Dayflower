@@ -100,7 +100,7 @@ public final class Scenes {
 		final Shape3F shape06 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));
 		final Shape3F shape07 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
 		final Shape3F shape08 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
-		final Shape3F shape09 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
+		final Shape3F shape09 = new Triangle3F();//new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
 		
 		final Texture texture011 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture012 = new ConstantTexture();
@@ -138,7 +138,7 @@ public final class Scenes {
 		final Matrix44F matrix06 = Matrix44F.translate(-3.0F, 0.0F,  0.0F);
 		final Matrix44F matrix07 = Matrix44F.translate(-1.5F, 1.0F,  8.0F);
 		final Matrix44F matrix08 = Matrix44F.translate( 1.5F, 1.0F,  7.0F);
-		final Matrix44F matrix09 = Matrix44F.translate( 0.0F, 5.5F,  6.0F);
+		final Matrix44F matrix09 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 4.99F, 9.0F), Matrix44F.rotateX(AngleF.degrees(270.0F))), Matrix44F.scale(0.25F));//Matrix44F.translate( 0.0F, 5.5F,  6.0F);
 		
 		final Primitive primitive01 = new Primitive(material01, shape01, texture011, texture012, texture013, matrix01);
 		final Primitive primitive02 = new Primitive(material02, shape02, texture021, texture022, texture023, matrix02);
@@ -730,7 +730,7 @@ public final class Scenes {
 	 */
 	public static Scene newShowcaseMaterialOrenNayarMaterialScene() {
 		final Material material1 = new LambertianMaterial();
-		final Material material2 = new OrenNayarMaterial();
+		final Material material2 = new OrenNayarMaterial(AngleF.degrees(90.0F));
 		
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = new Sphere3F(10.0F);

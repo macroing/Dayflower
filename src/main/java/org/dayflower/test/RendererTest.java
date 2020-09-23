@@ -46,7 +46,7 @@ public final class RendererTest {
 	}
 	
 	static void doTestPathTracer() {
-		doTestRenderer(new PathTracer(), Scenes.newSL500Scene());
+		doTestRenderer(new PathTracer(), Scenes.newCornellBoxScene());
 	}
 	
 	static void doTestRayCaster() {

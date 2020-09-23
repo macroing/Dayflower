@@ -194,6 +194,43 @@ public final class SampleGeneratorF {
 	}
 	
 	/**
+	 * Samples a point on a triangle with a uniform distribution.
+	 * <p>
+	 * Returns a {@link Point3F} instance with the sampled point.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SampleGeneratorF.sampleTriangleUniformDistribution(Floats.random(), Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Point3F} instance with the sampled point
+	 */
+	public static Point3F sampleTriangleUniformDistribution() {
+		return sampleTriangleUniformDistribution(random(), random());
+	}
+	
+	/**
+	 * Samples a point on a triangle with a uniform distribution.
+	 * <p>
+	 * Returns a {@link Point3F} instance with the sampled point.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @return a {@code Point3F} instance with the sampled point
+	 */
+	public static Point3F sampleTriangleUniformDistribution(final float u, final float v) {
+		final float sqrtU = sqrt(u);
+		
+		final float component1 = 1.0F - sqrtU;
+		final float component2 = v * sqrtU;
+		final float component3 = 1.0F - component1 - component2;
+		
+		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Samples a direction on a cone with a uniform distribution.
 	 * <p>
 	 * Returns a {@code Vector3F} instance with the sampled direction.

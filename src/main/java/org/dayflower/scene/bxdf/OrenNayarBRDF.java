@@ -123,8 +123,8 @@ public final class OrenNayarBRDF implements BXDF {
 		
 		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F();
 		
-		final Vector3F wI = Vector3F.normalize(Vector3F.transform(Vector3F.negate(i), orthonormalBasisLocal));
-		final Vector3F wO = Vector3F.normalize(Vector3F.transform(o, orthonormalBasisLocal));
+		final Vector3F wI = Vector3F.normalize(Vector3F.transformReverse(Vector3F.negate(i), orthonormalBasisLocal));
+		final Vector3F wO = Vector3F.normalize(Vector3F.transformReverse(o, orthonormalBasisLocal));
 		
 		final float cosThetaAbsWI = wI.cosThetaAbs();
 		final float cosThetaAbsWO = wO.cosThetaAbs();
@@ -198,13 +198,13 @@ public final class OrenNayarBRDF implements BXDF {
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		final Vector3F iLocalSpace = Vector3F.negate(SampleGeneratorF.sampleHemisphereCosineDistribution(u, v));
-		final Vector3F iTransformed = Vector3F.transform(iLocalSpace, orthonormalBasis);
+		final Vector3F iTransformed = Vector3F.normalize(Vector3F.transform(iLocalSpace, orthonormalBasis));
 		final Vector3F i = nDotO < 0.0F ? Vector3F.negate(iTransformed) : iTransformed;
 		
 		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F();
 		
-		final Vector3F wI = Vector3F.normalize(Vector3F.transform(Vector3F.negate(i), orthonormalBasisLocal));
-		final Vector3F wO = Vector3F.normalize(Vector3F.transform(o, orthonormalBasisLocal));
+		final Vector3F wI = Vector3F.normalize(Vector3F.transformReverse(Vector3F.negate(i), orthonormalBasisLocal));
+		final Vector3F wO = Vector3F.normalize(Vector3F.transformReverse(o, orthonormalBasisLocal));
 		
 		final float cosThetaAbsWI = wI.cosThetaAbs();
 		final float cosThetaAbsWO = wO.cosThetaAbs();
@@ -319,8 +319,8 @@ public final class OrenNayarBRDF implements BXDF {
 		
 		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F();
 		
-		final Vector3F wI = Vector3F.normalize(Vector3F.transform(Vector3F.negate(i), orthonormalBasisLocal));
-		final Vector3F wO = Vector3F.normalize(Vector3F.transform(o, orthonormalBasisLocal));
+		final Vector3F wI = Vector3F.normalize(Vector3F.transformReverse(Vector3F.negate(i), orthonormalBasisLocal));
+		final Vector3F wO = Vector3F.normalize(Vector3F.transformReverse(o, orthonormalBasisLocal));
 		
 		final float cosThetaAbsWI = wI.cosThetaAbs();
 		final float cosThetaAbsWO = wO.cosThetaAbs();

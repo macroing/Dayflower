@@ -19,6 +19,7 @@
 package org.dayflower.scene;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
@@ -125,5 +126,32 @@ public final class Intersection {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.primitive, this.surfaceIntersectionObjectSpace, this.surfaceIntersectionWorldSpace);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the closest {@code Intersection} instance.
+	 * <p>
+	 * If either {@code optionalIntersectionA} or {@code optionalIntersectionB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param optionalIntersectionA an {@code Optional} with an optional {@code Intersection} instance
+	 * @param optionalIntersectionB an {@code Optional} with an optional {@code Intersection} instance
+	 * @return the closest {@code Intersection} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code optionalIntersectionA} or {@code optionalIntersectionB} are {@code null}
+	 */
+	public static Optional<Intersection> closest(final Optional<Intersection> optionalIntersectionA, final Optional<Intersection> optionalIntersectionB) {
+		final Intersection intersectionA = optionalIntersectionA.orElse(null);
+		final Intersection intersectionB = optionalIntersectionB.orElse(null);
+		
+		if(intersectionA != null && intersectionB != null) {
+			return intersectionA.getSurfaceIntersectionWorldSpace().getT() < intersectionB.getSurfaceIntersectionWorldSpace().getT() ? optionalIntersectionA : optionalIntersectionB;
+		} else if(intersectionA != null) {
+			return optionalIntersectionA;
+		} else if(intersectionB != null) {
+			return optionalIntersectionB;
+		} else {
+			return Optional.empty();
+		}
 	}
 }

@@ -232,11 +232,11 @@ public final class SurfaceIntersection3F {
 		final SurfaceIntersection3F surfaceIntersectionB = optionalSurfaceIntersectionB.orElse(null);
 		
 		if(surfaceIntersectionA != null && surfaceIntersectionB != null) {
-			return Optional.of(surfaceIntersectionA.getT() <= surfaceIntersectionB.getT() ? surfaceIntersectionA : surfaceIntersectionB);
+			return surfaceIntersectionA.getT() <= surfaceIntersectionB.getT() ? optionalSurfaceIntersectionA : optionalSurfaceIntersectionB;
 		} else if(surfaceIntersectionA != null) {
-			return Optional.of(surfaceIntersectionA);
+			return optionalSurfaceIntersectionA;
 		} else if(surfaceIntersectionB != null) {
-			return Optional.of(surfaceIntersectionB);
+			return optionalSurfaceIntersectionB;
 		} else {
 			return Optional.empty();
 		}

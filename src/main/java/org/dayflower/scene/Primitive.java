@@ -181,7 +181,7 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.shape.intersection(Ray3F.transform(this.worldToObject, ray), tMinimum, tMaximum).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace));
+		return this.shape.intersection(Ray3F.transform(this.worldToObject, ray)).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace)).filter(intersection -> intersection.getSurfaceIntersectionWorldSpace().getT() > tMinimum && intersection.getSurfaceIntersectionWorldSpace().getT() < tMaximum);
 	}
 	
 	/**
@@ -306,7 +306,7 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.shape.intersects(Ray3F.transform(this.worldToObject, ray), tMinimum, tMaximum);
+		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -378,7 +378,7 @@ public final class Primitive {
 		final Ray3F rayWorldSpace = ray;
 		final Ray3F rayObjectSpace = Ray3F.transform(this.worldToObject, rayWorldSpace);
 		
-		final float tObjectSpace = this.shape.intersectionT(rayObjectSpace, tMinimum, tMaximum);
+		final float tObjectSpace = this.shape.intersectionT(rayObjectSpace);
 		
 		if(isNaN(tObjectSpace)) {
 			return Float.NaN;
@@ -388,6 +388,10 @@ public final class Primitive {
 		final Point3F surfaceIntersectionPointWorldSpace = Point3F.transform(this.objectToWorld, surfaceIntersectionPointObjectSpace);
 		
 		final float tWorldSpace = abs(Point3F.distance(rayWorldSpace.getOrigin(), surfaceIntersectionPointWorldSpace));
+		
+		if(tWorldSpace <= tMinimum || tWorldSpace >= tMaximum) {
+			return Float.NaN;
+		}
 		
 		return tWorldSpace;
 	}

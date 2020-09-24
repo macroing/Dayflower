@@ -1894,6 +1894,155 @@ public final class Color3F {
 		return array(length, () -> random());
 	}
 	
+	/**
+	 * Returns a {@code Color3F[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color3F} instances read from {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.arrayRead(array, ArrayComponentOrder.BGRA);
+	 * }
+	 * </pre>
+	 * 
+	 * @param array the array to read from
+	 * @return a {@code Color3F[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color3F} instances read from {@code array}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public static Color3F[] arrayRead(final byte[] array) {
+		return arrayRead(array, ArrayComponentOrder.BGRA);
+	}
+	
+	/**
+	 * Returns a {@code Color3F[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color3F} instances read from {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @return a {@code Color3F[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color3F} instances read from {@code array}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
+	 */
+	public static Color3F[] arrayRead(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		final Color3F[] colors = new Color3F[array.length / arrayComponentOrder.getComponentCount()];
+		
+		for(int i = 0; i < colors.length; i++) {
+			final int r = arrayComponentOrder.readR(array, i * arrayComponentOrder.getComponentCount());
+			final int g = arrayComponentOrder.readG(array, i * arrayComponentOrder.getComponentCount());
+			final int b = arrayComponentOrder.readB(array, i * arrayComponentOrder.getComponentCount());
+			
+			colors[i] = new Color3F(r, g, b);
+		}
+		
+		return colors;
+	}
+	
+	/**
+	 * Returns a {@code Color3F[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color3F} instances read from {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.arrayRead(array, ArrayComponentOrder.BGRA);
+	 * }
+	 * </pre>
+	 * 
+	 * @param array the array to read from
+	 * @return a {@code Color3F[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color3F} instances read from {@code array}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public static Color3F[] arrayRead(final int[] array) {
+		return arrayRead(array, ArrayComponentOrder.BGRA);
+	}
+	
+	/**
+	 * Returns a {@code Color3F[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color3F} instances read from {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @return a {@code Color3F[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color3F} instances read from {@code array}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
+	 */
+	public static Color3F[] arrayRead(final int[] array, final ArrayComponentOrder arrayComponentOrder) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		final Color3F[] colors = new Color3F[array.length / arrayComponentOrder.getComponentCount()];
+		
+		for(int i = 0; i < colors.length; i++) {
+			final int r = arrayComponentOrder.readR(array, i * arrayComponentOrder.getComponentCount());
+			final int g = arrayComponentOrder.readG(array, i * arrayComponentOrder.getComponentCount());
+			final int b = arrayComponentOrder.readB(array, i * arrayComponentOrder.getComponentCount());
+			
+			colors[i] = new Color3F(r, g, b);
+		}
+		
+		return colors;
+	}
+	
+	/**
+	 * Returns a {@code Color3F[]} with a length of {@code array.length} and contains {@code Color3F} instances unpacked from {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color3F.arrayUnpack(array, PackedIntComponentOrder.ARGB);
+	 * }
+	 * </pre>
+	 * 
+	 * @param array the array to unpack from
+	 * @return a {@code Color3F[]} with a length of {@code array.length} and contains {@code Color3F} instances unpacked from {@code array}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public static Color3F[] arrayUnpack(final int[] array) {
+		return arrayUnpack(array, PackedIntComponentOrder.ARGB);
+	}
+	
+	/**
+	 * Returns a {@code Color3F[]} with a length of {@code array.length} and contains {@code Color3F} instances unpacked from {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code packedIntComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param array the array to unpack from
+	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder} instance
+	 * @return a {@code Color3F[]} with a length of {@code array.length} and contains {@code Color3F} instances unpacked from {@code array}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code packedIntComponentOrder} are {@code null}
+	 */
+	public static Color3F[] arrayUnpack(final int[] array, final PackedIntComponentOrder packedIntComponentOrder) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");
+		
+		final Color3F[] colors = new Color3F[array.length];
+		
+		for(int i = 0; i < colors.length; i++) {
+			colors[i] = unpack(array[i], packedIntComponentOrder);
+		}
+		
+		return colors;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class ColorSpace3F {

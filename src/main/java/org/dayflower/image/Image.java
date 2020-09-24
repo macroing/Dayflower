@@ -37,7 +37,9 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -82,6 +84,49 @@ public final class Image {
 	 */
 	public Image() {
 		this(800, 800);
+	}
+	
+	/**
+	 * Constructs a new {@code Image} instance from {@code bufferedImage}.
+	 * <p>
+	 * If either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code bufferedImage} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Image(bufferedImage, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param bufferedImage a {@code BufferedImage} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
+	 */
+	public Image(final BufferedImage bufferedImage) {
+		this(bufferedImage, new MitchellFilter());
+	}
+	
+	/**
+	 * Constructs a new {@code Image} instance from {@code bufferedImage}.
+	 * <p>
+	 * If either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code bufferedImage} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bufferedImage a {@code BufferedImage} instance
+	 * @param filter the {@link Filter} to use
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code bufferedImage} or {@code filter} are {@code null}
+	 */
+	public Image(final BufferedImage bufferedImage, final Filter filter) {
+		this.filter = Objects.requireNonNull(filter, "filter == null");
+		this.pixels = Pixel.createPixels(bufferedImage);
+		this.filterTable = filter.createFilterTable();
+		this.resolution = requireRange(bufferedImage.getWidth() * bufferedImage.getHeight(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth() * bufferedImage.getHeight()");
+		this.resolutionX = requireRange(bufferedImage.getWidth(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth()");
+		this.resolutionY = requireRange(bufferedImage.getHeight(), 0, Integer.MAX_VALUE, "bufferedImage.getHeight()");
 	}
 	
 	/**
@@ -169,7 +214,7 @@ public final class Image {
 	}
 	
 	/**
-	 * Constructs a new {@code Image} instance filled with the {@code Color3F} instances in the array {@code colorRGBs}.
+	 * Constructs a new {@code Image} instance filled with the {@link Color3F} instances in the array {@code colorRGBs}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -184,7 +229,7 @@ public final class Image {
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the {@link Color3F} instances to fill the {@code Image} with
+	 * @param colorRGBs the {@code Color3F} instances to fill the {@code Image} with
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or at least one of its elements are {@code null}
 	 */
@@ -193,7 +238,7 @@ public final class Image {
 	}
 	
 	/**
-	 * Constructs a new {@code Image} instance filled with the {@code Color3F} instances in the array {@code colorRGBs}.
+	 * Constructs a new {@code Image} instance filled with the {@link Color3F} instances in the array {@code colorRGBs}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -201,7 +246,7 @@ public final class Image {
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the {@link Color3F} instances to fill the {@code Image} with
+	 * @param colorRGBs the {@code Color3F} instances to fill the {@code Image} with
 	 * @param filter the {@link Filter} to use
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, at least one of its elements or {@code filter} are {@code null}
@@ -211,6 +256,173 @@ public final class Image {
 		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGBs);
+		this.filter = Objects.requireNonNull(filter, "filter == null");
+		this.filterTable = filter.createFilterTable();
+	}
+	
+	/**
+	 * Constructs a new {@code Image} instance filled with {@link Color3F} instances read from {@code colorRGBs}.
+	 * <p>
+	 * If {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}, an
+	 * {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBs} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Image(resolutionX, resolutionY, colorRGBs, arrayComponentOrder, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBs the array to read {@code Color3F} instances from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
+	 *                                  {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or {@code arrayComponentOrder} are {@code null}
+	 */
+	public Image(final int resolutionX, final int resolutionY, final byte[] colorRGBs, final ArrayComponentOrder arrayComponentOrder) {
+		this(resolutionX, resolutionY, colorRGBs, arrayComponentOrder, new MitchellFilter());
+	}
+	
+	/**
+	 * Constructs a new {@code Image} instance filled with {@link Color3F} instances read from {@code colorRGBs}.
+	 * <p>
+	 * If {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}, an
+	 * {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBs the array to read {@code Color3F} instances from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @param filter the {@link Filter} to use
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
+	 *                                  {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
+	 */
+	public Image(final int resolutionX, final int resolutionY, final byte[] colorRGBs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
+		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color3F.arrayRead(colorRGBs, arrayComponentOrder));
+		this.filter = Objects.requireNonNull(filter, "filter == null");
+		this.filterTable = filter.createFilterTable();
+	}
+	
+	/**
+	 * Constructs a new {@code Image} instance filled with {@link Color3F} instances read from {@code colorRGBs}.
+	 * <p>
+	 * If {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}, an
+	 * {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBs} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Image(resolutionX, resolutionY, colorRGBs, arrayComponentOrder, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBs the array to read {@code Color3F} instances from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
+	 *                                  {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or {@code arrayComponentOrder} are {@code null}
+	 */
+	public Image(final int resolutionX, final int resolutionY, final int[] colorRGBs, final ArrayComponentOrder arrayComponentOrder) {
+		this(resolutionX, resolutionY, colorRGBs, arrayComponentOrder, new MitchellFilter());
+	}
+	
+	/**
+	 * Constructs a new {@code Image} instance filled with {@link Color3F} instances read from {@code colorRGBs}.
+	 * <p>
+	 * If {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}, an
+	 * {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBs the array to read {@code Color3F} instances from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @param filter the {@link Filter} to use
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
+	 *                                  {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
+	 */
+	public Image(final int resolutionX, final int resolutionY, final int[] colorRGBs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
+		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color3F.arrayRead(colorRGBs, arrayComponentOrder));
+		this.filter = Objects.requireNonNull(filter, "filter == null");
+		this.filterTable = filter.createFilterTable();
+	}
+	
+	/**
+	 * Constructs a new {@code Image} instance filled with {@link Color3F} instances unpacked from {@code colorRGBs}.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBs} or {@code packedIntComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Image(resolutionX, resolutionY, colorRGBs, packedIntComponentOrder, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBs the array to unpack {@code Color3F} instances from
+	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or {@code packedIntComponentOrder} are {@code null}
+	 */
+	public Image(final int resolutionX, final int resolutionY, final int[] colorRGBs, final PackedIntComponentOrder packedIntComponentOrder) {
+		this(resolutionX, resolutionY, colorRGBs, packedIntComponentOrder, new MitchellFilter());
+	}
+	
+	/**
+	 * Constructs a new {@code Image} instance filled with {@link Color3F} instances unpacked from {@code colorRGBs}.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBs the array to unpack {@code Color3F} instances from
+	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder} instance
+	 * @param filter the {@link Filter} to use
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}
+	 */
+	public Image(final int resolutionX, final int resolutionY, final int[] colorRGBs, final PackedIntComponentOrder packedIntComponentOrder, final Filter filter) {
+		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color3F.arrayUnpack(colorRGBs, packedIntComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
@@ -367,6 +579,46 @@ public final class Image {
 	 */
 	public Image copy() {
 		return new Image(this);
+	}
+	
+	/**
+	 * Finds the bounds for {@code image} in this {@code Image} instance.
+	 * <p>
+	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code Image} instance.
+	 * <p>
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image an {@code Image} instance
+	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 */
+	public List<Rectangle2I> findImageBoundsFor(final Image image) {
+		Objects.requireNonNull(image, "image == null");
+		
+		final List<Rectangle2I> rectangles = new ArrayList<>();
+		
+		for(int y = 0; y < getResolutionY() - image.getResolutionY(); y++) {
+			for(int x = 0; x < getResolutionX() - image.getResolutionX(); x++) {
+				Rectangle2I rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x, y));
+				
+				labelImage:
+				if(getColorRGB(x, y).equals(image.getColorRGB(0, 0))) {
+					for(int imageY = 0; imageY < image.getResolutionY(); imageY++) {
+						for(int imageX = 0; imageX < image.getResolutionX(); imageX++) {
+							if(!getColorRGB(x + imageX, y + imageY).equals(image.getColorRGB(imageX, imageY))) {
+								break labelImage;
+							}
+							
+							rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x + imageX + 1, y + imageY + 1));
+						}
+					}
+					
+					rectangles.add(rectangle);
+				}
+			}
+		}
+		
+		return rectangles;
 	}
 	
 	/**
@@ -1506,18 +1758,25 @@ public final class Image {
 	}
 	
 	/**
-	 * Saves this {@code Image} as a .PNG image to the file represented by the filename {@code filename}.
+	 * Saves this {@code Image} as a .PNG image to the file represented by the pathname {@code pathname}.
 	 * <p>
-	 * If {@code filename} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.save(new File(pathname));
+	 * }
+	 * </pre>
 	 * 
-	 * @param filename a {@code String} that represents the filename of the file to save to
-	 * @throws NullPointerException thrown if, and only if, {@code filename} is {@code null}
+	 * @param pathname a {@code String} that represents the pathname of the file to save to
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public void save(final String filename) {
-		save(new File(Objects.requireNonNull(filename, "filename == null")));
+	public void save(final String pathname) {
+		save(new File(pathname));
 	}
 	
 	/**
@@ -1632,6 +1891,93 @@ public final class Image {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Blends {@code imageA} and {@code imageB} using the factor {@code 0.5F}.
+	 * <p>
+	 * Returns a new {@code Image} instance with the result of the blend operation.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Image.blend(imageA, imageB, 0.5F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param imageA one of the {@code Image} instances to blend
+	 * @param imageB one of the {@code Image} instances to blend
+	 * @return a new {@code Image} instance with the result of the blend operation
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static Image blend(final Image imageA, final Image imageB) {
+		return blend(imageA, imageB, 0.5F);
+	}
+	
+	/**
+	 * Blends {@code imageA} and {@code imageB} using the factor {@code t}.
+	 * <p>
+	 * Returns a new {@code Image} instance with the result of the blend operation.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Image.blend(imageA, imageB, t, t, t);
+	 * }
+	 * </pre>
+	 * 
+	 * @param imageA one of the {@code Image} instances to blend
+	 * @param imageB one of the {@code Image} instances to blend
+	 * @param t the factor to use for all components in the blending process
+	 * @return a new {@code Image} instance with the result of the blend operation
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static Image blend(final Image imageA, final Image imageB, final float t) {
+		return blend(imageA, imageB, t, t, t);
+	}
+	
+	/**
+	 * Blends {@code imageA} and {@code imageB} using the factors {@code tComponent1}, {@code tComponent2} and {@code tComponent3}.
+	 * <p>
+	 * Returns a new {@code Image} instance with the result of the blend operation.
+	 * <p>
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param imageA one of the {@code Image} instances to blend
+	 * @param imageB one of the {@code Image} instances to blend
+	 * @param tComponent1 the factor to use for component 1 in the blending process
+	 * @param tComponent2 the factor to use for component 1 in the blending process
+	 * @param tComponent3 the factor to use for component 1 in the blending process
+	 * @return a new {@code Image} instance with the result of the blend operation
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
+	 */
+	public static Image blend(final Image imageA, final Image imageB, final float tComponent1, final float tComponent2, final float tComponent3) {
+		final int imageAResolutionX = imageA.resolutionX;
+		final int imageAResolutionY = imageA.resolutionY;
+		
+		final int imageBResolutionX = imageB.resolutionX;
+		final int imageBResolutionY = imageB.resolutionY;
+		
+		final int imageCResolutionX = max(imageAResolutionX, imageBResolutionX);
+		final int imageCResolutionY = max(imageAResolutionY, imageBResolutionY);
+		
+		final Image imageC = new Image(imageCResolutionX, imageCResolutionY);
+		
+		for(int y = 0; y < imageCResolutionY; y++) {
+			for(int x = 0; x < imageCResolutionX; x++) {
+				final Color3F colorA = imageA.getColorRGB(x, y);
+				final Color3F colorB = imageB.getColorRGB(x, y);
+				final Color3F colorC = Color3F.blend(colorA, colorB, tComponent1, tComponent2, tComponent3);
+				
+				imageC.setColorRGB(colorC, x, y);
+			}
+		}
+		
+		return imageC;
+	}
+	
+	/**
 	 * Returns an {@code Image} that shows the difference between {@code imageA} and {@code imageB} with {@code Color3F.BLACK}.
 	 * <p>
 	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -1711,47 +2057,54 @@ public final class Image {
 	}
 	
 	/**
-	 * Loads an {@code Image} from the file represented by the filename {@code filename}.
+	 * Loads an {@code Image} from the file represented by the pathname {@code pathname}.
 	 * <p>
 	 * Returns a new {@code Image} instance.
 	 * <p>
-	 * If {@code filename} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Image.load(filename, new MitchellFilter());
+	 * Image.load(pathname, new MitchellFilter());
 	 * }
 	 * </pre>
 	 * 
-	 * @param filename a {@code String} that represents the filename of the file to load from
+	 * @param pathname a {@code String} that represents the pathname of the file to load from
 	 * @return a new {@code Image} instance
-	 * @throws NullPointerException thrown if, and only if, {@code filename} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static Image load(final String filename) {
-		return load(filename, new MitchellFilter());
+	public static Image load(final String pathname) {
+		return load(pathname, new MitchellFilter());
 	}
 	
 	/**
-	 * Loads an {@code Image} from the file represented by the filename {@code filename}.
+	 * Loads an {@code Image} from the file represented by the pathname {@code pathname}.
 	 * <p>
 	 * Returns a new {@code Image} instance.
 	 * <p>
-	 * If either {@code filename} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code pathname} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Image.load(new File(pathname), filter);
+	 * }
+	 * </pre>
 	 * 
-	 * @param filename a {@code String} that represents the filename of the file to load from
+	 * @param pathname a {@code String} that represents the pathname of the file to load from
 	 * @param filter the {@link Filter} to use
 	 * @return a new {@code Image} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code filename} or {@code filter} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code filter} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static Image load(final String filename, final Filter filter) {
-		return load(new File(Objects.requireNonNull(filename, "filename == null")), Objects.requireNonNull(filter, "filter == null"));
+	public static Image load(final String pathname, final Filter filter) {
+		return load(new File(pathname), filter);
 	}
 	
 	/**

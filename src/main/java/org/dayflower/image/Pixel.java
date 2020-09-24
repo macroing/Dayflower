@@ -22,6 +22,8 @@ import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Ints.requireExact;
 import static org.dayflower.util.Ints.requireRange;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 /**
@@ -306,6 +308,36 @@ public final class Pixel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns an array with {@code Pixel} instances filled with the {@code Color3F} instances in {@code bufferedImage}.
+	 * <p>
+	 * If {@code bufferedImage} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bufferedImage a {@code BufferedImage} instance
+	 * @return an array with {@code Pixel} instances filled with the {@code Color3F} instances in {@code bufferedImage}
+	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
+	 */
+	public static Pixel[] createPixels(final BufferedImage bufferedImage) {
+		final BufferedImage compatibleBufferedImage = doGetCompatibleBufferedImage(bufferedImage);
+		
+		final int resolutionX = compatibleBufferedImage.getWidth();
+		final int resolutionY = compatibleBufferedImage.getHeight();
+		
+		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
+		
+		for(int i = 0; i < pixels.length; i++) {
+			final int index = i;
+			final int x = index % resolutionX;
+			final int y = index / resolutionX;
+			
+			final Color3F colorRGB = new Color3F(compatibleBufferedImage.getRGB(x, y));
+			
+			pixels[i] = new Pixel(colorRGB, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
+		}
+		
+		return pixels;
+	}
+	
+	/**
 	 * Returns an array with {@code Pixel} instances filled with {@code colorRGB}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
@@ -417,5 +449,23 @@ public final class Pixel {
 		pixelB.setIndex(indexA);
 		pixelB.setX(xA);
 		pixelB.setY(yA);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static BufferedImage doGetCompatibleBufferedImage(final BufferedImage bufferedImage) {
+		final int compatibleType = BufferedImage.TYPE_INT_ARGB;
+		
+		if(bufferedImage.getType() == compatibleType) {
+			return bufferedImage;
+		}
+		
+		final BufferedImage compatibleBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), compatibleType);
+		
+		final
+		Graphics2D graphics2D = compatibleBufferedImage.createGraphics();
+		graphics2D.drawImage(bufferedImage, 0, 0, null);
+		
+		return compatibleBufferedImage;
 	}
 }

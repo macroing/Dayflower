@@ -92,15 +92,15 @@ public final class Scenes {
 		final Material material08 = new RefractionMaterial();
 		final Material material09 = new LambertianMaterial();
 		
-		final Shape3F shape01 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F,  1.0F), new Point3F(1.0F, 0.0F,  0.0F));
-		final Shape3F shape02 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F, -1.0F), new Point3F(1.0F, 0.0F,  0.0F));
-		final Shape3F shape03 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));
-		final Shape3F shape04 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));
-		final Shape3F shape05 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F, -1.0F));
-		final Shape3F shape06 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));
+		final Shape3F shape01 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F,  1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Bottom
+		final Shape3F shape02 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F, -1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Top
+		final Shape3F shape03 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));//Back
+		final Shape3F shape04 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));//Front
+		final Shape3F shape05 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F, -1.0F));//Right
+		final Shape3F shape06 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));//Left
 		final Shape3F shape07 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
 		final Shape3F shape08 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
-		final Shape3F shape09 = new Triangle3F();//new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
+		final Shape3F shape09 = new Triangle3F();
 		
 		final Texture texture011 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture012 = new ConstantTexture();
@@ -138,7 +138,7 @@ public final class Scenes {
 		final Matrix44F matrix06 = Matrix44F.translate(-3.0F, 0.0F,  0.0F);
 		final Matrix44F matrix07 = Matrix44F.translate(-1.5F, 1.0F,  8.0F);
 		final Matrix44F matrix08 = Matrix44F.translate( 1.5F, 1.0F,  7.0F);
-		final Matrix44F matrix09 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 4.99F, 9.0F), Matrix44F.rotateX(AngleF.degrees(270.0F))), Matrix44F.scale(0.25F));//Matrix44F.translate( 0.0F, 5.5F,  6.0F);
+		final Matrix44F matrix09 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 4.99F, 9.0F), Matrix44F.rotateX(AngleF.degrees(270.0F))), Matrix44F.scale(0.25F));
 		
 		final Primitive primitive01 = new Primitive(material01, shape01, texture011, texture012, texture013, matrix01);
 		final Primitive primitive02 = new Primitive(material02, shape02, texture021, texture022, texture023, matrix02);
@@ -238,74 +238,81 @@ public final class Scenes {
 		final Color3F colorC = Color3F.GRAY;
 		
 		final Material material01 = new LambertianMaterial();
-		final Material material02 = new ReflectionMaterial();
+		final Material material02 = new RefractionMaterial();//new ReflectionMaterial();
 		final Material material03 = new AshikhminShirleyMaterial(0.05F);
 		final Material material04 = new OrenNayarMaterial(AngleF.degrees(20.0F));
 		final Material material05 = new OrenNayarMaterial(AngleF.degrees(20.0F));
 		final Material material06 = new OrenNayarMaterial(AngleF.degrees(20.0F));
 		final Material material07 = new AshikhminShirleyMaterial(0.05F);
 		final Material material08 = new OrenNayarMaterial(AngleF.degrees(20.0F));
-		final Material material09 = new ReflectionMaterial();
+		final Material material09 = new RefractionMaterial();//new ReflectionMaterial();
 		final Material material10 = new RefractionMaterial();
-		final Material material11 = new ReflectionMaterial();
+		final Material material11 = new RefractionMaterial();//new ReflectionMaterial();
 		final Material material12 = new RefractionMaterial();
 		final Material material13 = new RefractionMaterial();
-		final Material material14 = new LambertianMaterial();
-		final Material material15 = new LambertianMaterial();
-		final Material material16 = new LambertianMaterial();
-		final Material material17 = new LambertianMaterial();
-		final Material material18 = new LambertianMaterial();
-		final Material material19 = new LambertianMaterial();
-		final Material material20 = new LambertianMaterial();
+		final Material material14 = new AshikhminShirleyMaterial(0.05F);
+		final Material material15 = new AshikhminShirleyMaterial(0.05F);
+		final Material material16 = new AshikhminShirleyMaterial(0.02F);
+		final Material material17 = new AshikhminShirleyMaterial(0.02F);
+		final Material material18 = new AshikhminShirleyMaterial(0.02F);
+		final Material material19 = new AshikhminShirleyMaterial(0.02F);
+		final Material material20 = new OrenNayarMaterial(AngleF.degrees(20.0F));
 		final Material material21 = new AshikhminShirleyMaterial(0.05F);
-		final Material material22 = new LambertianMaterial();
-		final Material material23 = new LambertianMaterial();
-		final Material material24 = new LambertianMaterial();
-		final Material material25 = new LambertianMaterial();
-		final Material material26 = new LambertianMaterial();
-		final Material material27 = new LambertianMaterial();
-		final Material material28 = new LambertianMaterial();
-		final Material material29 = new LambertianMaterial();
-		final Material material30 = new LambertianMaterial();
-		final Material material31 = new LambertianMaterial();
-		final Material material32 = new LambertianMaterial();
-		final Material material33 = new LambertianMaterial();
-		final Material material34 = new LambertianMaterial();
-		final Material material35 = new LambertianMaterial();
-		final Material material36 = new LambertianMaterial();
-		final Material material37 = new LambertianMaterial();
-		final Material material38 = new LambertianMaterial();
-		final Material material39 = new LambertianMaterial();
+		final Material material22 = new AshikhminShirleyMaterial(0.02F);
+		final Material material23 = new AshikhminShirleyMaterial(0.02F);
+		final Material material24 = new AshikhminShirleyMaterial(0.02F);
+		final Material material25 = new AshikhminShirleyMaterial(0.02F);
+		final Material material26 = new AshikhminShirleyMaterial(0.02F);
+		final Material material27 = new AshikhminShirleyMaterial(0.02F);
+		final Material material28 = new AshikhminShirleyMaterial(0.02F);
+		final Material material29 = new AshikhminShirleyMaterial(0.02F);
+		final Material material30 = new AshikhminShirleyMaterial(0.02F);
+		final Material material31 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material32 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material33 = new AshikhminShirleyMaterial(0.05F);
+		final Material material34 = new RefractionMaterial();
+		final Material material35 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material36 = new AshikhminShirleyMaterial(0.05F);
+		final Material material37 = new RefractionMaterial();
+		final Material material38 = new AshikhminShirleyMaterial(0.02F);
+		final Material material39 = new AshikhminShirleyMaterial(0.02F);
 		final Material material40 = new AshikhminShirleyMaterial(0.05F);
-		final Material material41 = new LambertianMaterial();
-		final Material material42 = new LambertianMaterial();
+		final Material material41 = new AshikhminShirleyMaterial(0.02F);
+		final Material material42 = new AshikhminShirleyMaterial(0.02F);
 		final Material material43 = new AshikhminShirleyMaterial(0.05F);
-		final Material material44 = new LambertianMaterial();
-		final Material material45 = new LambertianMaterial();
-		final Material material46 = new LambertianMaterial();
-		final Material material47 = new LambertianMaterial();
-		final Material material48 = new LambertianMaterial();
+		final Material material44 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material45 = new ReflectionMaterial();
+		final Material material46 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material47 = new AshikhminShirleyMaterial(0.02F);
+		final Material material48 = new ReflectionMaterial();
 		final Material material49 = new AshikhminShirleyMaterial(0.05F);
-		final Material material50 = new LambertianMaterial();
-		final Material material51 = new LambertianMaterial();
+		final Material material50 = new AshikhminShirleyMaterial(0.02F);
+		final Material material51 = new ReflectionMaterial();
 		final Material material52 = new AshikhminShirleyMaterial(0.05F);
-		final Material material53 = new LambertianMaterial();
-		final Material material54 = new LambertianMaterial();
-		final Material material55 = new LambertianMaterial();
-		final Material material56 = new LambertianMaterial();
-		final Material material57 = new LambertianMaterial();
-		final Material material58 = new LambertianMaterial();
-		final Material material59 = new LambertianMaterial();
-		final Material material60 = new LambertianMaterial();
-		final Material material61 = new LambertianMaterial();
-		final Material material62 = new LambertianMaterial();
-		final Material material63 = new LambertianMaterial();
-		final Material material64 = new LambertianMaterial();
-		final Material material65 = new LambertianMaterial();
-		final Material material66 = new LambertianMaterial();
-		final Material material67 = new LambertianMaterial();
-		final Material material68 = new LambertianMaterial();
-		final Material material69 = new LambertianMaterial();
+		final Material material53 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material54 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material55 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material56 = new AshikhminShirleyMaterial(0.02F);
+		final Material material57 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material58 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material59 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material60 = new AshikhminShirleyMaterial(0.02F);
+		final Material material61 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material62 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material63 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material64 = new AshikhminShirleyMaterial(0.02F);
+		final Material material65 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material66 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material67 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		final Material material68 = new AshikhminShirleyMaterial(0.02F);
+		final Material material69 = new OrenNayarMaterial(AngleF.degrees(20.0F));
+		
+		final Material material70 = new LambertianMaterial();
+		final Material material71 = new LambertianMaterial();
+		final Material material72 = new LambertianMaterial();
+		final Material material73 = new LambertianMaterial();
+		final Material material74 = new LambertianMaterial();
+		final Material material75 = new LambertianMaterial();
 		
 		final Shape3F shape01 = new Plane3F();
 		final Shape3F shape02 = triangleMeshes.get( 0);
@@ -377,7 +384,14 @@ public final class Scenes {
 		final Shape3F shape68 = triangleMeshes.get(66);
 		final Shape3F shape69 = triangleMeshes.get(67);
 		
-		final Texture texture011 = new SimplexFractionalBrownianMotionTexture(new Color3F(0.8F, 0.5F, 0.0F), 5.0F, 0.5F, 16);
+		final Shape3F shape70 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F, -1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Top
+		final Shape3F shape71 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));//Back
+		final Shape3F shape72 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));//Front
+		final Shape3F shape73 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F, -1.0F));//Right
+		final Shape3F shape74 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));//Left
+		final Shape3F shape75 = new Triangle3F();
+		
+		final Texture texture011 = new ConstantTexture(Color3F.GRAY);//new SimplexFractionalBrownianMotionTexture(Color3F.GRAY/*new Color3F(0.8F, 0.5F, 0.0F)*/, 5.0F, 0.5F, 16);
 		final Texture texture012 = new ConstantTexture();
 		final Texture texture013 = new ConstantTexture();
 		final Texture texture021 = new ConstantTexture(Color3F.WHITE);
@@ -416,193 +430,221 @@ public final class Scenes {
 		final Texture texture131 = new ConstantTexture(new Color3F(1.0F, 0.01F, 0.01F));
 		final Texture texture132 = new ConstantTexture();
 		final Texture texture133 = new ConstantTexture();
-		final Texture texture141 = new ConstantTexture();
+		final Texture texture141 = new ConstantTexture(colorB);
 		final Texture texture142 = new ConstantTexture();
 		final Texture texture143 = new ConstantTexture();
-		final Texture texture151 = new ConstantTexture();
+		final Texture texture151 = new ConstantTexture(colorA);
 		final Texture texture152 = new ConstantTexture();
 		final Texture texture153 = new ConstantTexture();
-		final Texture texture161 = new ConstantTexture();
+		final Texture texture161 = new ConstantTexture(colorC);
 		final Texture texture162 = new ConstantTexture();
 		final Texture texture163 = new ConstantTexture();
-		final Texture texture171 = new ConstantTexture();
+		final Texture texture171 = new ConstantTexture(colorC);
 		final Texture texture172 = new ConstantTexture();
 		final Texture texture173 = new ConstantTexture();
-		final Texture texture181 = new ConstantTexture();
+		final Texture texture181 = new ConstantTexture(colorC);
 		final Texture texture182 = new ConstantTexture();
 		final Texture texture183 = new ConstantTexture();
-		final Texture texture191 = new ConstantTexture();
+		final Texture texture191 = new ConstantTexture(colorC);
 		final Texture texture192 = new ConstantTexture();
 		final Texture texture193 = new ConstantTexture();
-		final Texture texture201 = new ConstantTexture();
+		final Texture texture201 = new ConstantTexture(new Color3F(0.2F));
 		final Texture texture202 = new ConstantTexture();
 		final Texture texture203 = new ConstantTexture();
 		final Texture texture211 = new ConstantTexture(colorA);
 		final Texture texture212 = new ConstantTexture();
 		final Texture texture213 = new ConstantTexture();
-		final Texture texture221 = new ConstantTexture();
+		final Texture texture221 = new ConstantTexture(colorC);
 		final Texture texture222 = new ConstantTexture();
 		final Texture texture223 = new ConstantTexture();
-		final Texture texture231 = new ConstantTexture();
+		final Texture texture231 = new ConstantTexture(colorC);
 		final Texture texture232 = new ConstantTexture();
 		final Texture texture233 = new ConstantTexture();
-		final Texture texture241 = new ConstantTexture();
+		final Texture texture241 = new ConstantTexture(colorC);
 		final Texture texture242 = new ConstantTexture();
 		final Texture texture243 = new ConstantTexture();
-		final Texture texture251 = new ConstantTexture();
+		final Texture texture251 = new ConstantTexture(colorC);
 		final Texture texture252 = new ConstantTexture();
 		final Texture texture253 = new ConstantTexture();
-		final Texture texture261 = new ConstantTexture();
+		final Texture texture261 = new ConstantTexture(colorC);
 		final Texture texture262 = new ConstantTexture();
 		final Texture texture263 = new ConstantTexture();
-		final Texture texture271 = new ConstantTexture();
+		final Texture texture271 = new ConstantTexture(colorC);
 		final Texture texture272 = new ConstantTexture();
 		final Texture texture273 = new ConstantTexture();
-		final Texture texture281 = new ConstantTexture();
+		final Texture texture281 = new ConstantTexture(colorC);
 		final Texture texture282 = new ConstantTexture();
 		final Texture texture283 = new ConstantTexture();
-		final Texture texture291 = new ConstantTexture();
+		final Texture texture291 = new ConstantTexture(colorC);
 		final Texture texture292 = new ConstantTexture();
 		final Texture texture293 = new ConstantTexture();
-		final Texture texture301 = new ConstantTexture();
+		final Texture texture301 = new ConstantTexture(colorC);
 		final Texture texture302 = new ConstantTexture();
 		final Texture texture303 = new ConstantTexture();
-		final Texture texture311 = new ConstantTexture();
+		final Texture texture311 = new ConstantTexture(new Color3F(227, 161, 115));
 		final Texture texture312 = new ConstantTexture();
 		final Texture texture313 = new ConstantTexture();
-		final Texture texture321 = new ConstantTexture();
-		final Texture texture322 = new ConstantTexture();
+		final Texture texture321 = new ConstantTexture(Color3F.WHITE);
+		final Texture texture322 = new ConstantTexture(new Color3F(12.0F));
 		final Texture texture323 = new ConstantTexture();
-		final Texture texture331 = new ConstantTexture();
+		final Texture texture331 = new ConstantTexture(colorB);
 		final Texture texture332 = new ConstantTexture();
 		final Texture texture333 = new ConstantTexture();
-		final Texture texture341 = new ConstantTexture();
+		final Texture texture341 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture342 = new ConstantTexture();
 		final Texture texture343 = new ConstantTexture();
-		final Texture texture351 = new ConstantTexture();
-		final Texture texture352 = new ConstantTexture();
+		final Texture texture351 = new ConstantTexture(Color3F.WHITE);
+		final Texture texture352 = new ConstantTexture(new Color3F(12.0F));
 		final Texture texture353 = new ConstantTexture();
-		final Texture texture361 = new ConstantTexture();
+		final Texture texture361 = new ConstantTexture(colorB);
 		final Texture texture362 = new ConstantTexture();
 		final Texture texture363 = new ConstantTexture();
-		final Texture texture371 = new ConstantTexture();
+		final Texture texture371 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture372 = new ConstantTexture();
 		final Texture texture373 = new ConstantTexture();
-		final Texture texture381 = new ConstantTexture();
+		final Texture texture381 = new ConstantTexture(colorC);
 		final Texture texture382 = new ConstantTexture();
 		final Texture texture383 = new ConstantTexture();
-		final Texture texture391 = new ConstantTexture();
+		final Texture texture391 = new ConstantTexture(colorC);
 		final Texture texture392 = new ConstantTexture();
 		final Texture texture393 = new ConstantTexture();
 		final Texture texture401 = new ConstantTexture(colorA);
 		final Texture texture402 = new ConstantTexture();
 		final Texture texture403 = new ConstantTexture();
-		final Texture texture411 = new ConstantTexture();
+		final Texture texture411 = new ConstantTexture(colorC);
 		final Texture texture412 = new ConstantTexture();
 		final Texture texture413 = new ConstantTexture();
-		final Texture texture421 = new ConstantTexture();
+		final Texture texture421 = new ConstantTexture(colorC);
 		final Texture texture422 = new ConstantTexture();
 		final Texture texture423 = new ConstantTexture();
 		final Texture texture431 = new ConstantTexture(colorA);
 		final Texture texture432 = new ConstantTexture();
 		final Texture texture433 = new ConstantTexture();
-		final Texture texture441 = new ConstantTexture();
+		final Texture texture441 = new ConstantTexture(new Color3F(98, 74, 46));
 		final Texture texture442 = new ConstantTexture();
 		final Texture texture443 = new ConstantTexture();
-		final Texture texture451 = new ConstantTexture();
+		final Texture texture451 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture452 = new ConstantTexture();
 		final Texture texture453 = new ConstantTexture();
-		final Texture texture461 = new ConstantTexture();
+		final Texture texture461 = new ConstantTexture(new Color3F(98, 74, 46));
 		final Texture texture462 = new ConstantTexture();
 		final Texture texture463 = new ConstantTexture();
-		final Texture texture471 = new ConstantTexture();
+		final Texture texture471 = new ConstantTexture(colorC);
 		final Texture texture472 = new ConstantTexture();
 		final Texture texture473 = new ConstantTexture();
-		final Texture texture481 = new ConstantTexture();
+		final Texture texture481 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture482 = new ConstantTexture();
 		final Texture texture483 = new ConstantTexture();
 		final Texture texture491 = new ConstantTexture(colorA);
 		final Texture texture492 = new ConstantTexture();
 		final Texture texture493 = new ConstantTexture();
-		final Texture texture501 = new ConstantTexture();
+		final Texture texture501 = new ConstantTexture(colorC);
 		final Texture texture502 = new ConstantTexture();
 		final Texture texture503 = new ConstantTexture();
-		final Texture texture511 = new ConstantTexture();
+		final Texture texture511 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture512 = new ConstantTexture();
 		final Texture texture513 = new ConstantTexture();
 		final Texture texture521 = new ConstantTexture(colorA);
 		final Texture texture522 = new ConstantTexture();
 		final Texture texture523 = new ConstantTexture();
-		final Texture texture531 = new ConstantTexture();
+		final Texture texture531 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture532 = new ConstantTexture();
 		final Texture texture533 = new ConstantTexture();
-		final Texture texture541 = new ConstantTexture();
+		final Texture texture541 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture542 = new ConstantTexture();
 		final Texture texture543 = new ConstantTexture();
-		final Texture texture551 = new ConstantTexture();
+		final Texture texture551 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture552 = new ConstantTexture();
 		final Texture texture553 = new ConstantTexture();
-		final Texture texture561 = new ConstantTexture();
+		final Texture texture561 = new ConstantTexture(colorC);
 		final Texture texture562 = new ConstantTexture();
 		final Texture texture563 = new ConstantTexture();
-		final Texture texture571 = new ConstantTexture();
+		final Texture texture571 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture572 = new ConstantTexture();
 		final Texture texture573 = new ConstantTexture();
-		final Texture texture581 = new ConstantTexture();
+		final Texture texture581 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture582 = new ConstantTexture();
 		final Texture texture583 = new ConstantTexture();
-		final Texture texture591 = new ConstantTexture();
+		final Texture texture591 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture592 = new ConstantTexture();
 		final Texture texture593 = new ConstantTexture();
-		final Texture texture601 = new ConstantTexture();
+		final Texture texture601 = new ConstantTexture(colorC);
 		final Texture texture602 = new ConstantTexture();
 		final Texture texture603 = new ConstantTexture();
-		final Texture texture611 = new ConstantTexture();
+		final Texture texture611 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture612 = new ConstantTexture();
 		final Texture texture613 = new ConstantTexture();
-		final Texture texture621 = new ConstantTexture();
+		final Texture texture621 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture622 = new ConstantTexture();
 		final Texture texture623 = new ConstantTexture();
-		final Texture texture631 = new ConstantTexture();
+		final Texture texture631 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture632 = new ConstantTexture();
 		final Texture texture633 = new ConstantTexture();
-		final Texture texture641 = new ConstantTexture();
+		final Texture texture641 = new ConstantTexture(colorC);
 		final Texture texture642 = new ConstantTexture();
 		final Texture texture643 = new ConstantTexture();
-		final Texture texture651 = new ConstantTexture();
+		final Texture texture651 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture652 = new ConstantTexture();
 		final Texture texture653 = new ConstantTexture();
-		final Texture texture661 = new ConstantTexture();
+		final Texture texture661 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture662 = new ConstantTexture();
 		final Texture texture663 = new ConstantTexture();
-		final Texture texture671 = new ConstantTexture();
+		final Texture texture671 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture672 = new ConstantTexture();
 		final Texture texture673 = new ConstantTexture();
-		final Texture texture681 = new ConstantTexture();
+		final Texture texture681 = new ConstantTexture(colorC);
 		final Texture texture682 = new ConstantTexture();
 		final Texture texture683 = new ConstantTexture();
-		final Texture texture691 = new ConstantTexture();
+		final Texture texture691 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture692 = new ConstantTexture();
 		final Texture texture693 = new ConstantTexture();
 		
+		final Texture texture701 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture702 = new ConstantTexture();
+		final Texture texture703 = new ConstantTexture();
+		final Texture texture711 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture712 = new ConstantTexture();
+		final Texture texture713 = new ConstantTexture();
+		final Texture texture721 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture722 = new ConstantTexture();
+		final Texture texture723 = new ConstantTexture();
+		final Texture texture731 = new ConstantTexture(new Color3F(0.25F, 0.25F, 0.75F));
+		final Texture texture732 = new ConstantTexture();
+		final Texture texture733 = new ConstantTexture();
+		final Texture texture741 = new ConstantTexture(new Color3F(0.75F, 0.25F, 0.25F));
+		final Texture texture742 = new ConstantTexture();
+		final Texture texture743 = new ConstantTexture();
+		final Texture texture751 = new ConstantTexture(Color3F.WHITE);
+		final Texture texture752 = new ConstantTexture(new Color3F(12.0F));
+		final Texture texture753 = new ConstantTexture();
+		
 		final Matrix44F matrix01 = Matrix44F.identity();
 		final Matrix44F matrixNM = Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 5.0F), Matrix44F.multiply(Matrix44F.rotateY(AngleF.degrees(90.0F)), Matrix44F.rotateX(AngleF.degrees(270.0F))));
+		final Matrix44F matrix70 = Matrix44F.translate( 0.0F, 5.0F,  0.0F);
+		final Matrix44F matrix71 = Matrix44F.translate( 0.0F, 0.0F,  0.0F);
+		final Matrix44F matrix72 = Matrix44F.translate( 0.0F, 0.0F, 10.0F);
+		final Matrix44F matrix73 = Matrix44F.translate( 3.0F, 0.0F,  0.0F);
+		final Matrix44F matrix74 = Matrix44F.translate(-3.0F, 0.0F,  0.0F);
+		final Matrix44F matrix75 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 4.99F, 1.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.25F));
+		
+		final Primitive primitive75 = new Primitive(material75, shape75, texture751, texture752, texture753, matrix75);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "SL500");
+		scene.addLight(new PrimitiveLight(primitive75));
 		scene.addPrimitive(new Primitive(material01, shape01, texture011, texture012, texture013, matrix01));
-		scene.addPrimitive(new Primitive(material02, shape02, texture021, texture022, texture023, matrixNM));//Base			wind_glass			DONE
-		scene.addPrimitive(new Primitive(material03, shape03, texture031, texture032, texture033, matrixNM));//Base			Body_paint			DONE
-		scene.addPrimitive(new Primitive(material04, shape04, texture041, texture042, texture043, matrixNM));//Base			Misc				DONE
-		scene.addPrimitive(new Primitive(material05, shape05, texture051, texture052, texture053, matrixNM));//Base			Misc0				DONE
-		scene.addPrimitive(new Primitive(material06, shape06, texture061, texture062, texture063, matrixNM));//Base			Material__583		DONE
-		scene.addPrimitive(new Primitive(material07, shape07, texture071, texture072, texture073, matrixNM));//Base			Body_paint			DONE
-		scene.addPrimitive(new Primitive(material08, shape08, texture081, texture082, texture083, matrixNM));//Base			License				DONE
-		scene.addPrimitive(new Primitive(material09, shape09, texture091, texture092, texture093, matrixNM));//Base			wind_glass			DONE
-		scene.addPrimitive(new Primitive(material10, shape10, texture101, texture102, texture103, matrixNM));//Base			Material__586		DONE
-		scene.addPrimitive(new Primitive(material11, shape11, texture111, texture112, texture113, matrixNM));//Base			wind_glass			DONE
-		scene.addPrimitive(new Primitive(material12, shape12, texture121, texture122, texture123, matrixNM));//BLightL		Material__589		DONE
-		scene.addPrimitive(new Primitive(material13, shape13, texture131, texture132, texture133, matrixNM));//BLightR		Material__589		DONE
+		scene.addPrimitive(new Primitive(material02, shape02, texture021, texture022, texture023, matrixNM));//Base			wind_glass
+		scene.addPrimitive(new Primitive(material03, shape03, texture031, texture032, texture033, matrixNM));//Base			Body_paint
+		scene.addPrimitive(new Primitive(material04, shape04, texture041, texture042, texture043, matrixNM));//Base			Misc
+		scene.addPrimitive(new Primitive(material05, shape05, texture051, texture052, texture053, matrixNM));//Base			Misc0
+		scene.addPrimitive(new Primitive(material06, shape06, texture061, texture062, texture063, matrixNM));//Base			Material__583
+		scene.addPrimitive(new Primitive(material07, shape07, texture071, texture072, texture073, matrixNM));//Base			Body_paint
+		scene.addPrimitive(new Primitive(material08, shape08, texture081, texture082, texture083, matrixNM));//Base			License
+		scene.addPrimitive(new Primitive(material09, shape09, texture091, texture092, texture093, matrixNM));//Base			wind_glass
+		scene.addPrimitive(new Primitive(material10, shape10, texture101, texture102, texture103, matrixNM));//Base			Material__586
+		scene.addPrimitive(new Primitive(material11, shape11, texture111, texture112, texture113, matrixNM));//Base			wind_glass
+		scene.addPrimitive(new Primitive(material12, shape12, texture121, texture122, texture123, matrixNM));//BLightL		Material__589
+		scene.addPrimitive(new Primitive(material13, shape13, texture131, texture132, texture133, matrixNM));//BLightR		Material__589
 		scene.addPrimitive(new Primitive(material14, shape14, texture141, texture142, texture143, matrixNM));//Body			DoorLine
 		scene.addPrimitive(new Primitive(material15, shape15, texture151, texture152, texture153, matrixNM));//Body			Badging_Chrome
 		scene.addPrimitive(new Primitive(material16, shape16, texture161, texture162, texture163, matrixNM));//Body			Misc1
@@ -610,7 +652,7 @@ public final class Scenes {
 		scene.addPrimitive(new Primitive(material18, shape18, texture181, texture182, texture183, matrixNM));//Body			Misc_Chrome0
 		scene.addPrimitive(new Primitive(material19, shape19, texture191, texture192, texture193, matrixNM));//Body			Misc_Chrome1
 		scene.addPrimitive(new Primitive(material20, shape20, texture201, texture202, texture203, matrixNM));//Body			Black
-		scene.addPrimitive(new Primitive(material21, shape21, texture211, texture212, texture213, matrixNM));//Body			Body_paint0			DONE
+		scene.addPrimitive(new Primitive(material21, shape21, texture211, texture212, texture213, matrixNM));//Body			Body_paint0
 		scene.addPrimitive(new Primitive(material22, shape22, texture221, texture222, texture223, matrixNM));//Body			Bottom
 		scene.addPrimitive(new Primitive(material23, shape23, texture231, texture232, texture233, matrixNM));//BrakeFL		Brake_Pads
 		scene.addPrimitive(new Primitive(material24, shape24, texture241, texture242, texture243, matrixNM));//BrakeFL		Brake_Disc
@@ -629,19 +671,19 @@ public final class Scenes {
 		scene.addPrimitive(new Primitive(material37, shape37, texture371, texture372, texture373, matrixNM));//HLightRG		Material__594
 		scene.addPrimitive(new Primitive(material38, shape38, texture381, texture382, texture383, matrixNM));//Hood			Misc3
 		scene.addPrimitive(new Primitive(material39, shape39, texture391, texture392, texture393, matrixNM));//Hood			Misc_Chrome2
-		scene.addPrimitive(new Primitive(material40, shape40, texture401, texture402, texture403, matrixNM));//Hood			Body_paint1			DONE
+		scene.addPrimitive(new Primitive(material40, shape40, texture401, texture402, texture403, matrixNM));//Hood			Body_paint1
 		scene.addPrimitive(new Primitive(material41, shape41, texture411, texture412, texture413, matrixNM));//Hood_Carbon	Misc4
 		scene.addPrimitive(new Primitive(material42, shape42, texture421, texture422, texture423, matrixNM));//Hood_Carbon	Misc_Chrome3
-		scene.addPrimitive(new Primitive(material43, shape43, texture431, texture432, texture433, matrixNM));//Hood_Carbon	Body_paint2			DONE
+		scene.addPrimitive(new Primitive(material43, shape43, texture431, texture432, texture433, matrixNM));//Hood_Carbon	Body_paint2
 		scene.addPrimitive(new Primitive(material44, shape44, texture441, texture442, texture443, matrixNM));//Interior		Interior
 		scene.addPrimitive(new Primitive(material45, shape45, texture451, texture452, texture453, matrixNM));//Interior		Material__597
 		scene.addPrimitive(new Primitive(material46, shape46, texture461, texture462, texture463, matrixNM));//Interior		Interior0
 		scene.addPrimitive(new Primitive(material47, shape47, texture471, texture472, texture473, matrixNM));//MirrorL		Misc_Chrome4
 		scene.addPrimitive(new Primitive(material48, shape48, texture481, texture482, texture483, matrixNM));//MirrorL		Material__598
-		scene.addPrimitive(new Primitive(material49, shape49, texture491, texture492, texture493, matrixNM));//MirrorL		Body_paint3			DONE
+		scene.addPrimitive(new Primitive(material49, shape49, texture491, texture492, texture493, matrixNM));//MirrorL		Body_paint3
 		scene.addPrimitive(new Primitive(material50, shape50, texture501, texture502, texture503, matrixNM));//MirrorR		Misc_Chrome4
 		scene.addPrimitive(new Primitive(material51, shape51, texture511, texture512, texture513, matrixNM));//MirrorR		Material__598
-		scene.addPrimitive(new Primitive(material52, shape52, texture521, texture522, texture523, matrixNM));//MirrorR		Body_paint3			DONE
+		scene.addPrimitive(new Primitive(material52, shape52, texture521, texture522, texture523, matrixNM));//MirrorR		Body_paint3
 		scene.addPrimitive(new Primitive(material53, shape53, texture531, texture532, texture533, matrixNM));//TireFL		Tire_Back
 		scene.addPrimitive(new Primitive(material54, shape54, texture541, texture542, texture543, matrixNM));//TireFL		Tire_Tread
 		scene.addPrimitive(new Primitive(material55, shape55, texture551, texture552, texture553, matrixNM));//TireFL		Tire_Sidewall
@@ -659,6 +701,12 @@ public final class Scenes {
 		scene.addPrimitive(new Primitive(material67, shape67, texture671, texture672, texture673, matrixNM));//TireRR		Tire_Sidewall
 		scene.addPrimitive(new Primitive(material68, shape68, texture681, texture682, texture683, matrixNM));//TireRR		Material__600
 		scene.addPrimitive(new Primitive(material69, shape69, texture691, texture692, texture693, matrixNM));//License		License0
+		scene.addPrimitive(new Primitive(material70, shape70, texture701, texture702, texture703, matrix70));
+		scene.addPrimitive(new Primitive(material71, shape71, texture711, texture712, texture713, matrix71));
+		scene.addPrimitive(new Primitive(material72, shape72, texture721, texture722, texture723, matrix72));
+		scene.addPrimitive(new Primitive(material73, shape73, texture731, texture732, texture733, matrix73));
+		scene.addPrimitive(new Primitive(material74, shape74, texture741, texture742, texture743, matrix74));
+		scene.addPrimitive(primitive75);
 		
 		return scene;
 	}

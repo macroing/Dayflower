@@ -81,7 +81,7 @@ public final class Plane3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return new AxisAlignedBoundingBox3F(Point3F.minimum(), Point3F.maximum());
+		return new InfiniteBoundingVolume3F();
 	}
 	
 	/**

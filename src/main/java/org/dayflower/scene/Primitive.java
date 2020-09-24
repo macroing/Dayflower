@@ -24,6 +24,7 @@ import static org.dayflower.util.Floats.isNaN;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
@@ -41,6 +42,7 @@ import org.dayflower.image.Color3F;
  * @author J&#246;rgen Lundgren
  */
 public final class Primitive {
+	private BoundingVolume3F boundingVolume;
 	private Material material;
 	private Matrix44F objectToWorld;
 	private Matrix44F worldToObject;
@@ -95,9 +97,19 @@ public final class Primitive {
 		this.textureNormal = Objects.requireNonNull(textureNormal, "textureNormal == null");
 		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
 		this.worldToObject = Matrix44F.inverse(objectToWorld);
+		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the {@link BoundingVolume3F} instance associated with this {@code Primitive} instance.
+	 * 
+	 * @return the {@code BoundingVolume3F} instance associated with this {@code Primitive} instance
+	 */
+	public BoundingVolume3F getBoundingVolume() {
+		return this.boundingVolume;
+	}
 	
 	/**
 	 * Returns a {@link Color3F} instance representing the albedo of the surface at {@code intersection}.
@@ -181,7 +193,7 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.shape.intersection(Ray3F.transform(this.worldToObject, ray)).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace)).filter(intersection -> intersection.getSurfaceIntersectionWorldSpace().getT() > tMinimum && intersection.getSurfaceIntersectionWorldSpace().getT() < tMaximum);
+		return this.boundingVolume.intersects(ray, tMinimum, tMaximum) ? this.shape.intersection(Ray3F.transform(this.worldToObject, ray)).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace)).filter(intersection -> intersection.getSurfaceIntersectionWorldSpace().getT() > tMinimum && intersection.getSurfaceIntersectionWorldSpace().getT() < tMaximum) : Optional.empty();
 	}
 	
 	/**
@@ -261,6 +273,8 @@ public final class Primitive {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Primitive)) {
+			return false;
+		} else if(!Objects.equals(this.boundingVolume, Primitive.class.cast(object).boundingVolume)) {
 			return false;
 		} else if(!Objects.equals(this.material, Primitive.class.cast(object).material)) {
 			return false;
@@ -375,6 +389,10 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		if(!this.boundingVolume.intersects(ray, tMinimum, tMaximum)) {
+			return Float.NaN;
+		}
+		
 		final Ray3F rayWorldSpace = ray;
 		final Ray3F rayObjectSpace = Ray3F.transform(this.worldToObject, rayWorldSpace);
 		
@@ -403,7 +421,7 @@ public final class Primitive {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.material, this.objectToWorld, this.worldToObject, this.shape, this.textureAlbedo, this.textureEmittance, this.textureNormal);
+		return Objects.hash(this.boundingVolume, this.material, this.objectToWorld, this.worldToObject, this.shape, this.textureAlbedo, this.textureEmittance, this.textureNormal);
 	}
 	
 	/**
@@ -434,6 +452,7 @@ public final class Primitive {
 	public void setObjectToWorld(final Matrix44F objectToWorld) {
 		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
 		this.worldToObject = Matrix44F.inverse(objectToWorld);
+		this.boundingVolume = this.shape.getBoundingVolume().transform(this.objectToWorld);
 	}
 	
 	/**
@@ -500,5 +519,6 @@ public final class Primitive {
 	public void setWorldToObject(final Matrix44F worldToObject) {
 		this.worldToObject = Objects.requireNonNull(worldToObject, "worldToObject == null");
 		this.objectToWorld = Matrix44F.inverse(worldToObject);
+		this.boundingVolume = this.shape.getBoundingVolume().transform(this.objectToWorld);
 	}
 }

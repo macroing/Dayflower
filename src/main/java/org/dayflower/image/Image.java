@@ -31,7 +31,6 @@ import static org.dayflower.util.Ints.requireExact;
 import static org.dayflower.util.Ints.requireRange;
 import static org.dayflower.util.Ints.toInt;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
@@ -53,6 +52,7 @@ import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Rasterizer2I;
 import org.dayflower.geometry.Rectangle2I;
 import org.dayflower.geometry.Triangle2I;
+import org.dayflower.util.BufferedImages;
 
 /**
  * An {@code Image} is an image that can be drawn to.
@@ -989,9 +989,9 @@ public final class Image {
 		
 		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
 		
-		final Point2I[] scanLine = Rasterizer2I.rasterize(line, rectangle);
+		final Point2I[] scanline = Rasterizer2I.rasterize(line, rectangle);
 		
-		for(final Point2I point : scanLine) {
+		for(final Point2I point : scanline) {
 			final Optional<Pixel> optionalPixel = getPixel(point.getX(), point.getY());
 			
 			if(optionalPixel.isPresent()) {
@@ -1422,10 +1422,10 @@ public final class Image {
 		
 		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
 		
-		final Point2I[][] scanLines = Rasterizer2I.rasterize(triangle, rectangle);
+		final Point2I[][] scanlines = Rasterizer2I.rasterize(triangle, rectangle);
 		
-		for(final Point2I[] scanLine : scanLines) {
-			for(final Point2I point : scanLine) {
+		for(final Point2I[] scanline : scanlines) {
+			for(final Point2I point : scanline) {
 				final Optional<Pixel> optionalPixel = getPixel(point.getX(), point.getY());
 				
 				if(optionalPixel.isPresent()) {
@@ -1603,6 +1603,15 @@ public final class Image {
 			for(int x = 0; x < this.resolutionX; x++) {
 				Pixel.swap(this.pixels[yT * this.resolutionX + x], this.pixels[yB * this.resolutionX + x]);
 			}
+		}
+	}
+	
+	/**
+	 * Inverts this {@code Image} instance.
+	 */
+	public void invert() {
+		for(final Pixel pixel : this.pixels) {
+			pixel.setColorRGB(Color3F.invert(pixel.getColorRGB()));
 		}
 	}
 	
@@ -2045,7 +2054,7 @@ public final class Image {
 	 */
 	public static Image load(final File file, final Filter filter) {
 		try {
-			final BufferedImage bufferedImage = doGetCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
+			final BufferedImage bufferedImage = BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 			
 			final int resolutionX = bufferedImage.getWidth();
 			final int resolutionY = bufferedImage.getHeight();
@@ -2191,23 +2200,5 @@ public final class Image {
 		}
 		
 		return image;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static BufferedImage doGetCompatibleBufferedImage(final BufferedImage bufferedImage) {
-		final int compatibleType = BufferedImage.TYPE_INT_ARGB;
-		
-		if(bufferedImage.getType() == compatibleType) {
-			return bufferedImage;
-		}
-		
-		final BufferedImage compatibleBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), compatibleType);
-		
-		final
-		Graphics2D graphics2D = compatibleBufferedImage.createGraphics();
-		graphics2D.drawImage(bufferedImage, 0, 0, null);
-		
-		return compatibleBufferedImage;
 	}
 }

@@ -22,9 +22,10 @@ import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Ints.requireExact;
 import static org.dayflower.util.Ints.requireRange;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
+
+import org.dayflower.util.BufferedImages;
 
 /**
  * A {@code Pixel} is a pixel of an {@link Image} instance.
@@ -317,7 +318,7 @@ public final class Pixel {
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
 	public static Pixel[] createPixels(final BufferedImage bufferedImage) {
-		final BufferedImage compatibleBufferedImage = doGetCompatibleBufferedImage(bufferedImage);
+		final BufferedImage compatibleBufferedImage = BufferedImages.getCompatibleBufferedImage(bufferedImage);
 		
 		final int resolutionX = compatibleBufferedImage.getWidth();
 		final int resolutionY = compatibleBufferedImage.getHeight();
@@ -449,23 +450,5 @@ public final class Pixel {
 		pixelB.setIndex(indexA);
 		pixelB.setX(xA);
 		pixelB.setY(yA);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static BufferedImage doGetCompatibleBufferedImage(final BufferedImage bufferedImage) {
-		final int compatibleType = BufferedImage.TYPE_INT_ARGB;
-		
-		if(bufferedImage.getType() == compatibleType) {
-			return bufferedImage;
-		}
-		
-		final BufferedImage compatibleBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), compatibleType);
-		
-		final
-		Graphics2D graphics2D = compatibleBufferedImage.createGraphics();
-		graphics2D.drawImage(bufferedImage, 0, 0, null);
-		
-		return compatibleBufferedImage;
 	}
 }

@@ -22,7 +22,7 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 
 /**
- * A class that consists exclusively of static methods that returns or performs various operations on {@code String}s.
+ * A class that consists exclusively of static methods that returns or performs various operations on {@code String} instances.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

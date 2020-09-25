@@ -46,6 +46,7 @@ import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.background.ConstantBackground;
+import org.dayflower.scene.background.ImageBackground;
 import org.dayflower.scene.background.PerezBackground;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.PrimitiveLight;
@@ -709,6 +710,33 @@ public final class Scenes {
 		scene.addPrimitive(primitive75);
 		
 		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link ConstantBackground}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code ConstantBackground}
+	 */
+	public static Scene newShowcaseBackgroundConstantBackgroundScene() {
+		return new Scene(new ConstantBackground(), new Camera(), "ShowcaseBackgroundConstantBackground");
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link ImageBackground}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code ImageBackground}
+	 */
+	public static Scene newShowcaseBackgroundImageBackgroundScene() {
+		return new Scene(ImageBackground.load(new File("./resources/Image.jpg"), AngleF.degrees(0.0F), new Vector2F(1.0F, 1.0F)), new Camera(), "ShowcaseBackgroundImageBackground");
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link PerezBackground}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code PerezBackground}
+	 */
+	public static Scene newShowcaseBackgroundPerezBackgroundScene() {
+		return new Scene(new PerezBackground(), new Camera(), "ShowcaseBackgroundPerezBackground");
 	}
 	
 	/**

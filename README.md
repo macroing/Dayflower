@@ -3,6 +3,7 @@ Dayflower
 Dayflower is a renderer written in Java.
 
 ![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-002.png "Dayflower - Path Tracer")
+![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-007.png "Dayflower - Path Tracer")
 
 Getting Started
 ---------------
@@ -25,6 +26,7 @@ Supported Features
 
 #### Background
 * Constant
+* Image
 * Perez
 
 #### Camera Lens
@@ -40,6 +42,7 @@ Supported Features
 * Triangle
 
 #### Light
+* Directional
 * Point
 * Primitive
 

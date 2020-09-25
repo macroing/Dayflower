@@ -140,7 +140,7 @@ public final class Plane3F implements Shape3F {
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Vector3F direction = ray.getDirection();
-		final Vector3F surfaceNormal = getSurfaceNormal();
+		final Vector3F surfaceNormal = this.surfaceNormal;
 		
 		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
 		
@@ -149,9 +149,9 @@ public final class Plane3F implements Shape3F {
 		}
 		
 		final Point3F origin = ray.getOrigin();
-		final Point3F a = getA();
-		final Point3F b = getB();
-		final Point3F c = getC();
+		final Point3F a = this.a;
+		final Point3F b = this.b;
+		final Point3F c = this.c;
 		
 		final Vector3F originToA = Vector3F.direction(origin, a);
 		
@@ -399,7 +399,7 @@ public final class Plane3F implements Shape3F {
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Vector3F direction = ray.getDirection();
-		final Vector3F surfaceNormal = getSurfaceNormal();
+		final Vector3F surfaceNormal = this.surfaceNormal;
 		
 		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
 		
@@ -408,7 +408,7 @@ public final class Plane3F implements Shape3F {
 		}
 		
 		final Point3F origin = ray.getOrigin();
-		final Point3F a = getA();
+		final Point3F a = this.a;
 		
 		final Vector3F originToA = Vector3F.direction(origin, a);
 		

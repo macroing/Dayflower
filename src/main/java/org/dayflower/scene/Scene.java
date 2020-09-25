@@ -258,7 +258,13 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.primitives.stream().anyMatch(primitive -> primitive.intersects(ray, tMinimum, tMaximum));
+		for(final Primitive primitive : this.primitives) {
+			if(primitive.intersects(ray, tMinimum, tMaximum)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**

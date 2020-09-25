@@ -29,6 +29,7 @@ import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
@@ -193,7 +194,25 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.boundingVolume.intersects(ray, tMinimum, tMaximum) ? this.shape.intersection(Ray3F.transform(this.worldToObject, ray)).map(surfaceIntersectionObjectSpace -> new Intersection(this, surfaceIntersectionObjectSpace)).filter(intersection -> intersection.getSurfaceIntersectionWorldSpace().getT() > tMinimum && intersection.getSurfaceIntersectionWorldSpace().getT() < tMaximum) : Optional.empty();
+		if(this.boundingVolume.intersects(ray, tMinimum, tMaximum)) {
+			final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionObjectSpace = this.shape.intersection(Ray3F.transform(this.worldToObject, ray));
+			
+			if(optionalSurfaceIntersectionObjectSpace.isPresent()) {
+				final SurfaceIntersection3F surfaceIntersectionObjectSpace = optionalSurfaceIntersectionObjectSpace.get();
+				
+				final Intersection intersection = new Intersection(this, surfaceIntersectionObjectSpace);
+				
+				final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
+				
+				final float t = surfaceIntersectionWorldSpace.getT();
+				
+				if(t > tMinimum && t < tMaximum) {
+					return Optional.of(intersection);
+				}
+			}
+		}
+		
+		return Optional.empty();
 	}
 	
 	/**
@@ -211,7 +230,18 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
 	 */
 	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-		return this.shape.sample(Point3F.transform(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), u, v).map(surfaceSample -> SurfaceSample3F.transform(surfaceSample, this.objectToWorld, this.worldToObject)).filter(surfaceSample -> Vector3F.dotProduct(surfaceSample.getSurfaceNormal(), Vector3F.direction(surfaceSample.getPoint(), referencePoint)) >= 0.0F);
+		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = this.shape.sample(Point3F.transform(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), u, v);
+		
+		if(optionalSurfaceSampleObjectSpace.isPresent()) {
+			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSampleObjectSpace.get();
+			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleObjectSpace, this.objectToWorld, this.worldToObject);
+			
+			if(Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.direction(surfaceSampleWorldSpace.getPoint(), referencePoint)) >= 0.0F) {
+				return Optional.of(surfaceSampleWorldSpace);
+			}
+		}
+		
+		return Optional.empty();
 	}
 	
 	/**
@@ -465,6 +495,7 @@ public final class Primitive {
 	 */
 	public void setShape(final Shape3F shape) {
 		this.shape = Objects.requireNonNull(shape, "shape == null");
+		this.boundingVolume = this.shape.getBoundingVolume().transform(this.objectToWorld);
 	}
 	
 	/**

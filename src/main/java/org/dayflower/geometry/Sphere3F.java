@@ -45,7 +45,6 @@ import java.util.Optional;
  * @author J&#246;rgen Lundgren
  */
 public final class Sphere3F implements Shape3F {
-	private final BoundingVolume3F boundingVolume;
 	private final Point3F center;
 	private final float radius;
 	
@@ -91,9 +90,8 @@ public final class Sphere3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
 	public Sphere3F(final float radius, final Point3F center) {
-		this.radius = radius;
 		this.center = Objects.requireNonNull(center, "center == null");
-		this.boundingVolume = new BoundingSphere3F(this.radius, this.center);
+		this.radius = radius;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +103,7 @@ public final class Sphere3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return this.boundingVolume;
+		return new BoundingSphere3F(this.radius, this.center);
 	}
 	
 	/**
@@ -202,12 +200,13 @@ public final class Sphere3F implements Shape3F {
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F origin = ray.getOrigin();
-		final Point3F center = getCenter();
+		final Point3F center = this.center;
 		
 		final Vector3F direction = ray.getDirection();
 		final Vector3F centerToOrigin = Vector3F.direction(center, origin);
 		
-		final float radiusSquared = getRadiusSquared();
+		final float radius = this.radius;
+		final float radiusSquared = radius * radius;
 		
 		final float a = direction.lengthSquared();
 		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
@@ -270,8 +269,6 @@ public final class Sphere3F implements Shape3F {
 			return true;
 		} else if(!(object instanceof Sphere3F)) {
 			return false;
-		} else if(!Objects.equals(this.boundingVolume, Sphere3F.class.cast(object).boundingVolume)) {
-			return false;
 		} else if(!Objects.equals(this.center, Sphere3F.class.cast(object).center)) {
 			return false;
 		} else if(!equal(this.radius, Sphere3F.class.cast(object).radius)) {
@@ -327,12 +324,13 @@ public final class Sphere3F implements Shape3F {
 	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
-		final Point3F center = getCenter();
+		final Point3F center = this.center;
 		
 		final Vector3F directionToCenter = Vector3F.direction(referencePoint, center);
 		
 		final float lengthSquared = directionToCenter.lengthSquared();
-		final float radiusSquared = getRadiusSquared();
+		final float radius = this.radius;
+		final float radiusSquared = radius * radius;
 		
 		if(lengthSquared < radiusSquared * 1.00001F) {
 			final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
@@ -430,16 +428,42 @@ public final class Sphere3F implements Shape3F {
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F origin = ray.getOrigin();
-		final Point3F center = getCenter();
+		final Point3F center = this.center;
 		
 		final Vector3F direction = ray.getDirection();
-		final Vector3F centerToOrigin = Vector3F.direction(center, origin);
+//		final Vector3F centerToOrigin = Vector3F.direction(center, origin);
 		
-		final float radiusSquared = getRadiusSquared();
+//		final float radius = this.radius;
+//		final float radiusSquared = radius * radius;
 		
-		final float a = direction.lengthSquared();
-		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
-		final float c = centerToOrigin.lengthSquared() - radiusSquared;
+//		final float a = direction.lengthSquared();
+//		final float b = 2.0F * Vector3F.dotProduct(centerToOrigin, direction);
+//		final float c = centerToOrigin.lengthSquared() - radiusSquared;
+		
+//		The code below resulted in an optimization, but not in the intersection(Ray3F, float, float) method:
+		final float originX = origin.getX();
+		final float originY = origin.getY();
+		final float originZ = origin.getZ();
+		
+		final float centerX = center.getX();
+		final float centerY = center.getY();
+		final float centerZ = center.getZ();
+		
+		final float directionX = direction.getX();
+		final float directionY = direction.getY();
+		final float directionZ = direction.getZ();
+		
+		final float centerToOriginX = originX - centerX;
+		final float centerToOriginY = originY - centerY;
+		final float centerToOriginZ = originZ - centerZ;
+		
+		final float radius = this.radius;
+		final float radiusSquared = radius * radius;
+		
+		final float a = directionX * directionX + directionY * directionY + directionZ * directionZ;
+		final float b = 2.0F * (centerToOriginX * directionX + centerToOriginY * directionY + centerToOriginZ * directionZ);
+		final float c = (centerToOriginX * centerToOriginX + centerToOriginY * centerToOriginY + centerToOriginZ * centerToOriginZ) - radiusSquared;
+//		The code above resulted in an optimization, but not in the intersection(Ray3F, float, float) method.
 		
 		final float[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -458,7 +482,7 @@ public final class Sphere3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.boundingVolume, this.center, Float.valueOf(this.radius));
+		return Objects.hash(this.center, Float.valueOf(this.radius));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

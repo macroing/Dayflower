@@ -33,7 +33,6 @@ import java.util.Optional;
  * @author J&#246;rgen Lundgren
  */
 public final class Triangle3F implements Shape3F {
-	private final BoundingVolume3F boundingVolume;
 	private final Vector3F surfaceNormal;
 	private final Vertex3F a;
 	private final Vertex3F b;
@@ -48,7 +47,6 @@ public final class Triangle3F implements Shape3F {
 		this.a = new Vertex3F(new Point2F(0.5F, 0.0F), new Point3F(+0.0F, +5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F)), new Vector3F());
 		this.b = new Vertex3F(new Point2F(1.0F, 1.0F), new Point3F(+5.0F, -5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F)), new Vector3F());
 		this.c = new Vertex3F(new Point2F(0.0F, 1.0F), new Point3F(-5.0F, -5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F)), new Vector3F());
-		this.boundingVolume = new AxisAlignedBoundingBox3F(Point3F.minimum(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()), Point3F.maximum(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()));
 		this.surfaceNormal = Vector3F.normalNormalized(this.a.getPosition(), this.b.getPosition(), this.c.getPosition());
 	}
 	
@@ -66,7 +64,6 @@ public final class Triangle3F implements Shape3F {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 		this.c = Objects.requireNonNull(c, "c == null");
-		this.boundingVolume = new AxisAlignedBoundingBox3F(Point3F.minimum(a.getPosition(), b.getPosition(), c.getPosition()), Point3F.maximum(a.getPosition(), b.getPosition(), c.getPosition()));
 		this.surfaceNormal = Vector3F.normalNormalized(a.getPosition(), b.getPosition(), c.getPosition());
 	}
 	
@@ -79,7 +76,7 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return this.boundingVolume;
+		return new AxisAlignedBoundingBox3F(Point3F.minimum(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()), Point3F.maximum(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()));
 	}
 	
 	/**
@@ -273,8 +270,6 @@ public final class Triangle3F implements Shape3F {
 			return true;
 		} else if(!(object instanceof Triangle3F)) {
 			return false;
-		} else if(!Objects.equals(this.boundingVolume, Triangle3F.class.cast(object).boundingVolume)) {
-			return false;
 		} else if(!Objects.equals(this.surfaceNormal, Triangle3F.class.cast(object).surfaceNormal)) {
 			return false;
 		} else if(!Objects.equals(this.a, Triangle3F.class.cast(object).a)) {
@@ -463,7 +458,7 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.boundingVolume, this.surfaceNormal, this.a, this.b, this.c);
+		return Objects.hash(this.surfaceNormal, this.a, this.b, this.c);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

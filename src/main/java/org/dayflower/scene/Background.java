@@ -18,6 +18,9 @@
  */
 package org.dayflower.scene;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 
@@ -38,4 +41,7 @@ public interface Background {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	Color3F radiance(final Ray3F ray);
+	
+//	TODO: Add Javadocs!
+	List<BackgroundSample> sample(final Intersection intersection);
 }

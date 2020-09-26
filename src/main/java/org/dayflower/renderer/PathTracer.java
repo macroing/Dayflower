@@ -18,10 +18,12 @@
  */
 package org.dayflower.renderer;
 
+import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.sqrt;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.dayflower.display.Display;
@@ -36,6 +38,8 @@ import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
+import org.dayflower.scene.Background;
+import org.dayflower.scene.BackgroundSample;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
@@ -196,6 +200,7 @@ public final class PathTracer implements Renderer {
 				} else {
 					radiance = Color3F.add(radiance, doGetRadianceLights(throughput, materialResult, primitive, scene, surfaceIntersection, currentRayDirectionO));
 //					radiance = Color3F.add(radiance, doGetRadianceLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
+//					radiance = Color3F.add(radiance, doGetRadianceBackground(throughput, intersection, materialResult, scene));
 				}
 				
 				final BXDFResult selectedBXDFResult = selectedBXDF.sampleSolidAngle(currentRayDirectionO, surfaceNormalS, orthonormalBasisS, random(), random());
@@ -474,6 +479,31 @@ public final class PathTracer implements Renderer {
 		}
 		
 		return scene.getBackground().radiance(ray);
+	}
+	
+	@SuppressWarnings("unused")
+	private static Color3F doGetRadianceBackground(final Color3F throughput, final Intersection intersection, final MaterialResult materialResult, final Scene scene) {
+		Color3F radiance = Color3F.BLACK;
+		
+		final Background background = scene.getBackground();
+		
+		final Color3F color = materialResult.getColor();
+		
+		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+		
+		final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+		
+		final List<BackgroundSample> backgroundSamples = background.sample(intersection);
+		
+		for(final BackgroundSample backgroundSample : backgroundSamples) {
+			if(!scene.intersects(backgroundSample.getRay())) {
+				radiance = Color3F.add(radiance, Color3F.multiply(color, Color3F.multiply(backgroundSample.getRadiance(), Vector3F.dotProduct(backgroundSample.getRay().getDirection(), surfaceNormal))));
+			}
+		}
+		
+		radiance = Color3F.multiply(throughput, Color3F.divide(radiance, PI));
+		
+		return radiance;
 	}
 	
 	@SuppressWarnings("unused")

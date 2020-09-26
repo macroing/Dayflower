@@ -19,7 +19,10 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import javax.imageio.ImageIO;
@@ -32,6 +35,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.scene.Background;
+import org.dayflower.scene.BackgroundSample;
+import org.dayflower.scene.Intersection;
 import org.dayflower.util.BufferedImages;
 
 public class ImageBackground implements Background {
@@ -207,6 +212,14 @@ public class ImageBackground implements Background {
 		final float y = v >= 0.0F ? v : resolutionY - abs(v);
 		
 		return doGetColorRGB(x, y);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public List<BackgroundSample> sample(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
+		return new ArrayList<>();
 	}
 	
 	/**

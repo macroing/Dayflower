@@ -46,7 +46,7 @@ public final class RendererTest {
 	}
 	
 	static void doTestPathTracer() {
-		doTestRenderer(new PathTracer(), Scenes.newZealotScene());
+		doTestRenderer(new PathTracer(), Scenes.newDefaultScene());
 	}
 	
 	static void doTestRayCaster() {

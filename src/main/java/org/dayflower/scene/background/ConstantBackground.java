@@ -18,11 +18,16 @@
  */
 package org.dayflower.scene.background;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Background;
+import org.dayflower.scene.BackgroundSample;
+import org.dayflower.scene.Intersection;
 
 /**
  * A {@code ConstantBackground} is a {@link Background} implementation that returns a constant {@link Color3F} instance as radiance.
@@ -79,6 +84,14 @@ public final class ConstantBackground implements Background {
 		Objects.requireNonNull(ray, "ray == null");
 		
 		return this.color;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public List<BackgroundSample> sample(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
+		return new ArrayList<>();
 	}
 	
 	/**

@@ -21,20 +21,34 @@ package org.dayflower.scene.background;
 import static org.dayflower.util.Doubles.acos;
 import static org.dayflower.util.Doubles.cos;
 import static org.dayflower.util.Doubles.exp;
+import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Doubles.saturate;
 import static org.dayflower.util.Doubles.tan;
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.acos;
 import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ChromaticSpectralCurve;
 import org.dayflower.image.Color3F;
+import org.dayflower.image.ConstantSpectralCurve;
+import org.dayflower.image.IrregularSpectralCurve;
+import org.dayflower.image.RegularSpectralCurve;
+import org.dayflower.image.SpectralCurve;
 import org.dayflower.scene.Background;
+import org.dayflower.scene.BackgroundSample;
+import org.dayflower.scene.Intersection;
 
 /**
  * A {@code PerezBackground} is a {@link Background} implementation of the Perez algorithm.
@@ -45,18 +59,54 @@ import org.dayflower.scene.Background;
  * @author J&#246;rgen Lundgren
  */
 public final class PerezBackground implements Background {
-	private static final int HISTOGRAM_RESOLUTION_X = 32;
-	private static final int HISTOGRAM_RESOLUTION_Y = 32;
+	private static final SpectralCurve K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
+	private static final SpectralCurve K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
+	private static final SpectralCurve K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
+	private static final SpectralCurve SOL_SPECTRAL_CURVE;
+	private static final float[] K_GAS_ABSORPTION_ATTENUATION_AMPLITUDES;
+	private static final float[] K_GAS_ABSORPTION_ATTENUATION_WAVELENGTHS;
+	private static final float[] K_OZONE_ABSORPTION_ATTENUATION_AMPLITUDES;
+	private static final float[] K_OZONE_ABSORPTION_ATTENUATION_WAVELENGTHS;
+	private static final float[] K_WATER_VAPOR_ABSORPTION_ATTENUATION_AMPLITUDES;
+	private static final float[] K_WATER_VAPOR_ABSORPTION_ATTENUATION_WAVELENGTHS;
+	private static final float[] SOL_AMPLITUDES;
+	private static final int HISTOGRAM_RESOLUTION_X;
+	private static final int HISTOGRAM_RESOLUTION_Y;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	static {
+		K_GAS_ABSORPTION_ATTENUATION_AMPLITUDES = new float[] {0.0F, 3.0F, 0.210F, 0.0F};
+		K_GAS_ABSORPTION_ATTENUATION_WAVELENGTHS = new float[] {759.0F, 760.0F, 770.0F, 771.0F};
+		K_OZONE_ABSORPTION_ATTENUATION_AMPLITUDES = new float[] {10.0F, 4.8F, 2.7F, 1.35F, 0.8F, 0.380F, 0.160F, 0.075F, 0.04F, 0.019F, 0.007F, 0.0F, 0.003F, 0.003F, 0.004F, 0.006F, 0.008F, 0.009F, 0.012F, 0.014F, 0.017F, 0.021F, 0.025F, 0.03F, 0.035F, 0.04F, 0.045F, 0.048F, 0.057F, 0.063F, 0.07F, 0.075F, 0.08F, 0.085F, 0.095F, 0.103F, 0.110F, 0.12F, 0.122F, 0.12F, 0.118F, 0.115F, 0.12F, 0.125F, 0.130F, 0.12F, 0.105F, 0.09F, 0.079F, 0.067F, 0.057F, 0.048F, 0.036F, 0.028F, 0.023F, 0.018F, 0.014F, 0.011F, 0.010F, 0.009F, 0.007F, 0.004F, 0.0F, 0.0F};
+		K_OZONE_ABSORPTION_ATTENUATION_WAVELENGTHS = new float[] {300.0F, 305.0F, 310.0F, 315.0F, 320.0F, 325.0F, 330.0F, 335.0F, 340.0F, 345.0F, 350.0F, 355.0F, 445.0F, 450.0F, 455.0F, 460.0F, 465.0F, 470.0F, 475.0F, 480.0F, 485.0F, 490.0F, 495.0F, 500.0F, 505.0F, 510.0F, 515.0F, 520.0F, 525.0F, 530.0F, 535.0F, 540.0F, 545.0F, 550.0F, 555.0F, 560.0F, 565.0F, 570.0F, 575.0F, 580.0F, 585.0F, 590.0F, 595.0F, 600.0F, 605.0F, 610.0F, 620.0F, 630.0F, 640.0F, 650.0F, 660.0F, 670.0F, 680.0F, 690.0F, 700.0F, 710.0F, 720.0F, 730.0F, 740.0F, 750.0F, 760.0F, 770.0F, 780.0F, 790.0F};
+		K_WATER_VAPOR_ABSORPTION_ATTENUATION_AMPLITUDES = new float[] {0.0F, 0.160e-1F, 0.240e-1F, 0.125e-1F, 0.100e+1F, 0.870F, 0.610e-1F, 0.100e-2F, 0.100e-4F, 0.100e-4F, 0.600e-3F, 0.175e-1F, 0.360e-1F};
+		K_WATER_VAPOR_ABSORPTION_ATTENUATION_WAVELENGTHS = new float[] {689.0F, 690.0F, 700.0F, 710.0F, 720.0F, 730.0F, 740.0F, 750.0F, 760.0F, 770.0F, 780.0F, 790.0F, 800.0F};
+		
+		SOL_AMPLITUDES = new float[] {165.5F, 162.3F, 211.2F, 258.8F, 258.2F, 242.3F, 267.6F, 296.6F, 305.4F, 300.6F, 306.6F, 288.3F, 287.1F, 278.2F, 271.0F, 272.3F, 263.6F, 255.0F, 250.6F, 253.1F, 253.5F, 251.3F, 246.3F, 241.7F, 236.8F, 232.1F, 228.2F, 223.4F, 219.7F, 215.3F, 211.0F, 207.3F, 202.4F, 198.7F, 194.3F, 190.7F, 186.3F, 182.6F};
+		
+		K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurve(K_GAS_ABSORPTION_ATTENUATION_AMPLITUDES, K_GAS_ABSORPTION_ATTENUATION_WAVELENGTHS);
+		K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurve(K_OZONE_ABSORPTION_ATTENUATION_AMPLITUDES, K_OZONE_ABSORPTION_ATTENUATION_WAVELENGTHS);
+		K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurve(K_WATER_VAPOR_ABSORPTION_ATTENUATION_AMPLITUDES, K_WATER_VAPOR_ABSORPTION_ATTENUATION_WAVELENGTHS);
+		
+		SOL_SPECTRAL_CURVE = new RegularSpectralCurve(380.0F, 750.0F, SOL_AMPLITUDES);
+		
+		HISTOGRAM_RESOLUTION_X = 32;
+		HISTOGRAM_RESOLUTION_Y = 32;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Color3F sunColor;
 	private OrthonormalBasis33F orthonormalBasis;
+	private SpectralCurve sunSpectralRadiance;
 	private Vector3F sunDirection;
 	private Vector3F sunDirectionWorldSpace;
 	private double[] perezRelativeLuminance;
 	private double[] perezX;
 	private double[] perezY;
 	private double[] zenith;
+	private float jacobian;
 	private float theta;
 	private float turbidity;
 	private float[] histogramColumn;
@@ -123,6 +173,66 @@ public final class PerezBackground implements Background {
 		return Color3F.minimumTo0(doRadiance(Vector3F.normalize(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis))));
 	}
 	
+//	TODO: Add Javadocs!
+	@Override
+	public List<BackgroundSample> sample(final Intersection intersection) {
+		final List<BackgroundSample> backgroundSamples = new ArrayList<>();
+		
+		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+		
+		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+		
+		final Vector3F surfaceNormalG = surfaceIntersection.getSurfaceNormalG();
+		final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
+		
+		if(Vector3F.dotProduct(this.sunDirectionWorldSpace, surfaceNormalG) > 0.0F && Vector3F.dotProduct(this.sunDirectionWorldSpace, surfaceNormalS) > 0.0F) {
+			backgroundSamples.add(new BackgroundSample(this.sunColor, new Ray3F(surfaceIntersectionPoint, this.sunDirectionWorldSpace)));
+		}
+		
+		final int samples = 1;
+		
+		final float[] histogramCol = this.histogramColumn;
+		final float[][] histogramImage = this.histogramImage;
+		
+		for(int i = 0; i < samples; i++) {
+			final float randomX = random();
+			final float randomY = random();
+			
+			int x = 0;
+			int y = 0;
+			
+			while(randomX >= histogramCol[x] && x < histogramCol.length - 1) {
+				x++;
+			}
+			
+			final float[] histogramRow = histogramImage[x];
+			
+			while(randomY >= histogramRow[y] && y < histogramRow.length - 1) {
+				y++;
+			}
+			
+			final float u = x == 0 ? randomX / histogramCol[0] : (randomX - histogramCol[x - 1]) / (histogramCol[x] - histogramCol[x - 1]);
+			final float v = y == 0 ? randomY / histogramRow[0] : (randomY - histogramRow[y - 1]) / (histogramRow[y] - histogramRow[y - 1]);
+			
+			final float px = x == 0 ? histogramCol[0] : histogramCol[x] - histogramCol[x - 1];
+			final float py = y == 0 ? histogramRow[0] : histogramRow[y] - histogramRow[y - 1];
+			
+			final float su = (x + u) / histogramCol.length;
+			final float sv = (y + v) / histogramRow.length;
+			
+			final float probabilityReciprocal = sin(sv * PI) * this.jacobian / (samples * px * py);
+			
+			final Vector3F directionLocal = Vector3F.directionSpherical(su, sv);
+			final Vector3F direction = Vector3F.transform(directionLocal, this.orthonormalBasis);
+			
+			if(Vector3F.dotProduct(direction, surfaceNormalG) > 0.0F && Vector3F.dotProduct(direction, surfaceNormalS) > 0.0F) {
+				backgroundSamples.add(new BackgroundSample(Color3F.multiply(doRadiance(directionLocal), probabilityReciprocal), new Ray3F(surfaceIntersectionPoint, direction)));
+			}
+		}
+		
+		return backgroundSamples;
+	}
+	
 	/**
 	 * Sets the parameters for this {@code PerezBackground} instance.
 	 * <p>
@@ -168,7 +278,9 @@ public final class PerezBackground implements Background {
 		doSetSunDirectionWorldSpace(sunDirectionWorldSpace);
 		doSetSunDirection();
 		doSetTheta();
+		doSetSunColorAndSunSpectralRadiance();
 		doSetZenith();
+		doInitializeJacobian();
 		doInitializePerezRelativeLuminance();
 		doInitializePerezX();
 		doInitializePerezY();
@@ -243,6 +355,10 @@ public final class PerezBackground implements Background {
 		}
 	}
 	
+	private void doInitializeJacobian() {
+		this.jacobian = (2.0F * PI * PI) / (HISTOGRAM_RESOLUTION_X * HISTOGRAM_RESOLUTION_Y);
+	}
+	
 	private void doInitializePerezRelativeLuminance() {
 		this.perezRelativeLuminance    = new double[5];
 		this.perezRelativeLuminance[0] = +0.17872D * this.turbidity - 1.46303D;
@@ -274,6 +390,16 @@ public final class PerezBackground implements Background {
 		this.orthonormalBasis = new OrthonormalBasis33F(Vector3F.y(), Vector3F.z(), Vector3F.x());
 	}
 	
+	private void doSetSunColorAndSunSpectralRadiance() {
+		if(this.sunDirection.getZ() > 0.0F) {
+			this.sunSpectralRadiance = doCalculateAttenuatedSunlight(this.theta, this.turbidity);
+			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingSRGB(Color3F.multiply(this.sunSpectralRadiance.toColorXYZ(), 1.0e-4F)));
+		} else {
+			this.sunSpectralRadiance = new ConstantSpectralCurve(0.0F);
+			this.sunColor = Color3F.BLACK;
+		}
+	}
+	
 	private void doSetSunDirection() {
 		this.sunDirection = Vector3F.normalize(Vector3F.transformReverse(this.sunDirectionWorldSpace, this.orthonormalBasis));
 	}
@@ -295,5 +421,30 @@ public final class PerezBackground implements Background {
 		this.zenith[0] = ((4.0453D * this.turbidity - 4.9710D) * tan((4.0D / 9.0D - this.turbidity / 120.0D) * (Math.PI - 2.0D * this.theta)) - 0.2155D * this.turbidity + 2.4192D) * 1000.0D;
 		this.zenith[1] = (0.00165D * (this.theta * this.theta * this.theta) - 0.00374D * (this.theta * this.theta) + 0.00208D * this.theta + 0.0D) * (this.turbidity * this.turbidity) + (-0.02902D * (this.theta * this.theta * this.theta) + 0.06377D * (this.theta * this.theta) - 0.03202D * this.theta + 0.00394D) * this.turbidity + (0.11693D * (this.theta * this.theta * this.theta) - 0.21196D * (this.theta * this.theta) + 0.06052D * this.theta + 0.25885D);
 		this.zenith[2] = (0.00275D * (this.theta * this.theta * this.theta) - 0.00610D * (this.theta * this.theta) + 0.00316D * this.theta + 0.0D) * (this.turbidity * this.turbidity) + (-0.04212D * (this.theta * this.theta * this.theta) + 0.08970D * (this.theta * this.theta) - 0.04153D * this.theta + 0.00515D) * this.turbidity + (0.15346D * (this.theta * this.theta * this.theta) - 0.26756D * (this.theta * this.theta) + 0.06669D * this.theta + 0.26688D);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static SpectralCurve doCalculateAttenuatedSunlight(final float theta, final float turbidity) {
+		final float[] spectrum = new float[91];
+		
+		final double alpha = 1.3D;
+		final double lozone = 0.35D;
+		final double w = 2.0D;
+		final double beta = 0.04608365822050D * turbidity - 0.04586025928522D;
+		final double relativeOpticalMass = 1.0D / (cos(theta) + 0.000940D * pow(1.6386D - theta, -1.253D));
+		
+		for(int i = 0, lambda = 350; lambda <= 800; i++, lambda += 5) {
+			final double tauRayleighScattering = exp(-relativeOpticalMass * 0.008735D * pow(lambda / 1000.0D, -4.08D));
+			final double tauAerosolAttenuation = exp(-relativeOpticalMass * beta * pow(lambda / 1000.0D, -alpha));
+			final double tauOzoneAbsorptionAttenuation = exp(-relativeOpticalMass * K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * lozone);
+			final double tauGasAbsorptionAttenuation = exp(-1.41D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass / pow(1.0D + 118.93D * K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * relativeOpticalMass, 0.45D));
+			final double tauWaterVaporAbsorptionAttenuation = exp(-0.2385D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass / pow(1.0D + 20.07D * K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE.sample(lambda) * w * relativeOpticalMass, 0.45D));
+			final double amplitude = SOL_SPECTRAL_CURVE.sample(lambda) * tauRayleighScattering * tauAerosolAttenuation * tauOzoneAbsorptionAttenuation * tauGasAbsorptionAttenuation * tauWaterVaporAbsorptionAttenuation;
+			
+			spectrum[i] = (float)(amplitude);
+		}
+		
+		return new RegularSpectralCurve(350.0F, 800.0F, spectrum);
 	}
 }

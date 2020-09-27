@@ -60,6 +60,7 @@ import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.ImageTexture;
+import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.UVTexture;
@@ -1178,6 +1179,40 @@ public final class Scenes {
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureImageTexture");
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance used as a showcase for {@link MarbleTexture}.
+	 * 
+	 * @return a {@code Scene} instance used as a showcase for {@code MarbleTexture}
+	 */
+	public static Scene newShowcaseTextureMarbleTextureScene() {
+		final
+		Image image = new Image(800, 800, Color3F.WHITE);
+		image.fillRectangle(new Rectangle2I(new Point2I(300, 300), new Point2I(500, 500)), pixel -> Color3F.simplexFractionalBrownianMotion(new Color3F(0.75F, 0.5F, 0.75F), new Point2F(pixel.getX(), pixel.getY()), new Point2F(), new Point2F(800.0F, 800.0F)));
+		
+		final Material material1 = new LambertianMaterial();
+		final Material material2 = new LambertianMaterial();
+		
+		final Shape3F shape1 = new Plane3F();
+		final Shape3F shape2 = new Sphere3F(10.0F);
+		
+		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
+		final Texture texture12 = new ConstantTexture();
+		final Texture texture13 = new ConstantTexture();
+		final Texture texture21 = new MarbleTexture();
+		final Texture texture22 = new ConstantTexture();
+		final Texture texture23 = new ConstantTexture();
+		
+		final Matrix44F matrix1 = Matrix44F.identity();
+		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 20.0F), Matrix44F.rotateY(AngleF.degrees(90.0F)));//Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureMarbleTexture");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
 		

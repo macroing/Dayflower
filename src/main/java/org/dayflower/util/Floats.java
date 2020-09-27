@@ -741,6 +741,37 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns a {@code float} with noise computed by a Perlin-based turbulence algorithm using the coordinates X, Y and Z.
+	 * 
+	 * @param x the X-coordinate
+	 * @param y the Y-coordinate
+	 * @param z the Z-coordinate
+	 * @param octaves the number of iterations to perform
+	 * @return a {@code float} with noise computed by a Perlin-based turbulence algorithm using the coordinates X, Y and Z
+	 */
+	public static float perlinTurbulenceXYZ(final float x, final float y, final float z, final int octaves) {
+		float currentX = x;
+		float currentY = y;
+		float currentZ = z;
+		
+		float noise = abs(perlinNoiseXYZ(x, y, z));
+		
+		float weight = 1.0F;
+		
+		for(int i = 1; i < octaves; i++) {
+			weight *= 2.0F;
+			
+			currentX = x * weight;
+			currentY = y * weight;
+			currentZ = z * weight;
+			
+			noise += abs(perlinNoiseXYZ(currentX, currentY, currentZ)) / weight;
+		}
+		
+		return noise;
+	}
+	
+	/**
 	 * Returns {@code base} raised to the power of {@code exponent}.
 	 * <p>
 	 * For the full documentation of this method, see {@link Math#pow(double, double)}.

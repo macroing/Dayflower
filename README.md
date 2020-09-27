@@ -65,6 +65,7 @@ Supported Features
 * Checkerboard
 * Constant
 * Image
+* Marble
 * Simplex Fractional Brownian Motion
 * Surface Normal
 * UV

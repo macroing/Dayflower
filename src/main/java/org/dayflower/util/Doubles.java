@@ -740,6 +740,37 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns a {@code double} with noise computed by a Perlin-based turbulence algorithm using the coordinates X, Y and Z.
+	 * 
+	 * @param x the X-coordinate
+	 * @param y the Y-coordinate
+	 * @param z the Z-coordinate
+	 * @param octaves the number of iterations to perform
+	 * @return a {@code double} with noise computed by a Perlin-based turbulence algorithm using the coordinates X, Y and Z
+	 */
+	public static double perlinTurbulenceXYZ(final double x, final double y, final double z, final int octaves) {
+		double currentX = x;
+		double currentY = y;
+		double currentZ = z;
+		
+		double noise = abs(perlinNoiseXYZ(x, y, z));
+		
+		double weight = 1.0D;
+		
+		for(int i = 1; i < octaves; i++) {
+			weight *= 2.0D;
+			
+			currentX = x * weight;
+			currentY = y * weight;
+			currentZ = z * weight;
+			
+			noise += abs(perlinNoiseXYZ(currentX, currentY, currentZ)) / weight;
+		}
+		
+		return noise;
+	}
+	
+	/**
 	 * Returns {@code base} raised to the power of {@code exponent}.
 	 * <p>
 	 * For the full documentation of this method, see {@link Math#pow(double, double)}.

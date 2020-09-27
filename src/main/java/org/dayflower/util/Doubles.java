@@ -123,6 +123,16 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code value} is infinitely large in magnitude, {@code false} otherwise.
+	 * 
+	 * @param value a {@code double} value
+	 * @return {@code true} if, and only if, {@code value} is infinitely large in magnitude, {@code false} otherwise
+	 */
+	public static boolean isInfinite(final double value) {
+		return Double.isInfinite(value);
+	}
+	
+	/**
 	 * Returns {@code true} if, and only if, {@code value} is {@code Double.NaN}, {@code false} otherwise.
 	 * 
 	 * @param value a {@code double} value
@@ -336,6 +346,70 @@ public class Doubles {
 	 */
 	public static double cos(final double angleRadians) {
 		return Math.cos(angleRadians);
+	}
+	
+	/**
+	 * Returns the error of {@code value}.
+	 * 
+	 * @param value a {@code double} value
+	 * @return the error of {@code value}
+	 */
+	public static double error(final double value) {
+		final int sign = value < 0.0D ? -1 : +1;
+		
+		final double a1 = +0.254829592D;
+		final double a2 = -0.284496736D;
+		final double a3 = +1.421413741D;
+		final double a4 = -1.453152027D;
+		final double a5 = +1.061405429D;
+		
+		final double p = 0.3275911D;
+		
+		final double x = abs(value);
+		final double y = 1.0D / (1.0D + p * x);
+		final double z = 1.0D - (((((a5 * y + a4) * y) + a3) * y + a2) * y + a1) * y * exp(-x * x);
+		
+		return sign * z;
+	}
+	
+	/**
+	 * Returns the reciprocal (or inverse) error of {@code value}.
+	 * 
+	 * @param value a {@code double} value
+	 * @return the reciprocal (or inverse) error of {@code value}
+	 */
+	public static double errorReciprocal(final double value) {
+		double p = 0.0D;
+		double x = saturate(value, -0.99999D, +0.99999D);
+		double y = -log((1.0D - x) * (1.0D + x));
+		
+		if(y < 5.0D) {
+			y = y - 2.5D;
+			
+			p = +2.81022636e-08D;
+			p = +3.43273939e-07D + p * y;
+			p = -3.5233877e-06D  + p * y;
+			p = -4.39150654e-06D + p * y;
+			p = +0.00021858087D  + p * y;
+			p = -0.00125372503D  + p * y;
+			p = -0.00417768164D  + p * y;
+			p = +0.246640727D    + p * y;
+			p = +1.50140941D     + p * y;
+		} else {
+			y = sqrt(y) - 3.0D;
+			
+			p = -0.000200214257D;
+			p = +0.000100950558D + p * y;
+			p = +0.00134934322D  + p * y;
+			p = -0.00367342844D  + p * y;
+			p = +0.00573950773D  + p * y;
+			p = -0.0076224613D   + p * y;
+			p = +0.00943887047D  + p * y;
+			p = +1.00167406D     + p * y;
+			p = +2.83297682D     + p * y;
+		}
+		
+		return p * x;
 	}
 	
 	/**

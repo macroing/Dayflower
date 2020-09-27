@@ -171,6 +171,15 @@ public final class Vector3F {
 	}
 	
 	/**
+	 * Returns the cosine of the angle theta in quartic form.
+	 * 
+	 * @return the cosine of the angle theta in quartic form
+	 */
+	public float cosThetaQuartic() {
+		return cosThetaSquared() * cosThetaSquared();
+	}
+	
+	/**
 	 * Returns the cosine of the angle theta in squared form.
 	 * 
 	 * @return the cosine of the angle theta in squared form
@@ -330,6 +339,15 @@ public final class Vector3F {
 	}
 	
 	/**
+	 * Returns the tangent of the angle theta in absolute form.
+	 * 
+	 * @return the tangent of the angle theta in absolute form
+	 */
+	public float tanThetaAbs() {
+		return abs(tanTheta());
+	}
+	
+	/**
 	 * Returns the tangent of the angle theta in squared form.
 	 * 
 	 * @return the tangent of the angle theta in squared form
@@ -472,6 +490,24 @@ public final class Vector3F {
 	 */
 	public static Vector3F directionNormalized(final Point3F eye, final Point3F lookAt) {
 		return normalize(direction(eye, lookAt));
+	}
+	
+	/**
+	 * Returns a new {@code Vector3F} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}.
+	 * <p>
+	 * This method is based on PBRT.
+	 * 
+	 * @param sinTheta the sine of the angle theta
+	 * @param cosTheta the cosine of the angle theta
+	 * @param phi the angle phi
+	 * @return a new {@code Vector3F} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}
+	 */
+	public static Vector3F directionSpherical(final float sinTheta, final float cosTheta, final float phi) {
+		final float component1 = sinTheta * cos(phi);
+		final float component2 = sinTheta * sin(phi);
+		final float component3 = cosTheta;
+		
+		return new Vector3F(component1, component2, component3);
 	}
 	
 	/**

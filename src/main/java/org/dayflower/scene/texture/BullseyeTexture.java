@@ -32,7 +32,7 @@ import org.dayflower.scene.Texture;
 /**
  * A {@code BullseyeTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between two other {@code Texture} instances in a bullseye pattern.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is immutable and therefore thread-safe if, and only if, both {@code Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

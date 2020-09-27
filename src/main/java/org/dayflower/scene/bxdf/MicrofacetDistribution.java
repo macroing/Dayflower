@@ -18,9 +18,12 @@
  */
 package org.dayflower.scene.bxdf;
 
+import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.log;
+import static org.dayflower.util.Floats.max;
+
 import java.lang.reflect.Field;
 
-import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
@@ -37,24 +40,41 @@ public abstract class MicrofacetDistribution {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public abstract Vector3F sampleN(final Vector3F o, final Point2F p);
+	public abstract Vector3F sampleN(final Vector3F o, final float u, final float v);
+	
+//	TODO: Add Javadocs!
+	public final boolean isSamplingVisibleArea() {
+		return this.isSamplingVisibleArea;
+	}
 	
 //	TODO: Add Javadocs!
 	public abstract float computeDifferentialArea(final Vector3F n);
 	
 //	TODO: Add Javadocs!
-	public abstract float computeLambda(final Vector3F v);
+	public abstract float computeLambda(final Vector3F o);
 	
 //	TODO: Add Javadocs!
-	public abstract float computeProbabilityDensityFunctionValue(final Vector3F o, final Vector3F n);
+	public final float computeProbabilityDensityFunctionValue(final Vector3F o, final Vector3F n) {
+		return this.isSamplingVisibleArea ? computeDifferentialArea(n) * computeShadowingAndMasking(o) * abs(Vector3F.dotProduct(o, n)) / o.cosThetaAbs() : computeDifferentialArea(n) * n.cosThetaAbs();
+	}
 	
 //	TODO: Add Javadocs!
-	public final float computeShadowingAndMasking(final Vector3F v) {
-		return 1.0F / (1.0F + computeLambda(v));
+	public final float computeShadowingAndMasking(final Vector3F o) {
+		return 1.0F / (1.0F + computeLambda(o));
 	}
 	
 //	TODO: Add Javadocs!
 	public final float computeShadowingAndMasking(final Vector3F o, final Vector3F i) {
 		return 1.0F / (1.0F + computeLambda(o) + computeLambda(i));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static float computeRoughnessToAlpha(final float roughness) {
+		final float x = max(roughness, 1.0e-3F);
+		final float y = log(x);
+		final float z = 1.62142F + 0.819955F * y + 0.1734F * y * y + 0.0171201F * y * y * y + 0.000640711F * y * y * y * y;
+		
+		return z;
 	}
 }

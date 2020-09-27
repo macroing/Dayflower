@@ -90,8 +90,8 @@ public final class Scenes {
 		final Material material04 = new LambertianMaterial();
 		final Material material05 = new LambertianMaterial();
 		final Material material06 = new LambertianMaterial();
-		final Material material07 = new ReflectionMaterial();
-		final Material material08 = new RefractionMaterial();
+		final Material material07 = new OrenNayarMaterial();//new ReflectionMaterial();
+		final Material material08 = new OrenNayarMaterial();//new RefractionMaterial();
 		final Material material09 = new LambertianMaterial();
 		
 		final Shape3F shape01 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F,  1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Bottom

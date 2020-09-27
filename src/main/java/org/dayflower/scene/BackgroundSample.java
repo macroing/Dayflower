@@ -18,20 +18,34 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code BackgroundSample} represents a sample produced by a {@link Background} instance.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class BackgroundSample {
 	private final Color3F radiance;
 	private final Ray3F ray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code BackgroundSample} instance.
+	 * <p>
+	 * If either {@code radiance} or {@code ray} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param radiance a {@link Color3F} instance representing the radiance associated with this {@code BackgroundSample} instance
+	 * @param ray a {@link Ray3F} instance representing the ray associated with this {@code BackgroundSample} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code radiance} or {@code ray} are {@code null}
+	 */
 	public BackgroundSample(final Color3F radiance, final Ray3F ray) {
 		this.radiance = Objects.requireNonNull(radiance, "radiance == null");
 		this.ray = Objects.requireNonNull(ray, "ray == null");
@@ -39,23 +53,42 @@ public final class BackgroundSample {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance representing the radiance associated with this {@code BackgroundSample} instance.
+	 * 
+	 * @return a {@code Color3F} instance representing the radiance associated with this {@code BackgroundSample} instance
+	 */
 	public Color3F getRadiance() {
 		return this.radiance;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Ray3F} instance representing the ray associated with this {@code BackgroundSample} instance.
+	 * 
+	 * @return a {@code Ray3F} instance representing the ray associated with this {@code BackgroundSample} instance
+	 */
 	public Ray3F getRay() {
 		return this.ray;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code BackgroundSample} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code BackgroundSample} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new BackgroundSample(%s, %s)", this.radiance, this.ray);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code BackgroundSample} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BackgroundSample}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code BackgroundSample} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BackgroundSample}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -71,7 +104,11 @@ public final class BackgroundSample {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code BackgroundSample} instance.
+	 * 
+	 * @return a hash code for this {@code BackgroundSample} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.radiance, this.ray);

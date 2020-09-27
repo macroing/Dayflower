@@ -31,7 +31,6 @@ import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -173,7 +172,17 @@ public final class PerezBackground implements Background {
 		return Color3F.minimumTo0(doRadiance(Vector3F.normalize(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis))));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples this {@code PerezBackground} instance from {@code intersection}.
+	 * <p>
+	 * Returns a {@code List} of {@link BackgroundSample} instances.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} instance to sample from
+	 * @return a {@code List} of {@code BackgroundSample} instances
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public List<BackgroundSample> sample(final Intersection intersection) {
 		final List<BackgroundSample> backgroundSamples = new ArrayList<>();

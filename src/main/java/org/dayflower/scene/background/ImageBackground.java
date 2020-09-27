@@ -19,7 +19,6 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -214,7 +213,17 @@ public class ImageBackground implements Background {
 		return doGetColorRGB(x, y);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples this {@code ImageBackground} instance from {@code intersection}.
+	 * <p>
+	 * Returns a {@code List} of {@link BackgroundSample} instances.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} instance to sample from
+	 * @return a {@code List} of {@code BackgroundSample} instances
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public List<BackgroundSample> sample(final Intersection intersection) {
 		Objects.requireNonNull(intersection, "intersection == null");

@@ -22,8 +22,10 @@ import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.solveQuadraticSystem;
+import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
 
@@ -100,7 +102,19 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 */
 	@Override
 	public BoundingSphere3F transform(final Matrix44F matrix) {
-		return new BoundingSphere3F(this.radius, Point3F.transform(matrix, this.center));
+		final Point3F center = Point3F.transform(matrix, this.center);
+		final Point3F x = Point3F.transform(matrix, new Point3F(this.center.getX() + this.radius, this.center.getY(), this.center.getZ()));
+		final Point3F y = Point3F.transform(matrix, new Point3F(this.center.getX(), this.center.getY() + this.radius, this.center.getZ()));
+		final Point3F z = Point3F.transform(matrix, new Point3F(this.center.getX(), this.center.getY(), this.center.getZ() + this.radius));
+		
+		final float distanceSquaredFromCenterToX = Point3F.distanceSquared(center, x);
+		final float distanceSquaredFromCenterToY = Point3F.distanceSquared(center, y);
+		final float distanceSquaredFromCenterToZ = Point3F.distanceSquared(center, z);
+		final float distanceSquared = max(distanceSquaredFromCenterToX, distanceSquaredFromCenterToY, distanceSquaredFromCenterToZ);
+		
+		final float radius = sqrt(distanceSquared);
+		
+		return new BoundingSphere3F(radius, center);
 	}
 	
 	/**

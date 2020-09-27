@@ -19,6 +19,7 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Doubles.solveQuartic;
+import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_DIVIDED_BY_2;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
@@ -72,7 +73,7 @@ public final class Torus3F implements Shape3F {
 	 * @param radiusOuter the outer radius of this {@code Torus3F} instance
 	 */
 	public Torus3F(final float radiusInner, final float radiusOuter) {
-		this.boundingVolume = new BoundingSphere3F(radiusOuter, new Point3F());
+		this.boundingVolume = new BoundingSphere3F(radiusInner + radiusOuter, new Point3F());
 		this.radiusInner = radiusInner;
 		this.radiusInnerSquared = radiusInner * radiusInner;
 		this.radiusOuter = radiusOuter;
@@ -112,7 +113,7 @@ public final class Torus3F implements Shape3F {
 		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
-		return Optional.empty();
+		return Optional.empty();//TODO: Implement!
 	}
 	
 	/**
@@ -327,38 +328,32 @@ public final class Torus3F implements Shape3F {
 	
 	/**
 	 * Returns the surface area of this {@code Torus3F} instance.
-	 * <p>
-	 * Note: This method has not been implemented yet.
 	 * 
 	 * @return the surface area of this {@code Torus3F} instance
 	 */
 	@Override
 	public float getSurfaceArea() {
-		return 0.0F;//TODO: Implement!
+		return 4.0F * PI * PI * this.radiusOuter * this.radiusInner;
 	}
 	
 	/**
 	 * Returns the surface area probability density function (PDF) value of this {@code Torus3F} instance.
-	 * <p>
-	 * Note: This method has not been implemented yet.
 	 * 
 	 * @return the surface area probability density function (PDF) value of this {@code Torus3F} instance
 	 */
 	@Override
 	public float getSurfaceAreaProbabilityDensityFunctionValue() {
-		return 0.0F;//TODO: Implement!
+		return 1.0F / getSurfaceArea();
 	}
 	
 	/**
 	 * Returns the volume of this {@code Torus3F} instance.
-	 * <p>
-	 * Note: This method has not been implemented yet.
 	 * 
 	 * @return the volume of this {@code Torus3F} instance
 	 */
 	@Override
 	public float getVolume() {
-		return 0.0F;//TODO: Implement!
+		return 2.0F * PI * PI * this.radiusOuter * this.radiusInnerSquared;
 	}
 	
 	/**

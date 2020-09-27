@@ -396,7 +396,7 @@ public final class PerezBackground implements Background {
 	}
 	
 	private void doSetOrthonormalBasis() {
-		this.orthonormalBasis = new OrthonormalBasis33F(Vector3F.y(), Vector3F.z(), Vector3F.x());
+		this.orthonormalBasis = new OrthonormalBasis33F(Vector3F.y(), Vector3F.x());
 	}
 	
 	private void doSetSunColorAndSunSpectralRadiance() {

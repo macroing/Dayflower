@@ -18,7 +18,6 @@
  */
 package org.dayflower.renderer;
 
-import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.sqrt;
@@ -197,6 +196,8 @@ public final class PathTracer implements Renderer {
 				
 				if(selectedBXDF.isDiracDistribution()) {
 					currentBounceDiracDistribution++;
+					
+//					radiance = Color3F.add(radiance, doGetRadianceBackground(throughput, intersection, materialResult, scene));
 				} else {
 					radiance = Color3F.add(radiance, doGetRadianceLights(throughput, materialResult, primitive, scene, surfaceIntersection, currentRayDirectionO));
 //					radiance = Color3F.add(radiance, doGetRadianceLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
@@ -487,7 +488,11 @@ public final class PathTracer implements Renderer {
 		
 		final Background background = scene.getBackground();
 		
+		final BXDF selectedBXDF = materialResult.getSelectedBXDF();
+		
 		final Color3F color = materialResult.getColor();
+		
+		final float selectedBXDFWeight = materialResult.getSelectedBXDFWeight();
 		
 		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 		
@@ -497,11 +502,30 @@ public final class PathTracer implements Renderer {
 		
 		for(final BackgroundSample backgroundSample : backgroundSamples) {
 			if(!scene.intersects(backgroundSample.getRay())) {
-				radiance = Color3F.add(radiance, Color3F.multiply(color, Color3F.multiply(backgroundSample.getRadiance(), Vector3F.dotProduct(backgroundSample.getRay().getDirection(), surfaceNormal))));
+				final Vector3F d = backgroundSample.getRay().getDirection();
+				final Vector3F o = Vector3F.negate(surfaceIntersection.getRay().getDirection());
+				final Vector3F n = surfaceNormal;
+				final Vector3F i = Vector3F.negate(d);
+				
+				final BXDFResult selectedBXDFResult = selectedBXDF.evaluateSolidAngle(o, n, i);
+				
+				if(selectedBXDFResult.isFinite()) {
+					final float probabilityDensityFunctionValue = selectedBXDFResult.getProbabilityDensityFunctionValue();
+					final float reflectance = selectedBXDFResult.getReflectance();
+					
+					if(probabilityDensityFunctionValue > 0.0F && reflectance > 0.0F) {
+						final Color3F color1 = Color3F.multiply(backgroundSample.getRadiance(), color);
+						final Color3F color2 = Color3F.multiply(color1, reflectance);
+						final Color3F color3 = Color3F.multiply(color2, abs(Vector3F.dotProduct(d, n)));
+						final Color3F color4 = Color3F.divide(color3, probabilityDensityFunctionValue * selectedBXDFWeight);
+						
+						radiance = Color3F.add(radiance, color4);
+					}
+				}
 			}
 		}
 		
-		radiance = Color3F.multiply(throughput, Color3F.divide(radiance, PI));
+		radiance = Color3F.multiply(throughput, radiance);
 		
 		return radiance;
 	}

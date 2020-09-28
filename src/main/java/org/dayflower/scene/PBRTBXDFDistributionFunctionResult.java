@@ -60,7 +60,11 @@ public final class PBRTBXDFDistributionFunctionResult {
 		return this.value;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code PBRTBXDFDistributionFunctionResult} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new PBRTBXDFDistributionFunctionResult(%s, %s, %s, %+.10f)", this.incoming, this.outgoing, this.value, Float.valueOf(this.probabilityDensityFunctionValue));
@@ -76,7 +80,14 @@ public final class PBRTBXDFDistributionFunctionResult {
 		return this.outgoing;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code PBRTBXDFDistributionFunctionResult} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PBRTBXDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code PBRTBXDFDistributionFunctionResult} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PBRTBXDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -101,7 +112,11 @@ public final class PBRTBXDFDistributionFunctionResult {
 		return this.probabilityDensityFunctionValue;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * 
+	 * @return a hash code for this {@code PBRTBXDFDistributionFunctionResult} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.incoming, this.outgoing, this.value, Float.valueOf(this.probabilityDensityFunctionValue));

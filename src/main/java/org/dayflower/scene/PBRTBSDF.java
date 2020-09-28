@@ -23,11 +23,13 @@ import java.lang.reflect.Field;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 
+//TODO: Add Javadocs!
 public final class PBRTBSDF {
 	
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public PBRTBSDF() {
 		
 	}
@@ -35,11 +37,13 @@ public final class PBRTBSDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	BxDF: f(Vector3f &wo, Vector3f &wi)
+//	TODO: Add Javadocs!
 	public PBRTBSDFResult evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
 		return null;
 	}
 	
 //	BxDF: Sample_f(Vector3f &wo, Vector3f *wi, Point2f &sample, Float *pdf);
+//	TODO: Add Javadocs!
 	public PBRTBSDFResult sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
 		return null;
 	}

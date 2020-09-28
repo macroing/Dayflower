@@ -24,6 +24,7 @@ import java.util.Objects;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
+//TODO: Add Javadocs!
 public final class PBRTBSDFResult {
 	private final PBRTBXDFType sampledBXDFType;
 	private final Color3F distributionFunctionValue;
@@ -33,6 +34,7 @@ public final class PBRTBSDFResult {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public PBRTBSDFResult(final PBRTBXDFType sampledBXDFType, final Color3F distributionFunctionValue, final Vector3F incoming, final Vector3F outgoing, final float probabilityDensityFunctionValue) {
 		this.sampledBXDFType = Objects.requireNonNull(sampledBXDFType, "sampledBXDFType == null");
 		this.distributionFunctionValue = Objects.requireNonNull(distributionFunctionValue, "distributionFunctionValue == null");
@@ -43,22 +45,27 @@ public final class PBRTBSDFResult {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public PBRTBXDFType getSampledBXDFType() {
 		return this.sampledBXDFType;
 	}
 	
+//	TODO: Add Javadocs!
 	public Color3F getDistributionFunctionValue() {
 		return this.distributionFunctionValue;
 	}
 	
+//	TODO: Add Javadocs!
 	public Vector3F getIncoming() {
 		return this.incoming;
 	}
 	
+//	TODO: Add Javadocs!
 	public Vector3F getOutgoing() {
 		return this.outgoing;
 	}
 	
+//	TODO: Add Javadocs!
 	public float getProbabilityDensityFunctionValue() {
 		return this.probabilityDensityFunctionValue;
 	}

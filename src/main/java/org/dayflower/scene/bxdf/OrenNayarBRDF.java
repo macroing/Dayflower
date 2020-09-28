@@ -121,7 +121,7 @@ public final class OrenNayarBRDF implements BXDF {
 		final float nDotI = Vector3F.dotProduct(n, i);
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
-		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F(Vector3F.x(), Vector3F.y(), Vector3F.z());
+		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F();
 		
 		final Vector3F wI = Vector3F.normalize(Vector3F.transformReverse(Vector3F.negate(i), orthonormalBasisLocal));
 		final Vector3F wO = Vector3F.normalize(Vector3F.transformReverse(o, orthonormalBasisLocal));
@@ -201,7 +201,7 @@ public final class OrenNayarBRDF implements BXDF {
 		final Vector3F iTransformed = Vector3F.normalize(Vector3F.transform(iLocalSpace, orthonormalBasis));
 		final Vector3F i = nDotO < 0.0F ? Vector3F.negate(iTransformed) : iTransformed;
 		
-		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F(Vector3F.x(), Vector3F.y(), Vector3F.z());
+		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F();
 		
 		final Vector3F wI = Vector3F.normalize(Vector3F.transformReverse(Vector3F.negate(i), orthonormalBasisLocal));
 		final Vector3F wO = Vector3F.normalize(Vector3F.transformReverse(o, orthonormalBasisLocal));
@@ -317,7 +317,7 @@ public final class OrenNayarBRDF implements BXDF {
 		final float nDotI = Vector3F.dotProduct(n, i);
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
-		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F(Vector3F.x(), Vector3F.y(), Vector3F.z());
+		final OrthonormalBasis33F orthonormalBasisLocal = new OrthonormalBasis33F();
 		
 		final Vector3F wI = Vector3F.normalize(Vector3F.transformReverse(Vector3F.negate(i), orthonormalBasisLocal));
 		final Vector3F wO = Vector3F.normalize(Vector3F.transformReverse(o, orthonormalBasisLocal));

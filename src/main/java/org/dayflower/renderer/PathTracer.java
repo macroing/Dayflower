@@ -109,6 +109,8 @@ public final class PathTracer implements Renderer {
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
 		
+		final List<Light> lights = scene.getLights();
+		
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
 			final long currentTimeMillis1 = System.currentTimeMillis();
 			
@@ -122,7 +124,7 @@ public final class PathTracer implements Renderer {
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
 						
-						final Color3F colorRGB = doGetRadiance(ray, scene, rendererConfiguration);
+						final Color3F colorRGB = doGetRadiance(lights, ray, scene, rendererConfiguration);
 //						final Color3F colorRGB = doGetRadiance2(ray, scene, rendererConfiguration);
 //						final Color3F colorRGB = doGetRadiance3(ray, scene, rendererConfiguration, 1);
 						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
@@ -147,7 +149,7 @@ public final class PathTracer implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Color3F doGetRadiance(final Ray3F ray, final Scene scene, final RendererConfiguration rendererConfiguration) {
+	private static Color3F doGetRadiance(final List<Light> lights, final Ray3F ray, final Scene scene, final RendererConfiguration rendererConfiguration) {
 		final int maximumBounce = rendererConfiguration.getMaximumBounce();
 		final int minimumBounceRussianRoulette = rendererConfiguration.getMinimumBounceRussianRoulette();
 		
@@ -199,7 +201,7 @@ public final class PathTracer implements Renderer {
 					
 //					radiance = Color3F.add(radiance, doGetRadianceBackground(throughput, intersection, materialResult, scene));
 				} else {
-					radiance = Color3F.add(radiance, doGetRadianceLights(throughput, materialResult, primitive, scene, surfaceIntersection, currentRayDirectionO));
+					radiance = Color3F.add(radiance, doGetRadianceLights(throughput, lights, materialResult, primitive, scene, surfaceIntersection, currentRayDirectionO));
 //					radiance = Color3F.add(radiance, doGetRadianceLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
 //					radiance = Color3F.add(radiance, doGetRadianceBackground(throughput, intersection, materialResult, scene));
 				}
@@ -577,12 +579,22 @@ public final class PathTracer implements Renderer {
 		return radiance;
 	}
 	
-	private static Color3F doGetRadianceLights(final Color3F throughput, final MaterialResult materialResult, final Primitive primitiveToSkip, final Scene scene, final SurfaceIntersection3F surfaceIntersection, final Vector3F directionO) {
-		Color3F radiance = Color3F.BLACK;
+	private static Color3F doGetRadianceLights(final Color3F throughput, final List<Light> lights, final MaterialResult materialResult, final Primitive primitiveToSkip, final Scene scene, final SurfaceIntersection3F surfaceIntersection, final Vector3F directionO) {
+		float radianceR = 0.0F;
+		float radianceG = 0.0F;
+		float radianceB = 0.0F;
 		
 		final BXDF selectedBXDF = materialResult.getSelectedBXDF();
 		
 		final Color3F color = materialResult.getColor();
+		
+		final float colorR = color.getR();
+		final float colorG = color.getG();
+		final float colorB = color.getB();
+		
+		final float throughputR = throughput.getR();
+		final float throughputG = throughput.getG();
+		final float throughputB = throughput.getB();
 		
 		final float selectedBXDFWeight = materialResult.getSelectedBXDFWeight();
 		
@@ -592,7 +604,7 @@ public final class PathTracer implements Renderer {
 		
 		final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
 		
-		for(final Light light : scene.getLights()) {
+		for(final Light light : lights) {
 			if(light instanceof PrimitiveLight) {
 				final Primitive primitive = PrimitiveLight.class.cast(light).getPrimitive();
 				
@@ -600,7 +612,9 @@ public final class PathTracer implements Renderer {
 					continue;
 				}
 				
-				Color3F radianceLight = Color3F.BLACK;
+				float radianceLightR = 0.0F;
+				float radianceLightG = 0.0F;
+				float radianceLightB = 0.0F;
 				
 				final int samples = 1;
 				
@@ -632,15 +646,16 @@ public final class PathTracer implements Renderer {
 									final Intersection intersection = optionalIntersection.get();
 									
 									if(primitive == intersection.getPrimitive()) {
-										final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingBalanceHeuristic(probabilityDensityFunctionValueA1, probabilityDensityFunctionValueB1, 1, 1);
+										final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA1, probabilityDensityFunctionValueB1, 1, 1);
 										
-										final Color3F color1 = Color3F.multiply(primitive.calculateEmittance(intersection), color);
-										final Color3F color2 = Color3F.multiply(color1, reflectance);
-										final Color3F color3 = Color3F.multiply(color2, abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal)));
-										final Color3F color4 = Color3F.multiply(color3, multipleImportanceSampleWeightLight);
-										final Color3F color5 = Color3F.divide(color4, probabilityDensityFunctionValueA1 * selectedBXDFWeight);
+										final Color3F emittance = primitive.calculateEmittance(intersection);
 										
-										radianceLight = Color3F.add(radianceLight, color5);
+										final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
+										final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA1 * selectedBXDFWeight);
+										
+										radianceLightR += emittance.getR() * colorR * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+										radianceLightG += emittance.getG() * colorG * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+										radianceLightB += emittance.getB() * colorB * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
 									}
 								}
 							}
@@ -668,13 +683,15 @@ public final class PathTracer implements Renderer {
 									if(probabilityDensityFunctionValueB2 > 0.0F) {
 										final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA2, probabilityDensityFunctionValueB2, 1, 1);
 										
-										final Color3F color1 = Color3F.multiply(primitive.calculateEmittance(intersection), color);
-										final Color3F color2 = Color3F.multiply(color1, reflectance);
-										final Color3F color3 = Color3F.multiply(color2, abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal)));
-										final Color3F color4 = Color3F.multiply(color3, multipleImportanceSampleWeightBRDF);
-										final Color3F color5 = Color3F.divide(color4, probabilityDensityFunctionValueA2 * selectedBXDFWeight);
+										final Color3F emittance = primitive.calculateEmittance(intersection);
 										
-										radianceLight = Color3F.add(radianceLight, color5);
+										final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
+										final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA2 * selectedBXDFWeight);
+										
+										radianceLightR += emittance.getR() * colorR * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+										radianceLightG += emittance.getG() * colorG * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+										radianceLightB += emittance.getB() * colorB * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+
 									}
 								}
 							}
@@ -682,10 +699,14 @@ public final class PathTracer implements Renderer {
 					}
 				}
 				
-				radiance = Color3F.add(radiance, Color3F.multiply(throughput, Color3F.divide(radianceLight, samples)));
+				final float samplesReciprocal = 1.0F / samples;
+				
+				radianceR += throughputR * (radianceLightR * samplesReciprocal);
+				radianceG += throughputG * (radianceLightG * samplesReciprocal);
+				radianceB += throughputB * (radianceLightB * samplesReciprocal);
 			}
 		}
 		
-		return radiance;
+		return new Color3F(radianceR, radianceG, radianceB);
 	}
 }

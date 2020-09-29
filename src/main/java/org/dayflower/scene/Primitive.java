@@ -195,7 +195,12 @@ public final class Primitive {
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		if(this.boundingVolume.intersects(ray, tMinimum, tMaximum)) {
-			final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionObjectSpace = this.shape.intersection(Ray3F.transform(this.worldToObject, ray));
+			final Ray3F rayObjectSpace = Ray3F.transform(this.worldToObject, ray);
+			
+			final float tMinimumObjectSpace = tMinimum;
+			final float tMaximumObjectSpace = doTransformT(this.worldToObject, ray, rayObjectSpace, tMaximum);
+			
+			final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionObjectSpace = this.shape.intersection(rayObjectSpace, tMinimumObjectSpace, tMaximumObjectSpace);
 			
 			if(optionalSurfaceIntersectionObjectSpace.isPresent()) {
 				final SurfaceIntersection3F surfaceIntersectionObjectSpace = optionalSurfaceIntersectionObjectSpace.get();
@@ -426,7 +431,10 @@ public final class Primitive {
 		final Ray3F rayWorldSpace = ray;
 		final Ray3F rayObjectSpace = Ray3F.transform(this.worldToObject, rayWorldSpace);
 		
-		final float tObjectSpace = this.shape.intersectionT(rayObjectSpace);
+		final float tMinimumObjectSpace = tMinimum;
+		final float tMaximumObjectSpace = doTransformT(this.worldToObject, rayWorldSpace, rayObjectSpace, tMaximum);
+		
+		final float tObjectSpace = this.shape.intersectionT(rayObjectSpace, tMinimumObjectSpace, tMaximumObjectSpace);
 		
 		if(isNaN(tObjectSpace)) {
 			return Float.NaN;
@@ -551,5 +559,11 @@ public final class Primitive {
 		this.worldToObject = Objects.requireNonNull(worldToObject, "worldToObject == null");
 		this.objectToWorld = Matrix44F.inverse(worldToObject);
 		this.boundingVolume = this.shape.getBoundingVolume().transform(this.objectToWorld);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static float doTransformT(final Matrix44F matrix, final Ray3F rayOldSpace, final Ray3F rayNewSpace, final float t) {
+		return t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transform(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 }

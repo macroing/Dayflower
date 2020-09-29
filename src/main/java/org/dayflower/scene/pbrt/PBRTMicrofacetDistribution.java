@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf;
+package org.dayflower.scene.pbrt;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.log;
@@ -27,13 +27,13 @@ import java.lang.reflect.Field;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
-public abstract class MicrofacetDistribution {
+public abstract class PBRTMicrofacetDistribution {
 	private final boolean isSamplingVisibleArea;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	protected MicrofacetDistribution(final boolean isSamplingVisibleArea) {
+	protected PBRTMicrofacetDistribution(final boolean isSamplingVisibleArea) {
 		this.isSamplingVisibleArea = isSamplingVisibleArea;
 	}
 	

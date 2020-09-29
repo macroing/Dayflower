@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.material;
+package org.dayflower.scene.pbrt;
 
 import java.lang.reflect.Field;
 
@@ -26,9 +26,9 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.MaterialResult;
 
 //TODO: Add Javadocs!
-public final class TorranceSparrowMaterial implements Material {
+public final class PBRTTorranceSparrowReflectionMaterial implements Material {
 //	TODO: Add Javadocs!
-	public TorranceSparrowMaterial() {
+	public PBRTTorranceSparrowReflectionMaterial() {
 		
 	}
 	

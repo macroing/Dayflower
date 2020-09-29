@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.pbrt;
 
 import java.util.Objects;
 
@@ -24,6 +24,8 @@ import java.util.Objects;
  * A {@code PBRTBXDFType} contains information about the behaviour for a BRDF (Bidirectional Reflectance Distribution Function) or a BTDF (Bidirectional Transmittance Distribution Function).
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * Note: This class will change name from {@code PBRTBXDFType} to {@code BXDFType} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

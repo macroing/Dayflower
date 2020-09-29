@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.pbrt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,8 @@ import org.dayflower.util.Lists;
  * A {@code PBRTBXDFReflectanceFunctionResult} contains the result produced by computing the reflectance function by a {@link PBRTBXDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * Note: This class will change name from {@code PBRTBXDFReflectanceFunctionResult} to {@code BXDFReflectanceFunctionResult} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

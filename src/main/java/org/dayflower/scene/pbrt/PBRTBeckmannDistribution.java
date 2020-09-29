@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf;
+package org.dayflower.scene.pbrt;
 
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.abs;
@@ -41,14 +41,14 @@ import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
-public final class BeckmannDistribution extends MicrofacetDistribution {
+public final class PBRTBeckmannDistribution extends PBRTMicrofacetDistribution {
 	private final float alphaX;
 	private final float alphaY;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public BeckmannDistribution(final boolean isSamplingVisibleArea, final float alphaX, final float alphaY) {
+	public PBRTBeckmannDistribution(final boolean isSamplingVisibleArea, final float alphaX, final float alphaY) {
 		super(isSamplingVisibleArea);
 		
 		this.alphaX = max(alphaX, 0.001F);

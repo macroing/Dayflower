@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.pbrt;
+
+import java.util.Optional;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
@@ -25,6 +27,8 @@ import org.dayflower.geometry.Vector3F;
  * A {@code PBRTBXDF} represents a BRDF (Bidirectional Reflectance Distribution Function) or a BTDF (Bidirectional Transmittance Distribution Function).
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
+ * <p>
+ * Note: This interface will change name from {@code PBRTBXDF} to {@code BXDF} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -33,7 +37,7 @@ public interface PBRTBXDF {
 	/**
 	 * Evaluates the distribution function.
 	 * <p>
-	 * Returns a {@code PBRTBXDFDistributionFunctionResult} with the result of the evaluation.
+	 * Returns an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the evaluation.
 	 * <p>
 	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -41,15 +45,15 @@ public interface PBRTBXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param incoming the incoming direction, called {@code wi} in PBRT
-	 * @return a {@code PBRTBXDFDistributionFunctionResult} with the result of the evaluation
+	 * @return an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
-	PBRTBXDFDistributionFunctionResult evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming);
+	Optional<PBRTBXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming);
 	
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns a {@code PBRTBXDFDistributionFunctionResult} with the result of the sampling.
+	 * Returns an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -57,27 +61,27 @@ public interface PBRTBXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return a {@code PBRTBXDFDistributionFunctionResult} with the result of the sampling
+	 * @return an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
-	PBRTBXDFDistributionFunctionResult sampleDistributionFunction(final Vector3F outgoing, final Point2F sample);
+	Optional<PBRTBXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample);
 	
 	/**
 	 * Computes the reflectance function.
 	 * <p>
-	 * Returns a {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation.
+	 * Returns an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation.
 	 * <p>
 	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param samples the samples to compute
-	 * @return a {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
+	 * @return an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
 	 */
-	PBRTBXDFReflectanceFunctionResult computeReflectanceFunction(final int samples);
+	Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples);
 	
 	/**
 	 * Computes the reflectance function.
 	 * <p>
-	 * Returns a {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation.
+	 * Returns an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation.
 	 * <p>
 	 * If {@code outgoing} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -85,8 +89,8 @@ public interface PBRTBXDF {
 	 * 
 	 * @param samples the samples to compute
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @return a {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
+	 * @return an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
 	 * @throws NullPointerException thrown if, and only if, {@code outgoing} is {@code null}
 	 */
-	PBRTBXDFReflectanceFunctionResult computeReflectanceFunction(final int samples, final Vector3F outgoing);
+	Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing);
 }

@@ -39,6 +39,18 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class Vector3F {
+	/**
+	 * A {@code Vector3F} instance given the component values {@code Float.NaN}, {@code Float.NaN} and {@code Float.NaN}.
+	 */
+	public static final Vector3F NaN = new Vector3F(Float.NaN, Float.NaN, Float.NaN);
+	
+	/**
+	 * A {@code Vector3F} instance given the component values {@code 0.0F}, {@code 0.0F} and {@code 0.0F}.
+	 */
+	public static final Vector3F ZERO = new Vector3F(0.0F, 0.0F, 0.0F);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final float component1;
 	private final float component2;
 	private final float component3;

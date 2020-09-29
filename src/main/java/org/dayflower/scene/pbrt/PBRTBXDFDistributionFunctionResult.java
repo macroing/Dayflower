@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.pbrt;
 
 import static org.dayflower.util.Floats.equal;
 
@@ -29,6 +29,8 @@ import org.dayflower.image.Color3F;
  * A {@code PBRTBXDFDistributionFunctionResult} contains the result produced by evaluating or sampling the distribution function by a {@link PBRTBXDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * Note: This class will change name from {@code PBRTBXDFDistributionFunctionResult} to {@code BXDFDistributionFunctionResult} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -40,6 +42,20 @@ public final class PBRTBXDFDistributionFunctionResult {
 	private final float probabilityDensityFunctionValue;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PBRTBXDFDistributionFunctionResult(Vector3F.NaN, Vector3F.NaN);
+	 * }
+	 * </pre>
+	 */
+	public PBRTBXDFDistributionFunctionResult() {
+		this(Vector3F.NaN, Vector3F.NaN);
+	}
 	
 	/**
 	 * Constructs a new {@code PBRTBXDFDistributionFunctionResult} instance.

@@ -39,6 +39,18 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class Vector3D {
+	/**
+	 * A {@code Vector3D} instance given the component values {@code Double.NaN}, {@code Double.NaN} and {@code Double.NaN}.
+	 */
+	public static final Vector3D NaN = new Vector3D(Double.NaN, Double.NaN, Double.NaN);
+	
+	/**
+	 * A {@code Vector3D} instance given the component values {@code 0.0D}, {@code 0.0D} and {@code 0.0D}.
+	 */
+	public static final Vector3D ZERO = new Vector3D(0.0D, 0.0D, 0.0D);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final double component1;
 	private final double component2;
 	private final double component3;

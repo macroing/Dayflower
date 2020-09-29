@@ -20,13 +20,19 @@ package org.dayflower.scene;
 
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code PBRTBXDFDistributionFunctionResult} contains the result produced by evaluating or sampling the distribution function by a {@link PBRTBXDF} instance.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class PBRTBXDFDistributionFunctionResult {
 	private final Color3F value;
 	private final Vector3F incoming;
@@ -35,17 +41,58 @@ public final class PBRTBXDFDistributionFunctionResult {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * <p>
+	 * If either {@code incoming} or {@code outgoing} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PBRTBXDFDistributionFunctionResult(incoming, outgoing, Color3F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param incoming a {@link Vector3F} instance with the incoming direction used by the distribution function
+	 * @param outgoing a {@code Vector3F} instance with the outgoing direction used by the distribution function
+	 * @throws NullPointerException thrown if, and only if, either {@code incoming} or {@code outgoing} are {@code null}
+	 */
 	public PBRTBXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing) {
 		this(incoming, outgoing, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * <p>
+	 * If either {@code incoming}, {@code outgoing} or {@code value} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PBRTBXDFDistributionFunctionResult(incoming, outgoing, value, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param incoming a {@link Vector3F} instance with the incoming direction used by the distribution function
+	 * @param outgoing a {@code Vector3F} instance with the outgoing direction used by the distribution function
+	 * @param value a {@link Color3F} instance with the result of the distribution function
+	 * @throws NullPointerException thrown if, and only if, either {@code incoming}, {@code outgoing} or {@code value} are {@code null}
+	 */
 	public PBRTBXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing, final Color3F value) {
 		this(incoming, outgoing, value, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * <p>
+	 * If either {@code incoming}, {@code outgoing} or {@code value} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param incoming a {@link Vector3F} instance with the incoming direction used by the distribution function
+	 * @param outgoing a {@code Vector3F} instance with the outgoing direction used by the distribution function
+	 * @param value a {@link Color3F} instance with the result of the distribution function
+	 * @param probabilityDensityFunctionValue a {@code float} with the probability density function (PDF) value computed by the distribution function
+	 * @throws NullPointerException thrown if, and only if, either {@code incoming}, {@code outgoing} or {@code value} are {@code null}
+	 */
 	public PBRTBXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing, final Color3F value, final float probabilityDensityFunctionValue) {
 		this.incoming = Objects.requireNonNull(incoming, "incoming == null");
 		this.outgoing = Objects.requireNonNull(outgoing, "outgoing == null");
@@ -55,7 +102,17 @@ public final class PBRTBXDFDistributionFunctionResult {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the result of the distribution function.
+	 * <p>
+	 * The {@code Color3F} instance represents the {@code Spectrum} instance returned by the following {@code BxDF} methods in PBRT:
+	 * <ul>
+	 * <li>{@code f(const Vector3f &wo, const Vector3f &wi)}</li>
+	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)}</li>
+	 * </ul>
+	 * 
+	 * @return a {@code Color3F} instance with the result of the distribution function
+	 */
 	public Color3F getValue() {
 		return this.value;
 	}
@@ -70,12 +127,32 @@ public final class PBRTBXDFDistributionFunctionResult {
 		return String.format("new PBRTBXDFDistributionFunctionResult(%s, %s, %s, %+.10f)", this.incoming, this.outgoing, this.value, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Vector3F} instance with the incoming direction used by the distribution function.
+	 * <p>
+	 * The {@code Vector3F} instance represents the {@code Vector3f} called {@code wi} and is passed as a parameter argument to the following {@code BxDF} methods in PBRT:
+	 * <ul>
+	 * <li>{@code f(const Vector3f &wo, const Vector3f &wi)}</li>
+	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)}</li>
+	 * </ul>
+	 * 
+	 * @return a {@code Vector3F} instance with the incoming direction used by the distribution function
+	 */
 	public Vector3F getIncoming() {
 		return this.incoming;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Vector3F} instance with the outgoing direction used by the distribution function.
+	 * <p>
+	 * The {@code Vector3F} instance represents the {@code Vector3f} called {@code wo} and is passed as a parameter argument to the following {@code BxDF} methods in PBRT:
+	 * <ul>
+	 * <li>{@code f(const Vector3f &wo, const Vector3f &wi)}</li>
+	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)}</li>
+	 * </ul>
+	 * 
+	 * @return a {@code Vector3F} instance with the outgoing direction used by the distribution function
+	 */
 	public Vector3F getOutgoing() {
 		return this.outgoing;
 	}
@@ -107,7 +184,16 @@ public final class PBRTBXDFDistributionFunctionResult {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code float} with the probability density function (PDF) value computed by the distribution function.
+	 * <p>
+	 * The {@code float} represents the {@code Float} called {@code pdf} and is passed as a parameter argument to the following {@code BxDF} method in PBRT:
+	 * <ul>
+	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)}</li>
+	 * </ul>
+	 * 
+	 * @return a {@code float} with the probability density function (PDF) value computed by the distribution function
+	 */
 	public float getProbabilityDensityFunctionValue() {
 		return this.probabilityDensityFunctionValue;
 	}

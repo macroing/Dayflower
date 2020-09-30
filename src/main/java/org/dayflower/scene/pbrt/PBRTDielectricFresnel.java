@@ -18,15 +18,18 @@
  */
 package org.dayflower.scene.pbrt;
 
+import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.saturate;
+import static org.dayflower.util.Floats.sqrt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
 
 /**
- * A {@code PBRTDielectricFresnel} is used to compute the Fresnel equation for dielectric materials.
+ * A {@code PBRTDielectricFresnel} is used to compute the Fresnel equation for materials that are dielectric.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
@@ -62,7 +65,7 @@ public final class PBRTDielectricFresnel implements PBRTFresnel {
 	 */
 	@Override
 	public Color3F evaluate(final float cosThetaI) {
-		return null;//TODO: Implement!
+		return new Color3F(doEvaluate(cosThetaI, this.etaI, this.etaT));
 	}
 	
 	/**
@@ -124,5 +127,32 @@ public final class PBRTDielectricFresnel implements PBRTFresnel {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.etaI), Float.valueOf(this.etaT));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static float doEvaluate(final float cosThetaI, final float etaI, final float etaT) {
+		final float saturateCosThetaI = saturate(cosThetaI, -1.0F, 1.0F);
+		
+		final boolean isEntering = saturateCosThetaI > 0.0F;
+		
+		final float currentCosThetaI = isEntering ? saturateCosThetaI : abs(saturateCosThetaI);
+		final float currentEtaI = isEntering ? etaI : etaT;
+		final float currentEtaT = isEntering ? etaT : etaI;
+		
+		final float currentSinThetaI = sqrt(max(0.0F, 1.0F - currentCosThetaI * currentCosThetaI));
+		final float currentSinThetaT = currentEtaI / currentEtaT * currentSinThetaI;
+		
+		if(currentSinThetaT >= 1.0F) {
+			return 1.0F;
+		}
+		
+		final float currentCosThetaT = sqrt(max(0.0F, 1.0F - currentSinThetaT * currentSinThetaT));
+		
+		final float reflectancePara = ((currentEtaT * currentCosThetaI) - (currentEtaI * currentCosThetaT)) / ((currentEtaT * currentCosThetaI) + (currentEtaI * currentCosThetaT));
+		final float reflectancePerp = ((currentEtaI * currentCosThetaI) - (currentEtaT * currentCosThetaT)) / ((currentEtaI * currentCosThetaI) + (currentEtaT * currentCosThetaT));
+		final float reflectance = (reflectancePara * reflectancePara + reflectancePerp * reflectancePerp) / 2.0F;
+		
+		return reflectance;
 	}
 }

@@ -52,6 +52,9 @@ import org.dayflower.util.BufferedImages;
  * An {@code ImageTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from an image.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * Because the {@link Image} class requires a lot of memory, this {@code ImageTexture} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code ImageTexture} instance
+ * from an {@code Image} instance. This is useful if the requirement is to generate an image procedurally.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -202,6 +205,15 @@ public final class ImageTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns the {@link AngleF} instance to use.
+	 * 
+	 * @return the {@code AngleF} instance to use
+	 */
+	public AngleF getAngle() {
+		return this.angle;
+	}
+	
+	/**
 	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -240,6 +252,15 @@ public final class ImageTexture implements Texture {
 	}
 	
 	/**
+	 * Returns the {@link Vector2F} instance to use as the scale factor.
+	 * 
+	 * @return the {@code Vector2F} instance to use as the scale factor
+	 */
+	public Vector2F getScale() {
+		return this.scale;
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code ImageTexture} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ImageTexture}, and their respective values are equal, {@code false} otherwise.
@@ -271,6 +292,33 @@ public final class ImageTexture implements Texture {
 	}
 	
 	/**
+	 * Returns the resolution.
+	 * 
+	 * @return the resolution
+	 */
+	public int getResolution() {
+		return this.resolution;
+	}
+	
+	/**
+	 * Returns the resolution of the X-axis.
+	 * 
+	 * @return the resolution of the X-axis
+	 */
+	public int getResolutionX() {
+		return this.resolutionX;
+	}
+	
+	/**
+	 * Returns the resolution of the Y-axis.
+	 * 
+	 * @return the resolution of the Y-axis
+	 */
+	public int getResolutionY() {
+		return this.resolutionY;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code ImageTexture} instance.
 	 * 
 	 * @return a hash code for this {@code ImageTexture} instance
@@ -278,6 +326,17 @@ public final class ImageTexture implements Texture {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.angle, this.scale, Integer.valueOf(this.resolution), Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), Integer.valueOf(Arrays.hashCode(this.image)));
+	}
+	
+	/**
+	 * Returns an {@code int[]} containing the image with its colors in packed form using the order ARGB.
+	 * <p>
+	 * Modifying the returned {@code int[]} will not affect this {@code ImageTexture} instance.
+	 * 
+	 * @return an {@code int[]} containing the image with its colors in packed form using the order ARGB
+	 */
+	public int[] getImage() {
+		return this.image.clone();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

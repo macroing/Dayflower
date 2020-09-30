@@ -204,6 +204,15 @@ public final class BullseyeTexture implements Texture {
 	}
 	
 	/**
+	 * Returns the {@link Point3F} instance used as the origin for the bullseye pattern.
+	 * 
+	 * @return the {@code Point3F} instance used as the origin for the bullseye pattern
+	 */
+	public Point3F getOrigin() {
+		return this.origin;
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code BullseyeTexture} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code BullseyeTexture} instance
@@ -211,6 +220,24 @@ public final class BullseyeTexture implements Texture {
 	@Override
 	public String toString() {
 		return String.format("new BullseyeTexture(%s, %s, %s, %+.10f)", this.origin, this.textureA, this.textureB, Float.valueOf(this.scale));
+	}
+	
+	/**
+	 * Returns one of the two {@link Texture} instances to use.
+	 * 
+	 * @return one of the two {@code Texture} instances to use
+	 */
+	public Texture getTextureA() {
+		return this.textureA;
+	}
+	
+	/**
+	 * Returns one of the two {@link Texture} instances to use.
+	 * 
+	 * @return one of the two {@code Texture} instances to use
+	 */
+	public Texture getTextureB() {
+		return this.textureB;
 	}
 	
 	/**
@@ -238,6 +265,15 @@ public final class BullseyeTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns the scale for the bullseye pattern.
+	 * 
+	 * @return the scale for the bullseye pattern
+	 */
+	public float getScale() {
+		return this.scale;
 	}
 	
 	/**

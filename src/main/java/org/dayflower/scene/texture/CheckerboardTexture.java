@@ -185,6 +185,15 @@ public final class CheckerboardTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns the {@link AngleF} instance to use.
+	 * 
+	 * @return the {@code AngleF} instance to use
+	 */
+	public AngleF getAngle() {
+		return this.angle;
+	}
+	
+	/**
 	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -215,6 +224,33 @@ public final class CheckerboardTexture implements Texture {
 	@Override
 	public String toString() {
 		return String.format("new CheckerboardTexture(%s, %s, %s, %s)", this.angle, this.textureA, this.textureB, this.scale);
+	}
+	
+	/**
+	 * Returns one of the two {@link Texture} instances to use.
+	 * 
+	 * @return one of the two {@code Texture} instances to use
+	 */
+	public Texture getTextureA() {
+		return this.textureA;
+	}
+	
+	/**
+	 * Returns one of the two {@link Texture} instances to use.
+	 * 
+	 * @return one of the two {@code Texture} instances to use
+	 */
+	public Texture getTextureB() {
+		return this.textureB;
+	}
+	
+	/**
+	 * Returns the {@link Vector2F} instance to use as the scale factor.
+	 * 
+	 * @return the {@code Vector2F} instance to use as the scale factor
+	 */
+	public Vector2F getScale() {
+		return this.scale;
 	}
 	
 	/**

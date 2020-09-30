@@ -137,6 +137,24 @@ public final class BlendTexture implements Texture {
 	}
 	
 	/**
+	 * Returns one of the two {@link Texture} instances to blend.
+	 * 
+	 * @return one of the two {@code Texture} instances to blend
+	 */
+	public Texture getTextureA() {
+		return this.textureA;
+	}
+	
+	/**
+	 * Returns one of the two {@link Texture} instances to blend.
+	 * 
+	 * @return one of the two {@code Texture} instances to blend
+	 */
+	public Texture getTextureB() {
+		return this.textureB;
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code BlendTexture} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BlendTexture}, and their respective values are equal, {@code false} otherwise.
@@ -163,6 +181,33 @@ public final class BlendTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns the factor to use for component 1 in the blending process.
+	 * 
+	 * @return the factor to use for component 1 in the blending process
+	 */
+	public float getTComponent1() {
+		return this.tComponent1;
+	}
+	
+	/**
+	 * Returns the factor to use for component 2 in the blending process.
+	 * 
+	 * @return the factor to use for component 2 in the blending process
+	 */
+	public float getTComponent2() {
+		return this.tComponent2;
+	}
+	
+	/**
+	 * Returns the factor to use for component 3 in the blending process.
+	 * 
+	 * @return the factor to use for component 3 in the blending process
+	 */
+	public float getTComponent3() {
+		return this.tComponent3;
 	}
 	
 	/**

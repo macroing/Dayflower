@@ -683,6 +683,26 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Adds {@code scalarRHS} to the component values of {@code colorLHS}.
+	 * <p>
+	 * Returns a new {@code Color3D} instance with the result of the addition.
+	 * <p>
+	 * If {@code colorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorLHS the {@code Color3D} instance on the left-hand side
+	 * @param scalarRHS the scalar value on the right-hand side
+	 * @return a new {@code Color3D} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
+	 */
+	public static Color3D add(final Color3D colorLHS, final double scalarRHS) {
+		final double component1 = colorLHS.component1 + scalarRHS;
+		final double component2 = colorLHS.component2 + scalarRHS;
+		final double component3 = colorLHS.component3 + scalarRHS;
+		
+		return new Color3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Adds the component values of {@code colorRHS} to the component values of {@code colorLHS}.
 	 * <p>
 	 * Returns a new {@code Color3D} instance with the result of the addition.
@@ -1520,6 +1540,23 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Returns a {@code Color3D} instance with its component values corresponding to the correctly rounded positive square root of the component values of {@code color}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3D} instance
+	 * @return a {@code Color3D} instance with its component values corresponding to the correctly rounded positive square root of the component values of {@code color}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3D sqrt(final Color3D color) {
+		final double component1 = Doubles.sqrt(color.component1);
+		final double component2 = Doubles.sqrt(color.component2);
+		final double component3 = Doubles.sqrt(color.component3);
+		
+		return new Color3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Subtracts the component values of {@code colorRHS} from the component values of {@code colorLHS}.
 	 * <p>
 	 * Returns a new {@code Color3D} instance with the result of the subtraction.
@@ -1535,6 +1572,26 @@ public final class Color3D {
 		final double component1 = colorLHS.component1 - colorRHS.component1;
 		final double component2 = colorLHS.component2 - colorRHS.component2;
 		final double component3 = colorLHS.component3 - colorRHS.component3;
+		
+		return new Color3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Subtracts {@code scalarRHS} from the component values of {@code colorLHS}.
+	 * <p>
+	 * Returns a new {@code Color3D} instance with the result of the subtraction.
+	 * <p>
+	 * If {@code colorLHS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorLHS the {@code Color3D} instance on the left-hand side
+	 * @param scalarRHS the scalar value on the right-hand side
+	 * @return a new {@code Color3D} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
+	 */
+	public static Color3D subtract(final Color3D colorLHS, final double scalarRHS) {
+		final double component1 = colorLHS.component1 - scalarRHS;
+		final double component2 = colorLHS.component2 - scalarRHS;
+		final double component3 = colorLHS.component3 - scalarRHS;
 		
 		return new Color3D(component1, component2, component3);
 	}

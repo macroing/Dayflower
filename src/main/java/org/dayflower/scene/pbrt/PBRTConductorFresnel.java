@@ -18,11 +18,24 @@
  */
 package org.dayflower.scene.pbrt;
 
-import java.lang.reflect.Field;
+import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.saturate;
+
+import java.util.Objects;
 
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code PBRTConductorFresnel} is used to compute the Fresnel equation for materials that are conductors.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * <p>
+ * Note: This class will change name from {@code PBRTConductorFresnel} to {@code ConductorFresnel} in the future.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class PBRTConductorFresnel implements PBRTFresnel {
 	private final float etaI;
 	private final float etaT;
@@ -30,7 +43,13 @@ public final class PBRTConductorFresnel implements PBRTFresnel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code PBRTConductorFresnel} instance.
+	 * 
+	 * @param etaI the index of refraction (IOR) for the incident media
+	 * @param etaT the index of refraction (IOR) for the transmitted media
+	 * @param k the absorption coefficient
+	 */
 	public PBRTConductorFresnel(final float etaI, final float etaT, final float k) {
 		this.etaI = etaI;
 		this.etaT = etaT;
@@ -39,9 +58,116 @@ public final class PBRTConductorFresnel implements PBRTFresnel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance that represents the amount of light reflected by the surface.
+	 * 
+	 * @param cosThetaI the cosine of the angle made by the incoming direction and the surface normal
+	 * @return a {@code Color3F} instance that represents the amount of light reflected by the surface
+	 */
 	@Override
 	public Color3F evaluate(final float cosThetaI) {
-		return null;
+		return doEvaluate(abs(cosThetaI), new Color3F(this.etaI), new Color3F(this.etaT), new Color3F(this.k));
+	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code PBRTConductorFresnel} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code PBRTConductorFresnel} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new PBRTConductorFresnel(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.etaI), Float.valueOf(this.etaT), Float.valueOf(this.k));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code PBRTConductorFresnel} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PBRTConductorFresnel}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code PBRTConductorFresnel} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PBRTConductorFresnel}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof PBRTConductorFresnel)) {
+			return false;
+		} else if(!equal(this.etaI, PBRTConductorFresnel.class.cast(object).etaI)) {
+			return false;
+		} else if(!equal(this.etaT, PBRTConductorFresnel.class.cast(object).etaT)) {
+			return false;
+		} else if(!equal(this.k, PBRTConductorFresnel.class.cast(object).k)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns the index of refraction (IOR) for the incident media.
+	 * 
+	 * @return the index of refraction (IOR) for the incident media
+	 */
+	public float getEtaI() {
+		return this.etaI;
+	}
+	
+	/**
+	 * Returns the index of refraction (IOR) for the transmitted media.
+	 * 
+	 * @return the index of refraction (IOR) for the transmitted media
+	 */
+	public float getEtaT() {
+		return this.etaT;
+	}
+	
+	/**
+	 * Returns the absorption coefficient.
+	 * 
+	 * @return the absorption coefficient
+	 */
+	public float getK() {
+		return this.k;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code PBRTConductorFresnel} instance.
+	 * 
+	 * @return a hash code for this {@code PBRTConductorFresnel} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Float.valueOf(this.etaI), Float.valueOf(this.etaT), Float.valueOf(this.k));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Color3F doEvaluate(final float cosThetaI, final Color3F etaI, final Color3F etaT, final Color3F k) {
+		final float saturateCosThetaI = saturate(cosThetaI, -1.0F, 1.0F);
+		
+		final Color3F eta = Color3F.divide(etaT, etaI);
+		final Color3F etaK = Color3F.divide(k, etaI);
+		
+		final float cosThetaISquared = saturateCosThetaI * saturateCosThetaI;
+		final float sinThetaISquared = 1.0F - cosThetaISquared;
+		
+		final Color3F etaSquared = Color3F.multiply(eta, eta);
+		final Color3F etaKSquared = Color3F.multiply(etaK, etaK);
+		
+		final Color3F t0 = Color3F.subtract(Color3F.subtract(etaSquared, etaKSquared), sinThetaISquared);
+		
+		final Color3F aSquaredPlusBSquared = Color3F.sqrt(Color3F.add(Color3F.multiply(t0, t0), Color3F.multiply(Color3F.multiply(etaSquared, 4.0F), etaKSquared)));
+		
+		final Color3F t1 = Color3F.add(aSquaredPlusBSquared, cosThetaISquared);
+		final Color3F t2 = Color3F.multiply(Color3F.sqrt(Color3F.multiply(Color3F.add(aSquaredPlusBSquared, t0), 0.5F)), 2.0F * saturateCosThetaI);
+		final Color3F t3 = Color3F.add(Color3F.multiply(aSquaredPlusBSquared, cosThetaISquared), sinThetaISquared * sinThetaISquared);
+		final Color3F t4 = Color3F.multiply(t2, sinThetaISquared);
+		
+		final Color3F reflectanceS = Color3F.divide(Color3F.subtract(t1, t2), Color3F.add(t1, t2));
+		final Color3F reflectanceP = Color3F.divide(Color3F.multiply(reflectanceS, Color3F.subtract(t3, t4)), Color3F.add(t3, t4));
+		final Color3F reflectance = Color3F.multiply(Color3F.add(reflectanceP, reflectanceS), 0.5F);
+		
+		return reflectance;
 	}
 }

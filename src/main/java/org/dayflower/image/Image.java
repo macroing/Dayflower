@@ -58,6 +58,14 @@ import org.dayflower.util.BufferedImages;
  * An {@code Image} is an image that can be drawn to.
  * <p>
  * This class stores individual pixels as {@link Pixel} instances.
+ * <p>
+ * An instance of this class requires a lot of memory. It is therefore not advised to keep multiple instances of it in memory at once, only to retrieve the pixel colors.
+ * <p>
+ * This class was specifically created for the following reasons:
+ * <ul>
+ * <li>To render in multiple passes with filtering as anti-aliasing.</li>
+ * <li>To create images procedurally.</li>
+ * </ul>
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

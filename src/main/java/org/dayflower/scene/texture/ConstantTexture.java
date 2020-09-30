@@ -56,7 +56,7 @@ public final class ConstantTexture implements Texture {
 	 * <p>
 	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param color a {@code Color3F} instance
+	 * @param color the {@code Color3F} instance to use
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public ConstantTexture(final Color3F color) {
@@ -64,6 +64,15 @@ public final class ConstantTexture implements Texture {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the {@link Color3F} instance to use.
+	 * 
+	 * @return the {@code Color3F} instance to use
+	 */
+	public Color3F getColor() {
+		return this.color;
+	}
 	
 	/**
 	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.

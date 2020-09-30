@@ -68,7 +68,13 @@ public abstract class PBRTBXDF {
 	 * @return an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
-	public abstract Optional<PBRTBXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming);
+	@SuppressWarnings("static-method")
+	public Optional<PBRTBXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
+		return Optional.empty();//TODO: Implement!
+	}
 	
 	/**
 	 * Samples the distribution function.
@@ -84,7 +90,13 @@ public abstract class PBRTBXDF {
 	 * @return an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
-	public abstract Optional<PBRTBXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample);
+	@SuppressWarnings("static-method")
+	public Optional<PBRTBXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(sample, "sample == null");
+		
+		return Optional.empty();//TODO: Implement!
+	}
 	
 	/**
 	 * Computes the reflectance function.
@@ -96,7 +108,8 @@ public abstract class PBRTBXDF {
 	 * @param samples the samples to compute
 	 * @return an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
 	 */
-	public final Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples) {
+	@SuppressWarnings("static-method")
+	public Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples) {
 		return Optional.empty();//TODO: Implement!
 	}
 	
@@ -114,7 +127,10 @@ public abstract class PBRTBXDF {
 	 * @return an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
 	 * @throws NullPointerException thrown if, and only if, {@code outgoing} is {@code null}
 	 */
-	public final Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing) {
+	@SuppressWarnings("static-method")
+	public Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		
 		return Optional.empty();//TODO: Implement!
 	}
 	
@@ -140,5 +156,11 @@ public abstract class PBRTBXDF {
 	 * @param incoming the incoming direction, called {@code wi} in PBRT
 	 * @return a {@code float} with the probability density function (PDF) value
 	 */
-	public abstract float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming);
+	@SuppressWarnings("static-method")
+	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
+		return 0.0F;//TODO: Implement!
+	}
 }

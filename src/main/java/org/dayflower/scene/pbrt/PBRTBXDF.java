@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene.pbrt;
 
+import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Point2F;
@@ -26,14 +28,32 @@ import org.dayflower.geometry.Vector3F;
 /**
  * A {@code PBRTBXDF} represents a BRDF (Bidirectional Reflectance Distribution Function) or a BTDF (Bidirectional Transmittance Distribution Function).
  * <p>
- * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
+ * All official implementations of this class are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
  * <p>
- * Note: This interface will change name from {@code PBRTBXDF} to {@code BXDF} in the future.
+ * Note: This class will change name from {@code PBRTBXDF} to {@code BXDF} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface PBRTBXDF {
+public abstract class PBRTBXDF {
+	private final PBRTBXDFType pBRTBXDFType;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code PBRTBXDF} instance.
+	 * <p>
+	 * If {@code pBRTBXDFType} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pBRTBXDFType a {@link PBRTBXDFType} that contains information about the behaviour for this {@code PBRTBXDF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code pBRTBXDFType} is {@code null}
+	 */
+	protected PBRTBXDF(final PBRTBXDFType pBRTBXDFType) {
+		this.pBRTBXDFType = Objects.requireNonNull(pBRTBXDFType, "pBRTBXDFType == null");
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Evaluates the distribution function.
 	 * <p>
@@ -48,7 +68,7 @@ public interface PBRTBXDF {
 	 * @return an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
-	Optional<PBRTBXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming);
+	public abstract Optional<PBRTBXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming);
 	
 	/**
 	 * Samples the distribution function.
@@ -64,7 +84,7 @@ public interface PBRTBXDF {
 	 * @return an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
-	Optional<PBRTBXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample);
+	public abstract Optional<PBRTBXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample);
 	
 	/**
 	 * Computes the reflectance function.
@@ -76,7 +96,9 @@ public interface PBRTBXDF {
 	 * @param samples the samples to compute
 	 * @return an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
 	 */
-	Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples);
+	public final Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples) {
+		return Optional.empty();//TODO: Implement!
+	}
 	
 	/**
 	 * Computes the reflectance function.
@@ -92,5 +114,16 @@ public interface PBRTBXDF {
 	 * @return an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
 	 * @throws NullPointerException thrown if, and only if, {@code outgoing} is {@code null}
 	 */
-	Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing);
+	public final Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing) {
+		return Optional.empty();//TODO: Implement!
+	}
+	
+	/**
+	 * Returns a {@link PBRTBXDFType} that contains information about the behaviour for this {@code PBRTBXDF} instance.
+	 * 
+	 * @return a {@code PBRTBXDFType} that contains information about the behaviour for this {@code PBRTBXDF} instance
+	 */
+	public final PBRTBXDFType getPBRTBXDFType() {
+		return this.pBRTBXDFType;
+	}
 }

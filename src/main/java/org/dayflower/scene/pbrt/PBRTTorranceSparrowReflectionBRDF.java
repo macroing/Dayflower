@@ -28,13 +28,15 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
-public final class PBRTTorranceSparrowReflectionBRDF implements PBRTBXDF {
+public final class PBRTTorranceSparrowReflectionBRDF extends PBRTBXDF {
 	private final PBRTMicrofacetDistribution pBRTMicrofacetDistribution;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 	public PBRTTorranceSparrowReflectionBRDF(final PBRTMicrofacetDistribution pBRTMicrofacetDistribution) {
+		super(null);//TODO: Implement!
+		
 		this.pBRTMicrofacetDistribution = Objects.requireNonNull(pBRTMicrofacetDistribution, "pBRTMicrofacetDistribution == null");
 	}
 	
@@ -43,7 +45,7 @@ public final class PBRTTorranceSparrowReflectionBRDF implements PBRTBXDF {
 //	TODO: Add Javadocs!
 	@Override
 	public Optional<PBRTBXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
-		return Optional.empty();
+		return Optional.empty();//TODO: Implement!
 	}
 	
 //	TODO: Add Javadocs!
@@ -82,18 +84,6 @@ public final class PBRTTorranceSparrowReflectionBRDF implements PBRTBXDF {
 		final float fresnel = 1.0F;
 		final float reflectance = this.pBRTMicrofacetDistribution.computeDifferentialArea(normalNormalized) * this.pBRTMicrofacetDistribution.computeShadowingAndMasking(outgoing, incoming) * fresnel / (4.0F * cosThetaAbsIncoming * cosThetaAbsOutgoing);
 		
-		return Optional.empty();
-	}
-	
-//	TODO: Add Javadocs!
-	@Override
-	public Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples) {
-		return Optional.empty();
-	}
-	
-//	TODO: Add Javadocs!
-	@Override
-	public Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing) {
-		return Optional.empty();
+		return Optional.empty();//TODO: Implement!
 	}
 }

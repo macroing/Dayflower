@@ -126,4 +126,19 @@ public abstract class PBRTBXDF {
 	public final PBRTBXDFType getPBRTBXDFType() {
 		return this.pBRTBXDFType;
 	}
+	
+	/**
+	 * Evaluates the probability density function (PDF).
+	 * <p>
+	 * Returns a {@code float} with the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code BxDF} method {@code Pdf(const Vector3f &wo, const Vector3f &wi)} that returns a {@code Float} in PBRT.
+	 * 
+	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @return a {@code float} with the probability density function (PDF) value
+	 */
+	public abstract float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming);
 }

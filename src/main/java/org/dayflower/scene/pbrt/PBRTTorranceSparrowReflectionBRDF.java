@@ -86,4 +86,10 @@ public final class PBRTTorranceSparrowReflectionBRDF extends PBRTBXDF {
 		
 		return Optional.empty();//TODO: Implement!
 	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {
+		return 0.0F;//TODO: Implement!
+	}
 }

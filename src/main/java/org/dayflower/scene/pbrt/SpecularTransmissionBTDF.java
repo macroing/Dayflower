@@ -21,6 +21,6 @@ package org.dayflower.scene.pbrt;
 import java.lang.reflect.Field;
 
 //TODO: Add Javadocs!
-public final class PBRTOrenNayarBRDF {
+public final class SpecularTransmissionBTDF {
 	
 }

@@ -26,38 +26,45 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 
 /**
- * A {@code PBRTBXDF} represents a BRDF (Bidirectional Reflectance Distribution Function) or a BTDF (Bidirectional Transmittance Distribution Function).
+ * A {@code BXDF} represents a BRDF (Bidirectional Reflectance Distribution Function) or a BTDF (Bidirectional Transmittance Distribution Function).
  * <p>
  * All official implementations of this class are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
- * <p>
- * Note: This class will change name from {@code PBRTBXDF} to {@code BXDF} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class PBRTBXDF {
-	private final PBRTBXDFType pBRTBXDFType;
+public abstract class BXDF {
+	private final BXDFType bXDFType;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code PBRTBXDF} instance.
+	 * Constructs a new {@code BXDF} instance.
 	 * <p>
-	 * If {@code pBRTBXDFType} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code bXDFType} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pBRTBXDFType a {@link PBRTBXDFType} that contains information about the behaviour for this {@code PBRTBXDF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code pBRTBXDFType} is {@code null}
+	 * @param bXDFType a {@link BXDFType} that contains information about the behaviour for this {@code BXDF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code bXDFType} is {@code null}
 	 */
-	protected PBRTBXDF(final PBRTBXDFType pBRTBXDFType) {
-		this.pBRTBXDFType = Objects.requireNonNull(pBRTBXDFType, "pBRTBXDFType == null");
+	protected BXDF(final BXDFType bXDFType) {
+		this.bXDFType = Objects.requireNonNull(bXDFType, "bXDFType == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@link BXDFType} that contains information about the behaviour for this {@code BXDF} instance.
+	 * 
+	 * @return a {@code BXDFType} that contains information about the behaviour for this {@code BXDF} instance
+	 */
+	public final BXDFType getBXDFType() {
+		return this.bXDFType;
+	}
+	
+	/**
 	 * Evaluates the distribution function.
 	 * <p>
-	 * Returns an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the evaluation.
+	 * Returns an optional {@link BXDFDistributionFunctionResult} with the result of the evaluation.
 	 * <p>
 	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -65,11 +72,11 @@ public abstract class PBRTBXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param incoming the incoming direction, called {@code wi} in PBRT
-	 * @return an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the evaluation
+	 * @return an optional {@code BXDFDistributionFunctionResult} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
 	@SuppressWarnings("static-method")
-	public Optional<PBRTBXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public Optional<BXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
@@ -79,7 +86,7 @@ public abstract class PBRTBXDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the sampling.
+	 * Returns an optional {@link BXDFDistributionFunctionResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -87,11 +94,11 @@ public abstract class PBRTBXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code PBRTBXDFDistributionFunctionResult} with the result of the sampling
+	 * @return an optional {@code BXDFDistributionFunctionResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
 	@SuppressWarnings("static-method")
-	public Optional<PBRTBXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<BXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
@@ -101,22 +108,22 @@ public abstract class PBRTBXDF {
 	/**
 	 * Computes the reflectance function.
 	 * <p>
-	 * Returns an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation.
+	 * Returns an optional {@link BXDFReflectanceFunctionResult} with the result of the computation.
 	 * <p>
 	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param samples the samples to compute
-	 * @return an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
+	 * @return an optional {@code BXDFReflectanceFunctionResult} with the result of the computation
 	 */
 	@SuppressWarnings("static-method")
-	public Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples) {
+	public Optional<BXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples) {
 		return Optional.empty();//TODO: Implement!
 	}
 	
 	/**
 	 * Computes the reflectance function.
 	 * <p>
-	 * Returns an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation.
+	 * Returns an optional {@link BXDFReflectanceFunctionResult} with the result of the computation.
 	 * <p>
 	 * If {@code outgoing} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -124,23 +131,14 @@ public abstract class PBRTBXDF {
 	 * 
 	 * @param samples the samples to compute
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @return an optional {@code PBRTBXDFReflectanceFunctionResult} with the result of the computation
+	 * @return an optional {@code BXDFReflectanceFunctionResult} with the result of the computation
 	 * @throws NullPointerException thrown if, and only if, {@code outgoing} is {@code null}
 	 */
 	@SuppressWarnings("static-method")
-	public Optional<PBRTBXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing) {
+	public Optional<BXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		
 		return Optional.empty();//TODO: Implement!
-	}
-	
-	/**
-	 * Returns a {@link PBRTBXDFType} that contains information about the behaviour for this {@code PBRTBXDF} instance.
-	 * 
-	 * @return a {@code PBRTBXDFType} that contains information about the behaviour for this {@code PBRTBXDF} instance
-	 */
-	public final PBRTBXDFType getPBRTBXDFType() {
-		return this.pBRTBXDFType;
 	}
 	
 	/**

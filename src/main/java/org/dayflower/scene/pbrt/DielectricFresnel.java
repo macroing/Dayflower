@@ -29,28 +29,26 @@ import java.util.Objects;
 import org.dayflower.image.Color3F;
 
 /**
- * A {@code PBRTDielectricFresnel} is used to compute the Fresnel equation for materials that are dielectric.
+ * A {@code DielectricFresnel} is used to compute the Fresnel equation for materials that are dielectric.
  * <p>
  * This class is immutable and therefore thread-safe.
- * <p>
- * Note: This class will change name from {@code PBRTDielectricFresnel} to {@code DielectricFresnel} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PBRTDielectricFresnel implements PBRTFresnel {
+public final class DielectricFresnel implements Fresnel {
 	private final float etaI;
 	private final float etaT;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code PBRTDielectricFresnel} instance.
+	 * Constructs a new {@code DielectricFresnel} instance.
 	 * 
 	 * @param etaI the index of refraction (IOR) for the incident media
 	 * @param etaT the index of refraction (IOR) for the transmitted media
 	 */
-	public PBRTDielectricFresnel(final float etaI, final float etaT) {
+	public DielectricFresnel(final float etaI, final float etaT) {
 		this.etaI = etaI;
 		this.etaT = etaT;
 	}
@@ -69,32 +67,32 @@ public final class PBRTDielectricFresnel implements PBRTFresnel {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code PBRTDielectricFresnel} instance.
+	 * Returns a {@code String} representation of this {@code DielectricFresnel} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code PBRTDielectricFresnel} instance
+	 * @return a {@code String} representation of this {@code DielectricFresnel} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PBRTDielectricFresnel(%+.10f, %+.10f)", Float.valueOf(this.etaI), Float.valueOf(this.etaT));
+		return String.format("new DielectricFresnel(%+.10f, %+.10f)", Float.valueOf(this.etaI), Float.valueOf(this.etaT));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code PBRTDielectricFresnel} instance for equality.
+	 * Compares {@code object} to this {@code DielectricFresnel} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PBRTDielectricFresnel}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DielectricFresnel}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code PBRTDielectricFresnel} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PBRTDielectricFresnel}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code DielectricFresnel} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DielectricFresnel}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof PBRTDielectricFresnel)) {
+		} else if(!(object instanceof DielectricFresnel)) {
 			return false;
-		} else if(!equal(this.etaI, PBRTDielectricFresnel.class.cast(object).etaI)) {
+		} else if(!equal(this.etaI, DielectricFresnel.class.cast(object).etaI)) {
 			return false;
-		} else if(!equal(this.etaT, PBRTDielectricFresnel.class.cast(object).etaT)) {
+		} else if(!equal(this.etaT, DielectricFresnel.class.cast(object).etaT)) {
 			return false;
 		} else {
 			return true;
@@ -120,9 +118,9 @@ public final class PBRTDielectricFresnel implements PBRTFresnel {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code PBRTDielectricFresnel} instance.
+	 * Returns a hash code for this {@code DielectricFresnel} instance.
 	 * 
-	 * @return a hash code for this {@code PBRTDielectricFresnel} instance
+	 * @return a hash code for this {@code DielectricFresnel} instance
 	 */
 	@Override
 	public int hashCode() {

@@ -27,13 +27,13 @@ import java.lang.reflect.Field;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
-public abstract class PBRTMicrofacetDistribution {
+public abstract class MicrofacetDistribution {
 	private final boolean isSamplingVisibleArea;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	protected PBRTMicrofacetDistribution(final boolean isSamplingVisibleArea) {
+	protected MicrofacetDistribution(final boolean isSamplingVisibleArea) {
 		this.isSamplingVisibleArea = isSamplingVisibleArea;
 	}
 	

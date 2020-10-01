@@ -21,16 +21,14 @@ package org.dayflower.scene.pbrt;
 import org.dayflower.image.Color3F;
 
 /**
- * A {@code PBRTFresnel} is used to compute the Fresnel equations.
+ * A {@code Fresnel} is used to compute the Fresnel equations.
  * <p>
  * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
- * <p>
- * Note: This interface will change name from {@code PBRTFresnel} to {@code Fresnel} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface PBRTFresnel {
+public interface Fresnel {
 	/**
 	 * Returns a {@link Color3F} instance that represents the amount of light reflected by the surface.
 	 * 

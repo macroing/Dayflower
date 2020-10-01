@@ -20,7 +20,31 @@ package org.dayflower.scene.pbrt;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Vector3F;
+
 //TODO: Add Javadocs!
-public final class PBRTLambertianReflectionBRDF {
+public final class BSDF {
 	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public BSDF() {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	BxDF: f(Vector3f &wo, Vector3f &wi)
+//	TODO: Add Javadocs!
+	public BSDFResult evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+		return null;
+	}
+	
+//	BxDF: Sample_f(Vector3f &wo, Vector3f *wi, Point2f &sample, Float *pdf);
+//	TODO: Add Javadocs!
+	public BSDFResult sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+		return null;
+	}
 }

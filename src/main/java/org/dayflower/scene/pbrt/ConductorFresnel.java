@@ -27,16 +27,14 @@ import java.util.Objects;
 import org.dayflower.image.Color3F;
 
 /**
- * A {@code PBRTConductorFresnel} is used to compute the Fresnel equation for materials that are conductors.
+ * A {@code ConductorFresnel} is used to compute the Fresnel equation for materials that are conductors.
  * <p>
  * This class is immutable and therefore thread-safe.
- * <p>
- * Note: This class will change name from {@code PBRTConductorFresnel} to {@code ConductorFresnel} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PBRTConductorFresnel implements PBRTFresnel {
+public final class ConductorFresnel implements Fresnel {
 	private final float etaI;
 	private final float etaT;
 	private final float k;
@@ -44,13 +42,13 @@ public final class PBRTConductorFresnel implements PBRTFresnel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code PBRTConductorFresnel} instance.
+	 * Constructs a new {@code ConductorFresnel} instance.
 	 * 
 	 * @param etaI the index of refraction (IOR) for the incident media
 	 * @param etaT the index of refraction (IOR) for the transmitted media
 	 * @param k the absorption coefficient
 	 */
-	public PBRTConductorFresnel(final float etaI, final float etaT, final float k) {
+	public ConductorFresnel(final float etaI, final float etaT, final float k) {
 		this.etaI = etaI;
 		this.etaT = etaT;
 		this.k = k;
@@ -70,34 +68,34 @@ public final class PBRTConductorFresnel implements PBRTFresnel {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code PBRTConductorFresnel} instance.
+	 * Returns a {@code String} representation of this {@code ConductorFresnel} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code PBRTConductorFresnel} instance
+	 * @return a {@code String} representation of this {@code ConductorFresnel} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PBRTConductorFresnel(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.etaI), Float.valueOf(this.etaT), Float.valueOf(this.k));
+		return String.format("new ConductorFresnel(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.etaI), Float.valueOf(this.etaT), Float.valueOf(this.k));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code PBRTConductorFresnel} instance for equality.
+	 * Compares {@code object} to this {@code ConductorFresnel} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PBRTConductorFresnel}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ConductorFresnel}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code PBRTConductorFresnel} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PBRTConductorFresnel}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code ConductorFresnel} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ConductorFresnel}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof PBRTConductorFresnel)) {
+		} else if(!(object instanceof ConductorFresnel)) {
 			return false;
-		} else if(!equal(this.etaI, PBRTConductorFresnel.class.cast(object).etaI)) {
+		} else if(!equal(this.etaI, ConductorFresnel.class.cast(object).etaI)) {
 			return false;
-		} else if(!equal(this.etaT, PBRTConductorFresnel.class.cast(object).etaT)) {
+		} else if(!equal(this.etaT, ConductorFresnel.class.cast(object).etaT)) {
 			return false;
-		} else if(!equal(this.k, PBRTConductorFresnel.class.cast(object).k)) {
+		} else if(!equal(this.k, ConductorFresnel.class.cast(object).k)) {
 			return false;
 		} else {
 			return true;
@@ -132,9 +130,9 @@ public final class PBRTConductorFresnel implements PBRTFresnel {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code PBRTConductorFresnel} instance.
+	 * Returns a hash code for this {@code ConductorFresnel} instance.
 	 * 
-	 * @return a hash code for this {@code PBRTConductorFresnel} instance
+	 * @return a hash code for this {@code ConductorFresnel} instance
 	 */
 	@Override
 	public int hashCode() {

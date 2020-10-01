@@ -41,14 +41,14 @@ import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
-public final class PBRTBeckmannDistribution extends PBRTMicrofacetDistribution {
+public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution {
 	private final float alphaX;
 	private final float alphaY;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public PBRTBeckmannDistribution(final boolean isSamplingVisibleArea, final float alphaX, final float alphaY) {
+	public BeckmannMicrofacetDistribution(final boolean isSamplingVisibleArea, final float alphaX, final float alphaY) {
 		super(isSamplingVisibleArea);
 		
 		this.alphaX = max(alphaX, 0.001F);

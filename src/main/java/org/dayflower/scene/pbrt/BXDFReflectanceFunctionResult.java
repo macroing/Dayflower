@@ -26,23 +26,21 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.util.Lists;
 
 /**
- * A {@code PBRTBXDFReflectanceFunctionResult} contains the result produced by computing the reflectance function by a {@link PBRTBXDF} instance.
+ * A {@code BXDFReflectanceFunctionResult} contains the result produced by computing the reflectance function by a {@link BXDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
- * <p>
- * Note: This class will change name from {@code PBRTBXDFReflectanceFunctionResult} to {@code BXDFReflectanceFunctionResult} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PBRTBXDFReflectanceFunctionResult {
+public final class BXDFReflectanceFunctionResult {
 	private final List<Point2F> samplesA;
 	private final List<Point2F> samplesB;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code PBRTBXDFReflectanceFunctionResult} instance.
+	 * Constructs a new {@code BXDFReflectanceFunctionResult} instance.
 	 * <p>
 	 * If either {@code samplesA} or at least one element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -51,13 +49,13 @@ public final class PBRTBXDFReflectanceFunctionResult {
 	 * @param samplesA a {@code List} of sampled {@link Point2F} instances
 	 * @throws NullPointerException thrown if, and only if, either {@code samplesA} or at least one element in {@code samplesA} are {@code null}
 	 */
-	public PBRTBXDFReflectanceFunctionResult(final List<Point2F> samplesA) {
+	public BXDFReflectanceFunctionResult(final List<Point2F> samplesA) {
 		this.samplesA = new ArrayList<>(Lists.requireNonNullList(samplesA, "samplesA"));
 		this.samplesB = new ArrayList<>();
 	}
 	
 	/**
-	 * Constructs a new {@code PBRTBXDFReflectanceFunctionResult} instance.
+	 * Constructs a new {@code BXDFReflectanceFunctionResult} instance.
 	 * <p>
 	 * If either {@code samplesA}, {@code samplesB} or at least one element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -67,7 +65,7 @@ public final class PBRTBXDFReflectanceFunctionResult {
 	 * @param samplesB a {@code List} of sampled {@code Point2F} instances
 	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or at least one element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
-	public PBRTBXDFReflectanceFunctionResult(final List<Point2F> samplesA, final List<Point2F> samplesB) {
+	public BXDFReflectanceFunctionResult(final List<Point2F> samplesA, final List<Point2F> samplesB) {
 		this.samplesA = new ArrayList<>(Lists.requireNonNullList(samplesA, "samplesA"));
 		this.samplesB = new ArrayList<>(Lists.requireNonNullList(samplesB, "samplesB"));
 	}
@@ -77,7 +75,7 @@ public final class PBRTBXDFReflectanceFunctionResult {
 	/**
 	 * Returns a {@code List} of sampled {@link Point2F} instances.
 	 * <p>
-	 * Modifying the returned {@code List} will not affect this {@code PBRTBXDFReflectanceFunctionResult} instance.
+	 * Modifying the returned {@code List} will not affect this {@code BXDFReflectanceFunctionResult} instance.
 	 * <p>
 	 * The {@code List} represents the {@code Point2f} called {@code samples1} or {@code samples} and is passed as a parameter argument to the following {@code BxDF} methods in PBRT:
 	 * <ul>
@@ -94,7 +92,7 @@ public final class PBRTBXDFReflectanceFunctionResult {
 	/**
 	 * Returns a {@code List} of sampled {@link Point2F} instances.
 	 * <p>
-	 * Modifying the returned {@code List} will not affect this {@code PBRTBXDFReflectanceFunctionResult} instance.
+	 * Modifying the returned {@code List} will not affect this {@code BXDFReflectanceFunctionResult} instance.
 	 * <p>
 	 * The {@code List} represents the {@code Point2f} called {@code samples2} and is passed as a parameter argument to the following {@code BxDF} method in PBRT:
 	 * <ul>
@@ -108,32 +106,32 @@ public final class PBRTBXDFReflectanceFunctionResult {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code PBRTBXDFReflectanceFunctionResult} instance.
+	 * Returns a {@code String} representation of this {@code BXDFReflectanceFunctionResult} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code PBRTBXDFReflectanceFunctionResult} instance
+	 * @return a {@code String} representation of this {@code BXDFReflectanceFunctionResult} instance
 	 */
 	@Override
 	public String toString() {
-		return "new PBRTBXDFReflectanceFunctionResult(..., ...)";
+		return "new BXDFReflectanceFunctionResult(..., ...)";
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code PBRTBXDFReflectanceFunctionResult} instance for equality.
+	 * Compares {@code object} to this {@code BXDFReflectanceFunctionResult} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PBRTBXDFReflectanceFunctionResult}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BXDFReflectanceFunctionResult}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code PBRTBXDFReflectanceFunctionResult} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PBRTBXDFReflectanceFunctionResult}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code BXDFReflectanceFunctionResult} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BXDFReflectanceFunctionResult}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof PBRTBXDFReflectanceFunctionResult)) {
+		} else if(!(object instanceof BXDFReflectanceFunctionResult)) {
 			return false;
-		} else if(!Objects.equals(this.samplesA, PBRTBXDFReflectanceFunctionResult.class.cast(object).samplesA)) {
+		} else if(!Objects.equals(this.samplesA, BXDFReflectanceFunctionResult.class.cast(object).samplesA)) {
 			return false;
-		} else if(!Objects.equals(this.samplesB, PBRTBXDFReflectanceFunctionResult.class.cast(object).samplesB)) {
+		} else if(!Objects.equals(this.samplesB, BXDFReflectanceFunctionResult.class.cast(object).samplesB)) {
 			return false;
 		} else {
 			return true;
@@ -141,9 +139,9 @@ public final class PBRTBXDFReflectanceFunctionResult {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code PBRTBXDFReflectanceFunctionResult} instance.
+	 * Returns a hash code for this {@code BXDFReflectanceFunctionResult} instance.
 	 * 
-	 * @return a hash code for this {@code PBRTBXDFReflectanceFunctionResult} instance
+	 * @return a hash code for this {@code BXDFReflectanceFunctionResult} instance
 	 */
 	@Override
 	public int hashCode() {

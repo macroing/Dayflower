@@ -28,34 +28,34 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
-public final class PBRTTorranceSparrowReflectionBRDF extends PBRTBXDF {
-	private final PBRTMicrofacetDistribution pBRTMicrofacetDistribution;
+public final class TorranceSparrowReflectionBRDF extends BXDF {
+	private final MicrofacetDistribution microfacetDistribution;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public PBRTTorranceSparrowReflectionBRDF(final PBRTMicrofacetDistribution pBRTMicrofacetDistribution) {
+	public TorranceSparrowReflectionBRDF(final MicrofacetDistribution microfacetDistribution) {
 		super(null);//TODO: Implement!
 		
-		this.pBRTMicrofacetDistribution = Objects.requireNonNull(pBRTMicrofacetDistribution, "pBRTMicrofacetDistribution == null");
+		this.microfacetDistribution = Objects.requireNonNull(microfacetDistribution, "microfacetDistribution == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 	@Override
-	public Optional<PBRTBXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public Optional<BXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
 		return Optional.empty();//TODO: Implement!
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
-	public Optional<PBRTBXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<BXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
 		if(equal(outgoing.getZ(), 0.0F)) {
 			return Optional.empty();
 		}
 		
-		final Vector3F normal = this.pBRTMicrofacetDistribution.sampleN(outgoing, sample.getU(), sample.getV());
+		final Vector3F normal = this.microfacetDistribution.sampleN(outgoing, sample.getU(), sample.getV());
 		
 		if(Vector3F.dotProduct(outgoing, normal) < 0.0F) {
 			return Optional.empty();
@@ -67,7 +67,7 @@ public final class PBRTTorranceSparrowReflectionBRDF extends PBRTBXDF {
 			return Optional.empty();
 		}
 		
-		final float probabilityDensityFunctionValue = this.pBRTMicrofacetDistribution.computeProbabilityDensityFunctionValue(outgoing, normal) / (4.0F * Vector3F.dotProduct(outgoing, normal));
+		final float probabilityDensityFunctionValue = this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, normal) / (4.0F * Vector3F.dotProduct(outgoing, normal));
 		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
 		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
 		
@@ -82,7 +82,7 @@ public final class PBRTTorranceSparrowReflectionBRDF extends PBRTBXDF {
 		final Vector3F normalNormalized = Vector3F.normalize(normal);
 		
 		final float fresnel = 1.0F;
-		final float reflectance = this.pBRTMicrofacetDistribution.computeDifferentialArea(normalNormalized) * this.pBRTMicrofacetDistribution.computeShadowingAndMasking(outgoing, incoming) * fresnel / (4.0F * cosThetaAbsIncoming * cosThetaAbsOutgoing);
+		final float reflectance = this.microfacetDistribution.computeDifferentialArea(normalNormalized) * this.microfacetDistribution.computeShadowingAndMasking(outgoing, incoming) * fresnel / (4.0F * cosThetaAbsIncoming * cosThetaAbsOutgoing);
 		
 		return Optional.empty();//TODO: Implement!
 	}

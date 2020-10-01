@@ -26,16 +26,14 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
 /**
- * A {@code PBRTBXDFDistributionFunctionResult} contains the result produced by evaluating or sampling the distribution function by a {@link PBRTBXDF} instance.
+ * A {@code BXDFDistributionFunctionResult} contains the result produced by evaluating or sampling the distribution function by a {@link BXDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
- * <p>
- * Note: This class will change name from {@code PBRTBXDFDistributionFunctionResult} to {@code BXDFDistributionFunctionResult} in the future.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PBRTBXDFDistributionFunctionResult {
+public final class BXDFDistributionFunctionResult {
 	private final Color3F value;
 	private final Vector3F incoming;
 	private final Vector3F outgoing;
@@ -44,28 +42,28 @@ public final class PBRTBXDFDistributionFunctionResult {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PBRTBXDFDistributionFunctionResult(Vector3F.NaN, Vector3F.NaN);
+	 * new BXDFDistributionFunctionResult(Vector3F.NaN, Vector3F.NaN);
 	 * }
 	 * </pre>
 	 */
-	public PBRTBXDFDistributionFunctionResult() {
+	public BXDFDistributionFunctionResult() {
 		this(Vector3F.NaN, Vector3F.NaN);
 	}
 	
 	/**
-	 * Constructs a new {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
 	 * <p>
 	 * If either {@code incoming} or {@code outgoing} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PBRTBXDFDistributionFunctionResult(incoming, outgoing, Color3F.BLACK);
+	 * new BXDFDistributionFunctionResult(incoming, outgoing, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -73,19 +71,19 @@ public final class PBRTBXDFDistributionFunctionResult {
 	 * @param outgoing a {@code Vector3F} instance with the outgoing direction used by the distribution function
 	 * @throws NullPointerException thrown if, and only if, either {@code incoming} or {@code outgoing} are {@code null}
 	 */
-	public PBRTBXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing) {
+	public BXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing) {
 		this(incoming, outgoing, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
 	 * <p>
 	 * If either {@code incoming}, {@code outgoing} or {@code value} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PBRTBXDFDistributionFunctionResult(incoming, outgoing, value, 0.0F);
+	 * new BXDFDistributionFunctionResult(incoming, outgoing, value, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -94,12 +92,12 @@ public final class PBRTBXDFDistributionFunctionResult {
 	 * @param value a {@link Color3F} instance with the result of the distribution function
 	 * @throws NullPointerException thrown if, and only if, either {@code incoming}, {@code outgoing} or {@code value} are {@code null}
 	 */
-	public PBRTBXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing, final Color3F value) {
+	public BXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing, final Color3F value) {
 		this(incoming, outgoing, value, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
 	 * <p>
 	 * If either {@code incoming}, {@code outgoing} or {@code value} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -109,7 +107,7 @@ public final class PBRTBXDFDistributionFunctionResult {
 	 * @param probabilityDensityFunctionValue a {@code float} with the probability density function (PDF) value computed by the distribution function
 	 * @throws NullPointerException thrown if, and only if, either {@code incoming}, {@code outgoing} or {@code value} are {@code null}
 	 */
-	public PBRTBXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing, final Color3F value, final float probabilityDensityFunctionValue) {
+	public BXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing, final Color3F value, final float probabilityDensityFunctionValue) {
 		this.incoming = Objects.requireNonNull(incoming, "incoming == null");
 		this.outgoing = Objects.requireNonNull(outgoing, "outgoing == null");
 		this.value = Objects.requireNonNull(value, "value == null");
@@ -134,13 +132,13 @@ public final class PBRTBXDFDistributionFunctionResult {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * Returns a {@code String} representation of this {@code BXDFDistributionFunctionResult} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code PBRTBXDFDistributionFunctionResult} instance
+	 * @return a {@code String} representation of this {@code BXDFDistributionFunctionResult} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PBRTBXDFDistributionFunctionResult(%s, %s, %s, %+.10f)", this.incoming, this.outgoing, this.value, Float.valueOf(this.probabilityDensityFunctionValue));
+		return String.format("new BXDFDistributionFunctionResult(%s, %s, %s, %+.10f)", this.incoming, this.outgoing, this.value, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -174,26 +172,26 @@ public final class PBRTBXDFDistributionFunctionResult {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code PBRTBXDFDistributionFunctionResult} instance for equality.
+	 * Compares {@code object} to this {@code BXDFDistributionFunctionResult} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PBRTBXDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BXDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code PBRTBXDFDistributionFunctionResult} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PBRTBXDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code BXDFDistributionFunctionResult} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BXDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof PBRTBXDFDistributionFunctionResult)) {
+		} else if(!(object instanceof BXDFDistributionFunctionResult)) {
 			return false;
-		} else if(!Objects.equals(this.incoming, PBRTBXDFDistributionFunctionResult.class.cast(object).incoming)) {
+		} else if(!Objects.equals(this.incoming, BXDFDistributionFunctionResult.class.cast(object).incoming)) {
 			return false;
-		} else if(!Objects.equals(this.outgoing, PBRTBXDFDistributionFunctionResult.class.cast(object).outgoing)) {
+		} else if(!Objects.equals(this.outgoing, BXDFDistributionFunctionResult.class.cast(object).outgoing)) {
 			return false;
-		} else if(!Objects.equals(this.value, PBRTBXDFDistributionFunctionResult.class.cast(object).value)) {
+		} else if(!Objects.equals(this.value, BXDFDistributionFunctionResult.class.cast(object).value)) {
 			return false;
-		} else if(!equal(this.probabilityDensityFunctionValue, PBRTBXDFDistributionFunctionResult.class.cast(object).probabilityDensityFunctionValue)) {
+		} else if(!equal(this.probabilityDensityFunctionValue, BXDFDistributionFunctionResult.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
 		} else {
 			return true;
@@ -215,9 +213,9 @@ public final class PBRTBXDFDistributionFunctionResult {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code PBRTBXDFDistributionFunctionResult} instance.
+	 * Returns a hash code for this {@code BXDFDistributionFunctionResult} instance.
 	 * 
-	 * @return a hash code for this {@code PBRTBXDFDistributionFunctionResult} instance
+	 * @return a hash code for this {@code BXDFDistributionFunctionResult} instance
 	 */
 	@Override
 	public int hashCode() {

@@ -28,14 +28,14 @@ import java.lang.reflect.Field;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
-public final class PBRTTrowbridgeReitzDistribution extends PBRTMicrofacetDistribution {
+public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistribution {
 	private final float alphaX;
 	private final float alphaY;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public PBRTTrowbridgeReitzDistribution(final boolean isSamplingVisibleArea, final float alphaX, final float alphaY) {
+	public TrowbridgeReitzMicrofacetDistribution(final boolean isSamplingVisibleArea, final float alphaX, final float alphaY) {
 		super(isSamplingVisibleArea);
 		
 		this.alphaX = max(alphaX, 0.001F);

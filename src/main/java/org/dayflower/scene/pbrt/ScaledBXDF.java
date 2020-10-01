@@ -18,12 +18,14 @@
  */
 package org.dayflower.scene.pbrt;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.util.Lists;
 
 /**
  * A {@code ScaledBXDF} is an implementation of {@link BXDF} that scales the result of another {@code BXDF} instance.
@@ -56,6 +58,51 @@ public final class ScaledBXDF extends BXDF {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples2} in PBRT
+	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples, called {@code samples1} in PBRT
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 */
+	@Override
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
+		Lists.requireNonNullList(samplesA, "samplesA");
+		Lists.requireNonNullList(samplesB, "samplesB");
+		
+		return Color3F.multiply(this.bXDF.computeReflectanceFunction(samplesA, samplesB), this.scale);
+	}
+	
+	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code BxDF} method {@code rho(const Vector3f &wo, int nSamples, const Point2f *samples)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples} in PBRT
+	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}
+	 */
+	@Override
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
+		Lists.requireNonNullList(samplesA, "samplesA");
+		
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		
+		return Color3F.multiply(this.bXDF.computeReflectanceFunction(samplesA, outgoing), this.scale);
+	}
 	
 	/**
 	 * Evaluates the distribution function.
@@ -108,54 +155,6 @@ public final class ScaledBXDF extends BXDF {
 		
 		if(optionalBXDFDistributionFunctionResult.isPresent()) {
 			return Optional.of(BXDFDistributionFunctionResult.scale(optionalBXDFDistributionFunctionResult.get(), this.scale));
-		}
-		
-		return Optional.empty();
-	}
-	
-	/**
-	 * Computes the reflectance function.
-	 * <p>
-	 * Returns an optional {@link BXDFReflectanceFunctionResult} with the result of the computation.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @param samples the samples to compute
-	 * @return an optional {@code BXDFReflectanceFunctionResult} with the result of the computation
-	 */
-	@Override
-	public Optional<BXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples) {
-		final Optional<BXDFReflectanceFunctionResult> optionalBXDFReflectanceFunctionResult = this.bXDF.computeReflectanceFunction(samples);
-		
-		if(optionalBXDFReflectanceFunctionResult.isPresent()) {
-			return Optional.of(BXDFReflectanceFunctionResult.scale(optionalBXDFReflectanceFunctionResult.get(), this.scale));
-		}
-		
-		return Optional.empty();
-	}
-	
-	/**
-	 * Computes the reflectance function.
-	 * <p>
-	 * Returns an optional {@link BXDFReflectanceFunctionResult} with the result of the computation.
-	 * <p>
-	 * If {@code outgoing} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(const Vector3f &wo, int nSamples, const Point2f *samples)} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @param samples the samples to compute
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @return an optional {@code BXDFReflectanceFunctionResult} with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, {@code outgoing} is {@code null}
-	 */
-	@Override
-	public Optional<BXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing) {
-		Objects.requireNonNull(outgoing, "outgoing == null");
-		
-		final Optional<BXDFReflectanceFunctionResult> optionalBXDFReflectanceFunctionResult = this.bXDF.computeReflectanceFunction(samples, outgoing);
-		
-		if(optionalBXDFReflectanceFunctionResult.isPresent()) {
-			return Optional.of(BXDFReflectanceFunctionResult.scale(optionalBXDFReflectanceFunctionResult.get(), this.scale));
 		}
 		
 		return Optional.empty();

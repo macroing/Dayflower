@@ -22,6 +22,8 @@ import static org.dayflower.util.Doubles.PI;
 import static org.dayflower.util.Doubles.PI_DIVIDED_BY_2;
 import static org.dayflower.util.Doubles.PI_DIVIDED_BY_4;
 import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2;
+import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_4_RECIPROCAL;
 import static org.dayflower.util.Doubles.PI_RECIPROCAL;
 import static org.dayflower.util.Doubles.cos;
 import static org.dayflower.util.Doubles.equal;
@@ -43,81 +45,6 @@ public final class SampleGeneratorD {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Samples a point on a concentric disk.
-	 * <p>
-	 * Returns a {@code Point2D} instance with the sampled point.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * SampleGeneratorD.sampleConcentricDisk(Doubles.random(), Doubles.random());
-	 * }
-	 * </pre>
-	 * 
-	 * @return a {@code Point2D} instance with the sampled point
-	 */
-	public static Point2D sampleConcentricDisk() {
-		return sampleConcentricDisk(random(), random());
-	}
-	
-	/**
-	 * Samples a point on a concentric disk.
-	 * <p>
-	 * Returns a {@code Point2D} instance with the sampled point.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * SampleGeneratorD.sampleConcentricDisk(u, v, 1.0D);
-	 * }
-	 * </pre>
-	 * 
-	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
-	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
-	 * @return a {@code Point2D} instance with the sampled point
-	 */
-	public static Point2D sampleConcentricDisk(final double u, final double v) {
-		return sampleConcentricDisk(u, v, 1.0D);
-	}
-	
-	/**
-	 * Samples a point on a concentric disk.
-	 * <p>
-	 * Returns a {@code Point2D} instance with the sampled point.
-	 * 
-	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
-	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
-	 * @param radius the radius of the disk
-	 * @return a {@code Point2D} instance with the sampled point
-	 */
-	public static Point2D sampleConcentricDisk(final double u, final double v, final double radius) {
-		if(equal(u, 0.0D) && equal(v, 0.0D)) {
-			return new Point2D();
-		}
-		
-		final double a = u * 2.0D - 1.0D;
-		final double b = v * 2.0D - 1.0D;
-		
-		if(a * a > b * b) {
-			final double phi = PI_DIVIDED_BY_4 * (b / a);
-			final double r = radius * a;
-			
-			final double component1 = cos(phi) * r;
-			final double component2 = sin(phi) * r;
-			
-			return new Point2D(component1, component2);
-		}
-		
-		final double phi = PI_DIVIDED_BY_2 - (PI_DIVIDED_BY_4 * (a / b));
-		final double r = radius * b;
-		
-		final double component1 = cos(phi) * r;
-		final double component2 = sin(phi) * r;
-		
-		return new Point2D(component1, component2);
-	}
 	
 	/**
 	 * Samples a point on a disk with a uniform distribution.
@@ -147,8 +74,83 @@ public final class SampleGeneratorD {
 	 * @return a {@code Point2D} instance with the sampled point
 	 */
 	public static Point2D sampleDiskUniformDistribution(final double u, final double v) {
-		final double phi = PI_MULTIPLIED_BY_2 * v;
 		final double r = sqrt(u);
+		final double theta = PI_MULTIPLIED_BY_2 * v;
+		
+		final double component1 = r * cos(theta);
+		final double component2 = r * sin(theta);
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Samples a point on a concentric disk.
+	 * <p>
+	 * Returns a {@code Point2D} instance with the sampled point.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SampleGeneratorD.sampleDiskUniformDistributionByConcentricMapping(Doubles.random(), Doubles.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Point2D} instance with the sampled point
+	 */
+	public static Point2D sampleDiskUniformDistributionByConcentricMapping() {
+		return sampleDiskUniformDistributionByConcentricMapping(random(), random());
+	}
+	
+	/**
+	 * Samples a point on a concentric disk.
+	 * <p>
+	 * Returns a {@code Point2D} instance with the sampled point.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * SampleGeneratorD.sampleDiskUniformDistributionByConcentricMapping(u, v, 1.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @return a {@code Point2D} instance with the sampled point
+	 */
+	public static Point2D sampleDiskUniformDistributionByConcentricMapping(final double u, final double v) {
+		return sampleDiskUniformDistributionByConcentricMapping(u, v, 1.0D);
+	}
+	
+	/**
+	 * Samples a point on a concentric disk.
+	 * <p>
+	 * Returns a {@code Point2D} instance with the sampled point.
+	 * 
+	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param radius the radius of the disk
+	 * @return a {@code Point2D} instance with the sampled point
+	 */
+	public static Point2D sampleDiskUniformDistributionByConcentricMapping(final double u, final double v, final double radius) {
+		if(equal(u, 0.0D) && equal(v, 0.0D)) {
+			return new Point2D();
+		}
+		
+		final double a = u * 2.0D - 1.0D;
+		final double b = v * 2.0D - 1.0D;
+		
+		if(a * a > b * b) {
+			final double phi = PI_DIVIDED_BY_4 * (b / a);
+			final double r = radius * a;
+			
+			final double component1 = cos(phi) * r;
+			final double component2 = sin(phi) * r;
+			
+			return new Point2D(component1, component2);
+		}
+		
+		final double phi = PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
+		final double r = radius * b;
 		
 		final double component1 = cos(phi) * r;
 		final double component2 = sin(phi) * r;
@@ -241,9 +243,9 @@ public final class SampleGeneratorD {
 	 * @return a {@code Vector3D} instance with the sampled direction
 	 */
 	public static Vector3D sampleConeUniformDistribution(final double u, final double v, final double cosThetaMax) {
-		final double cosTheta = u * (cosThetaMax - 1.0D) + 1.0D;
-		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
-		final double phi = PI_MULTIPLIED_BY_2 * v;
+		final double cosTheta = (1.0D - u) + u * cosThetaMax;
+		final double sinTheta = sqrt(1.0D - cosTheta * cosTheta);
+		final double phi = v * PI_MULTIPLIED_BY_2;
 		
 		final double component1 = cos(phi) * sinTheta;
 		final double component2 = sin(phi) * sinTheta;
@@ -280,7 +282,7 @@ public final class SampleGeneratorD {
 	 * @return a {@code Vector3D} instance with the sampled direction
 	 */
 	public static Vector3D sampleHemisphereCosineDistribution(final double u, final double v) {
-		final Point2D point = sampleConcentricDisk(u, v);
+		final Point2D point = sampleDiskUniformDistributionByConcentricMapping(u, v);
 		
 		final double component1 = point.getComponent1();
 		final double component2 = point.getComponent2();
@@ -457,7 +459,7 @@ public final class SampleGeneratorD {
 	public static Vector3D sampleSphereUniformDistribution(final double u, final double v) {
 		final double cosTheta = 1.0D - 2.0D * u;
 		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
-		final double phi = PI_MULTIPLIED_BY_2 * v;
+		final double phi = v * PI_MULTIPLIED_BY_2;
 		
 		final double component1 = cos(phi) * sinTheta;
 		final double component2 = sin(phi) * sinTheta;
@@ -475,7 +477,7 @@ public final class SampleGeneratorD {
 	 * @return the probability density function (PDF) value for {@code cosThetaMax}
 	 */
 	public static double coneUniformDistributionProbabilityDensityFunction(final double cosThetaMax) {
-		return cosThetaMax >= 1.0D ? 0.0D : 1.0D / (2.0D * PI * (1.0D - cosThetaMax));
+		return 1.0D / (2.0D * PI * (1.0D - cosThetaMax));
 	}
 	
 	/**
@@ -488,6 +490,17 @@ public final class SampleGeneratorD {
 	 */
 	public static double hemisphereCosineDistributionProbabilityDensityFunction(final double cosTheta) {
 		return cosTheta * PI_RECIPROCAL;
+	}
+	
+	/**
+	 * Returns the probability density function (PDF) value.
+	 * <p>
+	 * This method is used together with {@link #sampleHemisphereUniformDistribution(double, double)}.
+	 * 
+	 * @return the probability density function (PDF) value
+	 */
+	public static double hemisphereUniformDistributionProbabilityDensityFunction() {
+		return PI_MULTIPLIED_BY_2_RECIPROCAL;
 	}
 	
 	/**
@@ -521,5 +534,16 @@ public final class SampleGeneratorD {
 		final double weightB = sampleCountB * probabilityDensityFunctionValueB;
 		
 		return weightA * weightA / (weightA * weightA + weightB * weightB);
+	}
+	
+	/**
+	 * Returns the probability density function (PDF) value.
+	 * <p>
+	 * This method is used together with {@link #sampleSphereUniformDistribution(double, double)}.
+	 * 
+	 * @return the probability density function (PDF) value
+	 */
+	public static double sphereUniformDistributionProbabilityDensityFunction() {
+		return PI_MULTIPLIED_BY_4_RECIPROCAL;
 	}
 }

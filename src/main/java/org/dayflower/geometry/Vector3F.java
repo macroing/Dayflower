@@ -29,6 +29,7 @@ import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A {@code Vector3F} denotes a 3-dimensional vector with three components, of type {@code float}.
@@ -379,6 +380,31 @@ public final class Vector3F {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns an optional {@code Vector3F} instance that represents the refraction of {@code direction} with regards to {@code normal}.
+	 * <p>
+	 * If either {@code direction} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param direction the {@code Vector3F} instance that will be refracted with regards to {@code normal}
+	 * @param normal the {@code Vector3F} instance that represents the normal of the surface
+	 * @param eta the index of refraction
+	 * @return an optional {@code Vector3F} instance that represents the refraction of {@code direction} with regards to {@code normal}
+	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
+	 */
+	public static Optional<Vector3F> refraction(final Vector3F direction, final Vector3F normal, final float eta) {
+		final float cosThetaI = dotProduct(direction, normal);
+		final float sinThetaISquared = max(0.0F, 1.0F - cosThetaI * cosThetaI);
+		final float sinThetaTSquared = eta * eta * sinThetaISquared;
+		
+		if(sinThetaTSquared >= 1.0F) {
+			return Optional.empty();
+		}
+		
+		final float cosThetaT = sqrt(1.0F - sinThetaTSquared);
+		
+		return Optional.of(add(multiply(negate(direction), eta), multiply(normal, eta * cosThetaI - cosThetaT)));
+	}
 	
 	/**
 	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
@@ -1050,6 +1076,20 @@ public final class Vector3F {
 	 */
 	public static Vector3F z(final float z) {
 		return new Vector3F(0.0F, 0.0F, z);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code vLHS} and {@code vRHS} are in the same hemisphere, {@code false} otherwise.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are in the same hemisphere, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
+	public static boolean sameHemisphere(final Vector3F vLHS, final Vector3F vRHS) {
+		return dotProduct(vLHS, vRHS) > 0.0F;
 	}
 	
 	/**

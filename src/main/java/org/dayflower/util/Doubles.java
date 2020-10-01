@@ -73,6 +73,11 @@ public class Doubles {
 	public static final double PI_MULTIPLIED_BY_4 = PI * 4.0D;
 	
 	/**
+	 * The reciprocal (or inverse) of {@link #PI_MULTIPLIED_BY_4}.
+	 */
+	public static final double PI_MULTIPLIED_BY_4_RECIPROCAL = 1.0D / PI_MULTIPLIED_BY_4;
+	
+	/**
 	 * The reciprocal (or inverse) of {@link #PI}.
 	 */
 	public static final double PI_RECIPROCAL = 1.0D / PI;

@@ -18,12 +18,18 @@
  */
 package org.dayflower.scene.pbrt;
 
+import static org.dayflower.util.Floats.PI;
+import static org.dayflower.util.Floats.random;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.util.Lists;
 
 /**
  * A {@code SpecularReflectionBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for specular reflection.
@@ -56,6 +62,95 @@ public final class SpecularReflectionBRDF extends BXDF {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples2} in PBRT
+	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples, called {@code samples1} in PBRT
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 */
+	@Override
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
+		Lists.requireNonNullList(samplesA, "samplesA");
+		Lists.requireNonNullList(samplesB, "samplesB");
+		
+		Color3F reflectance = Color3F.BLACK;
+		
+		for(int i = 0; i < samplesA.size(); i++) {
+			final Point2F sampleA = samplesA.get(i);
+			final Point2F sampleB = i < samplesB.size() ? samplesB.get(i) : new Point2F(random(), random());
+			
+			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
+			
+			final Optional<BXDFDistributionFunctionResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
+			
+			if(optionalBXDFDistributionFunctionResult.isPresent()) {
+				final BXDFDistributionFunctionResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
+				
+				final float probabilityDensityFunctionValueIncoming = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
+				final float probabilityDensityFunctionValueOutgoing = SampleGeneratorF.hemisphereUniformDistributionProbabilityDensityFunction();
+				
+				if(probabilityDensityFunctionValueIncoming > 0.0F) {
+					final Color3F result = bXDFDistributionFunctionResult.getResult();
+					
+					final Vector3F incoming = bXDFDistributionFunctionResult.getIncoming();
+					
+					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(Color3F.multiply(result, incoming.cosThetaAbs()), outgoing.cosThetaAbs()), probabilityDensityFunctionValueOutgoing * probabilityDensityFunctionValueIncoming));
+				}
+			}
+		}
+		
+		return Color3F.divide(reflectance, PI * samplesA.size());
+	}
+	
+	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code BxDF} method {@code rho(const Vector3f &wo, int nSamples, const Point2f *samples)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples} in PBRT
+	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}
+	 */
+	@Override
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
+		Color3F reflectance = Color3F.BLACK;
+		
+		for(int i = 0; i < samplesA.size(); i++) {
+			final Point2F sampleA = samplesA.get(i);
+			
+			final Optional<BXDFDistributionFunctionResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
+			
+			if(optionalBXDFDistributionFunctionResult.isPresent()) {
+				final BXDFDistributionFunctionResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
+				
+				final float probabilityDensityFunctionValue = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
+				
+				if(probabilityDensityFunctionValue > 0.0F) {
+					final Color3F result = bXDFDistributionFunctionResult.getResult();
+					
+					final Vector3F incoming = bXDFDistributionFunctionResult.getIncoming();
+					
+					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(result, incoming.cosThetaAbs()), probabilityDensityFunctionValue));
+				}
+			}
+		}
+		
+		return Color3F.divide(reflectance, samplesA.size());
+	}
 	
 	/**
 	 * Evaluates the distribution function.

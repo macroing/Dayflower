@@ -18,12 +18,13 @@
  */
 package org.dayflower.scene.pbrt;
 
-import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.image.Color3F;
 
 /**
  * A {@code BXDF} represents a BRDF (Bidirectional Reflectance Distribution Function) or a BTDF (Bidirectional Transmittance Distribution Function).
@@ -62,6 +63,38 @@ public abstract class BXDF {
 	}
 	
 	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples2} in PBRT
+	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples, called {@code samples1} in PBRT
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 */
+	public abstract Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB);
+	
+	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code BxDF} method {@code rho(const Vector3f &wo, int nSamples, const Point2f *samples)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples} in PBRT
+	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}
+	 */
+	public abstract Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing);
+	
+	/**
 	 * Evaluates the distribution function.
 	 * <p>
 	 * Returns an optional {@link BXDFDistributionFunctionResult} with the result of the evaluation.
@@ -75,13 +108,7 @@ public abstract class BXDF {
 	 * @return an optional {@code BXDFDistributionFunctionResult} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
-	@SuppressWarnings("static-method")
-	public Optional<BXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
-		Objects.requireNonNull(outgoing, "outgoing == null");
-		Objects.requireNonNull(incoming, "incoming == null");
-		
-		return Optional.empty();//TODO: Implement!
-	}
+	public abstract Optional<BXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming);
 	
 	/**
 	 * Samples the distribution function.
@@ -97,49 +124,7 @@ public abstract class BXDF {
 	 * @return an optional {@code BXDFDistributionFunctionResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
-	@SuppressWarnings("static-method")
-	public Optional<BXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
-		Objects.requireNonNull(outgoing, "outgoing == null");
-		Objects.requireNonNull(sample, "sample == null");
-		
-		return Optional.empty();//TODO: Implement!
-	}
-	
-	/**
-	 * Computes the reflectance function.
-	 * <p>
-	 * Returns an optional {@link BXDFReflectanceFunctionResult} with the result of the computation.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @param samples the samples to compute
-	 * @return an optional {@code BXDFReflectanceFunctionResult} with the result of the computation
-	 */
-	@SuppressWarnings("static-method")
-	public Optional<BXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples) {
-		return Optional.empty();//TODO: Implement!
-	}
-	
-	/**
-	 * Computes the reflectance function.
-	 * <p>
-	 * Returns an optional {@link BXDFReflectanceFunctionResult} with the result of the computation.
-	 * <p>
-	 * If {@code outgoing} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(const Vector3f &wo, int nSamples, const Point2f *samples)} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @param samples the samples to compute
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @return an optional {@code BXDFReflectanceFunctionResult} with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, {@code outgoing} is {@code null}
-	 */
-	@SuppressWarnings("static-method")
-	public Optional<BXDFReflectanceFunctionResult> computeReflectanceFunction(final int samples, final Vector3F outgoing) {
-		Objects.requireNonNull(outgoing, "outgoing == null");
-		
-		return Optional.empty();//TODO: Implement!
-	}
+	public abstract Optional<BXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample);
 	
 	/**
 	 * Evaluates the probability density function (PDF).
@@ -154,11 +139,5 @@ public abstract class BXDF {
 	 * @param incoming the incoming direction, called {@code wi} in PBRT
 	 * @return a {@code float} with the probability density function (PDF) value
 	 */
-	@SuppressWarnings("static-method")
-	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {
-		Objects.requireNonNull(outgoing, "outgoing == null");
-		Objects.requireNonNull(incoming, "incoming == null");
-		
-		return 0.0F;//TODO: Implement!
-	}
+	public abstract float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming);
 }

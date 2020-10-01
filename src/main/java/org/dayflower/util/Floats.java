@@ -74,6 +74,11 @@ public final class Floats {
 	public static final float PI_MULTIPLIED_BY_4 = PI * 4.0F;
 	
 	/**
+	 * The reciprocal (or inverse) of {@link #PI_MULTIPLIED_BY_4}.
+	 */
+	public static final float PI_MULTIPLIED_BY_4_RECIPROCAL = 1.0F / PI_MULTIPLIED_BY_4;
+	
+	/**
 	 * The reciprocal (or inverse) of {@link #PI}.
 	 */
 	public static final float PI_RECIPROCAL = 1.0F / PI;

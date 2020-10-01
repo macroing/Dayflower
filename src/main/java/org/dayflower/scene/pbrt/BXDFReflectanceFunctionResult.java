@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
+import org.dayflower.image.Color3F;
 import org.dayflower.util.Lists;
 
 /**
@@ -34,6 +35,7 @@ import org.dayflower.util.Lists;
  * @author J&#246;rgen Lundgren
  */
 public final class BXDFReflectanceFunctionResult {
+	private final Color3F result;
 	private final List<Point2F> samplesA;
 	private final List<Point2F> samplesB;
 	
@@ -42,14 +44,16 @@ public final class BXDFReflectanceFunctionResult {
 	/**
 	 * Constructs a new {@code BXDFReflectanceFunctionResult} instance.
 	 * <p>
-	 * If either {@code samplesA} or at least one element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code result}, {@code samplesA} or at least one element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This constructor will create a copy of {@code samplesA}.
 	 * 
+	 * @param result a {@link Color3F} instance with the result of the reflectance function
 	 * @param samplesA a {@code List} of sampled {@link Point2F} instances
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA} or at least one element in {@code samplesA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code result}, {@code samplesA} or at least one element in {@code samplesA} are {@code null}
 	 */
-	public BXDFReflectanceFunctionResult(final List<Point2F> samplesA) {
+	public BXDFReflectanceFunctionResult(final Color3F result, final List<Point2F> samplesA) {
+		this.result = Objects.requireNonNull(result, "result == null");
 		this.samplesA = new ArrayList<>(Lists.requireNonNullList(samplesA, "samplesA"));
 		this.samplesB = new ArrayList<>();
 	}
@@ -57,20 +61,37 @@ public final class BXDFReflectanceFunctionResult {
 	/**
 	 * Constructs a new {@code BXDFReflectanceFunctionResult} instance.
 	 * <p>
-	 * If either {@code samplesA}, {@code samplesB} or at least one element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code result}, {@code samplesA}, {@code samplesB} or at least one element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This constructor will create a copy of {@code samplesA} and {@code samplesB}.
 	 * 
+	 * @param result a {@link Color3F} instance with the result of the reflectance function
 	 * @param samplesA a {@code List} of sampled {@link Point2F} instances
 	 * @param samplesB a {@code List} of sampled {@code Point2F} instances
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or at least one element in {@code samplesA} or {@code samplesB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code result}, {@code samplesA}, {@code samplesB} or at least one element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
-	public BXDFReflectanceFunctionResult(final List<Point2F> samplesA, final List<Point2F> samplesB) {
+	public BXDFReflectanceFunctionResult(final Color3F result, final List<Point2F> samplesA, final List<Point2F> samplesB) {
+		this.result = Objects.requireNonNull(result, "result == null");
 		this.samplesA = new ArrayList<>(Lists.requireNonNullList(samplesA, "samplesA"));
 		this.samplesB = new ArrayList<>(Lists.requireNonNullList(samplesB, "samplesB"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Color3F} instance with the result of the reflectance function.
+	 * <p>
+	 * The {@code Color3F} instance represents the {@code Spectrum} instance returned by the following {@code BxDF} methods in PBRT:
+	 * <ul>
+	 * <li>{@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)}</li>
+	 * <li>{@code rho(const Vector3f &wo, int nSamples, const Point2f *samples)}</li>
+	 * </ul>
+	 * 
+	 * @return a {@code Color3F} instance with the result of the reflectance function
+	 */
+	public Color3F getResult() {
+		return this.result;
+	}
 	
 	/**
 	 * Returns a {@code List} of sampled {@link Point2F} instances.
@@ -129,6 +150,8 @@ public final class BXDFReflectanceFunctionResult {
 			return true;
 		} else if(!(object instanceof BXDFReflectanceFunctionResult)) {
 			return false;
+		} else if(!Objects.equals(this.result, BXDFReflectanceFunctionResult.class.cast(object).result)) {
+			return false;
 		} else if(!Objects.equals(this.samplesA, BXDFReflectanceFunctionResult.class.cast(object).samplesA)) {
 			return false;
 		} else if(!Objects.equals(this.samplesB, BXDFReflectanceFunctionResult.class.cast(object).samplesB)) {
@@ -145,6 +168,29 @@ public final class BXDFReflectanceFunctionResult {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.samplesA, this.samplesB);
+		return Objects.hash(this.result, this.samplesA, this.samplesB);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Scales the result of {@code bXDFReflectanceFunctionResult} with {@code scale}.
+	 * <p>
+	 * Returns a new {@code BXDFReflectanceFunctionResult} instance.
+	 * <p>
+	 * If either {@code bXDFReflectanceFunctionResult} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bXDFReflectanceFunctionResult the {@code BXDFReflectanceFunctionResult} instance to scale
+	 * @param scale a {@link Color3F} instance used as the scale
+	 * @return a new {@code BXDFReflectanceFunctionResult} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFReflectanceFunctionResult} or {@code scale} are {@code null}
+	 */
+	public static BXDFReflectanceFunctionResult scale(final BXDFReflectanceFunctionResult bXDFReflectanceFunctionResult, final Color3F scale) {
+		final Color3F result = Color3F.multiply(bXDFReflectanceFunctionResult.result, scale);
+		
+		final List<Point2F> samplesA = bXDFReflectanceFunctionResult.samplesA;
+		final List<Point2F> samplesB = bXDFReflectanceFunctionResult.samplesB;
+		
+		return new BXDFReflectanceFunctionResult(result, samplesA, samplesB);
 	}
 }

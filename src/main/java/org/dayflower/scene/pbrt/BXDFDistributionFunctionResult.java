@@ -34,7 +34,7 @@ import org.dayflower.image.Color3F;
  * @author J&#246;rgen Lundgren
  */
 public final class BXDFDistributionFunctionResult {
-	private final Color3F value;
+	private final Color3F result;
 	private final Vector3F incoming;
 	private final Vector3F outgoing;
 	private final float probabilityDensityFunctionValue;
@@ -47,70 +47,69 @@ public final class BXDFDistributionFunctionResult {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BXDFDistributionFunctionResult(Vector3F.NaN, Vector3F.NaN);
+	 * new BXDFDistributionFunctionResult(Color3F.BLACK);
 	 * }
 	 * </pre>
 	 */
 	public BXDFDistributionFunctionResult() {
-		this(Vector3F.NaN, Vector3F.NaN);
+		this(Color3F.BLACK);
 	}
 	
 	/**
 	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
 	 * <p>
-	 * If either {@code incoming} or {@code outgoing} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code result} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BXDFDistributionFunctionResult(incoming, outgoing, Color3F.BLACK);
+	 * new BXDFDistributionFunctionResult(result, Vector3F.NaN, Vector3F.NaN);
 	 * }
 	 * </pre>
 	 * 
-	 * @param incoming a {@link Vector3F} instance with the incoming direction used by the distribution function
-	 * @param outgoing a {@code Vector3F} instance with the outgoing direction used by the distribution function
-	 * @throws NullPointerException thrown if, and only if, either {@code incoming} or {@code outgoing} are {@code null}
+	 * @param result a {@link Color3F} instance with the result of the distribution function
+	 * @throws NullPointerException thrown if, and only if, {@code result} is {@code null}
 	 */
-	public BXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing) {
-		this(incoming, outgoing, Color3F.BLACK);
+	public BXDFDistributionFunctionResult(final Color3F result) {
+		this(result, Vector3F.NaN, Vector3F.NaN);
 	}
 	
 	/**
 	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
 	 * <p>
-	 * If either {@code incoming}, {@code outgoing} or {@code value} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code result}, {@code incoming} or {@code outgoing} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BXDFDistributionFunctionResult(incoming, outgoing, value, 0.0F);
+	 * new BXDFDistributionFunctionResult(result, incoming, outgoing, 0.0F);
 	 * }
 	 * </pre>
 	 * 
+	 * @param result a {@link Color3F} instance with the result of the distribution function
 	 * @param incoming a {@link Vector3F} instance with the incoming direction used by the distribution function
 	 * @param outgoing a {@code Vector3F} instance with the outgoing direction used by the distribution function
-	 * @param value a {@link Color3F} instance with the result of the distribution function
-	 * @throws NullPointerException thrown if, and only if, either {@code incoming}, {@code outgoing} or {@code value} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code result}, {@code incoming} or {@code outgoing} are {@code null}
 	 */
-	public BXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing, final Color3F value) {
-		this(incoming, outgoing, value, 0.0F);
+	public BXDFDistributionFunctionResult(final Color3F result, final Vector3F incoming, final Vector3F outgoing) {
+		this(result, incoming, outgoing, 0.0F);
 	}
 	
 	/**
 	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
 	 * <p>
-	 * If either {@code incoming}, {@code outgoing} or {@code value} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code result}, {@code incoming} or {@code outgoing} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param result a {@link Color3F} instance with the result of the distribution function
 	 * @param incoming a {@link Vector3F} instance with the incoming direction used by the distribution function
 	 * @param outgoing a {@code Vector3F} instance with the outgoing direction used by the distribution function
-	 * @param value a {@link Color3F} instance with the result of the distribution function
 	 * @param probabilityDensityFunctionValue a {@code float} with the probability density function (PDF) value computed by the distribution function
-	 * @throws NullPointerException thrown if, and only if, either {@code incoming}, {@code outgoing} or {@code value} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code result}, {@code incoming} or {@code outgoing} are {@code null}
 	 */
-	public BXDFDistributionFunctionResult(final Vector3F incoming, final Vector3F outgoing, final Color3F value, final float probabilityDensityFunctionValue) {
+	public BXDFDistributionFunctionResult(final Color3F result, final Vector3F incoming, final Vector3F outgoing, final float probabilityDensityFunctionValue) {
+		this.result = Objects.requireNonNull(result, "result == null");
 		this.incoming = Objects.requireNonNull(incoming, "incoming == null");
 		this.outgoing = Objects.requireNonNull(outgoing, "outgoing == null");
-		this.value = Objects.requireNonNull(value, "value == null");
 		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
 	}
 	
@@ -127,8 +126,8 @@ public final class BXDFDistributionFunctionResult {
 	 * 
 	 * @return a {@code Color3F} instance with the result of the distribution function
 	 */
-	public Color3F getValue() {
-		return this.value;
+	public Color3F getResult() {
+		return this.result;
 	}
 	
 	/**
@@ -138,7 +137,7 @@ public final class BXDFDistributionFunctionResult {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new BXDFDistributionFunctionResult(%s, %s, %s, %+.10f)", this.incoming, this.outgoing, this.value, Float.valueOf(this.probabilityDensityFunctionValue));
+		return String.format("new BXDFDistributionFunctionResult(%s, %s, %s, %+.10f)", this.result, this.incoming, this.outgoing, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -185,11 +184,11 @@ public final class BXDFDistributionFunctionResult {
 			return true;
 		} else if(!(object instanceof BXDFDistributionFunctionResult)) {
 			return false;
+		} else if(!Objects.equals(this.result, BXDFDistributionFunctionResult.class.cast(object).result)) {
+			return false;
 		} else if(!Objects.equals(this.incoming, BXDFDistributionFunctionResult.class.cast(object).incoming)) {
 			return false;
 		} else if(!Objects.equals(this.outgoing, BXDFDistributionFunctionResult.class.cast(object).outgoing)) {
-			return false;
-		} else if(!Objects.equals(this.value, BXDFDistributionFunctionResult.class.cast(object).value)) {
 			return false;
 		} else if(!equal(this.probabilityDensityFunctionValue, BXDFDistributionFunctionResult.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
@@ -219,6 +218,31 @@ public final class BXDFDistributionFunctionResult {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.incoming, this.outgoing, this.value, Float.valueOf(this.probabilityDensityFunctionValue));
+		return Objects.hash(this.result, this.incoming, this.outgoing, Float.valueOf(this.probabilityDensityFunctionValue));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Scales the result of {@code bXDFDistributionFunctionResult} with {@code scale}.
+	 * <p>
+	 * Returns a new {@code BXDFDistributionFunctionResult} instance.
+	 * <p>
+	 * If either {@code bXDFDistributionFunctionResult} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bXDFDistributionFunctionResult the {@code BXDFDistributionFunctionResult} instance to scale
+	 * @param scale a {@link Color3F} instance used as the scale
+	 * @return a new {@code BXDFDistributionFunctionResult} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFDistributionFunctionResult} or {@code scale} are {@code null}
+	 */
+	public static BXDFDistributionFunctionResult scale(final BXDFDistributionFunctionResult bXDFDistributionFunctionResult, final Color3F scale) {
+		final Color3F result = Color3F.multiply(bXDFDistributionFunctionResult.result, scale);
+		
+		final Vector3F incoming = bXDFDistributionFunctionResult.incoming;
+		final Vector3F outgoing = bXDFDistributionFunctionResult.outgoing;
+		
+		final float probabilityDensityFunctionValue = bXDFDistributionFunctionResult.probabilityDensityFunctionValue;
+		
+		return new BXDFDistributionFunctionResult(result, incoming, outgoing, probabilityDensityFunctionValue);
 	}
 }

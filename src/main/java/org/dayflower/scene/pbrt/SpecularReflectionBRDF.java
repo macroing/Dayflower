@@ -100,11 +100,11 @@ public final class SpecularReflectionBRDF extends BXDF {
 		
 		final Vector3F incoming = new Vector3F(-outgoing.getX(), -outgoing.getY(), outgoing.getZ());
 		
-		final Color3F value = Color3F.divide(Color3F.multiply(this.fresnel.evaluate(incoming.cosTheta()), this.reflectanceScale), incoming.cosThetaAbs());
+		final Color3F result = Color3F.divide(Color3F.multiply(this.fresnel.evaluate(incoming.cosTheta()), this.reflectanceScale), incoming.cosThetaAbs());
 		
 		final float probabilityDensityFunctionValue = 1.0F;
 		
-		return Optional.of(new BXDFDistributionFunctionResult(incoming, outgoing, value, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFDistributionFunctionResult(result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**

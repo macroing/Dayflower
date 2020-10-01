@@ -20,7 +20,10 @@ package org.dayflower.scene.pbrt;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.scene.Intersection;
+
 //TODO: Add Javadocs!
 public interface PBRTMaterial {
-	
+//	TODO: Add Javadocs!
+	BSDF computeBSDF(final Intersection intersection);
 }

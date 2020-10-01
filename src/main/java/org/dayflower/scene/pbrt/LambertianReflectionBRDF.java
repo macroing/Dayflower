@@ -107,7 +107,7 @@ public final class LambertianReflectionBRDF extends BXDF {
 	/**
 	 * Evaluates the distribution function.
 	 * <p>
-	 * Returns an optional {@link BXDFDistributionFunctionResult} with the result of the evaluation.
+	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
 	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -115,19 +115,15 @@ public final class LambertianReflectionBRDF extends BXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param incoming the incoming direction, called {@code wi} in PBRT
-	 * @return an optional {@code BXDFDistributionFunctionResult} with the result of the evaluation
+	 * @return a {@code Color3F} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public Optional<BXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Color3F result = Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL);
-		
-		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, incoming);
-		
-		return Optional.of(new BXDFDistributionFunctionResult(result, incoming, outgoing, probabilityDensityFunctionValue));
+		return Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL);
 	}
 	
 	/**
@@ -152,7 +148,11 @@ public final class LambertianReflectionBRDF extends BXDF {
 		final Vector3F incoming = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
 		final Vector3F incomingCorrectlyOriented = incoming.getZ() < 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
 		
-		return evaluateDistributionFunction(outgoing, incomingCorrectlyOriented);
+		final Color3F result = evaluateDistributionFunction(outgoing, incomingCorrectlyOriented);
+		
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, incomingCorrectlyOriented);
+		
+		return Optional.of(new BXDFDistributionFunctionResult(result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -198,6 +198,7 @@ public final class LambertianReflectionBRDF extends BXDF {
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param incoming the incoming direction, called {@code wi} in PBRT
 	 * @return a {@code float} with the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {

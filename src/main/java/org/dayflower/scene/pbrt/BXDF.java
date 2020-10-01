@@ -97,7 +97,7 @@ public abstract class BXDF {
 	/**
 	 * Evaluates the distribution function.
 	 * <p>
-	 * Returns an optional {@link BXDFDistributionFunctionResult} with the result of the evaluation.
+	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
 	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -105,10 +105,10 @@ public abstract class BXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param incoming the incoming direction, called {@code wi} in PBRT
-	 * @return an optional {@code BXDFDistributionFunctionResult} with the result of the evaluation
+	 * @return a {@code Color3F} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
-	public abstract Optional<BXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming);
+	public abstract Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming);
 	
 	/**
 	 * Samples the distribution function.
@@ -138,6 +138,7 @@ public abstract class BXDF {
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param incoming the incoming direction, called {@code wi} in PBRT
 	 * @return a {@code float} with the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
 	public abstract float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming);
 }

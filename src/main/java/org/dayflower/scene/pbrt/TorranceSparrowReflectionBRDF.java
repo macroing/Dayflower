@@ -92,11 +92,11 @@ public final class TorranceSparrowReflectionBRDF extends BXDF {
 	
 //	TODO: Add Javadocs!
 	@Override
-	public Optional<BXDFDistributionFunctionResult> evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Optional.empty();//TODO: Implement!
+		return Color3F.BLACK;//TODO: Implement!
 	}
 	
 //	TODO: Add Javadocs!

@@ -30,6 +30,7 @@ import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
+import org.dayflower.geometry.Sphere3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
@@ -45,6 +46,7 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.MaterialResult;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.background.PerezBackground;
 import org.dayflower.scene.bxdf.Fresnel;
 import org.dayflower.scene.light.PrimitiveLight;
 import org.dayflower.scene.material.AshikhminShirleyMaterial;
@@ -199,6 +201,7 @@ public final class PathTracer implements Renderer {
 				if(selectedBXDF.isDiracDistribution()) {
 					currentBounceDiracDistribution++;
 					
+					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
 //					radiance = Color3F.add(radiance, doGetRadianceRayitoBackground(throughput, intersection, materialResult, scene));
 				} else {
 					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
@@ -338,15 +341,19 @@ public final class PathTracer implements Renderer {
 		
 		final float selectedBXDFWeight = materialResult.getSelectedBXDFWeight();
 		
+		final Background background = scene.getBackground();
+		
 		final OrthonormalBasis33F orthonormalBasis = surfaceIntersection.getOrthonormalBasisS();
 		
 		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 		
 		final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
 		
-		final int samples = 10;
+		int samples = 0;
 		
-		for(int sample = 0; sample < samples; sample++) {
+		final int skySamples = 10;
+		
+		for(int skySample = 0; skySample < skySamples; samples++, skySample++) {
 			final BXDFResult selectedBXDFResult = selectedBXDF.sampleSolidAngle(directionO, surfaceNormal, orthonormalBasis, random(), random());
 			
 			final float probabilityDensityFunctionValueA = selectedBXDFResult.getProbabilityDensityFunctionValue();
@@ -363,7 +370,7 @@ public final class PathTracer implements Renderer {
 				if(!scene.intersects(ray)) {
 					final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA, probabilityDensityFunctionValueB, 1, 1);
 					
-					final Color3F emittance = scene.getBackground().radiance(ray);
+					final Color3F emittance = background.radiance(ray);
 					
 					final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
 					final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA * selectedBXDFWeight);
@@ -371,6 +378,59 @@ public final class PathTracer implements Renderer {
 					radianceR += emittance.getR() * colorR * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
 					radianceG += emittance.getG() * colorG * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
 					radianceB += emittance.getB() * colorB * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+				}
+			}
+		}
+		
+		if(background instanceof PerezBackground) {
+			final PerezBackground perezBackground = PerezBackground.class.cast(background);
+			
+			final Color3F sunColor = Color3F.multiply(perezBackground.getSunColor(), 10000000.0F);
+			
+			final Vector3F sunDirectionWorldSpace = perezBackground.getSunDirectionWorldSpace();
+			
+			final int sunSamples = 10;
+			
+			for(int sunSample = 0; sunSample < sunSamples; samples++, sunSample++) {
+				final Sphere3F sphere = new Sphere3F(100.0F, Point3F.add(new Point3F(), sunDirectionWorldSpace, 1000.0F));
+				
+				final Optional<SurfaceSample3F> optionalSurfaceSample = sphere.sample(surfaceIntersectionPoint, surfaceNormal, random(), random());
+				
+				if(optionalSurfaceSample.isPresent()) {
+					final SurfaceSample3F surfaceSample = optionalSurfaceSample.get();
+					
+					final Point3F point = surfaceSample.getPoint();
+					
+					final float probabilityDensityFunctionValueA1 = surfaceSample.getProbabilityDensityFunctionValue();
+					
+					if(probabilityDensityFunctionValueA1 > 0.0F) {
+						final Vector3F selectedDirectionI = Vector3F.normalize(Vector3F.direction(point, surfaceIntersectionPoint));
+						final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
+						
+						final BXDFResult selectedBXDFResult = selectedBXDF.evaluateSolidAngle(directionO, surfaceNormal, selectedDirectionI);
+						
+						if(selectedBXDFResult.isFinite()) {
+							final float probabilityDensityFunctionValueB1 = selectedBXDFResult.getProbabilityDensityFunctionValue();
+							final float reflectance = selectedBXDFResult.getReflectance();
+							
+							if(probabilityDensityFunctionValueB1 > 0.0F && reflectance > 0.0F) {
+								final Ray3F ray = new Ray3F(surfaceIntersectionPoint, selectedDirectionO);
+								
+								if(!scene.intersects(ray)) {
+									final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA1, probabilityDensityFunctionValueB1, 1, 1);
+									
+									final Color3F emittance = sunColor;
+									
+									final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
+									final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA1 * selectedBXDFWeight);
+									
+									radianceR += emittance.getR() * colorR * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+									radianceG += emittance.getG() * colorG * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+									radianceB += emittance.getB() * colorB * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+								}
+							}
+						}
+					}
 				}
 			}
 		}

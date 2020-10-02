@@ -159,6 +159,15 @@ public final class PerezBackground implements Background {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns the sun color associated with this {@code PerezBackground} instance.
+	 * 
+	 * @return the sun color associated with this {@code PerezBackground} instance
+	 */
+	public Color3F getSunColor() {
+		return this.sunColor;
+	}
+	
+	/**
 	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -240,6 +249,15 @@ public final class PerezBackground implements Background {
 		}
 		
 		return backgroundSamples;
+	}
+	
+	/**
+	 * Returns the sun direction in world space associated with this {@code PerezBackground} instance.
+	 * 
+	 * @return the sun direction in world space associated with this {@code PerezBackground} instance
+	 */
+	public Vector3F getSunDirectionWorldSpace() {
+		return this.sunDirectionWorldSpace;
 	}
 	
 	/**

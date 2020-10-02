@@ -229,7 +229,7 @@ public final class OrenNayarBRDF extends BXDF {
 		Objects.requireNonNull(sample, "sample == null");
 		
 		final Vector3F incoming = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
-		final Vector3F incomingCorrectlyOriented = incoming.getZ() < 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
+		final Vector3F incomingCorrectlyOriented = outgoing.getZ() < 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
 		
 		final Color3F result = evaluateDistributionFunction(outgoing, incomingCorrectlyOriented);
 		

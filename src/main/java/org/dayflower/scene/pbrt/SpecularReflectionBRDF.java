@@ -79,6 +79,8 @@ public final class SpecularReflectionBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
+//		PBRT: Implementation of BxDF.
+		
 		Lists.requireNonNullList(samplesA, "samplesA");
 		Lists.requireNonNullList(samplesB, "samplesB");
 		
@@ -127,6 +129,12 @@ public final class SpecularReflectionBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
+//		PBRT: Implementation of BxDF.
+		
+		Lists.requireNonNullList(samplesA, "samplesA");
+		
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		
 		Color3F reflectance = Color3F.BLACK;
 		
 		for(int i = 0; i < samplesA.size(); i++) {
@@ -168,6 +176,8 @@ public final class SpecularReflectionBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+//		PBRT: Implementation of SpecularReflection.
+		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
@@ -190,6 +200,8 @@ public final class SpecularReflectionBRDF extends BXDF {
 	 */
 	@Override
 	public Optional<BXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+//		PBRT: Implementation of SpecularReflection.
+		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
@@ -251,6 +263,8 @@ public final class SpecularReflectionBRDF extends BXDF {
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {
+//		PBRT: Implementation of SpecularReflection.
+		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		

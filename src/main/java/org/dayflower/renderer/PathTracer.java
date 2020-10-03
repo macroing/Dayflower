@@ -385,7 +385,7 @@ public final class PathTracer implements Renderer {
 		if(background instanceof PerezBackground) {
 			final PerezBackground perezBackground = PerezBackground.class.cast(background);
 			
-			final Color3F sunColor = Color3F.multiply(perezBackground.getSunColor(), 10000000.0F);//1000000000.0F
+			final Color3F sunColor = Color3F.multiply(perezBackground.getSunColor(), 10000000.0F);//1000000.0F, 1000000000.0F
 			
 			final Vector3F sunDirectionWorldSpace = perezBackground.getSunDirectionWorldSpace();
 			

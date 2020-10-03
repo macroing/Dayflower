@@ -351,7 +351,7 @@ public final class PathTracer implements Renderer {
 		
 		int samples = 0;
 		
-		final int skySamples = 10;
+		final int skySamples = 1;
 		
 		for(int skySample = 0; skySample < skySamples; samples++, skySample++) {
 			final BXDFResult selectedBXDFResult = selectedBXDF.sampleSolidAngle(directionO, surfaceNormal, orthonormalBasis, random(), random());
@@ -385,14 +385,14 @@ public final class PathTracer implements Renderer {
 		if(background instanceof PerezBackground) {
 			final PerezBackground perezBackground = PerezBackground.class.cast(background);
 			
-			final Color3F sunColor = Color3F.multiply(perezBackground.getSunColor(), 10000000.0F);
+			final Color3F sunColor = Color3F.multiply(perezBackground.getSunColor(), 10000000.0F);//1000000000.0F
 			
 			final Vector3F sunDirectionWorldSpace = perezBackground.getSunDirectionWorldSpace();
 			
-			final int sunSamples = 10;
+			final int sunSamples = 1;
 			
 			for(int sunSample = 0; sunSample < sunSamples; samples++, sunSample++) {
-				final Sphere3F sphere = new Sphere3F(100.0F, Point3F.add(new Point3F(), sunDirectionWorldSpace, 1000.0F));
+				final Sphere3F sphere = new Sphere3F(100.0F/*10.0F*/, Point3F.add(new Point3F(), sunDirectionWorldSpace, 1000.0F));
 				
 				final Optional<SurfaceSample3F> optionalSurfaceSample = sphere.sample(surfaceIntersectionPoint, surfaceNormal, random(), random());
 				
@@ -440,6 +440,10 @@ public final class PathTracer implements Renderer {
 		radianceR = throughputR * (radianceR * samplesReciprocal);
 		radianceG = throughputG * (radianceG * samplesReciprocal);
 		radianceB = throughputB * (radianceB * samplesReciprocal);
+		
+		if(!Float.isFinite(radianceR) || !Float.isFinite(radianceG) || !Float.isFinite(radianceB)) {
+			return Color3F.BLACK;
+		}
 		
 		return new Color3F(radianceR, radianceG, radianceB);
 	}

@@ -156,11 +156,13 @@ public final class LambertianTransmissionBTDF extends BXDF {
 		final Vector3F incoming = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
 		final Vector3F incomingCorrectlyOriented = outgoing.getZ() > 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
 		
+		final BXDFType bXDFType = getBXDFType();
+		
 		final Color3F result = evaluateDistributionFunction(outgoing, incomingCorrectlyOriented);
 		
 		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, incomingCorrectlyOriented);
 		
-		return Optional.of(new BXDFDistributionFunctionResult(result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFDistributionFunctionResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**

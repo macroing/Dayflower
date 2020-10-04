@@ -109,7 +109,7 @@ public final class TorranceSparrowReflectionBRDF extends BXDF {
 			return Optional.empty();
 		}
 		
-		final Vector3F normal = this.microfacetDistribution.sampleN(outgoing, sample.getU(), sample.getV());
+		final Vector3F normal = this.microfacetDistribution.sampleNormal(outgoing, sample);
 		
 		if(Vector3F.dotProduct(outgoing, normal) < 0.0F) {
 			return Optional.empty();

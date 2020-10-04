@@ -24,6 +24,7 @@ import static org.dayflower.util.Floats.max;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
@@ -40,7 +41,7 @@ public abstract class MicrofacetDistribution {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public abstract Vector3F sampleN(final Vector3F o, final float u, final float v);
+	public abstract Vector3F sampleNormal(final Vector3F outgoing, final Point2F sample);
 	
 //	TODO: Add Javadocs!
 	public final boolean isSamplingVisibleArea() {
@@ -48,24 +49,24 @@ public abstract class MicrofacetDistribution {
 	}
 	
 //	TODO: Add Javadocs!
-	public abstract float computeDifferentialArea(final Vector3F n);
+	public abstract float computeDifferentialArea(final Vector3F normal);
 	
 //	TODO: Add Javadocs!
-	public abstract float computeLambda(final Vector3F o);
+	public abstract float computeLambda(final Vector3F outgoing);
 	
 //	TODO: Add Javadocs!
-	public final float computeProbabilityDensityFunctionValue(final Vector3F o, final Vector3F n) {
-		return this.isSamplingVisibleArea ? computeDifferentialArea(n) * computeShadowingAndMasking(o) * abs(Vector3F.dotProduct(o, n)) / o.cosThetaAbs() : computeDifferentialArea(n) * n.cosThetaAbs();
+	public final float computeProbabilityDensityFunctionValue(final Vector3F outgoing, final Vector3F normal) {
+		return this.isSamplingVisibleArea ? computeDifferentialArea(normal) * computeShadowingAndMasking(outgoing) * abs(Vector3F.dotProduct(outgoing, normal)) / outgoing.cosThetaAbs() : computeDifferentialArea(normal) * normal.cosThetaAbs();
 	}
 	
 //	TODO: Add Javadocs!
-	public final float computeShadowingAndMasking(final Vector3F o) {
-		return 1.0F / (1.0F + computeLambda(o));
+	public final float computeShadowingAndMasking(final Vector3F outgoing) {
+		return 1.0F / (1.0F + computeLambda(outgoing));
 	}
 	
 //	TODO: Add Javadocs!
-	public final float computeShadowingAndMasking(final Vector3F o, final Vector3F i) {
-		return 1.0F / (1.0F + computeLambda(o) + computeLambda(i));
+	public final float computeShadowingAndMasking(final Vector3F outgoing, final Vector3F incoming) {
+		return 1.0F / (1.0F + computeLambda(outgoing) + computeLambda(incoming));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

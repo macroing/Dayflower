@@ -37,6 +37,7 @@ import static org.dayflower.util.Floats.tan;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 
@@ -59,16 +60,19 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	
 //	TODO: Add Javadocs!
 	@Override
-	public Vector3F sampleN(final Vector3F o, final float u, final float v) {
+	public Vector3F sampleNormal(final Vector3F outgoing, final Point2F sample) {
 		final float alphaX = this.alphaX;
 		final float alphaY = this.alphaY;
 		
+		final float u = sample.getU();
+		final float v = sample.getV();
+		
 		if(isSamplingVisibleArea()) {
-			if(o.getZ() >= 0.0F) {
-				return doSample(o, alphaX, alphaY, u, v);
+			if(outgoing.getZ() >= 0.0F) {
+				return doSample(outgoing, alphaX, alphaY, u, v);
 			}
 			
-			return Vector3F.negate(doSample(Vector3F.negate(o), alphaX, alphaY, u, v));
+			return Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
 		} else if(equal(alphaX, alphaY)) {
 			final float logSample = log(1.0F - u);
 			final float phi = v * 2.0F * PI;
@@ -76,10 +80,10 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
-			final Vector3F n = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F nCorrectlyOriented = o.getZ() * n.getZ() > 0.0F ? n : Vector3F.negate(n);
+			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
+			final Vector3F normalCorrectlyOriented = outgoing.getZ() * normal.getZ() > 0.0F ? normal : Vector3F.negate(normal);
 			
-			return nCorrectlyOriented;
+			return normalCorrectlyOriented;
 		} else {
 			final float logSample = log(1.0F - u);
 			final float phi = atan(alphaY / alphaX * tan(2.0F * PI * v + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
@@ -91,17 +95,17 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
-			final Vector3F n = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F nCorrectlyOriented = o.getZ() * n.getZ() > 0.0F ? n : Vector3F.negate(n);
+			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
+			final Vector3F normalCorrectlyOriented = outgoing.getZ() * normal.getZ() > 0.0F ? normal : Vector3F.negate(normal);
 			
-			return nCorrectlyOriented;
+			return normalCorrectlyOriented;
 		}
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
-	public float computeDifferentialArea(final Vector3F n) {
-		final float tanThetaSquared = n.tanThetaSquared();
+	public float computeDifferentialArea(final Vector3F normal) {
+		final float tanThetaSquared = normal.tanThetaSquared();
 		
 		if(isInfinite(tanThetaSquared)) {
 			return 0.0F;
@@ -112,10 +116,10 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 		final float alphaY = this.alphaY;
 		final float alphaYSquared = alphaY * alphaY;
 		
-		final float cosPhiSquared = n.cosPhiSquared();
-		final float sinPhiSquared = n.sinPhiSquared();
+		final float cosPhiSquared = normal.cosPhiSquared();
+		final float sinPhiSquared = normal.sinPhiSquared();
 		
-		final float cosThetaQuartic = n.cosThetaQuartic();
+		final float cosThetaQuartic = normal.cosThetaQuartic();
 		
 		final float differentialArea = exp(-tanThetaSquared * (cosPhiSquared / alphaXSquared + sinPhiSquared / alphaYSquared)) / (PI * alphaX * alphaY * cosThetaQuartic);
 		
@@ -124,8 +128,8 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	
 //	TODO: Add Javadocs!
 	@Override
-	public float computeLambda(final Vector3F o) {
-		final float tanThetaAbs = o.tanThetaAbs();
+	public float computeLambda(final Vector3F outgoing) {
+		final float tanThetaAbs = outgoing.tanThetaAbs();
 		
 		if(isInfinite(tanThetaAbs)) {
 			return 0.0F;
@@ -136,8 +140,8 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 		final float alphaY = this.alphaY;
 		final float alphaYSquared = alphaY * alphaY;
 		
-		final float cosPhiSquared = o.cosPhiSquared();
-		final float sinPhiSquared = o.sinPhiSquared();
+		final float cosPhiSquared = outgoing.cosPhiSquared();
+		final float sinPhiSquared = outgoing.sinPhiSquared();
 		
 		final float alpha = sqrt(cosPhiSquared * alphaXSquared + sinPhiSquared * alphaYSquared);
 		final float alphaReciprocal = 1.0F / (alpha * tanThetaAbs);

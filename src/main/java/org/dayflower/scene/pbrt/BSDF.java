@@ -19,8 +19,10 @@
 package org.dayflower.scene.pbrt;
 
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.floor;
+import static org.dayflower.util.Floats.min;
+import static org.dayflower.util.Ints.min;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +34,14 @@ import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.util.Lists;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code BSDF} represents a BSDF (Bidirectional Scattering Distribution Function).
+ * <p>
+ * This class is indirectly mutable and therefore not thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class BSDF {
 	private final Intersection intersection;
 	private final List<BXDF> bXDFs;
@@ -40,10 +49,21 @@ public final class BSDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
-	public BSDF(final Intersection intersection, final List<BXDF> bXDs, final float eta) {
+	/**
+	 * Constructs a new {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The {@code List} {@code bXDFs} will be copied.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param bXDFs a {@code List} of {@link BXDF} instances
+	 * @param eta the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}
+	 */
+	public BSDF(final Intersection intersection, final List<BXDF> bXDFs, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
-		this.bXDFs = new ArrayList<>(Lists.requireNonNullList(bXDs, "bXDs"));
+		this.bXDFs = new ArrayList<>(Lists.requireNonNullList(bXDFs, "bXDFs"));
 		this.eta = eta;
 	}
 	
@@ -155,7 +175,7 @@ public final class BSDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link BXDFDistributionFunctionResult} with the result of the sampling.
+	 * Returns an optional {@link BSDFDistributionFunctionResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoingWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -165,14 +185,113 @@ public final class BSDF {
 	 * @param sample the sample point
 	 * @param hasReflection {@code true} if, and only if, reflection is accepted, {@code false} otherwise
 	 * @param hasTransmission {@code true} if, and only if, transmission is accepted, {@code false} otherwise
-	 * @return an optional {@code BXDFDistributionFunctionResult} with the result of the sampling
+	 * @return an optional {@code BSDFDistributionFunctionResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoingWorldSpace} or {@code sample} are {@code null}
 	 */
-	public Optional<BXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoingWorldSpace, final Point2F sample, final boolean hasReflection, final boolean hasTransmission) {
+	public Optional<BSDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoingWorldSpace, final Point2F sample, final boolean hasReflection, final boolean hasTransmission) {
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		return Optional.empty();//TODO: Implement!
+		final int matches = doComputeMatches(hasReflection, hasTransmission);
+		
+		if(matches == 0) {
+			return Optional.empty();
+		}
+		
+		final int match = min((int)(floor(sample.getU() * matches)), matches - 1);
+		
+		final BXDF matchingBXDF = doGetMatchingBXDF(hasReflection, hasTransmission, match);
+		
+		if(matchingBXDF == null) {
+			return Optional.empty();
+		}
+		
+		final Point2F sampleRemapped = new Point2F(min(sample.getU() * matches - match, 0.99999994F), sample.getV());
+		
+		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
+		
+		if(equal(outgoing.getZ(), 0.0F)) {
+			return Optional.empty();
+		}
+		
+		final Optional<BXDFDistributionFunctionResult> optionalBXDFDistributionFunctionResult = matchingBXDF.sampleDistributionFunction(outgoing, sampleRemapped);
+		
+		if(!optionalBXDFDistributionFunctionResult.isPresent()) {
+			return Optional.empty();
+		}
+		
+		final BXDFDistributionFunctionResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
+		
+		final Vector3F incoming = bXDFDistributionFunctionResult.getIncoming();
+		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalG();
+		
+		Color3F result = bXDFDistributionFunctionResult.getResult();
+		
+		float probabilityDensityFunctionValue = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
+		
+		if(matches > 1 && !matchingBXDF.getBXDFType().isSpecular()) {
+			for(final BXDF bXDF : this.bXDFs) {
+				if(matchingBXDF != bXDF && (hasReflection && bXDF.getBXDFType().hasReflection() || hasTransmission && bXDF.getBXDFType().hasTransmission())) {
+					probabilityDensityFunctionValue += bXDF.evaluateProbabilityDensityFunction(outgoing, incoming);
+				}
+			}
+		}
+		
+		if(matches > 1) {
+			probabilityDensityFunctionValue /= matches;
+		}
+		
+		if(!matchingBXDF.getBXDFType().isSpecular()) {
+			final boolean isReflecting = Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) > 0.0F;
+			
+			result = Color3F.BLACK;
+			
+			for(final BXDF bXDF : this.bXDFs) {
+				if(hasReflection && bXDF.getBXDFType().hasReflection() && isReflecting || hasTransmission && bXDF.getBXDFType().hasTransmission() && !isReflecting) {
+					result = Color3F.add(result, bXDF.evaluateDistributionFunction(outgoing, incoming));
+				}
+			}
+		}
+		
+		final BXDFType bXDFType = bXDFDistributionFunctionResult.getBXDFType();
+		
+		return Optional.of(new BSDFDistributionFunctionResult(bXDFType, result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
+	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code BSDF} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code BSDF} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new BSDF(%s, %s, %+.10f)", this.intersection, "...", Float.valueOf(this.eta));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code BSDF} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BSDF}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code BSDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BSDF}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof BSDF)) {
+			return false;
+		} else if(!Objects.equals(this.intersection, BSDF.class.cast(object).intersection)) {
+			return false;
+		} else if(!Objects.equals(this.bXDFs, BSDF.class.cast(object).bXDFs)) {
+			return false;
+		} else if(!equal(this.eta, BSDF.class.cast(object).eta)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	/**
@@ -225,7 +344,38 @@ public final class BSDF {
 		return probabilityDensityFunctionValue;
 	}
 	
+	/**
+	 * Returns the index of refraction (IOR).
+	 * 
+	 * @return the index of refraction (IOR)
+	 */
+	public float getEta() {
+		return this.eta;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code BSDF} instance.
+	 * 
+	 * @return a hash code for this {@code BSDF} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.intersection, this.bXDFs, Float.valueOf(this.eta));
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private BXDF doGetMatchingBXDF(final boolean hasReflection, final boolean hasTransmission, final int match) {
+		for(int i = 0, j = match; i < this.bXDFs.size(); i++) {
+			final BXDF bXDF = this.bXDFs.get(i);
+			
+			if((hasReflection && bXDF.getBXDFType().hasReflection() || hasTransmission && bXDF.getBXDFType().hasTransmission()) && j-- == 0) {
+				return bXDF;
+			}
+		}
+		
+		return null;
+	}
 	
 	private Vector3F doTransformToLocalSpace(final Vector3F vector) {
 		return Vector3F.transformReverse(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS());
@@ -233,5 +383,17 @@ public final class BSDF {
 	
 	private Vector3F doTransformToWorldSpace(final Vector3F vector) {
 		return Vector3F.transform(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS());
+	}
+	
+	private int doComputeMatches(final boolean hasReflection, final boolean hasTransmission) {
+		int matches = 0;
+		
+		for(final BXDF bXDF : this.bXDFs) {
+			if(hasReflection && bXDF.getBXDFType().hasReflection() || hasTransmission && bXDF.getBXDFType().hasTransmission()) {
+				matches++;
+			}
+		}
+		
+		return matches;
 	}
 }

@@ -25,6 +25,7 @@ import static org.dayflower.util.Floats.sqrt;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 
 //TODO: Add Javadocs!
@@ -46,14 +47,14 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	
 //	TODO: Add Javadocs!
 	@Override
-	public Vector3F sampleN(final Vector3F o, final float u, final float v) {
-		return null;
+	public Vector3F sampleNormal(final Vector3F outgoing, final Point2F sample) {
+		return null;//TODO: Implement!
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
-	public float computeDifferentialArea(final Vector3F n) {
-		final float tanThetaSquared = n.tanThetaSquared();
+	public float computeDifferentialArea(final Vector3F normal) {
+		final float tanThetaSquared = normal.tanThetaSquared();
 		
 		if(isInfinite(tanThetaSquared)) {
 			return 0.0F;
@@ -64,10 +65,10 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float alphaY = this.alphaY;
 		final float alphaYSquared = alphaY * alphaY;
 		
-		final float cosPhiSquared = n.cosPhiSquared();
-		final float sinPhiSquared = n.sinPhiSquared();
+		final float cosPhiSquared = normal.cosPhiSquared();
+		final float sinPhiSquared = normal.sinPhiSquared();
 		
-		final float cosThetaQuartic = n.cosThetaQuartic();
+		final float cosThetaQuartic = normal.cosThetaQuartic();
 		
 		final float exponent = (cosPhiSquared / alphaXSquared + sinPhiSquared / alphaYSquared) * tanThetaSquared;
 		
@@ -78,8 +79,8 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	
 //	TODO: Add Javadocs!
 	@Override
-	public float computeLambda(final Vector3F o) {
-		final float tanThetaAbs = o.tanThetaAbs();
+	public float computeLambda(final Vector3F outgoing) {
+		final float tanThetaAbs = outgoing.tanThetaAbs();
 		
 		if(isInfinite(tanThetaAbs)) {
 			return 0.0F;
@@ -90,8 +91,8 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float alphaY = this.alphaY;
 		final float alphaYSquared = alphaY * alphaY;
 		
-		final float cosPhiSquared = o.cosPhiSquared();
-		final float sinPhiSquared = o.sinPhiSquared();
+		final float cosPhiSquared = outgoing.cosPhiSquared();
+		final float sinPhiSquared = outgoing.sinPhiSquared();
 		
 		final float alpha = sqrt(cosPhiSquared * alphaXSquared + sinPhiSquared * alphaYSquared);
 		final float alphaTanThetaAbsSquared = (alpha * tanThetaAbs) * (alpha * tanThetaAbs);

@@ -26,14 +26,14 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
 /**
- * A {@code BXDFDistributionFunctionResult} contains the result produced by sampling the distribution function by a {@link BXDF} instance.
+ * A {@code BSDFDistributionFunctionResult} contains the result produced by sampling the distribution function by a {@link BSDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class BXDFDistributionFunctionResult {
+public final class BSDFDistributionFunctionResult {
 	private final BXDFType bXDFType;
 	private final Color3F result;
 	private final Vector3F incoming;
@@ -43,33 +43,33 @@ public final class BXDFDistributionFunctionResult {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
+	 * Constructs a new {@code BSDFDistributionFunctionResult} instance.
 	 * <p>
 	 * If {@code bXDFType} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BXDFDistributionFunctionResult(bXDFType, Color3F.BLACK);
+	 * new BSDFDistributionFunctionResult(bXDFType, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance
 	 * @throws NullPointerException thrown if, and only if, {@code bXDFType} is {@code null}
 	 */
-	public BXDFDistributionFunctionResult(final BXDFType bXDFType) {
+	public BSDFDistributionFunctionResult(final BXDFType bXDFType) {
 		this(bXDFType, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
+	 * Constructs a new {@code BSDFDistributionFunctionResult} instance.
 	 * <p>
 	 * If either {@code bXDFType} or {@code result} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BXDFDistributionFunctionResult(bXDFType, result, Vector3F.NaN, Vector3F.NaN);
+	 * new BSDFDistributionFunctionResult(bXDFType, result, Vector3F.NaN, Vector3F.NaN);
 	 * }
 	 * </pre>
 	 * 
@@ -77,19 +77,19 @@ public final class BXDFDistributionFunctionResult {
 	 * @param result a {@link Color3F} instance with the result of the distribution function
 	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType} or {@code result} are {@code null}
 	 */
-	public BXDFDistributionFunctionResult(final BXDFType bXDFType, final Color3F result) {
+	public BSDFDistributionFunctionResult(final BXDFType bXDFType, final Color3F result) {
 		this(bXDFType, result, Vector3F.NaN, Vector3F.NaN);
 	}
 	
 	/**
-	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
+	 * Constructs a new {@code BSDFDistributionFunctionResult} instance.
 	 * <p>
 	 * If either {@code bXDFType}, {@code result}, {@code incoming} or {@code outgoing} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BXDFDistributionFunctionResult(bXDFType, result, incoming, outgoing, 0.0F);
+	 * new BSDFDistributionFunctionResult(bXDFType, result, incoming, outgoing, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -99,12 +99,12 @@ public final class BXDFDistributionFunctionResult {
 	 * @param outgoing a {@code Vector3F} instance with the outgoing direction used by the distribution function
 	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code result}, {@code incoming} or {@code outgoing} are {@code null}
 	 */
-	public BXDFDistributionFunctionResult(final BXDFType bXDFType, final Color3F result, final Vector3F incoming, final Vector3F outgoing) {
+	public BSDFDistributionFunctionResult(final BXDFType bXDFType, final Color3F result, final Vector3F incoming, final Vector3F outgoing) {
 		this(bXDFType, result, incoming, outgoing, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code BXDFDistributionFunctionResult} instance.
+	 * Constructs a new {@code BSDFDistributionFunctionResult} instance.
 	 * <p>
 	 * If either {@code bXDFType}, {@code result}, {@code incoming} or {@code outgoing} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -115,7 +115,7 @@ public final class BXDFDistributionFunctionResult {
 	 * @param probabilityDensityFunctionValue a {@code float} with the probability density function (PDF) value computed by the distribution function
 	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code result}, {@code incoming} or {@code outgoing} are {@code null}
 	 */
-	public BXDFDistributionFunctionResult(final BXDFType bXDFType, final Color3F result, final Vector3F incoming, final Vector3F outgoing, final float probabilityDensityFunctionValue) {
+	public BSDFDistributionFunctionResult(final BXDFType bXDFType, final Color3F result, final Vector3F incoming, final Vector3F outgoing, final float probabilityDensityFunctionValue) {
 		this.bXDFType = Objects.requireNonNull(bXDFType, "bXDFType == null");
 		this.result = Objects.requireNonNull(result, "result == null");
 		this.incoming = Objects.requireNonNull(incoming, "incoming == null");
@@ -137,9 +137,9 @@ public final class BXDFDistributionFunctionResult {
 	/**
 	 * Returns a {@link Color3F} instance with the result of the distribution function.
 	 * <p>
-	 * The {@code Color3F} instance represents the {@code Spectrum} instance returned by the following {@code BxDF} method in PBRT:
+	 * The {@code Color3F} instance represents the {@code Spectrum} instance returned by the following {@code BSDF} method in PBRT:
 	 * <ul>
-	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)}</li>
+	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u, Float *pdf, BxDFType type = BSDF_ALL, BxDFType *sampledType = nullptr)}</li>
 	 * </ul>
 	 * 
 	 * @return a {@code Color3F} instance with the result of the distribution function
@@ -149,21 +149,21 @@ public final class BXDFDistributionFunctionResult {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code BXDFDistributionFunctionResult} instance.
+	 * Returns a {@code String} representation of this {@code BSDFDistributionFunctionResult} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code BXDFDistributionFunctionResult} instance
+	 * @return a {@code String} representation of this {@code BSDFDistributionFunctionResult} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new BXDFDistributionFunctionResult(%s, %s, %s, %s, %+.10f)", this.bXDFType, this.result, this.incoming, this.outgoing, Float.valueOf(this.probabilityDensityFunctionValue));
+		return String.format("new BSDFDistributionFunctionResult(%s, %s, %s, %s, %+.10f)", this.bXDFType, this.result, this.incoming, this.outgoing, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 	
 	/**
 	 * Returns a {@link Vector3F} instance with the incoming direction used by the distribution function.
 	 * <p>
-	 * The {@code Vector3F} instance represents the {@code Vector3f} called {@code wi} and is passed as a parameter argument to the following {@code BxDF} method in PBRT:
+	 * The {@code Vector3F} instance represents the {@code Vector3f} called {@code wi} and is passed as a parameter argument to the following {@code BSDF} method in PBRT:
 	 * <ul>
-	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)}</li>
+	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u, Float *pdf, BxDFType type = BSDF_ALL, BxDFType *sampledType = nullptr)}</li>
 	 * </ul>
 	 * 
 	 * @return a {@code Vector3F} instance with the incoming direction used by the distribution function
@@ -175,9 +175,9 @@ public final class BXDFDistributionFunctionResult {
 	/**
 	 * Returns a {@link Vector3F} instance with the outgoing direction used by the distribution function.
 	 * <p>
-	 * The {@code Vector3F} instance represents the {@code Vector3f} called {@code wo} and is passed as a parameter argument to the following {@code BxDF} method in PBRT:
+	 * The {@code Vector3F} instance represents the {@code Vector3f} called {@code wo} and is passed as a parameter argument to the following {@code BSDF} method in PBRT:
 	 * <ul>
-	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)}</li>
+	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u, Float *pdf, BxDFType type = BSDF_ALL, BxDFType *sampledType = nullptr)}</li>
 	 * </ul>
 	 * 
 	 * @return a {@code Vector3F} instance with the outgoing direction used by the distribution function
@@ -187,28 +187,28 @@ public final class BXDFDistributionFunctionResult {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code BXDFDistributionFunctionResult} instance for equality.
+	 * Compares {@code object} to this {@code BSDFDistributionFunctionResult} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BXDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BSDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code BXDFDistributionFunctionResult} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BXDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code BSDFDistributionFunctionResult} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BSDFDistributionFunctionResult}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof BXDFDistributionFunctionResult)) {
+		} else if(!(object instanceof BSDFDistributionFunctionResult)) {
 			return false;
-		} else if(!Objects.equals(this.bXDFType, BXDFDistributionFunctionResult.class.cast(object).bXDFType)) {
+		} else if(!Objects.equals(this.bXDFType, BSDFDistributionFunctionResult.class.cast(object).bXDFType)) {
 			return false;
-		} else if(!Objects.equals(this.result, BXDFDistributionFunctionResult.class.cast(object).result)) {
+		} else if(!Objects.equals(this.result, BSDFDistributionFunctionResult.class.cast(object).result)) {
 			return false;
-		} else if(!Objects.equals(this.incoming, BXDFDistributionFunctionResult.class.cast(object).incoming)) {
+		} else if(!Objects.equals(this.incoming, BSDFDistributionFunctionResult.class.cast(object).incoming)) {
 			return false;
-		} else if(!Objects.equals(this.outgoing, BXDFDistributionFunctionResult.class.cast(object).outgoing)) {
+		} else if(!Objects.equals(this.outgoing, BSDFDistributionFunctionResult.class.cast(object).outgoing)) {
 			return false;
-		} else if(!equal(this.probabilityDensityFunctionValue, BXDFDistributionFunctionResult.class.cast(object).probabilityDensityFunctionValue)) {
+		} else if(!equal(this.probabilityDensityFunctionValue, BSDFDistributionFunctionResult.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
 		} else {
 			return true;
@@ -218,9 +218,9 @@ public final class BXDFDistributionFunctionResult {
 	/**
 	 * Returns a {@code float} with the probability density function (PDF) value computed by the distribution function.
 	 * <p>
-	 * The {@code float} represents the {@code Float} called {@code pdf} and is passed as a parameter argument to the following {@code BxDF} method in PBRT:
+	 * The {@code float} represents the {@code Float} called {@code pdf} and is passed as a parameter argument to the following {@code BSDF} method in PBRT:
 	 * <ul>
-	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)}</li>
+	 * <li>{@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u, Float *pdf, BxDFType type = BSDF_ALL, BxDFType *sampledType = nullptr)}</li>
 	 * </ul>
 	 * 
 	 * @return a {@code float} with the probability density function (PDF) value computed by the distribution function
@@ -230,39 +230,12 @@ public final class BXDFDistributionFunctionResult {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code BXDFDistributionFunctionResult} instance.
+	 * Returns a hash code for this {@code BSDFDistributionFunctionResult} instance.
 	 * 
-	 * @return a hash code for this {@code BXDFDistributionFunctionResult} instance
+	 * @return a hash code for this {@code BSDFDistributionFunctionResult} instance
 	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.bXDFType, this.result, this.incoming, this.outgoing, Float.valueOf(this.probabilityDensityFunctionValue));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Scales the result of {@code bXDFDistributionFunctionResult} with {@code scale}.
-	 * <p>
-	 * Returns a new {@code BXDFDistributionFunctionResult} instance.
-	 * <p>
-	 * If either {@code bXDFDistributionFunctionResult} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param bXDFDistributionFunctionResult the {@code BXDFDistributionFunctionResult} instance to scale
-	 * @param scale a {@link Color3F} instance used as the scale
-	 * @return a new {@code BXDFDistributionFunctionResult} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFDistributionFunctionResult} or {@code scale} are {@code null}
-	 */
-	public static BXDFDistributionFunctionResult scale(final BXDFDistributionFunctionResult bXDFDistributionFunctionResult, final Color3F scale) {
-		final BXDFType bXDFType = bXDFDistributionFunctionResult.bXDFType;
-		
-		final Color3F result = Color3F.multiply(bXDFDistributionFunctionResult.result, scale);
-		
-		final Vector3F incoming = bXDFDistributionFunctionResult.incoming;
-		final Vector3F outgoing = bXDFDistributionFunctionResult.outgoing;
-		
-		final float probabilityDensityFunctionValue = bXDFDistributionFunctionResult.probabilityDensityFunctionValue;
-		
-		return new BXDFDistributionFunctionResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue);
 	}
 }

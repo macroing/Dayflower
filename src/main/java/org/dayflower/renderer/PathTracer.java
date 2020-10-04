@@ -214,8 +214,8 @@ public final class PathTracer implements Renderer {
 				if(!selectedBXDFResult.isFinite()) {
 					System.out.printf("A BXDFResult must have finite values!%n");
 					System.out.printf("BXDF: %s%n", selectedBXDF.getClass().getSimpleName());
-					System.out.printf("Probability Density Function Value: %d%n", Float.valueOf(selectedBXDFResult.getProbabilityDensityFunctionValue()));
-					System.out.printf("Reflectance: %d%n", Float.valueOf(selectedBXDFResult.getReflectance()));
+					System.out.printf("Probability Density Function Value: %f%n", Float.valueOf(selectedBXDFResult.getProbabilityDensityFunctionValue()));
+					System.out.printf("Reflectance: %f%n", Float.valueOf(selectedBXDFResult.getReflectance()));
 					
 					break;
 				}

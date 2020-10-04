@@ -393,7 +393,8 @@ public final class Scenes {
 		final Shape3F shape74 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));//Left
 		final Shape3F shape75 = new Triangle3F();
 		
-		final Texture texture011 = new ConstantTexture(Color3F.GRAY);//new SimplexFractionalBrownianMotionTexture(Color3F.GRAY/*new Color3F(0.8F, 0.5F, 0.0F)*/, 5.0F, 0.5F, 16);
+		final Texture texture011 = new ConstantTexture(Color3F.GRAY);
+//		final Texture texture011 = new SimplexFractionalBrownianMotionTexture(new Color3F(0.8F, 0.5F, 0.0F), 5.0F, 0.5F, 16);
 		final Texture texture012 = new ConstantTexture();
 		final Texture texture013 = new ConstantTexture();
 		final Texture texture021 = new ConstantTexture(Color3F.WHITE);

@@ -21,6 +21,8 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Doubles.equal;
 import static org.dayflower.util.Doubles.max;
 import static org.dayflower.util.Doubles.min;
+import static org.dayflower.util.Doubles.nextDownPBRT;
+import static org.dayflower.util.Doubles.nextUpPBRT;
 
 import java.util.Objects;
 
@@ -447,6 +449,33 @@ public final class Point3D {
 		final double component1 = min(a.component1, b.component1, c.component1);
 		final double component2 = min(a.component2, b.component2, c.component2);
 		final double component3 = min(a.component3, b.component3, c.component3);
+		
+		return new Point3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Point3D} offset from {@code point} based on {@code direction}, {@code normal} and {@code pointError}.
+	 * <p>
+	 * If either {@code point}, {@code direction}, {@code normal} or {@code pointError} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point the {@code Point3D} instance to offset
+	 * @param direction a {@link Vector3D} instance denoting a ray direction
+	 * @param normal a {@code Vector3D} instance denoting a normal
+	 * @param pointError a {@code Vector3D} instance that contains the precision error
+	 * @return a {@code Point3D} offset from {@code point} based on {@code direction}, {@code normal} and {@code pointError}
+	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code direction}, {@code normal} or {@code pointError} are {@code null}
+	 */
+	public static Point3D offset(final Point3D point, final Vector3D direction, final Vector3D normal, final Vector3D pointError) {
+		final double dotProduct = Vector3D.dotProduct(Vector3D.absolute(normal), pointError);
+		
+		final Vector3D offset = Vector3D.multiply(normal, dotProduct);
+		final Vector3D offsetCorrectlyOriented = Vector3D.dotProduct(direction, normal) < 0.0D ? Vector3D.negate(offset) : offset;
+		
+		final Point3D pointOffset = add(point, offsetCorrectlyOriented);
+		
+		final double component1 = offset.getComponent1() > 0.0D ? nextUpPBRT(pointOffset.component1) : nextDownPBRT(pointOffset.component1);
+		final double component2 = offset.getComponent2() > 0.0D ? nextUpPBRT(pointOffset.component2) : nextDownPBRT(pointOffset.component2);
+		final double component3 = offset.getComponent3() > 0.0D ? nextUpPBRT(pointOffset.component3) : nextDownPBRT(pointOffset.component3);
 		
 		return new Point3D(component1, component2, component3);
 	}

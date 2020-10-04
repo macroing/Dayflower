@@ -407,6 +407,23 @@ public final class Vector3D {
 	}
 	
 	/**
+	 * Returns a new {@code Vector3D} instance with the absolute component values of {@code vector}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector3D} instance
+	 * @return a new {@code Vector3D} instance with the absolute component values of {@code vector}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector3D absolute(final Vector3D vector) {
+		final double component1 = abs(vector.component1);
+		final double component2 = abs(vector.component2);
+		final double component3 = abs(vector.component3);
+		
+		return new Vector3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
 	 * <p>
 	 * Returns a new {@code Vector3D} instance with the result of the addition.

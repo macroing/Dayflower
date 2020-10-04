@@ -19,13 +19,41 @@
 package org.dayflower.scene.pbrt;
 
 import java.lang.reflect.Field;
-import java.util.Optional;
-
-import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Material;
 
 //TODO: Add Javadocs!
-public interface PBRTMaterial extends Material {
-//	TODO: Add Javadocs!
-	Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes);
+public enum TransportMode {
+	/**
+	 * A {@code TransportMode} instance for importance.
+	 */
+	IMPORTANCE,
+	
+	/**
+	 * A {@code TransportMode} instance for radiance.
+	 */
+	RADIANCE;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private TransportMode() {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code String} representation of this {@code TransportMode} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code TransportMode} instance
+	 */
+	@Override
+	public String toString() {
+		switch(this) {
+			case IMPORTANCE:
+				return "TransportMode.IMPORTANCE";
+			case RADIANCE:
+				return "TransportMode.RADIANCE";
+			default:
+				return "";
+		}
+	}
 }

@@ -55,6 +55,7 @@ import org.dayflower.scene.material.LambertianMaterial;
 import org.dayflower.scene.material.OrenNayarMaterial;
 import org.dayflower.scene.material.ReflectionMaterial;
 import org.dayflower.scene.material.RefractionMaterial;
+import org.dayflower.scene.pbrt.MatteMaterial;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -223,6 +224,29 @@ public final class Scenes {
 		scene.addPrimitive(new Primitive(material3, shape3, texture31, texture32, texture33, matrix3));
 		scene.addPrimitive(new Primitive(material4, shape4, texture41, texture42, texture43, matrix4));
 		scene.addPrimitive(new Primitive(material5, shape5, texture51, texture52, texture53, matrix5));
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance.
+	 * 
+	 * @return a {@code Scene} instance
+	 */
+	public static Scene newPBRTScene() {
+		final Material material1 = new MatteMaterial(new ConstantTexture(), new ConstantTexture(Color3F.GRAY));
+		final Material material2 = new MatteMaterial(new ConstantTexture(), new ConstantTexture(new Color3F(0.75F, 0.1F, 0.1F)));
+		
+		final Shape3F shape1 = new Plane3F();
+		final Shape3F shape2 = new Sphere3F(10.0F);
+		
+		final Matrix44F matrix1 = Matrix44F.identity();
+		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "PBRT");
+		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix2));
 		
 		return scene;
 	}

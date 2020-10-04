@@ -631,6 +631,48 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns the {@code double} value next down after {@code value}.
+	 * <p>
+	 * This method is based on the function {@code NextFloatDown(float v)} in PBRT.
+	 * 
+	 * @param value a {@code double} value
+	 * @return the {@code double} value next down after {@code value}
+	 */
+	public static double nextDownPBRT(final double value) {
+		if(isInfinite(value) && value < 0.0D) {
+			return value;
+		}
+		
+		final double currentValue = equal(value, +0.0D) ? -0.0D : value;
+		
+		final long oldCurrentValueToLongBits = Double.doubleToLongBits(currentValue);
+		final long newCurrentValueToLongBits = currentValue > 0.0D ? oldCurrentValueToLongBits - 1L : oldCurrentValueToLongBits + 1L;
+		
+		return Double.longBitsToDouble(newCurrentValueToLongBits);
+	}
+	
+	/**
+	 * Returns the {@code double} value next up after {@code value}.
+	 * <p>
+	 * This method is based on the function {@code NextFloatUp(float v)} in PBRT.
+	 * 
+	 * @param value a {@code double} value
+	 * @return the {@code double} value next up after {@code value}
+	 */
+	public static double nextUpPBRT(final double value) {
+		if(isInfinite(value) && value > 0.0D) {
+			return value;
+		}
+		
+		final double currentValue = equal(value, -0.0D) ? +0.0D : value;
+		
+		final long oldCurrentValueToLongBits = Double.doubleToLongBits(currentValue);
+		final long newCurrentValueToLongBits = currentValue < 0.0D ? oldCurrentValueToLongBits - 1L : oldCurrentValueToLongBits + 1L;
+		
+		return Double.longBitsToDouble(newCurrentValueToLongBits);
+	}
+	
+	/**
 	 * Returns the normalized representation of {@code value}.
 	 * <p>
 	 * If {@code value} is greater than or equal to {@code min(a, b)} and less than or equal to {@code max(a, b)}, the normalized representation of {@code value} will be between {@code 0.0D} (inclusive) and {@code 1.0D} (inclusive).

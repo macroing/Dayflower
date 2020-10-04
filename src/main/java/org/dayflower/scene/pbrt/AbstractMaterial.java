@@ -19,13 +19,30 @@
 package org.dayflower.scene.pbrt;
 
 import java.lang.reflect.Field;
-import java.util.Optional;
 
+import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
+import org.dayflower.scene.MaterialResult;
 
 //TODO: Add Javadocs!
-public interface PBRTMaterial extends Material {
+public abstract class AbstractMaterial implements Material {
 //	TODO: Add Javadocs!
-	Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes);
+	protected AbstractMaterial() {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	@Override
+	public final Color3F emittance(final Intersection intersection) {
+		throw new UnsupportedOperationException();
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public final MaterialResult evaluate(final Intersection intersection) {
+		throw new UnsupportedOperationException();
+	}
 }

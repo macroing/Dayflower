@@ -58,6 +58,23 @@ public final class BSDF {
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param bXDFs a {@code List} of {@link BXDF} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}
+	 */
+	public BSDF(final Intersection intersection, final List<BXDF> bXDFs) {
+		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
+		this.bXDFs = new ArrayList<>(Lists.requireNonNullList(bXDFs, "bXDFs"));
+		this.eta = 1.0F;
+	}
+	
+	/**
+	 * Constructs a new {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The {@code List} {@code bXDFs} will be copied.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param bXDFs a {@code List} of {@link BXDF} instances
 	 * @param eta the index of refraction (IOR)
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}
 	 */

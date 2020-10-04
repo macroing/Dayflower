@@ -19,6 +19,7 @@
 package org.dayflower.renderer;
 
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.sqrt;
 
@@ -27,6 +28,7 @@ import java.util.Optional;
 
 import org.dayflower.display.Display;
 import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
@@ -54,6 +56,11 @@ import org.dayflower.scene.material.LambertianMaterial;
 import org.dayflower.scene.material.OrenNayarMaterial;
 import org.dayflower.scene.material.ReflectionMaterial;
 import org.dayflower.scene.material.RefractionMaterial;
+import org.dayflower.scene.pbrt.BSDF;
+import org.dayflower.scene.pbrt.BSDFDistributionFunctionResult;
+import org.dayflower.scene.pbrt.BXDFType;
+import org.dayflower.scene.pbrt.PBRTMaterial;
+import org.dayflower.scene.pbrt.TransportMode;
 
 /**
  * A {@code PathTracer} is a {@link Renderer} implementation that renders using Path Tracing.
@@ -126,7 +133,8 @@ public final class PathTracer implements Renderer {
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
 						
-						final Color3F colorRGB = doGetRadianceRayito(lights, ray, scene, rendererConfiguration);
+						final Color3F colorRGB = doGetRadiancePBRT(lights, ray, scene, rendererConfiguration);
+//						final Color3F colorRGB = doGetRadianceRayito(lights, ray, scene, rendererConfiguration);
 //						final Color3F colorRGB = doGetRadianceSmallPTIterative(ray, scene, rendererConfiguration);
 //						final Color3F colorRGB = doGetRadianceSmallPTRecursive(ray, scene, rendererConfiguration, 1);
 						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
@@ -150,6 +158,118 @@ public final class PathTracer implements Renderer {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Color3F doGetRadiancePBRT(final List<Light> lights, final Ray3F ray, final Scene scene, final RendererConfiguration rendererConfiguration) {
+		final int maximumBounce = rendererConfiguration.getMaximumBounce();
+		final int minimumBounceRussianRoulette = rendererConfiguration.getMinimumBounceRussianRoulette();
+		
+		Color3F radiance = Color3F.BLACK;
+		Color3F throughput = Color3F.WHITE;
+		
+		Ray3F currentRay = ray;
+		
+		boolean isSpecularBounce = false;
+		
+		float etaScale = 1.0F;
+		
+		for(int currentBounce = 0; true; currentBounce++) {
+			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay);
+			
+			final boolean hasFoundIntersection = optionalIntersection.isPresent();
+			
+			if(currentBounce == 0 || isSpecularBounce) {
+				if(hasFoundIntersection) {
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));//Color3F.WHITE -> isect.Le(-ray.d)
+				} else {
+//					for(final Light light : lights) {
+						radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));//Color3F.WHITE -> light.Le(ray)
+//					}
+				}
+			}
+			
+			if(!hasFoundIntersection || currentBounce >= maximumBounce) {
+				break;
+			}
+			
+			final Intersection intersection = optionalIntersection.get();
+			
+			final Primitive primitive = intersection.getPrimitive();
+			
+			final Material material = primitive.getMaterial();
+			
+			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+			
+			final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+			
+			final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
+			
+			if(!(material instanceof PBRTMaterial)) {
+				break;
+			}
+			
+			final PBRTMaterial pBRTMaterial = PBRTMaterial.class.cast(material);
+			
+			final Optional<BSDF> optionalBSDF = pBRTMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
+			
+			if(!optionalBSDF.isPresent()) {
+				break;
+			}
+			
+			final BSDF bSDF = optionalBSDF.get();
+			
+			{
+				/*
+				 * TODO: Implement light sampling!
+				 */
+				
+				radiance = Color3F.add(radiance, new Color3F(0.2F));
+			}
+			
+			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
+			
+			final Optional<BSDFDistributionFunctionResult> optionalBSDFDistributionFunctionResult = bSDF.sampleDistributionFunction(outgoing, new Point2F(random(), random()), true, true);
+			
+			if(!optionalBSDFDistributionFunctionResult.isPresent()) {
+				break;
+			}
+			
+			final BSDFDistributionFunctionResult bSDFDistributionFunctionResult = optionalBSDFDistributionFunctionResult.get();
+			
+			final BXDFType bXDFType = bSDFDistributionFunctionResult.getBXDFType();
+			
+			final Color3F result = bSDFDistributionFunctionResult.getResult();
+			
+			final Vector3F incoming = bSDFDistributionFunctionResult.getIncoming();
+			
+			final float probabilityDensityFunctionValue = bSDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
+			
+			throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result, abs(Vector3F.dotProduct(incoming, surfaceNormalS))), probabilityDensityFunctionValue));
+			
+			isSpecularBounce = bXDFType.isSpecular();
+			
+			if(bXDFType.hasTransmission() && bXDFType.isSpecular()) {
+				final float eta = bSDF.getEta();
+				
+				etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalS) > 0.0F ? eta * eta : 1.0F / (eta * eta);
+			}
+			
+			currentRay = new Ray3F(surfaceIntersectionPoint, incoming);
+			
+			final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
+			
+			if(russianRouletteThroughput.maximum() < 1.0F && currentBounce > minimumBounceRussianRoulette) {
+				final float probability = max(0.05F, 1.0F - russianRouletteThroughput.maximum());
+				
+				if(random() < probability) {
+					break;
+				}
+				
+				throughput = Color3F.divide(throughput, 1.0F - probability);
+			}
+		}
+		
+		return radiance;
+	}
 	
 	private static Color3F doGetRadianceRayito(final List<Light> lights, final Ray3F ray, final Scene scene, final RendererConfiguration rendererConfiguration) {
 		final int maximumBounce = rendererConfiguration.getMaximumBounce();

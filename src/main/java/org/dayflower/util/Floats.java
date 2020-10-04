@@ -632,6 +632,48 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns the {@code float} value next down after {@code value}.
+	 * <p>
+	 * This method is based on the function {@code NextFloatDown(float v)} in PBRT.
+	 * 
+	 * @param value a {@code float} value
+	 * @return the {@code float} value next down after {@code value}
+	 */
+	public static float nextDownPBRT(final float value) {
+		if(isInfinite(value) && value < 0.0F) {
+			return value;
+		}
+		
+		final float currentValue = equal(value, +0.0F) ? -0.0F : value;
+		
+		final int oldCurrentValueToIntBits = Float.floatToIntBits(currentValue);
+		final int newCurrentValueToIntBits = currentValue > 0.0F ? oldCurrentValueToIntBits - 1 : oldCurrentValueToIntBits + 1;
+		
+		return Float.intBitsToFloat(newCurrentValueToIntBits);
+	}
+	
+	/**
+	 * Returns the {@code float} value next up after {@code value}.
+	 * <p>
+	 * This method is based on the function {@code NextFloatUp(float v)} in PBRT.
+	 * 
+	 * @param value a {@code float} value
+	 * @return the {@code float} value next up after {@code value}
+	 */
+	public static float nextUpPBRT(final float value) {
+		if(isInfinite(value) && value > 0.0F) {
+			return value;
+		}
+		
+		final float currentValue = equal(value, -0.0F) ? +0.0F : value;
+		
+		final int oldCurrentValueToIntBits = Float.floatToIntBits(currentValue);
+		final int newCurrentValueToIntBits = currentValue < 0.0F ? oldCurrentValueToIntBits - 1 : oldCurrentValueToIntBits + 1;
+		
+		return Float.intBitsToFloat(newCurrentValueToIntBits);
+	}
+	
+	/**
 	 * Returns the normalized representation of {@code value}.
 	 * <p>
 	 * If {@code value} is greater than or equal to {@code min(a, b)} and less than or equal to {@code max(a, b)}, the normalized representation of {@code value} will be between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive).

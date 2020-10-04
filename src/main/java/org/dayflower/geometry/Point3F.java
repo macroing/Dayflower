@@ -21,6 +21,8 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
+import static org.dayflower.util.Floats.nextDownPBRT;
+import static org.dayflower.util.Floats.nextUpPBRT;
 
 import java.util.Objects;
 
@@ -447,6 +449,33 @@ public final class Point3F {
 		final float component1 = min(a.component1, b.component1, c.component1);
 		final float component2 = min(a.component2, b.component2, c.component2);
 		final float component3 = min(a.component3, b.component3, c.component3);
+		
+		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Point3F} offset from {@code point} based on {@code direction}, {@code normal} and {@code pointError}.
+	 * <p>
+	 * If either {@code point}, {@code direction}, {@code normal} or {@code pointError} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point the {@code Point3F} instance to offset
+	 * @param direction a {@link Vector3F} instance denoting a ray direction
+	 * @param normal a {@code Vector3F} instance denoting a normal
+	 * @param pointError a {@code Vector3F} instance that contains the precision error
+	 * @return a {@code Point3F} offset from {@code point} based on {@code direction}, {@code normal} and {@code pointError}
+	 * @throws NullPointerException thrown if, and only if, either {@code point}, {@code direction}, {@code normal} or {@code pointError} are {@code null}
+	 */
+	public static Point3F offset(final Point3F point, final Vector3F direction, final Vector3F normal, final Vector3F pointError) {
+		final float dotProduct = Vector3F.dotProduct(Vector3F.absolute(normal), pointError);
+		
+		final Vector3F offset = Vector3F.multiply(normal, dotProduct);
+		final Vector3F offsetCorrectlyOriented = Vector3F.dotProduct(direction, normal) < 0.0F ? Vector3F.negate(offset) : offset;
+		
+		final Point3F pointOffset = add(point, offsetCorrectlyOriented);
+		
+		final float component1 = offset.getComponent1() > 0.0F ? nextUpPBRT(pointOffset.component1) : nextDownPBRT(pointOffset.component1);
+		final float component2 = offset.getComponent2() > 0.0F ? nextUpPBRT(pointOffset.component2) : nextDownPBRT(pointOffset.component2);
+		final float component3 = offset.getComponent3() > 0.0F ? nextUpPBRT(pointOffset.component3) : nextDownPBRT(pointOffset.component3);
 		
 		return new Point3F(component1, component2, component3);
 	}

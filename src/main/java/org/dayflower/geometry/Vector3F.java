@@ -407,6 +407,23 @@ public final class Vector3F {
 	}
 	
 	/**
+	 * Returns a new {@code Vector3F} instance with the absolute component values of {@code vector}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the absolute component values of {@code vector}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector3F absolute(final Vector3F vector) {
+		final float component1 = abs(vector.component1);
+		final float component2 = abs(vector.component2);
+		final float component3 = abs(vector.component3);
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
 	 * <p>
 	 * Returns a new {@code Vector3F} instance with the result of the addition.

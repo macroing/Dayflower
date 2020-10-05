@@ -231,6 +231,12 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 	}
 	
+//	TODO: Add Javadocs!
+	@Override
+	public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+		return this.node.intersection(mutableSurfaceIntersection);
+	}
+	
 	/**
 	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code TriangleMesh3F} instance, {@code false} otherwise.
 	 * <p>
@@ -371,12 +377,6 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.node, this.groupName, this.materialName, this.objectName);
-	}
-	
-//	TODO: Add Javadocs!
-	@Override
-	public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-		this.node.intersection(mutableSurfaceIntersection);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1083,6 +1083,23 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
+		public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+			if(mutableSurfaceIntersection.isIntersecting(getBoundingVolume())) {
+				boolean isIntersecting = false;
+				
+				for(final Triangle3F triangle : this.triangles) {
+					if(mutableSurfaceIntersection.intersection(triangle)) {
+						isIntersecting = true;
+					}
+				}
+				
+				return isIntersecting;
+			}
+			
+			return false;
+		}
+		
+		@Override
 		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
 			if(getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
 				for(final Triangle3F triangle : this.triangles) {
@@ -1126,15 +1143,6 @@ public final class TriangleMesh3F implements Shape3F {
 		@Override
 		public int hashCode() {
 			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.triangles);
-		}
-		
-		@Override
-		public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-			if(mutableSurfaceIntersection.isIntersecting(getBoundingVolume())) {
-				for(final Triangle3F triangle : this.triangles) {
-					mutableSurfaceIntersection.intersection(triangle);
-				}
-			}
 		}
 		
 		@Override
@@ -1187,6 +1195,8 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		public abstract Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds);
 		
+		public abstract boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
+		
 		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
 		
 		public abstract float getSurfaceArea();
@@ -1196,8 +1206,6 @@ public final class TriangleMesh3F implements Shape3F {
 		public final int getDepth() {
 			return this.depth;
 		}
-		
-		public abstract void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
 		
 		public abstract void intersection(final NodeIntersector nodeIntersector);
 		
@@ -1294,6 +1302,18 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
+		public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+			if(mutableSurfaceIntersection.isIntersecting(getBoundingVolume())) {
+				final boolean isIntersectingL = this.nodeL.intersection(mutableSurfaceIntersection);
+				final boolean isIntersectingR = this.nodeR.intersection(mutableSurfaceIntersection);
+				
+				return isIntersectingL || isIntersectingR;
+			}
+			
+			return false;
+		}
+		
+		@Override
 		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
 			return getBoundingVolume().intersects(ray, tMinimum, tMaximum) && (this.nodeL.intersects(ray, tMinimum, tMaximum) || this.nodeR.intersects(ray, tMinimum, tMaximum));
 		}
@@ -1311,14 +1331,6 @@ public final class TriangleMesh3F implements Shape3F {
 		@Override
 		public int hashCode() {
 			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.nodeL, this.nodeR);
-		}
-		
-		@Override
-		public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-			if(mutableSurfaceIntersection.isIntersecting(getBoundingVolume())) {
-				this.nodeL.intersection(mutableSurfaceIntersection);
-				this.nodeR.intersection(mutableSurfaceIntersection);
-			}
 		}
 		
 		@Override

@@ -284,6 +284,12 @@ public final class Triangle3F implements Shape3F {
 		}
 	}
 	
+//	TODO: Add Javadocs!
+	@Override
+	public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+		return mutableSurfaceIntersection.intersection(this);
+	}
+	
 	/**
 	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Triangle3F} instance, {@code false} otherwise.
 	 * <p>
@@ -460,12 +466,6 @@ public final class Triangle3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.surfaceNormal, this.a, this.b, this.c);
-	}
-	
-//	TODO: Add Javadocs!
-	@Override
-	public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-		mutableSurfaceIntersection.intersection(this);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

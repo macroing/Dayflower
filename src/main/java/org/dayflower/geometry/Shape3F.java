@@ -81,6 +81,9 @@ public interface Shape3F {
 	 */
 	Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
+//	TODO: Add Javadocs!
+	boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
+	
 	/**
 	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise.
 	 * <p>
@@ -167,7 +170,4 @@ public interface Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum);
-	
-//	TODO: Add Javadocs!
-	void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
 }

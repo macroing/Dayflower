@@ -118,7 +118,7 @@ public final class MutableIntersection {
 		if(this.mutableSurfaceIntersection.isIntersecting(primitive.getBoundingVolume())) {
 			this.mutableSurfaceIntersection.transform(primitive.getWorldToObject());
 			
-			if(this.mutableSurfaceIntersection.intersection(primitive.getShape())) {
+			if(primitive.getShape().intersection(this.mutableSurfaceIntersection)) {
 				this.primitive = primitive;
 			}
 			

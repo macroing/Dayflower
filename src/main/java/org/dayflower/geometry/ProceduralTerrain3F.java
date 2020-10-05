@@ -173,6 +173,12 @@ public final class ProceduralTerrain3F implements Shape3F {
 		}
 	}
 	
+//	TODO: Add Javadocs!
+	@Override
+	public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+		return mutableSurfaceIntersection.intersection(this);
+	}
+	
 	/**
 	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code ProceduralTerrain3F} instance, {@code false} otherwise.
 	 * <p>
@@ -300,12 +306,6 @@ public final class ProceduralTerrain3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.floatBinaryOperator);
-	}
-	
-//	TODO: Add Javadocs!
-	@Override
-	public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-		mutableSurfaceIntersection.intersection(this);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

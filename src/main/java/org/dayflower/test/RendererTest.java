@@ -35,8 +35,8 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionRenderer();
-		doTestPathTracer();
-//		doTestRayCaster();
+//		doTestPathTracer();
+		doTestRayCaster();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

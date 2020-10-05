@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 /**
@@ -166,4 +167,7 @@ public interface Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum);
+	
+//	TODO: Add Javadocs!
+	void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
 }

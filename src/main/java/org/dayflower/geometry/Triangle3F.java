@@ -21,6 +21,7 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.isNaN;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -459,6 +460,12 @@ public final class Triangle3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.surfaceNormal, this.a, this.b, this.c);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+		mutableSurfaceIntersection.intersection(this);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

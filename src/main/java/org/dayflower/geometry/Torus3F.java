@@ -32,6 +32,7 @@ import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.toFloat;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -433,6 +434,12 @@ public final class Torus3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.boundingVolume, Float.valueOf(this.radiusInner), Float.valueOf(this.radiusInnerSquared), Float.valueOf(this.radiusOuter), Float.valueOf(this.radiusOuterSquared));
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+		mutableSurfaceIntersection.intersection(this);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

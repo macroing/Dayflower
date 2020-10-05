@@ -23,6 +23,7 @@ import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.normalize;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -375,6 +376,12 @@ public final class RectangularCuboid3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.maximum, this.minimum);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+		mutableSurfaceIntersection.intersection(this);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

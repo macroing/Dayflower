@@ -33,6 +33,13 @@ import org.dayflower.geometry.SurfaceIntersection3F;
  * @author J&#246;rgen Lundgren
  */
 public final class Intersection {
+	/**
+	 * An empty {@code Optional} instance.
+	 */
+	public static final Optional<Intersection> EMPTY = Optional.empty();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Primitive primitive;
 	private final SurfaceIntersection3F surfaceIntersectionObjectSpace;
 	private final SurfaceIntersection3F surfaceIntersectionWorldSpace;

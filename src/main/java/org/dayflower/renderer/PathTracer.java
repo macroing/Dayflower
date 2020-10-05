@@ -19,7 +19,6 @@
 package org.dayflower.renderer;
 
 import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.isInfinite;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.sqrt;
@@ -336,10 +335,10 @@ public final class PathTracer implements Renderer {
 				if(selectedBXDF.isDiracDistribution()) {
 					currentBounceDiracDistribution++;
 					
-//					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
+					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
 //					radiance = Color3F.add(radiance, doGetRadianceRayitoBackground(throughput, intersection, materialResult, scene));
 				} else {
-//					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
+					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
 					radiance = Color3F.add(radiance, doGetRadianceRayitoLights(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO, lights, primitive));
 //					radiance = Color3F.add(radiance, doGetRadianceRayitoBackground(throughput, intersection, materialResult, scene));
 				}

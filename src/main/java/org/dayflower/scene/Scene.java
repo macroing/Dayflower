@@ -134,6 +134,16 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		
+		final MutableIntersection mutableIntersection = new MutableIntersection(ray, tMinimum, tMaximum);
+		
+		for(final Primitive primitive : this.primitives) {
+			mutableIntersection.intersection(primitive);
+		}
+		
+		return mutableIntersection.intersection();
+		
+		/*
 		Primitive primitive = null;
 		
 		float t = Float.NaN;
@@ -158,6 +168,7 @@ public final class Scene {
 		}
 		
 		return Optional.empty();
+		*/
 	}
 	
 	/**

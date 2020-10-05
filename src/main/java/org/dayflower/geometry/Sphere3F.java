@@ -33,6 +33,7 @@ import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.solveQuadraticSystem;
 import static org.dayflower.util.Floats.sqrt;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -483,6 +484,12 @@ public final class Sphere3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Float.valueOf(this.radius));
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+		mutableSurfaceIntersection.intersection(this);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

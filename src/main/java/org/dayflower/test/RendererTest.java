@@ -35,8 +35,8 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionRenderer();
-//		doTestPathTracer();
-		doTestRayCaster();
+		doTestPathTracer();
+//		doTestRayCaster();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ public final class RendererTest {
 	}
 	
 	static void doTestPathTracer() {
-		doTestRenderer(new PathTracer(), Scenes.newBedroomScene());
+		doTestRenderer(new PathTracer(), Scenes.newDefaultScene());
 	}
 	
 	static void doTestRayCaster() {

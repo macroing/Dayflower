@@ -20,6 +20,7 @@ package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.isNaN;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -299,6 +300,12 @@ public final class ProceduralTerrain3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.floatBinaryOperator);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public void intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+		mutableSurfaceIntersection.intersection(this);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

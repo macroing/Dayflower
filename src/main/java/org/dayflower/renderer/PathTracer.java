@@ -19,6 +19,7 @@
 package org.dayflower.renderer;
 
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.isInfinite;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.sqrt;
@@ -133,8 +134,8 @@ public final class PathTracer implements Renderer {
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
 						
-						final Color3F colorRGB = doGetRadiancePBRT(lights, ray, scene, rendererConfiguration);
-//						final Color3F colorRGB = doGetRadianceRayito(lights, ray, scene, rendererConfiguration);
+//						final Color3F colorRGB = doGetRadiancePBRT(lights, ray, scene, rendererConfiguration);
+						final Color3F colorRGB = doGetRadianceRayito(lights, ray, scene, rendererConfiguration);
 //						final Color3F colorRGB = doGetRadianceSmallPTIterative(ray, scene, rendererConfiguration);
 //						final Color3F colorRGB = doGetRadianceSmallPTRecursive(ray, scene, rendererConfiguration, 1);
 						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
@@ -179,8 +180,14 @@ public final class PathTracer implements Renderer {
 			
 			if(currentBounce == 0 || isSpecularBounce) {
 				if(hasFoundIntersection) {
+//					radiance += throughput * isect.Le(-ray.d);
+					
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));//Color3F.WHITE -> isect.Le(-ray.d)
 				} else {
+//					for (const auto &light : scene.infiniteLights) {
+//						radiance += throughput * light->Le(ray);
+//					}
+					
 //					for(final Light light : lights) {
 						radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));//Color3F.WHITE -> light.Le(ray)
 //					}
@@ -217,12 +224,16 @@ public final class PathTracer implements Renderer {
 			
 			final BSDF bSDF = optionalBSDF.get();
 			
-			{
-				/*
-				 * TODO: Implement light sampling!
-				 */
-				
-				radiance = Color3F.add(radiance, new Color3F(0.2F));
+			/*
+			 * TODO: Implement light sampling!
+			 */
+			
+//			if (isect.bsdf->NumComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
+//				radiance += throughput * UniformSampleOneLight(isect, scene, arena, sampler, false, distrib);
+//			}
+			
+			if(bSDF.countBXDFsBySpecularType(false) > 0) {
+				radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));
 			}
 			
 			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
@@ -266,6 +277,10 @@ public final class PathTracer implements Renderer {
 				
 				throughput = Color3F.divide(throughput, 1.0F - probability);
 			}
+		}
+		
+		if(radiance.hasInfinites() || radiance.hasNaNs()) {
+			return Color3F.BLACK;
 		}
 		
 		return radiance;
@@ -321,10 +336,10 @@ public final class PathTracer implements Renderer {
 				if(selectedBXDF.isDiracDistribution()) {
 					currentBounceDiracDistribution++;
 					
-					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
+//					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
 //					radiance = Color3F.add(radiance, doGetRadianceRayitoBackground(throughput, intersection, materialResult, scene));
 				} else {
-					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
+//					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
 					radiance = Color3F.add(radiance, doGetRadianceRayitoLights(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO, lights, primitive));
 //					radiance = Color3F.add(radiance, doGetRadianceRayitoBackground(throughput, intersection, materialResult, scene));
 				}

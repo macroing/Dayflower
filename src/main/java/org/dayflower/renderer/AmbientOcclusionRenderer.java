@@ -54,12 +54,12 @@ public final class AmbientOcclusionRenderer implements Renderer {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AmbientOcclusionRenderer(0.0F);
+	 * new AmbientOcclusionRenderer(20.0F);
 	 * }
 	 * </pre>
 	 */
 	public AmbientOcclusionRenderer() {
-		this(0.0F);
+		this(20.0F);
 	}
 	
 	/**
@@ -81,7 +81,7 @@ public final class AmbientOcclusionRenderer implements Renderer {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ambientOcclusionRenderer.render(display, image, scene, new RendererConfiguration());
+	 * ambientOcclusionRenderer.render(display, image, scene, new RendererConfiguration(20, 5, 1000, 1, 1));
 	 * }
 	 * </pre>
 	 * 
@@ -92,7 +92,7 @@ public final class AmbientOcclusionRenderer implements Renderer {
 	 */
 	@Override
 	public void render(final Display display, final Image image, final Scene scene) {
-		render(display, image, scene, new RendererConfiguration());
+		render(display, image, scene, new RendererConfiguration(20, 5, 1000, 1, 1));
 	}
 	
 	/**

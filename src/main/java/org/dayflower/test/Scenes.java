@@ -19,7 +19,9 @@
 package org.dayflower.test;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Matrix44F;
@@ -78,6 +80,46 @@ public final class Scenes {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Scene} instance.
+	 * 
+	 * @return a {@code Scene} instance
+	 */
+	public static Scene newBedroomScene() {
+		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject(new File("./resources/Bedroom.obj"), true);
+		
+		final Material material = new LambertianMaterial();
+		
+		final Texture textureAlbedo = new ConstantTexture(Color3F.GRAY);
+		final Texture textureEmittance = new ConstantTexture();
+		final Texture textureNormal = new ConstantTexture();
+		
+		final Texture textureLaminate = ImageTexture.load(new File("./resources/laminate.jpg"));
+		final Texture textureWall = ImageTexture.load(new File("./resources/Wall.jpg"));
+		
+		final Map<String, Texture> textures = new HashMap<>();
+		
+		textures.put("Ceiling", textureWall);
+		textures.put("Floor", textureLaminate);
+		textures.put("Walls", textureWall);
+		
+		final Matrix44F matrix = Matrix44F.translate(0.0F, 0.0F, 20.0F);
+		
+		final Primitive primitive = new Primitive(new LambertianMaterial(), new Sphere3F(), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), Matrix44F.translate(0.0F, 60.0F, 20.0F));
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 30.0F, 0.0F)), "Bedroom");
+		scene.addLight(new PointLight(new Point3F(0.0F, 30.0F, 20.0F)));
+		scene.addLight(new PrimitiveLight(primitive));
+		scene.addPrimitive(primitive);
+		
+		for(final TriangleMesh3F triangleMesh : triangleMeshes) {
+			scene.addPrimitive(new Primitive(material, triangleMesh, textures.getOrDefault(triangleMesh.getGroupName(), textureAlbedo), textureEmittance, textureNormal, matrix));
+		}
+		
+		return scene;
+	}
 	
 	/**
 	 * Returns a {@link Scene} instance.
@@ -1044,9 +1086,9 @@ public final class Scenes {
 		
 		final Vector3F surfaceNormal = Vector3F.normalNormalized(positionA, positionB, positionC);
 		
-		final Vertex3F a = new Vertex3F(new Point2F(0.5F, 0.0F), positionA, surfaceNormal, new Vector3F());
-		final Vertex3F b = new Vertex3F(new Point2F(1.0F, 1.0F), positionB, surfaceNormal, new Vector3F());
-		final Vertex3F c = new Vertex3F(new Point2F(0.0F, 1.0F), positionC, surfaceNormal, new Vector3F());
+		final Vertex3F a = new Vertex3F(new Point2F(0.5F, 0.0F), positionA, surfaceNormal);
+		final Vertex3F b = new Vertex3F(new Point2F(1.0F, 1.0F), positionB, surfaceNormal);
+		final Vertex3F c = new Vertex3F(new Point2F(0.0F, 1.0F), positionC, surfaceNormal);
 		
 		final Shape3F shape = new Triangle3F(a, b, c);
 		

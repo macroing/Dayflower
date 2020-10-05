@@ -35,22 +35,22 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionRenderer();
-		doTestPathTracer();
-//		doTestRayCaster();
+//		doTestPathTracer();
+		doTestRayCaster();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	static void doTestAmbientOcclusionRenderer() {
-		doTestRenderer(new AmbientOcclusionRenderer(), Scenes.newDefaultScene());
+		doTestRenderer(new AmbientOcclusionRenderer(), Scenes.newBedroomScene());
 	}
 	
 	static void doTestPathTracer() {
-		doTestRenderer(new PathTracer(), Scenes.newPBRTScene());
+		doTestRenderer(new PathTracer(), Scenes.newBedroomScene());
 	}
 	
 	static void doTestRayCaster() {
-		doTestRenderer(new RayCaster(), Scenes.newDefaultScene());
+		doTestRenderer(new RayCaster(), Scenes.newBedroomScene());
 	}
 	
 	static void doTestRenderer(final Renderer renderer, final Scene scene) {

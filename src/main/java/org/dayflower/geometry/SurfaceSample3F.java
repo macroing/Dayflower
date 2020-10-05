@@ -21,6 +21,7 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A {@code SurfaceSample3F} denotes a 3-dimensional surface sample that uses the data type {@code float}.
@@ -31,6 +32,13 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class SurfaceSample3F {
+	/**
+	 * An empty {@code Optional} instance.
+	 */
+	public static final Optional<SurfaceSample3F> EMPTY = Optional.empty();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Point3F point;
 	private final Vector3F surfaceNormal;
 	private final float probabilityDensityFunctionValue;

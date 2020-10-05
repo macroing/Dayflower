@@ -35,6 +35,18 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class Point3F {
+	/**
+	 * A {@code Point3F} instance with the largest component values.
+	 */
+	public static final Point3F MAXIMUM = maximum();
+	
+	/**
+	 * A {@code Point3F} instance with the smallest component values.
+	 */
+	public static final Point3F MINIMUM = minimum();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final float component1;
 	private final float component2;
 	private final float component3;

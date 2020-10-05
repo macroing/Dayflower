@@ -220,7 +220,7 @@ public final class Sphere3F implements Shape3F {
 		final float t = !isNaN(t0) && t0 > tMinimum && t0 < tMaximum ? t0 : !isNaN(t1) && t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
 		
 		if(isNaN(t)) {
-			return Optional.empty();
+			return SurfaceIntersection3F.EMPTY;
 		}
 		
 		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);

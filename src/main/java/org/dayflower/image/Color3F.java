@@ -20,6 +20,7 @@ package org.dayflower.image;
 
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.exp;
+import static org.dayflower.util.Floats.isInfinite;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.lerp;
 import static org.dayflower.util.Floats.max;
@@ -243,6 +244,15 @@ public final class Color3F {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, at least one of the component values of this {@code Color3F} instance is infinite, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, at least one of the component values of this {@code Color3F} instance is infinite, {@code false} otherwise
+	 */
+	public boolean hasInfinites() {
+		return isInfinite(this.component1) || isInfinite(this.component2) || isInfinite(this.component3);
 	}
 	
 	/**

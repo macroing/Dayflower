@@ -20,6 +20,7 @@ package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.minOrNaN;
 
 import java.io.BufferedReader;
@@ -47,19 +48,28 @@ import org.dayflower.geometry.Triangle3F.Vertex3F;
  */
 public final class TriangleMesh3F implements Shape3F {
 	private final Node node;
+	private final String groupName;
+	private final String materialName;
+	private final String objectName;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code TriangleMesh3F} instance.
 	 * <p>
-	 * If either {@code triangles} or any of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param triangles a {@code List} of {@link Triangle3F} instances
-	 * @throws NullPointerException thrown if, and only if, either {@code triangles} or any of its elements are {@code null}
+	 * @param groupName the group name of this {@code TriangleMesh3F} instance
+	 * @param materialName the material name of this {@code TriangleMesh3F} instance
+	 * @param objectName the object name of this {@code TriangleMesh3F} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}
 	 */
-	public TriangleMesh3F(final List<Triangle3F> triangles) {
+	public TriangleMesh3F(final List<Triangle3F> triangles, final String groupName, final String materialName, final String objectName) {
 		this.node = doCreateNode(Objects.requireNonNull(triangles, "triangles == null"));
+		this.groupName = Objects.requireNonNull(groupName, "groupName == null");
+		this.materialName = Objects.requireNonNull(materialName, "materialName == null");
+		this.objectName = Objects.requireNonNull(objectName, "objectName == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +105,7 @@ public final class TriangleMesh3F implements Shape3F {
 		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
-		return Optional.empty();//TODO: Implement!
+		return SurfaceSample3F.EMPTY;//TODO: Implement!
 	}
 	
 	/**
@@ -129,7 +139,34 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.node.intersection(ray, tMinimum, tMaximum);
+		return this.node.intersection(ray, new float[] {tMinimum, tMaximum});
+	}
+	
+	/**
+	 * Returns the group name of this {@code TriangleMesh3F} instance.
+	 * 
+	 * @return the group name of this {@code TriangleMesh3F} instance
+	 */
+	public String getGroupName() {
+		return this.groupName;
+	}
+	
+	/**
+	 * Returns the material name of this {@code TriangleMesh3F} instance.
+	 * 
+	 * @return the material name of this {@code TriangleMesh3F} instance
+	 */
+	public String getMaterialName() {
+		return this.materialName;
+	}
+	
+	/**
+	 * Returns the object name of this {@code TriangleMesh3F} instance.
+	 * 
+	 * @return the object name of this {@code TriangleMesh3F} instance
+	 */
+	public String getObjectName() {
+		return this.objectName;
 	}
 	
 	/**
@@ -139,7 +176,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public String toString() {
-		return "new TriangleMesh3F(...)";
+		return String.format("new TriangleMesh3F(..., \"%s\", \"%s\", \"%s\")", this.groupName, this.materialName, this.objectName);
 	}
 	
 	/**
@@ -157,6 +194,12 @@ public final class TriangleMesh3F implements Shape3F {
 		} else if(!(object instanceof TriangleMesh3F)) {
 			return false;
 		} else if(!Objects.equals(this.node, TriangleMesh3F.class.cast(object).node)) {
+			return false;
+		} else if(!Objects.equals(this.groupName, TriangleMesh3F.class.cast(object).groupName)) {
+			return false;
+		} else if(!Objects.equals(this.materialName, TriangleMesh3F.class.cast(object).materialName)) {
+			return false;
+		} else if(!Objects.equals(this.objectName, TriangleMesh3F.class.cast(object).objectName)) {
 			return false;
 		} else {
 			return true;
@@ -282,7 +325,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.node.intersectionT(ray, tMinimum, tMaximum);
+		return this.node.intersectionT(ray, new float[] {tMinimum, tMaximum});
 	}
 	
 	/**
@@ -292,7 +335,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.node);
+		return Objects.hash(this.node, this.groupName, this.materialName, this.objectName);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -352,7 +395,7 @@ public final class TriangleMesh3F implements Shape3F {
 			final List<String> materialNames = indexedObjectModel.getMaterialNames();
 			final List<String> objectNames = indexedObjectModel.getObjectNames();
 			final List<Vector3F> normals = indexedObjectModel.getNormals();
-			final List<Vector3F> tangents = indexedObjectModel.getTangents();
+//			final List<Vector3F> tangents = indexedObjectModel.getTangents();
 			final List<Triangle3F> triangles = new ArrayList<>();
 			final List<TriangleMesh3F> triangleMeshes = new ArrayList<>();
 			
@@ -371,10 +414,10 @@ public final class TriangleMesh3F implements Shape3F {
 				
 				if(!previousGroupName.equals(currentGroupName) || !previousMaterialName.equals(currentMaterialName)) {
 					if(triangles.size() > 0) {
-						triangleMeshes.add(new TriangleMesh3F(triangles));
-						triangles.clear();
-						
 						System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
+						
+						triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName));
+						triangles.clear();
 					}
 					
 					if(!previousGroupName.equals(currentGroupName)) {
@@ -402,13 +445,13 @@ public final class TriangleMesh3F implements Shape3F {
 				final Vector3F normalB = normals.get(indexB);
 				final Vector3F normalC = normals.get(indexC);
 				
-				final Vector3F tangentA = tangents.get(indexA);
-				final Vector3F tangentB = tangents.get(indexB);
-				final Vector3F tangentC = tangents.get(indexC);
+//				final Vector3F tangentA = tangents.get(indexA);
+//				final Vector3F tangentB = tangents.get(indexB);
+//				final Vector3F tangentC = tangents.get(indexC);
 				
-				final Vertex3F a = new Vertex3F(textureCoordinatesA, positionA, normalA, tangentA);
-				final Vertex3F b = new Vertex3F(textureCoordinatesB, positionB, normalB, tangentB);
-				final Vertex3F c = new Vertex3F(textureCoordinatesC, positionC, normalC, tangentC);
+				final Vertex3F a = new Vertex3F(textureCoordinatesA, positionA, normalA/*, tangentA*/);
+				final Vertex3F b = new Vertex3F(textureCoordinatesB, positionB, normalB/*, tangentB*/);
+				final Vertex3F c = new Vertex3F(textureCoordinatesC, positionC, normalC/*, tangentC*/);
 				
 				final Triangle3F triangle = new Triangle3F(a, b, c);
 				
@@ -416,10 +459,10 @@ public final class TriangleMesh3F implements Shape3F {
 			}
 			
 			if(triangles.size() > 0) {
-				triangleMeshes.add(new TriangleMesh3F(triangles));
-				triangles.clear();
-				
 				System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
+				
+				triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName));
+				triangles.clear();
 			}
 			
 			System.out.println(" - Done.");
@@ -467,11 +510,15 @@ public final class TriangleMesh3F implements Shape3F {
 			
 			final float step = (stop - start) / (1024.0F / (depth + 1.0F));
 			
-			for(float split = start + step; split < stop - step; split += step) {
-				Point3F maximumL = Point3F.minimum();
-				Point3F minimumL = Point3F.maximum();
-				Point3F maximumR = Point3F.minimum();
-				Point3F minimumR = Point3F.maximum();
+			for(float oldSplit = 0.0F, newSplit = start + step; newSplit < stop - step; oldSplit = newSplit, newSplit += step) {
+				if(equal(oldSplit, newSplit)) {
+					break;
+				}
+				
+				Point3F maximumL = Point3F.MINIMUM;
+				Point3F minimumL = Point3F.MAXIMUM;
+				Point3F maximumR = Point3F.MINIMUM;
+				Point3F minimumR = Point3F.MAXIMUM;
 				
 				int countL = 0;
 				int countR = 0;
@@ -481,7 +528,7 @@ public final class TriangleMesh3F implements Shape3F {
 					
 					final float value = midpoint.getComponent(axis);
 					
-					if(value < split) {
+					if(value < newSplit) {
 						maximumL = Point3F.maximum(maximumL, processableLeafNode.getBoundingVolume().getMaximum());
 						minimumL = Point3F.minimum(minimumL, processableLeafNode.getBoundingVolume().getMinimum());
 						
@@ -512,7 +559,7 @@ public final class TriangleMesh3F implements Shape3F {
 				
 				if(cost < minimumCost) {
 					minimumCost = cost;
-					bestSplit = split;
+					bestSplit = newSplit;
 					bestAxis = axis;
 				}
 			}
@@ -533,10 +580,10 @@ public final class TriangleMesh3F implements Shape3F {
 		final List<LeafNode> leafNodesL = new ArrayList<>(sizeHalf);
 		final List<LeafNode> leafNodesR = new ArrayList<>(sizeHalf);
 		
-		Point3F maximumL = Point3F.minimum();
-		Point3F minimumL = Point3F.maximum();
-		Point3F maximumR = Point3F.minimum();
-		Point3F minimumR = Point3F.maximum();
+		Point3F maximumL = Point3F.MINIMUM;
+		Point3F minimumL = Point3F.MAXIMUM;
+		Point3F maximumR = Point3F.MINIMUM;
+		Point3F minimumR = Point3F.MAXIMUM;
 		
 		for(final LeafNode processableLeafNode : processableLeafNodes) {
 			final Point3F midpoint = processableLeafNode.getBoundingVolume().getMidpoint();
@@ -565,8 +612,8 @@ public final class TriangleMesh3F implements Shape3F {
 	private static Node doCreateNode(final List<Triangle3F> triangles) {
 		final List<LeafNode> processableLeafNodes = new ArrayList<>(triangles.size());
 		
-		Point3F maximum = Point3F.minimum();
-		Point3F minimum = Point3F.maximum();
+		Point3F maximum = Point3F.MINIMUM;
+		Point3F minimum = Point3F.MAXIMUM;
 		
 		for(final Triangle3F triangle : triangles) {
 			final Point3F a = triangle.getA().getPosition();
@@ -656,7 +703,7 @@ public final class TriangleMesh3F implements Shape3F {
 					indexedObjectModel1.addNormal(normal);
 					indexedObjectModel1.addObjectName(objectName);
 					indexedObjectModel1.addPosition(position);
-					indexedObjectModel1.addTangent(new Vector3F());
+//					indexedObjectModel1.addTangent(new Vector3F());
 					indexedObjectModel1.addTextureCoordinates(textureCoordinates);
 					
 					return Integer.valueOf(indexedObjectModel1.getPositionCount() - 1);
@@ -676,11 +723,11 @@ public final class TriangleMesh3F implements Shape3F {
 				}
 			}
 			
-			indexedObjectModel1.calculateTangents();
+//			indexedObjectModel1.calculateTangents();
 			
-			for(int i = 0; i < indexedObjectModel0.getPositionCount(); i++) {
-				indexedObjectModel0.addTangent(indexedObjectModel1.getTangent(normalModelIndices1.get(Integer.valueOf(i)).intValue()));
-			}
+//			for(int i = 0; i < indexedObjectModel0.getPositionCount(); i++) {
+//				indexedObjectModel0.addTangent(indexedObjectModel1.getTangent(normalModelIndices1.get(Integer.valueOf(i)).intValue()));
+//			}
 			
 			return indexedObjectModel0;
 		}
@@ -792,7 +839,7 @@ public final class TriangleMesh3F implements Shape3F {
 		private final List<String> materialNames;
 		private final List<String> objectNames;
 		private final List<Vector3F> normals;
-		private final List<Vector3F> tangents;
+//		private final List<Vector3F> tangents;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -804,7 +851,7 @@ public final class TriangleMesh3F implements Shape3F {
 			this.materialNames = new ArrayList<>();
 			this.objectNames = new ArrayList<>();
 			this.normals = new ArrayList<>();
-			this.tangents = new ArrayList<>();
+//			this.tangents = new ArrayList<>();
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -837,17 +884,17 @@ public final class TriangleMesh3F implements Shape3F {
 			return this.normals;
 		}
 		
-		public List<Vector3F> getTangents() {
-			return this.tangents;
-		}
+//		public List<Vector3F> getTangents() {
+//			return this.tangents;
+//		}
 		
 		public Vector3F getNormal(final int index) {
 			return this.normals.get(index);
 		}
 		
-		public Vector3F getTangent(final int index) {
-			return this.tangents.get(index);
-		}
+//		public Vector3F getTangent(final int index) {
+//			return this.tangents.get(index);
+//		}
 		
 		public int getPositionCount() {
 			return this.positions.size();
@@ -877,9 +924,9 @@ public final class TriangleMesh3F implements Shape3F {
 			this.positions.add(Objects.requireNonNull(position, "position == null"));
 		}
 		
-		public void addTangent(final Vector3F tangent) {
-			this.tangents.add(Objects.requireNonNull(tangent, "tangent == null"));
-		}
+//		public void addTangent(final Vector3F tangent) {
+//			this.tangents.add(Objects.requireNonNull(tangent, "tangent == null"));
+//		}
 		
 		public void addTextureCoordinates(final Point2F textureCoordinates) {
 			this.textureCoordinates.add(Objects.requireNonNull(textureCoordinates, "textureCoordinates == null"));
@@ -905,6 +952,7 @@ public final class TriangleMesh3F implements Shape3F {
 			}
 		}
 		
+		/*
 		public void calculateTangents() {
 			for(int i = 0; i < this.indices.size(); i += 3) {
 				final int indexA = this.indices.get(i + 0).intValue();
@@ -937,6 +985,7 @@ public final class TriangleMesh3F implements Shape3F {
 				this.tangents.set(i, Vector3F.normalize(this.tangents.get(i)));
 			}
 		}
+		*/
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -959,12 +1008,16 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			Optional<SurfaceIntersection3F> optionalSurfaceIntersection = Optional.empty();
+		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds) {
+			Optional<SurfaceIntersection3F> optionalSurfaceIntersection = SurfaceIntersection3F.EMPTY;
 			
-			if(getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
+			if(getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
 				for(final Triangle3F triangle : this.triangles) {
-					optionalSurfaceIntersection = SurfaceIntersection3F.closest(optionalSurfaceIntersection, triangle.intersection(ray, tMinimum, tMaximum));
+					optionalSurfaceIntersection = SurfaceIntersection3F.closest(optionalSurfaceIntersection, triangle.intersection(ray, tBounds[0], tBounds[1]));
+					
+					if(optionalSurfaceIntersection.isPresent()) {
+						tBounds[1] = optionalSurfaceIntersection.get().getT();
+					}
 				}
 			}
 			
@@ -1013,12 +1066,16 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		public float intersectionT(final Ray3F ray, final float[] tBounds) {
 			float t = Float.NaN;
 			
-			if(getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
+			if(getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
 				for(final Triangle3F triangle : this.triangles) {
-					t = minOrNaN(t, triangle.intersectionT(ray, tMinimum, tMaximum));
+					t = minOrNaN(t, triangle.intersectionT(ray, tBounds[0], tBounds[1]));
+					
+					if(!isNaN(t)) {
+						tBounds[1] = t;
+					}
 				}
 			}
 			
@@ -1050,13 +1107,13 @@ public final class TriangleMesh3F implements Shape3F {
 			return this.boundingVolume;
 		}
 		
-		public abstract Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
+		public abstract Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds);
 		
 		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
 		
 		public abstract float getSurfaceArea();
 		
-		public abstract float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum);
+		public abstract float intersectionT(final Ray3F ray, final float[] tBounds);
 		
 		public final int getDepth() {
 			return this.depth;
@@ -1081,8 +1138,8 @@ public final class TriangleMesh3F implements Shape3F {
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		@Override
-		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			return getBoundingVolume().intersects(ray, tMinimum, tMaximum) ? SurfaceIntersection3F.closest(this.nodeL.intersection(ray, tMinimum, tMaximum), this.nodeR.intersection(ray, tMinimum, tMaximum)) : Optional.empty();
+		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds) {
+			return getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3F.closest(this.nodeL.intersection(ray, tBounds), this.nodeR.intersection(ray, tBounds)) : Optional.empty();
 		}
 		
 		@Override
@@ -1115,8 +1172,8 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			return getBoundingVolume().intersects(ray, tMinimum, tMaximum) ? minOrNaN(this.nodeL.intersectionT(ray, tMinimum, tMaximum), this.nodeR.intersectionT(ray, tMinimum, tMaximum)) : Float.NaN;
+		public float intersectionT(final Ray3F ray, final float[] tBounds) {
+			return getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.nodeL.intersectionT(ray, tBounds), this.nodeR.intersectionT(ray, tBounds)) : Float.NaN;
 		}
 		
 		@Override

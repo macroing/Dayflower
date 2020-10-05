@@ -18,6 +18,9 @@
  */
 package org.dayflower.scene;
 
+import org.dayflower.geometry.Ray3F;
+import org.dayflower.image.Color3F;
+
 /**
  * A {@code Light} represents a light.
  * 
@@ -25,5 +28,14 @@ package org.dayflower.scene;
  * @author J&#246;rgen Lundgren
  */
 public interface Light {
-//	TODO: Implement!
+	/**
+	 * Returns a {@link Color3F} instance with the emittance for {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @return a {@code Color3F} instance with the emittance for {@code ray}
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	Color3F emittance(final Ray3F ray);
 }

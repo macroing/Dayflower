@@ -371,6 +371,24 @@ public final class BSDF {
 	}
 	
 	/**
+	 * Returns the {@link BXDF} count by specular or non-specular type.
+	 * 
+	 * @param isSpecular {@code true} if, and only if, specular types should be counted, {@code false} otherwise
+	 * @return the {@code BXDF} count by specular or non-specular type
+	 */
+	public int countBXDFsBySpecularType(final boolean isSpecular) {
+		int count = 0;
+		
+		for(final BXDF bXDF : this.bXDFs) {
+			if(bXDF.getBXDFType().isSpecular() == isSpecular) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code BSDF} instance.
 	 * 
 	 * @return a hash code for this {@code BSDF} instance

@@ -20,6 +20,8 @@ package org.dayflower.scene.light;
 
 import java.util.Objects;
 
+import org.dayflower.geometry.Ray3F;
+import org.dayflower.image.Color3F;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Primitive;
 
@@ -49,6 +51,22 @@ public final class PrimitiveLight implements Light {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Color3F} instance with the emittance for {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @return a {@code Color3F} instance with the emittance for {@code ray}
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	@Override
+	public Color3F emittance(final Ray3F ray) {
+		Objects.requireNonNull(ray, "ray == null");
+		
+		return Color3F.BLACK;
+	}
 	
 	/**
 	 * Returns the {@link Primitive} instance associated with this {@code PrimitiveLight} instance.

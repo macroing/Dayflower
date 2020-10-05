@@ -105,7 +105,7 @@ public final class Plane3F implements Shape3F {
 		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
-		return Optional.empty();//TODO: Implement!
+		return SurfaceSample3F.EMPTY;//TODO: Implement!
 	}
 	
 	/**
@@ -145,7 +145,7 @@ public final class Plane3F implements Shape3F {
 		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
 		
 		if(equal(nDotD, 0.0F)) {
-			return Optional.empty();
+			return SurfaceIntersection3F.EMPTY;
 		}
 		
 		final Point3F origin = ray.getOrigin();
@@ -158,7 +158,7 @@ public final class Plane3F implements Shape3F {
 		final float t = Vector3F.dotProduct(originToA, surfaceNormal) / nDotD;
 		
 		if(t <= tMinimum || t >= tMaximum) {
-			return Optional.empty();
+			return SurfaceIntersection3F.EMPTY;
 		}
 		
 		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);

@@ -35,6 +35,18 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class Point3D {
+	/**
+	 * A {@code Point3D} instance with the largest component values.
+	 */
+	public static final Point3D MAXIMUM = maximum();
+	
+	/**
+	 * A {@code Point3D} instance with the smallest component values.
+	 */
+	public static final Point3D MINIMUM = minimum();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final double component1;
 	private final double component2;
 	private final double component3;

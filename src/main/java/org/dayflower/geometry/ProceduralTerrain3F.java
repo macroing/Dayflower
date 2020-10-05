@@ -84,7 +84,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
-		return Optional.empty();//TODO: Implement!
+		return SurfaceSample3F.EMPTY;//TODO: Implement!
 	}
 	
 	/**
@@ -138,7 +138,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 			return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceNormalG, surfaceNormalS, t));
 		}
 		
-		return Optional.empty();
+		return SurfaceIntersection3F.EMPTY;
 	}
 	
 	/**

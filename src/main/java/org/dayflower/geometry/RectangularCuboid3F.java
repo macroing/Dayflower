@@ -99,7 +99,7 @@ public final class RectangularCuboid3F implements Shape3F {
 		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
-		return Optional.empty();//TODO: Implement!
+		return SurfaceSample3F.EMPTY;//TODO: Implement!
 	}
 	
 	/**
@@ -153,7 +153,7 @@ public final class RectangularCuboid3F implements Shape3F {
 		final float t = t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
 		
 		if(isNaN(t)) {
-			return Optional.empty();
+			return SurfaceIntersection3F.EMPTY;
 		}
 		
 		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);

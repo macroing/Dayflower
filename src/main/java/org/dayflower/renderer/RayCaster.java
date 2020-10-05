@@ -62,7 +62,7 @@ public final class RayCaster implements Renderer {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * rayCaster.render(display, image, scene, new RendererConfiguration());
+	 * rayCaster.render(display, image, scene, new RendererConfiguration(20, 5, 1000, 1, 10));
 	 * }
 	 * </pre>
 	 * 
@@ -73,7 +73,7 @@ public final class RayCaster implements Renderer {
 	 */
 	@Override
 	public void render(final Display display, final Image image, final Scene scene) {
-		render(display, image, scene, new RendererConfiguration());
+		render(display, image, scene, new RendererConfiguration(20, 5, 1000, 1, 10));
 	}
 	
 	/**

@@ -33,6 +33,13 @@ import java.util.Optional;
  * @author J&#246;rgen Lundgren
  */
 public final class SurfaceIntersection3F {
+	/**
+	 * An empty {@code Optional} instance.
+	 */
+	public static final Optional<SurfaceIntersection3F> EMPTY = Optional.empty();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final OrthonormalBasis33F orthonormalBasisG;
 	private final OrthonormalBasis33F orthonormalBasisS;
 	private final Point2F textureCoordinates;
@@ -238,7 +245,7 @@ public final class SurfaceIntersection3F {
 		} else if(surfaceIntersectionB != null) {
 			return optionalSurfaceIntersectionB;
 		} else {
-			return Optional.empty();
+			return EMPTY;
 		}
 	}
 	

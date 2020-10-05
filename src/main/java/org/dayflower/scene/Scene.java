@@ -138,13 +138,18 @@ public final class Scene {
 		
 		float t = Float.NaN;
 		
+		float tMax = tMaximum;
+		float tMin = tMinimum;
+		
 		for(final Primitive currentPrimitive : this.primitives) {
-			final float currentT = currentPrimitive.intersectionT(ray, tMinimum, tMaximum);
+			final float currentT = currentPrimitive.intersectionT(ray, tMin, tMax);
 			
 			if(!isNaN(currentT) && (isNaN(t) || currentT < t)) {
 				primitive = currentPrimitive;
 				
 				t = currentT;
+				
+				tMax = t;
 			}
 		}
 		
@@ -327,9 +332,15 @@ public final class Scene {
 	 */
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		float t = Float.NaN;
+		float tMax = tMaximum;
+		float tMin = tMinimum;
 		
 		for(final Primitive primitive : this.primitives) {
-			t = minOrNaN(t, primitive.intersectionT(ray, tMinimum, tMaximum));
+			t = minOrNaN(t, primitive.intersectionT(ray, tMin, tMax));
+			
+			if(!isNaN(t)) {
+				tMax = t;
+			}
 		}
 		
 		return t;

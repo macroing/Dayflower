@@ -95,6 +95,25 @@ public final class MutableIntersection {
 	}
 	
 //	TODO: Add Javadocs!
+	public boolean intersection(final Primitive primitive) {
+		boolean isIntersecting = false;
+		
+		if(this.mutableSurfaceIntersection.isIntersecting(primitive.getBoundingVolume())) {
+			this.mutableSurfaceIntersection.transform(primitive.getWorldToObject());
+			
+			if(primitive.getShape().intersection(this.mutableSurfaceIntersection)) {
+				this.primitive = primitive;
+				
+				isIntersecting = true;
+			}
+			
+			this.mutableSurfaceIntersection.transform(primitive.getObjectToWorld());
+		}
+		
+		return isIntersecting;
+	}
+	
+//	TODO: Add Javadocs!
 	public boolean isIntersecting() {
 		return this.primitive != null;
 	}
@@ -111,18 +130,5 @@ public final class MutableIntersection {
 		this.ray = ray;
 		this.tMaximum = tMaximum;
 		this.tMinimum = tMinimum;
-	}
-	
-//	TODO: Add Javadocs!
-	public void intersection(final Primitive primitive) {
-		if(this.mutableSurfaceIntersection.isIntersecting(primitive.getBoundingVolume())) {
-			this.mutableSurfaceIntersection.transform(primitive.getWorldToObject());
-			
-			if(primitive.getShape().intersection(this.mutableSurfaceIntersection)) {
-				this.primitive = primitive;
-			}
-			
-			this.mutableSurfaceIntersection.transform(primitive.getObjectToWorld());
-		}
 	}
 }

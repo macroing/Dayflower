@@ -140,31 +140,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-//		return this.node.intersection(ray, new float[] {tMinimum, tMaximum});
-		
-		/*
-		final float[] tBounds = new float[] {tMinimum, tMaximum};
-		
-		final Triangle3F[] intersectedTriangle = new Triangle3F[1];
-		
-		this.node.intersection(ray, tBounds, intersectedTriangle);
-		
-		if(intersectedTriangle[0] != null) {
-			return intersectedTriangle[0].intersection(ray, tMinimum, tMaximum);
-		}
-		
-		return SurfaceIntersection3F.EMPTY;
-		*/
-		
-		final NodeIntersector nodeIntersector = new NodeIntersector(ray, tMinimum, tMaximum);
-		
-		this.node.intersection(nodeIntersector);
-		
-		if(nodeIntersector.isIntersecting()) {
-			return nodeIntersector.getTriangle().intersection(ray, tMinimum, tMaximum);
-		}
-		
-		return SurfaceIntersection3F.EMPTY;
+		return this.node.intersection(ray, new float[] {tMinimum, tMaximum});
 	}
 	
 	/**
@@ -356,17 +332,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-//		return this.node.intersectionT(ray, new float[] {tMinimum, tMaximum});
-		
-		final NodeIntersector nodeIntersector = new NodeIntersector(ray, tMinimum, tMaximum);
-		
-		this.node.intersection(nodeIntersector);
-		
-		if(nodeIntersector.isIntersecting()) {
-			return nodeIntersector.getT();
-		}
-		
-		return Float.NaN;
+		return this.node.intersectionT(ray, new float[] {tMinimum, tMaximum});
 	}
 	
 	/**
@@ -1144,34 +1110,6 @@ public final class TriangleMesh3F implements Shape3F {
 		public int hashCode() {
 			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.triangles);
 		}
-		
-		@Override
-		public void intersection(final NodeIntersector nodeIntersector) {
-			if(nodeIntersector.isIntersecting(getBoundingVolume())) {
-				for(final Triangle3F triangle : this.triangles) {
-					nodeIntersector.intersection(triangle);
-				}
-			}
-		}
-		
-		@Override
-		public void intersection(final Ray3F ray, final float[] tBounds, final Triangle3F[] intersectedTriangle) {
-			if(getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
-				float t = tBounds[1];
-				
-				for(final Triangle3F triangle : this.triangles) {
-					final float currentT = triangle.intersectionT(ray, tBounds[0], tBounds[1]);
-					
-					if(!isNaN(currentT) && currentT < t) {
-						t = currentT;
-						
-						tBounds[1] = currentT;
-						
-						intersectedTriangle[0] = triangle;
-					}
-				}
-			}
-		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1205,58 +1143,6 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		public final int getDepth() {
 			return this.depth;
-		}
-		
-		public abstract void intersection(final NodeIntersector nodeIntersector);
-		
-		public abstract void intersection(final Ray3F ray, final float[] tBounds, final Triangle3F[] intersectedTriangle);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class NodeIntersector {
-		private Ray3F ray;
-		private Triangle3F triangle;
-		private float t;
-		private float tMaximum;
-		private float tMinimum;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public NodeIntersector(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			this.ray = ray;
-			this.triangle = null;
-			this.t = Float.NaN;
-			this.tMaximum = tMaximum;
-			this.tMinimum = tMinimum;
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Triangle3F getTriangle() {
-			return this.triangle;
-		}
-		
-		public boolean isIntersecting() {
-			return this.triangle != null;
-		}
-		
-		public boolean isIntersecting(final BoundingVolume3F boundingVolume) {
-			return boundingVolume.intersects(this.ray, this.tMinimum, this.tMaximum);
-		}
-		
-		public float getT() {
-			return this.t;
-		}
-		
-		public void intersection(final Triangle3F triangle) {
-			final float t = triangle.intersectionT(this.ray, this.tMinimum, this.tMaximum);
-			
-			if(!isNaN(t) && (isNaN(this.t) || t < this.t)) {
-				this.t = t;
-				this.tMaximum = t;
-				this.triangle = triangle;
-			}
 		}
 	}
 	
@@ -1331,22 +1217,6 @@ public final class TriangleMesh3F implements Shape3F {
 		@Override
 		public int hashCode() {
 			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.nodeL, this.nodeR);
-		}
-		
-		@Override
-		public void intersection(final NodeIntersector nodeIntersector) {
-			if(nodeIntersector.isIntersecting(getBoundingVolume())) {
-				this.nodeL.intersection(nodeIntersector);
-				this.nodeR.intersection(nodeIntersector);
-			}
-		}
-		
-		@Override
-		public void intersection(final Ray3F ray, final float[] tBounds, final Triangle3F[] intersectedTriangle) {
-			if(getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
-				this.nodeL.intersection(ray, tBounds, intersectedTriangle);
-				this.nodeR.intersection(ray, tBounds, intersectedTriangle);
-			}
 		}
 	}
 	

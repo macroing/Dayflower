@@ -64,7 +64,7 @@ public final class ConductorFresnel implements Fresnel {
 	 */
 	@Override
 	public Color3F evaluate(final float cosThetaI) {
-		return doEvaluate(abs(cosThetaI), new Color3F(this.etaI), new Color3F(this.etaT), new Color3F(this.k));
+		return evaluate(abs(cosThetaI), new Color3F(this.etaI), new Color3F(this.etaT), new Color3F(this.k));
 	}
 	
 	/**
@@ -141,7 +141,19 @@ public final class ConductorFresnel implements Fresnel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Color3F doEvaluate(final float cosThetaI, final Color3F etaI, final Color3F etaT, final Color3F k) {
+	/**
+	 * Returns a {@link Color3F} instance with the amount of light reflected by the surface.
+	 * <p>
+	 * If either {@code etaI}, {@code etaT} or {@code k} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cosThetaI the cosine of the angle made by the incoming direction and the surface normal
+	 * @param etaI the index of refraction (IOR) for the incident media
+	 * @param etaT the index of refraction (IOR) for the transmitted media
+	 * @param k the absorption coefficient
+	 * @return a {@code Color3F} instance with the amount of light reflected by the surface
+	 * @throws NullPointerException thrown if, and only if, either {@code etaI}, {@code etaT} or {@code k} are {@code null}
+	 */
+	public static Color3F evaluate(final float cosThetaI, final Color3F etaI, final Color3F etaT, final Color3F k) {
 		final float saturateCosThetaI = saturate(cosThetaI, -1.0F, 1.0F);
 		
 		final Color3F eta = Color3F.divide(etaT, etaI);

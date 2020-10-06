@@ -19,6 +19,7 @@
 package org.dayflower.scene;
 
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
 
 import java.util.Objects;
@@ -440,10 +441,7 @@ public final class Primitive {
 			return Float.NaN;
 		}
 		
-		final Point3F surfaceIntersectionPointObjectSpace = Point3F.add(rayObjectSpace.getOrigin(), rayObjectSpace.getDirection(), tObjectSpace);
-		final Point3F surfaceIntersectionPointWorldSpace = Point3F.transform(this.objectToWorld, surfaceIntersectionPointObjectSpace);
-		
-		final float tWorldSpace = abs(Point3F.distance(rayWorldSpace.getOrigin(), surfaceIntersectionPointWorldSpace));
+		final float tWorldSpace = doTransformT(this.objectToWorld, rayObjectSpace, rayWorldSpace, tObjectSpace);
 		
 		if(tWorldSpace <= tMinimum || tWorldSpace >= tMaximum) {
 			return Float.NaN;
@@ -564,6 +562,6 @@ public final class Primitive {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float doTransformT(final Matrix44F matrix, final Ray3F rayOldSpace, final Ray3F rayNewSpace, final float t) {
-		return t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transform(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+		return !equal(t, 0.0F) && t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transform(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 }

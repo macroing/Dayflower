@@ -19,6 +19,7 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
 
 import java.lang.reflect.Field;
@@ -142,6 +143,6 @@ public final class MutableSurfaceIntersection3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float doTransformT(final Matrix44F matrix, final Ray3F rayOldSpace, final Ray3F rayNewSpace, final float t) {
-		return t > 0.0F && t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transform(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+		return !equal(t, 0.0F) && t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transform(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 }

@@ -63,7 +63,7 @@ public final class DielectricFresnel implements Fresnel {
 	 */
 	@Override
 	public Color3F evaluate(final float cosThetaI) {
-		return new Color3F(doEvaluate(cosThetaI, this.etaI, this.etaT));
+		return new Color3F(evaluate(cosThetaI, this.etaI, this.etaT));
 	}
 	
 	/**
@@ -129,7 +129,15 @@ public final class DielectricFresnel implements Fresnel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static float doEvaluate(final float cosThetaI, final float etaI, final float etaT) {
+	/**
+	 * Returns a {@code float} with the amount of light reflected by the surface.
+	 * 
+	 * @param cosThetaI the cosine of the angle made by the incoming direction and the surface normal
+	 * @param etaI the index of refraction (IOR) for the incident media
+	 * @param etaT the index of refraction (IOR) for the transmitted media
+	 * @return a {@code float} with the amount of light reflected by the surface
+	 */
+	public static float evaluate(final float cosThetaI, final float etaI, final float etaT) {
 		final float saturateCosThetaI = saturate(cosThetaI, -1.0F, 1.0F);
 		
 		final boolean isEntering = saturateCosThetaI > 0.0F;

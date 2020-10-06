@@ -58,6 +58,7 @@ import org.dayflower.scene.material.OrenNayarMaterial;
 import org.dayflower.scene.material.ReflectionMaterial;
 import org.dayflower.scene.material.RefractionMaterial;
 import org.dayflower.scene.pbrt.MatteMaterial;
+import org.dayflower.scene.pbrt.PlasticMaterial;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -277,7 +278,7 @@ public final class Scenes {
 	 */
 	public static Scene newPBRTScene() {
 		final Material material1 = new MatteMaterial(new ConstantTexture(), new ConstantTexture(Color3F.GRAY));
-		final Material material2 = new MatteMaterial(new ConstantTexture(), new ConstantTexture(new Color3F(0.75F, 0.1F, 0.1F)));
+		final Material material2 = new PlasticMaterial(new ConstantTexture(new Color3F(0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.25F)), true);
 		
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = new Sphere3F(10.0F);

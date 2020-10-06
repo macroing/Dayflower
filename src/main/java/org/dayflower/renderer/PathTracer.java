@@ -133,8 +133,8 @@ public final class PathTracer implements Renderer {
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
 						
-//						final Color3F colorRGB = doGetRadiancePBRT(lights, ray, scene, rendererConfiguration);
-						final Color3F colorRGB = doGetRadianceRayito(lights, ray, scene, rendererConfiguration);
+						final Color3F colorRGB = doGetRadiancePBRT(lights, ray, scene, rendererConfiguration);
+//						final Color3F colorRGB = doGetRadianceRayito(lights, ray, scene, rendererConfiguration);
 //						final Color3F colorRGB = doGetRadianceSmallPTIterative(ray, scene, rendererConfiguration);
 //						final Color3F colorRGB = doGetRadianceSmallPTRecursive(ray, scene, rendererConfiguration, 1);
 						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);

@@ -278,7 +278,7 @@ public final class Scenes {
 	 */
 	public static Scene newPBRTScene() {
 		final Material material1 = new MatteMaterial(new ConstantTexture(), new ConstantTexture(Color3F.GRAY));
-		final Material material2 = new PlasticMaterial(new ConstantTexture(new Color3F(0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.25F)), true);
+		final Material material2 = new PlasticMaterial(new ConstantTexture(new Color3F(2.0F, 0.25F, 0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.25F)), true);
 		
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = new Sphere3F(10.0F);

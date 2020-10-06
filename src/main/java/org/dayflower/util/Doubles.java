@@ -38,6 +38,11 @@ import java.util.Random;
  */
 public class Doubles {
 	/**
+	 * The {@code double} value that represents a machine epsilon.
+	 */
+	public static final double MACHINE_EPSILON = Math.ulp(1.0D) * 0.5D;
+	
+	/**
 	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter.
 	 */
 	public static final double PI = Math.PI;
@@ -487,6 +492,16 @@ public class Doubles {
 	 */
 	public static double fractionalPart(final double value, final boolean isUsingCeilOnNegativeValue) {
 		return value < 0.0D && isUsingCeilOnNegativeValue ? ceil(value) - value : value - floor(value);
+	}
+	
+	/**
+	 * Returns the gamma of {@code value}.
+	 * 
+	 * @param value an {@code int} value
+	 * @return the gamma of {@code value}
+	 */
+	public static double gamma(final int value) {
+		return (value * MACHINE_EPSILON) / (1.0D - value * MACHINE_EPSILON);
 	}
 	
 	/**

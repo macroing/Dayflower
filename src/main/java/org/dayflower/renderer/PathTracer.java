@@ -181,14 +181,14 @@ public final class PathTracer implements Renderer {
 				if(hasFoundIntersection) {
 //					radiance += throughput * isect.Le(-ray.d);
 					
-					radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));//Color3F.WHITE -> isect.Le(-ray.d)
+//					radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));
 				} else {
 //					for (const auto &light : scene.infiniteLights) {
 //						radiance += throughput * light->Le(ray);
 //					}
 					
 //					for(final Light light : lights) {
-						radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));//Color3F.WHITE -> light.Le(ray)
+						radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.5F)));
 //					}
 				}
 			}
@@ -205,8 +205,6 @@ public final class PathTracer implements Renderer {
 			
 			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 			
-			final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
-			
 			final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
 			
 			if(!(material instanceof PBRTMaterial)) {
@@ -218,7 +216,11 @@ public final class PathTracer implements Renderer {
 			final Optional<BSDF> optionalBSDF = pBRTMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
 			
 			if(!optionalBSDF.isPresent()) {
-				break;
+				currentRay = surfaceIntersection.createRay(ray.getDirection());
+				
+				currentBounce--;
+				
+				continue;
 			}
 			
 			final BSDF bSDF = optionalBSDF.get();
@@ -232,7 +234,7 @@ public final class PathTracer implements Renderer {
 //			}
 			
 			if(bSDF.countBXDFsBySpecularType(false) > 0) {
-				radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));
+				radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.25F)));
 			}
 			
 			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
@@ -263,7 +265,7 @@ public final class PathTracer implements Renderer {
 				etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalS) > 0.0F ? eta * eta : 1.0F / (eta * eta);
 			}
 			
-			currentRay = new Ray3F(surfaceIntersectionPoint, incoming);
+			currentRay = surfaceIntersection.createRay(incoming);
 			
 			final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
 			

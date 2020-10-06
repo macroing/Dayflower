@@ -38,6 +38,11 @@ import java.util.Random;
  */
 public final class Floats {
 	/**
+	 * The {@code float} value that represents a machine epsilon.
+	 */
+	public static final float MACHINE_EPSILON = Math.ulp(1.0F) * 0.5F;
+	
+	/**
 	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter.
 	 */
 	public static final float PI = (float)(Math.PI);
@@ -488,6 +493,16 @@ public final class Floats {
 	 */
 	public static float fractionalPart(final float value, final boolean isUsingCeilOnNegativeValue) {
 		return value < 0.0F && isUsingCeilOnNegativeValue ? ceil(value) - value : value - floor(value);
+	}
+	
+	/**
+	 * Returns the gamma of {@code value}.
+	 * 
+	 * @param value an {@code int} value
+	 * @return the gamma of {@code value}
+	 */
+	public static float gamma(final int value) {
+		return (value * MACHINE_EPSILON) / (1.0F - value * MACHINE_EPSILON);
 	}
 	
 	/**

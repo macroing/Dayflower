@@ -27,6 +27,7 @@ import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.asinpi;
 import static org.dayflower.util.Floats.atan2;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.gamma;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.pow;
@@ -234,7 +235,9 @@ public final class Sphere3F implements Shape3F {
 		
 		final Point2F textureCoordinates = new Point2F(0.5F + atan2(surfaceNormalG.getZ(), surfaceNormalG.getX()) * PI_MULTIPLIED_BY_2_RECIPROCAL, 0.5F - asinpi(surfaceNormalG.getY()));
 		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceNormalG, surfaceNormalS, t));
+		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(Vector3F.absolute(new Vector3F(surfaceIntersectionPoint)), gamma(5));
+		
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t));
 	}
 	
 	/**

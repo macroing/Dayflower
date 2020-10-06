@@ -136,7 +136,10 @@ public final class ProceduralTerrain3F implements Shape3F {
 			final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG);
 			final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 			
-			return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceNormalG, surfaceNormalS, t));
+//			TODO: Implement!
+			final Vector3F surfaceIntersectionPointError = new Vector3F();
+			
+			return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t));
 		}
 		
 		return SurfaceIntersection3F.EMPTY;

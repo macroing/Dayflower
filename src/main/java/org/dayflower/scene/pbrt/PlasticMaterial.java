@@ -69,8 +69,7 @@ public final class PlasticMaterial extends AbstractMaterial implements PBRTMater
 			
 			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.computeRoughnessToAlpha(colorRoughness.average()) : colorRoughness.average();
 			
-//			TODO: Change to TrowbridgeReitzMicrofacetDistribution!
-			final MicrofacetDistribution microfacetDistribution = new BeckmannMicrofacetDistribution(true, roughness, roughness);
+			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughness, roughness);
 			
 			bXDFs.add(new TorranceSparrowReflectionBRDF(colorSpecular, fresnel, microfacetDistribution));
 		}

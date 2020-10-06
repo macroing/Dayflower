@@ -81,14 +81,14 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
 			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = outgoing.getZ() * normal.getZ() > 0.0F ? normal : Vector3F.negate(normal);
+			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphere(outgoing, normal) ? normal : Vector3F.negate(normal);
 			
 			return normalCorrectlyOriented;
 		} else {
 			final float logSample = log(1.0F - u);
 			final float phi = atan(alphaY / alphaX * tan(2.0F * PI * v + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
-			final float sinPhi = sin(phi);
 			final float cosPhi = cos(phi);
+			final float sinPhi = sin(phi);
 			final float alphaXSquared = alphaX * alphaX;
 			final float alphaYSquared = alphaY * alphaY;
 			final float tanThetaSquared = -logSample / (cosPhi * cosPhi / alphaXSquared + sinPhi * sinPhi / alphaYSquared);
@@ -96,7 +96,7 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
 			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = outgoing.getZ() * normal.getZ() > 0.0F ? normal : Vector3F.negate(normal);
+			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphere(outgoing, normal) ? normal : Vector3F.negate(normal);
 			
 			return normalCorrectlyOriented;
 		}
@@ -160,8 +160,9 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	private static Vector2F doComputeSlope(final float cosThetaI, final float u, final float v) {
 		if(cosThetaI > 0.9999F) {
 			final float r = sqrt(-log(1.0F - u));
-			final float cosPhi = cos(2.0F * PI * v);
-			final float sinPhi = sin(2.0F * PI * v);
+			final float phi = 2.0F * PI * v;
+			final float cosPhi = cos(phi);
+			final float sinPhi = sin(phi);
 			final float x = r * cosPhi;
 			final float y = r * sinPhi;
 			
@@ -216,8 +217,8 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 		
 		final Vector2F slope = doComputeSlope(iStretched.cosTheta(), u, v);
 		
-		final float x = -(iStretched.cosPhi() * slope.getX() - iStretched.sinPhi() * slope.getY());
-		final float y = -(iStretched.sinPhi() * slope.getX() + iStretched.cosPhi() * slope.getY());
+		final float x = -((iStretched.cosPhi() * slope.getX() - iStretched.sinPhi() * slope.getY()) * alphaX);
+		final float y = -((iStretched.sinPhi() * slope.getX() + iStretched.cosPhi() * slope.getY()) * alphaY);
 		final float z = 1.0F;
 		
 		return Vector3F.normalize(new Vector3F(x, y, z));

@@ -19,7 +19,6 @@
 package org.dayflower.scene.pbrt;
 
 import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.saturate;
 
 import java.util.Objects;
@@ -35,23 +34,26 @@ import org.dayflower.image.Color3F;
  * @author J&#246;rgen Lundgren
  */
 public final class ConductorFresnel implements Fresnel {
-	private final float etaI;
-	private final float etaT;
-	private final float k;
+	private final Color3F etaI;
+	private final Color3F etaT;
+	private final Color3F k;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code ConductorFresnel} instance.
+	 * <p>
+	 * If either {@code etaI}, {@code etaT} or {@code k} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param etaI the index of refraction (IOR) for the incident media
 	 * @param etaT the index of refraction (IOR) for the transmitted media
 	 * @param k the absorption coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code etaI}, {@code etaT} or {@code k} are {@code null}
 	 */
-	public ConductorFresnel(final float etaI, final float etaT, final float k) {
-		this.etaI = etaI;
-		this.etaT = etaT;
-		this.k = k;
+	public ConductorFresnel(final Color3F etaI, final Color3F etaT, final Color3F k) {
+		this.etaI = Objects.requireNonNull(etaI, "etaI == null");
+		this.etaT = Objects.requireNonNull(etaT, "etaT == null");
+		this.k = Objects.requireNonNull(k, "k == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +66,34 @@ public final class ConductorFresnel implements Fresnel {
 	 */
 	@Override
 	public Color3F evaluate(final float cosThetaI) {
-		return evaluate(abs(cosThetaI), new Color3F(this.etaI), new Color3F(this.etaT), new Color3F(this.k));
+		return evaluate(abs(cosThetaI), this.etaI, this.etaT, this.k);
+	}
+	
+	/**
+	 * Returns the index of refraction (IOR) for the incident media.
+	 * 
+	 * @return the index of refraction (IOR) for the incident media
+	 */
+	public Color3F getEtaI() {
+		return this.etaI;
+	}
+	
+	/**
+	 * Returns the index of refraction (IOR) for the transmitted media.
+	 * 
+	 * @return the index of refraction (IOR) for the transmitted media
+	 */
+	public Color3F getEtaT() {
+		return this.etaT;
+	}
+	
+	/**
+	 * Returns the absorption coefficient.
+	 * 
+	 * @return the absorption coefficient
+	 */
+	public Color3F getK() {
+		return this.k;
 	}
 	
 	/**
@@ -74,7 +103,7 @@ public final class ConductorFresnel implements Fresnel {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ConductorFresnel(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.etaI), Float.valueOf(this.etaT), Float.valueOf(this.k));
+		return String.format("new ConductorFresnel(%s, %s, %s)", this.etaI, this.etaT, this.k);
 	}
 	
 	/**
@@ -91,42 +120,15 @@ public final class ConductorFresnel implements Fresnel {
 			return true;
 		} else if(!(object instanceof ConductorFresnel)) {
 			return false;
-		} else if(!equal(this.etaI, ConductorFresnel.class.cast(object).etaI)) {
+		} else if(!Objects.equals(this.etaI, ConductorFresnel.class.cast(object).etaI)) {
 			return false;
-		} else if(!equal(this.etaT, ConductorFresnel.class.cast(object).etaT)) {
+		} else if(!Objects.equals(this.etaT, ConductorFresnel.class.cast(object).etaT)) {
 			return false;
-		} else if(!equal(this.k, ConductorFresnel.class.cast(object).k)) {
+		} else if(!Objects.equals(this.k, ConductorFresnel.class.cast(object).k)) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the index of refraction (IOR) for the incident media.
-	 * 
-	 * @return the index of refraction (IOR) for the incident media
-	 */
-	public float getEtaI() {
-		return this.etaI;
-	}
-	
-	/**
-	 * Returns the index of refraction (IOR) for the transmitted media.
-	 * 
-	 * @return the index of refraction (IOR) for the transmitted media
-	 */
-	public float getEtaT() {
-		return this.etaT;
-	}
-	
-	/**
-	 * Returns the absorption coefficient.
-	 * 
-	 * @return the absorption coefficient
-	 */
-	public float getK() {
-		return this.k;
 	}
 	
 	/**
@@ -136,7 +138,7 @@ public final class ConductorFresnel implements Fresnel {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.etaI), Float.valueOf(this.etaT), Float.valueOf(this.k));
+		return Objects.hash(this.etaI, this.etaT, this.k);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

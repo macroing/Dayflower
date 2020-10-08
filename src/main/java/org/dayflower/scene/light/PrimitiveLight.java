@@ -18,11 +18,17 @@
  */
 package org.dayflower.scene.light;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.Optional;
 
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
+import org.dayflower.scene.LightIncomingRadianceResult;
 import org.dayflower.scene.Primitive;
 
 /**
@@ -53,19 +59,25 @@ public final class PrimitiveLight implements Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance for {@code ray}.
+	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the emittance for {@code ray}
+	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public Color3F emittance(final Ray3F ray) {
+	public Color3F evaluateEmittedRadiance(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
 		
-		return Color3F.BLACK;
+		return Color3F.BLACK;//TODO: Implement!
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public Color3F power() {
+		return Color3F.BLACK;//TODO: Implement!
 	}
 	
 	/**
@@ -75,6 +87,15 @@ public final class PrimitiveLight implements Light {
 	 */
 	public Primitive getPrimitive() {
 		return this.primitive;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public Optional<LightIncomingRadianceResult> sampleIncomingRadiance(final Intersection intersection, final Point2F sample) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(sample, "sample == null");
+		
+		return Optional.empty();//TODO: Implement!
 	}
 	
 	/**
@@ -106,6 +127,21 @@ public final class PrimitiveLight implements Light {
 		} else {
 			return true;
 		}
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public boolean isDeltaDistribution() {
+		return false;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float evaluateProbabilityDensityFunctionIncomingRadiance(final Intersection intersection, final Vector3F incoming) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
+		return 0.0F;//TODO: Implement!
 	}
 	
 	/**

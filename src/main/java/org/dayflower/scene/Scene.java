@@ -21,12 +21,15 @@ package org.dayflower.scene;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.minOrNaN;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.image.Color3F;
+import org.dayflower.scene.pbrt.BSDF;
 
 /**
  * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.
@@ -81,6 +84,16 @@ public final class Scene {
 	 */
 	public Camera getCamera() {
 		return this.camera;
+	}
+	
+//	TODO: Add Javadocs!
+	public Color3F lightSampleAllUniformDistribution(final BSDF bSDF, final Intersection intersection) {
+		return new Color3F(0.25F);
+	}
+	
+//	TODO: Add Javadocs!
+	public Color3F lightSampleOneUniformDistribution(final BSDF bSDF, final Intersection intersection) {
+		return new Color3F(0.25F);
 	}
 	
 	/**

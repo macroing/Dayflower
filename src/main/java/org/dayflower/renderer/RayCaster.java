@@ -160,7 +160,7 @@ public final class RayCaster implements Renderer {
 				if(light instanceof PointLight) {
 					final PointLight pointLight = PointLight.class.cast(light);
 					
-					final Color3F emittance = pointLight.getEmittance();
+					final Color3F intensity = pointLight.getIntensity();
 					
 					final Point3F position = pointLight.getPosition();
 					
@@ -182,8 +182,8 @@ public final class RayCaster implements Renderer {
 						final float rDotL = Vector3F.dotProduct(reflectionDirectionNormalized, surfaceIntersectionPointToPositionNormalized);
 						
 						if(nDotL > 0.0F) {
-							radiance = Color3F.add(radiance, Color3F.multiply(emittance, Color3F.multiply(diffuse, Color3F.multiply(albedo, max(0.0F, nDotL)))));
-							radiance = Color3F.add(radiance, Color3F.multiply(emittance, Color3F.multiply(specular, pow(max(0.0F, rDotL), specularPower))));
+							radiance = Color3F.add(radiance, Color3F.multiply(intensity, Color3F.multiply(diffuse, Color3F.multiply(albedo, max(0.0F, nDotL)))));
+							radiance = Color3F.add(radiance, Color3F.multiply(intensity, Color3F.multiply(specular, pow(max(0.0F, rDotL), specularPower))));
 						}
 					}
 				}

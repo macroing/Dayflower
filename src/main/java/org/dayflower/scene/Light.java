@@ -18,7 +18,12 @@
  */
 package org.dayflower.scene;
 
+import java.lang.reflect.Field;
+import java.util.Optional;
+
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
 /**
@@ -29,13 +34,25 @@ import org.dayflower.image.Color3F;
  */
 public interface Light {
 	/**
-	 * Returns a {@link Color3F} instance with the emittance for {@code ray}.
+	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the emittance for {@code ray}
+	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	Color3F emittance(final Ray3F ray);
+	Color3F evaluateEmittedRadiance(final Ray3F ray);
+	
+//	TODO: Add Javadocs!
+	Color3F power();
+	
+//	TODO: Add Javadocs!
+	Optional<LightIncomingRadianceResult> sampleIncomingRadiance(final Intersection intersection, final Point2F sample);
+	
+//	TODO: Add Javadocs!
+	boolean isDeltaDistribution();
+	
+//	TODO: Add Javadocs!
+	float evaluateProbabilityDensityFunctionIncomingRadiance(final Intersection intersection, final Vector3F incoming);
 }

@@ -187,9 +187,9 @@ public final class PathTracer implements Renderer {
 //						radiance += throughput * light->Le(ray);
 //					}
 					
-//					for(final Light light : lights) {
-//						radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.5F)));
-//					}
+					for(final Light light : lights) {
+						radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateEmittedRadiance(currentRay)));
+					}
 				}
 			}
 			
@@ -234,7 +234,7 @@ public final class PathTracer implements Renderer {
 //			}
 			
 			if(bSDF.countBXDFsBySpecularType(false) > 0) {
-				radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.5F)));
+				radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.lightSampleOneUniformDistribution(bSDF, intersection)));
 			}
 			
 			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());

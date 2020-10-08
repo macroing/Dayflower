@@ -18,12 +18,21 @@
  */
 package org.dayflower.scene.light;
 
-import java.util.Objects;
+import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
 
+import java.lang.reflect.Field;
+import java.util.Objects;
+import java.util.Optional;
+
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
+import org.dayflower.scene.LightIncomingRadianceResult;
 
 /**
  * A {@code PointLight} is an implementation of {@link Light} that represents a point light.
@@ -34,7 +43,7 @@ import org.dayflower.scene.Light;
  * @author J&#246;rgen Lundgren
  */
 public final class PointLight implements Light {
-	private final Color3F emittance;
+	private final Color3F intensity;
 	private final Point3F position;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,42 +84,48 @@ public final class PointLight implements Light {
 	/**
 	 * Constructs a new {@code PointLight} instance.
 	 * <p>
-	 * If either {@code position} or {@code emittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code position} or {@code intensity} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param position a {@link Point3F} instance with the position associated with this {@code PointLight} instance
-	 * @param emittance a {@link Color3F} instance with the emittance associated with this {@code PointLight} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code position} or {@code emittance} are {@code null}
+	 * @param intensity a {@link Color3F} instance with the intensity associated with this {@code PointLight} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code position} or {@code intensity} are {@code null}
 	 */
-	public PointLight(final Point3F position, final Color3F emittance) {
+	public PointLight(final Point3F position, final Color3F intensity) {
 		this.position = Objects.requireNonNull(position, "position == null");
-		this.emittance = Objects.requireNonNull(emittance, "emittance == null");
+		this.intensity = Objects.requireNonNull(intensity, "intensity == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance for {@code ray}.
+	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the emittance for {@code ray}
+	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public Color3F emittance(final Ray3F ray) {
+	public Color3F evaluateEmittedRadiance(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
 		
 		return Color3F.BLACK;
 	}
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance associated with this {@code PointLight} instance.
+	 * Returns a {@link Color3F} instance with the intensity associated with this {@code PointLight} instance.
 	 * 
-	 * @return a {@code Color3F} instance with the emittance associated with this {@code PointLight} instance
+	 * @return a {@code Color3F} instance with the intensity associated with this {@code PointLight} instance
 	 */
-	public Color3F getEmittance() {
-		return this.emittance;
+	public Color3F getIntensity() {
+		return this.intensity;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public Color3F power() {
+		return Color3F.multiply(this.intensity, PI_MULTIPLIED_BY_4);
 	}
 	
 	/**
@@ -122,6 +137,29 @@ public final class PointLight implements Light {
 		return this.position;
 	}
 	
+//	TODO: Add Javadocs!
+	@Override
+	public Optional<LightIncomingRadianceResult> sampleIncomingRadiance(final Intersection intersection, final Point2F sample) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(sample, "sample == null");
+		
+		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+		
+		final Point3F position = this.position;
+		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+		
+		final Color3F intensity = this.intensity;
+		final Color3F result = Color3F.divide(intensity, Point3F.distanceSquared(surfaceIntersectionPoint, position));
+		
+		final Vector3F incoming = Vector3F.normalize(Vector3F.direction(surfaceIntersectionPoint, position));
+		
+		final Ray3F shadowRay = surfaceIntersection.createRay(incoming);
+		
+		final float probabilityDensityFunctionValue = 1.0F;
+		
+		return Optional.of(new LightIncomingRadianceResult(result, shadowRay, incoming, probabilityDensityFunctionValue));
+	}
+	
 	/**
 	 * Returns a {@code String} representation of this {@code PointLight} instance.
 	 * 
@@ -129,7 +167,7 @@ public final class PointLight implements Light {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PointLight(%s, %s)", this.position, this.emittance);
+		return String.format("new PointLight(%s, %s)", this.position, this.intensity);
 	}
 	
 	/**
@@ -146,13 +184,28 @@ public final class PointLight implements Light {
 			return true;
 		} else if(!(object instanceof PointLight)) {
 			return false;
-		} else if(!Objects.equals(this.emittance, PointLight.class.cast(object).emittance)) {
+		} else if(!Objects.equals(this.intensity, PointLight.class.cast(object).intensity)) {
 			return false;
 		} else if(!Objects.equals(this.position, PointLight.class.cast(object).position)) {
 			return false;
 		} else {
 			return true;
 		}
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public boolean isDeltaDistribution() {
+		return true;
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public float evaluateProbabilityDensityFunctionIncomingRadiance(final Intersection intersection, final Vector3F incoming) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
+		return 0.0F;
 	}
 	
 	/**
@@ -162,6 +215,6 @@ public final class PointLight implements Light {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.emittance, this.position);
+		return Objects.hash(this.intensity, this.position);
 	}
 }

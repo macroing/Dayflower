@@ -62,7 +62,7 @@ public final class FresnelSpecularBXDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScale}, {@code transmittanceScale} or {@code transportMode} are {@code null}
 	 */
 	public FresnelSpecularBXDF(final Color3F reflectanceScale, final Color3F transmittanceScale, final TransportMode transportMode, final float etaA, final float etaB) {
-		super(BXDFType.createSpecularReflectionAndTransmission());
+		super(BXDFType.SPECULAR_REFLECTION_AND_TRANSMISSION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
@@ -218,7 +218,7 @@ public final class FresnelSpecularBXDF extends BXDF {
 		final float reflectance = DielectricFresnel.evaluate(outgoing.cosTheta(), this.etaA, this.etaB);
 		
 		if(sample.getU() < reflectance) {
-			final BXDFType bXDFType = BXDFType.createSpecularReflection();
+			final BXDFType bXDFType = BXDFType.SPECULAR_REFLECTION;
 			
 			final Vector3F incoming = new Vector3F(-outgoing.getX(), -outgoing.getY(), outgoing.getZ());
 			
@@ -237,7 +237,7 @@ public final class FresnelSpecularBXDF extends BXDF {
 		final Optional<Vector3F> optionalIncoming = Vector3F.refraction(outgoing, Vector3F.faceForward(Vector3F.z(), outgoing), etaI / etaT);
 		
 		if(optionalIncoming.isPresent()) {
-			final BXDFType bXDFType = BXDFType.createSpecularTransmission();
+			final BXDFType bXDFType = BXDFType.SPECULAR_TRANSMISSION;
 			
 			final Vector3F incoming = optionalIncoming.get();
 			

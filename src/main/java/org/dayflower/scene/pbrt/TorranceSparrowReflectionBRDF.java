@@ -58,7 +58,7 @@ public final class TorranceSparrowReflectionBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScale}, {@code fresnel} or {@code microfacetDistribution} are {@code null}
 	 */
 	public TorranceSparrowReflectionBRDF(final Color3F reflectanceScale, final Fresnel fresnel, final MicrofacetDistribution microfacetDistribution) {
-		super(BXDFType.createGlossyReflection());
+		super(BXDFType.GLOSSY_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 		this.fresnel = Objects.requireNonNull(fresnel, "fresnel == null");

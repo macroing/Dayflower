@@ -29,20 +29,77 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class BXDFType {
-	private final boolean hasReflection;
-	private final boolean hasTransmission;
-	private final boolean isDiffuse;
-	private final boolean isGlossy;
-	private final boolean isSpecular;
+	/**
+	 * A {@code BXDFType} instance with all properties set to {@code true}.
+	 */
+	public static final BXDFType ALL = new BXDFType(true, true, true, true, true);
+	
+	/**
+	 * A {@code BXDFType} instance with all properties set to {@code true} except for specular.
+	 */
+	public static final BXDFType ALL_EXCEPT_SPECULAR = new BXDFType(true, true, true, true, false);
+	
+	/**
+	 * A diffuse {@code BXDFType} with reflection.
+	 */
+	public static final BXDFType DIFFUSE_REFLECTION = doCreateReflection(true, false, false);
+	
+	/**
+	 * A diffuse {@code BXDFType} with reflection and transmission.
+	 */
+	public static final BXDFType DIFFUSE_REFLECTION_AND_TRANSMISSION = doCreateReflectionAndTransmission(true, false, false);
+	
+	/**
+	 * A diffuse {@code BXDFType} with transmission.
+	 */
+	public static final BXDFType DIFFUSE_TRANSMISSION = doCreateTransmission(true, false, false);
+	
+	/**
+	 * A glossy {@code BXDFType} with reflection.
+	 */
+	public static final BXDFType GLOSSY_REFLECTION = doCreateReflection(false, true, false);
+	
+	/**
+	 * A glossy {@code BXDFType} with reflection and transmission.
+	 */
+	public static final BXDFType GLOSSY_REFLECTION_AND_TRANSMISSION = doCreateReflectionAndTransmission(false, true, false);
+	
+	/**
+	 * A glossy {@code BXDFType} with transmission.
+	 */
+	public static final BXDFType GLOSSY_TRANSMISSION = doCreateTransmission(false, true, false);
+	
+	/**
+	 * A specular {@code BXDFType} with reflection.
+	 */
+	public static final BXDFType SPECULAR_REFLECTION = doCreateReflection(false, false, true);
+	
+	/**
+	 * A specular {@code BXDFType} with reflection and transmission.
+	 */
+	public static final BXDFType SPECULAR_REFLECTION_AND_TRANSMISSION = doCreateReflectionAndTransmission(false, false, true);
+	
+	/**
+	 * A specular {@code BXDFType} with transmission.
+	 */
+	public static final BXDFType SPECULAR_TRANSMISSION = doCreateTransmission(false, false, true);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final int BIT_FLAG_HAS_REFLECTION = 1 << 0;
+	private static final int BIT_FLAG_HAS_TRANSMISSION = 1 << 1;
+	private static final int BIT_FLAG_IS_DIFFUSE = 1 << 2;
+	private static final int BIT_FLAG_IS_GLOSSY = 1 << 3;
+	private static final int BIT_FLAG_IS_SPECULAR = 1 << 4;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private final int bitFlags;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private BXDFType(final boolean hasReflection, final boolean hasTransmission, final boolean isDiffuse, final boolean isGlossy, final boolean isSpecular) {
-		this.hasReflection = hasReflection;
-		this.hasTransmission = hasTransmission;
-		this.isDiffuse = isDiffuse;
-		this.isGlossy = isGlossy;
-		this.isSpecular = isSpecular;
+		this.bitFlags = doCreateBitFlags(hasReflection, hasTransmission, isDiffuse, isGlossy, isSpecular);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,15 +148,7 @@ public final class BXDFType {
 			return true;
 		} else if(!(object instanceof BXDFType)) {
 			return false;
-		} else if(this.hasReflection != BXDFType.class.cast(object).hasReflection) {
-			return false;
-		} else if(this.hasTransmission != BXDFType.class.cast(object).hasTransmission) {
-			return false;
-		} else if(this.isDiffuse != BXDFType.class.cast(object).isDiffuse) {
-			return false;
-		} else if(this.isGlossy != BXDFType.class.cast(object).isGlossy) {
-			return false;
-		} else if(this.isSpecular != BXDFType.class.cast(object).isSpecular) {
+		} else if(this.bitFlags != BXDFType.class.cast(object).bitFlags) {
 			return false;
 		} else {
 			return true;
@@ -112,7 +161,7 @@ public final class BXDFType {
 	 * @return {@code true} if, and only if, this {@code BXDFType} has reflection, {@code false} otherwise
 	 */
 	public boolean hasReflection() {
-		return this.hasReflection;
+		return (this.bitFlags & BIT_FLAG_HAS_REFLECTION) == BIT_FLAG_HAS_REFLECTION;
 	}
 	
 	/**
@@ -121,7 +170,7 @@ public final class BXDFType {
 	 * @return {@code true} if, and only if, this {@code BXDFType} has transmission, {@code false} otherwise
 	 */
 	public boolean hasTransmission() {
-		return this.hasTransmission;
+		return (this.bitFlags & BIT_FLAG_HAS_TRANSMISSION) == BIT_FLAG_HAS_TRANSMISSION;
 	}
 	
 	/**
@@ -130,7 +179,7 @@ public final class BXDFType {
 	 * @return {@code true} if, and only if, this {@code BXDFType} is diffuse, {@code false} otherwise
 	 */
 	public boolean isDiffuse() {
-		return this.isDiffuse;
+		return (this.bitFlags & BIT_FLAG_IS_DIFFUSE) == BIT_FLAG_IS_DIFFUSE;
 	}
 	
 	/**
@@ -139,7 +188,7 @@ public final class BXDFType {
 	 * @return {@code true} if, and only if, this {@code BXDFType} is glossy, {@code false} otherwise
 	 */
 	public boolean isGlossy() {
-		return this.isGlossy;
+		return (this.bitFlags & BIT_FLAG_IS_GLOSSY) == BIT_FLAG_IS_GLOSSY;
 	}
 	
 	/**
@@ -148,7 +197,20 @@ public final class BXDFType {
 	 * @return {@code true} if, and only if, this {@code BXDFType} is specular, {@code false} otherwise
 	 */
 	public boolean isSpecular() {
-		return this.isSpecular;
+		return (this.bitFlags & BIT_FLAG_IS_SPECULAR) == BIT_FLAG_IS_SPECULAR;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code BXDFType} instance matches {@code bXDFType}, {@code false} otherwise.
+	 * <p>
+	 * If {@code bXDFType} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bXDFType a {@code BXDFType} instance
+	 * @return {@code true} if, and only if, this {@code BXDFType} instance matches {@code bXDFType}, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code bXDFType} is {@code null}
+	 */
+	public boolean matches(final BXDFType bXDFType) {
+		return (this.bitFlags & bXDFType.bitFlags) == this.bitFlags;
 	}
 	
 	/**
@@ -158,90 +220,7 @@ public final class BXDFType {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Boolean.valueOf(this.hasReflection), Boolean.valueOf(this.hasTransmission), Boolean.valueOf(this.isDiffuse), Boolean.valueOf(this.isGlossy), Boolean.valueOf(this.isSpecular));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a diffuse {@code BXDFType} with reflection.
-	 * 
-	 * @return a diffuse {@code BXDFType} with reflection
-	 */
-	public static BXDFType createDiffuseReflection() {
-		return doCreateReflection(true, false, false);
-	}
-	
-	/**
-	 * Returns a diffuse {@code BXDFType} with reflection and transmission.
-	 * 
-	 * @return a diffuse {@code BXDFType} with reflection and transmission
-	 */
-	public static BXDFType createDiffuseReflectionAndTransmission() {
-		return doCreateReflectionAndTransmission(true, false, false);
-	}
-	
-	/**
-	 * Returns a diffuse {@code BXDFType} with transmission.
-	 * 
-	 * @return a diffuse {@code BXDFType} with transmission
-	 */
-	public static BXDFType createDiffuseTransmission() {
-		return doCreateTransmission(true, false, false);
-	}
-	
-	/**
-	 * Returns a glossy {@code BXDFType} with reflection.
-	 * 
-	 * @return a glossy {@code BXDFType} with reflection
-	 */
-	public static BXDFType createGlossyReflection() {
-		return doCreateReflection(false, true, false);
-	}
-	
-	/**
-	 * Returns a glossy {@code BXDFType} with reflection and transmission.
-	 * 
-	 * @return a glossy {@code BXDFType} with reflection and transmission
-	 */
-	public static BXDFType createGlossyReflectionAndTransmission() {
-		return doCreateReflectionAndTransmission(false, true, false);
-	}
-	
-	/**
-	 * Returns a glossy {@code BXDFType} with transmission.
-	 * 
-	 * @return a glossy {@code BXDFType} with transmission
-	 */
-	public static BXDFType createGlossyTransmission() {
-		return doCreateTransmission(false, true, false);
-	}
-	
-	/**
-	 * Returns a specular {@code BXDFType} with reflection.
-	 * 
-	 * @return a specular {@code BXDFType} with reflection
-	 */
-	public static BXDFType createSpecularReflection() {
-		return doCreateReflection(false, false, true);
-	}
-	
-	/**
-	 * Returns a specular {@code BXDFType} with reflection and transmission.
-	 * 
-	 * @return a specular {@code BXDFType} with reflection and transmission
-	 */
-	public static BXDFType createSpecularReflectionAndTransmission() {
-		return doCreateReflectionAndTransmission(false, false, true);
-	}
-	
-	/**
-	 * Returns a specular {@code BXDFType} with transmission.
-	 * 
-	 * @return a specular {@code BXDFType} with transmission
-	 */
-	public static BXDFType createSpecularTransmission() {
-		return doCreateTransmission(false, false, true);
+		return Objects.hash(Integer.valueOf(this.bitFlags));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,5 +235,31 @@ public final class BXDFType {
 	
 	private static BXDFType doCreateTransmission(final boolean isDiffuse, final boolean isGlossy, final boolean isSpecular) {
 		return new BXDFType(false, true, isDiffuse, isGlossy, isSpecular);
+	}
+	
+	private static int doCreateBitFlags(final boolean hasReflection, final boolean hasTransmission, final boolean isDiffuse, final boolean isGlossy, final boolean isSpecular) {
+		int bitFlags = 0;
+		
+		if(hasReflection) {
+			bitFlags |= BIT_FLAG_HAS_REFLECTION;
+		}
+		
+		if(hasTransmission) {
+			bitFlags |= BIT_FLAG_HAS_TRANSMISSION;
+		}
+		
+		if(isDiffuse) {
+			bitFlags |= BIT_FLAG_IS_DIFFUSE;
+		}
+		
+		if(isGlossy) {
+			bitFlags |= BIT_FLAG_IS_GLOSSY;
+		}
+		
+		if(isSpecular) {
+			bitFlags |= BIT_FLAG_IS_SPECULAR;
+		}
+		
+		return bitFlags;
 	}
 }

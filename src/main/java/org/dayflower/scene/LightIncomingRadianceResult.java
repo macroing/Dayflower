@@ -23,23 +23,23 @@ import static org.dayflower.util.Floats.equal;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
 //TODO: Add Javadocs!
 public final class LightIncomingRadianceResult {
 	private final Color3F result;
-	private final Ray3F shadowRay;
+	private final Point3F point;
 	private final Vector3F incoming;
 	private final float probabilityDensityFunctionValue;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public LightIncomingRadianceResult(final Color3F result, final Ray3F shadowRay, final Vector3F incoming, final float probabilityDensityFunctionValue) {
+	public LightIncomingRadianceResult(final Color3F result, final Point3F point, final Vector3F incoming, final float probabilityDensityFunctionValue) {
 		this.result = Objects.requireNonNull(result, "result == null");
-		this.shadowRay = Objects.requireNonNull(shadowRay, "shadowRay == null");
+		this.point = Objects.requireNonNull(point, "point == null");
 		this.incoming = Objects.requireNonNull(incoming, "incoming == null");
 		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
 	}
@@ -52,14 +52,14 @@ public final class LightIncomingRadianceResult {
 	}
 	
 //	TODO: Add Javadocs!
-	public Ray3F getShadowRay() {
-		return this.shadowRay;
+	public Point3F getPoint() {
+		return this.point;
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public String toString() {
-		return String.format("new LightIncomingRadianceResult(%s, %s, %s, %+.10f)", this.result, this.shadowRay, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
+		return String.format("new LightIncomingRadianceResult(%s, %s, %s, %+.10f)", this.result, this.point, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 	
 //	TODO: Add Javadocs!
@@ -76,7 +76,7 @@ public final class LightIncomingRadianceResult {
 			return false;
 		} else if(!Objects.equals(this.result, LightIncomingRadianceResult.class.cast(object).result)) {
 			return false;
-		} else if(!Objects.equals(this.shadowRay, LightIncomingRadianceResult.class.cast(object).shadowRay)) {
+		} else if(!Objects.equals(this.point, LightIncomingRadianceResult.class.cast(object).point)) {
 			return false;
 		} else if(!Objects.equals(this.incoming, LightIncomingRadianceResult.class.cast(object).incoming)) {
 			return false;
@@ -95,6 +95,6 @@ public final class LightIncomingRadianceResult {
 //	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.result, this.shadowRay, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
+		return Objects.hash(this.result, this.point, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 }

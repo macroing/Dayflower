@@ -239,7 +239,7 @@ public final class PathTracer implements Renderer {
 			
 			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
 			
-			final Optional<BSDFDistributionFunctionResult> optionalBSDFDistributionFunctionResult = bSDF.sampleDistributionFunction(outgoing, new Point2F(random(), random()), true, true);
+			final Optional<BSDFDistributionFunctionResult> optionalBSDFDistributionFunctionResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, new Point2F(random(), random()));
 			
 			if(!optionalBSDFDistributionFunctionResult.isPresent()) {
 				break;

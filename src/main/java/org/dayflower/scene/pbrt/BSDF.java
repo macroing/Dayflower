@@ -91,25 +91,26 @@ public final class BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code BSDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2, BxDFType flags)} that returns a {@code Spectrum} in PBRT.
 	 * 
+	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples2} in PBRT
 	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples, called {@code samples1} in PBRT
-	 * @param hasReflection {@code true} if, and only if, reflection is accepted, {@code false} otherwise
-	 * @param hasTransmission {@code true} if, and only if, transmission is accepted, {@code false} otherwise
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
-	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final boolean hasReflection, final boolean hasTransmission) {
+	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final List<Point2F> samplesB) {
+		Objects.requireNonNull(bXDFType, "bXDFType == null");
+		
 		Lists.requireNonNullList(samplesA, "samplesA");
 		Lists.requireNonNullList(samplesB, "samplesB");
 		
 		Color3F reflectance = Color3F.BLACK;
 		
 		for(final BXDF bXDF : this.bXDFs) {
-			if(hasReflection && bXDF.getBXDFType().hasReflection() || hasTransmission && bXDF.getBXDFType().hasTransmission()) {
+			if(bXDF.getBXDFType().matches(bXDFType)) {
 				reflectance = Color3F.add(reflectance, bXDF.computeReflectanceFunction(samplesA, samplesB));
 			}
 		}
@@ -122,18 +123,19 @@ public final class BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code samplesA}, {@code outgoingWorldSpace} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code samplesA}, {@code outgoingWorldSpace} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code BSDF} method {@code rho(const Vector3f &woWorld, int nSamples, const Point2f *samples, BxDFType flags)} that returns a {@code Spectrum} in PBRT.
 	 * 
+	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples} in PBRT
 	 * @param outgoingWorldSpace the outgoing direction, called {@code woWorld} in PBRT
-	 * @param hasReflection {@code true} if, and only if, reflection is accepted, {@code false} otherwise
-	 * @param hasTransmission {@code true} if, and only if, transmission is accepted, {@code false} otherwise
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoingWorldSpace} or an element in {@code samplesA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA}, {@code outgoingWorldSpace} or an element in {@code samplesA} are {@code null}
 	 */
-	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoingWorldSpace, final boolean hasReflection, final boolean hasTransmission) {
+	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final Vector3F outgoingWorldSpace) {
+		Objects.requireNonNull(bXDFType, "bXDFType == null");
+		
 		Lists.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
@@ -143,7 +145,7 @@ public final class BSDF {
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
 		
 		for(final BXDF bXDF : this.bXDFs) {
-			if(hasReflection && bXDF.getBXDFType().hasReflection() || hasTransmission && bXDF.getBXDFType().hasTransmission()) {
+			if(bXDF.getBXDFType().matches(bXDFType)) {
 				reflectance = Color3F.add(reflectance, bXDF.computeReflectanceFunction(samplesA, outgoing));
 			}
 		}
@@ -156,18 +158,18 @@ public final class BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
-	 * If either {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code BSDF} method {@code f(const Vector3f &woW, const Vector3f &wiW, BxDFType flags)} that returns a {@code Spectrum} in PBRT.
 	 * 
+	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param outgoingWorldSpace the outgoing direction, called {@code woW} in PBRT
 	 * @param incomingWorldSpace the incoming direction, called {@code wiW} in PBRT
-	 * @param hasReflection {@code true} if, and only if, reflection is accepted, {@code false} otherwise
-	 * @param hasTransmission {@code true} if, and only if, transmission is accepted, {@code false} otherwise
 	 * @return a {@code Color3F} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}
 	 */
-	public Color3F evaluateDistributionFunction(final Vector3F outgoingWorldSpace, final Vector3F incomingWorldSpace, final boolean hasReflection, final boolean hasTransmission) {
+	public Color3F evaluateDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F incomingWorldSpace) {
+		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
 		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
@@ -181,7 +183,7 @@ public final class BSDF {
 		Color3F result = Color3F.BLACK;
 		
 		for(final BXDF bXDF : this.bXDFs) {
-			if(hasReflection && bXDF.getBXDFType().hasReflection() && isReflecting || hasTransmission && bXDF.getBXDFType().hasTransmission() && !isReflecting) {
+			if(bXDF.getBXDFType().matches(bXDFType) && (isReflecting && bXDF.getBXDFType().hasReflection() || !isReflecting && bXDF.getBXDFType().hasTransmission())) {
 				result = Color3F.add(result, bXDF.evaluateDistributionFunction(outgoing, incoming));
 			}
 		}
@@ -194,22 +196,22 @@ public final class BSDF {
 	 * <p>
 	 * Returns an optional {@link BSDFDistributionFunctionResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code outgoingWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code BSDF} method {@code Sample_f(const Vector3f &woWorld, Vector3f *wiWorld, const Point2f &u, Float *pdf, BxDFType type, BxDFType *sampledType)} that returns a {@code Spectrum} in PBRT.
 	 * 
+	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param outgoingWorldSpace the outgoing direction, called {@code woWorld} in PBRT
 	 * @param sample the sample point
-	 * @param hasReflection {@code true} if, and only if, reflection is accepted, {@code false} otherwise
-	 * @param hasTransmission {@code true} if, and only if, transmission is accepted, {@code false} otherwise
 	 * @return an optional {@code BSDFDistributionFunctionResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoingWorldSpace} or {@code sample} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}
 	 */
-	public Optional<BSDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoingWorldSpace, final Point2F sample, final boolean hasReflection, final boolean hasTransmission) {
+	public Optional<BSDFDistributionFunctionResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Point2F sample) {
+		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final int matches = doComputeMatches(hasReflection, hasTransmission);
+		final int matches = doComputeMatches(bXDFType);
 		
 		if(matches == 0) {
 			return Optional.empty();
@@ -217,7 +219,7 @@ public final class BSDF {
 		
 		final int match = min((int)(floor(sample.getU() * matches)), matches - 1);
 		
-		final BXDF matchingBXDF = doGetMatchingBXDF(hasReflection, hasTransmission, match);
+		final BXDF matchingBXDF = doGetMatchingBXDF(bXDFType, match);
 		
 		if(matchingBXDF == null) {
 			return Optional.empty();
@@ -249,7 +251,7 @@ public final class BSDF {
 		
 		if(matches > 1 && !matchingBXDF.getBXDFType().isSpecular()) {
 			for(final BXDF bXDF : this.bXDFs) {
-				if(matchingBXDF != bXDF && (hasReflection && bXDF.getBXDFType().hasReflection() || hasTransmission && bXDF.getBXDFType().hasTransmission())) {
+				if(matchingBXDF != bXDF && bXDF.getBXDFType().matches(bXDFType)) {
 					probabilityDensityFunctionValue += bXDF.evaluateProbabilityDensityFunction(outgoing, incoming);
 				}
 			}
@@ -265,15 +267,13 @@ public final class BSDF {
 			result = Color3F.BLACK;
 			
 			for(final BXDF bXDF : this.bXDFs) {
-				if(hasReflection && bXDF.getBXDFType().hasReflection() && isReflecting || hasTransmission && bXDF.getBXDFType().hasTransmission() && !isReflecting) {
+				if(bXDF.getBXDFType().matches(bXDFType) && (isReflecting && bXDF.getBXDFType().hasReflection() || !isReflecting && bXDF.getBXDFType().hasTransmission())) {
 					result = Color3F.add(result, bXDF.evaluateDistributionFunction(outgoing, incoming));
 				}
 			}
 		}
 		
-		final BXDFType bXDFType = bXDFDistributionFunctionResult.getBXDFType();
-		
-		return Optional.of(new BSDFDistributionFunctionResult(bXDFType, result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
+		return Optional.of(new BSDFDistributionFunctionResult(bXDFDistributionFunctionResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -316,18 +316,18 @@ public final class BSDF {
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code BSDF} method {@code Pdf(const Vector3f &woWorld, const Vector3f &wiWorld, BxDFType flags)} that returns a {@code Float} in PBRT.
 	 * 
+	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param outgoingWorldSpace the outgoing direction, called {@code woWorld} in PBRT
 	 * @param incomingWorldSpace the incoming direction, called {@code wiWorld} in PBRT
-	 * @param hasReflection {@code true} if, and only if, reflection is accepted, {@code false} otherwise
-	 * @param hasTransmission {@code true} if, and only if, transmission is accepted, {@code false} otherwise
 	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}
 	 */
-	public float evaluateProbabilityDensityFunction(final Vector3F outgoingWorldSpace, final Vector3F incomingWorldSpace, final boolean hasReflection, final boolean hasTransmission) {
+	public float evaluateProbabilityDensityFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F incomingWorldSpace) {
+		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
 		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
@@ -347,7 +347,7 @@ public final class BSDF {
 		int matches = 0;
 		
 		for(final BXDF bXDF : this.bXDFs) {
-			if(hasReflection && bXDF.getBXDFType().hasReflection() || hasTransmission && bXDF.getBXDFType().hasTransmission()) {
+			if(bXDF.getBXDFType().matches(bXDFType)) {
 				matches++;
 				
 				probabilityDensityFunctionValue += bXDF.evaluateProbabilityDensityFunction(outgoing, incoming);
@@ -400,11 +400,11 @@ public final class BSDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private BXDF doGetMatchingBXDF(final boolean hasReflection, final boolean hasTransmission, final int match) {
+	private BXDF doGetMatchingBXDF(final BXDFType bXDFType, final int match) {
 		for(int i = 0, j = match; i < this.bXDFs.size(); i++) {
 			final BXDF bXDF = this.bXDFs.get(i);
 			
-			if((hasReflection && bXDF.getBXDFType().hasReflection() || hasTransmission && bXDF.getBXDFType().hasTransmission()) && j-- == 0) {
+			if(bXDF.getBXDFType().matches(bXDFType) && j-- == 0) {
 				return bXDF;
 			}
 		}
@@ -420,11 +420,11 @@ public final class BSDF {
 		return Vector3F.transform(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS());
 	}
 	
-	private int doComputeMatches(final boolean hasReflection, final boolean hasTransmission) {
+	private int doComputeMatches(final BXDFType bXDFType) {
 		int matches = 0;
 		
 		for(final BXDF bXDF : this.bXDFs) {
-			if(hasReflection && bXDF.getBXDFType().hasReflection() || hasTransmission && bXDF.getBXDFType().hasTransmission()) {
+			if(bXDF.getBXDFType().matches(bXDFType)) {
 				matches++;
 			}
 		}

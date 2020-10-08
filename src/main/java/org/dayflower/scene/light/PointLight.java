@@ -153,11 +153,9 @@ public final class PointLight implements Light {
 		
 		final Vector3F incoming = Vector3F.normalize(Vector3F.direction(surfaceIntersectionPoint, position));
 		
-		final Ray3F shadowRay = surfaceIntersection.createRay(incoming);
-		
 		final float probabilityDensityFunctionValue = 1.0F;
 		
-		return Optional.of(new LightIncomingRadianceResult(result, shadowRay, incoming, probabilityDensityFunctionValue));
+		return Optional.of(new LightIncomingRadianceResult(result, position, incoming, probabilityDensityFunctionValue));
 	}
 	
 	/**

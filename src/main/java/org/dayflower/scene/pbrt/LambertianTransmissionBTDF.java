@@ -52,7 +52,7 @@ public final class LambertianTransmissionBTDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, {@code transmittanceScale} is {@code null}
 	 */
 	public LambertianTransmissionBTDF(final Color3F transmittanceScale) {
-		super(BXDFType.createDiffuseTransmission());
+		super(BXDFType.DIFFUSE_TRANSMISSION);
 		
 		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
 	}

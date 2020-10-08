@@ -61,7 +61,7 @@ public final class SpecularTransmissionBTDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, either {@code transmittanceScale} or {@code transportMode} are {@code null}
 	 */
 	public SpecularTransmissionBTDF(final Color3F transmittanceScale, final TransportMode transportMode, final float etaA, final float etaB) {
-		super(BXDFType.createSpecularTransmission());
+		super(BXDFType.SPECULAR_TRANSMISSION);
 		
 		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
 		this.fresnel = new DielectricFresnel(etaA, etaB);

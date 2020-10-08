@@ -55,7 +55,7 @@ public final class SpecularReflectionBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScale} or {@code fresnel} are {@code null}
 	 */
 	public SpecularReflectionBRDF(final Color3F reflectanceScale, final Fresnel fresnel) {
-		super(BXDFType.createSpecularReflection());
+		super(BXDFType.SPECULAR_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 		this.fresnel = Objects.requireNonNull(fresnel, "fresnel == null");

@@ -124,6 +124,19 @@ public final class SurfaceIntersection3F {
 	}
 	
 	/**
+	 * Returns a new {@link Ray3F} in the direction towards {@code point}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return a new {@code Ray3F} in the direction towards {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Ray3F createRay(final Point3F point) {
+		return new Ray3F(Point3F.offset(this.surfaceIntersectionPoint, Vector3F.direction(this.surfaceIntersectionPoint, point), this.surfaceNormalS, this.surfaceIntersectionPointError), Vector3F.direction(this.surfaceIntersectionPoint, point));
+	}
+	
+	/**
 	 * Returns a new {@link Ray3F} in the direction {@code direction}.
 	 * <p>
 	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.

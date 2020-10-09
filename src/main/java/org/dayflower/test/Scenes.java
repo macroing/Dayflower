@@ -58,6 +58,7 @@ import org.dayflower.scene.material.LambertianMaterial;
 import org.dayflower.scene.material.OrenNayarMaterial;
 import org.dayflower.scene.material.ReflectionMaterial;
 import org.dayflower.scene.material.RefractionMaterial;
+import org.dayflower.scene.pbrt.GlassMaterial;
 import org.dayflower.scene.pbrt.MatteMaterial;
 import org.dayflower.scene.pbrt.MetalMaterial;
 import org.dayflower.scene.pbrt.PlasticMaterial;
@@ -317,9 +318,10 @@ public final class Scenes {
 		final Color3F colorCopperN = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(new IrregularSpectralCurve(n, wavelengths).toColorXYZ()));
 		final Color3F colorCopperK = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(new IrregularSpectralCurve(k, wavelengths).toColorXYZ()));
 		
-		final Material material1 = new MatteMaterial(new ConstantTexture(), new ConstantTexture(Color3F.GRAY));
-		final Material material2 = new PlasticMaterial(new ConstantTexture(new Color3F(2.0F, 0.25F, 0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.25F)), true);
-		final Material material3 = new MetalMaterial(new ConstantTexture(colorCopperN), new ConstantTexture(colorCopperK), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
+		final Material material1 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.GRAY));
+		final Material material2 = new PlasticMaterial(new ConstantTexture(new Color3F(1.0F, 0.25F, 0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(1.0F)), true);
+//		final Material material3 = new MetalMaterial(new ConstantTexture(colorCopperN), new ConstantTexture(colorCopperK), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
+		final Material material3 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), new ConstantTexture(), true);
 		
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = new Sphere3F(10.0F);
@@ -331,7 +333,7 @@ public final class Scenes {
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "PBRT");
-		scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 0.0F), new Color3F(100.0F)));
+		scene.addLight(new PointLight(new Point3F(2.0F, 2.0F, 0.0F), new Color3F(100.0F)));
 		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix2));
 		scene.addPrimitive(new Primitive(material3, shape3, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix3));

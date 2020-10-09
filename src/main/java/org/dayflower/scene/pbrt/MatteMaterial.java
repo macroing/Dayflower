@@ -68,13 +68,24 @@ public final class MatteMaterial extends AbstractMaterial implements PBRTMateria
 		return Optional.of(new BSDF(intersection, Arrays.asList(new OrenNayarBRDF(angle, colorDiffuse))));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code MatteMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code MatteMaterial} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new MatteMaterial(%s, %s)", this.textureAngle, this.textureDiffuse);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code MatteMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MatteMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code MatteMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MatteMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -90,7 +101,11 @@ public final class MatteMaterial extends AbstractMaterial implements PBRTMateria
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code MatteMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code MatteMaterial} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.textureAngle, this.textureDiffuse);

@@ -81,13 +81,24 @@ public final class PlasticMaterial extends AbstractMaterial implements PBRTMater
 		return Optional.empty();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code PlasticMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code PlasticMaterial} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new PlasticMaterial(%s, %s, %s, %s)", this.textureDiffuse, this.textureRoughness, this.textureSpecular, Boolean.toString(this.isRemappingRoughness));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code PlasticMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PlasticMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code PlasticMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PlasticMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -107,7 +118,11 @@ public final class PlasticMaterial extends AbstractMaterial implements PBRTMater
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code PlasticMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code PlasticMaterial} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.textureDiffuse, this.textureRoughness, this.textureSpecular, Boolean.valueOf(this.isRemappingRoughness));

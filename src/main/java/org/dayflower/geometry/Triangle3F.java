@@ -19,6 +19,7 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.gamma;
 import static org.dayflower.util.Floats.isNaN;
 
 import java.lang.reflect.Field;
@@ -205,11 +206,17 @@ public final class Triangle3F implements Shape3F {
 		final Vector3F surfaceNormalG = this.surfaceNormal;
 		final Vector3F surfaceNormalS = Vector3F.normalNormalized(this.a.getNormal(), this.b.getNormal(), this.c.getNormal(), barycentricCoordinates);
 		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG);
-		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(surfaceNormalS);
+		final Vector3F surfaceTangentG = Vector3F.directionNormalized(a, b);
+		final Vector3F surfaceTangentS = Vector3F.normalNormalized(this.a.getTangent(), this.b.getTangent(), this.c.getTangent(), barycentricCoordinates);
 		
-//		TODO: Implement!
-		final Vector3F surfaceIntersectionPointError = new Vector3F();
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG, surfaceTangentG);
+		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(surfaceNormalS, surfaceTangentS);
+		
+		final float xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
+		final float yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
+		final float zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
+		
+		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
 		
 		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t));
 	}
@@ -485,9 +492,23 @@ public final class Triangle3F implements Shape3F {
 		private final Point2F textureCoordinates;
 		private final Point3F position;
 		private final Vector3F normal;
-//		private final Vector3F tangent;
+		private final Vector3F tangent;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Constructs a new {@code Vertex3F} instance.
+		 * <p>
+		 * If either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3F} instance
+		 * @param position the position associated with this {@code Vertex3F} instance
+		 * @param normal the normal associated with this {@code Vertex3F} instance
+		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}
+		 */
+		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F normal) {
+			this(textureCoordinates, position, normal, new Vector3F());
+		}
 		
 		/**
 		 * Constructs a new {@code Vertex3F} instance.
@@ -500,11 +521,11 @@ public final class Triangle3F implements Shape3F {
 		 * @param tangent the tangent associated with this {@code Vertex3F} instance
 		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position}, {@code normal} or {@code tangent} are {@code null}
 		 */
-		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F normal/*, final Vector3F tangent*/) {
+		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F normal, final Vector3F tangent) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
 			this.position = Objects.requireNonNull(position, "position == null");
 			this.normal = Objects.requireNonNull(normal, "normal == null");
-//			this.tangent = Objects.requireNonNull(tangent, "tangent == null");
+			this.tangent = Objects.requireNonNull(tangent, "tangent == null");
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -534,7 +555,7 @@ public final class Triangle3F implements Shape3F {
 		 */
 		@Override
 		public String toString() {
-			return String.format("new Vertex3F(%s, %s, %s, %s)", this.textureCoordinates, this.position, this.normal/*, this.tangent*/, "");
+			return String.format("new Vertex3F(%s, %s, %s, %s)", this.textureCoordinates, this.position, this.normal, this.tangent);
 		}
 		
 		/**
@@ -551,9 +572,9 @@ public final class Triangle3F implements Shape3F {
 		 * 
 		 * @return the tangent associated with this {@code Vertex3F} instance
 		 */
-//		public Vector3F getTangent() {
-//			return this.tangent;
-//		}
+		public Vector3F getTangent() {
+			return this.tangent;
+		}
 		
 		/**
 		 * Compares {@code object} to this {@code Vertex3F} instance for equality.
@@ -575,8 +596,8 @@ public final class Triangle3F implements Shape3F {
 				return false;
 			} else if(!Objects.equals(this.normal, Vertex3F.class.cast(object).normal)) {
 				return false;
-//			} else if(!Objects.equals(this.tangent, Vertex3F.class.cast(object).tangent)) {
-//				return false;
+			} else if(!Objects.equals(this.tangent, Vertex3F.class.cast(object).tangent)) {
+				return false;
 			} else {
 				return true;
 			}
@@ -589,7 +610,7 @@ public final class Triangle3F implements Shape3F {
 		 */
 		@Override
 		public int hashCode() {
-			return Objects.hash(this.textureCoordinates, this.position, this.normal/*, this.tangent*/);
+			return Objects.hash(this.textureCoordinates, this.position, this.normal, this.tangent);
 		}
 	}
 }

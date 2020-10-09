@@ -54,7 +54,8 @@ public final class MetalMaterial extends AbstractMaterial implements PBRTMateria
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final Color3F colorEta = this.textureEta.getColor(intersection);
+		final Color3F colorEtaI = Color3F.WHITE;
+		final Color3F colorEtaT = this.textureEta.getColor(intersection);
 		final Color3F colorK = this.textureK.getColor(intersection);
 		final Color3F colorRoughnessU = this.textureRoughnessU.getColor(intersection);
 		final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
@@ -62,20 +63,31 @@ public final class MetalMaterial extends AbstractMaterial implements PBRTMateria
 		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.computeRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
 		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.computeRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
 		
-		final Fresnel fresnel = new ConductorFresnel(Color3F.WHITE, colorEta, colorK);
+		final Fresnel fresnel = new ConductorFresnel(colorEtaI, colorEtaT, colorK);
 		
 		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
 		
 		return Optional.of(new BSDF(intersection, Arrays.asList(new TorranceSparrowReflectionBRDF(Color3F.WHITE, fresnel, microfacetDistribution))));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code MetalMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code MetalMaterial} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new MetalMaterial(%s, %s, %s, %s, %s)", this.textureEta, this.textureK, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code MetalMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MetalMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code MetalMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MetalMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -97,7 +109,11 @@ public final class MetalMaterial extends AbstractMaterial implements PBRTMateria
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code MetalMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code MetalMaterial} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.textureEta, this.textureK, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));

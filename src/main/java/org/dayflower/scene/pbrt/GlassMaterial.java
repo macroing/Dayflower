@@ -112,4 +112,55 @@ public final class GlassMaterial extends AbstractMaterial implements PBRTMateria
 		
 		return Optional.of(new BSDF(intersection, bXDFs, eta));
 	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code GlassMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code GlassMaterial} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new GlassMaterial(%s, %s, %s, %s, %s, %s)", this.textureEta, this.textureKReflection, this.textureKTransmission, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code GlassMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code GlassMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code GlassMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code GlassMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof GlassMaterial)) {
+			return false;
+		} else if(!Objects.equals(this.textureEta, GlassMaterial.class.cast(object).textureEta)) {
+			return false;
+		} else if(!Objects.equals(this.textureKReflection, GlassMaterial.class.cast(object).textureKReflection)) {
+			return false;
+		} else if(!Objects.equals(this.textureKTransmission, GlassMaterial.class.cast(object).textureKTransmission)) {
+			return false;
+		} else if(!Objects.equals(this.textureRoughnessU, GlassMaterial.class.cast(object).textureRoughnessU)) {
+			return false;
+		} else if(!Objects.equals(this.textureRoughnessV, GlassMaterial.class.cast(object).textureRoughnessV)) {
+			return false;
+		} else if(this.isRemappingRoughness != GlassMaterial.class.cast(object).isRemappingRoughness) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns a hash code for this {@code GlassMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code GlassMaterial} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.textureEta, this.textureKReflection, this.textureKTransmission, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
+	}
 }

@@ -53,6 +53,7 @@ import org.dayflower.scene.background.ImageBackground;
 import org.dayflower.scene.background.PerezBackground;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.PrimitiveLight;
+import org.dayflower.scene.light.SpotLight;
 import org.dayflower.scene.material.AshikhminShirleyMaterial;
 import org.dayflower.scene.material.LambertianMaterial;
 import org.dayflower.scene.material.OrenNayarMaterial;
@@ -305,7 +306,8 @@ public final class Scenes {
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "PBRT");
-		scene.addLight(new PointLight(new Point3F(2.0F, 2.0F, 0.0F), new Color3F(100.0F)));
+//		scene.addLight(new PointLight(new Point3F(2.0F, 2.0F, 0.0F), new Color3F(100.0F)));
+		scene.addLight(new SpotLight());
 		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix2));
 		scene.addPrimitive(new Primitive(material3, shape3, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix3));

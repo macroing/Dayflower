@@ -35,7 +35,10 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionRenderer();
-		doTestPathTracer();
+		doTestPathTracerPBRT();
+//		doTestPathTracerRayito();
+//		doTestPathTracerSmallPTIterative();
+//		doTestPathTracerSmallPTRecursive();
 //		doTestRayCaster();
 	}
 	
@@ -45,8 +48,20 @@ public final class RendererTest {
 		doTestRenderer(new AmbientOcclusionRenderer(), Scenes.newBedroomScene());
 	}
 	
-	static void doTestPathTracer() {
-		doTestRenderer(new PathTracer(), Scenes.newPBRTScene());
+	static void doTestPathTracerPBRT() {
+		doTestRenderer(new PathTracer(PathTracer.TYPE_P_B_R_T), Scenes.newPBRTScene());
+	}
+	
+	static void doTestPathTracerRayito() {
+		doTestRenderer(new PathTracer(PathTracer.TYPE_RAYITO), Scenes.newDefaultScene());
+	}
+	
+	static void doTestPathTracerSmallPTIterative() {
+		doTestRenderer(new PathTracer(PathTracer.TYPE_SMALL_P_T_ITERATIVE), Scenes.newDefaultScene());
+	}
+	
+	static void doTestPathTracerSmallPTRecursive() {
+		doTestRenderer(new PathTracer(PathTracer.TYPE_SMALL_P_T_RECURSIVE), Scenes.newDefaultScene());
 	}
 	
 	static void doTestRayCaster() {

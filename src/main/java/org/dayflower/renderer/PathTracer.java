@@ -40,7 +40,6 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.scene.Background;
-import org.dayflower.scene.BackgroundSample;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
@@ -72,10 +71,45 @@ import org.dayflower.scene.rayito.RefractionMaterial;
  */
 public final class PathTracer implements Renderer {
 	/**
+	 * The type of PBRT.
+	 */
+	public static final int TYPE_P_B_R_T = 1;
+	
+	/**
+	 * The type of Rayito.
+	 */
+	public static final int TYPE_RAYITO = 2;
+	
+	/**
+	 * The type of SmallPT using iteration.
+	 */
+	public static final int TYPE_SMALL_P_T_ITERATIVE = 3;
+	
+	/**
+	 * The type of SmallPT using recursion.
+	 */
+	public static final int TYPE_SMALL_P_T_RECURSIVE = 4;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private final int type;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * Constructs a new {@code PathTracer} instance.
 	 */
 	public PathTracer() {
-		
+		this(TYPE_P_B_R_T);
+	}
+	
+	/**
+	 * Constructs a new {@code PathTracer} instance.
+	 * 
+	 * @param type the type
+	 */
+	public PathTracer(final int type) {
+		this.type = type;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,6 +153,7 @@ public final class PathTracer implements Renderer {
 		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
+		final int type = this.type;
 		
 		final List<Light> lights = scene.getLights();
 		
@@ -135,10 +170,7 @@ public final class PathTracer implements Renderer {
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
 						
-						final Color3F colorRGB = doGetRadiancePBRT(lights, ray, scene, rendererConfiguration);
-//						final Color3F colorRGB = doGetRadianceRayito(lights, ray, scene, rendererConfiguration);
-//						final Color3F colorRGB = doGetRadianceSmallPTIterative(ray, scene, rendererConfiguration);
-//						final Color3F colorRGB = doGetRadianceSmallPTRecursive(ray, scene, rendererConfiguration, 1);
+						final Color3F colorRGB = doGetRadiance(lights, ray, scene, rendererConfiguration, type);
 						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
 						
 						if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
@@ -162,6 +194,21 @@ public final class PathTracer implements Renderer {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Color3F doGetRadiance(final List<Light> lights, final Ray3F ray, final Scene scene, final RendererConfiguration rendererConfiguration, final int type) {
+		switch(type) {
+			case TYPE_P_B_R_T:
+				return doGetRadiancePBRT(lights, ray, scene, rendererConfiguration);
+			case TYPE_RAYITO:
+				return doGetRadianceRayito(lights, ray, scene, rendererConfiguration);
+			case TYPE_SMALL_P_T_ITERATIVE:
+				return doGetRadianceSmallPTIterative(ray, scene, rendererConfiguration);
+			case TYPE_SMALL_P_T_RECURSIVE:
+				return doGetRadianceSmallPTRecursive(ray, scene, rendererConfiguration, 1);
+			default:
+				return doGetRadiancePBRT(lights, ray, scene, rendererConfiguration);
+		}
+	}
 	
 	private static Color3F doGetRadiancePBRT(final List<Light> lights, final Ray3F ray, final Scene scene, final RendererConfiguration rendererConfiguration) {
 		final int maximumBounce = rendererConfiguration.getMaximumBounce();
@@ -322,10 +369,6 @@ public final class PathTracer implements Renderer {
 				
 				final OrthonormalBasis33F orthonormalBasisS = surfaceIntersection.getOrthonormalBasisS();
 				
-				final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
-				
-//				final Vector3F surfaceNormalG = surfaceIntersection.getSurfaceNormalG();
-//				final Vector3F surfaceNormalGCorrectlyOriented = Vector3F.dotProduct(currentRayDirectionO, surfaceNormalG) < 0.0F ? Vector3F.negate(surfaceNormalG) : surfaceNormalG;
 				final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
 				
 				if(currentBounce == 0 || currentBounce == currentBounceDiracDistribution) {
@@ -336,11 +379,9 @@ public final class PathTracer implements Renderer {
 					currentBounceDiracDistribution++;
 					
 					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
-//					radiance = Color3F.add(radiance, doGetRadianceRayitoBackground(throughput, intersection, materialResult, scene));
 				} else {
 					radiance = Color3F.add(radiance, doGetRadianceRayitoLight(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO));
 					radiance = Color3F.add(radiance, doGetRadianceRayitoLights(throughput, materialResult, scene, surfaceIntersection, currentRayDirectionO, lights, primitive));
-//					radiance = Color3F.add(radiance, doGetRadianceRayitoBackground(throughput, intersection, materialResult, scene));
 				}
 				
 				final BXDFResult selectedBXDFResult = selectedBXDF.sampleSolidAngle(currentRayDirectionO, surfaceNormalS, orthonormalBasisS, random(), random());
@@ -358,8 +399,7 @@ public final class PathTracer implements Renderer {
 				final float reflectance = selectedBXDFResult.getReflectance();
 				
 				if(probabilityDensityFunctionValue > 0.0F) {
-//					currentRay = new Ray3F(Point3F.add(surfaceIntersectionPoint, surfaceNormalGCorrectlyOriented, 0.000001F), Vector3F.negate(Vector3F.normalize(selectedBXDFResult.getI())));
-					currentRay = new Ray3F(surfaceIntersectionPoint, Vector3F.negate(Vector3F.normalize(selectedBXDFResult.getI())));
+					currentRay = surfaceIntersection.createRay(Vector3F.negate(Vector3F.normalize(selectedBXDFResult.getI())));
 					
 					throughput = Color3F.multiply(throughput, color);
 					throughput = Color3F.multiply(throughput, reflectance);
@@ -389,71 +429,6 @@ public final class PathTracer implements Renderer {
 		}
 		
 		return radiance;
-	}
-	
-	@SuppressWarnings("unused")
-	private static Color3F doGetRadianceRayitoBackground(final Color3F throughput, final Intersection intersection, final MaterialResult materialResult, final Scene scene) {
-		float radianceR = 0.0F;
-		float radianceG = 0.0F;
-		float radianceB = 0.0F;
-		
-		final Background background = scene.getBackground();
-		
-		final BXDF selectedBXDF = materialResult.getSelectedBXDF();
-		
-		final Color3F color = materialResult.getColor();
-		
-		final float colorR = color.getR();
-		final float colorG = color.getG();
-		final float colorB = color.getB();
-		
-		final float throughputR = throughput.getR();
-		final float throughputG = throughput.getG();
-		final float throughputB = throughput.getB();
-		
-		final float selectedBXDFWeight = materialResult.getSelectedBXDFWeight();
-		
-		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-		
-		final Vector3F directionI = surfaceIntersection.getRay().getDirection();
-		final Vector3F directionO = Vector3F.negate(directionI);
-		final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
-		
-		final List<BackgroundSample> backgroundSamples = background.sample(intersection);
-		
-		for(final BackgroundSample backgroundSample : backgroundSamples) {
-			final Vector3F selectedDirectionO = backgroundSample.getRay().getDirection();
-			final Vector3F selectedDirectionI = Vector3F.negate(selectedDirectionO);
-			
-			final BXDFResult selectedBXDFResult = selectedBXDF.evaluateSolidAngle(directionO, surfaceNormal, selectedDirectionI);
-			
-			if(selectedBXDFResult.isFinite()) {
-				final float probabilityDensityFunctionValueA = SampleGeneratorF.sphereUniformDistributionProbabilityDensityFunction();
-				final float probabilityDensityFunctionValueB = selectedBXDFResult.getProbabilityDensityFunctionValue();
-				final float reflectance = selectedBXDFResult.getReflectance();
-				
-				if(probabilityDensityFunctionValueB > 0.0F && reflectance > 0.0F && !scene.intersects(backgroundSample.getRay())) {
-					final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA, probabilityDensityFunctionValueB, 1, 1);
-					
-					final Color3F emittance = backgroundSample.getRadiance();
-					
-					final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
-					final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA * selectedBXDFWeight);
-					
-					radianceR += emittance.getR() * colorR * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
-					radianceG += emittance.getG() * colorG * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
-					radianceB += emittance.getB() * colorB * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
-				}
-			}
-		}
-		
-		final float samplesReciprocal = 1.0F / backgroundSamples.size();
-		
-		radianceR = throughputR * (radianceR * samplesReciprocal);
-		radianceG = throughputG * (radianceG * samplesReciprocal);
-		radianceB = throughputB * (radianceB * samplesReciprocal);
-		
-		return new Color3F(radianceR, radianceG, radianceB);
 	}
 	
 	private static Color3F doGetRadianceRayitoLight(final Color3F throughput, final MaterialResult materialResult, final Scene scene, final SurfaceIntersection3F surfaceIntersection, final Vector3F directionO) {
@@ -499,7 +474,7 @@ public final class PathTracer implements Renderer {
 				
 				final float probabilityDensityFunctionValueB = SampleGeneratorF.sphereUniformDistributionProbabilityDensityFunction();
 				
-				final Ray3F ray = new Ray3F(surfaceIntersectionPoint, selectedDirectionO);
+				final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
 				
 				if(!scene.intersects(ray)) {
 					final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA, probabilityDensityFunctionValueB, 1, 1);
@@ -548,7 +523,7 @@ public final class PathTracer implements Renderer {
 							final float reflectance = selectedBXDFResult.getReflectance();
 							
 							if(probabilityDensityFunctionValueB1 > 0.0F && reflectance > 0.0F) {
-								final Ray3F ray = new Ray3F(surfaceIntersectionPoint, selectedDirectionO);
+								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
 								
 								if(!scene.intersects(ray)) {
 									final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA1, probabilityDensityFunctionValueB1, 1, 1);
@@ -641,7 +616,7 @@ public final class PathTracer implements Renderer {
 							final float reflectance = selectedBXDFResult.getReflectance();
 							
 							if(probabilityDensityFunctionValueB1 > 0.0F && reflectance > 0.0F) {
-								final Ray3F ray = new Ray3F(surfaceIntersectionPoint, selectedDirectionO);
+								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
 								
 								final Optional<Intersection> optionalIntersection = scene.intersection(ray);
 								
@@ -673,7 +648,7 @@ public final class PathTracer implements Renderer {
 							final Vector3F selectedDirectionI = selectedBXDFResult.getI();
 							final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
 							
-							final Ray3F ray = new Ray3F(surfaceIntersectionPoint, selectedDirectionO);
+							final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
 							
 							final Optional<Intersection> optionalIntersection = scene.intersection(ray);
 							
@@ -713,7 +688,6 @@ public final class PathTracer implements Renderer {
 		return new Color3F(radianceR, radianceG, radianceB);
 	}
 	
-	@SuppressWarnings("unused")
 	private static Color3F doGetRadianceSmallPTIterative(final Ray3F ray, final Scene scene, final RendererConfiguration rendererConfiguration) {
 		final int maximumBounce = rendererConfiguration.getMaximumBounce();
 		final int minimumBounceRussianRoulette = rendererConfiguration.getMinimumBounceRussianRoulette();
@@ -843,7 +817,6 @@ public final class PathTracer implements Renderer {
 		return radiance;
 	}
 	
-	@SuppressWarnings("unused")
 	private static Color3F doGetRadianceSmallPTRecursive(final Ray3F ray, final Scene scene, final RendererConfiguration rendererConfiguration, final int bounce) {
 		final Optional<Intersection> optionalIntersection = scene.intersection(ray);
 		

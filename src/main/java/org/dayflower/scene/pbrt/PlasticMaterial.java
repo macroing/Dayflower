@@ -27,6 +27,7 @@ import java.util.Optional;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
+import org.dayflower.scene.texture.ConstantTexture;
 
 //TODO: Add Javadocs!
 public final class PlasticMaterial extends AbstractMaterial implements PBRTMaterial {
@@ -36,6 +37,11 @@ public final class PlasticMaterial extends AbstractMaterial implements PBRTMater
 	private final boolean isRemappingRoughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public PlasticMaterial() {
+		this(new ConstantTexture(new Color3F(0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.25F)), true);
+	}
 	
 //	TODO: Add Javadocs!
 	public PlasticMaterial(final Texture textureDiffuse, final Texture textureRoughness, final Texture textureSpecular, final boolean isRemappingRoughness) {
@@ -55,8 +61,8 @@ public final class PlasticMaterial extends AbstractMaterial implements PBRTMater
 		
 		final List<BXDF> bXDFs = new ArrayList<>();
 		
-		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColor(intersection));
-		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColor(intersection));
+		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorDiffuse.isBlack()) {
 			bXDFs.add(new LambertianReflectionBRDF(colorDiffuse));

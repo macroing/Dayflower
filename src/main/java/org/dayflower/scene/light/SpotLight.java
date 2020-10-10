@@ -67,7 +67,7 @@ public final class SpotLight implements Light {
 	
 //	TODO: Add Javadocs!
 	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta) {
-		this(coneAngle, coneAngleDelta, new Color3F(100.0F));
+		this(coneAngle, coneAngleDelta, new Color3F(50.0F));
 	}
 	
 //	TODO: Add Javadocs!

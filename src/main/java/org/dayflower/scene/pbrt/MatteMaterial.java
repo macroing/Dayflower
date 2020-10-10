@@ -53,7 +53,7 @@ public final class MatteMaterial extends AbstractMaterial implements PBRTMateria
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		final Color3F colorAngle = this.textureAngle.getColor(intersection);
-		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColor(intersection));
+		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		final AngleF angle = AngleF.degrees(saturate(colorAngle.average(), 0.0F, 90.0F));
 		

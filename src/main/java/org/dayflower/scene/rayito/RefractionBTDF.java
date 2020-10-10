@@ -20,6 +20,7 @@ package org.dayflower.scene.rayito;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.fresnelDielectricSchlick;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sqrt;
@@ -350,7 +351,7 @@ public final class RefractionBTDF implements BXDF {
 		final float a = etaB - etaA;
 		final float b = etaB + etaA;
 		
-		final float reflectance = Fresnel.dielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmission, n), a * a / (b * b));
+		final float reflectance = fresnelDielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmission, n), a * a / (b * b));
 		final float transmittance = 1.0F - reflectance;
 		
 		final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;

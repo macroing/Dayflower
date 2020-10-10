@@ -495,6 +495,17 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns the dielectric Fresnel reflectance based on Schlicks approximation.
+	 * 
+	 * @param cosTheta the cosine of the angle theta
+	 * @param f0 the reflectance at grazing angle
+	 * @return the dielectric Fresnel reflectance based on Schlicks approximation
+	 */
+	public static double fresnelDielectricSchlick(final double cosTheta, final double f0) {
+		return f0 + (1.0D - f0) * pow(max(1.0D - cosTheta, 0.0D), 5.0D);
+	}
+	
+	/**
 	 * Returns the gamma of {@code value}.
 	 * 
 	 * @param value an {@code int} value

@@ -19,6 +19,7 @@
 package org.dayflower.test;
 
 import static org.dayflower.util.Doubles.abs;
+import static org.dayflower.util.Doubles.fresnelDielectricSchlick;
 import static org.dayflower.util.Doubles.isNaN;
 import static org.dayflower.util.Doubles.random;
 import static org.dayflower.util.Doubles.solveQuadraticSystem;
@@ -34,7 +35,6 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.image.Color3D;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
-import org.dayflower.scene.rayito.Fresnel;
 
 public final class SmallPTD {
 	private SmallPTD() {
@@ -124,7 +124,7 @@ public final class SmallPTD {
 				final double a = etaB - etaA;
 				final double b = etaB + etaA;
 				
-				final double reflectance = Fresnel.dielectricSchlick(into ? -cosTheta : Vector3D.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
+				final double reflectance = fresnelDielectricSchlick(into ? -cosTheta : Vector3D.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
 				final double transmittance = 1.0D - reflectance;
 				
 				final double probabilityRussianRoulette = 0.25D + 0.5D * reflectance;

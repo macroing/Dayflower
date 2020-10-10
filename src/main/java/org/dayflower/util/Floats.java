@@ -496,6 +496,17 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns the dielectric Fresnel reflectance based on Schlicks approximation.
+	 * 
+	 * @param cosTheta the cosine of the angle theta
+	 * @param f0 the reflectance at grazing angle
+	 * @return the dielectric Fresnel reflectance based on Schlicks approximation
+	 */
+	public static float fresnelDielectricSchlick(final float cosTheta, final float f0) {
+		return f0 + (1.0F - f0) * pow(max(1.0F - cosTheta, 0.0F), 5.0F);
+	}
+	
+	/**
 	 * Returns the gamma of {@code value}.
 	 * 
 	 * @param value an {@code int} value

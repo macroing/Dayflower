@@ -20,6 +20,7 @@ package org.dayflower.renderer;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.fresnelDielectricSchlick;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.sqrt;
@@ -55,7 +56,6 @@ import org.dayflower.scene.pbrt.TransportMode;
 import org.dayflower.scene.rayito.AshikhminShirleyMaterial;
 import org.dayflower.scene.rayito.BXDF;
 import org.dayflower.scene.rayito.BXDFResult;
-import org.dayflower.scene.rayito.Fresnel;
 import org.dayflower.scene.rayito.LambertianMaterial;
 import org.dayflower.scene.rayito.MaterialResult;
 import org.dayflower.scene.rayito.OrenNayarMaterial;
@@ -785,7 +785,7 @@ public final class PathTracer implements Renderer {
 						final float a = etaB - etaA;
 						final float b = etaB + etaA;
 						
-						final float reflectance = Fresnel.dielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
+						final float reflectance = fresnelDielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
 						final float transmittance = 1.0F - reflectance;
 						
 						final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
@@ -898,7 +898,7 @@ public final class PathTracer implements Renderer {
 				final float a = etaB - etaA;
 				final float b = etaB + etaA;
 				
-				final float reflectance = Fresnel.dielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
+				final float reflectance = fresnelDielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
 				final float transmittance = 1.0F - reflectance;
 				
 				final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;

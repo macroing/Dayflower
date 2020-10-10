@@ -34,7 +34,7 @@ import org.dayflower.geometry.Vector3D;
 import org.dayflower.image.Color3D;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
-import org.dayflower.scene.bxdf.Fresnel;
+import org.dayflower.scene.rayito.Fresnel;
 
 public final class SmallPTD {
 	private SmallPTD() {

@@ -28,7 +28,7 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 
 //TODO: Add Javadocs!
-public final class MetalMaterial extends AbstractMaterial implements PBRTMaterial {
+public final class MetalMaterial implements PBRTMaterial {
 	private final Texture textureEta;
 	private final Texture textureK;
 	private final Texture textureRoughnessU;

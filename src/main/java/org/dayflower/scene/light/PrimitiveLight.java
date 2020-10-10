@@ -62,6 +62,8 @@ public final class PrimitiveLight implements Light {
 	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Le(const RayDifferential &r)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param ray a {@link Ray3F} instance
 	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
@@ -74,10 +76,38 @@ public final class PrimitiveLight implements Light {
 		return Color3F.BLACK;//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the power of this {@code PrimitiveLight} instance.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @return a {@code Color3F} instance with the power of this {@code PrimitiveLight} instance
+	 */
 	@Override
 	public Color3F power() {
 		return Color3F.BLACK;//TODO: Implement!
+	}
+	
+	/**
+	 * Samples the incoming radiance.
+	 * <p>
+	 * Returns an optional {@link LightIncomingRadianceResult} with the result of the sampling.
+	 * <p>
+	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param sample a {@link Point2F} instance
+	 * @return an optional {@code LightIncomingRadianceResult} with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
+	 */
+	@Override
+	public Optional<LightIncomingRadianceResult> sampleIncomingRadiance(final Intersection intersection, final Point2F sample) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(sample, "sample == null");
+		
+		return Optional.empty();//TODO: Implement!
 	}
 	
 	/**
@@ -87,15 +117,6 @@ public final class PrimitiveLight implements Light {
 	 */
 	public Primitive getPrimitive() {
 		return this.primitive;
-	}
-	
-//	TODO: Add Javadocs!
-	@Override
-	public Optional<LightIncomingRadianceResult> sampleIncomingRadiance(final Intersection intersection, final Point2F sample) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(sample, "sample == null");
-		
-		return Optional.empty();//TODO: Implement!
 	}
 	
 	/**
@@ -129,13 +150,30 @@ public final class PrimitiveLight implements Light {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, this {@code PrimitiveLight} instance uses a delta distribution, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code PrimitiveLight} instance uses a delta distribution, {@code false} otherwise
+	 */
 	@Override
 	public boolean isDeltaDistribution() {
 		return false;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density function (PDF) for incoming radiance.
+	 * <p>
+	 * Returns a {@code float} with the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Pdf_Li(const Interaction &ref, const Vector3f &wi)} that returns a {@code Float} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @return a {@code float} with the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
+	 */
 	@Override
 	public float evaluateProbabilityDensityFunctionIncomingRadiance(final Intersection intersection, final Vector3F incoming) {
 		Objects.requireNonNull(intersection, "intersection == null");

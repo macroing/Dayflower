@@ -16,31 +16,56 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf;
+package org.dayflower.scene.rayito;
 
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.random;
+import static org.dayflower.util.Floats.saturate;
+import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.scene.BXDF;
-import org.dayflower.scene.BXDFResult;
 
 /**
- * A {@code ReflectionBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) with perfect specular reflection.
+ * A {@code RefractionBTDF} is an implementation of {@link BXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) with refraction.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ReflectionBRDF implements BXDF {
+public final class RefractionBTDF implements BXDF {
+	private final float etaA;
+	private final float etaB;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
-	 * Constructs a new {@code ReflectionBRDF} instance.
+	 * Constructs a new {@code RefractionBTDF} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RefractionBTDF(1.0F, 1.5F);
+	 * }
+	 * </pre>
 	 */
-	public ReflectionBRDF() {
-		
+	public RefractionBTDF() {
+		this(1.0F, 1.5F);
+	}
+	
+	/**
+	 * Constructs a new {@code RefractionBTDF} instance.
+	 * 
+	 * @param etaA the index of refraction denoted by {@code A}
+	 * @param etaB the index of refraction denoted by {@code B}
+	 */
+	public RefractionBTDF(final float etaA, final float etaB) {
+		this.etaA = etaA;
+		this.etaB = etaB;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +80,7 @@ public final class ReflectionBRDF implements BXDF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * reflectionBRDF.evaluateSolidAngle(o, n, i, false);
+	 * refractionBTDF.evaluateSolidAngle(o, n, i, false);
 	 * }
 	 * </pre>
 	 * 
@@ -99,7 +124,7 @@ public final class ReflectionBRDF implements BXDF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * reflectionBRDF.sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
+	 * refractionBTDF.sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
 	 * }
 	 * </pre>
 	 * 
@@ -134,44 +159,36 @@ public final class ReflectionBRDF implements BXDF {
 	 */
 	@Override
 	public BXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
-		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
-		
-		final float nDotO = Vector3F.dotProduct(n, o);
-		
-		final Vector3F i = nDotO < 0.0F ? Vector3F.add(o, Vector3F.multiply(n, 2.0F * nDotO)) : Vector3F.subtract(o, Vector3F.multiply(n, 2.0F * nDotO));
-		
-		if(isProjected) {
-			return new BXDFResult(o, n, i, 1.0F, 1.0F);
-		}
-		
-		final float nDotI = Vector3F.dotProduct(n, i);
-		
-		return new BXDFResult(o, n, i, abs(nDotI), 1.0F);
+		return doSampleSolidAngle3(o, n, isProjected);
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code ReflectionBRDF} instance.
+	 * Returns a {@code String} representation of this {@code RefractionBTDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code ReflectionBRDF} instance
+	 * @return a {@code String} representation of this {@code RefractionBTDF} instance
 	 */
 	@Override
 	public String toString() {
-		return "new ReflectionBRDF()";
+		return String.format("new RefractionBTDF(%+.10f, %+.10f)", Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code ReflectionBRDF} instance for equality.
+	 * Compares {@code object} to this {@code RefractionBTDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ReflectionBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code RefractionBTDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code ReflectionBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ReflectionBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code RefractionBTDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code RefractionBTDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof ReflectionBRDF)) {
+		} else if(!(object instanceof RefractionBTDF)) {
+			return false;
+		} else if(!equal(this.etaA, RefractionBTDF.class.cast(object).etaA)) {
+			return false;
+		} else if(!equal(this.etaB, RefractionBTDF.class.cast(object).etaB)) {
 			return false;
 		} else {
 			return true;
@@ -179,11 +196,11 @@ public final class ReflectionBRDF implements BXDF {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code ReflectionBRDF} instance is using a Dirac distribution, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code RefractionBTDF} instance is using a Dirac distribution, {@code false} otherwise.
 	 * <p>
 	 * This method always returns {@code true}.
 	 * 
-	 * @return {@code true} if, and only if, this {@code ReflectionBRDF} instance is using a Dirac distribution, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code RefractionBTDF} instance is using a Dirac distribution, {@code false} otherwise
 	 */
 	@Override
 	public boolean isDiracDistribution() {
@@ -198,7 +215,7 @@ public final class ReflectionBRDF implements BXDF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * reflectionBRDF.probabilityDensityFunctionSolidAngle(o, n, i, false);
+	 * refractionBTDF.probabilityDensityFunctionSolidAngle(o, n, i, false);
 	 * }
 	 * </pre>
 	 * 
@@ -235,12 +252,115 @@ public final class ReflectionBRDF implements BXDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code ReflectionBRDF} instance.
+	 * Returns a hash code for this {@code RefractionBTDF} instance.
 	 * 
-	 * @return a hash code for this {@code ReflectionBRDF} instance
+	 * @return a hash code for this {@code RefractionBTDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash();
+		return Objects.hash(Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("unused")
+	private BXDFResult doSampleSolidAngle1(final Vector3F o, final Vector3F n, final boolean isProjected) {
+		final Vector3F d = Vector3F.negate(o);
+		
+		final float nDotD = Vector3F.dotProduct(n, d);
+		
+		final float cosTheta = saturate(nDotD, -1.0F, 1.0F);
+		final float cosThetaAbs = abs(cosTheta);
+		
+		final boolean isEntering = cosTheta < 0.0F;
+		
+		final float etaA = this.etaA;
+		final float etaB = this.etaB;
+		final float etaI = isEntering ? etaA : etaB;
+		final float etaT = isEntering ? etaB : etaA;
+		
+		final Vector3F nCorrectlyOriented = isEntering ? n : Vector3F.negate(n);
+		
+		final float eta = etaI / etaT;
+		
+		final float k = 1.0F - eta * eta * (1.0F - cosThetaAbs * cosThetaAbs);
+		
+		if(k < 0.0F) {
+			return new BXDFResult(o, n, new Vector3F(), 0.0F, 0.0F);
+		}
+		
+		final Vector3F i = Vector3F.normalize(Vector3F.add(Vector3F.multiply(d, eta), Vector3F.multiply(nCorrectlyOriented, eta * cosTheta - sqrt(k))));
+		
+		if(isProjected) {
+			return new BXDFResult(o, n, Vector3F.negate(i), 1.0F, 1.0F);
+		}
+		
+		final float nDotI = Vector3F.dotProduct(n, i);
+		
+		return new BXDFResult(o, n, Vector3F.negate(i), abs(nDotI), 1.0F);
+	}
+	
+	@SuppressWarnings("unused")
+	private BXDFResult doSampleSolidAngle2(final Vector3F o, final Vector3F n, final boolean isProjected) {
+		final float nDotO = Vector3F.dotProduct(n, o);
+		
+		final Vector3F d = Vector3F.negate(o);
+		final Vector3F nCorrectlyOriented = Vector3F.dotProduct(n, d) < 0.0F ? n : Vector3F.negate(n);
+		final Vector3F reflection = nDotO < 0.0F ? Vector3F.add(o, Vector3F.multiply(n, 2.0F * nDotO)) : Vector3F.subtract(o, Vector3F.multiply(n, 2.0F * nDotO));
+		
+		final float cosTheta = Vector3F.dotProduct(d, nCorrectlyOriented);
+		
+		final boolean isEntering = Vector3F.dotProduct(n, nCorrectlyOriented) > 0.0F;
+		
+		final float etaA = this.etaA;
+		final float etaB = this.etaB;
+		final float eta = isEntering ? etaA / etaB : etaB / etaA;
+		
+		final float k = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
+		
+		if(k < 0.0F) {
+			return isProjected ? new BXDFResult(o, n, reflection, 1.0F, 1.0F) : new BXDFResult(o, n, reflection, abs(Vector3F.dotProduct(n, reflection)), 1.0F);
+		}
+		
+		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (eta * cosTheta + sqrt(k)))));
+		
+		return isProjected ? new BXDFResult(o, n, Vector3F.negate(transmission), 1.0F, 1.0F) : new BXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), 1.0F);
+	}
+	
+	private BXDFResult doSampleSolidAngle3(final Vector3F o, final Vector3F n, final boolean isProjected) {
+		final Vector3F d = Vector3F.negate(o);
+		final Vector3F reflection = Vector3F.reflection(d, n, true);
+		final Vector3F nCorrectlyOriented = Vector3F.dotProduct(n, d) < 0.0F ? n : Vector3F.negate(n);
+		
+		final boolean isEntering = Vector3F.dotProduct(n, nCorrectlyOriented) > 0.0F;
+		
+		final float etaA = this.etaA;
+		final float etaB = this.etaB;
+		final float eta = isEntering ? etaA / etaB : etaB / etaA;
+		
+		final float cosTheta = Vector3F.dotProduct(d, nCorrectlyOriented);
+		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
+		
+		if(cosTheta2Squared < 0.0F) {
+			return isProjected ? new BXDFResult(o, n, Vector3F.negate(reflection), 1.0F, 1.0F) : new BXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), 1.0F);
+		}
+		
+		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
+		
+		final float a = etaB - etaA;
+		final float b = etaB + etaA;
+		
+		final float reflectance = Fresnel.dielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmission, n), a * a / (b * b));
+		final float transmittance = 1.0F - reflectance;
+		
+		final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+		final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+		final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+		
+		if(random() < probabilityRussianRoulette) {
+			return isProjected ? new BXDFResult(o, n, Vector3F.negate(reflection), 1.0F, probabilityRussianRouletteReflection) : new BXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), probabilityRussianRouletteReflection);
+		}
+		
+		return isProjected ? new BXDFResult(o, n, Vector3F.negate(transmission), 1.0F, probabilityRussianRouletteTransmission) : new BXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), probabilityRussianRouletteTransmission);
 	}
 }

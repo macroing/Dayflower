@@ -22,7 +22,6 @@ import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -39,7 +38,14 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightIncomingRadianceResult;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code SpotLight} is an implementation of {@link Light} that represents a spotlight.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class SpotLight implements Light {
 	private final AngleF coneAngle;
 	private final AngleF coneAngleDelta;
@@ -55,32 +61,115 @@ public final class SpotLight implements Light {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SpotLight} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SpotLight(AngleF.degrees(30.0F));
+	 * }
+	 * </pre>
+	 */
 	public SpotLight() {
-		this(AngleF.degrees(50.0F));
+		this(AngleF.degrees(30.0F));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SpotLight} instance.
+	 * <p>
+	 * If {@code coneAngle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SpotLight(coneAngle, AngleF.degrees(5.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param coneAngle an {@link AngleF} instance with the cone angle
+	 * @throws NullPointerException thrown if, and only if, {@code coneAngle} is {@code null}
+	 */
 	public SpotLight(final AngleF coneAngle) {
-		this(coneAngle, AngleF.degrees(10.0F));
+		this(coneAngle, AngleF.degrees(5.0F));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SpotLight} instance.
+	 * <p>
+	 * If either {@code coneAngle} or {@code coneAngleDelta} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SpotLight(coneAngle, coneAngleDelta, Color3F.WHITE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param coneAngle an {@link AngleF} instance with the cone angle
+	 * @param coneAngleDelta an {@code AngleF} instance with the cone angle delta
+	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle} or {@code coneAngleDelta} are {@code null}
+	 */
 	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta) {
-		this(coneAngle, coneAngleDelta, new Color3F(50.0F));
+		this(coneAngle, coneAngleDelta, Color3F.WHITE);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SpotLight} instance.
+	 * <p>
+	 * If either {@code coneAngle}, {@code coneAngleDelta} or {@code intensity} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SpotLight(coneAngle, coneAngleDelta, intensity, Matrix44F.identity());
+	 * }
+	 * </pre>
+	 * 
+	 * @param coneAngle an {@link AngleF} instance with the cone angle
+	 * @param coneAngleDelta an {@code AngleF} instance with the cone angle delta
+	 * @param intensity a {@link Color3F} instance with the intensity
+	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta} or {@code intensity} are {@code null}
+	 */
 	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity) {
 		this(coneAngle, coneAngleDelta, intensity, Matrix44F.identity());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SpotLight} instance.
+	 * <p>
+	 * If either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity} or {@code lightToWorld} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SpotLight(coneAngle, coneAngleDelta, intensity, lightToWorld, new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param coneAngle an {@link AngleF} instance with the cone angle
+	 * @param coneAngleDelta an {@code AngleF} instance with the cone angle delta
+	 * @param intensity a {@link Color3F} instance with the intensity
+	 * @param lightToWorld a {@link Matrix44F} instance with the light to world transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity} or {@code lightToWorld} are {@code null}
+	 */
 	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity, final Matrix44F lightToWorld) {
-		this(coneAngle, coneAngleDelta, intensity, lightToWorld, new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 1.0F));
+		this(coneAngle, coneAngleDelta, intensity, lightToWorld, new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SpotLight} instance.
+	 * <p>
+	 * If either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity}, {@code lightToWorld}, {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param coneAngle an {@link AngleF} instance with the cone angle
+	 * @param coneAngleDelta an {@code AngleF} instance with the cone angle delta
+	 * @param intensity a {@link Color3F} instance with the intensity
+	 * @param lightToWorld a {@link Matrix44F} instance with the light to world transformation
+	 * @param eye a {@link Point3F} instance with the point to look from
+	 * @param lookAt a {@code Point3F} instance with the point to look at
+	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity}, {@code lightToWorld}, {@code eye} or {@code lookAt} are {@code null}
+	 */
 	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity, final Matrix44F lightToWorld, final Point3F eye, final Point3F lookAt) {
 		this.coneAngle = Objects.requireNonNull(coneAngle, "coneAngle == null");
 		this.coneAngleDelta = Objects.requireNonNull(coneAngleDelta, "coneAngleDelta == null");
@@ -101,6 +190,8 @@ public final class SpotLight implements Light {
 	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Le(const RayDifferential &r)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param ray a {@link Ray3F} instance
 	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
@@ -113,13 +204,32 @@ public final class SpotLight implements Light {
 		return Color3F.BLACK;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the power of this {@code SpotLight} instance.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @return a {@code Color3F} instance with the power of this {@code SpotLight} instance
+	 */
 	@Override
 	public Color3F power() {
 		return Color3F.multiply(Color3F.multiply(this.intensity, PI_MULTIPLIED_BY_2), 1.0F - 0.5F * (this.cosConeAngleMinusConeAngleDelta + this.cosConeAngle));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples the incoming radiance.
+	 * <p>
+	 * Returns an optional {@link LightIncomingRadianceResult} with the result of the sampling.
+	 * <p>
+	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param sample a {@link Point2F} instance
+	 * @return an optional {@code LightIncomingRadianceResult} with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
+	 */
 	@Override
 	public Optional<LightIncomingRadianceResult> sampleIncomingRadiance(final Intersection intersection, final Point2F sample) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -140,13 +250,24 @@ public final class SpotLight implements Light {
 		return Optional.of(new LightIncomingRadianceResult(result, position, incoming, probabilityDensityFunctionValue));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code SpotLight} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code SpotLight} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new SpotLight(%s, %s, %s, %s, %s, %s)", this.coneAngle, this.coneAngleDelta, this.intensity, this.lightToWorld, this.eye, this.lookAt);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code SpotLight} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SpotLight}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code SpotLight} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SpotLight}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -180,13 +301,30 @@ public final class SpotLight implements Light {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, this {@code SpotLight} instance uses a delta distribution, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code SpotLight} instance uses a delta distribution, {@code false} otherwise
+	 */
 	@Override
 	public boolean isDeltaDistribution() {
 		return true;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density function (PDF) for incoming radiance.
+	 * <p>
+	 * Returns a {@code float} with the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Pdf_Li(const Interaction &ref, const Vector3f &wi)} that returns a {@code Float} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @return a {@code float} with the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
+	 */
 	@Override
 	public float evaluateProbabilityDensityFunctionIncomingRadiance(final Intersection intersection, final Vector3F incoming) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -195,7 +333,11 @@ public final class SpotLight implements Light {
 		return 0.0F;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code SpotLight} instance.
+	 * 
+	 * @return a hash code for this {@code SpotLight} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.coneAngle, this.coneAngleDelta, this.intensity, this.lightToWorld, this.lightToWorldInternal, this.worldToLightInternal, this.eye, this.lookAt, this.position, Float.valueOf(this.cosConeAngle), Float.valueOf(this.cosConeAngleMinusConeAngleDelta));

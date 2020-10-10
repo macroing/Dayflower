@@ -30,6 +30,7 @@ import static org.dayflower.util.Floats.sqrt;
 import static org.dayflower.util.Floats.tan;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
@@ -51,6 +52,16 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code String} representation of this {@code TrowbridgeReitzMicrofacetDistribution} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code TrowbridgeReitzMicrofacetDistribution} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new TrowbridgeReitzMicrofacetDistribution(%s, %+.10f, %+.10f)", Boolean.toString(isSamplingVisibleArea()), Float.valueOf(this.alphaX), Float.valueOf(this.alphaY));
+	}
 	
 //	TODO: Add Javadocs!
 	@Override
@@ -92,6 +103,31 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphere(outgoing, normal) ? normal : Vector3F.negate(normal);
 			
 			return normalCorrectlyOriented;
+		}
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code TrowbridgeReitzMicrofacetDistribution} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code TrowbridgeReitzMicrofacetDistribution}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code TrowbridgeReitzMicrofacetDistribution} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TrowbridgeReitzMicrofacetDistribution}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof TrowbridgeReitzMicrofacetDistribution)) {
+			return false;
+		} else if(isSamplingVisibleArea() != TrowbridgeReitzMicrofacetDistribution.class.cast(object).isSamplingVisibleArea()) {
+			return false;
+		} else if(!equal(this.alphaX, TrowbridgeReitzMicrofacetDistribution.class.cast(object).alphaX)) {
+			return false;
+		} else if(!equal(this.alphaY, TrowbridgeReitzMicrofacetDistribution.class.cast(object).alphaY)) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 	
@@ -144,6 +180,16 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float lambda = (-1.0F + sqrt(1.0F + alphaTanThetaAbsOutgoingSquared)) / 2.0F;
 		
 		return lambda;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code TrowbridgeReitzMicrofacetDistribution} instance.
+	 * 
+	 * @return a hash code for this {@code TrowbridgeReitzMicrofacetDistribution} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Boolean.valueOf(isSamplingVisibleArea()), Float.valueOf(this.alphaX), Float.valueOf(this.alphaY));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

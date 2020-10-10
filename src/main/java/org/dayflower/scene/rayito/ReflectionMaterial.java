@@ -16,69 +16,65 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.material;
+package org.dayflower.scene.rayito;
 
 import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
-import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Material;
-import org.dayflower.scene.MaterialResult;
-import org.dayflower.scene.bxdf.LambertianBRDF;
 
 /**
- * A {@code LambertianMaterial} is an implementation of {@link Material} that uses a {@link LambertianBRDF} instance.
+ * A {@code ReflectionMaterial} is an implementation of {@link RayitoMaterial} that uses a {@link ReflectionBRDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LambertianMaterial implements Material {
+public final class ReflectionMaterial implements RayitoMaterial {
 	private final BXDF selectedBXDF;
 	private final float selectedBXDFWeight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code LambertianMaterial} instance.
+	 * Constructs a new {@code ReflectionMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LambertianMaterial(new LambertianBRDF());
+	 * new ReflectionMaterial(new ReflectionBRDF());
 	 * }
 	 * </pre>
 	 */
-	public LambertianMaterial() {
-		this(new LambertianBRDF());
+	public ReflectionMaterial() {
+		this(new ReflectionBRDF());
 	}
 	
 	/**
-	 * Constructs a new {@code LambertianMaterial} instance.
+	 * Constructs a new {@code ReflectionMaterial} instance.
 	 * <p>
-	 * If {@code lambertianBRDF} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code reflectionBRDF} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lambertianBRDF a {@link LambertianBRDF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code lambertianBRDF} is {@code null}
+	 * @param reflectionBRDF a {@link ReflectionBRDF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code reflectionBRDF} is {@code null}
 	 */
-	public LambertianMaterial(final LambertianBRDF lambertianBRDF) {
-		this.selectedBXDF = Objects.requireNonNull(lambertianBRDF, "lambertianBRDF == null");
+	public ReflectionMaterial(final ReflectionBRDF reflectionBRDF) {
+		this.selectedBXDF = Objects.requireNonNull(reflectionBRDF, "reflectionBRDF == null");
 		this.selectedBXDFWeight = 1.0F;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code LambertianMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code ReflectionMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code LambertianMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code ReflectionMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -87,12 +83,12 @@ public final class LambertianMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@link MaterialResult} instance with information about this {@code LambertianMaterial} instance at {@code intersection}.
+	 * Returns a {@link MaterialResult} instance with information about this {@code ReflectionMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code MaterialResult} instance with information about this {@code LambertianMaterial} instance at {@code intersection}
+	 * @return a {@code MaterialResult} instance with information about this {@code ReflectionMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -101,32 +97,32 @@ public final class LambertianMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code LambertianMaterial} instance.
+	 * Returns a {@code String} representation of this {@code ReflectionMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code LambertianMaterial} instance
+	 * @return a {@code String} representation of this {@code ReflectionMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LambertianMaterial(%s)", this.selectedBXDF);
+		return String.format("new ReflectionMaterial(%s)", this.selectedBXDF);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LambertianMaterial} instance for equality.
+	 * Compares {@code object} to this {@code ReflectionMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ReflectionMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LambertianMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code ReflectionMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ReflectionMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LambertianMaterial)) {
+		} else if(!(object instanceof ReflectionMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.selectedBXDF, LambertianMaterial.class.cast(object).selectedBXDF)) {
+		} else if(!Objects.equals(this.selectedBXDF, ReflectionMaterial.class.cast(object).selectedBXDF)) {
 			return false;
-		} else if(!equal(this.selectedBXDFWeight, LambertianMaterial.class.cast(object).selectedBXDFWeight)) {
+		} else if(!equal(this.selectedBXDFWeight, ReflectionMaterial.class.cast(object).selectedBXDFWeight)) {
 			return false;
 		} else {
 			return true;
@@ -134,9 +130,9 @@ public final class LambertianMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LambertianMaterial} instance.
+	 * Returns a hash code for this {@code ReflectionMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code LambertianMaterial} instance
+	 * @return a hash code for this {@code ReflectionMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

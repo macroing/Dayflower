@@ -16,33 +16,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.pbrt;
+package org.dayflower.scene.rayito;
+
+import static org.dayflower.util.Doubles.max;
+import static org.dayflower.util.Doubles.pow;
+import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.pow;
 
 import java.lang.reflect.Field;
 
-import org.dayflower.image.Color3F;
-import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Material;
-import org.dayflower.scene.MaterialResult;
-
 //TODO: Add Javadocs!
-public abstract class AbstractMaterial implements Material {
-//	TODO: Add Javadocs!
-	protected AbstractMaterial() {
+public final class Fresnel {
+	private Fresnel() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	@Override
-	public final Color3F emittance(final Intersection intersection) {
-		throw new UnsupportedOperationException();
+	public static double dielectricSchlick(final double cosTheta, final double f0) {
+		return f0 + (1.0D - f0) * pow(max(1.0D - cosTheta, 0.0D), 5.0D);
 	}
 	
 //	TODO: Add Javadocs!
-	@Override
-	public final MaterialResult evaluate(final Intersection intersection) {
-		throw new UnsupportedOperationException();
+	public static float dielectricSchlick(final float cosTheta, final float f0) {
+		return f0 + (1.0F - f0) * pow(max(1.0F - cosTheta, 0.0F), 5.0F);
 	}
 }

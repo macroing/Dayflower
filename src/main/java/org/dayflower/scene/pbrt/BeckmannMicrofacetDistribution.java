@@ -36,6 +36,7 @@ import static org.dayflower.util.Floats.sqrt;
 import static org.dayflower.util.Floats.tan;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
@@ -57,6 +58,16 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code String} representation of this {@code BeckmannMicrofacetDistribution} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code BeckmannMicrofacetDistribution} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new BeckmannMicrofacetDistribution(%s, %+.10f, %+.10f)", Boolean.toString(isSamplingVisibleArea()), Float.valueOf(this.alphaX), Float.valueOf(this.alphaY));
+	}
 	
 //	TODO: Add Javadocs!
 	@Override
@@ -99,6 +110,31 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphere(outgoing, normal) ? normal : Vector3F.negate(normal);
 			
 			return normalCorrectlyOriented;
+		}
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code BeckmannMicrofacetDistribution} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BeckmannMicrofacetDistribution}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code BeckmannMicrofacetDistribution} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BeckmannMicrofacetDistribution}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof BeckmannMicrofacetDistribution)) {
+			return false;
+		} else if(isSamplingVisibleArea() != BeckmannMicrofacetDistribution.class.cast(object).isSamplingVisibleArea()) {
+			return false;
+		} else if(!equal(this.alphaX, BeckmannMicrofacetDistribution.class.cast(object).alphaX)) {
+			return false;
+		} else if(!equal(this.alphaY, BeckmannMicrofacetDistribution.class.cast(object).alphaY)) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 	
@@ -153,6 +189,16 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 		final float lambda = (1.0F - 1.259F * alphaReciprocal + 0.396F * alphaReciprocal * alphaReciprocal) / (3.535F * alphaReciprocal + 2.181F * alphaReciprocal * alphaReciprocal);
 		
 		return lambda;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code BeckmannMicrofacetDistribution} instance.
+	 * 
+	 * @return a hash code for this {@code BeckmannMicrofacetDistribution} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(Boolean.valueOf(isSamplingVisibleArea()), Float.valueOf(this.alphaX), Float.valueOf(this.alphaY));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

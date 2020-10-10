@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf;
+package org.dayflower.scene.rayito;
 
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
@@ -29,8 +29,6 @@ import java.util.Objects;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.scene.BXDF;
-import org.dayflower.scene.BXDFResult;
 
 /**
  * An {@code AshikhminShirleyBRDF} is an implementation of {@link BXDF} that represents an Ashikhmin-Shirley BRDF (Bidirectional Reflectance Distribution Function).

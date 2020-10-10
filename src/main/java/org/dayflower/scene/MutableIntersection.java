@@ -54,7 +54,11 @@ public final class MutableIntersection {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link MutableSurfaceIntersection3F} instance that is associated with this {@code MutableIntersection} instance.
+	 * 
+	 * @return the {@code MutableSurfaceIntersection3F} instance that is associated with this {@code MutableIntersection} instance
+	 */
 	public MutableSurfaceIntersection3F getMutableSurfaceIntersection() {
 		return this.mutableSurfaceIntersection;
 	}
@@ -113,7 +117,11 @@ public final class MutableIntersection {
 		return isIntersecting;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, this {@code MutableIntersection} instance contains an intersection, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code MutableIntersection} instance contains an intersection, {@code false} otherwise
+	 */
 	public boolean isIntersecting() {
 		return this.primitive != null;
 	}

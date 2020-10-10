@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.material;
+package org.dayflower.scene.rayito;
 
 import static org.dayflower.util.Floats.equal;
 
@@ -24,21 +24,17 @@ import java.util.Objects;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.image.Color3F;
-import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Material;
-import org.dayflower.scene.MaterialResult;
-import org.dayflower.scene.bxdf.OrenNayarBRDF;
 
 /**
- * An {@code OrenNayarMaterial} is an implementation of {@link Material} that uses an {@link OrenNayarBRDF} instance.
+ * An {@code OrenNayarMaterial} is an implementation of {@link RayitoMaterial} that uses an {@link OrenNayarBRDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class OrenNayarMaterial implements Material {
+public final class OrenNayarMaterial implements RayitoMaterial {
 	private final BXDF selectedBXDF;
 	private final float selectedBXDFWeight;
 	

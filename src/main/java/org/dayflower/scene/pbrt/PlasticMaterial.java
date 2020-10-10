@@ -30,7 +30,7 @@ import org.dayflower.scene.Texture;
 import org.dayflower.scene.texture.ConstantTexture;
 
 //TODO: Add Javadocs!
-public final class PlasticMaterial extends AbstractMaterial implements PBRTMaterial {
+public final class PlasticMaterial implements PBRTMaterial {
 	private final Texture textureDiffuse;
 	private final Texture textureRoughness;
 	private final Texture textureSpecular;

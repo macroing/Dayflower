@@ -18,8 +18,6 @@
  */
 package org.dayflower.scene;
 
-import org.dayflower.image.Color3F;
-
 /**
  * A {@code Material} represents a material.
  * <p>
@@ -29,25 +27,5 @@ import org.dayflower.image.Color3F;
  * @author J&#246;rgen Lundgren
  */
 public interface Material {
-	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code Material} instance at {@code intersection}.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code Material} instance at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	Color3F emittance(final Intersection intersection);
 	
-	/**
-	 * Returns a {@link MaterialResult} instance with information about this {@code Material} instance at {@code intersection}.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code MaterialResult} instance with information about this {@code Material} instance at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	MaterialResult evaluate(final Intersection intersection);
 }

@@ -32,7 +32,7 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 
 //TODO: Add Javadocs!
-public final class GlassMaterial extends AbstractMaterial implements PBRTMaterial {
+public final class GlassMaterial implements PBRTMaterial {
 	private final Texture textureEta;
 	private final Texture textureKReflection;
 	private final Texture textureKTransmission;

@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.dayflower.geometry.Point2F;
@@ -37,6 +36,8 @@ public interface Light {
 	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Le(const RayDifferential &r)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param ray a {@link Ray3F} instance
 	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
@@ -44,15 +45,51 @@ public interface Light {
 	 */
 	Color3F evaluateEmittedRadiance(final Ray3F ray);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the power of this {@code Light} instance.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @return a {@code Color3F} instance with the power of this {@code Light} instance
+	 */
 	Color3F power();
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples the incoming radiance.
+	 * <p>
+	 * Returns an optional {@link LightIncomingRadianceResult} with the result of the sampling.
+	 * <p>
+	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param sample a {@link Point2F} instance
+	 * @return an optional {@code LightIncomingRadianceResult} with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
+	 */
 	Optional<LightIncomingRadianceResult> sampleIncomingRadiance(final Intersection intersection, final Point2F sample);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
+	 */
 	boolean isDeltaDistribution();
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density function (PDF) for incoming radiance.
+	 * <p>
+	 * Returns a {@code float} with the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Pdf_Li(const Interaction &ref, const Vector3f &wi)} that returns a {@code Float} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @return a {@code float} with the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
+	 */
 	float evaluateProbabilityDensityFunctionIncomingRadiance(final Intersection intersection, final Vector3F incoming);
 }

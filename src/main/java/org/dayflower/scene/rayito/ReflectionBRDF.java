@@ -16,32 +16,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf;
+package org.dayflower.scene.rayito;
 
-import static org.dayflower.util.Floats.PI_RECIPROCAL;
 import static org.dayflower.util.Floats.abs;
 
 import java.util.Objects;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
-import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.scene.BXDF;
-import org.dayflower.scene.BXDFResult;
 
 /**
- * A {@code LambertianBRDF} is an implementation of {@link BXDF} that represents a Lambertian BRDF (Bidirectional Reflectance Distribution Function).
+ * A {@code ReflectionBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) with perfect specular reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LambertianBRDF implements BXDF {
+public final class ReflectionBRDF implements BXDF {
 	/**
-	 * Constructs a new {@code LambertianBRDF} instance.
+	 * Constructs a new {@code ReflectionBRDF} instance.
 	 */
-	public LambertianBRDF() {
+	public ReflectionBRDF() {
 		
 	}
 	
@@ -57,7 +53,7 @@ public final class LambertianBRDF implements BXDF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * lambertianBRDF.evaluateSolidAngle(o, n, i, false);
+	 * reflectionBRDF.evaluateSolidAngle(o, n, i, false);
 	 * }
 	 * </pre>
 	 * 
@@ -88,16 +84,7 @@ public final class LambertianBRDF implements BXDF {
 	 */
 	@Override
 	public BXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
-		final float nDotI = Vector3F.dotProduct(n, i);
-		final float nDotO = Vector3F.dotProduct(n, o);
-		
-		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
-			return new BXDFResult(o, n, i, 0.0F,                       0.0F);
-		} else if(isProjected) {
-			return new BXDFResult(o, n, i, PI_RECIPROCAL,              PI_RECIPROCAL);
-		} else {
-			return new BXDFResult(o, n, i, PI_RECIPROCAL * abs(nDotI), PI_RECIPROCAL);
-		}
+		return new BXDFResult(o, n, i, 0.0F, 0.0F);
 	}
 	
 	/**
@@ -110,7 +97,7 @@ public final class LambertianBRDF implements BXDF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * lambertianBRDF.sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
+	 * reflectionBRDF.sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
 	 * }
 	 * </pre>
 	 * 
@@ -145,44 +132,44 @@ public final class LambertianBRDF implements BXDF {
 	 */
 	@Override
 	public BXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
+		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
+		
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
-		final Vector3F iLocalSpace = Vector3F.negate(SampleGeneratorF.sampleHemisphereCosineDistribution(u, v));
-		final Vector3F iTransformed = Vector3F.transform(iLocalSpace, orthonormalBasis);
-		final Vector3F i = nDotO < 0.0F ? Vector3F.negate(iTransformed) : iTransformed;
+		final Vector3F i = nDotO < 0.0F ? Vector3F.add(o, Vector3F.multiply(n, 2.0F * nDotO)) : Vector3F.subtract(o, Vector3F.multiply(n, 2.0F * nDotO));
 		
 		if(isProjected) {
-			return new BXDFResult(o, n, i, PI_RECIPROCAL, PI_RECIPROCAL);
+			return new BXDFResult(o, n, i, 1.0F, 1.0F);
 		}
 		
 		final float nDotI = Vector3F.dotProduct(n, i);
 		
-		return new BXDFResult(o, n, i, PI_RECIPROCAL * abs(nDotI), PI_RECIPROCAL);
+		return new BXDFResult(o, n, i, abs(nDotI), 1.0F);
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code LambertianBRDF} instance.
+	 * Returns a {@code String} representation of this {@code ReflectionBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code LambertianBRDF} instance
+	 * @return a {@code String} representation of this {@code ReflectionBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return "new LambertianBRDF()";
+		return "new ReflectionBRDF()";
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LambertianBRDF} instance for equality.
+	 * Compares {@code object} to this {@code ReflectionBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ReflectionBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LambertianBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code ReflectionBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ReflectionBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LambertianBRDF)) {
+		} else if(!(object instanceof ReflectionBRDF)) {
 			return false;
 		} else {
 			return true;
@@ -190,15 +177,15 @@ public final class LambertianBRDF implements BXDF {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code LambertianBRDF} instance is using a Dirac distribution, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code ReflectionBRDF} instance is using a Dirac distribution, {@code false} otherwise.
 	 * <p>
-	 * This method always returns {@code false}.
+	 * This method always returns {@code true}.
 	 * 
-	 * @return {@code true} if, and only if, this {@code LambertianBRDF} instance is using a Dirac distribution, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code ReflectionBRDF} instance is using a Dirac distribution, {@code false} otherwise
 	 */
 	@Override
 	public boolean isDiracDistribution() {
-		return false;
+		return true;
 	}
 	
 	/**
@@ -209,7 +196,7 @@ public final class LambertianBRDF implements BXDF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * lambertianBRDF.probabilityDensityFunctionSolidAngle(o, n, i, false);
+	 * reflectionBRDF.probabilityDensityFunctionSolidAngle(o, n, i, false);
 	 * }
 	 * </pre>
 	 * 
@@ -238,22 +225,17 @@ public final class LambertianBRDF implements BXDF {
 	 */
 	@Override
 	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
-		final float nDotI = Vector3F.dotProduct(n, i);
-		final float nDotO = Vector3F.dotProduct(n, o);
+		Objects.requireNonNull(o, "o == null");
+		Objects.requireNonNull(n, "n == null");
+		Objects.requireNonNull(i, "i == null");
 		
-		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
-			return 0.0F;
-		} else if(isProjected) {
-			return PI_RECIPROCAL;
-		} else {
-			return PI_RECIPROCAL * abs(nDotI);
-		}
+		return isProjected ? 1.0F : abs(Vector3F.dotProduct(n, i));
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LambertianBRDF} instance.
+	 * Returns a hash code for this {@code ReflectionBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code LambertianBRDF} instance
+	 * @return a hash code for this {@code ReflectionBRDF} instance
 	 */
 	@Override
 	public int hashCode() {

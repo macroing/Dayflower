@@ -56,7 +56,11 @@ public final class LightIncomingRadianceResult {
 		return this.point;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code LightIncomingRadianceResult} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code LightIncomingRadianceResult} instance
+	 */
 	@Override
 	public String toString() {
 		return String.format("new LightIncomingRadianceResult(%s, %s, %s, %+.10f)", this.result, this.point, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
@@ -67,7 +71,14 @@ public final class LightIncomingRadianceResult {
 		return this.incoming;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code LightIncomingRadianceResult} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LightIncomingRadianceResult}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code LightIncomingRadianceResult} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LightIncomingRadianceResult}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
@@ -92,7 +103,11 @@ public final class LightIncomingRadianceResult {
 		return this.probabilityDensityFunctionValue;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code LightIncomingRadianceResult} instance.
+	 * 
+	 * @return a hash code for this {@code LightIncomingRadianceResult} instance
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.result, this.point, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));

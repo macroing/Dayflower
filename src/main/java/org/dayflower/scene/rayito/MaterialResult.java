@@ -16,13 +16,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.rayito;
 
 import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.Material;
 
 /**
  * A {@code MaterialResult} represents a result produced by a {@link Material} instance.

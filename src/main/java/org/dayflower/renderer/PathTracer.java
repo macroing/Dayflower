@@ -39,29 +39,30 @@ import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
-import org.dayflower.scene.BXDF;
-import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.Background;
 import org.dayflower.scene.BackgroundSample;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
-import org.dayflower.scene.MaterialResult;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.background.PerezBackground;
-import org.dayflower.scene.bxdf.Fresnel;
 import org.dayflower.scene.light.PrimitiveLight;
-import org.dayflower.scene.material.AshikhminShirleyMaterial;
-import org.dayflower.scene.material.LambertianMaterial;
-import org.dayflower.scene.material.OrenNayarMaterial;
-import org.dayflower.scene.material.ReflectionMaterial;
-import org.dayflower.scene.material.RefractionMaterial;
 import org.dayflower.scene.pbrt.BSDF;
 import org.dayflower.scene.pbrt.BSDFDistributionFunctionResult;
 import org.dayflower.scene.pbrt.BXDFType;
 import org.dayflower.scene.pbrt.PBRTMaterial;
 import org.dayflower.scene.pbrt.TransportMode;
+import org.dayflower.scene.rayito.AshikhminShirleyMaterial;
+import org.dayflower.scene.rayito.BXDF;
+import org.dayflower.scene.rayito.BXDFResult;
+import org.dayflower.scene.rayito.Fresnel;
+import org.dayflower.scene.rayito.LambertianMaterial;
+import org.dayflower.scene.rayito.MaterialResult;
+import org.dayflower.scene.rayito.OrenNayarMaterial;
+import org.dayflower.scene.rayito.RayitoMaterial;
+import org.dayflower.scene.rayito.ReflectionMaterial;
+import org.dayflower.scene.rayito.RefractionMaterial;
 
 /**
  * A {@code PathTracer} is a {@link Renderer} implementation that renders using Path Tracing.
@@ -303,7 +304,13 @@ public final class PathTracer implements Renderer {
 				
 				final Material material = primitive.getMaterial();
 				
-				final MaterialResult materialResult = material.evaluate(intersection);
+				if(!(material instanceof RayitoMaterial)) {
+					break;
+				}
+				
+				final RayitoMaterial rayitoMaterial = RayitoMaterial.class.cast(material);
+				
+				final MaterialResult materialResult = rayitoMaterial.evaluate(intersection);
 				
 				final BXDF selectedBXDF = materialResult.getSelectedBXDF();
 				
@@ -322,7 +329,7 @@ public final class PathTracer implements Renderer {
 				final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
 				
 				if(currentBounce == 0 || currentBounce == currentBounceDiracDistribution) {
-					radiance = Color3F.add(radiance, Color3F.multiply(throughput, material.emittance(intersection)));
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, rayitoMaterial.emittance(intersection)));
 				}
 				
 				if(selectedBXDF.isDiracDistribution()) {

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf;
+package org.dayflower.scene.rayito;
 
 import static org.dayflower.util.Floats.PI_RECIPROCAL;
 import static org.dayflower.util.Floats.abs;
@@ -29,8 +29,6 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.scene.BXDF;
-import org.dayflower.scene.BXDFResult;
 
 /**
  * An {@code OrenNayarBRDF} is an implementation of {@link BXDF} that represents an Oren-Nayar BRDF (Bidirectional Reflectance Distribution Function).

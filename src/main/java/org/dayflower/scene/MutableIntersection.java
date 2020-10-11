@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -28,28 +27,64 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code MutableIntersection} is an utility useful for performing intersection tests.
+ * <p>
+ * This class is mutable and therefore not thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class MutableIntersection {
-	private MutableSurfaceIntersection3F mutableSurfaceIntersection;
-	private Primitive primitive;
-	private Ray3F ray;
-	private float tMaximum;
-	private float tMinimum;
+	/**
+	 * The default minimum parametric {@code t} value.
+	 */
+	public static final float T_MAXIMUM = Float.MAX_VALUE;
+	
+	/**
+	 * The default maximum parametric {@code t} value.
+	 */
+	public static final float T_MINIMUM = 0.0001F;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	private MutableSurfaceIntersection3F mutableSurfaceIntersection;
+	private Primitive primitive;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code MutableIntersection} instance given {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MutableIntersection(ray, MutableIntersection.T_MINIMUM, MutableIntersection.T_MAXIMUM);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public MutableIntersection(final Ray3F ray) {
-		this(ray, 0.0001F, Float.MAX_VALUE);
+		this(ray, T_MINIMUM, T_MAXIMUM);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code MutableIntersection} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @param tMinimum the minimum parametric {@code t} value
+	 * @param tMaximum the maximum parametric {@code t} value
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public MutableIntersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		this.mutableSurfaceIntersection = new MutableSurfaceIntersection3F(Objects.requireNonNull(ray, "ray == null"), tMinimum, tMaximum);
 		this.primitive = null;
-		this.ray = ray;
-		this.tMaximum = tMaximum;
-		this.tMinimum = tMinimum;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +98,14 @@ public final class MutableIntersection {
 		return this.mutableSurfaceIntersection;
 	}
 	
-//	TODO: Add Javadocs!
-	public Optional<Intersection> intersection() {
+	/**
+	 * Computes an {@link Intersection} for the current intersection.
+	 * <p>
+	 * Returns an optional {@code Intersection} instance.
+	 * 
+	 * @return an optional {@code Intersection} instance
+	 */
+	public Optional<Intersection> computeIntersection() {
 		final Primitive primitive = this.primitive;
 		
 		if(primitive != null) {
@@ -93,12 +134,61 @@ public final class MutableIntersection {
 		return Intersection.EMPTY;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the optional {@link Primitive} of the current intersection.
+	 * 
+	 * @return the optional {@code Primitive} of the current intersection
+	 */
 	public Optional<Primitive> getPrimitive() {
 		return Optional.ofNullable(this.primitive);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code MutableIntersection} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code MutableIntersection} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new MutableIntersection(%s, %+.10f, %+.10f)", this.mutableSurfaceIntersection.getRay(), Float.valueOf(this.mutableSurfaceIntersection.getTMinimum()), Float.valueOf(this.mutableSurfaceIntersection.getTMaximum()));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code MutableIntersection} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MutableIntersection}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code MutableIntersection} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MutableIntersection}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof MutableIntersection)) {
+			return false;
+		} else if(!Objects.equals(this.mutableSurfaceIntersection, MutableIntersection.class.cast(object).mutableSurfaceIntersection)) {
+			return false;
+		} else if(!Objects.equals(this.primitive, MutableIntersection.class.cast(object).primitive)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Performs an intersection test between {@code primitive} and this {@code MutableIntersection} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code primitive} intersects this {@code MutableIntersection} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code primitive} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code primitive} intersects this {@code MutableIntersection} instance, its state will get updated.
+	 * 
+	 * @param primitive a {@link Primitive} instance
+	 * @return {@code true} if, and only if, {@code primitive} intersects this {@code MutableIntersection} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
+	 */
 	public boolean intersection(final Primitive primitive) {
 		boolean isIntersecting = false;
 		
@@ -126,17 +216,47 @@ public final class MutableIntersection {
 		return this.primitive != null;
 	}
 	
-//	TODO: Add Javadocs!
-	public void initialize(final Ray3F ray) {
-		initialize(ray, 0.0001F, Float.MAX_VALUE);
+	/**
+	 * Returns a hash code for this {@code MutableIntersection} instance.
+	 * 
+	 * @return a hash code for this {@code MutableIntersection} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.mutableSurfaceIntersection, this.primitive);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Initializes this {@code MutableIntersection} instance given {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * mutableIntersection.initialize(ray, MutableIntersection.T_MINIMUM, MutableIntersection.T_MAXIMUM);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public void initialize(final Ray3F ray) {
+		initialize(ray, T_MINIMUM, T_MAXIMUM);
+	}
+	
+	/**
+	 * Initializes this {@code MutableIntersection} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @param tMinimum the minimum parametric {@code t} value
+	 * @param tMaximum the maximum parametric {@code t} value
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	public void initialize(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		this.mutableSurfaceIntersection = new MutableSurfaceIntersection3F(Objects.requireNonNull(ray, "ray == null"), tMinimum, tMaximum);
 		this.primitive = null;
-		this.ray = ray;
-		this.tMaximum = tMaximum;
-		this.tMinimum = tMinimum;
 	}
 }

@@ -235,7 +235,7 @@ public final class Scene {
 			mutableIntersection.intersection(primitive);
 		}
 		
-		return mutableIntersection.intersection();
+		return mutableIntersection.computeIntersection();
 		
 		/*
 		Primitive primitive = null;

@@ -2,6 +2,7 @@ Dayflower
 =========
 Dayflower is a renderer written in Java.
 
+![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-014.png "Dayflower - Path Tracer")
 ![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-010.png "Dayflower - Path Tracer")
 ![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-007.png "Dayflower - Path Tracer")
 
@@ -17,12 +18,19 @@ Supported Features
 ------------------
 #### BRDF
 * Ashikhmin-Shirley
+* Fresnel Specular
 * Lambertian
 * Oren-Nayar
 * Reflection
+* Specular
+* Torrance-Sparrow
 
 #### BTDF
+* Fresnel Specular
+* Lambertian
 * Refraction
+* Specular
+* Torrance-Sparrow
 
 #### Background
 * Constant
@@ -45,6 +53,7 @@ Supported Features
 * Directional
 * Point
 * Primitive
+* Spot
 
 #### Rendering Algorithms
 * Ambient Occlusion

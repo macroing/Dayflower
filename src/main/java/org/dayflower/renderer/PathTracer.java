@@ -231,10 +231,10 @@ public final class PathTracer implements Renderer {
 			if(currentBounce == 0 || isSpecularBounce) {
 				if(hasFoundIntersection) {
 //					radiance += throughput * isect.Le(-ray.d);
-					
 //					radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));
 				} else {
 					for(final Light light : lights) {
+//						radiance += throughput * light->Le(ray);
 						radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateEmittedRadiance(currentRay)));
 					}
 				}
@@ -252,6 +252,7 @@ public final class PathTracer implements Renderer {
 			
 			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 			
+			final Vector3F surfaceNormalG = surfaceIntersection.getSurfaceNormalG();
 			final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
 			
 			if(!(material instanceof PBRTMaterial)) {
@@ -273,6 +274,7 @@ public final class PathTracer implements Renderer {
 			final BSDF bSDF = optionalBSDF.get();
 			
 			if(bSDF.countBXDFsBySpecularType(false) > 0) {
+//				radiance += throughput * UniformSampleOneLight(isect, scene, arena, sampler, false, distrib);
 				radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.lightSampleOneUniformDistribution(bSDF, intersection)));
 			}
 			
@@ -298,6 +300,7 @@ public final class PathTracer implements Renderer {
 				break;
 			}
 			
+//			throughput *= result * AbsDot(incoming, surfaceNormalS) / probabilityDensityFunctionValue;
 			throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result, abs(Vector3F.dotProduct(incoming, surfaceNormalS))), probabilityDensityFunctionValue));
 			
 			isSpecularBounce = bXDFType.isSpecular();
@@ -305,7 +308,7 @@ public final class PathTracer implements Renderer {
 			if(bXDFType.hasTransmission() && bXDFType.isSpecular()) {
 				final float eta = bSDF.getEta();
 				
-				etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalS) > 0.0F ? eta * eta : 1.0F / (eta * eta);
+				etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalG) > 0.0F ? eta * eta : 1.0F / (eta * eta);
 			}
 			
 			currentRay = surfaceIntersection.createRay(incoming);

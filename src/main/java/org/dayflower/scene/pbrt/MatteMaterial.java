@@ -21,7 +21,6 @@ package org.dayflower.scene.pbrt;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.saturate;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,14 +30,29 @@ import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code MatteMaterial} is an implementation of {@link PBRTMaterial} and is used for matte surfaces.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class MatteMaterial implements PBRTMaterial {
 	private final Texture textureAngle;
 	private final Texture textureDiffuse;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code MatteMaterial} instance.
+	 * <p>
+	 * If either {@code textureAngle} or {@code textureDiffuse} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureAngle a {@link Texture} instance used for the angle
+	 * @param textureDiffuse a {@code Texture} instance used for the diffuse component
+	 * @throws NullPointerException thrown if, and only if, either {@code textureAngle} or {@code textureDiffuse} are {@code null}
+	 */
 	public MatteMaterial(final Texture textureAngle, final Texture textureDiffuse) {
 		this.textureAngle = Objects.requireNonNull(textureAngle, "textureAngle == null");
 		this.textureDiffuse = Objects.requireNonNull(textureDiffuse, "textureDiffuse == null");
@@ -46,7 +60,19 @@ public final class MatteMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	@Override
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");

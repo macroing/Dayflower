@@ -18,14 +18,32 @@
  */
 package org.dayflower.scene.pbrt;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code PBRTMaterial} represents a material.
+ * <p>
+ * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface PBRTMaterial extends Material {
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes);
 }

@@ -18,9 +18,12 @@
  */
 package org.dayflower.scene.pbrt;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code TransportMode} represents a transport mode.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public enum TransportMode {
 	/**
 	 * A {@code TransportMode} instance for importance.

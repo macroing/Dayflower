@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.pbrt;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +28,14 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.texture.ConstantTexture;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code PlasticMaterial} is an implementation of {@link PBRTMaterial} that represents plastic.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class PlasticMaterial implements PBRTMaterial {
 	private final Texture textureDiffuse;
 	private final Texture textureRoughness;
@@ -38,12 +44,31 @@ public final class PlasticMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code PlasticMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PlasticMaterial(new ConstantTexture(new Color3F(0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.25F)), true);
+	 * }
+	 * </pre>
+	 */
 	public PlasticMaterial() {
 		this(new ConstantTexture(new Color3F(0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.25F)), true);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code PlasticMaterial} instance.
+	 * <p>
+	 * If either {@code textureDiffuse}, {@code textureRoughness} or {@code textureSpecular} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureDiffuse a {@link Texture} instance used for the diffuse component
+	 * @param textureRoughness a {@code Texture} instance used for the roughness
+	 * @param textureSpecular a {@code Texture} instance used for the specular component
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code textureDiffuse}, {@code textureRoughness} or {@code textureSpecular} are {@code null}
+	 */
 	public PlasticMaterial(final Texture textureDiffuse, final Texture textureRoughness, final Texture textureSpecular, final boolean isRemappingRoughness) {
 		this.textureDiffuse = Objects.requireNonNull(textureDiffuse, "textureDiffuse == null");
 		this.textureRoughness = Objects.requireNonNull(textureRoughness, "textureRoughness == null");
@@ -53,7 +78,19 @@ public final class PlasticMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	@Override
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -73,7 +110,7 @@ public final class PlasticMaterial implements PBRTMaterial {
 			
 			final Color3F colorRoughness = this.textureRoughness.getColor(intersection);
 			
-			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.computeRoughnessToAlpha(colorRoughness.average()) : colorRoughness.average();
+			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughness.average()) : colorRoughness.average();
 			
 			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughness, roughness);
 			

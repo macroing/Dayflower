@@ -20,7 +20,6 @@ package org.dayflower.scene.pbrt;
 
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +30,14 @@ import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code GlassMaterial} is an implementation of {@link PBRTMaterial} that represents glass.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class GlassMaterial implements PBRTMaterial {
 	private final Texture textureEta;
 	private final Texture textureKReflection;
@@ -42,7 +48,19 @@ public final class GlassMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code GlassMaterial} instance.
+	 * <p>
+	 * If either {@code textureEta}, {@code textureKReflection}, {@code textureKTransmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureEta a {@link Texture} instance used for eta, also called index of refraction (IOR)
+	 * @param textureKReflection a {@code Texture} instance used for the reflection coefficient
+	 * @param textureKTransmission a {@code Texture} instance used for the transmission coefficient
+	 * @param textureRoughnessU a {@code Texture} instance used for the roughness along the U-axis
+	 * @param textureRoughnessV a {@code Texture} instance used for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code textureEta}, {@code textureKReflection}, {@code textureKTransmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 */
 	public GlassMaterial(final Texture textureEta, final Texture textureKReflection, final Texture textureKTransmission, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
 		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
 		this.textureKReflection = Objects.requireNonNull(textureKReflection, "textureKReflection == null");
@@ -54,7 +72,19 @@ public final class GlassMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	@Override
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -67,8 +97,8 @@ public final class GlassMaterial implements PBRTMaterial {
 		final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
 		
 		final float eta = colorEta.average();
-		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.computeRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
-		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.computeRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
+		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
+		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
 		
 		if(colorKReflection.isBlack() && colorKTransmission.isBlack()) {
 			return Optional.empty();

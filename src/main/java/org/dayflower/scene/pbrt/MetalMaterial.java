@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.pbrt;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,7 +26,14 @@ import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code MetalMaterial} is an implementation of {@link PBRTMaterial} that represents metal.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class MetalMaterial implements PBRTMaterial {
 	private final Texture textureEta;
 	private final Texture textureK;
@@ -37,7 +43,18 @@ public final class MetalMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code MetalMaterial} instance.
+	 * <p>
+	 * If either {@code textureEta}, {@code textureK}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureEta a {@link Texture} instance used for eta, also called index of refraction (IOR)
+	 * @param textureK a {@code Texture} instance used for the absorption coefficient
+	 * @param textureRoughnessU a {@code Texture} instance used for the roughness along the U-axis
+	 * @param textureRoughnessV a {@code Texture} instance used for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code textureEta}, {@code textureK}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 */
 	public MetalMaterial(final Texture textureEta, final Texture textureK, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
 		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
 		this.textureK = Objects.requireNonNull(textureK, "textureK == null");
@@ -48,7 +65,19 @@ public final class MetalMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	@Override
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -60,8 +89,8 @@ public final class MetalMaterial implements PBRTMaterial {
 		final Color3F colorRoughnessU = this.textureRoughnessU.getColor(intersection);
 		final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
 		
-		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.computeRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
-		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.computeRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
+		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
+		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
 		
 		final Fresnel fresnel = new ConductorFresnel(colorEtaI, colorEtaT, colorK);
 		

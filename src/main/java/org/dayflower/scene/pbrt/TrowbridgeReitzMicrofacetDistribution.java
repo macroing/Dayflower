@@ -29,21 +29,33 @@ import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 import static org.dayflower.util.Floats.tan;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code TrowbridgeReitzMicrofacetDistribution} is an implementation of {@link MicrofacetDistribution} that represents a Trowbridge-Reitz microfacet distribution.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistribution {
 	private final float alphaX;
 	private final float alphaY;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code TrowbridgeReitzMicrofacetDistribution} instance.
+	 * 
+	 * @param isSamplingVisibleArea {@code true} if, and only if, the visible area should be sampled, {@code false} otherwise
+	 * @param alphaX the alpha value on the X-axis
+	 * @param alphaY the alpha value on the Y-axis
+	 */
 	public TrowbridgeReitzMicrofacetDistribution(final boolean isSamplingVisibleArea, final float alphaX, final float alphaY) {
 		super(isSamplingVisibleArea);
 		
@@ -63,7 +75,20 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		return String.format("new TrowbridgeReitzMicrofacetDistribution(%s, %+.10f, %+.10f)", Boolean.toString(isSamplingVisibleArea()), Float.valueOf(this.alphaX), Float.valueOf(this.alphaY));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples a normal given {@code outgoing} and {@code sample}.
+	 * <p>
+	 * Returns a {@link Vector3F} instance with the sampled normal.
+	 * <p>
+	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code MicrofacetDistribution} method {@code Sample_wh(const Vector3f &wo, const Point2f &u)} that returns a {@code Vector3f} in PBRT.
+	 * 
+	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @param sample the sample point, called {@code u} in PBRT
+	 * @return a {@code Vector3F} instance with the sampled normal
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
+	 */
 	@Override
 	public Vector3F sampleNormal(final Vector3F outgoing, final Point2F sample) {
 		final float alphaX = this.alphaX;
@@ -131,7 +156,19 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the differential area term for {@code normal}.
+	 * <p>
+	 * Returns a {@code float} value with the computed differential area term.
+	 * <p>
+	 * If {@code normal} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code MicrofacetDistribution} method {@code D(const Vector3f &wh)} that returns a {@code Float} in PBRT.
+	 * 
+	 * @param normal the normal, called {@code wh} in PBRT
+	 * @return a {@code float} value with the computed differential area term
+	 * @throws NullPointerException thrown if, and only if, {@code normal} is {@code null}
+	 */
 	@Override
 	public float computeDifferentialArea(final Vector3F normal) {
 		final float tanThetaSquaredNormal = normal.tanThetaSquared();
@@ -157,7 +194,19 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		return differentialArea;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the Lambda term for {@code outgoing}.
+	 * <p>
+	 * Returns a {@code float} value with the computed Lambda term.
+	 * <p>
+	 * If {@code outgoing} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code MicrofacetDistribution} method {@code Lambda(const Vector3f &w)} that returns a {@code Float} in PBRT.
+	 * 
+	 * @param outgoing the outgoing direction, called {@code w} in PBRT
+	 * @return a {@code float} value with the computed Lambda term
+	 * @throws NullPointerException thrown if, and only if, {@code outgoing} is {@code null}
+	 */
 	@Override
 	public float computeLambda(final Vector3F outgoing) {
 		final float tanThetaAbsOutgoing = outgoing.tanThetaAbs();

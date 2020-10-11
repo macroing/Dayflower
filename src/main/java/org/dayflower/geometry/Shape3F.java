@@ -18,7 +18,6 @@
  */
 package org.dayflower.geometry;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 /**
@@ -81,7 +80,17 @@ public interface Shape3F {
 	 */
 	Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code mutableSurfaceIntersection} and this {@code Shape3F} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Shape3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code mutableSurfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mutableSurfaceIntersection a {@link MutableSurfaceIntersection3F} instance
+	 * @return {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Shape3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code mutableSurfaceIntersection} is {@code null}
+	 */
 	boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
 	
 	/**

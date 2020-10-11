@@ -34,7 +34,6 @@ import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.solveQuadraticSystem;
 import static org.dayflower.util.Floats.sqrt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -282,7 +281,17 @@ public final class Sphere3F implements Shape3F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code mutableSurfaceIntersection} and this {@code Sphere3F} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Sphere3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code mutableSurfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mutableSurfaceIntersection a {@link MutableSurfaceIntersection3F} instance
+	 * @return {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Sphere3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code mutableSurfaceIntersection} is {@code null}
+	 */
 	@Override
 	public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
 		return mutableSurfaceIntersection.intersection(this);

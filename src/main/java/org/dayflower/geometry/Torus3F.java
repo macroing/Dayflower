@@ -32,7 +32,6 @@ import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.toFloat;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -240,7 +239,17 @@ public final class Torus3F implements Shape3F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs an intersection test between {@code mutableSurfaceIntersection} and this {@code Torus3F} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Torus3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code mutableSurfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mutableSurfaceIntersection a {@link MutableSurfaceIntersection3F} instance
+	 * @return {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Torus3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code mutableSurfaceIntersection} is {@code null}
+	 */
 	@Override
 	public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
 		return mutableSurfaceIntersection.intersection(this);

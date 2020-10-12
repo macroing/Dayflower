@@ -55,6 +55,38 @@ public interface Light {
 	Color3F power();
 	
 	/**
+	 * Evaluates the probability density functions (PDFs) for emitted radiance.
+	 * <p>
+	 * Returns an optional {@link LightEmittedRadianceResult} with the result of the evaluation.
+	 * <p>
+	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Pdf_Le(const Ray &ray, const Normal3f &nLight, Float *pdfPos, Float *pdfDir)} in PBRT.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @param normal a {@link Vector3F} instance
+	 * @return an optional {@code LightEmittedRadianceResult} with the result of the evaluation
+	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
+	 */
+	Optional<LightEmittedRadianceResult> evaluateProbabilityDensityFunctionEmittedRadiance(final Ray3F ray, final Vector3F normal);
+	
+	/**
+	 * Samples the emitted radiance.
+	 * <p>
+	 * Returns an optional {@link LightEmittedRadianceResult} with the result of the sampling.
+	 * <p>
+	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param sampleA a {@link Point2F} instance
+	 * @param sampleB a {@code Point2F} instance
+	 * @return an optional {@code LightEmittedRadianceResult} with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
+	 */
+	Optional<LightEmittedRadianceResult> sampleEmittedRadiance(final Point2F sampleA, final Point2F sampleB);
+	
+	/**
 	 * Samples the incoming radiance.
 	 * <p>
 	 * Returns an optional {@link LightIncomingRadianceResult} with the result of the sampling.

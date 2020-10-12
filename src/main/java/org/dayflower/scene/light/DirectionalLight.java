@@ -18,16 +18,22 @@
  */
 package org.dayflower.scene.light;
 
-import java.lang.reflect.Field;
+import static org.dayflower.util.Floats.PI;
+import static org.dayflower.util.Floats.equal;
+
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
+import org.dayflower.scene.LightEmittedRadianceResult;
 import org.dayflower.scene.LightIncomingRadianceResult;
 
 /**
@@ -39,56 +45,29 @@ import org.dayflower.scene.LightIncomingRadianceResult;
  * @author J&#246;rgen Lundgren
  */
 public final class DirectionalLight implements Light {
-	private final Color3F emittance;
+	private final Color3F radiance;
+	private final Point3F center;
 	private final Vector3F direction;
+	private final float radius;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code DirectionalLight} instance.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new DirectionalLight(Vector3F.x());
-	 * }
-	 * </pre>
-	 */
-	public DirectionalLight() {
-		this(Vector3F.x());
-	}
-	
-	/**
-	 * Constructs a new {@code DirectionalLight} instance.
-	 * <p>
-	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new DirectionalLight(direction, Color3F.WHITE);
-	 * }
-	 * </pre>
+	 * If either {@code radiance}, {@code center} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param direction a {@link Vector3F} instance with the direction associated with this {@code DirectionalLight} instance
-	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
+	 * @param radiance a {@link Color3F} instance denoting the radiance for this {@code DirectionalLight} instance
+	 * @param center a {@link Point3F} instance denoting the center of the scene
+	 * @param direction a {@link Vector3F} instance denoting the direction for this {@code DirectionalLight} instance
+	 * @param radius a {@code float} denoting the radius of the scene
+	 * @throws NullPointerException thrown if, and only if, either {@code radiance}, {@code center} or {@code direction} are {@code null}
 	 */
-	public DirectionalLight(final Vector3F direction) {
-		this(direction, Color3F.WHITE);
-	}
-	
-	/**
-	 * Constructs a new {@code DirectionalLight} instance.
-	 * <p>
-	 * If either {@code direction} or {@code emittance} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param direction a {@link Vector3F} instance with the direction associated with this {@code DirectionalLight} instance
-	 * @param emittance a {@link Color3F} instance with the emittance associated with this {@code DirectionalLight} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code emittance} are {@code null}
-	 */
-	public DirectionalLight(final Vector3F direction, final Color3F emittance) {
-		this.direction = Objects.requireNonNull(direction, "direction == null");
-		this.emittance = Objects.requireNonNull(emittance, "emittance == null");
+	public DirectionalLight(final Color3F radiance, final Point3F center, final Vector3F direction, final float radius) {
+		this.radiance = Objects.requireNonNull(radiance, "radiance == null");
+		this.center = Objects.requireNonNull(center, "center == null");
+		this.direction = Vector3F.normalize(Objects.requireNonNull(direction, "direction == null"));
+		this.radius = radius;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,15 +91,6 @@ public final class DirectionalLight implements Light {
 	}
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance associated with this {@code DirectionalLight} instance.
-	 * 
-	 * @return a {@code Color3F} instance with the emittance associated with this {@code DirectionalLight} instance
-	 */
-	public Color3F getEmittance() {
-		return this.emittance;
-	}
-	
-	/**
 	 * Returns a {@link Color3F} instance with the power of this {@code DirectionalLight} instance.
 	 * <p>
 	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
@@ -129,7 +99,74 @@ public final class DirectionalLight implements Light {
 	 */
 	@Override
 	public Color3F power() {
-		return Color3F.BLACK;//TODO: Implement!
+		return Color3F.multiply(Color3F.multiply(Color3F.multiply(this.radiance, PI), this.radius), this.radius);
+	}
+	
+	/**
+	 * Evaluates the probability density functions (PDFs) for emitted radiance.
+	 * <p>
+	 * Returns an optional {@link LightEmittedRadianceResult} with the result of the evaluation.
+	 * <p>
+	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Pdf_Le(const Ray &ray, const Normal3f &nLight, Float *pdfPos, Float *pdfDir)} in PBRT.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @param normal a {@link Vector3F} instance
+	 * @return an optional {@code LightEmittedRadianceResult} with the result of the evaluation
+	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
+	 */
+	@Override
+	public Optional<LightEmittedRadianceResult> evaluateProbabilityDensityFunctionEmittedRadiance(final Ray3F ray, final Vector3F normal) {
+		Objects.requireNonNull(ray, "ray == null");
+		Objects.requireNonNull(normal, "normal == null");
+		
+		final Color3F result = this.radiance;
+		
+		final float probabilityDensityFunctionValueDirection = 0.0F;
+		final float probabilityDensityFunctionValuePosition = 1.0F / (PI * this.radius * this.radius);
+		
+		return Optional.of(new LightEmittedRadianceResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
+	}
+	
+	/**
+	 * Samples the emitted radiance.
+	 * <p>
+	 * Returns an optional {@link LightEmittedRadianceResult} with the result of the sampling.
+	 * <p>
+	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param sampleA a {@link Point2F} instance
+	 * @param sampleB a {@code Point2F} instance
+	 * @return an optional {@code LightEmittedRadianceResult} with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
+	 */
+	@Override
+	public Optional<LightEmittedRadianceResult> sampleEmittedRadiance(final Point2F sampleA, final Point2F sampleB) {
+		Objects.requireNonNull(sampleA, "sampleA == null");
+		Objects.requireNonNull(sampleB, "sampleB == null");
+		
+		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(this.direction);
+		
+		final Vector3F u = orthonormalBasis.getU();
+		final Vector3F v = orthonormalBasis.getV();
+		
+		final Point2F pointA = SampleGeneratorF.sampleDiskUniformDistributionByConcentricMapping(sampleA.getU(), sampleA.getV());
+		
+		final Point3F pointB = Point3F.add(this.center, Vector3F.multiply(Vector3F.add(Vector3F.multiply(u, pointA.getU()), Vector3F.multiply(v, pointA.getV())), this.radius));
+		
+		final Color3F result = this.radiance;
+		
+		final Ray3F ray = new Ray3F(Point3F.add(pointB, this.direction, this.radius), Vector3F.negate(this.direction));
+		
+		final Vector3F normal = ray.getDirection();
+		
+		final float probabilityDensityFunctionValueDirection = 1.0F;
+		final float probabilityDensityFunctionValuePosition = 1.0F / (PI * this.radius * this.radius);
+		
+		return Optional.of(new LightEmittedRadianceResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
 	}
 	
 	/**
@@ -151,7 +188,16 @@ public final class DirectionalLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		return Optional.empty();//TODO: Implement!
+		final Color3F result = this.radiance;
+		
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint();
+		final Point3F point = Point3F.add(surfaceIntersectionPoint, this.direction, 2.0F * this.radius);
+		
+		final Vector3F incoming = this.direction;
+		
+		final float probabilityDensityFunctionValue = 1.0F;
+		
+		return Optional.of(new LightIncomingRadianceResult(result, point, incoming, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -161,7 +207,7 @@ public final class DirectionalLight implements Light {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new DirectionalLight(%s, %s)", this.direction, this.emittance);
+		return String.format("new DirectionalLight(%s, %s, %s, %+.10f)", this.radiance, this.center, this.direction, Float.valueOf(this.radius));
 	}
 	
 	/**
@@ -187,9 +233,13 @@ public final class DirectionalLight implements Light {
 			return true;
 		} else if(!(object instanceof DirectionalLight)) {
 			return false;
-		} else if(!Objects.equals(this.emittance, DirectionalLight.class.cast(object).emittance)) {
+		} else if(!Objects.equals(this.radiance, DirectionalLight.class.cast(object).radiance)) {
+			return false;
+		} else if(!Objects.equals(this.center, DirectionalLight.class.cast(object).center)) {
 			return false;
 		} else if(!Objects.equals(this.direction, DirectionalLight.class.cast(object).direction)) {
+			return false;
+		} else if(!equal(this.radius, DirectionalLight.class.cast(object).radius)) {
 			return false;
 		} else {
 			return true;
@@ -225,7 +275,7 @@ public final class DirectionalLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return 0.0F;//TODO: Implement!
+		return 0.0F;
 	}
 	
 	/**
@@ -235,6 +285,6 @@ public final class DirectionalLight implements Light {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.emittance, this.direction);
+		return Objects.hash(this.radiance, this.center, this.direction, Float.valueOf(this.radius));
 	}
 }

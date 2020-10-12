@@ -80,7 +80,33 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 */
 	@Override
 	public AxisAlignedBoundingBox3F transform(final Matrix44F matrix) {
-		return new AxisAlignedBoundingBox3F(Point3F.transform(matrix, this.maximum), Point3F.transform(matrix, this.minimum));
+		final float maximumX = this.maximum.getX();
+		final float maximumY = this.maximum.getY();
+		final float maximumZ = this.maximum.getZ();
+		final float minimumX = this.minimum.getX();
+		final float minimumY = this.minimum.getY();
+		final float minimumZ = this.minimum.getZ();
+		
+		final Point3F[] points = new Point3F[] {
+			Point3F.transform(matrix, new Point3F(minimumX, minimumY, minimumZ)),
+			Point3F.transform(matrix, new Point3F(maximumX, minimumY, minimumZ)),
+			Point3F.transform(matrix, new Point3F(minimumX, maximumY, minimumZ)),
+			Point3F.transform(matrix, new Point3F(minimumX, minimumY, maximumZ)),
+			Point3F.transform(matrix, new Point3F(minimumX, maximumY, maximumZ)),
+			Point3F.transform(matrix, new Point3F(maximumX, maximumY, minimumZ)),
+			Point3F.transform(matrix, new Point3F(maximumX, minimumY, maximumZ)),
+			Point3F.transform(matrix, new Point3F(maximumX, maximumY, maximumZ))
+		};
+		
+		Point3F maximum = Point3F.MINIMUM;
+		Point3F minimum = Point3F.MAXIMUM;
+		
+		for(final Point3F point : points) {
+			maximum = Point3F.maximum(maximum, point);
+			minimum = Point3F.minimum(minimum, point);
+		}
+		
+		return new AxisAlignedBoundingBox3F(maximum, minimum);
 	}
 	
 	/**
@@ -225,7 +251,8 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 		final Point3F minimum = getMinimum();
 		final Point3F origin = ray.getOrigin();
 		
-		final Vector3F directionReciprocal = Vector3F.reciprocal(ray.getDirection());
+		final Vector3F direction = ray.getDirection();
+		final Vector3F directionReciprocal = Vector3F.reciprocal(direction);
 		
 		final float t0X = (minimum.getX() - origin.getX()) * directionReciprocal.getX();
 		final float t0Y = (minimum.getY() - origin.getY()) * directionReciprocal.getY();
@@ -250,5 +277,41 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.maximum, this.minimum);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code axisAlignedBoundingBoxRHS}.
+	 * <p>
+	 * If either {@code axisAlignedBoundingBoxLHS} or {@code axisAlignedBoundingBoxRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBoxLHS an {@code AxisAlignedBoundingBox3F} instance
+	 * @param axisAlignedBoundingBoxRHS an {@code AxisAlignedBoundingBox3F} instance
+	 * @return an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code axisAlignedBoundingBoxRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code axisAlignedBoundingBoxLHS} or {@code axisAlignedBoundingBoxRHS} are {@code null}
+	 */
+	public static AxisAlignedBoundingBox3F union(final AxisAlignedBoundingBox3F axisAlignedBoundingBoxLHS, final AxisAlignedBoundingBox3F axisAlignedBoundingBoxRHS) {
+		final Point3F maximum = Point3F.maximum(axisAlignedBoundingBoxLHS.maximum, axisAlignedBoundingBoxRHS.maximum);
+		final Point3F minimum = Point3F.minimum(axisAlignedBoundingBoxLHS.minimum, axisAlignedBoundingBoxRHS.minimum);
+		
+		return new AxisAlignedBoundingBox3F(maximum, minimum);
+	}
+	
+	/**
+	 * Returns an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code pointRHS}.
+	 * <p>
+	 * If either {@code axisAlignedBoundingBoxLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBoxLHS an {@code AxisAlignedBoundingBox3F} instance
+	 * @param pointRHS a {@code Point3F} instance
+	 * @return an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code pointRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code axisAlignedBoundingBoxLHS} or {@code pointRHS} are {@code null}
+	 */
+	public static AxisAlignedBoundingBox3F union(final AxisAlignedBoundingBox3F axisAlignedBoundingBoxLHS, final Point3F pointRHS) {
+		final Point3F maximum = Point3F.maximum(axisAlignedBoundingBoxLHS.maximum, pointRHS);
+		final Point3F minimum = Point3F.minimum(axisAlignedBoundingBoxLHS.minimum, pointRHS);
+		
+		return new AxisAlignedBoundingBox3F(maximum, minimum);
 	}
 }

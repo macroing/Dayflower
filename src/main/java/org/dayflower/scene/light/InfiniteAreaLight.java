@@ -19,6 +19,7 @@
 package org.dayflower.scene.light;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Matrix44F;
@@ -42,12 +43,17 @@ public final class InfiniteAreaLight extends AreaLight {
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F evaluateRadiance(final Intersection intersection, final Vector3F direction) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(direction, "direction == null");
+		
 		return Color3F.BLACK;//TODO: Implement!
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
+		Objects.requireNonNull(ray, "ray == null");
+		
 		return Color3F.BLACK;//TODO: Implement!
 	}
 	
@@ -60,18 +66,27 @@ public final class InfiniteAreaLight extends AreaLight {
 //	TODO: Add Javadocs!
 	@Override
 	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
+		Objects.requireNonNull(ray, "ray == null");
+		Objects.requireNonNull(normal, "normal == null");
+		
 		return Optional.empty();//TODO: Implement!
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public Optional<LightRadianceEmittedResult> sampleRadianceEmitted(final Point2F sampleA, final Point2F sampleB) {
+		Objects.requireNonNull(sampleA, "sampleA == null");
+		Objects.requireNonNull(sampleB, "sampleB == null");
+		
 		return Optional.empty();//TODO: Implement!
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(sample, "sample == null");
+		
 		return Optional.empty();//TODO: Implement!
 	}
 	
@@ -96,6 +111,9 @@ public final class InfiniteAreaLight extends AreaLight {
 //	TODO: Add Javadocs!
 	@Override
 	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
 		return 0.0F;//TODO: Implement!
 	}
 	

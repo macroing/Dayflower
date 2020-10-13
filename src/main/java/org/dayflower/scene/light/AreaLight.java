@@ -30,6 +30,7 @@ import org.dayflower.scene.Light;
 //TODO: Add Javadocs!
 public abstract class AreaLight implements Light {
 	private final Matrix44F lightToWorld;
+	private final Matrix44F worldToLight;
 	private final int samples;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,6 +38,7 @@ public abstract class AreaLight implements Light {
 //	TODO: Add Javadocs!
 	protected AreaLight(final Matrix44F lightToWorld, final int samples) {
 		this.lightToWorld = Objects.requireNonNull(lightToWorld, "lightToWorld == null");
+		this.worldToLight = Matrix44F.inverse(lightToWorld);
 		this.samples = samples;
 	}
 	
@@ -48,6 +50,11 @@ public abstract class AreaLight implements Light {
 //	TODO: Add Javadocs!
 	public final Matrix44F getLightToWorld() {
 		return this.lightToWorld;
+	}
+	
+//	TODO: Add Javadocs!
+	public final Matrix44F getWorldToLight() {
+		return this.worldToLight;
 	}
 	
 //	TODO: Add Javadocs!

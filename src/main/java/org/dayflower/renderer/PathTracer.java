@@ -235,7 +235,7 @@ public final class PathTracer implements Renderer {
 				} else {
 					for(final Light light : lights) {
 //						radiance += throughput * light->Le(ray);
-						radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateEmittedRadiance(currentRay)));
+						radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateRadianceEmitted(currentRay)));
 					}
 				}
 			}

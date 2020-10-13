@@ -28,8 +28,8 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
-import org.dayflower.scene.LightEmittedRadianceResult;
-import org.dayflower.scene.LightIncomingRadianceResult;
+import org.dayflower.scene.LightRadianceEmittedResult;
+import org.dayflower.scene.LightRadianceIncomingResult;
 import org.dayflower.scene.Primitive;
 
 /**
@@ -71,7 +71,7 @@ public final class PrimitiveLight implements Light {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public Color3F evaluateEmittedRadiance(final Ray3F ray) {
+	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
 		
 		return Color3F.BLACK;//TODO: Implement!
@@ -92,7 +92,7 @@ public final class PrimitiveLight implements Light {
 	/**
 	 * Evaluates the probability density functions (PDFs) for emitted radiance.
 	 * <p>
-	 * Returns an optional {@link LightEmittedRadianceResult} with the result of the evaluation.
+	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the evaluation.
 	 * <p>
 	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -100,11 +100,11 @@ public final class PrimitiveLight implements Light {
 	 * 
 	 * @param ray a {@link Ray3F} instance
 	 * @param normal a {@link Vector3F} instance
-	 * @return an optional {@code LightEmittedRadianceResult} with the result of the evaluation
+	 * @return an optional {@code LightRadianceEmittedResult} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
 	 */
 	@Override
-	public Optional<LightEmittedRadianceResult> evaluateProbabilityDensityFunctionEmittedRadiance(final Ray3F ray, final Vector3F normal) {
+	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
 		Objects.requireNonNull(ray, "ray == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
@@ -114,7 +114,7 @@ public final class PrimitiveLight implements Light {
 	/**
 	 * Samples the emitted radiance.
 	 * <p>
-	 * Returns an optional {@link LightEmittedRadianceResult} with the result of the sampling.
+	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -122,11 +122,11 @@ public final class PrimitiveLight implements Light {
 	 * 
 	 * @param sampleA a {@link Point2F} instance
 	 * @param sampleB a {@code Point2F} instance
-	 * @return an optional {@code LightEmittedRadianceResult} with the result of the sampling
+	 * @return an optional {@code LightRadianceEmittedResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
 	 */
 	@Override
-	public Optional<LightEmittedRadianceResult> sampleEmittedRadiance(final Point2F sampleA, final Point2F sampleB) {
+	public Optional<LightRadianceEmittedResult> sampleRadianceEmitted(final Point2F sampleA, final Point2F sampleB) {
 		Objects.requireNonNull(sampleA, "sampleA == null");
 		Objects.requireNonNull(sampleB, "sampleB == null");
 		
@@ -136,7 +136,7 @@ public final class PrimitiveLight implements Light {
 	/**
 	 * Samples the incoming radiance.
 	 * <p>
-	 * Returns an optional {@link LightIncomingRadianceResult} with the result of the sampling.
+	 * Returns an optional {@link LightRadianceIncomingResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -144,11 +144,11 @@ public final class PrimitiveLight implements Light {
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param sample a {@link Point2F} instance
-	 * @return an optional {@code LightIncomingRadianceResult} with the result of the sampling
+	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<LightIncomingRadianceResult> sampleIncomingRadiance(final Intersection intersection, final Point2F sample) {
+	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
@@ -220,7 +220,7 @@ public final class PrimitiveLight implements Light {
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public float evaluateProbabilityDensityFunctionIncomingRadiance(final Intersection intersection, final Vector3F incoming) {
+	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		

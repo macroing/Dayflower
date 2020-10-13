@@ -483,26 +483,26 @@ public final class Scene {
 		if(!light.isDeltaDistribution()) {
 			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
 			
-			final Optional<LightIncomingRadianceResult> optionalLightIncomingRadianceResult = light.sampleIncomingRadiance(intersection, sampleA);
+			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
 			
-			if(optionalLightIncomingRadianceResult.isPresent()) {
-				final LightIncomingRadianceResult lightIncomingRadianceResult = optionalLightIncomingRadianceResult.get();
+			if(optionalLightRadianceIncomingResult.isPresent()) {
+				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
 				
 				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 				
-				final Color3F lightIncoming = lightIncomingRadianceResult.getResult();
+				final Color3F lightIncoming = lightRadianceIncomingResult.getResult();
 				
-				final Vector3F incoming = lightIncomingRadianceResult.getIncoming();
+				final Vector3F incoming = lightRadianceIncomingResult.getIncoming();
 				final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
 				
-				final float lightProbabilityDensityFunctionValue = lightIncomingRadianceResult.getProbabilityDensityFunctionValue();
+				final float lightProbabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
 					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getSurfaceNormalS())));
 					
 					final float scatteringProbabilityDensityFunctionValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, incoming);
 					
-					if(!scatteringResult.isBlack() && doIsLightVisible(lightIncomingRadianceResult, surfaceIntersection)) {
+					if(!scatteringResult.isBlack() && doIsLightVisible(lightRadianceIncomingResult, surfaceIntersection)) {
 						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightProbabilityDensityFunctionValue, scatteringProbabilityDensityFunctionValue, 1, 1)), lightProbabilityDensityFunctionValue));
 					}
 				}
@@ -529,7 +529,7 @@ public final class Scene {
 					float weight = 1.0F;
 					
 					if(!hasSampledSpecular) {
-						final float lightProbabilityDensityFunctionValue = light.evaluateProbabilityDensityFunctionIncomingRadiance(intersection, incoming);
+						final float lightProbabilityDensityFunctionValue = light.evaluateProbabilityDensityFunctionRadianceIncoming(intersection, incoming);
 						
 						if(equal(lightProbabilityDensityFunctionValue, 0.0F)) {
 							return lightDirect;
@@ -545,7 +545,7 @@ public final class Scene {
 					if(intersects(ray)) {
 //						TODO: Add area lights!
 					} else {
-						final Color3F lightIncoming = light.evaluateEmittedRadiance(ray);
+						final Color3F lightIncoming = light.evaluateRadianceEmitted(ray);
 						
 						if(!lightIncoming.isBlack()) {
 							lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), transmittance), weight), scatteringProbabilityDensityFunctionValue));
@@ -564,24 +564,24 @@ public final class Scene {
 		if(light.isDeltaDistribution()) {
 			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
 			
-			final Optional<LightIncomingRadianceResult> optionalLightIncomingRadianceResult = light.sampleIncomingRadiance(intersection, sampleA);
+			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
 			
-			if(optionalLightIncomingRadianceResult.isPresent()) {
-				final LightIncomingRadianceResult lightIncomingRadianceResult = optionalLightIncomingRadianceResult.get();
+			if(optionalLightRadianceIncomingResult.isPresent()) {
+				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
 				
 				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 				
-				final Color3F lightIncoming = lightIncomingRadianceResult.getResult();
+				final Color3F lightIncoming = lightRadianceIncomingResult.getResult();
 				
-				final Vector3F incoming = lightIncomingRadianceResult.getIncoming();
+				final Vector3F incoming = lightRadianceIncomingResult.getIncoming();
 				final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
 				
-				final float lightProbabilityDensityFunctionValue = lightIncomingRadianceResult.getProbabilityDensityFunctionValue();
+				final float lightProbabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
 					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getSurfaceNormalS())));
 					
-					if(!scatteringResult.isBlack() && doIsLightVisible(lightIncomingRadianceResult, surfaceIntersection)) {
+					if(!scatteringResult.isBlack() && doIsLightVisible(lightRadianceIncomingResult, surfaceIntersection)) {
 						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming), lightProbabilityDensityFunctionValue));
 					}
 				}
@@ -591,7 +591,7 @@ public final class Scene {
 		return lightDirect;
 	}
 	
-	private boolean doIsLightVisible(final LightIncomingRadianceResult lightIncomingRadianceResult, final SurfaceIntersection3F surfaceIntersection) {
+	private boolean doIsLightVisible(final LightRadianceIncomingResult lightIncomingRadianceResult, final SurfaceIntersection3F surfaceIntersection) {
 		return !intersects(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), 0.0001F, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())));
 	}
 }

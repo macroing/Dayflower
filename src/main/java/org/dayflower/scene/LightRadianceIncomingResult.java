@@ -28,7 +28,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
 //TODO: Add Javadocs!
-public final class LightIncomingRadianceResult {
+public final class LightRadianceIncomingResult {
 	private final Color3F result;
 	private final Point3F point;
 	private final Vector3F incoming;
@@ -37,7 +37,7 @@ public final class LightIncomingRadianceResult {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public LightIncomingRadianceResult(final Color3F result, final Point3F point, final Vector3F incoming, final float probabilityDensityFunctionValue) {
+	public LightRadianceIncomingResult(final Color3F result, final Point3F point, final Vector3F incoming, final float probabilityDensityFunctionValue) {
 		this.result = Objects.requireNonNull(result, "result == null");
 		this.point = Objects.requireNonNull(point, "point == null");
 		this.incoming = Objects.requireNonNull(incoming, "incoming == null");
@@ -83,15 +83,15 @@ public final class LightIncomingRadianceResult {
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LightIncomingRadianceResult)) {
+		} else if(!(object instanceof LightRadianceIncomingResult)) {
 			return false;
-		} else if(!Objects.equals(this.result, LightIncomingRadianceResult.class.cast(object).result)) {
+		} else if(!Objects.equals(this.result, LightRadianceIncomingResult.class.cast(object).result)) {
 			return false;
-		} else if(!Objects.equals(this.point, LightIncomingRadianceResult.class.cast(object).point)) {
+		} else if(!Objects.equals(this.point, LightRadianceIncomingResult.class.cast(object).point)) {
 			return false;
-		} else if(!Objects.equals(this.incoming, LightIncomingRadianceResult.class.cast(object).incoming)) {
+		} else if(!Objects.equals(this.incoming, LightRadianceIncomingResult.class.cast(object).incoming)) {
 			return false;
-		} else if(!equal(this.probabilityDensityFunctionValue, LightIncomingRadianceResult.class.cast(object).probabilityDensityFunctionValue)) {
+		} else if(!equal(this.probabilityDensityFunctionValue, LightRadianceIncomingResult.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
 		} else {
 			return true;

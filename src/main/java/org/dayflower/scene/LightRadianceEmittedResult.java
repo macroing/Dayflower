@@ -28,7 +28,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
 //TODO: Add Javadocs!
-public final class LightEmittedRadianceResult {
+public final class LightRadianceEmittedResult {
 	private final Color3F result;
 	private final Ray3F ray;
 	private final Vector3F normal;
@@ -38,7 +38,7 @@ public final class LightEmittedRadianceResult {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public LightEmittedRadianceResult(final Color3F result, final Ray3F ray, final Vector3F normal, final float probabilityDensityFunctionValueDirection, final float probabilityDensityFunctionValuePosition) {
+	public LightRadianceEmittedResult(final Color3F result, final Ray3F ray, final Vector3F normal, final float probabilityDensityFunctionValueDirection, final float probabilityDensityFunctionValuePosition) {
 		this.result = Objects.requireNonNull(result, "result == null");
 		this.ray = Objects.requireNonNull(ray, "ray == null");
 		this.normal = Objects.requireNonNull(normal, "normal == null");
@@ -85,17 +85,17 @@ public final class LightEmittedRadianceResult {
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LightEmittedRadianceResult)) {
+		} else if(!(object instanceof LightRadianceEmittedResult)) {
 			return false;
-		} else if(!Objects.equals(this.result, LightEmittedRadianceResult.class.cast(object).result)) {
+		} else if(!Objects.equals(this.result, LightRadianceEmittedResult.class.cast(object).result)) {
 			return false;
-		} else if(!Objects.equals(this.ray, LightEmittedRadianceResult.class.cast(object).ray)) {
+		} else if(!Objects.equals(this.ray, LightRadianceEmittedResult.class.cast(object).ray)) {
 			return false;
-		} else if(!Objects.equals(this.normal, LightEmittedRadianceResult.class.cast(object).normal)) {
+		} else if(!Objects.equals(this.normal, LightRadianceEmittedResult.class.cast(object).normal)) {
 			return false;
-		} else if(!equal(this.probabilityDensityFunctionValueDirection, LightEmittedRadianceResult.class.cast(object).probabilityDensityFunctionValueDirection)) {
+		} else if(!equal(this.probabilityDensityFunctionValueDirection, LightRadianceEmittedResult.class.cast(object).probabilityDensityFunctionValueDirection)) {
 			return false;
-		} else if(!equal(this.probabilityDensityFunctionValuePosition, LightEmittedRadianceResult.class.cast(object).probabilityDensityFunctionValuePosition)) {
+		} else if(!equal(this.probabilityDensityFunctionValuePosition, LightRadianceEmittedResult.class.cast(object).probabilityDensityFunctionValuePosition)) {
 			return false;
 		} else {
 			return true;

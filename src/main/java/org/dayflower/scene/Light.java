@@ -43,7 +43,7 @@ public interface Light {
 	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	Color3F evaluateEmittedRadiance(final Ray3F ray);
+	Color3F evaluateRadianceEmitted(final Ray3F ray);
 	
 	/**
 	 * Returns a {@link Color3F} instance with the power of this {@code Light} instance.
@@ -57,7 +57,7 @@ public interface Light {
 	/**
 	 * Evaluates the probability density functions (PDFs) for emitted radiance.
 	 * <p>
-	 * Returns an optional {@link LightEmittedRadianceResult} with the result of the evaluation.
+	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the evaluation.
 	 * <p>
 	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -65,15 +65,15 @@ public interface Light {
 	 * 
 	 * @param ray a {@link Ray3F} instance
 	 * @param normal a {@link Vector3F} instance
-	 * @return an optional {@code LightEmittedRadianceResult} with the result of the evaluation
+	 * @return an optional {@code LightRadianceEmittedResult} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
 	 */
-	Optional<LightEmittedRadianceResult> evaluateProbabilityDensityFunctionEmittedRadiance(final Ray3F ray, final Vector3F normal);
+	Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal);
 	
 	/**
 	 * Samples the emitted radiance.
 	 * <p>
-	 * Returns an optional {@link LightEmittedRadianceResult} with the result of the sampling.
+	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -81,15 +81,15 @@ public interface Light {
 	 * 
 	 * @param sampleA a {@link Point2F} instance
 	 * @param sampleB a {@code Point2F} instance
-	 * @return an optional {@code LightEmittedRadianceResult} with the result of the sampling
+	 * @return an optional {@code LightRadianceEmittedResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
 	 */
-	Optional<LightEmittedRadianceResult> sampleEmittedRadiance(final Point2F sampleA, final Point2F sampleB);
+	Optional<LightRadianceEmittedResult> sampleRadianceEmitted(final Point2F sampleA, final Point2F sampleB);
 	
 	/**
 	 * Samples the incoming radiance.
 	 * <p>
-	 * Returns an optional {@link LightIncomingRadianceResult} with the result of the sampling.
+	 * Returns an optional {@link LightRadianceIncomingResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -97,10 +97,10 @@ public interface Light {
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param sample a {@link Point2F} instance
-	 * @return an optional {@code LightIncomingRadianceResult} with the result of the sampling
+	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
-	Optional<LightIncomingRadianceResult> sampleIncomingRadiance(final Intersection intersection, final Point2F sample);
+	Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample);
 	
 	/**
 	 * Returns {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise.
@@ -123,5 +123,5 @@ public interface Light {
 	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
 	 */
-	float evaluateProbabilityDensityFunctionIncomingRadiance(final Intersection intersection, final Vector3F incoming);
+	float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming);
 }

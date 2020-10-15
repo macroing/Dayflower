@@ -178,6 +178,8 @@ public final class PathTracer implements Renderer {
 						}
 					}
 				}
+				
+//				System.out.printf("%d/%d%n", Integer.valueOf((y + 1) * resolutionX), Integer.valueOf(resolutionX * resolutionY));
 			}
 			
 			final long currentTimeMillis2 = System.currentTimeMillis();

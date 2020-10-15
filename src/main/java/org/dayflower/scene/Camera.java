@@ -82,15 +82,35 @@ public final class Camera {
 	 * Constructs a new {@code Camera} instance with an eye of {@code eye}.
 	 * <p>
 	 * If {@code eye} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Camera(eye, AngleF.degrees(90.0F));
+	 * }
+	 * </pre>
 	 * 
 	 * @param eye a {@link Point3F} instance representing the eye that is associated with this {@code Camera} instance
 	 * @throws NullPointerException thrown if, and only if, {@code eye} is {@code null}
 	 */
 	public Camera(final Point3F eye) {
+		this(eye, AngleF.degrees(90.0F));
+	}
+	
+	/**
+	 * Constructs a new {@code Camera} instance with an eye of {@code eye} and a field of view on the X-axis of {@code fieldOfViewX}.
+	 * <p>
+	 * If either {@code eye} or {@code fieldOfViewX} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye a {@link Point3F} instance representing the eye that is associated with this {@code Camera} instance
+	 * @param fieldOfViewX an {@link AngleF} instance representing the field of view on the X-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code fieldOfViewX} are {@code null}
+	 */
+	public Camera(final Point3F eye, final AngleF fieldOfViewX) {
 //		Initialize the default parameters:
 		setApertureRadius(0.0F);
 		setEye(eye);
-		setFieldOfViewX(AngleF.degrees(90.0F));
+		setFieldOfViewX(fieldOfViewX);
 		setFocalDistance(30.0F);
 		setLensThin();
 		setPitch(AngleF.pitch(Vector3F.x()));

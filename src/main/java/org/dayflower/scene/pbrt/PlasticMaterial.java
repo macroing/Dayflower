@@ -50,12 +50,12 @@ public final class PlasticMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PlasticMaterial(new ConstantTexture(new Color3F(0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.25F)), true);
+	 * new PlasticMaterial(ConstantTexture.GRAY_0_25, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_25, true);
 	 * }
 	 * </pre>
 	 */
 	public PlasticMaterial() {
-		this(new ConstantTexture(new Color3F(0.25F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.25F)), true);
+		this(ConstantTexture.GRAY_0_25, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_25, true);
 	}
 	
 	/**

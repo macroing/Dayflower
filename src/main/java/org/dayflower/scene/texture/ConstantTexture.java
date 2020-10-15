@@ -33,6 +33,33 @@ import org.dayflower.scene.Texture;
  * @author J&#246;rgen Lundgren
  */
 public final class ConstantTexture implements Texture {
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.BLACK)}.
+	 */
+	public static final ConstantTexture BLACK = new ConstantTexture(Color3F.BLACK);
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(0.10F))}.
+	 */
+	public static final ConstantTexture GRAY_0_10 = new ConstantTexture(new Color3F(0.10F));
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(0.25F))}.
+	 */
+	public static final ConstantTexture GRAY_0_25 = new ConstantTexture(new Color3F(0.25F));
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(0.50F))}.
+	 */
+	public static final ConstantTexture GRAY_0_50 = new ConstantTexture(new Color3F(0.50F));
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.WHITE)}.
+	 */
+	public static final ConstantTexture WHITE = new ConstantTexture(Color3F.WHITE);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Color3F color;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

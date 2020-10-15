@@ -50,12 +50,12 @@ public final class SubstrateMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new SubstrateMaterial(new ConstantTexture(Color3F.GRAY), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(Color3F.GRAY), true);
+	 * new SubstrateMaterial(ConstantTexture.GRAY_0_50, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_50, true);
 	 * }
 	 * </pre>
 	 */
 	public SubstrateMaterial() {
-		this(new ConstantTexture(Color3F.GRAY), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(new Color3F(0.1F)), new ConstantTexture(Color3F.GRAY), true);
+		this(ConstantTexture.GRAY_0_50, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_50, true);
 	}
 	
 	/**

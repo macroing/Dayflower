@@ -46,38 +46,50 @@ public final class LightRadianceIncomingResult {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the result associated with this {@code LightRadianceIncomingResult} instance.
+	 * 
+	 * @return a {@code Color3F} instance with the result associated with this {@code LightRadianceIncomingResult} instance
+	 */
 	public Color3F getResult() {
 		return this.result;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link Point3F} instance associated with this {@code LightRadianceIncomingResult} instance.
+	 * 
+	 * @return the {@code Point3F} instance associated with this {@code LightRadianceIncomingResult} instance
+	 */
 	public Point3F getPoint() {
 		return this.point;
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code LightIncomingRadianceResult} instance.
+	 * Returns a {@code String} representation of this {@code LightRadianceIncomingResult} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code LightIncomingRadianceResult} instance
+	 * @return a {@code String} representation of this {@code LightRadianceIncomingResult} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LightIncomingRadianceResult(%s, %s, %s, %+.10f)", this.result, this.point, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
+		return String.format("new LightRadianceIncomingResult(%s, %s, %s, %+.10f)", this.result, this.point, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Vector3F} instance with the incoming direction associated with this {@code LightRadianceIncomingResult} instance.
+	 * 
+	 * @return a {@code Vector3F} instance with the incoming direction associated with this {@code LightRadianceIncomingResult} instance
+	 */
 	public Vector3F getIncoming() {
 		return this.incoming;
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LightIncomingRadianceResult} instance for equality.
+	 * Compares {@code object} to this {@code LightRadianceIncomingResult} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LightIncomingRadianceResult}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LightRadianceIncomingResult}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LightIncomingRadianceResult} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LightIncomingRadianceResult}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LightRadianceIncomingResult} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LightRadianceIncomingResult}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
@@ -98,15 +110,19 @@ public final class LightRadianceIncomingResult {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the probability density function (PDF) value.
+	 * 
+	 * @return the probability density function (PDF) value
+	 */
 	public float getProbabilityDensityFunctionValue() {
 		return this.probabilityDensityFunctionValue;
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LightIncomingRadianceResult} instance.
+	 * Returns a hash code for this {@code LightRadianceIncomingResult} instance.
 	 * 
-	 * @return a hash code for this {@code LightIncomingRadianceResult} instance
+	 * @return a hash code for this {@code LightRadianceIncomingResult} instance
 	 */
 	@Override
 	public int hashCode() {

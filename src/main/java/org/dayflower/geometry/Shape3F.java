@@ -132,6 +132,19 @@ public interface Shape3F {
 	float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal);
 	
 	/**
+	 * Returns the probability density function (PDF) value for solid angle.
+	 * <p>
+	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param referencePoint the reference point on this {@code Shape3F} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3F} instance
+	 * @param direction the direction to this {@code Shape3F} instance
+	 * @return the probability density function (PDF) value for solid angle
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
+	 */
+	float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction);
+	
+	/**
 	 * Returns the surface area of this {@code Shape3F} instance.
 	 * 
 	 * @return the surface area of this {@code Shape3F} instance

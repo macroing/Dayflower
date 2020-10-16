@@ -196,9 +196,11 @@ public final class PrimitiveLight implements Light {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code PrimitiveLight} instance uses a delta distribution, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@link Light} instance uses a delta distribution, {@code false} otherwise.
+	 * <p>
+	 * This {@code PrimitiveLight} class does not use a delta distribution, so this method will return {@code false}.
 	 * 
-	 * @return {@code true} if, and only if, this {@code PrimitiveLight} instance uses a delta distribution, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
 	 */
 	@Override
 	public boolean isDeltaDistribution() {

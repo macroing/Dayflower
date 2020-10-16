@@ -194,10 +194,11 @@ public final class DirectionalLight implements Light {
 		final Point3F point = Point3F.add(surfaceIntersectionPoint, this.direction, 2.0F * this.radius);
 		
 		final Vector3F incoming = this.direction;
+		final Vector3F surfaceNormal = new Vector3F();
 		
 		final float probabilityDensityFunctionValue = 1.0F;
 		
-		return Optional.of(new LightRadianceIncomingResult(result, point, incoming, probabilityDensityFunctionValue));
+		return Optional.of(new LightRadianceIncomingResult(result, point, incoming, surfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -247,9 +248,11 @@ public final class DirectionalLight implements Light {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code DirectionalLight} instance uses a delta distribution, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@link Light} instance uses a delta distribution, {@code false} otherwise.
+	 * <p>
+	 * This {@code DirectionalLight} class uses a delta distribution, so this method will return {@code true}.
 	 * 
-	 * @return {@code true} if, and only if, this {@code DirectionalLight} instance uses a delta distribution, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
 	 */
 	@Override
 	public boolean isDeltaDistribution() {

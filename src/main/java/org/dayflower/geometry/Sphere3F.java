@@ -368,6 +368,38 @@ public final class Sphere3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns the probability density function (PDF) value for solid angle.
+	 * <p>
+	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param referencePoint the reference point on this {@code Sphere3F} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Sphere3F} instance
+	 * @param direction the direction to this {@code Sphere3F} instance
+	 * @return the probability density function (PDF) value for solid angle
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
+	 */
+	@Override
+	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
+		Objects.requireNonNull(referencePoint, "referencePoint == null");
+		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+		Objects.requireNonNull(direction, "direction == null");
+		
+		final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = intersection(new Ray3F(referencePoint, direction));
+		
+		if(optionalSurfaceIntersection.isPresent()) {
+			final SurfaceIntersection3F surfaceIntersection = optionalSurfaceIntersection.get();
+			
+			final Point3F point = surfaceIntersection.getSurfaceIntersectionPoint();
+			
+			final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+			
+			return calculateProbabilityDensityFunctionValueForSolidAngle(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
+		}
+		
+		return 0.0F;
+	}
+	
+	/**
 	 * Returns the radius of this {@code Sphere3F} instance.
 	 * 
 	 * @return the radius of this {@code Sphere3F} instance

@@ -32,15 +32,17 @@ public final class LightRadianceIncomingResult {
 	private final Color3F result;
 	private final Point3F point;
 	private final Vector3F incoming;
+	private final Vector3F surfaceNormal;
 	private final float probabilityDensityFunctionValue;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public LightRadianceIncomingResult(final Color3F result, final Point3F point, final Vector3F incoming, final float probabilityDensityFunctionValue) {
+	public LightRadianceIncomingResult(final Color3F result, final Point3F point, final Vector3F incoming, final Vector3F surfaceNormal, final float probabilityDensityFunctionValue) {
 		this.result = Objects.requireNonNull(result, "result == null");
 		this.point = Objects.requireNonNull(point, "point == null");
 		this.incoming = Objects.requireNonNull(incoming, "incoming == null");
+		this.surfaceNormal = Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
 		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
 	}
 	
@@ -71,7 +73,7 @@ public final class LightRadianceIncomingResult {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LightRadianceIncomingResult(%s, %s, %s, %+.10f)", this.result, this.point, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
+		return String.format("new LightRadianceIncomingResult(%s, %s, %s, %s, %+.10f)", this.result, this.point, this.incoming, this.surfaceNormal, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -81,6 +83,15 @@ public final class LightRadianceIncomingResult {
 	 */
 	public Vector3F getIncoming() {
 		return this.incoming;
+	}
+	
+	/**
+	 * Returns a {@link Vector3F} instance with the surface normal associated with this {@code LightRadianceIncomingResult} instance.
+	 * 
+	 * @return a {@code Vector3F} instance with the surface normal associated with this {@code LightRadianceIncomingResult} instance
+	 */
+	public Vector3F getSurfaceNormal() {
+		return this.surfaceNormal;
 	}
 	
 	/**
@@ -102,6 +113,8 @@ public final class LightRadianceIncomingResult {
 		} else if(!Objects.equals(this.point, LightRadianceIncomingResult.class.cast(object).point)) {
 			return false;
 		} else if(!Objects.equals(this.incoming, LightRadianceIncomingResult.class.cast(object).incoming)) {
+			return false;
+		} else if(!Objects.equals(this.surfaceNormal, LightRadianceIncomingResult.class.cast(object).surfaceNormal)) {
 			return false;
 		} else if(!equal(this.probabilityDensityFunctionValue, LightRadianceIncomingResult.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
@@ -126,6 +139,6 @@ public final class LightRadianceIncomingResult {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.result, this.point, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
+		return Objects.hash(this.result, this.point, this.incoming, this.surfaceNormal, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 }

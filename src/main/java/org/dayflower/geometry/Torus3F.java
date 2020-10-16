@@ -310,6 +310,28 @@ public final class Torus3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns the probability density function (PDF) value for solid angle.
+	 * <p>
+	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Note: This method has not been implemented yet.
+	 * 
+	 * @param referencePoint the reference point on this {@code Torus3F} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Torus3F} instance
+	 * @param direction the direction to this {@code Torus3F} instance
+	 * @return the probability density function (PDF) value for solid angle
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
+	 */
+	@Override
+	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
+		Objects.requireNonNull(referencePoint, "referencePoint == null");
+		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+		Objects.requireNonNull(direction, "direction == null");
+		
+		return 0.0F;//TODO: Implement!
+	}
+	
+	/**
 	 * Returns the inner radius of this {@code Torus3F} instance.
 	 * 
 	 * @return the inner radius of this {@code Torus3F} instance

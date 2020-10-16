@@ -304,13 +304,14 @@ public final class SpotLight implements Light {
 		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 		
 		final Vector3F incoming = Vector3F.directionNormalized(surfaceIntersectionPoint, position);
+		final Vector3F surfaceNormal = new Vector3F();
 		
 		final Color3F intensity = this.intensity;
 		final Color3F result = Color3F.divide(Color3F.multiply(intensity, doComputeFalloff(Vector3F.negate(incoming))), Point3F.distanceSquared(surfaceIntersectionPoint, position));
 		
 		final float probabilityDensityFunctionValue = 1.0F;
 		
-		return Optional.of(new LightRadianceIncomingResult(result, position, incoming, probabilityDensityFunctionValue));
+		return Optional.of(new LightRadianceIncomingResult(result, position, incoming, surfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -365,9 +366,11 @@ public final class SpotLight implements Light {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code SpotLight} instance uses a delta distribution, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@link Light} instance uses a delta distribution, {@code false} otherwise.
+	 * <p>
+	 * This {@code SpotLight} class uses a delta distribution, so this method will return {@code true}.
 	 * 
-	 * @return {@code true} if, and only if, this {@code SpotLight} instance uses a delta distribution, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
 	 */
 	@Override
 	public boolean isDeltaDistribution() {

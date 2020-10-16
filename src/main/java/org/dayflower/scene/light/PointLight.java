@@ -232,10 +232,11 @@ public final class PointLight implements Light {
 		final Color3F result = Color3F.divide(intensity, Point3F.distanceSquared(surfaceIntersectionPoint, position));
 		
 		final Vector3F incoming = Vector3F.normalize(Vector3F.direction(surfaceIntersectionPoint, position));
+		final Vector3F surfaceNormal = new Vector3F();
 		
 		final float probabilityDensityFunctionValue = 1.0F;
 		
-		return Optional.of(new LightRadianceIncomingResult(result, position, incoming, probabilityDensityFunctionValue));
+		return Optional.of(new LightRadianceIncomingResult(result, position, incoming, surfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -272,9 +273,11 @@ public final class PointLight implements Light {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code PointLight} instance uses a delta distribution, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@link Light} instance uses a delta distribution, {@code false} otherwise.
+	 * <p>
+	 * This {@code PointLight} class uses a delta distribution, so this method will return {@code true}.
 	 * 
-	 * @return {@code true} if, and only if, this {@code PointLight} instance uses a delta distribution, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
 	 */
 	@Override
 	public boolean isDeltaDistribution() {

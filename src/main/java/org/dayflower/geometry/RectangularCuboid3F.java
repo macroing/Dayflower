@@ -275,6 +275,8 @@ public final class RectangularCuboid3F implements Shape3F {
 	 * Returns the probability density function (PDF) value for solid angle.
 	 * <p>
 	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Note: This method has not been implemented yet.
 	 * 
 	 * @param referencePoint the reference point on this {@code RectangularCuboid3F} instance
 	 * @param referenceSurfaceNormal the reference surface normal on this {@code RectangularCuboid3F} instance
@@ -291,6 +293,28 @@ public final class RectangularCuboid3F implements Shape3F {
 		Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
 		
 		return 0;//TODO: Implement!
+	}
+	
+	/**
+	 * Returns the probability density function (PDF) value for solid angle.
+	 * <p>
+	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Note: This method has not been implemented yet.
+	 * 
+	 * @param referencePoint the reference point on this {@code RectangularCuboid3F} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code RectangularCuboid3F} instance
+	 * @param direction the direction to this {@code RectangularCuboid3F} instance
+	 * @return the probability density function (PDF) value for solid angle
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
+	 */
+	@Override
+	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
+		Objects.requireNonNull(referencePoint, "referencePoint == null");
+		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+		Objects.requireNonNull(direction, "direction == null");
+		
+		return 0.0F;//TODO: Implement!
 	}
 	
 	/**

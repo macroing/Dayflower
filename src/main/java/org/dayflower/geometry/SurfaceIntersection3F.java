@@ -374,14 +374,15 @@ public final class SurfaceIntersection3F {
 		final Point2F textureCoordinates = surfaceIntersection.textureCoordinates;
 		
 		final Point3F surfaceIntersectionPointOldSpace = surfaceIntersection.surfaceIntersectionPoint;
-		final Point3F surfaceIntersectionPointNewSpace = Point3F.transform(matrix, surfaceIntersectionPointOldSpace);
+		final Point3F surfaceIntersectionPointNewSpace = Point3F.transformAndDivide(matrix, surfaceIntersectionPointOldSpace);
 		
 		final Ray3F rayOldSpace = surfaceIntersection.ray;
 		final Ray3F rayNewSpace = Ray3F.transform(matrix, rayOldSpace);
 		
 		final Shape3F shape = surfaceIntersection.shape;
 		
-		final Vector3F surfaceIntersectionPointError = surfaceIntersection.surfaceIntersectionPointError;
+		final Vector3F surfaceIntersectionPointErrorOldSpace = surfaceIntersection.surfaceIntersectionPointError;
+		final Vector3F surfaceIntersectionPointErrorNewSpace = Vector3F.transformError(matrix, surfaceIntersectionPointOldSpace, surfaceIntersectionPointErrorOldSpace);
 		final Vector3F surfaceNormalGOldSpace = surfaceIntersection.surfaceNormalG;
 		final Vector3F surfaceNormalSOldSpace = surfaceIntersection.surfaceNormalS;
 		final Vector3F surfaceNormalGNewSpace = Vector3F.normalize(Vector3F.transformTranspose(matrixInverse, surfaceNormalGOldSpace));
@@ -389,6 +390,6 @@ public final class SurfaceIntersection3F {
 		
 		final float tNewSpace = abs(Point3F.distance(rayNewSpace.getOrigin(), surfaceIntersectionPointNewSpace));
 		
-		return new SurfaceIntersection3F(orthonormalBasisGNewSpace, orthonormalBasisSNewSpace, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, surfaceIntersectionPointError, surfaceNormalGNewSpace, surfaceNormalSNewSpace, tNewSpace);
+		return new SurfaceIntersection3F(orthonormalBasisGNewSpace, orthonormalBasisSNewSpace, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, surfaceIntersectionPointErrorNewSpace, surfaceNormalGNewSpace, surfaceNormalSNewSpace, tNewSpace);
 	}
 }

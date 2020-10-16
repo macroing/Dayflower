@@ -23,6 +23,7 @@ import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Doubles.abs;
 import static org.dayflower.util.Doubles.cos;
 import static org.dayflower.util.Doubles.equal;
+import static org.dayflower.util.Doubles.gamma;
 import static org.dayflower.util.Doubles.max;
 import static org.dayflower.util.Doubles.saturate;
 import static org.dayflower.util.Doubles.sin;
@@ -937,6 +938,27 @@ public final class Vector3D {
 		final double component1 = vectorLHS.component1 * orthonormalBasisRHS.getU().component1 + vectorLHS.component2 * orthonormalBasisRHS.getV().component1 + vectorLHS.component3 * orthonormalBasisRHS.getW().component1;
 		final double component2 = vectorLHS.component1 * orthonormalBasisRHS.getU().component2 + vectorLHS.component2 * orthonormalBasisRHS.getV().component2 + vectorLHS.component3 * orthonormalBasisRHS.getW().component2;
 		final double component3 = vectorLHS.component1 * orthonormalBasisRHS.getU().component3 + vectorLHS.component2 * orthonormalBasisRHS.getV().component3 + vectorLHS.component3 * orthonormalBasisRHS.getW().component3;
+		
+		return new Vector3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Transforms the {@code Vector3D} {@code vector} with the {@link Matrix44D} {@code matrix}.
+	 * <p>
+	 * Returns a new {@code Vector3D} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code matrix}, {@code point} or {@code vector} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param matrix a {@code Matrix44D} instance
+	 * @param point a {@link Point3D} instance
+	 * @param vector a {@code Vector3D} instance
+	 * @return a new {@code Vector3D} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix}, {@code point} or {@code vector} are {@code null}
+	 */
+	public static Vector3D transformError(final Matrix44D matrix, final Point3D point, final Vector3D vector) {
+		final double component1 = (gamma(3) + 1.0D) * (abs(matrix.getElement11()) * vector.component1 + abs(matrix.getElement12()) * vector.component2 + abs(matrix.getElement13()) * vector.component3) + gamma(3) * (abs(matrix.getElement11() * point.getComponent1()) + abs(matrix.getElement12() * point.getComponent2()) + abs(matrix.getElement13() * point.getComponent3()) + abs(matrix.getElement14()));
+		final double component2 = (gamma(3) + 1.0D) * (abs(matrix.getElement21()) * vector.component1 + abs(matrix.getElement22()) * vector.component2 + abs(matrix.getElement23()) * vector.component3) + gamma(3) * (abs(matrix.getElement21() * point.getComponent1()) + abs(matrix.getElement22() * point.getComponent2()) + abs(matrix.getElement23() * point.getComponent3()) + abs(matrix.getElement24()));
+		final double component3 = (gamma(3) + 1.0D) * (abs(matrix.getElement31()) * vector.component1 + abs(matrix.getElement32()) * vector.component2 + abs(matrix.getElement33()) * vector.component3) + gamma(3) * (abs(matrix.getElement31() * point.getComponent1()) + abs(matrix.getElement32() * point.getComponent2()) + abs(matrix.getElement33() * point.getComponent3()) + abs(matrix.getElement34()));
 		
 		return new Vector3D(component1, component2, component3);
 	}

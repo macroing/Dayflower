@@ -236,7 +236,7 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
 	 */
 	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = this.shape.sample(Point3F.transform(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), u, v);
+		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = this.shape.sample(Point3F.transformAndDivide(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), u, v);
 		
 		if(optionalSurfaceSampleObjectSpace.isPresent()) {
 			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSampleObjectSpace.get();
@@ -372,7 +372,7 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
 	 */
 	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-		return this.shape.calculateProbabilityDensityFunctionValueForSolidAngle(Point3F.transform(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), Point3F.transform(this.worldToObject, point), Vector3F.transformTranspose(this.objectToWorld, surfaceNormal));
+		return this.shape.calculateProbabilityDensityFunctionValueForSolidAngle(Point3F.transformAndDivide(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), Point3F.transformAndDivide(this.worldToObject, point), Vector3F.transformTranspose(this.objectToWorld, surfaceNormal));
 	}
 	
 	/**
@@ -562,6 +562,6 @@ public final class Primitive {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float doTransformT(final Matrix44F matrix, final Ray3F rayOldSpace, final Ray3F rayNewSpace, final float t) {
-		return !equal(t, 0.0F) && t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transform(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+		return !equal(t, 0.0F) && t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 }

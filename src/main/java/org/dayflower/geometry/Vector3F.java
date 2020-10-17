@@ -943,7 +943,27 @@ public final class Vector3F {
 	}
 	
 	/**
-	 * Transforms the {@code Vector3F} {@code vector} with the {@link Matrix44F} {@code matrix}.
+	 * Transforms the error of the {@link Point3F} {@code point} with the {@link Matrix44F} {@code matrix}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code matrix} or {@code point} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param matrix a {@code Matrix44F} instance
+	 * @param point a {@code Point3F} instance
+	 * @return a new {@code Vector3F} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code matrix} or {@code point} are {@code null}
+	 */
+	public static Vector3F transformError(final Matrix44F matrix, final Point3F point) {
+		final float component1 = gamma(3) * (abs(matrix.getElement11() * point.getComponent1()) + abs(matrix.getElement12() * point.getY()) + abs(matrix.getElement13() * point.getZ()) + abs(matrix.getElement14()));
+		final float component2 = gamma(3) * (abs(matrix.getElement21() * point.getComponent1()) + abs(matrix.getElement22() * point.getY()) + abs(matrix.getElement23() * point.getZ()) + abs(matrix.getElement24()));
+		final float component3 = gamma(3) * (abs(matrix.getElement31() * point.getComponent1()) + abs(matrix.getElement32() * point.getY()) + abs(matrix.getElement33() * point.getZ()) + abs(matrix.getElement34()));
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Transforms the error of the {@code Vector3F} {@code vector} with the {@link Matrix44F} {@code matrix}.
 	 * <p>
 	 * Returns a new {@code Vector3F} instance with the result of the transformation.
 	 * <p>

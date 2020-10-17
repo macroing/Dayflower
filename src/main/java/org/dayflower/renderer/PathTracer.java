@@ -718,8 +718,6 @@ public final class PathTracer implements Renderer {
 				
 				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 				
-				final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
-				
 				final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
 				final Vector3F surfaceNormalCorrectlyOriented = Vector3F.dotProduct(currentDirection, surfaceNormal) < 0.0F ? surfaceNormal : Vector3F.negate(surfaceNormal);
 				
@@ -741,33 +739,31 @@ public final class PathTracer implements Renderer {
 				if(material instanceof AshikhminShirleyMaterial) {
 					final Vector3F s = SampleGeneratorF.sampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
 					final Vector3F w = Vector3F.normalize(Vector3F.reflection(currentDirection, surfaceNormal, true));
-					final Vector3F v = Vector3F.computeV(w);
-					final Vector3F u = Vector3F.crossProduct(v, w);
+					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? new Vector3F(w.getZ(), 0.0F, -w.getX()) : new Vector3F(0.0F, -w.getZ(), w.getY()), w));
+					final Vector3F v = Vector3F.crossProduct(w, u);
 					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 					
-					currentRay = new Ray3F(surfaceIntersectionPoint, d);
+					currentRay = surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
 				} else if(material instanceof LambertianMaterial || material instanceof OrenNayarMaterial) {
 					final Vector3F s = SampleGeneratorF.sampleHemisphereCosineDistribution2();
 					final Vector3F w = surfaceNormalCorrectlyOriented;
-					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? Vector3F.y() : Vector3F.x(), w));
+					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? new Vector3F(w.getZ(), 0.0F, -w.getX()) : new Vector3F(0.0F, -w.getZ(), w.getY()), w));
 					final Vector3F v = Vector3F.crossProduct(w, u);
 					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 					
-					currentRay = new Ray3F(surfaceIntersectionPoint, d);
+					currentRay = surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
 				} else if(material instanceof ReflectionMaterial) {
 					final Vector3F d = Vector3F.reflection(currentDirection, surfaceNormal, true);
 					
-					currentRay = new Ray3F(surfaceIntersectionPoint, d);
+					currentRay = surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
 				} else if(material instanceof RefractionMaterial) {
 					final Vector3F reflectionDirection = Vector3F.reflection(currentDirection, surfaceNormal, true);
-					
-					final Ray3F reflectionRay = new Ray3F(surfaceIntersectionPoint, reflectionDirection);
 					
 					final boolean isEntering = Vector3F.dotProduct(surfaceNormal, surfaceNormalCorrectlyOriented) > 0.0F;
 					
@@ -779,13 +775,11 @@ public final class PathTracer implements Renderer {
 					final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 					
 					if(cosTheta2Squared < 0.0F) {
-						currentRay = reflectionRay;
+						currentRay = surfaceIntersection.createRay(reflectionDirection);
 						
 						throughput = Color3F.multiply(throughput, albedo);
 					} else {
 						final Vector3F transmissionDirection = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(currentDirection, eta), Vector3F.multiply(surfaceNormal, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
-						
-						final Ray3F transmissionRay = new Ray3F(surfaceIntersectionPoint, transmissionDirection);
 						
 						final float a = etaB - etaA;
 						final float b = etaB + etaA;
@@ -798,12 +792,12 @@ public final class PathTracer implements Renderer {
 						final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 						
 						if(random() < probabilityRussianRoulette) {
-							currentRay = reflectionRay;
+							currentRay = surfaceIntersection.createRay(reflectionDirection);
 							
 							throughput = Color3F.multiply(throughput, albedo);
 							throughput = Color3F.multiply(throughput, probabilityRussianRouletteReflection);
 						} else {
-							currentRay = transmissionRay;
+							currentRay = surfaceIntersection.createRay(transmissionDirection);
 							
 							throughput = Color3F.multiply(throughput, albedo);
 							throughput = Color3F.multiply(throughput, probabilityRussianRouletteTransmission);

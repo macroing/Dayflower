@@ -128,6 +128,22 @@ public final class Ray3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code rayRHS} are {@code null}
 	 */
 	public static Ray3F transform(final Matrix44F matrixLHS, final Ray3F rayRHS) {
-		return new Ray3F(Point3F.transform(matrixLHS, rayRHS.origin), Vector3F.transform(matrixLHS, rayRHS.direction));
+		final Point3F originOld = rayRHS.origin;
+		final Point3F originNew = Point3F.transformAndDivide(matrixLHS, originOld);
+		
+		final Vector3F directionOld = rayRHS.direction;
+		final Vector3F directionNew = Vector3F.transform(matrixLHS, directionOld);
+		
+		final Vector3F originError = Vector3F.transformError(matrixLHS, originOld);
+		
+		final float lengthSquared = directionNew.lengthSquared();
+		
+		if(lengthSquared > 0.0F) {
+			final float t = Vector3F.dotProduct(Vector3F.absolute(directionNew), originError);
+			
+			return new Ray3F(Point3F.add(originNew, directionNew, t), directionNew);
+		}
+		
+		return new Ray3F(originNew, directionNew);
 	}
 }

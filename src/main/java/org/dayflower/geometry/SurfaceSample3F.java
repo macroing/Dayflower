@@ -178,7 +178,7 @@ public final class SurfaceSample3F {
 	 */
 	public static SurfaceSample3F transform(final SurfaceSample3F surfaceSample, final Matrix44F matrix, final Matrix44F matrixInverse) {
 		final Point3F pointOldSpace = surfaceSample.point;
-		final Point3F pointNewSpace = Point3F.transform(matrix, pointOldSpace);
+		final Point3F pointNewSpace = Point3F.transformAndDivide(matrix, pointOldSpace);
 		
 		final Vector3F surfaceNormalOldSpace = surfaceSample.surfaceNormal;
 		final Vector3F surfaceNormalNewSpace = Vector3F.transformTranspose(matrixInverse, surfaceNormalOldSpace);

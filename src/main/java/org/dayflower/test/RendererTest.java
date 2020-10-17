@@ -35,9 +35,9 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionRenderer();
-		doTestPathTracerPBRT();
+//		doTestPathTracerPBRT();
 //		doTestPathTracerRayito();
-//		doTestPathTracerSmallPTIterative();
+		doTestPathTracerSmallPTIterative();
 //		doTestPathTracerSmallPTRecursive();
 //		doTestRayCaster();
 	}
@@ -49,7 +49,7 @@ public final class RendererTest {
 	}
 	
 	static void doTestPathTracerPBRT() {
-		doTestRenderer(new PathTracer(PathTracer.TYPE_P_B_R_T), Scenes.newPBRTMaterialShowcaseScene());
+		doTestRenderer(new PathTracer(PathTracer.TYPE_P_B_R_T), Scenes.newPBRTZealotScene());
 	}
 	
 	static void doTestPathTracerRayito() {

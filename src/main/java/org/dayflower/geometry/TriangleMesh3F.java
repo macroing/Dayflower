@@ -702,7 +702,7 @@ public final class TriangleMesh3F implements Shape3F {
 			final Map<Integer, Integer> normalModelIndices1 = new HashMap<>();
 			final Map<Vertex, Integer> modelVertexIndices = new HashMap<>();
 			
-			boolean hasVNormals = false;
+			boolean hasNormals = false;
 			
 			for(int i = 0; i < this.vertices.size(); i++) {
 				final Vertex vertex = this.vertices.get(i);
@@ -714,7 +714,7 @@ public final class TriangleMesh3F implements Shape3F {
 				final Vector3F normal = vertex.hasVertexNormalIndex() ? this.normals.get(vertex.getVertexNormalIndex()) : new Vector3F();
 				
 				if(vertex.hasVertexNormalIndex()) {
-					hasVNormals = true;
+					hasNormals = true;
 				}
 				
 				final String groupName = this.groupNames.get(i);
@@ -753,7 +753,7 @@ public final class TriangleMesh3F implements Shape3F {
 				normalModelIndices1.put(modelVertexIndex, normalModelIndex);
 			}
 			
-			if(!hasVNormals) {
+			if(!hasNormals) {
 				indexedObjectModel1.calculateNormals();
 				
 				for(int i = 0; i < indexedObjectModel0.getPositionCount(); i++) {

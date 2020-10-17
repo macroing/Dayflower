@@ -219,7 +219,7 @@ public final class DiffuseAreaLight extends AreaLight {
 		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
 		
 		final Point3F referencePointWorldSpace = surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint();
-		final Point3F referencePointLightSpace = Point3F.transform(worldToLight, referencePointWorldSpace);
+		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
 		
 		final Vector3F referenceSurfaceNormalWorldSpace = surfaceIntersectionWorldSpace.getSurfaceNormalS();
 		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
@@ -331,7 +331,7 @@ public final class DiffuseAreaLight extends AreaLight {
 		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
 		
 		final Point3F referencePointWorldSpace = surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint();
-		final Point3F referencePointLightSpace = Point3F.transform(worldToLight, referencePointWorldSpace);
+		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
 		
 		final Vector3F referenceSurfaceNormalWorldSpace = surfaceIntersectionWorldSpace.getSurfaceNormalS();
 		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);

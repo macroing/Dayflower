@@ -88,14 +88,14 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 		final float minimumZ = this.minimum.getZ();
 		
 		final Point3F[] points = new Point3F[] {
-			Point3F.transform(matrix, new Point3F(minimumX, minimumY, minimumZ)),
-			Point3F.transform(matrix, new Point3F(maximumX, minimumY, minimumZ)),
-			Point3F.transform(matrix, new Point3F(minimumX, maximumY, minimumZ)),
-			Point3F.transform(matrix, new Point3F(minimumX, minimumY, maximumZ)),
-			Point3F.transform(matrix, new Point3F(minimumX, maximumY, maximumZ)),
-			Point3F.transform(matrix, new Point3F(maximumX, maximumY, minimumZ)),
-			Point3F.transform(matrix, new Point3F(maximumX, minimumY, maximumZ)),
-			Point3F.transform(matrix, new Point3F(maximumX, maximumY, maximumZ))
+			Point3F.transformAndDivide(matrix, new Point3F(minimumX, minimumY, minimumZ)),
+			Point3F.transformAndDivide(matrix, new Point3F(maximumX, minimumY, minimumZ)),
+			Point3F.transformAndDivide(matrix, new Point3F(minimumX, maximumY, minimumZ)),
+			Point3F.transformAndDivide(matrix, new Point3F(minimumX, minimumY, maximumZ)),
+			Point3F.transformAndDivide(matrix, new Point3F(minimumX, maximumY, maximumZ)),
+			Point3F.transformAndDivide(matrix, new Point3F(maximumX, maximumY, minimumZ)),
+			Point3F.transformAndDivide(matrix, new Point3F(maximumX, minimumY, maximumZ)),
+			Point3F.transformAndDivide(matrix, new Point3F(maximumX, maximumY, maximumZ))
 		};
 		
 		Point3F maximum = Point3F.MINIMUM;

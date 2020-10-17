@@ -181,7 +181,7 @@ public final class SpotLight implements Light {
 		this.worldToLightInternal = Matrix44F.inverse(this.lightToWorldInternal);
 		this.eye = Objects.requireNonNull(eye, "eye == null");
 		this.lookAt = Objects.requireNonNull(lookAt, "lookAt == null");
-		this.position = Point3F.transform(this.lightToWorldInternal, new Point3F());
+		this.position = Point3F.transformAndDivide(this.lightToWorldInternal, new Point3F());
 		this.cosConeAngle = cos(coneAngle.getRadians());
 		this.cosConeAngleMinusConeAngleDelta = cos(AngleF.subtract(coneAngle, coneAngleDelta).getRadians());
 	}

@@ -390,6 +390,6 @@ public final class SurfaceIntersection3F {
 		
 		final float tNewSpace = abs(Point3F.distance(rayNewSpace.getOrigin(), surfaceIntersectionPointNewSpace));
 		
-		return new SurfaceIntersection3F(orthonormalBasisGNewSpace, orthonormalBasisSNewSpace, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, surfaceIntersectionPointErrorNewSpace, surfaceNormalGNewSpace, surfaceNormalSNewSpace, tNewSpace);
+		return new SurfaceIntersection3F(orthonormalBasisGNewSpace, orthonormalBasisSNewSpace, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, surfaceIntersectionPointErrorNewSpace, surfaceNormalGNewSpace, Vector3F.faceForward(surfaceNormalSNewSpace, surfaceNormalGNewSpace), tNewSpace);
 	}
 }

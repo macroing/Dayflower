@@ -128,6 +128,22 @@ public final class Ray3D {
 	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code rayRHS} are {@code null}
 	 */
 	public static Ray3D transform(final Matrix44D matrixLHS, final Ray3D rayRHS) {
-		return new Ray3D(Point3D.transform(matrixLHS, rayRHS.origin), Vector3D.transform(matrixLHS, rayRHS.direction));
+		final Point3D originOld = rayRHS.origin;
+		final Point3D originNew = Point3D.transformAndDivide(matrixLHS, originOld);
+		
+		final Vector3D directionOld = rayRHS.direction;
+		final Vector3D directionNew = Vector3D.transform(matrixLHS, directionOld);
+		
+		final Vector3D originError = Vector3D.transformError(matrixLHS, originOld);
+		
+		final double lengthSquared = directionNew.lengthSquared();
+		
+		if(lengthSquared > 0.0D) {
+			final double t = Vector3D.dotProduct(Vector3D.absolute(directionNew), originError);
+			
+			return new Ray3D(Point3D.add(originNew, directionNew, t), directionNew);
+		}
+		
+		return new Ray3D(originNew, directionNew);
 	}
 }

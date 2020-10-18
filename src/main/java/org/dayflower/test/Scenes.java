@@ -116,7 +116,7 @@ public final class Scenes {
 		
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 0.0F, 20.0F);
 		
-		final Primitive primitive = new Primitive(new LambertianMaterial(), new Sphere3F(), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), Matrix44F.translate(0.0F, 60.0F, 20.0F));
+		final Primitive primitive = new Primitive(new LambertianMaterial(), new Sphere3F(), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), Matrix44F.translate(0.0F, 30.0F, 20.0F));
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 30.0F, 0.0F)), "Bedroom");
@@ -306,7 +306,8 @@ public final class Scenes {
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 30.0F, 0.0F)), "PBRTBedroom");
-		scene.addLight(new PointLight(new Point3F(0.0F, 30.0F, 20.0F), new Color3F(2000.0F)));
+		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 30.0F, 20.0F), 1, new Color3F(1000.0F), new Sphere3F(), true));
+//		scene.addLight(new PointLight(new Point3F(0.0F, 30.0F, 20.0F), new Color3F(2000.0F)));
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(2000.0F), Matrix44F.translate(0.0F, 30.0F, -1.0F), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
 		
 		for(final TriangleMesh3F triangleMesh : triangleMeshes) {
@@ -396,19 +397,22 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newPBRTScene() {
-		final Color3F colorCopperEta = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_ETA.toColorXYZ()));
-		final Color3F colorCopperK = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_K.toColorXYZ()));
+//		final Color3F colorCopperEta = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_ETA.toColorXYZ()));
+//		final Color3F colorCopperK = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_K.toColorXYZ()));
 		final Color3F colorGoldEta = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.GOLD_ETA.toColorXYZ()));
 		final Color3F colorGoldK = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.GOLD_K.toColorXYZ()));
 		
-		final Material material1 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F)));
-		final Material material2 = new PlasticMaterial(new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.5F, 0.1F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(1.0F)), true);
-		final Material material3 = new MetalMaterial(new ConstantTexture(colorCopperEta), new ConstantTexture(colorCopperK), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
+		final Material material1 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new SimplexFractionalBrownianMotionTexture(new Color3F(0.8F, 0.5F, 0.0F), 5.0F, 0.5F, 16));
+//		final Material material2 = new PlasticMaterial(new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.5F, 0.1F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(1.0F)), true);
+		final Material material2 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+//		final Material material3 = new MetalMaterial(new ConstantTexture(colorCopperEta), new ConstantTexture(colorCopperK), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
 //		final Material material3 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), new ConstantTexture(), true);
+//		final Material material3 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+		final Material material3 = new MirrorMaterial();
 		final Material material4 = new MetalMaterial(new ConstantTexture(colorGoldEta), new ConstantTexture(colorGoldK), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
 //		final Material material5 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), new ConstantTexture(), true);
 //		final Material material5 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(1.0F)), true);
-		final Material material5 = new SubstrateMaterial();
+		final Material material5 = new SubstrateMaterial(new ConstantTexture(new Color3F(1.0F, 0.2F, 0.2F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
 		
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = new Sphere3F(10.0F);
@@ -423,13 +427,14 @@ public final class Scenes {
 		final Matrix44F matrix5 = Matrix44F.translate(3.0F, 1.25F, 5.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "PBRT");
-		scene.addLight(new DirectionalLight(Color3F.WHITE, new Point3F(0.0F, 0.0F, 0.0F), Vector3F.transform(Matrix44F.rotateX(AngleF.degrees(90.0F)), new Vector3F(0.0F, 0.0F, -1.0F)), 10.0F));
-		scene.addLight(new PointLight(new Point3F(2.0F, 2.0F, 0.0F), new Color3F(1.0F)));
-		scene.addLight(new PointLight(new Point3F(0.0F, 5.0F, 5.0F), new Color3F(1.0F)));
-		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(1.0F), Matrix44F.identity(), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 1.0F)));
-		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(1.0F), Matrix44F.multiply(Matrix44F.translate(-5.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(90.0F))), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
-		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(1.0F), Matrix44F.multiply(Matrix44F.translate(+5.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(270.0F))), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)), "PBRT");
+		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 10.0F, 0.0F), 1, new Color3F(50.0F), new Sphere3F(), true));
+//		scene.addLight(new DirectionalLight(Color3F.WHITE, new Point3F(0.0F, 0.0F, 0.0F), Vector3F.transform(Matrix44F.rotateX(AngleF.degrees(90.0F)), new Vector3F(0.0F, 0.0F, -1.0F)), 10.0F));
+//		scene.addLight(new PointLight(new Point3F(2.0F, 2.0F, 0.0F), new Color3F(1.0F)));
+//		scene.addLight(new PointLight(new Point3F(0.0F, 5.0F, 5.0F), new Color3F(1.0F)));
+//		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(1.0F), Matrix44F.identity(), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 1.0F)));
+//		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(1.0F), Matrix44F.multiply(Matrix44F.translate(-5.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(90.0F))), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
+//		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(1.0F), Matrix44F.multiply(Matrix44F.translate(+5.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(270.0F))), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
 		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix2));
 		scene.addPrimitive(new Primitive(material3, shape3, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix3));
@@ -506,8 +511,8 @@ public final class Scenes {
 		final Material material15 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material16 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 //		final Material material21 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-		final Material material21 = new MetalMaterial(new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_ETA.toColorXYZ()))), new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_K.toColorXYZ()))), new ConstantTexture(new Color3F(0.05F)), new ConstantTexture(new Color3F(0.05F)), true);
-//		final Material material21 = new SubstrateMaterial(new ConstantTexture(new Color3F(1.0F, 0.2F, 0.2F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
+//		final Material material21 = new MetalMaterial(new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_ETA.toColorXYZ()))), new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_K.toColorXYZ()))), new ConstantTexture(new Color3F(0.05F)), new ConstantTexture(new Color3F(0.05F)), true);
+		final Material material21 = new SubstrateMaterial(ImageTexture.load(new File("./resources/Zealot_albedo.png")), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
 //		final Material material21 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(), new ConstantTexture(), true);
 //		final Material material21 = new MatteMaterial(new ConstantTexture(new Color3F(90.0F)), new ConstantTexture(new Color3F(0.2F, 1.0F, 0.2F)));
 //		final Material material21 = new MirrorMaterial();

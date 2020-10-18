@@ -441,7 +441,9 @@ public final class TriangleMesh3F implements Shape3F {
 			String previousMaterialName = "";
 			String previousObjectName = "";
 			
-			for(int i = 0; i < indices.size(); i += 3) {
+			final int maximumCount = Integer.MAX_VALUE;
+			
+			for(int i = 0, j = 0; i < indices.size(); i += 3) {
 				final int indexA = indices.get(i + 0).intValue();
 				final int indexB = indices.get(i + 1).intValue();
 				final int indexC = indices.get(i + 2).intValue();
@@ -456,6 +458,10 @@ public final class TriangleMesh3F implements Shape3F {
 						
 						triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName));
 						triangles.clear();
+						
+						if(++j >= maximumCount) {
+							break;
+						}
 					}
 					
 					if(!previousGroupName.equals(currentGroupName)) {

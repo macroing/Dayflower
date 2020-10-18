@@ -81,7 +81,7 @@ public final class AmbientOcclusionRenderer implements Renderer {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ambientOcclusionRenderer.render(display, image, scene, new RendererConfiguration(20, 5, 1000, 1, 1));
+	 * ambientOcclusionRenderer.render(display, image, scene, new RendererConfiguration());
 	 * }
 	 * </pre>
 	 * 
@@ -92,7 +92,7 @@ public final class AmbientOcclusionRenderer implements Renderer {
 	 */
 	@Override
 	public void render(final Display display, final Image image, final Scene scene) {
-		render(display, image, scene, new RendererConfiguration(20, 5, 1000, 1, 1));
+		render(display, image, scene, new RendererConfiguration());
 	}
 	
 	/**

@@ -49,7 +49,7 @@ public final class RendererTest {
 	}
 	
 	static void doTestPathTracerPBRT() {
-		doTestRenderer(new PathTracer(PathTracer.TYPE_P_B_R_T), Scenes.newPBRTScene());
+		doTestRenderer(new PathTracer(PathTracer.TYPE_P_B_R_T), Scenes.newPBRTSmoothMonkey2Scene());
 	}
 	
 	static void doTestPathTracerRayito() {

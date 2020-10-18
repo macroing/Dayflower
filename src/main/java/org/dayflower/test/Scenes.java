@@ -242,7 +242,7 @@ public final class Scenes {
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = new Sphere3F(10.0F);
 		final Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F), new Point3F(1.0F));
-		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 10.0F).get(0);
+		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
 		final Shape3F shape5 = new Torus3F();
 		
 		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
@@ -264,7 +264,7 @@ public final class Scenes {
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		final Matrix44F matrix3 = Matrix44F.translate(-3.0F, 1.0F, 5.0F);
-		final Matrix44F matrix4 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.1F));
+		final Matrix44F matrix4 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.01F));
 		final Matrix44F matrix5 = Matrix44F.translate(3.0F, 1.25F, 5.0F);
 		
 		final
@@ -409,7 +409,7 @@ public final class Scenes {
 //		final Material material3 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), new ConstantTexture(), true);
 //		final Material material3 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
 		final Material material3 = new MirrorMaterial();
-		final Material material4 = new MetalMaterial(new ConstantTexture(colorGoldEta), new ConstantTexture(colorGoldK), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
+		final Material material4 = new MetalMaterial(new ConstantTexture(colorGoldEta), new ConstantTexture(colorGoldK), new ConstantTexture(new Color3F(0.05F)), new ConstantTexture(new Color3F(0.05F)), true);
 //		final Material material5 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), new ConstantTexture(), true);
 //		final Material material5 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(1.0F)), true);
 		final Material material5 = new SubstrateMaterial(new ConstantTexture(new Color3F(1.0F, 0.2F, 0.2F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
@@ -417,13 +417,13 @@ public final class Scenes {
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = new Sphere3F(10.0F);
 		final Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F), new Point3F(1.0F));
-		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 10.0F).get(0);
+		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
 		final Shape3F shape5 = new Torus3F();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		final Matrix44F matrix3 = Matrix44F.multiply(Matrix44F.translate(-3.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(0.0F)));
-		final Matrix44F matrix4 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.1F));
+		final Matrix44F matrix4 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.01F));
 		final Matrix44F matrix5 = Matrix44F.translate(3.0F, 1.25F, 5.0F);
 		
 		final
@@ -458,10 +458,10 @@ public final class Scenes {
 		final Material material14 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material15 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material16 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
-		final Material material21 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+//		final Material material21 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
 //		final Material material21 = new MetalMaterial(new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_ETA.toColorXYZ()))), new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_K.toColorXYZ()))), new ConstantTexture(new Color3F(0.05F)), new ConstantTexture(new Color3F(0.05F)), true);
 //		final Material material21 = new SubstrateMaterial(new ConstantTexture(new Color3F(1.0F, 0.2F, 0.2F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
-//		final Material material21 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(), new ConstantTexture(), true);
+		final Material material21 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(), new ConstantTexture(), true);
 //		final Material material21 = new MatteMaterial(new ConstantTexture(new Color3F(90.0F)), new ConstantTexture(new Color3F(0.2F, 1.0F, 0.2F)));
 //		final Material material21 = new MirrorMaterial();
 //		final Material material21 = new UberMaterial();
@@ -472,7 +472,7 @@ public final class Scenes {
 		final Shape3F shape14 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F, +0.0F), new Point3F(1.0F, 0.0F, +0.0F));//B
 		final Shape3F shape15 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F, -1.0F));//R
 		final Shape3F shape16 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F,  1.0F));//L
-		final Shape3F shape21 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 10.0F).get(0);
+		final Shape3F shape21 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
 		
 		final Matrix44F matrix11 = Matrix44F.translate(+0.0F, 0.00F, + 0.0F);
 		final Matrix44F matrix12 = Matrix44F.translate(+0.0F, 8.00F, + 0.0F);
@@ -480,7 +480,7 @@ public final class Scenes {
 		final Matrix44F matrix14 = Matrix44F.translate(+0.0F, 0.00F, -10.0F);
 		final Matrix44F matrix15 = Matrix44F.translate(+5.0F, 0.00F, + 0.0F);
 		final Matrix44F matrix16 = Matrix44F.translate(-5.0F, 0.00F, + 0.0F);
-		final Matrix44F matrix21 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.2F));
+		final Matrix44F matrix21 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.02F));
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTSmoothMonkey2");
@@ -1368,13 +1368,13 @@ public final class Scenes {
 	public static Scene newShowcaseShape3FTriangleMesh3FScene() {
 		final Material material = new LambertianMaterial();
 		
-		final Shape3F shape = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 10.0F).get(0);
+		final Shape3F shape = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
 		
 		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture2 = new ConstantTexture();
 		final Texture texture3 = new ConstantTexture();
 		
-		final Matrix44F matrix = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.1F));
+		final Matrix44F matrix = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.01F));
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTriangleMesh3F");

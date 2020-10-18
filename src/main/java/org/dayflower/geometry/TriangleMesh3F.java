@@ -411,6 +411,13 @@ public final class TriangleMesh3F implements Shape3F {
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * TriangleMesh3F.readWavefrontObject(file, isFlippingTextureCoordinateY, 1.0F);
+	 * }
+	 * </pre>
 	 * 
 	 * @param file a {@code File} instance
 	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
@@ -419,6 +426,26 @@ public final class TriangleMesh3F implements Shape3F {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
 	public static List<TriangleMesh3F> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY) {
+		return readWavefrontObject(file, isFlippingTextureCoordinateY, 1.0F);
+	}
+	
+	/**
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} instance
+	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
+	 * @param scale the scale to apply to all {@link Triangle3F} instances
+	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static List<TriangleMesh3F> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY, final float scale) {
 		try {
 			System.out.printf("Loading triangle meshes from file '%s'...%n", file.getName());
 			
@@ -441,7 +468,12 @@ public final class TriangleMesh3F implements Shape3F {
 			String previousMaterialName = "";
 			String previousObjectName = "";
 			
+			final boolean isScaling = !equal(scale, 1.0F);
+			
 			final int maximumCount = Integer.MAX_VALUE;
+			
+			final Matrix44F matrix = isScaling ? Matrix44F.scale(scale) : null;
+			final Matrix44F matrixInverse = isScaling ? Matrix44F.inverse(matrix) : null;
 			
 			for(int i = 0, j = 0; i < indices.size(); i += 3) {
 				final int indexA = indices.get(i + 0).intValue();
@@ -481,17 +513,17 @@ public final class TriangleMesh3F implements Shape3F {
 				final Point2F textureCoordinatesB = textureCoordinates.get(indexB);
 				final Point2F textureCoordinatesC = textureCoordinates.get(indexC);
 				
-				final Point3F positionA = positions.get(indexA);
-				final Point3F positionB = positions.get(indexB);
-				final Point3F positionC = positions.get(indexC);
+				final Point3F positionA = isScaling ? Point3F.transformAndDivide(matrix, positions.get(indexA)) : positions.get(indexA);
+				final Point3F positionB = isScaling ? Point3F.transformAndDivide(matrix, positions.get(indexB)) : positions.get(indexB);
+				final Point3F positionC = isScaling ? Point3F.transformAndDivide(matrix, positions.get(indexC)) : positions.get(indexC);
 				
-				final Vector3F normalA = normals.get(indexA);
-				final Vector3F normalB = normals.get(indexB);
-				final Vector3F normalC = normals.get(indexC);
+				final Vector3F normalA = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexA)) : normals.get(indexA);
+				final Vector3F normalB = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexB)) : normals.get(indexB);
+				final Vector3F normalC = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexC)) : normals.get(indexC);
 				
-				final Vector3F tangentA = tangents.get(indexA);
-				final Vector3F tangentB = tangents.get(indexB);
-				final Vector3F tangentC = tangents.get(indexC);
+				final Vector3F tangentA = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexA)) : tangents.get(indexA);
+				final Vector3F tangentB = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexB)) : tangents.get(indexB);
+				final Vector3F tangentC = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexC)) : tangents.get(indexC);
 				
 				final Vertex3F a = new Vertex3F(textureCoordinatesA, positionA, normalA, tangentA);
 				final Vertex3F b = new Vertex3F(textureCoordinatesB, positionB, normalB, tangentB);

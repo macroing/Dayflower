@@ -97,6 +97,17 @@ public final class Scene {
 		return this.camera;
 	}
 	
+	/**
+	 * Returns a copy of the {@link Camera} instance associated with this {@code Scene} instance.
+	 * 
+	 * @return a copy of the {@code Camera} instance associated with this {@code Scene} instance
+	 */
+	public Camera getCameraCopy() {
+		synchronized(this.camera) {
+			return this.camera.copy();
+		}
+	}
+	
 //	TODO: Add Javadocs!
 	public Color3F lightEstimateDirect(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final boolean isSpecular) {
 		Objects.requireNonNull(bSDF, "bSDF == null");

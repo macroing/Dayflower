@@ -34,6 +34,7 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.scene.Camera;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Scene;
 
@@ -115,6 +116,8 @@ public final class AmbientOcclusionRenderer implements Renderer {
 		final int resolutionX = image.getResolutionX();
 		final int resolutionY = image.getResolutionY();
 		
+		final Camera camera = scene.getCameraCopy();
+		
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
 			final long currentTimeMillis1 = System.currentTimeMillis();
 			
@@ -123,7 +126,7 @@ public final class AmbientOcclusionRenderer implements Renderer {
 					final float sampleX = random();
 					final float sampleY = random();
 					
-					final Optional<Ray3F> optionalRayWorldSpace = scene.getCamera().createPrimaryRay(x, y, sampleX, sampleY);
+					final Optional<Ray3F> optionalRayWorldSpace = camera.createPrimaryRay(x, y, sampleX, sampleY);
 					
 					if(optionalRayWorldSpace.isPresent()) {
 						final Ray3F rayWorldSpace = optionalRayWorldSpace.get();

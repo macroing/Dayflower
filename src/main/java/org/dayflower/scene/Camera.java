@@ -125,6 +125,23 @@ public final class Camera {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private Camera(final AngleF fieldOfViewX, final AngleF fieldOfViewY, final AngleF pitch, final AngleF yaw, final OrthonormalBasis33F orthonormalBasis, final Point3F eye, final boolean isWalkLockEnabled, final float apertureRadius, final float focalDistance, final float resolutionX, final float resolutionY, final int lens) {
+		this.fieldOfViewX = fieldOfViewX;
+		this.fieldOfViewY = fieldOfViewY;
+		this.pitch = pitch;
+		this.yaw = yaw;
+		this.orthonormalBasis = orthonormalBasis;
+		this.eye = eye;
+		this.isWalkLockEnabled = isWalkLockEnabled;
+		this.apertureRadius = apertureRadius;
+		this.focalDistance = focalDistance;
+		this.resolutionX = resolutionX;
+		this.resolutionY = resolutionY;
+		this.lens = lens;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Returns an {@link AngleF} instance representing the field of view on the X-axis that is associated with this {@code Camera} instance.
 	 * 
@@ -159,6 +176,15 @@ public final class Camera {
 	 */
 	public AngleF getYaw() {
 		return this.yaw;
+	}
+	
+	/**
+	 * Returns a copy of this {@code Camera} instance.
+	 * 
+	 * @return a copy of this {@code Camera} instance
+	 */
+	public Camera copy() {
+		return new Camera(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.orthonormalBasis, this.eye, this.isWalkLockEnabled, this.apertureRadius, this.focalDistance, this.resolutionX, this.resolutionY, this.lens);
 	}
 	
 	/**

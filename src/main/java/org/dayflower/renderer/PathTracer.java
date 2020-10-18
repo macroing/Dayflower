@@ -41,6 +41,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.scene.Background;
+import org.dayflower.scene.Camera;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
@@ -155,6 +156,8 @@ public final class PathTracer implements Renderer {
 		final int resolutionY = image.getResolutionY();
 		final int type = this.type;
 		
+		final Camera camera = scene.getCameraCopy();
+		
 		final List<Light> lights = scene.getLights();
 		
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
@@ -165,7 +168,7 @@ public final class PathTracer implements Renderer {
 					final float sampleX = random();
 					final float sampleY = random();
 					
-					final Optional<Ray3F> optionalRay = scene.getCamera().createPrimaryRay(x, y, sampleX, sampleY);
+					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(x, y, sampleX, sampleY);
 					
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();

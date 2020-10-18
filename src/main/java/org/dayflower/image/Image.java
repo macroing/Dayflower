@@ -53,6 +53,7 @@ import org.dayflower.geometry.Rasterizer2I;
 import org.dayflower.geometry.Rectangle2I;
 import org.dayflower.geometry.Triangle2I;
 import org.dayflower.util.BufferedImages;
+import org.dayflower.util.Ints;
 
 /**
  * An {@code Image} is an image that can be drawn to.
@@ -875,6 +876,67 @@ public final class Image {
 		
 		for(final Pixel pixel : this.pixels) {
 			pixel.setColorRGB(colorRGB);
+		}
+	}
+	
+	/**
+	 * Copies the individual component values of the {@link Color3F} instances in this {@code Image} instance to the {@code byte[]} {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length != image.getResolution() * arrayComponentOrder.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.copyTo(array, ArrayComponentOrder.BGRA);
+	 * }
+	 * </pre>
+	 * 
+	 * @param array the {@code byte[]} to copy the individual component values of the {@code Color3F} instances in this {@code Image} instance to
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != image.getResolution() * arrayComponentOrder.getComponentCount()}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public void copyTo(final byte[] array) {
+		copyTo(array, ArrayComponentOrder.BGRA);
+	}
+	
+	/**
+	 * Copies the individual component values of the {@link Color3F} instances in this {@code Image} instance to the {@code byte[]} {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length != image.getResolution() * arrayComponentOrder.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array the {@code byte[]} to copy the individual component values of the {@code Color3F} instances in this {@code Image} instance to
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} to copy the components to {@code array} in the correct order
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != image.getResolution() * arrayComponentOrder.getComponentCount()}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
+	 */
+	public void copyTo(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		Ints.requireExact(array.length, this.pixels.length * arrayComponentOrder.getComponentCount(), "array");
+		
+		for(int i = 0, j = 0; i < this.pixels.length; i++, j += arrayComponentOrder.getComponentCount()) {
+			final Color3F colorRGB = this.pixels[i].getColorRGB();
+			
+			if(arrayComponentOrder.hasOffsetR()) {
+				array[j + arrayComponentOrder.getOffsetR()] = colorRGB.getAsByteR();
+			}
+			
+			if(arrayComponentOrder.hasOffsetG()) {
+				array[j + arrayComponentOrder.getOffsetG()] = colorRGB.getAsByteG();
+			}
+			
+			if(arrayComponentOrder.hasOffsetB()) {
+				array[j + arrayComponentOrder.getOffsetB()] = colorRGB.getAsByteB();
+			}
+			
+			if(arrayComponentOrder.hasOffsetA()) {
+				array[j + arrayComponentOrder.getOffsetA()] = (byte)(255);
+			}
 		}
 	}
 	

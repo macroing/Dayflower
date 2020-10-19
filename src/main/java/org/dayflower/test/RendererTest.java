@@ -21,10 +21,13 @@ package org.dayflower.test;
 import org.dayflower.display.FileDisplay;
 import org.dayflower.image.Image;
 import org.dayflower.renderer.AmbientOcclusionRenderer;
-import org.dayflower.renderer.PathTracer;
+import org.dayflower.renderer.PBRTPathTracingCPURenderer;
 import org.dayflower.renderer.RayCaster;
+import org.dayflower.renderer.RayitoPathTracingCPURenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
+import org.dayflower.renderer.SmallPTIPathTracingCPURenderer;
+import org.dayflower.renderer.SmallPTRPathTracingCPURenderer;
 
 public final class RendererTest {
 	private RendererTest() {
@@ -35,10 +38,10 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionRenderer();
-		doTestPathTracerPBRT();
+//		doTestPathTracerPBRT();
 //		doTestPathTracerRayito();
 //		doTestPathTracerSmallPTIterative();
-//		doTestPathTracerSmallPTRecursive();
+		doTestPathTracerSmallPTRecursive();
 //		doTestRayCaster();
 	}
 	
@@ -56,7 +59,7 @@ public final class RendererTest {
 	
 	static void doTestPathTracerPBRT() {
 		final
-		Renderer renderer = new PathTracer(PathTracer.TYPE_P_B_R_T);
+		Renderer renderer = new PBRTPathTracingCPURenderer();
 		renderer.setRendererConfiguration(new RendererConfiguration());
 		renderer.setScene(Scenes.newPBRTScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
@@ -66,7 +69,7 @@ public final class RendererTest {
 	
 	static void doTestPathTracerRayito() {
 		final
-		Renderer renderer = new PathTracer(PathTracer.TYPE_RAYITO);
+		Renderer renderer = new RayitoPathTracingCPURenderer();
 		renderer.setRendererConfiguration(new RendererConfiguration());
 		renderer.setScene(Scenes.newDefaultScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
@@ -76,7 +79,7 @@ public final class RendererTest {
 	
 	static void doTestPathTracerSmallPTIterative() {
 		final
-		Renderer renderer = new PathTracer(PathTracer.TYPE_SMALL_P_T_ITERATIVE);
+		Renderer renderer = new SmallPTIPathTracingCPURenderer();
 		renderer.setRendererConfiguration(new RendererConfiguration());
 		renderer.setScene(Scenes.newDefaultScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
@@ -86,7 +89,7 @@ public final class RendererTest {
 	
 	static void doTestPathTracerSmallPTRecursive() {
 		final
-		Renderer renderer = new PathTracer(PathTracer.TYPE_SMALL_P_T_RECURSIVE);
+		Renderer renderer = new SmallPTRPathTracingCPURenderer();
 		renderer.setRendererConfiguration(new RendererConfiguration());
 		renderer.setScene(Scenes.newDefaultScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));

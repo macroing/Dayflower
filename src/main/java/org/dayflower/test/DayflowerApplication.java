@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.dayflower.display.Display;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.AbstractCanvasApplication;
-import org.dayflower.renderer.PathTracer;
+import org.dayflower.renderer.PBRTPathTracingCPURenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.scene.Camera;
@@ -67,7 +67,7 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 		this.labelRenderPass = new Label("Render Pass: 0");
 		this.labelRenderTime = new Label("Render Time: 00:00:00");
 		this.labelRenderTimePerPass = new Label("Render Time Per Pass: 0");
-		this.renderer = new PathTracer(PathTracer.TYPE_P_B_R_T);
+		this.renderer = new PBRTPathTracingCPURenderer();
 		this.renderer.setDisplay(this);
 		this.renderer.setRendererConfiguration(new RendererConfiguration(20, 5, 1, 1, 1));
 		this.renderer.setScene(Scenes.newPBRTScene());

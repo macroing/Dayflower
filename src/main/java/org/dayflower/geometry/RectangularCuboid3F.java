@@ -115,7 +115,7 @@ public final class RectangularCuboid3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray) {
-		return intersection(ray, 0.0001F, Float.MAX_VALUE);
+		return intersection(ray, 0.0F, Float.MAX_VALUE);
 	}
 	
 	/**

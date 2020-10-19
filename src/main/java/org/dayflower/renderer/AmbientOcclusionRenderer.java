@@ -23,9 +23,11 @@ import static org.dayflower.util.Floats.normalize;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.saturate;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.dayflower.display.Display;
+import org.dayflower.display.FileDisplay;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
@@ -37,6 +39,7 @@ import org.dayflower.image.Image;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.background.ConstantBackground;
 
 /**
  * An {@code AmbientOcclusionRenderer} is a {@link Renderer} implementation that renders using Ambient Occlusion.
@@ -44,120 +47,40 @@ import org.dayflower.scene.Scene;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class AmbientOcclusionRenderer implements Renderer {
+public final class AmbientOcclusionRenderer extends AbstractCPURenderer {
 	private final float maximumDistance;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Constructs a new {@code AmbientOcclusionRenderer} instance.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new AmbientOcclusionRenderer(20.0F);
-	 * }
-	 * </pre>
-	 */
+//	TODO: Add Javadocs!
 	public AmbientOcclusionRenderer() {
-		this(20.0F);
+		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
 	}
 	
-	/**
-	 * Constructs a new {@code AmbientOcclusionRenderer} instance.
-	 * 
-	 * @param maximumDistance the maximum distance to use
-	 */
-	public AmbientOcclusionRenderer(final float maximumDistance) {
+//	TODO: Add Javadocs!
+	public AmbientOcclusionRenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
+		this(display, image, rendererConfiguration, scene, 20.0F);
+	}
+	
+//	TODO: Add Javadocs!
+	public AmbientOcclusionRenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene, final float maximumDistance) {
+		super(display, image, rendererConfiguration, scene);
+		
 		this.maximumDistance = maximumDistance;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * ambientOcclusionRenderer.render(display, image, scene, new RendererConfiguration());
-	 * }
-	 * </pre>
-	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image} or {@code scene} are {@code null}
-	 */
+//	TODO: Add Javadocs!
 	@Override
-	public void render(final Display display, final Image image, final Scene scene) {
-		render(display, image, scene, new RendererConfiguration());
-	}
-	
-	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance to use
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
-	 */
-	@Override
-	public void render(final Display display, final Image image, final Scene scene, final RendererConfiguration rendererConfiguration) {
-		final float maximumDistance = this.maximumDistance;
-		
-		final int renderPasses = rendererConfiguration.getRenderPasses();
-		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
-		final int resolutionX = image.getResolutionX();
-		final int resolutionY = image.getResolutionY();
-		
-		final Camera camera = scene.getCameraCopy();
-		
-		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
-			final long currentTimeMillis1 = System.currentTimeMillis();
-			
-			for(int y = 0; y < resolutionY; y++) {
-				for(int x = 0; x < resolutionX; x++) {
-					final float sampleX = random();
-					final float sampleY = random();
-					
-					final Optional<Ray3F> optionalRayWorldSpace = camera.createPrimaryRay(x, y, sampleX, sampleY);
-					
-					if(optionalRayWorldSpace.isPresent()) {
-						final Ray3F rayWorldSpace = optionalRayWorldSpace.get();
-						
-						final Color3F colorRGB = doGetRadiance(rayWorldSpace, scene, rendererConfiguration, maximumDistance);
-						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
-						
-						image.filmAddColorXYZ(x + sampleX, y + sampleY, colorXYZ);
-					}
-				}
-			}
-			
-			final long currentTimeMillis2 = System.currentTimeMillis();
-			final long elapsedTimeMillis = currentTimeMillis2 - currentTimeMillis1;
-			
-			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
-			
-			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
-				image.filmRender(0.5F);
-				
-				display.update(image);
-			}
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Color3F doGetRadiance(final Ray3F rayWorldSpace, final Scene scene, final RendererConfiguration rendererConfiguration, final float maximumDistance) {
+	protected Color3F radiance(final Ray3F ray) {
 		Color3F radiance = Color3F.BLACK;
 		
-		final Optional<Intersection> optionalIntersection = scene.intersection(rayWorldSpace);
+		final RendererConfiguration rendererConfiguration = getRendererConfiguration();
+		
+		final Scene scene = getScene();
+		
+		final Optional<Intersection> optionalIntersection = scene.intersection(ray);
 		
 		if(optionalIntersection.isPresent()) {
 			final Intersection intersection = optionalIntersection.get();
@@ -169,6 +92,8 @@ public final class AmbientOcclusionRenderer implements Renderer {
 			final Point3F surfaceIntersectionPointWorldSpace = surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint();
 			
 			final Vector3F surfaceNormalGWorldSpace = surfaceIntersectionWorldSpace.getSurfaceNormalG();
+			
+			final float maximumDistance = this.maximumDistance;
 			
 			final int samples = rendererConfiguration.getSamples();
 			

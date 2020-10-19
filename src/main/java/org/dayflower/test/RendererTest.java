@@ -24,7 +24,7 @@ import org.dayflower.renderer.AmbientOcclusionRenderer;
 import org.dayflower.renderer.PathTracer;
 import org.dayflower.renderer.RayCaster;
 import org.dayflower.renderer.Renderer;
-import org.dayflower.scene.Scene;
+import org.dayflower.renderer.RendererConfiguration;
 
 public final class RendererTest {
 	private RendererTest() {
@@ -45,33 +45,62 @@ public final class RendererTest {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	static void doTestAmbientOcclusionRenderer() {
-		doTestRenderer(new AmbientOcclusionRenderer(), Scenes.newDefaultScene());
+		final
+		Renderer renderer = new AmbientOcclusionRenderer();
+		renderer.setRendererConfiguration(new RendererConfiguration());
+		renderer.setScene(Scenes.newDefaultScene());
+		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
+		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.render();
 	}
 	
 	static void doTestPathTracerPBRT() {
-		doTestRenderer(new PathTracer(PathTracer.TYPE_P_B_R_T), Scenes.newPBRTScene());
+		final
+		Renderer renderer = new PathTracer(PathTracer.TYPE_P_B_R_T);
+		renderer.setRendererConfiguration(new RendererConfiguration());
+		renderer.setScene(Scenes.newPBRTScene());
+		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
+		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.render();
 	}
 	
 	static void doTestPathTracerRayito() {
-		doTestRenderer(new PathTracer(PathTracer.TYPE_RAYITO), Scenes.newDefaultScene());
+		final
+		Renderer renderer = new PathTracer(PathTracer.TYPE_RAYITO);
+		renderer.setRendererConfiguration(new RendererConfiguration());
+		renderer.setScene(Scenes.newDefaultScene());
+		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
+		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.render();
 	}
 	
 	static void doTestPathTracerSmallPTIterative() {
-		doTestRenderer(new PathTracer(PathTracer.TYPE_SMALL_P_T_ITERATIVE), Scenes.newDefaultScene());
+		final
+		Renderer renderer = new PathTracer(PathTracer.TYPE_SMALL_P_T_ITERATIVE);
+		renderer.setRendererConfiguration(new RendererConfiguration());
+		renderer.setScene(Scenes.newDefaultScene());
+		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
+		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.render();
 	}
 	
 	static void doTestPathTracerSmallPTRecursive() {
-		doTestRenderer(new PathTracer(PathTracer.TYPE_SMALL_P_T_RECURSIVE), Scenes.newDefaultScene());
+		final
+		Renderer renderer = new PathTracer(PathTracer.TYPE_SMALL_P_T_RECURSIVE);
+		renderer.setRendererConfiguration(new RendererConfiguration());
+		renderer.setScene(Scenes.newDefaultScene());
+		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
+		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.render();
 	}
 	
 	static void doTestRayCaster() {
-		doTestRenderer(new RayCaster(), Scenes.newBedroomScene());
-	}
-	
-	static void doTestRenderer(final Renderer renderer, final Scene scene) {
-		final int resolutionX = (int)(scene.getCamera().getResolutionX());
-		final int resolutionY = (int)(scene.getCamera().getResolutionY());
-		
-		renderer.render(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), scene.getName())), new Image(resolutionX, resolutionY), scene);
+		final
+		Renderer renderer = new RayCaster();
+		renderer.setRendererConfiguration(new RendererConfiguration());
+		renderer.setScene(Scenes.newBedroomScene());
+		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
+		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.render();
 	}
 }

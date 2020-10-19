@@ -21,6 +21,7 @@ package org.dayflower.renderer;
 import org.dayflower.display.Display;
 import org.dayflower.image.Image;
 import org.dayflower.scene.Scene;
+import org.dayflower.util.Timer;
 
 /**
  * A {@code Renderer} is a renderer that can render a {@link Scene} instance to an {@link Image} instance and display the result with a {@link Display} instance.
@@ -30,27 +31,117 @@ import org.dayflower.scene.Scene;
  */
 public interface Renderer {
 	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns the {@link Display} instance associated with this {@code Renderer} instance.
 	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image} or {@code scene} are {@code null}
+	 * @return the {@code Display} instance associated with this {@code Renderer} instance
 	 */
-	void render(final Display display, final Image image, final Scene scene);
+	Display getDisplay();
 	
 	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns the {@link Image} instance associated with this {@code Renderer} instance.
 	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance to use
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
+	 * @return the {@code Image} instance associated with this {@code Renderer} instance
 	 */
-	void render(final Display display, final Image image, final Scene scene, final RendererConfiguration rendererConfiguration);
+	Image getImage();
+	
+	/**
+	 * Returns the {@link RendererConfiguration} instance associated with this {@code Renderer} instance.
+	 * 
+	 * @return the {@code RendererConfiguration} instance associated with this {@code Renderer} instance
+	 */
+	RendererConfiguration getRendererConfiguration();
+	
+	/**
+	 * Returns the {@link Scene} instance associated with this {@code Renderer} instance.
+	 * 
+	 * @return the {@code Scene} instance associated with this {@code Renderer} instance
+	 */
+	Scene getScene();
+	
+	/**
+	 * Returns the {@link Timer} instance associated with this {@code Renderer} instance.
+	 * 
+	 * @return the {@code Timer} instance associated with this {@code Renderer} instance
+	 */
+	Timer getTimer();
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Renderer} instance is clearing the {@link Image} instance in the next {@link #render()} call, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Renderer} instance is clearing the {@code Image} instance in the next {@code  render()} call, {@code false} otherwise
+	 */
+	boolean isClearing();
+	
+	/**
+	 * Renders the associated {@link Scene} instance to the associated {@link Image} instance and, optionally, updates the associated {@link Display} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, rendering was performed, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, rendering was performed, {@code false} otherwise
+	 */
+	boolean render();
+	
+	/**
+	 * Returns the current render pass.
+	 * 
+	 * @return the current render pass
+	 */
+	int getRenderPass();
+	
+	/**
+	 * Returns the current render time in milliseconds.
+	 * 
+	 * @return the current render time in milliseconds
+	 */
+	long getRenderTime();
+	
+	/**
+	 * Call this method to clear the {@link Image} in the next {@link #render()} call.
+	 */
+	void clear();
+	
+	/**
+	 * Disposes of any resources created by this {@code Renderer} instance.
+	 */
+	void dispose();
+	
+	/**
+	 * Sets the {@link Display} instance associated with this {@code Renderer} instance to {@code display}.
+	 * <p>
+	 * If {@code display} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param display the {@code Display} instance associated with this {@code Renderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code display} is {@code null}
+	 */
+	void setDisplay(final Display display);
+	
+	/**
+	 * Sets the {@link Image} instance associated with this {@code Renderer} instance to {@code image}.
+	 * <p>
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image the {@code Image} instance associated with this {@code Renderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 */
+	void setImage(final Image image);
+	
+	/**
+	 * Sets the {@link RendererConfiguration} instance associated with this {@code Renderer} instance to {@code rendererConfiguration}.
+	 * <p>
+	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rendererConfiguration the {@code RendererConfiguration} instance associated with this {@code Renderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
+	 */
+	void setRendererConfiguration(final RendererConfiguration rendererConfiguration);
+	
+	/**
+	 * Sets the {@link Scene} instance associated with this {@code Renderer} instance to {@code scene}.
+	 * <p>
+	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param scene the {@code Scene} instance associated with this {@code Renderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
+	 */
+	void setScene(final Scene scene);
 }

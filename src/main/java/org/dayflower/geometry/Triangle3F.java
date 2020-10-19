@@ -320,7 +320,7 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public boolean intersects(final Ray3F ray) {
-		return intersects(ray, 0.0001F, Float.MAX_VALUE);
+		return intersects(ray, 0.0F, Float.MAX_VALUE);
 	}
 	
 	/**

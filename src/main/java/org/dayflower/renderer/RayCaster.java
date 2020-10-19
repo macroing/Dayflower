@@ -21,11 +21,12 @@ package org.dayflower.renderer;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.pow;
-import static org.dayflower.util.Floats.random;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.dayflower.display.Display;
+import org.dayflower.display.FileDisplay;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
@@ -37,6 +38,7 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.background.ConstantBackground;
 import org.dayflower.scene.light.PointLight;
 
 /**
@@ -45,90 +47,23 @@ import org.dayflower.scene.light.PointLight;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class RayCaster implements Renderer {
-	/**
-	 * Constructs a new {@code RayCaster} instance.
-	 */
+public final class RayCaster extends AbstractCPURenderer {
+//	TODO: Add Javadocs!
 	public RayCaster() {
-		
+		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+	}
+	
+//	TODO: Add Javadocs!
+	public RayCaster(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
+		super(display, image, rendererConfiguration, scene);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * rayCaster.render(display, image, scene, new RendererConfiguration(20, 5, 1000, 1, 10));
-	 * }
-	 * </pre>
-	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image} or {@code scene} are {@code null}
-	 */
+//	TODO: Add Javadocs!
 	@Override
-	public void render(final Display display, final Image image, final Scene scene) {
-		render(display, image, scene, new RendererConfiguration(20, 5, 1000, 1, 10));
-	}
-	
-	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance to use
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
-	 */
-	@Override
-	public void render(final Display display, final Image image, final Scene scene, final RendererConfiguration rendererConfiguration) {
-		final int renderPasses = rendererConfiguration.getRenderPasses();
-		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
-		final int resolutionX = image.getResolutionX();
-		final int resolutionY = image.getResolutionY();
-		
-		final Camera camera = scene.getCameraCopy();
-		
-		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
-			final long currentTimeMillis1 = System.currentTimeMillis();
-			
-			for(int y = 0; y < resolutionY; y++) {
-				for(int x = 0; x < resolutionX; x++) {
-					final float sampleX = random();
-					final float sampleY = random();
-					
-					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(x, y, sampleX, sampleY);
-					
-					if(optionalRay.isPresent()) {
-						final Ray3F ray = optionalRay.get();
-						
-						final Color3F colorRGB = doGetRadiance(ray, scene);
-						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
-						
-						image.filmAddColorXYZ(x + sampleX, y + sampleY, colorXYZ);
-					}
-				}
-			}
-			
-			final long currentTimeMillis2 = System.currentTimeMillis();
-			final long elapsedTimeMillis = currentTimeMillis2 - currentTimeMillis1;
-			
-			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
-			
-			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
-				image.filmRender(0.5F);
-				
-				display.update(image);
-			}
-		}
+	protected Color3F radiance(final Ray3F ray) {
+		return doGetRadiance(ray, getScene());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

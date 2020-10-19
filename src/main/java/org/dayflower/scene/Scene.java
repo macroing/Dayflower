@@ -188,7 +188,7 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray) {
-		return intersection(ray, 0.0001F, Float.MAX_VALUE);
+		return intersection(ray, 0.0F, Float.MAX_VALUE);
 	}
 	
 	/**
@@ -302,7 +302,7 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public boolean intersects(final Ray3F ray) {
-		return intersects(ray, 0.0001F, Float.MAX_VALUE);
+		return intersects(ray, 0.0F, Float.MAX_VALUE);
 	}
 	
 	/**
@@ -368,7 +368,7 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public float intersectionT(final Ray3F ray) {
-		return intersectionT(ray, 0.0001F, Float.MAX_VALUE);
+		return intersectionT(ray, 0.0F, Float.MAX_VALUE);
 	}
 	
 	/**

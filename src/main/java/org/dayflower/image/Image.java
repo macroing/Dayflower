@@ -1634,6 +1634,20 @@ public final class Image {
 	
 	/**
 	 * Renders the film to the image.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.filmRender(1.0F);
+	 * }
+	 * </pre>
+	 */
+	public void filmRender() {
+		filmRender(1.0F);
+	}
+	
+	/**
+	 * Renders the film to the image.
 	 * 
 	 * @param splatScale the splat scale to use
 	 */

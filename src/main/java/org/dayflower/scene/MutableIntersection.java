@@ -44,7 +44,7 @@ public final class MutableIntersection {
 	/**
 	 * The default maximum parametric {@code t} value.
 	 */
-	public static final float T_MINIMUM = 0.0001F;
+	public static final float T_MINIMUM = 0.0F;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

@@ -25,10 +25,12 @@ import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.sqrt;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
 import org.dayflower.display.Display;
+import org.dayflower.display.FileDisplay;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
@@ -47,6 +49,7 @@ import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.background.ConstantBackground;
 import org.dayflower.scene.background.PerezBackground;
 import org.dayflower.scene.light.PrimitiveLight;
 import org.dayflower.scene.pbrt.BSDF;
@@ -70,7 +73,7 @@ import org.dayflower.scene.rayito.RefractionMaterial;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PathTracer implements Renderer {
+public final class PathTracer extends AbstractCPURenderer {
 	/**
 	 * The type of PBRT.
 	 */
@@ -97,105 +100,34 @@ public final class PathTracer implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Constructs a new {@code PathTracer} instance.
-	 */
+//	TODO: Add Javadocs!
 	public PathTracer() {
-		this(TYPE_P_B_R_T);
+		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
 	}
 	
-	/**
-	 * Constructs a new {@code PathTracer} instance.
-	 * 
-	 * @param type the type
-	 */
+//	TODO: Add Javadocs!
 	public PathTracer(final int type) {
+		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"), type);
+	}
+	
+//	TODO: Add Javadocs!
+	public PathTracer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
+		this(display, image, rendererConfiguration, scene, TYPE_P_B_R_T);
+	}
+	
+//	TODO: Add Javadocs!
+	public PathTracer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene, final int type) {
+		super(display, image, rendererConfiguration, scene);
+		
 		this.type = type;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pathTracer.render(display, image, scene, new RendererConfiguration());
-	 * }
-	 * </pre>
-	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image} or {@code scene} are {@code null}
-	 */
+//	TODO: Add Javadocs!
 	@Override
-	public void render(final Display display, final Image image, final Scene scene) {
-		render(display, image, scene, new RendererConfiguration());
-	}
-	
-	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance to use
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
-	 */
-	@Override
-	public void render(final Display display, final Image image, final Scene scene, final RendererConfiguration rendererConfiguration) {
-		final int renderPasses = rendererConfiguration.getRenderPasses();
-		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
-		final int resolutionX = image.getResolutionX();
-		final int resolutionY = image.getResolutionY();
-		final int type = this.type;
-		
-		final Camera camera = scene.getCameraCopy();
-		
-		final List<Light> lights = scene.getLights();
-		
-		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
-			final long currentTimeMillis1 = System.currentTimeMillis();
-			
-			for(int y = 0; y < resolutionY; y++) {
-				for(int x = 0; x < resolutionX; x++) {
-					final float sampleX = random();
-					final float sampleY = random();
-					
-					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(x, y, sampleX, sampleY);
-					
-					if(optionalRay.isPresent()) {
-						final Ray3F ray = optionalRay.get();
-						
-						final Color3F colorRGB = doGetRadiance(lights, ray, scene, rendererConfiguration, type);
-						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
-						
-						if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
-							image.filmAddColorXYZ(x + sampleX, y + sampleY, colorXYZ);
-						}
-					}
-				}
-				
-//				System.out.printf("%d/%d%n", Integer.valueOf((y + 1) * resolutionX), Integer.valueOf(resolutionX * resolutionY));
-			}
-			
-			final long currentTimeMillis2 = System.currentTimeMillis();
-			final long elapsedTimeMillis = currentTimeMillis2 - currentTimeMillis1;
-			
-			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
-			
-			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
-				image.filmRender(0.5F);
-				
-				display.update(image);
-			}
-		}
+	protected Color3F radiance(final Ray3F ray) {
+		return doGetRadiance(getScene().getLights(), ray, getScene(), getRendererConfiguration(), this.type);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -730,7 +662,7 @@ public final class PathTracer implements Renderer {
 				if(currentBounce >= minimumBounceRussianRoulette) {
 					final float probability = albedo.maximum();
 					
-					if(random() > probability) {
+					if(random() >= probability) {
 						break;
 					}
 					
@@ -742,27 +674,39 @@ public final class PathTracer implements Renderer {
 				if(material instanceof AshikhminShirleyMaterial) {
 					final Vector3F s = SampleGeneratorF.sampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
 					final Vector3F w = Vector3F.normalize(Vector3F.reflection(currentDirection, surfaceNormal, true));
-					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? new Vector3F(w.getZ(), 0.0F, -w.getX()) : new Vector3F(0.0F, -w.getZ(), w.getY()), w));
-					final Vector3F v = Vector3F.crossProduct(w, u);
+					final Vector3F v = Vector3F.computeV(w);
+					final Vector3F u = Vector3F.crossProduct(v, w);
 					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 					
-					currentRay = surfaceIntersection.createRay(d);
+//					final Vector3F s = SampleGeneratorF.sampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
+//					final Vector3F w = Vector3F.normalize(Vector3F.reflection(currentDirection, surfaceNormal, true));
+//					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? new Vector3F(w.getZ(), 0.0F, -w.getX()) : new Vector3F(0.0F, -w.getZ(), w.getY()), w));
+//					final Vector3F v = Vector3F.crossProduct(w, u);
+//					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
+					
+					currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), d);//surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
 				} else if(material instanceof LambertianMaterial || material instanceof OrenNayarMaterial) {
 					final Vector3F s = SampleGeneratorF.sampleHemisphereCosineDistribution2();
 					final Vector3F w = surfaceNormalCorrectlyOriented;
-					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? new Vector3F(w.getZ(), 0.0F, -w.getX()) : new Vector3F(0.0F, -w.getZ(), w.getY()), w));
+					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? Vector3F.y() : Vector3F.x(), w));
 					final Vector3F v = Vector3F.crossProduct(w, u);
 					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 					
-					currentRay = surfaceIntersection.createRay(d);
+//					final Vector3F s = SampleGeneratorF.sampleHemisphereCosineDistribution2();
+//					final Vector3F w = surfaceNormalCorrectlyOriented;
+//					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? new Vector3F(w.getZ(), 0.0F, -w.getX()) : new Vector3F(0.0F, -w.getZ(), w.getY()), w));
+//					final Vector3F v = Vector3F.crossProduct(w, u);
+//					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
+					
+					currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), d);//surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
 				} else if(material instanceof ReflectionMaterial) {
 					final Vector3F d = Vector3F.reflection(currentDirection, surfaceNormal, true);
 					
-					currentRay = surfaceIntersection.createRay(d);
+					currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), d);//surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
 				} else if(material instanceof RefractionMaterial) {
@@ -778,7 +722,7 @@ public final class PathTracer implements Renderer {
 					final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 					
 					if(cosTheta2Squared < 0.0F) {
-						currentRay = surfaceIntersection.createRay(reflectionDirection);
+						currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), reflectionDirection);//surfaceIntersection.createRay(reflectionDirection);
 						
 						throughput = Color3F.multiply(throughput, albedo);
 					} else {
@@ -795,12 +739,12 @@ public final class PathTracer implements Renderer {
 						final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 						
 						if(random() < probabilityRussianRoulette) {
-							currentRay = surfaceIntersection.createRay(reflectionDirection);
+							currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), reflectionDirection);//surfaceIntersection.createRay(reflectionDirection);
 							
 							throughput = Color3F.multiply(throughput, albedo);
 							throughput = Color3F.multiply(throughput, probabilityRussianRouletteReflection);
 						} else {
-							currentRay = surfaceIntersection.createRay(transmissionDirection);
+							currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), transmissionDirection);//surfaceIntersection.createRay(transmissionDirection);
 							
 							throughput = Color3F.multiply(throughput, albedo);
 							throughput = Color3F.multiply(throughput, probabilityRussianRouletteTransmission);

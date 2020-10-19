@@ -18,9 +18,16 @@
  */
 package org.dayflower.renderer;
 
+import java.lang.reflect.Field;
+
 import org.dayflower.display.Display;
+import org.dayflower.display.FileDisplay;
+import org.dayflower.geometry.Ray3F;
+import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.background.ConstantBackground;
 
 /**
  * A {@code RayTracer} is a {@link Renderer} implementation that renders using Ray Tracing.
@@ -28,51 +35,22 @@ import org.dayflower.scene.Scene;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class RayTracer implements Renderer {
-	/**
-	 * Constructs a new {@code RayTracer} instance.
-	 */
+public final class RayTracer extends AbstractCPURenderer {
+//	TODO: Add Javadocs!
 	public RayTracer() {
-		
+		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+	}
+	
+//	TODO: Add Javadocs!
+	public RayTracer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
+		super(display, image, rendererConfiguration, scene);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * rayTracer.render(display, image, scene, new RendererConfiguration());
-	 * }
-	 * </pre>
-	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image} or {@code scene} are {@code null}
-	 */
+//	TODO: Add Javadocs!
 	@Override
-	public void render(final Display display, final Image image, final Scene scene) {
-		render(display, image, scene, new RendererConfiguration());
-	}
-	
-	/**
-	 * Renders {@code scene} to {@code image} and displays it using {@code display}.
-	 * <p>
-	 * If either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param display the {@link Display} instance to display with
-	 * @param image the {@link Image} instance to render to
-	 * @param scene the {@link Scene} instance to render
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance to use
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code scene} or {@code rendererConfiguration} are {@code null}
-	 */
-	@Override
-	public void render(final Display display, final Image image, final Scene scene, final RendererConfiguration rendererConfiguration) {
-//		TODO: Implement!
+	protected Color3F radiance(final Ray3F ray) {
+		return Color3F.BLACK;
 	}
 }

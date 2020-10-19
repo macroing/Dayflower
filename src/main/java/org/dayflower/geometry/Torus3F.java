@@ -410,7 +410,7 @@ public final class Torus3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray) {
-		return intersectionT(ray, 0.0001F, Float.MAX_VALUE);
+		return intersectionT(ray, 0.0F, Float.MAX_VALUE);
 	}
 	
 	/**

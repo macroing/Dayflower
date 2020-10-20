@@ -130,23 +130,23 @@ public final class UberMaterial implements PBRTMaterial {
 		final List<BXDF> bXDFs = new ArrayList<>();
 		
 		if(!colorTransmittanceScale.isBlack()) {
-			bXDFs.add(new SpecularTransmissionBTDF(colorTransmittanceScale, transportMode, 1.0F, 1.0F));
+			bXDFs.add(new SpecularBTDF(colorTransmittanceScale, transportMode, 1.0F, 1.0F));
 		}
 		
 		if(!colorKD.isBlack()) {
-			bXDFs.add(new LambertianReflectionBRDF(colorKD));
+			bXDFs.add(new LambertianBRDF(colorKD));
 		}
 		
 		if(!colorKS.isBlack()) {
-			bXDFs.add(new TorranceSparrowReflectionBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV)));
+			bXDFs.add(new TorranceSparrowBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV)));
 		}
 		
 		if(!colorKR.isBlack()) {
-			bXDFs.add(new SpecularReflectionBRDF(colorKR, new DielectricFresnel(1.0F, eta)));
+			bXDFs.add(new SpecularBRDF(colorKR, new DielectricFresnel(1.0F, eta)));
 		}
 		
 		if(!colorKT.isBlack()) {
-			bXDFs.add(new SpecularTransmissionBTDF(colorKT, transportMode, 1.0F, eta));
+			bXDFs.add(new SpecularBTDF(colorKT, transportMode, 1.0F, eta));
 		}
 		
 		return Optional.of(new BSDF(intersection, bXDFs, colorTransmittanceScale.isBlack() ? eta : 1.0F));

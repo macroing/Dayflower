@@ -116,11 +116,11 @@ public final class GlassMaterial implements PBRTMaterial {
 			if(!colorKReflection.isBlack()) {
 				final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 				
-				bXDFs.add(new SpecularReflectionBRDF(colorKReflection, fresnel));
+				bXDFs.add(new SpecularBRDF(colorKReflection, fresnel));
 			}
 			
 			if(!colorKTransmission.isBlack()) {
-				bXDFs.add(new SpecularTransmissionBTDF(colorKTransmission, transportMode, 1.0F, eta));
+				bXDFs.add(new SpecularBTDF(colorKTransmission, transportMode, 1.0F, eta));
 			}
 			
 			return Optional.of(new BSDF(intersection, bXDFs, eta));
@@ -133,11 +133,11 @@ public final class GlassMaterial implements PBRTMaterial {
 		if(!colorKReflection.isBlack()) {
 			final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 			
-			bXDFs.add(new TorranceSparrowReflectionBRDF(colorKReflection, fresnel, microfacetDistribution));
+			bXDFs.add(new TorranceSparrowBRDF(colorKReflection, fresnel, microfacetDistribution));
 		}
 		
 		if(!colorKTransmission.isBlack()) {
-			bXDFs.add(new TorranceSparrowTransmissionBTDF(colorKTransmission, microfacetDistribution, transportMode, 1.0F, eta));
+			bXDFs.add(new TorranceSparrowBTDF(colorKTransmission, microfacetDistribution, transportMode, 1.0F, eta));
 		}
 		
 		return Optional.of(new BSDF(intersection, bXDFs, eta));

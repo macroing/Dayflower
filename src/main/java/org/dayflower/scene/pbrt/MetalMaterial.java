@@ -96,7 +96,7 @@ public final class MetalMaterial implements PBRTMaterial {
 		
 		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
 		
-		return Optional.of(new BSDF(intersection, Arrays.asList(new TorranceSparrowReflectionBRDF(Color3F.WHITE, fresnel, microfacetDistribution))));
+		return Optional.of(new BSDF(intersection, Arrays.asList(new TorranceSparrowBRDF(Color3F.WHITE, fresnel, microfacetDistribution))));
 	}
 	
 	/**

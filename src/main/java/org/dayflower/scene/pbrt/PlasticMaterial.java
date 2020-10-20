@@ -102,7 +102,7 @@ public final class PlasticMaterial implements PBRTMaterial {
 		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorDiffuse.isBlack()) {
-			bXDFs.add(new LambertianReflectionBRDF(colorDiffuse));
+			bXDFs.add(new LambertianBRDF(colorDiffuse));
 		}
 		
 		if(!colorSpecular.isBlack()) {
@@ -114,7 +114,7 @@ public final class PlasticMaterial implements PBRTMaterial {
 			
 			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughness, roughness);
 			
-			bXDFs.add(new TorranceSparrowReflectionBRDF(colorSpecular, fresnel, microfacetDistribution));
+			bXDFs.add(new TorranceSparrowBRDF(colorSpecular, fresnel, microfacetDistribution));
 		}
 		
 		if(bXDFs.size() > 0) {

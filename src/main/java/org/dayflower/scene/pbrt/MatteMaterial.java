@@ -88,7 +88,7 @@ public final class MatteMaterial implements PBRTMaterial {
 		}
 		
 		if(equal(angle.getDegrees(), 0.0F)) {
-			return Optional.of(new BSDF(intersection, Arrays.asList(new LambertianReflectionBRDF(colorDiffuse))));
+			return Optional.of(new BSDF(intersection, Arrays.asList(new LambertianBRDF(colorDiffuse))));
 		}
 		
 		return Optional.of(new BSDF(intersection, Arrays.asList(new OrenNayarBRDF(angle, colorDiffuse))));

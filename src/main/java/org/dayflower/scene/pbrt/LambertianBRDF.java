@@ -31,27 +31,27 @@ import org.dayflower.image.Color3F;
 import org.dayflower.util.Lists;
 
 /**
- * A {@code LambertianReflectionBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Lambertian reflection.
+ * A {@code LambertianBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Lambertian reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LambertianReflectionBRDF extends BXDF {
+public final class LambertianBRDF extends BXDF {
 	private final Color3F reflectanceScale;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code LambertianReflectionBRDF} instance.
+	 * Constructs a new {@code LambertianBRDF} instance.
 	 * <p>
 	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public LambertianReflectionBRDF(final Color3F reflectanceScale) {
+	public LambertianBRDF(final Color3F reflectanceScale) {
 		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
@@ -166,30 +166,30 @@ public final class LambertianReflectionBRDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code LambertianReflectionBRDF} instance.
+	 * Returns a {@code String} representation of this {@code LambertianBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code LambertianReflectionBRDF} instance
+	 * @return a {@code String} representation of this {@code LambertianBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LambertianReflectionBRDF(%s)", this.reflectanceScale);
+		return String.format("new LambertianBRDF(%s)", this.reflectanceScale);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LambertianReflectionBRDF} instance for equality.
+	 * Compares {@code object} to this {@code LambertianBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianReflectionBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LambertianReflectionBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianReflectionBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LambertianBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LambertianReflectionBRDF)) {
+		} else if(!(object instanceof LambertianBRDF)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, LambertianReflectionBRDF.class.cast(object).reflectanceScale)) {
+		} else if(!Objects.equals(this.reflectanceScale, LambertianBRDF.class.cast(object).reflectanceScale)) {
 			return false;
 		} else {
 			return true;
@@ -221,9 +221,9 @@ public final class LambertianReflectionBRDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LambertianReflectionBRDF} instance.
+	 * Returns a hash code for this {@code LambertianBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code LambertianReflectionBRDF} instance
+	 * @return a hash code for this {@code LambertianBRDF} instance
 	 */
 	@Override
 	public int hashCode() {

@@ -31,27 +31,27 @@ import org.dayflower.image.Color3F;
 import org.dayflower.util.Lists;
 
 /**
- * A {@code LambertianTransmissionBTDF} is an implementation of {@link BXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for Lambertian transmission.
+ * A {@code LambertianBTDF} is an implementation of {@link BXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for Lambertian transmission.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LambertianTransmissionBTDF extends BXDF {
+public final class LambertianBTDF extends BXDF {
 	private final Color3F transmittanceScale;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code LambertianTransmissionBTDF} instance.
+	 * Constructs a new {@code LambertianBTDF} instance.
 	 * <p>
 	 * If {@code transmittanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param transmittanceScale a {@link Color3F} instance that represents the transmittance scale
 	 * @throws NullPointerException thrown if, and only if, {@code transmittanceScale} is {@code null}
 	 */
-	public LambertianTransmissionBTDF(final Color3F transmittanceScale) {
+	public LambertianBTDF(final Color3F transmittanceScale) {
 		super(BXDFType.DIFFUSE_TRANSMISSION);
 		
 		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
@@ -166,30 +166,30 @@ public final class LambertianTransmissionBTDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code LambertianTransmissionBTDF} instance.
+	 * Returns a {@code String} representation of this {@code LambertianBTDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code LambertianTransmissionBTDF} instance
+	 * @return a {@code String} representation of this {@code LambertianBTDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LambertianTransmissionBTDF(%s)", this.transmittanceScale);
+		return String.format("new LambertianBTDF(%s)", this.transmittanceScale);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LambertianTransmissionBTDF} instance for equality.
+	 * Compares {@code object} to this {@code LambertianBTDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianTransmissionBTDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianBTDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LambertianTransmissionBTDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianTransmissionBTDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LambertianBTDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianBTDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LambertianTransmissionBTDF)) {
+		} else if(!(object instanceof LambertianBTDF)) {
 			return false;
-		} else if(!Objects.equals(this.transmittanceScale, LambertianTransmissionBTDF.class.cast(object).transmittanceScale)) {
+		} else if(!Objects.equals(this.transmittanceScale, LambertianBTDF.class.cast(object).transmittanceScale)) {
 			return false;
 		} else {
 			return true;
@@ -221,9 +221,9 @@ public final class LambertianTransmissionBTDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LambertianTransmissionBTDF} instance.
+	 * Returns a hash code for this {@code LambertianBTDF} instance.
 	 * 
-	 * @return a hash code for this {@code LambertianTransmissionBTDF} instance
+	 * @return a hash code for this {@code LambertianBTDF} instance
 	 */
 	@Override
 	public int hashCode() {

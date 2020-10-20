@@ -23,7 +23,6 @@ import static org.dayflower.util.Floats.fresnelDielectricSchlick;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.sqrt;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.dayflower.display.Display;
@@ -54,19 +53,46 @@ import org.dayflower.scene.rayito.RefractionMaterial;
  * @author J&#246;rgen Lundgren
  */
 public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SmallPTRPathTracingCPURenderer} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SmallPTRPathTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+	 * }
+	 * </pre>
+	 */
 	public SmallPTRPathTracingCPURenderer() {
 		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SmallPTRPathTracingCPURenderer} instance.
+	 * <p>
+	 * If either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param display the {@link Display} instance associated with this {@code SmallPTRPathTracingCPURenderer} instance
+	 * @param image the {@link Image} instance associated with this {@code SmallPTRPathTracingCPURenderer} instance
+	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code SmallPTRPathTracingCPURenderer} instance
+	 * @param scene the {@link Scene} instance associated with this {@code SmallPTRPathTracingCPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
+	 */
 	public SmallPTRPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
 		super(display, image, rendererConfiguration, scene);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray}
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	@Override
 	protected Color3F radiance(final Ray3F ray) {
 		return doRadiance(ray, 1);

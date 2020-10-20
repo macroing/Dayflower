@@ -22,7 +22,6 @@ import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.pow;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.dayflower.display.Display;
@@ -42,25 +41,52 @@ import org.dayflower.scene.background.ConstantBackground;
 import org.dayflower.scene.light.PointLight;
 
 /**
- * A {@code RayCaster} is a {@link Renderer} implementation that renders using Ray Casting.
+ * A {@code RayCastingCPURenderer} is a {@link Renderer} implementation that renders using Ray Casting.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class RayCaster extends AbstractCPURenderer {
-//	TODO: Add Javadocs!
-	public RayCaster() {
+public final class RayCastingCPURenderer extends AbstractCPURenderer {
+	/**
+	 * Constructs a new {@code RayCastingCPURenderer} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RayCastingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+	 * }
+	 * </pre>
+	 */
+	public RayCastingCPURenderer() {
 		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
 	}
 	
-//	TODO: Add Javadocs!
-	public RayCaster(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
+	/**
+	 * Constructs a new {@code RayCastingCPURenderer} instance.
+	 * <p>
+	 * If either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param display the {@link Display} instance associated with this {@code RayCastingCPURenderer} instance
+	 * @param image the {@link Image} instance associated with this {@code RayCastingCPURenderer} instance
+	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code RayCastingCPURenderer} instance
+	 * @param scene the {@link Scene} instance associated with this {@code RayCastingCPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
+	 */
+	public RayCastingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
 		super(display, image, rendererConfiguration, scene);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray}
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	@Override
 	protected Color3F radiance(final Ray3F ray) {
 		return doGetRadiance(ray, getScene());

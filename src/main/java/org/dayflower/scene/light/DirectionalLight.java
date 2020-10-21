@@ -194,11 +194,10 @@ public final class DirectionalLight implements Light {
 		final Point3F point = Point3F.add(surfaceIntersectionPoint, this.direction, 2.0F * this.radius);
 		
 		final Vector3F incoming = this.direction;
-		final Vector3F surfaceNormal = new Vector3F();
 		
 		final float probabilityDensityFunctionValue = 1.0F;
 		
-		return Optional.of(new LightRadianceIncomingResult(result, point, incoming, surfaceNormal, probabilityDensityFunctionValue));
+		return Optional.of(new LightRadianceIncomingResult(result, point, incoming, probabilityDensityFunctionValue));
 	}
 	
 	/**

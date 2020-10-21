@@ -304,14 +304,13 @@ public final class SpotLight implements Light {
 		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 		
 		final Vector3F incoming = Vector3F.directionNormalized(surfaceIntersectionPoint, position);
-		final Vector3F surfaceNormal = new Vector3F();
 		
 		final Color3F intensity = this.intensity;
 		final Color3F result = Color3F.divide(Color3F.multiply(intensity, doComputeFalloff(Vector3F.negate(incoming))), Point3F.distanceSquared(surfaceIntersectionPoint, position));
 		
 		final float probabilityDensityFunctionValue = 1.0F;
 		
-		return Optional.of(new LightRadianceIncomingResult(result, position, incoming, surfaceNormal, probabilityDensityFunctionValue));
+		return Optional.of(new LightRadianceIncomingResult(result, position, incoming, probabilityDensityFunctionValue));
 	}
 	
 	/**

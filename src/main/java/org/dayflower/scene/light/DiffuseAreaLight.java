@@ -240,11 +240,10 @@ public final class DiffuseAreaLight extends AreaLight {
 				final Point3F point = pointWorldSpace;
 				
 				final Vector3F incoming = Vector3F.directionNormalized(referencePointWorldSpace, pointWorldSpace);
-				final Vector3F surfaceNormal = surfaceNormalWorldSpace;
 				
 				final float probabilityDensityFunctionValue = surfaceSampleWorldSpace.getProbabilityDensityFunctionValue();
 				
-				return Optional.of(new LightRadianceIncomingResult(result, point, incoming, surfaceNormal, probabilityDensityFunctionValue));
+				return Optional.of(new LightRadianceIncomingResult(result, point, incoming, probabilityDensityFunctionValue));
 			}
 		}
 		

@@ -20,14 +20,20 @@ package org.dayflower.scene;
 
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code LightRadianceEmittedResult} is returned by a {@link Light} instance and contains the computed properties.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class LightRadianceEmittedResult {
 	private final Color3F result;
 	private final Ray3F ray;
@@ -37,7 +43,18 @@ public final class LightRadianceEmittedResult {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code LightRadianceEmittedResult} instance.
+	 * <p>
+	 * If either {@code result}, {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param result a {@link Color3F} instance with the result associated with this {@code LightRadianceEmittedResult} instance
+	 * @param ray the {@link Ray3F} instance associated with this {@code LightRadianceEmittedResult} instance
+	 * @param normal a {@link Vector3F} instance with the normal associated with this {@code LightRadianceEmittedResult} instance
+	 * @param probabilityDensityFunctionValueDirection the probability density function (PDF) value for the direction
+	 * @param probabilityDensityFunctionValuePosition the probability density function (PDF) value for the position
+	 * @throws NullPointerException thrown if, and only if, either {@code result}, {@code ray} or {@code normal} are {@code null}
+	 */
 	public LightRadianceEmittedResult(final Color3F result, final Ray3F ray, final Vector3F normal, final float probabilityDensityFunctionValueDirection, final float probabilityDensityFunctionValuePosition) {
 		this.result = Objects.requireNonNull(result, "result == null");
 		this.ray = Objects.requireNonNull(ray, "ray == null");

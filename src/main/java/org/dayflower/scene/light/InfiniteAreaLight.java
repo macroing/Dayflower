@@ -49,7 +49,17 @@ public final class InfiniteAreaLight extends AreaLight {
 		return Color3F.BLACK;//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Le(const RayDifferential &r)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
 	@Override
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
@@ -57,13 +67,32 @@ public final class InfiniteAreaLight extends AreaLight {
 		return Color3F.BLACK;//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the power of this {@code InfiniteAreaLight} instance.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @return a {@code Color3F} instance with the power of this {@code InfiniteAreaLight} instance
+	 */
 	@Override
 	public Color3F power() {
 		return Color3F.BLACK;//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density functions (PDFs) for emitted radiance.
+	 * <p>
+	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the evaluation.
+	 * <p>
+	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Pdf_Le(const Ray &ray, const Normal3f &nLight, Float *pdfPos, Float *pdfDir)} in PBRT.
+	 * 
+	 * @param ray a {@link Ray3F} instance
+	 * @param normal a {@link Vector3F} instance
+	 * @return an optional {@code LightRadianceEmittedResult} with the result of the evaluation
+	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
+	 */
 	@Override
 	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
 		Objects.requireNonNull(ray, "ray == null");
@@ -72,7 +101,20 @@ public final class InfiniteAreaLight extends AreaLight {
 		return Optional.empty();//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples the emitted radiance.
+	 * <p>
+	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the sampling.
+	 * <p>
+	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param sampleA a {@link Point2F} instance
+	 * @param sampleB a {@code Point2F} instance
+	 * @return an optional {@code LightRadianceEmittedResult} with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
+	 */
 	@Override
 	public Optional<LightRadianceEmittedResult> sampleRadianceEmitted(final Point2F sampleA, final Point2F sampleB) {
 		Objects.requireNonNull(sampleA, "sampleA == null");
@@ -81,7 +123,20 @@ public final class InfiniteAreaLight extends AreaLight {
 		return Optional.empty();//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples the incoming radiance.
+	 * <p>
+	 * Returns an optional {@link LightRadianceIncomingResult} with the result of the sampling.
+	 * <p>
+	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param sample a {@link Point2F} instance
+	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
+	 */
 	@Override
 	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -90,25 +145,55 @@ public final class InfiniteAreaLight extends AreaLight {
 		return Optional.empty();//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code InfiniteAreaLight} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code InfiniteAreaLight} instance
+	 */
 	@Override
 	public String toString() {
 		return "";//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code InfiniteAreaLight} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code InfiniteAreaLight}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code InfiniteAreaLight} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code InfiniteAreaLight}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		return false;//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, this {@link Light} instance uses a delta distribution, {@code false} otherwise.
+	 * <p>
+	 * This {@code InfiniteAreaLight} class does not use a delta distribution, so this method will return {@code false}.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
+	 */
 	@Override
 	public boolean isDeltaDistribution() {
 		return false;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density function (PDF) for incoming radiance.
+	 * <p>
+	 * Returns a {@code float} with the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code Light} method {@code Pdf_Li(const Interaction &ref, const Vector3f &wi)} that returns a {@code Float} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @return a {@code float} with the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
+	 */
 	@Override
 	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -117,7 +202,11 @@ public final class InfiniteAreaLight extends AreaLight {
 		return 0.0F;//TODO: Implement!
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code InfiniteAreaLight} instance.
+	 * 
+	 * @return a hash code for this {@code InfiniteAreaLight} instance
+	 */
 	@Override
 	public int hashCode() {
 		return 0;//TODO: Implement!

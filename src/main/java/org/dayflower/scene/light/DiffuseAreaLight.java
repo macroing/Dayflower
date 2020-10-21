@@ -120,9 +120,9 @@ public final class DiffuseAreaLight extends AreaLight {
 		/*
 		Interaction it(ray.o, n, Vector3f(), Vector3f(n), ray.time, mediumInterface);
 		
-		 *pdfPos = shape->Pdf(it);
-		 *pdfDir = twoSided ? (.5 * CosineHemispherePdf(AbsDot(n, ray.d))) : CosineHemispherePdf(Dot(n, ray.d));
-		 */
+		*pdfPos = shape->Pdf(it);
+		*pdfDir = twoSided ? (.5 * CosineHemispherePdf(AbsDot(n, ray.d))) : CosineHemispherePdf(Dot(n, ray.d));
+		*/
 		
 		return Optional.empty();//TODO: Implement!
 	}
@@ -152,7 +152,7 @@ public final class DiffuseAreaLight extends AreaLight {
 		
 		pShape.mediumInterface = mediumInterface;
 		
-		 *nLight = pShape.n;
+		*nLight = pShape.n;
 		
 //		Sample a cosine-weighted outgoing direction _w_ for area light
 		Vector3f w;
@@ -173,7 +173,7 @@ public final class DiffuseAreaLight extends AreaLight {
 				w.z *= -1;
 			}
 			
-		 *pdfDir = 0.5f * CosineHemispherePdf(std::abs(w.z));
+			*pdfDir = 0.5f * CosineHemispherePdf(std::abs(w.z));
 		} else {
 			w = CosineSampleHemisphere(u2);
 			
@@ -186,10 +186,10 @@ public final class DiffuseAreaLight extends AreaLight {
 		
 		w = w.x * v1 + w.y * v2 + w.z * n;
 		
-		 *ray = pShape.SpawnRay(w);
+		*ray = pShape.SpawnRay(w);
 		
 		return L(pShape, w);
-		 */
+		*/
 		
 		return Optional.empty();//TODO: Implement!
 	}

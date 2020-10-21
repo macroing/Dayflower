@@ -18,29 +18,15 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.minOrNaN;
-import static org.dayflower.util.Floats.random;
-import static org.dayflower.util.Ints.min;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.geometry.Point2F;
-import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SampleGeneratorF;
-import org.dayflower.geometry.SurfaceIntersection3F;
-import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
-import org.dayflower.scene.pbrt.BSDF;
-import org.dayflower.scene.pbrt.BSDFDistributionFunctionResult;
-import org.dayflower.scene.pbrt.BXDFType;
 
 /**
  * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.
@@ -108,50 +94,17 @@ public final class Scene {
 		}
 	}
 	
-//	TODO: Add Javadocs!
-	public Color3F lightEstimateDirect(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final boolean isSpecular) {
-		Objects.requireNonNull(bSDF, "bSDF == null");
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(light, "light == null");
-		Objects.requireNonNull(sampleA, "sampleA == null");
-		Objects.requireNonNull(sampleB, "sampleB == null");
-		
-		if(light.isDeltaDistribution()) {
-			return doLightEstimateDirectDeltaDistribution(bSDF, intersection, light, sampleA, sampleB, isSpecular);
-		}
-		
-		return doLightEstimateDirect(bSDF, intersection, light, sampleA, sampleB, isSpecular);
-	}
-	
-//	TODO: Add Javadocs!
-	public Color3F lightSampleAllUniformDistribution(final BSDF bSDF, final Intersection intersection) {
-		Objects.requireNonNull(bSDF, "bSDF == null");
-		Objects.requireNonNull(intersection, "intersection == null");
-		
-		return new Color3F(0.25F);
-	}
-	
-//	TODO: Add Javadocs!
-	public Color3F lightSampleOneUniformDistribution(final BSDF bSDF, final Intersection intersection) {
-		Objects.requireNonNull(bSDF, "bSDF == null");
-		Objects.requireNonNull(intersection, "intersection == null");
-		
-		final int lightCount = this.lights.size();
-		
-		if(lightCount == 0) {
-			return Color3F.BLACK;
-		}
-		
-		final int lightIndex = min((int)(random() * lightCount), lightCount - 1);
-		
-		final float lightProbabilityDensityFunctionValue = 1.0F / lightCount;
-		
-		final Light light = this.lights.get(lightIndex);
-		
-		final Point2F sampleA = new Point2F(random(), random());
-		final Point2F sampleB = new Point2F(random(), random());
-		
-		return Color3F.divide(lightEstimateDirect(bSDF, intersection, light, sampleA, sampleB, false), lightProbabilityDensityFunctionValue);
+	/**
+	 * Returns the {@link Light} instance at {@code index}.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than or equal to {@code scene.getLightCount()}, an {@code IndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param index the index
+	 * @return the {@code Light} instance at {@code index}
+	 * @throws NullPointerException thrown if, and only if, {@code index} is less than {@code 0} or greater than or equal to {@code scene.getLightCount()}
+	 */
+	public Light getLight(final int index) {
+		return this.lights.get(index);
 	}
 	
 	/**
@@ -401,6 +354,15 @@ public final class Scene {
 	}
 	
 	/**
+	 * Returns the {@link Light} count in this {@code Scene} instance.
+	 * 
+	 * @return the {@code Light} count in this {@code Scene} instance
+	 */
+	public int getLightCount() {
+		return this.lights.size();
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Scene} instance.
 	 * 
 	 * @return a hash code for this {@code Scene} instance
@@ -408,201 +370,5 @@ public final class Scene {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.background, this.camera, this.lights, this.primitives, this.name);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private Color3F doLightEstimateDirect(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final boolean isSpecular) {
-		/*
-	BxDFType bsdfFlags = specular ? BSDF_ALL : BxDFType(BSDF_ALL & ~BSDF_SPECULAR);
-	
-	Spectrum Ld(0.f);
-	
-	Vector3f wi;
-	
-	Float lightPdf = 0, scatteringPdf = 0;
-	
-	VisibilityTester visibility;
-	
-	Spectrum Li = light.Sample_Li(it, uLight, &wi, &lightPdf, &visibility);
-	
-	if (lightPdf > 0 && !Li.IsBlack()) {
-		Spectrum f;
-		
-		const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
-		
-		f = isect.bsdf->f(isect.wo, wi, bsdfFlags) * AbsDot(wi, isect.shading.n);
-		
-		scatteringPdf = isect.bsdf->Pdf(isect.wo, wi, bsdfFlags);
-		
-		if (!f.IsBlack() && visibility.Unoccluded(scene)) {
-			Float weight = PowerHeuristic(1, lightPdf, 1, scatteringPdf);
-			
-			Ld += f * Li * weight / lightPdf;
-		}
-	}
-	
-	BxDFType sampledType;
-	
-	const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
-	
-	Spectrum f = isect.bsdf->Sample_f(isect.wo, &wi, uScattering, &scatteringPdf, bsdfFlags, &sampledType) * AbsDot(wi, isect.shading.n);
-	
-	bool sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
-	
-	if (!f.IsBlack() && scatteringPdf > 0) {
-		Float weight = 1;
-		
-		if (!sampledSpecular) {
-			lightPdf = light.Pdf_Li(it, wi);
-			
-			if (lightPdf == 0) {
-				return Ld;
-			}
-			
-			weight = PowerHeuristic(1, scatteringPdf, 1, lightPdf);
-		}
-		
-		SurfaceInteraction lightIsect;
-		
-		Ray ray = it.SpawnRay(wi);
-		
-		Spectrum Tr(1.f);
-		
-		bool foundSurfaceInteraction = handleMedia ? scene.IntersectTr(ray, sampler, &lightIsect, &Tr) : scene.Intersect(ray, &lightIsect);
-		
-		Spectrum Li(0.f);
-		
-		if (foundSurfaceInteraction) {
-			if (lightIsect.primitive->GetAreaLight() == &light) {
-				Li = lightIsect.Le(-wi);
-			}
-		} else {
-			Li = light.Le(ray);
-		}
-		
-		if (!Li.IsBlack()) {
-			Ld += f * Li * Tr * weight / scatteringPdf;
-		}
-	}
-	
-	return Ld;
-		 */
-		
-		Color3F lightDirect = Color3F.BLACK;
-		
-		if(!light.isDeltaDistribution()) {
-			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
-			
-			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
-			
-			if(optionalLightRadianceIncomingResult.isPresent()) {
-				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
-				
-				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-				
-				final Color3F lightIncoming = lightRadianceIncomingResult.getResult();
-				
-				final Vector3F incoming = lightRadianceIncomingResult.getIncoming();
-				final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
-				
-				final float lightProbabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
-				
-				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getSurfaceNormalS())));
-					
-					final float scatteringProbabilityDensityFunctionValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, incoming);
-					
-					if(!scatteringResult.isBlack() && doIsLightVisible(lightRadianceIncomingResult, surfaceIntersection)) {
-						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightProbabilityDensityFunctionValue, scatteringProbabilityDensityFunctionValue, 1, 1)), lightProbabilityDensityFunctionValue));
-					}
-				}
-			}
-			
-			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-			
-			final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
-			
-			final Optional<BSDFDistributionFunctionResult> optionalBSDFDistributionFunctionResult = bSDF.sampleDistributionFunction(bXDFType, outgoing, sampleB);
-			
-			if(optionalBSDFDistributionFunctionResult.isPresent()) {
-				final BSDFDistributionFunctionResult bSDFDistributionFunctionResult = optionalBSDFDistributionFunctionResult.get();
-				
-				final Vector3F incoming = bSDFDistributionFunctionResult.getIncoming();
-				
-				final Color3F scatteringResult = Color3F.multiply(bSDFDistributionFunctionResult.getResult(), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getSurfaceNormalS())));
-				
-				final boolean hasSampledSpecular = bSDFDistributionFunctionResult.getBXDFType().isSpecular();
-				
-				final float scatteringProbabilityDensityFunctionValue = bSDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
-				
-				if(!scatteringResult.isBlack() && scatteringProbabilityDensityFunctionValue > 0.0F) {
-					float weight = 1.0F;
-					
-					if(!hasSampledSpecular) {
-						final float lightProbabilityDensityFunctionValue = light.evaluateProbabilityDensityFunctionRadianceIncoming(intersection, incoming);
-						
-						if(equal(lightProbabilityDensityFunctionValue, 0.0F)) {
-							return lightDirect;
-						}
-						
-						weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(scatteringProbabilityDensityFunctionValue, lightProbabilityDensityFunctionValue, 1, 1);
-					}
-					
-					final Ray3F ray = surfaceIntersection.createRay(incoming);
-					
-					final Color3F transmittance = Color3F.WHITE;
-					
-					if(intersects(ray)) {
-//						TODO: Add area lights!
-					} else {
-						final Color3F lightIncoming = light.evaluateRadianceEmitted(ray);
-						
-						if(!lightIncoming.isBlack()) {
-							lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), transmittance), weight), scatteringProbabilityDensityFunctionValue));
-						}
-					}
-				}
-			}
-		}
-		
-		return lightDirect;
-	}
-	
-	private Color3F doLightEstimateDirectDeltaDistribution(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final boolean isSpecular) {
-		Color3F lightDirect = Color3F.BLACK;
-		
-		if(light.isDeltaDistribution()) {
-			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
-			
-			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
-			
-			if(optionalLightRadianceIncomingResult.isPresent()) {
-				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
-				
-				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-				
-				final Color3F lightIncoming = lightRadianceIncomingResult.getResult();
-				
-				final Vector3F incoming = lightRadianceIncomingResult.getIncoming();
-				final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
-				
-				final float lightProbabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
-				
-				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getSurfaceNormalS())));
-					
-					if(!scatteringResult.isBlack() && doIsLightVisible(lightRadianceIncomingResult, surfaceIntersection)) {
-						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming), lightProbabilityDensityFunctionValue));
-					}
-				}
-			}
-		}
-		
-		return lightDirect;
-	}
-	
-	private boolean doIsLightVisible(final LightRadianceIncomingResult lightIncomingRadianceResult, final SurfaceIntersection3F surfaceIntersection) {
-		return !intersects(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), 0.0001F, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())));
 	}
 }

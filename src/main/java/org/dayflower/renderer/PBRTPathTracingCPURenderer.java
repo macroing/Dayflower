@@ -126,7 +126,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			if(currentBounce == 0 || isSpecularBounce) {
 				if(hasFoundIntersection) {
 //					radiance += throughput * isect.Le(-ray.d);
-//					radiance = Color3F.add(radiance, Color3F.multiply(throughput, new Color3F(0.2F)));
+//					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(Vector3F.negate(ray.getDirection()))));
 				} else {
 					for(final Light light : lights) {
 //						radiance += throughput * light->Le(ray);
@@ -375,8 +375,18 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 					
 					final Color3F transmittance = Color3F.WHITE;
 					
-					if(scene.intersects(ray)) {
-//						TODO: Add area lights!
+					final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray);
+					
+					if(optionalIntersectionLight.isPresent()) {
+//						final Intersection intersectionLight = optionalIntersectionLight.get();
+						
+//						if(intersectionLight.getPrimitive().getAreaLight().isPresent() && intersectionLight.getPrimitive().getAreaLight().get() == light) {
+//							final Color3F lightIncoming = intersectionLight.evaluateRadianceEmitted(Vector3F.negate(incoming));
+							
+//							if(!lightIncoming.isBlack()) {
+//								lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), transmittance), weight), scatteringProbabilityDensityFunctionValue));
+//							}
+//						}
 					} else {
 						final Color3F lightIncoming = light.evaluateRadianceEmitted(ray);
 						

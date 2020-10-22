@@ -43,6 +43,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.image.IrregularSpectralCurve;
+import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
@@ -338,6 +339,7 @@ public final class Scenes {
 		final Material material25 = new MatteMaterial(new ConstantTexture(new Color3F(90.0F)), new ConstantTexture(new Color3F(0.2F, 1.0F, 0.2F)));
 		final Material material26 = new MirrorMaterial();
 		final Material material27 = new UberMaterial();
+		final Material material31 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE));
 		
 		final Shape3F shape11 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, +1.0F), new Point3F(1.0F, 0.0F, +0.0F));//B
 		final Shape3F shape12 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, -1.0F), new Point3F(1.0F, 0.0F, +0.0F));//T
@@ -352,6 +354,7 @@ public final class Scenes {
 		final Shape3F shape25 = new Sphere3F();//new Torus3F();
 		final Shape3F shape26 = new Sphere3F();//new Torus3F();
 		final Shape3F shape27 = new Sphere3F();//new Torus3F();
+		final Shape3F shape31 = new Sphere3F();
 		
 		final Matrix44F matrix11 = Matrix44F.translate(+0.0F, 0.00F, + 0.0F);
 		final Matrix44F matrix12 = Matrix44F.translate(+0.0F, 8.00F, + 0.0F);
@@ -366,10 +369,14 @@ public final class Scenes {
 		final Matrix44F matrix25 = Matrix44F.translate(+0.0F, 3.75F, + 5.0F);
 		final Matrix44F matrix26 = Matrix44F.translate(+3.0F, 3.75F, + 5.0F);
 		final Matrix44F matrix27 = Matrix44F.translate(+0.0F, 6.25F, + 5.0F);
+		final Matrix44F matrix31 = Matrix44F.translate(0.0F, 0.0F, 0.0F);
+		
+		final AreaLight areaLight31 = new DiffuseAreaLight(matrix31, 1, new Color3F(20.0F), shape31, true);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTMaterialShowcase");
-		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 0.0F, 0.0F), 1, new Color3F(20.0F), new Sphere3F(), true));
+		scene.addLight(areaLight31);
+//		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 0.0F, 0.0F), 1, new Color3F(20.0F), new Sphere3F(), true));
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(20.0F), Matrix44F.translate(+0.0F, 1.0F, -1.0F), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(10.0F), Matrix44F.translate(-5.0F, 1.0F, -1.0F), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(10.0F), Matrix44F.translate(+5.0F, 1.0F, -1.0F), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
@@ -387,6 +394,7 @@ public final class Scenes {
 		scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix25));
 		scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix26));
 		scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix27));
+//		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
 		
 		return scene;
 	}

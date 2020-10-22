@@ -23,6 +23,8 @@ import java.util.Optional;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.Vector3F;
+import org.dayflower.image.Color3F;
 
 /**
  * An {@code Intersection} denotes an intersection between a {@link Ray3F} instance and a {@link Primitive} instance.
@@ -62,6 +64,31 @@ public final class Intersection {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Evaluates the emitted radiance along {@code direction}.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the emitted radiance.
+	 * <p>
+	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param direction the direction
+	 * @return a {@code Color3F} instance with the emitted radiance
+	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
+	 */
+	public Color3F evaluateRadianceEmitted(final Vector3F direction) {
+		Objects.requireNonNull(direction, "direction == null");
+		
+		final Optional<AreaLight> optionalAreaLight = this.primitive.getAreaLight();
+		
+		if(optionalAreaLight.isPresent()) {
+			final AreaLight areaLight = optionalAreaLight.get();
+			
+			return areaLight.evaluateRadiance(this, direction);
+		}
+		
+		return Color3F.BLACK;
+	}
 	
 	/**
 	 * Returns the {@link Primitive} instance associated with this {@code Intersection} instance.

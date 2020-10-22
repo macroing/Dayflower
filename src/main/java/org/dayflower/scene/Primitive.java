@@ -44,6 +44,7 @@ import org.dayflower.image.Color3F;
  * @author J&#246;rgen Lundgren
  */
 public final class Primitive {
+	private AreaLight areaLight;
 	private BoundingVolume3F boundingVolume;
 	private Material material;
 	private Matrix44F objectToWorld;
@@ -100,6 +101,33 @@ public final class Primitive {
 		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
 		this.worldToObject = Matrix44F.inverse(objectToWorld);
 		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
+		this.areaLight = null;
+	}
+	
+	/**
+	 * Constructs a new {@code Primitive} instance.
+	 * <p>
+	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code textureNormal}, {@code objectToWorld} or {@code areaLight} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
+	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
+	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
+	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
+	 * @param textureNormal the {@code Texture} instance for the normal that is associated with this {@code Primitive} instance
+	 * @param objectToWorld the {@link Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
+	 * @param areaLight the {@link AreaLight} instance associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code textureNormal}, {@code objectToWorld} or {@code areaLight} are {@code null}
+	 */
+	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Texture textureNormal, final Matrix44F objectToWorld, final AreaLight areaLight) {
+		this.material = Objects.requireNonNull(material, "material == null");
+		this.shape = Objects.requireNonNull(shape, "shape == null");
+		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
+		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+		this.textureNormal = Objects.requireNonNull(textureNormal, "textureNormal == null");
+		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
+		this.worldToObject = Matrix44F.inverse(objectToWorld);
+		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
+		this.areaLight = Objects.requireNonNull(areaLight, "areaLight == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,6 +192,15 @@ public final class Primitive {
 	 */
 	public Matrix44F getWorldToObject() {
 		return this.worldToObject;
+	}
+	
+	/**
+	 * Returns the optional {@link AreaLight} that is associated with this {@code Primitive} instance.
+	 * 
+	 * @return the optional {@code AreaLight} that is associated with this {@code Primitive} instance
+	 */
+	public Optional<AreaLight> getAreaLight() {
+		return Optional.ofNullable(this.areaLight);
 	}
 	
 	/**
@@ -458,6 +495,18 @@ public final class Primitive {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.boundingVolume, this.material, this.objectToWorld, this.worldToObject, this.shape, this.textureAlbedo, this.textureEmittance, this.textureNormal);
+	}
+	
+	/**
+	 * Sets the {@link AreaLight} instance associated with this {@code Primitive} instance to {@code areaLight}.
+	 * <p>
+	 * If {@code areaLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param areaLight the {@code AreaLight} instance associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, {@code areaLight} is {@code null}
+	 */
+	public void setAreaLight(final AreaLight areaLight) {
+		this.areaLight = Objects.requireNonNull(areaLight, "areaLight == null");
 	}
 	
 	/**

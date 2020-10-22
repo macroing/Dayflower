@@ -73,7 +73,7 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
 	 */
 	public RayCastingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
-		super(display, image, rendererConfiguration, scene);
+		super(display, image, rendererConfiguration, scene, false);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 			final Vector3F surfaceNormalG = surfaceIntersection.getSurfaceNormalG();
 			final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
 			
-			final Color3F albedo = primitive.getTextureAlbedo().getColor(intersection);
+			final Color3F albedo = primitive.getTextureAlbedo().getColorRGB(intersection);
 			final Color3F ambient = new Color3F(0.05F);
 			final Color3F diffuse = new Color3F(1.0F);
 			final Color3F specular = new Color3F(1.0F);

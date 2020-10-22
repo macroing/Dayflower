@@ -79,7 +79,7 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
 	 */
 	public SmallPTRPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
-		super(display, image, rendererConfiguration, scene);
+		super(display, image, rendererConfiguration, scene, false);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,8 +125,8 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 			final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
 			final Vector3F surfaceNormalCorrectlyOriented = Vector3F.dotProduct(direction, surfaceNormal) < 0.0F ? surfaceNormal : Vector3F.negate(surfaceNormal);
 			
-			Color3F albedo = primitive.getTextureAlbedo().getColor(intersection);
-			Color3F emittance = primitive.getTextureEmittance().getColor(intersection);
+			Color3F albedo = primitive.getTextureAlbedo().getColorRGB(intersection);
+			Color3F emittance = primitive.getTextureEmittance().getColorRGB(intersection);
 			
 			final int currentBounce = bounce + 1;
 			

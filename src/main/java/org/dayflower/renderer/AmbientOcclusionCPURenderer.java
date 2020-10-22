@@ -99,7 +99,7 @@ public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
 	 */
 	public AmbientOcclusionCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene, final float maximumDistance) {
-		super(display, image, rendererConfiguration, scene);
+		super(display, image, rendererConfiguration, scene, false);
 		
 		this.maximumDistance = maximumDistance;
 	}

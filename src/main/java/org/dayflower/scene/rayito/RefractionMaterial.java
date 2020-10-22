@@ -79,7 +79,7 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return intersection.getPrimitive().getTextureEmittance().getColor(intersection);
+		return intersection.getPrimitive().getTextureEmittance().getColorRGB(intersection);
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public MaterialResult evaluate(final Intersection intersection) {
-		return new MaterialResult(intersection.getPrimitive().getTextureAlbedo().getColor(intersection), this.selectedBXDF, this.selectedBXDFWeight);
+		return new MaterialResult(intersection.getPrimitive().getTextureAlbedo().getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
 	}
 	
 	/**

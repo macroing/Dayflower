@@ -37,6 +37,7 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
@@ -84,7 +85,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
 	 */
 	public PBRTPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
-		super(display, image, rendererConfiguration, scene);
+		super(display, image, rendererConfiguration, scene, true);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +127,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			if(currentBounce == 0 || isSpecularBounce) {
 				if(hasFoundIntersection) {
 //					radiance += throughput * isect.Le(-ray.d);
-//					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(Vector3F.negate(ray.getDirection()))));
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(Vector3F.negate(ray.getDirection()))));
 				} else {
 					for(final Light light : lights) {
 //						radiance += throughput * light->Le(ray);
@@ -335,7 +336,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 					
 					final float scatteringProbabilityDensityFunctionValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, incoming);
 					
-					if(!scatteringResult.isBlack() && doIsLightVisible(lightRadianceIncomingResult, scene, surfaceIntersection)) {
+					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
 						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightProbabilityDensityFunctionValue, scatteringProbabilityDensityFunctionValue, 1, 1)), lightProbabilityDensityFunctionValue));
 					}
 				}
@@ -378,15 +379,15 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 					final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray);
 					
 					if(optionalIntersectionLight.isPresent()) {
-//						final Intersection intersectionLight = optionalIntersectionLight.get();
+						final Intersection intersectionLight = optionalIntersectionLight.get();
 						
-//						if(intersectionLight.getPrimitive().getAreaLight().isPresent() && intersectionLight.getPrimitive().getAreaLight().get() == light) {
-//							final Color3F lightIncoming = intersectionLight.evaluateRadianceEmitted(Vector3F.negate(incoming));
+						if(intersectionLight.getPrimitive().getAreaLight().isPresent() && intersectionLight.getPrimitive().getAreaLight().get() == light) {
+							final Color3F lightIncoming = intersectionLight.evaluateRadianceEmitted(Vector3F.negate(incoming));
 							
-//							if(!lightIncoming.isBlack()) {
-//								lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), transmittance), weight), scatteringProbabilityDensityFunctionValue));
-//							}
-//						}
+							if(!lightIncoming.isBlack()) {
+								lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), transmittance), weight), scatteringProbabilityDensityFunctionValue));
+							}
+						}
 					} else {
 						final Color3F lightIncoming = light.evaluateRadianceEmitted(ray);
 						
@@ -424,7 +425,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
 					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getSurfaceNormalS())));
 					
-					if(!scatteringResult.isBlack() && doIsLightVisible(lightRadianceIncomingResult, scene, surfaceIntersection)) {
+					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
 						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming), lightProbabilityDensityFunctionValue));
 					}
 				}
@@ -458,7 +459,29 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 		return Color3F.divide(doLightEstimateDirect(bSDF, intersection, light, sampleA, sampleB, scene, false), lightProbabilityDensityFunctionValue);
 	}
 	
-	private static boolean doIsLightVisible(final LightRadianceIncomingResult lightIncomingRadianceResult, final Scene scene, final SurfaceIntersection3F surfaceIntersection) {
-		return !scene.intersects(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), 0.0001F, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())));
+	private static boolean doIsLightVisible(final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult, final Scene scene, final SurfaceIntersection3F surfaceIntersection) {
+		if(light instanceof AreaLight) {
+			final Optional<Intersection> optionalIntersection = scene.intersection(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), 0.0F, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())));
+			
+			if(optionalIntersection.isPresent()) {
+				final Intersection intersection = optionalIntersection.get();
+				
+				final Primitive primitive = intersection.getPrimitive();
+				
+				final Optional<AreaLight> optionalAreaLight = primitive.getAreaLight();
+				
+				if(optionalAreaLight.isPresent()) {
+					final AreaLight areaLight = optionalAreaLight.get();
+					
+					return light == areaLight;
+				}
+				
+				return false;
+			}
+			
+			return true;
+		}
+		
+		return !scene.intersects(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), 0.0F, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())));
 	}
 }

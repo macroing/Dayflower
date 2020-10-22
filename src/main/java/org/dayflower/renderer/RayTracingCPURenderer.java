@@ -62,7 +62,7 @@ public final class RayTracingCPURenderer extends AbstractCPURenderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
 	 */
 	public RayTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
-		super(display, image, rendererConfiguration, scene);
+		super(display, image, rendererConfiguration, scene, false);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

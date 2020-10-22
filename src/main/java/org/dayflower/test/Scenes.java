@@ -235,9 +235,9 @@ public final class Scenes {
 	 */
 	public static Scene newDefaultScene() {
 		final Material material1 = new LambertianMaterial();
-		final Material material2 = new AshikhminShirleyMaterial();
-		final Material material3 = new AshikhminShirleyMaterial(0.02F);
-		final Material material4 = new AshikhminShirleyMaterial(0.02F);
+		final Material material2 = new AshikhminShirleyMaterial(0.05F);
+		final Material material3 = new AshikhminShirleyMaterial(0.05F);
+		final Material material4 = new AshikhminShirleyMaterial(0.05F);
 		final Material material5 = new RefractionMaterial();
 		
 		final Shape3F shape1 = new Plane3F();
@@ -333,7 +333,7 @@ public final class Scenes {
 		final Material material15 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material16 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material21 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-		final Material material22 = new MetalMaterial(new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_ETA.toColorXYZ()))), new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_K.toColorXYZ()))), new ConstantTexture(new Color3F(0.05F)), new ConstantTexture(new Color3F(0.05F)), true);
+		final Material material22 = new MetalMaterial(new ConstantTexture(Color3F.maximumTo1(/*Color3F.convertXYZToRGBUsingPBRT(*/IrregularSpectralCurve.GOLD_ETA.toColorXYZ())/*)*/), new ConstantTexture(Color3F.maximumTo1(/*Color3F.convertXYZToRGBUsingPBRT(*/IrregularSpectralCurve.GOLD_K.toColorXYZ())/*)*/), new ConstantTexture(new Color3F(0.05F)), new ConstantTexture(new Color3F(0.05F)), true);
 		final Material material23 = new SubstrateMaterial(new ConstantTexture(new Color3F(1.0F, 0.2F, 0.2F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
 		final Material material24 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(), new ConstantTexture(), true);
 		final Material material25 = new MatteMaterial(new ConstantTexture(new Color3F(90.0F)), new ConstantTexture(new Color3F(0.2F, 1.0F, 0.2F)));
@@ -394,7 +394,7 @@ public final class Scenes {
 		scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix25));
 		scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix26));
 		scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix27));
-//		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
+		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
 		
 		return scene;
 	}

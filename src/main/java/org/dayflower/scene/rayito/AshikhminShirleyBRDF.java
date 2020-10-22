@@ -22,6 +22,7 @@ import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.fresnelDielectricSchlick;
 import static org.dayflower.util.Floats.pow;
 
 import java.util.Objects;
@@ -119,7 +120,7 @@ public final class AshikhminShirleyBRDF implements BXDF {
 		final float oDotH = Vector3F.dotProduct(o, h);
 		
 		final float d = (this.exponent + 1.0F) * pow(abs(nDotH), this.exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float f = 1.0F;//TODO: Implement Fresnel!
+		final float f = fresnelDielectricSchlick(oDotH, 1.0F);
 		
 		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
 			return new BXDFResult(o, n, i, 0.0F, 0.0F);

@@ -84,7 +84,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
 	 */
 	public RayitoPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
-		super(display, image, rendererConfiguration, scene);
+		super(display, image, rendererConfiguration, scene, false);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -407,7 +407,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 									if(primitive == intersection.getPrimitive()) {
 										final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA1, probabilityDensityFunctionValueB1, 1, 1);
 										
-										final Color3F emittance = primitive.calculateEmittance(intersection);
+										final Color3F emittance = primitive.calculateEmittanceRGB(intersection);
 										
 										final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
 										final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA1 * selectedBXDFWeight);
@@ -442,7 +442,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 									if(probabilityDensityFunctionValueB2 > 0.0F) {
 										final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA2, probabilityDensityFunctionValueB2, 1, 1);
 										
-										final Color3F emittance = primitive.calculateEmittance(intersection);
+										final Color3F emittance = primitive.calculateEmittanceRGB(intersection);
 										
 										final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
 										final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA2 * selectedBXDFWeight);

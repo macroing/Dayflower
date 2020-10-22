@@ -113,14 +113,14 @@ public final class UberMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final Color3F colorEta = this.textureEta.getColor(intersection);
-		final Color3F colorOpacity = Color3F.saturate(this.textureOpacity.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKD = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorKR = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorKS = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorKT = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKT.getColor(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorRoughnessU = this.textureRoughnessU.getColor(intersection);
-		final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
+		final Color3F colorEta = this.textureEta.getColorXYZ(intersection);
+		final Color3F colorOpacity = Color3F.saturate(this.textureOpacity.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKD = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKD.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE));
+		final Color3F colorKR = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKR.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE));
+		final Color3F colorKS = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKS.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE));
+		final Color3F colorKT = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKT.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE));
+		final Color3F colorRoughnessU = this.textureRoughnessU.getColorXYZ(intersection);
+		final Color3F colorRoughnessV = this.textureRoughnessV.getColorXYZ(intersection);
 		final Color3F colorTransmittanceScale = Color3F.saturate(Color3F.subtract(Color3F.WHITE, colorOpacity), 0.0F, Float.MAX_VALUE);
 		
 		final float eta = colorEta.average();

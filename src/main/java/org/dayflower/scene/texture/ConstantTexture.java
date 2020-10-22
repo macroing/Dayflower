@@ -102,16 +102,32 @@ public final class ConstantTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection}
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
-	public Color3F getColor(final Intersection intersection) {
+	public Color3F getColorRGB(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
+		return this.color;
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	@Override
+	public Color3F getColorXYZ(final Intersection intersection) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		
 		return this.color;

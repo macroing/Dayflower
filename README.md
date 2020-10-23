@@ -2,7 +2,7 @@ Dayflower
 =========
 Dayflower is a renderer written in Java.
 
-![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-019.png "Dayflower - Path Tracer")
+![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-023.png "Dayflower - Path Tracer")
 ![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-010.png "Dayflower - Path Tracer")
 ![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-011.png "Dayflower - Path Tracer")
 

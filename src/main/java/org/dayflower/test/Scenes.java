@@ -478,10 +478,10 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newPBRTScene() {
-//		final Color3F colorCopperEta = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_ETA.toColorXYZ()));
-//		final Color3F colorCopperK = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_K.toColorXYZ()));
-		final Color3F colorGoldEta = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.GOLD_ETA.toColorXYZ()));
-		final Color3F colorGoldK = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.GOLD_K.toColorXYZ()));
+//		final Color3F colorCopperEta = Color3F.maximumTo1(IrregularSpectralCurve.COPPER_ETA.toColorXYZ());
+//		final Color3F colorCopperK = Color3F.maximumTo1(IrregularSpectralCurve.COPPER_K.toColorXYZ());
+		final Color3F colorGoldEta = Color3F.maximumTo1(IrregularSpectralCurve.GOLD_ETA.toColorXYZ());
+		final Color3F colorGoldK = Color3F.maximumTo1(IrregularSpectralCurve.GOLD_K.toColorXYZ());
 		
 		final Material material1 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new SimplexFractionalBrownianMotionTexture(new Color3F(0.8F, 0.5F, 0.0F), 5.0F, 0.5F, 16));
 //		final Material material2 = new PlasticMaterial(new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.5F, 0.1F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(1.0F)), true);
@@ -511,7 +511,7 @@ public final class Scenes {
 		final Matrix44F matrix5 = Matrix44F.translate(3.0F, 1.25F, 5.0F);
 		final Matrix44F matrix6 = Matrix44F.translate(0.0F, 10.0F, 0.0F);
 		
-		final AreaLight areaLight = new DiffuseAreaLight(matrix6, 1, new Color3F(100.0F), shape6, true);
+		final AreaLight areaLight = new DiffuseAreaLight(matrix6, 1, new Color3F(50.0F), shape6, false);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)), "PBRT");

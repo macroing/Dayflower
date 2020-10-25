@@ -461,7 +461,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	
 	private static boolean doIsLightVisible(final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult, final Scene scene, final SurfaceIntersection3F surfaceIntersection) {
 		if(light instanceof AreaLight) {
-			final Optional<Intersection> optionalIntersection = scene.intersection(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), 0.0F, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())));
+			final Optional<Intersection> optionalIntersection = scene.intersection(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), 0.0F, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())) + 0.0001F);
 			
 			if(optionalIntersection.isPresent()) {
 				final Intersection intersection = optionalIntersection.get();

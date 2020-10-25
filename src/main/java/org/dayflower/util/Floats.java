@@ -1722,6 +1722,16 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns the hyperbolic sine of a {@code value}.
+	 * 
+	 * @param value a {@code float} value
+	 * @return the hyperbolic sine of a {@code value}
+	 */
+	public static float sinh(final float value) {
+		return toFloat(Math.sinh(value));
+	}
+	
+	/**
 	 * Performs a smoothstep operation on {@code value} and the edges {@code edgeA} and {@code edgeB}.
 	 * <p>
 	 * Returns a {@code float} value.

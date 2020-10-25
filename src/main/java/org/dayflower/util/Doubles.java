@@ -1721,6 +1721,16 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns the hyperbolic sine of a {@code value}.
+	 * 
+	 * @param value a {@code double} value
+	 * @return the hyperbolic sine of a {@code value}
+	 */
+	public static double sinh(final double value) {
+		return Math.sinh(value);
+	}
+	
+	/**
 	 * Performs a smoothstep operation on {@code value} and the edges {@code edgeA} and {@code edgeB}.
 	 * <p>
 	 * Returns a {@code double} value.

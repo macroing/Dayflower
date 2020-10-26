@@ -75,9 +75,9 @@ public final class Plane3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link BoundingVolume3F} instance that contains parts of this {@code Plane3F} instance.
+	 * Returns a {@link BoundingVolume3F} instance that contains this {@code Plane3F} instance.
 	 * 
-	 * @return a {@code BoundingVolume3F} instance that contains parts of this {@code Plane3F} instance
+	 * @return a {@code BoundingVolume3F} instance that contains this {@code Plane3F} instance
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {

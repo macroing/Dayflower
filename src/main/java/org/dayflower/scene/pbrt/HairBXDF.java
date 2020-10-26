@@ -67,6 +67,7 @@ public final class HairBXDF extends BXDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public HairBXDF(final Color3F sigmaA, final float alpha, final float betaM, final float betaN, final float eta, final float h) {
 		super(BXDFType.GLOSSY_REFLECTION_AND_TRANSMISSION);
 		

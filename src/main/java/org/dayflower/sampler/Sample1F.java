@@ -20,31 +20,78 @@ package org.dayflower.sampler;
 
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Sample1F} denotes a 1-dimensional sample with one component, of type {@code float}.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Sample1F {
 	private final float component1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Sample1F} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Sample1F(0.0F);
+	 * }
+	 * </pre>
+	 */
 	public Sample1F() {
 		this(0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Sample1F} instance from {@code sample}.
+	 * <p>
+	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Sample1F(sample.getComponent1());
+	 * }
+	 * </pre>
+	 * 
+	 * @param sample a {@link Sample2F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
+	 */
 	public Sample1F(final Sample2F sample) {
 		this(sample.getComponent1());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Sample1F} instance from {@code sample}.
+	 * <p>
+	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Sample1F(sample.getComponent1());
+	 * }
+	 * </pre>
+	 * 
+	 * @param sample a {@link Sample3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
+	 */
 	public Sample1F(final Sample3F sample) {
 		this(sample.getComponent1());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Sample1F} instance.
+	 * 
+	 * @param component1 the value of component 1
+	 */
 	public Sample1F(final float component1) {
 		this.component1 = component1;
 	}
@@ -82,17 +129,29 @@ public final class Sample1F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1.
+	 * 
+	 * @return the value of component 1
+	 */
 	public float getComponent1() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component.
+	 * 
+	 * @return the value of the U-component
+	 */
 	public float getU() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component.
+	 * 
+	 * @return the value of the X-component
+	 */
 	public float getX() {
 		return this.component1;
 	}

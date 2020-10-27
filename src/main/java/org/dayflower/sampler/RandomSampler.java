@@ -18,41 +18,73 @@
  */
 package org.dayflower.sampler;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Random;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code RandomSampler} is a {@link Sampler} implementation that uses a {@code Random} instance to sample.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class RandomSampler implements Sampler {
 	private final Random random;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code RandomSampler} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RandomSampler(new Random());
+	 * }
+	 * </pre>
+	 */
 	public RandomSampler() {
 		this(new Random());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code RandomSampler} instance.
+	 * <p>
+	 * If {@code random} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param random a {@code Random} instance
+	 * @throws NullPointerException thrown if, and only if, {@code random} is {@code null}
+	 */
 	public RandomSampler(final Random random) {
 		this.random = Objects.requireNonNull(random, "random == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample1F} with a 1-dimensional sample.
+	 * 
+	 * @return a {@code Sample1F} with a 1-dimensional sample
+	 */
 	@Override
 	public Sample1F sample1() {
 		return new Sample1F(this.random.nextFloat());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample2F} with a 2-dimensional sample.
+	 * 
+	 * @return a {@code Sample2F} with a 2-dimensional sample
+	 */
 	@Override
 	public Sample2F sample2() {
 		return new Sample2F(this.random.nextFloat(), this.random.nextFloat());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample3F} with a 3-dimensional sample.
+	 * 
+	 * @return a {@code Sample3F} with a 3-dimensional sample
+	 */
 	@Override
 	public Sample3F sample3() {
 		return new Sample3F(this.random.nextFloat(), this.random.nextFloat(), this.random.nextFloat());

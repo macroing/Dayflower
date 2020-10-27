@@ -18,16 +18,31 @@
  */
 package org.dayflower.sampler;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code Sampler} is used for sampling in different dimensions.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface Sampler {
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample1F} with a 1-dimensional sample.
+	 * 
+	 * @return a {@code Sample1F} with a 1-dimensional sample
+	 */
 	Sample1F sample1();
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample2F} with a 2-dimensional sample.
+	 * 
+	 * @return a {@code Sample2F} with a 2-dimensional sample
+	 */
 	Sample2F sample2();
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample3F} with a 3-dimensional sample.
+	 * 
+	 * @return a {@code Sample3F} with a 3-dimensional sample
+	 */
 	Sample3F sample3();
 }

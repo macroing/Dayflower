@@ -20,32 +20,80 @@ package org.dayflower.sampler;
 
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Sample2F} denotes a 2-dimensional sample with two components, of type {@code float}.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Sample2F {
 	private final float component1;
 	private final float component2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Sample2F} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Sample2F(0.0F, 0.0F);
+	 * }
+	 * </pre>
+	 */
 	public Sample2F() {
 		this(0.0F, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Sample2F} instance from {@code sample}.
+	 * <p>
+	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Sample2F(sample.getComponent1(), 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param sample a {@link Sample1F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
+	 */
 	public Sample2F(final Sample1F sample) {
 		this(sample.getComponent1(), 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Sample2F} instance from {@code sample}.
+	 * <p>
+	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Sample2F(sample.getComponent1(), sample.getComponent2());
+	 * }
+	 * </pre>
+	 * 
+	 * @param sample a {@link Sample3F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
+	 */
 	public Sample2F(final Sample3F sample) {
 		this(sample.getComponent1(), sample.getComponent2());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Sample2F} instance.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 */
 	public Sample2F(final float component1, final float component2) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -86,32 +134,56 @@ public final class Sample2F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1.
+	 * 
+	 * @return the value of component 1
+	 */
 	public float getComponent1() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2.
+	 * 
+	 * @return the value of component 2
+	 */
 	public float getComponent2() {
 		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the U-component.
+	 * 
+	 * @return the value of the U-component
+	 */
 	public float getU() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the V-component.
+	 * 
+	 * @return the value of the V-component
+	 */
 	public float getV() {
 		return this.component2;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the X-component.
+	 * 
+	 * @return the value of the X-component
+	 */
 	public float getX() {
 		return this.component1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the Y-component.
+	 * 
+	 * @return the value of the Y-component
+	 */
 	public float getY() {
 		return this.component2;
 	}

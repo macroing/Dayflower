@@ -20,10 +20,14 @@ package org.dayflower.sampler;
 
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code ConstantSampler} is a {@link Sampler} implementation that uses constant values as samples.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class ConstantSampler implements Sampler {
 	private final float component1;
 	private final float component2;
@@ -31,12 +35,27 @@ public final class ConstantSampler implements Sampler {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code ConstantSampler} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ConstantSampler(0.0F, 0.0F, 0.0F);
+	 * }
+	 * </pre>
+	 */
 	public ConstantSampler() {
 		this(0.0F, 0.0F, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code ConstantSampler} instance.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
 	public ConstantSampler(final float component1, final float component2, final float component3) {
 		this.component1 = component1;
 		this.component2 = component2;
@@ -45,19 +64,31 @@ public final class ConstantSampler implements Sampler {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample1F} with a 1-dimensional sample.
+	 * 
+	 * @return a {@code Sample1F} with a 1-dimensional sample
+	 */
 	@Override
 	public Sample1F sample1() {
 		return new Sample1F(this.component1);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample2F} with a 2-dimensional sample.
+	 * 
+	 * @return a {@code Sample2F} with a 2-dimensional sample
+	 */
 	@Override
 	public Sample2F sample2() {
 		return new Sample2F(this.component1, this.component2);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample3F} with a 3-dimensional sample.
+	 * 
+	 * @return a {@code Sample3F} with a 3-dimensional sample
+	 */
 	@Override
 	public Sample3F sample3() {
 		return new Sample3F(this.component1, this.component2, this.component3);

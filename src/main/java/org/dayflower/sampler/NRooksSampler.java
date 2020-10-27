@@ -18,7 +18,6 @@
  */
 package org.dayflower.sampler;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
@@ -26,7 +25,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.dayflower.util.Ints;
 
-//TODO: Add Javadocs!
+/**
+ * An {@code NRooksSampler} is a {@link Sampler} implementation that produces samples based on the N-Rooks algorithm.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class NRooksSampler implements Sampler {
 	private final AtomicInteger index;
 	private final Random random;
@@ -34,32 +38,71 @@ public final class NRooksSampler implements Sampler {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code NRooksSampler} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new NRooksSampler(new Random());
+	 * }
+	 * </pre>
+	 */
 	public NRooksSampler() {
 		this(new Random());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code NRooksSampler} instance.
+	 * <p>
+	 * If {@code random} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new NRooksSampler(random, 200);
+	 * }
+	 * </pre>
+	 * 
+	 * @param random a {@code Random} instance
+	 * @throws NullPointerException thrown if, and only if, {@code random} is {@code null}
+	 */
 	public NRooksSampler(final Random random) {
 		this(random, 200);
 	}
 	
-//	TODO: Add Javadocs!
-	public NRooksSampler(final Random random, final int sampleCount) {
+	/**
+	 * Constructs a new {@code NRooksSampler} instance.
+	 * <p>
+	 * If {@code random} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param random a {@code Random} instance
+	 * @param size the size to use
+	 * @throws NullPointerException thrown if, and only if, {@code random} is {@code null}
+	 */
+	public NRooksSampler(final Random random, final int size) {
 		this.index = new AtomicInteger();
 		this.random = Objects.requireNonNull(random, "random == null");
-		this.samples = new Sample2F[Ints.requireRange(sampleCount, 0, Integer.MAX_VALUE, "sampleCount")];
+		this.samples = new Sample2F[Ints.requireRange(size, 0, Integer.MAX_VALUE, "size")];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample1F} with a 1-dimensional sample.
+	 * 
+	 * @return a {@code Sample1F} with a 1-dimensional sample
+	 */
 	@Override
 	public Sample1F sample1() {
 		return new Sample1F(sample2());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample2F} with a 2-dimensional sample.
+	 * 
+	 * @return a {@code Sample2F} with a 2-dimensional sample
+	 */
 	@Override
 	public Sample2F sample2() {
 		doUpdateIfNecessary();
@@ -67,7 +110,11 @@ public final class NRooksSampler implements Sampler {
 		return this.samples[doGetAndUpdateIndex()];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Sample3F} with a 3-dimensional sample.
+	 * 
+	 * @return a {@code Sample3F} with a 3-dimensional sample
+	 */
 	@Override
 	public Sample3F sample3() {
 		return new Sample3F(sample2());

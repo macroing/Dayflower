@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 - 2020 J&#246;rgen Lundgren
+ * Copyright 2020 J&#246;rgen Lundgren
  * 
  * This file is part of Dayflower.
  * 

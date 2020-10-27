@@ -20,6 +20,7 @@ package org.dayflower.renderer;
 
 import org.dayflower.display.Display;
 import org.dayflower.image.Image;
+import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Scene;
 import org.dayflower.util.Timer;
 
@@ -50,6 +51,13 @@ public interface Renderer {
 	 * @return the {@code RendererConfiguration} instance associated with this {@code Renderer} instance
 	 */
 	RendererConfiguration getRendererConfiguration();
+	
+	/**
+	 * Returns the {@link Sampler} instance associated with this {@code Renderer} instance.
+	 * 
+	 * @return the {@code Sampler} instance associated with this {@code Renderer} instance
+	 */
+	Sampler getSampler();
 	
 	/**
 	 * Returns the {@link Scene} instance associated with this {@code Renderer} instance.
@@ -134,6 +142,16 @@ public interface Renderer {
 	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
 	void setRendererConfiguration(final RendererConfiguration rendererConfiguration);
+	
+	/**
+	 * Sets the {@link Sampler} instance associated with this {@code Renderer} instance to {@code sampler}.
+	 * <p>
+	 * If {@code sampler} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sampler the {@code Sampler} instance associated with this {@code Renderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sampler} is {@code null}
+	 */
+	void setSampler(final Sampler sampler);
 	
 	/**
 	 * Sets the {@link Scene} instance associated with this {@code Renderer} instance to {@code scene}.

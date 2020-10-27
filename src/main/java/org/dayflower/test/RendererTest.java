@@ -28,6 +28,8 @@ import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.SmallPTIPathTracingCPURenderer;
 import org.dayflower.renderer.SmallPTRPathTracingCPURenderer;
+import org.dayflower.sampler.NRooksSampler;
+import org.dayflower.sampler.RandomSampler;
 
 public final class RendererTest {
 	private RendererTest() {
@@ -38,9 +40,9 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionCPURenderer();
-		doTestPBRTPathTracingCPURenderer();
+//		doTestPBRTPathTracingCPURenderer();
 //		doTestRayCastingCPURenderer();
-//		doTestRayitoPathTracingCPURenderer();
+		doTestRayitoPathTracingCPURenderer();
 //		doTestSmallPTIPathTracingCPURenderer();
 //		doTestSmallPTRPathTracingCPURenderer();
 	}
@@ -54,6 +56,7 @@ public final class RendererTest {
 		renderer.setScene(Scenes.newDefaultScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
 		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.setSampler(new RandomSampler());
 		renderer.render();
 	}
 	
@@ -64,6 +67,7 @@ public final class RendererTest {
 		renderer.setScene(Scenes.newPBRTMaterialShowcaseScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
 		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.setSampler(new RandomSampler());
 		renderer.render();
 	}
 	
@@ -74,6 +78,7 @@ public final class RendererTest {
 		renderer.setScene(Scenes.newBedroomScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
 		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.setSampler(new RandomSampler());
 		renderer.render();
 	}
 	
@@ -84,6 +89,7 @@ public final class RendererTest {
 		renderer.setScene(Scenes.newDefaultScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
 		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.setSampler(new NRooksSampler());
 		renderer.render();
 	}
 	
@@ -94,6 +100,7 @@ public final class RendererTest {
 		renderer.setScene(Scenes.newDefaultScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
 		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.setSampler(new RandomSampler());
 		renderer.render();
 	}
 	
@@ -104,6 +111,7 @@ public final class RendererTest {
 		renderer.setScene(Scenes.newDefaultScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
 		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
+		renderer.setSampler(new RandomSampler());
 		renderer.render();
 	}
 }

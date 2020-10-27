@@ -34,6 +34,8 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.sampler.RandomSampler;
+import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
@@ -59,27 +61,28 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new SmallPTRPathTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+	 * new SmallPTRPathTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
 	 * }
 	 * </pre>
 	 */
 	public SmallPTRPathTracingCPURenderer() {
-		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
 	}
 	
 	/**
 	 * Constructs a new {@code SmallPTRPathTracingCPURenderer} instance.
 	 * <p>
-	 * If either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param display the {@link Display} instance associated with this {@code SmallPTRPathTracingCPURenderer} instance
 	 * @param image the {@link Image} instance associated with this {@code SmallPTRPathTracingCPURenderer} instance
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code SmallPTRPathTracingCPURenderer} instance
+	 * @param sampler the {@link Sampler} instance associated with this {@code SmallPTRPathTracingCPURenderer} instance
 	 * @param scene the {@link Scene} instance associated with this {@code SmallPTRPathTracingCPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
 	 */
-	public SmallPTRPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene) {
-		super(display, image, rendererConfiguration, scene, false);
+	public SmallPTRPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
+		super(display, image, rendererConfiguration, sampler, scene, false);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

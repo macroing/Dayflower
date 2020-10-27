@@ -18,8 +18,6 @@
  */
 package org.dayflower.renderer;
 
-import static org.dayflower.util.Floats.random;
-
 import java.util.Objects;
 import java.util.Optional;
 
@@ -27,6 +25,8 @@ import org.dayflower.display.Display;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.sampler.Sample2F;
+import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.util.Timer;
@@ -41,6 +41,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 	private Display display;
 	private Image image;
 	private RendererConfiguration rendererConfiguration;
+	private Sampler sampler;
 	private Scene scene;
 	private Timer timer;
 	private boolean isClearing;
@@ -53,19 +54,21 @@ public abstract class AbstractCPURenderer implements Renderer {
 	/**
 	 * Constructs a new {@code AbstractCPURenderer} instance.
 	 * <p>
-	 * If either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param display the {@link Display} instance associated with this {@code AbstractCPURenderer} instance
 	 * @param image the {@link Image} instance associated with this {@code AbstractCPURenderer} instance
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AbstractCPURenderer} instance
+	 * @param sampler the {@link Sampler} instance associated with this {@code AbstractCPURenderer} instance
 	 * @param scene the {@link Scene} instance associated with this {@code AbstractCPURenderer} instance
 	 * @param isColorSpaceXYZ {@code true} if, and only if, an XYZ-color space should be used, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration} or {@code scene} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
 	 */
-	protected AbstractCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Scene scene, final boolean isColorSpaceXYZ) {
+	protected AbstractCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene, final boolean isColorSpaceXYZ) {
 		this.display = Objects.requireNonNull(display, "display == null");
 		this.image = Objects.requireNonNull(image, "image == null");
 		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
+		this.sampler = Objects.requireNonNull(sampler, "sampler == null");
 		this.scene = Objects.requireNonNull(scene, "scene == null");
 		this.timer = new Timer();
 		this.isClearing = false;
@@ -104,6 +107,16 @@ public abstract class AbstractCPURenderer implements Renderer {
 	@Override
 	public final RendererConfiguration getRendererConfiguration() {
 		return this.rendererConfiguration;
+	}
+	
+	/**
+	 * Returns the {@link Sampler} instance associated with this {@code AbstractCPURenderer} instance.
+	 * 
+	 * @return the {@code Sampler} instance associated with this {@code AbstractCPURenderer} instance
+	 */
+	@Override
+	public final Sampler getSampler() {
+		return this.sampler;
 	}
 	
 	/**
@@ -151,6 +164,8 @@ public abstract class AbstractCPURenderer implements Renderer {
 		
 		final RendererConfiguration rendererConfiguration = this.rendererConfiguration;
 		
+		final Sampler sampler = this.sampler;
+		
 		final Scene scene = this.scene;
 		
 		final boolean isColorSpaceXYZ = this.isColorSpaceXYZ;
@@ -180,10 +195,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 			
 			for(int y = 0; y < resolutionY; y++) {
 				for(int x = 0; x < resolutionX; x++) {
-					final float sampleX = random();
-					final float sampleY = random();
+					final Sample2F sample = sampler.sample2();
 					
-					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(x, y, sampleX, sampleY);
+					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(x, y, sample.getX(), sample.getY());
 					
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
@@ -192,7 +206,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 						final Color3F color1 = isColorSpaceXYZ ? color0 : Color3F.convertRGBToXYZUsingPBRT(color0);
 						
 						if(!color1.hasInfinites() && !color1.hasNaNs()) {
-							image.filmAddColorXYZ(x + sampleX, y + sampleY, color1);
+							image.filmAddColorXYZ(x + sample.getX(), y + sample.getY(), color1);
 						}
 					}
 				}
@@ -290,6 +304,19 @@ public abstract class AbstractCPURenderer implements Renderer {
 	@Override
 	public final void setRendererConfiguration(final RendererConfiguration rendererConfiguration) {
 		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
+	}
+	
+	/**
+	 * Sets the {@link Sampler} instance associated with this {@code AbstractCPURenderer} instance to {@code sampler}.
+	 * <p>
+	 * If {@code sampler} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sampler the {@code Sampler} instance associated with this {@code AbstractCPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sampler} is {@code null}
+	 */
+	@Override
+	public final void setSampler(final Sampler sampler) {
+		this.sampler = Objects.requireNonNull(sampler, "sampler == null");
 	}
 	
 	/**

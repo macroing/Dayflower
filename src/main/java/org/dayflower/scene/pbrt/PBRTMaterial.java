@@ -26,7 +26,7 @@ import org.dayflower.scene.Material;
 /**
  * A {@code PBRTMaterial} represents a material.
  * <p>
- * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
+ * All official implementations of this interface can be immutable and thread-safe. But this cannot be guaranteed for all implementations.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

@@ -18,7 +18,10 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Floats.acos;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.saturate;
+import static org.dayflower.util.Floats.sin;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -33,13 +36,17 @@ import java.util.Optional;
  * @author J&#246;rgen Lundgren
  */
 public final class Curve3F implements Shape3F {
-	
+	private final Data data;
+	private final float uMaximum;
+	private final float uMinimum;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public Curve3F() {
-		
+	public Curve3F(final Data data, final float uMinimum, final float uMaximum) {
+		this.data = Objects.requireNonNull(data, "data == null");
+		this.uMinimum = uMinimum;
+		this.uMaximum = uMaximum;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,5 +277,116 @@ public final class Curve3F implements Shape3F {
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		return 0.0F;//TODO: Implement!
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static final class Data {
+		private final Point3F pointA;
+		private final Point3F pointB;
+		private final Point3F pointC;
+		private final Point3F pointD;
+		private final Type type;
+		private final Vector3F normalA;
+		private final Vector3F normalB;
+		private final float normalAngle;
+		private final float normalAngleSinReciprocal;
+		private final float widthA;
+		private final float widthB;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+//		TODO: Add Javadocs!
+		public Data(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final Type type, final Vector3F normalA, final Vector3F normalB, final float widthA, final float widthB) {
+			this.pointA = Objects.requireNonNull(pointA, "pointA == null");
+			this.pointB = Objects.requireNonNull(pointB, "pointB == null");
+			this.pointC = Objects.requireNonNull(pointC, "pointC == null");
+			this.pointD = Objects.requireNonNull(pointD, "pointD == null");
+			this.type = Objects.requireNonNull(type, "type == null");
+			this.normalA = Vector3F.normalize(Objects.requireNonNull(normalA, "normalA == null"));
+			this.normalB = Vector3F.normalize(Objects.requireNonNull(normalB, "normalB == null"));
+			this.normalAngle = acos(saturate(Vector3F.dotProduct(normalA, normalB)));
+			this.normalAngleSinReciprocal = 1.0F / sin(this.normalAngle);
+			this.widthA = widthA;
+			this.widthB = widthB;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+//		TODO: Add Javadocs!
+		public Point3F getPointA() {
+			return this.pointA;
+		}
+		
+//		TODO: Add Javadocs!
+		public Point3F getPointB() {
+			return this.pointB;
+		}
+		
+//		TODO: Add Javadocs!
+		public Point3F getPointC() {
+			return this.pointC;
+		}
+		
+//		TODO: Add Javadocs!
+		public Point3F getPointD() {
+			return this.pointD;
+		}
+		
+//		TODO: Add Javadocs!
+		public Type getType() {
+			return this.type;
+		}
+		
+//		TODO: Add Javadocs!
+		public Vector3F getNormalA() {
+			return this.normalA;
+		}
+		
+//		TODO: Add Javadocs!
+		public Vector3F getNormalB() {
+			return this.normalB;
+		}
+		
+//		TODO: Add Javadocs!
+		public float getNormalAngle() {
+			return this.normalAngle;
+		}
+		
+//		TODO: Add Javadocs!
+		public float getNormalAngleSinReciprocal() {
+			return this.normalAngleSinReciprocal;
+		}
+		
+//		TODO: Add Javadocs!
+		public float getWidthA() {
+			return this.widthA;
+		}
+		
+//		TODO: Add Javadocs!
+		public float getWidthB() {
+			return this.widthB;
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static enum Type {
+//		TODO: Add Javadocs!
+		CYLINDER,
+		
+//		TODO: Add Javadocs!
+		FLAT,
+		
+//		TODO: Add Javadocs!
+		RIBBON;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private Type() {
+			
+		}
 	}
 }

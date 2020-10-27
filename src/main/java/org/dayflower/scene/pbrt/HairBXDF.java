@@ -23,6 +23,7 @@ import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.asin;
 import static org.dayflower.util.Floats.atan2;
 import static org.dayflower.util.Floats.cos;
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.exp;
 import static org.dayflower.util.Floats.log;
 import static org.dayflower.util.Floats.max;
@@ -33,7 +34,7 @@ import static org.dayflower.util.Floats.sinh;
 import static org.dayflower.util.Floats.sqrt;
 import static org.dayflower.util.Floats.toRadians;
 
-import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,9 +55,9 @@ import org.dayflower.util.Lists;
  */
 public final class HairBXDF extends BXDF {
 	private final Color3F sigmaA;
-//	private final float alpha;
-//	private final float betaM;
-//	private final float betaN;
+	private final float alpha;
+	private final float betaM;
+	private final float betaN;
 	private final float eta;
 	private final float gammaOutgoing;
 	private final float h;
@@ -67,14 +68,26 @@ public final class HairBXDF extends BXDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code HairBXDF} instance.
+	 * <p>
+	 * If {@code sigmaA} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sigmaA a {@link Color3F} instance
+	 * @param alpha a {@code float} value
+	 * @param betaM a {@code float} value
+	 * @param betaN a {@code float} value
+	 * @param eta a {@code float} value with the index of refraction (IOR)
+	 * @param h a {@code float} value
+	 * @throws NullPointerException thrown if, and only if, {@code sigmaA} is {@code null}
+	 */
 	public HairBXDF(final Color3F sigmaA, final float alpha, final float betaM, final float betaN, final float eta, final float h) {
 		super(BXDFType.GLOSSY_REFLECTION_AND_TRANSMISSION);
 		
 		this.sigmaA = Objects.requireNonNull(sigmaA, "sigmaA == null");
-//		this.alpha = alpha;
-//		this.betaM = betaM;
-//		this.betaN = betaN;
+		this.alpha = alpha;
+		this.betaM = betaM;
+		this.betaN = betaN;
 		this.eta = eta;
 		this.gammaOutgoing = asin(saturate(h, -1.0F, 1.0F));
 		this.h = h;
@@ -410,6 +423,57 @@ public final class HairBXDF extends BXDF {
 	}
 	
 	/**
+	 * Returns a {@code String} representation of this {@code HairBXDF} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code HairBXDF} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new HairBXDF(%s, %+.10f, %+.10f, %+.10f, %+.10f, %+.10f)", this.sigmaA, Float.valueOf(this.alpha), Float.valueOf(this.betaM), Float.valueOf(this.betaN), Float.valueOf(this.eta), Float.valueOf(this.h));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code HairBXDF} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code HairBXDF}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code HairBXDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code HairBXDF}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof HairBXDF)) {
+			return false;
+		} else if(!Objects.equals(this.sigmaA, HairBXDF.class.cast(object).sigmaA)) {
+			return false;
+		} else if(!equal(this.alpha, HairBXDF.class.cast(object).alpha)) {
+			return false;
+		} else if(!equal(this.betaM, HairBXDF.class.cast(object).betaM)) {
+			return false;
+		} else if(!equal(this.betaN, HairBXDF.class.cast(object).betaN)) {
+			return false;
+		} else if(!equal(this.eta, HairBXDF.class.cast(object).eta)) {
+			return false;
+		} else if(!equal(this.gammaOutgoing, HairBXDF.class.cast(object).gammaOutgoing)) {
+			return false;
+		} else if(!equal(this.h, HairBXDF.class.cast(object).h)) {
+			return false;
+		} else if(!equal(this.s, HairBXDF.class.cast(object).s)) {
+			return false;
+		} else if(!Arrays.equals(this.cos2KAlpha, HairBXDF.class.cast(object).cos2KAlpha)) {
+			return false;
+		} else if(!Arrays.equals(this.sin2KAlpha, HairBXDF.class.cast(object).sin2KAlpha)) {
+			return false;
+		} else if(!Arrays.equals(this.v, HairBXDF.class.cast(object).v)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Evaluates the probability density function (PDF).
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
@@ -483,6 +547,61 @@ public final class HairBXDF extends BXDF {
 		probabilityDensityFunctionValue += doMP(cosThetaIncoming, cosThetaOutgoing, sinThetaIncoming, sinThetaOutgoing, this.v[3]) * probabilityDensityFunctionValues[3] * (1.0F / (2.0F * PI));
 		
 		return probabilityDensityFunctionValue;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code HairBXDF} instance.
+	 * 
+	 * @return a hash code for this {@code HairBXDF} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.sigmaA, Float.valueOf(this.alpha), Float.valueOf(this.betaM), Float.valueOf(this.betaN), Float.valueOf(this.eta), Float.valueOf(this.gammaOutgoing), Float.valueOf(this.h), Float.valueOf(this.s), Integer.valueOf(Arrays.hashCode(this.cos2KAlpha)), Integer.valueOf(Arrays.hashCode(this.sin2KAlpha)), Integer.valueOf(Arrays.hashCode(this.v)));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Computes Sigma A from concentration.
+	 * <p>
+	 * Returns a {@link Color3F} instance with Sigma A.
+	 * 
+	 * @param colorEumelanin the eumelanin to use
+	 * @param colorPheomelanin the pheomelanin to use
+	 * @return a {@code Color3F} instance with Sigma A
+	 */
+	public static Color3F computeSigmaAFromConcentration(final float colorEumelanin, final float colorPheomelanin) {
+		final float[] sigmaA = new float[3];
+		final float[] sigmaAEumelanin = new float[] {0.419F, 0.697F, 1.37F};
+		final float[] sigmaAPheomelanin = new float[] {0.187F, 0.4F, 1.05F};
+		
+		for(int i = 0; i < 3; i++) {
+			sigmaA[i] = colorEumelanin * sigmaAEumelanin[i] + colorPheomelanin * sigmaAPheomelanin[i];
+		}
+		
+		return Color3F.convertRGBToXYZUsingPBRT(new Color3F(sigmaA[0], sigmaA[1], sigmaA[2]));
+	}
+	
+	/**
+	 * Computes Sigma A from reflectance.
+	 * <p>
+	 * Returns a {@link Color3F} instance with Sigma A.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color3F} instance
+	 * @param betaN a {@code float} value
+	 * @return a {@code Color3F} instance with Sigma A
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F computeSigmaAFromReflectance(final Color3F color, final float betaN) {
+		final float constant = (5.969F - 0.215F * betaN + 2.532F * (betaN * betaN) - 10.73F * doPow(betaN, 3) + 5.574F * doPow(betaN, 4) + 0.245F * doPow(betaN, 5));
+		
+		final float component1 = log(color.getComponent1()) / constant;
+		final float component2 = log(color.getComponent2()) / constant;
+		final float component3 = log(color.getComponent3()) / constant;
+		
+		return new Color3F(component1 * component1, component2 * component2, component3 * component3);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

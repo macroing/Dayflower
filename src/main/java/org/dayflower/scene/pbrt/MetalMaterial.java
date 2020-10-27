@@ -29,7 +29,7 @@ import org.dayflower.scene.Texture;
 /**
  * A {@code MetalMaterial} is an implementation of {@link PBRTMaterial} that represents metal.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

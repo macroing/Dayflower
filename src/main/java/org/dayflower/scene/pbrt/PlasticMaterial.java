@@ -31,7 +31,7 @@ import org.dayflower.scene.texture.ConstantTexture;
 /**
  * A {@code PlasticMaterial} is an implementation of {@link PBRTMaterial} that represents plastic.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

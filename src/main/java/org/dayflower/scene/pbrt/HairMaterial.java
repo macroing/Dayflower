@@ -18,10 +18,8 @@
  */
 package org.dayflower.scene.pbrt;
 
-import static org.dayflower.util.Floats.log;
 import static org.dayflower.util.Floats.max;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,7 +29,14 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.texture.ConstantTexture;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code HairMaterial} is an implementation of {@link PBRTMaterial} that represents hair.
+ * <p>
+ * This class is immutable and thread-safe as long as all {@link Texture} instances are.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class HairMaterial implements PBRTMaterial {
 	private final Texture textureAlpha;
 	private final Texture textureBetaM;
@@ -44,12 +49,46 @@ public final class HairMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code HairMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Texture textureAlpha = ConstantTexture.GRAY_2_00;
+	 * Texture textureBetaM = ConstantTexture.GRAY_0_30;
+	 * Texture textureBetaN = ConstantTexture.GRAY_0_30;
+	 * Texture textureColor = ConstantTexture.BLACK;
+	 * Texture textureEta = ConstantTexture.GRAY_1_55;
+	 * Texture textureEumelanin = ConstantTexture.BLACK;
+	 * Texture texturePheomelanin = ConstantTexture.BLACK;
+	 * Texture textureSigmaA = new ConstantTexture(HairBXDF.computeSigmaAFromConcentration(1.3F, 0.0F));
+	 * 
+	 * new HairMaterial(textureAlpha, textureBetaM, textureBetaN, textureColor, textureEta, textureEumelanin, texturePheomelanin, textureSigmaA);
+	 * }
+	 * </pre>
+	 */
 	public HairMaterial() {
-		this(ConstantTexture.GRAY_2_00, ConstantTexture.GRAY_0_30, ConstantTexture.GRAY_0_30, ConstantTexture.BLACK, new ConstantTexture(new Color3F(1.55F)), ConstantTexture.BLACK, ConstantTexture.BLACK, new ConstantTexture(doComputeSigmaAFromConcentration(1.3F, 0.0F)));
+		this(ConstantTexture.GRAY_2_00, ConstantTexture.GRAY_0_30, ConstantTexture.GRAY_0_30, ConstantTexture.BLACK, ConstantTexture.GRAY_1_55, ConstantTexture.BLACK, ConstantTexture.BLACK, new ConstantTexture(HairBXDF.computeSigmaAFromConcentration(1.3F, 0.0F)));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code HairMaterial} instance.
+	 * <p>
+	 * If either {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureColor}, {@code textureEta}, {@code textureEumelanin}, {@code texturePheomelanin} or {@code textureSigmaA} are {@code null}, a {@code NullPointerException}
+	 * will be thrown.
+	 * 
+	 * @param textureAlpha a {@link Texture} instance
+	 * @param textureBetaM a {@code Texture} instance
+	 * @param textureBetaN a {@code Texture} instance
+	 * @param textureColor a {@code Texture} instance
+	 * @param textureEta a {@code Texture} instance with the index of refraction (IOR)
+	 * @param textureEumelanin a {@code Texture} instance
+	 * @param texturePheomelanin a {@code Texture} instance
+	 * @param textureSigmaA a {@code Texture} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureColor}, {@code textureEta}, {@code textureEumelanin}, {@code texturePheomelanin} or {@code textureSigmaA}
+	 *                              are {@code null}
+	 */
 	public HairMaterial(final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN, final Texture textureColor, final Texture textureEta, final Texture textureEumelanin, final Texture texturePheomelanin, final Texture textureSigmaA) {
 		this.textureAlpha = Objects.requireNonNull(textureAlpha, "textureAlpha == null");
 		this.textureBetaM = Objects.requireNonNull(textureBetaM, "textureBetaM == null");
@@ -63,7 +102,19 @@ public final class HairMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	@Override
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -81,6 +132,61 @@ public final class HairMaterial implements PBRTMaterial {
 		return Optional.of(new BSDF(intersection, Arrays.asList(new HairBXDF(sigmaA, alpha, betaM, betaN, eta, h)), eta));
 	}
 	
+	/**
+	 * Returns a {@code String} representation of this {@code HairMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code HairMaterial} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new HairMaterial(%s, %s, %s, %s, %s, %s, %s, %s)", this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureColor, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.textureSigmaA);
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code HairMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code HairMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code HairMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code HairMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof HairMaterial)) {
+			return false;
+		} else if(!Objects.equals(this.textureAlpha, HairMaterial.class.cast(object).textureAlpha)) {
+			return false;
+		} else if(!Objects.equals(this.textureBetaM, HairMaterial.class.cast(object).textureBetaM)) {
+			return false;
+		} else if(!Objects.equals(this.textureBetaN, HairMaterial.class.cast(object).textureBetaN)) {
+			return false;
+		} else if(!Objects.equals(this.textureColor, HairMaterial.class.cast(object).textureColor)) {
+			return false;
+		} else if(!Objects.equals(this.textureEta, HairMaterial.class.cast(object).textureEta)) {
+			return false;
+		} else if(!Objects.equals(this.textureEumelanin, HairMaterial.class.cast(object).textureEumelanin)) {
+			return false;
+		} else if(!Objects.equals(this.texturePheomelanin, HairMaterial.class.cast(object).texturePheomelanin)) {
+			return false;
+		} else if(!Objects.equals(this.textureSigmaA, HairMaterial.class.cast(object).textureSigmaA)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns a hash code for this {@code HairMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code HairMaterial} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureColor, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.textureSigmaA);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F doComputeSigmaA(final Intersection intersection, final float betaN) {
@@ -93,7 +199,7 @@ public final class HairMaterial implements PBRTMaterial {
 		final Color3F colorColor = Color3F.saturate(this.textureColor.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorColor.isBlack()) {
-			return doComputeSigmaAFromReflectance(colorColor, betaN);
+			return HairBXDF.computeSigmaAFromReflectance(colorColor, betaN);
 		}
 		
 		final Color3F colorEumelanin = this.textureEumelanin.getColorXYZ(intersection);
@@ -102,42 +208,6 @@ public final class HairMaterial implements PBRTMaterial {
 		final float eumelanin = max(0.0F, colorEumelanin.average());
 		final float pheomelanin = max(0.0F, colorPheomelanin.average());
 		
-		return doComputeSigmaAFromConcentration(eumelanin, pheomelanin);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Color3F doComputeSigmaAFromConcentration(final float colorEumelanin, final float colorPheomelanin) {
-		final float[] sigmaA = new float[3];
-		final float[] sigmaAEumelanin = new float[] {0.419F, 0.697F, 1.37F};
-		final float[] sigmaAPheomelanin = new float[] {0.187F, 0.4F, 1.05F};
-		
-		for(int i = 0; i < 3; i++) {
-			sigmaA[i] = colorEumelanin * sigmaAEumelanin[i] + colorPheomelanin * sigmaAPheomelanin[i];
-		}
-		
-		return Color3F.convertRGBToXYZUsingPBRT(new Color3F(sigmaA[0], sigmaA[1], sigmaA[2]));
-	}
-	
-	private static Color3F doComputeSigmaAFromReflectance(final Color3F color, final float betaN) {
-		final float constant = (5.969F - 0.215F * betaN + 2.532F * (betaN * betaN) - 10.73F * doPow(betaN, 3) + 5.574F * doPow(betaN, 4) + 0.245F * doPow(betaN, 5));
-		
-		final float component1 = log(color.getComponent1()) / constant;
-		final float component2 = log(color.getComponent2()) / constant;
-		final float component3 = log(color.getComponent3()) / constant;
-		
-		return new Color3F(component1 * component1, component2 * component2, component3 * component3);
-	}
-	
-	private static float doPow(final float value, final int exponent) {
-		if(exponent == 0) {
-			return 1.0F;
-		} else if(exponent == 1) {
-			return value;
-		} else {
-			final float n2 = doPow(value, exponent / 2);
-			
-			return n2 * n2 * doPow(value, exponent & 1);
-		}
+		return HairBXDF.computeSigmaAFromConcentration(eumelanin, pheomelanin);
 	}
 }

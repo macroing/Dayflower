@@ -20,7 +20,12 @@ package org.dayflower.scene.pbrt;
 
 import java.lang.reflect.Field;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code BSSRDF} represents a BSSRDF (Bidirectional Surface Scattering Reflectance Distribution Function).
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface BSSRDF {
 	
 }

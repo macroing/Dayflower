@@ -19,6 +19,7 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.acos;
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
@@ -335,6 +336,12 @@ public final class Curve3F implements Shape3F {
 		}
 		
 //		TODO: Add Javadocs!
+		@Override
+		public String toString() {
+			return String.format("new Data(%s, %s, %s, %s, %s, %s, %s, %+.10f, %+.10f)", this.pointA, this.pointB, this.pointC, this.pointD, this.type, this.normalA, this.normalB, Float.valueOf(this.widthA), Float.valueOf(this.widthB));
+		}
+		
+//		TODO: Add Javadocs!
 		public Type getType() {
 			return this.type;
 		}
@@ -347,6 +354,40 @@ public final class Curve3F implements Shape3F {
 //		TODO: Add Javadocs!
 		public Vector3F getNormalB() {
 			return this.normalB;
+		}
+		
+//		TODO: Add Javadocs!
+		@Override
+		public boolean equals(final Object object) {
+			if(object == this) {
+				return true;
+			} else if(!(object instanceof Data)) {
+				return false;
+			} else if(!Objects.equals(this.pointA, Data.class.cast(object).pointA)) {
+				return false;
+			} else if(!Objects.equals(this.pointB, Data.class.cast(object).pointB)) {
+				return false;
+			} else if(!Objects.equals(this.pointC, Data.class.cast(object).pointC)) {
+				return false;
+			} else if(!Objects.equals(this.pointD, Data.class.cast(object).pointD)) {
+				return false;
+			} else if(!Objects.equals(this.type, Data.class.cast(object).type)) {
+				return false;
+			} else if(!Objects.equals(this.normalA, Data.class.cast(object).normalA)) {
+				return false;
+			} else if(!Objects.equals(this.normalB, Data.class.cast(object).normalB)) {
+				return false;
+			} else if(!equal(this.normalAngle, Data.class.cast(object).normalAngle)) {
+				return false;
+			} else if(!equal(this.normalAngleSinReciprocal, Data.class.cast(object).normalAngleSinReciprocal)) {
+				return false;
+			} else if(!equal(this.widthA, Data.class.cast(object).widthA)) {
+				return false;
+			} else if(!equal(this.widthB, Data.class.cast(object).widthB)) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 		
 //		TODO: Add Javadocs!
@@ -368,6 +409,12 @@ public final class Curve3F implements Shape3F {
 		public float getWidthB() {
 			return this.widthB;
 		}
+		
+//		TODO: Add Javadocs!
+		@Override
+		public int hashCode() {
+			return Objects.hash(this.pointA, this.pointB, this.pointC, this.pointD, this.type, this.normalA, this.normalB, Float.valueOf(this.normalAngle), Float.valueOf(this.normalAngleSinReciprocal), Float.valueOf(this.widthA), Float.valueOf(this.widthB));
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -387,6 +434,23 @@ public final class Curve3F implements Shape3F {
 		
 		private Type() {
 			
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+//		TODO: Add Javadocs!
+		@Override
+		public String toString() {
+			switch(this) {
+				case CYLINDER:
+					return "Type.CYLINDER";
+				case FLAT:
+					return "Type.FLAT";
+				case RIBBON:
+					return "Type.RIBBON";
+				default:
+					return "";
+			}
 		}
 	}
 }

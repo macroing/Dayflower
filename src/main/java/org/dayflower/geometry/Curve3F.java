@@ -335,7 +335,11 @@ public final class Curve3F implements Shape3F {
 			return this.pointD;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns a {@code String} representation of this {@code Data} instance.
+		 * 
+		 * @return a {@code String} representation of this {@code Data} instance
+		 */
 		@Override
 		public String toString() {
 			return String.format("new Data(%s, %s, %s, %s, %s, %s, %s, %+.10f, %+.10f)", this.pointA, this.pointB, this.pointC, this.pointD, this.type, this.normalA, this.normalB, Float.valueOf(this.widthA), Float.valueOf(this.widthB));
@@ -356,7 +360,14 @@ public final class Curve3F implements Shape3F {
 			return this.normalB;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Compares {@code object} to this {@code Data} instance for equality.
+		 * <p>
+		 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Data}, and their respective values are equal, {@code false} otherwise.
+		 * 
+		 * @param object the {@code Object} to compare to this {@code Data} instance for equality
+		 * @return {@code true} if, and only if, {@code object} is an instance of {@code Data}, and their respective values are equal, {@code false} otherwise
+		 */
 		@Override
 		public boolean equals(final Object object) {
 			if(object == this) {
@@ -410,7 +421,11 @@ public final class Curve3F implements Shape3F {
 			return this.widthB;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns a hash code for this {@code Data} instance.
+		 * 
+		 * @return a hash code for this {@code Data} instance
+		 */
 		@Override
 		public int hashCode() {
 			return Objects.hash(this.pointA, this.pointB, this.pointC, this.pointD, this.type, this.normalA, this.normalB, Float.valueOf(this.normalAngle), Float.valueOf(this.normalAngleSinReciprocal), Float.valueOf(this.widthA), Float.valueOf(this.widthB));
@@ -438,7 +453,11 @@ public final class Curve3F implements Shape3F {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns a {@code String} representation of this {@code Type} instance.
+		 * 
+		 * @return a {@code String} representation of this {@code Type} instance
+		 */
 		@Override
 		public String toString() {
 			switch(this) {

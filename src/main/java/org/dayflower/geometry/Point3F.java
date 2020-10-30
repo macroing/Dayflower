@@ -26,6 +26,8 @@ import static org.dayflower.util.Floats.nextUpPBRT;
 
 import java.util.Objects;
 
+import org.dayflower.util.Floats;
+
 /**
  * A {@code Point3F} denotes a 3-dimensional point with three coordinates, of type {@code float}.
  * <p>
@@ -329,6 +331,26 @@ public final class Point3F {
 	}
 	
 	/**
+	 * Returns a new {@code Point3F} instance that represents the centroid of {@code a} and {@code b}.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Note: This method is equivalent to {@link #midpoint(Point3F, Point3F)}.
+	 * 
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance that represents the centroid of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point3F centroid(final Point3F a, final Point3F b) {
+		final float component1 = (a.component1 + b.component1) / 2.0F;
+		final float component2 = (a.component2 + b.component2) / 2.0F;
+		final float component3 = (a.component3 + b.component3) / 2.0F;
+		
+		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Returns a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b} and {@code c}.
 	 * <p>
 	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -343,6 +365,71 @@ public final class Point3F {
 		final float component1 = (a.component1 + b.component1 + c.component1) / 3.0F;
 		final float component2 = (a.component2 + b.component2 + c.component2) / 3.0F;
 		final float component3 = (a.component3 + b.component3 + c.component3) / 3.0F;
+		
+		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @param c a {@code Point3F} instance
+	 * @param d a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public static Point3F centroid(final Point3F a, final Point3F b, final Point3F c, final Point3F d) {
+		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0F;
+		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0F;
+		final float component3 = (a.component3 + b.component3 + c.component3 + d.component3) / 4.0F;
+		
+		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @param c a {@code Point3F} instance
+	 * @param d a {@code Point3F} instance
+	 * @param e a {@code Point3F} instance
+	 * @param f a {@code Point3F} instance
+	 * @param g a {@code Point3F} instance
+	 * @param h a {@code Point3F} instance
+	 * @return a new {@code Point3F} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
+	 */
+	public static Point3F centroid(final Point3F a, final Point3F b, final Point3F c, final Point3F d, final Point3F e, final Point3F f, final Point3F g, final Point3F h) {
+		final float component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0F;
+		final float component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0F;
+		final float component3 = (a.component3 + b.component3 + c.component3 + d.component3 + e.component3 + f.component3 + g.component3 + g.component3) / 8.0F;
+		
+		return new Point3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns a {@code Point3F} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3F} instance
+	 * @param b a {@code Point3F} instance
+	 * @param t the factor
+	 * @return a {@code Point3F} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point3F lerp(final Point3F a, final Point3F b, final float t) {
+		final float component1 = Floats.lerp(a.component1, b.component1, t);
+		final float component2 = Floats.lerp(a.component2, b.component2, t);
+		final float component3 = Floats.lerp(a.component3, b.component3, t);
 		
 		return new Point3F(component1, component2, component3);
 	}

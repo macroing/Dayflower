@@ -596,6 +596,24 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns the greater value of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * The result is the argument closer to positive infinity.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value. If either value is NaN, then the result is NaN. Unlike the numerical comparison operators, this method considers negative zero to be strictly smaller than positive zero. If one
+	 * argument is positive zero and the two others negative zero, the result is positive zero.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @param c a value
+	 * @param d a value
+	 * @return the greater value of {@code a}, {@code b}, {@code c} and {@code d}
+	 */
+	public static double max(final double a, final double b, final double c, final double d) {
+		return max(max(a, b), max(c, d));
+	}
+	
+	/**
 	 * Returns the smaller value of {@code a} and {@code b}.
 	 * <p>
 	 * The result is the value closer to negative infinity.
@@ -627,6 +645,24 @@ public class Doubles {
 	 */
 	public static double min(final double a, final double b, final double c) {
 		return min(min(a, b), c);
+	}
+	
+	/**
+	 * Returns the smaller value of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * The result is the value closer to negative infinity.
+	 * <p>
+	 * If the arguments have the same value, the result is that same value. If either value is NaN, then the result is NaN. Unlike the numerical comparison operators, this method considers negative zero to be strictly smaller than positive zero. If one
+	 * argument is positive zero and the others negative zero, the result is negative zero.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @param c a value
+	 * @param d a value
+	 * @return the smaller value of {@code a}, {@code b}, {@code c} and {@code d}
+	 */
+	public static double min(final double a, final double b, final double c, final double d) {
+		return min(min(a, b), min(c, d));
 	}
 	
 	/**

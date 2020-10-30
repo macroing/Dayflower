@@ -18,11 +18,16 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.acos;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.lerp;
+import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
+import static org.dayflower.util.Ints.saturate;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -59,7 +64,33 @@ public final class Curve3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return null;//TODO: Implement!
+		final Data data = this.data;
+		
+		final float uMaximum = this.uMaximum;
+		final float uMinimum = this.uMinimum;
+		
+		final float widthA = data.getWidthA();
+		final float widthB = data.getWidthB();
+		final float widthC = lerp(widthA, widthB, uMinimum);
+		final float widthD = lerp(widthA, widthB, uMaximum);
+		final float widthE = max(widthC, widthD) * 0.5F;
+		
+		final Point3F pointA = data.getPointA();
+		final Point3F pointB = data.getPointB();
+		final Point3F pointC = data.getPointC();
+		final Point3F pointD = data.getPointD();
+		
+		final Point3F pointE = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMinimum, uMinimum);
+		final Point3F pointF = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMinimum, uMaximum);
+		final Point3F pointG = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMaximum, uMaximum);
+		final Point3F pointH = doBezierBlossom(pointA, pointB, pointC, pointD, uMaximum, uMaximum, uMaximum);
+		
+		final AxisAlignedBoundingBox3F axisAlignedBoundingBoxA = new AxisAlignedBoundingBox3F(pointE, pointF);
+		final AxisAlignedBoundingBox3F axisAlignedBoundingBoxB = new AxisAlignedBoundingBox3F(pointG, pointH);
+		final AxisAlignedBoundingBox3F axisAlignedBoundingBoxC = AxisAlignedBoundingBox3F.union(axisAlignedBoundingBoxA, axisAlignedBoundingBoxB);
+		final AxisAlignedBoundingBox3F axisAlignedBoundingBoxD = AxisAlignedBoundingBox3F.expand(axisAlignedBoundingBoxC, widthE);
+		
+		return axisAlignedBoundingBoxD;
 	}
 	
 	/**
@@ -117,6 +148,63 @@ public final class Curve3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Data data = this.data;
+		
+		final float uMaximum = this.uMaximum;
+		final float uMinimum = this.uMinimum;
+		
+		final float widthA = data.getWidthA();
+		final float widthB = data.getWidthB();
+		final float widthC = lerp(widthA, widthB, uMinimum);
+		final float widthD = lerp(widthA, widthB, uMaximum);
+		final float widthE = max(widthC, widthD) * 0.5F;
+		
+		final Point3F pointA = data.getPointA();
+		final Point3F pointB = data.getPointB();
+		final Point3F pointC = data.getPointC();
+		final Point3F pointD = data.getPointD();
+		
+		final Point3F pointE = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMinimum, uMinimum);
+		final Point3F pointF = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMinimum, uMaximum);
+		final Point3F pointG = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMaximum, uMaximum);
+		final Point3F pointH = doBezierBlossom(pointA, pointB, pointC, pointD, uMaximum, uMaximum, uMaximum);
+		
+		final Vector3F directionX = doCreateDirectionX(ray, pointE, pointH);
+		
+		final Matrix44F objectToRay = Matrix44F.lookAt(ray.getOrigin(), Point3F.add(ray.getOrigin(), ray.getDirection()), directionX);
+		
+		final Point3F pointI = Point3F.transform(objectToRay, pointE);
+		final Point3F pointJ = Point3F.transform(objectToRay, pointF);
+		final Point3F pointK = Point3F.transform(objectToRay, pointG);
+		final Point3F pointL = Point3F.transform(objectToRay, pointH);
+		
+		final float xMaximum = 0.0F;
+		final float yMaximum = 0.0F;
+		final float zMaximum = ray.getDirection().length() * tMaximum;
+		
+		if(max(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) + widthE < 0.0F || min(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) - widthE > xMaximum) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		if(max(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) + widthE < 0.0F || min(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) - widthE > yMaximum) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		if(max(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) + widthE < 0.0F || min(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) - widthE > zMaximum) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final float l01 = max(abs(pointI.getX() - 2.0F * pointJ.getX() + pointK.getX()), abs(pointI.getY() - 2.0F * pointJ.getY() + pointK.getY()), abs(pointI.getZ() - 2.0F * pointJ.getZ() + pointK.getZ()));
+		final float l02 = max(abs(pointJ.getX() - 2.0F * pointK.getX() + pointL.getX()), abs(pointJ.getY() - 2.0F * pointK.getY() + pointL.getY()), abs(pointJ.getZ() - 2.0F * pointK.getZ() + pointL.getZ()));
+		final float l03 = max(l01, l02);
+		
+		final float epsilon = max(widthA, widthB) * 0.05F;
+		
+		final int r0 = doLog2(1.41421356237F * 6.0F * l03 / (8.0F * epsilon)) / 2;
+		final int maximumDepth = saturate(r0, 0, 10);
+		
+//		return recursiveIntersect(ray, tHit, isect, cp, Inverse(objectToRay), uMin, uMax, maxDepth);
+		
 		return null;//TODO: Implement!
 	}
 	
@@ -219,7 +307,30 @@ public final class Curve3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		return 0.0F;//TODO: Implement!
+		final Data data = this.data;
+		
+		final float uMaximum = this.uMaximum;
+		final float uMinimum = this.uMinimum;
+		
+		final float widthA = data.getWidthA();
+		final float widthB = data.getWidthB();
+		final float widthC = lerp(widthA, widthB, uMinimum);
+		final float widthD = lerp(widthA, widthB, uMaximum);
+		final float widthE = (widthC + widthD) * 0.5F;
+		
+		final Point3F pointA = data.getPointA();
+		final Point3F pointB = data.getPointB();
+		final Point3F pointC = data.getPointC();
+		final Point3F pointD = data.getPointD();
+		
+		final Point3F pointE = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMinimum, uMinimum);
+		final Point3F pointF = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMinimum, uMaximum);
+		final Point3F pointG = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMaximum, uMaximum);
+		final Point3F pointH = doBezierBlossom(pointA, pointB, pointC, pointD, uMaximum, uMaximum, uMaximum);
+		
+		final float approximateLength = Point3F.distance(pointE, pointF) + Point3F.distance(pointF, pointG) + Point3F.distance(pointG, pointH);
+		
+		return approximateLength * widthE;
 	}
 	
 	/**
@@ -471,5 +582,81 @@ public final class Curve3F implements Shape3F {
 					return "";
 			}
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Point3F doBezierBlossom(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float t1, final float t2, final float t3) {
+		final Point3F pointAB = Point3F.lerp(pointA, pointB, t1);
+		final Point3F pointBC = Point3F.lerp(pointB, pointC, t1);
+		final Point3F pointCD = Point3F.lerp(pointC, pointD, t1);
+		
+		final Point3F pointABBC = Point3F.lerp(pointAB, pointBC, t2);
+		final Point3F pointBCCD = Point3F.lerp(pointBC, pointCD, t2);
+		
+		return Point3F.lerp(pointABBC, pointBCCD, t3);
+	}
+	
+	private static Point3F doBezierEvaluate(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float t) {
+		final Point3F pointAB = Point3F.lerp(pointA, pointB, t);
+		final Point3F pointBC = Point3F.lerp(pointB, pointC, t);
+		final Point3F pointCD = Point3F.lerp(pointC, pointD, t);
+		
+		final Point3F pointABBC = Point3F.lerp(pointAB, pointBC, t);
+		final Point3F pointBCCD = Point3F.lerp(pointBC, pointCD, t);
+		
+		return Point3F.lerp(pointABBC, pointBCCD, t);
+	}
+	
+	private static Point3F[] doBezierSubdivide(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD) {
+		return new Point3F[] {
+			pointA,
+			Point3F.centroid(pointA, pointB),
+			Point3F.centroid(pointA, pointB, pointB, pointC),
+			Point3F.centroid(pointA, pointB, pointB, pointB, pointC, pointC, pointC, pointD),
+			Point3F.centroid(pointB, pointC, pointC, pointD),
+			Point3F.centroid(pointC, pointD),
+			pointD
+		};
+	}
+	
+	private static Vector3F doBezierEvaluateDerivative(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float t) {
+		final Point3F pointAB = Point3F.lerp(pointA, pointB, t);
+		final Point3F pointBC = Point3F.lerp(pointB, pointC, t);
+		final Point3F pointCD = Point3F.lerp(pointC, pointD, t);
+		
+		final Point3F pointABBC = Point3F.lerp(pointAB, pointBC, t);
+		final Point3F pointBCCD = Point3F.lerp(pointBC, pointCD, t);
+		
+		final Vector3F direction = Vector3F.direction(pointABBC, pointBCCD);
+		
+		if(direction.lengthSquared() > 0.0F) {
+			return Vector3F.multiply(direction, 3.0F);
+		}
+		
+		return Vector3F.direction(pointA, pointD);
+	}
+	
+	private static Vector3F doCreateDirectionX(final Ray3F ray, final Point3F eye, final Point3F lookAt) {
+		final Vector3F directionR = ray.getDirection();
+		final Vector3F directionX = Vector3F.crossProduct(directionR, Vector3F.direction(eye, lookAt));
+		
+		if(!equal(directionX.lengthSquared(), 0.0F)) {
+			return directionX;
+		} else if(abs(directionR.getX()) > abs(directionR.getY())) {
+			return Vector3F.normalize(new Vector3F(-directionR.getZ(), 0.0F, directionR.getX()));
+		} else {
+			return Vector3F.normalize(new Vector3F(0.0F, directionR.getZ(), -directionR.getY()));
+		}
+	}
+	
+	private static int doLog2(final float value) {
+		if(value < 1.0F) {
+			return 0;
+		}
+		
+		final int bits = Float.floatToIntBits(value);
+		
+		return (bits >> 23) - 127 + ((bits & (1 << 22)) != 0 ? 1 : 0);
 	}
 }

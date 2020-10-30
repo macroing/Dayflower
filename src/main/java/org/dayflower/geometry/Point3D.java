@@ -26,6 +26,8 @@ import static org.dayflower.util.Doubles.nextUpPBRT;
 
 import java.util.Objects;
 
+import org.dayflower.util.Doubles;
+
 /**
  * A {@code Point3D} denotes a 3-dimensional point with three coordinates, of type {@code double}.
  * <p>
@@ -329,6 +331,26 @@ public final class Point3D {
 	}
 	
 	/**
+	 * Returns a new {@code Point3D} instance that represents the centroid of {@code a} and {@code b}.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Note: This method is equivalent to {@link #midpoint(Point3D, Point3D)}.
+	 * 
+	 * @param a a {@code Point3D} instance
+	 * @param b a {@code Point3D} instance
+	 * @return a new {@code Point3D} instance that represents the centroid of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point3D centroid(final Point3D a, final Point3D b) {
+		final double component1 = (a.component1 + b.component1) / 2.0D;
+		final double component2 = (a.component2 + b.component2) / 2.0D;
+		final double component3 = (a.component3 + b.component3) / 2.0D;
+		
+		return new Point3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Returns a new {@code Point3D} instance that represents the centroid of {@code a}, {@code b} and {@code c}.
 	 * <p>
 	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -343,6 +365,71 @@ public final class Point3D {
 		final double component1 = (a.component1 + b.component1 + c.component1) / 3.0D;
 		final double component2 = (a.component2 + b.component2 + c.component2) / 3.0D;
 		final double component3 = (a.component3 + b.component3 + c.component3) / 3.0D;
+		
+		return new Point3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Point3D} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3D} instance
+	 * @param b a {@code Point3D} instance
+	 * @param c a {@code Point3D} instance
+	 * @param d a {@code Point3D} instance
+	 * @return a new {@code Point3D} instance that represents the centroid of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public static Point3D centroid(final Point3D a, final Point3D b, final Point3D c, final Point3D d) {
+		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1) / 4.0D;
+		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2) / 4.0D;
+		final double component3 = (a.component3 + b.component3 + c.component3 + d.component3) / 4.0D;
+		
+		return new Point3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a new {@code Point3D} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3D} instance
+	 * @param b a {@code Point3D} instance
+	 * @param c a {@code Point3D} instance
+	 * @param d a {@code Point3D} instance
+	 * @param e a {@code Point3D} instance
+	 * @param f a {@code Point3D} instance
+	 * @param g a {@code Point3D} instance
+	 * @param h a {@code Point3D} instance
+	 * @return a new {@code Point3D} instance that represents the centroid of {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} and {@code h}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c}, {@code d}, {@code e}, {@code f}, {@code g} or {@code h} are {@code null}
+	 */
+	public static Point3D centroid(final Point3D a, final Point3D b, final Point3D c, final Point3D d, final Point3D e, final Point3D f, final Point3D g, final Point3D h) {
+		final double component1 = (a.component1 + b.component1 + c.component1 + d.component1 + e.component1 + f.component1 + g.component1 + h.component1) / 8.0D;
+		final double component2 = (a.component2 + b.component2 + c.component2 + d.component2 + e.component2 + f.component2 + g.component2 + h.component2) / 8.0D;
+		final double component3 = (a.component3 + b.component3 + c.component3 + d.component3 + e.component3 + f.component3 + g.component3 + g.component3) / 8.0D;
+		
+		return new Point3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns a {@code Point3D} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point3D} instance
+	 * @param b a {@code Point3D} instance
+	 * @param t the factor
+	 * @return a {@code Point3D} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point3D lerp(final Point3D a, final Point3D b, final double t) {
+		final double component1 = Doubles.lerp(a.component1, b.component1, t);
+		final double component2 = Doubles.lerp(a.component2, b.component2, t);
+		final double component3 = Doubles.lerp(a.component3, b.component3, t);
 		
 		return new Point3D(component1, component2, component3);
 	}

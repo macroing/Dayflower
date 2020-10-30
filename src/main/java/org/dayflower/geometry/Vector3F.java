@@ -93,6 +93,22 @@ public final class Vector3F {
 	}
 	
 	/**
+	 * Constructs a new {@code Vector3F} instance given the component values {@code component}, {@code component} and {@code component}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Vector3F(component, component, component);
+	 * }
+	 * </pre>
+	 * 
+	 * @param component the value of all components
+	 */
+	public Vector3F(final float component) {
+		this(component, component, component);
+	}
+	
+	/**
 	 * Constructs a new {@code Vector3F} instance given the component values {@code component1}, {@code component2} and {@code component3}.
 	 * 
 	 * @param component1 the value of component 1

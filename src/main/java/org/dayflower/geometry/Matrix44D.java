@@ -506,6 +506,42 @@ public final class Matrix44D {
 	}
 	
 	/**
+	 * Returns a new {@code Matrix44D} instance that looks in the direction of {@code eye} to {@code lookAt} and has an up-direction of {@code up}.
+	 * <p>
+	 * If either {@code eye}, {@code lookAt} or {@code up} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye a {@link Point3D} instance that represents the eye to look from
+	 * @param lookAt a {@code Point3D} instance that represents the point to look at
+	 * @param up a {@link Vector3D} instance that represents the up-direction
+	 * @return a new {@code Matrix44D} instance that looks in the direction of {@code eye} to {@code lookAt} and has an up-direction of {@code up}
+	 * @throws NullPointerException thrown if, and only if, either {@code eye}, {@code lookAt} or {@code up} are {@code null}
+	 */
+	public static Matrix44D lookAt(final Point3D eye, final Point3D lookAt, final Vector3D up) {
+		final Vector3D w = Vector3D.directionNormalized(eye, lookAt);
+		final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(Vector3D.normalize(up), w));
+		final Vector3D v = Vector3D.crossProduct(w, u);
+		
+		final double element11 = u.getX();
+		final double element12 = v.getX();
+		final double element13 = w.getX();
+		final double element14 = eye.getX();
+		final double element21 = u.getY();
+		final double element22 = v.getY();
+		final double element23 = w.getY();
+		final double element24 = eye.getY();
+		final double element31 = u.getZ();
+		final double element32 = v.getZ();
+		final double element33 = w.getZ();
+		final double element34 = eye.getZ();
+		final double element41 = 0.0D;
+		final double element42 = 0.0D;
+		final double element43 = 0.0D;
+		final double element44 = 1.0D;
+		
+		return new Matrix44D(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44);
+	}
+	
+	/**
 	 * Multiplies the element values of {@code matrixLHS} with the element values of {@code matrixRHS}.
 	 * <p>
 	 * Returns a new {@code Matrix44D} instance with the result of the multiplication.

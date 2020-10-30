@@ -282,6 +282,23 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns an {@code AxisAlignedBoundingBox3F} instance that is an expanded version of {@code axisAlignedBoundingBox}.
+	 * <p>
+	 * If {@code axisAlignedBoundingBox} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param axisAlignedBoundingBox an {@code AxisAlignedBoundingBox3F} instance
+	 * @param delta the delta to expand with
+	 * @return an {@code AxisAlignedBoundingBox3F} instance that is an expanded version of {@code axisAlignedBoundingBox}
+	 * @throws NullPointerException thrown if, and only if, {@code axisAlignedBoundingBox} is {@code null}
+	 */
+	public static AxisAlignedBoundingBox3F expand(final AxisAlignedBoundingBox3F axisAlignedBoundingBox, final float delta) {
+		final Point3F maximum = Point3F.add(axisAlignedBoundingBox.maximum, delta);
+		final Point3F minimum = Point3F.subtract(axisAlignedBoundingBox.minimum, delta);
+		
+		return new AxisAlignedBoundingBox3F(maximum, minimum);
+	}
+	
+	/**
 	 * Returns an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code axisAlignedBoundingBoxRHS}.
 	 * <p>
 	 * If either {@code axisAlignedBoundingBoxLHS} or {@code axisAlignedBoundingBoxRHS} are {@code null}, a {@code NullPointerException} will be thrown.

@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Curve3F;
+import org.dayflower.geometry.Curve3F.Data;
+import org.dayflower.geometry.Curve3F.Type;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Plane3F;
 import org.dayflower.geometry.Point2F;
@@ -427,6 +430,7 @@ public final class Scenes {
 		final Shape3F shape25 = new Sphere3F();//new Torus3F();
 		final Shape3F shape26 = new Sphere3F();//new Torus3F();
 		final Shape3F shape27 = new Sphere3F();//new Torus3F();
+//		final Shape3F shape27 = new Curve3F(new Data(new Point3F(), new Point3F(1.0F, 1.0F, 1.0F), new Point3F(2.0F, 2.0F, 2.0F), new Point3F(3.0F, 3.0F, 3.0F), Type.FLAT, new Vector3F(1.0F, 1.0F, 1.0F), new Vector3F(0.5F, 0.5F, 0.5F), 1.0F, 2.0F), 0.0F, 1.0F);
 		final Shape3F shape31 = new Sphere3F();
 		
 		final Matrix44F matrix11 = Matrix44F.translate(+0.0F, 0.00F, + 0.0F);

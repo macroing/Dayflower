@@ -27,6 +27,7 @@ import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
+import static org.dayflower.util.Floats.sqrt;
 import static org.dayflower.util.Ints.saturate;
 
 import java.lang.reflect.Field;
@@ -182,15 +183,15 @@ public final class Curve3F implements Shape3F {
 		final float yMaximum = 0.0F;
 		final float zMaximum = ray.getDirection().length() * tMaximum;
 		
-		if(max(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) + widthE < 0.0F || min(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) - widthE > xMaximum) {
+		if(max(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) + widthE < tMinimum || min(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) - widthE > xMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		if(max(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) + widthE < 0.0F || min(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) - widthE > yMaximum) {
+		if(max(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) + widthE < tMinimum || min(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) - widthE > yMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		if(max(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) + widthE < 0.0F || min(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) - widthE > zMaximum) {
+		if(max(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) + widthE < tMinimum || min(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) - widthE > zMaximum) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -198,14 +199,9 @@ public final class Curve3F implements Shape3F {
 		final float l02 = max(abs(pointJ.getX() - 2.0F * pointK.getX() + pointL.getX()), abs(pointJ.getY() - 2.0F * pointK.getY() + pointL.getY()), abs(pointJ.getZ() - 2.0F * pointK.getZ() + pointL.getZ()));
 		final float l03 = max(l01, l02);
 		
-		final float epsilon = max(widthA, widthB) * 0.05F;
+		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
 		
-		final int r0 = doLog2(1.41421356237F * 6.0F * l03 / (8.0F * epsilon)) / 2;
-		final int maximumDepth = saturate(r0, 0, 10);
-		
-//		return recursiveIntersect(ray, tHit, isect, cp, Inverse(objectToRay), uMin, uMax, maxDepth);
-		
-		return null;//TODO: Implement!
+		return doIntersectionRecursive(ray, tMinimum, tMaximum, Matrix44F.inverse(objectToRay), pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
 	}
 	
 	/**
@@ -388,7 +384,13 @@ public final class Curve3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return 0.0F;//TODO: Implement!
+		final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = intersection(ray, tMinimum, tMaximum);
+		
+		if(optionalSurfaceIntersection.isPresent()) {
+			return optionalSurfaceIntersection.get().getT();
+		}
+		
+		return Float.NaN;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -586,6 +588,146 @@ public final class Curve3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private Optional<SurfaceIntersection3F> doIntersectionRecursive(final Ray3F ray, final float tMinimum, final float tMaximum, final Matrix44F rayToObject, final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float uMinimum, final float uMaximum, final int depth) {
+		final Data data = this.data;
+		
+		final float rayDirectionLength = ray.getDirection().length();
+		
+		final float widthA = data.getWidthA();
+		final float widthB = data.getWidthB();
+		
+		if(depth > 0) {
+			final Point3F[] points = doBezierSubdivide(pointA, pointB, pointC, pointD);
+			
+			final float uA = uMinimum;
+			final float uB = (uMinimum + uMaximum) / 2.0F;
+			final float uC = uMaximum;
+			
+			final float widthC = max(lerp(widthA, widthB, uA), lerp(widthA, widthB, uB)) * 0.5F;
+			final float widthD = max(lerp(widthA, widthB, uB), lerp(widthA, widthB, uC)) * 0.5F;
+			
+			final float xMaximum = 0.0F;
+			final float yMaximum = 0.0F;
+			final float zMaximum = rayDirectionLength * tMaximum;
+			
+			final boolean isInsideAX = max(points[0].getX(), points[1].getX(), points[2].getX(), points[3].getX()) + widthC >= tMinimum && min(points[0].getX(), points[1].getX(), points[2].getX(), points[3].getX()) - widthC <= xMaximum;
+			final boolean isInsideAY = max(points[0].getY(), points[1].getY(), points[2].getY(), points[3].getY()) + widthC >= tMinimum && min(points[0].getY(), points[1].getY(), points[2].getY(), points[3].getY()) - widthC <= yMaximum;
+			final boolean isInsideAZ = max(points[0].getZ(), points[1].getZ(), points[2].getZ(), points[3].getZ()) + widthC >= tMinimum && min(points[0].getZ(), points[1].getZ(), points[2].getZ(), points[3].getZ()) - widthC <= zMaximum;
+			final boolean isInsideBX = max(points[3].getX(), points[4].getX(), points[5].getX(), points[6].getX()) + widthD >= tMinimum && min(points[3].getX(), points[4].getX(), points[5].getX(), points[6].getX()) - widthD <= xMaximum;
+			final boolean isInsideBY = max(points[3].getY(), points[4].getY(), points[5].getY(), points[6].getY()) + widthD >= tMinimum && min(points[3].getY(), points[4].getY(), points[5].getY(), points[6].getY()) - widthD <= yMaximum;
+			final boolean isInsideBZ = max(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) + widthD >= tMinimum && min(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) - widthD <= zMaximum;
+			
+			if(isInsideAX && isInsideAY && isInsideAZ) {
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = doIntersectionRecursive(ray, tMinimum, tMaximum, rayToObject, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
+				
+				if(optionalSurfaceIntersection.isPresent()) {
+					return optionalSurfaceIntersection;
+				}
+			}
+			
+			if(isInsideBX && isInsideBY && isInsideBZ) {
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = doIntersectionRecursive(ray, tMinimum, tMaximum, rayToObject, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
+				
+				if(optionalSurfaceIntersection.isPresent()) {
+					return optionalSurfaceIntersection;
+				}
+			}
+			
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final float edgeA = (pointB.getY() - pointA.getY()) * -pointA.getY() + pointA.getX() * (pointA.getX() - pointB.getX());
+		final float edgeB = (pointC.getY() - pointD.getY()) * -pointD.getY() + pointD.getX() * (pointD.getX() - pointC.getX());
+		
+		if(edgeA < 0.0F || edgeB < 0.0F) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final Vector2F segmentDirection = new Vector2F(pointD.getX() - pointA.getX(), pointD.getY() - pointA.getY());
+		
+		final float denominator = segmentDirection.lengthSquared();
+		
+		if(equal(denominator, 0.0F)) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final float w = Vector2F.dotProduct(Vector2F.negate(new Vector2F(pointA.getX(), pointA.getY())), segmentDirection) / denominator;
+		final float u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
+		final float hitWidth = doComputeHitWidth(data, ray, u);
+		
+		final Point3F point = doBezierEvaluate(pointA, pointB, pointC, pointD, saturate(w));
+		
+		final Vector3F derivative = doBezierEvaluateDerivative(pointA, pointB, pointC, pointD, saturate(w));
+		
+		final float pointCurveDistanceSquared = point.getX() * point.getX() + point.getY() * point.getY();
+		
+		if(pointCurveDistanceSquared > hitWidth * hitWidth * 0.25F) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final float zMaximum = rayDirectionLength * tMaximum;
+		
+		if(point.getZ() < tMinimum || point.getZ() > zMaximum) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final float pointCurveDistance = sqrt(pointCurveDistanceSquared);
+		final float edgeFunction = derivative.getX() * -point.getY() + point.getX() * derivative.getY();
+		final float v = edgeFunction > 0.0F ? 0.5F + pointCurveDistance / hitWidth : 0.5F - pointCurveDistance / hitWidth;
+		final float t = point.getZ() / rayDirectionLength;
+		
+		final OrthonormalBasis33F orthonormalBasisG = doComputeOrthonormalBasisG(data, rayToObject, hitWidth, u, v);
+		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
+		
+		final Point2F textureCoordinates = new Point2F(u, v);
+		
+		final Point3F surfaceIntersectionPoint = Point3F.add(ray.getOrigin(), ray.getDirection(), t);
+		
+		final Vector3F surfaceIntersectionPointError = new Vector3F(2.0F * hitWidth);
+		final Vector3F surfaceNormalG = orthonormalBasisG.getW();
+		final Vector3F surfaceNormalS = surfaceNormalG;
+		
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static OrthonormalBasis33F doComputeOrthonormalBasisG(final Data data, final Matrix44F rayToObject, final float hitWidth, final float u, final float v) {
+		switch(data.getType()) {
+			case CYLINDER: {
+				final Vector3F directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
+				final Vector3F directionUPlane = Vector3F.transform(Matrix44F.inverse(rayToObject), directionU);
+				final Vector3F directionV = Vector3F.transform(Matrix44F.rotate(AngleF.degrees(lerp(-90.0F, 90.0F, v)), directionUPlane), Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth));
+				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
+				
+				return new OrthonormalBasis33F(directionW, directionV, directionU);
+			}
+			case FLAT: {
+				final Vector3F directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
+				final Vector3F directionUPlane = Vector3F.transform(Matrix44F.inverse(rayToObject), directionU);
+				final Vector3F directionV = Vector3F.transform(rayToObject, Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth));
+				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
+				
+				return new OrthonormalBasis33F(directionW, directionV, directionU);
+			}
+			case RIBBON: {
+				final float sinA = sin((1.0F - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+				final float sinB = sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+				
+				final Vector3F normal = Vector3F.add(Vector3F.multiply(data.getNormalA(), sinA), Vector3F.multiply(data.getNormalB(), sinB));
+				
+				final Vector3F directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
+				final Vector3F directionV = Vector3F.multiply(Vector3F.normalize(Vector3F.crossProduct(normal, directionU)), hitWidth);
+				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
+				
+				return new OrthonormalBasis33F(directionW, directionV, directionU);
+			}
+			default: {
+				throw new IllegalArgumentException();
+			}
+		}
+	}
+	
 	private static Point3F doBezierBlossom(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float t1, final float t2, final float t3) {
 		final Point3F pointAB = Point3F.lerp(pointA, pointB, t1);
 		final Point3F pointBC = Point3F.lerp(pointB, pointC, t1);
@@ -648,6 +790,19 @@ public final class Curve3F implements Shape3F {
 		} else {
 			return Vector3F.normalize(new Vector3F(0.0F, directionR.getZ(), -directionR.getY()));
 		}
+	}
+	
+	private static float doComputeHitWidth(final Data data, final Ray3F ray, final float u) {
+		if(data.getType() == Type.RIBBON) {
+			final float sinA = sin((1.0F - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+			final float sinB = sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
+			
+			final Vector3F normal = Vector3F.add(Vector3F.multiply(data.getNormalA(), sinA), Vector3F.multiply(data.getNormalB(), sinB));
+			
+			return lerp(data.getWidthA(), data.getWidthB(), u) * (abs(Vector3F.dotProduct(normal, ray.getDirection())) / ray.getDirection().length());
+		}
+		
+		return lerp(data.getWidthA(), data.getWidthB(), u);
 	}
 	
 	private static int doLog2(final float value) {

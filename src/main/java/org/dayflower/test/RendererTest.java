@@ -40,9 +40,9 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionCPURenderer();
-//		doTestPBRTPathTracingCPURenderer();
+		doTestPBRTPathTracingCPURenderer();
 //		doTestRayCastingCPURenderer();
-		doTestRayitoPathTracingCPURenderer();
+//		doTestRayitoPathTracingCPURenderer();
 //		doTestSmallPTIPathTracingCPURenderer();
 //		doTestSmallPTRPathTracingCPURenderer();
 	}

@@ -138,7 +138,7 @@ public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
 			
 			final Point3F surfaceIntersectionPointWorldSpace = surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint();
 			
-			final Vector3F surfaceNormalGWorldSpace = surfaceIntersectionWorldSpace.getSurfaceNormalG();
+			final Vector3F surfaceNormalGWorldSpace = orthonormalBasisGWorldSpace.getW();
 			
 			final float maximumDistance = this.maximumDistance;
 			

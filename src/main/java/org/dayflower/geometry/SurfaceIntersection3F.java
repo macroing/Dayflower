@@ -47,8 +47,6 @@ public final class SurfaceIntersection3F {
 	private final Ray3F ray;
 	private final Shape3F shape;
 	private final Vector3F surfaceIntersectionPointError;
-	private final Vector3F surfaceNormalG;
-	private final Vector3F surfaceNormalS;
 	private final float t;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,8 +54,8 @@ public final class SurfaceIntersection3F {
 	/**
 	 * Constructs a new {@code SurfaceIntersection3F} instance.
 	 * <p>
-	 * If either {@code orthonormalBasisG}, {@code orthonormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape}, {@code surfaceIntersectionPointError}, {@code surfaceNormalG} or {@code surfaceNormalS} are
-	 * {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code orthonormalBasisG}, {@code orthonormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape} or {@code surfaceIntersectionPointError} are {@code null}, a {@code NullPointerException}
+	 * will be thrown.
 	 * 
 	 * @param orthonormalBasisG the {@link OrthonormalBasis33F} instance that is used as the orthonormal basis for the geometry
 	 * @param orthonormalBasisS the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for shading
@@ -66,13 +64,11 @@ public final class SurfaceIntersection3F {
 	 * @param ray the {@link Ray3F} instance that was used in the intersection operation
 	 * @param shape the {@link Shape3F} instance that was intersected
 	 * @param surfaceIntersectionPointError the {@link Vector3F} instance that contains the floating-point precision error of {@code surfaceIntersectionPoint}
-	 * @param surfaceNormalG the {@code Vector3F} instance that is used as the surface normal for the geometry
-	 * @param surfaceNormalS the {@code Vector3F} instance that is used as the surface normal for shading
 	 * @param t the parametric {@code t} value that represents the distance to the intersection
-	 * @throws NullPointerException thrown if, and only if, either {@code orthonormalBasisG}, {@code orthonormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape}, {@code surfaceIntersectionPointError},
-	 *                              {@code surfaceNormalG} or {@code surfaceNormalS} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code orthonormalBasisG}, {@code orthonormalBasisS}, {@code textureCoordinates}, {@code surfaceIntersectionPoint}, {@code ray}, {@code shape} or {@code surfaceIntersectionPointError}
+	 *                              are {@code null}
 	 */
-	public SurfaceIntersection3F(final OrthonormalBasis33F orthonormalBasisG, final OrthonormalBasis33F orthonormalBasisS, final Point2F textureCoordinates, final Point3F surfaceIntersectionPoint, final Ray3F ray, final Shape3F shape, final Vector3F surfaceIntersectionPointError, final Vector3F surfaceNormalG, final Vector3F surfaceNormalS, final float t) {
+	public SurfaceIntersection3F(final OrthonormalBasis33F orthonormalBasisG, final OrthonormalBasis33F orthonormalBasisS, final Point2F textureCoordinates, final Point3F surfaceIntersectionPoint, final Ray3F ray, final Shape3F shape, final Vector3F surfaceIntersectionPointError, final float t) {
 		this.orthonormalBasisG = Objects.requireNonNull(orthonormalBasisG, "orthonormalBasisG == null");
 		this.orthonormalBasisS = Objects.requireNonNull(orthonormalBasisS, "orthonormalBasisS == null");
 		this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
@@ -80,8 +76,6 @@ public final class SurfaceIntersection3F {
 		this.ray = Objects.requireNonNull(ray, "ray == null");
 		this.shape = Objects.requireNonNull(shape, "shape == null");
 		this.surfaceIntersectionPointError = Objects.requireNonNull(surfaceIntersectionPointError, "surfaceIntersectionPointError == null");
-		this.surfaceNormalG = Objects.requireNonNull(surfaceNormalG, "surfaceNormalG == null");
-		this.surfaceNormalS = Objects.requireNonNull(surfaceNormalS, "surfaceNormalS == null");
 		this.t = t;
 	}
 	
@@ -133,7 +127,7 @@ public final class SurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	public Ray3F createRay(final Point3F point) {
-		return new Ray3F(Point3F.offset(this.surfaceIntersectionPoint, Vector3F.direction(this.surfaceIntersectionPoint, point), this.surfaceNormalS, this.surfaceIntersectionPointError), Vector3F.direction(this.surfaceIntersectionPoint, point));
+		return new Ray3F(Point3F.offset(this.surfaceIntersectionPoint, Vector3F.direction(this.surfaceIntersectionPoint, point), this.orthonormalBasisS.getW(), this.surfaceIntersectionPointError), Vector3F.direction(this.surfaceIntersectionPoint, point));
 	}
 	
 	/**
@@ -146,7 +140,7 @@ public final class SurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
 	public Ray3F createRay(final Vector3F direction) {
-		return new Ray3F(Point3F.offset(this.surfaceIntersectionPoint, direction, this.surfaceNormalS, this.surfaceIntersectionPointError), direction);
+		return new Ray3F(Point3F.offset(this.surfaceIntersectionPoint, direction, this.orthonormalBasisS.getW(), this.surfaceIntersectionPointError), direction);
 	}
 	
 	/**
@@ -174,7 +168,7 @@ public final class SurfaceIntersection3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new SurfaceIntersection3F(%s, %s, %s, %s, %s, %s, %s, %s, %s, %+.10f)", this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceIntersectionPointError, this.surfaceNormalG, this.surfaceNormalS, Float.valueOf(this.t));
+		return String.format("new SurfaceIntersection3F(%s, %s, %s, %s, %s, %s, %s, %+.10f)", this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceIntersectionPointError, Float.valueOf(this.t));
 	}
 	
 	/**
@@ -184,24 +178,6 @@ public final class SurfaceIntersection3F {
 	 */
 	public Vector3F getSurfaceIntersectionPointError() {
 		return this.surfaceIntersectionPointError;
-	}
-	
-	/**
-	 * Returns the {@link Vector3F} instance that is used as the surface normal for the geometry.
-	 * 
-	 * @return the {@code Vector3F} instance that is used as the surface normal for the geometry
-	 */
-	public Vector3F getSurfaceNormalG() {
-		return this.surfaceNormalG;
-	}
-	
-	/**
-	 * Returns the {@link Vector3F} instance that is used as the surface normal for shading.
-	 * 
-	 * @return the {@code Vector3F} instance that is used as the surface normal for shading
-	 */
-	public Vector3F getSurfaceNormalS() {
-		return this.surfaceNormalS;
 	}
 	
 	/**
@@ -232,10 +208,6 @@ public final class SurfaceIntersection3F {
 			return false;
 		} else if(!Objects.equals(this.surfaceIntersectionPointError, SurfaceIntersection3F.class.cast(object).surfaceIntersectionPointError)) {
 			return false;
-		} else if(!Objects.equals(this.surfaceNormalG, SurfaceIntersection3F.class.cast(object).surfaceNormalG)) {
-			return false;
-		} else if(!Objects.equals(this.surfaceNormalS, SurfaceIntersection3F.class.cast(object).surfaceNormalS)) {
-			return false;
 		} else if(!equal(this.t, SurfaceIntersection3F.class.cast(object).t)) {
 			return false;
 		} else {
@@ -259,7 +231,7 @@ public final class SurfaceIntersection3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceIntersectionPointError, this.surfaceNormalG, this.surfaceNormalS, Float.valueOf(this.t));
+		return Objects.hash(this.orthonormalBasisG, this.orthonormalBasisS, this.textureCoordinates, this.surfaceIntersectionPoint, this.ray, this.shape, this.surfaceIntersectionPointError, Float.valueOf(this.t));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -302,7 +274,7 @@ public final class SurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code direction} are {@code null}
 	 */
 	public static SurfaceIntersection3F orient(final SurfaceIntersection3F surfaceIntersection, final Vector3F direction) {
-		if(Vector3F.dotProduct(direction, surfaceIntersection.getSurfaceNormalG()) >= 0.0F) {
+		if(Vector3F.dotProduct(direction, surfaceIntersection.getOrthonormalBasisG().getW()) >= 0.0F) {
 			final OrthonormalBasis33F orthonormalBasisG = OrthonormalBasis33F.flipW(surfaceIntersection.orthonormalBasisG);
 			final OrthonormalBasis33F orthonormalBasisS = OrthonormalBasis33F.flipW(surfaceIntersection.orthonormalBasisS);
 			
@@ -315,12 +287,10 @@ public final class SurfaceIntersection3F {
 			final Shape3F shape = surfaceIntersection.shape;
 			
 			final Vector3F surfaceIntersectionPointError = surfaceIntersection.surfaceIntersectionPointError;
-			final Vector3F surfaceNormalG = Vector3F.negate(surfaceIntersection.surfaceNormalG);
-			final Vector3F surfaceNormalS = Vector3F.negate(surfaceIntersection.surfaceNormalS);
 			
 			final float t = surfaceIntersection.t;
 			
-			return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, shape, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t);
+			return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, shape, surfaceIntersectionPointError, t);
 		}
 		
 		return surfaceIntersection;
@@ -366,6 +336,7 @@ public final class SurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection}, {@code matrix} or {@code matrixInverse} are {@code null}
 	 */
 	public static SurfaceIntersection3F transform(final SurfaceIntersection3F surfaceIntersection, final Matrix44F matrix, final Matrix44F matrixInverse) {
+//		TODO: Find out if the previous operation applied to 'surfaceNormalS', 'Vector3F.faceForward(surfaceNormalSNewSpace, surfaceNormalGNewSpace)', should be applied to 'orthonormalBasisSNewSpace':
 		final OrthonormalBasis33F orthonormalBasisGOldSpace = surfaceIntersection.orthonormalBasisG;
 		final OrthonormalBasis33F orthonormalBasisSOldSpace = surfaceIntersection.orthonormalBasisS;
 		final OrthonormalBasis33F orthonormalBasisGNewSpace = OrthonormalBasis33F.transformTranspose(matrixInverse, orthonormalBasisGOldSpace);
@@ -383,13 +354,9 @@ public final class SurfaceIntersection3F {
 		
 		final Vector3F surfaceIntersectionPointErrorOldSpace = surfaceIntersection.surfaceIntersectionPointError;
 		final Vector3F surfaceIntersectionPointErrorNewSpace = Vector3F.transformError(matrix, surfaceIntersectionPointOldSpace, surfaceIntersectionPointErrorOldSpace);
-		final Vector3F surfaceNormalGOldSpace = surfaceIntersection.surfaceNormalG;
-		final Vector3F surfaceNormalSOldSpace = surfaceIntersection.surfaceNormalS;
-		final Vector3F surfaceNormalGNewSpace = Vector3F.normalize(Vector3F.transformTranspose(matrixInverse, surfaceNormalGOldSpace));
-		final Vector3F surfaceNormalSNewSpace = Vector3F.normalize(Vector3F.transformTranspose(matrixInverse, surfaceNormalSOldSpace));
 		
 		final float tNewSpace = abs(Point3F.distance(rayNewSpace.getOrigin(), surfaceIntersectionPointNewSpace));
 		
-		return new SurfaceIntersection3F(orthonormalBasisGNewSpace, orthonormalBasisSNewSpace, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, surfaceIntersectionPointErrorNewSpace, surfaceNormalGNewSpace, Vector3F.faceForward(surfaceNormalSNewSpace, surfaceNormalGNewSpace), tNewSpace);
+		return new SurfaceIntersection3F(orthonormalBasisGNewSpace, orthonormalBasisSNewSpace, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, surfaceIntersectionPointErrorNewSpace, tNewSpace);
 	}
 }

@@ -176,7 +176,7 @@ public final class BSDF {
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
 		
-		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalG();
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
 		
 		final boolean isReflecting = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG) > 0.0F;
 		
@@ -243,7 +243,7 @@ public final class BSDF {
 		
 		final Vector3F incoming = bXDFDistributionFunctionResult.getIncoming();
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
-		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalG();
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();//.getSurfaceNormalG();
 		
 		Color3F result = bXDFDistributionFunctionResult.getResult();
 		

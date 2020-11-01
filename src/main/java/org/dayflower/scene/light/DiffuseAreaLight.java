@@ -66,7 +66,7 @@ public final class DiffuseAreaLight extends AreaLight {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(direction, "direction == null");
 		
-		return this.isTwoSided || Vector3F.dotProduct(intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalS(), direction) > 0.0F ? this.radianceEmitted : Color3F.BLACK;
+		return this.isTwoSided || Vector3F.dotProduct(intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS().getW(), direction) > 0.0F ? this.radianceEmitted : Color3F.BLACK;
 	}
 	
 	/**
@@ -222,7 +222,7 @@ public final class DiffuseAreaLight extends AreaLight {
 		final Point3F referencePointWorldSpace = surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint();
 		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
 		
-		final Vector3F referenceSurfaceNormalWorldSpace = surfaceIntersectionWorldSpace.getSurfaceNormalS();
+		final Vector3F referenceSurfaceNormalWorldSpace = surfaceIntersectionWorldSpace.getOrthonormalBasisS().getW();
 		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
 		
 		final Optional<SurfaceSample3F> optionalSurfaceSampleLightSpace = this.shape.sample(referencePointLightSpace, referenceSurfaceNormalLightSpace, sample.getU(), sample.getV());
@@ -333,7 +333,7 @@ public final class DiffuseAreaLight extends AreaLight {
 		final Point3F referencePointWorldSpace = surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint();
 		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
 		
-		final Vector3F referenceSurfaceNormalWorldSpace = surfaceIntersectionWorldSpace.getSurfaceNormalS();
+		final Vector3F referenceSurfaceNormalWorldSpace = surfaceIntersectionWorldSpace.getOrthonormalBasisS().getW();
 		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
 		
 		final Vector3F incomingLightSpace = Vector3F.transform(worldToLight, incoming);

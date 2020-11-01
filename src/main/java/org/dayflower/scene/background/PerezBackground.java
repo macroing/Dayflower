@@ -200,8 +200,8 @@ public final class PerezBackground implements Background {
 		
 		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 		
-		final Vector3F surfaceNormalG = surfaceIntersection.getSurfaceNormalG();
-		final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
+		final Vector3F surfaceNormalG = surfaceIntersection.getOrthonormalBasisG().getW();
+		final Vector3F surfaceNormalS = surfaceIntersection.getOrthonormalBasisS().getW();
 		
 		if(Vector3F.dotProduct(this.sunDirectionWorldSpace, surfaceNormalG) > 0.0F && Vector3F.dotProduct(this.sunDirectionWorldSpace, surfaceNormalS) > 0.0F) {
 			backgroundSamples.add(new BackgroundSample(this.sunColor, new Ray3F(surfaceIntersectionPoint, this.sunDirectionWorldSpace)));

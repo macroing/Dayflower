@@ -730,10 +730,8 @@ public final class Curve3F implements Shape3F {
 		final Point3F surfaceIntersectionPoint = Point3F.add(ray.getOrigin(), ray.getDirection(), t);
 		
 		final Vector3F surfaceIntersectionPointError = new Vector3F(2.0F * hitWidth);
-		final Vector3F surfaceNormalG = orthonormalBasisG.getW();
-		final Vector3F surfaceNormalS = surfaceNormalG;
 		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t));
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
 	}
 	
 	private float doIntersectionTRecursive(final Ray3F ray, final float tMinimum, final float tMaximum, final Matrix44F rayToObject, final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float uMinimum, final float uMaximum, final int depth) {

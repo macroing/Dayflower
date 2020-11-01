@@ -151,8 +151,8 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			
 			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 			
-			final Vector3F surfaceNormalG = surfaceIntersection.getSurfaceNormalG();
-			final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
+			final Vector3F surfaceNormalG = surfaceIntersection.getOrthonormalBasisG().getW();
+			final Vector3F surfaceNormalS = surfaceIntersection.getOrthonormalBasisS().getW();
 			
 			if(!(material instanceof PBRTMaterial)) {
 				break;
@@ -335,7 +335,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 				final float lightProbabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getSurfaceNormalS())));
+					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getOrthonormalBasisS().getW())));
 					
 					final float scatteringProbabilityDensityFunctionValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, incoming);
 					
@@ -356,7 +356,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 				
 				final Vector3F incoming = bSDFDistributionFunctionResult.getIncoming();
 				
-				final Color3F scatteringResult = Color3F.multiply(bSDFDistributionFunctionResult.getResult(), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getSurfaceNormalS())));
+				final Color3F scatteringResult = Color3F.multiply(bSDFDistributionFunctionResult.getResult(), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getOrthonormalBasisS().getW())));
 				
 				final boolean hasSampledSpecular = bSDFDistributionFunctionResult.getBXDFType().isSpecular();
 				
@@ -426,7 +426,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 				final float lightProbabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getSurfaceNormalS())));
+					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getOrthonormalBasisS().getW())));
 					
 					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
 						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming), lightProbabilityDensityFunctionValue));

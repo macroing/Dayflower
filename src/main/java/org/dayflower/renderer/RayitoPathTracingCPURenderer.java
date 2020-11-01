@@ -151,7 +151,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 				
 				final OrthonormalBasis33F orthonormalBasisS = surfaceIntersection.getOrthonormalBasisS();
 				
-				final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
+				final Vector3F surfaceNormalS = orthonormalBasisS.getW();
 				
 				if(currentBounce == 0 || currentBounce == currentBounceDiracDistribution) {
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, rayitoMaterial.emittance(intersection)));
@@ -240,7 +240,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 		
 		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 		
-		final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+		final Vector3F surfaceNormal = orthonormalBasis.getW();
 		
 		int samples = 0;
 		
@@ -364,7 +364,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 		
 		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 		
-		final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+		final Vector3F surfaceNormal = orthonormalBasis.getW();
 		
 		for(final Light light : lights) {
 			if(light instanceof PrimitiveLight) {

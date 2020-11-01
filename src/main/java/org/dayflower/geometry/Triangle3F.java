@@ -217,7 +217,7 @@ public final class Triangle3F implements Shape3F {
 		
 		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
 		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t));
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
 	}
 	
 	/**
@@ -387,7 +387,7 @@ public final class Triangle3F implements Shape3F {
 			
 			final Point3F point = surfaceIntersection.getSurfaceIntersectionPoint();
 			
-			final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();//.getSurfaceNormalS();
 			
 			return calculateProbabilityDensityFunctionValueForSolidAngle(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
 		}

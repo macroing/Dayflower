@@ -111,8 +111,8 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 			
 			final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 			
-			final Vector3F surfaceNormalG = surfaceIntersection.getSurfaceNormalG();
-			final Vector3F surfaceNormalS = surfaceIntersection.getSurfaceNormalS();
+			final Vector3F surfaceNormalG = surfaceIntersection.getOrthonormalBasisG().getW();
+			final Vector3F surfaceNormalS = surfaceIntersection.getOrthonormalBasisS().getW();
 			
 			final Color3F albedo = primitive.getTextureAlbedo().getColorRGB(intersection);
 			final Color3F ambient = new Color3F(0.05F);

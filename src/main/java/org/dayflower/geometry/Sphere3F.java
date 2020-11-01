@@ -226,17 +226,14 @@ public final class Sphere3F implements Shape3F {
 		
 		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction, t);
 		
-		final Vector3F surfaceNormalG = Vector3F.directionNormalized(center, surfaceIntersectionPoint);
-		final Vector3F surfaceNormalS = surfaceNormalG;
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG);
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(Vector3F.directionNormalized(center, surfaceIntersectionPoint));
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
-		final Point2F textureCoordinates = new Point2F(0.5F + atan2(surfaceNormalG.getZ(), surfaceNormalG.getX()) * PI_MULTIPLIED_BY_2_RECIPROCAL, 0.5F - asinpi(surfaceNormalG.getY()));
+		final Point2F textureCoordinates = new Point2F(0.5F + atan2(orthonormalBasisG.getW().getZ(), orthonormalBasisG.getW().getX()) * PI_MULTIPLIED_BY_2_RECIPROCAL, 0.5F - asinpi(orthonormalBasisG.getW().getY()));
 		
 		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(Vector3F.absolute(new Vector3F(surfaceIntersectionPoint)), gamma(5));
 		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t));
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
 	}
 	
 	/**
@@ -391,7 +388,7 @@ public final class Sphere3F implements Shape3F {
 			
 			final Point3F point = surfaceIntersection.getSurfaceIntersectionPoint();
 			
-			final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
 			
 			return calculateProbabilityDensityFunctionValueForSolidAngle(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
 		}

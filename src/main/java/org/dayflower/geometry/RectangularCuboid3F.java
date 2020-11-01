@@ -162,16 +162,13 @@ public final class RectangularCuboid3F implements Shape3F {
 		
 		final Point2F textureCoordinates = doCalculateTextureCoordinates(surfaceIntersectionPoint, maximum, minimum, face);
 		
-		final Vector3F surfaceNormalG = doCalculateSurfaceNormalG(face);
-		final Vector3F surfaceNormalS = surfaceNormalG;
-		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG);
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(doCalculateSurfaceNormalG(face));
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
 //		TODO: Implement!
 		final Vector3F surfaceIntersectionPointError = new Vector3F();
 		
-		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t));
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
 	}
 	
 	/**

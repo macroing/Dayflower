@@ -456,7 +456,7 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code intersection} are {@code null}
 	 */
 	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Ray3F ray, final Intersection intersection) {
-		return calculateProbabilityDensityFunctionValueForSolidAngle(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalS());
+		return calculateProbabilityDensityFunctionValueForSolidAngle(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS().getW());
 	}
 	
 	/**

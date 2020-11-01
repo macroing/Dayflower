@@ -125,7 +125,7 @@ public final class SmallPTIPathTracingCPURenderer extends AbstractCPURenderer {
 				
 				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 				
-				final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+				final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
 				final Vector3F surfaceNormalCorrectlyOriented = Vector3F.dotProduct(currentDirection, surfaceNormal) < 0.0F ? surfaceNormal : Vector3F.negate(surfaceNormal);
 				
 				Color3F albedo = primitive.getTextureAlbedo().getColorRGB(intersection);

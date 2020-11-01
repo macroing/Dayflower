@@ -384,13 +384,59 @@ public final class Curve3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = intersection(ray, tMinimum, tMaximum);
+		final Data data = this.data;
 		
-		if(optionalSurfaceIntersection.isPresent()) {
-			return optionalSurfaceIntersection.get().getT();
+		final float uMaximum = this.uMaximum;
+		final float uMinimum = this.uMinimum;
+		
+		final float widthA = data.getWidthA();
+		final float widthB = data.getWidthB();
+		final float widthC = lerp(widthA, widthB, uMinimum);
+		final float widthD = lerp(widthA, widthB, uMaximum);
+		final float widthE = max(widthC, widthD) * 0.5F;
+		
+		final Point3F pointA = data.getPointA();
+		final Point3F pointB = data.getPointB();
+		final Point3F pointC = data.getPointC();
+		final Point3F pointD = data.getPointD();
+		
+		final Point3F pointE = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMinimum, uMinimum);
+		final Point3F pointF = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMinimum, uMaximum);
+		final Point3F pointG = doBezierBlossom(pointA, pointB, pointC, pointD, uMinimum, uMaximum, uMaximum);
+		final Point3F pointH = doBezierBlossom(pointA, pointB, pointC, pointD, uMaximum, uMaximum, uMaximum);
+		
+		final Vector3F directionX = doCreateDirectionX(ray, pointE, pointH);
+		
+		final Matrix44F objectToRay = Matrix44F.lookAt(ray.getOrigin(), Point3F.add(ray.getOrigin(), ray.getDirection()), directionX);
+		
+		final Point3F pointI = Point3F.transform(objectToRay, pointE);
+		final Point3F pointJ = Point3F.transform(objectToRay, pointF);
+		final Point3F pointK = Point3F.transform(objectToRay, pointG);
+		final Point3F pointL = Point3F.transform(objectToRay, pointH);
+		
+		final float xMaximum = 0.0F;
+		final float yMaximum = 0.0F;
+		final float zMaximum = ray.getDirection().length() * tMaximum;
+		
+		if(max(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) + widthE < tMinimum || min(pointI.getX(), pointJ.getX(), pointK.getX(), pointL.getX()) - widthE > xMaximum) {
+			return Float.NaN;
 		}
 		
-		return Float.NaN;
+		if(max(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) + widthE < tMinimum || min(pointI.getY(), pointJ.getY(), pointK.getY(), pointL.getY()) - widthE > yMaximum) {
+			return Float.NaN;
+		}
+		
+		if(max(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) + widthE < tMinimum || min(pointI.getZ(), pointJ.getZ(), pointK.getZ(), pointL.getZ()) - widthE > zMaximum) {
+			return Float.NaN;
+		}
+		
+		final float l01 = max(abs(pointI.getX() - 2.0F * pointJ.getX() + pointK.getX()), abs(pointI.getY() - 2.0F * pointJ.getY() + pointK.getY()), abs(pointI.getZ() - 2.0F * pointJ.getZ() + pointK.getZ()));
+		final float l02 = max(abs(pointJ.getX() - 2.0F * pointK.getX() + pointL.getX()), abs(pointJ.getY() - 2.0F * pointK.getY() + pointL.getY()), abs(pointJ.getZ() - 2.0F * pointK.getZ() + pointL.getZ()));
+		final float l03 = max(l01, l02);
+		
+		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
+		
+		return doIntersectionTRecursive(ray, tMinimum, tMaximum, Matrix44F.inverse(objectToRay), pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -688,6 +734,92 @@ public final class Curve3F implements Shape3F {
 		final Vector3F surfaceNormalS = surfaceNormalG;
 		
 		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, surfaceNormalG, surfaceNormalS, t));
+	}
+	
+	private float doIntersectionTRecursive(final Ray3F ray, final float tMinimum, final float tMaximum, final Matrix44F rayToObject, final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float uMinimum, final float uMaximum, final int depth) {
+		final Data data = this.data;
+		
+		final float rayDirectionLength = ray.getDirection().length();
+		
+		final float widthA = data.getWidthA();
+		final float widthB = data.getWidthB();
+		
+		if(depth > 0) {
+			final Point3F[] points = doBezierSubdivide(pointA, pointB, pointC, pointD);
+			
+			final float uA = uMinimum;
+			final float uB = (uMinimum + uMaximum) / 2.0F;
+			final float uC = uMaximum;
+			
+			final float widthC = max(lerp(widthA, widthB, uA), lerp(widthA, widthB, uB)) * 0.5F;
+			final float widthD = max(lerp(widthA, widthB, uB), lerp(widthA, widthB, uC)) * 0.5F;
+			
+			final float xMaximum = 0.0F;
+			final float yMaximum = 0.0F;
+			final float zMaximum = rayDirectionLength * tMaximum;
+			
+			final boolean isInsideAX = max(points[0].getX(), points[1].getX(), points[2].getX(), points[3].getX()) + widthC >= tMinimum && min(points[0].getX(), points[1].getX(), points[2].getX(), points[3].getX()) - widthC <= xMaximum;
+			final boolean isInsideAY = max(points[0].getY(), points[1].getY(), points[2].getY(), points[3].getY()) + widthC >= tMinimum && min(points[0].getY(), points[1].getY(), points[2].getY(), points[3].getY()) - widthC <= yMaximum;
+			final boolean isInsideAZ = max(points[0].getZ(), points[1].getZ(), points[2].getZ(), points[3].getZ()) + widthC >= tMinimum && min(points[0].getZ(), points[1].getZ(), points[2].getZ(), points[3].getZ()) - widthC <= zMaximum;
+			final boolean isInsideBX = max(points[3].getX(), points[4].getX(), points[5].getX(), points[6].getX()) + widthD >= tMinimum && min(points[3].getX(), points[4].getX(), points[5].getX(), points[6].getX()) - widthD <= xMaximum;
+			final boolean isInsideBY = max(points[3].getY(), points[4].getY(), points[5].getY(), points[6].getY()) + widthD >= tMinimum && min(points[3].getY(), points[4].getY(), points[5].getY(), points[6].getY()) - widthD <= yMaximum;
+			final boolean isInsideBZ = max(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) + widthD >= tMinimum && min(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) - widthD <= zMaximum;
+			
+			if(isInsideAX && isInsideAY && isInsideAZ) {
+				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, rayToObject, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
+				
+				if(!isNaN(t)) {
+					return t;
+				}
+			}
+			
+			if(isInsideBX && isInsideBY && isInsideBZ) {
+				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, rayToObject, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
+				
+				if(!isNaN(t)) {
+					return t;
+				}
+			}
+			
+			return Float.NaN;
+		}
+		
+		final float edgeA = (pointB.getY() - pointA.getY()) * -pointA.getY() + pointA.getX() * (pointA.getX() - pointB.getX());
+		final float edgeB = (pointC.getY() - pointD.getY()) * -pointD.getY() + pointD.getX() * (pointD.getX() - pointC.getX());
+		
+		if(edgeA < 0.0F || edgeB < 0.0F) {
+			return Float.NaN;
+		}
+		
+		final Vector2F segmentDirection = new Vector2F(pointD.getX() - pointA.getX(), pointD.getY() - pointA.getY());
+		
+		final float denominator = segmentDirection.lengthSquared();
+		
+		if(equal(denominator, 0.0F)) {
+			return Float.NaN;
+		}
+		
+		final float w = Vector2F.dotProduct(Vector2F.negate(new Vector2F(pointA.getX(), pointA.getY())), segmentDirection) / denominator;
+		final float u = saturate(lerp(uMinimum, uMaximum, w), uMinimum, uMaximum);
+		final float hitWidth = doComputeHitWidth(data, ray, u);
+		
+		final Point3F point = doBezierEvaluate(pointA, pointB, pointC, pointD, saturate(w));
+		
+		final float pointCurveDistanceSquared = point.getX() * point.getX() + point.getY() * point.getY();
+		
+		if(pointCurveDistanceSquared > hitWidth * hitWidth * 0.25F) {
+			return Float.NaN;
+		}
+		
+		final float zMaximum = rayDirectionLength * tMaximum;
+		
+		if(point.getZ() < tMinimum || point.getZ() > zMaximum) {
+			return Float.NaN;
+		}
+		
+		final float t = point.getZ() / rayDirectionLength;
+		
+		return t;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

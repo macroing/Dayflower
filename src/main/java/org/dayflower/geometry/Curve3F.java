@@ -49,7 +49,16 @@ public final class Curve3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Curve3F} instance.
+	 * <p>
+	 * If {@code data} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param data a {@link Data} instance
+	 * @param uMinimum the minimum U-value
+	 * @param uMaximum the maximum U-value
+	 * @throws NullPointerException thrown if, and only if, {@code data} is {@code null}
+	 */
 	public Curve3F(final Data data, final float uMinimum, final float uMaximum) {
 		this.data = Objects.requireNonNull(data, "data == null");
 		this.uMinimum = uMinimum;

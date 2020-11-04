@@ -607,7 +607,7 @@ public final class Curve3F implements Shape3F {
 		final List<Curve3F> curves = new ArrayList<>();
 		
 		for(int segment = 0; segment < segments; segment++) {
-			final int offset = segment * degree;
+			final int offset = segment;
 			
 			if(degree == 2) {
 				final Point3F point00 = points.get(offset + 0);

@@ -20,6 +20,7 @@ package org.dayflower.renderer;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.dayflower.display.Display;
 import org.dayflower.geometry.Ray3F;
@@ -31,13 +32,26 @@ import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.util.Timer;
 
+import com.amd.aparapi.Kernel;
+
 /**
- * An {@code AbstractCPURenderer} is an abstract implementation of {@link Renderer} that takes care of most aspects.
+ * An {@code AbstractGPURenderer} is an abstract implementation of {@link Renderer} that takes care of most aspects.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractCPURenderer implements Renderer {
+public abstract class AbstractGPURenderer extends Kernel implements Renderer {
+	private static final float PRNG_NEXT_FLOAT_RECIPROCAL = 1.0F / (1 << 24);
+	private static final long PRNG_ADDEND = 0xBL;
+	private static final long PRNG_MASK = (1L << 48L) - 1L;
+	private static final long PRNG_MULTIPLIER = 0x5DEECE66DL;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	protected long[] seeds;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private Display display;
 	private Image image;
 	private RendererConfiguration rendererConfiguration;
@@ -52,19 +66,19 @@ public abstract class AbstractCPURenderer implements Renderer {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code AbstractCPURenderer} instance.
+	 * Constructs a new {@code AbstractGPURenderer} instance.
 	 * <p>
 	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param display the {@link Display} instance associated with this {@code AbstractCPURenderer} instance
-	 * @param image the {@link Image} instance associated with this {@code AbstractCPURenderer} instance
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AbstractCPURenderer} instance
-	 * @param sampler the {@link Sampler} instance associated with this {@code AbstractCPURenderer} instance
-	 * @param scene the {@link Scene} instance associated with this {@code AbstractCPURenderer} instance
+	 * @param display the {@link Display} instance associated with this {@code AbstractGPURenderer} instance
+	 * @param image the {@link Image} instance associated with this {@code AbstractGPURenderer} instance
+	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance
+	 * @param sampler the {@link Sampler} instance associated with this {@code AbstractGPURenderer} instance
+	 * @param scene the {@link Scene} instance associated with this {@code AbstractGPURenderer} instance
 	 * @param isColorSpaceXYZ {@code true} if, and only if, an XYZ-color space should be used, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
 	 */
-	protected AbstractCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene, final boolean isColorSpaceXYZ) {
+	protected AbstractGPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene, final boolean isColorSpaceXYZ) {
 		this.display = Objects.requireNonNull(display, "display == null");
 		this.image = Objects.requireNonNull(image, "image == null");
 		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
@@ -80,9 +94,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link Display} instance associated with this {@code AbstractCPURenderer} instance.
+	 * Returns the {@link Display} instance associated with this {@code AbstractGPURenderer} instance.
 	 * 
-	 * @return the {@code Display} instance associated with this {@code AbstractCPURenderer} instance
+	 * @return the {@code Display} instance associated with this {@code AbstractGPURenderer} instance
 	 */
 	@Override
 	public final Display getDisplay() {
@@ -90,9 +104,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Returns the {@link Image} instance associated with this {@code AbstractCPURenderer} instance.
+	 * Returns the {@link Image} instance associated with this {@code AbstractGPURenderer} instance.
 	 * 
-	 * @return the {@code Image} instance associated with this {@code AbstractCPURenderer} instance
+	 * @return the {@code Image} instance associated with this {@code AbstractGPURenderer} instance
 	 */
 	@Override
 	public final Image getImage() {
@@ -100,9 +114,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Returns the {@link RendererConfiguration} instance associated with this {@code AbstractCPURenderer} instance.
+	 * Returns the {@link RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance.
 	 * 
-	 * @return the {@code RendererConfiguration} instance associated with this {@code AbstractCPURenderer} instance
+	 * @return the {@code RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance
 	 */
 	@Override
 	public final RendererConfiguration getRendererConfiguration() {
@@ -110,9 +124,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Returns the {@link Sampler} instance associated with this {@code AbstractCPURenderer} instance.
+	 * Returns the {@link Sampler} instance associated with this {@code AbstractGPURenderer} instance.
 	 * 
-	 * @return the {@code Sampler} instance associated with this {@code AbstractCPURenderer} instance
+	 * @return the {@code Sampler} instance associated with this {@code AbstractGPURenderer} instance
 	 */
 	@Override
 	public final Sampler getSampler() {
@@ -120,9 +134,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Returns the {@link Scene} instance associated with this {@code AbstractCPURenderer} instance.
+	 * Returns the {@link Scene} instance associated with this {@code AbstractGPURenderer} instance.
 	 * 
-	 * @return the {@code Scene} instance associated with this {@code AbstractCPURenderer} instance
+	 * @return the {@code Scene} instance associated with this {@code AbstractGPURenderer} instance
 	 */
 	@Override
 	public final Scene getScene() {
@@ -130,9 +144,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Returns the {@link Timer} instance associated with this {@code AbstractCPURenderer} instance.
+	 * Returns the {@link Timer} instance associated with this {@code AbstractGPURenderer} instance.
 	 * 
-	 * @return the {@code Timer} instance associated with this {@code AbstractCPURenderer} instance
+	 * @return the {@code Timer} instance associated with this {@code AbstractGPURenderer} instance
 	 */
 	@Override
 	public final Timer getTimer() {
@@ -140,9 +154,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code AbstractCPURenderer} instance is clearing the {@link Image} instance in the next {@link #render()} call, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code AbstractGPURenderer} instance is clearing the {@link Image} instance in the next {@link #render()} call, {@code false} otherwise.
 	 * 
-	 * @return {@code true} if, and only if, this {@code AbstractCPURenderer} instance is clearing the {@code Image} instance in the next {@code  render()} call, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code AbstractGPURenderer} instance is clearing the {@code Image} instance in the next {@code  render()} call, {@code false} otherwise
 	 */
 	@Override
 	public final boolean isClearing() {
@@ -193,26 +207,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 			
 			final long currentTimeMillis = System.currentTimeMillis();
 			
-			for(int y = 0; y < resolutionY; y++) {
-				for(int x = 0; x < resolutionX; x++) {
-					final Sample2F sample = sampler.sample2();
-					
-					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(x, y, sample.getX(), sample.getY());
-					
-					if(optionalRay.isPresent()) {
-						final Ray3F ray = optionalRay.get();
-						
-						final Color3F color0 = radiance(ray);
-						final Color3F color1 = isColorSpaceXYZ ? color0 : Color3F.convertRGBToXYZUsingPBRT(color0);
-						
-						if(!color1.hasInfinites() && !color1.hasNaNs()) {
-							image.filmAddColorXYZ(x + sample.getX(), y + sample.getY(), color1);
-						}
-					}
-				}
-				
-//				System.out.printf("%d/%d%n", Integer.valueOf((y + 1) * resolutionX), Integer.valueOf(resolutionX * resolutionY));
-			}
+//			TODO: Implement rendering via Kernel!
 			
 			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
 				image.filmRender();
@@ -260,19 +255,19 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Disposes of any resources created by this {@code AbstractCPURenderer} instance.
+	 * Disposes of any resources created by this {@code AbstractGPURenderer} instance.
 	 */
 	@Override
-	public final void dispose() {
-//		Do nothing!
+	public final synchronized void dispose() {
+		super.dispose();
 	}
 	
 	/**
-	 * Sets the {@link Display} instance associated with this {@code AbstractCPURenderer} instance to {@code display}.
+	 * Sets the {@link Display} instance associated with this {@code AbstractGPURenderer} instance to {@code display}.
 	 * <p>
 	 * If {@code display} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param display the {@code Display} instance associated with this {@code AbstractCPURenderer} instance
+	 * @param display the {@code Display} instance associated with this {@code AbstractGPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code display} is {@code null}
 	 */
 	@Override
@@ -281,11 +276,11 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Sets the {@link Image} instance associated with this {@code AbstractCPURenderer} instance to {@code image}.
+	 * Sets the {@link Image} instance associated with this {@code AbstractGPURenderer} instance to {@code image}.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image the {@code Image} instance associated with this {@code AbstractCPURenderer} instance
+	 * @param image the {@code Image} instance associated with this {@code AbstractGPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
 	@Override
@@ -294,11 +289,11 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Sets the {@link RendererConfiguration} instance associated with this {@code AbstractCPURenderer} instance to {@code rendererConfiguration}.
+	 * Sets the {@link RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance to {@code rendererConfiguration}.
 	 * <p>
 	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param rendererConfiguration the {@code RendererConfiguration} instance associated with this {@code AbstractCPURenderer} instance
+	 * @param rendererConfiguration the {@code RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
 	@Override
@@ -307,11 +302,11 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Sets the {@link Sampler} instance associated with this {@code AbstractCPURenderer} instance to {@code sampler}.
+	 * Sets the {@link Sampler} instance associated with this {@code AbstractGPURenderer} instance to {@code sampler}.
 	 * <p>
 	 * If {@code sampler} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param sampler the {@code Sampler} instance associated with this {@code AbstractCPURenderer} instance
+	 * @param sampler the {@code Sampler} instance associated with this {@code AbstractGPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code sampler} is {@code null}
 	 */
 	@Override
@@ -320,11 +315,11 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Sets the {@link Scene} instance associated with this {@code AbstractCPURenderer} instance to {@code scene}.
+	 * Sets the {@link Scene} instance associated with this {@code AbstractGPURenderer} instance to {@code scene}.
 	 * <p>
 	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param scene the {@code Scene} instance associated with this {@code AbstractCPURenderer} instance
+	 * @param scene the {@code Scene} instance associated with this {@code AbstractGPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
 	 */
 	@Override
@@ -333,23 +328,44 @@ public abstract class AbstractCPURenderer implements Renderer {
 	}
 	
 	/**
-	 * Sets up all necessary resources for this {@code AbstractCPURenderer} instance.
+	 * Sets up all necessary resources for this {@code AbstractGPURenderer} instance.
 	 */
 	@Override
 	public final void setup() {
-//		Do nothing!
+		doSetupSeeds();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive).
 	 * 
-	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the radiance along {@code ray}
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 * @return a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive)
 	 */
-	protected abstract Color3F radiance(final Ray3F ray);
+	protected final float random() {
+		return doNext(24) * PRNG_NEXT_FLOAT_RECIPROCAL;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private int doNext(final int bits) {
+		final int index = getGlobalId();
+		
+		final long oldSeed = this.seeds[index];
+		final long newSeed = (oldSeed * PRNG_MULTIPLIER + PRNG_ADDEND) & PRNG_MASK;
+		
+		this.seeds[index] = newSeed;
+		
+		return (int)(newSeed >>> (48 - bits));
+	}
+	
+	private void doSetupSeeds() {
+		this.seeds = new long[this.image.getResolution()];
+		
+		for(int i = 0; i < this.seeds.length; i++) {
+			this.seeds[i] = ThreadLocalRandom.current().nextLong();
+		}
+		
+		put(this.seeds);
+	}
 }

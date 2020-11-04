@@ -129,11 +129,9 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			
 			if(currentBounce == 0 || isSpecularBounce) {
 				if(hasFoundIntersection) {
-//					radiance += throughput * isect.Le(-ray.d);
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(Vector3F.negate(ray.getDirection()))));
 				} else {
 					for(final Light light : lights) {
-//						radiance += throughput * light->Le(ray);
 						radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateRadianceEmitted(currentRay)));
 					}
 				}
@@ -173,7 +171,6 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			final BSDF bSDF = optionalBSDF.get();
 			
 			if(bSDF.countBXDFsBySpecularType(false) > 0) {
-//				radiance += throughput * UniformSampleOneLight(isect, scene, arena, sampler, false, distrib);
 				radiance = Color3F.add(radiance, Color3F.multiply(throughput, doLightSampleOneUniformDistribution(bSDF, intersection, scene)));
 			}
 			
@@ -199,7 +196,6 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 				break;
 			}
 			
-//			throughput *= result * AbsDot(incoming, surfaceNormalS) / probabilityDensityFunctionValue;
 			throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result, abs(Vector3F.dotProduct(incoming, surfaceNormalS))), probabilityDensityFunctionValue));
 			
 			isSpecularBounce = bXDFType.isSpecular();

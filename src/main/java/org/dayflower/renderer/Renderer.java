@@ -162,4 +162,9 @@ public interface Renderer {
 	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
 	 */
 	void setScene(final Scene scene);
+	
+	/**
+	 * Sets up all necessary resources for this {@code Renderer} instance.
+	 */
+	void setup();
 }

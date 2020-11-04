@@ -20,6 +20,7 @@ Supported Features
 #### BRDF
 * Ashikhmin-Shirley
 * Fresnel Specular
+* Hair
 * Lambertian
 * Oren-Nayar
 * Reflection
@@ -28,6 +29,7 @@ Supported Features
 
 #### BTDF
 * Fresnel Specular
+* Hair
 * Lambertian
 * Refraction
 * Specular
@@ -51,6 +53,7 @@ Supported Features
 * Triangle
 
 #### Light
+* Area
 * Directional
 * Point
 * Primitive
@@ -62,7 +65,9 @@ Supported Features
 * Ray Caster
 
 #### Shapes
+* Curve
 * Plane
+* Procedural Terrain
 * Rectangular Cuboid
 * Sphere
 * Torus

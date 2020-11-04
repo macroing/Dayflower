@@ -216,7 +216,7 @@ public final class Curve3F implements Shape3F {
 		
 		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
 		
-		return doIntersectionRecursive(ray, tMinimum, tMaximum, rayToObject, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
+		return doIntersectionRecursive(ray, tMinimum, tMaximum, objectToRay, rayToObject, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
 	}
 	
 	/**
@@ -1029,7 +1029,7 @@ public final class Curve3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Optional<SurfaceIntersection3F> doIntersectionRecursive(final Ray3F ray, final float tMinimum, final float tMaximum, final Matrix44F rayToObject, final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float uMinimum, final float uMaximum, final int depth) {
+	private Optional<SurfaceIntersection3F> doIntersectionRecursive(final Ray3F ray, final float tMinimum, final float tMaximum, final Matrix44F objectToRay, final Matrix44F rayToObject, final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float uMinimum, final float uMaximum, final int depth) {
 		final Data data = this.data;
 		
 		final float rayDirectionLength = ray.getDirection().length();
@@ -1059,7 +1059,7 @@ public final class Curve3F implements Shape3F {
 			final boolean isInsideBZ = max(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) + widthD >= tMinimum && min(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) - widthD <= zMaximum;
 			
 			if(isInsideAX && isInsideAY && isInsideAZ) {
-				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = doIntersectionRecursive(ray, tMinimum, tMaximum, rayToObject, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = doIntersectionRecursive(ray, tMinimum, tMaximum, objectToRay, rayToObject, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
 				
 				if(optionalSurfaceIntersection.isPresent()) {
 					return optionalSurfaceIntersection;
@@ -1067,7 +1067,7 @@ public final class Curve3F implements Shape3F {
 			}
 			
 			if(isInsideBX && isInsideBY && isInsideBZ) {
-				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = doIntersectionRecursive(ray, tMinimum, tMaximum, rayToObject, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = doIntersectionRecursive(ray, tMinimum, tMaximum, objectToRay, rayToObject, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
 				
 				if(optionalSurfaceIntersection.isPresent()) {
 					return optionalSurfaceIntersection;
@@ -1117,7 +1117,7 @@ public final class Curve3F implements Shape3F {
 		final float v = edgeFunction > 0.0F ? 0.5F + pointCurveDistance / hitWidth : 0.5F - pointCurveDistance / hitWidth;
 		final float t = point.getZ() / rayDirectionLength;
 		
-		final OrthonormalBasis33F orthonormalBasisG = doComputeOrthonormalBasisG(data, rayToObject, hitWidth, u, v);
+		final OrthonormalBasis33F orthonormalBasisG = doComputeOrthonormalBasisG(data, objectToRay, rayToObject, hitWidth, u, v);
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
 		final Point2F textureCoordinates = new Point2F(u, v);
@@ -1217,20 +1217,22 @@ public final class Curve3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static OrthonormalBasis33F doComputeOrthonormalBasisG(final Data data, final Matrix44F rayToObject, final float hitWidth, final float u, final float v) {
+	private static OrthonormalBasis33F doComputeOrthonormalBasisG(final Data data, final Matrix44F objectToRay, final Matrix44F rayToObject, final float hitWidth, final float u, final float v) {
 		switch(data.getType()) {
 			case CYLINDER: {
 				final Vector3F directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
-				final Vector3F directionUPlane = Vector3F.transform(Matrix44F.inverse(rayToObject), directionU);
-				final Vector3F directionV = Vector3F.transform(Matrix44F.rotate(AngleF.degrees(lerp(-90.0F, 90.0F, v)), directionUPlane), Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth));
+				final Vector3F directionUPlane = Vector3F.transform(objectToRay, directionU);
+				final Vector3F directionVPlane = Vector3F.transform(Matrix44F.rotate(AngleF.degrees(-lerp(-90.0F, 90.0F, v), -90.0F, 90.0F), directionUPlane), Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth));
+				final Vector3F directionV = Vector3F.transform(rayToObject, directionVPlane);
 				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
 				
 				return new OrthonormalBasis33F(directionW, directionV, directionU);
 			}
 			case FLAT: {
 				final Vector3F directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
-				final Vector3F directionUPlane = Vector3F.transform(Matrix44F.inverse(rayToObject), directionU);
-				final Vector3F directionV = Vector3F.transform(rayToObject, Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth));
+				final Vector3F directionUPlane = Vector3F.transform(objectToRay, directionU);
+				final Vector3F directionVPlane = Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth);
+				final Vector3F directionV = Vector3F.transform(rayToObject, directionVPlane);
 				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
 				
 				return new OrthonormalBasis33F(directionW, directionV, directionU);

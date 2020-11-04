@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Curve3F;
-import org.dayflower.geometry.Curve3F.Data;
 import org.dayflower.geometry.Curve3F.Type;
 import org.dayflower.geometry.Curves3F;
 import org.dayflower.geometry.Matrix44F;
@@ -59,12 +58,9 @@ import org.dayflower.scene.background.ConstantBackground;
 import org.dayflower.scene.background.ImageBackground;
 import org.dayflower.scene.background.PerezBackground;
 import org.dayflower.scene.light.DiffuseAreaLight;
-import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.PrimitiveLight;
-import org.dayflower.scene.light.SpotLight;
 import org.dayflower.scene.pbrt.GlassMaterial;
-import org.dayflower.scene.pbrt.HairMaterial;
 import org.dayflower.scene.pbrt.MatteMaterial;
 import org.dayflower.scene.pbrt.MetalMaterial;
 import org.dayflower.scene.pbrt.MirrorMaterial;
@@ -328,6 +324,7 @@ public final class Scenes {
 		final Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F), new Point3F(1.0F));
 		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
 		final Shape3F shape5 = new Torus3F();
+//		final Shape3F shape5 = new Curves3F(Curve3F.createCurvesByBSpline(Arrays.asList(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 2.0F, 0.0F), new Point3F(0.0F, 3.0F, 0.0F)), new ArrayList<>(), Type.FLAT, 5.0F, 5.0F, 3, 5));
 		
 		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
 		final Texture texture12 = new ConstantTexture();

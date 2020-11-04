@@ -28,11 +28,16 @@ import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
+import static org.dayflower.util.Floats.toFloat;
 import static org.dayflower.util.Ints.saturate;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.dayflower.util.Ints;
+import org.dayflower.util.Lists;
 
 /**
  * A {@code Curve3F} denotes a 3-dimensional curve that uses the data type {@code float}.
@@ -181,7 +186,8 @@ public final class Curve3F implements Shape3F {
 		
 		final Vector3F directionX = doCreateDirectionX(ray, pointE, pointH);
 		
-		final Matrix44F objectToRay = Matrix44F.lookAt(ray.getOrigin(), Point3F.add(ray.getOrigin(), ray.getDirection()), directionX);
+		final Matrix44F rayToObject = Matrix44F.lookAt(ray.getOrigin(), Point3F.add(ray.getOrigin(), ray.getDirection()), directionX);
+		final Matrix44F objectToRay = Matrix44F.inverse(rayToObject);
 		
 		final Point3F pointI = Point3F.transform(objectToRay, pointE);
 		final Point3F pointJ = Point3F.transform(objectToRay, pointF);
@@ -210,7 +216,7 @@ public final class Curve3F implements Shape3F {
 		
 		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
 		
-		return doIntersectionRecursive(ray, tMinimum, tMaximum, Matrix44F.inverse(objectToRay), pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
+		return doIntersectionRecursive(ray, tMinimum, tMaximum, rayToObject, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
 	}
 	
 	/**
@@ -416,7 +422,8 @@ public final class Curve3F implements Shape3F {
 		
 		final Vector3F directionX = doCreateDirectionX(ray, pointE, pointH);
 		
-		final Matrix44F objectToRay = Matrix44F.lookAt(ray.getOrigin(), Point3F.add(ray.getOrigin(), ray.getDirection()), directionX);
+		final Matrix44F rayToObject = Matrix44F.lookAt(ray.getOrigin(), Point3F.add(ray.getOrigin(), ray.getDirection()), directionX);
+		final Matrix44F objectToRay = Matrix44F.inverse(rayToObject);
 		
 		final Point3F pointI = Point3F.transform(objectToRay, pointE);
 		final Point3F pointJ = Point3F.transform(objectToRay, pointF);
@@ -445,12 +452,276 @@ public final class Curve3F implements Shape3F {
 		
 		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
 		
-		return doIntersectionTRecursive(ray, tMinimum, tMaximum, Matrix44F.inverse(objectToRay), pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
+		return doIntersectionTRecursive(ray, tMinimum, tMaximum, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code List} of {@code Curve3F} instances.
+	 * <p>
+	 * If either {@code pointA}, {@code pointB}, {@code pointC}, {@code pointD}, {@code type}, {@code normalA} or {@code normalB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pointA a {@link Point3F} instance with the control point denoted by A
+	 * @param pointB a {@code Point3F} instance with the control point denoted by B
+	 * @param pointC a {@code Point3F} instance with the control point denoted by C
+	 * @param pointD a {@code Point3F} instance with the control point denoted by D
+	 * @param type a {@link Type} instance
+	 * @param normalA a {@link Vector3F} instance with the normal denoted by A
+	 * @param normalB a {@code Vector3F} instance with the normal denoted by B
+	 * @param widthA the width denoted by A
+	 * @param widthB the width denoted by B
+	 * @param splitDepth the split depth
+	 * @return a {@code List} of {@code Curve3F} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code pointA}, {@code pointB}, {@code pointC}, {@code pointD}, {@code type}, {@code normalA} or {@code normalB} are {@code null}
+	 */
+	public static List<Curve3F> createCurves(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final Type type, final Vector3F normalA, final Vector3F normalB, final float widthA, final float widthB, final int splitDepth) {
+		Objects.requireNonNull(pointA, "pointA == null");
+		Objects.requireNonNull(pointB, "pointB == null");
+		Objects.requireNonNull(pointC, "pointC == null");
+		Objects.requireNonNull(pointD, "pointD == null");
+		Objects.requireNonNull(type, "type == null");
+		Objects.requireNonNull(normalA, "normalA == null");
+		Objects.requireNonNull(normalB, "normalB == null");
+		
+		final Data data = new Data(pointA, pointB, pointC, pointD, type, normalA, normalB, widthA, widthB);
+		
+		final List<Curve3F> curves = new ArrayList<>();
+		
+		final int segments = 1 << splitDepth;
+		
+		for(int segment = 0; segment < segments; segment++) {
+			final float uMinimum = toFloat(segment + 0) / toFloat(segments);
+			final float uMaximum = toFloat(segment + 1) / toFloat(segments);
+			
+			curves.add(new Curve3F(data, uMinimum, uMaximum));
+		}
+		
+		return curves;
+	}
+	
+	/**
+	 * Returns a {@code List} of {@code Curve3F} instances.
+	 * <p>
+	 * If either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code degree} is less than {@code 2} or greater than {@code 3}, {@code points} contains the wrong number of {@link Point3F} instances or {@code normals} contains the wrong number of {@link Vector3F} instances, an
+	 * {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Below follows the constraints:
+	 * <ul>
+	 * <li>For any given {@code degree}, there must exist at least {@code (degree + 1)} {@code Point3F} instances in {@code points}.</li>
+	 * <li>For a {@link Type} of {@link Type#RIBBON}, there must exist exactly {@code (points.size() - degree + 1)} {@code Vector3F} instances in {@code normals} and {@code 0} otherwise.</li>
+	 * </ul>
+	 * 
+	 * @param points a {@code List} of {@code Point3F} instances that represents the control points
+	 * @param normals a {@code List} of {@code Vector3F} instances that represents the normals
+	 * @param type a {@code Type} instance
+	 * @param widthA the width denoted by A
+	 * @param widthB the width denoted by B
+	 * @param degree the degree
+	 * @param splitDepth the split depth
+	 * @return a {@code List} of {@code Curve3F} instances
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code degree} is less than {@code 2} or greater than {@code 3}, {@code points} contains the wrong number of {@code Point3F} instances or {@code normals} contains the wrong number
+	 *                                  of {@code Vector3F} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}
+	 */
+	public static List<Curve3F> createCurvesByBSpline(final List<Point3F> points, final List<Vector3F> normals, final Type type, final float widthA, final float widthB, final int degree, final int splitDepth) {
+		Lists.requireNonNullList(points, "points");
+		Lists.requireNonNullList(normals, "normals");
+		
+		Objects.requireNonNull(type, "type == null");
+		
+		if(degree != 2 && degree != 3) {
+			throw new IllegalArgumentException(String.format("Parameter argument degree must be 2 or 3: degree == %d", Integer.valueOf(degree)));
+		}
+		
+		if(points.size() < degree + 1) {
+			throw new IllegalArgumentException(String.format("Parameter argument points must contain at least %d Point3F instances: points.size() == %d", Integer.valueOf(degree + 1), Integer.valueOf(points.size())));
+		}
+		
+		final int segments = points.size() - degree;
+		
+		switch(type) {
+			case CYLINDER:
+				Ints.requireExact(normals.size(), 0, "normals.size()");
+				
+				break;
+			case FLAT:
+				Ints.requireExact(normals.size(), 0, "normals.size()");
+				
+				break;
+			case RIBBON:
+				Ints.requireExact(normals.size(), segments + 1, "normals.size()");
+				
+				break;
+			default:
+				break;
+		}
+		
+		final List<Curve3F> curves = new ArrayList<>();
+		
+		for(int segment = 0; segment < segments; segment++) {
+			final int offset = segment * degree;
+			
+			if(degree == 2) {
+				final Point3F point00 = points.get(offset + 0);
+				final Point3F point01 = points.get(offset + 1);
+				final Point3F point02 = points.get(offset + 2);
+				
+				final Point3F point10 = Point3F.lerp(point00, point01, 0.5F);
+				final Point3F point11 = Point3F.lerp(point01, point02, 0.5F);
+				
+				final Point3F pointA = point10;
+				final Point3F pointB = Point3F.lerp(point10, point01, 2.0F / 3.0F);
+				final Point3F pointC = Point3F.lerp(point01, point11, 1.0F / 3.0F);
+				final Point3F pointD = point11;
+				
+				final Vector3F normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3F();
+				final Vector3F normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3F();
+				
+				final float widthC = lerp(widthA, widthB, toFloat(segment + 0) / toFloat(segments));
+				final float widthD = lerp(widthA, widthB, toFloat(segment + 1) / toFloat(segments));
+				
+				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
+			} else {
+				final Point3F point00 = points.get(offset + 0);
+				final Point3F point01 = points.get(offset + 1);
+				final Point3F point02 = points.get(offset + 2);
+				final Point3F point03 = points.get(offset + 3);
+				
+				final Point3F point10 = Point3F.lerp(point00, point01, 2.0F / 3.0F);
+				final Point3F point11 = Point3F.lerp(point01, point02, 1.0F / 3.0F);
+				final Point3F point12 = Point3F.lerp(point01, point02, 2.0F / 3.0F);
+				final Point3F point13 = Point3F.lerp(point02, point03, 1.0F / 3.0F);
+				
+				final Point3F point20 = Point3F.lerp(point10, point11, 0.5F);
+				final Point3F point21 = Point3F.lerp(point12, point13, 0.5F);
+				
+				final Point3F pointA = point20;
+				final Point3F pointB = point11;
+				final Point3F pointC = point12;
+				final Point3F pointD = point21;
+				
+				final Vector3F normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3F();
+				final Vector3F normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3F();
+				
+				final float widthC = lerp(widthA, widthB, toFloat(segment + 0) / toFloat(segments));
+				final float widthD = lerp(widthA, widthB, toFloat(segment + 1) / toFloat(segments));
+				
+				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
+			}
+		}
+		
+		return curves;
+	}
+	
+	/**
+	 * Returns a {@code List} of {@code Curve3F} instances.
+	 * <p>
+	 * If either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code degree} is less than {@code 2} or greater than {@code 3}, {@code points} contains the wrong number of {@link Point3F} instances or {@code normals} contains the wrong number of {@link Vector3F} instances, an
+	 * {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Below follows the constraints:
+	 * <ul>
+	 * <li>For any given {@code degree}, there must exist at least {@code ((degree + 1) + n * degree)} {@code Point3F} instances in {@code points}.</li>
+	 * <li>For a {@link Type} of {@link Type#RIBBON}, there must exist exactly {@code ((points.size() - 1) / degree + 1)} {@code Vector3F} instances in {@code normals} and {@code 0} otherwise.</li>
+	 * </ul>
+	 * 
+	 * @param points a {@code List} of {@code Point3F} instances that represents the control points
+	 * @param normals a {@code List} of {@code Vector3F} instances that represents the normals
+	 * @param type a {@code Type} instance
+	 * @param widthA the width denoted by A
+	 * @param widthB the width denoted by B
+	 * @param degree the degree
+	 * @param splitDepth the split depth
+	 * @return a {@code List} of {@code Curve3F} instances
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code degree} is less than {@code 2} or greater than {@code 3}, {@code points} contains the wrong number of {@code Point3F} instances or {@code normals} contains the wrong number
+	 *                                  of {@code Vector3F} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}
+	 */
+	public static List<Curve3F> createCurvesByBezier(final List<Point3F> points, final List<Vector3F> normals, final Type type, final float widthA, final float widthB, final int degree, final int splitDepth) {
+		Lists.requireNonNullList(points, "points");
+		Lists.requireNonNullList(normals, "normals");
+		
+		Objects.requireNonNull(type, "type == null");
+		
+		if(degree != 2 && degree != 3) {
+			throw new IllegalArgumentException(String.format("Parameter argument degree must be 2 or 3: degree == %d", Integer.valueOf(degree)));
+		}
+		
+		if((points.size() - 1 - degree) % degree != 0) {
+			throw new IllegalArgumentException(String.format("Parameter argument points must contain %d + n * %d Point3F instances: points.size() == %d", Integer.valueOf(degree + 1), Integer.valueOf(degree), Integer.valueOf(points.size())));
+		}
+		
+		final int segments = (points.size() - 1) / degree;
+		
+		switch(type) {
+			case CYLINDER:
+				Ints.requireExact(normals.size(), 0, "normals.size()");
+				
+				break;
+			case FLAT:
+				Ints.requireExact(normals.size(), 0, "normals.size()");
+				
+				break;
+			case RIBBON:
+				Ints.requireExact(normals.size(), segments + 1, "normals.size()");
+				
+				break;
+			default:
+				break;
+		}
+		
+		final List<Curve3F> curves = new ArrayList<>();
+		
+		for(int segment = 0; segment < segments; segment++) {
+			final int offset = segment * degree;
+			
+			if(degree == 2) {
+				final Point3F pointA = points.get(offset + 0);
+				final Point3F pointB = Point3F.lerp(points.get(offset + 0), points.get(offset + 1), 2.0F / 3.0F);
+				final Point3F pointC = Point3F.lerp(points.get(offset + 1), points.get(offset + 2), 1.0F / 3.0F);
+				final Point3F pointD = points.get(offset + 2);
+				
+				final Vector3F normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3F();
+				final Vector3F normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3F();
+				
+				final float widthC = lerp(widthA, widthB, toFloat(segment + 0) / toFloat(segments));
+				final float widthD = lerp(widthA, widthB, toFloat(segment + 1) / toFloat(segments));
+				
+				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
+			} else {
+				final Point3F pointA = points.get(offset + 0);
+				final Point3F pointB = points.get(offset + 1);
+				final Point3F pointC = points.get(offset + 2);
+				final Point3F pointD = points.get(offset + 3);
+				
+				final Vector3F normalA = segment + 0 < normals.size() ? normals.get(segment + 0) : new Vector3F();
+				final Vector3F normalB = segment + 1 < normals.size() ? normals.get(segment + 1) : new Vector3F();
+				
+				final float widthC = lerp(widthA, widthB, toFloat(segment + 0) / toFloat(segments));
+				final float widthD = lerp(widthA, widthB, toFloat(segment + 1) / toFloat(segments));
+				
+				curves.addAll(createCurves(pointA, pointB, pointC, pointD, type, normalA, normalB, widthC, widthD, splitDepth));
+			}
+		}
+		
+		return curves;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * A {@code Data} stores common data for one or more {@link Curve3F} instances.
+	 * <p>
+	 * This class is immutable and therefore thread-safe.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
 	public static final class Data {
 		private final Point3F pointA;
 		private final Point3F pointB;
@@ -466,7 +737,22 @@ public final class Curve3F implements Shape3F {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Constructs a new {@code Data} instance.
+		 * <p>
+		 * If either {@code pointA}, {@code pointB}, {@code pointC}, {@code pointD}, {@code type}, {@code normalA} or {@code normalB} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param pointA a {@link Point3F} instance with the control point denoted by A
+		 * @param pointB a {@link Point3F} instance with the control point denoted by B
+		 * @param pointC a {@link Point3F} instance with the control point denoted by C
+		 * @param pointD a {@link Point3F} instance with the control point denoted by D
+		 * @param type the {@link Type} instance associated with this {@code Data} instance
+		 * @param normalA a {@link Vector3F} instance with the normal denoted by A
+		 * @param normalB a {@code Vector3F} instance with the normal denoted by B
+		 * @param widthA the width denoted by A
+		 * @param widthB the width denoted by B
+		 * @throws NullPointerException thrown if, and only if, either {@code pointA}, {@code pointB}, {@code pointC}, {@code pointD}, {@code type}, {@code normalA} or {@code normalB} are {@code null}
+		 */
 		public Data(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final Type type, final Vector3F normalA, final Vector3F normalB, final float widthA, final float widthB) {
 			this.pointA = Objects.requireNonNull(pointA, "pointA == null");
 			this.pointB = Objects.requireNonNull(pointB, "pointB == null");
@@ -483,22 +769,38 @@ public final class Curve3F implements Shape3F {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns a {@link Point3F} instance with the control point denoted by A.
+		 * 
+		 * @return a {@code Point3F} instance with the control point denoted by A
+		 */
 		public Point3F getPointA() {
 			return this.pointA;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns a {@link Point3F} instance with the control point denoted by B.
+		 * 
+		 * @return a {@code Point3F} instance with the control point denoted by B
+		 */
 		public Point3F getPointB() {
 			return this.pointB;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns a {@link Point3F} instance with the control point denoted by C.
+		 * 
+		 * @return a {@code Point3F} instance with the control point denoted by C
+		 */
 		public Point3F getPointC() {
 			return this.pointC;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns a {@link Point3F} instance with the control point denoted by D.
+		 * 
+		 * @return a {@code Point3F} instance with the control point denoted by D
+		 */
 		public Point3F getPointD() {
 			return this.pointD;
 		}
@@ -513,17 +815,29 @@ public final class Curve3F implements Shape3F {
 			return String.format("new Data(%s, %s, %s, %s, %s, %s, %s, %+.10f, %+.10f)", this.pointA, this.pointB, this.pointC, this.pointD, this.type, this.normalA, this.normalB, Float.valueOf(this.widthA), Float.valueOf(this.widthB));
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns the {@link Type} instance associated with this {@code Data} instance.
+		 * 
+		 * @return the {@code Type} instance associated with this {@code Data} instance
+		 */
 		public Type getType() {
 			return this.type;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns a {@link Vector3F} instance with the normal denoted by A.
+		 * 
+		 * @return a {@code Vector3F} instance with the normal denoted by A
+		 */
 		public Vector3F getNormalA() {
 			return this.normalA;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns a {@link Vector3F} instance with the normal denoted by B.
+		 * 
+		 * @return a {@code Vector3F} instance with the normal denoted by B
+		 */
 		public Vector3F getNormalB() {
 			return this.normalB;
 		}
@@ -569,22 +883,38 @@ public final class Curve3F implements Shape3F {
 			}
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns the angle of the normal.
+		 * 
+		 * @return the angle of the normal
+		 */
 		public float getNormalAngle() {
 			return this.normalAngle;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns the reciprocal (or inverse) sine of the angle of the normal.
+		 * 
+		 * @return the reciprocal (or inverse) sine of the angle of the normal
+		 */
 		public float getNormalAngleSinReciprocal() {
 			return this.normalAngleSinReciprocal;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns the width denoted by A.
+		 * 
+		 * @return the width denoted by A
+		 */
 		public float getWidthA() {
 			return this.widthA;
 		}
 		
-//		TODO: Add Javadocs!
+		/**
+		 * Returns the width denoted by B.
+		 * 
+		 * @return the width denoted by B
+		 */
 		public float getWidthB() {
 			return this.widthB;
 		}
@@ -602,15 +932,26 @@ public final class Curve3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code Type} contains type information about one or more {@link Curve3F} instances.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
 	public static enum Type {
-//		TODO: Add Javadocs!
+		/**
+		 * A {@code Type} instance used to represent a {@link Curve3F} instance that looks like a cylinder.
+		 */
 		CYLINDER,
 		
-//		TODO: Add Javadocs!
+		/**
+		 * A {@code Type} instance used to represent a {@link Curve3F} instance that is flat.
+		 */
 		FLAT,
 		
-//		TODO: Add Javadocs!
+		/**
+		 * A {@code Type} instance used to represent a {@link Curve3F} instance that looks like a ribbon.
+		 */
 		RIBBON;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -743,7 +1084,7 @@ public final class Curve3F implements Shape3F {
 		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
 	}
 	
-	private float doIntersectionTRecursive(final Ray3F ray, final float tMinimum, final float tMaximum, final Matrix44F rayToObject, final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float uMinimum, final float uMaximum, final int depth) {
+	private float doIntersectionTRecursive(final Ray3F ray, final float tMinimum, final float tMaximum, final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final float uMinimum, final float uMaximum, final int depth) {
 		final Data data = this.data;
 		
 		final float rayDirectionLength = ray.getDirection().length();
@@ -773,7 +1114,7 @@ public final class Curve3F implements Shape3F {
 			final boolean isInsideBZ = max(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) + widthD >= tMinimum && min(points[3].getZ(), points[4].getZ(), points[5].getZ(), points[6].getZ()) - widthD <= zMaximum;
 			
 			if(isInsideAX && isInsideAY && isInsideAZ) {
-				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, rayToObject, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
+				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, points[0], points[1], points[2], points[3], uA, uB, depth - 1);
 				
 				if(!isNaN(t)) {
 					return t;
@@ -781,7 +1122,7 @@ public final class Curve3F implements Shape3F {
 			}
 			
 			if(isInsideBX && isInsideBY && isInsideBZ) {
-				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, rayToObject, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
+				final float t = doIntersectionTRecursive(ray, tMinimum, tMaximum, points[3], points[4], points[5], points[6], uB, uC, depth - 1);
 				
 				if(!isNaN(t)) {
 					return t;

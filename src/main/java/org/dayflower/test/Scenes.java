@@ -19,6 +19,8 @@
 package org.dayflower.test;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -468,6 +470,42 @@ public final class Scenes {
 		
 		for(final TriangleMesh3F triangleMesh : triangleMeshes) {
 			scene.addPrimitive(new Primitive(materials.getOrDefault(triangleMesh.getGroupName(), material), triangleMesh, textureAlbedo, textureEmittance, textureNormal, matrix));
+		}
+		
+		return scene;
+	}
+	
+	/**
+	 * Returns a {@link Scene} instance.
+	 * 
+	 * @return a {@code Scene} instance
+	 */
+	public static Scene newPBRTCurve3FScene() {
+		final List<Curve3F> curves = Curve3F.createCurvesByBSpline(Arrays.asList(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 1.0F, 1.0F), new Point3F(0.0F, 2.0F, 2.0F), new Point3F(0.0F, 3.0F, 3.0F)), new ArrayList<>(), Type.FLAT, 5.0F, 5.0F, 3, 5);
+		
+		final Material material0 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.GRAY));
+		final Material material1 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);//new HairMaterial();
+		final Material material2 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE));
+		
+		final Shape3F shape0 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(1.0F, 0.0F, +0.0F));//F
+		final Shape3F shape1 = new Curve3F(new Data(new Point3F(), new Point3F(1.0F, 1.0F, 1.0F), new Point3F(2.0F, 2.0F, 2.0F), new Point3F(3.0F, 3.0F, 3.0F), Type.FLAT, new Vector3F(1.0F, 1.0F, 1.0F), new Vector3F(0.5F, 0.5F, 0.5F), 1.0F, 2.0F), 0.0F, 1.0F);
+		final Shape3F shape2 = new Sphere3F();
+		
+		final Matrix44F matrix0 = Matrix44F.translate(0.0F, 0.0F, 7.5F);
+		final Matrix44F matrix1 = Matrix44F.translate(0.0F, 2.0F, 5.0F);
+		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 0.0F, 0.0F);
+		
+		final AreaLight areaLight2 = new DiffuseAreaLight(matrix2, 1, new Color3F(20.0F), shape2, false);
+		
+		final
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTCurve3F");
+		scene.addLight(areaLight2);
+		scene.addPrimitive(new Primitive(material0, shape0, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix0));
+//		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix2, areaLight2));
+		
+		for(final Curve3F curve : curves) {
+			scene.addPrimitive(new Primitive(material1, curve, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
 		}
 		
 		return scene;

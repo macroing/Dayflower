@@ -28,11 +28,29 @@ import java.util.Optional;
 
 import org.dayflower.util.Lists;
 
+/**
+ * A {@code Curves3F} is a container of {@link Curve3F} instances.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Curves3F implements Shape3F {
 	private final List<Curve3F> curves;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Constructs a new {@code Curves3F} instance.
+	 * <p>
+	 * If either {@code curves} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Modifying {@code curves} will not affect this {@code Curves3F} instance.
+	 * 
+	 * @param curves a {@code List} of {@link Curve3F} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code curves} or at least one of its elements are {@code null}
+	 */
 	public Curves3F(final List<Curve3F> curves) {
 		this.curves = new ArrayList<>(Lists.requireNonNullList(curves, "curves"));
 	}

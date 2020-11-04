@@ -29,6 +29,7 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Curve3F;
 import org.dayflower.geometry.Curve3F.Data;
 import org.dayflower.geometry.Curve3F.Type;
+import org.dayflower.geometry.Curves3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Plane3F;
 import org.dayflower.geometry.Point2F;
@@ -488,7 +489,7 @@ public final class Scenes {
 		final Material material2 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE));
 		
 		final Shape3F shape0 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(1.0F, 0.0F, +0.0F));//F
-		final Shape3F shape1 = new Curve3F(new Data(new Point3F(), new Point3F(1.0F, 1.0F, 1.0F), new Point3F(2.0F, 2.0F, 2.0F), new Point3F(3.0F, 3.0F, 3.0F), Type.FLAT, new Vector3F(1.0F, 1.0F, 1.0F), new Vector3F(0.5F, 0.5F, 0.5F), 1.0F, 2.0F), 0.0F, 1.0F);
+		final Shape3F shape1 = new Curves3F(curves);
 		final Shape3F shape2 = new Sphere3F();
 		
 		final Matrix44F matrix0 = Matrix44F.translate(0.0F, 0.0F, 7.5F);
@@ -501,12 +502,8 @@ public final class Scenes {
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTCurve3F");
 		scene.addLight(areaLight2);
 		scene.addPrimitive(new Primitive(material0, shape0, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix0));
-//		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
+		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix2, areaLight2));
-		
-		for(final Curve3F curve : curves) {
-			scene.addPrimitive(new Primitive(material1, curve, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
-		}
 		
 		return scene;
 	}

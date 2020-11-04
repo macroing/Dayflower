@@ -220,6 +220,41 @@ public final class Curve3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns a {@code String} representation of this {@code Curve3F} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Curve3F} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new Curve3F(%s, %+.10f, %+.10f)", this.data, Float.valueOf(this.uMinimum), Float.valueOf(this.uMaximum));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code Curve3F} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Curve3F}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Curve3F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Curve3F}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof Curve3F)) {
+			return false;
+		} else if(!Objects.equals(this.data, Curve3F.class.cast(object).data)) {
+			return false;
+		} else if(!equal(this.uMaximum, Curve3F.class.cast(object).uMaximum)) {
+			return false;
+		} else if(!equal(this.uMinimum, Curve3F.class.cast(object).uMinimum)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Performs an intersection test between {@code mutableSurfaceIntersection} and this {@code Curve3F} instance.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Curve3F} instance, {@code false} otherwise.
@@ -453,6 +488,16 @@ public final class Curve3F implements Shape3F {
 		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
 		
 		return doIntersectionTRecursive(ray, tMinimum, tMaximum, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
+	}
+	
+	/**
+	 * Returns a hash code for this {@code Curve3F} instance.
+	 * 
+	 * @return a hash code for this {@code Curve3F} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.data, Float.valueOf(this.uMaximum), Float.valueOf(this.uMinimum));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

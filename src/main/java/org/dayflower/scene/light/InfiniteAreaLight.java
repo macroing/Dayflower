@@ -27,28 +27,29 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceEmittedResult;
 import org.dayflower.scene.LightRadianceIncomingResult;
 
 //TODO: Add Javadocs!
-public final class InfiniteAreaLight extends AreaLight {
-//	TODO: Add Javadocs!
-	public InfiniteAreaLight(final Matrix44F lightToWorld, final int samples) {
-		super(lightToWorld, samples);
-	}
+public final class InfiniteAreaLight implements Light {
+	private final Color3F intensity;
+	private final Matrix44F lightToWorld;
+	private final Matrix44F worldToLight;
+	private final int samples;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	@Override
-	public Color3F evaluateRadiance(final Intersection intersection, final Vector3F direction) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(direction, "direction == null");
-		
-		return Color3F.BLACK;//TODO: Implement!
+	public InfiniteAreaLight(final Color3F intensity, final Matrix44F lightToWorld, final int samples) {
+		this.intensity = Objects.requireNonNull(intensity, "intensity == null");
+		this.lightToWorld = Objects.requireNonNull(lightToWorld, "lightToWorld == null");
+		this.worldToLight = Matrix44F.inverse(lightToWorld);
+		this.samples = samples;
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
@@ -65,6 +66,16 @@ public final class InfiniteAreaLight extends AreaLight {
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
 		
+		/*
+Spectrum InfiniteAreaLight::Le(const RayDifferential &ray) const {
+	Vector3f w = Normalize(WorldToLight(ray.d));
+	
+	Point2f st(SphericalPhi(w) * Inv2Pi, SphericalTheta(w) * InvPi);
+	
+	return Spectrum(Lmap->Lookup(st), SpectrumType::Illuminant);
+}
+		 */
+		
 		return Color3F.BLACK;//TODO: Implement!
 	}
 	
@@ -77,6 +88,12 @@ public final class InfiniteAreaLight extends AreaLight {
 	 */
 	@Override
 	public Color3F power() {
+		/*
+Spectrum InfiniteAreaLight::Power() const {
+	return Pi * worldRadius * worldRadius * Spectrum(Lmap->Lookup(Point2f(.5f, .5f), .5f), SpectrumType::Illuminant);
+}
+		 */
+		
 		return Color3F.BLACK;//TODO: Implement!
 	}
 	
@@ -98,6 +115,23 @@ public final class InfiniteAreaLight extends AreaLight {
 	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
 		Objects.requireNonNull(ray, "ray == null");
 		Objects.requireNonNull(normal, "normal == null");
+		
+		/*
+void InfiniteAreaLight::Pdf_Le(const Ray &ray, const Normal3f &, Float *pdfPos, Float *pdfDir) const {
+	ProfilePhase _(Prof::LightPdf);
+	
+	Vector3f d = -WorldToLight(ray.d);
+	
+	Float theta = SphericalTheta(d), phi = SphericalPhi(d);
+	
+	Point2f uv(phi * Inv2Pi, theta * InvPi);
+	
+	Float mapPdf = distribution->Pdf(uv);
+	
+	*pdfDir = mapPdf / (2 * Pi * Pi * std::sin(theta));
+	*pdfPos = 1 / (Pi * worldRadius * worldRadius);
+}
+		 */
 		
 		return Optional.empty();//TODO: Implement!
 	}
@@ -121,6 +155,49 @@ public final class InfiniteAreaLight extends AreaLight {
 		Objects.requireNonNull(sampleA, "sampleA == null");
 		Objects.requireNonNull(sampleB, "sampleB == null");
 		
+		/*
+Spectrum InfiniteAreaLight::Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir) const {
+	ProfilePhase _(Prof::LightSample);
+	
+//	Compute direction for infinite light sample ray
+	Point2f u = u1;
+	
+//	Find $(u,v)$ sample coordinates in infinite light texture
+	Float mapPdf;
+	
+	Point2f uv = distribution->SampleContinuous(u, &mapPdf);
+	
+	if (mapPdf == 0) {
+		return Spectrum(0.f);
+	}
+	
+	Float theta = uv[1] * Pi, phi = uv[0] * 2.f * Pi;
+	Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
+	Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+	
+	Vector3f d = -LightToWorld(Vector3f(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
+	
+	*nLight = (Normal3f)d;
+	
+//	Compute origin for infinite light sample ray
+	Vector3f v1, v2;
+	
+	CoordinateSystem(-d, &v1, &v2);
+	
+	Point2f cd = ConcentricSampleDisk(u2);
+	
+	Point3f pDisk = worldCenter + worldRadius * (cd.x * v1 + cd.y * v2);
+	
+	*ray = Ray(pDisk + worldRadius * -d, d, Infinity, time);
+	
+//	Compute _InfiniteAreaLight_ ray PDFs
+	*pdfDir = sinTheta == 0 ? 0 : mapPdf / (2 * Pi * Pi * sinTheta);
+	*pdfPos = 1 / (Pi * worldRadius * worldRadius);
+	
+	return Spectrum(Lmap->Lookup(uv), SpectrumType::Illuminant);
+}
+		 */
+		
 		return Optional.empty();//TODO: Implement!
 	}
 	
@@ -142,6 +219,40 @@ public final class InfiniteAreaLight extends AreaLight {
 	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
+		
+		/*
+Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis) const {
+	ProfilePhase _(Prof::LightSample);
+	
+//	Find $(u,v)$ sample coordinates in infinite light texture
+	Float mapPdf;
+	
+	Point2f uv = distribution->SampleContinuous(u, &mapPdf);
+	
+	if (mapPdf == 0) {
+		return Spectrum(0.f);
+	}
+	
+//	Convert infinite light sample point to direction
+	Float theta = uv[1] * Pi, phi = uv[0] * 2 * Pi;
+	Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
+	Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+	
+	*wi = LightToWorld(Vector3f(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
+	
+//	Compute PDF for sampled infinite light direction
+	*pdf = mapPdf / (2 * Pi * Pi * sinTheta);
+	
+	if (sinTheta == 0) {
+		*pdf = 0;
+	}
+	
+//	Return radiance value for infinite light direction
+	*vis = VisibilityTester(ref, Interaction(ref.p + *wi * (2 * worldRadius), ref.time, mediumInterface));
+	
+	return Spectrum(Lmap->Lookup(uv), SpectrumType::Illuminant);
+}
+		 */
 		
 		return Optional.empty();//TODO: Implement!
 	}
@@ -199,6 +310,23 @@ public final class InfiniteAreaLight extends AreaLight {
 	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
+		
+		/*
+Float InfiniteAreaLight::Pdf_Li(const Interaction &, const Vector3f &w) const {
+	ProfilePhase _(Prof::LightPdf);
+	
+	Vector3f wi = WorldToLight(w);
+	
+	Float theta = SphericalTheta(wi), phi = SphericalPhi(wi);
+	Float sinTheta = std::sin(theta);
+	
+	if (sinTheta == 0) {
+		return 0;
+	}
+	
+	return distribution->Pdf(Point2f(phi * Inv2Pi, theta * InvPi)) / (2 * Pi * Pi * sinTheta);
+}
+		 */
 		
 		return 0.0F;//TODO: Implement!
 	}

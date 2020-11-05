@@ -1981,6 +1981,59 @@ public final class Image {
 		}
 	}
 	
+	/**
+	 * Updates this {@code Image} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
+	 * <p>
+	 * If {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.update(function, 0, 0, image.getResolutionX(), image.getResolutionY());
+	 * }
+	 * </pre>
+	 * 
+	 * @param function a {@code Function} that updates the old {@code Color3F} instances with new {@code Color3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}
+	 */
+	public void update(final Function<Color3F, Color3F> function) {
+		update(function, 0, 0, getResolutionX(), getResolutionY());
+	}
+	
+	/**
+	 * Updates this {@code Image} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
+	 * <p>
+	 * If {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param function a {@code Function} that updates the old {@code Color3F} instances with new {@code Color3F} instances
+	 * @param aX the minimum (inclusive) or maximum (exclusive) X-coordinate of the region to be updated
+	 * @param aY the minimum (inclusive) or maximum (exclusive) Y-coordinate of the region to be updated
+	 * @param bX the maximum (exclusive) or minimum (inclusive) X-coordinate of the region to be updated
+	 * @param bY the maximum (exclusive) or minimum (inclusive) Y-coordinate of the region to be updated
+	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}
+	 */
+	public void update(final Function<Color3F, Color3F> function, final int aX, final int aY, final int bX, final int bY) {
+		Objects.requireNonNull(function, "function == null");
+		
+		final int minimumX = max(min(aX, bX), 0);
+		final int minimumY = max(min(aY, bY), 0);
+		final int maximumX = min(max(aX, bX), this.resolutionX);
+		final int maximumY = min(max(aY, bY), this.resolutionY);
+		
+		for(int y = minimumY; y < maximumY; y++) {
+			for(int x = minimumX; x < maximumX; x++) {
+				final Color3F oldColor = getColorRGB(x, y);
+				final Color3F newColor = function.apply(oldColor);
+				
+				if(newColor == null) {
+					throw new NullPointerException(String.format("function.apply(%s) == null: x=%s, y=%s", oldColor, Integer.valueOf(x), Integer.valueOf(y)));
+				}
+				
+				setColorRGB(newColor, x, y);
+			}
+		}
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -2068,6 +2121,27 @@ public final class Image {
 		}
 		
 		return imageC;
+	}
+	
+	/**
+	 * Creates an {@code Image} by capturing the contents of the screen, without the mouse cursor.
+	 * <p>
+	 * Returns a new {@code Image} instance.
+	 * <p>
+	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If the permission {@code readDisplayPixels} is not granted, a {@code SecurityException} will be thrown.
+	 * 
+	 * @param rectangle a {@link Rectangle2I} that contains the bounds
+	 * @return a new {@code Image} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
+	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
+	 */
+	public static Image createScreenCapture(final Rectangle2I rectangle) {
+		return new Image(BufferedImages.createScreenCapture(rectangle.getA().getX(), rectangle.getA().getY(), rectangle.getC().getX() - rectangle.getA().getX(), rectangle.getC().getY() - rectangle.getA().getY()));
 	}
 	
 	/**

@@ -18,7 +18,10 @@
  */
 package org.dayflower.util;
 
+import java.awt.AWTException;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.image.BufferedImage;
 
 /**
@@ -28,11 +31,36 @@ import java.awt.image.BufferedImage;
  * @author J&#246;rgen Lundgren
  */
 public final class BufferedImages {
+	private static final Robot ROBOT = doCreateRobot();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private BufferedImages() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Creates a {@code BufferedImage} by capturing the contents of the screen, without the mouse cursor.
+	 * <p>
+	 * Returns a {@code BufferedImage} instance.
+	 * <p>
+	 * If either {@code width} or {@code height} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If the permission {@code readDisplayPixels} is not granted, a {@code SecurityException} will be thrown.
+	 * 
+	 * @param x the X-coordinate
+	 * @param y the Y-coordinate
+	 * @param width the width
+	 * @param height the height
+	 * @return a {@code BufferedImage} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code width} or {@code height} are less than or equal to {@code 0}
+	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
+	 */
+	public static BufferedImage createScreenCapture(final int x, final int y, final int width, final int height) {
+		return ROBOT != null ? ROBOT.createScreenCapture(new Rectangle(x, y, width, height)) : new BufferedImage(0, 0, BufferedImage.TYPE_INT_ARGB);
+	}
 	
 	/**
 	 * Returns a {@code BufferedImage} that is compatible with the type {@code BufferedImage.TYPE_INT_ARGB}.
@@ -76,5 +104,15 @@ public final class BufferedImages {
 		graphics2D.drawImage(bufferedImage, 0, 0, null);
 		
 		return compatibleBufferedImage;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Robot doCreateRobot() {
+		try {
+			return new Robot();
+		} catch(final AWTException e) {
+			return null;
+		}
 	}
 }

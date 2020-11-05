@@ -35,37 +35,37 @@ public final class ConvolutionKernel33F {
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a box blur effect.
 	 */
-	public static ConvolutionKernel33F BOX_BLUR = new ConvolutionKernel33F(1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F / 9.0F, 0.0F);
+	public static final ConvolutionKernel33F BOX_BLUR = new ConvolutionKernel33F(1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F / 9.0F, 0.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs an edge detection effect.
 	 */
-	public static ConvolutionKernel33F EDGE_DETECTION = new ConvolutionKernel33F(-1.0F, -1.0F, -1.0F, -1.0F, 8.0F, -1.0F, -1.0F, -1.0F, -1.0F);
+	public static final ConvolutionKernel33F EDGE_DETECTION = new ConvolutionKernel33F(-1.0F, -1.0F, -1.0F, -1.0F, 8.0F, -1.0F, -1.0F, -1.0F, -1.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs an emboss effect.
 	 */
-	public static ConvolutionKernel33F EMBOSS = new ConvolutionKernel33F(-1.0F, -1.0F, 0.0F, -1.0F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.5F);
+	public static final ConvolutionKernel33F EMBOSS = new ConvolutionKernel33F(-1.0F, -1.0F, 0.0F, -1.0F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.5F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a Gaussian blur effect.
 	 */
-	public static ConvolutionKernel33F GAUSSIAN_BLUR = new ConvolutionKernel33F(1.0F, 2.0F, 1.0F, 2.0F, 4.0F, 2.0F, 1.0F, 2.0F, 1.0F, 1.0F / 16.0F, 0.0F);
+	public static final ConvolutionKernel33F GAUSSIAN_BLUR = new ConvolutionKernel33F(1.0F, 2.0F, 1.0F, 2.0F, 4.0F, 2.0F, 1.0F, 2.0F, 1.0F, 1.0F / 16.0F, 0.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a gradient effect in the horizontal direction.
 	 */
-	public static ConvolutionKernel33F GRADIENT_HORIZONTAL = new ConvolutionKernel33F(-1.0F, -1.0F, -1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+	public static final ConvolutionKernel33F GRADIENT_HORIZONTAL = new ConvolutionKernel33F(-1.0F, -1.0F, -1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a gradient effect in the vertical direction.
 	 */
-	public static ConvolutionKernel33F GRADIENT_VERTICAL = new ConvolutionKernel33F(-1.0F, 0.0F, 1.0F, -1.0F, 0.0F, 1.0F, -1.0F, 0.0F, 1.0F);
+	public static final ConvolutionKernel33F GRADIENT_VERTICAL = new ConvolutionKernel33F(-1.0F, 0.0F, 1.0F, -1.0F, 0.0F, 1.0F, -1.0F, 0.0F, 1.0F);
 	
 	/**
 	 * A {@code ConvolutionKernel33F} instance that performs a sharpen effect.
 	 */
-	public static ConvolutionKernel33F SHARPEN = new ConvolutionKernel33F(-1.0F, -1.0F, -1.0F, -1.0F, 9.0F, -1.0F, -1.0F, -1.0F, -1.0F);
+	public static final ConvolutionKernel33F SHARPEN = new ConvolutionKernel33F(-1.0F, -1.0F, -1.0F, -1.0F, 9.0F, -1.0F, -1.0F, -1.0F, -1.0F);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

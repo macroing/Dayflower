@@ -330,7 +330,7 @@ public final class Pixel {
 			final int x = index % resolutionX;
 			final int y = index / resolutionX;
 			
-			final Color3F colorRGB = new Color3F(compatibleBufferedImage.getRGB(x, y));
+			final Color3F colorRGB = Color3F.unpack(compatibleBufferedImage.getRGB(x, y));
 			
 			pixels[i] = new Pixel(colorRGB, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
 		}

@@ -37,7 +37,7 @@ public final class ImageTest {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(final String[] args) {
-		doTestImageCopper();
+//		doTestImageCopper();
 //		doTestImageDifference();
 //		doTestImageDrawCircle();
 //		doTestImageDrawLine();
@@ -49,6 +49,7 @@ public final class ImageTest {
 //		doTestImageFillTriangle();
 //		doTestImageMultiplyConvolutionKernel33F();
 //		doTestImageMultiplyConvolutionKernel55F();
+		doTestImageScreenCapture();
 //		doTestImageSave();
 	}
 	
@@ -175,6 +176,12 @@ public final class ImageTest {
 		Image image = Image.load("./generated/Image.jpg");
 		image.multiply(ConvolutionKernel55F.GAUSSIAN_BLUR);
 		image.save("./generated/doTestImageMultiplyConvolutionKernel55F.png");
+	}
+	
+	static void doTestImageScreenCapture() {
+		final
+		Image image = Image.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		image.save("./generated/doTestImageScreenCapture.png");
 	}
 	
 	static void doTestImageSave() {

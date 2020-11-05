@@ -276,6 +276,44 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, this {@code Color3D} instance is considered blue, {@code false} otherwise.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * color.isBlue(1.0D, 1.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered blue, {@code false} otherwise
+	 */
+	public boolean isBlue() {
+		return isBlue(1.0D, 1.0D);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3D} instance is considered blue, {@code false} otherwise.
+	 * <p>
+	 * The {@code Color3D} instance {@code color} is considered blue if, and only if, {@code color.getB() - thresholdR >= color.getR()} and {@code color.getB() - thresholdG >= color.getG()}.
+	 * 
+	 * @param thresholdR the threshold for the R-component
+	 * @param thresholdG the threshold for the G-component
+	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered blue, {@code false} otherwise
+	 */
+	public boolean isBlue(final double thresholdR, final double thresholdG) {
+		return getB() - thresholdR >= getR() && getB() - thresholdG >= getG();
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3D} instance is considered cyan, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered cyan, {@code false} otherwise
+	 */
+	public boolean isCyan() {
+		return isGreen(1.0D, 0.5D) && isBlue(1.0D, 0.5D);
+	}
+	
+	/**
 	 * Returns {@code true} if, and only if, this {@code Color3D} instance is a grayscale color, {@code false} otherwise.
 	 * <p>
 	 * A {@code Color3D} instance is a grayscale color if all component values are equal.
@@ -287,6 +325,73 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, this {@code Color3D} instance is considered green, {@code false} otherwise.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * color.isGreen(1.0D, 1.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered green, {@code false} otherwise
+	 */
+	public boolean isGreen() {
+		return isGreen(1.0D, 1.0D);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3D} instance is considered green, {@code false} otherwise.
+	 * <p>
+	 * The {@code Color3D} instance {@code color} is considered green if, and only if, {@code color.getG() - thresholdR >= color.getR()} and {@code color.getG() - thresholdB >= color.getB()}.
+	 * 
+	 * @param thresholdR the threshold for the R-component
+	 * @param thresholdB the threshold for the B-component
+	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered green, {@code false} otherwise
+	 */
+	public boolean isGreen(final double thresholdR, final double thresholdB) {
+		return getG() - thresholdR >= getR() && getG() - thresholdB >= getB();
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3D} instance is considered magenta, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered magenta, {@code false} otherwise
+	 */
+	public boolean isMagenta() {
+		return isRed(1.0D, 0.5D) && isBlue(0.5D, 1.0D);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3D} instance is considered red, {@code false} otherwise.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * color.isRed(1.0D, 1.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered red, {@code false} otherwise
+	 */
+	public boolean isRed() {
+		return isRed(1.0D, 1.0D);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3D} instance is considered red, {@code false} otherwise.
+	 * <p>
+	 * The {@code Color3D} instance {@code color} is considered red if, and only if, {@code color.getR() - thresholdG >= color.getG()} and {@code color.getR() - thresholdB >= color.getB()}.
+	 * 
+	 * @param thresholdG the threshold for the G-component
+	 * @param thresholdB the threshold for the B-component
+	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered red, {@code false} otherwise
+	 */
+	public boolean isRed(final double thresholdG, final double thresholdB) {
+		return getR() - thresholdG >= getG() && getR() - thresholdB >= getB();
+	}
+	
+	/**
 	 * Returns {@code true} if, and only if, this {@code Color3D} instance is white, {@code false} otherwise.
 	 * <p>
 	 * A {@code Color3D} instance is white if all component values are equal and greater than or equal to {@code 1.0D}.
@@ -295,6 +400,15 @@ public final class Color3D {
 	 */
 	public boolean isWhite() {
 		return isGrayscale() && this.component1 >= 1.0D;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code Color3D} instance is considered yellow, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Color3D} instance is considered yellow, {@code false} otherwise
+	 */
+	public boolean isYellow() {
+		return isRed(0.5D, 1.0D) && isGreen(0.5D, 1.0D);
 	}
 	
 	/**

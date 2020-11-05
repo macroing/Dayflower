@@ -49,7 +49,7 @@ import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.background.ConstantBackground;
 import org.dayflower.scene.pbrt.BSDF;
-import org.dayflower.scene.pbrt.BSDFDistributionFunctionResult;
+import org.dayflower.scene.pbrt.BSDFResult;
 import org.dayflower.scene.pbrt.BXDFType;
 import org.dayflower.scene.pbrt.PBRTMaterial;
 import org.dayflower.scene.pbrt.TransportMode;
@@ -176,21 +176,21 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			
 			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
 			
-			final Optional<BSDFDistributionFunctionResult> optionalBSDFDistributionFunctionResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, new Point2F(random(), random()));
+			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, new Point2F(random(), random()));
 			
-			if(!optionalBSDFDistributionFunctionResult.isPresent()) {
+			if(!optionalBSDFResult.isPresent()) {
 				break;
 			}
 			
-			final BSDFDistributionFunctionResult bSDFDistributionFunctionResult = optionalBSDFDistributionFunctionResult.get();
+			final BSDFResult bSDFResult = optionalBSDFResult.get();
 			
-			final BXDFType bXDFType = bSDFDistributionFunctionResult.getBXDFType();
+			final BXDFType bXDFType = bSDFResult.getBXDFType();
 			
-			final Color3F result = bSDFDistributionFunctionResult.getResult();
+			final Color3F result = bSDFResult.getResult();
 			
-			final Vector3F incoming = bSDFDistributionFunctionResult.getIncoming();
+			final Vector3F incoming = bSDFResult.getIncoming();
 			
-			final float probabilityDensityFunctionValue = bSDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
+			final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 			
 			if(result.isBlack() || equal(probabilityDensityFunctionValue, 0.0F)) {
 				break;
@@ -345,18 +345,18 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			
 			final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
 			
-			final Optional<BSDFDistributionFunctionResult> optionalBSDFDistributionFunctionResult = bSDF.sampleDistributionFunction(bXDFType, outgoing, sampleB);
+			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(bXDFType, outgoing, sampleB);
 			
-			if(optionalBSDFDistributionFunctionResult.isPresent()) {
-				final BSDFDistributionFunctionResult bSDFDistributionFunctionResult = optionalBSDFDistributionFunctionResult.get();
+			if(optionalBSDFResult.isPresent()) {
+				final BSDFResult bSDFResult = optionalBSDFResult.get();
 				
-				final Vector3F incoming = bSDFDistributionFunctionResult.getIncoming();
+				final Vector3F incoming = bSDFResult.getIncoming();
 				
-				final Color3F scatteringResult = Color3F.multiply(bSDFDistributionFunctionResult.getResult(), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getOrthonormalBasisS().getW())));
+				final Color3F scatteringResult = Color3F.multiply(bSDFResult.getResult(), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getOrthonormalBasisS().getW())));
 				
-				final boolean hasSampledSpecular = bSDFDistributionFunctionResult.getBXDFType().isSpecular();
+				final boolean hasSampledSpecular = bSDFResult.getBXDFType().isSpecular();
 				
-				final float scatteringProbabilityDensityFunctionValue = bSDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
+				final float scatteringProbabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 				
 				if(!scatteringResult.isBlack() && scatteringProbabilityDensityFunctionValue > 0.0F) {
 					float weight = 1.0F;

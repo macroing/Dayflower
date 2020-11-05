@@ -194,7 +194,7 @@ public final class BSDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link BSDFDistributionFunctionResult} with the result of the sampling.
+	 * Returns an optional {@link BSDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -203,10 +203,10 @@ public final class BSDF {
 	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param outgoingWorldSpace the outgoing direction, called {@code woWorld} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code BSDFDistributionFunctionResult} with the result of the sampling
+	 * @return an optional {@code BSDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}
 	 */
-	public Optional<BSDFDistributionFunctionResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Point2F sample) {
+	public Optional<BSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Point2F sample) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
 		Objects.requireNonNull(sample, "sample == null");
@@ -273,7 +273,7 @@ public final class BSDF {
 			}
 		}
 		
-		return Optional.of(new BSDFDistributionFunctionResult(bXDFDistributionFunctionResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
+		return Optional.of(new BSDFResult(bXDFDistributionFunctionResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**

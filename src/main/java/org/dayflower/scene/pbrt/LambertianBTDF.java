@@ -135,7 +135,7 @@ public final class LambertianBTDF extends BXDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link BXDFDistributionFunctionResult} with the result of the sampling.
+	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -143,11 +143,11 @@ public final class LambertianBTDF extends BXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code BXDFDistributionFunctionResult} with the result of the sampling
+	 * @return an optional {@code BXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<BXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
 //		PBRT: Implementation of LambertianTransmission.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
@@ -162,7 +162,7 @@ public final class LambertianBTDF extends BXDF {
 		
 		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, incomingCorrectlyOriented);
 		
-		return Optional.of(new BXDFDistributionFunctionResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**

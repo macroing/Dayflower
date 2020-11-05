@@ -233,21 +233,21 @@ public final class BSDF {
 			return Optional.empty();
 		}
 		
-		final Optional<BXDFDistributionFunctionResult> optionalBXDFDistributionFunctionResult = matchingBXDF.sampleDistributionFunction(outgoing, sampleRemapped);
+		final Optional<BXDFResult> optionalBXDFResult = matchingBXDF.sampleDistributionFunction(outgoing, sampleRemapped);
 		
-		if(!optionalBXDFDistributionFunctionResult.isPresent()) {
+		if(!optionalBXDFResult.isPresent()) {
 			return Optional.empty();
 		}
 		
-		final BXDFDistributionFunctionResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
+		final BXDFResult bXDFResult = optionalBXDFResult.get();
 		
-		final Vector3F incoming = bXDFDistributionFunctionResult.getIncoming();
+		final Vector3F incoming = bXDFResult.getIncoming();
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
-		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();//.getSurfaceNormalG();
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
 		
-		Color3F result = bXDFDistributionFunctionResult.getResult();
+		Color3F result = bXDFResult.getResult();
 		
-		float probabilityDensityFunctionValue = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
+		float probabilityDensityFunctionValue = bXDFResult.getProbabilityDensityFunctionValue();
 		
 		if(matches > 1 && !matchingBXDF.getBXDFType().isSpecular()) {
 			for(final BXDF bXDF : this.bXDFs) {
@@ -273,7 +273,7 @@ public final class BSDF {
 			}
 		}
 		
-		return Optional.of(new BSDFResult(bXDFDistributionFunctionResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
+		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**

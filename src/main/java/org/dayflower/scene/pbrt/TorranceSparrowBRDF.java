@@ -96,10 +96,10 @@ public final class TorranceSparrowBRDF extends BXDF {
 			
 			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
 			
-			final Optional<BXDFDistributionFunctionResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<BXDFResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
 			
 			if(optionalBXDFDistributionFunctionResult.isPresent()) {
-				final BXDFDistributionFunctionResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
+				final BXDFResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
 				
 				final float probabilityDensityFunctionValueIncoming = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
 				final float probabilityDensityFunctionValueOutgoing = SampleGeneratorF.hemisphereUniformDistributionProbabilityDensityFunction();
@@ -144,10 +144,10 @@ public final class TorranceSparrowBRDF extends BXDF {
 		for(int i = 0; i < samplesA.size(); i++) {
 			final Point2F sampleA = samplesA.get(i);
 			
-			final Optional<BXDFDistributionFunctionResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<BXDFResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
 			
 			if(optionalBXDFDistributionFunctionResult.isPresent()) {
-				final BXDFDistributionFunctionResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
+				final BXDFResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
 				
 				final float probabilityDensityFunctionValue = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
 				
@@ -212,7 +212,7 @@ public final class TorranceSparrowBRDF extends BXDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link BXDFDistributionFunctionResult} with the result of the sampling.
+	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -220,11 +220,11 @@ public final class TorranceSparrowBRDF extends BXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code BXDFDistributionFunctionResult} with the result of the sampling
+	 * @return an optional {@code BXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<BXDFDistributionFunctionResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
 //		PBRT: Implementation of MicrofacetReflection.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
@@ -252,7 +252,7 @@ public final class TorranceSparrowBRDF extends BXDF {
 		
 		final float probabilityDensityFunctionValue = this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, normal) / (4.0F * Vector3F.dotProduct(outgoing, normal));
 		
-		return Optional.of(new BXDFDistributionFunctionResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**

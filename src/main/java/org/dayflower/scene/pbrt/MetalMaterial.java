@@ -100,6 +100,27 @@ public final class MetalMaterial implements PBRTMaterial {
 	}
 	
 	/**
+	 * Computes the {@link BSSRDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSSRDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSSRDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		return Optional.empty();
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code MetalMaterial} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code MetalMaterial} instance

@@ -45,6 +45,7 @@ import org.dayflower.scene.background.ConstantBackground;
 import org.dayflower.scene.rayito.AshikhminShirleyMaterial;
 import org.dayflower.scene.rayito.LambertianMaterial;
 import org.dayflower.scene.rayito.OrenNayarMaterial;
+import org.dayflower.scene.rayito.RayitoMaterial;
 import org.dayflower.scene.rayito.ReflectionMaterial;
 import org.dayflower.scene.rayito.RefractionMaterial;
 
@@ -128,8 +129,8 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
 			final Vector3F surfaceNormalCorrectlyOriented = Vector3F.dotProduct(direction, surfaceNormal) < 0.0F ? surfaceNormal : Vector3F.negate(surfaceNormal);
 			
-			Color3F albedo = primitive.getTextureAlbedo().getColorRGB(intersection);
-			Color3F emittance = primitive.getTextureEmittance().getColorRGB(intersection);
+			Color3F albedo = doGetAlbedo(intersection, material);
+			Color3F emittance = doGetEmittance(intersection, material);
 			
 			final int currentBounce = bounce + 1;
 			
@@ -206,5 +207,15 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 		}
 		
 		return scene.getBackground().radiance(ray);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Color3F doGetAlbedo(final Intersection intersection, final Material material) {
+		return material instanceof RayitoMaterial ? RayitoMaterial.class.cast(material).evaluate(intersection).getColor() : Color3F.BLACK;
+	}
+	
+	private static Color3F doGetEmittance(final Intersection intersection, final Material material) {
+		return material instanceof RayitoMaterial ? RayitoMaterial.class.cast(material).emittance(intersection) : Color3F.BLACK;
 	}
 }

@@ -40,9 +40,9 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestAmbientOcclusionCPURenderer();
-//		doTestPBRTPathTracingCPURenderer();
+		doTestPBRTPathTracingCPURenderer();
 //		doTestRayCastingCPURenderer();
-		doTestRayitoPathTracingCPURenderer();
+//		doTestRayitoPathTracingCPURenderer();
 //		doTestSmallPTIPathTracingCPURenderer();
 //		doTestSmallPTRPathTracingCPURenderer();
 	}
@@ -75,7 +75,7 @@ public final class RendererTest {
 		final
 		Renderer renderer = new RayCastingCPURenderer();
 		renderer.setRendererConfiguration(new RendererConfiguration());
-		renderer.setScene(Scenes.newBedroomScene());
+		renderer.setScene(Scenes.newDefaultScene());
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
 		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
 		renderer.setSampler(new RandomSampler());

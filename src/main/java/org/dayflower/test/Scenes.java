@@ -125,31 +125,22 @@ public final class Scenes {
 		
 		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new ConstantTexture(new Color3F(227, 161, 115));
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		final Texture texture31 = new ConstantTexture(new Color3F(227, 161, 115));
 		final Texture texture32 = new ConstantTexture();
-		final Texture texture33 = new ConstantTexture();
 		final Texture texture41 = new ConstantTexture(new Color3F(0.8F, 0.1F, 0.8F));
 		final Texture texture42 = new ConstantTexture();
-		final Texture texture43 = new ConstantTexture();
 		final Texture texture51 = new ConstantTexture(new Color3F(216, 192, 120));
 		final Texture texture52 = new ConstantTexture();
-		final Texture texture53 = new ConstantTexture();
 		final Texture texture61 = new ConstantTexture(new Color3F(0.8F, 0.1F, 0.8F));
 		final Texture texture62 = new ConstantTexture();
-		final Texture texture63 = new ConstantTexture();
 		final Texture texture71 = new ConstantTexture(new Color3F(227, 161, 115));
 		final Texture texture72 = new ConstantTexture();
-		final Texture texture73 = new ConstantTexture();
 		final Texture texture81 = new ConstantTexture(new Color3F(1.0F, 1.0F, 1.0F));
 		final Texture texture82 = new ConstantTexture();
-		final Texture texture83 = new ConstantTexture();
 		final Texture texture91 = new ConstantTexture(new Color3F(227, 161, 115));
 		final Texture texture92 = new ConstantTexture();
-		final Texture texture93 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 2.0F), Matrix44F.rotateY(AngleF.degrees(0.0F))), Matrix44F.scale(0.01F));
@@ -158,15 +149,15 @@ public final class Scenes {
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "AphroditeGirl");
 		scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 5.0F), new Color3F(1.0F, 1.0F, 1.0F)));
 		scene.addLight(new PointLight(new Point3F(0.0F, 1.0F, 0.0F), new Color3F(1.0F, 1.0F, 1.0F)));
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
-		scene.addPrimitive(new Primitive(material3, shape3, texture31, texture32, texture33, matrix2));
-		scene.addPrimitive(new Primitive(material4, shape4, texture41, texture42, texture43, matrix2));
-		scene.addPrimitive(new Primitive(material5, shape5, texture51, texture52, texture53, matrix2));
-		scene.addPrimitive(new Primitive(material6, shape6, texture61, texture62, texture63, matrix2));
-		scene.addPrimitive(new Primitive(material7, shape7, texture71, texture72, texture73, matrix2));
-		scene.addPrimitive(new Primitive(material8, shape8, texture81, texture82, texture83, matrix2));
-		scene.addPrimitive(new Primitive(material9, shape9, texture91, texture92, texture93, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
+		scene.addPrimitive(new Primitive(material3, shape3, texture31, texture32, matrix2));
+		scene.addPrimitive(new Primitive(material4, shape4, texture41, texture42, matrix2));
+		scene.addPrimitive(new Primitive(material5, shape5, texture51, texture52, matrix2));
+		scene.addPrimitive(new Primitive(material6, shape6, texture61, texture62, matrix2));
+		scene.addPrimitive(new Primitive(material7, shape7, texture71, texture72, matrix2));
+		scene.addPrimitive(new Primitive(material8, shape8, texture81, texture82, matrix2));
+		scene.addPrimitive(new Primitive(material9, shape9, texture91, texture92, matrix2));
 		
 		return scene;
 	}
@@ -183,7 +174,6 @@ public final class Scenes {
 		
 		final Texture textureAlbedo = new ConstantTexture(Color3F.GRAY);
 		final Texture textureEmittance = new ConstantTexture();
-		final Texture textureNormal = new ConstantTexture();
 		
 		final Texture textureLaminate = ImageTexture.load(new File("./resources/laminate.jpg"));
 		final Texture textureWall = ImageTexture.load(new File("./resources/Wall.jpg"));
@@ -196,7 +186,7 @@ public final class Scenes {
 		
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 0.0F, 20.0F);
 		
-		final Primitive primitive = new Primitive(new LambertianMaterial(), new Sphere3F(), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), Matrix44F.translate(0.0F, 30.0F, 20.0F));
+		final Primitive primitive = new Primitive(new LambertianMaterial(), new Sphere3F(), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), Matrix44F.translate(0.0F, 30.0F, 20.0F));
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 30.0F, 0.0F)), "Bedroom");
@@ -205,7 +195,7 @@ public final class Scenes {
 		scene.addPrimitive(primitive);
 		
 		for(final TriangleMesh3F triangleMesh : triangleMeshes) {
-			scene.addPrimitive(new Primitive(material, triangleMesh, textures.getOrDefault(triangleMesh.getGroupName(), textureAlbedo), textureEmittance, textureNormal, matrix));
+			scene.addPrimitive(new Primitive(material, triangleMesh, textures.getOrDefault(triangleMesh.getGroupName(), textureAlbedo), textureEmittance, matrix));
 		}
 		
 		return scene;
@@ -239,31 +229,22 @@ public final class Scenes {
 		
 		final Texture texture011 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture012 = new ConstantTexture();
-		final Texture texture013 = new ConstantTexture();
 		final Texture texture021 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture022 = new ConstantTexture();
-		final Texture texture023 = new ConstantTexture();
 		final Texture texture031 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture032 = new ConstantTexture();
-		final Texture texture033 = new ConstantTexture();
 		final Texture texture041 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture042 = new ConstantTexture();
-		final Texture texture043 = new ConstantTexture();
 		final Texture texture051 = new ConstantTexture(new Color3F(0.25F, 0.25F, 0.75F));
 		final Texture texture052 = new ConstantTexture();
-		final Texture texture053 = new ConstantTexture();
 		final Texture texture061 = new ConstantTexture(new Color3F(0.75F, 0.25F, 0.25F));
 		final Texture texture062 = new ConstantTexture();
-		final Texture texture063 = new ConstantTexture();
 		final Texture texture071 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture072 = new ConstantTexture();
-		final Texture texture073 = new ConstantTexture();
 		final Texture texture081 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture082 = new ConstantTexture();
-		final Texture texture083 = new ConstantTexture();
 		final Texture texture091 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture092 = new ConstantTexture(new Color3F(12.0F));
-		final Texture texture093 = new ConstantTexture();
 		
 		final Matrix44F matrix01 = Matrix44F.translate( 0.0F, 0.0F,  0.0F);
 		final Matrix44F matrix02 = Matrix44F.translate( 0.0F, 5.0F,  0.0F);
@@ -275,15 +256,15 @@ public final class Scenes {
 		final Matrix44F matrix08 = Matrix44F.translate( 1.5F, 1.0F,  7.0F);
 		final Matrix44F matrix09 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 4.99F, 9.0F), Matrix44F.rotateX(AngleF.degrees(270.0F))), Matrix44F.scale(0.25F));
 		
-		final Primitive primitive01 = new Primitive(material01, shape01, texture011, texture012, texture013, matrix01);
-		final Primitive primitive02 = new Primitive(material02, shape02, texture021, texture022, texture023, matrix02);
-		final Primitive primitive03 = new Primitive(material03, shape03, texture031, texture032, texture033, matrix03);
-		final Primitive primitive04 = new Primitive(material04, shape04, texture041, texture042, texture043, matrix04);
-		final Primitive primitive05 = new Primitive(material05, shape05, texture051, texture052, texture053, matrix05);
-		final Primitive primitive06 = new Primitive(material06, shape06, texture061, texture062, texture063, matrix06);
-		final Primitive primitive07 = new Primitive(material07, shape07, texture071, texture072, texture073, matrix07);
-		final Primitive primitive08 = new Primitive(material08, shape08, texture081, texture082, texture083, matrix08);
-		final Primitive primitive09 = new Primitive(material09, shape09, texture091, texture092, texture093, matrix09);
+		final Primitive primitive01 = new Primitive(material01, shape01, texture011, texture012, matrix01);
+		final Primitive primitive02 = new Primitive(material02, shape02, texture021, texture022, matrix02);
+		final Primitive primitive03 = new Primitive(material03, shape03, texture031, texture032, matrix03);
+		final Primitive primitive04 = new Primitive(material04, shape04, texture041, texture042, matrix04);
+		final Primitive primitive05 = new Primitive(material05, shape05, texture051, texture052, matrix05);
+		final Primitive primitive06 = new Primitive(material06, shape06, texture061, texture062, matrix06);
+		final Primitive primitive07 = new Primitive(material07, shape07, texture071, texture072, matrix07);
+		final Primitive primitive08 = new Primitive(material08, shape08, texture081, texture082, matrix08);
+		final Primitive primitive09 = new Primitive(material09, shape09, texture091, texture092, matrix09);
 		
 		final
 		Camera camera = new Camera(new Point3F(0.0F, 2.5F, 1.0F));
@@ -328,19 +309,14 @@ public final class Scenes {
 		
 		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.5F, 0.1F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F);
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		final Texture texture31 = new CheckerboardTexture(new Color3F(0.2F, 0.4F, 0.2F), new Color3F(0.6F, 0.8F, 0.6F), AngleF.degrees(90.0F), new Vector2F(1.5F, 1.5F));
 		final Texture texture32 = new ConstantTexture();
-		final Texture texture33 = new ConstantTexture();
 		final Texture texture41 = new ConstantTexture(new Color3F(0.5F));
 		final Texture texture42 = new ConstantTexture();
-		final Texture texture43 = new ConstantTexture();
 		final Texture texture51 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture52 = new ConstantTexture();
-		final Texture texture53 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
@@ -352,11 +328,11 @@ public final class Scenes {
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "Default");
 		scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 5.0F), new Color3F(1.0F, 1.0F, 1.0F)));
 		scene.addLight(new PointLight(new Point3F(0.0F, 1.0F, 0.0F), new Color3F(1.0F, 1.0F, 1.0F)));
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
-		scene.addPrimitive(new Primitive(material3, shape3, texture31, texture32, texture33, matrix3));
-		scene.addPrimitive(new Primitive(material4, shape4, texture41, texture42, texture43, matrix4));
-		scene.addPrimitive(new Primitive(material5, shape5, texture51, texture52, texture53, matrix5));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
+		scene.addPrimitive(new Primitive(material3, shape3, texture31, texture32, matrix3));
+		scene.addPrimitive(new Primitive(material4, shape4, texture41, texture42, matrix4));
+		scene.addPrimitive(new Primitive(material5, shape5, texture51, texture52, matrix5));
 		
 		return scene;
 	}
@@ -417,21 +393,21 @@ public final class Scenes {
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTAphroditeGirl");
 		scene.addLight(areaLight31);
-		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix11));
-		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix12));
-		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix13));
-		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix14));
-		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix15));
-		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix16));
-		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material28, shape28, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
+		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
+		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
+		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
+		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
+		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
+		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
+		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material28, shape28, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
 		
 		return scene;
 	}
@@ -456,7 +432,6 @@ public final class Scenes {
 		
 		final Texture textureAlbedo = new ConstantTexture(Color3F.GRAY);
 		final Texture textureEmittance = new ConstantTexture();
-		final Texture textureNormal = new ConstantTexture();
 		
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 0.0F, 20.0F);
 		
@@ -467,7 +442,7 @@ public final class Scenes {
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(2000.0F), Matrix44F.translate(0.0F, 30.0F, -1.0F), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
 		
 		for(final TriangleMesh3F triangleMesh : triangleMeshes) {
-			scene.addPrimitive(new Primitive(materials.getOrDefault(triangleMesh.getGroupName(), material), triangleMesh, textureAlbedo, textureEmittance, textureNormal, matrix));
+			scene.addPrimitive(new Primitive(materials.getOrDefault(triangleMesh.getGroupName(), material), triangleMesh, textureAlbedo, textureEmittance, matrix));
 		}
 		
 		return scene;
@@ -498,9 +473,9 @@ public final class Scenes {
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTCurve3F");
 		scene.addLight(areaLight2);
-		scene.addPrimitive(new Primitive(material0, shape0, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix0));
-		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix2, areaLight2));
+		scene.addPrimitive(new Primitive(material0, shape0, new ConstantTexture(), new ConstantTexture(), matrix0));
+		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), matrix2, areaLight2));
 		
 		return scene;
 	}
@@ -561,18 +536,18 @@ public final class Scenes {
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTBil");
 		scene.addLight(areaLight31);
-		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(Color3F.GRAY), new ConstantTexture(), new ConstantTexture(), matrix11));
-		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix12));
-		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix13));
-		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix14));
-		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix15));
-		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix16));
-		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix22));
-		scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix23));
-		scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix24));
-		scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix25));
-		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
+		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(Color3F.GRAY), new ConstantTexture(), matrix11));
+		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
+		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
+		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
+		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
+		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
+		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), matrix22));
+		scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), matrix23));
+		scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), matrix24));
+		scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), matrix25));
+		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
 		
 		return scene;
 	}
@@ -641,20 +616,20 @@ public final class Scenes {
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(10.0F), Matrix44F.translate(-5.0F, 1.0F, -1.0F), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(10.0F), Matrix44F.translate(+5.0F, 1.0F, -1.0F), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
 //		scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 0.0F), new Color3F(20.0F)));
-		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix11));
-		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix12));
-		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix13));
-		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix14));
-		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix15));
-		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix16));
-		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix22));
-		scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix23));
-		scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix24));
-		scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix25));
-		scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix26));
-		scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix27));
-		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
+		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
+		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
+		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
+		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
+		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
+		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
+		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), matrix22));
+		scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), matrix23));
+		scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), matrix24));
+		scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), matrix25));
+		scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), matrix26));
+		scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), matrix27));
+		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
 		
 		return scene;
 	}
@@ -709,12 +684,12 @@ public final class Scenes {
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(1.0F), Matrix44F.identity(), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 1.0F)));
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(1.0F), Matrix44F.multiply(Matrix44F.translate(-5.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(90.0F))), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(1.0F), Matrix44F.multiply(Matrix44F.translate(+5.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(270.0F))), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
-		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix2));
-		scene.addPrimitive(new Primitive(material3, shape3, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix3));
-		scene.addPrimitive(new Primitive(material4, shape4, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix4));
-		scene.addPrimitive(new Primitive(material5, shape5, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix5));
-		scene.addPrimitive(new Primitive(material6, shape6, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix6, areaLight));
+		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), matrix2));
+		scene.addPrimitive(new Primitive(material3, shape3, new ConstantTexture(), new ConstantTexture(), matrix3));
+		scene.addPrimitive(new Primitive(material4, shape4, new ConstantTexture(), new ConstantTexture(), matrix4));
+		scene.addPrimitive(new Primitive(material5, shape5, new ConstantTexture(), new ConstantTexture(), matrix5));
+		scene.addPrimitive(new Primitive(material6, shape6, new ConstantTexture(), new ConstantTexture(), matrix6, areaLight));
 		
 		return scene;
 	}
@@ -761,13 +736,13 @@ public final class Scenes {
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTSmoothMonkey2");
 		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 0.0F, 0.0F), 1, new Color3F(20.0F), new Sphere3F(), true));
-		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix11));
-		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix12));
-		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix13));
-		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix14));
-		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix15));
-		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix16));
-		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
+		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
+		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
+		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
+		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
+		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
+		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
 		
 		return scene;
 	}
@@ -813,13 +788,13 @@ public final class Scenes {
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTZealot");
 		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 0.0F, 0.0F), 1, new Color3F(20.0F), new Sphere3F(), true));
-		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix11));
-		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix12));
-		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix13));
-		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix14));
-		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix15));
-		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix16));
-		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
+		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
+		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
+		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
+		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
+		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
+		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
 		
 		return scene;
 	}
@@ -993,230 +968,155 @@ public final class Scenes {
 		final Texture texture011 = new ConstantTexture(Color3F.GRAY);
 //		final Texture texture011 = new SimplexFractionalBrownianMotionTexture(new Color3F(0.8F, 0.5F, 0.0F), 5.0F, 0.5F, 16);
 		final Texture texture012 = new ConstantTexture();
-		final Texture texture013 = new ConstantTexture();
 		final Texture texture021 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture022 = new ConstantTexture();
-		final Texture texture023 = new ConstantTexture();
 		final Texture texture031 = new ConstantTexture(colorA);
 		final Texture texture032 = new ConstantTexture();
-		final Texture texture033 = new ConstantTexture();
 		final Texture texture041 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture042 = new ConstantTexture();
-		final Texture texture043 = new ConstantTexture();
 		final Texture texture051 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture052 = new ConstantTexture();
-		final Texture texture053 = new ConstantTexture();
 		final Texture texture061 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture062 = new ConstantTexture();
-		final Texture texture063 = new ConstantTexture();
 		final Texture texture071 = new ConstantTexture(colorA);
 		final Texture texture072 = new ConstantTexture();
-		final Texture texture073 = new ConstantTexture();
 		final Texture texture081 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture082 = new ConstantTexture();
-		final Texture texture083 = new ConstantTexture();
 		final Texture texture091 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture092 = new ConstantTexture();
-		final Texture texture093 = new ConstantTexture();
 		final Texture texture101 = new ConstantTexture(new Color3F(1.0F, 0.01F, 0.01F));
 		final Texture texture102 = new ConstantTexture();
-		final Texture texture103 = new ConstantTexture();
 		final Texture texture111 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture112 = new ConstantTexture();
-		final Texture texture113 = new ConstantTexture();
 		final Texture texture121 = new ConstantTexture(new Color3F(1.0F, 0.01F, 0.01F));
 		final Texture texture122 = new ConstantTexture();
-		final Texture texture123 = new ConstantTexture();
 		final Texture texture131 = new ConstantTexture(new Color3F(1.0F, 0.01F, 0.01F));
 		final Texture texture132 = new ConstantTexture();
-		final Texture texture133 = new ConstantTexture();
 		final Texture texture141 = new ConstantTexture(colorB);
 		final Texture texture142 = new ConstantTexture();
-		final Texture texture143 = new ConstantTexture();
 		final Texture texture151 = new ConstantTexture(colorA);
 		final Texture texture152 = new ConstantTexture();
-		final Texture texture153 = new ConstantTexture();
 		final Texture texture161 = new ConstantTexture(colorC);
 		final Texture texture162 = new ConstantTexture();
-		final Texture texture163 = new ConstantTexture();
 		final Texture texture171 = new ConstantTexture(colorC);
 		final Texture texture172 = new ConstantTexture();
-		final Texture texture173 = new ConstantTexture();
 		final Texture texture181 = new ConstantTexture(colorC);
 		final Texture texture182 = new ConstantTexture();
-		final Texture texture183 = new ConstantTexture();
 		final Texture texture191 = new ConstantTexture(colorC);
 		final Texture texture192 = new ConstantTexture();
-		final Texture texture193 = new ConstantTexture();
 		final Texture texture201 = new ConstantTexture(new Color3F(0.2F));
 		final Texture texture202 = new ConstantTexture();
-		final Texture texture203 = new ConstantTexture();
 		final Texture texture211 = new ConstantTexture(colorA);
 		final Texture texture212 = new ConstantTexture();
-		final Texture texture213 = new ConstantTexture();
 		final Texture texture221 = new ConstantTexture(colorC);
 		final Texture texture222 = new ConstantTexture();
-		final Texture texture223 = new ConstantTexture();
 		final Texture texture231 = new ConstantTexture(colorC);
 		final Texture texture232 = new ConstantTexture();
-		final Texture texture233 = new ConstantTexture();
 		final Texture texture241 = new ConstantTexture(colorC);
 		final Texture texture242 = new ConstantTexture();
-		final Texture texture243 = new ConstantTexture();
 		final Texture texture251 = new ConstantTexture(colorC);
 		final Texture texture252 = new ConstantTexture();
-		final Texture texture253 = new ConstantTexture();
 		final Texture texture261 = new ConstantTexture(colorC);
 		final Texture texture262 = new ConstantTexture();
-		final Texture texture263 = new ConstantTexture();
 		final Texture texture271 = new ConstantTexture(colorC);
 		final Texture texture272 = new ConstantTexture();
-		final Texture texture273 = new ConstantTexture();
 		final Texture texture281 = new ConstantTexture(colorC);
 		final Texture texture282 = new ConstantTexture();
-		final Texture texture283 = new ConstantTexture();
 		final Texture texture291 = new ConstantTexture(colorC);
 		final Texture texture292 = new ConstantTexture();
-		final Texture texture293 = new ConstantTexture();
 		final Texture texture301 = new ConstantTexture(colorC);
 		final Texture texture302 = new ConstantTexture();
-		final Texture texture303 = new ConstantTexture();
 		final Texture texture311 = new ConstantTexture(new Color3F(227, 161, 115));
 		final Texture texture312 = new ConstantTexture();
-		final Texture texture313 = new ConstantTexture();
 		final Texture texture321 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture322 = new ConstantTexture(new Color3F(12.0F));
-		final Texture texture323 = new ConstantTexture();
 		final Texture texture331 = new ConstantTexture(colorB);
 		final Texture texture332 = new ConstantTexture();
-		final Texture texture333 = new ConstantTexture();
 		final Texture texture341 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture342 = new ConstantTexture();
-		final Texture texture343 = new ConstantTexture();
 		final Texture texture351 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture352 = new ConstantTexture(new Color3F(12.0F));
-		final Texture texture353 = new ConstantTexture();
 		final Texture texture361 = new ConstantTexture(colorB);
 		final Texture texture362 = new ConstantTexture();
-		final Texture texture363 = new ConstantTexture();
 		final Texture texture371 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture372 = new ConstantTexture();
-		final Texture texture373 = new ConstantTexture();
 		final Texture texture381 = new ConstantTexture(colorC);
 		final Texture texture382 = new ConstantTexture();
-		final Texture texture383 = new ConstantTexture();
 		final Texture texture391 = new ConstantTexture(colorC);
 		final Texture texture392 = new ConstantTexture();
-		final Texture texture393 = new ConstantTexture();
 		final Texture texture401 = new ConstantTexture(colorA);
 		final Texture texture402 = new ConstantTexture();
-		final Texture texture403 = new ConstantTexture();
 		final Texture texture411 = new ConstantTexture(colorC);
 		final Texture texture412 = new ConstantTexture();
-		final Texture texture413 = new ConstantTexture();
 		final Texture texture421 = new ConstantTexture(colorC);
 		final Texture texture422 = new ConstantTexture();
-		final Texture texture423 = new ConstantTexture();
 		final Texture texture431 = new ConstantTexture(colorA);
 		final Texture texture432 = new ConstantTexture();
-		final Texture texture433 = new ConstantTexture();
 		final Texture texture441 = new ConstantTexture(new Color3F(98, 74, 46));
 		final Texture texture442 = new ConstantTexture();
-		final Texture texture443 = new ConstantTexture();
 		final Texture texture451 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture452 = new ConstantTexture();
-		final Texture texture453 = new ConstantTexture();
 		final Texture texture461 = new ConstantTexture(new Color3F(98, 74, 46));
 		final Texture texture462 = new ConstantTexture();
-		final Texture texture463 = new ConstantTexture();
 		final Texture texture471 = new ConstantTexture(colorC);
 		final Texture texture472 = new ConstantTexture();
-		final Texture texture473 = new ConstantTexture();
 		final Texture texture481 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture482 = new ConstantTexture();
-		final Texture texture483 = new ConstantTexture();
 		final Texture texture491 = new ConstantTexture(colorA);
 		final Texture texture492 = new ConstantTexture();
-		final Texture texture493 = new ConstantTexture();
 		final Texture texture501 = new ConstantTexture(colorC);
 		final Texture texture502 = new ConstantTexture();
-		final Texture texture503 = new ConstantTexture();
 		final Texture texture511 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture512 = new ConstantTexture();
-		final Texture texture513 = new ConstantTexture();
 		final Texture texture521 = new ConstantTexture(colorA);
 		final Texture texture522 = new ConstantTexture();
-		final Texture texture523 = new ConstantTexture();
 		final Texture texture531 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture532 = new ConstantTexture();
-		final Texture texture533 = new ConstantTexture();
 		final Texture texture541 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture542 = new ConstantTexture();
-		final Texture texture543 = new ConstantTexture();
 		final Texture texture551 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture552 = new ConstantTexture();
-		final Texture texture553 = new ConstantTexture();
 		final Texture texture561 = new ConstantTexture(colorC);
 		final Texture texture562 = new ConstantTexture();
-		final Texture texture563 = new ConstantTexture();
 		final Texture texture571 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture572 = new ConstantTexture();
-		final Texture texture573 = new ConstantTexture();
 		final Texture texture581 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture582 = new ConstantTexture();
-		final Texture texture583 = new ConstantTexture();
 		final Texture texture591 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture592 = new ConstantTexture();
-		final Texture texture593 = new ConstantTexture();
 		final Texture texture601 = new ConstantTexture(colorC);
 		final Texture texture602 = new ConstantTexture();
-		final Texture texture603 = new ConstantTexture();
 		final Texture texture611 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture612 = new ConstantTexture();
-		final Texture texture613 = new ConstantTexture();
 		final Texture texture621 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture622 = new ConstantTexture();
-		final Texture texture623 = new ConstantTexture();
 		final Texture texture631 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture632 = new ConstantTexture();
-		final Texture texture633 = new ConstantTexture();
 		final Texture texture641 = new ConstantTexture(colorC);
 		final Texture texture642 = new ConstantTexture();
-		final Texture texture643 = new ConstantTexture();
 		final Texture texture651 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture652 = new ConstantTexture();
-		final Texture texture653 = new ConstantTexture();
 		final Texture texture661 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture662 = new ConstantTexture();
-		final Texture texture663 = new ConstantTexture();
 		final Texture texture671 = new ConstantTexture(new Color3F(0.1F));
 		final Texture texture672 = new ConstantTexture();
-		final Texture texture673 = new ConstantTexture();
 		final Texture texture681 = new ConstantTexture(colorC);
 		final Texture texture682 = new ConstantTexture();
-		final Texture texture683 = new ConstantTexture();
 		final Texture texture691 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture692 = new ConstantTexture();
-		final Texture texture693 = new ConstantTexture();
 		
 		final Texture texture701 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture702 = new ConstantTexture();
-		final Texture texture703 = new ConstantTexture();
 		final Texture texture711 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture712 = new ConstantTexture();
-		final Texture texture713 = new ConstantTexture();
 		final Texture texture721 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture722 = new ConstantTexture();
-		final Texture texture723 = new ConstantTexture();
 		final Texture texture731 = new ConstantTexture(new Color3F(0.25F, 0.25F, 0.75F));
 		final Texture texture732 = new ConstantTexture();
-		final Texture texture733 = new ConstantTexture();
 		final Texture texture741 = new ConstantTexture(new Color3F(0.75F, 0.25F, 0.25F));
 		final Texture texture742 = new ConstantTexture();
-		final Texture texture743 = new ConstantTexture();
 		final Texture texture751 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture752 = new ConstantTexture(new Color3F(12.0F));
-		final Texture texture753 = new ConstantTexture();
 		
 		final Matrix44F matrix01 = Matrix44F.identity();
 		final Matrix44F matrixNM = Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 5.0F), Matrix44F.multiply(Matrix44F.rotateY(AngleF.degrees(90.0F)), Matrix44F.rotateX(AngleF.degrees(270.0F))));
@@ -1227,85 +1127,85 @@ public final class Scenes {
 		final Matrix44F matrix74 = Matrix44F.translate(-3.0F, 0.0F,  0.0F);
 		final Matrix44F matrix75 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 4.99F, 1.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.25F));
 		
-		final Primitive primitive75 = new Primitive(material75, shape75, texture751, texture752, texture753, matrix75);
+		final Primitive primitive75 = new Primitive(material75, shape75, texture751, texture752, matrix75);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "SL500");
 		scene.addLight(new PrimitiveLight(primitive75));
-		scene.addPrimitive(new Primitive(material01, shape01, texture011, texture012, texture013, matrix01));
-		scene.addPrimitive(new Primitive(material02, shape02, texture021, texture022, texture023, matrixNM));//Base			wind_glass
-		scene.addPrimitive(new Primitive(material03, shape03, texture031, texture032, texture033, matrixNM));//Base			Body_paint
-		scene.addPrimitive(new Primitive(material04, shape04, texture041, texture042, texture043, matrixNM));//Base			Misc
-		scene.addPrimitive(new Primitive(material05, shape05, texture051, texture052, texture053, matrixNM));//Base			Misc0
-		scene.addPrimitive(new Primitive(material06, shape06, texture061, texture062, texture063, matrixNM));//Base			Material__583
-		scene.addPrimitive(new Primitive(material07, shape07, texture071, texture072, texture073, matrixNM));//Base			Body_paint
-		scene.addPrimitive(new Primitive(material08, shape08, texture081, texture082, texture083, matrixNM));//Base			License
-		scene.addPrimitive(new Primitive(material09, shape09, texture091, texture092, texture093, matrixNM));//Base			wind_glass
-		scene.addPrimitive(new Primitive(material10, shape10, texture101, texture102, texture103, matrixNM));//Base			Material__586
-		scene.addPrimitive(new Primitive(material11, shape11, texture111, texture112, texture113, matrixNM));//Base			wind_glass
-		scene.addPrimitive(new Primitive(material12, shape12, texture121, texture122, texture123, matrixNM));//BLightL		Material__589
-		scene.addPrimitive(new Primitive(material13, shape13, texture131, texture132, texture133, matrixNM));//BLightR		Material__589
-		scene.addPrimitive(new Primitive(material14, shape14, texture141, texture142, texture143, matrixNM));//Body			DoorLine
-		scene.addPrimitive(new Primitive(material15, shape15, texture151, texture152, texture153, matrixNM));//Body			Badging_Chrome
-		scene.addPrimitive(new Primitive(material16, shape16, texture161, texture162, texture163, matrixNM));//Body			Misc1
-		scene.addPrimitive(new Primitive(material17, shape17, texture171, texture172, texture173, matrixNM));//Body			Misc_Chrome
-		scene.addPrimitive(new Primitive(material18, shape18, texture181, texture182, texture183, matrixNM));//Body			Misc_Chrome0
-		scene.addPrimitive(new Primitive(material19, shape19, texture191, texture192, texture193, matrixNM));//Body			Misc_Chrome1
-		scene.addPrimitive(new Primitive(material20, shape20, texture201, texture202, texture203, matrixNM));//Body			Black
-		scene.addPrimitive(new Primitive(material21, shape21, texture211, texture212, texture213, matrixNM));//Body			Body_paint0
-		scene.addPrimitive(new Primitive(material22, shape22, texture221, texture222, texture223, matrixNM));//Body			Bottom
-		scene.addPrimitive(new Primitive(material23, shape23, texture231, texture232, texture233, matrixNM));//BrakeFL		Brake_Pads
-		scene.addPrimitive(new Primitive(material24, shape24, texture241, texture242, texture243, matrixNM));//BrakeFL		Brake_Disc
-		scene.addPrimitive(new Primitive(material25, shape25, texture251, texture252, texture253, matrixNM));//BrakeFR		Brake_Pads0
-		scene.addPrimitive(new Primitive(material26, shape26, texture261, texture262, texture263, matrixNM));//BrakeFR		Brake_Disc0
-		scene.addPrimitive(new Primitive(material27, shape27, texture271, texture272, texture273, matrixNM));//BrakeRL		Brake_Pads
-		scene.addPrimitive(new Primitive(material28, shape28, texture281, texture282, texture283, matrixNM));//BrakeRL		Brake_Disc
-		scene.addPrimitive(new Primitive(material29, shape29, texture291, texture292, texture293, matrixNM));//BrakeRR		Brake_Pads0
-		scene.addPrimitive(new Primitive(material30, shape30, texture301, texture302, texture303, matrixNM));//BrakeRR		Brake_Disc0
-		scene.addPrimitive(new Primitive(material31, shape31, texture311, texture312, texture313, matrixNM));//Driver		Driver
-		scene.addPrimitive(new Primitive(material32, shape32, texture321, texture322, texture323, matrixNM));//HLightL		Material__593
-		scene.addPrimitive(new Primitive(material33, shape33, texture331, texture332, texture333, matrixNM));//HLightL		Misc2
-		scene.addPrimitive(new Primitive(material34, shape34, texture341, texture342, texture343, matrixNM));//HLightLG		Material__594
-		scene.addPrimitive(new Primitive(material35, shape35, texture351, texture352, texture353, matrixNM));//HLightR		Material__593
-		scene.addPrimitive(new Primitive(material36, shape36, texture361, texture362, texture363, matrixNM));//HLightR		Misc2
-		scene.addPrimitive(new Primitive(material37, shape37, texture371, texture372, texture373, matrixNM));//HLightRG		Material__594
-		scene.addPrimitive(new Primitive(material38, shape38, texture381, texture382, texture383, matrixNM));//Hood			Misc3
-		scene.addPrimitive(new Primitive(material39, shape39, texture391, texture392, texture393, matrixNM));//Hood			Misc_Chrome2
-		scene.addPrimitive(new Primitive(material40, shape40, texture401, texture402, texture403, matrixNM));//Hood			Body_paint1
-		scene.addPrimitive(new Primitive(material41, shape41, texture411, texture412, texture413, matrixNM));//Hood_Carbon	Misc4
-		scene.addPrimitive(new Primitive(material42, shape42, texture421, texture422, texture423, matrixNM));//Hood_Carbon	Misc_Chrome3
-		scene.addPrimitive(new Primitive(material43, shape43, texture431, texture432, texture433, matrixNM));//Hood_Carbon	Body_paint2
-		scene.addPrimitive(new Primitive(material44, shape44, texture441, texture442, texture443, matrixNM));//Interior		Interior
-		scene.addPrimitive(new Primitive(material45, shape45, texture451, texture452, texture453, matrixNM));//Interior		Material__597
-		scene.addPrimitive(new Primitive(material46, shape46, texture461, texture462, texture463, matrixNM));//Interior		Interior0
-		scene.addPrimitive(new Primitive(material47, shape47, texture471, texture472, texture473, matrixNM));//MirrorL		Misc_Chrome4
-		scene.addPrimitive(new Primitive(material48, shape48, texture481, texture482, texture483, matrixNM));//MirrorL		Material__598
-		scene.addPrimitive(new Primitive(material49, shape49, texture491, texture492, texture493, matrixNM));//MirrorL		Body_paint3
-		scene.addPrimitive(new Primitive(material50, shape50, texture501, texture502, texture503, matrixNM));//MirrorR		Misc_Chrome4
-		scene.addPrimitive(new Primitive(material51, shape51, texture511, texture512, texture513, matrixNM));//MirrorR		Material__598
-		scene.addPrimitive(new Primitive(material52, shape52, texture521, texture522, texture523, matrixNM));//MirrorR		Body_paint3
-		scene.addPrimitive(new Primitive(material53, shape53, texture531, texture532, texture533, matrixNM));//TireFL		Tire_Back
-		scene.addPrimitive(new Primitive(material54, shape54, texture541, texture542, texture543, matrixNM));//TireFL		Tire_Tread
-		scene.addPrimitive(new Primitive(material55, shape55, texture551, texture552, texture553, matrixNM));//TireFL		Tire_Sidewall
-		scene.addPrimitive(new Primitive(material56, shape56, texture561, texture562, texture563, matrixNM));//TireFL		Material__600
-		scene.addPrimitive(new Primitive(material57, shape57, texture571, texture572, texture573, matrixNM));//TireFR		Tire_Back
-		scene.addPrimitive(new Primitive(material58, shape58, texture581, texture582, texture583, matrixNM));//TireFR		Tire_Tread
-		scene.addPrimitive(new Primitive(material59, shape59, texture591, texture592, texture593, matrixNM));//TireFR		Tire_Sidewall
-		scene.addPrimitive(new Primitive(material60, shape60, texture601, texture602, texture603, matrixNM));//TireFR		Material__600
-		scene.addPrimitive(new Primitive(material61, shape61, texture611, texture612, texture613, matrixNM));//TireRL		Tire_Back
-		scene.addPrimitive(new Primitive(material62, shape62, texture621, texture622, texture623, matrixNM));//TireRL		Tire_Tread
-		scene.addPrimitive(new Primitive(material63, shape63, texture631, texture632, texture633, matrixNM));//TireRL		Tire_Sidewall
-		scene.addPrimitive(new Primitive(material64, shape64, texture641, texture642, texture643, matrixNM));//TireRL		Material__600
-		scene.addPrimitive(new Primitive(material65, shape65, texture651, texture652, texture653, matrixNM));//TireRR		Tire_Back
-		scene.addPrimitive(new Primitive(material66, shape66, texture661, texture662, texture663, matrixNM));//TireRR		Tire_Tread
-		scene.addPrimitive(new Primitive(material67, shape67, texture671, texture672, texture673, matrixNM));//TireRR		Tire_Sidewall
-		scene.addPrimitive(new Primitive(material68, shape68, texture681, texture682, texture683, matrixNM));//TireRR		Material__600
-		scene.addPrimitive(new Primitive(material69, shape69, texture691, texture692, texture693, matrixNM));//License		License0
-		scene.addPrimitive(new Primitive(material70, shape70, texture701, texture702, texture703, matrix70));
-		scene.addPrimitive(new Primitive(material71, shape71, texture711, texture712, texture713, matrix71));
-		scene.addPrimitive(new Primitive(material72, shape72, texture721, texture722, texture723, matrix72));
-		scene.addPrimitive(new Primitive(material73, shape73, texture731, texture732, texture733, matrix73));
-		scene.addPrimitive(new Primitive(material74, shape74, texture741, texture742, texture743, matrix74));
+		scene.addPrimitive(new Primitive(material01, shape01, texture011, texture012, matrix01));
+		scene.addPrimitive(new Primitive(material02, shape02, texture021, texture022, matrixNM));//Base			wind_glass
+		scene.addPrimitive(new Primitive(material03, shape03, texture031, texture032, matrixNM));//Base			Body_paint
+		scene.addPrimitive(new Primitive(material04, shape04, texture041, texture042, matrixNM));//Base			Misc
+		scene.addPrimitive(new Primitive(material05, shape05, texture051, texture052, matrixNM));//Base			Misc0
+		scene.addPrimitive(new Primitive(material06, shape06, texture061, texture062, matrixNM));//Base			Material__583
+		scene.addPrimitive(new Primitive(material07, shape07, texture071, texture072, matrixNM));//Base			Body_paint
+		scene.addPrimitive(new Primitive(material08, shape08, texture081, texture082, matrixNM));//Base			License
+		scene.addPrimitive(new Primitive(material09, shape09, texture091, texture092, matrixNM));//Base			wind_glass
+		scene.addPrimitive(new Primitive(material10, shape10, texture101, texture102, matrixNM));//Base			Material__586
+		scene.addPrimitive(new Primitive(material11, shape11, texture111, texture112, matrixNM));//Base			wind_glass
+		scene.addPrimitive(new Primitive(material12, shape12, texture121, texture122, matrixNM));//BLightL		Material__589
+		scene.addPrimitive(new Primitive(material13, shape13, texture131, texture132, matrixNM));//BLightR		Material__589
+		scene.addPrimitive(new Primitive(material14, shape14, texture141, texture142, matrixNM));//Body			DoorLine
+		scene.addPrimitive(new Primitive(material15, shape15, texture151, texture152, matrixNM));//Body			Badging_Chrome
+		scene.addPrimitive(new Primitive(material16, shape16, texture161, texture162, matrixNM));//Body			Misc1
+		scene.addPrimitive(new Primitive(material17, shape17, texture171, texture172, matrixNM));//Body			Misc_Chrome
+		scene.addPrimitive(new Primitive(material18, shape18, texture181, texture182, matrixNM));//Body			Misc_Chrome0
+		scene.addPrimitive(new Primitive(material19, shape19, texture191, texture192, matrixNM));//Body			Misc_Chrome1
+		scene.addPrimitive(new Primitive(material20, shape20, texture201, texture202, matrixNM));//Body			Black
+		scene.addPrimitive(new Primitive(material21, shape21, texture211, texture212, matrixNM));//Body			Body_paint0
+		scene.addPrimitive(new Primitive(material22, shape22, texture221, texture222, matrixNM));//Body			Bottom
+		scene.addPrimitive(new Primitive(material23, shape23, texture231, texture232, matrixNM));//BrakeFL		Brake_Pads
+		scene.addPrimitive(new Primitive(material24, shape24, texture241, texture242, matrixNM));//BrakeFL		Brake_Disc
+		scene.addPrimitive(new Primitive(material25, shape25, texture251, texture252, matrixNM));//BrakeFR		Brake_Pads0
+		scene.addPrimitive(new Primitive(material26, shape26, texture261, texture262, matrixNM));//BrakeFR		Brake_Disc0
+		scene.addPrimitive(new Primitive(material27, shape27, texture271, texture272, matrixNM));//BrakeRL		Brake_Pads
+		scene.addPrimitive(new Primitive(material28, shape28, texture281, texture282, matrixNM));//BrakeRL		Brake_Disc
+		scene.addPrimitive(new Primitive(material29, shape29, texture291, texture292, matrixNM));//BrakeRR		Brake_Pads0
+		scene.addPrimitive(new Primitive(material30, shape30, texture301, texture302, matrixNM));//BrakeRR		Brake_Disc0
+		scene.addPrimitive(new Primitive(material31, shape31, texture311, texture312, matrixNM));//Driver		Driver
+		scene.addPrimitive(new Primitive(material32, shape32, texture321, texture322, matrixNM));//HLightL		Material__593
+		scene.addPrimitive(new Primitive(material33, shape33, texture331, texture332, matrixNM));//HLightL		Misc2
+		scene.addPrimitive(new Primitive(material34, shape34, texture341, texture342, matrixNM));//HLightLG		Material__594
+		scene.addPrimitive(new Primitive(material35, shape35, texture351, texture352, matrixNM));//HLightR		Material__593
+		scene.addPrimitive(new Primitive(material36, shape36, texture361, texture362, matrixNM));//HLightR		Misc2
+		scene.addPrimitive(new Primitive(material37, shape37, texture371, texture372, matrixNM));//HLightRG		Material__594
+		scene.addPrimitive(new Primitive(material38, shape38, texture381, texture382, matrixNM));//Hood			Misc3
+		scene.addPrimitive(new Primitive(material39, shape39, texture391, texture392, matrixNM));//Hood			Misc_Chrome2
+		scene.addPrimitive(new Primitive(material40, shape40, texture401, texture402, matrixNM));//Hood			Body_paint1
+		scene.addPrimitive(new Primitive(material41, shape41, texture411, texture412, matrixNM));//Hood_Carbon	Misc4
+		scene.addPrimitive(new Primitive(material42, shape42, texture421, texture422, matrixNM));//Hood_Carbon	Misc_Chrome3
+		scene.addPrimitive(new Primitive(material43, shape43, texture431, texture432, matrixNM));//Hood_Carbon	Body_paint2
+		scene.addPrimitive(new Primitive(material44, shape44, texture441, texture442, matrixNM));//Interior		Interior
+		scene.addPrimitive(new Primitive(material45, shape45, texture451, texture452, matrixNM));//Interior		Material__597
+		scene.addPrimitive(new Primitive(material46, shape46, texture461, texture462, matrixNM));//Interior		Interior0
+		scene.addPrimitive(new Primitive(material47, shape47, texture471, texture472, matrixNM));//MirrorL		Misc_Chrome4
+		scene.addPrimitive(new Primitive(material48, shape48, texture481, texture482, matrixNM));//MirrorL		Material__598
+		scene.addPrimitive(new Primitive(material49, shape49, texture491, texture492, matrixNM));//MirrorL		Body_paint3
+		scene.addPrimitive(new Primitive(material50, shape50, texture501, texture502, matrixNM));//MirrorR		Misc_Chrome4
+		scene.addPrimitive(new Primitive(material51, shape51, texture511, texture512, matrixNM));//MirrorR		Material__598
+		scene.addPrimitive(new Primitive(material52, shape52, texture521, texture522, matrixNM));//MirrorR		Body_paint3
+		scene.addPrimitive(new Primitive(material53, shape53, texture531, texture532, matrixNM));//TireFL		Tire_Back
+		scene.addPrimitive(new Primitive(material54, shape54, texture541, texture542, matrixNM));//TireFL		Tire_Tread
+		scene.addPrimitive(new Primitive(material55, shape55, texture551, texture552, matrixNM));//TireFL		Tire_Sidewall
+		scene.addPrimitive(new Primitive(material56, shape56, texture561, texture562, matrixNM));//TireFL		Material__600
+		scene.addPrimitive(new Primitive(material57, shape57, texture571, texture572, matrixNM));//TireFR		Tire_Back
+		scene.addPrimitive(new Primitive(material58, shape58, texture581, texture582, matrixNM));//TireFR		Tire_Tread
+		scene.addPrimitive(new Primitive(material59, shape59, texture591, texture592, matrixNM));//TireFR		Tire_Sidewall
+		scene.addPrimitive(new Primitive(material60, shape60, texture601, texture602, matrixNM));//TireFR		Material__600
+		scene.addPrimitive(new Primitive(material61, shape61, texture611, texture612, matrixNM));//TireRL		Tire_Back
+		scene.addPrimitive(new Primitive(material62, shape62, texture621, texture622, matrixNM));//TireRL		Tire_Tread
+		scene.addPrimitive(new Primitive(material63, shape63, texture631, texture632, matrixNM));//TireRL		Tire_Sidewall
+		scene.addPrimitive(new Primitive(material64, shape64, texture641, texture642, matrixNM));//TireRL		Material__600
+		scene.addPrimitive(new Primitive(material65, shape65, texture651, texture652, matrixNM));//TireRR		Tire_Back
+		scene.addPrimitive(new Primitive(material66, shape66, texture661, texture662, matrixNM));//TireRR		Tire_Tread
+		scene.addPrimitive(new Primitive(material67, shape67, texture671, texture672, matrixNM));//TireRR		Tire_Sidewall
+		scene.addPrimitive(new Primitive(material68, shape68, texture681, texture682, matrixNM));//TireRR		Material__600
+		scene.addPrimitive(new Primitive(material69, shape69, texture691, texture692, matrixNM));//License		License0
+		scene.addPrimitive(new Primitive(material70, shape70, texture701, texture702, matrix70));
+		scene.addPrimitive(new Primitive(material71, shape71, texture711, texture712, matrix71));
+		scene.addPrimitive(new Primitive(material72, shape72, texture721, texture722, matrix72));
+		scene.addPrimitive(new Primitive(material73, shape73, texture731, texture732, matrix73));
+		scene.addPrimitive(new Primitive(material74, shape74, texture741, texture742, matrix74));
 		scene.addPrimitive(primitive75);
 		
 		return scene;
@@ -1352,18 +1252,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialAshikhminShirleyMaterial");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1382,18 +1280,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialLambertianMaterial");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1412,18 +1308,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialOrenNayarMaterial");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1442,18 +1336,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialReflectionMaterial");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1472,18 +1364,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 5.0F, 10.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 7.5F, 0.0F)), "ShowcaseMaterialRefractionMaterial");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1500,13 +1390,12 @@ public final class Scenes {
 		
 		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture2 = new ConstantTexture();
-		final Texture texture3 = new ConstantTexture();
 		
 		final Matrix44F matrix = Matrix44F.identity();
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FPlane3F");
-		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
 	}
@@ -1523,13 +1412,12 @@ public final class Scenes {
 		
 		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture2 = new ConstantTexture();
-		final Texture texture3 = new ConstantTexture();
 		
 		final Matrix44F matrix = Matrix44F.scale(1.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(10.0F, 4.0F, 10.0F)), "ShowcaseShape3FProceduralTerrain3F");
-		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
 	}
@@ -1546,13 +1434,12 @@ public final class Scenes {
 		
 		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture2 = new ConstantTexture();
-		final Texture texture3 = new ConstantTexture();
 		
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FRectangularCuboid3F");
-		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
 	}
@@ -1569,13 +1456,12 @@ public final class Scenes {
 		
 		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture2 = new ConstantTexture();
-		final Texture texture3 = new ConstantTexture();
 		
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FSphere3F");
-		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
 	}
@@ -1592,13 +1478,12 @@ public final class Scenes {
 		
 		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture2 = new ConstantTexture();
-		final Texture texture3 = new ConstantTexture();
 		
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 5.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTorus3F");
-		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
 	}
@@ -1625,13 +1510,12 @@ public final class Scenes {
 		
 		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture2 = new ConstantTexture();
-		final Texture texture3 = new ConstantTexture();
 		
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTriangle3F");
-		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
 	}
@@ -1648,13 +1532,12 @@ public final class Scenes {
 		
 		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture2 = new ConstantTexture();
-		final Texture texture3 = new ConstantTexture();
 		
 		final Matrix44F matrix = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.01F));
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTriangleMesh3F");
-		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, texture3, matrix));
+		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
 	}
@@ -1673,18 +1556,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new BlendTexture(new CheckerboardTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), AngleF.degrees(90.0F), new Vector2F(5.0F, 5.0F)), new BullseyeTexture(new Color3F(0.1F, 1.0F, 0.1F), new Color3F(0.1F, 0.1F, 1.0F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F));
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureBlendTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1703,18 +1584,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new BullseyeTexture(new Color3F(0.1F, 1.0F, 0.1F), new Color3F(0.1F, 0.1F, 1.0F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F);
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureBullseyeTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1733,18 +1612,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new CheckerboardTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), AngleF.degrees(90.0F), new Vector2F(5.0F, 5.0F));
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureCheckerboardTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1767,18 +1644,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new ImageTexture(image, AngleF.degrees(90.0F));
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 20.0F), Matrix44F.rotateY(AngleF.degrees(90.0F)));//Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureImageTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1801,18 +1676,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new MarbleTexture();
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 20.0F), Matrix44F.rotateY(AngleF.degrees(90.0F)));//Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureMarbleTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1831,18 +1704,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new SimplexFractionalBrownianMotionTexture();
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureSimplexFractionalBrownianMotionTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1861,18 +1732,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new SurfaceNormalTexture();
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureSurfaceNormalTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1891,18 +1760,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = new UVTexture();
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture23 = new ConstantTexture();
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureUVTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}
@@ -1921,18 +1788,16 @@ public final class Scenes {
 		
 		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture13 = new ConstantTexture();
 		final Texture texture21 = ImageTexture.load(new File("./resources/Zealot_albedo.png"));
 		final Texture texture22 = ImageTexture.load(new File("./resources/Zealot_emissive.png"));
-		final Texture texture23 = ImageTexture.load(new File("./resources/Zealot_normal.png"));
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.05F));
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "Zealot");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, texture13, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, texture23, matrix2));
+		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
+		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}

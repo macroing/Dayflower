@@ -52,19 +52,18 @@ public final class Primitive {
 	private Shape3F shape;
 	private Texture textureAlbedo;
 	private Texture textureEmittance;
-	private Texture textureNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
-	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code textureNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code material}, {@code shape}, {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Primitive(material, shape, textureAlbedo, textureEmittance, textureNormal, Matrix44F.identity());
+	 * new Primitive(material, shape, textureAlbedo, textureEmittance, Matrix44F.identity());
 	 * }
 	 * </pre>
 	 * 
@@ -72,32 +71,29 @@ public final class Primitive {
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
 	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
 	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
-	 * @param textureNormal the {@code Texture} instance for the normal that is associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code textureNormal} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Texture textureNormal) {
-		this(material, shape, textureAlbedo, textureEmittance, textureNormal, Matrix44F.identity());
+	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance) {
+		this(material, shape, textureAlbedo, textureEmittance, Matrix44F.identity());
 	}
 	
 	/**
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
-	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code textureNormal} or {@code objectToWorld} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code objectToWorld} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
 	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
 	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
-	 * @param textureNormal the {@code Texture} instance for the normal that is associated with this {@code Primitive} instance
 	 * @param objectToWorld the {@link Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code textureNormal} or {@code objectToWorld} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code objectToWorld} are {@code null}
 	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Texture textureNormal, final Matrix44F objectToWorld) {
+	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Matrix44F objectToWorld) {
 		this.material = Objects.requireNonNull(material, "material == null");
 		this.shape = Objects.requireNonNull(shape, "shape == null");
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
-		this.textureNormal = Objects.requireNonNull(textureNormal, "textureNormal == null");
 		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
 		this.worldToObject = Matrix44F.inverse(objectToWorld);
 		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
@@ -107,23 +103,21 @@ public final class Primitive {
 	/**
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
-	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code textureNormal}, {@code objectToWorld} or {@code areaLight} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code objectToWorld} or {@code areaLight} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
 	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
 	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
-	 * @param textureNormal the {@code Texture} instance for the normal that is associated with this {@code Primitive} instance
 	 * @param objectToWorld the {@link Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
 	 * @param areaLight the {@link AreaLight} instance associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code textureNormal}, {@code objectToWorld} or {@code areaLight} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code objectToWorld} or {@code areaLight} are {@code null}
 	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Texture textureNormal, final Matrix44F objectToWorld, final AreaLight areaLight) {
+	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Matrix44F objectToWorld, final AreaLight areaLight) {
 		this.material = Objects.requireNonNull(material, "material == null");
 		this.shape = Objects.requireNonNull(shape, "shape == null");
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
-		this.textureNormal = Objects.requireNonNull(textureNormal, "textureNormal == null");
 		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
 		this.worldToObject = Matrix44F.inverse(objectToWorld);
 		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
@@ -329,7 +323,7 @@ public final class Primitive {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Primitive(%s, %s, %s, %s, %s, %s)", this.material, this.shape, this.textureAlbedo, this.textureEmittance, this.textureNormal, this.objectToWorld);
+		return String.format("new Primitive(%s, %s, %s, %s, %s)", this.material, this.shape, this.textureAlbedo, this.textureEmittance, this.objectToWorld);
 	}
 	
 	/**
@@ -348,15 +342,6 @@ public final class Primitive {
 	 */
 	public Texture getTextureEmittance() {
 		return this.textureEmittance;
-	}
-	
-	/**
-	 * Returns the {@link Texture} instance for the normal that is associated with this {@code Primitive} instance.
-	 * 
-	 * @return the {@code Texture} instance for the normal that is associated with this {@code Primitive} instance
-	 */
-	public Texture getTextureNormal() {
-		return this.textureNormal;
 	}
 	
 	/**
@@ -386,8 +371,6 @@ public final class Primitive {
 		} else if(!Objects.equals(this.textureAlbedo, Primitive.class.cast(object).textureAlbedo)) {
 			return false;
 		} else if(!Objects.equals(this.textureEmittance, Primitive.class.cast(object).textureEmittance)) {
-			return false;
-		} else if(!Objects.equals(this.textureNormal, Primitive.class.cast(object).textureNormal)) {
 			return false;
 		} else {
 			return true;
@@ -520,7 +503,7 @@ public final class Primitive {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.boundingVolume, this.material, this.objectToWorld, this.worldToObject, this.shape, this.textureAlbedo, this.textureEmittance, this.textureNormal);
+		return Objects.hash(this.boundingVolume, this.material, this.objectToWorld, this.worldToObject, this.shape, this.textureAlbedo, this.textureEmittance);
 	}
 	
 	/**
@@ -601,18 +584,6 @@ public final class Primitive {
 	 */
 	public void setTextureEmittance(final Texture textureEmittance) {
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
-	}
-	
-	/**
-	 * Sets the {@link Texture} instance for the normal that is associated with this {@code Primitive} instance to {@code textureNormal}.
-	 * <p>
-	 * If {@code textureNormal} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param textureNormal the {@code Texture} instance for the normal that is associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, {@code textureNormal} is {@code null}
-	 */
-	public void setTextureNormal(final Texture textureNormal) {
-		this.textureNormal = Objects.requireNonNull(textureNormal, "textureNormal == null");
 	}
 	
 	/**

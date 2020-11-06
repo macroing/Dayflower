@@ -53,4 +53,15 @@ public interface Background {
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	List<BackgroundSample> sample(final Intersection intersection);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code Background} instance that represents a black background.
+	 * 
+	 * @return a new {@code Background} instance that represents a black background
+	 */
+	static Background newBlackBackground() {
+		return new BlackBackground();
+	}
 }

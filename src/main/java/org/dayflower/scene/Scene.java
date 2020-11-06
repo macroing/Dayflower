@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.util.Lists;
 
 /**
  * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.
@@ -37,13 +38,66 @@ import org.dayflower.geometry.Ray3F;
  * @author J&#246;rgen Lundgren
  */
 public final class Scene {
-	private final Background background;
-	private final Camera camera;
-	private final List<Light> lights;
-	private final List<Primitive> primitives;
-	private final String name;
+	private Background background;
+	private Camera camera;
+	private List<Light> lights;
+	private List<Primitive> primitives;
+	private String name;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code Scene} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Scene(Background.newBlackBackground());
+	 * }
+	 * </pre>
+	 */
+	public Scene() {
+		this(Background.newBlackBackground());
+	}
+	
+	/**
+	 * Constructs a new {@code Scene} instance.
+	 * <p>
+	 * If {@code background} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Scene(background, new Camera());
+	 * }
+	 * </pre>
+	 * 
+	 * @param background the {@link Background} instance associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, {@code background} is {@code null}
+	 */
+	public Scene(final Background background) {
+		this(background, new Camera());
+	}
+	
+	/**
+	 * Constructs a new {@code Scene} instance.
+	 * <p>
+	 * If either {@code background} or {@code camera} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Scene(background, camera, "Default");
+	 * }
+	 * </pre>
+	 * 
+	 * @param background the {@link Background} instance associated with this {@code Scene} instance
+	 * @param camera the {@link Camera} instance associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code background} or {@code camera} are {@code null}
+	 */
+	public Scene(final Background background, final Camera camera) {
+		this(background, camera, "Default");
+	}
 	
 	/**
 	 * Constructs a new {@code Scene} instance.
@@ -370,5 +424,65 @@ public final class Scene {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.background, this.camera, this.lights, this.primitives, this.name);
+	}
+	
+	/**
+	 * Sets the {@link Background} instance associated with this {@code Scene} instance to {@code background}.
+	 * <p>
+	 * If {@code background} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param background the {@code Background} instance associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, {@code background} is {@code null}
+	 */
+	public void setBackground(final Background background) {
+		this.background = Objects.requireNonNull(background, "background == null");
+	}
+	
+	/**
+	 * Sets the {@link Camera} instance associated with this {@code Scene} instance to {@code camera}.
+	 * <p>
+	 * If {@code camera} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param camera the {@code Camera} instance associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
+	 */
+	public void setCamera(final Camera camera) {
+		this.camera = Objects.requireNonNull(camera, "camera == null");
+	}
+	
+	/**
+	 * Sets the {@code List} with all {@link Light} instances associated with this {@code Scene} instance to a copy of {@code lights}.
+	 * <p>
+	 * If either {@code lights} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lights a {@code List} with all {@code Light} instances associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code lights} or at least one of its elements are {@code null}
+	 */
+	public void setLights(final List<Light> lights) {
+		this.lights = new ArrayList<>(Lists.requireNonNullList(lights, "lights"));
+	}
+	
+	/**
+	 * Sets the name associated with this {@code Scene} instance to {@code name}.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
+	public void setName(final String name) {
+		this.name = Objects.requireNonNull(name, "name == null");
+	}
+	
+	/**
+	 * Sets the {@code List} with all {@link Primitive} instances associated with this {@code Scene} instance to a copy of {@code primitives}.
+	 * <p>
+	 * If either {@code primitives} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lights a {@code List} with all {@code Primitive} instances associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code primitives} or at least one of its elements are {@code null}
+	 */
+	public void setPrimitives(final List<Primitive> primitives) {
+		this.primitives = new ArrayList<>(Lists.requireNonNullList(primitives, "primitives"));
 	}
 }

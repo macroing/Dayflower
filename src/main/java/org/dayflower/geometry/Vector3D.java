@@ -638,11 +638,17 @@ public final class Vector3D {
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
 	public static Vector3D divide(final Vector3D vectorLHS, final double scalarRHS) {
-		final double component1 = vectorLHS.component1 / scalarRHS;
-		final double component2 = vectorLHS.component2 / scalarRHS;
-		final double component3 = vectorLHS.component3 / scalarRHS;
+		Objects.requireNonNull(vectorLHS, "vectorLHS == null");
 		
-		return new Vector3D(component1, component2, component3);
+		if(scalarRHS < -0.0D || scalarRHS > +0.0D) {
+			final double component1 = vectorLHS.component1 / scalarRHS;
+			final double component2 = vectorLHS.component2 / scalarRHS;
+			final double component3 = vectorLHS.component3 / scalarRHS;
+			
+			return new Vector3D(component1, component2, component3);
+		}
+		
+		return ZERO;
 	}
 	
 	/**
@@ -830,9 +836,9 @@ public final class Vector3D {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3D reciprocal(final Vector3D vector) {
-		final double component1 = 1.0D / vector.component1;
-		final double component2 = 1.0D / vector.component2;
-		final double component3 = 1.0D / vector.component3;
+		final double component1 = vector.component1 < -0.0D || vector.component1 > +0.0D ? 1.0D / vector.component1 : 0.0D;
+		final double component2 = vector.component2 < -0.0D || vector.component2 > +0.0D ? 1.0D / vector.component2 : 0.0D;
+		final double component3 = vector.component3 < -0.0D || vector.component3 > +0.0D ? 1.0D / vector.component3 : 0.0D;
 		
 		return new Vector3D(component1, component2, component3);
 	}

@@ -881,12 +881,12 @@ public final class Scenes {
 		final Material material68 = new AshikhminShirleyMaterial(0.02F);
 		final Material material69 = new OrenNayarMaterial(AngleF.degrees(20.0F));
 		
-		final Material material70 = new LambertianMaterial();
-		final Material material71 = new LambertianMaterial();
-		final Material material72 = new LambertianMaterial();
-		final Material material73 = new LambertianMaterial();
-		final Material material74 = new LambertianMaterial();
-		final Material material75 = new LambertianMaterial();
+//		final Material material70 = new LambertianMaterial();
+//		final Material material71 = new LambertianMaterial();
+//		final Material material72 = new LambertianMaterial();
+//		final Material material73 = new LambertianMaterial();
+//		final Material material74 = new LambertianMaterial();
+//		final Material material75 = new LambertianMaterial();
 		
 		final Shape3F shape01 = new Plane3F();
 		final Shape3F shape02 = triangleMeshes.get( 0);
@@ -958,12 +958,12 @@ public final class Scenes {
 		final Shape3F shape68 = triangleMeshes.get(66);
 		final Shape3F shape69 = triangleMeshes.get(67);
 		
-		final Shape3F shape70 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F, -1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Top
-		final Shape3F shape71 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));//Back
-		final Shape3F shape72 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));//Front
-		final Shape3F shape73 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F, -1.0F));//Right
-		final Shape3F shape74 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));//Left
-		final Shape3F shape75 = new Triangle3F();
+//		final Shape3F shape70 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F, -1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Top
+//		final Shape3F shape71 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));//Back
+//		final Shape3F shape72 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));//Front
+//		final Shape3F shape73 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F, -1.0F));//Right
+//		final Shape3F shape74 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));//Left
+//		final Shape3F shape75 = new Triangle3F();
 		
 		final Texture texture011 = new ConstantTexture(Color3F.GRAY);
 //		final Texture texture011 = new SimplexFractionalBrownianMotionTexture(new Color3F(0.8F, 0.5F, 0.0F), 5.0F, 0.5F, 16);
@@ -1105,33 +1105,33 @@ public final class Scenes {
 		final Texture texture691 = new ConstantTexture(Color3F.WHITE);
 		final Texture texture692 = new ConstantTexture();
 		
-		final Texture texture701 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture702 = new ConstantTexture();
-		final Texture texture711 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture712 = new ConstantTexture();
-		final Texture texture721 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture722 = new ConstantTexture();
-		final Texture texture731 = new ConstantTexture(new Color3F(0.25F, 0.25F, 0.75F));
-		final Texture texture732 = new ConstantTexture();
-		final Texture texture741 = new ConstantTexture(new Color3F(0.75F, 0.25F, 0.25F));
-		final Texture texture742 = new ConstantTexture();
-		final Texture texture751 = new ConstantTexture(Color3F.WHITE);
-		final Texture texture752 = new ConstantTexture(new Color3F(12.0F));
+//		final Texture texture701 = new ConstantTexture(Color3F.GRAY);
+//		final Texture texture702 = new ConstantTexture();
+//		final Texture texture711 = new ConstantTexture(Color3F.GRAY);
+//		final Texture texture712 = new ConstantTexture();
+//		final Texture texture721 = new ConstantTexture(Color3F.GRAY);
+//		final Texture texture722 = new ConstantTexture();
+//		final Texture texture731 = new ConstantTexture(new Color3F(0.25F, 0.25F, 0.75F));
+//		final Texture texture732 = new ConstantTexture();
+//		final Texture texture741 = new ConstantTexture(new Color3F(0.75F, 0.25F, 0.25F));
+//		final Texture texture742 = new ConstantTexture();
+//		final Texture texture751 = new ConstantTexture(Color3F.WHITE);
+//		final Texture texture752 = new ConstantTexture(new Color3F(12.0F));
 		
 		final Matrix44F matrix01 = Matrix44F.identity();
 		final Matrix44F matrixNM = Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 5.0F), Matrix44F.multiply(Matrix44F.rotateY(AngleF.degrees(90.0F)), Matrix44F.rotateX(AngleF.degrees(270.0F))));
-		final Matrix44F matrix70 = Matrix44F.translate( 0.0F, 5.0F,  0.0F);
-		final Matrix44F matrix71 = Matrix44F.translate( 0.0F, 0.0F,  0.0F);
-		final Matrix44F matrix72 = Matrix44F.translate( 0.0F, 0.0F, 10.0F);
-		final Matrix44F matrix73 = Matrix44F.translate( 3.0F, 0.0F,  0.0F);
-		final Matrix44F matrix74 = Matrix44F.translate(-3.0F, 0.0F,  0.0F);
-		final Matrix44F matrix75 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 4.99F, 1.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.25F));
+//		final Matrix44F matrix70 = Matrix44F.translate( 0.0F, 5.0F,  0.0F);
+//		final Matrix44F matrix71 = Matrix44F.translate( 0.0F, 0.0F,  0.0F);
+//		final Matrix44F matrix72 = Matrix44F.translate( 0.0F, 0.0F, 10.0F);
+//		final Matrix44F matrix73 = Matrix44F.translate( 3.0F, 0.0F,  0.0F);
+//		final Matrix44F matrix74 = Matrix44F.translate(-3.0F, 0.0F,  0.0F);
+//		final Matrix44F matrix75 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 4.99F, 1.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.25F));
 		
-		final Primitive primitive75 = new Primitive(material75, shape75, texture751, texture752, matrix75);
+//		final Primitive primitive75 = new Primitive(material75, shape75, texture751, texture752, matrix75);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "SL500");
-		scene.addLight(new PrimitiveLight(primitive75));
+//		scene.addLight(new PrimitiveLight(primitive75));
 		scene.addPrimitive(new Primitive(material01, shape01, texture011, texture012, matrix01));
 		scene.addPrimitive(new Primitive(material02, shape02, texture021, texture022, matrixNM));//Base			wind_glass
 		scene.addPrimitive(new Primitive(material03, shape03, texture031, texture032, matrixNM));//Base			Body_paint
@@ -1201,12 +1201,12 @@ public final class Scenes {
 		scene.addPrimitive(new Primitive(material67, shape67, texture671, texture672, matrixNM));//TireRR		Tire_Sidewall
 		scene.addPrimitive(new Primitive(material68, shape68, texture681, texture682, matrixNM));//TireRR		Material__600
 		scene.addPrimitive(new Primitive(material69, shape69, texture691, texture692, matrixNM));//License		License0
-		scene.addPrimitive(new Primitive(material70, shape70, texture701, texture702, matrix70));
-		scene.addPrimitive(new Primitive(material71, shape71, texture711, texture712, matrix71));
-		scene.addPrimitive(new Primitive(material72, shape72, texture721, texture722, matrix72));
-		scene.addPrimitive(new Primitive(material73, shape73, texture731, texture732, matrix73));
-		scene.addPrimitive(new Primitive(material74, shape74, texture741, texture742, matrix74));
-		scene.addPrimitive(primitive75);
+//		scene.addPrimitive(new Primitive(material70, shape70, texture701, texture702, matrix70));
+//		scene.addPrimitive(new Primitive(material71, shape71, texture711, texture712, matrix71));
+//		scene.addPrimitive(new Primitive(material72, shape72, texture721, texture722, matrix72));
+//		scene.addPrimitive(new Primitive(material73, shape73, texture731, texture732, matrix73));
+//		scene.addPrimitive(new Primitive(material74, shape74, texture741, texture742, matrix74));
+//		scene.addPrimitive(primitive75);
 		
 		return scene;
 	}

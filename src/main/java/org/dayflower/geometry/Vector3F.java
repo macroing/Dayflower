@@ -638,11 +638,21 @@ public final class Vector3F {
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
 	public static Vector3F divide(final Vector3F vectorLHS, final float scalarRHS) {
-		final float component1 = vectorLHS.component1 / scalarRHS;
-		final float component2 = vectorLHS.component2 / scalarRHS;
-		final float component3 = vectorLHS.component3 / scalarRHS;
+		Objects.requireNonNull(vectorLHS, "vectorLHS == null");
 		
-		return new Vector3F(component1, component2, component3);
+		if(scalarRHS < -0.0F || scalarRHS > +0.0F) {
+			final float component1 = vectorLHS.component1 / scalarRHS;
+			final float component2 = vectorLHS.component2 / scalarRHS;
+			final float component3 = vectorLHS.component3 / scalarRHS;
+			
+			if(Float.isNaN(component1) || Float.isNaN(component2) || Float.isNaN(component3)) {
+				throw new IllegalArgumentException(vectorLHS.toString() + ", " + scalarRHS);
+			}
+			
+			return new Vector3F(component1, component2, component3);
+		}
+		
+		return ZERO;
 	}
 	
 	/**
@@ -830,9 +840,9 @@ public final class Vector3F {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3F reciprocal(final Vector3F vector) {
-		final float component1 = 1.0F / vector.component1;
-		final float component2 = 1.0F / vector.component2;
-		final float component3 = 1.0F / vector.component3;
+		final float component1 = vector.component1 < -0.0F || vector.component1 > +0.0F ? 1.0F / vector.component1 : 0.0F;
+		final float component2 = vector.component2 < -0.0F || vector.component2 > +0.0F ? 1.0F / vector.component2 : 0.0F;
+		final float component3 = vector.component3 < -0.0F || vector.component3 > +0.0F ? 1.0F / vector.component3 : 0.0F;
 		
 		return new Vector3F(component1, component2, component3);
 	}

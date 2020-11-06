@@ -1059,6 +1059,10 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		public void addTangent(final Vector3F tangent) {
 			this.tangents.add(Objects.requireNonNull(tangent, "tangent == null"));
+			
+			if(Float.isNaN(tangent.getX()) || Float.isNaN(tangent.getY()) || Float.isNaN(tangent.getZ())) {
+				throw new IllegalArgumentException(tangent.toString());
+			}
 		}
 		
 		public void addTextureCoordinates(final Point2F textureCoordinates) {
@@ -1100,7 +1104,7 @@ public final class TriangleMesh3F implements Shape3F {
 				final float deltaACV = this.textureCoordinates.get(indexC).getY() - this.textureCoordinates.get(indexA).getY();
 				
 				final float dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
-				final float fraction = equal(dividend, 0.0F) ? 0.0F : 1.0F / dividend;
+				final float fraction = dividend < -0.0F || dividend > +0.0F ? 1.0F / dividend : 0.0F;
 				
 				final float x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
 				final float y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());

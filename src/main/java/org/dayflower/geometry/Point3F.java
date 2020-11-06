@@ -24,6 +24,8 @@ import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.nextDownPBRT;
 import static org.dayflower.util.Floats.nextUpPBRT;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.util.Floats;
@@ -46,6 +48,10 @@ public final class Point3F {
 	 * A {@code Point3F} instance with the smallest component values.
 	 */
 	public static final Point3F MINIMUM = minimum();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final Map<Point3F, Point3F> CACHE = new HashMap<>();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -414,6 +420,19 @@ public final class Point3F {
 	}
 	
 	/**
+	 * Returns a cached version of {@code point}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point3F} instance
+	 * @return a cached version of {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Point3F getCached(final Point3F point) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
+	}
+	
+	/**
 	 * Performs a linear interpolation operation on the supplied values.
 	 * <p>
 	 * Returns a {@code Point3F} instance with the result of the linear interpolation operation.
@@ -686,5 +705,21 @@ public final class Point3F {
 	 */
 	public static float distanceSquared(final Point3F eye, final Point3F lookAt) {
 		return Vector3F.direction(eye, lookAt).lengthSquared();
+	}
+	
+	/**
+	 * Returns the size of the cache.
+	 * 
+	 * @return the size of the cache
+	 */
+	public static int getCacheSize() {
+		return CACHE.size();
+	}
+	
+	/**
+	 * Clears the cache.
+	 */
+	public static void clearCache() {
+		CACHE.clear();
 	}
 }

@@ -91,7 +91,7 @@ public final class Sphere3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code center} is {@code null}
 	 */
 	public Sphere3F(final float radius, final Point3F center) {
-		this.center = Objects.requireNonNull(center, "center == null");
+		this.center = Point3F.getCached(Objects.requireNonNull(center, "center == null"));
 		this.radius = radius;
 	}
 	

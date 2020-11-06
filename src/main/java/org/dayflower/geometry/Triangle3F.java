@@ -564,7 +564,7 @@ public final class Triangle3F implements Shape3F {
 		 */
 		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F normal, final Vector3F tangent) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
-			this.position = Objects.requireNonNull(position, "position == null");
+			this.position = Point3F.getCached(Objects.requireNonNull(position, "position == null"));
 			this.normal = Objects.requireNonNull(normal, "normal == null");
 			this.tangent = Objects.requireNonNull(tangent, "tangent == null");
 		}

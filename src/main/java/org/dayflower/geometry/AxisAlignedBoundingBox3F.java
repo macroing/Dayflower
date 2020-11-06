@@ -61,8 +61,8 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public AxisAlignedBoundingBox3F(final Point3F a, final Point3F b) {
-		this.maximum = Point3F.maximum(a, b);
-		this.minimum = Point3F.minimum(a, b);
+		this.maximum = Point3F.getCached(Point3F.maximum(a, b));
+		this.minimum = Point3F.getCached(Point3F.minimum(a, b));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

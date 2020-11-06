@@ -84,7 +84,7 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	 */
 	public BoundingSphere3F(final float radius, final Point3F center) {
 		this.radius = radius;
-		this.center = Objects.requireNonNull(center, "center == null");
+		this.center = Point3F.getCached(Objects.requireNonNull(center, "center == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

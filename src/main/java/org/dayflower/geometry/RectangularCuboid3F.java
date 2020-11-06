@@ -64,8 +64,8 @@ public final class RectangularCuboid3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
 	 */
 	public RectangularCuboid3F(final Point3F a, final Point3F b) {
-		this.maximum = Point3F.maximum(a, b);
-		this.minimum = Point3F.minimum(a, b);
+		this.maximum = Point3F.getCached(Point3F.maximum(a, b));
+		this.minimum = Point3F.getCached(Point3F.minimum(a, b));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

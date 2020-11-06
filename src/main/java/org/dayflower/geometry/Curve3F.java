@@ -799,10 +799,10 @@ public final class Curve3F implements Shape3F {
 		 * @throws NullPointerException thrown if, and only if, either {@code pointA}, {@code pointB}, {@code pointC}, {@code pointD}, {@code type}, {@code normalA} or {@code normalB} are {@code null}
 		 */
 		public Data(final Point3F pointA, final Point3F pointB, final Point3F pointC, final Point3F pointD, final Type type, final Vector3F normalA, final Vector3F normalB, final float widthA, final float widthB) {
-			this.pointA = Objects.requireNonNull(pointA, "pointA == null");
-			this.pointB = Objects.requireNonNull(pointB, "pointB == null");
-			this.pointC = Objects.requireNonNull(pointC, "pointC == null");
-			this.pointD = Objects.requireNonNull(pointD, "pointD == null");
+			this.pointA = Point3F.getCached(Objects.requireNonNull(pointA, "pointA == null"));
+			this.pointB = Point3F.getCached(Objects.requireNonNull(pointB, "pointB == null"));
+			this.pointC = Point3F.getCached(Objects.requireNonNull(pointC, "pointC == null"));
+			this.pointD = Point3F.getCached(Objects.requireNonNull(pointD, "pointD == null"));
 			this.type = Objects.requireNonNull(type, "type == null");
 			this.normalA = Vector3F.normalize(Objects.requireNonNull(normalA, "normalA == null"));
 			this.normalB = Vector3F.normalize(Objects.requireNonNull(normalB, "normalB == null"));

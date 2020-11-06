@@ -21,6 +21,8 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.minOrNaN;
 
 import java.io.BufferedReader;
@@ -587,31 +589,52 @@ public final class TriangleMesh3F implements Shape3F {
 			final float step = (stop - start) / (1024.0F / (depth + 1.0F));
 			
 			for(float oldSplit = 0.0F, newSplit = start + step; newSplit < stop - step; oldSplit = newSplit, newSplit += step) {
+//				The following test prevents an infinite loop from occurring:
 				if(equal(oldSplit, newSplit)) {
 					break;
 				}
 				
-				Point3F maximumL = Point3F.MINIMUM;
-				Point3F minimumL = Point3F.MAXIMUM;
-				Point3F maximumR = Point3F.MINIMUM;
-				Point3F minimumR = Point3F.MAXIMUM;
+				float maximumLX = Float.MIN_VALUE;
+				float maximumLY = Float.MIN_VALUE;
+				float maximumLZ = Float.MIN_VALUE;
+				float minimumLX = Float.MAX_VALUE;
+				float minimumLY = Float.MAX_VALUE;
+				float minimumLZ = Float.MAX_VALUE;
+				float maximumRX = Float.MIN_VALUE;
+				float maximumRY = Float.MIN_VALUE;
+				float maximumRZ = Float.MIN_VALUE;
+				float minimumRX = Float.MAX_VALUE;
+				float minimumRY = Float.MAX_VALUE;
+				float minimumRZ = Float.MAX_VALUE;
 				
 				int countL = 0;
 				int countR = 0;
 				
 				for(final LeafNode processableLeafNode : processableLeafNodes) {
-					final Point3F midpoint = processableLeafNode.getBoundingVolume().getMidpoint();
+					final BoundingVolume3F boundingVolume = processableLeafNode.getBoundingVolume();
 					
-					final float value = midpoint.getComponent(axis);
+					final Point3F max = boundingVolume.getMaximum();
+					final Point3F mid = boundingVolume.getMidpoint();
+					final Point3F min = boundingVolume.getMinimum();
+					
+					final float value = mid.getComponent(axis);
 					
 					if(value < newSplit) {
-						maximumL = Point3F.maximum(maximumL, processableLeafNode.getBoundingVolume().getMaximum());
-						minimumL = Point3F.minimum(minimumL, processableLeafNode.getBoundingVolume().getMinimum());
+						maximumLX = max(maximumLX, max.getX());
+						maximumLY = max(maximumLY, max.getY());
+						maximumLZ = max(maximumLZ, max.getZ());
+						minimumLX = min(minimumLX, min.getX());
+						minimumLY = min(minimumLY, min.getY());
+						minimumLZ = min(minimumLZ, min.getZ());
 						
 						countL++;
 					} else {
-						maximumR = Point3F.maximum(maximumR, processableLeafNode.getBoundingVolume().getMaximum());
-						minimumR = Point3F.minimum(minimumR, processableLeafNode.getBoundingVolume().getMinimum());
+						maximumRX = max(maximumRX, max.getX());
+						maximumRY = max(maximumRY, max.getY());
+						maximumRZ = max(maximumRZ, max.getZ());
+						minimumRX = min(minimumRX, min.getX());
+						minimumRY = min(minimumRY, min.getY());
+						minimumRZ = min(minimumRZ, min.getZ());
 						
 						countR++;
 					}
@@ -621,12 +644,12 @@ public final class TriangleMesh3F implements Shape3F {
 					continue;
 				}
 				
-				final float sideLX = maximumL.getX() - minimumL.getX();
-				final float sideLY = maximumL.getY() - minimumL.getY();
-				final float sideLZ = maximumL.getZ() - minimumL.getZ();
-				final float sideRX = maximumR.getX() - minimumR.getX();
-				final float sideRY = maximumR.getY() - minimumR.getY();
-				final float sideRZ = maximumR.getZ() - minimumR.getZ();
+				final float sideLX = maximumLX - minimumLX;
+				final float sideLY = maximumLY - minimumLY;
+				final float sideLZ = maximumLZ - minimumLZ;
+				final float sideRX = maximumRX - minimumRX;
+				final float sideRY = maximumRY - minimumRY;
+				final float sideRZ = maximumRZ - minimumRZ;
 				
 				final float surfaceL = sideLX * sideLY + sideLY * sideLZ + sideLZ * sideLX;
 				final float surfaceR = sideRX * sideRY + sideRY * sideRZ + sideRZ * sideRX;
@@ -656,28 +679,53 @@ public final class TriangleMesh3F implements Shape3F {
 		final List<LeafNode> leafNodesL = new ArrayList<>(sizeHalf);
 		final List<LeafNode> leafNodesR = new ArrayList<>(sizeHalf);
 		
-		Point3F maximumL = Point3F.MINIMUM;
-		Point3F minimumL = Point3F.MAXIMUM;
-		Point3F maximumR = Point3F.MINIMUM;
-		Point3F minimumR = Point3F.MAXIMUM;
+		float maximumLX = Float.MIN_VALUE;
+		float maximumLY = Float.MIN_VALUE;
+		float maximumLZ = Float.MIN_VALUE;
+		float minimumLX = Float.MAX_VALUE;
+		float minimumLY = Float.MAX_VALUE;
+		float minimumLZ = Float.MAX_VALUE;
+		float maximumRX = Float.MIN_VALUE;
+		float maximumRY = Float.MIN_VALUE;
+		float maximumRZ = Float.MIN_VALUE;
+		float minimumRX = Float.MAX_VALUE;
+		float minimumRY = Float.MAX_VALUE;
+		float minimumRZ = Float.MAX_VALUE;
 		
 		for(final LeafNode processableLeafNode : processableLeafNodes) {
-			final Point3F midpoint = processableLeafNode.getBoundingVolume().getMidpoint();
+			final BoundingVolume3F boundingVolume = processableLeafNode.getBoundingVolume();
 			
-			final float value = midpoint.getComponent(bestAxis);
+			final Point3F max = boundingVolume.getMaximum();
+			final Point3F mid = boundingVolume.getMidpoint();
+			final Point3F min = boundingVolume.getMinimum();
+			
+			final float value = mid.getComponent(bestAxis);
 			
 			if(value < bestSplit) {
 				leafNodesL.add(processableLeafNode);
 				
-				maximumL = Point3F.maximum(maximumL, processableLeafNode.getBoundingVolume().getMaximum());
-				minimumL = Point3F.minimum(minimumL, processableLeafNode.getBoundingVolume().getMinimum());
+				maximumLX = max(maximumLX, max.getX());
+				maximumLY = max(maximumLY, max.getY());
+				maximumLZ = max(maximumLZ, max.getZ());
+				minimumLX = min(minimumLX, min.getX());
+				minimumLY = min(minimumLY, min.getY());
+				minimumLZ = min(minimumLZ, min.getZ());
 			} else {
 				leafNodesR.add(processableLeafNode);
 				
-				maximumR = Point3F.maximum(maximumR, processableLeafNode.getBoundingVolume().getMaximum());
-				minimumR = Point3F.minimum(minimumR, processableLeafNode.getBoundingVolume().getMinimum());
+				maximumRX = max(maximumRX, max.getX());
+				maximumRY = max(maximumRY, max.getY());
+				maximumRZ = max(maximumRZ, max.getZ());
+				minimumRX = min(minimumRX, min.getX());
+				minimumRY = min(minimumRY, min.getY());
+				minimumRZ = min(minimumRZ, min.getZ());
 			}
 		}
+		
+		final Point3F maximumL = new Point3F(maximumLX, maximumLY, maximumLZ);
+		final Point3F minimumL = new Point3F(minimumLX, minimumLY, minimumLZ);
+		final Point3F maximumR = new Point3F(maximumRX, maximumRY, maximumRZ);
+		final Point3F minimumR = new Point3F(minimumRX, minimumRY, minimumRZ);
 		
 		final Node nodeL = doCreateNode(leafNodesL, maximumL, minimumL, depth + 1);
 		final Node nodeR = doCreateNode(leafNodesR, maximumR, minimumR, depth + 1);
@@ -688,23 +736,32 @@ public final class TriangleMesh3F implements Shape3F {
 	private static Node doCreateNode(final List<Triangle3F> triangles) {
 		final List<LeafNode> processableLeafNodes = new ArrayList<>(triangles.size());
 		
-		Point3F maximum = Point3F.MINIMUM;
-		Point3F minimum = Point3F.MAXIMUM;
+		float maximumX = Float.MIN_VALUE;
+		float maximumY = Float.MIN_VALUE;
+		float maximumZ = Float.MIN_VALUE;
+		float minimumX = Float.MAX_VALUE;
+		float minimumY = Float.MAX_VALUE;
+		float minimumZ = Float.MAX_VALUE;
 		
 		for(final Triangle3F triangle : triangles) {
 			final Point3F a = triangle.getA().getPosition();
 			final Point3F b = triangle.getB().getPosition();
 			final Point3F c = triangle.getC().getPosition();
 			
-			final LeafNode leafNode = new LeafNode(Point3F.maximum(a, b, c), Point3F.minimum(a, b, c), 0, Arrays.asList(triangle));
+			final Point3F maximum = Point3F.maximum(a, b, c);
+			final Point3F minimum = Point3F.minimum(a, b, c);
 			
-			processableLeafNodes.add(leafNode);
+			maximumX = max(maximumX, maximum.getX());
+			maximumY = max(maximumY, maximum.getY());
+			maximumZ = max(maximumZ, maximum.getZ());
+			minimumX = min(minimumX, minimum.getX());
+			minimumY = min(minimumY, minimum.getY());
+			minimumZ = min(minimumZ, minimum.getZ());
 			
-			maximum = Point3F.maximum(maximum, leafNode.getBoundingVolume().getMaximum());
-			minimum = Point3F.minimum(minimum, leafNode.getBoundingVolume().getMinimum());
+			processableLeafNodes.add(new LeafNode(maximum, minimum, 0, Arrays.asList(triangle)));
 		}
 		
-		return doCreateNode(processableLeafNodes, maximum, minimum, 0);
+		return doCreateNode(processableLeafNodes, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

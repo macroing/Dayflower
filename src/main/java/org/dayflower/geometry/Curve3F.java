@@ -804,8 +804,8 @@ public final class Curve3F implements Shape3F {
 			this.pointC = Point3F.getCached(Objects.requireNonNull(pointC, "pointC == null"));
 			this.pointD = Point3F.getCached(Objects.requireNonNull(pointD, "pointD == null"));
 			this.type = Objects.requireNonNull(type, "type == null");
-			this.normalA = Vector3F.normalize(Objects.requireNonNull(normalA, "normalA == null"));
-			this.normalB = Vector3F.normalize(Objects.requireNonNull(normalB, "normalB == null"));
+			this.normalA = Vector3F.getCached(Vector3F.normalize(Objects.requireNonNull(normalA, "normalA == null")));
+			this.normalB = Vector3F.getCached(Vector3F.normalize(Objects.requireNonNull(normalB, "normalB == null")));
 			this.normalAngle = acos(saturate(Vector3F.dotProduct(normalA, normalB)));
 			this.normalAngleSinReciprocal = 1.0F / sin(this.normalAngle);
 			this.widthA = widthA;

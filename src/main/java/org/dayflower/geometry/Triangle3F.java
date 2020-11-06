@@ -48,7 +48,7 @@ public final class Triangle3F implements Shape3F {
 		this.a = new Vertex3F(new Point2F(0.5F, 0.0F), new Point3F(+0.0F, +5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F))/*, new Vector3F()*/);
 		this.b = new Vertex3F(new Point2F(1.0F, 1.0F), new Point3F(+5.0F, -5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F))/*, new Vector3F()*/);
 		this.c = new Vertex3F(new Point2F(0.0F, 1.0F), new Point3F(-5.0F, -5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F))/*, new Vector3F()*/);
-		this.surfaceNormal = Vector3F.normalNormalized(this.a.getPosition(), this.b.getPosition(), this.c.getPosition());
+		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()));
 	}
 	
 	/**
@@ -65,7 +65,7 @@ public final class Triangle3F implements Shape3F {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 		this.c = Objects.requireNonNull(c, "c == null");
-		this.surfaceNormal = Vector3F.normalNormalized(a.getPosition(), b.getPosition(), c.getPosition());
+		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(a.getPosition(), b.getPosition(), c.getPosition()));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -565,8 +565,8 @@ public final class Triangle3F implements Shape3F {
 		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F normal, final Vector3F tangent) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
 			this.position = Point3F.getCached(Objects.requireNonNull(position, "position == null"));
-			this.normal = Objects.requireNonNull(normal, "normal == null");
-			this.tangent = Objects.requireNonNull(tangent, "tangent == null");
+			this.normal = Vector3F.getCached(Objects.requireNonNull(normal, "normal == null"));
+			this.tangent = Vector3F.getCached(Objects.requireNonNull(tangent, "tangent == null"));
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////

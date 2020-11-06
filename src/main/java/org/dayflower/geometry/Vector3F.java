@@ -29,6 +29,8 @@ import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -50,6 +52,10 @@ public final class Vector3F {
 	 * A {@code Vector3F} instance given the component values {@code 0.0F}, {@code 0.0F} and {@code 0.0F}.
 	 */
 	public static final Vector3F ZERO = new Vector3F(0.0F, 0.0F, 0.0F);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final Map<Vector3F, Vector3F> CACHE = new HashMap<>();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -654,6 +660,19 @@ public final class Vector3F {
 	}
 	
 	/**
+	 * Returns a cached version of {@code vector}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector3F} instance
+	 * @return a cached version of {@code vector}
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector3F getCached(final Vector3F vector) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(vector, "vector == null"), key -> vector);
+	}
+	
+	/**
 	 * Returns {@code n} or {@code Vector3F.normalize(Vector3F.subtract(o, i))} as {@code Vector3F.dotProduct(o, i)} is greater than {@code 0.999F} or less than or equal to {@code 0.999F}, respectively.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -1179,5 +1198,21 @@ public final class Vector3F {
 	 */
 	public static float dotProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3;
+	}
+	
+	/**
+	 * Returns the size of the cache.
+	 * 
+	 * @return the size of the cache
+	 */
+	public static int getCacheSize() {
+		return CACHE.size();
+	}
+	
+	/**
+	 * Clears the cache.
+	 */
+	public static void clearCache() {
+		CACHE.clear();
 	}
 }

@@ -66,10 +66,10 @@ public final class Plane3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
 	 */
 	public Plane3F(final Point3F a, final Point3F b, final Point3F c) {
-		this.a = Objects.requireNonNull(a, "a == null");
-		this.b = Objects.requireNonNull(b, "b == null");
-		this.c = Objects.requireNonNull(c, "c == null");
-		this.surfaceNormal = Vector3F.normalNormalized(a, b, c);
+		this.a = Point3F.getCached(Objects.requireNonNull(a, "a == null"));
+		this.b = Point3F.getCached(Objects.requireNonNull(b, "b == null"));
+		this.c = Point3F.getCached(Objects.requireNonNull(c, "c == null"));
+		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(a, b, c));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

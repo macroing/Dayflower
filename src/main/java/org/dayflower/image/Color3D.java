@@ -20,6 +20,7 @@ package org.dayflower.image;
 
 import static org.dayflower.util.Doubles.equal;
 import static org.dayflower.util.Doubles.exp;
+import static org.dayflower.util.Doubles.finiteOrDefault;
 import static org.dayflower.util.Doubles.isInfinite;
 import static org.dayflower.util.Doubles.isNaN;
 import static org.dayflower.util.Doubles.lerp;
@@ -1001,9 +1002,9 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
 	 */
 	public static Color3D divide(final Color3D colorLHS, final Color3D colorRHS) {
-		final double component1 = colorLHS.component1 / colorRHS.component1;
-		final double component2 = colorLHS.component2 / colorRHS.component2;
-		final double component3 = colorLHS.component3 / colorRHS.component3;
+		final double component1 = finiteOrDefault(colorLHS.component1 / colorRHS.component1, 0.0D);
+		final double component2 = finiteOrDefault(colorLHS.component2 / colorRHS.component2, 0.0D);
+		final double component3 = finiteOrDefault(colorLHS.component3 / colorRHS.component3, 0.0D);
 		
 		return new Color3D(component1, component2, component3);
 	}
@@ -1021,9 +1022,9 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, {@code colorLHS} is {@code null}
 	 */
 	public static Color3D divide(final Color3D colorLHS, final double scalarRHS) {
-		final double component1 = colorLHS.component1 / scalarRHS;
-		final double component2 = colorLHS.component2 / scalarRHS;
-		final double component3 = colorLHS.component3 / scalarRHS;
+		final double component1 = finiteOrDefault(colorLHS.component1 / scalarRHS, 0.0D);
+		final double component2 = finiteOrDefault(colorLHS.component2 / scalarRHS, 0.0D);
+		final double component3 = finiteOrDefault(colorLHS.component3 / scalarRHS, 0.0D);
 		
 		return new Color3D(component1, component2, component3);
 	}

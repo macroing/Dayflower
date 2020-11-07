@@ -23,6 +23,7 @@ import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Doubles.abs;
 import static org.dayflower.util.Doubles.cos;
 import static org.dayflower.util.Doubles.equal;
+import static org.dayflower.util.Doubles.finiteOrDefault;
 import static org.dayflower.util.Doubles.gamma;
 import static org.dayflower.util.Doubles.max;
 import static org.dayflower.util.Doubles.saturate;
@@ -638,17 +639,11 @@ public final class Vector3D {
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
 	public static Vector3D divide(final Vector3D vectorLHS, final double scalarRHS) {
-		Objects.requireNonNull(vectorLHS, "vectorLHS == null");
+		final double component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0D);
+		final double component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0D);
+		final double component3 = finiteOrDefault(vectorLHS.component3 / scalarRHS, 0.0D);
 		
-		if(scalarRHS < -0.0D || scalarRHS > +0.0D) {
-			final double component1 = vectorLHS.component1 / scalarRHS;
-			final double component2 = vectorLHS.component2 / scalarRHS;
-			final double component3 = vectorLHS.component3 / scalarRHS;
-			
-			return new Vector3D(component1, component2, component3);
-		}
-		
-		return ZERO;
+		return new Vector3D(component1, component2, component3);
 	}
 	
 	/**
@@ -836,9 +831,9 @@ public final class Vector3D {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3D reciprocal(final Vector3D vector) {
-		final double component1 = vector.component1 < -0.0D || vector.component1 > +0.0D ? 1.0D / vector.component1 : 0.0D;
-		final double component2 = vector.component2 < -0.0D || vector.component2 > +0.0D ? 1.0D / vector.component2 : 0.0D;
-		final double component3 = vector.component3 < -0.0D || vector.component3 > +0.0D ? 1.0D / vector.component3 : 0.0D;
+		final double component1 = finiteOrDefault(1.0D / vector.component1, 0.0D);
+		final double component2 = finiteOrDefault(1.0D / vector.component2, 0.0D);
+		final double component3 = finiteOrDefault(1.0D / vector.component3, 0.0D);
 		
 		return new Vector3D(component1, component2, component3);
 	}

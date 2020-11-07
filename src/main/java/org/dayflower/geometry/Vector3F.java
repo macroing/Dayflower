@@ -23,6 +23,7 @@ import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.finiteOrDefault;
 import static org.dayflower.util.Floats.gamma;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.saturate;
@@ -638,21 +639,11 @@ public final class Vector3F {
 	 * @throws NullPointerException thrown if, and only if, {@code vectorLHS} is {@code null}
 	 */
 	public static Vector3F divide(final Vector3F vectorLHS, final float scalarRHS) {
-		Objects.requireNonNull(vectorLHS, "vectorLHS == null");
+		final float component1 = finiteOrDefault(vectorLHS.component1 / scalarRHS, 0.0F);
+		final float component2 = finiteOrDefault(vectorLHS.component2 / scalarRHS, 0.0F);
+		final float component3 = finiteOrDefault(vectorLHS.component3 / scalarRHS, 0.0F);
 		
-		if(scalarRHS < -0.0F || scalarRHS > +0.0F) {
-			final float component1 = vectorLHS.component1 / scalarRHS;
-			final float component2 = vectorLHS.component2 / scalarRHS;
-			final float component3 = vectorLHS.component3 / scalarRHS;
-			
-			if(Float.isNaN(component1) || Float.isNaN(component2) || Float.isNaN(component3)) {
-				throw new IllegalArgumentException(vectorLHS.toString() + ", " + scalarRHS);
-			}
-			
-			return new Vector3F(component1, component2, component3);
-		}
-		
-		return ZERO;
+		return new Vector3F(component1, component2, component3);
 	}
 	
 	/**
@@ -840,9 +831,9 @@ public final class Vector3F {
 	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
 	 */
 	public static Vector3F reciprocal(final Vector3F vector) {
-		final float component1 = vector.component1 < -0.0F || vector.component1 > +0.0F ? 1.0F / vector.component1 : 0.0F;
-		final float component2 = vector.component2 < -0.0F || vector.component2 > +0.0F ? 1.0F / vector.component2 : 0.0F;
-		final float component3 = vector.component3 < -0.0F || vector.component3 > +0.0F ? 1.0F / vector.component3 : 0.0F;
+		final float component1 = finiteOrDefault(1.0F / vector.component1, 0.0F);
+		final float component2 = finiteOrDefault(1.0F / vector.component2, 0.0F);
+		final float component3 = finiteOrDefault(1.0F / vector.component3, 0.0F);
 		
 		return new Vector3F(component1, component2, component3);
 	}

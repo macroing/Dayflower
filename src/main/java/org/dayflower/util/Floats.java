@@ -444,6 +444,23 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns {@code value} if it is finite and {@code defaultValue} otherwise.
+	 * 
+	 * @param value a {@code float} value
+	 * @param defaultValue a {@code float} value
+	 * @return {@code value} if it is finite and {@code defaultValue} otherwise
+	 */
+	public static float finiteOrDefault(final float value, final float defaultValue) {
+		if(isInfinite(value)) {
+			return defaultValue;
+		} else if(isNaN(value)) {
+			return defaultValue;
+		} else {
+			return value;
+		}
+	}
+	
+	/**
 	 * Returns the largest (closest to positive infinity) {@code float} value that is less than or equal to {@code value} and is equal to a mathematical integer.
 	 * <p>
 	 * Special cases:

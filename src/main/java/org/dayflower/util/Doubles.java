@@ -443,6 +443,23 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns {@code value} if it is finite and {@code defaultValue} otherwise.
+	 * 
+	 * @param value a {@code double} value
+	 * @param defaultValue a {@code double} value
+	 * @return {@code value} if it is finite and {@code defaultValue} otherwise
+	 */
+	public static double finiteOrDefault(final double value, final double defaultValue) {
+		if(isInfinite(value)) {
+			return defaultValue;
+		} else if(isNaN(value)) {
+			return defaultValue;
+		} else {
+			return value;
+		}
+	}
+	
+	/**
 	 * Returns the largest (closest to positive infinity) {@code double} value that is less than or equal to {@code value} and is equal to a mathematical integer.
 	 * <p>
 	 * Special cases:

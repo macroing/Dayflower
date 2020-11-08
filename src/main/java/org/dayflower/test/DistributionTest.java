@@ -19,6 +19,8 @@
 package org.dayflower.test;
 
 import org.dayflower.sampler.Distribution1F;
+import org.dayflower.sampler.Distribution2F;
+import org.dayflower.sampler.Sample2F;
 
 public final class DistributionTest {
 	private DistributionTest() {
@@ -29,24 +31,45 @@ public final class DistributionTest {
 	
 	public static void main(final String[] args) {
 		doTestDistribution1F();
+		doTestDistribution2F();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static void doTestDistribution1F() {
-		final Distribution1F distribution = new Distribution1F(new float[] {0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F, 0.8F, 0.9F, 1.0F});
+		final float[] function = new float[] {0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F, 0.8F, 0.9F, 1.0F};
 		
-		final float u = 0.5F;
+		final Distribution1F distribution = new Distribution1F(function);
 		
-		final int index = distribution.index(u);
+		final float value = 0.5F;
+		
+		final int index = distribution.index(value);
 		
 		final float continuousProbabilityDensityFunctionValue = distribution.continuousProbabilityDensityFunction(index);
 		final float discreteProbabilityDensityFunctionValue = distribution.discreteProbabilityDensityFunction(index);
 		
-		final float continuousU = distribution.continuousRemapU(u, index);
-		final float discreteU = distribution.discreteRemapU(u, index);
+		final float continuousValue = distribution.continuousRemap(value, index);
+		final float discreteValue = distribution.discreteRemap(value, index);
 		
-		System.out.println("Continuous: Index=" + index + ", PDF=" + continuousProbabilityDensityFunctionValue + ", U=" + continuousU);
-		System.out.println("Discrete: Index=" + index + ", PDF=" + discreteProbabilityDensityFunctionValue + ", U=" + discreteU);
+		System.out.println("Continuous: Index=" + index + ", PDF=" + continuousProbabilityDensityFunctionValue + ", Value=" + continuousValue);
+		System.out.println("Discrete: Index=" + index + ", PDF=" + discreteProbabilityDensityFunctionValue + ", Value=" + discreteValue);
+	}
+	
+	private static void doTestDistribution2F() {
+		final float[][] functions = new float[][] {
+			new float[] {0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F, 0.8F, 0.9F, 1.0F},
+			new float[] {0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F, 0.8F, 0.9F, 1.0F},
+			new float[] {0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F, 0.8F, 0.9F, 1.0F}
+		};
+		
+		final Distribution2F distribution = new Distribution2F(functions);
+		
+		final Sample2F sample = new Sample2F(0.5F, 0.5F);
+		final Sample2F sampleRemapped = distribution.continuousRemap(sample);
+		
+		final float probabilityDensityFunctionValue0 = distribution.continuousProbabilityDensityFunction(sample);
+		final float probabilityDensityFunctionValue1 = distribution.probabilityDensityFunction(sampleRemapped);
+		
+		System.out.println("SampleRemapped=" + sampleRemapped + ", PDF #0=" + probabilityDensityFunctionValue0 + ", PDF #1=" + probabilityDensityFunctionValue1);
 	}
 }

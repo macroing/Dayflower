@@ -18,6 +18,7 @@
  */
 package org.dayflower.util;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -1947,6 +1948,44 @@ public class Doubles {
 		}
 		
 		return currentValue;
+	}
+	
+	/**
+	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code 0.0D}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Doubles.array(length, 0.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @param length the length of the {@code double[]}
+	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code 0.0D}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static double[] array(final int length) {
+		return array(length, 0.0D);
+	}
+	
+	/**
+	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code value}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the {@code double[]}
+	 * @param value the {@code double} value to fill the {@code double[]} with
+	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static double[] array(final int length, final double value) {
+		final double[] array = new double[Ints.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Arrays.fill(array, value);
+		
+		return array;
 	}
 	
 	/**

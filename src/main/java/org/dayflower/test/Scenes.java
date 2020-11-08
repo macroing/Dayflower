@@ -58,6 +58,7 @@ import org.dayflower.scene.background.ConstantBackground;
 import org.dayflower.scene.background.ImageBackground;
 import org.dayflower.scene.background.PerezBackground;
 import org.dayflower.scene.light.DiffuseAreaLight;
+import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.PrimitiveLight;
 import org.dayflower.scene.pbrt.GlassMaterial;
@@ -395,13 +396,14 @@ public final class Scenes {
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTAphroditeGirl");
-		scene.addLight(areaLight31);
+//		scene.addLight(areaLight31);
+		scene.addLight(new PerezLight());
 		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
-		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
-		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
-		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
-		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
-		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
+//		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
+//		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
+//		scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
+//		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
+//		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
 		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
 		scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), matrix21));
 		scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), matrix21));
@@ -410,7 +412,7 @@ public final class Scenes {
 		scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), matrix21));
 		scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), matrix21));
 		scene.addPrimitive(new Primitive(material28, shape28, new ConstantTexture(), new ConstantTexture(), matrix21));
-		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
+//		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
 		
 		return scene;
 	}

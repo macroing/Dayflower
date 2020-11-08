@@ -18,6 +18,9 @@
  */
 package org.dayflower.util;
 
+import java.util.Objects;
+import java.util.function.IntPredicate;
+
 /**
  * The class {@code Ints} contains methods for performing basic numeric operations.
  * <p>
@@ -54,6 +57,42 @@ public final class Ints {
 	 */
 	public static int abs(final int value) {
 		return Math.abs(value);
+	}
+	
+	/**
+	 * Returns an {@code int} value in the interval of length {@code length}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code intPredicate} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param length the length of the interval
+	 * @param intPredicate an {@code IntPredicate} instance
+	 * @return an {@code int} value in the interval of length {@code length}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code intPredicate} is {@code null}
+	 */
+	public static int findInterval(final int length, final IntPredicate intPredicate) {
+		requireRange(length, 0, Integer.MAX_VALUE, "length");
+		
+		Objects.requireNonNull(intPredicate, "intPredicate == null");
+		
+		int currentMinimum = 0;
+		int currentLength = length;
+		
+		while(currentLength > 0) {
+			int currentHalf = currentLength >> 1;
+			int currentMiddle = currentMinimum + currentHalf;
+			
+			if(intPredicate.test(currentMiddle)) {
+				currentMinimum = currentMiddle + 1;
+				currentLength -= currentHalf + 1;
+			} else {
+				currentLength = currentHalf;
+			}
+		}
+		
+		return saturate(currentMinimum - 1, 0, length - 2);
 	}
 	
 	/**

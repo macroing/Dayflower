@@ -18,6 +18,7 @@
  */
 package org.dayflower.util;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -1948,6 +1949,44 @@ public final class Floats {
 		}
 		
 		return currentValue;
+	}
+	
+	/**
+	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code 0.0F}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Floats.array(length, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param length the length of the {@code float[]}
+	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code 0.0F}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static float[] array(final int length) {
+		return array(length, 0.0F);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code value}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the {@code float[]}
+	 * @param value the {@code float} value to fill the {@code float[]} with
+	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static float[] array(final int length, final float value) {
+		final float[] array = new float[Ints.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Arrays.fill(array, value);
+		
+		return array;
 	}
 	
 	/**

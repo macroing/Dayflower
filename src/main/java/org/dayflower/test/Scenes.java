@@ -301,7 +301,7 @@ public final class Scenes {
 		final Material material5 = new RefractionMaterial();
 		
 		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
+		final Shape3F shape2 = new Sphere3F(7.5F);
 		final Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F), new Point3F(1.0F));
 		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
 		final Shape3F shape5 = new Torus3F();
@@ -309,9 +309,12 @@ public final class Scenes {
 		
 		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.5F, 0.1F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F);
+//		final Texture texture21 = new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.5F, 0.1F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F);
+		final Texture texture21 = new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 0.5F);
 		final Texture texture22 = new ConstantTexture();
-		final Texture texture31 = new CheckerboardTexture(new Color3F(0.2F, 0.4F, 0.2F), new Color3F(0.6F, 0.8F, 0.6F), AngleF.degrees(90.0F), new Vector2F(1.5F, 1.5F));
+//		final Texture texture31 = new CheckerboardTexture(new Color3F(0.2F, 0.4F, 0.2F), new Color3F(0.6F, 0.8F, 0.6F), AngleF.degrees(90.0F), new Vector2F(1.5F, 1.5F));
+//		final Texture texture31 = new ConstantTexture(new Color3F(1.0F, 0.1F, 0.1F));
+		final Texture texture31 = new ConstantTexture(new Color3F(1.0F, 1.0F, 0.1F));
 		final Texture texture32 = new ConstantTexture();
 		final Texture texture41 = new ConstantTexture(new Color3F(0.5F));
 		final Texture texture42 = new ConstantTexture();
@@ -325,7 +328,7 @@ public final class Scenes {
 		final Matrix44F matrix5 = Matrix44F.translate(3.0F, 1.25F, 5.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "Default");
+		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)), "Default");
 		scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 5.0F), new Color3F(1.0F, 1.0F, 1.0F)));
 		scene.addLight(new PointLight(new Point3F(0.0F, 1.0F, 0.0F), new Color3F(1.0F, 1.0F, 1.0F)));
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
@@ -762,12 +765,14 @@ public final class Scenes {
 		final Material material15 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material16 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 //		final Material material21 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+		final Material material21 = new PlasticMaterial(ImageTexture.load(new File("./resources/Zealot_albedo.png")), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
 //		final Material material21 = new MetalMaterial(new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_ETA.toColorXYZ()))), new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_K.toColorXYZ()))), new ConstantTexture(new Color3F(0.05F)), new ConstantTexture(new Color3F(0.05F)), true);
-		final Material material21 = new SubstrateMaterial(ImageTexture.load(new File("./resources/Zealot_albedo.png")), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
+//		final Material material21 = new SubstrateMaterial(ImageTexture.load(new File("./resources/Zealot_albedo.png")), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
 //		final Material material21 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(), new ConstantTexture(), true);
 //		final Material material21 = new MatteMaterial(new ConstantTexture(new Color3F(90.0F)), new ConstantTexture(new Color3F(0.2F, 1.0F, 0.2F)));
 //		final Material material21 = new MirrorMaterial();
 //		final Material material21 = new UberMaterial();
+		final Material material31 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE));
 		
 		final Shape3F shape11 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, +1.0F), new Point3F(1.0F, 0.0F, +0.0F));//B
 		final Shape3F shape12 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, -1.0F), new Point3F(1.0F, 0.0F, +0.0F));//T
@@ -776,6 +781,7 @@ public final class Scenes {
 		final Shape3F shape15 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F, -1.0F));//R
 		final Shape3F shape16 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F,  1.0F));//L
 		final Shape3F shape21 = TriangleMesh3F.readWavefrontObject(new File("./resources/Zealot.obj"), true).get(0);
+		final Shape3F shape31 = new Sphere3F();
 		
 		final Matrix44F matrix11 = Matrix44F.translate(+0.0F, 0.00F, + 0.0F);
 		final Matrix44F matrix12 = Matrix44F.translate(+0.0F, 8.00F, + 0.0F);
@@ -783,11 +789,14 @@ public final class Scenes {
 		final Matrix44F matrix14 = Matrix44F.translate(+0.0F, 0.00F, -10.0F);
 		final Matrix44F matrix15 = Matrix44F.translate(+5.0F, 0.00F, + 0.0F);
 		final Matrix44F matrix16 = Matrix44F.translate(-5.0F, 0.00F, + 0.0F);
-		final Matrix44F matrix21 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 2.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.05F));
+		final Matrix44F matrix21 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 4.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.05F));
+		final Matrix44F matrix31 = Matrix44F.translate(0.0F, 8.0F, 0.0F);
+		
+		final AreaLight areaLight31 = new DiffuseAreaLight(matrix31, 1, new Color3F(50.0F), shape31, false);
 		
 		final
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTZealot");
-		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 0.0F, 0.0F), 1, new Color3F(20.0F), new Sphere3F(), true));
+		scene.addLight(areaLight31);
 		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
 		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
 		scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
@@ -795,6 +804,7 @@ public final class Scenes {
 		scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
 		scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
 		scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
+		scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
 		
 		return scene;
 	}

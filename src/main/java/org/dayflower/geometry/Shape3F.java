@@ -192,4 +192,11 @@ public interface Shape3F {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum);
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code Shape3F} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Shape3F} instance
+	 */
+	float[] toArray();
 }

@@ -491,6 +491,18 @@ public final class Curve3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns a {@code float[]} representation of this {@code Curve3F} instance.
+	 * <p>
+	 * Note: This method has not been implemented yet.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Curve3F} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Curve3F} instance.
 	 * 
 	 * @return a hash code for this {@code Curve3F} instance

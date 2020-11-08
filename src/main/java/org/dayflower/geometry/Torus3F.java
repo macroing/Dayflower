@@ -44,6 +44,23 @@ import java.util.Optional;
  * @author J&#246;rgen Lundgren
  */
 public final class Torus3F implements Shape3F {
+	/**
+	 * The offset for the inner radius in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RADIUS_INNER = 0;
+	
+	/**
+	 * The offset for the outer radius in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RADIUS_OUTER = 1;
+	
+	/**
+	 * The size of the {@code float[]}.
+	 */
+	public static final int ARRAY_SIZE = 2;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final BoundingVolume3F boundingVolume;
 	private final float radiusInner;
 	private final float radiusInnerSquared;
@@ -461,6 +478,21 @@ public final class Torus3F implements Shape3F {
 		}
 		
 		return Float.NaN;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code Torus3F} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Torus3F} instance
+	 */
+	@Override
+	public float[] toArray() {
+		final float[] array = new float[ARRAY_SIZE];
+		
+		array[ARRAY_OFFSET_RADIUS_INNER] = this.radiusInner;
+		array[ARRAY_OFFSET_RADIUS_OUTER] = this.radiusOuter;
+		
+		return array;
 	}
 	
 	/**

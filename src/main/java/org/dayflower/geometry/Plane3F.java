@@ -34,6 +34,33 @@ import java.util.Optional;
  * @author J&#246;rgen Lundgren
  */
 public final class Plane3F implements Shape3F {
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_A = 0;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_B = 3;
+	
+	/**
+	 * The offset for the {@link Point3F} instance denoted by {@code C} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_C = 6;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance representing the surface normal in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SURFACE_NORMAL = 9;
+	
+	/**
+	 * The size of the {@code float[]}.
+	 */
+	public static final int ARRAY_SIZE = 12;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Point3F a;
 	private final Point3F b;
 	private final Point3F c;
@@ -457,6 +484,31 @@ public final class Plane3F implements Shape3F {
 		}
 		
 		return t;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code Plane3F} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Plane3F} instance
+	 */
+	@Override
+	public float[] toArray() {
+		final float[] array = new float[ARRAY_SIZE];
+		
+		array[ARRAY_OFFSET_A + 0] = this.a.getX();
+		array[ARRAY_OFFSET_A + 1] = this.a.getY();
+		array[ARRAY_OFFSET_A + 2] = this.a.getZ();
+		array[ARRAY_OFFSET_B + 0] = this.b.getX();
+		array[ARRAY_OFFSET_B + 1] = this.b.getY();
+		array[ARRAY_OFFSET_B + 2] = this.b.getZ();
+		array[ARRAY_OFFSET_C + 0] = this.c.getX();
+		array[ARRAY_OFFSET_C + 1] = this.c.getY();
+		array[ARRAY_OFFSET_C + 2] = this.c.getZ();
+		array[ARRAY_OFFSET_SURFACE_NORMAL + 0] = this.surfaceNormal.getX();
+		array[ARRAY_OFFSET_SURFACE_NORMAL + 1] = this.surfaceNormal.getY();
+		array[ARRAY_OFFSET_SURFACE_NORMAL + 2] = this.surfaceNormal.getZ();
+		
+		return array;
 	}
 	
 	/**

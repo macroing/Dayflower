@@ -37,6 +37,7 @@ import org.dayflower.sampler.RandomSampler;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
@@ -157,7 +158,8 @@ public final class SmallPTIPathTracingCPURenderer extends AbstractCPURenderer {
 //					final Vector3F v = Vector3F.crossProduct(w, u);
 //					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 					
-					currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), d);//surfaceIntersection.createRay(d);
+//					currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), d);
+					currentRay = surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
 				} else if(material instanceof LambertianMaterial || material instanceof OrenNayarMaterial) {
@@ -173,13 +175,15 @@ public final class SmallPTIPathTracingCPURenderer extends AbstractCPURenderer {
 //					final Vector3F v = Vector3F.crossProduct(w, u);
 //					final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 					
-					currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), d);//surfaceIntersection.createRay(d);
+//					currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), d);
+					currentRay = surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
 				} else if(material instanceof ReflectionMaterial) {
 					final Vector3F d = Vector3F.reflection(currentDirection, surfaceNormal, true);
 					
-					currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), d);//surfaceIntersection.createRay(d);
+//					currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), d);
+					currentRay = surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
 				} else if(material instanceof RefractionMaterial) {
@@ -195,7 +199,8 @@ public final class SmallPTIPathTracingCPURenderer extends AbstractCPURenderer {
 					final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 					
 					if(cosTheta2Squared < 0.0F) {
-						currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), reflectionDirection);//surfaceIntersection.createRay(reflectionDirection);
+//						currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), reflectionDirection);
+						currentRay = surfaceIntersection.createRay(reflectionDirection);
 						
 						throughput = Color3F.multiply(throughput, albedo);
 					} else {
@@ -212,12 +217,14 @@ public final class SmallPTIPathTracingCPURenderer extends AbstractCPURenderer {
 						final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 						
 						if(random() < probabilityRussianRoulette) {
-							currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), reflectionDirection);//surfaceIntersection.createRay(reflectionDirection);
+//							currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), reflectionDirection);
+							currentRay = surfaceIntersection.createRay(reflectionDirection);
 							
 							throughput = Color3F.multiply(throughput, albedo);
 							throughput = Color3F.multiply(throughput, probabilityRussianRouletteReflection);
 						} else {
-							currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), transmissionDirection);//surfaceIntersection.createRay(transmissionDirection);
+//							currentRay = new Ray3F(surfaceIntersection.getSurfaceIntersectionPoint(), transmissionDirection);
+							currentRay = surfaceIntersection.createRay(transmissionDirection);
 							
 							throughput = Color3F.multiply(throughput, albedo);
 							throughput = Color3F.multiply(throughput, probabilityRussianRouletteTransmission);
@@ -227,7 +234,9 @@ public final class SmallPTIPathTracingCPURenderer extends AbstractCPURenderer {
 				
 				currentBounce++;
 			} else {
-				radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.getBackground().radiance(currentRay)));
+				for(final Light light : scene.getLights()) {
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateRadianceEmitted(currentRay)));
+				}
 				
 				break;
 			}

@@ -120,10 +120,10 @@ public final class HairMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final float alpha = this.textureAlpha.getColorXYZ(intersection).average();
-		final float betaM = this.textureBetaM.getColorXYZ(intersection).average();
-		final float betaN = this.textureBetaN.getColorXYZ(intersection).average();
-		final float eta = this.textureEta.getColorXYZ(intersection).average();
+		final float alpha = this.textureAlpha.getColorRGB(intersection).average();
+		final float betaM = this.textureBetaM.getColorRGB(intersection).average();
+		final float betaN = this.textureBetaN.getColorRGB(intersection).average();
+		final float eta = this.textureEta.getColorRGB(intersection).average();
 		
 		final Color3F sigmaA = doComputeSigmaA(intersection, betaN);
 		

@@ -592,7 +592,7 @@ public final class PerezLight implements Light {
 		final float y0 = (float)(relativeLuminance);
 		final float z0 = (float)(colorXYZ.getZ() * relativeLuminance / colorXYZ.getY());
 		
-		return new Color3F(x0, y0, z0);
+		return Color3F.convertXYZToRGBUsingSRGB(new Color3F(x0, y0, z0));
 	}
 	
 	private double doCalculatePerezFunction(final double[] lam, final double theta, final double gamma, final double lvz) {
@@ -618,9 +618,9 @@ public final class PerezLight implements Light {
 			for(int u = 0; u < resolutionU; u++) {
 				final float sphericalU = (u + 0.5F) * resolutionUReciprocal;
 				
-				final Color3F colorXYZ = doRadiance(Vector3F.directionSpherical(sphericalU, sphericalV));
+				final Color3F colorRGB = doRadiance(Vector3F.directionSpherical(sphericalU, sphericalV));
 				
-				functions[v][u] = colorXYZ.getY() * sinTheta;
+				functions[v][u] = colorRGB.luminance() * sinTheta;
 			}
 		}
 		
@@ -639,9 +639,9 @@ public final class PerezLight implements Light {
 				final float u = (x + 0.5F) * deltaU;
 				final float v = (y + 0.5F) * deltaV;
 				
-				final Color3F colorXYZ = doRadiance(Vector3F.directionSpherical(u, v));
+				final Color3F colorRGB = doRadiance(Vector3F.directionSpherical(u, v));
 				
-				this.histogramImage[x][y] = colorXYZ.luminance() * sin(PI * v);
+				this.histogramImage[x][y] = colorRGB.luminance() * sin(PI * v);
 				
 				if(y > 0) {
 					this.histogramImage[x][y] += this.histogramImage[x][y - 1];
@@ -700,7 +700,7 @@ public final class PerezLight implements Light {
 	}
 	
 	private void doSetRadius() {
-		this.radius = 100.0F;
+		this.radius = 10.0F;
 	}
 	
 	private void doSetSunColorAndSunSpectralRadiance() {

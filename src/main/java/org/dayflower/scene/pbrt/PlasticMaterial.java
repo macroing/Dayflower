@@ -98,8 +98,8 @@ public final class PlasticMaterial implements PBRTMaterial {
 		
 		final List<BXDF> bXDFs = new ArrayList<>();
 		
-		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorDiffuse.isBlack()) {
 			bXDFs.add(new LambertianBRDF(colorDiffuse));
@@ -108,7 +108,7 @@ public final class PlasticMaterial implements PBRTMaterial {
 		if(!colorSpecular.isBlack()) {
 			final Fresnel fresnel = new DielectricFresnel(1.5F, 1.0F);
 			
-			final Color3F colorRoughness = this.textureRoughness.getColorXYZ(intersection);
+			final Color3F colorRoughness = this.textureRoughness.getColorRGB(intersection);
 			
 			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughness.average()) : colorRoughness.average();
 			

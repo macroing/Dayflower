@@ -124,7 +124,7 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 			
 			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 			
-			final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+//			final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
 			
 			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
 			final Vector3F surfaceNormalCorrectlyOriented = Vector3F.dotProduct(direction, surfaceNormal) < 0.0F ? surfaceNormal : Vector3F.negate(surfaceNormal);
@@ -151,7 +151,7 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 				final Vector3F u = Vector3F.crossProduct(v, w);
 				final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 				
-				return Color3F.add(emittance, Color3F.multiply(albedo, doRadiance(new Ray3F(surfaceIntersectionPoint, d), currentBounce)));
+				return Color3F.add(emittance, Color3F.multiply(albedo, doRadiance(/*new Ray3F(surfaceIntersectionPoint, d)*/surfaceIntersection.createRay(d), currentBounce)));
 			} else if(material instanceof LambertianMaterial || material instanceof OrenNayarMaterial) {
 				final Vector3F s = SampleGeneratorF.sampleHemisphereCosineDistribution2();
 				final Vector3F w = surfaceNormalCorrectlyOriented;
@@ -159,15 +159,16 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 				final Vector3F v = Vector3F.crossProduct(w, u);
 				final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 				
-				return Color3F.add(emittance, Color3F.multiply(albedo, doRadiance(new Ray3F(surfaceIntersectionPoint, d), currentBounce)));
+				return Color3F.add(emittance, Color3F.multiply(albedo, doRadiance(/*new Ray3F(surfaceIntersectionPoint, d)*/surfaceIntersection.createRay(d), currentBounce)));
 			} else if(material instanceof ReflectionMaterial) {
 				final Vector3F d = Vector3F.reflection(direction, surfaceNormal, true);
 				
-				return Color3F.add(emittance, Color3F.multiply(albedo, doRadiance(new Ray3F(surfaceIntersectionPoint, d), currentBounce)));
+				return Color3F.add(emittance, Color3F.multiply(albedo, doRadiance(/*new Ray3F(surfaceIntersectionPoint, d)*/surfaceIntersection.createRay(d), currentBounce)));
 			} else if(material instanceof RefractionMaterial) {
 				final Vector3F reflectionDirection = Vector3F.reflection(direction, surfaceNormal, true);
 				
-				final Ray3F reflectionRay = new Ray3F(surfaceIntersectionPoint, reflectionDirection);
+//				final Ray3F reflectionRay = new Ray3F(surfaceIntersectionPoint, reflectionDirection);
+				final Ray3F reflectionRay = surfaceIntersection.createRay(reflectionDirection);
 				
 				final boolean isEntering = Vector3F.dotProduct(surfaceNormal, surfaceNormalCorrectlyOriented) > 0.0F;
 				
@@ -184,7 +185,8 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 				
 				final Vector3F transmissionDirection = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(direction, eta), Vector3F.multiply(surfaceNormal, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
 				
-				final Ray3F transmissionRay = new Ray3F(surfaceIntersectionPoint, transmissionDirection);
+//				final Ray3F transmissionRay = new Ray3F(surfaceIntersectionPoint, transmissionDirection);
+				final Ray3F transmissionRay = surfaceIntersection.createRay(transmissionDirection);
 				
 				final float a = etaB - etaA;
 				final float b = etaB + etaA;

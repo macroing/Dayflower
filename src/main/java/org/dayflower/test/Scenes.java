@@ -332,6 +332,7 @@ public final class Scenes {
 		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)), "Default");
 		scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 5.0F), new Color3F(1.0F, 1.0F, 1.0F)));
 		scene.addLight(new PointLight(new Point3F(0.0F, 1.0F, 0.0F), new Color3F(1.0F, 1.0F, 1.0F)));
+		scene.addLight(new PerezLight());
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		scene.addPrimitive(new Primitive(material3, shape3, texture31, texture32, matrix3));

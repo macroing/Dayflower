@@ -249,7 +249,9 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 			
 			radiance = doGetRadiance(intersection, material, scene);
 		} else {
-			radiance = scene.getBackground().radiance(ray);
+			for(final Light light : scene.getLights()) {
+				radiance = Color3F.add(radiance, light.evaluateRadianceEmitted(ray));
+			}
 		}
 		
 		return radiance;

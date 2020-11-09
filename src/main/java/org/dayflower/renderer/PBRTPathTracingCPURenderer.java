@@ -88,7 +88,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
 	 */
 	public PBRTPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
-		super(display, image, rendererConfiguration, sampler, scene, true);
+		super(display, image, rendererConfiguration, sampler, scene, false);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

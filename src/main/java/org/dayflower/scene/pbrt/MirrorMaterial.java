@@ -86,7 +86,7 @@ public final class MirrorMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final Color3F colorReflectanceScale = Color3F.saturate(this.textureReflectanceScale.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorReflectanceScale = Color3F.saturate(this.textureReflectanceScale.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorReflectanceScale.isBlack()) {
 			return Optional.of(new BSDF(intersection, Arrays.asList(new SpecularBRDF(colorReflectanceScale, new ConstantFresnel()))));

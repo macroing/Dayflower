@@ -90,11 +90,11 @@ public final class GlassMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final Color3F colorEta = this.textureEta.getColorXYZ(intersection);
-		final Color3F colorKReflection = Color3F.saturate(this.textureKReflection.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKTransmission = Color3F.saturate(this.textureKTransmission.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorRoughnessU = this.textureRoughnessU.getColorXYZ(intersection);
-		final Color3F colorRoughnessV = this.textureRoughnessV.getColorXYZ(intersection);
+		final Color3F colorEta = this.textureEta.getColorRGB(intersection);
+		final Color3F colorKReflection = Color3F.saturate(this.textureKReflection.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKTransmission = Color3F.saturate(this.textureKTransmission.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorRoughnessU = this.textureRoughnessU.getColorRGB(intersection);
+		final Color3F colorRoughnessV = this.textureRoughnessV.getColorRGB(intersection);
 		
 		final float eta = colorEta.average();
 		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();

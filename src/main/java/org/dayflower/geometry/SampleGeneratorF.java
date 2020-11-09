@@ -143,8 +143,8 @@ public final class SampleGeneratorF {
 			final float phi = PI_DIVIDED_BY_4 * (b / a);
 			final float r = radius * a;
 			
-			final float component1 = cos(phi) * r;
-			final float component2 = sin(phi) * r;
+			final float component1 = r * cos(phi);
+			final float component2 = r * sin(phi);
 			
 			return new Point2F(component1, component2);
 		}
@@ -152,8 +152,8 @@ public final class SampleGeneratorF {
 		final float phi = PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
 		final float r = radius * b;
 		
-		final float component1 = cos(phi) * r;
-		final float component2 = sin(phi) * r;
+		final float component1 = r * cos(phi);
+		final float component2 = r * sin(phi);
 		
 		return new Point2F(component1, component2);
 	}
@@ -247,8 +247,8 @@ public final class SampleGeneratorF {
 		final float sinTheta = sqrt(1.0F - cosTheta * cosTheta);
 		final float phi = v * PI_MULTIPLIED_BY_2;
 		
-		final float component1 = cos(phi) * sinTheta;
-		final float component2 = sin(phi) * sinTheta;
+		final float component1 = sinTheta * cos(phi);
+		final float component2 = sinTheta * sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);
@@ -323,8 +323,8 @@ public final class SampleGeneratorF {
 		final float cosTheta = sqrt(1.0F - v);
 		final float phi = PI_MULTIPLIED_BY_2 * u;
 		
-		final float component1 = cos(phi) * sinTheta;
-		final float component2 = sin(phi) * sinTheta;
+		final float component1 = sinTheta * cos(phi);
+		final float component2 = sinTheta * sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);
@@ -383,8 +383,8 @@ public final class SampleGeneratorF {
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
-		final float component1 = cos(phi) * sinTheta;
-		final float component2 = sin(phi) * sinTheta;
+		final float component1 = sinTheta * cos(phi);
+		final float component2 = sinTheta * sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);
@@ -422,8 +422,8 @@ public final class SampleGeneratorF {
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
-		final float component1 = cos(phi) * sinTheta;
-		final float component2 = sin(phi) * sinTheta;
+		final float component1 = sinTheta * cos(phi);
+		final float component2 = sinTheta * sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);
@@ -461,8 +461,8 @@ public final class SampleGeneratorF {
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = v * PI_MULTIPLIED_BY_2;
 		
-		final float component1 = cos(phi) * sinTheta;
-		final float component2 = sin(phi) * sinTheta;
+		final float component1 = sinTheta * cos(phi);
+		final float component2 = sinTheta * sin(phi);
 		final float component3 = cosTheta;
 		
 		return new Vector3F(component1, component2, component3);

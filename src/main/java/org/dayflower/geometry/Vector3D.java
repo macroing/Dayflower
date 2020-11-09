@@ -21,6 +21,8 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Doubles.PI;
 import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Doubles.abs;
+import static org.dayflower.util.Doubles.acos;
+import static org.dayflower.util.Doubles.atan2;
 import static org.dayflower.util.Doubles.cos;
 import static org.dayflower.util.Doubles.equal;
 import static org.dayflower.util.Doubles.finiteOrDefault;
@@ -367,6 +369,27 @@ public final class Vector3D {
 	}
 	
 	/**
+	 * Returns the spherical phi angle.
+	 * 
+	 * @return the spherical phi angle
+	 */
+	public double sphericalPhi() {
+		final double sphericalPhi0 = atan2(this.component2, this.component1);
+		final double sphericalPhi1 = sphericalPhi0 < 0.0D ? sphericalPhi0 + 2.0D * PI : sphericalPhi0;
+		
+		return sphericalPhi1;
+	}
+	
+	/**
+	 * Returns the spherical theta angle.
+	 * 
+	 * @return the spherical theta angle
+	 */
+	public double sphericalTheta() {
+		return acos(saturate(this.component3, -1.0D, 1.0D));
+	}
+	
+	/**
 	 * Returns the tangent of the angle theta.
 	 * 
 	 * @return the tangent of the angle theta
@@ -597,20 +620,11 @@ public final class Vector3D {
 	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code u} and {@code v}
 	 */
 	public static Vector3D directionSpherical(final double u, final double v) {
-		final double theta = u * PI_MULTIPLIED_BY_2;
-		final double phi = v * PI;
+		final double cosTheta = 1.0D - 2.0D * u;
+		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
+		final double phi = v * PI_MULTIPLIED_BY_2;
 		
-		final double cosPhi = cos(phi);
-		final double cosTheta = cos(theta);
-		
-		final double sinPhi = sin(phi);
-		final double sinTheta = sin(theta);
-		
-		final double component1 = -sinPhi * cosTheta;
-		final double component2 = cosPhi;
-		final double component3 = sinPhi * sinTheta;
-		
-		return new Vector3D(component1, component2, component3);
+		return directionSpherical(sinTheta, cosTheta, phi);
 	}
 	
 	/**

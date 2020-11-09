@@ -143,8 +143,8 @@ public final class SampleGeneratorD {
 			final double phi = PI_DIVIDED_BY_4 * (b / a);
 			final double r = radius * a;
 			
-			final double component1 = cos(phi) * r;
-			final double component2 = sin(phi) * r;
+			final double component1 = r * cos(phi);
+			final double component2 = r * sin(phi);
 			
 			return new Point2D(component1, component2);
 		}
@@ -152,8 +152,8 @@ public final class SampleGeneratorD {
 		final double phi = PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
 		final double r = radius * b;
 		
-		final double component1 = cos(phi) * r;
-		final double component2 = sin(phi) * r;
+		final double component1 = r * cos(phi);
+		final double component2 = r * sin(phi);
 		
 		return new Point2D(component1, component2);
 	}
@@ -247,8 +247,8 @@ public final class SampleGeneratorD {
 		final double sinTheta = sqrt(1.0D - cosTheta * cosTheta);
 		final double phi = v * PI_MULTIPLIED_BY_2;
 		
-		final double component1 = cos(phi) * sinTheta;
-		final double component2 = sin(phi) * sinTheta;
+		final double component1 = sinTheta * cos(phi);
+		final double component2 = sinTheta * sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);
@@ -323,8 +323,8 @@ public final class SampleGeneratorD {
 		final double cosTheta = sqrt(1.0D - v);
 		final double phi = PI_MULTIPLIED_BY_2 * u;
 		
-		final double component1 = cos(phi) * sinTheta;
-		final double component2 = sin(phi) * sinTheta;
+		final double component1 = sinTheta * cos(phi);
+		final double component2 = sinTheta * sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);
@@ -383,8 +383,8 @@ public final class SampleGeneratorD {
 		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
 		final double phi = PI_MULTIPLIED_BY_2 * v;
 		
-		final double component1 = cos(phi) * sinTheta;
-		final double component2 = sin(phi) * sinTheta;
+		final double component1 = sinTheta * cos(phi);
+		final double component2 = sinTheta * sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);
@@ -422,8 +422,8 @@ public final class SampleGeneratorD {
 		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
 		final double phi = PI_MULTIPLIED_BY_2 * v;
 		
-		final double component1 = cos(phi) * sinTheta;
-		final double component2 = sin(phi) * sinTheta;
+		final double component1 = sinTheta * cos(phi);
+		final double component2 = sinTheta * sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);
@@ -461,8 +461,8 @@ public final class SampleGeneratorD {
 		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
 		final double phi = v * PI_MULTIPLIED_BY_2;
 		
-		final double component1 = cos(phi) * sinTheta;
-		final double component2 = sin(phi) * sinTheta;
+		final double component1 = sinTheta * cos(phi);
+		final double component2 = sinTheta * sin(phi);
 		final double component3 = cosTheta;
 		
 		return new Vector3D(component1, component2, component3);

@@ -25,7 +25,11 @@ import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Doubles.saturate;
 import static org.dayflower.util.Doubles.tan;
 import static org.dayflower.util.Floats.PI;
+import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.util.Floats.PI_RECIPROCAL;
 import static org.dayflower.util.Floats.acos;
+import static org.dayflower.util.Floats.cos;
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
@@ -45,6 +49,8 @@ import org.dayflower.image.ConstantSpectralCurve;
 import org.dayflower.image.IrregularSpectralCurve;
 import org.dayflower.image.RegularSpectralCurve;
 import org.dayflower.image.SpectralCurve;
+import org.dayflower.sampler.Distribution2F;
+import org.dayflower.sampler.Sample2F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceEmittedResult;
@@ -98,6 +104,7 @@ public final class PerezLight implements Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F sunColor;
+	private Distribution2F distribution;
 	private OrthonormalBasis33F orthonormalBasis;
 	private SpectralCurve sunSpectralRadiance;
 	private Vector3F sunDirection;
@@ -107,6 +114,7 @@ public final class PerezLight implements Light {
 	private double[] perezY;
 	private double[] zenith;
 	private float jacobian;
+	private float radius;
 	private float theta;
 	private float turbidity;
 	private float[] histogramColumn;
@@ -172,6 +180,16 @@ public final class PerezLight implements Light {
 	 */
 	@Override
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
+		/*
+		Spectrum InfiniteAreaLight::Le(const RayDifferential &ray) const {
+			Vector3f w = Normalize(WorldToLight(ray.d));
+			
+			Point2f st(SphericalPhi(w) * Inv2Pi, SphericalTheta(w) * InvPi);
+			
+			return Spectrum(Lmap->Lookup(st), SpectrumType::Illuminant);
+		}
+				 */
+		
 		return doRadiance(Vector3F.normalize(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis)));
 	}
 	
@@ -193,7 +211,7 @@ public final class PerezLight implements Light {
 	 */
 	@Override
 	public Color3F power() {
-		return Color3F.BLACK;
+		return Color3F.multiply(doRadiance(Vector3F.directionSpherical(0.5F, 0.5F)), PI * this.radius * this.radius);
 	}
 	
 	/**
@@ -214,6 +232,40 @@ public final class PerezLight implements Light {
 	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
 		Objects.requireNonNull(ray, "ray == null");
 		Objects.requireNonNull(normal, "normal == null");
+		
+		/*
+		final Vector3F incoming = ray.getDirection();
+		final Vector3F incomingLocal = Vector3F.transformReverse(incoming, this.orthonormalBasis);
+		final Vector3F direction = Vector3F.negate(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis));
+		
+		final float phi = direction.sphericalPhi();
+		final float theta = direction.sphericalTheta();
+		
+		final Sample2F sample = new Sample2F(phi * PI_MULTIPLIED_BY_2_RECIPROCAL, theta * PI_RECIPROCAL);
+		
+		final float radius = this.radius;
+		
+		final float probabilityDensityFunctionValueMap = this.distribution.probabilityDensityFunction(sample);
+		final float probabilityDensityFunctionValueDirection = probabilityDensityFunctionValueMap / (2.0F * PI * PI * sin(theta));
+		final float probabilityDensityFunctionValuePosition = 1.0F / (PI * radius * radius);
+		*/
+		
+		/*
+		void InfiniteAreaLight::Pdf_Le(const Ray &ray, const Normal3f &, Float *pdfPos, Float *pdfDir) const {
+			ProfilePhase _(Prof::LightPdf);
+			
+			Vector3f d = -WorldToLight(ray.d);
+			
+			Float theta = SphericalTheta(d), phi = SphericalPhi(d);
+			
+			Point2f uv(phi * Inv2Pi, theta * InvPi);
+			
+			Float mapPdf = distribution->Pdf(uv);
+			
+			*pdfDir = mapPdf / (2 * Pi * Pi * std::sin(theta));
+			*pdfPos = 1 / (Pi * worldRadius * worldRadius);
+		}
+				 */
 		
 		return Optional.empty();
 	}
@@ -237,6 +289,49 @@ public final class PerezLight implements Light {
 		Objects.requireNonNull(sampleA, "sampleA == null");
 		Objects.requireNonNull(sampleB, "sampleB == null");
 		
+		/*
+		Spectrum InfiniteAreaLight::Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir) const {
+			ProfilePhase _(Prof::LightSample);
+			
+//			Compute direction for infinite light sample ray
+			Point2f u = u1;
+			
+//			Find $(u,v)$ sample coordinates in infinite light texture
+			Float mapPdf;
+			
+			Point2f uv = distribution->SampleContinuous(u, &mapPdf);
+			
+			if (mapPdf == 0) {
+				return Spectrum(0.f);
+			}
+			
+			Float theta = uv[1] * Pi, phi = uv[0] * 2.f * Pi;
+			Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
+			Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+			
+			Vector3f d = -LightToWorld(Vector3f(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
+			
+			*nLight = (Normal3f)d;
+			
+//			Compute origin for infinite light sample ray
+			Vector3f v1, v2;
+			
+			CoordinateSystem(-d, &v1, &v2);
+			
+			Point2f cd = ConcentricSampleDisk(u2);
+			
+			Point3f pDisk = worldCenter + worldRadius * (cd.x * v1 + cd.y * v2);
+			
+			*ray = Ray(pDisk + worldRadius * -d, d, Infinity, time);
+			
+//			Compute _InfiniteAreaLight_ ray PDFs
+			*pdfDir = sinTheta == 0 ? 0 : mapPdf / (2 * Pi * Pi * sinTheta);
+			*pdfPos = 1 / (Pi * worldRadius * worldRadius);
+			
+			return Spectrum(Lmap->Lookup(uv), SpectrumType::Illuminant);
+		}
+				 */
+		
 		return Optional.empty();
 	}
 	
@@ -256,7 +351,21 @@ public final class PerezLight implements Light {
 	 */
 	@Override
 	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
-		/*
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(sample, "sample == null");
+		
+		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());
+		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
+		
+		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample0);
+		
+		if(equal(probabilityDensityFunctionValue0, 0.0F)) {
+			return Optional.empty();
+		}
+		
+		final float u = sample1.getU();
+		final float v = sample1.getV();
+		
 		final float phi = u * 2.0F * PI;
 		final float theta = v * PI;
 		
@@ -266,43 +375,31 @@ public final class PerezLight implements Light {
 		final float sinPhi = sin(phi);
 		final float sinTheta = sin(theta);
 		
+		if(equal(sinTheta, 0.0F)) {
+			return Optional.empty();
+		}
+		
 		final float x = sinTheta * cosPhi;
 		final float y = sinTheta * sinPhi;
 		final float z = cosTheta;
-		*/
+		
+		final float radius = this.radius;
+		
+//		final Vector3F incomingLocal = Vector3F.directionSpherical(u, v);
+		final Vector3F incomingLocal = new Vector3F(x, y, z);
+		final Vector3F incoming = Vector3F.normalize(Vector3F.transform(incomingLocal, this.orthonormalBasis));
+		
+		final Color3F result = doRadiance(incomingLocal);
+//		final Color3F result = doRadiance(Vector3F.directionSpherical(u, v));
+		
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint();
+		final Point3F point = Point3F.add(surfaceIntersectionPoint, incoming, 2.0F * radius);
+		
+		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
+		
+		return Optional.of(new LightRadianceIncomingResult(result, point, incoming, probabilityDensityFunctionValue1));
 		
 		/*
-Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis) const {
-//	Find $(u,v)$ sample coordinates in infinite light texture
-	Float mapPdf;
-	
-	Point2f uv = distribution->SampleContinuous(u, &mapPdf);
-	
-	if (mapPdf == 0) {
-		return Spectrum(0.f);
-	}
-	
-//	Convert infinite light sample point to direction
-	Float theta = uv[1] * Pi, phi = uv[0] * 2 * Pi;
-	Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
-	Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
-	
-	*wi = LightToWorld(Vector3f(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
-	
-//	Compute PDF for sampled infinite light direction
-	*pdf = mapPdf / (2 * Pi * Pi * sinTheta);
-	
-	if (sinTheta == 0) {
-		*pdf = 0;
-	}
-	
-//	Return radiance value for infinite light direction
-	*vis = VisibilityTester(ref, Interaction(ref.p + *wi * (2 * worldRadius), ref.time, mediumInterface));
-	
-	return Spectrum(Lmap->Lookup(uv), SpectrumType::Illuminant);
-}
-		*/
-		
 		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 		
 		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
@@ -356,6 +453,7 @@ Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, 
 		}
 		
 		return Optional.empty();
+		*/
 	}
 	
 	/**
@@ -396,7 +494,25 @@ Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, 
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return 0.0F;
+		final Vector3F incomingLocal = Vector3F.transformReverse(incoming, this.orthonormalBasis);
+		
+		final float phi = incomingLocal.sphericalPhi();
+		final float theta = incomingLocal.sphericalTheta();
+		final float sinTheta = sin(theta);
+		
+		if(equal(sinTheta, 0.0F)) {
+			return 0.0F;
+		}
+		
+		final float u = phi * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float v = theta * PI_RECIPROCAL;
+		
+		final Sample2F sample = new Sample2F(u, v);
+		
+		final float probabilityDensityFunctionValue0 = this.distribution.probabilityDensityFunction(sample);
+		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
+		
+		return probabilityDensityFunctionValue1;
 	}
 	
 	/**
@@ -440,6 +556,7 @@ Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, 
 	 */
 	public void set(final float turbidity, final Vector3F sunDirectionWorldSpace) {
 		doSetOrthonormalBasis();
+		doSetRadius();
 		doSetTurbidity(turbidity);
 		doSetSunDirectionWorldSpace(sunDirectionWorldSpace);
 		doSetSunDirection();
@@ -450,6 +567,7 @@ Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, 
 		doInitializePerezRelativeLuminance();
 		doInitializePerezX();
 		doInitializePerezY();
+		doInitializeDistribution();
 		doInitializeHistogram();
 	}
 	
@@ -462,7 +580,7 @@ Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, 
 		
 		final Vector3F directionSaturated = Vector3F.normalize(new Vector3F(direction.getX(), direction.getY(), max(direction.getZ(), 0.001F)));
 		
-		final double theta = acos(saturate(directionSaturated.getZ(), -1.0D, 1.0D));
+		final double theta = directionSaturated.sphericalTheta();
 		final double gamma = acos(saturate(Vector3F.dotProduct(directionSaturated, this.sunDirection), -1.0D, 1.0D));
 		final double relativeLuminance = doCalculatePerezFunction(this.perezRelativeLuminance, theta, gamma, this.zenith[0]) * 1.0e-4D;
 		final double x = doCalculatePerezFunction(this.perezX, theta, gamma, this.zenith[1]);
@@ -482,6 +600,31 @@ Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, 
 		final double num = ((1.0D + lam[0] * exp(lam[1] / cos(theta))) * (1.0D + lam[2] * exp(lam[3] * gamma) + lam[4] * cos(gamma) * cos(gamma)));
 		
 		return lvz * num / den;
+	}
+	
+	private void doInitializeDistribution() {
+		final int resolutionU = 32;
+		final int resolutionV = 32;
+		
+		final float resolutionUReciprocal = 1.0F / resolutionU;
+		final float resolutionVReciprocal = 1.0F / resolutionV;
+		
+		final float[][] functions = new float[resolutionV][resolutionU];
+		
+		for(int v = 0; v < resolutionV; v++) {
+			final float sphericalV = (v + 0.5F) * resolutionVReciprocal;
+			final float sinTheta = sin(PI * (v + 0.5F) * resolutionVReciprocal);
+			
+			for(int u = 0; u < resolutionU; u++) {
+				final float sphericalU = (u + 0.5F) * resolutionUReciprocal;
+				
+				final Color3F colorXYZ = doRadiance(Vector3F.directionSpherical(sphericalU, sphericalV));
+				
+				functions[v][u] = colorXYZ.getY() * sinTheta;
+			}
+		}
+		
+		this.distribution = new Distribution2F(functions);
 	}
 	
 	private void doInitializeHistogram() {
@@ -554,6 +697,10 @@ Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, 
 	
 	private void doSetOrthonormalBasis() {
 		this.orthonormalBasis = new OrthonormalBasis33F(Vector3F.y(), Vector3F.x());
+	}
+	
+	private void doSetRadius() {
+		this.radius = 100.0F;
 	}
 	
 	private void doSetSunColorAndSunSpectralRadiance() {

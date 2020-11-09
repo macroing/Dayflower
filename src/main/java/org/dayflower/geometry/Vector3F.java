@@ -21,6 +21,8 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.acos;
+import static org.dayflower.util.Floats.atan2;
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.finiteOrDefault;
@@ -367,6 +369,27 @@ public final class Vector3F {
 	}
 	
 	/**
+	 * Returns the spherical phi angle.
+	 * 
+	 * @return the spherical phi angle
+	 */
+	public float sphericalPhi() {
+		final float sphericalPhi0 = atan2(this.component2, this.component1);
+		final float sphericalPhi1 = sphericalPhi0 < 0.0F ? sphericalPhi0 + 2.0F * PI : sphericalPhi0;
+		
+		return sphericalPhi1;
+	}
+	
+	/**
+	 * Returns the spherical theta angle.
+	 * 
+	 * @return the spherical theta angle
+	 */
+	public float sphericalTheta() {
+		return acos(saturate(this.component3, -1.0F, 1.0F));
+	}
+	
+	/**
 	 * Returns the tangent of the angle theta.
 	 * 
 	 * @return the tangent of the angle theta
@@ -597,20 +620,11 @@ public final class Vector3F {
 	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v}
 	 */
 	public static Vector3F directionSpherical(final float u, final float v) {
-		final float theta = u * PI_MULTIPLIED_BY_2;
-		final float phi = v * PI;
+		final float cosTheta = 1.0F - 2.0F * u;
+		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float phi = v * PI_MULTIPLIED_BY_2;
 		
-		final float cosPhi = cos(phi);
-		final float cosTheta = cos(theta);
-		
-		final float sinPhi = sin(phi);
-		final float sinTheta = sin(theta);
-		
-		final float component1 = -sinPhi * cosTheta;
-		final float component2 = cosPhi;
-		final float component3 = sinPhi * sinTheta;
-		
-		return new Vector3F(component1, component2, component3);
+		return directionSpherical(sinTheta, cosTheta, phi);
 	}
 	
 	/**

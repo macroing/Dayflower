@@ -563,6 +563,77 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 	}
 	
+	/**
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * TriangleMesh3F.readWavefrontObject(pathname, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} instance with the pathname to a file
+	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static List<TriangleMesh3F> readWavefrontObject(final String pathname) {
+		return readWavefrontObject(pathname, false);
+	}
+	
+	/**
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * TriangleMesh3F.readWavefrontObject(pathname, isFlippingTextureCoordinateY, 1.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} instance with the pathname to a file
+	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
+	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static List<TriangleMesh3F> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY) {
+		return readWavefrontObject(pathname, isFlippingTextureCoordinateY, 1.0F);
+	}
+	
+	/**
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param pathname a {@code String} instance with the pathname to a file
+	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
+	 * @param scale the scale to apply to all {@link Triangle3F} instances
+	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static List<TriangleMesh3F> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final float scale) {
+		return readWavefrontObject(new File(Objects.requireNonNull(pathname, "pathname == null")), isFlippingTextureCoordinateY, scale);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Node doCreateNode(final List<LeafNode> processableLeafNodes, final Point3F maximum, final Point3F minimum, final int depth) {

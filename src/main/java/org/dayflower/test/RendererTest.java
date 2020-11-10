@@ -30,6 +30,7 @@ import org.dayflower.renderer.SmallPTIPathTracingCPURenderer;
 import org.dayflower.renderer.SmallPTRPathTracingCPURenderer;
 import org.dayflower.sampler.NRooksSampler;
 import org.dayflower.sampler.RandomSampler;
+import org.dayflower.scene.loader.JavaSceneLoader;
 
 public final class RendererTest {
 	private RendererTest() {
@@ -86,7 +87,7 @@ public final class RendererTest {
 		final
 		Renderer renderer = new RayitoPathTracingCPURenderer();
 		renderer.setRendererConfiguration(new RendererConfiguration());
-		renderer.setScene(Scenes.newDefaultScene());
+		renderer.setScene(new JavaSceneLoader().load("./resources/scenes/Default.java"));
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
 		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
 		renderer.setSampler(new NRooksSampler());

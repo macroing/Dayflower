@@ -18,7 +18,6 @@
  */
 package org.dayflower.test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -109,7 +108,7 @@ public final class Scenes {
 		final Material material8 = new LambertianMaterial();
 		final Material material9 = new LambertianMaterial();
 		
-		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject(new File("./resources/aphroditegirl.obj"), true, 100.0F);
+		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/aphroditegirl.obj", true, 100.0F);
 		
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = triangleMeshes.get(0);
@@ -166,15 +165,15 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newBedroomScene() {
-		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject(new File("./resources/Bedroom.obj"), true);
+		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/Bedroom.obj", true);
 		
 		final Material material = new LambertianMaterial();
 		
 		final Texture textureAlbedo = new ConstantTexture(Color3F.GRAY);
 		final Texture textureEmittance = new ConstantTexture();
 		
-		final Texture textureLaminate = ImageTexture.load(new File("./resources/laminate.jpg"));
-		final Texture textureWall = ImageTexture.load(new File("./resources/Wall.jpg"));
+		final Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg");
+		final Texture textureWall = ImageTexture.load("./resources/textures/Wall.jpg");
 		
 		final Map<String, Texture> textures = new HashMap<>();
 		
@@ -301,7 +300,7 @@ public final class Scenes {
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = new Sphere3F(7.5F);
 		final Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F), new Point3F(1.0F));
-		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
+		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject("./resources/models/smoothMonkey2.obj", true, 100.0F).get(0);
 		final Shape3F shape5 = new Torus3F();
 //		final Shape3F shape5 = new Curves3F(Curve3F.createCurvesByBSpline(Arrays.asList(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 2.0F, 0.0F), new Point3F(0.0F, 3.0F, 0.0F)), new ArrayList<>(), Type.FLAT, 5.0F, 5.0F, 3, 5));
 		
@@ -345,7 +344,7 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newPBRTAphroditeGirlScene() {
-		final Texture textureLaminate = ImageTexture.load(new File("./resources/laminate.jpg"), AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
+		final Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
 		
 		final Material material11 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material12 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
@@ -363,7 +362,7 @@ public final class Scenes {
 		final Material material28 = new PlasticMaterial(new ConstantTexture(new Color3F(227, 161, 115)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
 		final Material material31 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE));
 		
-		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject(new File("./resources/aphroditegirl.obj"), true, 100.0F);
+		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/aphroditegirl.obj", true, 100.0F);
 		
 		final Shape3F shape11 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, +1.0F), new Point3F(1.0F, 0.0F, +0.0F));//B
 		final Shape3F shape12 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, -1.0F), new Point3F(1.0F, 0.0F, +0.0F));//T
@@ -421,11 +420,11 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newPBRTBedroomScene() {
-		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject(new File("./resources/Bedroom.obj"), true);
+		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/Bedroom.obj", true);
 		
 		final Material material = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.WHITE));
-		final Material materialLaminate = new SubstrateMaterial(ImageTexture.load(new File("./resources/laminate.jpg")), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
-		final Material materialWall = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), ImageTexture.load(new File("./resources/Wall.jpg")));
+		final Material materialLaminate = new SubstrateMaterial(ImageTexture.load("./resources/textures/laminate.jpg"), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
+		final Material materialWall = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), ImageTexture.load("./resources/textures/Wall.jpg"));
 		
 		final Map<String, Material> materials = new HashMap<>();
 		
@@ -489,9 +488,9 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newPBRTBilScene() {
-		final Texture textureHjul = ImageTexture.load(new File("./resources/hjul.png"));
-		final Texture textureLaminate = ImageTexture.load(new File("./resources/laminate.jpg"), AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
-		final Texture textureTextur = ImageTexture.load(new File("./resources/textur.png"));
+		final Texture textureHjul = ImageTexture.load("./resources/textures/hjul.png");
+		final Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
+		final Texture textureTextur = ImageTexture.load("./resources/textures/textur.png");
 		
 		final Material material11 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material12 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
@@ -506,7 +505,7 @@ public final class Scenes {
 		final Material material25 = new SubstrateMaterial(textureHjul, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
 		final Material material31 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE));
 		
-		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject(new File("./resources/bil.obj"), true);
+		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/bil.obj", true);
 		
 		final Shape3F shape11 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, +1.0F), new Point3F(1.0F, 0.0F, +0.0F));//B
 		final Shape3F shape12 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, -1.0F), new Point3F(1.0F, 0.0F, +0.0F));//T
@@ -561,7 +560,7 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newPBRTMaterialShowcaseScene() {
-		final Texture textureLaminate = ImageTexture.load(new File("./resources/laminate.jpg"), AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
+		final Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
 		
 		final Material material11 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material12 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
@@ -665,7 +664,7 @@ public final class Scenes {
 		final Shape3F shape1 = new Plane3F();
 		final Shape3F shape2 = new Sphere3F(10.0F);
 		final Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F), new Point3F(1.0F));
-		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
+		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject("./resources/models/smoothMonkey2.obj", true, 100.0F).get(0);
 		final Shape3F shape5 = new Torus3F();
 		final Shape3F shape6 = new Sphere3F();
 		
@@ -703,7 +702,7 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newPBRTSmoothMonkey2Scene() {
-		final Texture textureLaminate = ImageTexture.load(new File("./resources/laminate.jpg"), AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
+		final Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
 		
 		final Material material11 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material12 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
@@ -726,7 +725,7 @@ public final class Scenes {
 		final Shape3F shape14 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F, +0.0F), new Point3F(1.0F, 0.0F, +0.0F));//B
 		final Shape3F shape15 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F, -1.0F));//R
 		final Shape3F shape16 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F,  1.0F));//L
-		final Shape3F shape21 = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
+		final Shape3F shape21 = TriangleMesh3F.readWavefrontObject("./resources/models/smoothMonkey2.obj", true, 100.0F).get(0);
 		
 		final Matrix44F matrix11 = Matrix44F.translate(+0.0F, 0.00F, + 0.0F);
 		final Matrix44F matrix12 = Matrix44F.translate(+0.0F, 8.00F, + 0.0F);
@@ -756,7 +755,7 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newPBRTZealotScene() {
-		final Texture textureLaminate = ImageTexture.load(new File("./resources/laminate.jpg"), AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
+		final Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
 		
 		final Material material11 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material12 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
@@ -765,9 +764,9 @@ public final class Scenes {
 		final Material material15 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 		final Material material16 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 //		final Material material21 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-		final Material material21 = new PlasticMaterial(ImageTexture.load(new File("./resources/Zealot_albedo.png")), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+		final Material material21 = new PlasticMaterial(ImageTexture.load("./resources/textures/Zealot_albedo.png"), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
 //		final Material material21 = new MetalMaterial(new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_ETA.toColorXYZ()))), new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_K.toColorXYZ()))), new ConstantTexture(new Color3F(0.05F)), new ConstantTexture(new Color3F(0.05F)), true);
-//		final Material material21 = new SubstrateMaterial(ImageTexture.load(new File("./resources/Zealot_albedo.png")), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
+//		final Material material21 = new SubstrateMaterial(ImageTexture.load("./resources/Zealot_albedo.png"), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
 //		final Material material21 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(), new ConstantTexture(), true);
 //		final Material material21 = new MatteMaterial(new ConstantTexture(new Color3F(90.0F)), new ConstantTexture(new Color3F(0.2F, 1.0F, 0.2F)));
 //		final Material material21 = new MirrorMaterial();
@@ -780,7 +779,7 @@ public final class Scenes {
 		final Shape3F shape14 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F, +0.0F), new Point3F(1.0F, 0.0F, +0.0F));//B
 		final Shape3F shape15 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F, -1.0F));//R
 		final Shape3F shape16 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F,  1.0F));//L
-		final Shape3F shape21 = TriangleMesh3F.readWavefrontObject(new File("./resources/Zealot.obj"), true).get(0);
+		final Shape3F shape21 = TriangleMesh3F.readWavefrontObject("./resources/models/Zealot.obj", true).get(0);
 		final Shape3F shape31 = new Sphere3F();
 		
 		final Matrix44F matrix11 = Matrix44F.translate(+0.0F, 0.00F, + 0.0F);
@@ -815,7 +814,7 @@ public final class Scenes {
 	 * @return a {@code Scene} instance
 	 */
 	public static Scene newSL500Scene() {
-		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject(new File("./resources/SL500.obj"), false);
+		final List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/SL500.obj", false);
 		
 		final Color3F colorA = new Color3F(0.3F, 0.7F, 0.3F);
 		final Color3F colorB = new Color3F(0.1F, 0.5F, 0.1F);
@@ -1511,7 +1510,7 @@ public final class Scenes {
 	public static Scene newShowcaseShape3FTriangleMesh3FScene() {
 		final Material material = new LambertianMaterial();
 		
-		final Shape3F shape = TriangleMesh3F.readWavefrontObject(new File("./resources/smoothMonkey2.obj"), true, 100.0F).get(0);
+		final Shape3F shape = TriangleMesh3F.readWavefrontObject("./resources/models/smoothMonkey2.obj", true, 100.0F).get(0);
 		
 		final Texture texture1 = new ConstantTexture(Color3F.GRAY);
 		final Texture texture2 = new ConstantTexture();
@@ -1767,12 +1766,12 @@ public final class Scenes {
 		final Material material2 = new AshikhminShirleyMaterial(0.02F);
 		
 		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = TriangleMesh3F.readWavefrontObject(new File("./resources/Zealot.obj"), true).get(0);
+		final Shape3F shape2 = TriangleMesh3F.readWavefrontObject("./resources/models/Zealot.obj", true).get(0);
 		
 		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
 		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = ImageTexture.load(new File("./resources/Zealot_albedo.png"));
-		final Texture texture22 = ImageTexture.load(new File("./resources/Zealot_emissive.png"));
+		final Texture texture21 = ImageTexture.load("./resources/textures/Zealot_albedo.png");
+		final Texture texture22 = ImageTexture.load("./resources/textures/Zealot_emissive.png");
 		
 		final Matrix44F matrix1 = Matrix44F.identity();
 		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.05F));

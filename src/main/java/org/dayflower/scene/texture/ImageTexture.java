@@ -437,6 +437,77 @@ public final class ImageTexture implements Texture {
 		}
 	}
 	
+	/**
+	 * Loads an {@code ImageTexture} from the file represented by {@code pathname}.
+	 * <p>
+	 * Returns a new {@code ImageTexture} instance.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * ImageTexture.load(pathname, AngleF.degrees(0.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} that represents the pathname to the file to load from
+	 * @return a new {@code ImageTexture} instance
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static ImageTexture load(final String pathname) {
+		return load(pathname, AngleF.degrees(0.0F));
+	}
+	
+	/**
+	 * Loads an {@code ImageTexture} from the file represented by {@code pathname}.
+	 * <p>
+	 * Returns a new {@code ImageTexture} instance.
+	 * <p>
+	 * If either {@code pathname} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * ImageTexture.load(pathname, angle, new Vector2F(1.0F, 1.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} that represents the pathname to the file to load from
+	 * @param angle the {@link AngleF} instance to use
+	 * @return a new {@code ImageTexture} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code angle} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static ImageTexture load(final String pathname, final AngleF angle) {
+		return load(pathname, angle, new Vector2F(1.0F, 1.0F));
+	}
+	
+	/**
+	 * Loads an {@code ImageTexture} from the file represented by {@code pathname}.
+	 * <p>
+	 * Returns a new {@code ImageTexture} instance.
+	 * <p>
+	 * If either {@code pathname}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param pathname a {@code String} that represents the pathname to the file to load from
+	 * @param angle the {@link AngleF} instance to use
+	 * @param scale the {@link Vector2F} instance to use as the scale factor
+	 * @return a new {@code ImageTexture} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code pathname}, {@code angle} or {@code scale} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static ImageTexture load(final String pathname, final AngleF angle, final Vector2F scale) {
+		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F doGetColorRGB(final float x, final float y) {

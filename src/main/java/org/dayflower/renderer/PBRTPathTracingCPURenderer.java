@@ -40,14 +40,12 @@ import org.dayflower.image.Image;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.AreaLight;
-import org.dayflower.scene.Camera;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceIncomingResult;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
-import org.dayflower.scene.background.ConstantBackground;
 import org.dayflower.scene.pbrt.BSDF;
 import org.dayflower.scene.pbrt.BSDFResult;
 import org.dayflower.scene.pbrt.BXDFType;
@@ -67,12 +65,12 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PBRTPathTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+	 * new PBRTPathTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
 	 * }
 	 * </pre>
 	 */
 	public PBRTPathTracingCPURenderer() {
-		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
 	}
 	
 	/**

@@ -27,9 +27,7 @@ import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.sampler.Sampler;
-import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
-import org.dayflower.scene.background.ConstantBackground;
 
 /**
  * A {@code RayTracingCPURenderer} is a {@link Renderer} implementation that renders using Ray Tracing.
@@ -44,12 +42,12 @@ public final class RayTracingCPURenderer extends AbstractCPURenderer {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RayTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+	 * new RayTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
 	 * }
 	 * </pre>
 	 */
 	public RayTracingCPURenderer() {
-		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
 	}
 	
 	/**

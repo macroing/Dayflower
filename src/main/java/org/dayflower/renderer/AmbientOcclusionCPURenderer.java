@@ -36,10 +36,8 @@ import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.sampler.Sampler;
-import org.dayflower.scene.Camera;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Scene;
-import org.dayflower.scene.background.ConstantBackground;
 
 /**
  * An {@code AmbientOcclusionCPURenderer} is a {@link Renderer} implementation that renders using Ambient Occlusion.
@@ -58,12 +56,12 @@ public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AmbientOcclusionCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+	 * new AmbientOcclusionCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
 	 * }
 	 * </pre>
 	 */
 	public AmbientOcclusionCPURenderer() {
-		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene(new ConstantBackground(), new Camera(), "Scene"));
+		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
 	}
 	
 	/**

@@ -41,7 +41,6 @@ import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ChromaticSpectralCurve;
 import org.dayflower.image.Color3F;
@@ -76,8 +75,6 @@ public final class PerezLight implements Light {
 	private static final float[] K_WATER_VAPOR_ABSORPTION_ATTENUATION_AMPLITUDES;
 	private static final float[] K_WATER_VAPOR_ABSORPTION_ATTENUATION_WAVELENGTHS;
 	private static final float[] SOL_AMPLITUDES;
-	private static final int HISTOGRAM_RESOLUTION_X;
-	private static final int HISTOGRAM_RESOLUTION_Y;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -96,9 +93,6 @@ public final class PerezLight implements Light {
 		K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurve(K_WATER_VAPOR_ABSORPTION_ATTENUATION_AMPLITUDES, K_WATER_VAPOR_ABSORPTION_ATTENUATION_WAVELENGTHS);
 		
 		SOL_SPECTRAL_CURVE = new RegularSpectralCurve(380.0F, 750.0F, SOL_AMPLITUDES);
-		
-		HISTOGRAM_RESOLUTION_X = 32;
-		HISTOGRAM_RESOLUTION_Y = 32;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,12 +107,9 @@ public final class PerezLight implements Light {
 	private double[] perezX;
 	private double[] perezY;
 	private double[] zenith;
-	private float jacobian;
 	private float radius;
 	private float theta;
 	private float turbidity;
-	private float[] histogramColumn;
-	private float[][] histogramImage;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -188,7 +179,7 @@ public final class PerezLight implements Light {
 			
 			return Spectrum(Lmap->Lookup(st), SpectrumType::Illuminant);
 		}
-				 */
+		*/
 		
 		return doRadiance(Vector3F.normalize(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis)));
 	}
@@ -385,12 +376,10 @@ public final class PerezLight implements Light {
 		
 		final float radius = this.radius;
 		
-//		final Vector3F incomingLocal = Vector3F.directionSpherical(u, v);
 		final Vector3F incomingLocal = new Vector3F(x, y, z);
 		final Vector3F incoming = Vector3F.normalize(Vector3F.transform(incomingLocal, this.orthonormalBasis));
 		
 		final Color3F result = doRadiance(incomingLocal);
-//		final Color3F result = doRadiance(Vector3F.directionSpherical(u, v));
 		
 		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint();
 		final Point3F point = Point3F.add(surfaceIntersectionPoint, incoming, 2.0F * radius);
@@ -398,62 +387,6 @@ public final class PerezLight implements Light {
 		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
 		
 		return Optional.of(new LightRadianceIncomingResult(result, point, incoming, probabilityDensityFunctionValue1));
-		
-		/*
-		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-		
-		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
-		
-		final Vector3F surfaceNormalG = surfaceIntersection.getOrthonormalBasisG().getW();
-		final Vector3F surfaceNormalS = surfaceIntersection.getOrthonormalBasisS().getW();
-		
-		final float[] histogramCol = this.histogramColumn;
-		final float[][] histogramImage = this.histogramImage;
-		
-		final float sampleX = sample.getX();
-		final float sampleY = sample.getY();
-		
-		int x = 0;
-		int y = 0;
-		
-		while(sampleX >= histogramCol[x] && x < histogramCol.length - 1) {
-			x++;
-		}
-		
-		final float[] histogramRow = histogramImage[x];
-		
-		while(sampleY >= histogramRow[y] && y < histogramRow.length - 1) {
-			y++;
-		}
-		
-		final float u = x == 0 ? sampleX / histogramCol[0] : (sampleX - histogramCol[x - 1]) / (histogramCol[x] - histogramCol[x - 1]);
-		final float v = y == 0 ? sampleY / histogramRow[0] : (sampleY - histogramRow[y - 1]) / (histogramRow[y] - histogramRow[y - 1]);
-		
-		final float px = x == 0 ? histogramCol[0] : histogramCol[x] - histogramCol[x - 1];
-		final float py = y == 0 ? histogramRow[0] : histogramRow[y] - histogramRow[y - 1];
-		
-		final float su = (x + u) / histogramCol.length;
-		final float sv = (y + v) / histogramRow.length;
-		
-		final float probabilityReciprocal = sin(sv * PI) * this.jacobian / (px * py);
-		
-		final Vector3F directionLocal = Vector3F.directionSpherical(su, sv);
-		final Vector3F direction = Vector3F.normalize(Vector3F.transform(directionLocal, this.orthonormalBasis));
-		
-		if(Vector3F.dotProduct(direction, surfaceNormalG) > 0.0F && Vector3F.dotProduct(direction, surfaceNormalS) > 0.0F) {
-			final Color3F result = doRadiance(directionLocal);
-			
-			final Point3F point = Point3F.add(surfaceIntersectionPoint, direction, 1000.0F);
-			
-			final Vector3F incoming = direction;
-			
-			final float probabilityDensityFunctionValue = 1.0F / probabilityReciprocal;
-			
-			return Optional.of(new LightRadianceIncomingResult(result, point, incoming, probabilityDensityFunctionValue));
-		}
-		
-		return Optional.empty();
-		*/
 	}
 	
 	/**
@@ -563,12 +496,10 @@ public final class PerezLight implements Light {
 		doSetTheta();
 		doSetSunColorAndSunSpectralRadiance();
 		doSetZenith();
-		doInitializeJacobian();
 		doInitializePerezRelativeLuminance();
 		doInitializePerezX();
 		doInitializePerezY();
 		doInitializeDistribution();
-		doInitializeHistogram();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -625,47 +556,6 @@ public final class PerezLight implements Light {
 		}
 		
 		this.distribution = new Distribution2F(functions);
-	}
-	
-	private void doInitializeHistogram() {
-		final float deltaU = 1.0F / HISTOGRAM_RESOLUTION_X;
-		final float deltaV = 1.0F / HISTOGRAM_RESOLUTION_Y;
-		
-		this.histogramColumn = new float[HISTOGRAM_RESOLUTION_X];
-		this.histogramImage  = new float[HISTOGRAM_RESOLUTION_X][HISTOGRAM_RESOLUTION_Y];
-		
-		for(int x = 0; x < HISTOGRAM_RESOLUTION_X; x++) {
-			for(int y = 0; y < HISTOGRAM_RESOLUTION_Y; y++) {
-				final float u = (x + 0.5F) * deltaU;
-				final float v = (y + 0.5F) * deltaV;
-				
-				final Color3F colorRGB = doRadiance(Vector3F.directionSpherical(u, v));
-				
-				this.histogramImage[x][y] = colorRGB.luminance() * sin(PI * v);
-				
-				if(y > 0) {
-					this.histogramImage[x][y] += this.histogramImage[x][y - 1];
-				}
-			}
-			
-			this.histogramColumn[x] = this.histogramImage[x][HISTOGRAM_RESOLUTION_Y - 1];
-			
-			if(x > 0) {
-				this.histogramColumn[x] += this.histogramColumn[x - 1];
-			}
-			
-			for(int y = 0; y < HISTOGRAM_RESOLUTION_Y; y++) {
-				this.histogramImage[x][y] /= this.histogramImage[x][HISTOGRAM_RESOLUTION_Y - 1];
-			}
-		}
-		
-		for(int x = 0; x < HISTOGRAM_RESOLUTION_X; x++) {
-			this.histogramColumn[x] /= this.histogramColumn[HISTOGRAM_RESOLUTION_X - 1];
-		}
-	}
-	
-	private void doInitializeJacobian() {
-		this.jacobian = (2.0F * PI * PI) / (HISTOGRAM_RESOLUTION_X * HISTOGRAM_RESOLUTION_Y);
 	}
 	
 	private void doInitializePerezRelativeLuminance() {

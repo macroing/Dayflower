@@ -54,9 +54,6 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Texture;
-import org.dayflower.scene.background.ConstantBackground;
-import org.dayflower.scene.background.ImageBackground;
-import org.dayflower.scene.background.PerezBackground;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
@@ -147,7 +144,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 2.0F), Matrix44F.rotateY(AngleF.degrees(0.0F))), Matrix44F.scale(0.01F));
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "AphroditeGirl");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "AphroditeGirl");
 		scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 5.0F), new Color3F(1.0F, 1.0F, 1.0F)));
 		scene.addLight(new PointLight(new Point3F(0.0F, 1.0F, 0.0F), new Color3F(1.0F, 1.0F, 1.0F)));
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
@@ -190,7 +187,7 @@ public final class Scenes {
 		final Primitive primitive = new Primitive(new LambertianMaterial(), new Sphere3F(), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), Matrix44F.translate(0.0F, 30.0F, 20.0F));
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 30.0F, 0.0F)), "Bedroom");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 30.0F, 0.0F)), "Bedroom");
 		scene.addLight(new PointLight(new Point3F(0.0F, 30.0F, 20.0F)));
 		scene.addLight(new PrimitiveLight(primitive));
 		scene.addPrimitive(primitive);
@@ -274,7 +271,7 @@ public final class Scenes {
 		camera.setFieldOfViewX();
 		
 		final
-		Scene scene = new Scene(new ConstantBackground(Color3F.BLACK), camera, "CornellBox");
+		Scene scene = new Scene(camera, "CornellBox");
 		scene.addLight(new PrimitiveLight(primitive09));
 		scene.addPrimitive(primitive01);
 		scene.addPrimitive(primitive02);
@@ -329,7 +326,7 @@ public final class Scenes {
 		final Matrix44F matrix5 = Matrix44F.translate(3.0F, 1.25F, 5.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)), "Default");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)), "Default");
 		scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 5.0F), new Color3F(1.0F, 1.0F, 1.0F)));
 		scene.addLight(new PointLight(new Point3F(0.0F, 1.0F, 0.0F), new Color3F(1.0F, 1.0F, 1.0F)));
 		scene.addLight(new PerezLight());
@@ -396,7 +393,7 @@ public final class Scenes {
 		final AreaLight areaLight31 = new DiffuseAreaLight(matrix31, 1, new Color3F(20.0F), shape31, false);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTAphroditeGirl");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTAphroditeGirl");
 //		scene.addLight(areaLight31);
 		scene.addLight(new PerezLight());
 		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
@@ -442,7 +439,7 @@ public final class Scenes {
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 0.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 30.0F, 0.0F)), "PBRTBedroom");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 30.0F, 0.0F)), "PBRTBedroom");
 		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 30.0F, 20.0F), 1, new Color3F(1000.0F), new Sphere3F(), true));
 //		scene.addLight(new PointLight(new Point3F(0.0F, 30.0F, 20.0F), new Color3F(2000.0F)));
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(2000.0F), Matrix44F.translate(0.0F, 30.0F, -1.0F), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
@@ -477,7 +474,7 @@ public final class Scenes {
 		final AreaLight areaLight2 = new DiffuseAreaLight(matrix2, 1, new Color3F(20.0F), shape2, false);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTCurve3F");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTCurve3F");
 		scene.addLight(areaLight2);
 		scene.addPrimitive(new Primitive(material0, shape0, new ConstantTexture(), new ConstantTexture(), matrix0));
 		scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), matrix1));
@@ -540,7 +537,7 @@ public final class Scenes {
 		final AreaLight areaLight31 = new DiffuseAreaLight(matrix31, 1, new Color3F(20.0F), shape31, true);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTBil");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTBil");
 		scene.addLight(areaLight31);
 		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(Color3F.GRAY), new ConstantTexture(), matrix11));
 		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
@@ -615,7 +612,7 @@ public final class Scenes {
 		final AreaLight areaLight31 = new DiffuseAreaLight(matrix31, 1, new Color3F(20.0F), shape31, true);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTMaterialShowcase");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTMaterialShowcase");
 		scene.addLight(areaLight31);
 //		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 0.0F, 0.0F), 1, new Color3F(20.0F), new Sphere3F(), true));
 //		scene.addLight(new SpotLight(AngleF.degrees(75.0F), AngleF.degrees(10.0F), new Color3F(20.0F), Matrix44F.translate(+0.0F, 1.0F, -1.0F), new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F)));
@@ -682,7 +679,7 @@ public final class Scenes {
 		final AreaLight areaLight = new DiffuseAreaLight(matrix6, 1, new Color3F(50.0F), shape6, false);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)), "PBRT");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)), "PBRT");
 		scene.addLight(areaLight);
 //		scene.addLight(new DirectionalLight(Color3F.WHITE, new Point3F(0.0F, 0.0F, 0.0F), Vector3F.transform(Matrix44F.rotateX(AngleF.degrees(90.0F)), new Vector3F(0.0F, 0.0F, -1.0F)), 10.0F));
 //		scene.addLight(new PointLight(new Point3F(2.0F, 2.0F, 0.0F), new Color3F(1.0F)));
@@ -740,7 +737,7 @@ public final class Scenes {
 		final Matrix44F matrix21 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.02F));
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTSmoothMonkey2");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTSmoothMonkey2");
 		scene.addLight(new DiffuseAreaLight(Matrix44F.translate(0.0F, 0.0F, 0.0F), 1, new Color3F(20.0F), new Sphere3F(), true));
 		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
 		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
@@ -798,7 +795,7 @@ public final class Scenes {
 		final AreaLight areaLight31 = new DiffuseAreaLight(matrix31, 1, new Color3F(50.0F), shape31, false);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTZealot");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)), "PBRTZealot");
 		scene.addLight(areaLight31);
 		scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
 		scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
@@ -1143,7 +1140,7 @@ public final class Scenes {
 //		final Primitive primitive75 = new Primitive(material75, shape75, texture751, texture752, matrix75);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "SL500");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "SL500");
 //		scene.addLight(new PrimitiveLight(primitive75));
 		scene.addPrimitive(new Primitive(material01, shape01, texture011, texture012, matrix01));
 		scene.addPrimitive(new Primitive(material02, shape02, texture021, texture022, matrixNM));//Base			wind_glass
@@ -1225,33 +1222,6 @@ public final class Scenes {
 	}
 	
 	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link ConstantBackground}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code ConstantBackground}
-	 */
-	public static Scene newShowcaseBackgroundConstantBackgroundScene() {
-		return new Scene(new ConstantBackground(), new Camera(), "ShowcaseBackgroundConstantBackground");
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link ImageBackground}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code ImageBackground}
-	 */
-	public static Scene newShowcaseBackgroundImageBackgroundScene() {
-		return new Scene(ImageBackground.load(new File("./resources/Image.jpg"), AngleF.degrees(0.0F), new Vector2F(1.0F, 1.0F)), new Camera(), "ShowcaseBackgroundImageBackground");
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link PerezBackground}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code PerezBackground}
-	 */
-	public static Scene newShowcaseBackgroundPerezBackgroundScene() {
-		return new Scene(new PerezBackground(), new Camera(), "ShowcaseBackgroundPerezBackground");
-	}
-	
-	/**
 	 * Returns a {@link Scene} instance used as a showcase for {@link AshikhminShirleyMaterial}.
 	 * 
 	 * @return a {@code Scene} instance used as a showcase for {@code AshikhminShirleyMaterial}
@@ -1272,7 +1242,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialAshikhminShirleyMaterial");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialAshikhminShirleyMaterial");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1300,7 +1270,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialLambertianMaterial");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialLambertianMaterial");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1328,7 +1298,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialOrenNayarMaterial");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialOrenNayarMaterial");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1356,7 +1326,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialReflectionMaterial");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseMaterialReflectionMaterial");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1384,7 +1354,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 5.0F, 10.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 7.5F, 0.0F)), "ShowcaseMaterialRefractionMaterial");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 7.5F, 0.0F)), "ShowcaseMaterialRefractionMaterial");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1407,7 +1377,7 @@ public final class Scenes {
 		final Matrix44F matrix = Matrix44F.identity();
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FPlane3F");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FPlane3F");
 		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
@@ -1429,7 +1399,7 @@ public final class Scenes {
 		final Matrix44F matrix = Matrix44F.scale(1.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(10.0F, 4.0F, 10.0F)), "ShowcaseShape3FProceduralTerrain3F");
+		Scene scene = new Scene(new Camera(new Point3F(10.0F, 4.0F, 10.0F)), "ShowcaseShape3FProceduralTerrain3F");
 		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
@@ -1451,7 +1421,7 @@ public final class Scenes {
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FRectangularCuboid3F");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FRectangularCuboid3F");
 		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
@@ -1473,7 +1443,7 @@ public final class Scenes {
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FSphere3F");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FSphere3F");
 		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
@@ -1495,7 +1465,7 @@ public final class Scenes {
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 5.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTorus3F");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTorus3F");
 		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
@@ -1527,7 +1497,7 @@ public final class Scenes {
 		final Matrix44F matrix = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTriangle3F");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTriangle3F");
 		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
@@ -1549,7 +1519,7 @@ public final class Scenes {
 		final Matrix44F matrix = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.01F));
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTriangleMesh3F");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTriangleMesh3F");
 		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
 		
 		return scene;
@@ -1576,7 +1546,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureBlendTexture");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureBlendTexture");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1604,7 +1574,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureBullseyeTexture");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureBullseyeTexture");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1632,7 +1602,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureCheckerboardTexture");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureCheckerboardTexture");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1664,7 +1634,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 20.0F), Matrix44F.rotateY(AngleF.degrees(90.0F)));//Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureImageTexture");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureImageTexture");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1696,7 +1666,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 20.0F), Matrix44F.rotateY(AngleF.degrees(90.0F)));//Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureMarbleTexture");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureMarbleTexture");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1724,7 +1694,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureSimplexFractionalBrownianMotionTexture");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureSimplexFractionalBrownianMotionTexture");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1752,7 +1722,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureSurfaceNormalTexture");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureSurfaceNormalTexture");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1780,7 +1750,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureUVTexture");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureUVTexture");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
@@ -1808,7 +1778,7 @@ public final class Scenes {
 		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.05F));
 		
 		final
-		Scene scene = new Scene(new PerezBackground(), new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "Zealot");
+		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "Zealot");
 		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
 		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		

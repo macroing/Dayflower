@@ -84,7 +84,7 @@ public final class SampleGeneratorD {
 	}
 	
 	/**
-	 * Samples a point on a concentric disk.
+	 * Samples a point on a disk with a uniform distribution using concentric mapping.
 	 * <p>
 	 * Returns a {@code Point2D} instance with the sampled point.
 	 * <p>
@@ -102,7 +102,7 @@ public final class SampleGeneratorD {
 	}
 	
 	/**
-	 * Samples a point on a concentric disk.
+	 * Samples a point on a disk with a uniform distribution using concentric mapping.
 	 * <p>
 	 * Returns a {@code Point2D} instance with the sampled point.
 	 * <p>
@@ -122,7 +122,7 @@ public final class SampleGeneratorD {
 	}
 	
 	/**
-	 * Samples a point on a concentric disk.
+	 * Samples a point on a disk with a uniform distribution using concentric mapping.
 	 * <p>
 	 * Returns a {@code Point2D} instance with the sampled point.
 	 * 

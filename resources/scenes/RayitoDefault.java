@@ -36,4 +36,4 @@ scene.addPrimitive(new Primitive(material3, shape3, texture31, texture32, matrix
 scene.addPrimitive(new Primitive(material4, shape4, texture41, texture42, matrix4));
 scene.addPrimitive(new Primitive(material5, shape5, texture51, texture52, matrix5));
 scene.setCamera(new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)));
-scene.setName("Default");
+scene.setName("RayitoDefault");

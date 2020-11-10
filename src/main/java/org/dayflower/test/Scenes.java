@@ -31,12 +31,10 @@ import org.dayflower.geometry.Curves3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Plane3F;
 import org.dayflower.geometry.Point2F;
-import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.RectangularCuboid3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.ProceduralTerrain3F;
-import org.dayflower.geometry.Rectangle2I;
 import org.dayflower.geometry.Sphere3F;
 import org.dayflower.geometry.Torus3F;
 import org.dayflower.geometry.Triangle3F;
@@ -45,7 +43,6 @@ import org.dayflower.geometry.TriangleMesh3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
 import org.dayflower.image.IrregularSpectralCurve;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Camera;
@@ -69,15 +66,10 @@ import org.dayflower.scene.rayito.LambertianMaterial;
 import org.dayflower.scene.rayito.OrenNayarMaterial;
 import org.dayflower.scene.rayito.ReflectionMaterial;
 import org.dayflower.scene.rayito.RefractionMaterial;
-import org.dayflower.scene.texture.BlendTexture;
-import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.ImageTexture;
-import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
-import org.dayflower.scene.texture.SurfaceNormalTexture;
-import org.dayflower.scene.texture.UVTexture;
 
 /**
  * A class that consists exclusively of static methods that returns {@link Scene} instances.
@@ -281,59 +273,6 @@ public final class Scenes {
 		scene.addPrimitive(primitive07);
 		scene.addPrimitive(primitive08);
 		scene.addPrimitive(primitive09);
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance.
-	 * 
-	 * @return a {@code Scene} instance
-	 */
-	public static Scene newDefaultScene() {
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new AshikhminShirleyMaterial(0.05F);
-		final Material material3 = new AshikhminShirleyMaterial(0.05F);
-		final Material material4 = new AshikhminShirleyMaterial(0.05F);
-		final Material material5 = new RefractionMaterial();
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(7.5F);
-		final Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F), new Point3F(1.0F));
-		final Shape3F shape4 = TriangleMesh3F.readWavefrontObject("./resources/models/smoothMonkey2.obj", true, 100.0F).get(0);
-		final Shape3F shape5 = new Torus3F();
-//		final Shape3F shape5 = new Curves3F(Curve3F.createCurvesByBSpline(Arrays.asList(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 2.0F, 0.0F), new Point3F(0.0F, 3.0F, 0.0F)), new ArrayList<>(), Type.FLAT, 5.0F, 5.0F, 3, 5));
-		
-		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
-		final Texture texture12 = new ConstantTexture();
-//		final Texture texture21 = new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.5F, 0.1F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F);
-		final Texture texture21 = new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 0.5F);
-		final Texture texture22 = new ConstantTexture();
-//		final Texture texture31 = new CheckerboardTexture(new Color3F(0.2F, 0.4F, 0.2F), new Color3F(0.6F, 0.8F, 0.6F), AngleF.degrees(90.0F), new Vector2F(1.5F, 1.5F));
-//		final Texture texture31 = new ConstantTexture(new Color3F(1.0F, 0.1F, 0.1F));
-		final Texture texture31 = new ConstantTexture(new Color3F(1.0F, 1.0F, 0.1F));
-		final Texture texture32 = new ConstantTexture();
-		final Texture texture41 = new ConstantTexture(new Color3F(0.5F));
-		final Texture texture42 = new ConstantTexture();
-		final Texture texture51 = new ConstantTexture(Color3F.WHITE);
-		final Texture texture52 = new ConstantTexture();
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
-		final Matrix44F matrix3 = Matrix44F.translate(-3.0F, 1.0F, 5.0F);
-		final Matrix44F matrix4 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 1.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.01F));
-		final Matrix44F matrix5 = Matrix44F.translate(3.0F, 1.25F, 5.0F);
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)), "Default");
-		scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 5.0F), new Color3F(1.0F, 1.0F, 1.0F)));
-		scene.addLight(new PointLight(new Point3F(0.0F, 1.0F, 0.0F), new Color3F(1.0F, 1.0F, 1.0F)));
-		scene.addLight(new PerezLight());
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
-		scene.addPrimitive(new Primitive(material3, shape3, texture31, texture32, matrix3));
-		scene.addPrimitive(new Primitive(material4, shape4, texture41, texture42, matrix4));
-		scene.addPrimitive(new Primitive(material5, shape5, texture51, texture52, matrix5));
 		
 		return scene;
 	}
@@ -1520,266 +1459,6 @@ public final class Scenes {
 		final
 		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseShape3FTriangleMesh3F");
 		scene.addPrimitive(new Primitive(material, shape, texture1, texture2, matrix));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link BlendTexture}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code BlendTexture}
-	 */
-	public static Scene newShowcaseTextureBlendTextureScene() {
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new LambertianMaterial();
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
-		
-		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = new BlendTexture(new CheckerboardTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), AngleF.degrees(90.0F), new Vector2F(5.0F, 5.0F)), new BullseyeTexture(new Color3F(0.1F, 1.0F, 0.1F), new Color3F(0.1F, 0.1F, 1.0F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F));
-		final Texture texture22 = new ConstantTexture();
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureBlendTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link BullseyeTexture}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code BullseyeTexture}
-	 */
-	public static Scene newShowcaseTextureBullseyeTextureScene() {
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new LambertianMaterial();
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
-		
-		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = new BullseyeTexture(new Color3F(0.1F, 1.0F, 0.1F), new Color3F(0.1F, 0.1F, 1.0F), new Point3F(0.0F, 10.0F, 0.0F), 2.0F);
-		final Texture texture22 = new ConstantTexture();
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureBullseyeTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link CheckerboardTexture}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code CheckerboardTexture}
-	 */
-	public static Scene newShowcaseTextureCheckerboardTextureScene() {
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new LambertianMaterial();
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
-		
-		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = new CheckerboardTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), AngleF.degrees(90.0F), new Vector2F(5.0F, 5.0F));
-		final Texture texture22 = new ConstantTexture();
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureCheckerboardTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link ImageTexture}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code ImageTexture}
-	 */
-	public static Scene newShowcaseTextureImageTextureScene() {
-		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.fillRectangle(new Rectangle2I(new Point2I(300, 300), new Point2I(500, 500)), pixel -> Color3F.simplexFractionalBrownianMotion(new Color3F(0.75F, 0.5F, 0.75F), new Point2F(pixel.getX(), pixel.getY()), new Point2F(), new Point2F(800.0F, 800.0F)));
-		
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new LambertianMaterial();
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
-		
-		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = new ImageTexture(image, AngleF.degrees(90.0F));
-		final Texture texture22 = new ConstantTexture();
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 20.0F), Matrix44F.rotateY(AngleF.degrees(90.0F)));//Matrix44F.translate(0.0F, 2.0F, 20.0F);
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureImageTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link MarbleTexture}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code MarbleTexture}
-	 */
-	public static Scene newShowcaseTextureMarbleTextureScene() {
-		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.fillRectangle(new Rectangle2I(new Point2I(300, 300), new Point2I(500, 500)), pixel -> Color3F.simplexFractionalBrownianMotion(new Color3F(0.75F, 0.5F, 0.75F), new Point2F(pixel.getX(), pixel.getY()), new Point2F(), new Point2F(800.0F, 800.0F)));
-		
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new LambertianMaterial();
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
-		
-		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = new MarbleTexture();
-		final Texture texture22 = new ConstantTexture();
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 20.0F), Matrix44F.rotateY(AngleF.degrees(90.0F)));//Matrix44F.translate(0.0F, 2.0F, 20.0F);
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureMarbleTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link SimplexFractionalBrownianMotionTexture}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code SimplexFractionalBrownianMotionTexture}
-	 */
-	public static Scene newShowcaseTextureSimplexFractionalBrownianMotionTextureScene() {
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new LambertianMaterial();
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
-		
-		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = new SimplexFractionalBrownianMotionTexture();
-		final Texture texture22 = new ConstantTexture();
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureSimplexFractionalBrownianMotionTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link SurfaceNormalTexture}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code SurfaceNormalTexture}
-	 */
-	public static Scene newShowcaseTextureSurfaceNormalTextureScene() {
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new LambertianMaterial();
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
-		
-		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = new SurfaceNormalTexture();
-		final Texture texture22 = new ConstantTexture();
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureSurfaceNormalTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance used as a showcase for {@link UVTexture}.
-	 * 
-	 * @return a {@code Scene} instance used as a showcase for {@code UVTexture}
-	 */
-	public static Scene newShowcaseTextureUVTextureScene() {
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new LambertianMaterial();
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = new Sphere3F(10.0F);
-		
-		final Texture texture11 = new ConstantTexture(Color3F.GRAY);
-		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = new UVTexture();
-		final Texture texture22 = new ConstantTexture();
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.translate(0.0F, 2.0F, 20.0F);
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "ShowcaseTextureUVTexture");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
-		
-		return scene;
-	}
-	
-	/**
-	 * Returns a {@link Scene} instance.
-	 * 
-	 * @return a {@code Scene} instance
-	 */
-	public static Scene newZealotScene() {
-		final Material material1 = new LambertianMaterial();
-		final Material material2 = new AshikhminShirleyMaterial(0.02F);
-		
-		final Shape3F shape1 = new Plane3F();
-		final Shape3F shape2 = TriangleMesh3F.readWavefrontObject("./resources/models/Zealot.obj", true).get(0);
-		
-		final Texture texture11 = new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F));
-		final Texture texture12 = new ConstantTexture();
-		final Texture texture21 = ImageTexture.load("./resources/textures/Zealot_albedo.png");
-		final Texture texture22 = ImageTexture.load("./resources/textures/Zealot_emissive.png");
-		
-		final Matrix44F matrix1 = Matrix44F.identity();
-		final Matrix44F matrix2 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 5.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.05F));
-		
-		final
-		Scene scene = new Scene(new Camera(new Point3F(0.0F, 2.0F, 0.0F)), "Zealot");
-		scene.addPrimitive(new Primitive(material1, shape1, texture11, texture12, matrix1));
-		scene.addPrimitive(new Primitive(material2, shape2, texture21, texture22, matrix2));
 		
 		return scene;
 	}

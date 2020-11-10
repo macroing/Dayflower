@@ -33,6 +33,7 @@ import org.dayflower.renderer.PBRTPathTracingCPURenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.scene.Camera;
+import org.dayflower.scene.loader.JavaSceneLoader;
 import org.dayflower.util.Timer;
 
 /**
@@ -70,7 +71,7 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 		this.renderer = new PBRTPathTracingCPURenderer();
 		this.renderer.setDisplay(this);
 		this.renderer.setRendererConfiguration(new RendererConfiguration(20, 5, 1, 1, 1));
-		this.renderer.setScene(Scenes.newPBRTScene());
+		this.renderer.setScene(new JavaSceneLoader().load("./resources/scenes/PBRTDefault.java"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

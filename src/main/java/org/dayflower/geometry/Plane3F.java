@@ -148,7 +148,7 @@ public final class Plane3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray) {
-		return intersection(ray, 0.0F, Float.MAX_VALUE);
+		return intersection(ray, 0.001F, Float.MAX_VALUE);
 	}
 	
 	/**
@@ -331,7 +331,7 @@ public final class Plane3F implements Shape3F {
 	 */
 	@Override
 	public boolean intersects(final Ray3F ray) {
-		return intersects(ray, 0.0F, Float.MAX_VALUE);
+		return intersects(ray, 0.001F, Float.MAX_VALUE);
 	}
 	
 	/**
@@ -445,7 +445,7 @@ public final class Plane3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray) {
-		return intersectionT(ray, 0.0F, Float.MAX_VALUE);
+		return intersectionT(ray, 0.001F, Float.MAX_VALUE);
 	}
 	
 	/**

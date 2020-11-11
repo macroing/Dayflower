@@ -700,7 +700,9 @@ public final class PerezLight implements Light {
 				
 				final Color3F colorRGB = doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV));
 				
-				functions[v][u] = colorRGB.luminance() * sinTheta;
+//				TODO: Find out why swapping the U and V indices produces more accurate results for the GlassMaterial.
+//				functions[v][u] = colorRGB.luminance() * sinTheta;
+				functions[u][v] = colorRGB.luminance() * sinTheta;
 			}
 		}
 		

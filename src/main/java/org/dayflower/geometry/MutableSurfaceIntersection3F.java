@@ -42,7 +42,7 @@ public final class MutableSurfaceIntersection3F {
 	/**
 	 * The default maximum parametric {@code t} value.
 	 */
-	public static final float T_MINIMUM = 0.0F;
+	public static final float T_MINIMUM = 0.001F;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

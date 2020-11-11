@@ -83,6 +83,8 @@ public final class Distribution2F {
 		final int indexU = saturate(toInt(sample.getU() * this.conditional[0].size()), 0, this.conditional[0].size() - 1);
 		final int indexV = saturate(toInt(sample.getV() * this.marginal.size()), 0, this.marginal.size() - 1);
 		
-		return this.conditional[indexV].function(indexU) / this.marginal.functionIntegral();
+		final float probabilityDensityFunctionValue = this.conditional[indexV].function(indexU) / this.marginal.functionIntegral();
+		
+		return probabilityDensityFunctionValue;
 	}
 }

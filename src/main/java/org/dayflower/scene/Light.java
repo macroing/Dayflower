@@ -124,4 +124,11 @@ public interface Light {
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
 	 */
 	float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming);
+	
+	/**
+	 * Returns the sample count associated with this {@code Light} instance.
+	 * 
+	 * @return the sample count associated with this {@code Light} instance
+	 */
+	int getSampleCount();
 }

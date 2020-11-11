@@ -306,6 +306,16 @@ public final class PointLight implements Light {
 	}
 	
 	/**
+	 * Returns the sample count associated with this {@code PointLight} instance.
+	 * 
+	 * @return the sample count associated with this {@code PointLight} instance
+	 */
+	@Override
+	public int getSampleCount() {
+		return 1;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code PointLight} instance.
 	 * 
 	 * @return a hash code for this {@code PointLight} instance

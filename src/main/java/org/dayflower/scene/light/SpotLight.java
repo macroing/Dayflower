@@ -177,7 +177,7 @@ public final class SpotLight implements Light {
 		this.coneAngleDelta = Objects.requireNonNull(coneAngleDelta, "coneAngleDelta == null");
 		this.intensity = Objects.requireNonNull(intensity, "intensity == null");
 		this.lightToWorld = Objects.requireNonNull(lightToWorld, "lightToWorld == null");
-		this.lightToWorldInternal = doCreateLightToWorldInternal(lightToWorld, eye, lookAt);
+		this.lightToWorldInternal = Matrix44F.multiply(Matrix44F.multiply(lightToWorld, Matrix44F.translate(eye)), Matrix44F.inverse(Matrix44F.transpose(Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.directionNormalized(eye, lookAt))))));
 		this.worldToLightInternal = Matrix44F.inverse(this.lightToWorldInternal);
 		this.eye = Objects.requireNonNull(eye, "eye == null");
 		this.lookAt = Objects.requireNonNull(lookAt, "lookAt == null");
@@ -399,6 +399,16 @@ public final class SpotLight implements Light {
 	}
 	
 	/**
+	 * Returns the sample count associated with this {@code SpotLight} instance.
+	 * 
+	 * @return the sample count associated with this {@code SpotLight} instance
+	 */
+	@Override
+	public int getSampleCount() {
+		return 1;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code SpotLight} instance.
 	 * 
 	 * @return a hash code for this {@code SpotLight} instance
@@ -426,15 +436,5 @@ public final class SpotLight implements Light {
 		final float delta = (cosTheta - this.cosConeAngle) / (this.cosConeAngleMinusConeAngleDelta - this.cosConeAngle);
 		
 		return (delta * delta) * (delta * delta);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Matrix44F doCreateLightToWorldInternal(final Matrix44F lightToWorld, final Point3F eye, final Point3F lookAt) {
-		final Vector3F w = Vector3F.directionNormalized(eye, lookAt);
-		
-		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(w);
-		
-		return Matrix44F.multiply(Matrix44F.multiply(lightToWorld, Matrix44F.translate(eye)), Matrix44F.inverse(Matrix44F.rotate(orthonormalBasis)));
 	}
 }

@@ -281,6 +281,16 @@ public final class DirectionalLight implements Light {
 	}
 	
 	/**
+	 * Returns the sample count associated with this {@code DirectionalLight} instance.
+	 * 
+	 * @return the sample count associated with this {@code DirectionalLight} instance
+	 */
+	@Override
+	public int getSampleCount() {
+		return 1;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code DirectionalLight} instance.
 	 * 
 	 * @return a hash code for this {@code DirectionalLight} instance

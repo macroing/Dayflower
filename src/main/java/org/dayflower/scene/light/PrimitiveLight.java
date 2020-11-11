@@ -230,6 +230,16 @@ public final class PrimitiveLight implements Light {
 	}
 	
 	/**
+	 * Returns the sample count associated with this {@code PrimitiveLight} instance.
+	 * 
+	 * @return the sample count associated with this {@code PrimitiveLight} instance
+	 */
+	@Override
+	public int getSampleCount() {
+		return 1;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code PrimitiveLight} instance.
 	 * 
 	 * @return a hash code for this {@code PrimitiveLight} instance

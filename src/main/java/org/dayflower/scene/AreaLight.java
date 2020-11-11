@@ -95,6 +95,7 @@ public abstract class AreaLight implements Light {
 	 * 
 	 * @return the sample count associated with this {@code AreaLight} instance
 	 */
+	@Override
 	public final int getSampleCount() {
 		return this.sampleCount;
 	}

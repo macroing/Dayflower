@@ -35,6 +35,8 @@ import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -174,17 +176,23 @@ public final class PerezLight implements Light {
 	 */
 	@Override
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
-		/*
-		Spectrum InfiniteAreaLight::Le(const RayDifferential &ray) const {
-			Vector3f w = Normalize(WorldToLight(ray.d));
-			
-			Point2f st(SphericalPhi(w) * Inv2Pi, SphericalTheta(w) * InvPi);
-			
-			return Spectrum(Lmap->Lookup(st), SpectrumType::Illuminant);
-		}
-		*/
+//		TODO: Verify!
+//		Spectrum InfiniteAreaLight::Le(const RayDifferential &ray) const {
+//			Vector3f w = Normalize(WorldToLight(ray.d));
+//			
+//			Point2f st(SphericalPhi(w) * Inv2Pi, SphericalTheta(w) * InvPi);
+//			
+//			return Spectrum(Lmap->Lookup(st), SpectrumType::Illuminant);
+//		}
 		
-		return doRadianceSky(Vector3F.normalize(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis)));
+		final Vector3F incoming = ray.getDirection();
+		final Vector3F incomingLocal = Vector3F.normalize(Vector3F.transformReverse(incoming, this.orthonormalBasis));
+		
+		final Color3F resultSky = doRadianceSky(incomingLocal);
+		final Color3F resultSun = doRadianceSun(incomingLocal);
+		final Color3F result = Color3F.add(resultSky, resultSun);
+		
+		return result;
 	}
 	
 	/**
@@ -227,10 +235,9 @@ public final class PerezLight implements Light {
 		Objects.requireNonNull(ray, "ray == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
-		/*
 		final Vector3F incoming = ray.getDirection();
 		final Vector3F incomingLocal = Vector3F.transformReverse(incoming, this.orthonormalBasis);
-		final Vector3F direction = Vector3F.negate(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis));
+		final Vector3F direction = Vector3F.negate(incomingLocal);
 		
 		final float phi = direction.sphericalPhi();
 		final float theta = direction.sphericalTheta();
@@ -239,29 +246,29 @@ public final class PerezLight implements Light {
 		
 		final float radius = this.radius;
 		
-		final float probabilityDensityFunctionValueMap = this.distribution.probabilityDensityFunction(sample);
-		final float probabilityDensityFunctionValueDirection = probabilityDensityFunctionValueMap / (2.0F * PI * PI * sin(theta));
+		final Color3F resultSky = doRadianceSky(incomingLocal);
+		final Color3F resultSun = doRadianceSun(incomingLocal);
+		final Color3F result = Color3F.add(resultSky, resultSun);
+		
+		final float probabilityDensityFunctionValue = this.distribution.probabilityDensityFunction(sample);
+		final float probabilityDensityFunctionValueDirection = probabilityDensityFunctionValue / (2.0F * PI * PI * sin(theta));
 		final float probabilityDensityFunctionValuePosition = 1.0F / (PI * radius * radius);
-		*/
 		
-		/*
-		void InfiniteAreaLight::Pdf_Le(const Ray &ray, const Normal3f &, Float *pdfPos, Float *pdfDir) const {
-			ProfilePhase _(Prof::LightPdf);
-			
-			Vector3f d = -WorldToLight(ray.d);
-			
-			Float theta = SphericalTheta(d), phi = SphericalPhi(d);
-			
-			Point2f uv(phi * Inv2Pi, theta * InvPi);
-			
-			Float mapPdf = distribution->Pdf(uv);
-			
-			*pdfDir = mapPdf / (2 * Pi * Pi * std::sin(theta));
-			*pdfPos = 1 / (Pi * worldRadius * worldRadius);
-		}
-				 */
+		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
 		
-		return Optional.empty();
+//		TODO: Verify!
+//		void InfiniteAreaLight::Pdf_Le(const Ray &ray, const Normal3f &, Float *pdfPos, Float *pdfDir) const {
+//			Vector3f d = -WorldToLight(ray.d);
+//			
+//			Float theta = SphericalTheta(d), phi = SphericalPhi(d);
+//			
+//			Point2f uv(phi * Inv2Pi, theta * InvPi);
+//			
+//			Float mapPdf = distribution->Pdf(uv);
+//			
+//			*pdfDir = mapPdf / (2 * Pi * Pi * std::sin(theta));
+//			*pdfPos = 1 / (Pi * worldRadius * worldRadius);
+//		}
 	}
 	
 	/**
@@ -283,48 +290,41 @@ public final class PerezLight implements Light {
 		Objects.requireNonNull(sampleA, "sampleA == null");
 		Objects.requireNonNull(sampleB, "sampleB == null");
 		
-		/*
-		Spectrum InfiniteAreaLight::Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir) const {
-			ProfilePhase _(Prof::LightSample);
-			
-//			Compute direction for infinite light sample ray
-			Point2f u = u1;
-			
-//			Find $(u,v)$ sample coordinates in infinite light texture
-			Float mapPdf;
-			
-			Point2f uv = distribution->SampleContinuous(u, &mapPdf);
-			
-			if (mapPdf == 0) {
-				return Spectrum(0.f);
-			}
-			
-			Float theta = uv[1] * Pi, phi = uv[0] * 2.f * Pi;
-			Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
-			Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
-			
-			Vector3f d = -LightToWorld(Vector3f(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
-			
-			*nLight = (Normal3f)d;
-			
-//			Compute origin for infinite light sample ray
-			Vector3f v1, v2;
-			
-			CoordinateSystem(-d, &v1, &v2);
-			
-			Point2f cd = ConcentricSampleDisk(u2);
-			
-			Point3f pDisk = worldCenter + worldRadius * (cd.x * v1 + cd.y * v2);
-			
-			*ray = Ray(pDisk + worldRadius * -d, d, Infinity, time);
-			
-//			Compute _InfiniteAreaLight_ ray PDFs
-			*pdfDir = sinTheta == 0 ? 0 : mapPdf / (2 * Pi * Pi * sinTheta);
-			*pdfPos = 1 / (Pi * worldRadius * worldRadius);
-			
-			return Spectrum(Lmap->Lookup(uv), SpectrumType::Illuminant);
-		}
-				 */
+//		TODO: Implement!
+//		Spectrum InfiniteAreaLight::Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir) const {
+//			Point2f u = u1;
+//			
+//			Float mapPdf;
+//			
+//			Point2f uv = distribution->SampleContinuous(u, &mapPdf);
+//			
+//			if (mapPdf == 0) {
+//				return Spectrum(0.f);
+//			}
+//			
+//			Float theta = uv[1] * Pi, phi = uv[0] * 2.f * Pi;
+//			Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
+//			Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+//			
+//			Vector3f d = -LightToWorld(Vector3f(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
+//			
+//			*nLight = (Normal3f)d;
+//			
+//			Vector3f v1, v2;
+//			
+//			CoordinateSystem(-d, &v1, &v2);
+//			
+//			Point2f cd = ConcentricSampleDisk(u2);
+//			
+//			Point3f pDisk = worldCenter + worldRadius * (cd.x * v1 + cd.y * v2);
+//			
+//			*ray = Ray(pDisk + worldRadius * -d, d, Infinity, time);
+//			
+//			*pdfDir = sinTheta == 0 ? 0 : mapPdf / (2 * Pi * Pi * sinTheta);
+//			*pdfPos = 1 / (Pi * worldRadius * worldRadius);
+//			
+//			return Spectrum(Lmap->Lookup(uv), SpectrumType::Illuminant);
+//		}
 		
 		return Optional.empty();
 	}
@@ -395,12 +395,69 @@ public final class PerezLight implements Light {
 	}
 	
 	/**
+	 * Returns a {@code String} representation of this {@code PerezLight} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code PerezLight} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new PerezLight(%+.10f, %s)", Float.valueOf(this.turbidity), this.sunDirectionWorldSpace);
+	}
+	
+	/**
 	 * Returns the sun direction in world space associated with this {@code PerezLight} instance.
 	 * 
 	 * @return the sun direction in world space associated with this {@code PerezLight} instance
 	 */
 	public Vector3F getSunDirectionWorldSpace() {
 		return this.sunDirectionWorldSpace;
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code PerezLight} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PerezLight}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code PerezLight} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PerezLight}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof PerezLight)) {
+			return false;
+		} else if(!Objects.equals(this.sunColor, PerezLight.class.cast(object).sunColor)) {
+			return false;
+		} else if(!Objects.equals(this.distribution, PerezLight.class.cast(object).distribution)) {
+			return false;
+		} else if(!Objects.equals(this.orthonormalBasis, PerezLight.class.cast(object).orthonormalBasis)) {
+			return false;
+		} else if(!Objects.equals(this.sunSpectralRadiance, PerezLight.class.cast(object).sunSpectralRadiance)) {
+			return false;
+		} else if(!Objects.equals(this.sun, PerezLight.class.cast(object).sun)) {
+			return false;
+		} else if(!Objects.equals(this.sunDirection, PerezLight.class.cast(object).sunDirection)) {
+			return false;
+		} else if(!Objects.equals(this.sunDirectionWorldSpace, PerezLight.class.cast(object).sunDirectionWorldSpace)) {
+			return false;
+		} else if(!Arrays.equals(this.perezRelativeLuminance, PerezLight.class.cast(object).perezRelativeLuminance)) {
+			return false;
+		} else if(!Arrays.equals(this.perezX, PerezLight.class.cast(object).perezX)) {
+			return false;
+		} else if(!Arrays.equals(this.perezY, PerezLight.class.cast(object).perezY)) {
+			return false;
+		} else if(!Arrays.equals(this.zenith, PerezLight.class.cast(object).zenith)) {
+			return false;
+		} else if(!equal(this.radius, PerezLight.class.cast(object).radius)) {
+			return false;
+		} else if(!equal(this.theta, PerezLight.class.cast(object).theta)) {
+			return false;
+		} else if(!equal(this.turbidity, PerezLight.class.cast(object).turbidity)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	/**
@@ -451,6 +508,26 @@ public final class PerezLight implements Light {
 		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
 		
 		return probabilityDensityFunctionValue1;
+	}
+	
+	/**
+	 * Returns the sample count associated with this {@code PerezLight} instance.
+	 * 
+	 * @return the sample count associated with this {@code PerezLight} instance
+	 */
+	@Override
+	public int getSampleCount() {
+		return 1;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code PerezLight} instance.
+	 * 
+	 * @return a hash code for this {@code PerezLight} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.sunColor, this.distribution, this.orthonormalBasis, this.sunSpectralRadiance, this.sun, this.sunDirection, this.sunDirectionWorldSpace, Integer.valueOf(Arrays.hashCode(this.perezRelativeLuminance)), Integer.valueOf(Arrays.hashCode(this.perezX)), Integer.valueOf(Arrays.hashCode(this.perezY)), Integer.valueOf(Arrays.hashCode(this.zenith)), Float.valueOf(this.radius), Float.valueOf(this.theta), Float.valueOf(this.turbidity));
 	}
 	
 	/**

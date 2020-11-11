@@ -21,8 +21,8 @@ package org.dayflower.image;
 import static org.dayflower.image.Filter.FILTER_TABLE_SIZE;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.ceil;
-import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.floor;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Ints.max;
@@ -1656,7 +1656,7 @@ public final class Image {
 			Color3F colorRGB = Color3F.convertXYZToRGBUsingPBRT(pixel.getColorXYZ());
 			Color3F splatRGB = Color3F.convertXYZToRGBUsingPBRT(pixel.getSplatXYZ());
 			
-			if(!equal(pixel.getFilterWeightSum(), 0.0F)) {
+			if(!isZero(pixel.getFilterWeightSum())) {
 				colorRGB = Color3F.multiplyAndSaturateNegative(colorRGB, 1.0F / pixel.getFilterWeightSum());
 			}
 			

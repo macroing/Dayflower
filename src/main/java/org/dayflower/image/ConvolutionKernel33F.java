@@ -19,6 +19,7 @@
 package org.dayflower.image;
 
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
@@ -360,7 +361,7 @@ public final class ConvolutionKernel33F {
 		final boolean isFactorBasedOnRandomFloat = doNextBoolean();
 		final boolean isBiasBasedOnRandomFloat = doNextBoolean();
 		
-		final float factorBasedOnElementTotal = equal(elementTotal, 0.0F) ? 1.0F : 1.0F / elementTotal;
+		final float factorBasedOnElementTotal = isZero(elementTotal) ? 1.0F : 1.0F / elementTotal;
 		
 		final float factor = isFactorBasedOnElementTotal ? factorBasedOnElementTotal : isFactorBasedOnRandomFloat ? doNextFloat() : 1.0F;
 		final float bias = isBiasBasedOnRandomFloat ? doNextFloat() : 0.0F;

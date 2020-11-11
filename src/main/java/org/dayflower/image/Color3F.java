@@ -23,6 +23,7 @@ import static org.dayflower.util.Floats.exp;
 import static org.dayflower.util.Floats.finiteOrDefault;
 import static org.dayflower.util.Floats.isInfinite;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.lerp;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
@@ -273,7 +274,7 @@ public final class Color3F {
 	 * @return {@code true} if, and only if, this {@code Color3F} instance is black, {@code false} otherwise
 	 */
 	public boolean isBlack() {
-		return isGrayscale() && equal(this.component1, 0.0F);
+		return isGrayscale() && isZero(this.component1);
 	}
 	
 	/**

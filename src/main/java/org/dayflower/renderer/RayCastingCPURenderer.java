@@ -19,8 +19,8 @@
 package org.dayflower.renderer;
 
 import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.random;
@@ -393,7 +393,7 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 					if(!hasSampledSpecular) {
 						final float lightProbabilityDensityFunctionValue = light.evaluateProbabilityDensityFunctionRadianceIncoming(intersection, incoming);
 						
-						if(equal(lightProbabilityDensityFunctionValue, 0.0F)) {
+						if(isZero(lightProbabilityDensityFunctionValue)) {
 							return lightDirect;
 						}
 						

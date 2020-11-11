@@ -18,7 +18,7 @@
  */
 package org.dayflower.sampler;
 
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.toFloat;
 import static org.dayflower.util.Ints.findInterval;
 
@@ -44,7 +44,7 @@ public final class Distribution1F {
 		
 		this.functionIntegral = this.cumulativeDistributionFunction[this.function.length];
 		
-		if(equal(this.functionIntegral, 0.0F)) {
+		if(isZero(this.functionIntegral)) {
 			for(int i = 1; i < this.cumulativeDistributionFunction.length; i++) {
 				this.cumulativeDistributionFunction[i] = toFloat(i) / toFloat(this.function.length);
 			}
@@ -64,7 +64,7 @@ public final class Distribution1F {
 	
 //	TODO: Add Javadocs!
 	public float continuousRemap(final float value, final int index) {
-		if((cumulativeDistributionFunction(index + 1) - cumulativeDistributionFunction(index)) > 0.0F) {
+		if(cumulativeDistributionFunction(index + 1) - cumulativeDistributionFunction(index) > 0.0F) {
 			return (index + ((value - cumulativeDistributionFunction(index)) / (cumulativeDistributionFunction(index + 1) - cumulativeDistributionFunction(index)))) / size();
 		}
 		

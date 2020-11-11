@@ -19,7 +19,7 @@
 package org.dayflower.scene.pbrt;
 
 import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.random;
 
 import java.util.List;
@@ -188,13 +188,13 @@ public final class TorranceSparrowBRDF extends BXDF {
 		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
 		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
 		
-		if(equal(cosThetaAbsOutgoing, 0.0F) || equal(cosThetaAbsIncoming, 0.0F)) {
+		if(isZero(cosThetaAbsOutgoing) || isZero(cosThetaAbsIncoming)) {
 			return Color3F.BLACK;
 		}
 		
 		final Vector3F normal = Vector3F.add(incoming, outgoing);
 		
-		if(equal(normal.getX(), 0.0F) && equal(normal.getY(), 0.0F) && equal(normal.getZ(), 0.0F)) {
+		if(isZero(normal.getX()) && isZero(normal.getY()) && isZero(normal.getZ())) {
 			return Color3F.BLACK;
 		}
 		
@@ -230,7 +230,7 @@ public final class TorranceSparrowBRDF extends BXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		if(equal(outgoing.getZ(), 0.0F)) {
+		if(isZero(outgoing.getZ())) {
 			return Optional.empty();
 		}
 		

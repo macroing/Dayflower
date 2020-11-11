@@ -23,6 +23,7 @@ import static org.dayflower.util.Doubles.exp;
 import static org.dayflower.util.Doubles.finiteOrDefault;
 import static org.dayflower.util.Doubles.isInfinite;
 import static org.dayflower.util.Doubles.isNaN;
+import static org.dayflower.util.Doubles.isZero;
 import static org.dayflower.util.Doubles.lerp;
 import static org.dayflower.util.Doubles.max;
 import static org.dayflower.util.Doubles.min;
@@ -273,7 +274,7 @@ public final class Color3D {
 	 * @return {@code true} if, and only if, this {@code Color3D} instance is black, {@code false} otherwise
 	 */
 	public boolean isBlack() {
-		return isGrayscale() && equal(this.component1, 0.0F);
+		return isGrayscale() && isZero(this.component1);
 	}
 	
 	/**

@@ -19,8 +19,8 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.isZero;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -171,7 +171,7 @@ public final class Plane3F implements Shape3F {
 		
 		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
 		
-		if(equal(nDotD, 0.0F)) {
+		if(isZero(nDotD)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -468,7 +468,7 @@ public final class Plane3F implements Shape3F {
 		
 		final float nDotD = Vector3F.dotProduct(surfaceNormal, direction);
 		
-		if(equal(nDotD, 0.0F)) {
+		if(isZero(nDotD)) {
 			return Float.NaN;
 		}
 		

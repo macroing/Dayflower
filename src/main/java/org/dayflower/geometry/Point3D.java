@@ -19,6 +19,7 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Doubles.equal;
+import static org.dayflower.util.Doubles.isZero;
 import static org.dayflower.util.Doubles.max;
 import static org.dayflower.util.Doubles.min;
 import static org.dayflower.util.Doubles.nextDownPBRT;
@@ -676,7 +677,7 @@ public final class Point3D {
 		final double component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34();
 		final double component4 = matrixLHS.getElement41() * pointRHS.component1 + matrixLHS.getElement42() * pointRHS.component2 + matrixLHS.getElement43() * pointRHS.component3 + matrixLHS.getElement44();
 		
-		return equal(component4, 1.0D) || equal(component4, 0.0D) ? new Point3D(component1, component2, component3) : new Point3D(component1 / component4, component2 / component4, component3 / component4);
+		return equal(component4, 1.0D) || isZero(component4) ? new Point3D(component1, component2, component3) : new Point3D(component1 / component4, component2 / component4, component3 / component4);
 	}
 	
 	/**

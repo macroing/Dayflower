@@ -21,6 +21,7 @@ package org.dayflower.scene.pbrt;
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.random;
 
 import java.util.List;
@@ -201,7 +202,7 @@ public final class TorranceSparrowBTDF extends BXDF {
 		final float cosThetaIncoming = incoming.cosTheta();
 		final float cosThetaOutgoing = outgoing.cosTheta();
 		
-		if(equal(cosThetaIncoming, 0.0F) || equal(cosThetaOutgoing, 0.0F)) {
+		if(isZero(cosThetaIncoming) || isZero(cosThetaOutgoing)) {
 			return Color3F.BLACK;
 		}
 		
@@ -252,7 +253,7 @@ public final class TorranceSparrowBTDF extends BXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		if(equal(outgoing.getZ(), 0.0F)) {
+		if(isZero(outgoing.getZ())) {
 			return Optional.empty();
 		}
 		

@@ -154,6 +154,16 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, either {@code Doubles.equal(value, +0.0D)} or {@code Doubles.equal(value, -0.0D)} are {@code true}, {@code false} otherwise.
+	 * 
+	 * @param value a {@code double} value
+	 * @return {@code true} if, and only if, either {@code Doubles.equal(value, +0.0D)} or {@code Doubles.equal(value, -0.0D)} are {@code true}, {@code false} otherwise
+	 */
+	public static boolean isZero(final double value) {
+		return equal(value, +0.0D) || equal(value, -0.0D);
+	}
+	
+	/**
 	 * Returns the absolute version of {@code value}.
 	 * <p>
 	 * If the argument is not negative, the argument is returned. If the argument is negative, the negation of the argument is returned.

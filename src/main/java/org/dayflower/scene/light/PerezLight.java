@@ -30,6 +30,7 @@ import static org.dayflower.util.Floats.PI_RECIPROCAL;
 import static org.dayflower.util.Floats.acos;
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
@@ -186,7 +187,7 @@ public final class PerezLight implements Light {
 //		}
 		
 		final Vector3F incoming = ray.getDirection();
-		final Vector3F incomingLocal = Vector3F.normalize(Vector3F.transformReverse(incoming, this.orthonormalBasis));
+		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
 		
 		final Color3F resultSky = doRadianceSky(incomingLocal);
 		final Color3F resultSun = doRadianceSun(incomingLocal);
@@ -213,7 +214,18 @@ public final class PerezLight implements Light {
 	 */
 	@Override
 	public Color3F power() {
-		return Color3F.multiply(doRadianceSky(Vector3F.directionSpherical(0.5F, 0.5F)), PI * this.radius * this.radius);
+//		TODO: Verify!
+//		Spectrum InfiniteAreaLight::Power() const {
+//			return Pi * worldRadius * worldRadius * Spectrum(Lmap->Lookup(Point2f(.5f, .5f), .5f), SpectrumType::Illuminant);
+//		}
+		
+		final Vector3F incomingLocal = Vector3F.directionSpherical(0.5F, 0.5F);
+		
+		final Color3F resultSky = doRadianceSky(incomingLocal);
+		final Color3F resultSun = doRadianceSun(incomingLocal);
+		final Color3F result = Color3F.add(resultSky, resultSun);
+		
+		return Color3F.multiply(result, PI * this.radius * this.radius);
 	}
 	
 	/**
@@ -236,7 +248,7 @@ public final class PerezLight implements Light {
 		Objects.requireNonNull(normal, "normal == null");
 		
 		final Vector3F incoming = ray.getDirection();
-		final Vector3F incomingLocal = Vector3F.transformReverse(incoming, this.orthonormalBasis);
+		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
 		final Vector3F direction = Vector3F.negate(incomingLocal);
 		
 		final float phi = direction.sphericalPhi();
@@ -348,12 +360,39 @@ public final class PerezLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
+//		TODO: Verify!
+//		Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis) const {
+//			Float mapPdf;
+//			
+//			Point2f uv = distribution->SampleContinuous(u, &mapPdf);
+//			
+//			if (mapPdf == 0) {
+//				return Spectrum(0.f);
+//			}
+//			
+//			Float theta = uv[1] * Pi, phi = uv[0] * 2 * Pi;
+//			Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
+//			Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+//			
+//			*wi = LightToWorld(Vector3f(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
+//			
+//			*pdf = mapPdf / (2 * Pi * Pi * sinTheta);
+//			
+//			if (sinTheta == 0) {
+//				*pdf = 0;
+//			}
+//			
+//			*vis = VisibilityTester(ref, Interaction(ref.p + *wi * (2 * worldRadius), ref.time, mediumInterface));
+//			
+//			return Spectrum(Lmap->Lookup(uv), SpectrumType::Illuminant);
+//		}
+		
 		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());
 		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
 		
 		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample0);
 		
-		if(equal(probabilityDensityFunctionValue0, 0.0F)) {
+		if(isZero(probabilityDensityFunctionValue0)) {
 			return Optional.empty();
 		}
 		
@@ -369,7 +408,7 @@ public final class PerezLight implements Light {
 		final float sinPhi = sin(phi);
 		final float sinTheta = sin(theta);
 		
-		if(equal(sinTheta, 0.0F)) {
+		if(isZero(sinTheta)) {
 			return Optional.empty();
 		}
 		
@@ -380,7 +419,7 @@ public final class PerezLight implements Light {
 		final float radius = this.radius;
 		
 		final Vector3F incomingLocal = new Vector3F(x, y, z);
-		final Vector3F incoming = Vector3F.normalize(Vector3F.transform(incomingLocal, this.orthonormalBasis));
+		final Vector3F incoming = doTransformToWorldSpace(incomingLocal);
 		
 		final Color3F resultSky = doRadianceSky(incomingLocal);
 		final Color3F resultSun = doRadianceSun(incomingLocal);
@@ -489,13 +528,27 @@ public final class PerezLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Vector3F incomingLocal = Vector3F.transformReverse(incoming, this.orthonormalBasis);
+//		TODO: Verify!
+//		Float InfiniteAreaLight::Pdf_Li(const Interaction &, const Vector3f &w) const {
+//			Vector3f wi = WorldToLight(w);
+//			
+//			Float theta = SphericalTheta(wi), phi = SphericalPhi(wi);
+//			Float sinTheta = std::sin(theta);
+//			
+//			if (sinTheta == 0) {
+//				return 0;
+//			}
+//			
+//			return distribution->Pdf(Point2f(phi * Inv2Pi, theta * InvPi)) / (2 * Pi * Pi * sinTheta);
+//		}
+		
+		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
 		
 		final float phi = incomingLocal.sphericalPhi();
 		final float theta = incomingLocal.sphericalTheta();
 		final float sinTheta = sin(theta);
 		
-		if(equal(sinTheta, 0.0F)) {
+		if(isZero(sinTheta)) {
 			return 0.0F;
 		}
 		
@@ -610,7 +663,16 @@ public final class PerezLight implements Light {
 	}
 	
 	private Color3F doRadianceSun(final Vector3F direction) {
-		return this.sun.intersects(new Ray3F(new Point3F(), direction)) ? Color3F.multiply(this.sunColor, 10000000.0F) : Color3F.BLACK;
+		return Color3F.BLACK;
+//		return this.sun.intersects(new Ray3F(new Point3F(), direction)) ? Color3F.multiply(this.sunColor, 10000000.0F) : Color3F.BLACK;
+	}
+	
+	private Vector3F doTransformToLocalSpace(final Vector3F vector) {
+		return Vector3F.normalize(Vector3F.transformReverse(vector, this.orthonormalBasis));
+	}
+	
+	private Vector3F doTransformToWorldSpace(final Vector3F vector) {
+		return Vector3F.normalize(Vector3F.transform(vector, this.orthonormalBasis));
 	}
 	
 	private double doCalculatePerezFunction(final double[] lam, final double theta, final double gamma, final double lvz) {

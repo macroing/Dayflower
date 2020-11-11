@@ -18,7 +18,7 @@
  */
 package org.dayflower.scene.pbrt;
 
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.saturate;
 
 import java.util.Arrays;
@@ -87,7 +87,7 @@ public final class MatteMaterial implements PBRTMaterial {
 			return Optional.empty();
 		}
 		
-		if(equal(angle.getDegrees(), 0.0F)) {
+		if(isZero(angle.getDegrees())) {
 			return Optional.of(new BSDF(intersection, Arrays.asList(new LambertianBRDF(colorDiffuse))));
 		}
 		

@@ -20,6 +20,7 @@ package org.dayflower.scene.pbrt;
 
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.floor;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Ints.min;
 
@@ -229,7 +230,7 @@ public final class BSDF {
 		
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
 		
-		if(equal(outgoing.getZ(), 0.0F)) {
+		if(isZero(outgoing.getZ())) {
 			return Optional.empty();
 		}
 		
@@ -338,7 +339,7 @@ public final class BSDF {
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
 		
-		if(equal(outgoing.getZ(), 0.0F)) {
+		if(isZero(outgoing.getZ())) {
 			return 0.0F;
 		}
 		
@@ -413,11 +414,11 @@ public final class BSDF {
 	}
 	
 	private Vector3F doTransformToLocalSpace(final Vector3F vector) {
-		return Vector3F.transformReverse(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS());
+		return Vector3F.normalize(Vector3F.transformReverse(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS()));
 	}
 	
 	private Vector3F doTransformToWorldSpace(final Vector3F vector) {
-		return Vector3F.transform(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS());
+		return Vector3F.normalize(Vector3F.transform(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS()));
 	}
 	
 	private int doComputeMatches(final BXDFType bXDFType) {

@@ -27,6 +27,7 @@ import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.finiteOrDefault;
 import static org.dayflower.util.Floats.gamma;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
@@ -334,7 +335,7 @@ public final class Vector3F {
 	public float sinPhi() {
 		final float sinTheta = sinTheta();
 		
-		if(equal(sinTheta, 0.0F)) {
+		if(isZero(sinTheta)) {
 			return 0.0F;
 		}
 		

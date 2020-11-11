@@ -26,7 +26,7 @@ import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_4_RECIPROCAL;
 import static org.dayflower.util.Doubles.PI_RECIPROCAL;
 import static org.dayflower.util.Doubles.cos;
-import static org.dayflower.util.Doubles.equal;
+import static org.dayflower.util.Doubles.isZero;
 import static org.dayflower.util.Doubles.max;
 import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Doubles.random;
@@ -132,7 +132,7 @@ public final class SampleGeneratorD {
 	 * @return a {@code Point2D} instance with the sampled point
 	 */
 	public static Point2D sampleDiskUniformDistributionByConcentricMapping(final double u, final double v, final double radius) {
-		if(equal(u, 0.0D) && equal(v, 0.0D)) {
+		if(isZero(u) && isZero(v)) {
 			return new Point2D();
 		}
 		

@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
@@ -460,6 +461,42 @@ public final class Camera {
 		final float z = eye.getZ() + u.getZ() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
 		
 		this.eye = new Point3F(x, y, z);
+	}
+	
+	/**
+	 * Rotates this {@code Camera} instance along the X-axis with an angle of {@code angle}.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 */
+	public void rotateX(final AngleF angle) {
+		this.orthonormalBasis = OrthonormalBasis33F.transform(Matrix44F.rotateX(angle), this.orthonormalBasis);
+	}
+	
+	/**
+	 * Rotates this {@code Camera} instance along the Y-axis with an angle of {@code angle}.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 */
+	public void rotateY(final AngleF angle) {
+		this.orthonormalBasis = OrthonormalBasis33F.transform(Matrix44F.rotateY(angle), this.orthonormalBasis);
+	}
+	
+	/**
+	 * Rotates this {@code Camera} instance along the Z-axis with an angle of {@code angle}.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 */
+	public void rotateZ(final AngleF angle) {
+		this.orthonormalBasis = OrthonormalBasis33F.transform(Matrix44F.rotateZ(angle), this.orthonormalBasis);
 	}
 	
 	/**

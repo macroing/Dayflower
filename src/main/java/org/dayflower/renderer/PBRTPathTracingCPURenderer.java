@@ -19,7 +19,7 @@
 package org.dayflower.renderer;
 
 import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Ints.min;
@@ -190,7 +190,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			
 			final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 			
-			if(result.isBlack() || equal(probabilityDensityFunctionValue, 0.0F)) {
+			if(result.isBlack() || isZero(probabilityDensityFunctionValue)) {
 				break;
 			}
 			
@@ -362,7 +362,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 					if(!hasSampledSpecular) {
 						final float lightProbabilityDensityFunctionValue = light.evaluateProbabilityDensityFunctionRadianceIncoming(intersection, incoming);
 						
-						if(equal(lightProbabilityDensityFunctionValue, 0.0F)) {
+						if(isZero(lightProbabilityDensityFunctionValue)) {
 							return lightDirect;
 						}
 						

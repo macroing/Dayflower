@@ -18,7 +18,7 @@
  */
 package org.dayflower.scene.pbrt;
 
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,7 +104,7 @@ public final class GlassMaterial implements PBRTMaterial {
 			return Optional.empty();
 		}
 		
-		final boolean isSpecular = equal(roughnessU, 0.0F) && equal(roughnessV, 0.0F);
+		final boolean isSpecular = isZero(roughnessU) && isZero(roughnessV);
 		
 		if(isSpecular && isAllowingMultipleLobes) {
 			return Optional.of(new BSDF(intersection, Arrays.asList(new FresnelSpecularBXDF(colorKReflection, colorKTransmission, transportMode, 1.0F, eta)), eta));

@@ -155,6 +155,16 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, either {@code Floats.equal(value, +0.0F)} or {@code Floats.equal(value, -0.0F)} are {@code true}, {@code false} otherwise.
+	 * 
+	 * @param value a {@code float} value
+	 * @return {@code true} if, and only if, either {@code Floats.equal(value, +0.0F)} or {@code Floats.equal(value, -0.0F)} are {@code true}, {@code false} otherwise
+	 */
+	public static boolean isZero(final float value) {
+		return equal(value, +0.0F) || equal(value, -0.0F);
+	}
+	
+	/**
 	 * Returns the absolute version of {@code value}.
 	 * <p>
 	 * If the argument is not negative, the argument is returned. If the argument is negative, the negation of the argument is returned.

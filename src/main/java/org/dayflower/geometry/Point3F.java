@@ -19,6 +19,7 @@
 package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.nextDownPBRT;
@@ -676,7 +677,7 @@ public final class Point3F {
 		final float component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33() * pointRHS.component3 + matrixLHS.getElement34();
 		final float component4 = matrixLHS.getElement41() * pointRHS.component1 + matrixLHS.getElement42() * pointRHS.component2 + matrixLHS.getElement43() * pointRHS.component3 + matrixLHS.getElement44();
 		
-		return equal(component4, 1.0F) || equal(component4, 0.0F) ? new Point3F(component1, component2, component3) : new Point3F(component1 / component4, component2 / component4, component3 / component4);
+		return equal(component4, 1.0F) || isZero(component4) ? new Point3F(component1, component2, component3) : new Point3F(component1 / component4, component2 / component4, component3 / component4);
 	}
 	
 	/**

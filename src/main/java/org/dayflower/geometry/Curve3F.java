@@ -22,6 +22,7 @@ import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.acos;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.lerp;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
@@ -1110,7 +1111,7 @@ public final class Curve3F implements Shape3F {
 		
 		final float denominator = segmentDirection.lengthSquared();
 		
-		if(equal(denominator, 0.0F)) {
+		if(isZero(denominator)) {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
@@ -1210,7 +1211,7 @@ public final class Curve3F implements Shape3F {
 		
 		final float denominator = segmentDirection.lengthSquared();
 		
-		if(equal(denominator, 0.0F)) {
+		if(isZero(denominator)) {
 			return Float.NaN;
 		}
 		
@@ -1332,7 +1333,7 @@ public final class Curve3F implements Shape3F {
 		final Vector3F directionR = ray.getDirection();
 		final Vector3F directionX = Vector3F.crossProduct(directionR, Vector3F.direction(eye, lookAt));
 		
-		if(!equal(directionX.lengthSquared(), 0.0F)) {
+		if(!isZero(directionX.lengthSquared())) {
 			return directionX;
 		} else if(abs(directionR.getX()) > abs(directionR.getY())) {
 			return Vector3F.normalize(new Vector3F(-directionR.getZ(), 0.0F, directionR.getX()));

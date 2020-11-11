@@ -27,6 +27,7 @@ import static org.dayflower.util.Doubles.cos;
 import static org.dayflower.util.Doubles.equal;
 import static org.dayflower.util.Doubles.finiteOrDefault;
 import static org.dayflower.util.Doubles.gamma;
+import static org.dayflower.util.Doubles.isZero;
 import static org.dayflower.util.Doubles.max;
 import static org.dayflower.util.Doubles.saturate;
 import static org.dayflower.util.Doubles.sin;
@@ -334,7 +335,7 @@ public final class Vector3D {
 	public double sinPhi() {
 		final double sinTheta = sinTheta();
 		
-		if(equal(sinTheta, 0.0D)) {
+		if(isZero(sinTheta)) {
 			return 0.0D;
 		}
 		

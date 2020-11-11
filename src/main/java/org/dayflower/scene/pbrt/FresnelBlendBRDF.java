@@ -21,7 +21,7 @@ package org.dayflower.scene.pbrt;
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_RECIPROCAL;
 import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.random;
@@ -195,7 +195,7 @@ public final class FresnelBlendBRDF extends BXDF {
 		
 		final Vector3F normal = Vector3F.add(outgoing, incoming);
 		
-		if(equal(normal.getX(), 0.0F) && equal(normal.getY(), 0.0F) && equal(normal.getZ(), 0.0F)) {
+		if(isZero(normal.getX()) && isZero(normal.getY()) && isZero(normal.getZ())) {
 			return Color3F.BLACK;
 		}
 		

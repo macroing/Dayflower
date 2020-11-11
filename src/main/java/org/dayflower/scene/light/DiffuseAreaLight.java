@@ -36,10 +36,18 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceEmittedResult;
 import org.dayflower.scene.LightRadianceIncomingResult;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code DiffuseAreaLight} is an implementation of {@link AreaLight} that represents a diffuse area light.
+ * <p>
+ * This class can be considered immutable and thread-safe if, and only if, its associated {@link Shape3F} instance is.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class DiffuseAreaLight extends AreaLight {
 	private final Color3F radianceEmitted;
 	private final Shape3F shape;
@@ -48,9 +56,23 @@ public final class DiffuseAreaLight extends AreaLight {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
-	public DiffuseAreaLight(final Matrix44F lightToWorld, final int samples, final Color3F radianceEmitted, final Shape3F shape, final boolean isTwoSided) {
-		super(lightToWorld, samples);
+	/**
+	 * Constructs a new {@code DiffuseAreaLight} instance.
+	 * <p>
+	 * If either {@code lightToWorld}, {@code radianceEmitted} or {@code shape} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sampleCount} is less than {@code 1}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param lightToWorld the {@link Matrix44F} instance that is used to transform from light space to world space and is associated with this {@code DiffuseAreaLight} instance
+	 * @param sampleCount the sample count associated with this {@code AreaLight} instance
+	 * @param radianceEmitted a {@link Color3F} instance with the radiance emitted
+	 * @param shape a {@link Shape3F} instance
+	 * @param isTwoSided {@code true} if, and only if, this {@code DiffuseAreaLight} is two-sided, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sampleCount} is less than {@code 1}
+	 * @throws NullPointerException thrown if, and only if, either {@code lightToWorld}, {@code radianceEmitted} or {@code shape} are {@code null}
+	 */
+	public DiffuseAreaLight(final Matrix44F lightToWorld, final int sampleCount, final Color3F radianceEmitted, final Shape3F shape, final boolean isTwoSided) {
+		super(lightToWorld, sampleCount);
 		
 		this.radianceEmitted = Objects.requireNonNull(radianceEmitted, "radianceEmitted == null");
 		this.shape = Objects.requireNonNull(shape, "shape == null");
@@ -60,7 +82,18 @@ public final class DiffuseAreaLight extends AreaLight {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the radiance for {@code intersection} and {@code direction}.
+	 * <p>
+	 * If either {@code intersection} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code AreaLight} method {@code L(const Interaction &intr, const Vector3f &w)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param direction a {@link Vector3F} instance with a direction
+	 * @return a {@code Color3F} instance with the radiance for {@code intersection} and {@code direction}
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code direction} are {@code null}
+	 */
 	@Override
 	public Color3F evaluateRadiance(final Intersection intersection, final Vector3F direction) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -118,14 +151,13 @@ public final class DiffuseAreaLight extends AreaLight {
 		Objects.requireNonNull(ray, "ray == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
-		/*
-		Interaction it(ray.o, n, Vector3f(), Vector3f(n), ray.time, mediumInterface);
+//		TODO: Implement!
+//		Interaction it(ray.o, n, Vector3f(), Vector3f(n), ray.time, mediumInterface);
+//		
+//		pdfPos = shape->Pdf(it);
+//		pdfDir = twoSided ? (.5 * CosineHemispherePdf(AbsDot(n, ray.d))) : CosineHemispherePdf(Dot(n, ray.d));
 		
-		*pdfPos = shape->Pdf(it);
-		*pdfDir = twoSided ? (.5 * CosineHemispherePdf(AbsDot(n, ray.d))) : CosineHemispherePdf(Dot(n, ray.d));
-		*/
-		
-		return Optional.empty();//TODO: Implement!
+		return Optional.empty();
 	}
 	
 	/**
@@ -147,52 +179,47 @@ public final class DiffuseAreaLight extends AreaLight {
 		Objects.requireNonNull(sampleA, "sampleA == null");
 		Objects.requireNonNull(sampleB, "sampleB == null");
 		
-		/*
-//		Sample a point on the area light's _Shape_, _pShape_
-		Interaction pShape = shape->Sample(u1, pdfPos);
+//		TODO: Implement!
+//		Interaction pShape = shape->Sample(u1, pdfPos);
+//		
+//		pShape.mediumInterface = mediumInterface;
+//		
+//		*nLight = pShape.n;
+//		
+//		Vector3f w;
+//		
+//		if (twoSided) {
+//			Point2f u = u2;
+//			
+//			if (u[0] < .5) {
+//				u[0] = std::min(u[0] * 2, OneMinusEpsilon);
+//				
+//				w = CosineSampleHemisphere(u);
+//			} else {
+//				u[0] = std::min((u[0] - .5f) * 2, OneMinusEpsilon);
+//				
+//				w = CosineSampleHemisphere(u);
+//				w.z *= -1;
+//			}
+//			
+//			*pdfDir = 0.5f * CosineHemispherePdf(std::abs(w.z));
+//		} else {
+//			w = CosineSampleHemisphere(u2);
+//			
+//		 	*pdfDir = CosineHemispherePdf(w.z);
+//		}
+//		
+//		Vector3f v1, v2, n(pShape.n);
+//		
+//		CoordinateSystem(n, &v1, &v2);
+//		
+//		w = w.x * v1 + w.y * v2 + w.z * n;
+//		
+//		*ray = pShape.SpawnRay(w);
+//		
+//		return L(pShape, w);
 		
-		pShape.mediumInterface = mediumInterface;
-		
-		*nLight = pShape.n;
-		
-//		Sample a cosine-weighted outgoing direction _w_ for area light
-		Vector3f w;
-		
-		if (twoSided) {
-			Point2f u = u2;
-			
-//			Choose a side to sample and then remap u[0] to [0,1] before
-//			applying cosine-weighted hemisphere sampling for the chosen side.
-			if (u[0] < .5) {
-				u[0] = std::min(u[0] * 2, OneMinusEpsilon);
-				
-				w = CosineSampleHemisphere(u);
-			} else {
-				u[0] = std::min((u[0] - .5f) * 2, OneMinusEpsilon);
-				
-				w = CosineSampleHemisphere(u);
-				w.z *= -1;
-			}
-			
-			*pdfDir = 0.5f * CosineHemispherePdf(std::abs(w.z));
-		} else {
-			w = CosineSampleHemisphere(u2);
-			
-		 	*pdfDir = CosineHemispherePdf(w.z);
-		}
-		
-		Vector3f v1, v2, n(pShape.n);
-		
-		CoordinateSystem(n, &v1, &v2);
-		
-		w = w.x * v1 + w.y * v2 + w.z * n;
-		
-		*ray = pShape.SpawnRay(w);
-		
-		return L(pShape, w);
-		*/
-		
-		return Optional.empty();//TODO: Implement!
+		return Optional.empty();
 	}
 	
 	/**
@@ -258,7 +285,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new DiffuseAreaLight(%s, %d, %s, %s, %s)", getLightToWorld(), Integer.valueOf(getSamples()), this.radianceEmitted, this.shape, Boolean.toString(this.isTwoSided));
+		return String.format("new DiffuseAreaLight(%s, %d, %s, %s, %s)", getLightToWorld(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.toString(this.isTwoSided));
 	}
 	
 	/**
@@ -279,7 +306,7 @@ public final class DiffuseAreaLight extends AreaLight {
 			return false;
 		} else if(!Objects.equals(getWorldToLight(), DiffuseAreaLight.class.cast(object).getWorldToLight())) {
 			return false;
-		} else if(getSamples() != DiffuseAreaLight.class.cast(object).getSamples()) {
+		} else if(getSampleCount() != DiffuseAreaLight.class.cast(object).getSampleCount()) {
 			return false;
 		} else if(!Objects.equals(this.radianceEmitted, DiffuseAreaLight.class.cast(object).radianceEmitted)) {
 			return false;
@@ -348,6 +375,6 @@ public final class DiffuseAreaLight extends AreaLight {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(getLightToWorld(), getWorldToLight(), Integer.valueOf(getSamples()), this.radianceEmitted, this.shape, Boolean.valueOf(this.isTwoSided), Float.valueOf(this.surfaceArea));
+		return Objects.hash(getLightToWorld(), getWorldToLight(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.valueOf(this.isTwoSided), Float.valueOf(this.surfaceArea));
 	}
 }

@@ -81,12 +81,15 @@ public final class Primitive {
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
 	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code objectToWorld} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code objectToWorld} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
 	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
 	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
 	 * @param objectToWorld the {@link Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code objectToWorld} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code objectToWorld} are {@code null}
 	 */
 	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Matrix44F objectToWorld) {
@@ -104,6 +107,8 @@ public final class Primitive {
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
 	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code objectToWorld} or {@code areaLight} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code objectToWorld} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
@@ -111,6 +116,7 @@ public final class Primitive {
 	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
 	 * @param objectToWorld the {@link Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
 	 * @param areaLight the {@link AreaLight} instance associated with this {@code Primitive} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code objectToWorld} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code objectToWorld} or {@code areaLight} are {@code null}
 	 */
 	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Matrix44F objectToWorld, final AreaLight areaLight) {

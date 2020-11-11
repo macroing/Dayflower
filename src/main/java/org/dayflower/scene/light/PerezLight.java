@@ -33,6 +33,7 @@ import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
+import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -41,6 +42,7 @@ import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Sphere3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ChromaticSpectralCurve;
 import org.dayflower.image.Color3F;
@@ -101,6 +103,7 @@ public final class PerezLight implements Light {
 	private Distribution2F distribution;
 	private OrthonormalBasis33F orthonormalBasis;
 	private SpectralCurve sunSpectralRadiance;
+	private Sphere3F sun;
 	private Vector3F sunDirection;
 	private Vector3F sunDirectionWorldSpace;
 	private double[] perezRelativeLuminance;
@@ -181,7 +184,7 @@ public final class PerezLight implements Light {
 		}
 		*/
 		
-		return doRadiance(Vector3F.normalize(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis)));
+		return doRadianceSky(Vector3F.normalize(Vector3F.transformReverse(ray.getDirection(), this.orthonormalBasis)));
 	}
 	
 	/**
@@ -202,7 +205,7 @@ public final class PerezLight implements Light {
 	 */
 	@Override
 	public Color3F power() {
-		return Color3F.multiply(doRadiance(Vector3F.directionSpherical(0.5F, 0.5F)), PI * this.radius * this.radius);
+		return Color3F.multiply(doRadianceSky(Vector3F.directionSpherical(0.5F, 0.5F)), PI * this.radius * this.radius);
 	}
 	
 	/**
@@ -379,7 +382,9 @@ public final class PerezLight implements Light {
 		final Vector3F incomingLocal = new Vector3F(x, y, z);
 		final Vector3F incoming = Vector3F.normalize(Vector3F.transform(incomingLocal, this.orthonormalBasis));
 		
-		final Color3F result = doRadiance(incomingLocal);
+		final Color3F resultSky = doRadianceSky(incomingLocal);
+		final Color3F resultSun = doRadianceSun(incomingLocal);
+		final Color3F result = Color3F.add(resultSky, resultSun);
 		
 		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint();
 		final Point3F point = Point3F.add(surfaceIntersectionPoint, incoming, 2.0F * radius);
@@ -493,6 +498,7 @@ public final class PerezLight implements Light {
 		doSetTurbidity(turbidity);
 		doSetSunDirectionWorldSpace(sunDirectionWorldSpace);
 		doSetSunDirection();
+		doSetSun();
 		doSetTheta();
 		doSetSunColorAndSunSpectralRadiance();
 		doSetZenith();
@@ -504,7 +510,7 @@ public final class PerezLight implements Light {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Color3F doRadiance(final Vector3F direction) {
+	private Color3F doRadianceSky(final Vector3F direction) {
 		if(direction.getZ() < 0.0F) {
 			return Color3F.BLACK;
 		}
@@ -524,6 +530,10 @@ public final class PerezLight implements Light {
 		final float z0 = (float)(colorXYZ.getZ() * relativeLuminance / colorXYZ.getY());
 		
 		return Color3F.convertXYZToRGBUsingSRGB(new Color3F(x0, y0, z0));
+	}
+	
+	private Color3F doRadianceSun(final Vector3F direction) {
+		return this.sun.intersects(new Ray3F(new Point3F(), direction)) ? Color3F.multiply(this.sunColor, 10000000.0F) : Color3F.BLACK;
 	}
 	
 	private double doCalculatePerezFunction(final double[] lam, final double theta, final double gamma, final double lvz) {
@@ -549,7 +559,7 @@ public final class PerezLight implements Light {
 			for(int u = 0; u < resolutionU; u++) {
 				final float sphericalU = (u + 0.5F) * resolutionUReciprocal;
 				
-				final Color3F colorRGB = doRadiance(Vector3F.directionSpherical(sphericalU, sphericalV));
+				final Color3F colorRGB = doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV));
 				
 				functions[v][u] = colorRGB.luminance() * sinTheta;
 			}
@@ -590,7 +600,7 @@ public final class PerezLight implements Light {
 	}
 	
 	private void doSetRadius() {
-		this.radius = 10.0F;
+		this.radius = 1000.0F;
 	}
 	
 	private void doSetSunColorAndSunSpectralRadiance() {
@@ -601,6 +611,10 @@ public final class PerezLight implements Light {
 			this.sunSpectralRadiance = new ConstantSpectralCurve(0.0F);
 			this.sunColor = Color3F.BLACK;
 		}
+	}
+	
+	private void doSetSun() {
+		this.sun = new Sphere3F(sqrt(this.radius), Point3F.add(new Point3F(), this.sunDirection, this.radius));
 	}
 	
 	private void doSetSunDirection() {

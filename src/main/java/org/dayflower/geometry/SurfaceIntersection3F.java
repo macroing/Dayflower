@@ -303,7 +303,7 @@ public final class SurfaceIntersection3F {
 	 * <p>
 	 * If either {@code surfaceIntersection} or {@code matrix} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix} cannot be inverted, an IllegalStateException will be thrown.
+	 * If {@code matrix} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -315,7 +315,7 @@ public final class SurfaceIntersection3F {
 	 * @param surfaceIntersection the {@code SurfaceIntersection3F} instance to transform
 	 * @param matrix the {@link Matrix44F} instance to perform the transformation with
 	 * @return a new {@code SurfaceIntersection3F} instance with the result of the transformation
-	 * @throws IllegalStateException thrown if, and only if, {@code matrix} cannot be inverted
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code matrix} are {@code null}
 	 */
 	public static SurfaceIntersection3F transform(final SurfaceIntersection3F surfaceIntersection, final Matrix44F matrix) {

@@ -144,7 +144,7 @@ public final class SurfaceSample3F {
 	 * <p>
 	 * If either {@code surfaceSample} or {@code matrix} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix} cannot be inverted, an IllegalStateException will be thrown.
+	 * If {@code matrix} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -156,7 +156,7 @@ public final class SurfaceSample3F {
 	 * @param surfaceSample the {@code SurfaceSample3F} instance to transform
 	 * @param matrix the {@link Matrix44F} instance to perform the transformation with
 	 * @return a new {@code SurfaceSample3F} instance with the result of the transformation
-	 * @throws IllegalStateException thrown if, and only if, {@code matrix} cannot be inverted
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, either {@code surfaceSample} or {@code matrix} are {@code null}
 	 */
 	public static SurfaceSample3F transform(final SurfaceSample3F surfaceSample, final Matrix44F matrix) {

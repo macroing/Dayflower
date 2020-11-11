@@ -487,6 +487,11 @@ public final class TriangleMesh3F implements Shape3F {
 			final int maximumCount = Integer.MAX_VALUE;
 			
 			final Matrix44F matrix = isScaling ? Matrix44F.scale(scale) : null;
+			
+			if(matrix != null && !matrix.isInvertible()) {
+				return new ArrayList<>();
+			}
+			
 			final Matrix44F matrixInverse = isScaling ? Matrix44F.inverse(matrix) : null;
 			
 			for(int i = 0, j = 0; i < indices.size(); i += 3) {

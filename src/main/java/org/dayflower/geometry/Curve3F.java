@@ -187,6 +187,11 @@ public final class Curve3F implements Shape3F {
 		final Vector3F directionX = doCreateDirectionX(ray, pointE, pointH);
 		
 		final Matrix44F rayToObject = Matrix44F.lookAt(ray.getOrigin(), Point3F.add(ray.getOrigin(), ray.getDirection()), directionX);
+		
+		if(!rayToObject.isInvertible()) {
+			return Optional.empty();
+		}
+		
 		final Matrix44F objectToRay = Matrix44F.inverse(rayToObject);
 		
 		final Point3F pointI = Point3F.transform(objectToRay, pointE);
@@ -458,6 +463,11 @@ public final class Curve3F implements Shape3F {
 		final Vector3F directionX = doCreateDirectionX(ray, pointE, pointH);
 		
 		final Matrix44F rayToObject = Matrix44F.lookAt(ray.getOrigin(), Point3F.add(ray.getOrigin(), ray.getDirection()), directionX);
+		
+		if(!rayToObject.isInvertible()) {
+			return Float.NaN;
+		}
+		
 		final Matrix44F objectToRay = Matrix44F.inverse(rayToObject);
 		
 		final Point3F pointI = Point3F.transform(objectToRay, pointE);

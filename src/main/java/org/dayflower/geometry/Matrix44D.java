@@ -456,12 +456,12 @@ public final class Matrix44D {
 	 * <p>
 	 * If {@code matrix} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code matrix} cannot be inverted, an {@code IllegalStateException} will be thrown.
+	 * If {@code matrix} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * To make sure {@code matrix} is invertible, consider calling {@link #isInvertible()}.
 	 * 
 	 * @return a new {@code Matrix44D} instance that is the inverse of {@code matrix}
-	 * @throws IllegalStateException thrown if, and only if, {@code matrix} cannot be inverted
+	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */
 	public static Matrix44D inverse(final Matrix44D matrix) {

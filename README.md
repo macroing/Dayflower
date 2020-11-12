@@ -53,8 +53,9 @@ Supported Features
 * Triangle
 
 #### Light
-* Area
+* Diffuse Area
 * Directional
+* Perez
 * Point
 * Primitive
 * Spot
@@ -66,6 +67,7 @@ Supported Features
 
 #### Shapes
 * Curve
+* Curves
 * Plane
 * Procedural Terrain
 * Rectangular Cuboid

@@ -21,6 +21,7 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 

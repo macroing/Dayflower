@@ -59,6 +59,11 @@ import org.dayflower.scene.pbrt.TransportMode;
  * @author J&#246;rgen Lundgren
  */
 public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
+	private static final float T_MAXIMUM = Float.MAX_VALUE;
+	private static final float T_MINIMUM = 0.001F;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code PBRTPathTracingCPURenderer} instance.
 	 * <p>
@@ -86,7 +91,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
 	 */
 	public PBRTPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
-		super(display, image, rendererConfiguration, sampler, scene, false);
+		super(display, image, rendererConfiguration, sampler, scene);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +126,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 		float etaScale = 1.0F;
 		
 		for(int currentBounce = 0; true; currentBounce++) {
-			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay);
+			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay, T_MINIMUM, T_MAXIMUM);
 			
 			final boolean hasFoundIntersection = optionalIntersection.isPresent();
 			
@@ -458,7 +463,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	
 	private static boolean doIsLightVisible(final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult, final Scene scene, final SurfaceIntersection3F surfaceIntersection) {
 		if(light instanceof AreaLight) {
-			final Optional<Intersection> optionalIntersection = scene.intersection(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), 0.001F, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())) + 0.0001F);
+			final Optional<Intersection> optionalIntersection = scene.intersection(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), T_MINIMUM, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())) + T_MINIMUM);
 			
 			if(optionalIntersection.isPresent()) {
 				final Intersection intersection = optionalIntersection.get();

@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Floats.isNaN;
+
 import java.util.Optional;
 
 /**
@@ -60,62 +62,12 @@ public interface Shape3F {
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
-	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	Optional<SurfaceIntersection3F> intersection(final Ray3F ray);
-	
-	/**
-	 * Performs an intersection test between {@code ray} and this {@code Shape3F} instance.
-	 * <p>
-	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3F} instance that contains information about the intersection, if it was found.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
-	
-	/**
-	 * Performs an intersection test between {@code mutableSurfaceIntersection} and this {@code Shape3F} instance.
-	 * <p>
-	 * Returns {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Shape3F} instance, {@code false} otherwise.
-	 * <p>
-	 * If {@code mutableSurfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param mutableSurfaceIntersection a {@link MutableSurfaceIntersection3F} instance
-	 * @return {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Shape3F} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code mutableSurfaceIntersection} is {@code null}
-	 */
-	boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
-	
-	/**
-	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
-	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	boolean intersects(final Ray3F ray);
-	
-	/**
-	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
-	 * @param tMinimum the minimum parametric distance
-	 * @param tMaximum the maximum parametric distance
-	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
 	/**
 	 * Returns the probability density function (PDF) value for solid angle.
@@ -173,19 +125,6 @@ public interface Shape3F {
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
-	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	float intersectionT(final Ray3F ray);
-	
-	/**
-	 * Performs an intersection test between {@code ray} and this {@code Shape3F} instance.
-	 * <p>
-	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
@@ -199,4 +138,36 @@ public interface Shape3F {
 	 * @return a {@code float[]} representation of this {@code Shape3F} instance
 	 */
 	float[] toArray();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Performs an intersection test between {@code mutableSurfaceIntersection} and this {@code Shape3F} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Shape3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code mutableSurfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param mutableSurfaceIntersection a {@link MutableSurfaceIntersection3F} instance
+	 * @return {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Shape3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code mutableSurfaceIntersection} is {@code null}
+	 */
+	default boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
+		return mutableSurfaceIntersection.intersection(this);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Shape3F} instance
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Shape3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	default boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
+	}
 }

@@ -21,6 +21,7 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.minOrNaN;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -99,22 +100,6 @@ public final class Curves3F implements Shape3F {
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Curves3F} instance
-	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	@Override
-	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray) {
-		return intersection(ray, 0.001F, Float.MAX_VALUE);
-	}
-	
-	/**
-	 * Performs an intersection test between {@code ray} and this {@code Curves3F} instance.
-	 * <p>
-	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3F} instance that contains information about the intersection, if it was found.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Curves3F} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
@@ -160,52 +145,6 @@ public final class Curves3F implements Shape3F {
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Performs an intersection test between {@code mutableSurfaceIntersection} and this {@code Curves3F} instance.
-	 * <p>
-	 * Returns {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Curves3F} instance, {@code false} otherwise.
-	 * <p>
-	 * If {@code mutableSurfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param mutableSurfaceIntersection a {@link MutableSurfaceIntersection3F} instance
-	 * @return {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Curves3F} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code mutableSurfaceIntersection} is {@code null}
-	 */
-	@Override
-	public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-		return mutableSurfaceIntersection.intersection(this);
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Curves3F} instance, {@code false} otherwise.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Curves3F} instance
-	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Curves3F} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	@Override
-	public boolean intersects(final Ray3F ray) {
-		return intersects(ray, 0.001F, Float.MAX_VALUE);
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code Curves3F} instance, {@code false} otherwise.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Curves3F} instance
-	 * @param tMinimum the minimum parametric distance
-	 * @param tMaximum the maximum parametric distance
-	 * @return {@code true} if, and only if, {@code ray} intersects this {@code Curves3F} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	@Override
-	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -292,22 +231,6 @@ public final class Curves3F implements Shape3F {
 	@Override
 	public float getVolume() {
 		return 0.0F;//TODO: Implement!
-	}
-	
-	/**
-	 * Performs an intersection test between {@code ray} and this {@code Curves3F} instance.
-	 * <p>
-	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Curves3F} instance
-	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	@Override
-	public float intersectionT(final Ray3F ray) {
-		return intersectionT(ray, 0.001F, Float.MAX_VALUE);
 	}
 	
 	/**

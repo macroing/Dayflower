@@ -38,6 +38,11 @@ import org.dayflower.util.Lists;
  * @author J&#246;rgen Lundgren
  */
 public final class Scene {
+	private static final float T_MAXIMUM = Float.MAX_VALUE;
+	private static final float T_MINIMUM = 0.001F;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private Camera camera;
 	private List<Light> lights;
 	private List<Primitive> primitives;
@@ -163,7 +168,7 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray) {
-		return intersection(ray, 0.001F, Float.MAX_VALUE);
+		return intersection(ray, T_MINIMUM, T_MAXIMUM);
 	}
 	
 	/**
@@ -275,7 +280,7 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public boolean intersects(final Ray3F ray) {
-		return intersects(ray, 0.001F, Float.MAX_VALUE);
+		return intersects(ray, T_MINIMUM, T_MAXIMUM);
 	}
 	
 	/**
@@ -341,7 +346,7 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public float intersectionT(final Ray3F ray) {
-		return intersectionT(ray, 0.001F, Float.MAX_VALUE);
+		return intersectionT(ray, T_MINIMUM, T_MAXIMUM);
 	}
 	
 	/**

@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Floats.isNaN;
+
 /**
  * A {@code BoundingVolume3F} denotes a 3-dimensional bounding volume that uses the data type {@code float}.
  * <p>
@@ -145,6 +147,6 @@ public interface BoundingVolume3F {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	default boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return !Float.isNaN(intersection(ray, tMinimum, tMaximum));
+		return !isNaN(intersection(ray, tMinimum, tMaximum));
 	}
 }

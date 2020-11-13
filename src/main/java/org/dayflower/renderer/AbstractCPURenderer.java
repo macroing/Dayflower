@@ -45,7 +45,6 @@ public abstract class AbstractCPURenderer implements Renderer {
 	private Scene scene;
 	private Timer timer;
 	private boolean isClearing;
-	private boolean isColorSpaceXYZ;
 	private int renderPass;
 	private long renderTime;
 	
@@ -61,10 +60,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AbstractCPURenderer} instance
 	 * @param sampler the {@link Sampler} instance associated with this {@code AbstractCPURenderer} instance
 	 * @param scene the {@link Scene} instance associated with this {@code AbstractCPURenderer} instance
-	 * @param isColorSpaceXYZ {@code true} if, and only if, an XYZ-color space should be used, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
 	 */
-	protected AbstractCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene, final boolean isColorSpaceXYZ) {
+	protected AbstractCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
 		this.display = Objects.requireNonNull(display, "display == null");
 		this.image = Objects.requireNonNull(image, "image == null");
 		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
@@ -72,7 +70,6 @@ public abstract class AbstractCPURenderer implements Renderer {
 		this.scene = Objects.requireNonNull(scene, "scene == null");
 		this.timer = new Timer();
 		this.isClearing = false;
-		this.isColorSpaceXYZ = isColorSpaceXYZ;
 		this.renderPass = 0;
 		this.renderTime = 0L;
 	}
@@ -168,8 +165,6 @@ public abstract class AbstractCPURenderer implements Renderer {
 		
 		final Scene scene = this.scene;
 		
-		final boolean isColorSpaceXYZ = this.isColorSpaceXYZ;
-		
 		final int renderPasses = rendererConfiguration.getRenderPasses();
 		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
 		final int resolutionX = image.getResolutionX();
@@ -202,11 +197,11 @@ public abstract class AbstractCPURenderer implements Renderer {
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
 						
-						final Color3F color0 = radiance(ray);
-						final Color3F color1 = isColorSpaceXYZ ? color0 : Color3F.convertRGBToXYZUsingPBRT(color0);
+						final Color3F colorRGB = radiance(ray);
+						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
 						
-						if(!color1.hasInfinites() && !color1.hasNaNs()) {
-							image.filmAddColorXYZ(x + sample.getX(), y + sample.getY(), color1);
+						if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
+							image.filmAddColorXYZ(x + sample.getX(), y + sample.getY(), colorXYZ);
 						}
 					}
 				}

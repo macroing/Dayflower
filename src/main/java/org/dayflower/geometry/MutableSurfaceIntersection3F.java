@@ -22,6 +22,7 @@ import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -110,7 +111,11 @@ public final class MutableSurfaceIntersection3F {
 	 * @return an optional {@code SurfaceIntersection3F} instance
 	 */
 	public Optional<SurfaceIntersection3F> computeSurfaceIntersection() {
-		return isIntersecting() ? this.shape.intersection(this.ray) : SurfaceIntersection3F.EMPTY;
+//		TODO: Check if these variables should be supplied as parameters?
+		final float tMinimum = 0.001F;
+		final float tMaximum = Float.MAX_VALUE;
+		
+		return isIntersecting() ? this.shape.intersection(this.ray, tMinimum, tMaximum) : SurfaceIntersection3F.EMPTY;
 	}
 	
 	/**

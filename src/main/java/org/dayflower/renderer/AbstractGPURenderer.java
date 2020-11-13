@@ -18,17 +18,13 @@
  */
 package org.dayflower.renderer;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.dayflower.display.Display;
-import org.dayflower.geometry.Ray3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
-import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
-import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.util.Timer;
 
@@ -59,7 +55,6 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	private Scene scene;
 	private Timer timer;
 	private boolean isClearing;
-	private boolean isColorSpaceXYZ;
 	private int renderPass;
 	private long renderTime;
 	
@@ -75,10 +70,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance
 	 * @param sampler the {@link Sampler} instance associated with this {@code AbstractGPURenderer} instance
 	 * @param scene the {@link Scene} instance associated with this {@code AbstractGPURenderer} instance
-	 * @param isColorSpaceXYZ {@code true} if, and only if, an XYZ-color space should be used, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
 	 */
-	protected AbstractGPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene, final boolean isColorSpaceXYZ) {
+	protected AbstractGPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
 		this.display = Objects.requireNonNull(display, "display == null");
 		this.image = Objects.requireNonNull(image, "image == null");
 		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
@@ -86,7 +80,6 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		this.scene = Objects.requireNonNull(scene, "scene == null");
 		this.timer = new Timer();
 		this.isClearing = false;
-		this.isColorSpaceXYZ = isColorSpaceXYZ;
 		this.renderPass = 0;
 		this.renderTime = 0L;
 	}
@@ -178,18 +171,8 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		
 		final RendererConfiguration rendererConfiguration = this.rendererConfiguration;
 		
-		final Sampler sampler = this.sampler;
-		
-		final Scene scene = this.scene;
-		
-		final boolean isColorSpaceXYZ = this.isColorSpaceXYZ;
-		
 		final int renderPasses = rendererConfiguration.getRenderPasses();
 		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
-		final int resolutionX = image.getResolutionX();
-		final int resolutionY = image.getResolutionY();
-		
-		final Camera camera = scene.getCameraCopy();
 		
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
 			if(this.isClearing) {

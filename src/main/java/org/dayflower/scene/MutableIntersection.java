@@ -119,7 +119,7 @@ public final class MutableIntersection {
 			if(optionalShape.isPresent()) {
 				final Shape3F shape = optionalShape.get();
 				
-				final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionObjectSpace = shape.intersection(rayObjectSpace);
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionObjectSpace = shape.intersection(rayObjectSpace, T_MINIMUM, T_MAXIMUM);
 				
 				if(optionalSurfaceIntersectionObjectSpace.isPresent()) {
 					final SurfaceIntersection3F surfaceIntersectionObjectSpace = optionalSurfaceIntersectionObjectSpace.get();

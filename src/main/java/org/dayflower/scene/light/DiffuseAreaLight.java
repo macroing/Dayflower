@@ -19,6 +19,7 @@
 package org.dayflower.scene.light;
 
 import static org.dayflower.util.Floats.PI;
+import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
 
 import java.lang.reflect.Field;
@@ -29,6 +30,7 @@ import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
@@ -151,13 +153,30 @@ public final class DiffuseAreaLight extends AreaLight {
 		Objects.requireNonNull(ray, "ray == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
-//		TODO: Implement!
+//		TODO: Verify!
 //		Interaction it(ray.o, n, Vector3f(), Vector3f(n), ray.time, mediumInterface);
 //		
 //		pdfPos = shape->Pdf(it);
 //		pdfDir = twoSided ? (.5 * CosineHemispherePdf(AbsDot(n, ray.d))) : CosineHemispherePdf(Dot(n, ray.d));
 		
-		return Optional.empty();
+		final Matrix44F lightToWorld = getLightToWorld();
+		final Matrix44F worldToLight = getWorldToLight();
+		
+		final Point3F referencePointWorldSpace = ray.getOrigin();
+		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
+		
+		final Vector3F referenceSurfaceNormalWorldSpace = normal;
+		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
+		
+		final Vector3F directionWorldSpace = ray.getDirection();
+		final Vector3F directionLightSpace = Vector3F.transform(worldToLight, directionWorldSpace);
+		
+		final Color3F result = Color3F.BLACK;
+		
+		final float probabilityDensityFunctionValueDirection = this.isTwoSided ? 0.5F * SampleGeneratorF.hemisphereCosineDistributionProbabilityDensityFunction(abs(Vector3F.dotProduct(referenceSurfaceNormalWorldSpace, directionWorldSpace))) : SampleGeneratorF.hemisphereCosineDistributionProbabilityDensityFunction(abs(Vector3F.dotProduct(referenceSurfaceNormalWorldSpace, directionWorldSpace)));
+		final float probabilityDensityFunctionValuePosition = this.shape.calculateProbabilityDensityFunctionValueForSolidAngle(referencePointLightSpace, referenceSurfaceNormalLightSpace, directionLightSpace);
+		
+		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
 	}
 	
 	/**

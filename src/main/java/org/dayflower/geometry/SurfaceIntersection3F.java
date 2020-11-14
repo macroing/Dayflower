@@ -21,7 +21,6 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -337,12 +336,11 @@ public final class SurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection}, {@code matrix} or {@code matrixInverse} are {@code null}
 	 */
 	public static SurfaceIntersection3F transform(final SurfaceIntersection3F surfaceIntersection, final Matrix44F matrix, final Matrix44F matrixInverse) {
-//		TODO: Find out if the previous operation applied to 'surfaceNormalS', 'Vector3F.faceForward(surfaceNormalSNewSpace, surfaceNormalGNewSpace)', should be applied to 'orthonormalBasisSNewSpace'...
-//		      It has been applied, but is it correct and even necessary? No difference has been observed so far.
 		final OrthonormalBasis33F orthonormalBasisGOldSpace = surfaceIntersection.orthonormalBasisG;
 		final OrthonormalBasis33F orthonormalBasisSOldSpace = surfaceIntersection.orthonormalBasisS;
 		final OrthonormalBasis33F orthonormalBasisGNewSpace = OrthonormalBasis33F.transformTranspose(matrixInverse, orthonormalBasisGOldSpace);
 		final OrthonormalBasis33F orthonormalBasisSNewSpace = OrthonormalBasis33F.transformTranspose(matrixInverse, orthonormalBasisSOldSpace);
+		final OrthonormalBasis33F orthonormalBasisSNewSpaceCorrectlyOriented = Vector3F.dotProduct(orthonormalBasisSNewSpace.getW(), orthonormalBasisGNewSpace.getW()) < 0.0F ? OrthonormalBasis33F.flipW(orthonormalBasisSNewSpace) : orthonormalBasisSNewSpace;
 		
 		final Point2F textureCoordinates = surfaceIntersection.textureCoordinates;
 		
@@ -359,6 +357,6 @@ public final class SurfaceIntersection3F {
 		
 		final float tNewSpace = abs(Point3F.distance(rayNewSpace.getOrigin(), surfaceIntersectionPointNewSpace));
 		
-		return new SurfaceIntersection3F(orthonormalBasisGNewSpace, Vector3F.dotProduct(orthonormalBasisSNewSpace.getW(), orthonormalBasisGNewSpace.getW()) < 0.0F ? OrthonormalBasis33F.flipW(orthonormalBasisSNewSpace) : orthonormalBasisSNewSpace, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, surfaceIntersectionPointErrorNewSpace, tNewSpace);
+		return new SurfaceIntersection3F(orthonormalBasisGNewSpace, orthonormalBasisSNewSpaceCorrectlyOriented, textureCoordinates, surfaceIntersectionPointNewSpace, rayNewSpace, shape, surfaceIntersectionPointErrorNewSpace, tNewSpace);
 	}
 }

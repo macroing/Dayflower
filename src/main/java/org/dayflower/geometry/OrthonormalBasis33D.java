@@ -179,6 +179,21 @@ public final class OrthonormalBasis33D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Flips the directions of {@code orthonormalBasis}.
+	 * <p>
+	 * Returns a new {@code OrthonormalBasis33D} with the directions flipped.
+	 * <p>
+	 * If {@code orthonormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param orthonormalBasis the {@code OrthonormalBasis33D} instance to flip the directions for
+	 * @return a new {@code OrthonormalBasis33D} with the directions flipped
+	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
+	 */
+	public static OrthonormalBasis33D flip(final OrthonormalBasis33D orthonormalBasis) {
+		return new OrthonormalBasis33D(Vector3D.negate(orthonormalBasis.w), Vector3D.negate(orthonormalBasis.v), Vector3D.negate(orthonormalBasis.u));
+	}
+	
+	/**
 	 * Flips the U-direction of {@code orthonormalBasis}.
 	 * <p>
 	 * Returns a new {@code OrthonormalBasis33D} with the U-direction flipped.

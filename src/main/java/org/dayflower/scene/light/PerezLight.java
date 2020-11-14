@@ -641,9 +641,9 @@ public final class PerezLight implements Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F doRadianceSky(final Vector3F direction) {
-		if(direction.getZ() < 0.0F) {
-			return Color3F.BLACK;
-		}
+//		if(direction.getZ() < 0.0F) {
+//			return Color3F.BLACK;
+//		}
 		
 		final Vector3F directionSaturated = Vector3F.normalize(new Vector3F(direction.getX(), direction.getY(), max(direction.getZ(), 0.001F)));
 		
@@ -663,8 +663,7 @@ public final class PerezLight implements Light {
 	}
 	
 	private Color3F doRadianceSun(final Vector3F direction) {
-		return Color3F.BLACK;
-//		return this.sun.intersects(new Ray3F(new Point3F(), direction)) ? Color3F.multiply(this.sunColor, 10000000.0F) : Color3F.BLACK;
+		return this.sun.intersects(new Ray3F(new Point3F(), direction), 0.0F, Float.MAX_VALUE) ? Color3F.multiply(this.sunColor, 10000000.0F) : Color3F.BLACK;
 	}
 	
 	private Vector3F doTransformToLocalSpace(final Vector3F vector) {
@@ -701,8 +700,8 @@ public final class PerezLight implements Light {
 				final Color3F colorRGB = doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV));
 				
 //				TODO: Find out why swapping the U and V indices produces more accurate results for the GlassMaterial.
-//				functions[v][u] = colorRGB.luminance() * sinTheta;
-				functions[u][v] = colorRGB.luminance() * sinTheta;
+				functions[v][u] = colorRGB.luminance() * sinTheta;
+//				functions[u][v] = colorRGB.luminance() * sinTheta;
 			}
 		}
 		

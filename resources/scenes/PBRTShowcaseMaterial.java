@@ -1,4 +1,5 @@
 boolean isInBox = false;
+boolean isTorus = false;
 
 Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
 
@@ -11,7 +12,7 @@ Material material16 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)),
 Material material21 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
 Material material22 = new MetalMaterial(new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_ETA.toColorXYZ()))), new ConstantTexture(Color3F.maximumTo1(Color3F.convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_K.toColorXYZ()))), new ConstantTexture(new Color3F(0.05F)), new ConstantTexture(new Color3F(0.05F)), true);
 Material material23 = new SubstrateMaterial(new ConstantTexture(new Color3F(1.0F, 0.2F, 0.2F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
-Material material24 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(), new ConstantTexture(), true);
+Material material24 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(new Color3F(1.0F, 1.0F, 0.5F)), new ConstantTexture(), new ConstantTexture(), false);
 Material material25 = new MatteMaterial(new ConstantTexture(new Color3F(90.0F)), new ConstantTexture(new Color3F(0.2F, 1.0F, 0.2F)));
 Material material26 = new MirrorMaterial();
 Material material27 = new UberMaterial();
@@ -23,13 +24,13 @@ Shape3F shape13 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +
 Shape3F shape14 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -1.0F, +0.0F), new Point3F(1.0F, 0.0F, +0.0F));//Back
 Shape3F shape15 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F, -1.0F));//Right
 Shape3F shape16 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1.0F, +0.0F), new Point3F(0.0F, 0.0F,  1.0F));//Left
-Shape3F shape21 = new Sphere3F();
-Shape3F shape22 = new Sphere3F();
-Shape3F shape23 = new Sphere3F();
-Shape3F shape24 = new Sphere3F();
-Shape3F shape25 = new Sphere3F();
-Shape3F shape26 = new Sphere3F();
-Shape3F shape27 = new Sphere3F();
+Shape3F shape21 = isTorus ? new Torus3F() : new Sphere3F();
+Shape3F shape22 = isTorus ? new Torus3F() : new Sphere3F();
+Shape3F shape23 = isTorus ? new Torus3F() : new Sphere3F();
+Shape3F shape24 = isTorus ? new Torus3F() : new Sphere3F();
+Shape3F shape25 = isTorus ? new Torus3F() : new Sphere3F();
+Shape3F shape26 = isTorus ? new Torus3F() : new Sphere3F();
+Shape3F shape27 = isTorus ? new Torus3F() : new Sphere3F();
 Shape3F shape31 = new Sphere3F();
 
 Matrix44F matrix11 = Matrix44F.translate(+0.0F, 0.00F, + 0.0F);

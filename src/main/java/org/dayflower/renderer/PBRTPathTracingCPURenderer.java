@@ -484,6 +484,6 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			return true;
 		}
 		
-		return !scene.intersects(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), 0.001F, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())));
+		return !scene.intersects(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), T_MINIMUM, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint()) + T_MINIMUM));
 	}
 }

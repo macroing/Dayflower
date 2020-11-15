@@ -407,6 +407,25 @@ public final class Camera {
 	}
 	
 	/**
+	 * Moves this {@code Camera} instance down by {@code distance}.
+	 * 
+	 * @param distance the distance to move by
+	 */
+	public void moveDown(final float distance) {
+		final Point3F eye = this.eye;
+		
+		final Vector3F v = this.orthonormalBasis.getV();
+		
+		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
+		
+		final float x = eye.getX() - v.getX() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
+		final float y = eye.getY() - v.getY() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
+		final float z = eye.getZ() - v.getZ() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
+		
+		this.eye = new Point3F(x, y, z);
+	}
+	
+	/**
 	 * Moves this {@code Camera} instance forward by {@code distance}.
 	 * 
 	 * @param distance the distance to move by
@@ -459,6 +478,25 @@ public final class Camera {
 		final float x = eye.getX() + u.getX() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
 		final float y = eye.getY() + u.getY() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
 		final float z = eye.getZ() + u.getZ() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
+		
+		this.eye = new Point3F(x, y, z);
+	}
+	
+	/**
+	 * Moves this {@code Camera} instance up by {@code distance}.
+	 * 
+	 * @param distance the distance to move by
+	 */
+	public void moveUp(final float distance) {
+		final Point3F eye = this.eye;
+		
+		final Vector3F v = this.orthonormalBasis.getV();
+		
+		final boolean isWalkLockEnabled = this.isWalkLockEnabled;
+		
+		final float x = eye.getX() + v.getX() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
+		final float y = eye.getY() + v.getY() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
+		final float z = eye.getZ() + v.getZ() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
 		
 		this.eye = new Point3F(x, y, z);
 	}

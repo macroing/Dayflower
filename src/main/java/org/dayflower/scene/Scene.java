@@ -38,11 +38,6 @@ import org.dayflower.util.Lists;
  * @author J&#246;rgen Lundgren
  */
 public final class Scene {
-	private static final float T_MAXIMUM = Float.MAX_VALUE;
-	private static final float T_MINIMUM = 0.001F;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private Camera camera;
 	private List<Light> lights;
 	private List<Primitive> primitives;
@@ -164,21 +159,6 @@ public final class Scene {
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
-	 * @return an {@code Optional} with an optional {@code Intersection} instance that contains information about the intersection, if it was found
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	public Optional<Intersection> intersection(final Ray3F ray) {
-		return intersection(ray, T_MINIMUM, T_MAXIMUM);
-	}
-	
-	/**
-	 * Performs an intersection test between {@code ray} and this {@code Scene} instance.
-	 * <p>
-	 * Returns an {@code Optional} with an optional {@link Intersection} instance that contains information about the intersection, if it was found.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return an {@code Optional} with an optional {@code Intersection} instance that contains information about the intersection, if it was found
@@ -276,19 +256,6 @@ public final class Scene {
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
-	 * @return {@code true} if, and only if, {@code ray} intersects any {@code Primitive} instance in this {@code Scene} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	public boolean intersects(final Ray3F ray) {
-		return intersects(ray, T_MINIMUM, T_MAXIMUM);
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, {@code ray} intersects any {@link Primitive} instance in this {@code Scene} instance, {@code false} otherwise.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} in world space to perform an intersection test against this {@code Scene} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
 	 * @return {@code true} if, and only if, {@code ray} intersects any {@code Primitive} instance in this {@code Scene} instance, {@code false} otherwise
@@ -332,21 +299,6 @@ public final class Scene {
 	 */
 	public boolean removePrimitive(final Primitive primitive) {
 		return this.primitives.remove(Objects.requireNonNull(primitive, "primitive == null"));
-	}
-	
-	/**
-	 * Performs an intersection test between {@code ray} and this {@code Scene} instance.
-	 * <p>
-	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code Scene} instance
-	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	public float intersectionT(final Ray3F ray) {
-		return intersectionT(ray, T_MINIMUM, T_MAXIMUM);
 	}
 	
 	/**

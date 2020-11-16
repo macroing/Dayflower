@@ -55,6 +55,11 @@ import org.dayflower.scene.rayito.RayitoMaterial;
  * @author J&#246;rgen Lundgren
  */
 public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
+	private static final float T_MAXIMUM = Float.MAX_VALUE;
+	private static final float T_MINIMUM = 0.001F;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code RayitoPathTracingCPURenderer} instance.
 	 * <p>
@@ -116,7 +121,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 		int currentBounceDiracDistribution = 0;
 		
 		while(currentBounce < maximumBounce) {
-			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay);
+			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay, T_MINIMUM, T_MAXIMUM);
 			
 			if(optionalIntersection.isPresent()) {
 				final Vector3F currentRayDirectionI = currentRay.getDirection();
@@ -269,7 +274,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 							if(probabilityDensityFunctionValueB1 > 0.0F && reflectance > 0.0F) {
 								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
 								
-								final Optional<Intersection> optionalIntersection = scene.intersection(ray);
+								final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 								
 								if(optionalIntersection.isPresent()) {
 									final Intersection intersection = optionalIntersection.get();
@@ -301,7 +306,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 							
 							final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
 							
-							final Optional<Intersection> optionalIntersection = scene.intersection(ray);
+							final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 							
 							if(optionalIntersection.isPresent()) {
 								final Intersection intersection = optionalIntersection.get();

@@ -663,7 +663,8 @@ public final class PerezLight implements Light {
 	}
 	
 	private Color3F doRadianceSun(final Vector3F direction) {
-		return this.sun.intersects(new Ray3F(new Point3F(), direction), 0.0F, Float.MAX_VALUE) ? Color3F.multiply(this.sunColor, 10000000.0F) : Color3F.BLACK;
+		return Color3F.BLACK;
+//		return this.sun.intersects(new Ray3F(new Point3F(), direction), 0.0F, Float.MAX_VALUE) ? Color3F.multiply(this.sunColor, 10000000.0F) : Color3F.BLACK;
 	}
 	
 	private Vector3F doTransformToLocalSpace(final Vector3F vector) {

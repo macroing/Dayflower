@@ -25,6 +25,7 @@ import java.util.Optional;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
+import org.dayflower.scene.texture.ConstantTexture;
 
 /**
  * A {@code MetalMaterial} is an implementation of {@link PBRTMaterial} that represents metal.
@@ -42,6 +43,40 @@ public final class MetalMaterial implements PBRTMaterial {
 	private final boolean isRemappingRoughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code MetalMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalTexture(new ConstantTexture(Color3F.GOLD_ETA_MAXIMUM_TO_1), new ConstantTexture(Color3F.GOLD_K_MAXIMUM_TO_1));
+	 * }
+	 * </pre>
+	 */
+	public MetalMaterial() {
+		this(new ConstantTexture(Color3F.GOLD_ETA_MAXIMUM_TO_1), new ConstantTexture(Color3F.GOLD_K_MAXIMUM_TO_1));
+	}
+	
+	/**
+	 * Constructs a new {@code MetalMaterial} instance.
+	 * <p>
+	 * If either {@code textureEta} or {@code textureK} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalTexture(textureEta, textureK, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureEta a {@link Texture} instance used for eta, also called index of refraction (IOR)
+	 * @param textureK a {@code Texture} instance used for the absorption coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureEta} or {@code textureK} are {@code null}
+	 */
+	public MetalMaterial(final Texture textureEta, final Texture textureK) {
+		this(textureEta, textureK, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
+	}
 	
 	/**
 	 * Constructs a new {@code MetalMaterial} instance.

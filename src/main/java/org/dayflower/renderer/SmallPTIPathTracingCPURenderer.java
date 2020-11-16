@@ -54,6 +54,11 @@ import org.dayflower.scene.rayito.RefractionMaterial;
  * @author J&#246;rgen Lundgren
  */
 public final class SmallPTIPathTracingCPURenderer extends AbstractCPURenderer {
+	private static final float T_MAXIMUM = Float.MAX_VALUE;
+	private static final float T_MINIMUM = 0.001F;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code SmallPTIPathTracingCPURenderer} instance.
 	 * <p>
@@ -112,7 +117,7 @@ public final class SmallPTIPathTracingCPURenderer extends AbstractCPURenderer {
 		int currentBounce = 0;
 		
 		while(currentBounce < maximumBounce) {
-			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay);
+			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay, T_MINIMUM, T_MAXIMUM);
 			
 			if(optionalIntersection.isPresent()) {
 				final Vector3F currentDirection = currentRay.getDirection();

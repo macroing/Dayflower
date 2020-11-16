@@ -27,7 +27,6 @@ import java.util.Optional;
 import org.dayflower.display.Display;
 import org.dayflower.display.FileDisplay;
 import org.dayflower.geometry.OrthonormalBasis33F;
-import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
@@ -46,6 +45,11 @@ import org.dayflower.scene.Scene;
  * @author J&#246;rgen Lundgren
  */
 public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
+	private static final float T_MAXIMUM = Float.MAX_VALUE;
+	private static final float T_MINIMUM = 0.001F;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final float maximumDistance;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +129,7 @@ public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
 		
 		final Scene scene = getScene();
 		
-		final Optional<Intersection> optionalIntersection = scene.intersection(ray);
+		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 		
 		if(optionalIntersection.isPresent()) {
 			final Intersection intersection = optionalIntersection.get();
@@ -134,23 +138,17 @@ public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
 			
 			final OrthonormalBasis33F orthonormalBasisGWorldSpace = surfaceIntersectionWorldSpace.getOrthonormalBasisG();
 			
-			final Point3F surfaceIntersectionPointWorldSpace = surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint();
-			
-			final Vector3F surfaceNormalGWorldSpace = orthonormalBasisGWorldSpace.getW();
-			
 			final float maximumDistance = this.maximumDistance;
 			
 			final int samples = rendererConfiguration.getSamples();
 			
 			for(int sample = 0; sample < samples; sample++) {
-				final Point3F originWorldSpace = Point3F.add(surfaceIntersectionPointWorldSpace, surfaceNormalGWorldSpace, 0.0001F);
-				
 				final Vector3F directionWorldSpace = Vector3F.normalize(Vector3F.transform(SampleGeneratorF.sampleHemisphereUniformDistribution(), orthonormalBasisGWorldSpace));
 				
-				final Ray3F rayWorldSpaceShadow = new Ray3F(originWorldSpace, directionWorldSpace);
+				final Ray3F rayWorldSpaceShadow = surfaceIntersectionWorldSpace.createRay(directionWorldSpace);
 				
 				if(maximumDistance > 0.0F) {
-					final Optional<Intersection> optionalIntersectionShadow = scene.intersection(rayWorldSpaceShadow);
+					final Optional<Intersection> optionalIntersectionShadow = scene.intersection(rayWorldSpaceShadow, T_MINIMUM, T_MAXIMUM);
 					
 					if(optionalIntersectionShadow.isPresent()) {
 						final Intersection intersectionShadow = optionalIntersectionShadow.get();
@@ -161,7 +159,7 @@ public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
 					} else {
 						radiance = Color3F.add(radiance, Color3F.WHITE);
 					}
-				} else if(!scene.intersects(rayWorldSpaceShadow)) {
+				} else if(!scene.intersects(rayWorldSpaceShadow, T_MINIMUM, T_MAXIMUM)) {
 					radiance = Color3F.add(radiance, Color3F.WHITE);
 				}
 			}

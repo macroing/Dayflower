@@ -75,6 +75,26 @@ public final class Color3F {
 	public static final Color3F GOLD_AZTEK = new Color3F(0.76F, 0.6F, 0.33F);
 	
 	/**
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for gold.
+	 */
+	public static final Color3F GOLD_ETA = convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_ETA.toColorXYZ());
+	
+	/**
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for gold, but has a restricted range.
+	 */
+	public static final Color3F GOLD_ETA_MAXIMUM_TO_1 = maximumTo1(GOLD_ETA);
+	
+	/**
+	 * A {@code Color3F} that contains the absorption coefficient for gold.
+	 */
+	public static final Color3F GOLD_K = convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_K.toColorXYZ());
+	
+	/**
+	 * A {@code Color3F} that contains the absorption coefficient for gold, but has a restricted range.
+	 */
+	public static final Color3F GOLD_K_MAXIMUM_TO_1 = maximumTo1(GOLD_K);
+	
+	/**
 	 * A {@code Color3F} denoting the color metallic gold.
 	 */
 	public static final Color3F GOLD_METALLIC = new Color3F(0.83F, 0.69F, 0.22F);

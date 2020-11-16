@@ -26,6 +26,7 @@ import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Ints.min;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.dayflower.display.Display;
@@ -63,6 +64,11 @@ import org.dayflower.scene.rayito.RayitoMaterial;
  * @author J&#246;rgen Lundgren
  */
 public final class RayCastingCPURenderer extends AbstractCPURenderer {
+	private static final float T_MAXIMUM = Float.MAX_VALUE;
+	private static final float T_MINIMUM = 0.001F;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code RayCastingCPURenderer} instance.
 	 * <p>
@@ -164,7 +170,7 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 					
 					final Ray3F shadowRay = new Ray3F(origin, direction);
 					
-					final float t = scene.intersectionT(shadowRay);
+					final float t = scene.intersectionT(shadowRay, T_MINIMUM, T_MAXIMUM);
 					
 					if(isNaN(t) || t * t > surfaceIntersectionPointToPosition.lengthSquared()) {
 						final float nDotL = Vector3F.dotProduct(surfaceNormalS, surfaceIntersectionPointToPositionNormalized);
@@ -215,7 +221,7 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 					
 					final Ray3F shadowRay = new Ray3F(origin, direction);
 					
-					final float t = scene.intersectionT(shadowRay);
+					final float t = scene.intersectionT(shadowRay, T_MINIMUM, T_MAXIMUM);
 					
 					if(isNaN(t) || t * t > surfaceIntersectionPointToPosition.lengthSquared()) {
 						final float nDotL = Vector3F.dotProduct(surfaceNormalS, surfaceIntersectionPointToPositionNormalized);
@@ -236,7 +242,7 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 	private static Color3F doGetRadiance(final Ray3F ray, final Scene scene) {
 		Color3F radiance = Color3F.BLACK;
 		
-		final Optional<Intersection> optionalIntersection = scene.intersection(ray);
+		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 		
 		if(optionalIntersection.isPresent()) {
 			final Intersection intersection = optionalIntersection.get();
@@ -264,81 +270,80 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 	}
 	
 	private static Color3F doLightEstimateDirectDeltaDistributionFalse(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final Scene scene, final boolean isSpecular) {
-		/*
-	BxDFType bsdfFlags = specular ? BSDF_ALL : BxDFType(BSDF_ALL & ~BSDF_SPECULAR);
-	
-	Spectrum Ld(0.f);
-	
-	Vector3f wi;
-	
-	Float lightPdf = 0, scatteringPdf = 0;
-	
-	VisibilityTester visibility;
-	
-	Spectrum Li = light.Sample_Li(it, uLight, &wi, &lightPdf, &visibility);
-	
-	if (lightPdf > 0 && !Li.IsBlack()) {
-		Spectrum f;
-		
-		const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
-		
-		f = isect.bsdf->f(isect.wo, wi, bsdfFlags) * AbsDot(wi, isect.shading.n);
-		
-		scatteringPdf = isect.bsdf->Pdf(isect.wo, wi, bsdfFlags);
-		
-		if (!f.IsBlack() && visibility.Unoccluded(scene)) {
-			Float weight = PowerHeuristic(1, lightPdf, 1, scatteringPdf);
-			
-			Ld += f * Li * weight / lightPdf;
-		}
-	}
-	
-	BxDFType sampledType;
-	
-	const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
-	
-	Spectrum f = isect.bsdf->Sample_f(isect.wo, &wi, uScattering, &scatteringPdf, bsdfFlags, &sampledType) * AbsDot(wi, isect.shading.n);
-	
-	bool sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
-	
-	if (!f.IsBlack() && scatteringPdf > 0) {
-		Float weight = 1;
-		
-		if (!sampledSpecular) {
-			lightPdf = light.Pdf_Li(it, wi);
-			
-			if (lightPdf == 0) {
-				return Ld;
-			}
-			
-			weight = PowerHeuristic(1, scatteringPdf, 1, lightPdf);
-		}
-		
-		SurfaceInteraction lightIsect;
-		
-		Ray ray = it.SpawnRay(wi);
-		
-		Spectrum Tr(1.f);
-		
-		bool foundSurfaceInteraction = handleMedia ? scene.IntersectTr(ray, sampler, &lightIsect, &Tr) : scene.Intersect(ray, &lightIsect);
-		
-		Spectrum Li(0.f);
-		
-		if (foundSurfaceInteraction) {
-			if (lightIsect.primitive->GetAreaLight() == &light) {
-				Li = lightIsect.Le(-wi);
-			}
-		} else {
-			Li = light.Le(ray);
-		}
-		
-		if (!Li.IsBlack()) {
-			Ld += f * Li * Tr * weight / scatteringPdf;
-		}
-	}
-	
-	return Ld;
-		 */
+//		TODO: Verify!
+//		BxDFType bsdfFlags = specular ? BSDF_ALL : BxDFType(BSDF_ALL & ~BSDF_SPECULAR);
+//		
+//		Spectrum Ld(0.f);
+//		
+//		Vector3f wi;
+//		
+//		Float lightPdf = 0, scatteringPdf = 0;
+//		
+//		VisibilityTester visibility;
+//		
+//		Spectrum Li = light.Sample_Li(it, uLight, &wi, &lightPdf, &visibility);
+//		
+//		if (lightPdf > 0 && !Li.IsBlack()) {
+//			Spectrum f;
+//			
+//			const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
+//			
+//			f = isect.bsdf->f(isect.wo, wi, bsdfFlags) * AbsDot(wi, isect.shading.n);
+//			
+//			scatteringPdf = isect.bsdf->Pdf(isect.wo, wi, bsdfFlags);
+//			
+//			if (!f.IsBlack() && visibility.Unoccluded(scene)) {
+//				Float weight = PowerHeuristic(1, lightPdf, 1, scatteringPdf);
+//				
+//				Ld += f * Li * weight / lightPdf;
+//			}
+//		}
+//		
+//		BxDFType sampledType;
+//		
+//		const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
+//		
+//		Spectrum f = isect.bsdf->Sample_f(isect.wo, &wi, uScattering, &scatteringPdf, bsdfFlags, &sampledType) * AbsDot(wi, isect.shading.n);
+//		
+//		bool sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
+//		
+//		if (!f.IsBlack() && scatteringPdf > 0) {
+//			Float weight = 1;
+//			
+//			if (!sampledSpecular) {
+//				lightPdf = light.Pdf_Li(it, wi);
+//				
+//				if (lightPdf == 0) {
+//					return Ld;
+//				}
+//				
+//				weight = PowerHeuristic(1, scatteringPdf, 1, lightPdf);
+//			}
+//			
+//			SurfaceInteraction lightIsect;
+//			
+//			Ray ray = it.SpawnRay(wi);
+//			
+//			Spectrum Tr(1.f);
+//			
+//			bool foundSurfaceInteraction = handleMedia ? scene.IntersectTr(ray, sampler, &lightIsect, &Tr) : scene.Intersect(ray, &lightIsect);
+//			
+//			Spectrum Li(0.f);
+//			
+//			if (foundSurfaceInteraction) {
+//				if (lightIsect.primitive->GetAreaLight() == &light) {
+//					Li = lightIsect.Le(-wi);
+//				}
+//			} else {
+//				Li = light.Le(ray);
+//			}
+//			
+//			if (!Li.IsBlack()) {
+//				Ld += f * Li * Tr * weight / scatteringPdf;
+//			}
+//		}
+//		
+//		return Ld;
 		
 		Color3F lightDirect = Color3F.BLACK;
 		
@@ -404,7 +409,7 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 					
 					final Color3F transmittance = Color3F.WHITE;
 					
-					final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray);
+					final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 					
 					if(optionalIntersectionLight.isPresent()) {
 						final Intersection intersectionLight = optionalIntersectionLight.get();

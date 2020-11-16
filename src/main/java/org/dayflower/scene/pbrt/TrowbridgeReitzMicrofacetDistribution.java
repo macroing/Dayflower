@@ -216,14 +216,12 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		}
 		
 		final float alphaX = this.alphaX;
-		final float alphaXSquared = alphaX * alphaX;
 		final float alphaY = this.alphaY;
-		final float alphaYSquared = alphaY * alphaY;
 		
 		final float cosPhiSquaredOutgoing = outgoing.cosPhiSquared();
 		final float sinPhiSquaredOutgoing = outgoing.sinPhiSquared();
 		
-		final float alpha = sqrt(cosPhiSquaredOutgoing * alphaXSquared + sinPhiSquaredOutgoing * alphaYSquared);
+		final float alpha = sqrt(cosPhiSquaredOutgoing * alphaX * alphaX + sinPhiSquaredOutgoing * alphaY * alphaY);
 		final float alphaTanThetaAbsOutgoingSquared = (alpha * tanThetaAbsOutgoing) * (alpha * tanThetaAbsOutgoing);
 		
 		final float lambda = (-1.0F + sqrt(1.0F + alphaTanThetaAbsOutgoingSquared)) / 2.0F;

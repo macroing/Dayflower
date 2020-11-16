@@ -54,6 +54,11 @@ import org.dayflower.scene.rayito.RefractionMaterial;
  * @author J&#246;rgen Lundgren
  */
 public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
+	private static final float T_MAXIMUM = Float.MAX_VALUE;
+	private static final float T_MINIMUM = 0.001F;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code SmallPTRPathTracingCPURenderer} instance.
 	 * <p>
@@ -107,7 +112,7 @@ public final class SmallPTRPathTracingCPURenderer extends AbstractCPURenderer {
 		
 		final Scene scene = getScene();
 		
-		final Optional<Intersection> optionalIntersection = scene.intersection(ray);
+		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 		
 		if(bounce >= rendererConfiguration.getMaximumBounce()) {
 			return Color3F.BLACK;

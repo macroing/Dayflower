@@ -1290,6 +1290,49 @@ public final class Color3F {
 	}
 	
 	/**
+	 * Multiplies the component values of {@code colorA}, {@code colorB} and {@code colorC}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the multiplication.
+	 * <p>
+	 * If either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorA a {@code Color3F} instance
+	 * @param colorB a {@code Color3F} instance
+	 * @param colorC a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}
+	 */
+	public static Color3F multiply(final Color3F colorA, final Color3F colorB, final Color3F colorC) {
+		final float component1 = colorA.component1 * colorB.component1 * colorC.component1;
+		final float component2 = colorA.component2 * colorB.component2 * colorC.component2;
+		final float component3 = colorA.component3 * colorB.component3 * colorC.component3;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Multiplies the component values of {@code colorA}, {@code colorB}, {@code colorC} and {@code colorD}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the multiplication.
+	 * <p>
+	 * If either {@code colorA}, {@code colorB}, {@code colorC} or {@code colorD} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorA a {@code Color3F} instance
+	 * @param colorB a {@code Color3F} instance
+	 * @param colorC a {@code Color3F} instance
+	 * @param colorD a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB}, {@code colorC} or {@code colorD} are {@code null}
+	 */
+	public static Color3F multiply(final Color3F colorA, final Color3F colorB, final Color3F colorC, final Color3F colorD) {
+		final float component1 = colorA.component1 * colorB.component1 * colorC.component1 * colorD.component1;
+		final float component2 = colorA.component2 * colorB.component2 * colorC.component2 * colorD.component2;
+		final float component3 = colorA.component3 * colorB.component3 * colorC.component3 * colorD.component3;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Multiplies the component values of {@code colorA} with the component values of {@code colorB} and its result with {@code scalarC}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result of the multiplication.

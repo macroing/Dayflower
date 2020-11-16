@@ -745,6 +745,63 @@ public final class Vector3F {
 	}
 	
 	/**
+	 * Negates the component 1 value of {@code vector}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the negation.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the result of the negation
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector3F negateComponent1(final Vector3F vector) {
+		final float component1 = -vector.component1;
+		final float component2 = +vector.component2;
+		final float component3 = +vector.component3;
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Negates the component 2 value of {@code vector}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the negation.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the result of the negation
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector3F negateComponent2(final Vector3F vector) {
+		final float component1 = +vector.component1;
+		final float component2 = -vector.component2;
+		final float component3 = +vector.component3;
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Negates the component 3 value of {@code vector}.
+	 * <p>
+	 * Returns a new {@code Vector3F} instance with the result of the negation.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vector a {@code Vector3F} instance
+	 * @return a new {@code Vector3F} instance with the result of the negation
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public static Vector3F negateComponent3(final Vector3F vector) {
+		final float component1 = +vector.component1;
+		final float component2 = +vector.component2;
+		final float component3 = -vector.component3;
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Returns a new {@code Vector3F} instance denoting the normal of the plane defined by the {@link Point3F} instances {@code a}, {@code b} and {@code c}.
 	 * <p>
 	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.

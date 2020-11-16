@@ -201,10 +201,18 @@ public final class FresnelBlendBRDF extends BXDF {
 		
 		final Vector3F normalNormalized = Vector3F.normalize(normal);
 		
+		final float a = 28.0F / (23.0F * PI);
+		final float b = 1.0F - doPow5(1.0F - 0.5F * incoming.cosThetaAbs());
+		final float c = 1.0F - doPow5(1.0F - 0.5F * outgoing.cosThetaAbs());
+		final float d = this.microfacetDistribution.computeDifferentialArea(normalNormalized);
+		final float e = 4.0F * abs(Vector3F.dotProduct(incoming, normalNormalized)) * max(incoming.cosThetaAbs(), outgoing.cosThetaAbs());
+		final float f = d / e;
+		
 		final Color3F reflectanceScaleDiffuse = this.reflectanceScaleDiffuse;
 		final Color3F reflectanceScaleSpecular = this.reflectanceScaleSpecular;
-		final Color3F colorDiffuse = Color3F.multiply(Color3F.multiply(Color3F.multiply(Color3F.multiply(reflectanceScaleDiffuse, 28.0F / (23.0F * PI)), Color3F.subtract(Color3F.WHITE, reflectanceScaleSpecular)), 1.0F - doPow5(1.0F - 0.5F * incoming.cosThetaAbs())), 1.0F - doPow5(1.0F - 0.5F * outgoing.cosThetaAbs()));
-		final Color3F colorSpecular = Color3F.multiply(doFresnelDielectricSchlick(Vector3F.dotProduct(incoming, normalNormalized), reflectanceScaleSpecular), this.microfacetDistribution.computeDifferentialArea(normalNormalized) / (4.0F * abs(Vector3F.dotProduct(incoming, normalNormalized)) * max(incoming.cosThetaAbs(), outgoing.cosThetaAbs())));
+		final Color3F fresnel = doFresnelDielectricSchlick(reflectanceScaleSpecular, Vector3F.dotProduct(incoming, normalNormalized));
+		final Color3F colorDiffuse = Color3F.multiply(Color3F.multiply(Color3F.multiply(Color3F.multiply(reflectanceScaleDiffuse, a), Color3F.subtract(Color3F.WHITE, reflectanceScaleSpecular)), b), c);
+		final Color3F colorSpecular = Color3F.multiply(fresnel, f);
 		
 		return Color3F.add(colorDiffuse, colorSpecular);
 	}
@@ -235,7 +243,7 @@ public final class FresnelBlendBRDF extends BXDF {
 			final float v = sample.getV();
 			
 			final Vector3F incomingUnoriented = SampleGeneratorF.sampleHemisphereCosineDistribution(u, v);
-			final Vector3F incoming = outgoing.getZ() < 0.0F ? new Vector3F(incomingUnoriented.getX(), incomingUnoriented.getY(), -incomingUnoriented.getZ()) : incomingUnoriented;
+			final Vector3F incoming = outgoing.getZ() < 0.0F ? Vector3F.negateComponent3(incomingUnoriented) : incomingUnoriented;
 			
 			final BXDFType bXDFType = getBXDFType();
 			
@@ -343,7 +351,7 @@ public final class FresnelBlendBRDF extends BXDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Color3F doFresnelDielectricSchlick(final float cosTheta, final Color3F f0) {
+	private static Color3F doFresnelDielectricSchlick(final Color3F f0, final float cosTheta) {
 		return Color3F.add(f0, Color3F.multiply(Color3F.subtract(Color3F.WHITE, f0), doPow5(1.0F - cosTheta)));
 	}
 	

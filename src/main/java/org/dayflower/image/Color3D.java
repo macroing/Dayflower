@@ -1290,6 +1290,49 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Multiplies the component values of {@code colorA}, {@code colorB} and {@code colorC}.
+	 * <p>
+	 * Returns a new {@code Color3D} instance with the result of the multiplication.
+	 * <p>
+	 * If either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorA a {@code Color3D} instance
+	 * @param colorB a {@code Color3D} instance
+	 * @param colorC a {@code Color3D} instance
+	 * @return a new {@code Color3D} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}
+	 */
+	public static Color3D multiply(final Color3D colorA, final Color3D colorB, final Color3D colorC) {
+		final double component1 = colorA.component1 * colorB.component1 * colorC.component1;
+		final double component2 = colorA.component2 * colorB.component2 * colorC.component2;
+		final double component3 = colorA.component3 * colorB.component3 * colorC.component3;
+		
+		return new Color3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Multiplies the component values of {@code colorA}, {@code colorB}, {@code colorC} and {@code colorD}.
+	 * <p>
+	 * Returns a new {@code Color3D} instance with the result of the multiplication.
+	 * <p>
+	 * If either {@code colorA}, {@code colorB}, {@code colorC} or {@code colorD} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorA a {@code Color3D} instance
+	 * @param colorB a {@code Color3D} instance
+	 * @param colorC a {@code Color3D} instance
+	 * @param colorD a {@code Color3D} instance
+	 * @return a new {@code Color3D} instance with the result of the multiplication
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB}, {@code colorC} or {@code colorD} are {@code null}
+	 */
+	public static Color3D multiply(final Color3D colorA, final Color3D colorB, final Color3D colorC, final Color3D colorD) {
+		final double component1 = colorA.component1 * colorB.component1 * colorC.component1 * colorD.component1;
+		final double component2 = colorA.component2 * colorB.component2 * colorC.component2 * colorD.component2;
+		final double component3 = colorA.component3 * colorB.component3 * colorC.component3 * colorD.component3;
+		
+		return new Color3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Multiplies the component values of {@code colorA} with the component values of {@code colorB} and its result with {@code scalarC}.
 	 * <p>
 	 * Returns a new {@code Color3D} instance with the result of the multiplication.

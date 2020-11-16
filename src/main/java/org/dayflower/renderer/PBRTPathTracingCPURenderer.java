@@ -38,6 +38,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.sampler.RandomSampler;
+import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
@@ -109,6 +110,8 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	protected Color3F radiance(final Ray3F ray) {
 		final RendererConfiguration rendererConfiguration = getRendererConfiguration();
 		
+		final Sampler sampler = getSampler();
+		
 		final Scene scene = getScene();
 		
 		final List<Light> lights = scene.getLights();
@@ -174,12 +177,14 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			final BSDF bSDF = optionalBSDF.get();
 			
 			if(bSDF.countBXDFsBySpecularType(false) > 0) {
-				radiance = Color3F.add(radiance, Color3F.multiply(throughput, doLightSampleOneUniformDistribution(bSDF, intersection, scene)));
+				radiance = Color3F.add(radiance, Color3F.multiply(throughput, doLightSampleOneUniformDistribution(bSDF, intersection, sampler, scene)));
 			}
 			
 			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
 			
-			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, new Point2F(random(), random()));
+			final Sample2F sample = sampler.sample2();
+			
+			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, new Point2F(sample.getU(), sample.getV()));
 			
 			if(!optionalBSDFResult.isPresent()) {
 				break;
@@ -321,32 +326,35 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			
 			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
 			
+			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+			
+			final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
+			final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
+			
 			if(optionalLightRadianceIncomingResult.isPresent()) {
 				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
-				
-				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 				
 				final Color3F lightIncoming = lightRadianceIncomingResult.getResult();
 				
 				final Vector3F incoming = lightRadianceIncomingResult.getIncoming();
-				final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
 				
 				final float lightProbabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getOrthonormalBasisS().getW())));
+					final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
+					final float incomingDotNormalAbs = abs(incomingDotNormal);
+					
+					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), incomingDotNormalAbs);
 					
 					final float scatteringProbabilityDensityFunctionValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, incoming);
 					
 					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
-						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightProbabilityDensityFunctionValue, scatteringProbabilityDensityFunctionValue, 1, 1)), lightProbabilityDensityFunctionValue));
+						final float weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightProbabilityDensityFunctionValue, scatteringProbabilityDensityFunctionValue, 1, 1);
+						
+						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming, weight), lightProbabilityDensityFunctionValue));
 					}
 				}
 			}
-			
-			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-			
-			final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
 			
 			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(bXDFType, outgoing, sampleB);
 			
@@ -355,14 +363,17 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 				
 				final Vector3F incoming = bSDFResult.getIncoming();
 				
-				final Color3F scatteringResult = Color3F.multiply(bSDFResult.getResult(), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getOrthonormalBasisS().getW())));
+				final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
+				final float incomingDotNormalAbs = abs(incomingDotNormal);
+				
+				final Color3F scatteringResult = Color3F.multiply(bSDFResult.getResult(), incomingDotNormalAbs);
 				
 				final boolean hasSampledSpecular = bSDFResult.getBXDFType().isSpecular();
 				
 				final float scatteringProbabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 				
 				if(!scatteringResult.isBlack() && scatteringProbabilityDensityFunctionValue > 0.0F) {
-					float weight = 1.0F;
+					Color3F weight = Color3F.WHITE;
 					
 					if(!hasSampledSpecular) {
 						final float lightProbabilityDensityFunctionValue = light.evaluateProbabilityDensityFunctionRadianceIncoming(intersection, incoming);
@@ -371,7 +382,7 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 							return lightDirect;
 						}
 						
-						weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(scatteringProbabilityDensityFunctionValue, lightProbabilityDensityFunctionValue, 1, 1);
+						weight = new Color3F(SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(scatteringProbabilityDensityFunctionValue, lightProbabilityDensityFunctionValue, 1, 1));
 					}
 					
 					final Ray3F ray = surfaceIntersection.createRay(incoming);
@@ -387,14 +398,14 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 							final Color3F lightIncoming = intersectionLight.evaluateRadianceEmitted(Vector3F.negate(incoming));
 							
 							if(!lightIncoming.isBlack()) {
-								lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), transmittance), weight), scatteringProbabilityDensityFunctionValue));
+								lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming, transmittance, weight), scatteringProbabilityDensityFunctionValue));
 							}
 						}
 					} else {
 						final Color3F lightIncoming = light.evaluateRadianceEmitted(ray);
 						
 						if(!lightIncoming.isBlack()) {
-							lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(scatteringResult, lightIncoming), transmittance), weight), scatteringProbabilityDensityFunctionValue));
+							lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming, transmittance, weight), scatteringProbabilityDensityFunctionValue));
 						}
 					}
 				}
@@ -425,7 +436,12 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 				final float lightProbabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), abs(Vector3F.dotProduct(incoming, surfaceIntersection.getOrthonormalBasisS().getW())));
+					final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
+					
+					final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
+					final float incomingDotNormalAbs = abs(incomingDotNormal);
+					
+					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), incomingDotNormalAbs);
 					
 					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
 						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming), lightProbabilityDensityFunctionValue));
@@ -438,11 +454,11 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	}
 	
 	@SuppressWarnings("unused")
-	private static Color3F doLightSampleAllUniformDistribution(final BSDF bSDF, final Intersection intersection, final Scene scene) {
+	private static Color3F doLightSampleAllUniformDistribution(final BSDF bSDF, final Intersection intersection, final Sampler sampler, final Scene scene) {
 		return new Color3F(0.25F);
 	}
 	
-	private static Color3F doLightSampleOneUniformDistribution(final BSDF bSDF, final Intersection intersection, final Scene scene) {
+	private static Color3F doLightSampleOneUniformDistribution(final BSDF bSDF, final Intersection intersection, final Sampler sampler, final Scene scene) {
 		final int lightCount = scene.getLightCount();
 		
 		if(lightCount == 0) {
@@ -455,15 +471,23 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 		
 		final Light light = scene.getLight(lightIndex);
 		
-		final Point2F sampleA = new Point2F(random(), random());
-		final Point2F sampleB = new Point2F(random(), random());
+		final Sample2F sampleA = sampler.sample2();
+		final Sample2F sampleB = sampler.sample2();
 		
-		return Color3F.divide(doLightEstimateDirect(bSDF, intersection, light, sampleA, sampleB, scene, false), lightProbabilityDensityFunctionValue);
+		return Color3F.divide(doLightEstimateDirect(bSDF, intersection, light, new Point2F(sampleA.getU(), sampleA.getV()), new Point2F(sampleB.getU(), sampleB.getV()), scene, false), lightProbabilityDensityFunctionValue);
 	}
 	
 	private static boolean doIsLightVisible(final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult, final Scene scene, final SurfaceIntersection3F surfaceIntersection) {
+		final Point3F point = lightIncomingRadianceResult.getPoint();
+		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+		
+		final Ray3F ray = surfaceIntersection.createRay(point);
+		
+		final float tMinimum = T_MINIMUM;
+		final float tMaximum = abs(Point3F.distance(surfaceIntersectionPoint, point)) + T_MINIMUM;
+		
 		if(light instanceof AreaLight) {
-			final Optional<Intersection> optionalIntersection = scene.intersection(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), T_MINIMUM, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint())) + T_MINIMUM);
+			final Optional<Intersection> optionalIntersection = scene.intersection(ray, tMinimum, tMaximum);
 			
 			if(optionalIntersection.isPresent()) {
 				final Intersection intersection = optionalIntersection.get();
@@ -484,6 +508,6 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 			return true;
 		}
 		
-		return !scene.intersects(surfaceIntersection.createRay(lightIncomingRadianceResult.getPoint()), T_MINIMUM, abs(Point3F.distance(surfaceIntersection.getSurfaceIntersectionPoint(), lightIncomingRadianceResult.getPoint()) + T_MINIMUM));
+		return !scene.intersects(ray, tMinimum, tMaximum);
 	}
 }

@@ -65,10 +65,10 @@ public final class RendererTest {
 		final
 		Renderer renderer = new PBRTPathTracingCPURenderer();
 		renderer.setRendererConfiguration(new RendererConfiguration());
-		renderer.setScene(new JavaSceneLoader().load("./resources/scenes/PBRTSL500.java"));
+		renderer.setScene(new JavaSceneLoader().load("./resources/scenes/PBRTShowcaseMaterial.java"));
 		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
 		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
-		renderer.setSampler(new RandomSampler());
+		renderer.setSampler(new NRooksSampler());
 		renderer.render();
 	}
 	

@@ -662,6 +662,7 @@ public final class PerezLight implements Light {
 		return Color3F.convertXYZToRGBUsingSRGB(new Color3F(x0, y0, z0));
 	}
 	
+	@SuppressWarnings({"static-method", "unused"})
 	private Color3F doRadianceSun(final Vector3F direction) {
 		return Color3F.BLACK;
 //		return this.sun.intersects(new Ray3F(new Point3F(), direction), 0.0F, Float.MAX_VALUE) ? Color3F.multiply(this.sunColor, 10000000.0F) : Color3F.BLACK;

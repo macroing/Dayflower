@@ -145,7 +145,6 @@ Shape3F shape68 = triangleMeshes.get(66);
 Shape3F shape69 = triangleMeshes.get(67);
 
 Matrix44F matrix01 = Matrix44F.identity();
-//Matrix44F matrixNM = Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 2.0F), Matrix44F.multiply(Matrix44F.rotateY(AngleF.degrees(90.0F)), Matrix44F.rotateX(AngleF.degrees(270.0F))));
 Matrix44F matrixNM = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 0.0F), Matrix44F.rotateY(AngleF.degrees(90.0F))), Matrix44F.rotateX(AngleF.degrees(270.0F))), Matrix44F.scale(0.01F));
 
 Camera camera = new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F));
@@ -222,3 +221,4 @@ scene.addPrimitive(new Primitive(material68, shape68, new ConstantTexture(), new
 scene.addPrimitive(new Primitive(material69, shape69, new ConstantTexture(), new ConstantTexture(), matrixNM));//License		License0
 scene.setCamera(camera);
 scene.setName("PBRTSL500");
+scene.buildAccelerationStructure();

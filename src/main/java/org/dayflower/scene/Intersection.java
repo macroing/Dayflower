@@ -185,7 +185,7 @@ public final class Intersection {
 		} else if(intersectionB != null) {
 			return optionalIntersectionB;
 		} else {
-			return Optional.empty();
+			return EMPTY;
 		}
 	}
 }

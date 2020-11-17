@@ -340,7 +340,7 @@ public final class SurfaceIntersection3F {
 		final OrthonormalBasis33F orthonormalBasisSOldSpace = surfaceIntersection.orthonormalBasisS;
 		final OrthonormalBasis33F orthonormalBasisGNewSpace = OrthonormalBasis33F.transformTranspose(matrixInverse, orthonormalBasisGOldSpace);
 		final OrthonormalBasis33F orthonormalBasisSNewSpace = OrthonormalBasis33F.transformTranspose(matrixInverse, orthonormalBasisSOldSpace);
-		final OrthonormalBasis33F orthonormalBasisSNewSpaceCorrectlyOriented = Vector3F.dotProduct(orthonormalBasisSNewSpace.getW(), orthonormalBasisGNewSpace.getW()) < 0.0F ? OrthonormalBasis33F.flipW(orthonormalBasisSNewSpace) : orthonormalBasisSNewSpace;
+		final OrthonormalBasis33F orthonormalBasisSNewSpaceCorrectlyOriented = orthonormalBasisSNewSpace;//Vector3F.dotProduct(orthonormalBasisSNewSpace.getW(), orthonormalBasisGNewSpace.getW()) < 0.0F ? OrthonormalBasis33F.flipW(orthonormalBasisSNewSpace) : orthonormalBasisSNewSpace;
 		
 		final Point2F textureCoordinates = surfaceIntersection.textureCoordinates;
 		

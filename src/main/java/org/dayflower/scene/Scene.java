@@ -18,14 +18,23 @@
  */
 package org.dayflower.scene;
 
+import static org.dayflower.util.Floats.abs;
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.minOrNaN;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.AxisAlignedBoundingBox3F;
+import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.InfiniteBoundingVolume3F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.util.Lists;
 
@@ -41,6 +50,8 @@ public final class Scene {
 	private Camera camera;
 	private List<Light> lights;
 	private List<Primitive> primitives;
+	private List<Primitive> primitivesExternalToBVH;
+	private Node node;
 	private String name;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +102,8 @@ public final class Scene {
 		this.camera = Objects.requireNonNull(camera, "camera == null");
 		this.lights = new ArrayList<>();
 		this.primitives = new ArrayList<>();
+		this.primitivesExternalToBVH = new ArrayList<>();
+		this.node = null;
 		this.name = Objects.requireNonNull(name, "name == null");
 	}
 	
@@ -166,6 +179,18 @@ public final class Scene {
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final MutableIntersection mutableIntersection = new MutableIntersection(ray, tMinimum, tMaximum);
+		
+		final Node node = this.node;
+		
+		if(node != null) {
+			for(final Primitive primitive : this.primitivesExternalToBVH) {
+				mutableIntersection.intersection(primitive);
+			}
+			
+			node.intersection(mutableIntersection);
+			
+			return mutableIntersection.computeIntersection();
+		}
 		
 		for(final Primitive primitive : this.primitives) {
 			mutableIntersection.intersection(primitive);
@@ -262,6 +287,18 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Node node = this.node;
+		
+		if(node != null) {
+			for(final Primitive primitive : this.primitivesExternalToBVH) {
+				if(primitive.intersects(ray, tMinimum, tMaximum)) {
+					return true;
+				}
+			}
+			
+			return node.intersects(ray, tMinimum, tMaximum);
+		}
+		
 		for(final Primitive primitive : this.primitives) {
 			if(primitive.intersects(ray, tMinimum, tMaximum)) {
 				return true;
@@ -319,6 +356,22 @@ public final class Scene {
 		float tMax = tMaximum;
 		float tMin = tMinimum;
 		
+		final Node node = this.node;
+		
+		if(node != null) {
+			for(final Primitive primitive : this.primitivesExternalToBVH) {
+				t = minOrNaN(t, primitive.intersectionT(ray, tMin, tMax));
+				
+				if(!isNaN(t)) {
+					tMax = t;
+				}
+			}
+			
+			t = minOrNaN(t, node.intersectionT(ray, new float[] {tMin, tMax}));
+			
+			return t;
+		}
+		
 		for(final Primitive primitive : this.primitives) {
 			t = minOrNaN(t, primitive.intersectionT(ray, tMin, tMax));
 			
@@ -347,6 +400,17 @@ public final class Scene {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.camera, this.lights, this.primitives, this.name);
+	}
+	
+	/**
+	 * Builds an acceleration structure for this {@code Scene} instance.
+	 */
+	public void buildAccelerationStructure() {
+		final List<Primitive> primitives = this.primitives;
+		final List<Primitive> primitivesExternalToBVH = new ArrayList<>();
+		
+		this.node = doCreateNode(primitives, primitivesExternalToBVH);
+		this.primitivesExternalToBVH = primitivesExternalToBVH;
 	}
 	
 	/**
@@ -395,5 +459,405 @@ public final class Scene {
 	 */
 	public void setPrimitives(final List<Primitive> primitives) {
 		this.primitives = new ArrayList<>(Lists.requireNonNullList(primitives, "primitives"));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Node doCreateNode(final List<LeafNode> processableLeafNodes, final Point3F maximum, final Point3F minimum, final int depth) {
+		final int size = processableLeafNodes.size();
+		final int sizeHalf = size / 2;
+		
+		if(size < 4) {
+			final List<Primitive> primitives = new ArrayList<>();
+			
+			for(final LeafNode processableLeafNode : processableLeafNodes) {
+				for(final Primitive primitive : processableLeafNode.getPrimitives()) {
+					primitives.add(primitive);
+				}
+			}
+			
+			return new LeafNode(maximum, minimum, depth, primitives);
+		}
+		
+		final float sideX = maximum.getX() - minimum.getX();
+		final float sideY = maximum.getY() - minimum.getY();
+		final float sideZ = maximum.getZ() - minimum.getZ();
+		
+		float minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
+		float bestSplit = Float.MAX_VALUE;
+		
+		int bestAxis = -1;
+		
+		for(int axis = 0; axis < 3; axis++) {
+			final float start = minimum.getComponent(axis);
+			final float stop  = maximum.getComponent(axis);
+			
+			if(abs(stop - start) < 1.0e-4F) {
+				continue;
+			}
+			
+			final float step = (stop - start) / (1024.0F / (depth + 1.0F));
+			
+			for(float oldSplit = 0.0F, newSplit = start + step; newSplit < stop - step; oldSplit = newSplit, newSplit += step) {
+//				The following test prevents an infinite loop from occurring:
+				if(equal(oldSplit, newSplit)) {
+					break;
+				}
+				
+				float maximumLX = Float.MIN_VALUE;
+				float maximumLY = Float.MIN_VALUE;
+				float maximumLZ = Float.MIN_VALUE;
+				float minimumLX = Float.MAX_VALUE;
+				float minimumLY = Float.MAX_VALUE;
+				float minimumLZ = Float.MAX_VALUE;
+				float maximumRX = Float.MIN_VALUE;
+				float maximumRY = Float.MIN_VALUE;
+				float maximumRZ = Float.MIN_VALUE;
+				float minimumRX = Float.MAX_VALUE;
+				float minimumRY = Float.MAX_VALUE;
+				float minimumRZ = Float.MAX_VALUE;
+				
+				int countL = 0;
+				int countR = 0;
+				
+				for(final LeafNode processableLeafNode : processableLeafNodes) {
+					final BoundingVolume3F boundingVolume = processableLeafNode.getBoundingVolume();
+					
+					final Point3F max = boundingVolume.getMaximum();
+					final Point3F mid = boundingVolume.getMidpoint();
+					final Point3F min = boundingVolume.getMinimum();
+					
+					final float value = mid.getComponent(axis);
+					
+					if(value < newSplit) {
+						maximumLX = max(maximumLX, max.getX());
+						maximumLY = max(maximumLY, max.getY());
+						maximumLZ = max(maximumLZ, max.getZ());
+						minimumLX = min(minimumLX, min.getX());
+						minimumLY = min(minimumLY, min.getY());
+						minimumLZ = min(minimumLZ, min.getZ());
+						
+						countL++;
+					} else {
+						maximumRX = max(maximumRX, max.getX());
+						maximumRY = max(maximumRY, max.getY());
+						maximumRZ = max(maximumRZ, max.getZ());
+						minimumRX = min(minimumRX, min.getX());
+						minimumRY = min(minimumRY, min.getY());
+						minimumRZ = min(minimumRZ, min.getZ());
+						
+						countR++;
+					}
+				}
+				
+				if(countL <= 1 || countR <= 1) {
+					continue;
+				}
+				
+				final float sideLX = maximumLX - minimumLX;
+				final float sideLY = maximumLY - minimumLY;
+				final float sideLZ = maximumLZ - minimumLZ;
+				final float sideRX = maximumRX - minimumRX;
+				final float sideRY = maximumRY - minimumRY;
+				final float sideRZ = maximumRZ - minimumRZ;
+				
+				final float surfaceL = sideLX * sideLY + sideLY * sideLZ + sideLZ * sideLX;
+				final float surfaceR = sideRX * sideRY + sideRY * sideRZ + sideRZ * sideRX;
+				
+				final float cost = surfaceL * countL + surfaceR * countR;
+				
+				if(cost < minimumCost) {
+					minimumCost = cost;
+					bestSplit = newSplit;
+					bestAxis = axis;
+				}
+			}
+		}
+		
+		if(bestAxis == -1) {
+			final List<Primitive> primitives = new ArrayList<>();
+			
+			for(final LeafNode processableLeafNode : processableLeafNodes) {
+				for(final Primitive primitive : processableLeafNode.getPrimitives()) {
+					primitives.add(primitive);
+				}
+			}
+			
+			return new LeafNode(maximum, minimum, depth, primitives);
+		}
+		
+		final List<LeafNode> leafNodesL = new ArrayList<>(sizeHalf);
+		final List<LeafNode> leafNodesR = new ArrayList<>(sizeHalf);
+		
+		float maximumLX = Float.MIN_VALUE;
+		float maximumLY = Float.MIN_VALUE;
+		float maximumLZ = Float.MIN_VALUE;
+		float minimumLX = Float.MAX_VALUE;
+		float minimumLY = Float.MAX_VALUE;
+		float minimumLZ = Float.MAX_VALUE;
+		float maximumRX = Float.MIN_VALUE;
+		float maximumRY = Float.MIN_VALUE;
+		float maximumRZ = Float.MIN_VALUE;
+		float minimumRX = Float.MAX_VALUE;
+		float minimumRY = Float.MAX_VALUE;
+		float minimumRZ = Float.MAX_VALUE;
+		
+		for(final LeafNode processableLeafNode : processableLeafNodes) {
+			final BoundingVolume3F boundingVolume = processableLeafNode.getBoundingVolume();
+			
+			final Point3F max = boundingVolume.getMaximum();
+			final Point3F mid = boundingVolume.getMidpoint();
+			final Point3F min = boundingVolume.getMinimum();
+			
+			final float value = mid.getComponent(bestAxis);
+			
+			if(value < bestSplit) {
+				leafNodesL.add(processableLeafNode);
+				
+				maximumLX = max(maximumLX, max.getX());
+				maximumLY = max(maximumLY, max.getY());
+				maximumLZ = max(maximumLZ, max.getZ());
+				minimumLX = min(minimumLX, min.getX());
+				minimumLY = min(minimumLY, min.getY());
+				minimumLZ = min(minimumLZ, min.getZ());
+			} else {
+				leafNodesR.add(processableLeafNode);
+				
+				maximumRX = max(maximumRX, max.getX());
+				maximumRY = max(maximumRY, max.getY());
+				maximumRZ = max(maximumRZ, max.getZ());
+				minimumRX = min(minimumRX, min.getX());
+				minimumRY = min(minimumRY, min.getY());
+				minimumRZ = min(minimumRZ, min.getZ());
+			}
+		}
+		
+		final Point3F maximumL = new Point3F(maximumLX, maximumLY, maximumLZ);
+		final Point3F minimumL = new Point3F(minimumLX, minimumLY, minimumLZ);
+		final Point3F maximumR = new Point3F(maximumRX, maximumRY, maximumRZ);
+		final Point3F minimumR = new Point3F(minimumRX, minimumRY, minimumRZ);
+		
+		final Node nodeL = doCreateNode(leafNodesL, maximumL, minimumL, depth + 1);
+		final Node nodeR = doCreateNode(leafNodesR, maximumR, minimumR, depth + 1);
+		
+		return new TreeNode(maximum, minimum, depth, nodeL, nodeR);
+	}
+	
+	private static Node doCreateNode(final List<Primitive> primitives, final List<Primitive> primitivesExternalToBVH) {
+		final List<LeafNode> processableLeafNodes = new ArrayList<>(primitives.size());
+		
+		float maximumX = Float.MIN_VALUE;
+		float maximumY = Float.MIN_VALUE;
+		float maximumZ = Float.MIN_VALUE;
+		float minimumX = Float.MAX_VALUE;
+		float minimumY = Float.MAX_VALUE;
+		float minimumZ = Float.MAX_VALUE;
+		
+		for(final Primitive primitive : primitives) {
+			final BoundingVolume3F boundingVolume = primitive.getBoundingVolume();
+			
+			if(boundingVolume instanceof InfiniteBoundingVolume3F) {
+				primitivesExternalToBVH.add(primitive);
+				
+				continue;
+			}
+			
+			final Point3F maximum = boundingVolume.getMaximum();
+			final Point3F minimum = boundingVolume.getMinimum();
+			
+			maximumX = max(maximumX, maximum.getX());
+			maximumY = max(maximumY, maximum.getY());
+			maximumZ = max(maximumZ, maximum.getZ());
+			minimumX = min(minimumX, minimum.getX());
+			minimumY = min(minimumY, minimum.getY());
+			minimumZ = min(minimumZ, minimum.getZ());
+			
+			processableLeafNodes.add(new LeafNode(maximum, minimum, 0, Arrays.asList(primitive)));
+		}
+		
+		return doCreateNode(processableLeafNodes, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class LeafNode extends Node {
+		private final List<Primitive> primitives;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public LeafNode(final Point3F maximum, final Point3F minimum, final int depth, final List<Primitive> primitives) {
+			super(maximum, minimum, depth);
+			
+			this.primitives = Objects.requireNonNull(primitives, "primitives == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public List<Primitive> getPrimitives() {
+			return this.primitives;
+		}
+		
+		@Override
+		public boolean equals(final Object object) {
+			if(object == this) {
+				return true;
+			} else if(!(object instanceof LeafNode)) {
+				return false;
+			} else if(!Objects.equals(getBoundingVolume(), LeafNode.class.cast(object).getBoundingVolume())) {
+				return false;
+			} else if(getDepth() != LeafNode.class.cast(object).getDepth()) {
+				return false;
+			} else if(!Objects.equals(this.primitives, LeafNode.class.cast(object).primitives)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		@Override
+		public boolean intersection(final MutableIntersection mutableIntersection) {
+			if(mutableIntersection.isIntersecting(getBoundingVolume())) {
+				boolean isIntersecting = false;
+				
+				for(final Primitive primitive : this.primitives) {
+					if(mutableIntersection.intersection(primitive)) {
+						isIntersecting = true;
+					}
+				}
+				
+				return isIntersecting;
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
+			if(getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
+				for(final Primitive primitive : this.primitives) {
+					if(primitive.intersects(ray, tMinimum, tMaximum)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public float intersectionT(final Ray3F ray, final float[] tBounds) {
+			float t = Float.NaN;
+			
+			if(getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
+				for(final Primitive primitive : this.primitives) {
+					t = minOrNaN(t, primitive.intersectionT(ray, tBounds[0], tBounds[1]));
+					
+					if(!isNaN(t)) {
+						tBounds[1] = t;
+					}
+				}
+			}
+			
+			return t;
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.primitives);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static abstract class Node {
+		private final BoundingVolume3F boundingVolume;
+		private final int depth;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		protected Node(final Point3F maximum, final Point3F minimum, final int depth) {
+			this.boundingVolume = new AxisAlignedBoundingBox3F(maximum, minimum);
+			this.depth = depth;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public final BoundingVolume3F getBoundingVolume() {
+			return this.boundingVolume;
+		}
+		
+		public abstract boolean intersection(final MutableIntersection mutableIntersection);
+		
+		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
+		
+		public abstract float intersectionT(final Ray3F ray, final float[] tBounds);
+		
+		public final int getDepth() {
+			return this.depth;
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class TreeNode extends Node {
+		private final Node nodeL;
+		private final Node nodeR;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public TreeNode(final Point3F maximum, final Point3F minimum, final int depth, final Node nodeL, final Node nodeR) {
+			super(maximum, minimum, depth);
+			
+			this.nodeL = Objects.requireNonNull(nodeL, "nodeL == null");
+			this.nodeR = Objects.requireNonNull(nodeR, "nodeR == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public boolean equals(final Object object) {
+			if(object == this) {
+				return true;
+			} else if(!(object instanceof TreeNode)) {
+				return false;
+			} else if(!Objects.equals(getBoundingVolume(), TreeNode.class.cast(object).getBoundingVolume())) {
+				return false;
+			} else if(getDepth() != TreeNode.class.cast(object).getDepth()) {
+				return false;
+			} else if(!Objects.equals(this.nodeL, TreeNode.class.cast(object).nodeL)) {
+				return false;
+			} else if(!Objects.equals(this.nodeR, TreeNode.class.cast(object).nodeR)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		@Override
+		public boolean intersection(final MutableIntersection mutableIntersection) {
+			if(mutableIntersection.isIntersecting(getBoundingVolume())) {
+				final boolean isIntersectingL = this.nodeL.intersection(mutableIntersection);
+				final boolean isIntersectingR = this.nodeR.intersection(mutableIntersection);
+				
+				return isIntersectingL || isIntersectingR;
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
+			return getBoundingVolume().intersects(ray, tMinimum, tMaximum) && (this.nodeL.intersects(ray, tMinimum, tMaximum) || this.nodeR.intersects(ray, tMinimum, tMaximum));
+		}
+		
+		@Override
+		public float intersectionT(final Ray3F ray, final float[] tBounds) {
+			return getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.nodeL.intersectionT(ray, tBounds), this.nodeR.intersectionT(ray, tBounds)) : Float.NaN;
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.nodeL, this.nodeR);
+		}
 	}
 }

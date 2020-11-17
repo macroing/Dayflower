@@ -21,6 +21,7 @@ package org.dayflower.scene;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.MutableSurfaceIntersection3F;
 import org.dayflower.geometry.Ray3F;
@@ -214,6 +215,20 @@ public final class MutableIntersection {
 	 */
 	public boolean isIntersecting() {
 		return this.primitive != null;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code boundingVolume} intersects this {@code MutableIntersection} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code boundingVolume} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param boundingVolume a {@link BoundingVolume3F} instance
+	 * @return {@code true} if, and only if, {@code boundingVolume} intersects this {@code MutableIntersection} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume} is {@code null}
+	 */
+	public boolean isIntersecting(final BoundingVolume3F boundingVolume) {
+//		return this.mutableSurfaceIntersection.isIntersecting(boundingVolume);
+		return boundingVolume.intersects(this.mutableSurfaceIntersection.getRay(), 0.0F, Float.MAX_VALUE);
 	}
 	
 	/**

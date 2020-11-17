@@ -264,7 +264,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 		final float t0 = max(min(t0X, t1X), min(t0Y, t1Y), min(t0Z, t1Z));
 		final float t1 = min(max(t0X, t1X), max(t0Y, t1Y), max(t0Z, t1Z));
 		
-		final float t = t0 > t1 ? Float.NaN : t0 > tMinimum && t0 < tMaximum ? t0 : t1 > tMinimum && t1 < tMaximum ? t1 : Float.NaN;
+		final float t = t0 > t1 ? Float.NaN : t0 >= tMinimum && t0 <= tMaximum ? t0 : t1 >= tMinimum && t1 <= tMaximum ? t1 : Float.NaN;
 		
 		return t;
 	}

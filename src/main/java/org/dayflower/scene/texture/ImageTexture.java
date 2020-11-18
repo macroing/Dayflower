@@ -63,6 +63,7 @@ import org.dayflower.util.BufferedImages;
 public final class ImageTexture implements Texture {
 	private final AngleF angle;
 	private final Vector2F scale;
+	private final boolean isRepeating;
 	private final int resolution;
 	private final int resolutionX;
 	private final int resolutionY;
@@ -117,7 +118,7 @@ public final class ImageTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
+	 * new ImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale, false);
 	 * }
 	 * </pre>
 	 * 
@@ -127,7 +128,29 @@ public final class ImageTexture implements Texture {
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
 	public ImageTexture(final Image image, final AngleF angle, final Vector2F scale) {
-		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
+		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale, false);
+	}
+	
+	/**
+	 * Constructs a new {@code ImageTexture} instance.
+	 * <p>
+	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale, isRepeating);
+	 * }
+	 * </pre>
+	 * 
+	 * @param image an {@link Image} instance
+	 * @param angle the {@link AngleF} instance to use
+	 * @param scale the {@link Vector2F} instance to use as the scale factor
+	 * @param isRepeating {@code true} if, and only if, the coordinates should be repeated, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
+	 */
+	public ImageTexture(final Image image, final AngleF angle, final Vector2F scale, final boolean isRepeating) {
+		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale, isRepeating);
 	}
 	
 	/**
@@ -185,6 +208,13 @@ public final class ImageTexture implements Texture {
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ImageTexture(resolutionX, resolutionY, image, angle, scale, false);
+	 * }
+	 * </pre>
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
@@ -195,12 +225,33 @@ public final class ImageTexture implements Texture {
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
 	public ImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
+		this(resolutionX, resolutionY, image, angle, scale, false);
+	}
+	
+	/**
+	 * Constructs a new {@code ImageTexture} instance.
+	 * <p>
+	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param image the image to clone and use
+	 * @param angle the {@link AngleF} instance to use
+	 * @param scale the {@link Vector2F} instance to use as the scale factor
+	 * @param isRepeating {@code true} if, and only if, the coordinates should be repeated, {@code false} otherwise
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
+	 */
+	public ImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale, final boolean isRepeating) {
 		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		this.image = requireExactArrayLength(Objects.requireNonNull(image, "image == null"), resolutionX * resolutionY, "image").clone();
 		this.angle = Objects.requireNonNull(angle, "angle == null");
 		this.scale = Objects.requireNonNull(scale, "scale == null");
+		this.isRepeating = isRepeating;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,8 +292,8 @@ public final class ImageTexture implements Texture {
 //		final float y = v >= 0.0F ? v : resolutionY - abs(v);
 		
 //		New:
-		final float x = doCalculateCoordinate(false, false, true, (int)(u >= 0.0F ? u : resolutionX - abs(u)), this.resolutionX);
-		final float y = doCalculateCoordinate(false, false, true, (int)(v >= 0.0F ? v : resolutionY - abs(v)), this.resolutionY);
+		final float x = this.isRepeating ? doCalculateCoordinate(false, false, true, (int)(u >= 0.0F ? u : resolutionX - abs(u)), this.resolutionX) : u >= 0.0F ? u : resolutionX - abs(u);
+		final float y = this.isRepeating ? doCalculateCoordinate(false, false, true, (int)(v >= 0.0F ? v : resolutionY - abs(v)), this.resolutionY) : v >= 0.0F ? v : resolutionY - abs(v);
 		
 		return doGetColorRGB(x, y);
 	}
@@ -420,6 +471,13 @@ public final class ImageTexture implements Texture {
 	 * If either {@code file}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * ImageTexture.load(file, angle, scale, false);
+	 * }
+	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
@@ -429,6 +487,27 @@ public final class ImageTexture implements Texture {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static ImageTexture load(final File file, final AngleF angle, final Vector2F scale) {
+		return load(file, angle, scale, false);
+	}
+	
+	/**
+	 * Loads an {@code ImageTexture} from the file represented by {@code file}.
+	 * <p>
+	 * Returns a new {@code ImageTexture} instance.
+	 * <p>
+	 * If either {@code file}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} that represents the file to load from
+	 * @param angle the {@link AngleF} instance to use
+	 * @param scale the {@link Vector2F} instance to use as the scale factor
+	 * @param isRepeating {@code true} if, and only if, the coordinates should be repeated, {@code false} otherwise
+	 * @return a new {@code ImageTexture} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code file}, {@code angle} or {@code scale} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static ImageTexture load(final File file, final AngleF angle, final Vector2F scale, final boolean isRepeating) {
 		try {
 			final BufferedImage bufferedImage = BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 			
@@ -437,7 +516,7 @@ public final class ImageTexture implements Texture {
 			
 			final int[] image = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
 			
-			return new ImageTexture(resolutionX, resolutionY, image, angle, scale);
+			return new ImageTexture(resolutionX, resolutionY, image, angle, scale, isRepeating);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -502,6 +581,13 @@ public final class ImageTexture implements Texture {
 	 * If either {@code pathname}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * ImageTexture.load(pathname, angle, scale, false);
+	 * }
+	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
@@ -511,7 +597,28 @@ public final class ImageTexture implements Texture {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static ImageTexture load(final String pathname, final AngleF angle, final Vector2F scale) {
-		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale);
+		return load(pathname, angle, scale, false);
+	}
+	
+	/**
+	 * Loads an {@code ImageTexture} from the file represented by {@code pathname}.
+	 * <p>
+	 * Returns a new {@code ImageTexture} instance.
+	 * <p>
+	 * If either {@code pathname}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param pathname a {@code String} that represents the pathname to the file to load from
+	 * @param angle the {@link AngleF} instance to use
+	 * @param scale the {@link Vector2F} instance to use as the scale factor
+	 * @param isRepeating {@code true} if, and only if, the coordinates should be repeated, {@code false} otherwise
+	 * @return a new {@code ImageTexture} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code pathname}, {@code angle} or {@code scale} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static ImageTexture load(final String pathname, final AngleF angle, final Vector2F scale, final boolean isRepeating) {
+		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale, isRepeating);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

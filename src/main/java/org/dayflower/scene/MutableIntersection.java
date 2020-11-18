@@ -227,8 +227,7 @@ public final class MutableIntersection {
 	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume} is {@code null}
 	 */
 	public boolean isIntersecting(final BoundingVolume3F boundingVolume) {
-//		return this.mutableSurfaceIntersection.isIntersecting(boundingVolume);
-		return boundingVolume.intersects(this.mutableSurfaceIntersection.getRay(), 0.0F, Float.MAX_VALUE);
+		return this.mutableSurfaceIntersection.isIntersecting(boundingVolume);
 	}
 	
 	/**

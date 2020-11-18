@@ -208,7 +208,8 @@ public final class MutableSurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume} is {@code null}
 	 */
 	public boolean isIntersecting(final BoundingVolume3F boundingVolume) {
-		return boundingVolume.intersects(this.ray, this.tMinimum, this.tMaximum);
+//		return boundingVolume.intersects(this.ray, this.tMinimum, this.tMaximum);
+		return boundingVolume.intersects(this.ray, 0.0F, Float.MAX_VALUE);
 	}
 	
 	/**

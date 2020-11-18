@@ -55,6 +55,8 @@ public final class TriangleMesh3F implements Shape3F {
 	private final String materialName;
 	private final String objectName;
 	
+//	private final List<Triangle3F> triangles;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -73,6 +75,8 @@ public final class TriangleMesh3F implements Shape3F {
 		this.groupName = Objects.requireNonNull(groupName, "groupName == null");
 		this.materialName = Objects.requireNonNull(materialName, "materialName == null");
 		this.objectName = Objects.requireNonNull(objectName, "objectName == null");
+		
+//		this.triangles = new ArrayList<>(triangles);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,6 +131,14 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		return this.node.intersection(ray, new float[] {tMinimum, tMaximum});
+		
+//		final MutableSurfaceIntersection3F mutableSurfaceIntersection = new MutableSurfaceIntersection3F(ray, tMinimum, tMaximum);
+//		
+//		for(final Triangle3F triangle : this.triangles) {
+//			mutableSurfaceIntersection.intersection(triangle);
+//		}
+//		
+//		return mutableSurfaceIntersection.computeSurfaceIntersection();
 	}
 	
 	/**
@@ -321,6 +333,20 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		return this.node.intersectionT(ray, new float[] {tMinimum, tMaximum});
+		
+//		float t = Float.NaN;
+//		float tMax = tMaximum;
+//		float tMin = tMinimum;
+//		
+//		for(final Triangle3F triangle : this.triangles) {
+//			t = minOrNaN(t, triangle.intersectionT(ray, tMin, tMax));
+//			
+//			if(!isNaN(t)) {
+//				tMax = t;
+//			}
+//		}
+//		
+//		return t;
 	}
 	
 	/**

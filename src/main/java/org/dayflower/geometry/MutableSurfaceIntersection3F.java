@@ -23,6 +23,7 @@ import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.isZero;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -208,8 +209,9 @@ public final class MutableSurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume} is {@code null}
 	 */
 	public boolean isIntersecting(final BoundingVolume3F boundingVolume) {
+//		TODO: Find out why tMaximum does not work as expected!
 //		return boundingVolume.intersects(this.ray, this.tMinimum, this.tMaximum);
-		return boundingVolume.intersects(this.ray, 0.0F, Float.MAX_VALUE);
+		return boundingVolume.intersects(this.ray, this.tMinimum, Float.MAX_VALUE);
 	}
 	
 	/**
@@ -304,7 +306,7 @@ public final class MutableSurfaceIntersection3F {
 		final float tMaximumNewSpace = doTransformT(matrix, rayOldSpace, rayNewSpace, tMaximumOldSpace);
 		
 		final float tMinimumOldSpace = this.tMinimum;
-		final float tMinimumNewSpace = doTransformT(matrix, rayOldSpace, rayNewSpace, tMinimumOldSpace);
+		final float tMinimumNewSpace = tMinimumOldSpace;//doTransformT(matrix, rayOldSpace, rayNewSpace, tMinimumOldSpace);
 		
 		this.ray = rayNewSpace;
 		this.t = tNewSpace;

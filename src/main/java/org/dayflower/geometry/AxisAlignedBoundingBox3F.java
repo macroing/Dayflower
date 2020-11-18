@@ -247,6 +247,7 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 */
 	@Override
 	public float intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		/*
 		final Point3F maximum = getMaximum();
 		final Point3F minimum = getMinimum();
 		final Point3F origin = ray.getOrigin();
@@ -265,6 +266,47 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 		final float t1 = min(max(t0X, t1X), max(t0Y, t1Y), max(t0Z, t1Z));
 		
 		final float t = t0 > t1 ? Float.NaN : t0 >= tMinimum && t0 <= tMaximum ? t0 : t1 >= tMinimum && t1 <= tMaximum ? t1 : Float.NaN;
+		
+		return t;
+		*/
+		
+		final Point3F maximum = getMaximum();
+		final Point3F minimum = getMinimum();
+		final Point3F origin = ray.getOrigin();
+		
+		final Vector3F direction = ray.getDirection();
+		final Vector3F directionReciprocal = Vector3F.reciprocal(direction);
+		
+		final boolean isSwappingX = directionReciprocal.getX() < 0.0F;
+		final boolean isSwappingY = directionReciprocal.getY() < 0.0F;
+		final boolean isSwappingZ = directionReciprocal.getZ() < 0.0F;
+		
+		final float xTMinimum = isSwappingX ? (maximum.getX() - origin.getX()) * directionReciprocal.getX() : (minimum.getX() - origin.getX()) * directionReciprocal.getX();
+		final float xTMaximum = isSwappingX ? (minimum.getX() - origin.getX()) * directionReciprocal.getX() : (maximum.getX() - origin.getX()) * directionReciprocal.getX();
+		final float yTMinimum = isSwappingY ? (maximum.getY() - origin.getY()) * directionReciprocal.getY() : (minimum.getY() - origin.getY()) * directionReciprocal.getY();
+		final float yTMaximum = isSwappingY ? (minimum.getY() - origin.getY()) * directionReciprocal.getY() : (maximum.getY() - origin.getY()) * directionReciprocal.getY();
+		
+		float currentTMinimum = xTMinimum;
+		float currentTMaximum = xTMaximum;
+		
+		if(currentTMinimum > yTMaximum || currentTMaximum <= yTMinimum) {
+			return Float.NaN;
+		}
+		
+		currentTMinimum = max(currentTMinimum, yTMinimum);
+		currentTMaximum = min(currentTMaximum, yTMaximum);
+		
+		final float zTMinimum = isSwappingZ ? (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ() : (minimum.getZ() - origin.getZ()) * directionReciprocal.getZ();
+		final float zTMaximum = isSwappingZ ? (minimum.getZ() - origin.getZ()) * directionReciprocal.getZ() : (maximum.getZ() - origin.getZ()) * directionReciprocal.getZ();
+		
+		if(currentTMinimum > zTMaximum || currentTMaximum <= zTMinimum) {
+			return Float.NaN;
+		}
+		
+		currentTMinimum = max(currentTMinimum, zTMinimum);
+		currentTMaximum = min(currentTMaximum, zTMaximum);
+		
+		final float t = currentTMinimum > tMinimum && currentTMinimum < tMaximum ? currentTMinimum : currentTMaximum > tMinimum && currentTMaximum < tMaximum ? currentTMaximum : Float.NaN;
 		
 		return t;
 	}

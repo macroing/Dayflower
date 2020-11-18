@@ -644,6 +644,8 @@ public final class Scene {
 	}
 	
 	private static Node doCreateNode(final List<Primitive> primitives, final List<Primitive> primitivesExternalToBVH) {
+		System.out.println("Generating acceleration structure...");
+		
 		final List<LeafNode> processableLeafNodes = new ArrayList<>(primitives.size());
 		
 		float maximumX = Float.MIN_VALUE;
@@ -675,7 +677,11 @@ public final class Scene {
 			processableLeafNodes.add(new LeafNode(maximum, minimum, 0, Arrays.asList(primitive)));
 		}
 		
-		return doCreateNode(processableLeafNodes, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
+		final Node node = doCreateNode(processableLeafNodes, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
+		
+		System.out.println(" - Done.");
+		
+		return node;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

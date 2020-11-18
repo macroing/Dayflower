@@ -24,6 +24,7 @@ import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.floor;
 import static org.dayflower.util.Floats.remainder;
 import static org.dayflower.util.Floats.sin;
+import static org.dayflower.util.Ints.abs;
 import static org.dayflower.util.Ints.modulo;
 import static org.dayflower.util.Ints.requireExactArrayLength;
 import static org.dayflower.util.Ints.requireRange;
@@ -235,8 +236,13 @@ public final class ImageTexture implements Texture {
 		final float u = remainder((textureCoordinates.getU() * cosAngleRadians - textureCoordinates.getV() * sinAngleRadians) * this.scale.getU() * resolutionX, resolutionX);
 		final float v = remainder((textureCoordinates.getV() * cosAngleRadians + textureCoordinates.getU() * sinAngleRadians) * this.scale.getV() * resolutionY, resolutionY);
 		
-		final float x = u >= 0.0F ? u : resolutionX - abs(u);
-		final float y = v >= 0.0F ? v : resolutionY - abs(v);
+//		Old:
+//		final float x = u >= 0.0F ? u : resolutionX - abs(u);
+//		final float y = v >= 0.0F ? v : resolutionY - abs(v);
+		
+//		New:
+		final float x = doCalculateCoordinate(false, false, true, (int)(u >= 0.0F ? u : resolutionX - abs(u)), this.resolutionX);
+		final float y = doCalculateCoordinate(false, false, true, (int)(v >= 0.0F ? v : resolutionY - abs(v)), this.resolutionY);
 		
 		return doGetColorRGB(x, y);
 	}
@@ -536,5 +542,26 @@ public final class ImageTexture implements Texture {
 	
 	private Color3F doGetColorRGB(final int x, final int y) {
 		return Color3F.unpack(this.image[modulo(y, this.resolutionY) * this.resolutionX + modulo(x, this.resolutionX)]);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static int doCalculateCoordinate(final boolean isCentering, final boolean isFlipping, final boolean isRepeating, final int coordinate, final int resolution) {
+		int coordinateTransformed = coordinate;
+		
+		if(isCentering) {
+			coordinateTransformed -= resolution / 2;
+		}
+		
+		if(isRepeating) {
+			coordinateTransformed = coordinateTransformed < 0 ? resolution - abs(coordinateTransformed) : coordinateTransformed;
+			coordinateTransformed = coordinateTransformed % resolution;
+		}
+		
+		if(isFlipping) {
+			coordinateTransformed = resolution - 1 - coordinateTransformed;
+		}
+		
+		return coordinateTransformed;
 	}
 }

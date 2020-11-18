@@ -1,3 +1,5 @@
+boolean isInBox = false;
+
 List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/bil.obj", true);
 
 Texture textureHjul = ImageTexture.load("./resources/textures/hjul.png");
@@ -10,11 +12,11 @@ Material material13 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)),
 Material material14 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 Material material15 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
 Material material16 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
-Material material21 = new PlasticMaterial(textureTextur, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-Material material22 = new SubstrateMaterial(textureHjul, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
-Material material23 = new SubstrateMaterial(textureHjul, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
-Material material24 = new SubstrateMaterial(textureHjul, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
-Material material25 = new SubstrateMaterial(textureHjul, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.2F)), true);
+Material material21 = new PlasticMaterial(textureTextur, new ConstantTexture(new Color3F(0.2F)), new ConstantTexture(Color3F.WHITE), true);
+Material material22 = new SubstrateMaterial(textureHjul, new ConstantTexture(new Color3F(0.2F)), new ConstantTexture(new Color3F(0.2F)), new ConstantTexture(new Color3F(0.2F)), true);
+Material material23 = new SubstrateMaterial(textureHjul, new ConstantTexture(new Color3F(0.2F)), new ConstantTexture(new Color3F(0.2F)), new ConstantTexture(new Color3F(0.2F)), true);
+Material material24 = new SubstrateMaterial(textureHjul, new ConstantTexture(new Color3F(0.2F)), new ConstantTexture(new Color3F(0.2F)), new ConstantTexture(new Color3F(0.2F)), true);
+Material material25 = new SubstrateMaterial(textureHjul, new ConstantTexture(new Color3F(0.2F)), new ConstantTexture(new Color3F(0.2F)), new ConstantTexture(new Color3F(0.2F)), true);
 Material material31 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE));
 
 Shape3F shape11 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, +1.0F), new Point3F(1.0F, 0.0F, +0.0F));//Bottom
@@ -45,18 +47,32 @@ Matrix44F matrix31 = Matrix44F.translate(0.0F, 5.0F, 0.0F);
 
 AreaLight areaLight31 = new DiffuseAreaLight(matrix31, 1, new Color3F(20.0F), shape31, true);
 
-scene.addLight(areaLight31);
-scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(Color3F.GRAY), new ConstantTexture(), matrix11));
-scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
-scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
-scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
-scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
-scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
-scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
-scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), matrix22));
-scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), matrix23));
-scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), matrix24));
-scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), matrix25));
-scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
-scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
-scene.setName("PBRTBil");
+if(isInBox) {
+	scene.addLight(areaLight31);
+	scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(Color3F.GRAY), new ConstantTexture(), matrix11));
+	scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
+	scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
+	scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
+	scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
+	scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
+	scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
+	scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), matrix22));
+	scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), matrix23));
+	scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), matrix24));
+	scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), matrix25));
+	scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
+	scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
+	scene.setName("PBRTBil");
+	scene.buildAccelerationStructure();
+} else {
+	scene.addLight(new PerezLight());
+	scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(Color3F.GRAY), new ConstantTexture(), matrix11));
+	scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
+	scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), matrix22));
+	scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), matrix23));
+	scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), matrix24));
+	scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), matrix25));
+	scene.setCamera(new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)));
+	scene.setName("PBRTBil");
+	scene.buildAccelerationStructure();
+}

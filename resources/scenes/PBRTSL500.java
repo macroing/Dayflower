@@ -1,4 +1,4 @@
-List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/SL500.obj", false, 100.0F);
+List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/SL500.obj", false, 100.0F, true);
 
 Color3F colorA = new Color3F(0.8F);//new Color3F(0.3F, 0.7F, 0.3F);
 Color3F colorB = new Color3F(0.5F);//new Color3F(0.1F, 0.5F, 0.1F);

@@ -243,7 +243,7 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		if(this.boundingVolume.intersects(ray, tMinimum, tMaximum)) {
+		if(this.boundingVolume.contains(ray.getOrigin()) || this.boundingVolume.intersects(ray, tMinimum, tMaximum)) {
 			final Ray3F rayObjectSpace = Ray3F.transform(this.worldToObject, ray);
 			
 			final float tMinimumObjectSpace = tMinimum;
@@ -434,7 +434,7 @@ public final class Primitive {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		if(!this.boundingVolume.intersects(ray, tMinimum, tMaximum)) {
+		if(!this.boundingVolume.contains(ray.getOrigin()) && !this.boundingVolume.intersects(ray, tMinimum, tMaximum)) {
 			return Float.NaN;
 		}
 		

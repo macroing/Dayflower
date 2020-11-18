@@ -23,7 +23,6 @@ import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.isZero;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -209,9 +208,14 @@ public final class MutableSurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume} is {@code null}
 	 */
 	public boolean isIntersecting(final BoundingVolume3F boundingVolume) {
-//		TODO: Find out why tMaximum does not work as expected!
+//		The original version:
 //		return boundingVolume.intersects(this.ray, this.tMinimum, this.tMaximum);
-		return boundingVolume.intersects(this.ray, this.tMinimum, Float.MAX_VALUE);
+		
+//		The original version had a bug that missed intersections and was fixed by the following slower version:
+//		return boundingVolume.intersects(this.ray, this.tMinimum, Float.MAX_VALUE);
+		
+//		A new attempt at fixing the original version and is about as fast as that version:
+		return boundingVolume.contains(this.ray.getOrigin()) || boundingVolume.intersects(this.ray, this.tMinimum, this.tMaximum);
 	}
 	
 	/**

@@ -40,6 +40,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Triangle3F.Vertex3F;
+import org.dayflower.util.Lists;
 
 /**
  * A {@code TriangleMesh3F} denotes a 3-dimensional triangle mesh that uses the data type {@code float}.
@@ -50,14 +51,36 @@ import org.dayflower.geometry.Triangle3F.Vertex3F;
  * @author J&#246;rgen Lundgren
  */
 public final class TriangleMesh3F implements Shape3F {
+	private final List<Triangle3F> triangles;
 	private final Node node;
 	private final String groupName;
 	private final String materialName;
 	private final String objectName;
-	
-//	private final List<Triangle3F> triangles;
+	private final boolean isUsingAccelerationStructure;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code TriangleMesh3F} instance.
+	 * <p>
+	 * If either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new TriangleMesh3F(triangles, groupName, materialName, objectName, true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param triangles a {@code List} of {@link Triangle3F} instances
+	 * @param groupName the group name of this {@code TriangleMesh3F} instance
+	 * @param materialName the material name of this {@code TriangleMesh3F} instance
+	 * @param objectName the object name of this {@code TriangleMesh3F} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}
+	 */
+	public TriangleMesh3F(final List<Triangle3F> triangles, final String groupName, final String materialName, final String objectName) {
+		this(triangles, groupName, materialName, objectName, true);
+	}
 	
 	/**
 	 * Constructs a new {@code TriangleMesh3F} instance.
@@ -68,15 +91,16 @@ public final class TriangleMesh3F implements Shape3F {
 	 * @param groupName the group name of this {@code TriangleMesh3F} instance
 	 * @param materialName the material name of this {@code TriangleMesh3F} instance
 	 * @param objectName the object name of this {@code TriangleMesh3F} instance
+	 * @param isUsingAccelerationStructure {@code true} if, and only if, an acceleration structure should be used, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}
 	 */
-	public TriangleMesh3F(final List<Triangle3F> triangles, final String groupName, final String materialName, final String objectName) {
-		this.node = doCreateNode(Objects.requireNonNull(triangles, "triangles == null"));
+	public TriangleMesh3F(final List<Triangle3F> triangles, final String groupName, final String materialName, final String objectName, final boolean isUsingAccelerationStructure) {
+		this.triangles = Lists.requireNonNullList(triangles, "triangles");
+		this.node = isUsingAccelerationStructure ? doCreateNode(this.triangles) : null;
 		this.groupName = Objects.requireNonNull(groupName, "groupName == null");
 		this.materialName = Objects.requireNonNull(materialName, "materialName == null");
 		this.objectName = Objects.requireNonNull(objectName, "objectName == null");
-		
-//		this.triangles = new ArrayList<>(triangles);
+		this.isUsingAccelerationStructure = isUsingAccelerationStructure;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +112,23 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return this.node.getBoundingVolume();
+		if(this.isUsingAccelerationStructure) {
+			return this.node.getBoundingVolume();
+		}
+		
+		Point3F maximum = Point3F.MINIMUM;
+		Point3F minimum = Point3F.MAXIMUM;
+		
+		for(final Triangle3F triangle : this.triangles) {
+			final Point3F a = triangle.getA().getPosition();
+			final Point3F b = triangle.getB().getPosition();
+			final Point3F c = triangle.getC().getPosition();
+			
+			maximum = Point3F.maximum(maximum, Point3F.maximum(a, b, c));
+			minimum = Point3F.minimum(minimum, Point3F.minimum(a, b, c));
+		}
+		
+		return new AxisAlignedBoundingBox3F(maximum, minimum);
 	}
 	
 	/**
@@ -130,15 +170,17 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.node.intersection(ray, new float[] {tMinimum, tMaximum});
+		if(this.isUsingAccelerationStructure) {
+			return this.node.intersection(ray, new float[] {tMinimum, tMaximum});
+		}
 		
-//		final MutableSurfaceIntersection3F mutableSurfaceIntersection = new MutableSurfaceIntersection3F(ray, tMinimum, tMaximum);
-//		
-//		for(final Triangle3F triangle : this.triangles) {
-//			mutableSurfaceIntersection.intersection(triangle);
-//		}
-//		
-//		return mutableSurfaceIntersection.computeSurfaceIntersection();
+		final MutableSurfaceIntersection3F mutableSurfaceIntersection = new MutableSurfaceIntersection3F(ray, tMinimum, tMaximum);
+		
+		for(final Triangle3F triangle : this.triangles) {
+			mutableSurfaceIntersection.intersection(triangle);
+		}
+		
+		return mutableSurfaceIntersection.computeSurfaceIntersection();
 	}
 	
 	/**
@@ -175,7 +217,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new TriangleMesh3F(..., \"%s\", \"%s\", \"%s\")", this.groupName, this.materialName, this.objectName);
+		return String.format("new TriangleMesh3F(..., \"%s\", \"%s\", \"%s\", %s)", this.groupName, this.materialName, this.objectName, Boolean.toString(this.isUsingAccelerationStructure));
 	}
 	
 	/**
@@ -192,6 +234,8 @@ public final class TriangleMesh3F implements Shape3F {
 			return true;
 		} else if(!(object instanceof TriangleMesh3F)) {
 			return false;
+		} else if(!Objects.equals(this.triangles, TriangleMesh3F.class.cast(object).triangles)) {
+			return false;
 		} else if(!Objects.equals(this.node, TriangleMesh3F.class.cast(object).node)) {
 			return false;
 		} else if(!Objects.equals(this.groupName, TriangleMesh3F.class.cast(object).groupName)) {
@@ -199,6 +243,8 @@ public final class TriangleMesh3F implements Shape3F {
 		} else if(!Objects.equals(this.materialName, TriangleMesh3F.class.cast(object).materialName)) {
 			return false;
 		} else if(!Objects.equals(this.objectName, TriangleMesh3F.class.cast(object).objectName)) {
+			return false;
+		} else if(this.isUsingAccelerationStructure != TriangleMesh3F.class.cast(object).isUsingAccelerationStructure) {
 			return false;
 		} else {
 			return true;
@@ -218,7 +264,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-		return this.node.intersection(mutableSurfaceIntersection);
+		return this.isUsingAccelerationStructure ? this.node.intersection(mutableSurfaceIntersection) : mutableSurfaceIntersection.intersection(this);
 	}
 	
 	/**
@@ -234,7 +280,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.node.intersects(ray, tMinimum, tMaximum);
+		return this.isUsingAccelerationStructure ? this.node.intersects(ray, tMinimum, tMaximum) : !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -290,7 +336,17 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		return this.node.getSurfaceArea();
+		if(this.isUsingAccelerationStructure) {
+			return this.node.getSurfaceArea();
+		}
+		
+		float surfaceArea = 0.0F;
+		
+		for(final Triangle3F triangle : this.triangles) {
+			surfaceArea += triangle.getSurfaceArea();
+		}
+		
+		return surfaceArea;
 	}
 	
 	/**
@@ -332,21 +388,23 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.node.intersectionT(ray, new float[] {tMinimum, tMaximum});
+		if(this.isUsingAccelerationStructure) {
+			return this.node.intersectionT(ray, new float[] {tMinimum, tMaximum});
+		}
 		
-//		float t = Float.NaN;
-//		float tMax = tMaximum;
-//		float tMin = tMinimum;
-//		
-//		for(final Triangle3F triangle : this.triangles) {
-//			t = minOrNaN(t, triangle.intersectionT(ray, tMin, tMax));
-//			
-//			if(!isNaN(t)) {
-//				tMax = t;
-//			}
-//		}
-//		
-//		return t;
+		float t = Float.NaN;
+		float tMax = tMaximum;
+		float tMin = tMinimum;
+		
+		for(final Triangle3F triangle : this.triangles) {
+			t = minOrNaN(t, triangle.intersectionT(ray, tMin, tMax));
+			
+			if(!isNaN(t)) {
+				tMax = t;
+			}
+		}
+		
+		return t;
 	}
 	
 	/**
@@ -368,7 +426,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.node, this.groupName, this.materialName, this.objectName);
+		return Objects.hash(this.triangles, this.node, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -432,6 +490,13 @@ public final class TriangleMesh3F implements Shape3F {
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * TriangleMesh3F.readWavefrontObject(file, isFlippingTextureCoordinateY, scale, true);
+	 * }
+	 * </pre>
 	 * 
 	 * @param file a {@code File} instance
 	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
@@ -441,6 +506,27 @@ public final class TriangleMesh3F implements Shape3F {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
 	public static List<TriangleMesh3F> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY, final float scale) {
+		return readWavefrontObject(file, isFlippingTextureCoordinateY, scale, true);
+	}
+	
+	/**
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} instance
+	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
+	 * @param scale the scale to apply to all {@link Triangle3F} instances
+	 * @param isUsingAccelerationStructure {@code true} if, and only if, an acceleration structure should be used, {@code false} otherwise
+	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static List<TriangleMesh3F> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY, final float scale, final boolean isUsingAccelerationStructure) {
 		try {
 			System.out.printf("Loading triangle meshes from file '%s'...%n", file.getName());
 			
@@ -488,7 +574,7 @@ public final class TriangleMesh3F implements Shape3F {
 					if(triangles.size() > 0) {
 						System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
 						
-						triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName));
+						triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
 						triangles.clear();
 						
 						if(++j >= maximumCount) {
@@ -537,7 +623,7 @@ public final class TriangleMesh3F implements Shape3F {
 			if(triangles.size() > 0) {
 				System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
 				
-				triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName));
+				triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
 				triangles.clear();
 			}
 			
@@ -608,6 +694,13 @@ public final class TriangleMesh3F implements Shape3F {
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * TriangleMesh3F.readWavefrontObject(pathname, isFlippingTextureCoordinateY, scale, true);
+	 * }
+	 * </pre>
 	 * 
 	 * @param pathname a {@code String} instance with the pathname to a file
 	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
@@ -617,7 +710,28 @@ public final class TriangleMesh3F implements Shape3F {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
 	public static List<TriangleMesh3F> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final float scale) {
-		return readWavefrontObject(new File(Objects.requireNonNull(pathname, "pathname == null")), isFlippingTextureCoordinateY, scale);
+		return readWavefrontObject(pathname, isFlippingTextureCoordinateY, scale, true);
+	}
+	
+	/**
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O-error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param pathname a {@code String} instance with the pathname to a file
+	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
+	 * @param scale the scale to apply to all {@link Triangle3F} instances
+	 * @param isUsingAccelerationStructure {@code true} if, and only if, an acceleration structure should be used, {@code false} otherwise
+	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
+	 */
+	public static List<TriangleMesh3F> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final float scale, final boolean isUsingAccelerationStructure) {
+		return readWavefrontObject(new File(Objects.requireNonNull(pathname, "pathname == null")), isFlippingTextureCoordinateY, scale, isUsingAccelerationStructure);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1215,7 +1329,7 @@ public final class TriangleMesh3F implements Shape3F {
 		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds) {
 			Optional<SurfaceIntersection3F> optionalSurfaceIntersection = SurfaceIntersection3F.EMPTY;
 			
-			if(getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
+			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
 				for(final Triangle3F triangle : this.triangles) {
 					optionalSurfaceIntersection = SurfaceIntersection3F.closest(optionalSurfaceIntersection, triangle.intersection(ray, tBounds[0], tBounds[1]));
 					
@@ -1264,7 +1378,7 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		@Override
 		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			if(getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
+			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
 				for(final Triangle3F triangle : this.triangles) {
 					if(triangle.intersects(ray, tMinimum, tMaximum)) {
 						return true;
@@ -1290,7 +1404,7 @@ public final class TriangleMesh3F implements Shape3F {
 		public float intersectionT(final Ray3F ray, final float[] tBounds) {
 			float t = Float.NaN;
 			
-			if(getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
+			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
 				for(final Triangle3F triangle : this.triangles) {
 					t = minOrNaN(t, triangle.intersectionT(ray, tBounds[0], tBounds[1]));
 					
@@ -1362,7 +1476,7 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		@Override
 		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds) {
-			return getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3F.closest(this.nodeL.intersection(ray, tBounds), this.nodeR.intersection(ray, tBounds)) : Optional.empty();
+			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3F.closest(this.nodeL.intersection(ray, tBounds), this.nodeR.intersection(ray, tBounds)) : Optional.empty();
 		}
 		
 		@Override
@@ -1398,7 +1512,7 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		@Override
 		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			return getBoundingVolume().intersects(ray, tMinimum, tMaximum) && (this.nodeL.intersects(ray, tMinimum, tMaximum) || this.nodeR.intersects(ray, tMinimum, tMaximum));
+			return (getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) && (this.nodeL.intersects(ray, tMinimum, tMaximum) || this.nodeR.intersects(ray, tMinimum, tMaximum));
 		}
 		
 		@Override
@@ -1408,7 +1522,7 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		@Override
 		public float intersectionT(final Ray3F ray, final float[] tBounds) {
-			return getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.nodeL.intersectionT(ray, tBounds), this.nodeR.intersectionT(ray, tBounds)) : Float.NaN;
+			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.nodeL.intersectionT(ray, tBounds), this.nodeR.intersectionT(ray, tBounds)) : Float.NaN;
 		}
 		
 		@Override

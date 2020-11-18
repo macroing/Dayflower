@@ -733,7 +733,7 @@ public final class Scene {
 		
 		@Override
 		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			if(getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
+			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
 				for(final Primitive primitive : this.primitives) {
 					if(primitive.intersects(ray, tMinimum, tMaximum)) {
 						return true;
@@ -748,7 +748,7 @@ public final class Scene {
 		public float intersectionT(final Ray3F ray, final float[] tBounds) {
 			float t = Float.NaN;
 			
-			if(getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
+			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
 				for(final Primitive primitive : this.primitives) {
 					t = minOrNaN(t, primitive.intersectionT(ray, tBounds[0], tBounds[1]));
 					
@@ -847,12 +847,12 @@ public final class Scene {
 		
 		@Override
 		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			return getBoundingVolume().intersects(ray, tMinimum, tMaximum) && (this.nodeL.intersects(ray, tMinimum, tMaximum) || this.nodeR.intersects(ray, tMinimum, tMaximum));
+			return (getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) && (this.nodeL.intersects(ray, tMinimum, tMaximum) || this.nodeR.intersects(ray, tMinimum, tMaximum));
 		}
 		
 		@Override
 		public float intersectionT(final Ray3F ray, final float[] tBounds) {
-			return getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.nodeL.intersectionT(ray, tBounds), this.nodeR.intersectionT(ray, tBounds)) : Float.NaN;
+			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.nodeL.intersectionT(ray, tBounds), this.nodeR.intersectionT(ray, tBounds)) : Float.NaN;
 		}
 		
 		@Override

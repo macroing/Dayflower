@@ -21,6 +21,8 @@ package org.dayflower.renderer;
 import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.display.Display;
 import org.dayflower.image.Image;
@@ -47,8 +49,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private RendererConfiguration rendererConfiguration;
-	private boolean isClearing;
+	private final AtomicBoolean isClearing;
+	private final AtomicBoolean isRendering;
+	private final AtomicReference<RendererConfiguration> rendererConfiguration;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -61,8 +64,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
 	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration) {
-		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
-		this.isClearing = false;
+		this.isClearing = new AtomicBoolean();
+		this.isRendering = new AtomicBoolean();
+		this.rendererConfiguration = new AtomicReference<>(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +78,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 */
 	@Override
 	public final RendererConfiguration getRendererConfiguration() {
-		return this.rendererConfiguration;
+		return this.rendererConfiguration.get();
 	}
 	
 	/**
@@ -84,7 +88,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 */
 	@Override
 	public final boolean isClearing() {
-		return this.isClearing;
+		return this.isClearing.get();
 	}
 	
 	/**
@@ -96,7 +100,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 */
 	@Override
 	public final boolean render() {
-		final RendererConfiguration rendererConfiguration = this.rendererConfiguration;
+		this.isRendering.set(true);
+		
+		final RendererConfiguration rendererConfiguration = this.rendererConfiguration.get();
 		
 		final Display display = rendererConfiguration.getDisplay();
 		
@@ -108,9 +114,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
 		
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
-			if(this.isClearing) {
-				this.isClearing = false;
-				
+			if(this.isClearing.compareAndSet(true, false)) {
 				rendererConfiguration.setRenderPass(0);
 				rendererConfiguration.setRenderTime(0L);
 				
@@ -126,6 +130,10 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 			
 //			TODO: Implement rendering via Kernel!
 			
+			if(!this.isRendering.get()) {
+				return false;
+			}
+			
 			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
 				image.filmRender();
 				
@@ -140,7 +148,21 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 			rendererConfiguration.setRenderTime(elapsedTimeMillis);
 		}
 		
+		this.isRendering.set(false);
+		
 		return true;
+	}
+	
+	/**
+	 * Attempts to shutdown the rendering process of this {@code AbstractGPURenderer} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, this {@code AbstractGPURenderer} instance was rendering and is shutting down, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code AbstractGPURenderer} instance was rendering and is shutting down, {@code false} otherwise
+	 */
+	@Override
+	public final boolean renderShutdown() {
+		return this.isRendering.compareAndSet(true, false);
 	}
 	
 	/**
@@ -148,7 +170,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 */
 	@Override
 	public final void clear() {
-		this.isClearing = true;
+		this.isClearing.set(true);
 	}
 	
 	/**
@@ -169,7 +191,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 */
 	@Override
 	public final void setRendererConfiguration(final RendererConfiguration rendererConfiguration) {
-		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
+		this.rendererConfiguration.set(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
 	}
 	
 	/**
@@ -205,7 +227,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 	private void doSetupSeeds() {
-		this.seeds = new long[this.rendererConfiguration.getImage().getResolution()];
+		this.seeds = new long[this.rendererConfiguration.get().getImage().getResolution()];
 		
 		for(int i = 0; i < this.seeds.length; i++) {
 			this.seeds[i] = ThreadLocalRandom.current().nextLong();

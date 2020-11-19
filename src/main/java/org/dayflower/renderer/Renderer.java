@@ -53,6 +53,15 @@ public interface Renderer {
 	boolean render();
 	
 	/**
+	 * Attempts to shutdown the rendering process of this {@code Renderer} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, this {@code Renderer} instance was rendering and is shutting down, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Renderer} instance was rendering and is shutting down, {@code false} otherwise
+	 */
+	boolean renderShutdown();
+	
+	/**
 	 * Call this method to clear the {@link Image} in the next {@link #render()} call.
 	 */
 	void clear();

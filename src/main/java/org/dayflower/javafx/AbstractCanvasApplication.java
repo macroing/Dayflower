@@ -188,6 +188,8 @@ public abstract class AbstractCanvasApplication extends Application {
 			@Override
 			public void handle(final long now) {
 				if(hasRequestedToExit()) {
+					executorService.shutdown();
+					
 					Platform.exit();
 				} else {
 					update();
@@ -195,9 +197,7 @@ public abstract class AbstractCanvasApplication extends Application {
 					final RendererTask oldRendererTask = rendererTask.get();
 					
 					if(oldRendererTask == null || oldRendererTask.isCancelled() || oldRendererTask.isDone()) {
-						final RendererTask newRendererTask = new RendererTask(() -> {
-							return Boolean.valueOf(render(image));
-						}, () -> {
+						final RendererTask newRendererTask = new RendererTask(() -> Boolean.valueOf(render(image)), () -> {
 							image.copyTo(byteBuffer.array());
 							
 							final

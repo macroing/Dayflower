@@ -20,6 +20,8 @@ package org.dayflower.renderer;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.display.Display;
 import org.dayflower.geometry.Ray3F;
@@ -38,8 +40,9 @@ import org.dayflower.util.Timer;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractCPURenderer implements Renderer {
-	private RendererConfiguration rendererConfiguration;
-	private boolean isClearing;
+	private final AtomicBoolean isClearing;
+	private final AtomicBoolean isRendering;
+	private final AtomicReference<RendererConfiguration> rendererConfiguration;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -52,8 +55,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
 	protected AbstractCPURenderer(final RendererConfiguration rendererConfiguration) {
-		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
-		this.isClearing = false;
+		this.isClearing = new AtomicBoolean();
+		this.isRendering = new AtomicBoolean();
+		this.rendererConfiguration = new AtomicReference<>(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +69,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 	 */
 	@Override
 	public final RendererConfiguration getRendererConfiguration() {
-		return this.rendererConfiguration;
+		return this.rendererConfiguration.get();
 	}
 	
 	/**
@@ -75,7 +79,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 	 */
 	@Override
 	public final boolean isClearing() {
-		return this.isClearing;
+		return this.isClearing.get();
 	}
 	
 	/**
@@ -87,7 +91,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	 */
 	@Override
 	public final boolean render() {
-		final RendererConfiguration rendererConfiguration = this.rendererConfiguration;
+		this.isRendering.set(true);
+		
+		final RendererConfiguration rendererConfiguration = this.rendererConfiguration.get();
 		
 		final Display display = rendererConfiguration.getDisplay();
 		
@@ -107,9 +113,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 		final Camera camera = scene.getCameraCopy();
 		
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
-			if(this.isClearing) {
-				this.isClearing = false;
-				
+			if(this.isClearing.compareAndSet(true, false)) {
 				rendererConfiguration.setRenderPass(0);
 				rendererConfiguration.setRenderTime(0L);
 				
@@ -141,6 +145,10 @@ public abstract class AbstractCPURenderer implements Renderer {
 					}
 				}
 				
+				if(!this.isRendering.get()) {
+					return false;
+				}
+				
 //				System.out.printf("%d/%d%n", Integer.valueOf((y + 1) * resolutionX), Integer.valueOf(resolutionX * resolutionY));
 			}
 			
@@ -158,7 +166,21 @@ public abstract class AbstractCPURenderer implements Renderer {
 			rendererConfiguration.setRenderTime(elapsedTimeMillis);
 		}
 		
+		this.isRendering.set(false);
+		
 		return true;
+	}
+	
+	/**
+	 * Attempts to shutdown the rendering process of this {@code AbstractCPURenderer} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, this {@code AbstractCPURenderer} instance was rendering and is shutting down, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code AbstractCPURenderer} instance was rendering and is shutting down, {@code false} otherwise
+	 */
+	@Override
+	public final boolean renderShutdown() {
+		return this.isRendering.compareAndSet(true, false);
 	}
 	
 	/**
@@ -166,7 +188,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 	 */
 	@Override
 	public final void clear() {
-		this.isClearing = true;
+		this.isClearing.set(true);
 	}
 	
 	/**
@@ -187,7 +209,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 	 */
 	@Override
 	public final void setRendererConfiguration(final RendererConfiguration rendererConfiguration) {
-		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
+		this.rendererConfiguration.set(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
 	}
 	
 	/**

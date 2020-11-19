@@ -18,17 +18,20 @@
  */
 package org.dayflower.test;
 
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.dayflower.display.Display;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.AbstractCanvasApplication;
+import org.dayflower.javafx.HierarchicalMenuBar;
 import org.dayflower.renderer.PBRTPathTracingCPURenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
@@ -48,6 +51,7 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final AtomicBoolean isRendering;
 	private final AtomicLong maximumRenderTime;
 	private final AtomicLong minimumRenderTime;
 	private final Label labelRenderPass;
@@ -63,6 +67,7 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 	public DayflowerApplication() {
 		super("Dayflower", RESOLUTION_X, RESOLUTION_Y);
 		
+		this.isRendering = new AtomicBoolean(true);
 		this.maximumRenderTime = new AtomicLong(Long.MIN_VALUE);
 		this.minimumRenderTime = new AtomicLong(Long.MAX_VALUE);
 		this.labelRenderPass = new Label("Render Pass: 0");
@@ -111,10 +116,14 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 	 */
 	@Override
 	protected boolean render(final Image image) {
-		this.renderer.getRendererConfiguration().setImage(image);
-		this.renderer.render();
+		if(this.isRendering.get()) {
+			this.renderer.getRendererConfiguration().setImage(image);
+			this.renderer.render();
+			
+			return true;
+		}
 		
-		return true;
+		return false;
 	}
 	
 	/**
@@ -125,6 +134,13 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 	@Override
 	protected void initializeGUI(final BorderPane borderPane) {
 		final
+		HierarchicalMenuBar hierarchicalMenuBar = new HierarchicalMenuBar();
+		hierarchicalMenuBar.setPathElementText("File", "File");
+		hierarchicalMenuBar.addMenuItem("File", "Open", this::doHandleEventFileOpen, null, true);
+		hierarchicalMenuBar.addSeparatorMenuItem("File");
+		hierarchicalMenuBar.addMenuItem("File", "Exit", this::doHandleEventFileExit, null, true);
+		
+		final
 		HBox hBox = new HBox();
 		hBox.getChildren().add(this.labelRenderPass);
 		hBox.getChildren().add(this.labelRenderTime);
@@ -133,6 +149,7 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 		hBox.setSpacing(20.0D);
 		
 		borderPane.setBottom(hBox);
+		borderPane.setTop(hierarchicalMenuBar);
 	}
 	
 	/**
@@ -190,6 +207,21 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	@SuppressWarnings("unused")
+	private void doHandleEventFileExit(final ActionEvent actionEvent) {
+		this.renderer.renderShutdown();
+		this.renderer.dispose();
+		
+		exit();
+	}
+	
+	@SuppressWarnings("unused")
+	private void doHandleEventFileOpen(final ActionEvent actionEvent) {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static RendererConfiguration doCreateRendererConfiguration(final Display display) {
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
@@ -197,7 +229,7 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 		rendererConfiguration.setRenderPasses(1);
 		rendererConfiguration.setRenderPassesPerDisplayUpdate(1);
 		rendererConfiguration.setSamples(1);
-		rendererConfiguration.setScene(new JavaSceneLoader().load("./resources/scenes/PBRTDefault.java"));
+		rendererConfiguration.setScene(new JavaSceneLoader().load("./resources/scenes/PBRTShowcaseMaterial.java"));
 		
 		return rendererConfiguration;
 	}

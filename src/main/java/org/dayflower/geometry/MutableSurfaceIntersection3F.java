@@ -310,7 +310,8 @@ public final class MutableSurfaceIntersection3F {
 		final float tMaximumNewSpace = doTransformT(matrix, rayOldSpace, rayNewSpace, tMaximumOldSpace);
 		
 		final float tMinimumOldSpace = this.tMinimum;
-		final float tMinimumNewSpace = tMinimumOldSpace;//doTransformT(matrix, rayOldSpace, rayNewSpace, tMinimumOldSpace);
+		final float tMinimumNewSpace = tMinimumOldSpace;
+//		final float tMinimumNewSpace = doTransformT(matrix, rayOldSpace, rayNewSpace, tMinimumOldSpace);
 		
 		this.ray = rayNewSpace;
 		this.t = tNewSpace;

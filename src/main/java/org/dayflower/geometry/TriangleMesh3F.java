@@ -51,12 +51,14 @@ import org.dayflower.util.Lists;
  * @author J&#246;rgen Lundgren
  */
 public final class TriangleMesh3F implements Shape3F {
+	private final BoundingVolume3F boundingVolume;
 	private final List<Triangle3F> triangles;
 	private final Node node;
 	private final String groupName;
 	private final String materialName;
 	private final String objectName;
 	private final boolean isUsingAccelerationStructure;
+	private final float surfaceArea;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -95,12 +97,14 @@ public final class TriangleMesh3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}
 	 */
 	public TriangleMesh3F(final List<Triangle3F> triangles, final String groupName, final String materialName, final String objectName, final boolean isUsingAccelerationStructure) {
-		this.triangles = Lists.requireNonNullList(triangles, "triangles");
+		this.triangles = new ArrayList<>(Lists.requireNonNullList(triangles, "triangles"));
 		this.node = isUsingAccelerationStructure ? doCreateNode(this.triangles) : null;
+		this.boundingVolume = isUsingAccelerationStructure ? this.node.getBoundingVolume() : doCreateBoundingVolume(this.triangles);
 		this.groupName = Objects.requireNonNull(groupName, "groupName == null");
 		this.materialName = Objects.requireNonNull(materialName, "materialName == null");
 		this.objectName = Objects.requireNonNull(objectName, "objectName == null");
 		this.isUsingAccelerationStructure = isUsingAccelerationStructure;
+		this.surfaceArea = isUsingAccelerationStructure ? this.node.getSurfaceArea() : doCalculateSurfaceArea(this.triangles);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,23 +116,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		if(this.isUsingAccelerationStructure) {
-			return this.node.getBoundingVolume();
-		}
-		
-		Point3F maximum = Point3F.MINIMUM;
-		Point3F minimum = Point3F.MAXIMUM;
-		
-		for(final Triangle3F triangle : this.triangles) {
-			final Point3F a = triangle.getA().getPosition();
-			final Point3F b = triangle.getB().getPosition();
-			final Point3F c = triangle.getC().getPosition();
-			
-			maximum = Point3F.maximum(maximum, Point3F.maximum(a, b, c));
-			minimum = Point3F.minimum(minimum, Point3F.minimum(a, b, c));
-		}
-		
-		return new AxisAlignedBoundingBox3F(maximum, minimum);
+		return this.boundingVolume;
 	}
 	
 	/**
@@ -234,6 +222,8 @@ public final class TriangleMesh3F implements Shape3F {
 			return true;
 		} else if(!(object instanceof TriangleMesh3F)) {
 			return false;
+		} else if(!Objects.equals(this.boundingVolume, TriangleMesh3F.class.cast(object).boundingVolume)) {
+			return false;
 		} else if(!Objects.equals(this.triangles, TriangleMesh3F.class.cast(object).triangles)) {
 			return false;
 		} else if(!Objects.equals(this.node, TriangleMesh3F.class.cast(object).node)) {
@@ -245,6 +235,8 @@ public final class TriangleMesh3F implements Shape3F {
 		} else if(!Objects.equals(this.objectName, TriangleMesh3F.class.cast(object).objectName)) {
 			return false;
 		} else if(this.isUsingAccelerationStructure != TriangleMesh3F.class.cast(object).isUsingAccelerationStructure) {
+			return false;
+		} else if(!equal(this.surfaceArea, TriangleMesh3F.class.cast(object).surfaceArea)) {
 			return false;
 		} else {
 			return true;
@@ -336,17 +328,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		if(this.isUsingAccelerationStructure) {
-			return this.node.getSurfaceArea();
-		}
-		
-		float surfaceArea = 0.0F;
-		
-		for(final Triangle3F triangle : this.triangles) {
-			surfaceArea += triangle.getSurfaceArea();
-		}
-		
-		return surfaceArea;
+		return this.surfaceArea;
 	}
 	
 	/**
@@ -426,7 +408,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.triangles, this.node, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure));
+		return Objects.hash(this.boundingVolume, this.triangles, this.node, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure), Float.valueOf(this.surfaceArea));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -736,6 +718,22 @@ public final class TriangleMesh3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private static BoundingVolume3F doCreateBoundingVolume(final List<Triangle3F> triangles) {
+		Point3F maximum = Point3F.MINIMUM;
+		Point3F minimum = Point3F.MAXIMUM;
+		
+		for(final Triangle3F triangle : triangles) {
+			final Point3F a = triangle.getA().getPosition();
+			final Point3F b = triangle.getB().getPosition();
+			final Point3F c = triangle.getC().getPosition();
+			
+			maximum = Point3F.maximum(maximum, Point3F.maximum(a, b, c));
+			minimum = Point3F.minimum(minimum, Point3F.minimum(a, b, c));
+		}
+		
+		return new AxisAlignedBoundingBox3F(maximum, minimum);
+	}
+	
 	private static Node doCreateNode(final List<LeafNode> processableLeafNodes, final Point3F maximum, final Point3F minimum, final int depth) {
 		final int size = processableLeafNodes.size();
 		final int sizeHalf = size / 2;
@@ -945,6 +943,16 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		return doCreateNode(processableLeafNodes, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
+	}
+	
+	private static float doCalculateSurfaceArea(final List<Triangle3F> triangles) {
+		float surfaceArea = 0.0F;
+		
+		for(final Triangle3F triangle : triangles) {
+			surfaceArea += triangle.getSurfaceArea();
+		}
+		
+		return surfaceArea;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

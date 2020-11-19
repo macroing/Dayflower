@@ -28,8 +28,6 @@ import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.SmallPTIPathTracingCPURenderer;
 import org.dayflower.renderer.SmallPTRPathTracingCPURenderer;
-import org.dayflower.sampler.NRooksSampler;
-import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.loader.JavaSceneLoader;
 
 public final class RendererTest {
@@ -53,66 +51,54 @@ public final class RendererTest {
 	static void doTestAmbientOcclusionCPURenderer() {
 		final
 		Renderer renderer = new AmbientOcclusionCPURenderer();
-		renderer.setRendererConfiguration(new RendererConfiguration());
-		renderer.setScene(new JavaSceneLoader().load("./resources/scenes/RayitoDefault.java"));
-		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
-		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
-		renderer.setSampler(new RandomSampler());
+		renderer.setRendererConfiguration(doCreateRendererConfiguration(AmbientOcclusionCPURenderer.class, "./resources/scenes/RayitoDefault.java"));
 		renderer.render();
 	}
 	
 	static void doTestPBRTPathTracingCPURenderer() {
 		final
 		Renderer renderer = new PBRTPathTracingCPURenderer();
-		renderer.setRendererConfiguration(new RendererConfiguration());
-		renderer.setScene(new JavaSceneLoader().load("./resources/scenes/PBRTSL500.java"));
-		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
-		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
-		renderer.setSampler(new NRooksSampler());
+		renderer.setRendererConfiguration(doCreateRendererConfiguration(PBRTPathTracingCPURenderer.class, "./resources/scenes/PBRTSL500.java"));
 		renderer.render();
 	}
 	
 	static void doTestRayCastingCPURenderer() {
 		final
 		Renderer renderer = new RayCastingCPURenderer();
-		renderer.setRendererConfiguration(new RendererConfiguration());
-		renderer.setScene(new JavaSceneLoader().load("./resources/scenes/RayitoDefault.java"));
-		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
-		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
-		renderer.setSampler(new RandomSampler());
+		renderer.setRendererConfiguration(doCreateRendererConfiguration(RayCastingCPURenderer.class, "./resources/scenes/RayitoDefault.java"));
 		renderer.render();
 	}
 	
 	static void doTestRayitoPathTracingCPURenderer() {
 		final
 		Renderer renderer = new RayitoPathTracingCPURenderer();
-		renderer.setRendererConfiguration(new RendererConfiguration());
-		renderer.setScene(new JavaSceneLoader().load("./resources/scenes/RayitoDefault.java"));
-		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
-		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
-		renderer.setSampler(new NRooksSampler());
+		renderer.setRendererConfiguration(doCreateRendererConfiguration(RayitoPathTracingCPURenderer.class, "./resources/scenes/RayitoDefault.java"));
 		renderer.render();
 	}
 	
 	static void doTestSmallPTIPathTracingCPURenderer() {
 		final
 		Renderer renderer = new SmallPTIPathTracingCPURenderer();
-		renderer.setRendererConfiguration(new RendererConfiguration());
-		renderer.setScene(new JavaSceneLoader().load("./resources/scenes/RayitoDefault.java"));
-		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
-		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
-		renderer.setSampler(new RandomSampler());
+		renderer.setRendererConfiguration(doCreateRendererConfiguration(SmallPTIPathTracingCPURenderer.class, "./resources/scenes/RayitoDefault.java"));
 		renderer.render();
 	}
 	
 	static void doTestSmallPTRPathTracingCPURenderer() {
 		final
 		Renderer renderer = new SmallPTRPathTracingCPURenderer();
-		renderer.setRendererConfiguration(new RendererConfiguration());
-		renderer.setScene(new JavaSceneLoader().load("./resources/scenes/RayitoDefault.java"));
-		renderer.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", renderer.getClass().getSimpleName(), renderer.getScene().getName())));
-		renderer.setImage(new Image((int)(renderer.getScene().getCamera().getResolutionX()), (int)(renderer.getScene().getCamera().getResolutionY())));
-		renderer.setSampler(new RandomSampler());
+		renderer.setRendererConfiguration(doCreateRendererConfiguration(SmallPTRPathTracingCPURenderer.class, "./resources/scenes/RayitoDefault.java"));
 		renderer.render();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static RendererConfiguration doCreateRendererConfiguration(final Class<?> clazz, final String pathname) {
+		final
+		RendererConfiguration rendererConfiguration = new RendererConfiguration();
+		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
+		rendererConfiguration.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", clazz.getSimpleName(), rendererConfiguration.getScene().getName())));
+		rendererConfiguration.setImage(new Image((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
+		
+		return rendererConfiguration;
 	}
 }

@@ -18,7 +18,17 @@
  */
 package org.dayflower.renderer;
 
+import static org.dayflower.util.Floats.equal;
+
 import java.util.Objects;
+
+import org.dayflower.display.Display;
+import org.dayflower.display.FileDisplay;
+import org.dayflower.image.Image;
+import org.dayflower.sampler.NRooksSampler;
+import org.dayflower.sampler.Sampler;
+import org.dayflower.scene.Scene;
+import org.dayflower.util.Timer;
 
 /**
  * A {@code RendererConfiguration} is used to configure the rendering process of a {@link Renderer} instance.
@@ -27,46 +37,78 @@ import java.util.Objects;
  * @author J&#246;rgen Lundgren
  */
 public final class RendererConfiguration {
+	private Display display;
+	private Image image;
+	private Sampler sampler;
+	private Scene scene;
+	private Timer timer;
+	private float maximumDistance;
 	private int maximumBounce;
 	private int minimumBounceRussianRoulette;
+	private int renderPass;
 	private int renderPasses;
 	private int renderPassesPerDisplayUpdate;
 	private int samples;
+	private long renderTime;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code RendererConfiguration} instance.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new RendererConfiguration(20, 5, 1000, 10, 10);
-	 * }
-	 * </pre>
 	 */
 	public RendererConfiguration() {
-		this(20, 5, 1000, 10, 10);
-	}
-	
-	/**
-	 * Constructs a new {@code RendererConfiguration} instance.
-	 * 
-	 * @param maximumBounce the maximum bounce
-	 * @param minimumBounceRussianRoulette the minimum bounce before Russian roulette termination occurs
-	 * @param renderPasses the render passes to perform
-	 * @param renderPassesPerDisplayUpdate the render passes to perform before the display is updated
-	 * @param samples the samples to use per render pass
-	 */
-	public RendererConfiguration(final int maximumBounce, final int minimumBounceRussianRoulette, final int renderPasses, final int renderPassesPerDisplayUpdate, final int samples) {
-		this.maximumBounce = maximumBounce;
-		this.minimumBounceRussianRoulette = minimumBounceRussianRoulette;
-		this.renderPasses = renderPasses;
-		this.renderPassesPerDisplayUpdate = renderPassesPerDisplayUpdate;
-		this.samples = samples;
+		this.display = new FileDisplay("Image.png");
+		this.image = new Image(800, 800);
+		this.sampler = new NRooksSampler();
+		this.scene = new Scene();
+		this.timer = new Timer();
+		this.maximumDistance = 20.0F;
+		this.maximumBounce = 20;
+		this.minimumBounceRussianRoulette = 5;
+		this.renderPass = 0;
+		this.renderPasses = 1000;
+		this.renderPassesPerDisplayUpdate = 10;
+		this.samples = 10;
+		this.renderTime = 0L;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the {@link Display} instance associated with this {@code RendererConfiguration} instance.
+	 * 
+	 * @return the {@code Display} instance associated with this {@code RendererConfiguration} instance
+	 */
+	public Display getDisplay() {
+		return this.display;
+	}
+	
+	/**
+	 * Returns the {@link Image} instance associated with this {@code RendererConfiguration} instance.
+	 * 
+	 * @return the {@code Image} instance associated with this {@code RendererConfiguration} instance
+	 */
+	public Image getImage() {
+		return this.image;
+	}
+	
+	/**
+	 * Returns the {@link Sampler} instance associated with this {@code RendererConfiguration} instance.
+	 * 
+	 * @return the {@code Sampler} instance associated with this {@code RendererConfiguration} instance
+	 */
+	public Sampler getSampler() {
+		return this.sampler;
+	}
+	
+	/**
+	 * Returns the {@link Scene} instance associated with this {@code RendererConfiguration} instance.
+	 * 
+	 * @return the {@code Scene} instance associated with this {@code RendererConfiguration} instance
+	 */
+	public Scene getScene() {
+		return this.scene;
+	}
 	
 	/**
 	 * Returns a {@code String} representation of this {@code RendererConfiguration} instance.
@@ -75,7 +117,16 @@ public final class RendererConfiguration {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new RendererConfiguration(%d, %d, %d, %d, %d)", Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerDisplayUpdate), Integer.valueOf(this.samples));
+		return "new RendererConfiguration()";
+	}
+	
+	/**
+	 * Returns the {@link Timer} instance associated with this {@code RendererConfiguration} instance.
+	 * 
+	 * @return the {@code Timer} instance associated with this {@code RendererConfiguration} instance
+	 */
+	public Timer getTimer() {
+		return this.timer;
 	}
 	
 	/**
@@ -92,9 +143,21 @@ public final class RendererConfiguration {
 			return true;
 		} else if(!(object instanceof RendererConfiguration)) {
 			return false;
+		} else if(!Objects.equals(this.display, RendererConfiguration.class.cast(object).display)) {
+			return false;
+		} else if(!Objects.equals(this.image, RendererConfiguration.class.cast(object).image)) {
+			return false;
+		} else if(!Objects.equals(this.sampler, RendererConfiguration.class.cast(object).sampler)) {
+			return false;
+		} else if(!Objects.equals(this.scene, RendererConfiguration.class.cast(object).scene)) {
+			return false;
+		} else if(!equal(this.maximumDistance, RendererConfiguration.class.cast(object).maximumDistance)) {
+			return false;
 		} else if(this.maximumBounce != RendererConfiguration.class.cast(object).maximumBounce) {
 			return false;
 		} else if(this.minimumBounceRussianRoulette != RendererConfiguration.class.cast(object).minimumBounceRussianRoulette) {
+			return false;
+		} else if(this.renderPass != RendererConfiguration.class.cast(object).renderPass) {
 			return false;
 		} else if(this.renderPasses != RendererConfiguration.class.cast(object).renderPasses) {
 			return false;
@@ -102,9 +165,20 @@ public final class RendererConfiguration {
 			return false;
 		} else if(this.samples != RendererConfiguration.class.cast(object).samples) {
 			return false;
+		} else if(this.renderTime != RendererConfiguration.class.cast(object).renderTime) {
+			return false;
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns the maximum distance.
+	 * 
+	 * @return the maximum distance
+	 */
+	public float getMaximumDistance() {
+		return this.maximumDistance;
 	}
 	
 	/**
@@ -123,6 +197,15 @@ public final class RendererConfiguration {
 	 */
 	public int getMinimumBounceRussianRoulette() {
 		return this.minimumBounceRussianRoulette;
+	}
+	
+	/**
+	 * Returns the current render pass.
+	 * 
+	 * @return the current render pass
+	 */
+	public int getRenderPass() {
+		return this.renderPass;
 	}
 	
 	/**
@@ -159,7 +242,40 @@ public final class RendererConfiguration {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerDisplayUpdate), Integer.valueOf(this.samples));
+		return Objects.hash(this.display, this.image, this.sampler, this.scene, Float.valueOf(this.maximumDistance), Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPass), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerDisplayUpdate), Integer.valueOf(this.samples), Long.valueOf(this.renderTime));
+	}
+	
+	/**
+	 * Returns the current render time in milliseconds.
+	 * 
+	 * @return the current render time in milliseconds
+	 */
+	public long getRenderTime() {
+		return this.renderTime;
+	}
+	
+	/**
+	 * Sets the {@link Display} instance associated with this {@code RendererConfiguration} instance to {@code display}.
+	 * <p>
+	 * If {@code display} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param display the {@code Display} instance associated with this {@code RendererConfiguration} instance
+	 * @throws NullPointerException thrown if, and only if, {@code display} is {@code null}
+	 */
+	public void setDisplay(final Display display) {
+		this.display = Objects.requireNonNull(display, "display == null");
+	}
+	
+	/**
+	 * Sets the {@link Image} instance associated with this {@code RendererConfiguration} instance to {@code image}.
+	 * <p>
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image the {@code Image} instance associated with this {@code RendererConfiguration} instance
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 */
+	public void setImage(final Image image) {
+		this.image = Objects.requireNonNull(image, "image == null");
 	}
 	
 	/**
@@ -172,12 +288,30 @@ public final class RendererConfiguration {
 	}
 	
 	/**
+	 * Sets the maximum distance to {@code maximumDistance}.
+	 * 
+	 * @param maximumDistance the maximum distance
+	 */
+	public void setMaximumDistance(final float maximumDistance) {
+		this.maximumDistance = maximumDistance;
+	}
+	
+	/**
 	 * Sets the minimum bounce before Russian roulette termination occurs to {@code minimumBounceRussianRoulette}.
 	 * 
 	 * @param minimumBounceRussianRoulette the minimum bounce before Russian roulette termination occurs
 	 */
 	public void setMinimumBounceRussianRoulette(final int minimumBounceRussianRoulette) {
 		this.minimumBounceRussianRoulette = minimumBounceRussianRoulette;
+	}
+	
+	/**
+	 * Sets the current render pass to {@code renderPass}.
+	 * 
+	 * @param renderPass the current render pass
+	 */
+	public void setRenderPass(final int renderPass) {
+		this.renderPass = renderPass;
 	}
 	
 	/**
@@ -199,11 +333,56 @@ public final class RendererConfiguration {
 	}
 	
 	/**
+	 * Sets the current render time in milliseconds to {@code renderTime}.
+	 * 
+	 * @param renderTime the current render time in milliseconds
+	 */
+	public void setRenderTime(final long renderTime) {
+		this.renderTime = renderTime;
+	}
+	
+	/**
+	 * Sets the {@link Sampler} instance associated with this {@code RendererConfiguration} instance to {@code sampler}.
+	 * <p>
+	 * If {@code sampler} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sampler the {@code Sampler} instance associated with this {@code RendererConfiguration} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sampler} is {@code null}
+	 */
+	public void setSampler(final Sampler sampler) {
+		this.sampler = Objects.requireNonNull(sampler, "sampler == null");
+	}
+	
+	/**
 	 * Sets the samples to use per render pass to {@code samples}.
 	 * 
 	 * @param samples the samples to use per render pass
 	 */
 	public void setSamples(final int samples) {
 		this.samples = samples;
+	}
+	
+	/**
+	 * Sets the {@link Scene} instance associated with this {@code RendererConfiguration} instance to {@code scene}.
+	 * <p>
+	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param scene the {@code Scene} instance associated with this {@code RendererConfiguration} instance
+	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
+	 */
+	public void setScene(final Scene scene) {
+		this.scene = Objects.requireNonNull(scene, "scene == null");
+	}
+	
+	/**
+	 * Sets the {@link Timer} instance associated with this {@code RendererConfiguration} instance to {@code timer}.
+	 * <p>
+	 * If {@code timer} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param timer the {@code Timer} instance associated with this {@code RendererConfiguration} instance
+	 * @throws NullPointerException thrown if, and only if, {@code timer} is {@code null}
+	 */
+	public void setTimer(final Timer timer) {
+		this.timer = Objects.requireNonNull(timer, "timer == null");
 	}
 }

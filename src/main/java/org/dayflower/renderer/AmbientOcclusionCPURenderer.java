@@ -24,17 +24,12 @@ import static org.dayflower.util.Floats.saturate;
 
 import java.util.Optional;
 
-import org.dayflower.display.Display;
-import org.dayflower.display.FileDisplay;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
-import org.dayflower.sampler.RandomSampler;
-import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Scene;
 
@@ -50,64 +45,30 @@ public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final float maximumDistance;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
 	 * Constructs a new {@code AmbientOcclusionCPURenderer} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AmbientOcclusionCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+	 * new AmbientOcclusionCPURenderer(new RendererConfiguration());
 	 * }
 	 * </pre>
 	 */
 	public AmbientOcclusionCPURenderer() {
-		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+		this(new RendererConfiguration());
 	}
 	
 	/**
 	 * Constructs a new {@code AmbientOcclusionCPURenderer} instance.
 	 * <p>
-	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new AmbientOcclusionCPURenderer(display, image, rendererConfiguration, sampler, scene, 20.0F);
-	 * }
-	 * </pre>
+	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param display the {@link Display} instance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @param image the {@link Image} instance associated with this {@code AmbientOcclusionCPURenderer} instance
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @param sampler the {@link Sampler} instance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @param scene the {@link Scene} instance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
-	public AmbientOcclusionCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
-		this(display, image, rendererConfiguration, sampler, scene, 20.0F);
-	}
-	
-	/**
-	 * Constructs a new {@code AmbientOcclusionCPURenderer} instance.
-	 * <p>
-	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param display the {@link Display} instance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @param image the {@link Image} instance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @param sampler the {@link Sampler} instance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @param scene the {@link Scene} instance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @param maximumDistance the maximum distance associated with this {@code AmbientOcclusionCPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
-	 */
-	public AmbientOcclusionCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene, final float maximumDistance) {
-		super(display, image, rendererConfiguration, sampler, scene);
-		
-		this.maximumDistance = maximumDistance;
+	public AmbientOcclusionCPURenderer(final RendererConfiguration rendererConfiguration) {
+		super(rendererConfiguration);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +88,7 @@ public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
 		
 		final RendererConfiguration rendererConfiguration = getRendererConfiguration();
 		
-		final Scene scene = getScene();
+		final Scene scene = rendererConfiguration.getScene();
 		
 		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 		
@@ -138,7 +99,7 @@ public final class AmbientOcclusionCPURenderer extends AbstractCPURenderer {
 			
 			final OrthonormalBasis33F orthonormalBasisGWorldSpace = surfaceIntersectionWorldSpace.getOrthonormalBasisG();
 			
-			final float maximumDistance = this.maximumDistance;
+			final float maximumDistance = rendererConfiguration.getMaximumDistance();
 			
 			final int samples = rendererConfiguration.getSamples();
 			

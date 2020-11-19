@@ -20,14 +20,8 @@ package org.dayflower.renderer;
 
 import java.util.Objects;
 
-import org.dayflower.display.Display;
-import org.dayflower.display.FileDisplay;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
-import org.dayflower.sampler.RandomSampler;
-import org.dayflower.sampler.Sampler;
-import org.dayflower.scene.Scene;
 
 /**
  * A {@code RayTracingCPURenderer} is a {@link Renderer} implementation that renders using Ray Tracing.
@@ -42,28 +36,24 @@ public final class RayTracingCPURenderer extends AbstractCPURenderer {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RayTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+	 * new RayTracingCPURenderer(new RendererConfiguration());
 	 * }
 	 * </pre>
 	 */
 	public RayTracingCPURenderer() {
-		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+		this(new RendererConfiguration());
 	}
 	
 	/**
 	 * Constructs a new {@code RayTracingCPURenderer} instance.
 	 * <p>
-	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param display the {@link Display} instance associated with this {@code RayTracingCPURenderer} instance
-	 * @param image the {@link Image} instance associated with this {@code RayTracingCPURenderer} instance
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code RayTracingCPURenderer} instance
-	 * @param sampler the {@link Sampler} instance associated with this {@code RayTracingCPURenderer} instance
-	 * @param scene the {@link Scene} instance associated with this {@code RayTracingCPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
-	public RayTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
-		super(display, image, rendererConfiguration, sampler, scene);
+	public RayTracingCPURenderer(final RendererConfiguration rendererConfiguration) {
+		super(rendererConfiguration);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

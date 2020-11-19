@@ -24,7 +24,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.dayflower.display.Display;
 import org.dayflower.image.Image;
-import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Scene;
 import org.dayflower.util.Timer;
 
@@ -48,63 +47,25 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Display display;
-	private Image image;
 	private RendererConfiguration rendererConfiguration;
-	private Sampler sampler;
-	private Scene scene;
-	private Timer timer;
 	private boolean isClearing;
-	private int renderPass;
-	private long renderTime;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code AbstractGPURenderer} instance.
 	 * <p>
-	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param display the {@link Display} instance associated with this {@code AbstractGPURenderer} instance
-	 * @param image the {@link Image} instance associated with this {@code AbstractGPURenderer} instance
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance
-	 * @param sampler the {@link Sampler} instance associated with this {@code AbstractGPURenderer} instance
-	 * @param scene the {@link Scene} instance associated with this {@code AbstractGPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
-	protected AbstractGPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
-		this.display = Objects.requireNonNull(display, "display == null");
-		this.image = Objects.requireNonNull(image, "image == null");
+	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration) {
 		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
-		this.sampler = Objects.requireNonNull(sampler, "sampler == null");
-		this.scene = Objects.requireNonNull(scene, "scene == null");
-		this.timer = new Timer();
 		this.isClearing = false;
-		this.renderPass = 0;
-		this.renderTime = 0L;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns the {@link Display} instance associated with this {@code AbstractGPURenderer} instance.
-	 * 
-	 * @return the {@code Display} instance associated with this {@code AbstractGPURenderer} instance
-	 */
-	@Override
-	public final Display getDisplay() {
-		return this.display;
-	}
-	
-	/**
-	 * Returns the {@link Image} instance associated with this {@code AbstractGPURenderer} instance.
-	 * 
-	 * @return the {@code Image} instance associated with this {@code AbstractGPURenderer} instance
-	 */
-	@Override
-	public final Image getImage() {
-		return this.image;
-	}
 	
 	/**
 	 * Returns the {@link RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance.
@@ -114,36 +75,6 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	@Override
 	public final RendererConfiguration getRendererConfiguration() {
 		return this.rendererConfiguration;
-	}
-	
-	/**
-	 * Returns the {@link Sampler} instance associated with this {@code AbstractGPURenderer} instance.
-	 * 
-	 * @return the {@code Sampler} instance associated with this {@code AbstractGPURenderer} instance
-	 */
-	@Override
-	public final Sampler getSampler() {
-		return this.sampler;
-	}
-	
-	/**
-	 * Returns the {@link Scene} instance associated with this {@code AbstractGPURenderer} instance.
-	 * 
-	 * @return the {@code Scene} instance associated with this {@code AbstractGPURenderer} instance
-	 */
-	@Override
-	public final Scene getScene() {
-		return this.scene;
-	}
-	
-	/**
-	 * Returns the {@link Timer} instance associated with this {@code AbstractGPURenderer} instance.
-	 * 
-	 * @return the {@code Timer} instance associated with this {@code AbstractGPURenderer} instance
-	 */
-	@Override
-	public final Timer getTimer() {
-		return this.timer;
 	}
 	
 	/**
@@ -165,11 +96,13 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 */
 	@Override
 	public final boolean render() {
-		final Display display = this.display;
-		
-		final Image image = this.image;
-		
 		final RendererConfiguration rendererConfiguration = this.rendererConfiguration;
+		
+		final Display display = rendererConfiguration.getDisplay();
+		
+		final Image image = rendererConfiguration.getImage();
+		
+		final Timer timer = rendererConfiguration.getTimer();
 		
 		final int renderPasses = rendererConfiguration.getRenderPasses();
 		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
@@ -177,15 +110,16 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
 			if(this.isClearing) {
 				this.isClearing = false;
-				this.renderPass = 0;
-				this.renderTime = 0L;
+				
+				rendererConfiguration.setRenderPass(0);
+				rendererConfiguration.setRenderTime(0L);
 				
 				image.filmClear();
 				image.filmRender();
 				
 				display.update(image);
 				
-				this.timer.restart();
+				timer.restart();
 			}
 			
 			final long currentTimeMillis = System.currentTimeMillis();
@@ -202,31 +136,11 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 			
 			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
 			
-			this.renderPass++;
-			this.renderTime = elapsedTimeMillis;
+			rendererConfiguration.setRenderPass(rendererConfiguration.getRenderPass() + 1);
+			rendererConfiguration.setRenderTime(elapsedTimeMillis);
 		}
 		
 		return true;
-	}
-	
-	/**
-	 * Returns the current render pass.
-	 * 
-	 * @return the current render pass
-	 */
-	@Override
-	public final int getRenderPass() {
-		return this.renderPass;
-	}
-	
-	/**
-	 * Returns the current render time in milliseconds.
-	 * 
-	 * @return the current render time in milliseconds
-	 */
-	@Override
-	public final long getRenderTime() {
-		return this.renderTime;
 	}
 	
 	/**
@@ -246,32 +160,6 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 	/**
-	 * Sets the {@link Display} instance associated with this {@code AbstractGPURenderer} instance to {@code display}.
-	 * <p>
-	 * If {@code display} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param display the {@code Display} instance associated with this {@code AbstractGPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code display} is {@code null}
-	 */
-	@Override
-	public final void setDisplay(final Display display) {
-		this.display = Objects.requireNonNull(display, "display == null");
-	}
-	
-	/**
-	 * Sets the {@link Image} instance associated with this {@code AbstractGPURenderer} instance to {@code image}.
-	 * <p>
-	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param image the {@code Image} instance associated with this {@code AbstractGPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
-	 */
-	@Override
-	public final void setImage(final Image image) {
-		this.image = Objects.requireNonNull(image, "image == null");
-	}
-	
-	/**
 	 * Sets the {@link RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance to {@code rendererConfiguration}.
 	 * <p>
 	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -282,32 +170,6 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	@Override
 	public final void setRendererConfiguration(final RendererConfiguration rendererConfiguration) {
 		this.rendererConfiguration = Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null");
-	}
-	
-	/**
-	 * Sets the {@link Sampler} instance associated with this {@code AbstractGPURenderer} instance to {@code sampler}.
-	 * <p>
-	 * If {@code sampler} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param sampler the {@code Sampler} instance associated with this {@code AbstractGPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code sampler} is {@code null}
-	 */
-	@Override
-	public final void setSampler(final Sampler sampler) {
-		this.sampler = Objects.requireNonNull(sampler, "sampler == null");
-	}
-	
-	/**
-	 * Sets the {@link Scene} instance associated with this {@code AbstractGPURenderer} instance to {@code scene}.
-	 * <p>
-	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param scene the {@code Scene} instance associated with this {@code AbstractGPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
-	 */
-	@Override
-	public final void setScene(final Scene scene) {
-		this.scene = Objects.requireNonNull(scene, "scene == null");
 	}
 	
 	/**
@@ -343,7 +205,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 	private void doSetupSeeds() {
-		this.seeds = new long[this.image.getResolution()];
+		this.seeds = new long[this.rendererConfiguration.getImage().getResolution()];
 		
 		for(int i = 0; i < this.seeds.length; i++) {
 			this.seeds[i] = ThreadLocalRandom.current().nextLong();

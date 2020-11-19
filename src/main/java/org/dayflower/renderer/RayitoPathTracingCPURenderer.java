@@ -24,8 +24,6 @@ import static org.dayflower.util.Floats.random;
 import java.util.List;
 import java.util.Optional;
 
-import org.dayflower.display.Display;
-import org.dayflower.display.FileDisplay;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
@@ -34,9 +32,6 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
-import org.dayflower.sampler.RandomSampler;
-import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
@@ -66,28 +61,24 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RayitoPathTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+	 * new RayitoPathTracingCPURenderer(new RendererConfiguration());
 	 * }
 	 * </pre>
 	 */
 	public RayitoPathTracingCPURenderer() {
-		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+		this(new RendererConfiguration());
 	}
 	
 	/**
 	 * Constructs a new {@code RayitoPathTracingCPURenderer} instance.
 	 * <p>
-	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param display the {@link Display} instance associated with this {@code RayitoPathTracingCPURenderer} instance
-	 * @param image the {@link Image} instance associated with this {@code RayitoPathTracingCPURenderer} instance
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code RayitoPathTracingCPURenderer} instance
-	 * @param sampler the {@link Sampler} instance associated with this {@code RayitoPathTracingCPURenderer} instance
-	 * @param scene the {@link Scene} instance associated with this {@code RayitoPathTracingCPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
-	public RayitoPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
-		super(display, image, rendererConfiguration, sampler, scene);
+	public RayitoPathTracingCPURenderer(final RendererConfiguration rendererConfiguration) {
+		super(rendererConfiguration);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +96,7 @@ public final class RayitoPathTracingCPURenderer extends AbstractCPURenderer {
 	protected Color3F radiance(final Ray3F ray) {
 		final RendererConfiguration rendererConfiguration = getRendererConfiguration();
 		
-		final Scene scene = getScene();
+		final Scene scene = rendererConfiguration.getScene();
 		
 		final List<Light> lights = scene.getLights();
 		

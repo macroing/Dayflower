@@ -28,8 +28,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
-import org.dayflower.display.Display;
-import org.dayflower.display.FileDisplay;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
@@ -37,8 +35,6 @@ import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
-import org.dayflower.sampler.RandomSampler;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.AreaLight;
@@ -72,28 +68,24 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PBRTPathTracingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+	 * new PBRTPathTracingCPURenderer(new RendererConfiguration());
 	 * }
 	 * </pre>
 	 */
 	public PBRTPathTracingCPURenderer() {
-		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+		this(new RendererConfiguration());
 	}
 	
 	/**
 	 * Constructs a new {@code PBRTPathTracingCPURenderer} instance.
 	 * <p>
-	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param display the {@link Display} instance associated with this {@code PBRTPathTracingCPURenderer} instance
-	 * @param image the {@link Image} instance associated with this {@code PBRTPathTracingCPURenderer} instance
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code PBRTPathTracingCPURenderer} instance
-	 * @param sampler the {@link Sampler} instance associated with this {@code PBRTPathTracingCPURenderer} instance
-	 * @param scene the {@link Scene} instance associated with this {@code PBRTPathTracingCPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
-	public PBRTPathTracingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
-		super(display, image, rendererConfiguration, sampler, scene);
+	public PBRTPathTracingCPURenderer(final RendererConfiguration rendererConfiguration) {
+		super(rendererConfiguration);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,9 +103,9 @@ public final class PBRTPathTracingCPURenderer extends AbstractCPURenderer {
 	protected Color3F radiance(final Ray3F ray) {
 		final RendererConfiguration rendererConfiguration = getRendererConfiguration();
 		
-		final Sampler sampler = getSampler();
+		final Sampler sampler = rendererConfiguration.getSampler();
 		
-		final Scene scene = getScene();
+		final Scene scene = rendererConfiguration.getScene();
 		
 		final List<Light> lights = scene.getLights();
 		

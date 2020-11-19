@@ -29,8 +29,6 @@ import static org.dayflower.util.Ints.min;
 import java.lang.reflect.Field;
 import java.util.Optional;
 
-import org.dayflower.display.Display;
-import org.dayflower.display.FileDisplay;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
@@ -38,9 +36,6 @@ import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
-import org.dayflower.sampler.RandomSampler;
-import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
@@ -75,28 +70,24 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RayCastingCPURenderer(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+	 * new RayCastingCPURenderer(new RendererConfiguration());
 	 * }
 	 * </pre>
 	 */
 	public RayCastingCPURenderer() {
-		this(new FileDisplay("Image.png"), new Image(800, 800), new RendererConfiguration(), new RandomSampler(), new Scene());
+		this(new RendererConfiguration());
 	}
 	
 	/**
 	 * Constructs a new {@code RayCastingCPURenderer} instance.
 	 * <p>
-	 * If either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param display the {@link Display} instance associated with this {@code RayCastingCPURenderer} instance
-	 * @param image the {@link Image} instance associated with this {@code RayCastingCPURenderer} instance
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code RayCastingCPURenderer} instance
-	 * @param sampler the {@link Sampler} instance associated with this {@code RayCastingCPURenderer} instance
-	 * @param scene the {@link Scene} instance associated with this {@code RayCastingCPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code display}, {@code image}, {@code rendererConfiguration}, {@code sampler} or {@code scene} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
-	public RayCastingCPURenderer(final Display display, final Image image, final RendererConfiguration rendererConfiguration, final Sampler sampler, final Scene scene) {
-		super(display, image, rendererConfiguration, sampler, scene);
+	public RayCastingCPURenderer(final RendererConfiguration rendererConfiguration) {
+		super(rendererConfiguration);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +103,7 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 	 */
 	@Override
 	protected Color3F radiance(final Ray3F ray) {
-		return doGetRadiance(ray, getScene());
+		return doGetRadiance(ray, getRendererConfiguration().getScene());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

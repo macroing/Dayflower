@@ -35,11 +35,6 @@ Supported Features
 * Specular
 * Torrance-Sparrow
 
-#### Background
-* Constant
-* Image
-* Perez
-
 #### Camera Lens
 * Fisheye
 * Thin

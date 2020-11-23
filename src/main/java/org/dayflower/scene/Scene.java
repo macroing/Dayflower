@@ -31,11 +31,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.geometry.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.InfiniteBoundingVolume3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.util.Lists;
 
 /**

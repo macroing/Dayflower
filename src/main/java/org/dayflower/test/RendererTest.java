@@ -28,6 +28,7 @@ import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.SmallPTIPathTracingCPURenderer;
 import org.dayflower.renderer.SmallPTRPathTracingCPURenderer;
+import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.loader.JavaSceneLoader;
 
 public final class RendererTest {
@@ -98,6 +99,7 @@ public final class RendererTest {
 		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
 		rendererConfiguration.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", clazz.getSimpleName(), rendererConfiguration.getScene().getName())));
 		rendererConfiguration.setImage(new Image((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
+		rendererConfiguration.setSampler(new RandomSampler());
 		
 		return rendererConfiguration;
 	}

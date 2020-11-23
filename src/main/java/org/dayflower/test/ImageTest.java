@@ -18,11 +18,11 @@
  */
 package org.dayflower.test;
 
-import org.dayflower.geometry.Circle2I;
-import org.dayflower.geometry.Line2I;
 import org.dayflower.geometry.Point2I;
-import org.dayflower.geometry.Rectangle2I;
-import org.dayflower.geometry.Triangle2I;
+import org.dayflower.geometry.shape.Circle2I;
+import org.dayflower.geometry.shape.Line2I;
+import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.ConvolutionKernel33F;
 import org.dayflower.image.ConvolutionKernel55F;

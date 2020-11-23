@@ -16,12 +16,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.geometry;
+package org.dayflower.geometry.boundingvolume;
 
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 
 import java.util.Objects;
+
+import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Vector3F;
 
 /**
  * An {@code AxisAlignedBoundingBox3F} denotes a 3-dimensional axis-aligned bounding box (AABB) that uses the data type {@code float}.

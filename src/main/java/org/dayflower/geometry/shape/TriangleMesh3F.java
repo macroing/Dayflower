@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.geometry;
+package org.dayflower.geometry.shape;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
@@ -39,7 +39,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.geometry.Triangle3F.Vertex3F;
+import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.MutableSurfaceIntersection3F;
+import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.SurfaceSample3F;
+import org.dayflower.geometry.Vector3F;
+import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.util.Lists;
 
 /**

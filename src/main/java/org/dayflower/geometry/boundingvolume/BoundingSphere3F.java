@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.geometry;
+package org.dayflower.geometry.boundingvolume;
 
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
@@ -28,6 +28,12 @@ import static org.dayflower.util.Floats.solveQuadraticSystem;
 import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
+
+import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Vector3F;
 
 /**
  * A {@code BoundingSphere3F} denotes a 3-dimensional bounding sphere that uses the data type {@code float}.

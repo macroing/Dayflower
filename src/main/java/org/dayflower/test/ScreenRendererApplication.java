@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import org.dayflower.geometry.Point2I;
-import org.dayflower.geometry.Rectangle2I;
+import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.ConvolutionKernel33F;
 import org.dayflower.image.Image;

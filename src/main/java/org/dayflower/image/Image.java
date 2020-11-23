@@ -46,12 +46,12 @@ import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
-import org.dayflower.geometry.Circle2I;
-import org.dayflower.geometry.Line2I;
 import org.dayflower.geometry.Point2I;
-import org.dayflower.geometry.Rasterizer2I;
-import org.dayflower.geometry.Rectangle2I;
-import org.dayflower.geometry.Triangle2I;
+import org.dayflower.geometry.rasterizer.Rasterizer2I;
+import org.dayflower.geometry.shape.Circle2I;
+import org.dayflower.geometry.shape.Line2I;
+import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.util.BufferedImages;
 import org.dayflower.util.Ints;
 

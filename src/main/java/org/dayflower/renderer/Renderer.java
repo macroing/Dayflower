@@ -18,12 +18,11 @@
  */
 package org.dayflower.renderer;
 
-import org.dayflower.display.Display;
 import org.dayflower.image.Image;
 import org.dayflower.scene.Scene;
 
 /**
- * A {@code Renderer} is a renderer that can render a {@link Scene} instance to an {@link Image} instance and display the result with a {@link Display} instance.
+ * A {@code Renderer} is a renderer that can render a {@link Scene} instance to an {@link Image} instance and display the result with a {@link RendererObserver} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -35,6 +34,13 @@ public interface Renderer {
 	 * @return the {@code RendererConfiguration} instance associated with this {@code Renderer} instance
 	 */
 	RendererConfiguration getRendererConfiguration();
+	
+	/**
+	 * Returns the {@link RendererObserver} instance associated with this {@code Renderer} instance.
+	 * 
+	 * @return the {@code RendererObserver} instance associated with this {@code Renderer} instance
+	 */
+	RendererObserver getRendererObserver();
 	
 	/**
 	 * Returns {@code true} if, and only if, this {@code Renderer} instance is clearing the {@link Image} instance in the next {@link #render()} call, {@code false} otherwise.
@@ -80,6 +86,16 @@ public interface Renderer {
 	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
 	void setRendererConfiguration(final RendererConfiguration rendererConfiguration);
+	
+	/**
+	 * Sets the {@link RendererObserver} instance associated with this {@code Renderer} instance to {@code rendererObserver}.
+	 * <p>
+	 * If {@code rendererObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rendererObserver the {@code RendererObserver} instance associated with this {@code Renderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rendererObserver} is {@code null}
+	 */
+	void setRendererObserver(final RendererObserver rendererObserver);
 	
 	/**
 	 * Sets up all necessary resources for this {@code Renderer} instance.

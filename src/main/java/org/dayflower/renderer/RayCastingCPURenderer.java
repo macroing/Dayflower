@@ -82,12 +82,32 @@ public final class RayCastingCPURenderer extends AbstractCPURenderer {
 	 * Constructs a new {@code RayCastingCPURenderer} instance.
 	 * <p>
 	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RayCastingCPURenderer(rendererConfiguration, new FileRendererObserver());
+	 * }
+	 * </pre>
 	 * 
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code RayCastingCPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
 	public RayCastingCPURenderer(final RendererConfiguration rendererConfiguration) {
-		super(rendererConfiguration);
+		this(rendererConfiguration, new FileRendererObserver());
+	}
+	
+	/**
+	 * Constructs a new {@code RayCastingCPURenderer} instance.
+	 * <p>
+	 * If either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code RayCastingCPURenderer} instance
+	 * @param rendererObserver the {@link RendererObserver} instance associated with this {@code RayCastingCPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
+	 */
+	public RayCastingCPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
+		super(rendererConfiguration, rendererObserver);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

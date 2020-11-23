@@ -24,18 +24,21 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.dayflower.display.Display;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.AbstractCanvasApplication;
 import org.dayflower.javafx.HierarchicalMenuBar;
+import org.dayflower.renderer.NoOpRendererObserver;
 import org.dayflower.renderer.PBRTPathTracingCPURenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.scene.Camera;
+import org.dayflower.scene.Scene;
 import org.dayflower.scene.loader.JavaSceneLoader;
 import org.dayflower.util.Timer;
 
@@ -45,7 +48,7 @@ import org.dayflower.util.Timer;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DayflowerApplication extends AbstractCanvasApplication implements Display {
+public final class DayflowerApplication extends AbstractCanvasApplication {
 	private static final int RESOLUTION_X = 800;
 	private static final int RESOLUTION_Y = 800;
 	
@@ -73,22 +76,7 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 		this.labelRenderPass = new Label("Render Pass: 0");
 		this.labelRenderTime = new Label("Render Time: 00:00:00");
 		this.labelRenderTimePerPass = new Label("Render Time Per Pass: 0");
-		this.renderer = new PBRTPathTracingCPURenderer(doCreateRendererConfiguration(this));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Updates this {@code DayflowerApplication} instance with {@code image}.
-	 * <p>
-	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param image the {@link Image} instance to display
-	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
-	 */
-	@Override
-	public void update(final Image image) {
-//		Do nothing!
+		this.renderer = new PBRTPathTracingCPURenderer(doCreateRendererConfiguration(), new NoOpRendererObserver());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,6 +126,9 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 		hierarchicalMenuBar.setPathElementText("File", "File");
 		hierarchicalMenuBar.addMenuItem("File", "Open", this::doHandleEventFileOpen, null, true);
 		hierarchicalMenuBar.addSeparatorMenuItem("File");
+		hierarchicalMenuBar.addMenuItem("File", "Save", this::doHandleEventFileSave, null, true);
+		hierarchicalMenuBar.addMenuItem("File", "Save As...", this::doHandleEventFileSaveAs, null, true);
+		hierarchicalMenuBar.addSeparatorMenuItem("File");
 		hierarchicalMenuBar.addMenuItem("File", "Exit", this::doHandleEventFileExit, null, true);
 		
 		final
@@ -150,6 +141,11 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 		
 		borderPane.setBottom(hBox);
 		borderPane.setTop(hierarchicalMenuBar);
+		
+		final int resolutionX = this.renderer.getRendererConfiguration().getImage().getResolutionX();
+		final int resolutionY = this.renderer.getRendererConfiguration().getImage().getResolutionY();
+		
+		setResolution(resolutionX, resolutionY);
 	}
 	
 	/**
@@ -217,19 +213,60 @@ public final class DayflowerApplication extends AbstractCanvasApplication implem
 	
 	@SuppressWarnings("unused")
 	private void doHandleEventFileOpen(final ActionEvent actionEvent) {
+		final
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setInitialDirectory(new File("."));
+		fileChooser.setTitle("Open");
+		
+		final File file = fileChooser.showOpenDialog(getStage());
+		
+		if(file != null) {
+			final Scene scene = new JavaSceneLoader().load(file);
+			
+			final Camera camera = scene.getCamera();
+			
+			final int resolutionX = (int)(camera.getResolutionX());
+			final int resolutionY = (int)(camera.getResolutionY());
+			
+			this.isRendering.set(false);
+			
+			this.renderer.clear();
+			this.renderer.getRendererConfiguration().setImage(new Image(resolutionX, resolutionY));
+			this.renderer.getRendererConfiguration().setScene(scene);
+			
+			setResolution(resolutionX, resolutionY);
+			
+			this.isRendering.set(true);
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	private void doHandleEventFileSave(final ActionEvent actionEvent) {
+		
+	}
+	
+	@SuppressWarnings("unused")
+	private void doHandleEventFileSaveAs(final ActionEvent actionEvent) {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static RendererConfiguration doCreateRendererConfiguration(final Display display) {
+	private static RendererConfiguration doCreateRendererConfiguration() {
+		final Scene scene = new JavaSceneLoader().load("./resources/scenes/PBRTShowcaseMaterial.java");
+		
+		final Camera camera = scene.getCamera();
+		
+		final int resolutionX = (int)(camera.getResolutionX());
+		final int resolutionY = (int)(camera.getResolutionY());
+		
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
-		rendererConfiguration.setDisplay(display);
+		rendererConfiguration.setImage(new Image(resolutionX, resolutionY));
 		rendererConfiguration.setRenderPasses(1);
 		rendererConfiguration.setRenderPassesPerDisplayUpdate(1);
 		rendererConfiguration.setSamples(1);
-		rendererConfiguration.setScene(new JavaSceneLoader().load("./resources/scenes/PBRTShowcaseMaterial.java"));
+		rendererConfiguration.setScene(scene);
 		
 		return rendererConfiguration;
 	}

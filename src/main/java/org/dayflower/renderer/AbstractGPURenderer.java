@@ -24,7 +24,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.dayflower.display.Display;
 import org.dayflower.image.Image;
 import org.dayflower.scene.Scene;
 import org.dayflower.util.Timer;
@@ -52,21 +51,24 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
 	private final AtomicReference<RendererConfiguration> rendererConfiguration;
+	private final AtomicReference<RendererObserver> rendererObserver;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code AbstractGPURenderer} instance.
 	 * <p>
-	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AbstractGPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
+	 * @param rendererObserver the {@link RendererObserver} instance associated with this {@code AbstractGPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
 	 */
-	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration) {
+	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
 		this.isClearing = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
 		this.rendererConfiguration = new AtomicReference<>(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
+		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,6 +81,16 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	@Override
 	public final RendererConfiguration getRendererConfiguration() {
 		return this.rendererConfiguration.get();
+	}
+	
+	/**
+	 * Returns the {@link RendererObserver} instance associated with this {@code AbstractGPURenderer} instance.
+	 * 
+	 * @return the {@code RendererObserver} instance associated with this {@code AbstractGPURenderer} instance
+	 */
+	@Override
+	public final RendererObserver getRendererObserver() {
+		return this.rendererObserver.get();
 	}
 	
 	/**
@@ -102,9 +114,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	public final boolean render() {
 		this.isRendering.set(true);
 		
-		final RendererConfiguration rendererConfiguration = this.rendererConfiguration.get();
+		final RendererConfiguration rendererConfiguration = getRendererConfiguration();
 		
-		final Display display = rendererConfiguration.getDisplay();
+		final RendererObserver rendererObserver = getRendererObserver();
 		
 		final Image image = rendererConfiguration.getImage();
 		
@@ -121,7 +133,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 				image.filmClear();
 				image.filmRender();
 				
-				display.update(image);
+				rendererObserver.onRenderDisplay(this, image);
 				
 				timer.restart();
 			}
@@ -137,12 +149,12 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
 				image.filmRender();
 				
-				display.update(image);
+				rendererObserver.onRenderDisplay(this, image);
 			}
 			
 			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
-			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
+			rendererObserver.onRenderPassComplete(this, renderPass, renderPasses, elapsedTimeMillis);
 			
 			rendererConfiguration.setRenderPass(rendererConfiguration.getRenderPass() + 1);
 			rendererConfiguration.setRenderTime(elapsedTimeMillis);
@@ -192,6 +204,19 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	@Override
 	public final void setRendererConfiguration(final RendererConfiguration rendererConfiguration) {
 		this.rendererConfiguration.set(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
+	}
+	
+	/**
+	 * Sets the {@link RendererObserver} instance associated with this {@code AbstractGPURenderer} instance to {@code rendererObserver}.
+	 * <p>
+	 * If {@code rendererObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rendererObserver the {@code RendererObserver} instance associated with this {@code AbstractGPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rendererObserver} is {@code null}
+	 */
+	@Override
+	public final void setRendererObserver(final RendererObserver rendererObserver) {
+		this.rendererObserver.set(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
 	}
 	
 	/**

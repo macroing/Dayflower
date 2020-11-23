@@ -72,12 +72,32 @@ public final class SmallPTIPathTracingCPURenderer extends AbstractCPURenderer {
 	 * Constructs a new {@code SmallPTIPathTracingCPURenderer} instance.
 	 * <p>
 	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SmallPTIPathTracingCPURenderer(rendererConfiguration, new FileRendererObserver());
+	 * }
+	 * </pre>
 	 * 
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code SmallPTIPathTracingCPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
 	 */
 	public SmallPTIPathTracingCPURenderer(final RendererConfiguration rendererConfiguration) {
-		super(rendererConfiguration);
+		this(rendererConfiguration, new FileRendererObserver());
+	}
+	
+	/**
+	 * Constructs a new {@code SmallPTIPathTracingCPURenderer} instance.
+	 * <p>
+	 * If either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code SmallPTIPathTracingCPURenderer} instance
+	 * @param rendererObserver the {@link RendererObserver} instance associated with this {@code SmallPTIPathTracingCPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
+	 */
+	public SmallPTIPathTracingCPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
+		super(rendererConfiguration, rendererObserver);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

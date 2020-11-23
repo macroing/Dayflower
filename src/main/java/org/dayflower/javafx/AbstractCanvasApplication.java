@@ -18,6 +18,8 @@
  */
 package org.dayflower.javafx;
 
+import static org.dayflower.util.Doubles.equal;
+
 import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -28,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 
 import org.dayflower.image.Image;
 
@@ -55,6 +58,10 @@ import javafx.stage.Stage;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractCanvasApplication extends Application {
+	static final PixelFormat<ByteBuffer> PIXEL_FORMAT = PixelFormat.getByteBgraPreInstance();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AtomicBoolean hasRequestedToExit;
 	private final AtomicInteger keysPressed;
 	private final AtomicInteger mouseButtonsPressed;
@@ -62,9 +69,9 @@ public abstract class AbstractCanvasApplication extends Application {
 	private final AtomicLong mouseY;
 	private final AtomicLong resolutionX;
 	private final AtomicLong resolutionY;
-	private final AtomicReference<RendererTask> rendererTask;
+	private final AtomicReference<Stage> stage;
+	private final BorderPane borderPane;
 	private final Canvas canvas;
-	private final ExecutorService executorService;
 	private final String title;
 	private final boolean[] isKeyPressed;
 	private final boolean[] isKeyPressedOnce;
@@ -117,17 +124,17 @@ public abstract class AbstractCanvasApplication extends Application {
 	 * @throws NullPointerException thrown if, and only if, {@code title} is {@code null}
 	 */
 	protected AbstractCanvasApplication(final String title, final double resolutionX, final double resolutionY) {
-		this.title = Objects.requireNonNull(title, "title == null");
 		this.hasRequestedToExit = new AtomicBoolean();
 		this.keysPressed = new AtomicInteger();
 		this.mouseButtonsPressed = new AtomicInteger();
-		this.resolutionX = new AtomicLong(Double.doubleToLongBits(resolutionX));
-		this.resolutionY = new AtomicLong(Double.doubleToLongBits(resolutionY));
 		this.mouseX = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
-		this.rendererTask = new AtomicReference<>();
+		this.resolutionX = new AtomicLong(Double.doubleToLongBits(resolutionX));
+		this.resolutionY = new AtomicLong(Double.doubleToLongBits(resolutionY));
+		this.stage = new AtomicReference<>();
+		this.borderPane = new BorderPane();
 		this.canvas = new Canvas();
-		this.executorService = Executors.newFixedThreadPool(1);
+		this.title = Objects.requireNonNull(title, "title == null");
 		this.isKeyPressed = new boolean[KeyCode.values().length];
 		this.isKeyPressedOnce = new boolean[KeyCode.values().length];
 		this.isMouseButtonPressed = new boolean[MouseButton.values().length];
@@ -143,82 +150,25 @@ public abstract class AbstractCanvasApplication extends Application {
 	 */
 	@Override
 	public final void start(final Stage stage) {
-		final
-		Canvas canvas = this.canvas;
-		canvas.addEventFilter(MouseEvent.ANY, e -> canvas.requestFocus());
-		canvas.addEventFilter(KeyEvent.ANY, e -> canvas.requestFocus());
-		canvas.setFocusTraversable(true);
-		canvas.setHeight(getResolutionY());
-		canvas.setOnKeyPressed(this::doOnKeyPressed);
-		canvas.setOnKeyReleased(this::doOnKeyReleased);
-		canvas.setOnMouseDragged(this::doOnMouseDragged);
-		canvas.setOnMouseMoved(this::doOnMouseMoved);
-		canvas.setOnMousePressed(this::doOnMousePressed);
-		canvas.setOnMouseReleased(this::doOnMouseReleased);
-		canvas.setWidth(getResolutionX());
+		initializeGUI(this.borderPane);
 		
-		final int resolutionX = (int)(getResolutionX());
-		final int resolutionY = (int)(getResolutionY());
-		
-		final AtomicReference<RendererTask> rendererTask = this.rendererTask;
-		
-		final BorderPane borderPane = new BorderPane(this.canvas);
-		
-		final ByteBuffer byteBuffer = ByteBuffer.allocate(resolutionX * resolutionY * 4);
-		
-		final ExecutorService executorService = this.executorService;
-		
-		final Image image = new Image(resolutionX, resolutionY);
-		
-		final PixelFormat<ByteBuffer> pixelFormat = PixelFormat.getByteBgraPreInstance();
-		
-		initializeGUI(borderPane);
-		
-		final Scene scene = new Scene(borderPane);
-		
-		final WritableImage writableImage = new WritableImage(resolutionX, resolutionY);
-		
-		stage.setResizable(false);
-		stage.setScene(scene);
-		stage.setTitle(this.title);
-		stage.sizeToScene();
-		stage.show();
-		
-		new AnimationTimer() {
-			@Override
-			public void handle(final long now) {
-				if(hasRequestedToExit()) {
-					executorService.shutdown();
-					
-					Platform.exit();
-				} else {
-					update();
-					
-					final RendererTask oldRendererTask = rendererTask.get();
-					
-					if(oldRendererTask == null || oldRendererTask.isCancelled() || oldRendererTask.isDone()) {
-						final RendererTask newRendererTask = new RendererTask(() -> Boolean.valueOf(render(image)), () -> {
-							image.copyTo(byteBuffer.array());
-							
-							final
-							PixelWriter pixelWriter = writableImage.getPixelWriter();
-							pixelWriter.setPixels(0, 0, image.getResolutionX(), image.getResolutionY(), pixelFormat, byteBuffer, image.getResolutionX() * 4);
-							
-							final
-							GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-							graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, getResolutionX(), getResolutionY());
-						});
-						
-						rendererTask.set(newRendererTask);
-						
-						executorService.execute(newRendererTask);
-					}
-				}
-			}
-		}.start();
+		doSetStage(stage);
+		doConfigureCanvas();
+		doConfigureBorderPane();
+		doConfigureAndShowStage();
+		doCreateAndStartAnimationTimer();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the {@code Stage}.
+	 * 
+	 * @return the {@code Stage}
+	 */
+	protected final Stage getStage() {
+		return this.stage.get();
+	}
 	
 	/**
 	 * Returns {@code true} if, and only if, exit has been requested, {@code false} otherwise.
@@ -408,8 +358,12 @@ public abstract class AbstractCanvasApplication extends Application {
 	 * @param resolutionY the resolution of the Y-axis
 	 */
 	protected final void setResolution(final double resolutionX, final double resolutionY) {
+		System.out.println("Old: " + getResolutionX() + "," + getResolutionY());
+		
 		this.resolutionX.set(Double.doubleToLongBits(resolutionX));
 		this.resolutionY.set(Double.doubleToLongBits(resolutionY));
+		
+		System.out.println("New: " + getResolutionX() + "," + getResolutionY());
 	}
 	
 	/**
@@ -436,6 +390,42 @@ public abstract class AbstractCanvasApplication extends Application {
 	protected abstract void update();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doConfigureAndShowStage() {
+		final
+		Stage stage = this.stage.get();
+		stage.setResizable(false);
+		stage.setScene(new Scene(this.borderPane));
+		stage.setTitle(this.title);
+		stage.sizeToScene();
+		stage.show();
+	}
+	
+	private void doConfigureBorderPane() {
+		this.borderPane.setCenter(this.canvas);
+	}
+	
+	private void doConfigureCanvas() {
+		final
+		Canvas canvas = this.canvas;
+		canvas.addEventFilter(MouseEvent.ANY, e -> canvas.requestFocus());
+		canvas.addEventFilter(KeyEvent.ANY, e -> canvas.requestFocus());
+		canvas.setFocusTraversable(true);
+		canvas.setHeight(getResolutionY());
+		canvas.setOnKeyPressed(this::doOnKeyPressed);
+		canvas.setOnKeyReleased(this::doOnKeyReleased);
+		canvas.setOnMouseDragged(this::doOnMouseDragged);
+		canvas.setOnMouseMoved(this::doOnMouseMoved);
+		canvas.setOnMousePressed(this::doOnMousePressed);
+		canvas.setOnMouseReleased(this::doOnMouseReleased);
+		canvas.setWidth(getResolutionX());
+	}
+	
+	private void doCreateAndStartAnimationTimer() {
+		final
+		AnimationTimer animationTimer = new RendererAnimationTimer(this.hasRequestedToExit, this.resolutionX, this.resolutionY, this.stage, this.canvas, this::render, this::update);
+		animationTimer.start();
+	}
 	
 	private void doOnKeyPressed(final KeyEvent e) {
 		if(!this.isKeyPressed[e.getCode().ordinal()]) {
@@ -479,6 +469,210 @@ public abstract class AbstractCanvasApplication extends Application {
 		
 		this.isMouseButtonPressed[e.getButton().ordinal()] = false;
 		this.isMouseButtonPressedOnce[e.getButton().ordinal()] = false;
+	}
+	
+	private void doSetStage(final Stage stage) {
+		this.stage.set(stage);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class RendererAnimationTimer extends AnimationTimer {
+		private final AtomicBoolean hasRequestedToExit;
+		private final AtomicLong resolutionX;
+		private final AtomicLong resolutionY;
+		private final AtomicReference<ByteBuffer> byteBuffer;
+		private final AtomicReference<Image> image;
+		private final AtomicReference<RendererTask> rendererTask;
+		private final AtomicReference<Stage> stage;
+		private final AtomicReference<WritableImage> writableImage;
+		private final Canvas canvas;
+		private final ExecutorService executorService;
+		private final Predicate<Image> renderPredicate;
+		private final Runnable updateRunnable;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public RendererAnimationTimer(final AtomicBoolean hasRequestedToExit, final AtomicLong resolutionX, final AtomicLong resolutionY, final AtomicReference<Stage> stage, final Canvas canvas, final Predicate<Image> renderPredicate, final Runnable updateRunnable) {
+			this.hasRequestedToExit = Objects.requireNonNull(hasRequestedToExit, "hasRequestedToExit == null");
+			this.resolutionX = Objects.requireNonNull(resolutionX, "resolutionX == null");
+			this.resolutionY = Objects.requireNonNull(resolutionY, "resolutionY == null");
+			this.byteBuffer = new AtomicReference<>(doCreateByteBuffer(resolutionX, resolutionY));
+			this.image = new AtomicReference<>(doCreateImage(resolutionX, resolutionY));
+			this.rendererTask = new AtomicReference<>();
+			this.stage = Objects.requireNonNull(stage, "stage == null");
+			this.writableImage = new AtomicReference<>(doCreateWritableImage(resolutionX, resolutionY));
+			this.canvas = Objects.requireNonNull(canvas, "canvas == null");
+			this.executorService = Executors.newFixedThreadPool(1);
+			this.renderPredicate = Objects.requireNonNull(renderPredicate, "renderPredicate == null");
+			this.updateRunnable = Objects.requireNonNull(updateRunnable, "updateRunnable == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void handle(final long now) {
+			if(doHasRequestedToExit()) {
+				doShutdownExecutorServiceAndExit();
+			} else {
+				doUpdate();
+				doUpdateByteBufferIfNecessary();
+				doUpdateCanvasIfNecessary();
+				doUpdateImageIfNecessary();
+				doUpdateWritableImageIfNecessary();
+				doRender();
+			}
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private ByteBuffer doGetByteBuffer() {
+			return this.byteBuffer.get();
+		}
+		
+		private Canvas doGetCanvas() {
+			return this.canvas;
+		}
+		
+		private Image doGetImage() {
+			return this.image.get();
+		}
+		
+		private Predicate<Image> doGetRenderPredicate() {
+			return this.renderPredicate;
+		}
+		
+		private RendererTask doGetRendererTask() {
+			return this.rendererTask.get();
+		}
+		
+		private WritableImage doGetWritableImage() {
+			return this.writableImage.get();
+		}
+		
+		private boolean doHasRequestedToExit() {
+			return this.hasRequestedToExit.get();
+		}
+		
+		private double doGetResolutionX() {
+			return Double.longBitsToDouble(this.resolutionX.get());
+		}
+		
+		private double doGetResolutionY() {
+			return Double.longBitsToDouble(this.resolutionY.get());
+		}
+		
+		private void doExecuteExecutorService(final RendererTask rendererTask) {
+			this.executorService.execute(rendererTask);
+		}
+		
+		private void doRender() {
+			final RendererTask oldRendererTask = doGetRendererTask();
+			
+			if(oldRendererTask == null || oldRendererTask.isCancelled() || oldRendererTask.isDone()) {
+				final ByteBuffer byteBuffer = doGetByteBuffer();
+				
+				final Canvas canvas = doGetCanvas();
+				
+				final Image image = doGetImage();
+				
+				final Predicate<Image> renderPredicate = doGetRenderPredicate();
+				
+				final WritableImage writableImage = doGetWritableImage();
+				
+				final RendererTask newRendererTask = new RendererTask(() -> Boolean.valueOf(renderPredicate.test(image)), () -> {
+					image.copyTo(byteBuffer.array());
+					
+					final
+					PixelWriter pixelWriter = writableImage.getPixelWriter();
+					pixelWriter.setPixels(0, 0, image.getResolutionX(), image.getResolutionY(), PIXEL_FORMAT, byteBuffer, image.getResolutionX() * 4);
+					
+					final
+					GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+					graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, doGetResolutionX(), doGetResolutionY());
+				});
+				
+				doSetRendererTask(newRendererTask);
+				doExecuteExecutorService(newRendererTask);
+			}
+		}
+		
+		private void doSetRendererTask(final RendererTask rendererTask) {
+			this.rendererTask.set(rendererTask);
+		}
+		
+		private void doShutdownExecutorServiceAndExit() {
+			this.executorService.shutdown();
+			
+			Platform.exit();
+		}
+		
+		private void doUpdate() {
+			this.updateRunnable.run();
+		}
+		
+		private void doUpdateByteBufferIfNecessary() {
+			final int resolutionX = (int)(doGetResolutionX());
+			final int resolutionY = (int)(doGetResolutionY());
+			
+			final ByteBuffer byteBuffer = doGetByteBuffer();
+			
+			if(byteBuffer.capacity() != resolutionX * resolutionY * 4) {
+				this.byteBuffer.set(ByteBuffer.allocate(resolutionX * resolutionY * 4));
+			}
+		}
+		
+		private void doUpdateCanvasIfNecessary() {
+			final double resolutionX = doGetResolutionX();
+			final double resolutionY = doGetResolutionY();
+			
+			final Canvas canvas = doGetCanvas();
+			
+			if(!equal(canvas.getWidth(), resolutionX) || !equal(canvas.getHeight(), resolutionY)) {
+				canvas.setHeight(resolutionY);
+				canvas.setWidth(resolutionX);
+				
+				final
+				Stage stage = this.stage.get();
+				stage.sizeToScene();
+			}
+		}
+		
+		private void doUpdateImageIfNecessary() {
+			final int resolutionX = (int)(doGetResolutionX());
+			final int resolutionY = (int)(doGetResolutionY());
+			
+			final Image image = doGetImage();
+			
+			if(image.getResolutionX() != resolutionX || image.getResolutionY() != resolutionY) {
+				this.image.set(new Image(resolutionX, resolutionY));
+			}
+		}
+		
+		private void doUpdateWritableImageIfNecessary() {
+			final int resolutionX = (int)(doGetResolutionX());
+			final int resolutionY = (int)(doGetResolutionY());
+			
+			final WritableImage writableImage = doGetWritableImage();
+			
+			if(writableImage.getWidth() != resolutionX || writableImage.getHeight() != resolutionY) {
+				this.writableImage.set(new WritableImage(resolutionX, resolutionY));
+			}
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private static ByteBuffer doCreateByteBuffer(final AtomicLong resolutionX, final AtomicLong resolutionY) {
+			return ByteBuffer.allocate((int)(Double.longBitsToDouble(resolutionX.get())) * (int)(Double.longBitsToDouble(resolutionY.get())) * 4);
+		}
+		
+		private static Image doCreateImage(final AtomicLong resolutionX, final AtomicLong resolutionY) {
+			return new Image((int)(Double.longBitsToDouble(resolutionX.get())), (int)(Double.longBitsToDouble(resolutionY.get())));
+		}
+		
+		private static WritableImage doCreateWritableImage(final AtomicLong resolutionX, final AtomicLong resolutionY) {
+			return new WritableImage((int)(Double.longBitsToDouble(resolutionX.get())), (int)(Double.longBitsToDouble(resolutionY.get())));
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

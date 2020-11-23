@@ -22,8 +22,6 @@ import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
 
-import org.dayflower.display.Display;
-import org.dayflower.display.FileDisplay;
 import org.dayflower.image.Image;
 import org.dayflower.sampler.NRooksSampler;
 import org.dayflower.sampler.Sampler;
@@ -37,7 +35,6 @@ import org.dayflower.util.Timer;
  * @author J&#246;rgen Lundgren
  */
 public final class RendererConfiguration {
-	private Display display;
 	private Image image;
 	private Sampler sampler;
 	private Scene scene;
@@ -57,7 +54,6 @@ public final class RendererConfiguration {
 	 * Constructs a new {@code RendererConfiguration} instance.
 	 */
 	public RendererConfiguration() {
-		this.display = new FileDisplay("Image.png");
 		this.image = new Image(800, 800);
 		this.sampler = new NRooksSampler();
 		this.scene = new Scene();
@@ -73,15 +69,6 @@ public final class RendererConfiguration {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns the {@link Display} instance associated with this {@code RendererConfiguration} instance.
-	 * 
-	 * @return the {@code Display} instance associated with this {@code RendererConfiguration} instance
-	 */
-	public Display getDisplay() {
-		return this.display;
-	}
 	
 	/**
 	 * Returns the {@link Image} instance associated with this {@code RendererConfiguration} instance.
@@ -142,8 +129,6 @@ public final class RendererConfiguration {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof RendererConfiguration)) {
-			return false;
-		} else if(!Objects.equals(this.display, RendererConfiguration.class.cast(object).display)) {
 			return false;
 		} else if(!Objects.equals(this.image, RendererConfiguration.class.cast(object).image)) {
 			return false;
@@ -242,7 +227,7 @@ public final class RendererConfiguration {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.display, this.image, this.sampler, this.scene, Float.valueOf(this.maximumDistance), Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPass), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerDisplayUpdate), Integer.valueOf(this.samples), Long.valueOf(this.renderTime));
+		return Objects.hash(this.image, this.sampler, this.scene, Float.valueOf(this.maximumDistance), Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPass), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerDisplayUpdate), Integer.valueOf(this.samples), Long.valueOf(this.renderTime));
 	}
 	
 	/**
@@ -252,18 +237,6 @@ public final class RendererConfiguration {
 	 */
 	public long getRenderTime() {
 		return this.renderTime;
-	}
-	
-	/**
-	 * Sets the {@link Display} instance associated with this {@code RendererConfiguration} instance to {@code display}.
-	 * <p>
-	 * If {@code display} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param display the {@code Display} instance associated with this {@code RendererConfiguration} instance
-	 * @throws NullPointerException thrown if, and only if, {@code display} is {@code null}
-	 */
-	public void setDisplay(final Display display) {
-		this.display = Objects.requireNonNull(display, "display == null");
 	}
 	
 	/**

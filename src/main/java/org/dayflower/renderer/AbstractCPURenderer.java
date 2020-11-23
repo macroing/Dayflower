@@ -23,7 +23,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.dayflower.display.Display;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
@@ -43,21 +42,24 @@ public abstract class AbstractCPURenderer implements Renderer {
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
 	private final AtomicReference<RendererConfiguration> rendererConfiguration;
+	private final AtomicReference<RendererObserver> rendererObserver;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code AbstractCPURenderer} instance.
 	 * <p>
-	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code AbstractCPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
+	 * @param rendererObserver the {@link RendererObserver} instance associated with this {@code AbstractCPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
 	 */
-	protected AbstractCPURenderer(final RendererConfiguration rendererConfiguration) {
+	protected AbstractCPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
 		this.isClearing = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
 		this.rendererConfiguration = new AtomicReference<>(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
+		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,6 +72,16 @@ public abstract class AbstractCPURenderer implements Renderer {
 	@Override
 	public final RendererConfiguration getRendererConfiguration() {
 		return this.rendererConfiguration.get();
+	}
+	
+	/**
+	 * Returns the {@link RendererObserver} instance associated with this {@code AbstractCPURenderer} instance.
+	 * 
+	 * @return the {@code RendererObserver} instance associated with this {@code AbstractCPURenderer} instance
+	 */
+	@Override
+	public final RendererObserver getRendererObserver() {
+		return this.rendererObserver.get();
 	}
 	
 	/**
@@ -93,9 +105,9 @@ public abstract class AbstractCPURenderer implements Renderer {
 	public final boolean render() {
 		this.isRendering.set(true);
 		
-		final RendererConfiguration rendererConfiguration = this.rendererConfiguration.get();
+		final RendererConfiguration rendererConfiguration = getRendererConfiguration();
 		
-		final Display display = rendererConfiguration.getDisplay();
+		final RendererObserver rendererObserver = getRendererObserver();
 		
 		final Image image = rendererConfiguration.getImage();
 		
@@ -120,7 +132,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 				image.filmClear();
 				image.filmRender();
 				
-				display.update(image);
+				rendererObserver.onRenderDisplay(this, image);
 				
 				timer.restart();
 			}
@@ -149,18 +161,20 @@ public abstract class AbstractCPURenderer implements Renderer {
 					return false;
 				}
 				
-//				System.out.printf("%d/%d%n", Integer.valueOf((y + 1) * resolutionX), Integer.valueOf(resolutionX * resolutionY));
+				final double percent = ((y + 1.0D) * resolutionX) / (resolutionX * resolutionY);
+				
+				rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, percent);
 			}
 			
 			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
 				image.filmRender();
 				
-				display.update(image);
+				rendererObserver.onRenderDisplay(this, image);
 			}
 			
 			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
-			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
+			rendererObserver.onRenderPassComplete(this, renderPass, renderPasses, elapsedTimeMillis);
 			
 			rendererConfiguration.setRenderPass(rendererConfiguration.getRenderPass() + 1);
 			rendererConfiguration.setRenderTime(elapsedTimeMillis);
@@ -210,6 +224,19 @@ public abstract class AbstractCPURenderer implements Renderer {
 	@Override
 	public final void setRendererConfiguration(final RendererConfiguration rendererConfiguration) {
 		this.rendererConfiguration.set(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
+	}
+	
+	/**
+	 * Sets the {@link RendererObserver} instance associated with this {@code AbstractCPURenderer} instance to {@code rendererObserver}.
+	 * <p>
+	 * If {@code rendererObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rendererObserver the {@code RendererObserver} instance associated with this {@code AbstractCPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rendererObserver} is {@code null}
+	 */
+	@Override
+	public final void setRendererObserver(final RendererObserver rendererObserver) {
+		this.rendererObserver.set(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
 	}
 	
 	/**

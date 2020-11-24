@@ -358,12 +358,8 @@ public abstract class AbstractCanvasApplication extends Application {
 	 * @param resolutionY the resolution of the Y-axis
 	 */
 	protected final void setResolution(final double resolutionX, final double resolutionY) {
-		System.out.println("Old: " + getResolutionX() + "," + getResolutionY());
-		
 		this.resolutionX.set(Double.doubleToLongBits(resolutionX));
 		this.resolutionY.set(Double.doubleToLongBits(resolutionY));
-		
-		System.out.println("New: " + getResolutionX() + "," + getResolutionY());
 	}
 	
 	/**

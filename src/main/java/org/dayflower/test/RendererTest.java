@@ -19,16 +19,12 @@
 package org.dayflower.test;
 
 import org.dayflower.image.Image;
-import org.dayflower.renderer.AmbientOcclusionCPURenderer;
+import org.dayflower.renderer.CPURenderer;
 import org.dayflower.renderer.FileRendererObserver;
-import org.dayflower.renderer.PBRTPathTracingCPURenderer;
-import org.dayflower.renderer.RayCastingCPURenderer;
-import org.dayflower.renderer.RayitoPathTracingCPURenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
-import org.dayflower.renderer.SmallPTIPathTracingCPURenderer;
-import org.dayflower.renderer.SmallPTRPathTracingCPURenderer;
+import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.loader.JavaSceneLoader;
 
@@ -40,78 +36,75 @@ public final class RendererTest {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(final String[] args) {
-//		doTestAmbientOcclusionCPURenderer();
-		doTestPBRTPathTracingCPURenderer();
-//		doTestRayCastingCPURenderer();
-//		doTestRayitoPathTracingCPURenderer();
-//		doTestSmallPTIPathTracingCPURenderer();
-//		doTestSmallPTRPathTracingCPURenderer();
+//		doTestCPURendererAmbientOcclusion();
+		doTestCPURendererPathTracingPBRT();
+//		doTestCPURendererPathTracingRayito();
+//		doTestCPURendererPathTracingSmallPTIterative();
+//		doTestCPURendererPathTracingSmallPTRecursive();
+//		doTestCPURendererRayCasting();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	static void doTestAmbientOcclusionCPURenderer() {
+	static void doTestCPURendererAmbientOcclusion() {
 		final
-		Renderer renderer = new AmbientOcclusionCPURenderer();
-		renderer.setRendererConfiguration(doCreateRendererConfiguration("./resources/scenes/RayitoDefault.java"));
-		renderer.setRendererObserver(doCreateRendererObserver(AmbientOcclusionCPURenderer.class, renderer));
+		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.AMBIENT_OCCLUSION, "./resources/scenes/RayitoDefault.java");
 		renderer.render();
 	}
 	
-	static void doTestPBRTPathTracingCPURenderer() {
+	static void doTestCPURendererPathTracingPBRT() {
 		final
-		Renderer renderer = new PBRTPathTracingCPURenderer();
-		renderer.setRendererConfiguration(doCreateRendererConfiguration("./resources/scenes/PBRTSL500.java"));
-		renderer.setRendererObserver(doCreateRendererObserver(PBRTPathTracingCPURenderer.class, renderer));
+		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_P_B_R_T, "./resources/scenes/PBRTSL500.java");
 		renderer.render();
 	}
 	
-	static void doTestRayCastingCPURenderer() {
+	static void doTestCPURendererPathTracingRayito() {
 		final
-		Renderer renderer = new RayCastingCPURenderer();
-		renderer.setRendererConfiguration(doCreateRendererConfiguration("./resources/scenes/RayitoDefault.java"));
-		renderer.setRendererObserver(doCreateRendererObserver(RayCastingCPURenderer.class, renderer));
+		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_RAYITO, "./resources/scenes/RayitoDefault.java");
 		renderer.render();
 	}
 	
-	static void doTestRayitoPathTracingCPURenderer() {
+	static void doTestCPURendererPathTracingSmallPTIterative() {
 		final
-		Renderer renderer = new RayitoPathTracingCPURenderer();
-		renderer.setRendererConfiguration(doCreateRendererConfiguration("./resources/scenes/RayitoDefault.java"));
-		renderer.setRendererObserver(doCreateRendererObserver(RayitoPathTracingCPURenderer.class, renderer));
+		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE, "./resources/scenes/RayitoDefault.java");
 		renderer.render();
 	}
 	
-	static void doTestSmallPTIPathTracingCPURenderer() {
+	static void doTestCPURendererPathTracingSmallPTRecursive() {
 		final
-		Renderer renderer = new SmallPTIPathTracingCPURenderer();
-		renderer.setRendererConfiguration(doCreateRendererConfiguration("./resources/scenes/RayitoDefault.java"));
-		renderer.setRendererObserver(doCreateRendererObserver(SmallPTIPathTracingCPURenderer.class, renderer));
+		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_SMALL_P_T_RECURSIVE, "./resources/scenes/RayitoDefault.java");
 		renderer.render();
 	}
 	
-	static void doTestSmallPTRPathTracingCPURenderer() {
+	static void doTestCPURendererRayCasting() {
 		final
-		Renderer renderer = new SmallPTRPathTracingCPURenderer();
-		renderer.setRendererConfiguration(doCreateRendererConfiguration("./resources/scenes/RayitoDefault.java"));
-		renderer.setRendererObserver(doCreateRendererObserver(SmallPTRPathTracingCPURenderer.class, renderer));
+		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.RAY_CASTING, "./resources/scenes/RayitoDefault.java");
 		renderer.render();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static CPURenderer doCreateCPURenderer(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
+		final
+		CPURenderer cPURenderer = new CPURenderer();
+		cPURenderer.setRendererConfiguration(doCreateRendererConfiguration(pathname));
+		cPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), cPURenderer.getRendererConfiguration().getScene().getName()));
+		cPURenderer.setRenderingAlgorithm(renderingAlgorithm);
+		
+		return cPURenderer;
+	}
 	
 	private static RendererConfiguration doCreateRendererConfiguration(final String pathname) {
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
 		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
-//		rendererConfiguration.setDisplay(new FileDisplay(String.format("./generated/%s-%s.png", clazz.getSimpleName(), rendererConfiguration.getScene().getName())));
 		rendererConfiguration.setImage(new Image((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
 		rendererConfiguration.setSampler(new RandomSampler());
 		
 		return rendererConfiguration;
 	}
 	
-	private static RendererObserver doCreateRendererObserver(final Class<?> clazz, final Renderer renderer) {
-		return new FileRendererObserver(String.format("./generated/%s-%s.png", clazz.getSimpleName(), renderer.getRendererConfiguration().getScene().getName()), true, false);
+	private static RendererObserver doCreateRendererObserver(final String renderingAlgorithmName, final String sceneName) {
+		return new FileRendererObserver(String.format("./generated/%s-%s.png", renderingAlgorithmName, sceneName), true, false);
 	}
 }

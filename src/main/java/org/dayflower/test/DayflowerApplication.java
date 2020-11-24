@@ -33,10 +33,11 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.AbstractCanvasApplication;
 import org.dayflower.javafx.HierarchicalMenuBar;
+import org.dayflower.renderer.CPURenderer;
 import org.dayflower.renderer.NoOpRendererObserver;
-import org.dayflower.renderer.PBRTPathTracingCPURenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
+import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.loader.JavaSceneLoader;
@@ -76,7 +77,7 @@ public final class DayflowerApplication extends AbstractCanvasApplication {
 		this.labelRenderPass = new Label("Render Pass: 0");
 		this.labelRenderTime = new Label("Render Time: 00:00:00");
 		this.labelRenderTimePerPass = new Label("Render Time Per Pass: 0");
-		this.renderer = new PBRTPathTracingCPURenderer(doCreateRendererConfiguration(), new NoOpRendererObserver());
+		this.renderer = new CPURenderer(doCreateRendererConfiguration(), new NoOpRendererObserver(), RenderingAlgorithm.PATH_TRACING_P_B_R_T);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -16,16 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.test;
+package org.dayflower.image;
 
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.image.Color3F;
-import org.dayflower.image.ConvolutionKernel33F;
-import org.dayflower.image.Image;
 import org.dayflower.util.Floats;
 
 import javafx.animation.AnimationTimer;

@@ -16,11 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.test;
-
-import org.dayflower.sampler.Distribution1F;
-import org.dayflower.sampler.Distribution2F;
-import org.dayflower.sampler.Sample2F;
+package org.dayflower.sampler;
 
 public final class DistributionTest {
 	private DistributionTest() {

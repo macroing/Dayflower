@@ -16,18 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.test;
+package org.dayflower.image;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
-import org.dayflower.image.Color3F;
-import org.dayflower.image.ConvolutionKernel33F;
-import org.dayflower.image.ConvolutionKernel55F;
-import org.dayflower.image.Image;
-import org.dayflower.image.IrregularSpectralCurve;
+import org.dayflower.sampler.NRooksSampler;
+import org.dayflower.sampler.RandomSampler;
+import org.dayflower.sampler.Sample2F;
+import org.dayflower.sampler.Sampler;
 
 public final class ImageTest {
 	private ImageTest() {
@@ -38,36 +37,28 @@ public final class ImageTest {
 	
 	public static void main(final String[] args) {
 		doTestImageCopper();
-//		doTestImageDifference();
-//		doTestImageDrawCircle();
-//		doTestImageDrawLine();
-//		doTestImageDrawRectangle();
-//		doTestImageDrawTriangle();
-//		doTestImageFillCircle();
-//		doTestImageFillImage();
-//		doTestImageFillRectangle();
-//		doTestImageFillTriangle();
-//		doTestImageMultiplyConvolutionKernel33F();
-//		doTestImageMultiplyConvolutionKernel55F();
-//		doTestImageScreenCapture();
-//		doTestImageSave();
+		doTestImageDrawCircle();
+		doTestImageDrawLine();
+		doTestImageDrawRectangle();
+		doTestImageDrawTriangle();
+		doTestImageFillCircle();
+		doTestImageFillImage();
+		doTestImageFillRectangle();
+		doTestImageFillTriangle();
+		doTestImageMultiplyConvolutionKernel33F();
+		doTestImageMultiplyConvolutionKernel55F();
+		doTestImageSamplerNRooksSampler();
+		doTestImageSamplerRandomSampler();
+		doTestImageScreenCapture();
+		doTestImageSave();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	static void doTestImageCopper() {
-//		final Color3F colorCopperEta = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_ETA.toColorXYZ()));
-		final Color3F colorCopperK = Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_K.toColorXYZ()));
-		
 		final
-		Image image = new Image(800, 800, colorCopperK);
+		Image image = new Image(800, 800, Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_K.toColorXYZ())));
 		image.save("./generated/doTestImageCopper.png");
-	}
-	
-	static void doTestImageDifference() {
-		final
-		Image image = Image.difference(Image.load("./generated/PathTracer-ShowcaseMaterialLambertianMaterial.png"), Image.load("./generated/PathTracer-ShowcaseMaterialOrenNayarMaterial.png"));
-		image.save("./generated/doTestImageDifference.png");
 	}
 	
 	static void doTestImageDrawCircle() {
@@ -128,16 +119,52 @@ public final class ImageTest {
 	
 	static void doTestImageMultiplyConvolutionKernel33F() {
 		final
-		Image image = Image.load("./generated/Image.jpg");
+		Image image = Image.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
 		image.multiply(ConvolutionKernel33F.GAUSSIAN_BLUR);
 		image.save("./generated/doTestImageMultiplyConvolutionKernel33F.png");
 	}
 	
 	static void doTestImageMultiplyConvolutionKernel55F() {
 		final
-		Image image = Image.load("./generated/Image.jpg");
+		Image image = Image.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
 		image.multiply(ConvolutionKernel55F.GAUSSIAN_BLUR);
 		image.save("./generated/doTestImageMultiplyConvolutionKernel55F.png");
+	}
+	
+	static void doTestImageSamplerNRooksSampler() {
+		final Image image = new Image(800, 800, Color3F.WHITE);
+		
+		final Sampler sampler = new NRooksSampler();
+		
+		for(int y = 0; y < image.getResolutionY(); y += 8) {
+			for(int x = 0; x < image.getResolutionX(); x += 8) {
+				final Sample2F sample = sampler.sample2();
+				
+				final int index = (int)(sample.getY() * 8 + y) * image.getResolutionX() + (int)(sample.getX() * 8 + x);
+				
+				image.setColorRGB(Color3F.BLACK, index);
+			}
+		}
+		
+		image.save("./generated/NRooksSampler.png");
+	}
+	
+	static void doTestImageSamplerRandomSampler() {
+		final Image image = new Image(800, 800, Color3F.WHITE);
+		
+		final Sampler sampler = new RandomSampler();
+		
+		for(int y = 0; y < image.getResolutionY(); y += 8) {
+			for(int x = 0; x < image.getResolutionX(); x += 8) {
+				final Sample2F sample = sampler.sample2();
+				
+				final int index = (int)(sample.getY() * 8 + y) * image.getResolutionX() + (int)(sample.getX() * 8 + x);
+				
+				image.setColorRGB(Color3F.BLACK, index);
+			}
+		}
+		
+		image.save("./generated/RandomSampler.png");
 	}
 	
 	static void doTestImageScreenCapture() {

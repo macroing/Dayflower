@@ -1,11 +1,8 @@
 Dayflower
 =========
-Dayflower is a renderer written in Java.
+Dayflower is a 3D-renderer written in Java. Its primary focus is photorealism, preferably in realtime.
 
-![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-036.png "Dayflower - Path Tracer")
-![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-033.png "Dayflower - Path Tracer")
-![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-010.png "Dayflower - Path Tracer")
-![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-011.png "Dayflower - Path Tracer")
+![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-036.png "Dayflower")
 
 Getting Started
 ---------------
@@ -17,70 +14,16 @@ git clone https://github.com/macroing/Dayflower.git
 
 Supported Features
 ------------------
-#### BRDF
-* Ashikhmin-Shirley
-* Fresnel Specular
-* Hair
-* Lambertian
-* Oren-Nayar
-* Reflection
-* Specular
-* Torrance-Sparrow
+This library consists of several projects. They are presented below.
 
-#### BTDF
-* Fresnel Specular
-* Hair
-* Lambertian
-* Refraction
-* Specular
-* Torrance-Sparrow
-
-#### Camera Lens
-* Fisheye
-* Thin
-
-#### Filter
-* Box
-* Catmull Rom
-* Gaussian
-* Lanczos Sinc
-* Mitchell
-* Triangle
-
-#### Light
-* Diffuse Area
-* Directional
-* Perez
-* Point
-* Primitive
-* Spot
-
-#### Rendering Algorithms
-* Ambient Occlusion
-* Path Tracer
-* Ray Caster
-
-#### Shapes
-* Curve
-* Curves
-* Plane
-* Procedural Terrain
-* Rectangular Cuboid
-* Sphere
-* Torus
-* Triangle
-* Triangle Mesh with Bounding Volume Hierarchy (BVH) based on the Surface Area Heuristic (SAH)
-
-#### Textures
-* Blend
-* Bullseye
-* Checkerboard
-* Constant
-* Image
-* Marble
-* Simplex Fractional Brownian Motion
-* Surface Normal
-* UV
+ - [The Geometry API](https://github.com/macroing/Dayflower/tree/master/documentation/Geometry) provides all geometric types and operations for Dayflower.
+ - [The Image API](https://github.com/macroing/Dayflower/tree/master/documentation/Image) provides image processing functionality for Dayflower.
+ - [The JavaFX API](https://github.com/macroing/Dayflower/tree/master/documentation/JavaFX) provides the GUI components for Dayflower.
+ - [The Renderer API](https://github.com/macroing/Dayflower/tree/master/documentation/Renderer) provides the rendering algorithms for Dayflower.
+ - [The Sampler API](https://github.com/macroing/Dayflower/tree/master/documentation/Sampler) provides sampling functionality for Dayflower.
+ - [The Scene API](https://github.com/macroing/Dayflower/tree/master/documentation/Scene) provides the scene types and operations for Dayflower.
+ - [The Utility API](https://github.com/macroing/Dayflower/tree/master/documentation/Utility) provides unrelated functionality used by Dayflower.
+ - [The Wavefront API](https://github.com/macroing/Dayflower/tree/master/documentation/Wavefront) provides functionality to read Wavefront files for Dayflower.
 
 Dependencies
 ------------

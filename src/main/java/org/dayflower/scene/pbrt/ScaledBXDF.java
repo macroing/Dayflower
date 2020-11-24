@@ -25,7 +25,7 @@ import java.util.Optional;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.util.Lists;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code ScaledBXDF} is an implementation of {@link BXDF} that scales the result of another {@code BXDF} instance.
@@ -75,8 +75,8 @@ public final class ScaledBXDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
-		Lists.requireNonNullList(samplesA, "samplesA");
-		Lists.requireNonNullList(samplesB, "samplesB");
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
 		return Color3F.multiply(this.bXDF.computeReflectanceFunction(samplesA, samplesB), this.scale);
 	}
@@ -97,7 +97,7 @@ public final class ScaledBXDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
-		Lists.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		

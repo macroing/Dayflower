@@ -19,13 +19,12 @@
 package org.dayflower.image;
 
 import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Ints.requireExact;
-import static org.dayflower.util.Ints.requireRange;
 
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 import org.dayflower.util.BufferedImages;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Pixel} is a pixel of an {@link Image} instance.
@@ -66,9 +65,9 @@ public final class Pixel {
 		this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
 		this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
 		this.filterWeightSum = filterWeightSum;
-		this.index = requireRange(index, 0, Integer.MAX_VALUE, "index");
-		this.x = requireRange(x, 0, Integer.MAX_VALUE, "x");
-		this.y = requireRange(y, 0, Integer.MAX_VALUE, "y");
+		this.index = ParameterArguments.requireRange(index, 0, Integer.MAX_VALUE, "index");
+		this.x = ParameterArguments.requireRange(x, 0, Integer.MAX_VALUE, "x");
+		this.y = ParameterArguments.requireRange(y, 0, Integer.MAX_VALUE, "y");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -267,7 +266,7 @@ public final class Pixel {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0}
 	 */
 	public void setIndex(final int index) {
-		this.index = requireRange(index, 0, Integer.MAX_VALUE, "index");
+		this.index = ParameterArguments.requireRange(index, 0, Integer.MAX_VALUE, "index");
 	}
 	
 	/**
@@ -291,7 +290,7 @@ public final class Pixel {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code x} is less than {@code 0}
 	 */
 	public void setX(final int x) {
-		this.x = requireRange(x, 0, Integer.MAX_VALUE, "x");
+		this.x = ParameterArguments.requireRange(x, 0, Integer.MAX_VALUE, "x");
 	}
 	
 	/**
@@ -303,7 +302,7 @@ public final class Pixel {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code y} is less than {@code 0}
 	 */
 	public void setY(final int y) {
-		this.y = requireRange(y, 0, Integer.MAX_VALUE, "y");
+		this.y = ParameterArguments.requireRange(y, 0, Integer.MAX_VALUE, "y");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -353,9 +352,9 @@ public final class Pixel {
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
 	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color3F colorRGB) {
-		requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		
@@ -387,13 +386,13 @@ public final class Pixel {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or at least one of its elements are {@code null}
 	 */
 	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs) {
-		requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		
 		Objects.requireNonNull(colorRGBs, "colorRGBs == null");
 		
-		requireExact(colorRGBs.length, resolutionX * resolutionY, "colorRGBs.length");
+		ParameterArguments.requireExact(colorRGBs.length, resolutionX * resolutionY, "colorRGBs.length");
 		
 		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
 		

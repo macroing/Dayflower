@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.dayflower.util.Ints;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * An {@code NRooksSampler} is a {@link Sampler} implementation that produces samples based on the N-Rooks algorithm.
@@ -83,7 +83,7 @@ public final class NRooksSampler implements Sampler {
 	public NRooksSampler(final Random random, final int size) {
 		this.index = new AtomicInteger();
 		this.random = Objects.requireNonNull(random, "random == null");
-		this.samples = new Sample2F[Ints.requireRange(size, 0, Integer.MAX_VALUE, "size")];
+		this.samples = new Sample2F[ParameterArguments.requireRange(size, 0, Integer.MAX_VALUE, "size")];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

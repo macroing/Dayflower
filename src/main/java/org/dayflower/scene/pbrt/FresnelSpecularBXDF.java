@@ -30,7 +30,7 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.util.Lists;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code FresnelSpecularBXDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for specular reflection and transmission.
@@ -91,8 +91,8 @@ public final class FresnelSpecularBXDF extends BXDF {
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
 //		PBRT: Implementation of BxDF.
 		
-		Lists.requireNonNullList(samplesA, "samplesA");
-		Lists.requireNonNullList(samplesB, "samplesB");
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
 		Color3F reflectance = Color3F.BLACK;
 		
@@ -141,7 +141,7 @@ public final class FresnelSpecularBXDF extends BXDF {
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
 //		PBRT: Implementation of BxDF.
 		
-		Lists.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		

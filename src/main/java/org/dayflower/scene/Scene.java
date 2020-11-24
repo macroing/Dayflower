@@ -36,7 +36,7 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
-import org.dayflower.util.Lists;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.
@@ -434,7 +434,7 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, either {@code lights} or at least one of its elements are {@code null}
 	 */
 	public void setLights(final List<Light> lights) {
-		this.lights = new ArrayList<>(Lists.requireNonNullList(lights, "lights"));
+		this.lights = new ArrayList<>(ParameterArguments.requireNonNullList(lights, "lights"));
 	}
 	
 	/**
@@ -458,7 +458,7 @@ public final class Scene {
 	 * @throws NullPointerException thrown if, and only if, either {@code primitives} or at least one of its elements are {@code null}
 	 */
 	public void setPrimitives(final List<Primitive> primitives) {
-		this.primitives = new ArrayList<>(Lists.requireNonNullList(primitives, "primitives"));
+		this.primitives = new ArrayList<>(ParameterArguments.requireNonNullList(primitives, "primitives"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

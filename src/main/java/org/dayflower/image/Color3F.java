@@ -31,7 +31,6 @@ import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.simplexFractionalBrownianMotionXY;
 import static org.dayflower.util.Floats.toFloat;
 import static org.dayflower.util.Ints.toInt;
-import static org.dayflower.util.Ints.requireRange;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -39,6 +38,7 @@ import java.util.function.Supplier;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.util.Floats;
 import org.dayflower.util.Ints;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Color3F} encapsulates a color using the data type {@code float}.
@@ -2109,7 +2109,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code supplier} is {@code null}
 	 */
 	public static Color3F[] array(final int length, final Supplier<Color3F> supplier) {
-		final Color3F[] colors = new Color3F[requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		final Color3F[] colors = new Color3F[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
 		Objects.requireNonNull(supplier, "supplier == null");
 		

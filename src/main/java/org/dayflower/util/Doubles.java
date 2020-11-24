@@ -1001,7 +1001,6 @@ public class Doubles {
 	 * @return a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code 1.0D} (exclusive)
 	 */
 	public static double random() {
-//		return ThreadLocalRandom.current().nextDouble();
 		return RANDOM.nextDouble();
 	}
 	
@@ -1014,28 +1013,6 @@ public class Doubles {
 	 */
 	public static double remainder(final double x, final double y) {
 		return x - (int)(x / y) * y;
-	}
-	
-	/**
-	 * Checks that {@code value} is finite.
-	 * <p>
-	 * Returns {@code value}.
-	 * <p>
-	 * If either {@code Double.isInfinite(value)} or {@code Double.isNaN(value)} returns {@code true}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param value the value to check
-	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
-	 * @return {@code value}
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code Double.isInfinite(value)} or {@code Double.isNaN(value)} returns {@code true}
-	 */
-	public static double requireFiniteValue(final double value, final String name) {
-		if(Double.isInfinite(value)) {
-			throw new IllegalArgumentException(String.format("Double.isInfinite(%s) == true", name));
-		} else if(Double.isNaN(value)) {
-			throw new IllegalArgumentException(String.format("Double.isNaN(%s) == true", name));
-		} else {
-			return value;
-		}
 	}
 	
 	/**
@@ -1991,7 +1968,7 @@ public class Doubles {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
 	public static double[] array(final int length, final double value) {
-		final double[] array = new double[Ints.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
 		Arrays.fill(array, value);
 		

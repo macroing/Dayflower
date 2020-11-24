@@ -33,7 +33,7 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
-import org.dayflower.util.Lists;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code BSDF} represents a BSDF (Bidirectional Scattering Distribution Function).
@@ -63,7 +63,7 @@ public final class BSDF {
 	 */
 	public BSDF(final Intersection intersection, final List<BXDF> bXDFs) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
-		this.bXDFs = new ArrayList<>(Lists.requireNonNullList(bXDFs, "bXDFs"));
+		this.bXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(bXDFs, "bXDFs"));
 		this.eta = 1.0F;
 	}
 	
@@ -81,7 +81,7 @@ public final class BSDF {
 	 */
 	public BSDF(final Intersection intersection, final List<BXDF> bXDFs, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
-		this.bXDFs = new ArrayList<>(Lists.requireNonNullList(bXDFs, "bXDFs"));
+		this.bXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(bXDFs, "bXDFs"));
 		this.eta = eta;
 	}
 	
@@ -105,8 +105,8 @@ public final class BSDF {
 	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final List<Point2F> samplesB) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		
-		Lists.requireNonNullList(samplesA, "samplesA");
-		Lists.requireNonNullList(samplesB, "samplesB");
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
 		Color3F reflectance = Color3F.BLACK;
 		
@@ -137,7 +137,7 @@ public final class BSDF {
 	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final Vector3F outgoingWorldSpace) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		
-		Lists.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
 		

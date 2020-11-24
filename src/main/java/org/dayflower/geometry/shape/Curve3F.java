@@ -51,8 +51,7 @@ import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.util.Ints;
-import org.dayflower.util.Lists;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Curve3F} denotes a 3-dimensional curve that uses the data type {@code float}.
@@ -531,8 +530,8 @@ public final class Curve3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}
 	 */
 	public static List<Curve3F> createCurvesByBSpline(final List<Point3F> points, final List<Vector3F> normals, final Type type, final float widthA, final float widthB, final int degree, final int splitDepth) {
-		Lists.requireNonNullList(points, "points");
-		Lists.requireNonNullList(normals, "normals");
+		ParameterArguments.requireNonNullList(points, "points");
+		ParameterArguments.requireNonNullList(normals, "normals");
 		
 		Objects.requireNonNull(type, "type == null");
 		
@@ -548,15 +547,15 @@ public final class Curve3F implements Shape3F {
 		
 		switch(type) {
 			case CYLINDER:
-				Ints.requireExact(normals.size(), 0, "normals.size()");
+				ParameterArguments.requireExact(normals.size(), 0, "normals.size()");
 				
 				break;
 			case FLAT:
-				Ints.requireExact(normals.size(), 0, "normals.size()");
+				ParameterArguments.requireExact(normals.size(), 0, "normals.size()");
 				
 				break;
 			case RIBBON:
-				Ints.requireExact(normals.size(), segments + 1, "normals.size()");
+				ParameterArguments.requireExact(normals.size(), segments + 1, "normals.size()");
 				
 				break;
 			default:
@@ -647,8 +646,8 @@ public final class Curve3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code points}, at least one element in {@code points}, {@code normals}, at least one element in {@code normals} or {@code type} are {@code null}
 	 */
 	public static List<Curve3F> createCurvesByBezier(final List<Point3F> points, final List<Vector3F> normals, final Type type, final float widthA, final float widthB, final int degree, final int splitDepth) {
-		Lists.requireNonNullList(points, "points");
-		Lists.requireNonNullList(normals, "normals");
+		ParameterArguments.requireNonNullList(points, "points");
+		ParameterArguments.requireNonNullList(normals, "normals");
 		
 		Objects.requireNonNull(type, "type == null");
 		
@@ -664,15 +663,15 @@ public final class Curve3F implements Shape3F {
 		
 		switch(type) {
 			case CYLINDER:
-				Ints.requireExact(normals.size(), 0, "normals.size()");
+				ParameterArguments.requireExact(normals.size(), 0, "normals.size()");
 				
 				break;
 			case FLAT:
-				Ints.requireExact(normals.size(), 0, "normals.size()");
+				ParameterArguments.requireExact(normals.size(), 0, "normals.size()");
 				
 				break;
 			case RIBBON:
-				Ints.requireExact(normals.size(), segments + 1, "normals.size()");
+				ParameterArguments.requireExact(normals.size(), segments + 1, "normals.size()");
 				
 				break;
 			default:

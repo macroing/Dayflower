@@ -23,7 +23,7 @@ import java.util.Objects;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.util.Ints;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * An {@code AreaLight} is an implementation of {@link Light} that represents an area light.
@@ -53,7 +53,7 @@ public abstract class AreaLight implements Light {
 	protected AreaLight(final Matrix44F lightToWorld, final int sampleCount) {
 		this.lightToWorld = Objects.requireNonNull(lightToWorld, "lightToWorld == null");
 		this.worldToLight = Matrix44F.inverse(lightToWorld);
-		this.sampleCount = Ints.requireRange(sampleCount, 1, Integer.MAX_VALUE, "sampleCount");
+		this.sampleCount = ParameterArguments.requireRange(sampleCount, 1, Integer.MAX_VALUE, "sampleCount");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

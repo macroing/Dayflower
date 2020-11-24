@@ -51,7 +51,7 @@ import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
-import org.dayflower.util.Lists;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code TriangleMesh3F} denotes a 3-dimensional triangle mesh that uses the data type {@code float}.
@@ -108,7 +108,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}
 	 */
 	public TriangleMesh3F(final List<Triangle3F> triangles, final String groupName, final String materialName, final String objectName, final boolean isUsingAccelerationStructure) {
-		this.triangles = new ArrayList<>(Lists.requireNonNullList(triangles, "triangles"));
+		this.triangles = new ArrayList<>(ParameterArguments.requireNonNullList(triangles, "triangles"));
 		this.node = isUsingAccelerationStructure ? doCreateNode(this.triangles) : null;
 		this.boundingVolume = isUsingAccelerationStructure ? this.node.getBoundingVolume() : doCreateBoundingVolume(this.triangles);
 		this.groupName = Objects.requireNonNull(groupName, "groupName == null");

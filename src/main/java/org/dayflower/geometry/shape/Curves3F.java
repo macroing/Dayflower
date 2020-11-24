@@ -36,7 +36,7 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.util.Lists;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Curves3F} is a container of {@link Curve3F} instances.
@@ -62,7 +62,7 @@ public final class Curves3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code curves} or at least one of its elements are {@code null}
 	 */
 	public Curves3F(final List<Curve3F> curves) {
-		this.curves = new ArrayList<>(Lists.requireNonNullList(curves, "curves"));
+		this.curves = new ArrayList<>(ParameterArguments.requireNonNullList(curves, "curves"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

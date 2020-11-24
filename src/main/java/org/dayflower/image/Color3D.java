@@ -31,7 +31,6 @@ import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Doubles.simplexFractionalBrownianMotionXY;
 import static org.dayflower.util.Doubles.toDouble;
 import static org.dayflower.util.Ints.toInt;
-import static org.dayflower.util.Ints.requireRange;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -39,6 +38,7 @@ import java.util.function.Supplier;
 import org.dayflower.geometry.Point2D;
 import org.dayflower.util.Doubles;
 import org.dayflower.util.Ints;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Color3D} encapsulates a color using the data type {@code double}.
@@ -2089,7 +2089,7 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, {@code supplier} is {@code null}
 	 */
 	public static Color3D[] array(final int length, final Supplier<Color3D> supplier) {
-		final Color3D[] colors = new Color3D[requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		final Color3D[] colors = new Color3D[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
 		Objects.requireNonNull(supplier, "supplier == null");
 		

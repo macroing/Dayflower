@@ -28,7 +28,7 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.util.Lists;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code LambertianBTDF} is an implementation of {@link BXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for Lambertian transmission.
@@ -77,8 +77,8 @@ public final class LambertianBTDF extends BXDF {
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
 //		PBRT: Implementation of LambertianTransmission.
 		
-		Lists.requireNonNullList(samplesA, "samplesA");
-		Lists.requireNonNullList(samplesB, "samplesB");
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
 		return this.transmittanceScale;
 	}
@@ -101,7 +101,7 @@ public final class LambertianBTDF extends BXDF {
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
 //		PBRT: Implementation of LambertianTransmission.
 		
-		Lists.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		

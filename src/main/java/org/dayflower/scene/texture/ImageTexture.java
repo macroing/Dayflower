@@ -26,8 +26,6 @@ import static org.dayflower.util.Floats.remainder;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Ints.abs;
 import static org.dayflower.util.Ints.modulo;
-import static org.dayflower.util.Ints.requireExactArrayLength;
-import static org.dayflower.util.Ints.requireRange;
 import static org.dayflower.util.Ints.toInt;
 
 import java.awt.image.BufferedImage;
@@ -48,6 +46,7 @@ import org.dayflower.image.Image;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 import org.dayflower.util.BufferedImages;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * An {@code ImageTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from an image.
@@ -245,10 +244,10 @@ public final class ImageTexture implements Texture {
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
 	public ImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale, final boolean isRepeating) {
-		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.image = requireExactArrayLength(Objects.requireNonNull(image, "image == null"), resolutionX * resolutionY, "image").clone();
+		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.image = ParameterArguments.requireExactArrayLength(Objects.requireNonNull(image, "image == null"), resolutionX * resolutionY, "image").clone();
 		this.angle = Objects.requireNonNull(angle, "angle == null");
 		this.scale = Objects.requireNonNull(scale, "scale == null");
 		this.isRepeating = isRepeating;

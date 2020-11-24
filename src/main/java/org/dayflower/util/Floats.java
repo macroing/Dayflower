@@ -1002,7 +1002,6 @@ public final class Floats {
 	 * @return a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive)
 	 */
 	public static float random() {
-//		return ThreadLocalRandom.current().nextFloat();
 		return RANDOM.nextFloat();
 	}
 	
@@ -1015,28 +1014,6 @@ public final class Floats {
 	 */
 	public static float remainder(final float x, final float y) {
 		return x - (int)(x / y) * y;
-	}
-	
-	/**
-	 * Checks that {@code value} is finite.
-	 * <p>
-	 * Returns {@code value}.
-	 * <p>
-	 * If either {@code Float.isInfinite(value)} or {@code Float.isNaN(value)} returns {@code true}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param value the value to check
-	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
-	 * @return {@code value}
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code Float.isInfinite(value)} or {@code Float.isNaN(value)} returns {@code true}
-	 */
-	public static float requireFiniteValue(final float value, final String name) {
-		if(Float.isInfinite(value)) {
-			throw new IllegalArgumentException(String.format("Float.isInfinite(%s) == true", name));
-		} else if(Float.isNaN(value)) {
-			throw new IllegalArgumentException(String.format("Float.isNaN(%s) == true", name));
-		} else {
-			return value;
-		}
 	}
 	
 	/**
@@ -1992,7 +1969,7 @@ public final class Floats {
 	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
 	 */
 	public static float[] array(final int length, final float value) {
-		final float[] array = new float[Ints.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		final float[] array = new float[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
 		
 		Arrays.fill(array, value);
 		

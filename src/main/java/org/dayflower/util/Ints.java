@@ -73,7 +73,7 @@ public final class Ints {
 	 * @throws NullPointerException thrown if, and only if, {@code intPredicate} is {@code null}
 	 */
 	public static int findInterval(final int length, final IntPredicate intPredicate) {
-		requireRange(length, 0, Integer.MAX_VALUE, "length");
+		ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length");
 		
 		Objects.requireNonNull(intPredicate, "intPredicate == null");
 		
@@ -156,54 +156,6 @@ public final class Ints {
 	}
 	
 	/**
-	 * Checks that {@code value} is equal to {@code valueExpected}.
-	 * <p>
-	 * Returns {@code value}.
-	 * <p>
-	 * If {@code value} is not equal to {@code valueExpected}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param value the value to check
-	 * @param valueExpected the expected value to compare against
-	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
-	 * @return {@code value}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is not equal to {@code valueExpected}
-	 */
-	public static int requireExact(final int value, final int valueExpected, final String name) {
-		if(value != valueExpected) {
-			throw new IllegalArgumentException(String.format("%s != %d: %s == %d", name, Integer.valueOf(valueExpected), name, Integer.valueOf(value)));
-		}
-		
-		return value;
-	}
-	
-	/**
-	 * Checks that {@code value} is in the range {@code [Ints.min(edgeA, edgeB), Ints.max(edgeA, edgeB)]}.
-	 * <p>
-	 * Returns {@code value}.
-	 * <p>
-	 * If {@code value} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param value the value to check
-	 * @param edgeA the minimum or maximum value allowed
-	 * @param edgeB the maximum or minimum value allowed
-	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
-	 * @return {@code value}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}
-	 */
-	public static int requireRange(final int value, final int edgeA, final int edgeB, final String name) {
-		final int minimum = min(edgeA, edgeB);
-		final int maximum = max(edgeA, edgeB);
-		
-		if(value < minimum) {
-			throw new IllegalArgumentException(String.format("%s < %d: %s == %d", name, Integer.valueOf(minimum), name, Integer.valueOf(value)));
-		} else if(value > maximum) {
-			throw new IllegalArgumentException(String.format("%s > %d: %s == %d", name, Integer.valueOf(maximum), name, Integer.valueOf(value)));
-		} else {
-			return value;
-		}
-	}
-	
-	/**
 	 * Returns a saturated (or clamped) value based on {@code value}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
@@ -262,26 +214,5 @@ public final class Ints {
 	 */
 	public static int toInt(final float value) {
 		return (int)(value);
-	}
-	
-	/**
-	 * Checks that {@code array.length} is equal to {@code arrayLengthExpected}.
-	 * <p>
-	 * Returns {@code array}.
-	 * <p>
-	 * If {@code array.length} is not equal to {@code arrayLengthExpected}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param array the array to check
-	 * @param arrayLengthExpected the expected length to compare against
-	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
-	 * @return {@code array}
-	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length} is not equal to {@code arrayLengthExpected}
-	 */
-	public static int[] requireExactArrayLength(final int[] array, final int arrayLengthExpected, final String name) {
-		if(array.length != arrayLengthExpected) {
-			throw new IllegalArgumentException(String.format("%s.length != %d: %s.length == %d", name, Integer.valueOf(arrayLengthExpected), name, Integer.valueOf(array.length)));
-		}
-		
-		return array;
 	}
 }

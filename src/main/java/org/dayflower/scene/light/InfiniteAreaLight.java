@@ -31,7 +31,7 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceEmittedResult;
 import org.dayflower.scene.LightRadianceIncomingResult;
-import org.dayflower.util.Ints;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * An {@code InfiniteAreaLight} is a {@link Light} implementation that represents an infinite area light.
@@ -66,7 +66,7 @@ public final class InfiniteAreaLight implements Light {
 		this.intensity = Objects.requireNonNull(intensity, "intensity == null");
 		this.lightToWorld = Objects.requireNonNull(lightToWorld, "lightToWorld == null");
 		this.worldToLight = Matrix44F.inverse(lightToWorld);
-		this.sampleCount = Ints.requireRange(sampleCount, 1, Integer.MAX_VALUE, "sampleCount");
+		this.sampleCount = ParameterArguments.requireRange(sampleCount, 1, Integer.MAX_VALUE, "sampleCount");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

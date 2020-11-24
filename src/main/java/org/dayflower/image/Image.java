@@ -27,8 +27,6 @@ import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Ints.max;
 import static org.dayflower.util.Ints.min;
-import static org.dayflower.util.Ints.requireExact;
-import static org.dayflower.util.Ints.requireRange;
 import static org.dayflower.util.Ints.toInt;
 
 import java.awt.image.BufferedImage;
@@ -53,7 +51,7 @@ import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.util.BufferedImages;
-import org.dayflower.util.Ints;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * An {@code Image} is an image that can be drawn to.
@@ -133,9 +131,9 @@ public final class Image {
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.pixels = Pixel.createPixels(bufferedImage);
 		this.filterTable = filter.createFilterTable();
-		this.resolution = requireRange(bufferedImage.getWidth() * bufferedImage.getHeight(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth() * bufferedImage.getHeight()");
-		this.resolutionX = requireRange(bufferedImage.getWidth(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth()");
-		this.resolutionY = requireRange(bufferedImage.getHeight(), 0, Integer.MAX_VALUE, "bufferedImage.getHeight()");
+		this.resolution = ParameterArguments.requireRange(bufferedImage.getWidth() * bufferedImage.getHeight(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth() * bufferedImage.getHeight()");
+		this.resolutionX = ParameterArguments.requireRange(bufferedImage.getWidth(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth()");
+		this.resolutionY = ParameterArguments.requireRange(bufferedImage.getHeight(), 0, Integer.MAX_VALUE, "bufferedImage.getHeight()");
 	}
 	
 	/**
@@ -214,9 +212,9 @@ public final class Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code filter} are {@code null}
 	 */
 	public Image(final int resolutionX, final int resolutionY, final Color3F colorRGB, final Filter filter) {
-		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGB);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
@@ -261,9 +259,9 @@ public final class Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, at least one of its elements or {@code filter} are {@code null}
 	 */
 	public Image(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs, final Filter filter) {
-		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGBs);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
@@ -320,9 +318,9 @@ public final class Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
 	 */
 	public Image(final int resolutionX, final int resolutionY, final byte[] colorRGBs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
-		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color3F.arrayRead(colorRGBs, arrayComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
@@ -379,9 +377,9 @@ public final class Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
 	 */
 	public Image(final int resolutionX, final int resolutionY, final int[] colorRGBs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
-		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color3F.arrayRead(colorRGBs, arrayComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
@@ -428,9 +426,9 @@ public final class Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}
 	 */
 	public Image(final int resolutionX, final int resolutionY, final int[] colorRGBs, final PackedIntComponentOrder packedIntComponentOrder, final Filter filter) {
-		this.resolutionX = requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color3F.arrayUnpack(colorRGBs, packedIntComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
@@ -917,7 +915,7 @@ public final class Image {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
 		
-		Ints.requireExact(array.length, this.pixels.length * arrayComponentOrder.getComponentCount(), "array");
+		ParameterArguments.requireExact(array.length, this.pixels.length * arrayComponentOrder.getComponentCount(), "array");
 		
 		for(int i = 0, j = 0; i < this.pixels.length; i++, j += arrayComponentOrder.getComponentCount()) {
 			final Color3F colorRGB = this.pixels[i].getColorRGB();
@@ -2351,7 +2349,7 @@ public final class Image {
 	public static Image unpackFromARGB(final int resolutionX, final int resolutionY, final int[] imageARGB, final Filter filter) {
 		final Image image = new Image(resolutionX, resolutionY, new Color3F(), filter);
 		
-		requireExact(imageARGB.length, resolutionX * resolutionY, "imageARGB.length");
+		ParameterArguments.requireExact(imageARGB.length, resolutionX * resolutionY, "imageARGB.length");
 		
 		for(int i = 0; i < image.resolution; i++) {
 			image.setColorRGB(Color3F.unpack(imageARGB[i], PackedIntComponentOrder.ARGB), i);

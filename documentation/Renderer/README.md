@@ -11,6 +11,7 @@ Packages
 * `org.dayflower.renderer` - The Renderer API.
 * `org.dayflower.renderer.cpu` - The Renderer CPU API.
 * `org.dayflower.renderer.gpu` - The Renderer GPU API.
+* `org.dayflower.renderer.observer` - The Renderer Observer API.
 
 Examples
 --------

@@ -9,6 +9,8 @@ Coming soon...
 Packages
 --------
 * `org.dayflower.renderer` - The Renderer API.
+* `org.dayflower.renderer.cpu` - The Renderer CPU API.
+* `org.dayflower.renderer.gpu` - The Renderer GPU API.
 
 Examples
 --------

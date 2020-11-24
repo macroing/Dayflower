@@ -19,12 +19,12 @@
 package org.dayflower.renderer;
 
 import org.dayflower.image.Image;
-import org.dayflower.renderer.CPURenderer;
-import org.dayflower.renderer.FileRendererObserver;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
-import org.dayflower.renderer.RenderingAlgorithm;
+import org.dayflower.renderer.cpu.CPURenderer;
+import org.dayflower.renderer.cpu.RenderingAlgorithm;
+import org.dayflower.renderer.observer.FileRendererObserver;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.loader.JavaSceneLoader;
 

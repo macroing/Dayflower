@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.renderer;
+package org.dayflower.renderer.observer;
 
 import java.util.Objects;
 
 import org.dayflower.image.Image;
+import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.RendererObserver;
 
 /**
  * A {@code NoOpRendererObserver} is a {@link RendererObserver} implementation that performs no operation.

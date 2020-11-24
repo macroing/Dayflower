@@ -16,12 +16,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.renderer;
+package org.dayflower.renderer.cpu;
 
 import java.util.Objects;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.renderer.RendererConfiguration;
+import org.dayflower.renderer.RendererObserver;
+import org.dayflower.renderer.observer.FileRendererObserver;
 
 /**
  * A {@code CPURenderer} is an implementation of {@link AbstractCPURenderer} that supports various rendering algorithms.

@@ -27,6 +27,8 @@ import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Quaternion4F} denotes a 4-dimensional quaternion with four components, of type {@code float}.
  * <p>
@@ -35,7 +37,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Quaternion4F {
+public final class Quaternion4F implements Node {
 	private final float component1;
 	private final float component2;
 	private final float component3;

@@ -25,6 +25,8 @@ import static org.dayflower.util.Floats.sin;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Matrix44F} denotes a 4 x 4 matrix with 16 elements of type {@code float}.
  * <p>
@@ -35,7 +37,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Matrix44F {
+public final class Matrix44F implements Node {
 	private final float element11;
 	private final float element12;
 	private final float element13;

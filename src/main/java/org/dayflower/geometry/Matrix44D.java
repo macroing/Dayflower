@@ -25,6 +25,8 @@ import static org.dayflower.util.Doubles.sin;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Matrix44D} denotes a 4 x 4 matrix with 16 elements of type {@code double}.
  * <p>
@@ -35,7 +37,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Matrix44D {
+public final class Matrix44D implements Node {
 	private final double element11;
 	private final double element12;
 	private final double element13;

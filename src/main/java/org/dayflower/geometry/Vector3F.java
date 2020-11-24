@@ -38,6 +38,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Vector3F} denotes a 3-dimensional vector with three components, of type {@code float}.
  * <p>
@@ -46,7 +48,7 @@ import java.util.Optional;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Vector3F {
+public final class Vector3F implements Node {
 	/**
 	 * A {@code Vector3F} instance given the component values {@code Float.NaN}, {@code Float.NaN} and {@code Float.NaN}.
 	 */

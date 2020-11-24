@@ -24,6 +24,8 @@ import static org.dayflower.util.Doubles.min;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Point2D} denotes a 2-dimensional point with two coordinates, of type {@code double}.
  * <p>
@@ -32,7 +34,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Point2D {
+public final class Point2D implements Node {
 	private final double component1;
 	private final double component2;
 	

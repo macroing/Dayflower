@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.node.Node;
 import org.dayflower.util.Floats;
 
 /**
@@ -39,7 +40,7 @@ import org.dayflower.util.Floats;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Point3F {
+public final class Point3F implements Node {
 	/**
 	 * A {@code Point3F} instance with the largest component values.
 	 */

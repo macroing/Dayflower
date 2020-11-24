@@ -20,6 +20,8 @@ package org.dayflower.geometry;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Ray3F} denotes a 3-dimensional ray with a point called its origin and a direction vector, both of which are using {@code float} as their type.
  * <p>
@@ -30,7 +32,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Ray3F {
+public final class Ray3F implements Node {
 	private final Point3F origin;
 	private final Vector3F direction;
 	

@@ -19,6 +19,7 @@
 package org.dayflower.scene;
 
 import org.dayflower.image.Color3F;
+import org.dayflower.node.Node;
 
 /**
  * A {@code Texture} represents a texture of a surface.
@@ -28,7 +29,7 @@ import org.dayflower.image.Color3F;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Texture {
+public interface Texture extends Node {
 	/**
 	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space.
 	 * <p>

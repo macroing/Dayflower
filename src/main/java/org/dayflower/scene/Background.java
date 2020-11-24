@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.node.Node;
 
 /**
  * A {@code Background} represents the background.
@@ -29,7 +30,7 @@ import org.dayflower.image.Color3F;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Background {
+public interface Background extends Node {
 	/**
 	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
 	 * <p>

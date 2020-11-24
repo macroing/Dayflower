@@ -23,6 +23,8 @@ import static org.dayflower.util.Doubles.sqrt;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Vector2D} denotes a 2-dimensional vector with two components, of type {@code double}.
  * <p>
@@ -31,7 +33,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Vector2D {
+public final class Vector2D implements Node {
 	private final double component1;
 	private final double component2;
 	

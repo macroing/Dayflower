@@ -34,6 +34,7 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.node.Node;
 
 /**
  * A {@code Primitive} represents a primitive and is associated with a {@link Material} instance, a {@link Shape3F} instance and some other properties.
@@ -43,7 +44,7 @@ import org.dayflower.image.Color3F;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Primitive {
+public final class Primitive implements Node {
 	private AreaLight areaLight;
 	private BoundingVolume3F boundingVolume;
 	private Material material;

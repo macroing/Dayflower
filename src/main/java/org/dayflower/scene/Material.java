@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Material} represents a material.
  * <p>
@@ -26,6 +28,6 @@ package org.dayflower.scene;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Material {
+public interface Material extends Node {
 	
 }

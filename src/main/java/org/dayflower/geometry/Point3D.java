@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.dayflower.node.Node;
 import org.dayflower.util.Doubles;
 
 /**
@@ -39,7 +40,7 @@ import org.dayflower.util.Doubles;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Point3D {
+public final class Point3D implements Node {
 	/**
 	 * A {@code Point3D} instance with the largest component values.
 	 */

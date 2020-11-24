@@ -24,6 +24,8 @@ import static org.dayflower.util.Floats.min;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Point2F} denotes a 2-dimensional point with two coordinates, of type {@code float}.
  * <p>
@@ -32,7 +34,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Point2F {
+public final class Point2F implements Node {
 	private final float component1;
 	private final float component2;
 	

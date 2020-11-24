@@ -20,6 +20,8 @@ package org.dayflower.geometry;
 
 import static org.dayflower.util.Floats.isNaN;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code BoundingVolume3F} denotes a 3-dimensional bounding volume that uses the data type {@code float}.
  * <p>
@@ -28,7 +30,7 @@ import static org.dayflower.util.Floats.isNaN;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface BoundingVolume3F {
+public interface BoundingVolume3F extends Node {
 	/**
 	 * Performs a transformation.
 	 * <p>

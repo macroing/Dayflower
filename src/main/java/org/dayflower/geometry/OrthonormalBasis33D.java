@@ -20,6 +20,8 @@ package org.dayflower.geometry;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * An {@code OrthonormalBasis33D} denotes an orthonormal basis constructed by three 3-dimensional vectors of type {@code double}.
  * <p>
@@ -30,7 +32,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class OrthonormalBasis33D {
+public final class OrthonormalBasis33D implements Node {
 	private final Vector3D u;
 	private final Vector3D v;
 	private final Vector3D w;

@@ -23,6 +23,8 @@ import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Vector2F} denotes a 2-dimensional vector with two components, of type {@code float}.
  * <p>
@@ -31,7 +33,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Vector2F {
+public final class Vector2F implements Node {
 	private final float component1;
 	private final float component2;
 	

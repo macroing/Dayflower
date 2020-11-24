@@ -35,6 +35,7 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.node.Node;
 
 /**
  * A {@code Camera} represents a camera.
@@ -44,7 +45,7 @@ import org.dayflower.geometry.Vector3F;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Camera {
+public final class Camera implements Node {
 	private static final int LENS_FISHEYE = 1;
 	private static final int LENS_THIN = 2;
 	

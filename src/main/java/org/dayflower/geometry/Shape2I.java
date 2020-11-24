@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Shape2I} denotes a 2-dimensional shape that uses the data type {@code int}.
  * <p>
@@ -26,6 +28,6 @@ package org.dayflower.geometry;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Shape2I {
+public interface Shape2I extends Node {
 	
 }

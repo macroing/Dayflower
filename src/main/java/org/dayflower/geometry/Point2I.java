@@ -20,6 +20,8 @@ package org.dayflower.geometry;
 
 import java.util.Objects;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Point2I} denotes a 2-dimensional point with two coordinates, of type {@code int}.
  * <p>
@@ -28,7 +30,7 @@ import java.util.Objects;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Point2I {
+public final class Point2I implements Node {
 	private final int component1;
 	private final int component2;
 	

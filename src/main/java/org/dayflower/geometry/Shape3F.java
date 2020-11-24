@@ -22,6 +22,8 @@ import static org.dayflower.util.Floats.isNaN;
 
 import java.util.Optional;
 
+import org.dayflower.node.Node;
+
 /**
  * A {@code Shape3F} denotes a 3-dimensional shape that uses the data type {@code float}.
  * <p>
@@ -30,7 +32,7 @@ import java.util.Optional;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Shape3F {
+public interface Shape3F extends Node {
 	/**
 	 * Returns a {@link BoundingVolume3F} instance that contains this {@code Shape3F} instance.
 	 * 

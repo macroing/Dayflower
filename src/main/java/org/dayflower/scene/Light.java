@@ -24,6 +24,7 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.node.Node;
 
 /**
  * A {@code Light} represents a light.
@@ -31,7 +32,7 @@ import org.dayflower.image.Color3F;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Light {
+public interface Light extends Node {
 	/**
 	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
 	 * <p>

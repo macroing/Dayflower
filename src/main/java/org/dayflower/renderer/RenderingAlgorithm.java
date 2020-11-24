@@ -18,27 +18,48 @@
  */
 package org.dayflower.renderer;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code RenderingAlgorithm} represents a rendering algorithm.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public enum RenderingAlgorithm {
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code RenderingAlgorithm} that represents Ambient Occlusion.
+	 */
 	AMBIENT_OCCLUSION("AmbientOcclusion"),
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code RenderingAlgorithm} that represents Path Tracing.
+	 */
+	PATH_TRACING("PathTracing"),
+	
+	/**
+	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to PBRT.
+	 */
 	PATH_TRACING_P_B_R_T("PathTracing-PBRT"),
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to Rayito.
+	 */
 	PATH_TRACING_RAYITO("PathTracing-Rayito"),
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to SmallPT and is iterative.
+	 */
 	PATH_TRACING_SMALL_P_T_ITERATIVE("PathTracing-SmallPT-Iterative"),
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to SmallPT and is recursive.
+	 */
 	PATH_TRACING_SMALL_P_T_RECURSIVE("PathTracing-SmallPT-Recursive"),
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code RenderingAlgorithm} that represents Ray Casting.
+	 */
 	RAY_CASTING("RayCasting");
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +74,11 @@ public enum RenderingAlgorithm {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the name of this {@code RenderingAlgorithm} instance.
+	 * 
+	 * @return the name of this {@code RenderingAlgorithm} instance
+	 */
 	public String getName() {
 		return this.name;
 	}

@@ -18,18 +18,49 @@
  */
 package org.dayflower.renderer;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.image.Image;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code RendererObserver} is used to observe the rendering process of a {@link Renderer} instance.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface RendererObserver {
-//	TODO: Add Javadocs!
+	/**
+	 * This method is called by {@code renderer} when {@code image} should be displayed.
+	 * <p>
+	 * If either {@code renderer} or {@code image} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param renderer the {@link Renderer} instance that called this method
+	 * @param image the {@link Image} instance that is rendered to
+	 * @throws NullPointerException thrown if, and only if, either {@code renderer} or {@code image} are {@code null}
+	 */
 	void onRenderDisplay(final Renderer renderer, final Image image);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * This method is called by {@code renderer} when {@code renderPass} is complete.
+	 * <p>
+	 * If {@code renderer} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param renderer the {@link Renderer} instance that called this method
+	 * @param renderPass the current render pass
+	 * @param renderPasses the total number of render passes
+	 * @param elapsedTimeMillis the total number of milliseconds required to complete this render pass
+	 * @throws NullPointerException thrown if, and only if, {@code renderer} is {@code null}
+	 */
 	void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * This method is called by {@code renderer} when {@code renderPass} is processed.
+	 * <p>
+	 * If {@code renderer} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param renderer the {@link Renderer} instance that called this method
+	 * @param renderPass the current render pass
+	 * @param renderPasses the total number of render passes
+	 * @param percent the progress in percent between {@code 0.0D} and {@code 1.0D}
+	 * @throws NullPointerException thrown if, and only if, {@code renderer} is {@code null}
+	 */
 	void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent);
 }

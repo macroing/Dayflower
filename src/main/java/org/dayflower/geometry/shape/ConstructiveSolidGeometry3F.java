@@ -125,15 +125,16 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 						return optionalSurfaceIntersectionL;
 					}
 					
-					float t0 = tR;
-					float t1 = tR;
+					float tCurrentR = tR + 0.001F;
+					float tMinimumR = tR + 0.001F;
 					
-					while(!isNaN(t0)) {
-						t1 = t0;
-						t0 = this.shapeR.intersectionT(ray, t0 + 0.001F, tMaximum);
+					while(!isNaN(tCurrentR)) {
+						tMinimumR = tCurrentR;
+						tCurrentR = this.shapeR.intersectionT(ray, tCurrentR + 0.001F, tMaximum);
 					}
 					
-					return this.shapeL.intersection(ray, t1 + 0.001F, tMaximum);
+//					return this.shapeL.intersection(ray, tMinimumR + 0.001F, tMaximum);
+					return this.shapeR.intersection(ray, tMinimumR - 0.001F, tMaximum);
 				}
 				
 				return SurfaceIntersection3F.EMPTY;
@@ -340,15 +341,16 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 						return tL;
 					}
 					
-					float t0 = tR;
-					float t1 = tR;
+					float tCurrentR = tR + 0.001F;
+					float tMinimumR = tR + 0.001F;
 					
-					while(!isNaN(t0)) {
-						t1 = t0;
-						t0 = this.shapeR.intersectionT(ray, t0 + 0.001F, tMaximum);
+					while(!isNaN(tCurrentR)) {
+						tMinimumR = tCurrentR;
+						tCurrentR = this.shapeR.intersectionT(ray, tCurrentR + 0.001F, tMaximum);
 					}
 					
-					return this.shapeL.intersectionT(ray, t1 + 0.001F, tMaximum);
+//					return this.shapeL.intersectionT(ray, tMinimumR + 0.001F, tMaximum);
+					return this.shapeR.intersectionT(ray, tMinimumR - 0.001F, tMaximum);
 				}
 				
 				return Float.NaN;

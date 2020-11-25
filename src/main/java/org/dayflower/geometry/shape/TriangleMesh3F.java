@@ -51,6 +51,7 @@ import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
+import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.util.ParameterArguments;
@@ -64,9 +65,9 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class TriangleMesh3F implements Shape3F {
+	private final BVHNode bVHNode;
 	private final BoundingVolume3F boundingVolume;
 	private final List<Triangle3F> triangles;
-	private final Node node;
 	private final String groupName;
 	private final String materialName;
 	private final String objectName;
@@ -111,13 +112,13 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	public TriangleMesh3F(final List<Triangle3F> triangles, final String groupName, final String materialName, final String objectName, final boolean isUsingAccelerationStructure) {
 		this.triangles = new ArrayList<>(ParameterArguments.requireNonNullList(triangles, "triangles"));
-		this.node = isUsingAccelerationStructure ? doCreateNode(this.triangles) : null;
-		this.boundingVolume = isUsingAccelerationStructure ? this.node.getBoundingVolume() : doCreateBoundingVolume(this.triangles);
+		this.bVHNode = isUsingAccelerationStructure ? doCreateBVHNode(this.triangles) : null;
+		this.boundingVolume = isUsingAccelerationStructure ? this.bVHNode.getBoundingVolume() : doCreateBoundingVolume(this.triangles);
 		this.groupName = Objects.requireNonNull(groupName, "groupName == null");
 		this.materialName = Objects.requireNonNull(materialName, "materialName == null");
 		this.objectName = Objects.requireNonNull(objectName, "objectName == null");
 		this.isUsingAccelerationStructure = isUsingAccelerationStructure;
-		this.surfaceArea = isUsingAccelerationStructure ? this.node.getSurfaceArea() : doCalculateSurfaceArea(this.triangles);
+		this.surfaceArea = isUsingAccelerationStructure ? this.bVHNode.getSurfaceArea() : doCalculateSurfaceArea(this.triangles);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +173,7 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		if(this.isUsingAccelerationStructure) {
-			return this.node.intersection(ray, new float[] {tMinimum, tMaximum});
+			return this.bVHNode.intersection(ray, new float[] {tMinimum, tMaximum});
 		}
 		
 		final MutableSurfaceIntersection3F mutableSurfaceIntersection = new MutableSurfaceIntersection3F(ray, tMinimum, tMaximum);
@@ -257,6 +258,10 @@ public final class TriangleMesh3F implements Shape3F {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
 				}
+				
+				if(this.bVHNode != null && !this.bVHNode.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
 			}
 			
 			return nodeHierarchicalVisitor.visitLeave(this);
@@ -279,11 +284,11 @@ public final class TriangleMesh3F implements Shape3F {
 			return true;
 		} else if(!(object instanceof TriangleMesh3F)) {
 			return false;
+		} else if(!Objects.equals(this.bVHNode, TriangleMesh3F.class.cast(object).bVHNode)) {
+			return false;
 		} else if(!Objects.equals(this.boundingVolume, TriangleMesh3F.class.cast(object).boundingVolume)) {
 			return false;
 		} else if(!Objects.equals(this.triangles, TriangleMesh3F.class.cast(object).triangles)) {
-			return false;
-		} else if(!Objects.equals(this.node, TriangleMesh3F.class.cast(object).node)) {
 			return false;
 		} else if(!Objects.equals(this.groupName, TriangleMesh3F.class.cast(object).groupName)) {
 			return false;
@@ -313,7 +318,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-		return this.isUsingAccelerationStructure ? this.node.intersection(mutableSurfaceIntersection) : mutableSurfaceIntersection.intersection(this);
+		return this.isUsingAccelerationStructure ? this.bVHNode.intersection(mutableSurfaceIntersection) : mutableSurfaceIntersection.intersection(this);
 	}
 	
 	/**
@@ -329,7 +334,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		return this.isUsingAccelerationStructure ? this.node.intersects(ray, tMinimum, tMaximum) : !isNaN(intersectionT(ray, tMinimum, tMaximum));
+		return this.isUsingAccelerationStructure ? this.bVHNode.intersects(ray, tMinimum, tMaximum) : !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
@@ -428,7 +433,7 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		if(this.isUsingAccelerationStructure) {
-			return this.node.intersectionT(ray, new float[] {tMinimum, tMaximum});
+			return this.bVHNode.intersectionT(ray, new float[] {tMinimum, tMaximum});
 		}
 		
 		float t = Float.NaN;
@@ -465,7 +470,7 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.boundingVolume, this.triangles, this.node, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure), Float.valueOf(this.surfaceArea));
+		return Objects.hash(this.bVHNode, this.boundingVolume, this.triangles, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure), Float.valueOf(this.surfaceArea));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -775,36 +780,20 @@ public final class TriangleMesh3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static BoundingVolume3F doCreateBoundingVolume(final List<Triangle3F> triangles) {
-		Point3F maximum = Point3F.MINIMUM;
-		Point3F minimum = Point3F.MAXIMUM;
-		
-		for(final Triangle3F triangle : triangles) {
-			final Point3F a = triangle.getA().getPosition();
-			final Point3F b = triangle.getB().getPosition();
-			final Point3F c = triangle.getC().getPosition();
-			
-			maximum = Point3F.maximum(maximum, Point3F.maximum(a, b, c));
-			minimum = Point3F.minimum(minimum, Point3F.minimum(a, b, c));
-		}
-		
-		return new AxisAlignedBoundingBox3F(maximum, minimum);
-	}
-	
-	private static Node doCreateNode(final List<LeafNode> processableLeafNodes, final Point3F maximum, final Point3F minimum, final int depth) {
-		final int size = processableLeafNodes.size();
+	private static BVHNode doCreateBVHNode(final List<LeafBVHNode> processableLeafBVHNodes, final Point3F maximum, final Point3F minimum, final int depth) {
+		final int size = processableLeafBVHNodes.size();
 		final int sizeHalf = size / 2;
 		
 		if(size < 4) {
 			final List<Triangle3F> triangles = new ArrayList<>();
 			
-			for(final LeafNode processableLeafNode : processableLeafNodes) {
-				for(final Triangle3F triangle : processableLeafNode.getTriangles()) {
+			for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
+				for(final Triangle3F triangle : processableLeafBVHNode.getTriangles()) {
 					triangles.add(triangle);
 				}
 			}
 			
-			return new LeafNode(maximum, minimum, depth, triangles);
+			return new LeafBVHNode(maximum, minimum, depth, triangles);
 		}
 		
 		final float sideX = maximum.getX() - minimum.getX();
@@ -848,8 +837,8 @@ public final class TriangleMesh3F implements Shape3F {
 				int countL = 0;
 				int countR = 0;
 				
-				for(final LeafNode processableLeafNode : processableLeafNodes) {
-					final BoundingVolume3F boundingVolume = processableLeafNode.getBoundingVolume();
+				for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
+					final BoundingVolume3F boundingVolume = processableLeafBVHNode.getBoundingVolume();
 					
 					final Point3F max = boundingVolume.getMaximum();
 					final Point3F mid = boundingVolume.getMidpoint();
@@ -905,17 +894,17 @@ public final class TriangleMesh3F implements Shape3F {
 		if(bestAxis == -1) {
 			final List<Triangle3F> triangles = new ArrayList<>();
 			
-			for(final LeafNode processableLeafNode : processableLeafNodes) {
-				for(final Triangle3F triangle : processableLeafNode.getTriangles()) {
+			for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
+				for(final Triangle3F triangle : processableLeafBVHNode.getTriangles()) {
 					triangles.add(triangle);
 				}
 			}
 			
-			return new LeafNode(maximum, minimum, depth, triangles);
+			return new LeafBVHNode(maximum, minimum, depth, triangles);
 		}
 		
-		final List<LeafNode> leafNodesL = new ArrayList<>(sizeHalf);
-		final List<LeafNode> leafNodesR = new ArrayList<>(sizeHalf);
+		final List<LeafBVHNode> leafBVHNodesL = new ArrayList<>(sizeHalf);
+		final List<LeafBVHNode> leafBVHNodesR = new ArrayList<>(sizeHalf);
 		
 		float maximumLX = Float.MIN_VALUE;
 		float maximumLY = Float.MIN_VALUE;
@@ -930,8 +919,8 @@ public final class TriangleMesh3F implements Shape3F {
 		float minimumRY = Float.MAX_VALUE;
 		float minimumRZ = Float.MAX_VALUE;
 		
-		for(final LeafNode processableLeafNode : processableLeafNodes) {
-			final BoundingVolume3F boundingVolume = processableLeafNode.getBoundingVolume();
+		for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
+			final BoundingVolume3F boundingVolume = processableLeafBVHNode.getBoundingVolume();
 			
 			final Point3F max = boundingVolume.getMaximum();
 			final Point3F mid = boundingVolume.getMidpoint();
@@ -940,7 +929,7 @@ public final class TriangleMesh3F implements Shape3F {
 			final float value = mid.getComponent(bestAxis);
 			
 			if(value < bestSplit) {
-				leafNodesL.add(processableLeafNode);
+				leafBVHNodesL.add(processableLeafBVHNode);
 				
 				maximumLX = max(maximumLX, max.getX());
 				maximumLY = max(maximumLY, max.getY());
@@ -949,7 +938,7 @@ public final class TriangleMesh3F implements Shape3F {
 				minimumLY = min(minimumLY, min.getY());
 				minimumLZ = min(minimumLZ, min.getZ());
 			} else {
-				leafNodesR.add(processableLeafNode);
+				leafBVHNodesR.add(processableLeafBVHNode);
 				
 				maximumRX = max(maximumRX, max.getX());
 				maximumRY = max(maximumRY, max.getY());
@@ -965,14 +954,14 @@ public final class TriangleMesh3F implements Shape3F {
 		final Point3F maximumR = new Point3F(maximumRX, maximumRY, maximumRZ);
 		final Point3F minimumR = new Point3F(minimumRX, minimumRY, minimumRZ);
 		
-		final Node nodeL = doCreateNode(leafNodesL, maximumL, minimumL, depth + 1);
-		final Node nodeR = doCreateNode(leafNodesR, maximumR, minimumR, depth + 1);
+		final BVHNode bVHNodeL = doCreateBVHNode(leafBVHNodesL, maximumL, minimumL, depth + 1);
+		final BVHNode bVHNodeR = doCreateBVHNode(leafBVHNodesR, maximumR, minimumR, depth + 1);
 		
-		return new TreeNode(maximum, minimum, depth, nodeL, nodeR);
+		return new TreeBVHNode(maximum, minimum, depth, bVHNodeL, bVHNodeR);
 	}
 	
-	private static Node doCreateNode(final List<Triangle3F> triangles) {
-		final List<LeafNode> processableLeafNodes = new ArrayList<>(triangles.size());
+	private static BVHNode doCreateBVHNode(final List<Triangle3F> triangles) {
+		final List<LeafBVHNode> processableLeafBVHNodes = new ArrayList<>(triangles.size());
 		
 		float maximumX = Float.MIN_VALUE;
 		float maximumY = Float.MIN_VALUE;
@@ -996,10 +985,26 @@ public final class TriangleMesh3F implements Shape3F {
 			minimumY = min(minimumY, minimum.getY());
 			minimumZ = min(minimumZ, minimum.getZ());
 			
-			processableLeafNodes.add(new LeafNode(maximum, minimum, 0, Arrays.asList(triangle)));
+			processableLeafBVHNodes.add(new LeafBVHNode(maximum, minimum, 0, Arrays.asList(triangle)));
 		}
 		
-		return doCreateNode(processableLeafNodes, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
+		return doCreateBVHNode(processableLeafBVHNodes, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
+	}
+	
+	private static BoundingVolume3F doCreateBoundingVolume(final List<Triangle3F> triangles) {
+		Point3F maximum = Point3F.MINIMUM;
+		Point3F minimum = Point3F.MAXIMUM;
+		
+		for(final Triangle3F triangle : triangles) {
+			final Point3F a = triangle.getA().getPosition();
+			final Point3F b = triangle.getB().getPosition();
+			final Point3F c = triangle.getC().getPosition();
+			
+			maximum = Point3F.maximum(maximum, Point3F.maximum(a, b, c));
+			minimum = Point3F.minimum(minimum, Point3F.minimum(a, b, c));
+		}
+		
+		return new AxisAlignedBoundingBox3F(maximum, minimum);
 	}
 	
 	private static float doCalculateSurfaceArea(final List<Triangle3F> triangles) {
@@ -1010,6 +1015,40 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		return surfaceArea;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static abstract class BVHNode implements Node {
+		private final BoundingVolume3F boundingVolume;
+		private final int depth;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		protected BVHNode(final Point3F maximum, final Point3F minimum, final int depth) {
+			this.boundingVolume = new AxisAlignedBoundingBox3F(maximum, minimum);
+			this.depth = depth;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public final BoundingVolume3F getBoundingVolume() {
+			return this.boundingVolume;
+		}
+		
+		public abstract Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds);
+		
+		public abstract boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
+		
+		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
+		
+		public abstract float getSurfaceArea();
+		
+		public abstract float intersectionT(final Ray3F ray, final float[] tBounds);
+		
+		public final int getDepth() {
+			return this.depth;
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1373,12 +1412,12 @@ public final class TriangleMesh3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final class LeafNode extends Node {
+	private static final class LeafBVHNode extends BVHNode {
 		private final List<Triangle3F> triangles;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public LeafNode(final Point3F maximum, final Point3F minimum, final int depth, final List<Triangle3F> triangles) {
+		public LeafBVHNode(final Point3F maximum, final Point3F minimum, final int depth, final List<Triangle3F> triangles) {
 			super(maximum, minimum, depth);
 			
 			this.triangles = Objects.requireNonNull(triangles, "triangles == null");
@@ -1408,16 +1447,39 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
+		public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+			Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+			
+			try {
+				if(nodeHierarchicalVisitor.visitEnter(this)) {
+					if(!getBoundingVolume().accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+					
+					for(final Triangle3F triangle : this.triangles) {
+						if(!triangle.accept(nodeHierarchicalVisitor)) {
+							return nodeHierarchicalVisitor.visitLeave(this);
+						}
+					}
+				}
+				
+				return nodeHierarchicalVisitor.visitLeave(this);
+			} catch(final RuntimeException e) {
+				throw new NodeTraversalException(e);
+			}
+		}
+		
+		@Override
 		public boolean equals(final Object object) {
 			if(object == this) {
 				return true;
-			} else if(!(object instanceof LeafNode)) {
+			} else if(!(object instanceof LeafBVHNode)) {
 				return false;
-			} else if(!Objects.equals(getBoundingVolume(), LeafNode.class.cast(object).getBoundingVolume())) {
+			} else if(!Objects.equals(getBoundingVolume(), LeafBVHNode.class.cast(object).getBoundingVolume())) {
 				return false;
-			} else if(getDepth() != LeafNode.class.cast(object).getDepth()) {
+			} else if(getDepth() != LeafBVHNode.class.cast(object).getDepth()) {
 				return false;
-			} else if(!Objects.equals(this.triangles, LeafNode.class.cast(object).triangles)) {
+			} else if(!Objects.equals(this.triangles, LeafBVHNode.class.cast(object).triangles)) {
 				return false;
 			} else {
 				return true;
@@ -1490,73 +1552,64 @@ public final class TriangleMesh3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static abstract class Node {
-		private final BoundingVolume3F boundingVolume;
-		private final int depth;
+	private static final class TreeBVHNode extends BVHNode {
+		private final BVHNode bVHNodeL;
+		private final BVHNode bVHNodeR;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		protected Node(final Point3F maximum, final Point3F minimum, final int depth) {
-			this.boundingVolume = new AxisAlignedBoundingBox3F(maximum, minimum);
-			this.depth = depth;
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public final BoundingVolume3F getBoundingVolume() {
-			return this.boundingVolume;
-		}
-		
-		public abstract Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds);
-		
-		public abstract boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
-		
-		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
-		
-		public abstract float getSurfaceArea();
-		
-		public abstract float intersectionT(final Ray3F ray, final float[] tBounds);
-		
-		public final int getDepth() {
-			return this.depth;
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class TreeNode extends Node {
-		private final Node nodeL;
-		private final Node nodeR;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public TreeNode(final Point3F maximum, final Point3F minimum, final int depth, final Node nodeL, final Node nodeR) {
+		public TreeBVHNode(final Point3F maximum, final Point3F minimum, final int depth, final BVHNode bVHNodeL, final BVHNode bVHNodeR) {
 			super(maximum, minimum, depth);
 			
-			this.nodeL = Objects.requireNonNull(nodeL, "nodeL == null");
-			this.nodeR = Objects.requireNonNull(nodeR, "nodeR == null");
+			this.bVHNodeL = Objects.requireNonNull(bVHNodeL, "bVHNodeL == null");
+			this.bVHNodeR = Objects.requireNonNull(bVHNodeR, "bVHNodeR == null");
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		@Override
 		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds) {
-			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3F.closest(this.nodeL.intersection(ray, tBounds), this.nodeR.intersection(ray, tBounds)) : Optional.empty();
+			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3F.closest(this.bVHNodeL.intersection(ray, tBounds), this.bVHNodeR.intersection(ray, tBounds)) : Optional.empty();
+		}
+		
+		@Override
+		public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+			Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+			
+			try {
+				if(nodeHierarchicalVisitor.visitEnter(this)) {
+					if(!getBoundingVolume().accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+					
+					if(!this.bVHNodeL.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+					
+					if(!this.bVHNodeR.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
+				return nodeHierarchicalVisitor.visitLeave(this);
+			} catch(final RuntimeException e) {
+				throw new NodeTraversalException(e);
+			}
 		}
 		
 		@Override
 		public boolean equals(final Object object) {
 			if(object == this) {
 				return true;
-			} else if(!(object instanceof TreeNode)) {
+			} else if(!(object instanceof TreeBVHNode)) {
 				return false;
-			} else if(!Objects.equals(getBoundingVolume(), TreeNode.class.cast(object).getBoundingVolume())) {
+			} else if(!Objects.equals(getBoundingVolume(), TreeBVHNode.class.cast(object).getBoundingVolume())) {
 				return false;
-			} else if(getDepth() != TreeNode.class.cast(object).getDepth()) {
+			} else if(getDepth() != TreeBVHNode.class.cast(object).getDepth()) {
 				return false;
-			} else if(!Objects.equals(this.nodeL, TreeNode.class.cast(object).nodeL)) {
+			} else if(!Objects.equals(this.bVHNodeL, TreeBVHNode.class.cast(object).bVHNodeL)) {
 				return false;
-			} else if(!Objects.equals(this.nodeR, TreeNode.class.cast(object).nodeR)) {
+			} else if(!Objects.equals(this.bVHNodeR, TreeBVHNode.class.cast(object).bVHNodeR)) {
 				return false;
 			} else {
 				return true;
@@ -1566,8 +1619,8 @@ public final class TriangleMesh3F implements Shape3F {
 		@Override
 		public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
 			if(mutableSurfaceIntersection.isIntersecting(getBoundingVolume())) {
-				final boolean isIntersectingL = this.nodeL.intersection(mutableSurfaceIntersection);
-				final boolean isIntersectingR = this.nodeR.intersection(mutableSurfaceIntersection);
+				final boolean isIntersectingL = this.bVHNodeL.intersection(mutableSurfaceIntersection);
+				final boolean isIntersectingR = this.bVHNodeR.intersection(mutableSurfaceIntersection);
 				
 				return isIntersectingL || isIntersectingR;
 			}
@@ -1577,22 +1630,22 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		@Override
 		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
-			return (getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) && (this.nodeL.intersects(ray, tMinimum, tMaximum) || this.nodeR.intersects(ray, tMinimum, tMaximum));
+			return (getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) && (this.bVHNodeL.intersects(ray, tMinimum, tMaximum) || this.bVHNodeR.intersects(ray, tMinimum, tMaximum));
 		}
 		
 		@Override
 		public float getSurfaceArea() {
-			return this.nodeL.getSurfaceArea() + this.nodeR.getSurfaceArea();
+			return this.bVHNodeL.getSurfaceArea() + this.bVHNodeR.getSurfaceArea();
 		}
 		
 		@Override
 		public float intersectionT(final Ray3F ray, final float[] tBounds) {
-			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.nodeL.intersectionT(ray, tBounds), this.nodeR.intersectionT(ray, tBounds)) : Float.NaN;
+			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.bVHNodeL.intersectionT(ray, tBounds), this.bVHNodeR.intersectionT(ray, tBounds)) : Float.NaN;
 		}
 		
 		@Override
 		public int hashCode() {
-			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.nodeL, this.nodeR);
+			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.bVHNodeL, this.bVHNodeR);
 		}
 	}
 	

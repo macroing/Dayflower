@@ -25,11 +25,14 @@ import static org.dayflower.util.Doubles.min;
 import static org.dayflower.util.Doubles.nextDownPBRT;
 import static org.dayflower.util.Doubles.nextUpPBRT;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 import org.dayflower.util.Doubles;
 
 /**
@@ -276,6 +279,32 @@ public final class Point3D implements Node {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} with all {@code Point3D} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all {@code Point3D} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point3D> filterAll(final Node node) {
+		return NodeFilter.filter(node, NodeFilter.any(), Point3D.class);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@code Point3D} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all distinct {@code Point3D} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point3D> filterAllDistinct(final Node node) {
+		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
 	
 	/**
 	 * Adds the component values of {@code vectorRHS} to the component values of {@code pointLHS}.
@@ -707,6 +736,29 @@ public final class Point3D implements Node {
 	 */
 	public static double distanceSquared(final Point3D eye, final Point3D lookAt) {
 		return Vector3D.direction(eye, lookAt).lengthSquared();
+	}
+	
+	/**
+	 * Returns a {@code double[]} representation of {@code points}.
+	 * <p>
+	 * If either {@code points} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code List} of {@code Point3D} instances
+	 * @return a {@code double[]} representation of {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or at least one of its elements are {@code null}
+	 */
+	public static double[] toArray(final List<Point3D> points) {
+		final double[] array = new double[points.size() * 3];
+		
+		for(int i = 0, j = 0; i < points.size(); i++, j += 3) {
+			final Point3D point = points.get(i);
+			
+			array[j + 0] = point.component1;
+			array[j + 1] = point.component2;
+			array[j + 2] = point.component3;
+		}
+		
+		return array;
 	}
 	
 	/**

@@ -18,6 +18,9 @@
  */
 package org.dayflower.renderer.gpu;
 
+import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Scene;
 
 final class SceneCompiler {
@@ -28,10 +31,11 @@ final class SceneCompiler {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public CompiledScene compile(final Scene scene) {
-		return null;
+		final float[] matrix44Fs = new float[0];
+		final float[] point2Fs = Point2F.toArray(Point2F.filterAllDistinct(scene));
+		final float[] point3Fs = Point3F.toArray(Point3F.filterAllDistinct(scene));
+		final float[] vector3Fs = Vector3F.toArray(Vector3F.filterAllDistinct(scene));
+		
+		return new CompiledScene(matrix44Fs, point2Fs, point3Fs, vector3Fs);
 	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
 }

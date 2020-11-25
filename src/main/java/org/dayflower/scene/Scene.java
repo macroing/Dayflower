@@ -37,6 +37,8 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeHierarchicalVisitor;
+import org.dayflower.node.NodeTraversalException;
 import org.dayflower.util.ParameterArguments;
 
 /**
@@ -217,6 +219,60 @@ public final class Scene implements Node {
 	@Override
 	public String toString() {
 		return String.format("new Scene(%s, %s)", this.camera, this.name);
+	}
+	
+	/**
+	 * Accepts a {@link NodeHierarchicalVisitor}.
+	 * <p>
+	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.
+	 * <p>
+	 * If {@code nodeHierarchicalVisitor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}, a {@code NodeTraversalException} will be thrown with the {@code RuntimeException} wrapped.
+	 * <p>
+	 * This implementation will:
+	 * <ul>
+	 * <li>throw a {@code NullPointerException} if {@code nodeHierarchicalVisitor} is {@code null}.</li>
+	 * <li>throw a {@code NodeTraversalException} if {@code nodeHierarchicalVisitor} throws a {@code RuntimeException}.</li>
+	 * <li>traverse its child {@code Node} instances.</li>
+	 * </ul>
+	 * 
+	 * @param nodeHierarchicalVisitor the {@code NodeHierarchicalVisitor} to accept
+	 * @return the result of {@code nodeHierarchicalVisitor.visitLeave(this)}
+	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
+	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
+	 */
+	@Override
+	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+		
+		try {
+			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(this.bVHNode != null && !this.bVHNode.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.camera.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				for(final Light light : this.lights) {
+					if(!light.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
+				for(final Primitive primitive : this.primitives) {
+					if(!primitive.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+			}
+			
+			return nodeHierarchicalVisitor.visitLeave(this);
+		} catch(final RuntimeException e) {
+			throw new NodeTraversalException(e);
+		}
 	}
 	
 	/**
@@ -687,6 +743,36 @@ public final class Scene implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private static abstract class BVHNode implements Node {
+		private final BoundingVolume3F boundingVolume;
+		private final int depth;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		protected BVHNode(final Point3F maximum, final Point3F minimum, final int depth) {
+			this.boundingVolume = new AxisAlignedBoundingBox3F(maximum, minimum);
+			this.depth = depth;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public final BoundingVolume3F getBoundingVolume() {
+			return this.boundingVolume;
+		}
+		
+		public abstract boolean intersection(final MutableIntersection mutableIntersection);
+		
+		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
+		
+		public abstract float intersectionT(final Ray3F ray, final float[] tBounds);
+		
+		public final int getDepth() {
+			return this.depth;
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static final class LeafBVHNode extends BVHNode {
 		private final List<Primitive> primitives;
 		
@@ -702,6 +788,29 @@ public final class Scene implements Node {
 		
 		public List<Primitive> getPrimitives() {
 			return this.primitives;
+		}
+		
+		@Override
+		public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+			Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+			
+			try {
+				if(nodeHierarchicalVisitor.visitEnter(this)) {
+					if(!getBoundingVolume().accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+					
+					for(final Primitive primitive : this.primitives) {
+						if(!primitive.accept(nodeHierarchicalVisitor)) {
+							return nodeHierarchicalVisitor.visitLeave(this);
+						}
+					}
+				}
+				
+				return nodeHierarchicalVisitor.visitLeave(this);
+			} catch(final RuntimeException e) {
+				throw new NodeTraversalException(e);
+			}
 		}
 		
 		@Override
@@ -776,36 +885,6 @@ public final class Scene implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static abstract class BVHNode {
-		private final BoundingVolume3F boundingVolume;
-		private final int depth;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		protected BVHNode(final Point3F maximum, final Point3F minimum, final int depth) {
-			this.boundingVolume = new AxisAlignedBoundingBox3F(maximum, minimum);
-			this.depth = depth;
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public final BoundingVolume3F getBoundingVolume() {
-			return this.boundingVolume;
-		}
-		
-		public abstract boolean intersection(final MutableIntersection mutableIntersection);
-		
-		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
-		
-		public abstract float intersectionT(final Ray3F ray, final float[] tBounds);
-		
-		public final int getDepth() {
-			return this.depth;
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private static final class TreeBVHNode extends BVHNode {
 		private final BVHNode bVHNodeL;
 		private final BVHNode bVHNodeR;
@@ -820,6 +899,31 @@ public final class Scene implements Node {
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+			Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+			
+			try {
+				if(nodeHierarchicalVisitor.visitEnter(this)) {
+					if(!getBoundingVolume().accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+					
+					if(!this.bVHNodeL.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+					
+					if(!this.bVHNodeR.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+				}
+				
+				return nodeHierarchicalVisitor.visitLeave(this);
+			} catch(final RuntimeException e) {
+				throw new NodeTraversalException(e);
+			}
+		}
 		
 		@Override
 		public boolean equals(final Object object) {

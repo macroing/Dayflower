@@ -22,9 +22,12 @@ import static org.dayflower.util.Doubles.equal;
 import static org.dayflower.util.Doubles.max;
 import static org.dayflower.util.Doubles.min;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 
 /**
  * A {@code Point2D} denotes a 2-dimensional point with two coordinates, of type {@code double}.
@@ -186,6 +189,32 @@ public final class Point2D implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code List} with all {@code Point2D} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all {@code Point2D} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point2D> filterAll(final Node node) {
+		return NodeFilter.filter(node, NodeFilter.any(), Point2D.class);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@code Point2D} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all distinct {@code Point2D} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point2D> filterAllDistinct(final Node node) {
+		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
+	
+	/**
 	 * Computes texture coordinates from three other texture coordinates via Barycentric interpolation.
 	 * <p>
 	 * Returns a new {@code Point2D} instance with the interpolated texture coordinates.
@@ -326,5 +355,27 @@ public final class Point2D implements Node {
 	 */
 	public static double distanceSquared(final Point2D eye, final Point2D lookAt) {
 		return Vector2D.direction(eye, lookAt).lengthSquared();
+	}
+	
+	/**
+	 * Returns a {@code double[]} representation of {@code points}.
+	 * <p>
+	 * If either {@code points} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code List} of {@code Point2D} instances
+	 * @return a {@code double[]} representation of {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or at least one of its elements are {@code null}
+	 */
+	public static double[] toArray(final List<Point2D> points) {
+		final double[] array = new double[points.size() * 2];
+		
+		for(int i = 0, j = 0; i < points.size(); i++, j += 2) {
+			final Point2D point = points.get(i);
+			
+			array[j + 0] = point.component1;
+			array[j + 1] = point.component2;
+		}
+		
+		return array;
 	}
 }

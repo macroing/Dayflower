@@ -21,9 +21,12 @@ package org.dayflower.geometry;
 import static org.dayflower.util.Doubles.equal;
 import static org.dayflower.util.Doubles.sqrt;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 
 /**
  * A {@code Vector2D} denotes a 2-dimensional vector with two components, of type {@code double}.
@@ -203,6 +206,32 @@ public final class Vector2D implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code List} with all {@code Vector2D} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all {@code Vector2D} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Vector2D> filterAll(final Node node) {
+		return NodeFilter.filter(node, NodeFilter.any(), Vector2D.class);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@code Vector2D} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all distinct {@code Vector2D} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Vector2D> filterAllDistinct(final Node node) {
+		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
+	
+	/**
 	 * Adds the component values of {@code vectorRHS} to the component values of {@code vectorLHS}.
 	 * <p>
 	 * Returns a new {@code Vector2D} instance with the result of the addition.
@@ -348,5 +377,27 @@ public final class Vector2D implements Node {
 	 */
 	public static double dotProduct(final Vector2D vectorLHS, final Vector2D vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2;
+	}
+	
+	/**
+	 * Returns a {@code double[]} representation of {@code vectors}.
+	 * <p>
+	 * If either {@code vectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectors a {@code List} of {@code Vector2D} instances
+	 * @return a {@code double[]} representation of {@code vectors}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectors} or at least one of its elements are {@code null}
+	 */
+	public static double[] toArray(final List<Vector2D> vectors) {
+		final double[] array = new double[vectors.size() * 2];
+		
+		for(int i = 0, j = 0; i < vectors.size(); i++, j += 2) {
+			final Vector2D vector = vectors.get(i);
+			
+			array[j + 0] = vector.component1;
+			array[j + 1] = vector.component2;
+		}
+		
+		return array;
 	}
 }

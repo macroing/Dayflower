@@ -18,9 +18,12 @@
  */
 package org.dayflower.geometry;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 
 /**
  * A {@code Point2I} denotes a 2-dimensional point with two coordinates, of type {@code int}.
@@ -158,5 +161,55 @@ public final class Point2I implements Node {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Integer.valueOf(this.component1), Integer.valueOf(this.component2));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} with all {@code Point2I} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all {@code Point2I} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point2I> filterAll(final Node node) {
+		return NodeFilter.filter(node, NodeFilter.any(), Point2I.class);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@code Point2I} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all distinct {@code Point2I} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point2I> filterAllDistinct(final Node node) {
+		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of {@code points}.
+	 * <p>
+	 * If either {@code points} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code List} of {@code Point2I} instances
+	 * @return an {@code int[]} representation of {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or at least one of its elements are {@code null}
+	 */
+	public static int[] toArray(final List<Point2I> points) {
+		final int[] array = new int[points.size() * 2];
+		
+		for(int i = 0, j = 0; i < points.size(); i++, j += 2) {
+			final Point2I point = points.get(i);
+			
+			array[j + 0] = point.component1;
+			array[j + 1] = point.component2;
+		}
+		
+		return array;
 	}
 }

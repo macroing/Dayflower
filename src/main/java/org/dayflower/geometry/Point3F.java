@@ -25,11 +25,14 @@ import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.nextDownPBRT;
 import static org.dayflower.util.Floats.nextUpPBRT;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 import org.dayflower.util.Floats;
 
 /**
@@ -276,6 +279,32 @@ public final class Point3F implements Node {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} with all {@code Point3F} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all {@code Point3F} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point3F> filterAll(final Node node) {
+		return NodeFilter.filter(node, NodeFilter.any(), Point3F.class);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@code Point3F} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all distinct {@code Point3F} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point3F> filterAllDistinct(final Node node) {
+		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
 	
 	/**
 	 * Adds the component values of {@code vectorRHS} to the component values of {@code pointLHS}.
@@ -707,6 +736,29 @@ public final class Point3F implements Node {
 	 */
 	public static float distanceSquared(final Point3F eye, final Point3F lookAt) {
 		return Vector3F.direction(eye, lookAt).lengthSquared();
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of {@code points}.
+	 * <p>
+	 * If either {@code points} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code List} of {@code Point3F} instances
+	 * @return a {@code float[]} representation of {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or at least one of its elements are {@code null}
+	 */
+	public static float[] toArray(final List<Point3F> points) {
+		final float[] array = new float[points.size() * 3];
+		
+		for(int i = 0, j = 0; i < points.size(); i++, j += 3) {
+			final Point3F point = points.get(i);
+			
+			array[j + 0] = point.component1;
+			array[j + 1] = point.component2;
+			array[j + 2] = point.component3;
+		}
+		
+		return array;
 	}
 	
 	/**

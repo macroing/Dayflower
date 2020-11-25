@@ -33,12 +33,15 @@ import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 
 /**
  * A {@code Vector3F} denotes a 3-dimensional vector with three components, of type {@code float}.
@@ -430,6 +433,32 @@ public final class Vector3F implements Node {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} with all {@code Vector3F} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all {@code Vector3F} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Vector3F> filterAll(final Node node) {
+		return NodeFilter.filter(node, NodeFilter.any(), Vector3F.class);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@code Vector3F} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all distinct {@code Vector3F} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Vector3F> filterAllDistinct(final Node node) {
+		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
 	
 	/**
 	 * Returns an optional {@code Vector3F} instance that represents the refraction of {@code direction} with regards to {@code normal}.
@@ -1273,6 +1302,29 @@ public final class Vector3F implements Node {
 	 */
 	public static float dotProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of {@code vectors}.
+	 * <p>
+	 * If either {@code vectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectors a {@code List} of {@code Vector3F} instances
+	 * @return a {@code float[]} representation of {@code vectors}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectors} or at least one of its elements are {@code null}
+	 */
+	public static float[] toArray(final List<Vector3F> vectors) {
+		final float[] array = new float[vectors.size() * 3];
+		
+		for(int i = 0, j = 0; i < vectors.size(); i++, j += 3) {
+			final Vector3F vector = vectors.get(i);
+			
+			array[j + 0] = vector.component1;
+			array[j + 1] = vector.component2;
+			array[j + 2] = vector.component3;
+		}
+		
+		return array;
 	}
 	
 	/**

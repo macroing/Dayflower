@@ -22,9 +22,12 @@ import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 
 /**
  * A {@code Point2F} denotes a 2-dimensional point with two coordinates, of type {@code float}.
@@ -186,6 +189,32 @@ public final class Point2F implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code List} with all {@code Point2F} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all {@code Point2F} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point2F> filterAll(final Node node) {
+		return NodeFilter.filter(node, NodeFilter.any(), Point2F.class);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@code Point2F} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all distinct {@code Point2F} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Point2F> filterAllDistinct(final Node node) {
+		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
+	
+	/**
 	 * Computes texture coordinates from three other texture coordinates via Barycentric interpolation.
 	 * <p>
 	 * Returns a new {@code Point2F} instance with the interpolated texture coordinates.
@@ -326,5 +355,27 @@ public final class Point2F implements Node {
 	 */
 	public static float distanceSquared(final Point2F eye, final Point2F lookAt) {
 		return Vector2F.direction(eye, lookAt).lengthSquared();
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of {@code points}.
+	 * <p>
+	 * If either {@code points} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param points a {@code List} of {@code Point2F} instances
+	 * @return a {@code float[]} representation of {@code points}
+	 * @throws NullPointerException thrown if, and only if, either {@code points} or at least one of its elements are {@code null}
+	 */
+	public static float[] toArray(final List<Point2F> points) {
+		final float[] array = new float[points.size() * 2];
+		
+		for(int i = 0, j = 0; i < points.size(); i++, j += 2) {
+			final Point2F point = points.get(i);
+			
+			array[j + 0] = point.component1;
+			array[j + 1] = point.component2;
+		}
+		
+		return array;
 	}
 }

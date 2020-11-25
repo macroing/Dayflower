@@ -33,12 +33,15 @@ import static org.dayflower.util.Doubles.saturate;
 import static org.dayflower.util.Doubles.sin;
 import static org.dayflower.util.Doubles.sqrt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 
 /**
  * A {@code Vector3D} denotes a 3-dimensional vector with three components, of type {@code double}.
@@ -430,6 +433,32 @@ public final class Vector3D implements Node {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} with all {@code Vector3D} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all {@code Vector3D} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Vector3D> filterAll(final Node node) {
+		return NodeFilter.filter(node, NodeFilter.any(), Vector3D.class);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@code Vector3D} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all distinct {@code Vector3D} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Vector3D> filterAllDistinct(final Node node) {
+		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
 	
 	/**
 	 * Returns an optional {@code Vector3D} instance that represents the refraction of {@code direction} with regards to {@code normal}.
@@ -1273,6 +1302,29 @@ public final class Vector3D implements Node {
 	 */
 	public static double dotProduct(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3;
+	}
+	
+	/**
+	 * Returns a {@code double[]} representation of {@code vectors}.
+	 * <p>
+	 * If either {@code vectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectors a {@code List} of {@code Vector3D} instances
+	 * @return a {@code double[]} representation of {@code vectors}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectors} or at least one of its elements are {@code null}
+	 */
+	public static double[] toArray(final List<Vector3D> vectors) {
+		final double[] array = new double[vectors.size() * 3];
+		
+		for(int i = 0, j = 0; i < vectors.size(); i++, j += 3) {
+			final Vector3D vector = vectors.get(i);
+			
+			array[j + 0] = vector.component1;
+			array[j + 1] = vector.component2;
+			array[j + 2] = vector.component3;
+		}
+		
+		return array;
 	}
 	
 	/**

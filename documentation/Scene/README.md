@@ -6,7 +6,30 @@ Supported Features
 ------------------
 Below follows a few lists of features available in the Scene API.
 
-#### Textures
+#### The Scene API
+* `AreaLight` - A `Light` that represents an area light.
+* `Camera` - A camera from which an image can be formed. It is associated with a `Scene` instance.
+* `Light` - A light source that emits light. It is associated with a `Scene` instance.
+* `Material` - A material assigned to a specific `Primitive` instance.
+* `Primitive` - A primitive (or object) that can be rendered. It is associated with a `Scene` instance.
+* `Scene` - Contains a `Camera`, a list of `Light` instances and a list of `Primitive` instances.
+* `SceneLoader` - Loads a `Scene` instance.
+* `Texture` - A texture assigned to a specific `Primitive` instance or a specific `Material` instance.
+
+#### The Scene Loader API
+* `JavaSceneLoader` - A `SceneLoader` that produces `Scene` instances by loading, compiling and executing snippets of Java source code.
+
+#### The Scene PBRT API
+* `GlassMaterial` - A `Material` that represents glass.
+* `HairMaterial` - A `Material` that represents hair.
+* `MatteMaterial` - A `Material` that is used for matte surfaces.
+* `MetalMaterial` - A `Material` that represents metal.
+* `MirrorMaterial` - A `Material` that represents a mirror.
+* `PlasticMaterial` - A `Material` that represents plastic.
+* `SubstrateMaterial` - A `Material` that represents a substrate material.
+* `UberMaterial` - A `Material` that can represent a wide variety of materials.
+
+#### The Scene Texture API
 * `BlendTexture` - Returns a `Color3F` by blending two `Texture` instances together.
 * `BullseyeTexture` - Returns a `Color3F` by alternating between two `Texture` instances in a bullseye pattern.
 * `CheckerboardTexture` - Returns a `Color3F` by alternating between two `Texture` instances in a checkerboard pattern.

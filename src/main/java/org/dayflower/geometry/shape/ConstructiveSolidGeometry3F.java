@@ -19,7 +19,6 @@
 package org.dayflower.geometry.shape;
 
 import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.minOrNaN;
 
@@ -122,7 +121,19 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 					final float tL = surfaceIntersectionL.getT();
 					final float tR = surfaceIntersectionR.getT();
 					
-					return this.shapeL.intersection(ray, max(tL, tR) + 0.001F, tMaximum);
+					if(tL < tR) {
+						return optionalSurfaceIntersectionL;
+					}
+					
+					float t0 = tR;
+					float t1 = tR;
+					
+					while(!isNaN(t0)) {
+						t1 = t0;
+						t0 = this.shapeR.intersectionT(ray, t0 + 0.001F, tMaximum);
+					}
+					
+					return this.shapeL.intersection(ray, t1 + 0.001F, tMaximum);
 				}
 				
 				return SurfaceIntersection3F.EMPTY;
@@ -325,7 +336,19 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 				}
 				
 				if(!isNaN(tL) && !isNaN(tR)) {
-					return this.shapeL.intersectionT(ray, max(tL, tR) + 0.001F, tMaximum);
+					if(tL < tR) {
+						return tL;
+					}
+					
+					float t0 = tR;
+					float t1 = tR;
+					
+					while(!isNaN(t0)) {
+						t1 = t0;
+						t0 = this.shapeR.intersectionT(ray, t0 + 0.001F, tMaximum);
+					}
+					
+					return this.shapeL.intersectionT(ray, t1 + 0.001F, tMaximum);
 				}
 				
 				return Float.NaN;

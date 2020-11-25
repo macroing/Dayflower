@@ -143,9 +143,7 @@ public final class ConstantTexture implements Texture {
 	 */
 	@Override
 	public Color3F getColorXYZ(final Intersection intersection) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		
-		return this.color;
+		return Color3F.convertRGBToXYZUsingPBRT(getColorRGB(intersection));
 	}
 	
 	/**

@@ -391,18 +391,18 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	}
 	
 	/**
-	 * Returns an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code axisAlignedBoundingBoxRHS}.
+	 * Returns an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code boundingVolumeLHS} and {@code boundingVolumeRHS}.
 	 * <p>
-	 * If either {@code axisAlignedBoundingBoxLHS} or {@code axisAlignedBoundingBoxRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code boundingVolumeLHS} or {@code boundingVolumeRHS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param axisAlignedBoundingBoxLHS an {@code AxisAlignedBoundingBox3F} instance
-	 * @param axisAlignedBoundingBoxRHS an {@code AxisAlignedBoundingBox3F} instance
-	 * @return an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code axisAlignedBoundingBoxLHS} and {@code axisAlignedBoundingBoxRHS}
-	 * @throws NullPointerException thrown if, and only if, either {@code axisAlignedBoundingBoxLHS} or {@code axisAlignedBoundingBoxRHS} are {@code null}
+	 * @param boundingVolumeLHS a {@link BoundingVolume3F} instance
+	 * @param boundingVolumeRHS a {@code BoundingVolume3F} instance
+	 * @return an {@code AxisAlignedBoundingBox3F} instance that is the union of {@code boundingVolumeLHS} and {@code boundingVolumeRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code boundingVolumeLHS} or {@code boundingVolumeRHS} are {@code null}
 	 */
-	public static AxisAlignedBoundingBox3F union(final AxisAlignedBoundingBox3F axisAlignedBoundingBoxLHS, final AxisAlignedBoundingBox3F axisAlignedBoundingBoxRHS) {
-		final Point3F maximum = Point3F.maximum(axisAlignedBoundingBoxLHS.maximum, axisAlignedBoundingBoxRHS.maximum);
-		final Point3F minimum = Point3F.minimum(axisAlignedBoundingBoxLHS.minimum, axisAlignedBoundingBoxRHS.minimum);
+	public static AxisAlignedBoundingBox3F union(final BoundingVolume3F boundingVolumeLHS, final BoundingVolume3F boundingVolumeRHS) {
+		final Point3F maximum = Point3F.maximum(boundingVolumeLHS.getMaximum(), boundingVolumeRHS.getMaximum());
+		final Point3F minimum = Point3F.minimum(boundingVolumeLHS.getMinimum(), boundingVolumeRHS.getMinimum());
 		
 		return new AxisAlignedBoundingBox3F(maximum, minimum);
 	}

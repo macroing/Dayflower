@@ -299,6 +299,7 @@ public final class JavaSceneLoader implements SceneLoader {
 		doAppendLinef(stringBuilder, "import org.dayflower.geometry.boundingvolume.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.geometry.rasterizer.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.geometry.shape.*;");
+		doAppendLinef(stringBuilder, "import org.dayflower.geometry.shape.ConstructiveSolidGeometry3F.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.geometry.shape.Curve3F.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.geometry.shape.Triangle3F.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.image.*;");

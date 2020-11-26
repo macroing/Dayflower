@@ -37,8 +37,8 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestCPURendererAmbientOcclusion();
-		doTestCPURendererPathTracingPBRT();
-//		doTestCPURendererPathTracingRayito();
+//		doTestCPURendererPathTracingPBRT();
+		doTestCPURendererPathTracingRayito();
 //		doTestCPURendererPathTracingSmallPTIterative();
 //		doTestCPURendererPathTracingSmallPTRecursive();
 //		doTestCPURendererRayCasting();
@@ -60,7 +60,7 @@ public final class RendererTest {
 	
 	static void doTestCPURendererPathTracingRayito() {
 		final
-		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_RAYITO, "./resources/scenes/RayitoDefault.java");
+		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_RAYITO, "./resources/scenes/RayitoShowcaseShape3FConstructiveSolidGeometry3F.java");
 		renderer.render();
 	}
 	

@@ -150,6 +150,10 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 					return this.shapeR.intersection(ray, tMinimum, tMaximum);
 				}
 				
+				if(tR1 <= tL0) {
+					return this.shapeL.intersection(ray, tMinimum, tMaximum);
+				}
+				
 //				The secondary intersection for R is farther away than or equal to the secondary intersection for L:
 				if(tR1 >= tL1) {
 					return SurfaceIntersection3F.EMPTY;
@@ -395,6 +399,10 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 				
 				if(isNaN(tR1)) {
 					return tR0;
+				}
+				
+				if(tR1 <= tL0) {
+					return tL0;
 				}
 				
 				if(tR1 >= tL1) {

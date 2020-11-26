@@ -105,45 +105,75 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionL = this.shapeL.intersection(ray, tMinimum, tMaximum);
-		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionR = this.shapeR.intersection(ray, tMinimum, tMaximum);
-		
 		switch(this.operation) {
-			case DIFFERENCE:
-				if(optionalSurfaceIntersectionL.isPresent() && !optionalSurfaceIntersectionR.isPresent()) {
-					return optionalSurfaceIntersectionL;
+			case DIFFERENCE: {
+				if(this.shapeL.getBoundingVolume().contains(ray.getOrigin())) {
+//					TODO: If the BoundingVolume3F contains the Ray3F, that should probably be handled in a different way.
+					return SurfaceIntersection3F.EMPTY;
 				}
 				
-				if(optionalSurfaceIntersectionL.isPresent() && optionalSurfaceIntersectionR.isPresent()) {
-					final SurfaceIntersection3F surfaceIntersectionL = optionalSurfaceIntersectionL.get();
-					final SurfaceIntersection3F surfaceIntersectionR = optionalSurfaceIntersectionR.get();
-					
-					final float tL = surfaceIntersectionL.getT();
-					final float tR = surfaceIntersectionR.getT();
-					
-					if(tL < tR) {
-						return optionalSurfaceIntersectionL;
-					}
-					
-					float tCurrentR = tR + 0.001F;
-					float tMinimumR = tR + 0.001F;
-					
-					while(!isNaN(tCurrentR)) {
-						tMinimumR = tCurrentR;
-						tCurrentR = this.shapeR.intersectionT(ray, tCurrentR + 0.001F, tMaximum);
-					}
-					
-//					return this.shapeL.intersection(ray, tMinimumR + 0.001F, tMaximum);
-					return this.shapeR.intersection(ray, tMinimumR - 0.001F, tMaximum);
+				if(this.shapeR.getBoundingVolume().contains(ray.getOrigin())) {
+//					TODO: If the BoundingVolume3F contains the Ray3F, that should probably be handled in a different way.
+					return SurfaceIntersection3F.EMPTY;
 				}
 				
+				final float[] tIntervalL = doFindTInterval(ray, tMinimum, tMaximum, this.shapeL);
+				final float[] tIntervalR = doFindTInterval(ray, tMinimum, tMaximum, this.shapeR);
+				
+				final float tL0 = tIntervalL[0];
+				final float tL1 = tIntervalL[1];
+				final float tR0 = tIntervalR[0];
+				final float tR1 = tIntervalR[1];
+				
+//				No intersection with L and nothing to subtract from:
+				if(isNaN(tL0)) {
+					return SurfaceIntersection3F.EMPTY;
+				}
+				
+//				No intersection with R and nothing to subtract:
+				if(isNaN(tR0)) {
+					return this.shapeL.intersection(ray, tMinimum, tMaximum);
+				}
+				
+//				The closest intersection for L is closer than or equal to the closest intersection for R:
+				if(tL0 <= tR0) {
+					return this.shapeL.intersection(ray, tMinimum, tMaximum);
+				}
+				
+//				No secondary intersection for L and nothing to subtract from:
+				if(isNaN(tL1)) {
+					return SurfaceIntersection3F.EMPTY;
+				}
+				
+//				No secondary intersection for R:
+				if(isNaN(tR1)) {
+					return this.shapeR.intersection(ray, tMinimum, tMaximum);
+				}
+				
+//				The secondary intersection for R is farther away than or equal to the secondary intersection for L:
+				if(tR1 >= tL1) {
+					return SurfaceIntersection3F.EMPTY;
+				}
+				
+				return this.shapeR.intersection(ray, tR0 + 0.001F, tMaximum);
+			}
+			case INTERSECTION: {
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionL = this.shapeL.intersection(ray, tMinimum, tMaximum);
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionR = this.shapeR.intersection(ray, tMinimum, tMaximum);
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = optionalSurfaceIntersectionL.isPresent() && optionalSurfaceIntersectionR.isPresent() ? SurfaceIntersection3F.closest(optionalSurfaceIntersectionL, optionalSurfaceIntersectionR) : SurfaceIntersection3F.EMPTY;
+				
+				return optionalSurfaceIntersection;
+			}
+			case UNION: {
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionL = this.shapeL.intersection(ray, tMinimum, tMaximum);
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionR = this.shapeR.intersection(ray, tMinimum, tMaximum);
+				final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = SurfaceIntersection3F.closest(optionalSurfaceIntersectionL, optionalSurfaceIntersectionR);
+				
+				return optionalSurfaceIntersection;
+			}
+			default: {
 				return SurfaceIntersection3F.EMPTY;
-			case INTERSECTION:
-				return optionalSurfaceIntersectionL.isPresent() && optionalSurfaceIntersectionR.isPresent() ? SurfaceIntersection3F.closest(optionalSurfaceIntersectionL, optionalSurfaceIntersectionR) : SurfaceIntersection3F.EMPTY;
-			case UNION:
-				return SurfaceIntersection3F.closest(optionalSurfaceIntersectionL, optionalSurfaceIntersectionR);
-			default:
-				return SurfaceIntersection3F.EMPTY;
+			}
 		}
 	}
 	
@@ -327,39 +357,69 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final float tL = this.shapeL.intersectionT(ray, tMinimum, tMaximum);
-		final float tR = this.shapeR.intersectionT(ray, tMinimum, tMaximum);
-		
 		switch(this.operation) {
-			case DIFFERENCE:
-				if(!isNaN(tL) && isNaN(tR)) {
-					return tL;
+			case DIFFERENCE: {
+				if(this.shapeL.getBoundingVolume().contains(ray.getOrigin())) {
+//					TODO: If the BoundingVolume3F contains the Ray3F, that should probably be handled in a different way.
+					return Float.NaN;
 				}
 				
-				if(!isNaN(tL) && !isNaN(tR)) {
-					if(tL < tR) {
-						return tL;
-					}
-					
-					float tCurrentR = tR + 0.001F;
-					float tMinimumR = tR + 0.001F;
-					
-					while(!isNaN(tCurrentR)) {
-						tMinimumR = tCurrentR;
-						tCurrentR = this.shapeR.intersectionT(ray, tCurrentR + 0.001F, tMaximum);
-					}
-					
-//					return this.shapeL.intersectionT(ray, tMinimumR + 0.001F, tMaximum);
-					return this.shapeR.intersectionT(ray, tMinimumR - 0.001F, tMaximum);
+				if(this.shapeR.getBoundingVolume().contains(ray.getOrigin())) {
+//					TODO: If the BoundingVolume3F contains the Ray3F, that should probably be handled in a different way.
+					return Float.NaN;
 				}
 				
+				final float[] tIntervalL = doFindTInterval(ray, tMinimum, tMaximum, this.shapeL);
+				final float[] tIntervalR = doFindTInterval(ray, tMinimum, tMaximum, this.shapeR);
+				
+				final float tL0 = tIntervalL[0];
+				final float tL1 = tIntervalL[1];
+				final float tR0 = tIntervalR[0];
+				final float tR1 = tIntervalR[1];
+				
+				if(isNaN(tL0)) {
+					return Float.NaN;
+				}
+				
+				if(isNaN(tR0)) {
+					return tL0;
+				}
+				
+				if(tL0 <= tR0) {
+					return tL0;
+				}
+				
+				if(isNaN(tL1)) {
+					return Float.NaN;
+				}
+				
+				if(isNaN(tR1)) {
+					return tR0;
+				}
+				
+				if(tR1 >= tL1) {
+					return Float.NaN;
+				}
+				
+				return tR1;
+			}
+			case INTERSECTION: {
+				final float tL = this.shapeL.intersectionT(ray, tMinimum, tMaximum);
+				final float tR = this.shapeR.intersectionT(ray, tMinimum, tMaximum);
+				final float t = !isNaN(tL) && !isNaN(tR) ? min(tL, tR) : Float.NaN;
+				
+				return t;
+			}
+			case UNION: {
+				final float tL = this.shapeL.intersectionT(ray, tMinimum, tMaximum);
+				final float tR = this.shapeR.intersectionT(ray, tMinimum, tMaximum);
+				final float t = minOrNaN(tL, tR);
+				
+				return t;
+			}
+			default: {
 				return Float.NaN;
-			case INTERSECTION:
-				return !isNaN(tL) && !isNaN(tR) ? min(tL, tR) : Float.NaN;
-			case UNION:
-				return minOrNaN(tL, tR);
-			default:
-				return Float.NaN;
+			}
 		}
 	}
 	
@@ -424,5 +484,30 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 					return "";
 			}
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static float[] doFindTInterval(final Ray3F ray, final float tMinimum, final float tMaximum, final Shape3F shape) {
+		final float[] tInterval = new float[] {Float.NaN, Float.NaN};
+		
+		float currentTMinimum = tMinimum;
+		float currentTMaximum = tMaximum;
+		
+		for(int i = 0; i < tInterval.length; i++) {
+			if(isNaN(tInterval[i])) {
+				final float t = shape.intersectionT(ray, currentTMinimum, currentTMaximum);
+				
+				if(isNaN(t)) {
+					return tInterval;
+				}
+				
+				tInterval[i] = t;
+				
+				currentTMinimum = t + 0.001F;
+			}
+		}
+		
+		return tInterval;
 	}
 }

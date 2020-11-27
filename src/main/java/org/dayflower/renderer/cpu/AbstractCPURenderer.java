@@ -177,10 +177,10 @@ public abstract class AbstractCPURenderer implements Renderer {
 			
 			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
-			rendererObserver.onRenderPassComplete(this, renderPass, renderPasses, elapsedTimeMillis);
-			
 			rendererConfiguration.setRenderPass(rendererConfiguration.getRenderPass() + 1);
 			rendererConfiguration.setRenderTime(elapsedTimeMillis);
+			
+			rendererObserver.onRenderPassComplete(this, renderPass, renderPasses, elapsedTimeMillis);
 		}
 		
 		this.isRendering.set(false);

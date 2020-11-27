@@ -28,8 +28,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
 
+import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -38,6 +41,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 final class RendererViewPane extends BorderPane {
 	private static final PixelFormat<ByteBuffer> PIXEL_FORMAT = PixelFormat.getByteBgraPreInstance();
@@ -52,6 +58,11 @@ final class RendererViewPane extends BorderPane {
 	private final ByteBuffer byteBuffer;
 	private final Canvas canvas;
 	private final ExecutorService executorService;
+	private final HBox hBox;
+	private final Label labelRenderPass;
+	private final Label labelRenderTime;
+	private final Label labelRenderTimePerPass;
+	private final ProgressBar progressBar;
 	private final Renderer renderer;
 	private final WritableImage writableImage;
 	private final boolean[] isKeyPressed;
@@ -70,6 +81,11 @@ final class RendererViewPane extends BorderPane {
 		this.byteBuffer = ByteBuffer.allocate((int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionX()) * (int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionY()) * 4);
 		this.canvas = new Canvas();
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
+		this.hBox = new HBox();
+		this.labelRenderPass = new Label();
+		this.labelRenderTime = new Label();
+		this.labelRenderTimePerPass = new Label();
+		this.progressBar = new ProgressBar();
 		this.renderer = renderer;
 		this.writableImage = new WritableImage((int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionX()), (int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionY()));
 		this.isKeyPressed = new boolean[KeyCode.values().length];
@@ -163,7 +179,32 @@ final class RendererViewPane extends BorderPane {
 		this.canvas.setOnMouseReleased(this::doOnMouseReleased);
 		this.canvas.setWidth(doGetResolutionX());
 		
+//		Configure the HBox:
+		this.hBox.getChildren().add(this.labelRenderPass);
+		this.hBox.getChildren().add(this.labelRenderTime);
+		this.hBox.getChildren().add(this.labelRenderTimePerPass);
+		this.hBox.getChildren().add(doCreateHBoxRegion());
+		this.hBox.getChildren().add(this.progressBar);
+		this.hBox.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
+		this.hBox.setSpacing(20.0D);
+		
+//		Configure the Label for Render Pass:
+		this.labelRenderPass.setText("Render Pass: 0");
+		
+//		Configure the Label for Render Time:
+		this.labelRenderTime.setText("Render Time: 00:00:00");
+		
+//		Configure the Label for Render Time Per Pass:
+		this.labelRenderTimePerPass.setText("Render Time Per Pass: 0");
+		
+//		Configure the ProgressBar:
+		this.progressBar.setProgress(0.0D);
+		
+//		Configure the Renderer:
+		this.renderer.setRendererObserver(new RendererObserverImpl(this.labelRenderPass, this.labelRenderTime, this.labelRenderTimePerPass, this.progressBar));
+		
 //		Configure the RendererViewPane:
+		setBottom(this.hBox);
 		setCenter(this.canvas);
 	}
 	
@@ -217,5 +258,15 @@ final class RendererViewPane extends BorderPane {
 	
 	private void doSetRendererTask(final RendererTask rendererTask) {
 		this.rendererTask.set(rendererTask);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Region doCreateHBoxRegion() {
+		final Region region = new Region();
+		
+		HBox.setHgrow(region, Priority.ALWAYS);
+		
+		return region;
 	}
 }

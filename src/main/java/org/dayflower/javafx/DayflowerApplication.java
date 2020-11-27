@@ -16,15 +16,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.renderer;
+package org.dayflower.javafx;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.image.Image;
-import org.dayflower.javafx.HierarchicalMenuBar;
-import org.dayflower.javafx.SelectionTabPane;
+import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
 import org.dayflower.sampler.RandomSampler;
@@ -33,13 +36,12 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
 import org.dayflower.scene.loader.JavaSceneLoader;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -47,35 +49,56 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public final class DayflowerApplication2 extends Application {
+//TODO: Add Javadocs!
+public final class DayflowerApplication extends Application {
+	private static final File INITIAL_DIRECTORY = new File("./resources/scenes");
+	private static final String PATH_ELEMENT_FILE = "File";
+	private static final String PATH_FILE = "File";
+	private static final String TEXT_EXIT = "Exit";
+	private static final String TEXT_FILE = "File";
+	private static final String TEXT_OPEN = "Open";
+	private static final String TEXT_SAVE = "Save";
+	private static final String TEXT_SAVE_AS = "Save As...";
+	private static final String TITLE = "Dayflower";
+	private static final String TITLE_OPEN = "Open";
+	private static final double MINIMUM_RESOLUTION_X = 400.0D;
+	private static final double MINIMUM_RESOLUTION_Y = 400.0D;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AtomicReference<Stage> stage;
 	private final BorderPane borderPane;
+	private final ExecutorService executorService;
 	private final HierarchicalMenuBar hierarchicalMenuBar;
 	private final SelectionTabPane<RendererMainPane, Renderer> selectionTabPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public DayflowerApplication2() {
+//	TODO: Add Javadocs!
+	public DayflowerApplication() {
 		this.stage = new AtomicReference<>();
 		this.borderPane = new BorderPane();
+		this.executorService = Executors.newFixedThreadPool(1);
 		this.hierarchicalMenuBar = new HierarchicalMenuBar();
-		this.selectionTabPane = new SelectionTabPane<>(RendererMainPane.class, (a, b) -> a.equals(b), rendererPane -> rendererPane.getRenderer(), renderer -> new RendererMainPane(renderer), renderer -> renderer.getRendererConfiguration().getScene().getName());
+		this.selectionTabPane = new SelectionTabPane<>(RendererMainPane.class, (a, b) -> a.equals(b), rendererPane -> rendererPane.getRenderer(), renderer -> new RendererMainPane(renderer, this.executorService), renderer -> renderer.getRendererConfiguration().getScene().getName());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public void start(final Stage stage) {
 		doSetStage(stage);
 		doConfigureBorderPane();
 		doConfigureHierarchicalMenuBar();
 		doConfigureSelectionTabPane();
-//		doAddRenderer();
 		doConfigureAndShowStage();
+		doCreateAndStartAnimationTimer();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public static void main(final String[] args) {
 		launch(args);
 	}
@@ -84,10 +107,6 @@ public final class DayflowerApplication2 extends Application {
 	
 	private Stage doGetStage() {
 		return this.stage.get();
-	}
-	
-	private void doAddRenderer() {
-		doAddRenderer(new File("./resources/scenes/PBRTDefault.java"));
 	}
 	
 	private void doAddRenderer(final File file) {
@@ -103,25 +122,25 @@ public final class DayflowerApplication2 extends Application {
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
 		rendererConfiguration.setImage(new Image(resolutionX, resolutionY));
+		rendererConfiguration.setRenderPasses(1);
+		rendererConfiguration.setRenderPassesPerDisplayUpdate(1);
+		rendererConfiguration.setSamples(1);
 		rendererConfiguration.setSampler(new RandomSampler());
 		rendererConfiguration.setScene(scene);
 		
 		final Renderer renderer = new CPURenderer(rendererConfiguration, new NoOpRendererObserver());
 		
 		this.selectionTabPane.add(renderer);
-		
-//		final
-//		Stage stage = doGetStage();
-//		stage.sizeToScene();
 	}
 	
 	private void doConfigureAndShowStage() {
 		final
 		Stage stage = doGetStage();
+		stage.setMinHeight(MINIMUM_RESOLUTION_Y);
+		stage.setMinWidth(MINIMUM_RESOLUTION_X);
 		stage.setResizable(false);
-		stage.setScene(new javafx.scene.Scene(this.borderPane, 800.0D, 800.0D));
-		stage.setTitle("Dayflower");
-//		stage.sizeToScene();
+		stage.setScene(new javafx.scene.Scene(this.borderPane));
+		stage.setTitle(TITLE);
 		stage.show();
 	}
 	
@@ -131,17 +150,23 @@ public final class DayflowerApplication2 extends Application {
 	}
 	
 	private void doConfigureHierarchicalMenuBar() {
-		this.hierarchicalMenuBar.setPathElementText("File", "File");
-		this.hierarchicalMenuBar.addMenuItem("File", "Open", this::doHandleEventFileOpen, new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), true);
-		this.hierarchicalMenuBar.addSeparatorMenuItem("File");
-		this.hierarchicalMenuBar.addMenuItem("File", "Save", this::doHandleEventFileSave, null, false);
-		this.hierarchicalMenuBar.addMenuItem("File", "Save As...", this::doHandleEventFileSaveAs, null, false);
-		this.hierarchicalMenuBar.addSeparatorMenuItem("File");
-		this.hierarchicalMenuBar.addMenuItem("File", "Exit", this::doHandleEventFileExit, null, true);
+		this.hierarchicalMenuBar.setPathElementText(PATH_ELEMENT_FILE, TEXT_FILE);
+		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_OPEN, this::doHandleEventFileOpen, new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), true);
+		this.hierarchicalMenuBar.addSeparatorMenuItem(PATH_FILE);
+		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE, this::doHandleEventFileSave, new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), false);
+		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_AS, this::doHandleEventFileSaveAs, null, false);
+		this.hierarchicalMenuBar.addSeparatorMenuItem(PATH_FILE);
+		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, this::doHandleEventFileExit, null, true);
 	}
 	
 	private void doConfigureSelectionTabPane() {
 		this.selectionTabPane.getSelectionModel().selectedItemProperty().addListener(this::doHandleTabChangeSelectionTabPane);
+	}
+	
+	private void doCreateAndStartAnimationTimer() {
+		final
+		AnimationTimer animationTimer = new RendererAnimationTimer(this.selectionTabPane);
+		animationTimer.start();
 	}
 	
 	@SuppressWarnings("unused")
@@ -153,8 +178,8 @@ public final class DayflowerApplication2 extends Application {
 	private void doHandleEventFileOpen(final ActionEvent actionEvent) {
 		final
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(new File("./resources/scenes"));
-		fileChooser.setTitle("Open");
+		fileChooser.setInitialDirectory(INITIAL_DIRECTORY);
+		fileChooser.setTitle(TITLE_OPEN);
 		
 		final File file = fileChooser.showOpenDialog(doGetStage());
 		
@@ -176,81 +201,21 @@ public final class DayflowerApplication2 extends Application {
 	@SuppressWarnings("unused")
 	private void doHandleTabChangeSelectionTabPane(final ObservableValue<? extends Tab> observableValue, final Tab oldTab, final Tab newTab) {
 		if(newTab != null) {
-			this.hierarchicalMenuBar.getMenuItem("File", "Save").setDisable(false);
-			this.hierarchicalMenuBar.getMenuItem("File", "Save As...").setDisable(false);
+			this.hierarchicalMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE).setDisable(false);
+			this.hierarchicalMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_AS).setDisable(false);
 		} else {
-			this.hierarchicalMenuBar.getMenuItem("File", "Save").setDisable(true);
-			this.hierarchicalMenuBar.getMenuItem("File", "Save As...").setDisable(true);
+			this.hierarchicalMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE).setDisable(true);
+			this.hierarchicalMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_AS).setDisable(true);
 		}
+		
+		Platform.runLater(() -> {
+			final
+			Stage stage = doGetStage();
+			stage.sizeToScene();
+		});
 	}
 	
 	private void doSetStage(final Stage stage) {
 		this.stage.set(Objects.requireNonNull(stage, "stage == null"));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class RendererInfoPane extends BorderPane {
-		private final Renderer renderer;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public RendererInfoPane(final Renderer renderer) {
-			this.renderer = Objects.requireNonNull(renderer, "renderer == null");
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class RendererMainPane extends BorderPane {
-		private final Renderer renderer;
-		private final RendererInfoPane rendererInfoPane;
-		private final RendererViewPane rendererViewPane;
-		private final TabPane tabPane;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public RendererMainPane(final Renderer renderer) {
-			this.renderer = Objects.requireNonNull(renderer, "renderer == null");
-			this.rendererInfoPane = new RendererInfoPane(renderer);
-			this.rendererViewPane = new RendererViewPane(renderer);
-			this.tabPane = new TabPane();
-			this.tabPane.getTabs().add(new Tab("Info", this.rendererInfoPane));
-			this.tabPane.getTabs().add(new Tab("View", this.rendererViewPane));
-			this.tabPane.getSelectionModel().select(0);
-			this.tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-			
-			setCenter(this.tabPane);
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Renderer getRenderer() {
-			return this.renderer;
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class RendererViewPane extends BorderPane {
-		private final Canvas canvas;
-		private final Renderer renderer;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public RendererViewPane(final Renderer renderer) {
-			this.renderer = Objects.requireNonNull(renderer, "renderer == null");
-			this.canvas = new Canvas(800.0D, 800.0D);
-			
-			setCenter(this.canvas);
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		
 	}
 }

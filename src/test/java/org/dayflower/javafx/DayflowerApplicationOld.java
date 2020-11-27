@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.renderer;
+package org.dayflower.javafx;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -49,7 +49,7 @@ import org.dayflower.util.Timer;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DayflowerApplication extends AbstractCanvasApplication {
+public final class DayflowerApplicationOld extends AbstractCanvasApplication {
 	private static final int RESOLUTION_X = 800;
 	private static final int RESOLUTION_Y = 800;
 	
@@ -68,7 +68,7 @@ public final class DayflowerApplication extends AbstractCanvasApplication {
 	/**
 	 * Constructs a new {@code DayflowerApplication} instance.
 	 */
-	public DayflowerApplication() {
+	public DayflowerApplicationOld() {
 		super("Dayflower", RESOLUTION_X, RESOLUTION_Y);
 		
 		this.isRendering = new AtomicBoolean(true);

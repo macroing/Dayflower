@@ -21,6 +21,7 @@ package org.dayflower.javafx;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
@@ -51,7 +52,8 @@ import javafx.stage.Stage;
 
 //TODO: Add Javadocs!
 public final class DayflowerApplication extends Application {
-	private static final File INITIAL_DIRECTORY = new File("./resources/scenes");
+	private static final File INITIAL_DIRECTORY_IMAGES = new File(".");
+	private static final File INITIAL_DIRECTORY_SCENES = new File("./resources/scenes");
 	private static final String PATH_ELEMENT_FILE = "File";
 	private static final String PATH_FILE = "File";
 	private static final String TEXT_EXIT = "Exit";
@@ -61,6 +63,7 @@ public final class DayflowerApplication extends Application {
 	private static final String TEXT_SAVE_AS = "Save As...";
 	private static final String TITLE = "Dayflower";
 	private static final String TITLE_OPEN = "Open";
+	private static final String TITLE_SAVE_AS = "Save As...";
 	private static final double MINIMUM_RESOLUTION_X = 400.0D;
 	private static final double MINIMUM_RESOLUTION_Y = 400.0D;
 	
@@ -180,7 +183,7 @@ public final class DayflowerApplication extends Application {
 	private void doHandleEventFileOpen(final ActionEvent actionEvent) {
 		final
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(INITIAL_DIRECTORY);
+		fileChooser.setInitialDirectory(INITIAL_DIRECTORY_SCENES);
 		fileChooser.setTitle(TITLE_OPEN);
 		
 		final File file = fileChooser.showOpenDialog(doGetStage());
@@ -192,12 +195,54 @@ public final class DayflowerApplication extends Application {
 	
 	@SuppressWarnings("unused")
 	private void doHandleEventFileSave(final ActionEvent actionEvent) {
-//		TODO: Implement!
+		final Optional<RendererMainPane> optionalRendererMainPane = this.selectionTabPane.getSelectedNode();
+		
+		if(optionalRendererMainPane.isPresent()) {
+			final RendererMainPane rendererMainPane = optionalRendererMainPane.get();
+			
+			final RendererViewPane rendererViewPane = rendererMainPane.getRendererViewPane();
+			
+			final Optional<File> optionalFile = rendererViewPane.getFile();
+			
+			if(optionalFile.isPresent()) {
+				rendererViewPane.save();
+			} else {
+				final
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setInitialDirectory(INITIAL_DIRECTORY_IMAGES);
+				fileChooser.setTitle(TITLE_SAVE_AS);
+				
+				final File file = fileChooser.showSaveDialog(doGetStage());
+				
+				if(file != null) {
+					rendererViewPane.setFile(file);
+					rendererViewPane.save();
+				}
+			}
+		}
 	}
 	
 	@SuppressWarnings("unused")
 	private void doHandleEventFileSaveAs(final ActionEvent actionEvent) {
-//		TODO: Implement!
+		final Optional<RendererMainPane> optionalRendererMainPane = this.selectionTabPane.getSelectedNode();
+		
+		if(optionalRendererMainPane.isPresent()) {
+			final RendererMainPane rendererMainPane = optionalRendererMainPane.get();
+			
+			final RendererViewPane rendererViewPane = rendererMainPane.getRendererViewPane();
+			
+			final
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setInitialDirectory(INITIAL_DIRECTORY_IMAGES);
+			fileChooser.setTitle(TITLE_SAVE_AS);
+			
+			final File file = fileChooser.showSaveDialog(doGetStage());
+			
+			if(file != null) {
+				rendererViewPane.setFile(file);
+				rendererViewPane.save();
+			}
+		}
 	}
 	
 	@SuppressWarnings("unused")

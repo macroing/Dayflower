@@ -18,8 +18,10 @@
  */
 package org.dayflower.javafx;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -54,6 +56,7 @@ final class RendererViewPane extends BorderPane {
 	private final AtomicInteger mouseButtonsPressed;
 	private final AtomicLong mouseX;
 	private final AtomicLong mouseY;
+	private final AtomicReference<File> file;
 	private final AtomicReference<RendererTask> rendererTask;
 	private final ByteBuffer byteBuffer;
 	private final Canvas canvas;
@@ -77,6 +80,7 @@ final class RendererViewPane extends BorderPane {
 		this.mouseButtonsPressed = new AtomicInteger();
 		this.mouseX = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
+		this.file = new AtomicReference<>();
 		this.rendererTask = new AtomicReference<>();
 		this.byteBuffer = ByteBuffer.allocate((int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionX()) * (int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionY()) * 4);
 		this.canvas = new Canvas();
@@ -97,6 +101,10 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public Optional<File> getFile() {
+		return Optional.ofNullable(this.file.get());
+	}
 	
 	public Renderer getRenderer() {
 		return this.renderer;
@@ -129,6 +137,16 @@ final class RendererViewPane extends BorderPane {
 			doSetRendererTask(newRendererTask);
 			doExecuteExecutorService(newRendererTask);
 		}
+	}
+	
+	public void save() {
+		getFile().ifPresent(file -> {
+			doGetImage().save(file);
+		});
+	}
+	
+	public void setFile(final File file) {
+		this.file.set(Objects.requireNonNull(file, "file == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,7 +275,7 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	private void doSetRendererTask(final RendererTask rendererTask) {
-		this.rendererTask.set(rendererTask);
+		this.rendererTask.set(Objects.requireNonNull(rendererTask, "rendererTask == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

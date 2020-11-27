@@ -31,11 +31,19 @@ final class RendererInfoPane extends BorderPane {
 	
 	public RendererInfoPane(final Renderer renderer) {
 		this.renderer = Objects.requireNonNull(renderer, "renderer == null");
+		
+		doConfigure();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public Renderer getRenderer() {
 		return this.renderer;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doConfigure() {
+		
 	}
 }

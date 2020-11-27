@@ -110,27 +110,29 @@ public final class DayflowerApplication extends Application {
 	}
 	
 	private void doAddRenderer(final File file) {
-		final SceneLoader sceneLoader = new JavaSceneLoader();
-		
-		final Scene scene = sceneLoader.load(file);
-		
-		final Camera camera = scene.getCamera();
-		
-		final int resolutionX = (int)(camera.getResolutionX());
-		final int resolutionY = (int)(camera.getResolutionY());
-		
-		final
-		RendererConfiguration rendererConfiguration = new RendererConfiguration();
-		rendererConfiguration.setImage(new Image(resolutionX, resolutionY));
-		rendererConfiguration.setRenderPasses(1);
-		rendererConfiguration.setRenderPassesPerDisplayUpdate(1);
-		rendererConfiguration.setSamples(1);
-		rendererConfiguration.setSampler(new RandomSampler());
-		rendererConfiguration.setScene(scene);
-		
-		final Renderer renderer = new CPURenderer(rendererConfiguration, new NoOpRendererObserver());
-		
-		this.selectionTabPane.add(renderer);
+		this.executorService.execute(() -> {
+			final SceneLoader sceneLoader = new JavaSceneLoader();
+			
+			final Scene scene = sceneLoader.load(file);
+			
+			final Camera camera = scene.getCamera();
+			
+			final int resolutionX = (int)(camera.getResolutionX());
+			final int resolutionY = (int)(camera.getResolutionY());
+			
+			final
+			RendererConfiguration rendererConfiguration = new RendererConfiguration();
+			rendererConfiguration.setImage(new Image(resolutionX, resolutionY));
+			rendererConfiguration.setRenderPasses(1);
+			rendererConfiguration.setRenderPassesPerDisplayUpdate(1);
+			rendererConfiguration.setSamples(1);
+			rendererConfiguration.setSampler(new RandomSampler());
+			rendererConfiguration.setScene(scene);
+			
+			final Renderer renderer = new CPURenderer(rendererConfiguration, new NoOpRendererObserver());
+			
+			Platform.runLater(() -> this.selectionTabPane.add(renderer));
+		});
 	}
 	
 	private void doConfigureAndShowStage() {

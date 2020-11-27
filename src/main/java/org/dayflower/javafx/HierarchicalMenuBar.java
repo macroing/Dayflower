@@ -140,6 +140,8 @@ public final class HierarchicalMenuBar extends MenuBar {
 	 * @throws NullPointerException thrown if, and only if, {@code path} is {@code null}
 	 */
 	public Menu getMenu(final String path) {
+		Objects.requireNonNull(path, "path == null");
+		
 		final String[] pathElements = path.split(this.pathDelimiter);
 		
 		final String pathElement = this.pathElementTexts.getOrDefault(pathElements[0], pathElements[0]);
@@ -155,6 +157,34 @@ public final class HierarchicalMenuBar extends MenuBar {
 		getMenus().add(menu);
 		
 		return pathElements.length == 1 ? menu : doGetMenu(path, pathElements, 1, menu);
+	}
+	
+	/**
+	 * Returns a {@code MenuItem} given its path {@code path} and text {@code text}.
+	 * <p>
+	 * If either {@code path} or {@code text} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If no matching {@code MenuItem} exists, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param path the path for the {@code Menu}
+	 * @param text the text for the {@code MenuItem}
+	 * @return a {@code MenuItem} given its path {@code path} and text {@code text}
+	 * @throws IllegalArgumentException thrown if, and only if, no matching {@code MenuItem} exists
+	 * @throws NullPointerException thrown if, and only if, either {@code path} or {@code text} are {@code null}
+	 */
+	public MenuItem getMenuItem(final String path, final String text) {
+		Objects.requireNonNull(path, "path == null");
+		Objects.requireNonNull(text, "text == null");
+		
+		final Menu menu = getMenu(path);
+		
+		for(final MenuItem menuItem : menu.getItems()) {
+			if(menuItem.getText() != null && menuItem.getText().equals(text)) {
+				return menuItem;
+			}
+		}
+		
+		throw new IllegalArgumentException(String.format("Invalid MenuItem: path=\"%s\", text=\"%s\"", path, text));
 	}
 	
 	/**

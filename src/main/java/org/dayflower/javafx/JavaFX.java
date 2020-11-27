@@ -107,6 +107,14 @@ final class JavaFX {
 		return region;
 	}
 	
+	public static Region createRegionHBoxGrowAlways() {
+		final Region region = new Region();
+		
+		HBox.setHgrow(region, Priority.ALWAYS);
+		
+		return region;
+	}
+	
 	public static Separator createSeparator() {
 		return new Separator();
 	}

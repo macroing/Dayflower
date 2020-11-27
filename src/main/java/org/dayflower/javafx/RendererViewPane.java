@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.RendererConfiguration;
 
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
@@ -44,8 +45,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 
 final class RendererViewPane extends BorderPane {
 	private static final PixelFormat<ByteBuffer> PIXEL_FORMAT = PixelFormat.getByteBgraPreInstance();
@@ -82,7 +81,7 @@ final class RendererViewPane extends BorderPane {
 		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.file = new AtomicReference<>();
 		this.rendererTask = new AtomicReference<>();
-		this.byteBuffer = ByteBuffer.allocate((int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionX()) * (int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionY()) * 4);
+		this.byteBuffer = ByteBuffer.allocate(renderer.getRendererConfiguration().getImage().getResolutionX() * renderer.getRendererConfiguration().getImage().getResolutionY() * 4);
 		this.canvas = new Canvas();
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
 		this.hBox = new HBox();
@@ -91,7 +90,7 @@ final class RendererViewPane extends BorderPane {
 		this.labelRenderTimePerPass = new Label();
 		this.progressBar = new ProgressBar();
 		this.renderer = renderer;
-		this.writableImage = new WritableImage((int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionX()), (int)(renderer.getRendererConfiguration().getScene().getCamera().getResolutionY()));
+		this.writableImage = new WritableImage(renderer.getRendererConfiguration().getImage().getResolutionX(), renderer.getRendererConfiguration().getImage().getResolutionY());
 		this.isKeyPressed = new boolean[KeyCode.values().length];
 		this.isKeyPressedOnce = new boolean[KeyCode.values().length];
 		this.isMouseButtonPressed = new boolean[MouseButton.values().length];
@@ -111,18 +110,25 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	public void render() {
-		final RendererTask oldRendererTask = doGetRendererTask();
+		final RendererTask oldRendererTask = this.rendererTask.get();
 		
 		if(oldRendererTask == null || oldRendererTask.isCancelled() || oldRendererTask.isDone()) {
-			final ByteBuffer byteBuffer = doGetByteBuffer();
+			final ByteBuffer byteBuffer = this.byteBuffer;
 			
-			final Canvas canvas = doGetCanvas();
+			final Canvas canvas = this.canvas;
 			
-			final Image image = doGetImage();
+			final Renderer renderer = this.renderer;
 			
-			final WritableImage writableImage = doGetWritableImage();
+			final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
 			
-			final RendererTask newRendererTask = new RendererTask(() -> Boolean.valueOf(doRender()), () -> {
+			final Image image = rendererConfiguration.getImage();
+			
+			final double resolutionX = image.getResolutionX();
+			final double resolutionY = image.getResolutionY();
+			
+			final WritableImage writableImage = this.writableImage;
+			
+			final RendererTask newRendererTask = new RendererTask(() -> Boolean.valueOf(renderer.render()), () -> {
 				image.copyTo(byteBuffer.array());
 				
 				final
@@ -131,18 +137,29 @@ final class RendererViewPane extends BorderPane {
 				
 				final
 				GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-				graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, doGetResolutionX(), doGetResolutionY());
+				graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, resolutionX, resolutionY);
 			});
 			
-			doSetRendererTask(newRendererTask);
-			doExecuteExecutorService(newRendererTask);
+			this.rendererTask.set(newRendererTask);
+			
+			this.executorService.execute(newRendererTask);
 		}
 	}
 	
 	public void save() {
-		getFile().ifPresent(file -> {
-			doGetImage().save(file);
-		});
+		final Optional<File> optionalFile = getFile();
+		
+		if(optionalFile.isPresent()) {
+			final File file = optionalFile.get();
+			
+			final Renderer renderer = this.renderer;
+			
+			final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
+			
+			final
+			Image image = rendererConfiguration.getImage();
+			image.save(file);
+		}
 	}
 	
 	public void setFile(final File file) {
@@ -151,57 +168,31 @@ final class RendererViewPane extends BorderPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private ByteBuffer doGetByteBuffer() {
-		return this.byteBuffer;
-	}
-	
-	private Canvas doGetCanvas() {
-		return this.canvas;
-	}
-	
-	private Image doGetImage() {
-		return this.renderer.getRendererConfiguration().getImage();
-	}
-	
-	private RendererTask doGetRendererTask() {
-		return this.rendererTask.get();
-	}
-	
-	private WritableImage doGetWritableImage() {
-		return this.writableImage;
-	}
-	
-	private boolean doRender() {
-		return this.renderer.render();
-	}
-	
-	private double doGetResolutionX() {
-		return this.renderer.getRendererConfiguration().getScene().getCamera().getResolutionX();
-	}
-	
-	private double doGetResolutionY() {
-		return this.renderer.getRendererConfiguration().getScene().getCamera().getResolutionY();
-	}
-	
 	private void doConfigure() {
+//		Retrieve the Image and its resolution:
+		final Image image = this.renderer.getRendererConfiguration().getImage();
+		
+		final double resolutionX = image.getResolutionX();
+		final double resolutionY = image.getResolutionY();
+		
 //		Configure the Canvas:
 		this.canvas.addEventFilter(MouseEvent.ANY, e -> this.canvas.requestFocus());
 		this.canvas.addEventFilter(KeyEvent.ANY, e -> this.canvas.requestFocus());
 		this.canvas.setFocusTraversable(true);
-		this.canvas.setHeight(doGetResolutionY());
+		this.canvas.setHeight(resolutionY);
 		this.canvas.setOnKeyPressed(this::doOnKeyPressed);
 		this.canvas.setOnKeyReleased(this::doOnKeyReleased);
 		this.canvas.setOnMouseDragged(this::doOnMouseDragged);
 		this.canvas.setOnMouseMoved(this::doOnMouseMoved);
 		this.canvas.setOnMousePressed(this::doOnMousePressed);
 		this.canvas.setOnMouseReleased(this::doOnMouseReleased);
-		this.canvas.setWidth(doGetResolutionX());
+		this.canvas.setWidth(resolutionX);
 		
 //		Configure the HBox:
 		this.hBox.getChildren().add(this.labelRenderPass);
 		this.hBox.getChildren().add(this.labelRenderTime);
 		this.hBox.getChildren().add(this.labelRenderTimePerPass);
-		this.hBox.getChildren().add(doCreateHBoxRegion());
+		this.hBox.getChildren().add(JavaFX.createRegionHBoxGrowAlways());
 		this.hBox.getChildren().add(this.progressBar);
 		this.hBox.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
 		this.hBox.setSpacing(20.0D);
@@ -224,10 +215,6 @@ final class RendererViewPane extends BorderPane {
 //		Configure the RendererViewPane:
 		setBottom(this.hBox);
 		setCenter(this.canvas);
-	}
-	
-	private void doExecuteExecutorService(final RendererTask rendererTask) {
-		this.executorService.execute(rendererTask);
 	}
 	
 	private void doOnKeyPressed(final KeyEvent keyEvent) {
@@ -272,19 +259,5 @@ final class RendererViewPane extends BorderPane {
 		
 		this.isMouseButtonPressed[mouseEvent.getButton().ordinal()] = false;
 		this.isMouseButtonPressedOnce[mouseEvent.getButton().ordinal()] = false;
-	}
-	
-	private void doSetRendererTask(final RendererTask rendererTask) {
-		this.rendererTask.set(Objects.requireNonNull(rendererTask, "rendererTask == null"));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Region doCreateHBoxRegion() {
-		final Region region = new Region();
-		
-		HBox.setHgrow(region, Priority.ALWAYS);
-		
-		return region;
 	}
 }

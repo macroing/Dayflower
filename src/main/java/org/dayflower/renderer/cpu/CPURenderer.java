@@ -33,10 +33,6 @@ import org.dayflower.renderer.observer.FileRendererObserver;
  * @author J&#246;rgen Lundgren
  */
 public final class CPURenderer extends AbstractCPURenderer {
-	private RenderingAlgorithm renderingAlgorithm;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
 	 * Constructs a new {@code CPURenderer} instance.
 	 * <p>
@@ -74,59 +70,13 @@ public final class CPURenderer extends AbstractCPURenderer {
 	 * Constructs a new {@code CPURenderer} instance.
 	 * <p>
 	 * If either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new CPURenderer(rendererConfiguration, rendererObserver, RenderingAlgorithm.PATH_TRACING);
-	 * }
-	 * </pre>
 	 * 
 	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code CPURenderer} instance
 	 * @param rendererObserver the {@link RendererObserver} instance associated with this {@code CPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
 	 */
 	public CPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
-		this(rendererConfiguration, rendererObserver, RenderingAlgorithm.PATH_TRACING);
-	}
-	
-	/**
-	 * Constructs a new {@code CPURenderer} instance.
-	 * <p>
-	 * If either {@code rendererConfiguration}, {@code rendererObserver} or {@code renderingAlgorithm} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code CPURenderer} instance
-	 * @param rendererObserver the {@link RendererObserver} instance associated with this {@code CPURenderer} instance
-	 * @param renderingAlgorithm the {@link RenderingAlgorithm} instance associated with this {@code CPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration}, {@code rendererObserver} or {@code renderingAlgorithm} are {@code null}
-	 */
-	public CPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver, final RenderingAlgorithm renderingAlgorithm) {
 		super(rendererConfiguration, rendererObserver);
-		
-		this.renderingAlgorithm = Objects.requireNonNull(renderingAlgorithm, "renderingAlgorithm == null");
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns the {@link RenderingAlgorithm} instance associated with this {@code CPURenderer} instance.
-	 * 
-	 * @return the {@code RenderingAlgorithm} instance associated with this {@code CPURenderer} instance
-	 */
-	public RenderingAlgorithm getRenderingAlgorithm() {
-		return this.renderingAlgorithm;
-	}
-	
-	/**
-	 * Sets the {@link RenderingAlgorithm} instance associated with this {@code CPURenderer} instance to {@code renderingAlgorithm}.
-	 * <p>
-	 * If {@code renderingAlgorithm} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param renderingAlgorithm the {@code RenderingAlgorithm} instance associated with this {@code CPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code renderingAlgorithm} is {@code null}
-	 */
-	public void setRenderingAlgorithm(final RenderingAlgorithm renderingAlgorithm) {
-		this.renderingAlgorithm = Objects.requireNonNull(renderingAlgorithm, "renderingAlgorithm == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +94,7 @@ public final class CPURenderer extends AbstractCPURenderer {
 	protected Color3F radiance(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
 		
-		switch(this.renderingAlgorithm) {
+		switch(getRendererConfiguration().getRenderingAlgorithm()) {
 			case AMBIENT_OCCLUSION:
 				return RenderingAlgorithms.radianceAmbientOcclusion(ray, getRendererConfiguration());
 			case PATH_TRACING:

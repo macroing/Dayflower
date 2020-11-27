@@ -36,6 +36,7 @@ import org.dayflower.util.Timer;
  */
 public final class RendererConfiguration {
 	private Image image;
+	private RenderingAlgorithm renderingAlgorithm;
 	private Sampler sampler;
 	private Scene scene;
 	private Timer timer;
@@ -55,6 +56,7 @@ public final class RendererConfiguration {
 	 */
 	public RendererConfiguration() {
 		this.image = new Image(800, 800);
+		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
 		this.sampler = new NRooksSampler();
 		this.scene = new Scene();
 		this.timer = new Timer();
@@ -77,6 +79,15 @@ public final class RendererConfiguration {
 	 */
 	public Image getImage() {
 		return this.image;
+	}
+	
+	/**
+	 * Returns the {@link RenderingAlgorithm} instance associated with this {@code RendererConfiguration} instance.
+	 * 
+	 * @return the {@code RenderingAlgorithm} instance associated with this {@code RendererConfiguration} instance
+	 */
+	public RenderingAlgorithm getRenderingAlgorithm() {
+		return this.renderingAlgorithm;
 	}
 	
 	/**
@@ -131,6 +142,8 @@ public final class RendererConfiguration {
 		} else if(!(object instanceof RendererConfiguration)) {
 			return false;
 		} else if(!Objects.equals(this.image, RendererConfiguration.class.cast(object).image)) {
+			return false;
+		} else if(!Objects.equals(this.renderingAlgorithm, RendererConfiguration.class.cast(object).renderingAlgorithm)) {
 			return false;
 		} else if(!Objects.equals(this.sampler, RendererConfiguration.class.cast(object).sampler)) {
 			return false;
@@ -227,7 +240,7 @@ public final class RendererConfiguration {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.image, this.sampler, this.scene, Float.valueOf(this.maximumDistance), Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPass), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerDisplayUpdate), Integer.valueOf(this.samples), Long.valueOf(this.renderTime));
+		return Objects.hash(this.image, this.renderingAlgorithm, this.sampler, this.scene, Float.valueOf(this.maximumDistance), Integer.valueOf(this.maximumBounce), Integer.valueOf(this.minimumBounceRussianRoulette), Integer.valueOf(this.renderPass), Integer.valueOf(this.renderPasses), Integer.valueOf(this.renderPassesPerDisplayUpdate), Integer.valueOf(this.samples), Long.valueOf(this.renderTime));
 	}
 	
 	/**
@@ -312,6 +325,18 @@ public final class RendererConfiguration {
 	 */
 	public void setRenderTime(final long renderTime) {
 		this.renderTime = renderTime;
+	}
+	
+	/**
+	 * Sets the {@link RenderingAlgorithm} instance associated with this {@code RendererConfiguration} instance to {@code renderingAlgorithm}.
+	 * <p>
+	 * If {@code renderingAlgorithm} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param renderingAlgorithm the {@code RenderingAlgorithm} instance associated with this {@code RendererConfiguration} instance
+	 * @throws NullPointerException thrown if, and only if, {@code renderingAlgorithm} is {@code null}
+	 */
+	public void setRenderingAlgorithm(final RenderingAlgorithm renderingAlgorithm) {
+		this.renderingAlgorithm = Objects.requireNonNull(renderingAlgorithm, "renderingAlgorithm == null");
 	}
 	
 	/**

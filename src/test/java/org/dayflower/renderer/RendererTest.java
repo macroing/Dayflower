@@ -23,7 +23,6 @@ import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.cpu.CPURenderer;
-import org.dayflower.renderer.cpu.RenderingAlgorithm;
 import org.dayflower.renderer.observer.FileRendererObserver;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.loader.JavaSceneLoader;
@@ -87,18 +86,18 @@ public final class RendererTest {
 	private static CPURenderer doCreateCPURenderer(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
 		final
 		CPURenderer cPURenderer = new CPURenderer();
-		cPURenderer.setRendererConfiguration(doCreateRendererConfiguration(pathname));
+		cPURenderer.setRendererConfiguration(doCreateRendererConfiguration(renderingAlgorithm, pathname));
 		cPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), cPURenderer.getRendererConfiguration().getScene().getName()));
-		cPURenderer.setRenderingAlgorithm(renderingAlgorithm);
 		
 		return cPURenderer;
 	}
 	
-	private static RendererConfiguration doCreateRendererConfiguration(final String pathname) {
+	private static RendererConfiguration doCreateRendererConfiguration(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
 		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
 		rendererConfiguration.setImage(new Image((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
+		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
 		rendererConfiguration.setSampler(new RandomSampler());
 		
 		return rendererConfiguration;

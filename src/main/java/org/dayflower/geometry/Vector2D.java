@@ -22,11 +22,14 @@ import static org.dayflower.util.Doubles.equal;
 import static org.dayflower.util.Doubles.sqrt;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeFilter;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Vector2D} denotes a 2-dimensional vector with two components, of type {@code double}.
@@ -229,6 +232,52 @@ public final class Vector2D implements Node {
 	 */
 	public static List<Vector2D> filterAllDistinct(final Node node) {
 		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
+	
+	/**
+	 * Returns a {@code Map} that maps distinct {@code Vector2D} instances to their indices.
+	 * <p>
+	 * If {@code distinctVectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Vector2D.mapDistinctToIndices(distinctVectors, 1);
+	 * }
+	 * </pre>
+	 * 
+	 * @param distinctVectors a {@code List} with distinct {@code Vector2D} instances
+	 * @return a {@code Map} that maps distinct {@code Vector2D} instances to their indices
+	 * @throws NullPointerException thrown if, and only if, {@code distinctVectors} or at least one of its elements are {@code null}
+	 */
+	public static Map<Vector2D, Integer> mapDistinctToIndices(final List<Vector2D> distinctVectors) {
+		return mapDistinctToIndices(distinctVectors, 1);
+	}
+	
+	/**
+	 * Returns a {@code Map} that maps distinct {@code Vector2D} instances to their indices.
+	 * <p>
+	 * If {@code distinctVectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sizeVector} is less than {@code 1} or at least one index is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param distinctVectors a {@code List} with distinct {@code Vector2D} instances
+	 * @param sizeVector the size of a {@code Vector2D} instance
+	 * @return a {@code Map} that maps distinct {@code Vector2D} instances to their indices
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sizeVector} is less than {@code 1} or at least one index is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code distinctVectors} or at least one of its elements are {@code null}
+	 */
+	public static Map<Vector2D, Integer> mapDistinctToIndices(final List<Vector2D> distinctVectors, final int sizeVector) {
+		ParameterArguments.requireNonNullList(distinctVectors, "distinctVectors");
+		ParameterArguments.requireRange(sizeVector, 1, Integer.MAX_VALUE, "sizeVector");
+		
+		final Map<Vector2D, Integer> map = new LinkedHashMap<>();
+		
+		for(int i = 0; i < distinctVectors.size(); i++) {
+			map.put(distinctVectors.get(i), Integer.valueOf(ParameterArguments.requireRangef(i * sizeVector, 0, Integer.MAX_VALUE, "(%d * %d)", Integer.valueOf(i), Integer.valueOf(sizeVector))));
+		}
+		
+		return map;
 	}
 	
 	/**

@@ -23,11 +23,14 @@ import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeFilter;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Point2F} denotes a 2-dimensional point with two coordinates, of type {@code float}.
@@ -212,6 +215,52 @@ public final class Point2F implements Node {
 	 */
 	public static List<Point2F> filterAllDistinct(final Node node) {
 		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
+	
+	/**
+	 * Returns a {@code Map} that maps distinct {@code Point2F} instances to their indices.
+	 * <p>
+	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Point2F.mapDistinctToIndices(distinctPoints, 1);
+	 * }
+	 * </pre>
+	 * 
+	 * @param distinctPoints a {@code List} with distinct {@code Point2F} instances
+	 * @return a {@code Map} that maps distinct {@code Point2F} instances to their indices
+	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
+	 */
+	public static Map<Point2F, Integer> mapDistinctToIndices(final List<Point2F> distinctPoints) {
+		return mapDistinctToIndices(distinctPoints, 1);
+	}
+	
+	/**
+	 * Returns a {@code Map} that maps distinct {@code Point2F} instances to their indices.
+	 * <p>
+	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sizePoint} is less than {@code 1} or at least one index is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param distinctPoints a {@code List} with distinct {@code Point2F} instances
+	 * @param sizePoint the size of a {@code Point2F} instance
+	 * @return a {@code Map} that maps distinct {@code Point2F} instances to their indices
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sizePoint} is less than {@code 1} or at least one index is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
+	 */
+	public static Map<Point2F, Integer> mapDistinctToIndices(final List<Point2F> distinctPoints, final int sizePoint) {
+		ParameterArguments.requireNonNullList(distinctPoints, "distinctPoints");
+		ParameterArguments.requireRange(sizePoint, 1, Integer.MAX_VALUE, "sizePoint");
+		
+		final Map<Point2F, Integer> map = new LinkedHashMap<>();
+		
+		for(int i = 0; i < distinctPoints.size(); i++) {
+			map.put(distinctPoints.get(i), Integer.valueOf(ParameterArguments.requireRangef(i * sizePoint, 0, Integer.MAX_VALUE, "(%d * %d)", Integer.valueOf(i), Integer.valueOf(sizePoint))));
+		}
+		
+		return map;
 	}
 	
 	/**

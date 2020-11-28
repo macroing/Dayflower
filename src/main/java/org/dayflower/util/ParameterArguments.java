@@ -180,6 +180,41 @@ public final class ParameterArguments {
 	}
 	
 	/**
+	 * Checks that {@code value} is in the range {@code [Ints.min(edgeA, edgeB), Ints.max(edgeA, edgeB)]}.
+	 * <p>
+	 * Returns {@code value}.
+	 * <p>
+	 * If {@code value} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code nameFormat} or {@code nameFormatArguments} are invalid, an {@code IllegalFormatException} will be thrown.
+	 * 
+	 * @param value the value to check
+	 * @param edgeA the minimum or maximum value allowed
+	 * @param edgeB the maximum or minimum value allowed
+	 * @param nameFormat the name format of the variable that will be part of the message of the {@code IllegalArgumentException}
+	 * @param nameFormatArguments the name format arguments of the variable that will be part of the message of the {@code IllegalArgumentException}
+	 * @return {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is less than {@code Ints.min(edgeA, edgeB)} or greater than {@code Ints.max(edgeA, edgeB)}
+	 * @throws IllegalFormatException thrown if, and only if, either {@code nameFormat} or {@code nameFormatArguments} are invalid
+	 */
+	public static int requireRangef(final int value, final int edgeA, final int edgeB, final String nameFormat, final Object... nameFormatArguments) {
+		final int minimum = min(edgeA, edgeB);
+		final int maximum = max(edgeA, edgeB);
+		
+		if(value < minimum) {
+			final String name = String.format(nameFormat, nameFormatArguments);
+			
+			throw new IllegalArgumentException(String.format("%s < %d: %s == %d", name, Integer.valueOf(minimum), name, Integer.valueOf(value)));
+		} else if(value > maximum) {
+			final String name = String.format(nameFormat, nameFormatArguments);
+			
+			throw new IllegalArgumentException(String.format("%s > %d: %s == %d", name, Integer.valueOf(maximum), name, Integer.valueOf(value)));
+		} else {
+			return value;
+		}
+	}
+	
+	/**
 	 * Checks that {@code array.length} is equal to {@code arrayLengthExpected}.
 	 * <p>
 	 * Returns {@code array}.

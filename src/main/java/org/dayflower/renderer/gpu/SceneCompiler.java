@@ -18,6 +18,9 @@
  */
 package org.dayflower.renderer.gpu;
 
+import java.util.List;
+import java.util.Map;
+
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
@@ -31,10 +34,21 @@ final class SceneCompiler {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public CompiledScene compile(final Scene scene) {
+//		Retrieve Lists for all distinct types:
+		final List<Point2F> distinctPoint2Fs = Point2F.filterAllDistinct(scene);
+		final List<Point3F> distinctPoint3Fs = Point3F.filterAllDistinct(scene);
+		final List<Vector3F> distinctVector3Fs = Vector3F.filterAllDistinct(scene);
+		
+//		Retrieve index mappings for all distinct types:
+		final Map<Point2F, Integer> distinctToIndicesPoint2Fs = Point2F.mapDistinctToIndices(distinctPoint2Fs, 2);
+		final Map<Point3F, Integer> distinctToIndicesPoint3Fs = Point3F.mapDistinctToIndices(distinctPoint3Fs, 3);
+		final Map<Vector3F, Integer> distinctToIndicesVector3Fs = Vector3F.mapDistinctToIndices(distinctVector3Fs, 3);
+		
+//		Retrieve float[] for all distinct types:
 		final float[] matrix44Fs = new float[0];
-		final float[] point2Fs = Point2F.toArray(Point2F.filterAllDistinct(scene));
-		final float[] point3Fs = Point3F.toArray(Point3F.filterAllDistinct(scene));
-		final float[] vector3Fs = Vector3F.toArray(Vector3F.filterAllDistinct(scene));
+		final float[] point2Fs = Point2F.toArray(distinctPoint2Fs);
+		final float[] point3Fs = Point3F.toArray(distinctPoint3Fs);
+		final float[] vector3Fs = Vector3F.toArray(distinctVector3Fs);
 		
 		return new CompiledScene(matrix44Fs, point2Fs, point3Fs, vector3Fs);
 	}

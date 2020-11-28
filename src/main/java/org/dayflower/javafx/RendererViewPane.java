@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -267,39 +268,50 @@ final class RendererViewPane extends BorderPane {
 	 * This method is called when it's time to render.
 	 */
 	public void render() {
-		final RendererTask oldRendererTask = this.rendererTask.get();
+		final ExecutorService executorService = this.executorService;
 		
-		if(oldRendererTask == null || oldRendererTask.isCancelled() || oldRendererTask.isDone()) {
-			final ByteBuffer byteBuffer = this.byteBuffer;
+		if(!executorService.isShutdown()) {
+			final AtomicReference<RendererTask> rendererTask = this.rendererTask;
 			
-			final Canvas canvas = this.canvas;
+			final RendererTask oldRendererTask = rendererTask.get();
 			
-			final Renderer renderer = this.renderer;
-			
-			final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
-			
-			final Image image = rendererConfiguration.getImage();
-			
-			final double resolutionX = image.getResolutionX();
-			final double resolutionY = image.getResolutionY();
-			
-			final WritableImage writableImage = this.writableImage;
-			
-			final RendererTask newRendererTask = new RendererTask(() -> Boolean.valueOf(renderer.render()), () -> {
-				image.copyTo(byteBuffer.array());
+			if(oldRendererTask == null || oldRendererTask.isCancelled() || oldRendererTask.isDone()) {
+				final ByteBuffer byteBuffer = this.byteBuffer;
 				
-				final
-				PixelWriter pixelWriter = writableImage.getPixelWriter();
-				pixelWriter.setPixels(0, 0, image.getResolutionX(), image.getResolutionY(), PIXEL_FORMAT, byteBuffer, image.getResolutionX() * 4);
+				final Canvas canvas = this.canvas;
 				
-				final
-				GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-				graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, resolutionX, resolutionY);
-			});
-			
-			this.rendererTask.set(newRendererTask);
-			
-			this.executorService.execute(newRendererTask);
+				final Renderer renderer = this.renderer;
+				
+				final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
+				
+				final Image image = rendererConfiguration.getImage();
+				
+				final double resolutionX = image.getResolutionX();
+				final double resolutionY = image.getResolutionY();
+				
+				final WritableImage writableImage = this.writableImage;
+				
+				final RendererTask newRendererTask = new RendererTask(() -> Boolean.valueOf(renderer.render()), () -> {
+					image.copyTo(byteBuffer.array());
+					
+					final
+					PixelWriter pixelWriter = writableImage.getPixelWriter();
+					pixelWriter.setPixels(0, 0, image.getResolutionX(), image.getResolutionY(), PIXEL_FORMAT, byteBuffer, image.getResolutionX() * 4);
+					
+					final
+					GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+					graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, resolutionX, resolutionY);
+				});
+				
+				rendererTask.set(newRendererTask);
+				
+				try {
+					executorService.execute(newRendererTask);
+				} catch(final RejectedExecutionException e) {
+//					One of the methods shutdown() and shutdownNow() of the ExecutorService has been called.
+//					The next time this render() method is called, nothing will happen.
+				}
+			}
 		}
 	}
 	

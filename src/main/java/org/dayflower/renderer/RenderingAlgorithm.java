@@ -30,46 +30,48 @@ public enum RenderingAlgorithm {
 	/**
 	 * A {@code RenderingAlgorithm} that represents Ambient Occlusion.
 	 */
-	AMBIENT_OCCLUSION("AmbientOcclusion"),
+	AMBIENT_OCCLUSION("AmbientOcclusion", "Ambient Occlusion"),
 	
 	/**
 	 * A {@code RenderingAlgorithm} that represents Path Tracing.
 	 */
-	PATH_TRACING("PathTracing"),
+	PATH_TRACING("PathTracing", "Path Tracing"),
 	
 	/**
 	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to PBRT.
 	 */
-	PATH_TRACING_P_B_R_T("PathTracing-PBRT"),
+	PATH_TRACING_P_B_R_T("PathTracing-PBRT", "Path Tracing - PBRT"),
 	
 	/**
 	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to Rayito.
 	 */
-	PATH_TRACING_RAYITO("PathTracing-Rayito"),
+	PATH_TRACING_RAYITO("PathTracing-Rayito", "Path Tracing - Rayito"),
 	
 	/**
 	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to SmallPT and is iterative.
 	 */
-	PATH_TRACING_SMALL_P_T_ITERATIVE("PathTracing-SmallPT-Iterative"),
+	PATH_TRACING_SMALL_P_T_ITERATIVE("PathTracing-SmallPT-Iterative", "Path Tracing - SmallPT - Iterative"),
 	
 	/**
 	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to SmallPT and is recursive.
 	 */
-	PATH_TRACING_SMALL_P_T_RECURSIVE("PathTracing-SmallPT-Recursive"),
+	PATH_TRACING_SMALL_P_T_RECURSIVE("PathTracing-SmallPT-Recursive", "Path Tracing - SmallPT - Recursive"),
 	
 	/**
 	 * A {@code RenderingAlgorithm} that represents Ray Casting.
 	 */
-	RAY_CASTING("RayCasting");
+	RAY_CASTING("RayCasting", "Ray Casting");
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final String name;
+	private final String nameExternal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private RenderingAlgorithm(final String name) {
+	private RenderingAlgorithm(final String name, final String nameExternal) {
 		this.name = Objects.requireNonNull(name, "name == null");
+		this.nameExternal = Objects.requireNonNull(nameExternal, "nameExternal == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,5 +83,24 @@ public enum RenderingAlgorithm {
 	 */
 	public String getName() {
 		return this.name;
+	}
+	
+	/**
+	 * Returns the name of this {@code RenderingAlgorithm} instance in external form.
+	 * 
+	 * @return the name of this {@code RenderingAlgorithm} instance in external form
+	 */
+	public String getNameExternal() {
+		return this.nameExternal;
+	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code RenderingAlgorithm} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code RenderingAlgorithm} instance
+	 */
+	@Override
+	public String toString() {
+		return this.nameExternal;
 	}
 }

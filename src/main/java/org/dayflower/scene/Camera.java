@@ -49,15 +49,11 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class Camera implements Node {
-	private static final int LENS_FISHEYE = 1;
-	private static final int LENS_THIN = 2;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private AngleF fieldOfViewX;
 	private AngleF fieldOfViewY;
 	private AngleF pitch;
 	private AngleF yaw;
+	private Lens lens;
 	private List<CameraObserver> cameraObservers;
 	private OrthonormalBasis33F orthonormalBasis;
 	private Point3F eye;
@@ -66,7 +62,6 @@ public final class Camera implements Node {
 	private float focalDistance;
 	private float resolutionX;
 	private float resolutionY;
-	private int lens;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -121,7 +116,7 @@ public final class Camera implements Node {
 		setEye(eye);
 		setFieldOfViewX(fieldOfViewX);
 		setFocalDistance(30.0F);
-		setLensThin();
+		setLens(Lens.THIN);
 		setPitch(AngleF.pitch(Vector3F.x()));
 		setResolution(800.0F, 800.0F);
 		setWalkLockEnabled(true);
@@ -134,11 +129,12 @@ public final class Camera implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Camera(final AngleF fieldOfViewX, final AngleF fieldOfViewY, final AngleF pitch, final AngleF yaw, final List<CameraObserver> cameraObservers, final OrthonormalBasis33F orthonormalBasis, final Point3F eye, final boolean isWalkLockEnabled, final float apertureRadius, final float focalDistance, final float resolutionX, final float resolutionY, final int lens) {
+	private Camera(final AngleF fieldOfViewX, final AngleF fieldOfViewY, final AngleF pitch, final AngleF yaw, final Lens lens, final List<CameraObserver> cameraObservers, final OrthonormalBasis33F orthonormalBasis, final Point3F eye, final boolean isWalkLockEnabled, final float apertureRadius, final float focalDistance, final float resolutionX, final float resolutionY) {
 		this.fieldOfViewX = fieldOfViewX;
 		this.fieldOfViewY = fieldOfViewY;
 		this.pitch = pitch;
 		this.yaw = yaw;
+		this.lens = lens;
 		this.cameraObservers = new ArrayList<>(cameraObservers);
 		this.orthonormalBasis = orthonormalBasis;
 		this.eye = eye;
@@ -147,7 +143,6 @@ public final class Camera implements Node {
 		this.focalDistance = focalDistance;
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
-		this.lens = lens;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,7 +189,16 @@ public final class Camera implements Node {
 	 * @return a copy of this {@code Camera} instance
 	 */
 	public Camera copy() {
-		return new Camera(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.cameraObservers, this.orthonormalBasis, this.eye, this.isWalkLockEnabled, this.apertureRadius, this.focalDistance, this.resolutionX, this.resolutionY, this.lens);
+		return new Camera(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.lens, this.cameraObservers, this.orthonormalBasis, this.eye, this.isWalkLockEnabled, this.apertureRadius, this.focalDistance, this.resolutionX, this.resolutionY);
+	}
+	
+	/**
+	 * Returns a {@link Lens} instance representing the lens that is associated with this {@code Camera} instance.
+	 * 
+	 * @return a {@code Lens} instance representing the lens that is associated with this {@code Camera} instance
+	 */
+	public Lens getLens() {
+		return this.lens;
 	}
 	
 	/**
@@ -240,7 +244,7 @@ public final class Camera implements Node {
 		
 		float wFactor = 1.0F;
 		
-		if(isLensFisheye()) {
+		if(this.lens == Lens.FISHEYE) {
 			final float dotProduct = sx * sx + sy * sy;
 			
 			if(dotProduct > 1.0F) {
@@ -328,6 +332,8 @@ public final class Camera implements Node {
 			return false;
 		} else if(!Objects.equals(this.yaw, Camera.class.cast(object).yaw)) {
 			return false;
+		} else if(!Objects.equals(this.lens, Camera.class.cast(object).lens)) {
+			return false;
 		} else if(!Objects.equals(this.cameraObservers, Camera.class.cast(object).cameraObservers)) {
 			return false;
 		} else if(!Objects.equals(this.orthonormalBasis, Camera.class.cast(object).orthonormalBasis)) {
@@ -344,29 +350,9 @@ public final class Camera implements Node {
 			return false;
 		} else if(!equal(this.resolutionY, Camera.class.cast(object).resolutionY)) {
 			return false;
-		} else if(this.lens != Camera.class.cast(object).lens) {
-			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the lens associated with this {@code Camera} instance is a fisheye lens, {@code false} otherwise.
-	 * 
-	 * @return {@code true} if, and only if, the lens associated with this {@code Camera} instance is a fisheye lens, {@code false} otherwise
-	 */
-	public boolean isLensFisheye() {
-		return this.lens == LENS_FISHEYE;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the lens associated with this {@code Camera} instance is a thin lens, {@code false} otherwise.
-	 * 
-	 * @return {@code true} if, and only if, the lens associated with this {@code Camera} instance is a thin lens, {@code false} otherwise
-	 */
-	public boolean isLensThin() {
-		return this.lens == LENS_THIN;
 	}
 	
 	/**
@@ -436,7 +422,7 @@ public final class Camera implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.cameraObservers, this.orthonormalBasis, this.eye, Boolean.valueOf(this.isWalkLockEnabled), Float.valueOf(this.apertureRadius), Float.valueOf(this.focalDistance), Float.valueOf(this.resolutionX), Float.valueOf(this.resolutionY), Integer.valueOf(this.lens));
+		return Objects.hash(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.lens, this.cameraObservers, this.orthonormalBasis, this.eye, Boolean.valueOf(this.isWalkLockEnabled), Float.valueOf(this.apertureRadius), Float.valueOf(this.focalDistance), Float.valueOf(this.resolutionX), Float.valueOf(this.resolutionY));
 	}
 	
 	/**
@@ -455,7 +441,7 @@ public final class Camera implements Node {
 		final float y = eye.getY() - w.getY() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
 		final float z = eye.getZ() - w.getZ() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
 		
-		this.eye = new Point3F(x, y, z);
+		setEye(new Point3F(x, y, z));
 	}
 	
 	/**
@@ -474,7 +460,7 @@ public final class Camera implements Node {
 		final float y = eye.getY() - v.getY() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
 		final float z = eye.getZ() - v.getZ() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
 		
-		this.eye = new Point3F(x, y, z);
+		setEye(new Point3F(x, y, z));
 	}
 	
 	/**
@@ -493,7 +479,7 @@ public final class Camera implements Node {
 		final float y = eye.getY() + w.getY() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
 		final float z = eye.getZ() + w.getZ() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
 		
-		this.eye = new Point3F(x, y, z);
+		setEye(new Point3F(x, y, z));
 	}
 	
 	/**
@@ -512,7 +498,7 @@ public final class Camera implements Node {
 		final float y = eye.getY() - u.getY() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
 		final float z = eye.getZ() - u.getZ() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
 		
-		this.eye = new Point3F(x, y, z);
+		setEye(new Point3F(x, y, z));
 	}
 	
 	/**
@@ -531,7 +517,7 @@ public final class Camera implements Node {
 		final float y = eye.getY() + u.getY() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
 		final float z = eye.getZ() + u.getZ() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
 		
-		this.eye = new Point3F(x, y, z);
+		setEye(new Point3F(x, y, z));
 	}
 	
 	/**
@@ -550,7 +536,7 @@ public final class Camera implements Node {
 		final float y = eye.getY() + v.getY() * distance * (isWalkLockEnabled ? 1.0F : 1.0F);
 		final float z = eye.getZ() + v.getZ() * distance * (isWalkLockEnabled ? 0.0F : 1.0F);
 		
-		this.eye = new Point3F(x, y, z);
+		setEye(new Point3F(x, y, z));
 	}
 	
 	/**
@@ -562,7 +548,7 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public void rotateX(final AngleF angle) {
-		this.orthonormalBasis = OrthonormalBasis33F.transform(Matrix44F.rotateX(angle), this.orthonormalBasis);
+		setOrthonormalBasis(OrthonormalBasis33F.transform(Matrix44F.rotateX(angle), this.orthonormalBasis));
 	}
 	
 	/**
@@ -574,7 +560,7 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public void rotateY(final AngleF angle) {
-		this.orthonormalBasis = OrthonormalBasis33F.transform(Matrix44F.rotateY(angle), this.orthonormalBasis);
+		setOrthonormalBasis(OrthonormalBasis33F.transform(Matrix44F.rotateY(angle), this.orthonormalBasis));
 	}
 	
 	/**
@@ -586,7 +572,7 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public void rotateZ(final AngleF angle) {
-		this.orthonormalBasis = OrthonormalBasis33F.transform(Matrix44F.rotateZ(angle), this.orthonormalBasis);
+		setOrthonormalBasis(OrthonormalBasis33F.transform(Matrix44F.rotateZ(angle), this.orthonormalBasis));
 	}
 	
 	/**
@@ -595,7 +581,16 @@ public final class Camera implements Node {
 	 * @param apertureRadius a {@code float} representing the aperture radius associated with this {@code Camera} instance
 	 */
 	public void setApertureRadius(final float apertureRadius) {
-		this.apertureRadius = apertureRadius;
+		if(!equal(this.apertureRadius, apertureRadius)) {
+			final float oldApertureRadius = this.apertureRadius;
+			final float newApertureRadius =      apertureRadius;
+			
+			this.apertureRadius = apertureRadius;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeApertureRadius(this, oldApertureRadius, newApertureRadius);
+			}
+		}
 	}
 	
 	/**
@@ -626,7 +621,18 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code eye} is {@code null}
 	 */
 	public void setEye(final Point3F eye) {
-		this.eye = Objects.requireNonNull(eye, "eye == null");
+		Objects.requireNonNull(eye, "eye == null");
+		
+		if(!Objects.equals(this.eye, eye)) {
+			final Point3F oldEye = this.eye;
+			final Point3F newEye =      eye;
+			
+			this.eye = eye;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeEye(this, oldEye, newEye);
+			}
+		}
 	}
 	
 	/**
@@ -635,7 +641,7 @@ public final class Camera implements Node {
 	 * This method requires that the field of view on the Y-axis and the resolution (on both axes) are set.
 	 */
 	public void setFieldOfViewX() {
-		this.fieldOfViewX = AngleF.fieldOfViewX(this.fieldOfViewY, this.resolutionX, this.resolutionY);
+		setFieldOfViewX(AngleF.fieldOfViewX(this.fieldOfViewY, this.resolutionX, this.resolutionY));
 	}
 	
 	/**
@@ -647,7 +653,18 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewX} is {@code null}
 	 */
 	public void setFieldOfViewX(final AngleF fieldOfViewX) {
-		this.fieldOfViewX = Objects.requireNonNull(fieldOfViewX, "fieldOfViewX == null");
+		Objects.requireNonNull(fieldOfViewX, "fieldOfViewX == null");
+		
+		if(!Objects.equals(this.fieldOfViewX, fieldOfViewX)) {
+			final AngleF oldFieldOfViewX = this.fieldOfViewX;
+			final AngleF newFieldOfViewX =      fieldOfViewX;
+			
+			this.fieldOfViewX = fieldOfViewX;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeFieldOfViewX(this, oldFieldOfViewX, newFieldOfViewX);
+			}
+		}
 	}
 	
 	/**
@@ -656,7 +673,7 @@ public final class Camera implements Node {
 	 * This method requires that the field of view on the X-axis and the resolution (on both axes) are set.
 	 */
 	public void setFieldOfViewY() {
-		this.fieldOfViewY = AngleF.fieldOfViewY(this.fieldOfViewX, this.resolutionX, this.resolutionY);
+		setFieldOfViewY(AngleF.fieldOfViewY(this.fieldOfViewX, this.resolutionX, this.resolutionY));
 	}
 	
 	/**
@@ -668,7 +685,18 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code fieldOfViewY} is {@code null}
 	 */
 	public void setFieldOfViewY(final AngleF fieldOfViewY) {
-		this.fieldOfViewY = Objects.requireNonNull(fieldOfViewY, "fieldOfViewY == null");
+		Objects.requireNonNull(fieldOfViewY, "fieldOfViewY == null");
+		
+		if(!Objects.equals(this.fieldOfViewY, fieldOfViewY)) {
+			final AngleF oldFieldOfViewY = this.fieldOfViewY;
+			final AngleF newFieldOfViewY =      fieldOfViewY;
+			
+			this.fieldOfViewY = fieldOfViewY;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeFieldOfViewY(this, oldFieldOfViewY, newFieldOfViewY);
+			}
+		}
 	}
 	
 	/**
@@ -677,21 +705,39 @@ public final class Camera implements Node {
 	 * @param focalDistance a {@code float} representing the focal distance associated with this {@code Camera} instance
 	 */
 	public void setFocalDistance(final float focalDistance) {
-		this.focalDistance = focalDistance;
+		if(!equal(this.focalDistance, focalDistance)) {
+			final float oldFocalDistance = this.focalDistance;
+			final float newFocalDistance =      focalDistance;
+			
+			this.focalDistance = focalDistance;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeFocalDistance(this, oldFocalDistance, newFocalDistance);
+			}
+		}
 	}
 	
 	/**
-	 * Sets the lens associated with this {@code Camera} instance to fisheye lens.
+	 * Sets the lens associated with this {@code Camera} instance to {@code lens}.
+	 * <p>
+	 * If {@code lens} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param lens a {@link Lens} representing the lens associated with this {@code Camera} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lens} is {@code null}
 	 */
-	public void setLensFisheye() {
-		this.lens = LENS_FISHEYE;
-	}
-	
-	/**
-	 * Sets the lens associated with this {@code Camera} instance to thin lens.
-	 */
-	public void setLensThin() {
-		this.lens = LENS_THIN;
+	public void setLens(final Lens lens) {
+		Objects.requireNonNull(lens, "lens == null");
+		
+		if(!Objects.equals(this.lens, lens)) {
+			final Lens oldLens = this.lens;
+			final Lens newLens =      lens;
+			
+			this.lens = lens;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeLens(this, oldLens, newLens);
+			}
+		}
 	}
 	
 	/**
@@ -710,7 +756,7 @@ public final class Camera implements Node {
 		final Vector3F w = new Vector3F(x, y, z);
 		final Vector3F v = Vector3F.v();
 		
-		this.orthonormalBasis = new OrthonormalBasis33F(w, v);
+		setOrthonormalBasis(new OrthonormalBasis33F(w, v));
 	}
 	
 	/**
@@ -726,7 +772,18 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
 	 */
 	public void setOrthonormalBasis(final OrthonormalBasis33F orthonormalBasis) {
-		this.orthonormalBasis = Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
+		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
+		
+		if(!Objects.equals(this.orthonormalBasis, orthonormalBasis)) {
+			final OrthonormalBasis33F oldOrthonormalBasis = this.orthonormalBasis;
+			final OrthonormalBasis33F newOrthonormalBasis =      orthonormalBasis;
+			
+			this.orthonormalBasis = orthonormalBasis;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeOrthonormalBasis(this, oldOrthonormalBasis, newOrthonormalBasis);
+			}
+		}
 	}
 	
 	/**
@@ -738,7 +795,18 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code pitch} is {@code null}
 	 */
 	public void setPitch(final AngleF pitch) {
-		this.pitch = Objects.requireNonNull(pitch, "pitch == null");
+		Objects.requireNonNull(pitch, "pitch == null");
+		
+		if(!Objects.equals(this.pitch, pitch)) {
+			final AngleF oldPitch = this.pitch;
+			final AngleF newPitch =      pitch;
+			
+			this.pitch = pitch;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangePitch(this, oldPitch, newPitch);
+			}
+		}
 	}
 	
 	/**
@@ -748,8 +816,8 @@ public final class Camera implements Node {
 	 * @param resolutionY a {@code float} representing the resolution on the Y-axis that is associated with this {@code Camera} instance
 	 */
 	public void setResolution(final float resolutionX, final float resolutionY) {
-		this.resolutionX = resolutionX;
-		this.resolutionY = resolutionY;
+		setResolutionX(resolutionX);
+		setResolutionY(resolutionY);
 	}
 	
 	/**
@@ -758,7 +826,16 @@ public final class Camera implements Node {
 	 * @param resolutionX a {@code float} representing the resolution on the X-axis that is associated with this {@code Camera} instance
 	 */
 	public void setResolutionX(final float resolutionX) {
-		this.resolutionX = resolutionX;
+		if(!equal(this.resolutionX, resolutionX)) {
+			final float oldResolutionX = this.resolutionX;
+			final float newResolutionX =      resolutionX;
+			
+			this.resolutionX = resolutionX;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeResolutionX(this, oldResolutionX, newResolutionX);
+			}
+		}
 	}
 	
 	/**
@@ -767,7 +844,16 @@ public final class Camera implements Node {
 	 * @param resolutionY a {@code float} representing the resolution on the Y-axis that is associated with this {@code Camera} instance
 	 */
 	public void setResolutionY(final float resolutionY) {
-		this.resolutionY = resolutionY;
+		if(!equal(this.resolutionY, resolutionY)) {
+			final float oldResolutionY = this.resolutionY;
+			final float newResolutionY =      resolutionY;
+			
+			this.resolutionY = resolutionY;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeResolutionY(this, oldResolutionY, newResolutionY);
+			}
+		}
 	}
 	
 	/**
@@ -776,7 +862,16 @@ public final class Camera implements Node {
 	 * @param isWalkLockEnabled {@code true} if, and only if, walk lock should be enabled, {@code false} otherwise
 	 */
 	public void setWalkLockEnabled(final boolean isWalkLockEnabled) {
-		this.isWalkLockEnabled = isWalkLockEnabled;
+		if(this.isWalkLockEnabled != isWalkLockEnabled) {
+			final boolean oldIsWalkLockEnabled = this.isWalkLockEnabled;
+			final boolean newIsWalkLockEnabled =      isWalkLockEnabled;
+			
+			this.isWalkLockEnabled = isWalkLockEnabled;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeWalkLockEnabled(this, oldIsWalkLockEnabled, newIsWalkLockEnabled);
+			}
+		}
 	}
 	
 	/**
@@ -788,6 +883,17 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code yaw} is {@code null}
 	 */
 	public void setYaw(final AngleF yaw) {
-		this.yaw = Objects.requireNonNull(yaw, "yaw == null");
+		Objects.requireNonNull(yaw, "yaw == null");
+		
+		if(!Objects.equals(this.yaw, yaw)) {
+			final AngleF oldYaw = this.yaw;
+			final AngleF newYaw =      yaw;
+			
+			this.yaw = yaw;
+			
+			for(final CameraObserver cameraObserver : this.cameraObservers) {
+				cameraObserver.onChangeYaw(this, oldYaw, newYaw);
+			}
+		}
 	}
 }

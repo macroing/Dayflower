@@ -20,7 +20,45 @@ package org.dayflower.scene;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Point3F;
+
 //TODO: Add Javadocs!
 public interface CameraObserver {
+//	TODO: Add Javadocs!
+	void onChangeApertureRadius(final Camera camera, final float oldApertureRadius, final float newApertureRadius);
 	
+//	TODO: Add Javadocs!
+	void onChangeEye(final Camera camera, final Point3F oldEye, final Point3F newEye);
+	
+//	TODO: Add Javadocs!
+	void onChangeFieldOfViewX(final Camera camera, final AngleF oldFieldOfViewX, final AngleF newFieldOfViewX);
+	
+//	TODO: Add Javadocs!
+	void onChangeFieldOfViewY(final Camera camera, final AngleF oldFieldOfViewY, final AngleF newFieldOfViewY);
+	
+//	TODO: Add Javadocs!
+	void onChangeFocalDistance(final Camera camera, final float oldFocalDistance, final float newFocalDistance);
+	
+//	TODO: Add Javadocs!
+	void onChangeLens(final Camera camera, final Lens oldLens, final Lens newLens);
+	
+//	TODO: Add Javadocs!
+	void onChangeOrthonormalBasis(final Camera camera, final OrthonormalBasis33F oldOrthonormalBasis, final OrthonormalBasis33F newOrthonormalBasis);
+	
+//	TODO: Add Javadocs!
+	void onChangePitch(final Camera camera, final AngleF oldPitch, final AngleF newPitch);
+	
+//	TODO: Add Javadocs!
+	void onChangeResolutionX(final Camera camera, final float oldResolutionX, final float newResolutionX);
+	
+//	TODO: Add Javadocs!
+	void onChangeResolutionY(final Camera camera, final float oldResolutionY, final float newResolutionY);
+	
+//	TODO: Add Javadocs!
+	void onChangeWalkLockEnabled(final Camera camera, final boolean oldIsWalkLockEnabled, final boolean newIsWalkLockEnabled);
+	
+//	TODO: Add Javadocs!
+	void onChangeYaw(final Camera camera, final AngleF oldYaw, final AngleF newYaw);
 }

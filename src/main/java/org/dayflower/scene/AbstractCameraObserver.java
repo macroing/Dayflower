@@ -18,17 +18,28 @@
  */
 package org.dayflower.scene;
 
+import java.util.Objects;
+
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point3F;
 
 /**
- * A {@code CameraObserver} is used to observe changes to a {@link Camera} instance.
+ * An {@code AbstractCameraObserver} is an abstract implementation of {@link CameraObserver} that does nothing by default.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface CameraObserver {
+public abstract class AbstractCameraObserver implements CameraObserver {
+	/**
+	 * Constructs a new {@code AbstractCameraObserver} instance.
+	 */
+	protected AbstractCameraObserver() {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * This method is called by {@code camera} when the aperture radius changes.
 	 * <p>
@@ -39,7 +50,10 @@ public interface CameraObserver {
 	 * @param newApertureRadius a {@code float} that represents the new aperture radius
 	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
 	 */
-	void onChangeApertureRadius(final Camera camera, final float oldApertureRadius, final float newApertureRadius);
+	@Override
+	public void onChangeApertureRadius(final Camera camera, final float oldApertureRadius, final float newApertureRadius) {
+		Objects.requireNonNull(camera, "camera == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the eye changes.
@@ -51,7 +65,12 @@ public interface CameraObserver {
 	 * @param newEye a {@code Point3F} instance that represents the new eye
 	 * @throws NullPointerException thrown if, and only if, either {@code camera}, {@code oldEye} or {@code newEye} are {@code null}
 	 */
-	void onChangeEye(final Camera camera, final Point3F oldEye, final Point3F newEye);
+	@Override
+	public void onChangeEye(final Camera camera, final Point3F oldEye, final Point3F newEye) {
+		Objects.requireNonNull(camera, "camera == null");
+		Objects.requireNonNull(oldEye, "oldEye == null");
+		Objects.requireNonNull(newEye, "newEye == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the field of view on the X-axis changes.
@@ -63,7 +82,12 @@ public interface CameraObserver {
 	 * @param newFieldOfViewX an {@code AngleF} instance that represents the new field of view on the X-axis
 	 * @throws NullPointerException thrown if, and only if, either {@code camera}, {@code oldFieldOfViewX} or {@code newFieldOfViewX} are {@code null}
 	 */
-	void onChangeFieldOfViewX(final Camera camera, final AngleF oldFieldOfViewX, final AngleF newFieldOfViewX);
+	@Override
+	public void onChangeFieldOfViewX(final Camera camera, final AngleF oldFieldOfViewX, final AngleF newFieldOfViewX) {
+		Objects.requireNonNull(camera, "camera == null");
+		Objects.requireNonNull(oldFieldOfViewX, "oldFieldOfViewX == null");
+		Objects.requireNonNull(newFieldOfViewX, "newFieldOfViewX == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the field of view on the Y-axis changes.
@@ -75,7 +99,12 @@ public interface CameraObserver {
 	 * @param newFieldOfViewY an {@code AngleF} instance that represents the new field of view on the Y-axis
 	 * @throws NullPointerException thrown if, and only if, either {@code camera}, {@code oldFieldOfViewY} or {@code newFieldOfViewY} are {@code null}
 	 */
-	void onChangeFieldOfViewY(final Camera camera, final AngleF oldFieldOfViewY, final AngleF newFieldOfViewY);
+	@Override
+	public void onChangeFieldOfViewY(final Camera camera, final AngleF oldFieldOfViewY, final AngleF newFieldOfViewY) {
+		Objects.requireNonNull(camera, "camera == null");
+		Objects.requireNonNull(oldFieldOfViewY, "oldFieldOfViewY == null");
+		Objects.requireNonNull(newFieldOfViewY, "newFieldOfViewY == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the focal distance changes.
@@ -87,7 +116,10 @@ public interface CameraObserver {
 	 * @param newFocalDistance a {@code float} that represents the new focal distance
 	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
 	 */
-	void onChangeFocalDistance(final Camera camera, final float oldFocalDistance, final float newFocalDistance);
+	@Override
+	public void onChangeFocalDistance(final Camera camera, final float oldFocalDistance, final float newFocalDistance) {
+		Objects.requireNonNull(camera, "camera == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the lens changes.
@@ -99,7 +131,12 @@ public interface CameraObserver {
 	 * @param newLens a {@code Lens} instance that represents the new lens
 	 * @throws NullPointerException thrown if, and only if, either {@code camera}, {@code oldLens} or {@code newLens} are {@code null}
 	 */
-	void onChangeLens(final Camera camera, final Lens oldLens, final Lens newLens);
+	@Override
+	public void onChangeLens(final Camera camera, final Lens oldLens, final Lens newLens) {
+		Objects.requireNonNull(camera, "camera == null");
+		Objects.requireNonNull(oldLens, "oldLens == null");
+		Objects.requireNonNull(newLens, "newLens == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the orthonormal basis changes.
@@ -111,7 +148,12 @@ public interface CameraObserver {
 	 * @param newOrthonormalBasis an {@code OrthonormalBasis33F} instance that represents the new orthonormal basis
 	 * @throws NullPointerException thrown if, and only if, either {@code camera}, {@code oldOrthonormalBasis} or {@code newOrthonormalBasis} are {@code null}
 	 */
-	void onChangeOrthonormalBasis(final Camera camera, final OrthonormalBasis33F oldOrthonormalBasis, final OrthonormalBasis33F newOrthonormalBasis);
+	@Override
+	public void onChangeOrthonormalBasis(final Camera camera, final OrthonormalBasis33F oldOrthonormalBasis, final OrthonormalBasis33F newOrthonormalBasis) {
+		Objects.requireNonNull(camera, "camera == null");
+		Objects.requireNonNull(oldOrthonormalBasis, "oldOrthonormalBasis == null");
+		Objects.requireNonNull(newOrthonormalBasis, "newOrthonormalBasis == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the pitch changes.
@@ -123,7 +165,12 @@ public interface CameraObserver {
 	 * @param newPitch an {@code AngleF} instance that represents the new pitch
 	 * @throws NullPointerException thrown if, and only if, either {@code camera}, {@code oldPitch} or {@code newPitch} are {@code null}
 	 */
-	void onChangePitch(final Camera camera, final AngleF oldPitch, final AngleF newPitch);
+	@Override
+	public void onChangePitch(final Camera camera, final AngleF oldPitch, final AngleF newPitch) {
+		Objects.requireNonNull(camera, "camera == null");
+		Objects.requireNonNull(oldPitch, "oldPitch == null");
+		Objects.requireNonNull(newPitch, "newPitch == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the resolution on the X-axis changes.
@@ -135,7 +182,10 @@ public interface CameraObserver {
 	 * @param newResolutionX a {@code float} that represents the new resolution on the X-axis
 	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
 	 */
-	void onChangeResolutionX(final Camera camera, final float oldResolutionX, final float newResolutionX);
+	@Override
+	public void onChangeResolutionX(final Camera camera, final float oldResolutionX, final float newResolutionX) {
+		Objects.requireNonNull(camera, "camera == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the resolution on the Y-axis changes.
@@ -147,7 +197,10 @@ public interface CameraObserver {
 	 * @param newResolutionY a {@code float} that represents the new resolution on the Y-axis
 	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
 	 */
-	void onChangeResolutionY(final Camera camera, final float oldResolutionY, final float newResolutionY);
+	@Override
+	public void onChangeResolutionY(final Camera camera, final float oldResolutionY, final float newResolutionY) {
+		Objects.requireNonNull(camera, "camera == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the walk lock state changes.
@@ -159,7 +212,10 @@ public interface CameraObserver {
 	 * @param newIsWalkLockEnabled a {@code boolean} that represents the new walk lock state
 	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
 	 */
-	void onChangeWalkLockEnabled(final Camera camera, final boolean oldIsWalkLockEnabled, final boolean newIsWalkLockEnabled);
+	@Override
+	public void onChangeWalkLockEnabled(final Camera camera, final boolean oldIsWalkLockEnabled, final boolean newIsWalkLockEnabled) {
+		Objects.requireNonNull(camera, "camera == null");
+	}
 	
 	/**
 	 * This method is called by {@code camera} when the yaw changes.
@@ -171,5 +227,10 @@ public interface CameraObserver {
 	 * @param newYaw an {@code AngleF} instance that represents the new yaw
 	 * @throws NullPointerException thrown if, and only if, either {@code camera}, {@code oldYaw} or {@code newYaw} are {@code null}
 	 */
-	void onChangeYaw(final Camera camera, final AngleF oldYaw, final AngleF newYaw);
+	@Override
+	public void onChangeYaw(final Camera camera, final AngleF oldYaw, final AngleF newYaw) {
+		Objects.requireNonNull(camera, "camera == null");
+		Objects.requireNonNull(oldYaw, "oldYaw == null");
+		Objects.requireNonNull(newYaw, "newYaw == null");
+	}
 }

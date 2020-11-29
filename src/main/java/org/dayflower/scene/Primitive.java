@@ -590,6 +590,22 @@ public final class Primitive implements Node {
 	}
 	
 	/**
+	 * Clears the {@link AreaLight} instance associated with this {@code Primitive} instance.
+	 */
+	public void clearAreaLight() {
+		if(!Objects.equals(this.areaLight, null)) {
+			final Optional<AreaLight> oldOptionalAreaLight = Optional.ofNullable(this.areaLight);
+			final Optional<AreaLight> newOptionalAreaLight = Optional.empty();
+			
+			this.areaLight = null;
+			
+			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+				primitiveObserver.onChangeAreaLight(this, oldOptionalAreaLight, newOptionalAreaLight);
+			}
+		}
+	}
+	
+	/**
 	 * Sets the {@link AreaLight} instance associated with this {@code Primitive} instance to {@code areaLight}.
 	 * <p>
 	 * If {@code areaLight} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -598,7 +614,18 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code areaLight} is {@code null}
 	 */
 	public void setAreaLight(final AreaLight areaLight) {
-		this.areaLight = Objects.requireNonNull(areaLight, "areaLight == null");
+		Objects.requireNonNull(areaLight, "areaLight == null");
+		
+		if(!Objects.equals(this.areaLight, areaLight)) {
+			final Optional<AreaLight> oldOptionalAreaLight = Optional.ofNullable(this.areaLight);
+			final Optional<AreaLight> newOptionalAreaLight = Optional.of(areaLight);
+			
+			this.areaLight = areaLight;
+			
+			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+				primitiveObserver.onChangeAreaLight(this, oldOptionalAreaLight, newOptionalAreaLight);
+			}
+		}
 	}
 	
 	/**
@@ -610,7 +637,18 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code material} is {@code null}
 	 */
 	public void setMaterial(final Material material) {
-		this.material = Objects.requireNonNull(material, "material == null");
+		Objects.requireNonNull(material, "material == null");
+		
+		if(!Objects.equals(this.material, material)) {
+			final Material oldMaterial = this.material;
+			final Material newMaterial =      material;
+			
+			this.material = material;
+			
+			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+				primitiveObserver.onChangeMaterial(this, oldMaterial, newMaterial);
+			}
+		}
 	}
 	
 	/**
@@ -639,9 +677,12 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code objectToWorld} is {@code null}
 	 */
 	public void setObjectToWorld(final Matrix44F objectToWorld) {
-		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
-		this.worldToObject = Matrix44F.inverse(objectToWorld);
-		this.boundingVolume = this.shape.getBoundingVolume().transform(this.objectToWorld);
+		Objects.requireNonNull(objectToWorld, "objectToWorld == null");
+		
+		if(doSetObjectToWorld(objectToWorld)) {
+			doSetWorldToObject();
+			doSetBoundingVolume();
+		}
 	}
 	
 	/**
@@ -653,8 +694,11 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
 	public void setShape(final Shape3F shape) {
-		this.shape = Objects.requireNonNull(shape, "shape == null");
-		this.boundingVolume = this.shape.getBoundingVolume().transform(this.objectToWorld);
+		Objects.requireNonNull(shape, "shape == null");
+		
+		if(doSetShape(shape)) {
+			doSetBoundingVolume();
+		}
 	}
 	
 	/**
@@ -666,7 +710,18 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
 	 */
 	public void setTextureAlbedo(final Texture textureAlbedo) {
-		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
+		Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
+		
+		if(!Objects.equals(this.textureAlbedo, textureAlbedo)) {
+			final Texture oldTextureAlbedo = this.textureAlbedo;
+			final Texture newTextureAlbedo =      textureAlbedo;
+			
+			this.textureAlbedo = textureAlbedo;
+			
+			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+				primitiveObserver.onChangeTextureAlbedo(this, oldTextureAlbedo, newTextureAlbedo);
+			}
+		}
 	}
 	
 	/**
@@ -678,7 +733,18 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code textureEmittance} is {@code null}
 	 */
 	public void setTextureEmittance(final Texture textureEmittance) {
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+		Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+		
+		if(!Objects.equals(this.textureEmittance, textureEmittance)) {
+			final Texture oldTextureEmittance = this.textureEmittance;
+			final Texture newTextureEmittance =      textureEmittance;
+			
+			this.textureEmittance = textureEmittance;
+			
+			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+				primitiveObserver.onChangeTextureEmittance(this, oldTextureEmittance, newTextureEmittance);
+			}
+		}
 	}
 	
 	/**
@@ -695,9 +761,102 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code worldToObject} is {@code null}
 	 */
 	public void setWorldToObject(final Matrix44F worldToObject) {
-		this.worldToObject = Objects.requireNonNull(worldToObject, "worldToObject == null");
-		this.objectToWorld = Matrix44F.inverse(worldToObject);
-		this.boundingVolume = this.shape.getBoundingVolume().transform(this.objectToWorld);
+		Objects.requireNonNull(worldToObject, "worldToObject == null");
+		
+		if(doSetWorldToObject(worldToObject)) {
+			doSetObjectToWorld();
+			doSetBoundingVolume();
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doSetBoundingVolume() {
+		return doSetBoundingVolume(this.shape.getBoundingVolume().transform(this.objectToWorld));
+	}
+	
+	private boolean doSetBoundingVolume(final BoundingVolume3F boundingVolume) {
+		Objects.requireNonNull(boundingVolume, "boundingVolume == null");
+		
+		if(!Objects.equals(this.boundingVolume, boundingVolume)) {
+			final BoundingVolume3F oldBoundingVolume = this.boundingVolume;
+			final BoundingVolume3F newBoundingVolume =      boundingVolume;
+			
+			this.boundingVolume = boundingVolume;
+			
+			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+				primitiveObserver.onChangeBoundingVolume(this, oldBoundingVolume, newBoundingVolume);
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean doSetObjectToWorld() {
+		return doSetObjectToWorld(Matrix44F.inverse(this.worldToObject));
+	}
+	
+	private boolean doSetObjectToWorld(final Matrix44F objectToWorld) {
+		Objects.requireNonNull(objectToWorld, "objectToWorld == null");
+		
+		if(!Objects.equals(this.objectToWorld, objectToWorld)) {
+			final Matrix44F oldObjectToWorld = this.objectToWorld;
+			final Matrix44F newObjectToWorld =      objectToWorld;
+			
+			this.objectToWorld = objectToWorld;
+			
+			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+				primitiveObserver.onChangeObjectToWorld(this, oldObjectToWorld, newObjectToWorld);
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean doSetShape(final Shape3F shape) {
+		Objects.requireNonNull(shape, "shape == null");
+		
+		if(!Objects.equals(this.shape, shape)) {
+			final Shape3F oldShape = this.shape;
+			final Shape3F newShape =      shape;
+			
+			this.shape = shape;
+			
+			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+				primitiveObserver.onChangeShape(this, oldShape, newShape);
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean doSetWorldToObject() {
+		return doSetWorldToObject(Matrix44F.inverse(this.objectToWorld));
+	}
+	
+	private boolean doSetWorldToObject(final Matrix44F worldToObject) {
+		Objects.requireNonNull(worldToObject, "worldToObject == null");
+		
+		if(!Objects.equals(this.worldToObject, worldToObject)) {
+			final Matrix44F oldWorldToObject = this.worldToObject;
+			final Matrix44F newWorldToObject =      worldToObject;
+			
+			this.worldToObject = worldToObject;
+			
+			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+				primitiveObserver.onChangeWorldToObject(this, oldWorldToObject, newWorldToObject);
+			}
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

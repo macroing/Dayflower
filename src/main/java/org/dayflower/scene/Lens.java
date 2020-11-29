@@ -18,14 +18,21 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code Lens} represents a lens and is associated with a {@link Camera} instance.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public enum Lens {
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code Lens} instance that represents a fisheye lens.
+	 */
 	FISHEYE,
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code Lens} instance that represents a thin lens.
+	 */
 	THIN;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +43,11 @@ public enum Lens {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code Lens} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code Lens} instance
+	 */
 	@Override
 	public String toString() {
 		switch(this) {

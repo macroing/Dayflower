@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
@@ -25,12 +26,21 @@ import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Shape3F;
 
 /**
- * A {@code PrimitiveObserver} is used to observe changes to a {@link Primitive} instance.
+ * An {@code AbstractPrimitiveObserver} is an abstract implementation of {@link PrimitiveObserver} that does nothing by default.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface PrimitiveObserver {
+public abstract class AbstractPrimitiveObserver implements PrimitiveObserver {
+	/**
+	 * Constructs a new {@code AbstractPrimitiveObserver} instance.
+	 */
+	protected AbstractPrimitiveObserver() {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * This method is called by {@code primitive} when the {@link AreaLight} changes.
 	 * <p>
@@ -41,7 +51,12 @@ public interface PrimitiveObserver {
 	 * @param newOptionalAreaLight an {@code Optional} with the new {@code AreaLight} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldOptionalAreaLight} or {@code newOptionalAreaLight} are {@code null}
 	 */
-	void onChangeAreaLight(final Primitive primitive, final Optional<AreaLight> oldOptionalAreaLight, final Optional<AreaLight> newOptionalAreaLight);
+	@Override
+	public void onChangeAreaLight(final Primitive primitive, final Optional<AreaLight> oldOptionalAreaLight, final Optional<AreaLight> newOptionalAreaLight) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		Objects.requireNonNull(oldOptionalAreaLight, "oldOptionalAreaLight == null");
+		Objects.requireNonNull(newOptionalAreaLight, "newOptionalAreaLight == null");
+	}
 	
 	/**
 	 * This method is called by {@code primitive} when the {@link BoundingVolume3F} changes.
@@ -53,7 +68,12 @@ public interface PrimitiveObserver {
 	 * @param newBoundingVolume the new {@code BoundingVolume3F} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldBoundingVolume} or {@code newBoundingVolume} are {@code null}
 	 */
-	void onChangeBoundingVolume(final Primitive primitive, final BoundingVolume3F oldBoundingVolume, final BoundingVolume3F newBoundingVolume);
+	@Override
+	public void onChangeBoundingVolume(final Primitive primitive, final BoundingVolume3F oldBoundingVolume, final BoundingVolume3F newBoundingVolume) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		Objects.requireNonNull(oldBoundingVolume, "oldBoundingVolume == null");
+		Objects.requireNonNull(newBoundingVolume, "newBoundingVolume == null");
+	}
 	
 	/**
 	 * This method is called by {@code primitive} when the {@link Material} changes.
@@ -65,7 +85,12 @@ public interface PrimitiveObserver {
 	 * @param newMaterial the new {@code Material} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldMaterial} or {@code newMaterial} are {@code null}
 	 */
-	void onChangeMaterial(final Primitive primitive, final Material oldMaterial, final Material newMaterial);
+	@Override
+	public void onChangeMaterial(final Primitive primitive, final Material oldMaterial, final Material newMaterial) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		Objects.requireNonNull(oldMaterial, "oldMaterial == null");
+		Objects.requireNonNull(newMaterial, "newMaterial == null");
+	}
 	
 	/**
 	 * This method is called by {@code primitive} when the {@link Matrix44F} instance that transforms from object space to world space changes.
@@ -77,7 +102,12 @@ public interface PrimitiveObserver {
 	 * @param newObjectToWorld the new {@code Matrix44F} instance that transforms from object space to world space
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldObjectToWorld} or {@code newObjectToWorld} are {@code null}
 	 */
-	void onChangeObjectToWorld(final Primitive primitive, final Matrix44F oldObjectToWorld, final Matrix44F newObjectToWorld);
+	@Override
+	public void onChangeObjectToWorld(final Primitive primitive, final Matrix44F oldObjectToWorld, final Matrix44F newObjectToWorld) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		Objects.requireNonNull(oldObjectToWorld, "oldObjectToWorld == null");
+		Objects.requireNonNull(newObjectToWorld, "newObjectToWorld == null");
+	}
 	
 	/**
 	 * This method is called by {@code primitive} when the {@link Shape3F} changes.
@@ -89,7 +119,12 @@ public interface PrimitiveObserver {
 	 * @param newShape the new {@code Shape3F} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldShape} or {@code newShape} are {@code null}
 	 */
-	void onChangeShape(final Primitive primitive, final Shape3F oldShape, final Shape3F newShape);
+	@Override
+	public void onChangeShape(final Primitive primitive, final Shape3F oldShape, final Shape3F newShape) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		Objects.requireNonNull(oldShape, "oldShape == null");
+		Objects.requireNonNull(newShape, "newShape == null");
+	}
 	
 	/**
 	 * This method is called by {@code primitive} when the {@link Texture} instance for the albedo color changes.
@@ -101,7 +136,12 @@ public interface PrimitiveObserver {
 	 * @param newTextureAlbedo the new {@code Texture} instance for the albedo color
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldTextureAlbedo} or {@code newTextureAlbedo} are {@code null}
 	 */
-	void onChangeTextureAlbedo(final Primitive primitive, final Texture oldTextureAlbedo, final Texture newTextureAlbedo);
+	@Override
+	public void onChangeTextureAlbedo(final Primitive primitive, final Texture oldTextureAlbedo, final Texture newTextureAlbedo) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		Objects.requireNonNull(oldTextureAlbedo, "oldTextureAlbedo == null");
+		Objects.requireNonNull(newTextureAlbedo, "newTextureAlbedo == null");
+	}
 	
 	/**
 	 * This method is called by {@code primitive} when the {@link Texture} instance for the emittance changes.
@@ -113,7 +153,12 @@ public interface PrimitiveObserver {
 	 * @param newTextureEmittance the new {@code Texture} instance for the emittance
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldTextureEmittance} or {@code newTextureEmittance} are {@code null}
 	 */
-	void onChangeTextureEmittance(final Primitive primitive, final Texture oldTextureEmittance, final Texture newTextureEmittance);
+	@Override
+	public void onChangeTextureEmittance(final Primitive primitive, final Texture oldTextureEmittance, final Texture newTextureEmittance) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		Objects.requireNonNull(oldTextureEmittance, "oldTextureEmittance == null");
+		Objects.requireNonNull(newTextureEmittance, "newTextureEmittance == null");
+	}
 	
 	/**
 	 * This method is called by {@code primitive} when the {@link Matrix44F} instance that transforms from world space to object space changes.
@@ -125,5 +170,10 @@ public interface PrimitiveObserver {
 	 * @param newWorldToObject the new {@code Matrix44F} instance that transforms from world space to object space
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldWorldToObject} or {@code newWorldToObject} are {@code null}
 	 */
-	void onChangeWorldToObject(final Primitive primitive, final Matrix44F oldWorldToObject, final Matrix44F newWorldToObject);
+	@Override
+	public void onChangeWorldToObject(final Primitive primitive, final Matrix44F oldWorldToObject, final Matrix44F newWorldToObject) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		Objects.requireNonNull(oldWorldToObject, "oldWorldToObject == null");
+		Objects.requireNonNull(newWorldToObject, "newWorldToObject == null");
+	}
 }

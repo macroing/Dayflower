@@ -22,5 +22,27 @@ import java.lang.reflect.Field;
 
 //TODO: Add Javadocs!
 public interface SceneObserver {
+//	TODO: Add Javadocs!
+	void onAddLight(final Scene scene, final Light newLight);
 	
+//	TODO: Add Javadocs!
+	void onAddPrimitive(final Scene scene, final Primitive newPrimitive);
+	
+//	TODO: Add Javadocs!
+	void onChangeCamera(final Scene scene, final Camera oldCamera);
+	
+//	TODO: Add Javadocs!
+	void onChangeCamera(final Scene scene, final Camera oldCamera, final Camera newCamera);
+	
+//	TODO: Add Javadocs!
+	void onChangeName(final Scene scene, final String oldName, final String newName);
+	
+//	TODO: Add Javadocs!
+	void onChangePrimitive(final Scene scene, final Primitive oldPrimitive);
+	
+//	TODO: Add Javadocs!
+	void onRemoveLight(final Scene scene, final Light oldLight);
+	
+//	TODO: Add Javadocs!
+	void onRemovePrimitive(final Scene scene, final Primitive oldPrimitive);
 }

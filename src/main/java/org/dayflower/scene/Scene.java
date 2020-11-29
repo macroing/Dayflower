@@ -31,9 +31,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.node.Node;
@@ -52,10 +56,12 @@ import org.dayflower.util.ParameterArguments;
 public final class Scene implements Node {
 	private BVHNode bVHNode;
 	private Camera camera;
-	private List<Light> lights;
-	private List<Primitive> primitives;
-	private List<Primitive> primitivesExternalToBVH;
-	private List<SceneObserver> sceneObservers;
+	private final CameraObserver cameraObserver;
+	private final List<Light> lights;
+	private final List<Primitive> primitives;
+	private final List<Primitive> primitivesExternalToBVH;
+	private final List<SceneObserver> sceneObservers;
+	private final PrimitiveObserver primitiveObserver;
 	private String name;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,11 +110,14 @@ public final class Scene implements Node {
 	 */
 	public Scene(final Camera camera, final String name) {
 		this.bVHNode = null;
-		this.camera = Objects.requireNonNull(camera, "camera == null");
 		this.lights = new ArrayList<>();
 		this.primitives = new ArrayList<>();
 		this.primitivesExternalToBVH = new ArrayList<>();
 		this.sceneObservers = new ArrayList<>();
+		this.cameraObserver = new CameraObserverImpl(this, this.sceneObservers);
+		this.camera = Objects.requireNonNull(camera, "camera == null");
+		this.camera.addCameraObserver(this.cameraObserver);
+		this.primitiveObserver = new PrimitiveObserverImpl(this, this.sceneObservers);
 		this.name = Objects.requireNonNull(name, "name == null");
 	}
 	
@@ -300,7 +309,17 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code light} is {@code null}
 	 */
 	public boolean addLight(final Light light) {
-		return this.lights.add(Objects.requireNonNull(light, "light == null"));
+		Objects.requireNonNull(light, "light == null");
+		
+		if(this.lights.add(light)) {
+			for(final SceneObserver sceneObserver : this.sceneObservers) {
+				sceneObserver.onAddLight(this, light);
+			}
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -315,7 +334,19 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
 	 */
 	public boolean addPrimitive(final Primitive primitive) {
-		return this.primitives.add(Objects.requireNonNull(primitive, "primitive == null"));
+		Objects.requireNonNull(primitive, "primitive == null");
+		
+		if(this.primitives.add(primitive)) {
+			primitive.addPrimitiveObserver(this.primitiveObserver);
+			
+			for(final SceneObserver sceneObserver : this.sceneObservers) {
+				sceneObserver.onAddPrimitive(this, primitive);
+			}
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -411,7 +442,17 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code light} is {@code null}
 	 */
 	public boolean removeLight(final Light light) {
-		return this.lights.remove(Objects.requireNonNull(light, "light == null"));
+		Objects.requireNonNull(light, "light == null");
+		
+		if(this.lights.remove(light)) {
+			for(final SceneObserver sceneObserver : this.sceneObservers) {
+				sceneObserver.onRemoveLight(this, light);
+			}
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -426,7 +467,19 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
 	 */
 	public boolean removePrimitive(final Primitive primitive) {
-		return this.primitives.remove(Objects.requireNonNull(primitive, "primitive == null"));
+		Objects.requireNonNull(primitive, "primitive == null");
+		
+		if(this.primitives.remove(primitive)) {
+			primitive.removePrimitiveObserver(this.primitiveObserver);
+			
+			for(final SceneObserver sceneObserver : this.sceneObservers) {
+				sceneObserver.onRemovePrimitive(this, primitive);
+			}
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -516,7 +569,8 @@ public final class Scene implements Node {
 		final List<Primitive> primitivesExternalToBVH = new ArrayList<>();
 		
 		this.bVHNode = doCreateBVHNode(primitives, primitivesExternalToBVH);
-		this.primitivesExternalToBVH = primitivesExternalToBVH;
+		this.primitivesExternalToBVH.clear();
+		this.primitivesExternalToBVH.addAll(primitivesExternalToBVH);
 	}
 	
 	/**
@@ -528,7 +582,18 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code camera} is {@code null}
 	 */
 	public void setCamera(final Camera camera) {
-		this.camera = Objects.requireNonNull(camera, "camera == null");
+		Objects.requireNonNull(camera, "camera == null");
+		
+		final Camera oldCamera = this.camera;
+		final Camera newCamera =      camera;
+		
+		this.camera.removeCameraObserver(this.cameraObserver);
+		this.camera = camera;
+		this.camera.addCameraObserver(this.cameraObserver);
+		
+		for(final SceneObserver sceneObserver : this.sceneObservers) {
+			sceneObserver.onChangeCamera(this, oldCamera, newCamera);
+		}
 	}
 	
 	/**
@@ -540,7 +605,15 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code lights} or at least one of its elements are {@code null}
 	 */
 	public void setLights(final List<Light> lights) {
-		this.lights = new ArrayList<>(ParameterArguments.requireNonNullList(lights, "lights"));
+		ParameterArguments.requireNonNullList(lights, "lights");
+		
+		for(final Light light : getLights()) {
+			removeLight(light);
+		}
+		
+		for(final Light light : lights) {
+			addLight(light);
+		}
 	}
 	
 	/**
@@ -552,7 +625,18 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
 	 */
 	public void setName(final String name) {
-		this.name = Objects.requireNonNull(name, "name == null");
+		Objects.requireNonNull(name, "name == null");
+		
+		if(!Objects.equals(this.name, name)) {
+			final String oldName = this.name;
+			final String newName =      name;
+			
+			this.name = name;
+			
+			for(final SceneObserver sceneObserver : this.sceneObservers) {
+				sceneObserver.onChangeName(this, oldName, newName);
+			}
+		}
 	}
 	
 	/**
@@ -564,7 +648,15 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code primitives} or at least one of its elements are {@code null}
 	 */
 	public void setPrimitives(final List<Primitive> primitives) {
-		this.primitives = new ArrayList<>(ParameterArguments.requireNonNullList(primitives, "primitives"));
+		ParameterArguments.requireNonNullList(primitives, "primitives");
+		
+		for(final Primitive primitive : getPrimitives()) {
+			removePrimitive(primitive);
+		}
+		
+		for(final Primitive primitive : primitives) {
+			addPrimitive(primitive);
+		}
 	}
 	
 	/**
@@ -576,7 +668,8 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code sceneObservers} or at least one of its elements are {@code null}
 	 */
 	public void setSceneObservers(final List<SceneObserver> sceneObservers) {
-		this.sceneObservers = new ArrayList<>(ParameterArguments.requireNonNullList(sceneObservers, "sceneObservers"));
+		this.sceneObservers.clear();
+		this.sceneObservers.addAll(ParameterArguments.requireNonNullList(sceneObservers, "sceneObservers"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -834,6 +927,128 @@ public final class Scene implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private static final class CameraObserverImpl implements CameraObserver {
+		private final List<SceneObserver> sceneObservers;
+		private final Scene scene;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public CameraObserverImpl(final Scene scene, final List<SceneObserver> sceneObservers) {
+			this.scene = Objects.requireNonNull(scene, "scene == null");
+			this.sceneObservers = ParameterArguments.requireNonNullList(sceneObservers, "sceneObservers");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void onChangeApertureRadius(final Camera camera, final float oldApertureRadius, final float newApertureRadius) {
+			Objects.requireNonNull(camera, "camera == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeEye(final Camera camera, final Point3F oldEye, final Point3F newEye) {
+			Objects.requireNonNull(camera, "camera == null");
+			Objects.requireNonNull(oldEye, "oldEye == null");
+			Objects.requireNonNull(newEye, "newEye == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeFieldOfViewX(final Camera camera, final AngleF oldFieldOfViewX, final AngleF newFieldOfViewX) {
+			Objects.requireNonNull(camera, "camera == null");
+			Objects.requireNonNull(oldFieldOfViewX, "oldFieldOfViewX == null");
+			Objects.requireNonNull(newFieldOfViewX, "newFieldOfViewX == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeFieldOfViewY(final Camera camera, final AngleF oldFieldOfViewY, final AngleF newFieldOfViewY) {
+			Objects.requireNonNull(camera, "camera == null");
+			Objects.requireNonNull(oldFieldOfViewY, "oldFieldOfViewY == null");
+			Objects.requireNonNull(newFieldOfViewY, "newFieldOfViewY == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeFocalDistance(final Camera camera, final float oldFocalDistance, final float newFocalDistance) {
+			Objects.requireNonNull(camera, "camera == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeLens(final Camera camera, final Lens oldLens, final Lens newLens) {
+			Objects.requireNonNull(camera, "camera == null");
+			Objects.requireNonNull(oldLens, "oldLens == null");
+			Objects.requireNonNull(newLens, "newLens == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeOrthonormalBasis(final Camera camera, final OrthonormalBasis33F oldOrthonormalBasis, final OrthonormalBasis33F newOrthonormalBasis) {
+			Objects.requireNonNull(camera, "camera == null");
+			Objects.requireNonNull(oldOrthonormalBasis, "oldOrthonormalBasis == null");
+			Objects.requireNonNull(newOrthonormalBasis, "newOrthonormalBasis == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangePitch(final Camera camera, final AngleF oldPitch, final AngleF newPitch) {
+			Objects.requireNonNull(camera, "camera == null");
+			Objects.requireNonNull(oldPitch, "oldPitch == null");
+			Objects.requireNonNull(newPitch, "newPitch == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeResolutionX(final Camera camera, final float oldResolutionX, final float newResolutionX) {
+			Objects.requireNonNull(camera, "camera == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeResolutionY(final Camera camera, final float oldResolutionY, final float newResolutionY) {
+			Objects.requireNonNull(camera, "camera == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeWalkLockEnabled(final Camera camera, final boolean oldIsWalkLockEnabled, final boolean newIsWalkLockEnabled) {
+			Objects.requireNonNull(camera, "camera == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		@Override
+		public void onChangeYaw(final Camera camera, final AngleF oldYaw, final AngleF newYaw) {
+			Objects.requireNonNull(camera, "camera == null");
+			Objects.requireNonNull(oldYaw, "oldYaw == null");
+			Objects.requireNonNull(newYaw, "newYaw == null");
+			
+			doOnChangeCamera(camera);
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private void doOnChangeCamera(final Camera oldCamera) {
+			for(final SceneObserver sceneObserver : this.sceneObservers) {
+				sceneObserver.onChangeCamera(this.scene, oldCamera);
+			}
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static final class LeafBVHNode extends BVHNode {
 		private final List<Primitive> primitives;
 		
@@ -941,6 +1156,102 @@ public final class Scene implements Node {
 		@Override
 		public int hashCode() {
 			return Objects.hash(getBoundingVolume(), Integer.valueOf(getDepth()), this.primitives);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class PrimitiveObserverImpl implements PrimitiveObserver {
+		private final List<SceneObserver> sceneObservers;
+		private final Scene scene;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public PrimitiveObserverImpl(final Scene scene, final List<SceneObserver> sceneObservers) {
+			this.scene = Objects.requireNonNull(scene, "scene == null");
+			this.sceneObservers = ParameterArguments.requireNonNullList(sceneObservers, "sceneObservers");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void onChangeAreaLight(final Primitive primitive, final Optional<AreaLight> oldOptionalAreaLight, final Optional<AreaLight> newOptionalAreaLight) {
+			Objects.requireNonNull(primitive, "primitive == null");
+			Objects.requireNonNull(oldOptionalAreaLight, "oldOptionalAreaLight == null");
+			Objects.requireNonNull(newOptionalAreaLight, "newOptionalAreaLight == null");
+			
+			doOnChangePrimitive(primitive);
+		}
+		
+		@Override
+		public void onChangeBoundingVolume(final Primitive primitive, final BoundingVolume3F oldBoundingVolume, final BoundingVolume3F newBoundingVolume) {
+			Objects.requireNonNull(primitive, "primitive == null");
+			Objects.requireNonNull(oldBoundingVolume, "oldBoundingVolume == null");
+			Objects.requireNonNull(newBoundingVolume, "newBoundingVolume == null");
+			
+			doOnChangePrimitive(primitive);
+		}
+		
+		@Override
+		public void onChangeMaterial(final Primitive primitive, final Material oldMaterial, final Material newMaterial) {
+			Objects.requireNonNull(primitive, "primitive == null");
+			Objects.requireNonNull(oldMaterial, "oldMaterial == null");
+			Objects.requireNonNull(newMaterial, "newMaterial == null");
+			
+			doOnChangePrimitive(primitive);
+		}
+		
+		@Override
+		public void onChangeObjectToWorld(final Primitive primitive, final Matrix44F oldObjectToWorld, final Matrix44F newObjectToWorld) {
+			Objects.requireNonNull(primitive, "primitive == null");
+			Objects.requireNonNull(oldObjectToWorld, "oldObjectToWorld == null");
+			Objects.requireNonNull(newObjectToWorld, "newObjectToWorld == null");
+			
+			doOnChangePrimitive(primitive);
+		}
+		
+		@Override
+		public void onChangeShape(final Primitive primitive, final Shape3F oldShape, final Shape3F newShape) {
+			Objects.requireNonNull(primitive, "primitive == null");
+			Objects.requireNonNull(oldShape, "oldShape == null");
+			Objects.requireNonNull(newShape, "newShape == null");
+			
+			doOnChangePrimitive(primitive);
+		}
+		
+		@Override
+		public void onChangeTextureAlbedo(final Primitive primitive, final Texture oldTextureAlbedo, final Texture newTextureAlbedo) {
+			Objects.requireNonNull(primitive, "primitive == null");
+			Objects.requireNonNull(oldTextureAlbedo, "oldTextureAlbedo == null");
+			Objects.requireNonNull(newTextureAlbedo, "newTextureAlbedo == null");
+			
+			doOnChangePrimitive(primitive);
+		}
+		
+		@Override
+		public void onChangeTextureEmittance(final Primitive primitive, final Texture oldTextureEmittance, final Texture newTextureEmittance) {
+			Objects.requireNonNull(primitive, "primitive == null");
+			Objects.requireNonNull(oldTextureEmittance, "oldTextureEmittance == null");
+			Objects.requireNonNull(newTextureEmittance, "newTextureEmittance == null");
+			
+			doOnChangePrimitive(primitive);
+		}
+		
+		@Override
+		public void onChangeWorldToObject(final Primitive primitive, final Matrix44F oldWorldToObject, final Matrix44F newWorldToObject) {
+			Objects.requireNonNull(primitive, "primitive == null");
+			Objects.requireNonNull(oldWorldToObject, "oldWorldToObject == null");
+			Objects.requireNonNull(newWorldToObject, "newWorldToObject == null");
+			
+			doOnChangePrimitive(primitive);
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private void doOnChangePrimitive(final Primitive oldPrimitive) {
+			for(final SceneObserver sceneObserver : this.sceneObservers) {
+				sceneObserver.onChangePrimitive(this.scene, oldPrimitive);
+			}
 		}
 	}
 	

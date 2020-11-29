@@ -18,13 +18,24 @@
  */
 package org.dayflower.scene;
 
+import java.util.Objects;
+
 /**
- * A {@code SceneObserver} is used to observe changes to a {@link Scene} instance.
+ * An {@code AbstractSceneObserver} is an abstract implementation of {@link SceneObserver} that does nothing by default.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface SceneObserver {
+public abstract class AbstractSceneObserver implements SceneObserver {
+	/**
+	 * Constructs a new {@code AbstractSceneObserver} instance.
+	 */
+	protected AbstractSceneObserver() {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * This method is called by {@code scene} when a {@link Light} is added.
 	 * <p>
@@ -34,7 +45,11 @@ public interface SceneObserver {
 	 * @param newLight the new {@code Light} instance that was added
 	 * @throws NullPointerException thrown if, and only if, either {@code scene} or {@code newLight} are {@code null}
 	 */
-	void onAddLight(final Scene scene, final Light newLight);
+	@Override
+	public void onAddLight(final Scene scene, final Light newLight) {
+		Objects.requireNonNull(scene, "scene == null");
+		Objects.requireNonNull(newLight, "newLight == null");
+	}
 	
 	/**
 	 * This method is called by {@code scene} when a {@link Primitive} is added.
@@ -45,7 +60,11 @@ public interface SceneObserver {
 	 * @param newPrimitive the new {@code Primitive} instance that was added
 	 * @throws NullPointerException thrown if, and only if, either {@code scene} or {@code newPrimitive} are {@code null}
 	 */
-	void onAddPrimitive(final Scene scene, final Primitive newPrimitive);
+	@Override
+	public void onAddPrimitive(final Scene scene, final Primitive newPrimitive) {
+		Objects.requireNonNull(scene, "scene == null");
+		Objects.requireNonNull(newPrimitive, "newPrimitive == null");
+	}
 	
 	/**
 	 * This method is called by {@code scene} when the {@link Camera} changes.
@@ -56,7 +75,11 @@ public interface SceneObserver {
 	 * @param oldCamera the old {@code Camera} instance that was changed
 	 * @throws NullPointerException thrown if, and only if, either {@code scene} or {@code oldCamera} are {@code null}
 	 */
-	void onChangeCamera(final Scene scene, final Camera oldCamera);
+	@Override
+	public void onChangeCamera(final Scene scene, final Camera oldCamera) {
+		Objects.requireNonNull(scene, "scene == null");
+		Objects.requireNonNull(oldCamera, "oldCamera == null");
+	}
 	
 	/**
 	 * This method is called by {@code scene} when the {@link Camera} changes.
@@ -68,7 +91,12 @@ public interface SceneObserver {
 	 * @param newCamera the new {@code Camera} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code scene}, {@code oldCamera} or {@code newCamera} are {@code null}
 	 */
-	void onChangeCamera(final Scene scene, final Camera oldCamera, final Camera newCamera);
+	@Override
+	public void onChangeCamera(final Scene scene, final Camera oldCamera, final Camera newCamera) {
+		Objects.requireNonNull(scene, "scene == null");
+		Objects.requireNonNull(oldCamera, "oldCamera == null");
+		Objects.requireNonNull(newCamera, "newCamera == null");
+	}
 	
 	/**
 	 * This method is called by {@code scene} when the name changes.
@@ -80,7 +108,12 @@ public interface SceneObserver {
 	 * @param newName the new name
 	 * @throws NullPointerException thrown if, and only if, either {@code scene}, {@code oldName} or {@code newName} are {@code null}
 	 */
-	void onChangeName(final Scene scene, final String oldName, final String newName);
+	@Override
+	public void onChangeName(final Scene scene, final String oldName, final String newName) {
+		Objects.requireNonNull(scene, "scene == null");
+		Objects.requireNonNull(oldName, "oldName == null");
+		Objects.requireNonNull(newName, "newName == null");
+	}
 	
 	/**
 	 * This method is called by {@code scene} when a {@link Primitive} changes.
@@ -91,7 +124,11 @@ public interface SceneObserver {
 	 * @param oldPrimitive the old {@code Primitive} instance that was changed
 	 * @throws NullPointerException thrown if, and only if, either {@code scene} or {@code oldPrimitive} are {@code null}
 	 */
-	void onChangePrimitive(final Scene scene, final Primitive oldPrimitive);
+	@Override
+	public void onChangePrimitive(final Scene scene, final Primitive oldPrimitive) {
+		Objects.requireNonNull(scene, "scene == null");
+		Objects.requireNonNull(oldPrimitive, "oldPrimitive == null");
+	}
 	
 	/**
 	 * This method is called by {@code scene} when a {@link Light} is removed.
@@ -102,7 +139,11 @@ public interface SceneObserver {
 	 * @param oldLight the old {@code Light} instance that was removed
 	 * @throws NullPointerException thrown if, and only if, either {@code scene} or {@code oldLight} are {@code null}
 	 */
-	void onRemoveLight(final Scene scene, final Light oldLight);
+	@Override
+	public void onRemoveLight(final Scene scene, final Light oldLight) {
+		Objects.requireNonNull(scene, "scene == null");
+		Objects.requireNonNull(oldLight, "oldLight == null");
+	}
 	
 	/**
 	 * This method is called by {@code scene} when a {@link Primitive} is removed.
@@ -113,5 +154,9 @@ public interface SceneObserver {
 	 * @param oldPrimitive the old {@code Primitive} instance that was removed
 	 * @throws NullPointerException thrown if, and only if, either {@code scene} or {@code oldPrimitive} are {@code null}
 	 */
-	void onRemovePrimitive(final Scene scene, final Primitive oldPrimitive);
+	@Override
+	public void onRemovePrimitive(final Scene scene, final Primitive oldPrimitive) {
+		Objects.requireNonNull(scene, "scene == null");
+		Objects.requireNonNull(oldPrimitive, "oldPrimitive == null");
+	}
 }

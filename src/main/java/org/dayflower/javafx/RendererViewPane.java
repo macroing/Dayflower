@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -35,6 +36,7 @@ import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
+import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
@@ -449,6 +451,10 @@ final class RendererViewPane extends BorderPane {
 			
 			final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
 			
+			final Scene scene = rendererConfiguration.getScene();
+			
+			final Camera camera = scene.getCamera();
+			
 			final Material material = new MatteMaterial();
 			
 			final Shape3F shape = new Plane3F();
@@ -456,10 +462,10 @@ final class RendererViewPane extends BorderPane {
 			final Texture textureAlbedo = new ConstantTexture(Color3F.BLACK);
 			final Texture textureEmittance = new ConstantTexture(Color3F.BLACK);
 			
-			final Primitive primitive = new Primitive(material, shape, textureAlbedo, textureEmittance);
+			final Matrix44F objectToWorld = Matrix44F.translate(camera.getPointBelowEye(1.0F));
 			
-			final
-			Scene scene = rendererConfiguration.getScene();
+			final Primitive primitive = new Primitive(material, shape, textureAlbedo, textureEmittance, objectToWorld);
+			
 			scene.addPrimitive(primitive);
 			
 			renderer.clear();
@@ -473,6 +479,10 @@ final class RendererViewPane extends BorderPane {
 			
 			final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
 			
+			final Scene scene = rendererConfiguration.getScene();
+			
+			final Camera camera = scene.getCamera();
+			
 			final Material material = new MatteMaterial();
 			
 			final Shape3F shape = new Sphere3F();
@@ -480,10 +490,10 @@ final class RendererViewPane extends BorderPane {
 			final Texture textureAlbedo = new ConstantTexture(Color3F.BLACK);
 			final Texture textureEmittance = new ConstantTexture(Color3F.BLACK);
 			
-			final Primitive primitive = new Primitive(material, shape, textureAlbedo, textureEmittance);
+			final Matrix44F objectToWorld = Matrix44F.translate(camera.getPointInfrontOfEye(7.5F));
 			
-			final
-			Scene scene = rendererConfiguration.getScene();
+			final Primitive primitive = new Primitive(material, shape, textureAlbedo, textureEmittance, objectToWorld);
+			
 			scene.addPrimitive(primitive);
 			
 			renderer.clear();

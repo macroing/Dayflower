@@ -71,12 +71,12 @@ public final class Camera implements Node {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Camera(new Point3F(0.0F, 1.0F, -10.0F));
+	 * new Camera(new Point3F());
 	 * }
 	 * </pre>
 	 */
 	public Camera() {
-		this(new Point3F(0.0F, 1.0F, -10.0F));
+		this(new Point3F());
 	}
 	
 	/**
@@ -283,6 +283,114 @@ public final class Camera implements Node {
 	 */
 	public Point3F getEye() {
 		return this.eye;
+	}
+	
+	/**
+	 * Returns a {@link Point3F} instance that is {@code distance} units above the eye.
+	 * 
+	 * @param distance the distance
+	 * @return a {@code Point3F} instance that is {@code distance} units above the eye
+	 */
+	public Point3F getPointAboveEye(final float distance) {
+		final Point3F eye = this.eye;
+		
+		final Vector3F v = this.orthonormalBasis.getV();
+		
+		final float x = eye.getX() + v.getX() * distance;
+		final float y = eye.getY() + v.getY() * distance;
+		final float z = eye.getZ() + v.getZ() * distance;
+		
+		return new Point3F(x, y, z);
+	}
+	
+	/**
+	 * Returns a {@link Point3F} instance that is {@code distance} units behind the eye.
+	 * 
+	 * @param distance the distance
+	 * @return a {@code Point3F} instance that is {@code distance} units behind the eye
+	 */
+	public Point3F getPointBehindEye(final float distance) {
+		final Point3F eye = this.eye;
+		
+		final Vector3F w = this.orthonormalBasis.getW();
+		
+		final float x = eye.getX() - w.getX() * distance;
+		final float y = eye.getY() - w.getY() * distance;
+		final float z = eye.getZ() - w.getZ() * distance;
+		
+		return new Point3F(x, y, z);
+	}
+	
+	/**
+	 * Returns a {@link Point3F} instance that is {@code distance} units below the eye.
+	 * 
+	 * @param distance the distance
+	 * @return a {@code Point3F} instance that is {@code distance} units below the eye
+	 */
+	public Point3F getPointBelowEye(final float distance) {
+		final Point3F eye = this.eye;
+		
+		final Vector3F v = this.orthonormalBasis.getV();
+		
+		final float x = eye.getX() - v.getX() * distance;
+		final float y = eye.getY() - v.getY() * distance;
+		final float z = eye.getZ() - v.getZ() * distance;
+		
+		return new Point3F(x, y, z);
+	}
+	
+	/**
+	 * Returns a {@link Point3F} instance that is {@code distance} units infront of the eye.
+	 * 
+	 * @param distance the distance
+	 * @return a {@code Point3F} instance that is {@code distance} units infront of the eye
+	 */
+	public Point3F getPointInfrontOfEye(final float distance) {
+		final Point3F eye = this.eye;
+		
+		final Vector3F w = this.orthonormalBasis.getW();
+		
+		final float x = eye.getX() + w.getX() * distance;
+		final float y = eye.getY() + w.getY() * distance;
+		final float z = eye.getZ() + w.getZ() * distance;
+		
+		return new Point3F(x, y, z);
+	}
+	
+	/**
+	 * Returns a {@link Point3F} instance that is {@code distance} units left of the eye.
+	 * 
+	 * @param distance the distance
+	 * @return a {@code Point3F} instance that is {@code distance} units left of the eye
+	 */
+	public Point3F getPointLeftOfEye(final float distance) {
+		final Point3F eye = this.eye;
+		
+		final Vector3F u = this.orthonormalBasis.getU();
+		
+		final float x = eye.getX() - u.getX() * distance;
+		final float y = eye.getY() - u.getY() * distance;
+		final float z = eye.getZ() - u.getZ() * distance;
+		
+		return new Point3F(x, y, z);
+	}
+	
+	/**
+	 * Returns a {@link Point3F} instance that is {@code distance} units right of the eye.
+	 * 
+	 * @param distance the distance
+	 * @return a {@code Point3F} instance that is {@code distance} units right of the eye
+	 */
+	public Point3F getPointRightOfEye(final float distance) {
+		final Point3F eye = this.eye;
+		
+		final Vector3F u = this.orthonormalBasis.getU();
+		
+		final float x = eye.getX() + u.getX() * distance;
+		final float y = eye.getY() + u.getY() * distance;
+		final float z = eye.getZ() + u.getZ() * distance;
+		
+		return new Point3F(x, y, z);
 	}
 	
 	/**

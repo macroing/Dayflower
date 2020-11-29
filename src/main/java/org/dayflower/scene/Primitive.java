@@ -22,6 +22,8 @@ import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.isZero;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,6 +39,7 @@ import org.dayflower.image.Color3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Primitive} represents a primitive and is associated with a {@link Material} instance, a {@link Shape3F} instance and some other properties.
@@ -49,6 +52,7 @@ import org.dayflower.node.NodeTraversalException;
 public final class Primitive implements Node {
 	private AreaLight areaLight;
 	private BoundingVolume3F boundingVolume;
+	private List<PrimitiveObserver> primitiveObservers;
 	private Material material;
 	private Matrix44F objectToWorld;
 	private Matrix44F worldToObject;
@@ -96,14 +100,15 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code objectToWorld} are {@code null}
 	 */
 	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Matrix44F objectToWorld) {
+		this.areaLight = null;
+		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
+		this.primitiveObservers = new ArrayList<>();
 		this.material = Objects.requireNonNull(material, "material == null");
-		this.shape = Objects.requireNonNull(shape, "shape == null");
+		this.objectToWorld = objectToWorld;
+		this.worldToObject = Matrix44F.inverse(objectToWorld);
+		this.shape = shape;
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
-		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
-		this.worldToObject = Matrix44F.inverse(objectToWorld);
-		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
-		this.areaLight = null;
 	}
 	
 	/**
@@ -123,14 +128,15 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code objectToWorld} or {@code areaLight} are {@code null}
 	 */
 	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Matrix44F objectToWorld, final AreaLight areaLight) {
+		this.areaLight = Objects.requireNonNull(areaLight, "areaLight == null");
+		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
+		this.primitiveObservers = new ArrayList<>();
 		this.material = Objects.requireNonNull(material, "material == null");
-		this.shape = Objects.requireNonNull(shape, "shape == null");
+		this.objectToWorld = objectToWorld;
+		this.worldToObject = Matrix44F.inverse(objectToWorld);
+		this.shape = shape;
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
-		this.objectToWorld = Objects.requireNonNull(objectToWorld, "objectToWorld == null");
-		this.worldToObject = Matrix44F.inverse(objectToWorld);
-		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
-		this.areaLight = Objects.requireNonNull(areaLight, "areaLight == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,6 +200,17 @@ public final class Primitive implements Node {
 	 */
 	public Color3F calculateEmittanceXYZ(final Intersection intersection) {
 		return this.textureEmittance.getColorXYZ(Objects.requireNonNull(intersection, "intersection == null"));
+	}
+	
+	/**
+	 * Returns a {@code List} with all {@link PrimitiveObserver} instances currently associated with this {@code Primitive} instance.
+	 * <p>
+	 * Modifying the returned {@code List} will not affect this {@code Primitive} instance.
+	 * 
+	 * @return a {@code List} with all {@code PrimitiveObserver} instances currently associated with this {@code Primitive} instance
+	 */
+	public List<PrimitiveObserver> getPrimitiveObservers() {
+		return new ArrayList<>(this.primitiveObservers);
 	}
 	
 	/**
@@ -405,6 +422,21 @@ public final class Primitive implements Node {
 	}
 	
 	/**
+	 * Adds {@code primitiveObserver} to this {@code Primitive} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code primitiveObserver} was added, {@code false} otherwise.
+	 * <p>
+	 * If {@code primitiveObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param primitiveObserver the {@link PrimitiveObserver} instance to add
+	 * @return {@code true} if, and only if, {@code primitiveObserver} was added, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code primitiveObserver} is {@code null}
+	 */
+	public boolean addPrimitiveObserver(final PrimitiveObserver primitiveObserver) {
+		return this.primitiveObservers.add(Objects.requireNonNull(primitiveObserver, "primitiveObserver == null"));
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Primitive} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Primitive}, and their respective values are equal, {@code false} otherwise.
@@ -418,7 +450,11 @@ public final class Primitive implements Node {
 			return true;
 		} else if(!(object instanceof Primitive)) {
 			return false;
+		} else if(!Objects.equals(this.areaLight, Primitive.class.cast(object).areaLight)) {
+			return false;
 		} else if(!Objects.equals(this.boundingVolume, Primitive.class.cast(object).boundingVolume)) {
+			return false;
+		} else if(!Objects.equals(this.primitiveObservers, Primitive.class.cast(object).primitiveObservers)) {
 			return false;
 		} else if(!Objects.equals(this.material, Primitive.class.cast(object).material)) {
 			return false;
@@ -450,6 +486,21 @@ public final class Primitive implements Node {
 	 */
 	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
+	}
+	
+	/**
+	 * Removes {@code primitiveObserver} from this {@code Primitive} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code primitiveObserver} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code primitiveObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param primitiveObserver the {@link PrimitiveObserver} instance to remove
+	 * @return {@code true} if, and only if, {@code primitiveObserver} was removed, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code primitiveObserver} is {@code null}
+	 */
+	public boolean removePrimitiveObserver(final PrimitiveObserver primitiveObserver) {
+		return this.primitiveObservers.remove(Objects.requireNonNull(primitiveObserver, "primitiveObserver == null"));
 	}
 	
 	/**
@@ -535,7 +586,7 @@ public final class Primitive implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.boundingVolume, this.material, this.objectToWorld, this.worldToObject, this.shape, this.textureAlbedo, this.textureEmittance);
+		return Objects.hash(this.areaLight, this.boundingVolume, this.primitiveObservers, this.material, this.objectToWorld, this.worldToObject, this.shape, this.textureAlbedo, this.textureEmittance);
 	}
 	
 	/**
@@ -560,6 +611,18 @@ public final class Primitive implements Node {
 	 */
 	public void setMaterial(final Material material) {
 		this.material = Objects.requireNonNull(material, "material == null");
+	}
+	
+	/**
+	 * Sets the {@code List} with all {@link PrimitiveObserver} instances associated with this {@code Primitive} instance to a copy of {@code primitiveObservers}.
+	 * <p>
+	 * If either {@code primitiveObservers} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param primitiveObservers a {@code List} with all {@code PrimitiveObserver} instances associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code primitiveObservers} or at least one of its elements are {@code null}
+	 */
+	public void setPrimitiveObservers(final List<PrimitiveObserver> primitiveObservers) {
+		this.primitiveObservers = new ArrayList<>(ParameterArguments.requireNonNullList(primitiveObservers, "primitiveObservers"));
 	}
 	
 	/**

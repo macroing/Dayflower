@@ -55,6 +55,7 @@ public final class Scene implements Node {
 	private List<Light> lights;
 	private List<Primitive> primitives;
 	private List<Primitive> primitivesExternalToBVH;
+	private List<SceneObserver> sceneObservers;
 	private String name;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,6 +108,7 @@ public final class Scene implements Node {
 		this.lights = new ArrayList<>();
 		this.primitives = new ArrayList<>();
 		this.primitivesExternalToBVH = new ArrayList<>();
+		this.sceneObservers = new ArrayList<>();
 		this.name = Objects.requireNonNull(name, "name == null");
 	}
 	
@@ -165,6 +167,17 @@ public final class Scene implements Node {
 	 */
 	public List<Primitive> getPrimitives() {
 		return new ArrayList<>(this.primitives);
+	}
+	
+	/**
+	 * Returns a {@code List} with all {@link SceneObserver} instances currently associated with this {@code Scene} instance.
+	 * <p>
+	 * Modifying the returned {@code List} will not affect this {@code Scene} instance.
+	 * 
+	 * @return a {@code List} with all {@code SceneObserver} instances currently associated with this {@code Scene} instance
+	 */
+	public List<SceneObserver> getSceneObservers() {
+		return new ArrayList<>(this.sceneObservers);
 	}
 	
 	/**
@@ -306,6 +319,21 @@ public final class Scene implements Node {
 	}
 	
 	/**
+	 * Adds {@code sceneObserver} to this {@code Scene} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code sceneObserver} was added, {@code false} otherwise.
+	 * <p>
+	 * If {@code sceneObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sceneObserver the {@link SceneObserver} instance to add
+	 * @return {@code true} if, and only if, {@code sceneObserver} was added, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code sceneObserver} is {@code null}
+	 */
+	public boolean addSceneObserver(final SceneObserver sceneObserver) {
+		return this.sceneObservers.add(Objects.requireNonNull(sceneObserver, "sceneObserver == null"));
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Scene} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Scene}, and their respective values are equal, {@code false} otherwise.
@@ -319,11 +347,17 @@ public final class Scene implements Node {
 			return true;
 		} else if(!(object instanceof Scene)) {
 			return false;
+		} else if(!Objects.equals(this.bVHNode, Scene.class.cast(object).bVHNode)) {
+			return false;
 		} else if(!Objects.equals(this.camera, Scene.class.cast(object).camera)) {
 			return false;
 		} else if(!Objects.equals(this.lights, Scene.class.cast(object).lights)) {
 			return false;
 		} else if(!Objects.equals(this.primitives, Scene.class.cast(object).primitives)) {
+			return false;
+		} else if(!Objects.equals(this.primitivesExternalToBVH, Scene.class.cast(object).primitivesExternalToBVH)) {
+			return false;
+		} else if(!Objects.equals(this.sceneObservers, Scene.class.cast(object).sceneObservers)) {
 			return false;
 		} else if(!Objects.equals(this.name, Scene.class.cast(object).name)) {
 			return false;
@@ -396,6 +430,21 @@ public final class Scene implements Node {
 	}
 	
 	/**
+	 * Removes {@code sceneObserver} from this {@code Scene} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code sceneObserver} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code sceneObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sceneObserver the {@link SceneObserver} instance to remove
+	 * @return {@code true} if, and only if, {@code sceneObserver} was removed, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code sceneObserver} is {@code null}
+	 */
+	public boolean removeSceneObserver(final SceneObserver sceneObserver) {
+		return this.sceneObservers.remove(Objects.requireNonNull(sceneObserver, "sceneObserver == null"));
+	}
+	
+	/**
 	 * Performs an intersection test between {@code ray} and this {@code Scene} instance.
 	 * <p>
 	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
@@ -456,7 +505,7 @@ public final class Scene implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.camera, this.lights, this.primitives, this.name);
+		return Objects.hash(this.bVHNode, this.camera, this.lights, this.primitives, this.primitivesExternalToBVH, this.name);
 	}
 	
 	/**
@@ -511,11 +560,23 @@ public final class Scene implements Node {
 	 * <p>
 	 * If either {@code primitives} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lights a {@code List} with all {@code Primitive} instances associated with this {@code Scene} instance
+	 * @param primitives a {@code List} with all {@code Primitive} instances associated with this {@code Scene} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code primitives} or at least one of its elements are {@code null}
 	 */
 	public void setPrimitives(final List<Primitive> primitives) {
 		this.primitives = new ArrayList<>(ParameterArguments.requireNonNullList(primitives, "primitives"));
+	}
+	
+	/**
+	 * Sets the {@code List} with all {@link SceneObserver} instances associated with this {@code Scene} instance to a copy of {@code sceneObservers}.
+	 * <p>
+	 * If either {@code sceneObservers} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sceneObservers a {@code List} with all {@code SceneObserver} instances associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code sceneObservers} or at least one of its elements are {@code null}
+	 */
+	public void setSceneObservers(final List<SceneObserver> sceneObservers) {
+		this.sceneObservers = new ArrayList<>(ParameterArguments.requireNonNullList(sceneObservers, "sceneObservers"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

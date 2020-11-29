@@ -24,6 +24,8 @@ import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 import static org.dayflower.util.Floats.tan;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,6 +38,7 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.Node;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Camera} represents a camera.
@@ -55,6 +58,7 @@ public final class Camera implements Node {
 	private AngleF fieldOfViewY;
 	private AngleF pitch;
 	private AngleF yaw;
+	private List<CameraObserver> cameraObservers;
 	private OrthonormalBasis33F orthonormalBasis;
 	private Point3F eye;
 	private boolean isWalkLockEnabled;
@@ -109,6 +113,9 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code fieldOfViewX} are {@code null}
 	 */
 	public Camera(final Point3F eye, final AngleF fieldOfViewX) {
+//		Initialize the CameraObservers:
+		setCameraObservers();
+		
 //		Initialize the default parameters:
 		setApertureRadius(0.0F);
 		setEye(eye);
@@ -127,11 +134,12 @@ public final class Camera implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Camera(final AngleF fieldOfViewX, final AngleF fieldOfViewY, final AngleF pitch, final AngleF yaw, final OrthonormalBasis33F orthonormalBasis, final Point3F eye, final boolean isWalkLockEnabled, final float apertureRadius, final float focalDistance, final float resolutionX, final float resolutionY, final int lens) {
+	private Camera(final AngleF fieldOfViewX, final AngleF fieldOfViewY, final AngleF pitch, final AngleF yaw, final List<CameraObserver> cameraObservers, final OrthonormalBasis33F orthonormalBasis, final Point3F eye, final boolean isWalkLockEnabled, final float apertureRadius, final float focalDistance, final float resolutionX, final float resolutionY, final int lens) {
 		this.fieldOfViewX = fieldOfViewX;
 		this.fieldOfViewY = fieldOfViewY;
 		this.pitch = pitch;
 		this.yaw = yaw;
+		this.cameraObservers = new ArrayList<>(cameraObservers);
 		this.orthonormalBasis = orthonormalBasis;
 		this.eye = eye;
 		this.isWalkLockEnabled = isWalkLockEnabled;
@@ -186,7 +194,18 @@ public final class Camera implements Node {
 	 * @return a copy of this {@code Camera} instance
 	 */
 	public Camera copy() {
-		return new Camera(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.orthonormalBasis, this.eye, this.isWalkLockEnabled, this.apertureRadius, this.focalDistance, this.resolutionX, this.resolutionY, this.lens);
+		return new Camera(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.cameraObservers, this.orthonormalBasis, this.eye, this.isWalkLockEnabled, this.apertureRadius, this.focalDistance, this.resolutionX, this.resolutionY, this.lens);
+	}
+	
+	/**
+	 * Returns a {@code List} with all {@link CameraObserver} instances currently associated with this {@code Camera} instance.
+	 * <p>
+	 * Modifying the returned {@code List} will not affect this {@code Camera} instance.
+	 * 
+	 * @return a {@code List} with all {@code CameraObserver} instances currently associated with this {@code Camera} instance
+	 */
+	public List<CameraObserver> getCameraObservers() {
+		return new ArrayList<>(this.cameraObservers);
 	}
 	
 	/**
@@ -273,6 +292,21 @@ public final class Camera implements Node {
 	}
 	
 	/**
+	 * Adds {@code cameraObserver} to this {@code Camera} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code cameraObserver} was added, {@code false} otherwise.
+	 * <p>
+	 * If {@code cameraObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cameraObserver the {@link CameraObserver} instance to add
+	 * @return {@code true} if, and only if, {@code cameraObserver} was added, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code cameraObserver} is {@code null}
+	 */
+	public boolean addCameraObserver(final CameraObserver cameraObserver) {
+		return this.cameraObservers.add(Objects.requireNonNull(cameraObserver, "cameraObserver == null"));
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Camera} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Camera}, and their respective values are equal, {@code false} otherwise.
@@ -293,6 +327,8 @@ public final class Camera implements Node {
 		} else if(!Objects.equals(this.pitch, Camera.class.cast(object).pitch)) {
 			return false;
 		} else if(!Objects.equals(this.yaw, Camera.class.cast(object).yaw)) {
+			return false;
+		} else if(!Objects.equals(this.cameraObservers, Camera.class.cast(object).cameraObservers)) {
 			return false;
 		} else if(!Objects.equals(this.orthonormalBasis, Camera.class.cast(object).orthonormalBasis)) {
 			return false;
@@ -343,6 +379,21 @@ public final class Camera implements Node {
 	}
 	
 	/**
+	 * Removes {@code cameraObserver} from this {@code Camera} instance, if present.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code cameraObserver} was removed, {@code false} otherwise.
+	 * <p>
+	 * If {@code cameraObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cameraObserver the {@link CameraObserver} instance to remove
+	 * @return {@code true} if, and only if, {@code cameraObserver} was removed, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code cameraObserver} is {@code null}
+	 */
+	public boolean removeCameraObserver(final CameraObserver cameraObserver) {
+		return this.cameraObservers.remove(Objects.requireNonNull(cameraObserver, "cameraObserver == null"));
+	}
+	
+	/**
 	 * Returns a {@code float} representing the aperture radius that is associated with this {@code Camera} instance.
 	 * 
 	 * @return a {@code float} representing the aperture radius that is associated with this {@code Camera} instance
@@ -385,7 +436,7 @@ public final class Camera implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.orthonormalBasis, this.eye, Boolean.valueOf(this.isWalkLockEnabled), Float.valueOf(this.apertureRadius), Float.valueOf(this.focalDistance), Float.valueOf(this.resolutionX), Float.valueOf(this.resolutionY), Integer.valueOf(this.lens));
+		return Objects.hash(this.fieldOfViewX, this.fieldOfViewY, this.pitch, this.yaw, this.cameraObservers, this.orthonormalBasis, this.eye, Boolean.valueOf(this.isWalkLockEnabled), Float.valueOf(this.apertureRadius), Float.valueOf(this.focalDistance), Float.valueOf(this.resolutionX), Float.valueOf(this.resolutionY), Integer.valueOf(this.lens));
 	}
 	
 	/**
@@ -545,6 +596,25 @@ public final class Camera implements Node {
 	 */
 	public void setApertureRadius(final float apertureRadius) {
 		this.apertureRadius = apertureRadius;
+	}
+	
+	/**
+	 * Sets the {@code List} with all {@link CameraObserver} instances associated with this {@code Camera} instance to an empty {@code List}.
+	 */
+	public void setCameraObservers() {
+		this.cameraObservers = new ArrayList<>();
+	}
+	
+	/**
+	 * Sets the {@code List} with all {@link CameraObserver} instances associated with this {@code Camera} instance to a copy of {@code cameraObservers}.
+	 * <p>
+	 * If either {@code cameraObservers} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cameraObservers a {@code List} with all {@code CameraObserver} instances associated with this {@code Camera} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code cameraObservers} or at least one of its elements are {@code null}
+	 */
+	public void setCameraObservers(final List<CameraObserver> cameraObservers) {
+		this.cameraObservers = new ArrayList<>(ParameterArguments.requireNonNullList(cameraObservers, "cameraObservers"));
 	}
 	
 	/**

@@ -29,6 +29,7 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
+import org.dayflower.scene.texture.ConstantTexture;
 
 /**
  * A {@code MatteMaterial} is an implementation of {@link PBRTMaterial} and is used for matte surfaces.
@@ -43,6 +44,20 @@ public final class MatteMaterial implements PBRTMaterial {
 	private final Texture textureDiffuse;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code MatteMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MatteMaterial(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY));
+	 * }
+	 * </pre>
+	 */
+	public MatteMaterial() {
+		this(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY));
+	}
 	
 	/**
 	 * Constructs a new {@code MatteMaterial} instance.

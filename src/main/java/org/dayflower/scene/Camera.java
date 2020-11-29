@@ -71,12 +71,12 @@ public final class Camera implements Node {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Camera(new Point3F());
+	 * new Camera(new Point3F(0.0F, 1.0F, -10.0F));
 	 * }
 	 * </pre>
 	 */
 	public Camera() {
-		this(new Point3F());
+		this(new Point3F(0.0F, 1.0F, -10.0F));
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public final class Camera implements Node {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Camera(eye, AngleF.degrees(90.0F));
+	 * new Camera(eye, AngleF.degrees(40.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -95,7 +95,7 @@ public final class Camera implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code eye} is {@code null}
 	 */
 	public Camera(final Point3F eye) {
-		this(eye, AngleF.degrees(90.0F));
+		this(eye, AngleF.degrees(40.0F));
 	}
 	
 	/**

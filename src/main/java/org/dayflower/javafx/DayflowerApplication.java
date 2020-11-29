@@ -35,6 +35,7 @@ import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
+import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.loader.JavaSceneLoader;
 
 import javafx.animation.AnimationTimer;
@@ -58,6 +59,7 @@ public final class DayflowerApplication extends Application {
 	private static final String PATH_FILE = "File";
 	private static final String TEXT_EXIT = "Exit";
 	private static final String TEXT_FILE = "File";
+	private static final String TEXT_NEW = "New";
 	private static final String TEXT_OPEN = "Open";
 	private static final String TEXT_SAVE = "Save";
 	private static final String TEXT_SAVE_AS = "Save As...";
@@ -118,6 +120,12 @@ public final class DayflowerApplication extends Application {
 			
 			final Scene scene = sceneLoader.load(file);
 			
+			doAddRenderer(scene);
+		});
+	}
+	
+	private void doAddRenderer(final Scene scene) {
+		this.executorService.execute(() -> {
 			final Camera camera = scene.getCamera();
 			
 			final int resolutionX = (int)(camera.getResolutionX());
@@ -156,6 +164,7 @@ public final class DayflowerApplication extends Application {
 	
 	private void doConfigureHierarchicalMenuBar() {
 		this.hierarchicalMenuBar.setPathElementText(PATH_ELEMENT_FILE, TEXT_FILE);
+		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_NEW, this::doHandleEventFileNew, new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), true);
 		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_OPEN, this::doHandleEventFileOpen, new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), true);
 		this.hierarchicalMenuBar.addSeparatorMenuItem(PATH_FILE);
 		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE, this::doHandleEventFileSave, new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), false);
@@ -191,6 +200,15 @@ public final class DayflowerApplication extends Application {
 		if(file != null) {
 			doAddRenderer(file);
 		}
+	}
+	
+	@SuppressWarnings("unused")
+	private void doHandleEventFileNew(final ActionEvent actionEvent) {
+		final
+		Scene scene = new Scene();
+		scene.addLight(new PerezLight());
+		
+		doAddRenderer(scene);
 	}
 	
 	@SuppressWarnings("unused")

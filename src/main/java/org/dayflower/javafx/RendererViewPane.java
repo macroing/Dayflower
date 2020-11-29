@@ -28,13 +28,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.Sphere3F;
+import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
+import org.dayflower.scene.Material;
+import org.dayflower.scene.Primitive;
+import org.dayflower.scene.Scene;
+import org.dayflower.scene.Texture;
+import org.dayflower.scene.pbrt.MatteMaterial;
+import org.dayflower.scene.texture.ConstantTexture;
 
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.PixelFormat;
@@ -44,8 +56,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 final class RendererViewPane extends BorderPane {
 	private static final PixelFormat<ByteBuffer> PIXEL_FORMAT = PixelFormat.getByteBgraPreInstance();
@@ -58,6 +77,8 @@ final class RendererViewPane extends BorderPane {
 	private final AtomicLong mouseY;
 	private final AtomicReference<File> file;
 	private final AtomicReference<RendererTask> rendererTask;
+	private final Button buttonPlane;
+	private final Button buttonSphere;
 	private final ByteBuffer byteBuffer;
 	private final Canvas canvas;
 	private final ExecutorService executorService;
@@ -67,6 +88,7 @@ final class RendererViewPane extends BorderPane {
 	private final Label labelRenderTimePerPass;
 	private final ProgressBar progressBar;
 	private final Renderer renderer;
+	private final VBox vBox;
 	private final WritableImage writableImage;
 	private final boolean[] isKeyPressed;
 	private final boolean[] isKeyPressedOnce;
@@ -91,6 +113,8 @@ final class RendererViewPane extends BorderPane {
 		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.file = new AtomicReference<>();
 		this.rendererTask = new AtomicReference<>();
+		this.buttonPlane = new Button();
+		this.buttonSphere = new Button();
 		this.byteBuffer = ByteBuffer.allocate(renderer.getRendererConfiguration().getImage().getResolutionX() * renderer.getRendererConfiguration().getImage().getResolutionY() * 4);
 		this.canvas = new Canvas();
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
@@ -100,6 +124,7 @@ final class RendererViewPane extends BorderPane {
 		this.labelRenderTimePerPass = new Label();
 		this.progressBar = new ProgressBar();
 		this.renderer = renderer;
+		this.vBox = new VBox();
 		this.writableImage = new WritableImage(renderer.getRendererConfiguration().getImage().getResolutionX(), renderer.getRendererConfiguration().getImage().getResolutionY());
 		this.isKeyPressed = new boolean[KeyCode.values().length];
 		this.isKeyPressedOnce = new boolean[KeyCode.values().length];
@@ -355,6 +380,16 @@ final class RendererViewPane extends BorderPane {
 		final double resolutionX = image.getResolutionX();
 		final double resolutionY = image.getResolutionY();
 		
+//		Configure the Button for Plane:
+		this.buttonPlane.setMaxWidth(Double.MAX_VALUE);
+		this.buttonPlane.setOnAction(this::doHandleEventButtonPlane);
+		this.buttonPlane.setText("Plane");
+		
+//		Configure the Button for Sphere:
+		this.buttonSphere.setMaxWidth(Double.MAX_VALUE);
+		this.buttonSphere.setOnAction(this::doHandleEventButtonSphere);
+		this.buttonSphere.setText("Sphere");
+		
 //		Configure the Canvas:
 		this.canvas.addEventFilter(MouseEvent.ANY, e -> this.canvas.requestFocus());
 		this.canvas.addEventFilter(KeyEvent.ANY, e -> this.canvas.requestFocus());
@@ -374,6 +409,7 @@ final class RendererViewPane extends BorderPane {
 		this.hBox.getChildren().add(this.labelRenderTimePerPass);
 		this.hBox.getChildren().add(JavaFX.createRegionHBoxGrowAlways());
 		this.hBox.getChildren().add(this.progressBar);
+		this.hBox.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1.0D, 0.0D, 0.0D, 0.0D))));
 		this.hBox.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
 		this.hBox.setSpacing(20.0D);
 		
@@ -392,9 +428,66 @@ final class RendererViewPane extends BorderPane {
 //		Configure the Renderer:
 		this.renderer.setRendererObserver(new RendererObserverImpl(this.labelRenderPass, this.labelRenderTime, this.labelRenderTimePerPass, this.progressBar));
 		
+//		Configure the VBox:
+		this.vBox.getChildren().add(this.buttonPlane);
+		this.vBox.getChildren().add(this.buttonSphere);
+		this.vBox.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 1.0D, 0.0D, 0.0D))));
+		this.vBox.setFillWidth(true);
+		this.vBox.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
+		this.vBox.setSpacing(20.0D);
+		
 //		Configure the RendererViewPane:
 		setBottom(this.hBox);
 		setCenter(this.canvas);
+		setLeft(this.vBox);
+	}
+	
+	@SuppressWarnings("unused")
+	private void doHandleEventButtonPlane(final ActionEvent actionEvent) {
+		this.executorService.execute(() -> {
+			final Renderer renderer = this.renderer;
+			
+			final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
+			
+			final Material material = new MatteMaterial();
+			
+			final Shape3F shape = new Plane3F();
+			
+			final Texture textureAlbedo = new ConstantTexture(Color3F.BLACK);
+			final Texture textureEmittance = new ConstantTexture(Color3F.BLACK);
+			
+			final Primitive primitive = new Primitive(material, shape, textureAlbedo, textureEmittance);
+			
+			final
+			Scene scene = rendererConfiguration.getScene();
+			scene.addPrimitive(primitive);
+			
+			renderer.clear();
+		});
+	}
+	
+	@SuppressWarnings("unused")
+	private void doHandleEventButtonSphere(final ActionEvent actionEvent) {
+		this.executorService.execute(() -> {
+			final Renderer renderer = this.renderer;
+			
+			final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
+			
+			final Material material = new MatteMaterial();
+			
+			final Shape3F shape = new Sphere3F();
+			
+			final Texture textureAlbedo = new ConstantTexture(Color3F.BLACK);
+			final Texture textureEmittance = new ConstantTexture(Color3F.BLACK);
+			
+			final Primitive primitive = new Primitive(material, shape, textureAlbedo, textureEmittance);
+			
+			final
+			Scene scene = rendererConfiguration.getScene();
+			scene.addPrimitive(primitive);
+			
+			renderer.clear();
+		});
 	}
 	
 	private void doOnKeyPressed(final KeyEvent keyEvent) {

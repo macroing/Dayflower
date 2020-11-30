@@ -43,12 +43,14 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Tab;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 //TODO: Add Javadocs!
@@ -274,9 +276,13 @@ public final class DayflowerApplication extends Application {
 		}
 		
 		Platform.runLater(() -> {
+			final Rectangle2D rectangle = Screen.getPrimary().getVisualBounds();
+			
 			final
 			Stage stage = doGetStage();
 			stage.sizeToScene();
+			stage.setX((rectangle.getWidth()  - stage.getWidth())  / 2.0D);
+			stage.setY((rectangle.getHeight() - stage.getHeight()) / 2.0D);
 		});
 	}
 	

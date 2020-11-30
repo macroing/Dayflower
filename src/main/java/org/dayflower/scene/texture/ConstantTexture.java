@@ -59,6 +59,11 @@ public final class ConstantTexture implements Texture {
 	public static final ConstantTexture GRAY_0_50 = new ConstantTexture(new Color3F(0.50F));
 	
 	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(1.50F))}.
+	 */
+	public static final ConstantTexture GRAY_1_50 = new ConstantTexture(new Color3F(1.50F));
+	
+	/**
 	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(1.55F))}.
 	 */
 	public static final ConstantTexture GRAY_1_55 = new ConstantTexture(new Color3F(1.55F));

@@ -29,6 +29,7 @@ import java.util.Optional;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
+import org.dayflower.scene.texture.ConstantTexture;
 
 /**
  * A {@code GlassMaterial} is an implementation of {@link PBRTMaterial} that represents glass.
@@ -47,6 +48,20 @@ public final class GlassMaterial implements PBRTMaterial {
 	private final boolean isRemappingRoughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code GlassMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassMaterial(ConstantTexture.GRAY_1_50, ConstantTexture.WHITE, ConstantTexture.WHITE, ConstantTexture.BLACK, ConstantTexture.BLACK, false);
+	 * }
+	 * </pre>
+	 */
+	public GlassMaterial() {
+		this(ConstantTexture.GRAY_1_50, ConstantTexture.WHITE, ConstantTexture.WHITE, ConstantTexture.BLACK, ConstantTexture.BLACK, false);
+	}
 	
 	/**
 	 * Constructs a new {@code GlassMaterial} instance.

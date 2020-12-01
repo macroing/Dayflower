@@ -8,15 +8,15 @@ Shape3F shape0 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +1
 Shape3F shape1 = new Curves3F(curves);
 Shape3F shape2 = new Sphere3F();
 
-Matrix44F matrix0 = Matrix44F.translate(0.0F, 0.0F, 7.5F);
-Matrix44F matrix1 = Matrix44F.multiply(Matrix44F.translate(0.0F, 2.0F, 5.0F), Matrix44F.rotateZ(AngleF.degrees(45.0F)));
-Matrix44F matrix2 = Matrix44F.translate(0.0F, 0.0F, 0.0F);
+Transform transform0 = new Transform(new Point3F(0.0F, 0.0F, 7.5F));
+Transform transform1 = new Transform(new Point3F(0.0F, 2.0F, 5.0F), Quaternion4F.from(Matrix44F.rotateZ(AngleF.degrees(45.0F))));
+Transform transform2 = new Transform(new Point3F(0.0F, 0.0F, 0.0F));
 
-AreaLight areaLight2 = new DiffuseAreaLight(matrix2, 1, new Color3F(20.0F), shape2, false);
+AreaLight areaLight2 = new DiffuseAreaLight(transform2.getObjectToWorld(), 1, new Color3F(20.0F), shape2, false);
 
 scene.addLight(areaLight2);
-scene.addPrimitive(new Primitive(material0, shape0, new ConstantTexture(), new ConstantTexture(), matrix0));
-scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), matrix1));
-scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), matrix2, areaLight2));
+scene.addPrimitive(new Primitive(material0, shape0, new ConstantTexture(), new ConstantTexture(), transform0));
+scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), transform1));
+scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), transform2, areaLight2));
 scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
 scene.setName("PBRTShowcaseShape3FCurves3F");

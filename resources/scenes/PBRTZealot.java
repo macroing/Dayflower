@@ -18,25 +18,25 @@ Shape3F shape16 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +
 Shape3F shape21 = TriangleMesh3F.readWavefrontObject("./resources/models/Zealot.obj", true).get(0);
 Shape3F shape31 = new Sphere3F();
 
-Matrix44F matrix11 = Matrix44F.translate(+0.0F, 0.00F, + 0.0F);
-Matrix44F matrix12 = Matrix44F.translate(+0.0F, 8.00F, + 0.0F);
-Matrix44F matrix13 = Matrix44F.translate(+0.0F, 0.00F, + 7.5F);
-Matrix44F matrix14 = Matrix44F.translate(+0.0F, 0.00F, -10.0F);
-Matrix44F matrix15 = Matrix44F.translate(+5.0F, 0.00F, + 0.0F);
-Matrix44F matrix16 = Matrix44F.translate(-5.0F, 0.00F, + 0.0F);
-Matrix44F matrix21 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 0.0F, 4.0F), Matrix44F.rotateY(AngleF.degrees(180.0F))), Matrix44F.scale(0.05F));
-Matrix44F matrix31 = Matrix44F.translate(0.0F, 8.0F, 0.0F);
+Transform transform11 = new Transform(new Point3F(+0.0F, 0.00F, + 0.0F));
+Transform transform12 = new Transform(new Point3F(+0.0F, 8.00F, + 0.0F));
+Transform transform13 = new Transform(new Point3F(+0.0F, 0.00F, + 7.5F));
+Transform transform14 = new Transform(new Point3F(+0.0F, 0.00F, -10.0F));
+Transform transform15 = new Transform(new Point3F(+5.0F, 0.00F, + 0.0F));
+Transform transform16 = new Transform(new Point3F(-5.0F, 0.00F, + 0.0F));
+Transform transform21 = new Transform(new Point3F(+0.0F, 0.00F, + 4.0F), Quaternion4F.from(Matrix44F.rotateY(AngleF.degrees(180.0F))), new Vector3F(0.05F));
+Transform transform31 = new Transform(new Point3F(+0.0F, 8.00F, + 0.0F));
 
-AreaLight areaLight31 = new DiffuseAreaLight(matrix31, 1, new Color3F(50.0F), shape31, false);
+AreaLight areaLight31 = new DiffuseAreaLight(transform31.getObjectToWorld(), 1, new Color3F(50.0F), shape31, false);
 
 scene.addLight(areaLight31);
-scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), matrix11));
-scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), matrix12));
-scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), matrix13));
-scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), matrix14));
-scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), matrix15));
-scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), matrix16));
-scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), matrix21));
-scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), matrix31, areaLight31));
+scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), transform11));
+scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), transform12));
+scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), transform13));
+scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), transform14));
+scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), transform15));
+scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), transform16));
+scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), transform21));
+scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), transform31, areaLight31));
 scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
 scene.setName("PBRTZealot");

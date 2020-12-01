@@ -20,7 +20,25 @@ package org.dayflower.scene;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Quaternion4F;
+import org.dayflower.geometry.Vector3F;
+
 //TODO: Add Javadocs!
 public interface TransformObserver {
+//	TODO: Add Javadocs!
+	void onChangeObjectToWorld(final Transform transform, final Matrix44F newObjectToWorld);
 	
+//	TODO: Add Javadocs!
+	void onChangePosition(final Transform transform, final Point3F oldPosition, final Point3F newPosition);
+	
+//	TODO: Add Javadocs!
+	void onChangeRotation(final Transform transform, final Quaternion4F oldRotation, final Quaternion4F newRotation);
+	
+//	TODO: Add Javadocs!
+	void onChangeScale(final Transform transform, final Vector3F oldScale, final Vector3F newScale);
+	
+//	TODO: Add Javadocs!
+	void onChangeWorldToObject(final Transform transform, final Matrix44F newWorldToObject);
 }

@@ -311,6 +311,8 @@ public final class Scene implements Node {
 		Objects.requireNonNull(light, "light == null");
 		
 		if(this.lights.add(light)) {
+			clearAccelerationStructure();
+			
 			for(final SceneObserver sceneObserver : this.sceneObservers) {
 				sceneObserver.onAddLight(this, light);
 			}
@@ -337,6 +339,8 @@ public final class Scene implements Node {
 		
 		if(this.primitives.add(primitive)) {
 			primitive.addPrimitiveObserver(this.primitiveObserver);
+			
+			clearAccelerationStructure();
 			
 			for(final SceneObserver sceneObserver : this.sceneObservers) {
 				sceneObserver.onAddPrimitive(this, primitive);
@@ -444,6 +448,8 @@ public final class Scene implements Node {
 		Objects.requireNonNull(light, "light == null");
 		
 		if(this.lights.remove(light)) {
+			clearAccelerationStructure();
+			
 			for(final SceneObserver sceneObserver : this.sceneObservers) {
 				sceneObserver.onRemoveLight(this, light);
 			}
@@ -470,6 +476,8 @@ public final class Scene implements Node {
 		
 		if(this.primitives.remove(primitive)) {
 			primitive.removePrimitiveObserver(this.primitiveObserver);
+			
+			clearAccelerationStructure();
 			
 			for(final SceneObserver sceneObserver : this.sceneObservers) {
 				sceneObserver.onRemovePrimitive(this, primitive);
@@ -570,6 +578,14 @@ public final class Scene implements Node {
 		this.bVHNode = doCreateBVHNode(primitives, primitivesExternalToBVH);
 		this.primitivesExternalToBVH.clear();
 		this.primitivesExternalToBVH.addAll(primitivesExternalToBVH);
+	}
+	
+	/**
+	 * Clears the acceleration structure for this {@code Scene} instance.
+	 */
+	public void clearAccelerationStructure() {
+		this.bVHNode = null;
+		this.primitivesExternalToBVH.clear();
 	}
 	
 	/**

@@ -74,6 +74,7 @@ final class RendererViewPane extends BorderPane {
 	private final Label labelRenderTimePerPass;
 	private final ProgressBar progressBar;
 	private final Renderer renderer;
+	private final RendererBox rendererBox;
 	private final SceneBox sceneBox;
 	private final VBox vBox;
 	private final WritableImage writableImage;
@@ -109,6 +110,7 @@ final class RendererViewPane extends BorderPane {
 		this.labelRenderTimePerPass = new Label();
 		this.progressBar = new ProgressBar();
 		this.renderer = renderer;
+		this.rendererBox = new RendererBox(renderer, executorService);
 		this.sceneBox = new SceneBox(renderer, executorService);
 		this.vBox = new VBox();
 		this.writableImage = new WritableImage(renderer.getRendererConfiguration().getImage().getResolutionX(), renderer.getRendererConfiguration().getImage().getResolutionY());
@@ -405,6 +407,7 @@ final class RendererViewPane extends BorderPane {
 		this.renderer.setRendererObserver(new RendererObserverImpl(this.labelRenderPass, this.labelRenderTime, this.labelRenderTimePerPass, this.progressBar));
 		
 //		Configure the VBox:
+		this.vBox.getChildren().add(this.rendererBox);
 		this.vBox.getChildren().add(this.sceneBox);
 		this.vBox.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 1.0D, 0.0D, 0.0D))));
 		this.vBox.setFillWidth(true);

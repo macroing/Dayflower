@@ -63,9 +63,10 @@ final class RendererMainPane extends BorderPane {
 	
 	private void doConfigure() {
 //		Configure the TabPane:
-		this.tabPane.getTabs().add(new Tab("Info", this.rendererInfoPane));
+//		this.tabPane.getTabs().add(new Tab("Info", this.rendererInfoPane));
 		this.tabPane.getTabs().add(new Tab("View", this.rendererViewPane));
-		this.tabPane.getSelectionModel().select(1);
+//		this.tabPane.getSelectionModel().select(1);
+		this.tabPane.getSelectionModel().select(0);
 		this.tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 		
 //		Configure the RendererMainPane:

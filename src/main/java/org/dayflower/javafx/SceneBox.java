@@ -48,8 +48,10 @@ import org.dayflower.scene.rayito.ReflectionMaterial;
 import org.dayflower.scene.rayito.RefractionMaterial;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
 
 final class SceneBox extends VBox {
@@ -73,6 +75,8 @@ final class SceneBox extends VBox {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final Button buttonBuildAccelerationStructure;
+	private final Button buttonClearAccelerationStructure;
 	private final Button buttonPrimitiveAdd;
 	private final ComboBox<String> comboBoxPrimitiveAddMaterial;
 	private final ComboBox<String> comboBoxPrimitiveAddShape;
@@ -82,6 +86,8 @@ final class SceneBox extends VBox {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public SceneBox(final Renderer renderer, final ExecutorService executorService) {
+		this.buttonBuildAccelerationStructure = new Button();
+		this.buttonClearAccelerationStructure = new Button();
 		this.buttonPrimitiveAdd = new Button();
 		this.comboBoxPrimitiveAddMaterial = new ComboBox<>();
 		this.comboBoxPrimitiveAddShape = new ComboBox<>();
@@ -204,6 +210,16 @@ final class SceneBox extends VBox {
 	}
 	
 	private void doConfigure() {
+//		Configure the Button for Build Acceleration Structure:
+		this.buttonBuildAccelerationStructure.setMaxWidth(Double.MAX_VALUE);
+		this.buttonBuildAccelerationStructure.setOnAction(this::doOnActionButtonBuildAccelerationStructure);
+		this.buttonBuildAccelerationStructure.setText("Build Acceleration Structure");
+		
+//		Configure the Button for Clear Acceleration Structure:
+		this.buttonClearAccelerationStructure.setMaxWidth(Double.MAX_VALUE);
+		this.buttonClearAccelerationStructure.setOnAction(this::doOnActionButtonClearAccelerationStructure);
+		this.buttonClearAccelerationStructure.setText("Clear Acceleration Structure");
+		
 //		Configure the Button for Primitive Add:
 		this.buttonPrimitiveAdd.setMaxWidth(Double.MAX_VALUE);
 		this.buttonPrimitiveAdd.setOnAction(this::doOnActionButtonPrimitiveAdd);
@@ -235,11 +251,34 @@ final class SceneBox extends VBox {
 		this.comboBoxPrimitiveAddShape.setValue(SHAPE_PLANE);
 		
 //		Configure the SceneBox:
+		getChildren().add(JavaFX.createLabel("Scene Configuration", 16.0D));
 		getChildren().add(this.comboBoxPrimitiveAddMaterial);
 		getChildren().add(this.comboBoxPrimitiveAddShape);
 		getChildren().add(this.buttonPrimitiveAdd);
+		getChildren().add(new Separator());
+		getChildren().add(this.buttonBuildAccelerationStructure);
+		getChildren().add(this.buttonClearAccelerationStructure);
+		setAlignment(Pos.CENTER);
 		setFillWidth(true);
 		setSpacing(10.0D);
+	}
+	
+	@SuppressWarnings("unused")
+	private void doOnActionButtonBuildAccelerationStructure(final ActionEvent actionEvent) {
+		getExecutorService().execute(() -> {
+			final
+			Scene scene = doGetScene();
+			scene.buildAccelerationStructure();
+		});
+	}
+	
+	@SuppressWarnings("unused")
+	private void doOnActionButtonClearAccelerationStructure(final ActionEvent actionEvent) {
+		getExecutorService().execute(() -> {
+			final
+			Scene scene = doGetScene();
+			scene.clearAccelerationStructure();
+		});
 	}
 	
 	@SuppressWarnings("unused")

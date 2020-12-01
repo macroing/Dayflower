@@ -24,6 +24,8 @@ import java.util.Objects;
 
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Texture;
+import org.dayflower.scene.texture.ConstantTexture;
 
 /**
  * A {@code LambertianMaterial} is an implementation of {@link RayitoMaterial} that uses a {@link LambertianBRDF} instance.
@@ -35,6 +37,8 @@ import org.dayflower.scene.Intersection;
  */
 public final class LambertianMaterial implements RayitoMaterial {
 	private final BXDF selectedBXDF;
+	private final Texture textureAlbedo;
+	private final Texture textureEmittance;
 	private final float selectedBXDFWeight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,24 +49,85 @@ public final class LambertianMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LambertianMaterial(new LambertianBRDF());
+	 * new LambertianMaterial(Color3F.GRAY);
 	 * }
 	 * </pre>
 	 */
 	public LambertianMaterial() {
-		this(new LambertianBRDF());
+		this(Color3F.GRAY);
 	}
 	
 	/**
 	 * Constructs a new {@code LambertianMaterial} instance.
 	 * <p>
-	 * If {@code lambertianBRDF} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new LambertianMaterial(colorAlbedo, Color3F.BLACK);
+	 * }
+	 * </pre>
 	 * 
-	 * @param lambertianBRDF a {@link LambertianBRDF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code lambertianBRDF} is {@code null}
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @throws NullPointerException thrown if, and only if, {@code colorAlbedo} is {@code null}
 	 */
-	public LambertianMaterial(final LambertianBRDF lambertianBRDF) {
-		this.selectedBXDF = Objects.requireNonNull(lambertianBRDF, "lambertianBRDF == null");
+	public LambertianMaterial(final Color3F colorAlbedo) {
+		this(colorAlbedo, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code LambertianMaterial} instance.
+	 * <p>
+	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new LambertianMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance));
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @param colorEmittance a {@code Color3F} instance with the emittance
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 */
+	public LambertianMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
+		this(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance));
+	}
+	
+	/**
+	 * Constructs a new {@code LambertianMaterial} instance.
+	 * <p>
+	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new LambertianMaterial(textureAlbedo, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
+	 */
+	public LambertianMaterial(final Texture textureAlbedo) {
+		this(textureAlbedo, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code LambertianMaterial} instance.
+	 * <p>
+	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @param textureEmittance a {@code Texture} instance with the emittance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 */
+	public LambertianMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
+		this.selectedBXDF = new LambertianBRDF();
+		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
+		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 		this.selectedBXDFWeight = 1.0F;
 	}
 	
@@ -79,7 +144,7 @@ public final class LambertianMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return intersection.getPrimitive().getTextureEmittance().getColorRGB(intersection);
+		return this.textureEmittance.getColorRGB(intersection);
 	}
 	
 	/**
@@ -93,7 +158,7 @@ public final class LambertianMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public MaterialResult evaluate(final Intersection intersection) {
-		return new MaterialResult(intersection.getPrimitive().getTextureAlbedo().getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
+		return new MaterialResult(this.textureAlbedo.getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
 	}
 	
 	/**
@@ -103,7 +168,7 @@ public final class LambertianMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LambertianMaterial(%s)", this.selectedBXDF);
+		return "new LambertianMaterial(...)";
 	}
 	
 	/**
@@ -122,6 +187,10 @@ public final class LambertianMaterial implements RayitoMaterial {
 			return false;
 		} else if(!Objects.equals(this.selectedBXDF, LambertianMaterial.class.cast(object).selectedBXDF)) {
 			return false;
+		} else if(!Objects.equals(this.textureAlbedo, LambertianMaterial.class.cast(object).textureAlbedo)) {
+			return false;
+		} else if(!Objects.equals(this.textureEmittance, LambertianMaterial.class.cast(object).textureEmittance)) {
+			return false;
 		} else if(!equal(this.selectedBXDFWeight, LambertianMaterial.class.cast(object).selectedBXDFWeight)) {
 			return false;
 		} else {
@@ -136,6 +205,6 @@ public final class LambertianMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.selectedBXDF, Float.valueOf(this.selectedBXDFWeight));
+		return Objects.hash(this.selectedBXDF, this.textureAlbedo, this.textureEmittance, Float.valueOf(this.selectedBXDFWeight));
 	}
 }

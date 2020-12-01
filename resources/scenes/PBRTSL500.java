@@ -150,75 +150,75 @@ Transform transformNM = new Transform(new Point3F(0.0F, 0.0F, 0.0F), Quaternion4
 Camera camera = new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F));
 
 scene.addLight(new PerezLight());
-scene.addPrimitive(new Primitive(material01, shape01, new ConstantTexture(), new ConstantTexture(), transform01));
-scene.addPrimitive(new Primitive(material02, shape02, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			wind_glass
-scene.addPrimitive(new Primitive(material03, shape03, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			Body_paint
-scene.addPrimitive(new Primitive(material04, shape04, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			Misc
-scene.addPrimitive(new Primitive(material05, shape05, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			Misc0
-scene.addPrimitive(new Primitive(material06, shape06, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			Material__583
-scene.addPrimitive(new Primitive(material07, shape07, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			Body_paint
-scene.addPrimitive(new Primitive(material08, shape08, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			License
-scene.addPrimitive(new Primitive(material09, shape09, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			wind_glass
-scene.addPrimitive(new Primitive(material10, shape10, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			Material__586
-scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), transformNM));//Base			wind_glass
-scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), transformNM));//BLightL		Material__589
-scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), transformNM));//BLightR		Material__589
-scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), transformNM));//Body			DoorLine
-scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), transformNM));//Body			Badging_Chrome
-scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), transformNM));//Body			Misc1
-scene.addPrimitive(new Primitive(material17, shape17, new ConstantTexture(), new ConstantTexture(), transformNM));//Body			Misc_Chrome
-scene.addPrimitive(new Primitive(material18, shape18, new ConstantTexture(), new ConstantTexture(), transformNM));//Body			Misc_Chrome0
-scene.addPrimitive(new Primitive(material19, shape19, new ConstantTexture(), new ConstantTexture(), transformNM));//Body			Misc_Chrome1
-scene.addPrimitive(new Primitive(material20, shape20, new ConstantTexture(), new ConstantTexture(), transformNM));//Body			Black
-scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), transformNM));//Body			Body_paint0
-scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), transformNM));//Body			Bottom
-scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), transformNM));//BrakeFL		Brake_Pads
-scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), transformNM));//BrakeFL		Brake_Disc
-scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), transformNM));//BrakeFR		Brake_Pads0
-scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), transformNM));//BrakeFR		Brake_Disc0
-scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), transformNM));//BrakeRL		Brake_Pads
-scene.addPrimitive(new Primitive(material28, shape28, new ConstantTexture(), new ConstantTexture(), transformNM));//BrakeRL		Brake_Disc
-scene.addPrimitive(new Primitive(material29, shape29, new ConstantTexture(), new ConstantTexture(), transformNM));//BrakeRR		Brake_Pads0
-scene.addPrimitive(new Primitive(material30, shape30, new ConstantTexture(), new ConstantTexture(), transformNM));//BrakeRR		Brake_Disc0
-scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), transformNM));//Driver			Driver
-scene.addPrimitive(new Primitive(material32, shape32, new ConstantTexture(), new ConstantTexture(), transformNM));//HLightL		Material__593
-scene.addPrimitive(new Primitive(material33, shape33, new ConstantTexture(), new ConstantTexture(), transformNM));//HLightL		Misc2
-scene.addPrimitive(new Primitive(material34, shape34, new ConstantTexture(), new ConstantTexture(), transformNM));//HLightLG		Material__594
-scene.addPrimitive(new Primitive(material35, shape35, new ConstantTexture(), new ConstantTexture(), transformNM));//HLightR		Material__593
-scene.addPrimitive(new Primitive(material36, shape36, new ConstantTexture(), new ConstantTexture(), transformNM));//HLightR		Misc2
-scene.addPrimitive(new Primitive(material37, shape37, new ConstantTexture(), new ConstantTexture(), transformNM));//HLightRG		Material__594
-scene.addPrimitive(new Primitive(material38, shape38, new ConstantTexture(), new ConstantTexture(), transformNM));//Hood			Misc3
-scene.addPrimitive(new Primitive(material39, shape39, new ConstantTexture(), new ConstantTexture(), transformNM));//Hood			Misc_Chrome2
-scene.addPrimitive(new Primitive(material40, shape40, new ConstantTexture(), new ConstantTexture(), transformNM));//Hood			Body_paint1
-scene.addPrimitive(new Primitive(material41, shape41, new ConstantTexture(), new ConstantTexture(), transformNM));//Hood_Carbon	Misc4
-scene.addPrimitive(new Primitive(material42, shape42, new ConstantTexture(), new ConstantTexture(), transformNM));//Hood_Carbon	Misc_Chrome3
-scene.addPrimitive(new Primitive(material43, shape43, new ConstantTexture(), new ConstantTexture(), transformNM));//Hood_Carbon	Body_paint2
-scene.addPrimitive(new Primitive(material44, shape44, new ConstantTexture(), new ConstantTexture(), transformNM));//Interior		Interior
-scene.addPrimitive(new Primitive(material45, shape45, new ConstantTexture(), new ConstantTexture(), transformNM));//Interior		Material__597
-scene.addPrimitive(new Primitive(material46, shape46, new ConstantTexture(), new ConstantTexture(), transformNM));//Interior		Interior0
-scene.addPrimitive(new Primitive(material47, shape47, new ConstantTexture(), new ConstantTexture(), transformNM));//MirrorL		Misc_Chrome4
-scene.addPrimitive(new Primitive(material48, shape48, new ConstantTexture(), new ConstantTexture(), transformNM));//MirrorL		Material__598
-scene.addPrimitive(new Primitive(material49, shape49, new ConstantTexture(), new ConstantTexture(), transformNM));//MirrorL		Body_paint3
-scene.addPrimitive(new Primitive(material50, shape50, new ConstantTexture(), new ConstantTexture(), transformNM));//MirrorR		Misc_Chrome4
-scene.addPrimitive(new Primitive(material51, shape51, new ConstantTexture(), new ConstantTexture(), transformNM));//MirrorR		Material__598
-scene.addPrimitive(new Primitive(material52, shape52, new ConstantTexture(), new ConstantTexture(), transformNM));//MirrorR		Body_paint3
-scene.addPrimitive(new Primitive(material53, shape53, new ConstantTexture(), new ConstantTexture(), transformNM));//TireFL			Tire_Back
-scene.addPrimitive(new Primitive(material54, shape54, new ConstantTexture(), new ConstantTexture(), transformNM));//TireFL			Tire_Tread
-scene.addPrimitive(new Primitive(material55, shape55, new ConstantTexture(), new ConstantTexture(), transformNM));//TireFL			Tire_Sidewall
-scene.addPrimitive(new Primitive(material56, shape56, new ConstantTexture(), new ConstantTexture(), transformNM));//TireFL			Material__600
-scene.addPrimitive(new Primitive(material57, shape57, new ConstantTexture(), new ConstantTexture(), transformNM));//TireFR			Tire_Back
-scene.addPrimitive(new Primitive(material58, shape58, new ConstantTexture(), new ConstantTexture(), transformNM));//TireFR			Tire_Tread
-scene.addPrimitive(new Primitive(material59, shape59, new ConstantTexture(), new ConstantTexture(), transformNM));//TireFR			Tire_Sidewall
-scene.addPrimitive(new Primitive(material60, shape60, new ConstantTexture(), new ConstantTexture(), transformNM));//TireFR			Material__600
-scene.addPrimitive(new Primitive(material61, shape61, new ConstantTexture(), new ConstantTexture(), transformNM));//TireRL			Tire_Back
-scene.addPrimitive(new Primitive(material62, shape62, new ConstantTexture(), new ConstantTexture(), transformNM));//TireRL			Tire_Tread
-scene.addPrimitive(new Primitive(material63, shape63, new ConstantTexture(), new ConstantTexture(), transformNM));//TireRL			Tire_Sidewall
-scene.addPrimitive(new Primitive(material64, shape64, new ConstantTexture(), new ConstantTexture(), transformNM));//TireRL			Material__600
-scene.addPrimitive(new Primitive(material65, shape65, new ConstantTexture(), new ConstantTexture(), transformNM));//TireRR			Tire_Back
-scene.addPrimitive(new Primitive(material66, shape66, new ConstantTexture(), new ConstantTexture(), transformNM));//TireRR			Tire_Tread
-scene.addPrimitive(new Primitive(material67, shape67, new ConstantTexture(), new ConstantTexture(), transformNM));//TireRR			Tire_Sidewall
-scene.addPrimitive(new Primitive(material68, shape68, new ConstantTexture(), new ConstantTexture(), transformNM));//TireRR			Material__600
-scene.addPrimitive(new Primitive(material69, shape69, new ConstantTexture(), new ConstantTexture(), transformNM));//License		License0
+scene.addPrimitive(new Primitive(material01, shape01, transform01));
+scene.addPrimitive(new Primitive(material02, shape02, transformNM));//Base			wind_glass
+scene.addPrimitive(new Primitive(material03, shape03, transformNM));//Base			Body_paint
+scene.addPrimitive(new Primitive(material04, shape04, transformNM));//Base			Misc
+scene.addPrimitive(new Primitive(material05, shape05, transformNM));//Base			Misc0
+scene.addPrimitive(new Primitive(material06, shape06, transformNM));//Base			Material__583
+scene.addPrimitive(new Primitive(material07, shape07, transformNM));//Base			Body_paint
+scene.addPrimitive(new Primitive(material08, shape08, transformNM));//Base			License
+scene.addPrimitive(new Primitive(material09, shape09, transformNM));//Base			wind_glass
+scene.addPrimitive(new Primitive(material10, shape10, transformNM));//Base			Material__586
+scene.addPrimitive(new Primitive(material11, shape11, transformNM));//Base			wind_glass
+scene.addPrimitive(new Primitive(material12, shape12, transformNM));//BLightL		Material__589
+scene.addPrimitive(new Primitive(material13, shape13, transformNM));//BLightR		Material__589
+scene.addPrimitive(new Primitive(material14, shape14, transformNM));//Body			DoorLine
+scene.addPrimitive(new Primitive(material15, shape15, transformNM));//Body			Badging_Chrome
+scene.addPrimitive(new Primitive(material16, shape16, transformNM));//Body			Misc1
+scene.addPrimitive(new Primitive(material17, shape17, transformNM));//Body			Misc_Chrome
+scene.addPrimitive(new Primitive(material18, shape18, transformNM));//Body			Misc_Chrome0
+scene.addPrimitive(new Primitive(material19, shape19, transformNM));//Body			Misc_Chrome1
+scene.addPrimitive(new Primitive(material20, shape20, transformNM));//Body			Black
+scene.addPrimitive(new Primitive(material21, shape21, transformNM));//Body			Body_paint0
+scene.addPrimitive(new Primitive(material22, shape22, transformNM));//Body			Bottom
+scene.addPrimitive(new Primitive(material23, shape23, transformNM));//BrakeFL		Brake_Pads
+scene.addPrimitive(new Primitive(material24, shape24, transformNM));//BrakeFL		Brake_Disc
+scene.addPrimitive(new Primitive(material25, shape25, transformNM));//BrakeFR		Brake_Pads0
+scene.addPrimitive(new Primitive(material26, shape26, transformNM));//BrakeFR		Brake_Disc0
+scene.addPrimitive(new Primitive(material27, shape27, transformNM));//BrakeRL		Brake_Pads
+scene.addPrimitive(new Primitive(material28, shape28, transformNM));//BrakeRL		Brake_Disc
+scene.addPrimitive(new Primitive(material29, shape29, transformNM));//BrakeRR		Brake_Pads0
+scene.addPrimitive(new Primitive(material30, shape30, transformNM));//BrakeRR		Brake_Disc0
+scene.addPrimitive(new Primitive(material31, shape31, transformNM));//Driver		Driver
+scene.addPrimitive(new Primitive(material32, shape32, transformNM));//HLightL		Material__593
+scene.addPrimitive(new Primitive(material33, shape33, transformNM));//HLightL		Misc2
+scene.addPrimitive(new Primitive(material34, shape34, transformNM));//HLightLG		Material__594
+scene.addPrimitive(new Primitive(material35, shape35, transformNM));//HLightR		Material__593
+scene.addPrimitive(new Primitive(material36, shape36, transformNM));//HLightR		Misc2
+scene.addPrimitive(new Primitive(material37, shape37, transformNM));//HLightRG		Material__594
+scene.addPrimitive(new Primitive(material38, shape38, transformNM));//Hood			Misc3
+scene.addPrimitive(new Primitive(material39, shape39, transformNM));//Hood			Misc_Chrome2
+scene.addPrimitive(new Primitive(material40, shape40, transformNM));//Hood			Body_paint1
+scene.addPrimitive(new Primitive(material41, shape41, transformNM));//Hood_Carbon	Misc4
+scene.addPrimitive(new Primitive(material42, shape42, transformNM));//Hood_Carbon	Misc_Chrome3
+scene.addPrimitive(new Primitive(material43, shape43, transformNM));//Hood_Carbon	Body_paint2
+scene.addPrimitive(new Primitive(material44, shape44, transformNM));//Interior		Interior
+scene.addPrimitive(new Primitive(material45, shape45, transformNM));//Interior		Material__597
+scene.addPrimitive(new Primitive(material46, shape46, transformNM));//Interior		Interior0
+scene.addPrimitive(new Primitive(material47, shape47, transformNM));//MirrorL		Misc_Chrome4
+scene.addPrimitive(new Primitive(material48, shape48, transformNM));//MirrorL		Material__598
+scene.addPrimitive(new Primitive(material49, shape49, transformNM));//MirrorL		Body_paint3
+scene.addPrimitive(new Primitive(material50, shape50, transformNM));//MirrorR		Misc_Chrome4
+scene.addPrimitive(new Primitive(material51, shape51, transformNM));//MirrorR		Material__598
+scene.addPrimitive(new Primitive(material52, shape52, transformNM));//MirrorR		Body_paint3
+scene.addPrimitive(new Primitive(material53, shape53, transformNM));//TireFL		Tire_Back
+scene.addPrimitive(new Primitive(material54, shape54, transformNM));//TireFL		Tire_Tread
+scene.addPrimitive(new Primitive(material55, shape55, transformNM));//TireFL		Tire_Sidewall
+scene.addPrimitive(new Primitive(material56, shape56, transformNM));//TireFL		Material__600
+scene.addPrimitive(new Primitive(material57, shape57, transformNM));//TireFR		Tire_Back
+scene.addPrimitive(new Primitive(material58, shape58, transformNM));//TireFR		Tire_Tread
+scene.addPrimitive(new Primitive(material59, shape59, transformNM));//TireFR		Tire_Sidewall
+scene.addPrimitive(new Primitive(material60, shape60, transformNM));//TireFR		Material__600
+scene.addPrimitive(new Primitive(material61, shape61, transformNM));//TireRL		Tire_Back
+scene.addPrimitive(new Primitive(material62, shape62, transformNM));//TireRL		Tire_Tread
+scene.addPrimitive(new Primitive(material63, shape63, transformNM));//TireRL		Tire_Sidewall
+scene.addPrimitive(new Primitive(material64, shape64, transformNM));//TireRL		Material__600
+scene.addPrimitive(new Primitive(material65, shape65, transformNM));//TireRR		Tire_Back
+scene.addPrimitive(new Primitive(material66, shape66, transformNM));//TireRR		Tire_Tread
+scene.addPrimitive(new Primitive(material67, shape67, transformNM));//TireRR		Tire_Sidewall
+scene.addPrimitive(new Primitive(material68, shape68, transformNM));//TireRR		Material__600
+scene.addPrimitive(new Primitive(material69, shape69, transformNM));//License		License0
 scene.setCamera(camera);
 scene.setName("PBRTSL500");
 scene.buildAccelerationStructure();

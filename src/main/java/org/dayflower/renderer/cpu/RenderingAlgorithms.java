@@ -826,16 +826,22 @@ final class RenderingAlgorithms {
 									final Intersection intersection = optionalIntersection.get();
 									
 									if(primitive == intersection.getPrimitive()) {
-										final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA1, probabilityDensityFunctionValueB1, 1, 1);
+										final Material material = primitive.getMaterial();
 										
-										final Color3F emittance = primitive.calculateEmittanceRGB(intersection);
-										
-										final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
-										final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA1 * selectedBXDFWeight);
-										
-										radianceLightR += emittance.getR() * colorR * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
-										radianceLightG += emittance.getG() * colorG * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
-										radianceLightB += emittance.getB() * colorB * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+										if(material instanceof RayitoMaterial) {
+											final RayitoMaterial rayitoMaterial = RayitoMaterial.class.cast(material);
+											
+											final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA1, probabilityDensityFunctionValueB1, 1, 1);
+											
+											final Color3F emittance = rayitoMaterial.emittance(intersection);
+											
+											final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
+											final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA1 * selectedBXDFWeight);
+											
+											radianceLightR += emittance.getR() * colorR * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+											radianceLightG += emittance.getG() * colorG * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+											radianceLightB += emittance.getB() * colorB * reflectance * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+										}
 									}
 								}
 							}
@@ -858,19 +864,25 @@ final class RenderingAlgorithms {
 								final Intersection intersection = optionalIntersection.get();
 								
 								if(primitive == intersection.getPrimitive()) {
-									final float probabilityDensityFunctionValueB2 = primitive.calculateProbabilityDensityFunctionValueForSolidAngle(ray, intersection);
+									final Material material = primitive.getMaterial();
 									
-									if(probabilityDensityFunctionValueB2 > 0.0F) {
-										final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA2, probabilityDensityFunctionValueB2, 1, 1);
+									if(material instanceof RayitoMaterial) {
+										final RayitoMaterial rayitoMaterial = RayitoMaterial.class.cast(material);
 										
-										final Color3F emittance = primitive.calculateEmittanceRGB(intersection);
+										final float probabilityDensityFunctionValueB2 = primitive.calculateProbabilityDensityFunctionValueForSolidAngle(ray, intersection);
 										
-										final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
-										final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA2 * selectedBXDFWeight);
-										
-										radianceLightR += emittance.getR() * colorR * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
-										radianceLightG += emittance.getG() * colorG * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
-										radianceLightB += emittance.getB() * colorB * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+										if(probabilityDensityFunctionValueB2 > 0.0F) {
+											final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA2, probabilityDensityFunctionValueB2, 1, 1);
+											
+											final Color3F emittance = rayitoMaterial.emittance(intersection);
+											
+											final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
+											final float probabilityDensityFunctionValueReciprocal = 1.0F / (probabilityDensityFunctionValueA2 * selectedBXDFWeight);
+											
+											radianceLightR += emittance.getR() * colorR * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+											radianceLightG += emittance.getG() * colorG * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+											radianceLightB += emittance.getB() * colorB * reflectance * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+										}
 									}
 								}
 							}

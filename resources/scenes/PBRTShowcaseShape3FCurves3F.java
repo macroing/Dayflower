@@ -15,8 +15,8 @@ Transform transform2 = new Transform(new Point3F(0.0F, 0.0F, 0.0F));
 AreaLight areaLight2 = new DiffuseAreaLight(transform2.getObjectToWorld(), 1, new Color3F(20.0F), shape2, false);
 
 scene.addLight(areaLight2);
-scene.addPrimitive(new Primitive(material0, shape0, new ConstantTexture(), new ConstantTexture(), transform0));
-scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), transform1));
-scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), transform2, areaLight2));
+scene.addPrimitive(new Primitive(material0, shape0, transform0));
+scene.addPrimitive(new Primitive(material1, shape1, transform1));
+scene.addPrimitive(new Primitive(material2, shape2, transform2, areaLight2));
 scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
 scene.setName("PBRTShowcaseShape3FCurves3F");

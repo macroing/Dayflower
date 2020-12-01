@@ -36,7 +36,6 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
@@ -56,8 +55,6 @@ public final class Primitive implements Node {
 	private final List<PrimitiveObserver> primitiveObservers;
 	private Material material;
 	private Shape3F shape;
-	private Texture textureAlbedo;
-	private Texture textureEmittance;
 	private Transform transform;
 	private final TransformObserver transformObserver;
 	
@@ -66,45 +63,39 @@ public final class Primitive implements Node {
 	/**
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
-	 * If either {@code material}, {@code shape}, {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code material} or {@code shape} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Primitive(material, shape, textureAlbedo, textureEmittance, new Transform());
+	 * new Primitive(material, shape, new Transform());
 	 * }
 	 * </pre>
 	 * 
 	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
-	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
-	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code material} or {@code shape} are {@code null}
 	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance) {
-		this(material, shape, textureAlbedo, textureEmittance, new Transform());
+	public Primitive(final Material material, final Shape3F shape) {
+		this(material, shape, new Transform());
 	}
 	
 	/**
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
-	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code transform} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code material}, {@code shape} or {@code transform} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
-	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
-	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
 	 * @param transform the {@link Transform} instance that is associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code transform} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape} or {@code transform} are {@code null}
 	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Transform transform) {
+	public Primitive(final Material material, final Shape3F shape, final Transform transform) {
 		this.areaLight = null;
 		this.boundingVolume = shape.getBoundingVolume().transform(transform.getObjectToWorld());
 		this.primitiveObservers = new ArrayList<>();
 		this.material = Objects.requireNonNull(material, "material == null");
 		this.shape = shape;
-		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 		this.transformObserver = new TransformObserverImpl(this::doSetBoundingVolume);
 		this.transform = transform;
 		this.transform.addTransformObserver(this.transformObserver);
@@ -113,24 +104,20 @@ public final class Primitive implements Node {
 	/**
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
-	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code transform} or {@code areaLight} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code material}, {@code shape}, {@code transform} or {@code areaLight} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
-	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
-	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
 	 * @param transform the {@link Transform} instance that is associated with this {@code Primitive} instance
 	 * @param areaLight the {@link AreaLight} instance associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code transform} or {@code areaLight} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code transform} or {@code areaLight} are {@code null}
 	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Transform transform, final AreaLight areaLight) {
+	public Primitive(final Material material, final Shape3F shape, final Transform transform, final AreaLight areaLight) {
 		this.areaLight = Objects.requireNonNull(areaLight, "areaLight == null");
 		this.boundingVolume = shape.getBoundingVolume().transform(transform.getObjectToWorld());
 		this.primitiveObservers = new ArrayList<>();
 		this.material = Objects.requireNonNull(material, "material == null");
 		this.shape = shape;
-		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 		this.transformObserver = new TransformObserverImpl(this::doSetBoundingVolume);
 		this.transform = transform;
 		this.transform.addTransformObserver(this.transformObserver);
@@ -145,58 +132,6 @@ public final class Primitive implements Node {
 	 */
 	public BoundingVolume3F getBoundingVolume() {
 		return this.boundingVolume;
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the albedo of the surface at {@code intersection} using an RGB-color space.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the albedo of the surface at {@code intersection} using an RGB-color space
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	public Color3F calculateAlbedoRGB(final Intersection intersection) {
-		return getTextureAlbedo().getColorRGB(Objects.requireNonNull(intersection, "intersection == null"));
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the albedo of the surface at {@code intersection} using an XYZ-color space.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the albedo of the surface at {@code intersection} using an XYZ-color space
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	public Color3F calculateAlbedoXYZ(final Intersection intersection) {
-		return getTextureAlbedo().getColorXYZ(Objects.requireNonNull(intersection, "intersection == null"));
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the emittance of the surface at {@code intersection} using an RGB-color space.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the emittance of the surface at {@code intersection} using an RGB-color space
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	public Color3F calculateEmittanceRGB(final Intersection intersection) {
-		return getTextureEmittance().getColorRGB(Objects.requireNonNull(intersection, "intersection == null"));
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the emittance of the surface at {@code intersection} using an XYZ-color space.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the emittance of the surface at {@code intersection} using an XYZ-color space
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	public Color3F calculateEmittanceXYZ(final Intersection intersection) {
-		return getTextureEmittance().getColorXYZ(Objects.requireNonNull(intersection, "intersection == null"));
 	}
 	
 	/**
@@ -328,25 +263,7 @@ public final class Primitive implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Primitive(%s, %s, %s, %s, %s)", this.material, this.shape, this.textureAlbedo, this.textureEmittance, this.transform);
-	}
-	
-	/**
-	 * Returns the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance.
-	 * 
-	 * @return the {@code Texture} instance for the albedo color that is associated with this {@code Primitive} instance
-	 */
-	public Texture getTextureAlbedo() {
-		return this.textureAlbedo;
-	}
-	
-	/**
-	 * Returns the {@link Texture} instance for the emittance that is associated with this {@code Primitive} instance.
-	 * 
-	 * @return the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
-	 */
-	public Texture getTextureEmittance() {
-		return this.textureEmittance;
+		return String.format("new Primitive(%s, %s, %s)", this.material, this.shape, this.transform);
 	}
 	
 	/**
@@ -401,14 +318,6 @@ public final class Primitive implements Node {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureAlbedo.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
 				if(!this.transform.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -458,10 +367,6 @@ public final class Primitive implements Node {
 		} else if(!Objects.equals(this.material, Primitive.class.cast(object).material)) {
 			return false;
 		} else if(!Objects.equals(this.shape, Primitive.class.cast(object).shape)) {
-			return false;
-		} else if(!Objects.equals(this.textureAlbedo, Primitive.class.cast(object).textureAlbedo)) {
-			return false;
-		} else if(!Objects.equals(this.textureEmittance, Primitive.class.cast(object).textureEmittance)) {
 			return false;
 		} else if(!Objects.equals(this.transform, Primitive.class.cast(object).transform)) {
 			return false;
@@ -599,7 +504,7 @@ public final class Primitive implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.areaLight, this.boundingVolume, this.primitiveObservers, this.material, this.shape, this.textureAlbedo, this.textureEmittance, this.transform);
+		return Objects.hash(this.areaLight, this.boundingVolume, this.primitiveObservers, this.material, this.shape, this.transform);
 	}
 	
 	/**
@@ -696,52 +601,6 @@ public final class Primitive implements Node {
 	}
 	
 	/**
-	 * Sets the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance to {@code textureAlbedo}.
-	 * <p>
-	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param textureAlbedo the {@code Texture} instance for the albedo color that is associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
-	 */
-	public void setTextureAlbedo(final Texture textureAlbedo) {
-		Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
-		
-		if(!Objects.equals(this.textureAlbedo, textureAlbedo)) {
-			final Texture oldTextureAlbedo = this.textureAlbedo;
-			final Texture newTextureAlbedo =      textureAlbedo;
-			
-			this.textureAlbedo = textureAlbedo;
-			
-			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
-				primitiveObserver.onChangeTextureAlbedo(this, oldTextureAlbedo, newTextureAlbedo);
-			}
-		}
-	}
-	
-	/**
-	 * Sets the {@link Texture} instance for the emittance that is associated with this {@code Primitive} instance to {@code textureEmittance}.
-	 * <p>
-	 * If {@code textureEmittance} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
-	 * @throws NullPointerException thrown if, and only if, {@code textureEmittance} is {@code null}
-	 */
-	public void setTextureEmittance(final Texture textureEmittance) {
-		Objects.requireNonNull(textureEmittance, "textureEmittance == null");
-		
-		if(!Objects.equals(this.textureEmittance, textureEmittance)) {
-			final Texture oldTextureEmittance = this.textureEmittance;
-			final Texture newTextureEmittance =      textureEmittance;
-			
-			this.textureEmittance = textureEmittance;
-			
-			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
-				primitiveObserver.onChangeTextureEmittance(this, oldTextureEmittance, newTextureEmittance);
-			}
-		}
-	}
-	
-	/**
 	 * Sets the {@link Transform} instance that is associated with this {@code Primitive} instance to {@code transform}.
 	 * <p>
 	 * If {@code transform} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -762,6 +621,8 @@ public final class Primitive implements Node {
 		for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
 			primitiveObserver.onChangeTransform(this, oldTransform, newTransform);
 		}
+		
+		doSetBoundingVolume();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

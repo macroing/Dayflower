@@ -11,7 +11,7 @@ Transform transform0 = new Transform(new Point3F(0.0F, 0.0F, 7.5F));
 Transform transform1 = new Transform(new Point3F(0.0F, 2.0F, 2.0F), Quaternion4F.from(Matrix44F.multiply(Matrix44F.rotateX(AngleF.degrees(0.0F)), Matrix44F.rotateY(AngleF.degrees(60.0F)))));
 
 scene.addLight(new PerezLight());
-scene.addPrimitive(new Primitive(material0, shape0, new ConstantTexture(), new ConstantTexture(), transform0));
-scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), transform1));
+scene.addPrimitive(new Primitive(material0, shape0, transform0));
+scene.addPrimitive(new Primitive(material1, shape1, transform1));
 scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
 scene.setName("PBRTShowcaseShape3FConstructiveSolidGeometry3F");

@@ -25,6 +25,8 @@ import java.util.Objects;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Texture;
+import org.dayflower.scene.texture.ConstantTexture;
 
 /**
  * An {@code OrenNayarMaterial} is an implementation of {@link RayitoMaterial} that uses an {@link OrenNayarBRDF} instance.
@@ -36,6 +38,8 @@ import org.dayflower.scene.Intersection;
  */
 public final class OrenNayarMaterial implements RayitoMaterial {
 	private final BXDF selectedBXDF;
+	private final Texture textureAlbedo;
+	private final Texture textureEmittance;
 	private final float selectedBXDFWeight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,12 +50,12 @@ public final class OrenNayarMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new OrenNayarMaterial(new OrenNayarBRDF());
+	 * new OrenNayarMaterial(AngleF.degrees(20.0F));
 	 * }
 	 * </pre>
 	 */
 	public OrenNayarMaterial() {
-		this(new OrenNayarBRDF());
+		this(AngleF.degrees(20.0F));
 	}
 	
 	/**
@@ -62,7 +66,7 @@ public final class OrenNayarMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new OrenNayarMaterial(new OrenNayarBRDF(angle));
+	 * new OrenNayarMaterial(angle, Color3F.GRAY);
 	 * }
 	 * </pre>
 	 * 
@@ -70,19 +74,84 @@ public final class OrenNayarMaterial implements RayitoMaterial {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public OrenNayarMaterial(final AngleF angle) {
-		this(new OrenNayarBRDF(angle));
+		this(angle, Color3F.GRAY);
 	}
 	
 	/**
 	 * Constructs a new {@code OrenNayarMaterial} instance.
 	 * <p>
-	 * If {@code orenNayarBRDF} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code angle} or {@code colorAlbedo} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new OrenNayarMaterial(angle, colorAlbedo, Color3F.BLACK);
+	 * }
+	 * </pre>
 	 * 
-	 * @param orenNayarBRDF an {@link OrenNayarBRDF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code orenNayarBRDF} is {@code null}
+	 * @param angle an {@link AngleF} instance
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code colorAlbedo} are {@code null}
 	 */
-	public OrenNayarMaterial(final OrenNayarBRDF orenNayarBRDF) {
-		this.selectedBXDF = Objects.requireNonNull(orenNayarBRDF, "orenNayarBRDF == null");
+	public OrenNayarMaterial(final AngleF angle, final Color3F colorAlbedo) {
+		this(angle, colorAlbedo, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code OrenNayarMaterial} instance.
+	 * <p>
+	 * If either {@code angle}, {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new OrenNayarMaterial(angle, new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance));
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @param colorEmittance a {@code Color3F} instance with the emittance
+	 * @throws NullPointerException thrown if, and only if, either {@code angle}, {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 */
+	public OrenNayarMaterial(final AngleF angle, final Color3F colorAlbedo, final Color3F colorEmittance) {
+		this(angle, new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance));
+	}
+	
+	/**
+	 * Constructs a new {@code OrenNayarMaterial} instance.
+	 * <p>
+	 * If either {@code angle} or {@code textureAlbedo} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new OrenNayarMaterial(angle, textureAlbedo, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code textureAlbedo} are {@code null}
+	 */
+	public OrenNayarMaterial(final AngleF angle, final Texture textureAlbedo) {
+		this(angle, textureAlbedo, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code OrenNayarMaterial} instance.
+	 * <p>
+	 * If either {@code angle}, {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @param textureEmittance a {@code Texture} instance with the emittance
+	 * @throws NullPointerException thrown if, and only if, either {@code angle}, {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 */
+	public OrenNayarMaterial(final AngleF angle, final Texture textureAlbedo, final Texture textureEmittance) {
+		this.selectedBXDF = new OrenNayarBRDF(angle);
+		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
+		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 		this.selectedBXDFWeight = 1.0F;
 	}
 	
@@ -99,7 +168,7 @@ public final class OrenNayarMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return intersection.getPrimitive().getTextureEmittance().getColorRGB(intersection);
+		return this.textureEmittance.getColorRGB(intersection);
 	}
 	
 	/**
@@ -113,7 +182,7 @@ public final class OrenNayarMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public MaterialResult evaluate(final Intersection intersection) {
-		return new MaterialResult(intersection.getPrimitive().getTextureAlbedo().getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
+		return new MaterialResult(this.textureAlbedo.getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
 	}
 	
 	/**
@@ -123,7 +192,7 @@ public final class OrenNayarMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new OrenNayarMaterial(%s)", this.selectedBXDF);
+		return "new OrenNayarMaterial(...)";
 	}
 	
 	/**
@@ -142,6 +211,10 @@ public final class OrenNayarMaterial implements RayitoMaterial {
 			return false;
 		} else if(!Objects.equals(this.selectedBXDF, OrenNayarMaterial.class.cast(object).selectedBXDF)) {
 			return false;
+		} else if(!Objects.equals(this.textureAlbedo, OrenNayarMaterial.class.cast(object).textureAlbedo)) {
+			return false;
+		} else if(!Objects.equals(this.textureEmittance, OrenNayarMaterial.class.cast(object).textureEmittance)) {
+			return false;
 		} else if(!equal(this.selectedBXDFWeight, OrenNayarMaterial.class.cast(object).selectedBXDFWeight)) {
 			return false;
 		} else {
@@ -156,6 +229,6 @@ public final class OrenNayarMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.selectedBXDF, Float.valueOf(this.selectedBXDFWeight));
+		return Objects.hash(this.selectedBXDF, this.textureAlbedo, this.textureEmittance, Float.valueOf(this.selectedBXDFWeight));
 	}
 }

@@ -26,11 +26,11 @@ AreaLight areaLight = new DiffuseAreaLight(transform6.getObjectToWorld(), 1, new
 
 scene.addLight(areaLight);
 scene.addLight(new PerezLight());
-scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), transform1));
-scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), transform2));
-scene.addPrimitive(new Primitive(material3, shape3, new ConstantTexture(), new ConstantTexture(), transform3));
-scene.addPrimitive(new Primitive(material4, shape4, new ConstantTexture(), new ConstantTexture(), transform4));
-scene.addPrimitive(new Primitive(material5, shape5, new ConstantTexture(), new ConstantTexture(), transform5));
-scene.addPrimitive(new Primitive(material6, shape6, new ConstantTexture(), new ConstantTexture(), transform6, areaLight));
+scene.addPrimitive(new Primitive(material1, shape1, transform1));
+scene.addPrimitive(new Primitive(material2, shape2, transform2));
+scene.addPrimitive(new Primitive(material3, shape3, transform3));
+scene.addPrimitive(new Primitive(material4, shape4, transform4));
+scene.addPrimitive(new Primitive(material5, shape5, transform5));
+scene.addPrimitive(new Primitive(material6, shape6, transform6, areaLight));
 scene.setCamera(new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)));
 scene.setName("PBRTDefault");

@@ -52,32 +52,32 @@ AreaLight areaLight31 = new DiffuseAreaLight(transform31.getObjectToWorld(), 1, 
 
 if(isInBox) {
 	scene.addLight(areaLight31);
-	scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), transform11));
-	scene.addPrimitive(new Primitive(material12, shape12, new ConstantTexture(), new ConstantTexture(), transform12));
-	scene.addPrimitive(new Primitive(material13, shape13, new ConstantTexture(), new ConstantTexture(), transform13));
-	scene.addPrimitive(new Primitive(material14, shape14, new ConstantTexture(), new ConstantTexture(), transform14));
-	scene.addPrimitive(new Primitive(material15, shape15, new ConstantTexture(), new ConstantTexture(), transform15));
-	scene.addPrimitive(new Primitive(material16, shape16, new ConstantTexture(), new ConstantTexture(), transform16));
-	scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), transform21));
-	scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), transform22));
-	scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), transform23));
-	scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), transform24));
-	scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), transform25));
-	scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), transform26));
-	scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), transform27));
-	scene.addPrimitive(new Primitive(material31, shape31, new ConstantTexture(), new ConstantTexture(), transform31, areaLight31));
+	scene.addPrimitive(new Primitive(material11, shape11, transform11));
+	scene.addPrimitive(new Primitive(material12, shape12, transform12));
+	scene.addPrimitive(new Primitive(material13, shape13, transform13));
+	scene.addPrimitive(new Primitive(material14, shape14, transform14));
+	scene.addPrimitive(new Primitive(material15, shape15, transform15));
+	scene.addPrimitive(new Primitive(material16, shape16, transform16));
+	scene.addPrimitive(new Primitive(material21, shape21, transform21));
+	scene.addPrimitive(new Primitive(material22, shape22, transform22));
+	scene.addPrimitive(new Primitive(material23, shape23, transform23));
+	scene.addPrimitive(new Primitive(material24, shape24, transform24));
+	scene.addPrimitive(new Primitive(material25, shape25, transform25));
+	scene.addPrimitive(new Primitive(material26, shape26, transform26));
+	scene.addPrimitive(new Primitive(material27, shape27, transform27));
+	scene.addPrimitive(new Primitive(material31, shape31, transform31, areaLight31));
 	scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
 	scene.setName("PBRTShowcaseMaterial");
 } else {
 	scene.addLight(new PerezLight());
-	scene.addPrimitive(new Primitive(material11, shape11, new ConstantTexture(), new ConstantTexture(), transform11));
-	scene.addPrimitive(new Primitive(material21, shape21, new ConstantTexture(), new ConstantTexture(), transform21));
-	scene.addPrimitive(new Primitive(material22, shape22, new ConstantTexture(), new ConstantTexture(), transform22));
-	scene.addPrimitive(new Primitive(material23, shape23, new ConstantTexture(), new ConstantTexture(), transform23));
-	scene.addPrimitive(new Primitive(material24, shape24, new ConstantTexture(), new ConstantTexture(), transform24));
-	scene.addPrimitive(new Primitive(material25, shape25, new ConstantTexture(), new ConstantTexture(), transform25));
-	scene.addPrimitive(new Primitive(material26, shape26, new ConstantTexture(), new ConstantTexture(), transform26));
-	scene.addPrimitive(new Primitive(material27, shape27, new ConstantTexture(), new ConstantTexture(), transform27));
+	scene.addPrimitive(new Primitive(material11, shape11, transform11));
+	scene.addPrimitive(new Primitive(material21, shape21, transform21));
+	scene.addPrimitive(new Primitive(material22, shape22, transform22));
+	scene.addPrimitive(new Primitive(material23, shape23, transform23));
+	scene.addPrimitive(new Primitive(material24, shape24, transform24));
+	scene.addPrimitive(new Primitive(material25, shape25, transform25));
+	scene.addPrimitive(new Primitive(material26, shape26, transform26));
+	scene.addPrimitive(new Primitive(material27, shape27, transform27));
 	scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
 	scene.setName("PBRTShowcaseMaterial");
 }

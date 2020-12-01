@@ -8,7 +8,7 @@ Transform transform1 = new Transform(new Point3F(0.0F, 0.0F, 0.0F));
 Transform transform2 = new Transform(new Point3F(0.0F, 3.5F, 3.0F));
 
 scene.addLight(new PerezLight());
-scene.addPrimitive(new Primitive(material1, shape1, new ConstantTexture(), new ConstantTexture(), transform1));
-scene.addPrimitive(new Primitive(material2, shape2, new ConstantTexture(), new ConstantTexture(), transform2));
+scene.addPrimitive(new Primitive(material1, shape1, transform1));
+scene.addPrimitive(new Primitive(material2, shape2, transform2));
 scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
 scene.setName("PBRTShowcaseMaterialGlassMaterial");

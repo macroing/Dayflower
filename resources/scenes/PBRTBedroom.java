@@ -10,9 +10,6 @@ materials.put("Ceiling", materialWall);
 materials.put("Floor", materialLaminate);
 materials.put("Walls", materialWall);
 
-Texture textureAlbedo = new ConstantTexture(Color3F.GRAY);
-Texture textureEmittance = new ConstantTexture();
-
 Transform transform1 = new Transform(new Point3F(0.0F,  0.0F, 20.0F));
 Transform transform2 = new Transform(new Point3F(0.0F, 40.0F, 20.0F));
 
@@ -21,10 +18,10 @@ Shape3F shape = new Sphere3F();
 AreaLight areaLight = new DiffuseAreaLight(transform2.getObjectToWorld(), 1, new Color3F(500.0F), shape, false);
 
 scene.addLight(areaLight);
-scene.addPrimitive(new Primitive(new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE)), shape, new ConstantTexture(), new ConstantTexture(), transform2, areaLight));
+scene.addPrimitive(new Primitive(new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE)), shape, transform2, areaLight));
 
 for(final TriangleMesh3F triangleMesh : triangleMeshes) {
-	scene.addPrimitive(new Primitive(materials.getOrDefault(triangleMesh.getGroupName(), material), triangleMesh, textureAlbedo, textureEmittance, transform1));
+	scene.addPrimitive(new Primitive(materials.getOrDefault(triangleMesh.getGroupName(), material), triangleMesh, transform1));
 }
 
 scene.setCamera(new Camera(new Point3F(0.0F, 30.0F, 0.0F), AngleF.degrees(70.0F)));

@@ -24,6 +24,8 @@ import java.util.Objects;
 
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Texture;
+import org.dayflower.scene.texture.ConstantTexture;
 
 /**
  * An {@code AshikhminShirleyMaterial} is an implementation of {@link RayitoMaterial} that uses an {@link AshikhminShirleyBRDF} instance.
@@ -35,6 +37,8 @@ import org.dayflower.scene.Intersection;
  */
 public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	private final BXDF selectedBXDF;
+	private final Texture textureAlbedo;
+	private final Texture textureEmittance;
 	private final float selectedBXDFWeight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,41 +49,128 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AshikhminShirleyMaterial(new AshikhminShirleyBRDF());
+	 * new AshikhminShirleyMaterial(Color3F.GRAY);
 	 * }
 	 * </pre>
 	 */
 	public AshikhminShirleyMaterial() {
-		this(new AshikhminShirleyBRDF());
+		this(Color3F.GRAY);
 	}
 	
 	/**
 	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
 	 * <p>
-	 * If {@code ashikhminShirleyBRDF} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ashikhminShirleyBRDF an {@link AshikhminShirleyBRDF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code ashikhminShirleyBRDF} is {@code null}
-	 */
-	public AshikhminShirleyMaterial(final AshikhminShirleyBRDF ashikhminShirleyBRDF) {
-		this.selectedBXDF = Objects.requireNonNull(ashikhminShirleyBRDF, "ashikhminShirleyBRDF == null");
-		this.selectedBXDFWeight = 1.0F;
-	}
-	
-	/**
-	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * If {@code colorAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AshikhminShirleyMaterial(new AshikhminShirleyBRDF(roughness));
+	 * new AshikhminShirleyMaterial(colorAlbedo, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param roughness the roughness to use
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @throws NullPointerException thrown if, and only if, {@code colorAlbedo} is {@code null}
 	 */
-	public AshikhminShirleyMaterial(final float roughness) {
-		this(new AshikhminShirleyBRDF(roughness));
+	public AshikhminShirleyMaterial(final Color3F colorAlbedo) {
+		this(colorAlbedo, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * <p>
+	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new AshikhminShirleyMaterial(colorAlbedo, colorEmittance, 0.05F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @param colorEmittance a {@code Color3F} instance with the emittance
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 */
+	public AshikhminShirleyMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
+		this(colorAlbedo, colorEmittance, 0.05F);
+	}
+	
+	/**
+	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * <p>
+	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new AshikhminShirleyMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), roughness);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @param colorEmittance a {@code Color3F} instance with the emittance
+	 * @param roughness the roughness to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 */
+	public AshikhminShirleyMaterial(final Color3F colorAlbedo, final Color3F colorEmittance, final float roughness) {
+		this(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), roughness);
+	}
+	
+	/**
+	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * <p>
+	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new AshikhminShirleyMaterial(textureAlbedo, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
+	 */
+	public AshikhminShirleyMaterial(final Texture textureAlbedo) {
+		this(textureAlbedo, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * <p>
+	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new AshikhminShirleyMaterial(textureAlbedo, textureEmittance, 0.05F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @param textureEmittance a {@code Texture} instance with the emittance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 */
+	public AshikhminShirleyMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
+		this(textureAlbedo, textureEmittance, 0.05F);
+	}
+	
+	/**
+	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * <p>
+	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @param textureEmittance a {@code Texture} instance with the emittance
+	 * @param roughness the roughness to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 */
+	public AshikhminShirleyMaterial(final Texture textureAlbedo, final Texture textureEmittance, final float roughness) {
+		this.selectedBXDF = new AshikhminShirleyBRDF(roughness);
+		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
+		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+		this.selectedBXDFWeight = 1.0F;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +186,7 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return intersection.getPrimitive().getTextureEmittance().getColorRGB(intersection);
+		return this.textureEmittance.getColorRGB(intersection);
 	}
 	
 	/**
@@ -109,7 +200,7 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public MaterialResult evaluate(final Intersection intersection) {
-		return new MaterialResult(intersection.getPrimitive().getTextureAlbedo().getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
+		return new MaterialResult(this.textureAlbedo.getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
 	}
 	
 	/**
@@ -119,7 +210,7 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new AshikhminShirleyMaterial(%s)", this.selectedBXDF);
+		return "new AshikhminShirleyMaterial(...)";
 	}
 	
 	/**
@@ -138,6 +229,10 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 			return false;
 		} else if(!Objects.equals(this.selectedBXDF, AshikhminShirleyMaterial.class.cast(object).selectedBXDF)) {
 			return false;
+		} else if(!Objects.equals(this.textureAlbedo, AshikhminShirleyMaterial.class.cast(object).textureAlbedo)) {
+			return false;
+		} else if(!Objects.equals(this.textureEmittance, AshikhminShirleyMaterial.class.cast(object).textureEmittance)) {
+			return false;
 		} else if(!equal(this.selectedBXDFWeight, AshikhminShirleyMaterial.class.cast(object).selectedBXDFWeight)) {
 			return false;
 		} else {
@@ -152,6 +247,6 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.selectedBXDF, Float.valueOf(this.selectedBXDFWeight));
+		return Objects.hash(this.selectedBXDF, this.textureAlbedo, this.textureEmittance, Float.valueOf(this.selectedBXDFWeight));
 	}
 }

@@ -24,6 +24,8 @@ import java.util.Objects;
 
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Texture;
+import org.dayflower.scene.texture.ConstantTexture;
 
 /**
  * A {@code RefractionMaterial} is an implementation of {@link RayitoMaterial} that uses a {@link RefractionBTDF} instance.
@@ -35,6 +37,8 @@ import org.dayflower.scene.Intersection;
  */
 public final class RefractionMaterial implements RayitoMaterial {
 	private final BXDF selectedBXDF;
+	private final Texture textureAlbedo;
+	private final Texture textureEmittance;
 	private final float selectedBXDFWeight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,24 +49,129 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RefractionMaterial(new RefractionBTDF());
+	 * new RefractionMaterial(Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
 	public RefractionMaterial() {
-		this(new RefractionBTDF());
+		this(Color3F.WHITE);
 	}
 	
 	/**
 	 * Constructs a new {@code RefractionMaterial} instance.
 	 * <p>
-	 * If {@code refractionBTDF} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RefractionMaterial(colorAlbedo, Color3F.BLACK);
+	 * }
+	 * </pre>
 	 * 
-	 * @param refractionBTDF a {@link RefractionBTDF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code refractionBTDF} is {@code null}
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @throws NullPointerException thrown if, and only if, {@code colorAlbedo} is {@code null}
 	 */
-	public RefractionMaterial(final RefractionBTDF refractionBTDF) {
-		this.selectedBXDF = Objects.requireNonNull(refractionBTDF, "refractionBTDF == null");
+	public RefractionMaterial(final Color3F colorAlbedo) {
+		this(colorAlbedo, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code RefractionMaterial} instance.
+	 * <p>
+	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RefractionMaterial(colorAlbedo, colorEmittance, 1.0F, 1.5F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @param colorEmittance a {@code Color3F} instance with the emittance
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 */
+	public RefractionMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
+		this(colorAlbedo, colorEmittance, 1.0F, 1.5F);
+	}
+	
+	/**
+	 * Constructs a new {@code RefractionMaterial} instance.
+	 * <p>
+	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RefractionMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), etaA, etaB);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
+	 * @param colorEmittance a {@code Color3F} instance with the emittance
+	 * @param etaA the index of refraction denoted by {@code A}
+	 * @param etaB the index of refraction denoted by {@code B}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 */
+	public RefractionMaterial(final Color3F colorAlbedo, final Color3F colorEmittance, final float etaA, final float etaB) {
+		this(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), etaA, etaB);
+	}
+	
+	/**
+	 * Constructs a new {@code RefractionMaterial} instance.
+	 * <p>
+	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RefractionMaterial(textureAlbedo, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
+	 */
+	public RefractionMaterial(final Texture textureAlbedo) {
+		this(textureAlbedo, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code RefractionMaterial} instance.
+	 * <p>
+	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new RefractionMaterial(textureAlbedo, textureEmittance, 1.0F, 1.5F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @param textureEmittance a {@code Texture} instance with the emittance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 */
+	public RefractionMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
+		this(textureAlbedo, textureEmittance, 1.0F, 1.5F);
+	}
+	
+	/**
+	 * Constructs a new {@code RefractionMaterial} instance.
+	 * <p>
+	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureAlbedo a {@link Texture} instance with the albedo color
+	 * @param textureEmittance a {@code Texture} instance with the emittance
+	 * @param etaA the index of refraction denoted by {@code A}
+	 * @param etaB the index of refraction denoted by {@code B}
+	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 */
+	public RefractionMaterial(final Texture textureAlbedo, final Texture textureEmittance, final float etaA, final float etaB) {
+		this.selectedBXDF = new RefractionBTDF(etaA, etaB);
+		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
+		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 		this.selectedBXDFWeight = 1.0F;
 	}
 	
@@ -79,7 +188,7 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return intersection.getPrimitive().getTextureEmittance().getColorRGB(intersection);
+		return this.textureEmittance.getColorRGB(intersection);
 	}
 	
 	/**
@@ -93,7 +202,7 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public MaterialResult evaluate(final Intersection intersection) {
-		return new MaterialResult(intersection.getPrimitive().getTextureAlbedo().getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
+		return new MaterialResult(this.textureAlbedo.getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
 	}
 	
 	/**
@@ -103,7 +212,7 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new RefractionMaterial(%s)", this.selectedBXDF);
+		return "new RefractionMaterial(...)";
 	}
 	
 	/**
@@ -122,6 +231,10 @@ public final class RefractionMaterial implements RayitoMaterial {
 			return false;
 		} else if(!Objects.equals(this.selectedBXDF, RefractionMaterial.class.cast(object).selectedBXDF)) {
 			return false;
+		} else if(!Objects.equals(this.textureAlbedo, RefractionMaterial.class.cast(object).textureAlbedo)) {
+			return false;
+		} else if(!Objects.equals(this.textureEmittance, RefractionMaterial.class.cast(object).textureEmittance)) {
+			return false;
 		} else if(!equal(this.selectedBXDFWeight, RefractionMaterial.class.cast(object).selectedBXDFWeight)) {
 			return false;
 		} else {
@@ -136,6 +249,6 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.selectedBXDF, Float.valueOf(this.selectedBXDFWeight));
+		return Objects.hash(this.selectedBXDF, this.textureAlbedo, this.textureEmittance, Float.valueOf(this.selectedBXDFWeight));
 	}
 }

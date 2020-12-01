@@ -21,7 +21,6 @@ package org.dayflower.scene;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Shape3F;
 
 /**
@@ -68,18 +67,6 @@ public interface PrimitiveObserver {
 	void onChangeMaterial(final Primitive primitive, final Material oldMaterial, final Material newMaterial);
 	
 	/**
-	 * This method is called by {@code primitive} when the {@link Matrix44F} instance that transforms from object space to world space changes.
-	 * <p>
-	 * If either {@code primitive}, {@code oldObjectToWorld} or {@code newObjectToWorld} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param primitive the {@link Primitive} instance that called this method
-	 * @param oldObjectToWorld the old {@code Matrix44F} instance that transforms from object space to world space
-	 * @param newObjectToWorld the new {@code Matrix44F} instance that transforms from object space to world space
-	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldObjectToWorld} or {@code newObjectToWorld} are {@code null}
-	 */
-	void onChangeObjectToWorld(final Primitive primitive, final Matrix44F oldObjectToWorld, final Matrix44F newObjectToWorld);
-	
-	/**
 	 * This method is called by {@code primitive} when the {@link Shape3F} changes.
 	 * <p>
 	 * If either {@code primitive}, {@code oldShape} or {@code newShape} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -92,30 +79,6 @@ public interface PrimitiveObserver {
 	void onChangeShape(final Primitive primitive, final Shape3F oldShape, final Shape3F newShape);
 	
 	/**
-	 * This method is called by {@code primitive} when the {@link Texture} instance for the albedo color changes.
-	 * <p>
-	 * If either {@code primitive}, {@code oldTextureAlbedo} or {@code newTextureAlbedo} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param primitive the {@link Primitive} instance that called this method
-	 * @param oldTextureAlbedo the old {@code Texture} instance for the albedo color
-	 * @param newTextureAlbedo the new {@code Texture} instance for the albedo color
-	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldTextureAlbedo} or {@code newTextureAlbedo} are {@code null}
-	 */
-	void onChangeTextureAlbedo(final Primitive primitive, final Texture oldTextureAlbedo, final Texture newTextureAlbedo);
-	
-	/**
-	 * This method is called by {@code primitive} when the {@link Texture} instance for the emittance changes.
-	 * <p>
-	 * If either {@code primitive}, {@code oldTextureEmittance} or {@code newTextureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param primitive the {@link Primitive} instance that called this method
-	 * @param oldTextureEmittance the old {@code Texture} instance for the emittance
-	 * @param newTextureEmittance the new {@code Texture} instance for the emittance
-	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldTextureEmittance} or {@code newTextureEmittance} are {@code null}
-	 */
-	void onChangeTextureEmittance(final Primitive primitive, final Texture oldTextureEmittance, final Texture newTextureEmittance);
-	
-	/**
 	 * This method is called by {@code primitive} when the {@link Transform} instance changes.
 	 * <p>
 	 * If either {@code primitive}, {@code oldTransform} or {@code newTransform} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -126,16 +89,4 @@ public interface PrimitiveObserver {
 	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldTransform} or {@code newTransform} are {@code null}
 	 */
 	void onChangeTransform(final Primitive primitive, final Transform oldTransform, final Transform newTransform);
-	
-	/**
-	 * This method is called by {@code primitive} when the {@link Matrix44F} instance that transforms from world space to object space changes.
-	 * <p>
-	 * If either {@code primitive}, {@code oldWorldToObject} or {@code newWorldToObject} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param primitive the {@link Primitive} instance that called this method
-	 * @param oldWorldToObject the old {@code Matrix44F} instance that transforms from world space to object space
-	 * @param newWorldToObject the new {@code Matrix44F} instance that transforms from world space to object space
-	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldWorldToObject} or {@code newWorldToObject} are {@code null}
-	 */
-	void onChangeWorldToObject(final Primitive primitive, final Matrix44F oldWorldToObject, final Matrix44F newWorldToObject);
 }

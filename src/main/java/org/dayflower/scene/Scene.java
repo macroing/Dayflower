@@ -33,7 +33,6 @@ import java.util.Optional;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
@@ -1202,15 +1201,6 @@ public final class Scene implements Node {
 		}
 		
 		@Override
-		public void onChangeObjectToWorld(final Primitive primitive, final Matrix44F oldObjectToWorld, final Matrix44F newObjectToWorld) {
-			Objects.requireNonNull(primitive, "primitive == null");
-			Objects.requireNonNull(oldObjectToWorld, "oldObjectToWorld == null");
-			Objects.requireNonNull(newObjectToWorld, "newObjectToWorld == null");
-			
-			doOnChangePrimitive(primitive);
-		}
-		
-		@Override
 		public void onChangeShape(final Primitive primitive, final Shape3F oldShape, final Shape3F newShape) {
 			Objects.requireNonNull(primitive, "primitive == null");
 			Objects.requireNonNull(oldShape, "oldShape == null");
@@ -1220,37 +1210,10 @@ public final class Scene implements Node {
 		}
 		
 		@Override
-		public void onChangeTextureAlbedo(final Primitive primitive, final Texture oldTextureAlbedo, final Texture newTextureAlbedo) {
-			Objects.requireNonNull(primitive, "primitive == null");
-			Objects.requireNonNull(oldTextureAlbedo, "oldTextureAlbedo == null");
-			Objects.requireNonNull(newTextureAlbedo, "newTextureAlbedo == null");
-			
-			doOnChangePrimitive(primitive);
-		}
-		
-		@Override
-		public void onChangeTextureEmittance(final Primitive primitive, final Texture oldTextureEmittance, final Texture newTextureEmittance) {
-			Objects.requireNonNull(primitive, "primitive == null");
-			Objects.requireNonNull(oldTextureEmittance, "oldTextureEmittance == null");
-			Objects.requireNonNull(newTextureEmittance, "newTextureEmittance == null");
-			
-			doOnChangePrimitive(primitive);
-		}
-		
-		@Override
 		public void onChangeTransform(final Primitive primitive, final Transform oldTransform, final Transform newTransform) {
 			Objects.requireNonNull(primitive, "primitive == null");
 			Objects.requireNonNull(oldTransform, "oldTransform == null");
 			Objects.requireNonNull(newTransform, "newTransform == null");
-			
-			doOnChangePrimitive(primitive);
-		}
-		
-		@Override
-		public void onChangeWorldToObject(final Primitive primitive, final Matrix44F oldWorldToObject, final Matrix44F newWorldToObject) {
-			Objects.requireNonNull(primitive, "primitive == null");
-			Objects.requireNonNull(oldWorldToObject, "oldWorldToObject == null");
-			Objects.requireNonNull(newWorldToObject, "newWorldToObject == null");
 			
 			doOnChangePrimitive(primitive);
 		}

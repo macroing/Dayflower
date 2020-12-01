@@ -30,15 +30,15 @@ Transform transform09 = new Transform(new Point3F( 0.0F, 4.99F, 9.0F), Quaternio
 
 AreaLight areaLight09 = new DiffuseAreaLight(transform09.getObjectToWorld(), 1, new Color3F(12.0F), shape09, false);
 
-Primitive primitive01 = new Primitive(material01, shape01, new ConstantTexture(), new ConstantTexture(), transform01);
-Primitive primitive02 = new Primitive(material02, shape02, new ConstantTexture(), new ConstantTexture(), transform02);
-Primitive primitive03 = new Primitive(material03, shape03, new ConstantTexture(), new ConstantTexture(), transform03);
-Primitive primitive04 = new Primitive(material04, shape04, new ConstantTexture(), new ConstantTexture(), transform04);
-Primitive primitive05 = new Primitive(material05, shape05, new ConstantTexture(), new ConstantTexture(), transform05);
-Primitive primitive06 = new Primitive(material06, shape06, new ConstantTexture(), new ConstantTexture(), transform06);
-Primitive primitive07 = new Primitive(material07, shape07, new ConstantTexture(), new ConstantTexture(), transform07);
-Primitive primitive08 = new Primitive(material08, shape08, new ConstantTexture(), new ConstantTexture(), transform08);
-Primitive primitive09 = new Primitive(material09, shape09, new ConstantTexture(), new ConstantTexture(), transform09, areaLight09);
+Primitive primitive01 = new Primitive(material01, shape01, transform01);
+Primitive primitive02 = new Primitive(material02, shape02, transform02);
+Primitive primitive03 = new Primitive(material03, shape03, transform03);
+Primitive primitive04 = new Primitive(material04, shape04, transform04);
+Primitive primitive05 = new Primitive(material05, shape05, transform05);
+Primitive primitive06 = new Primitive(material06, shape06, transform06);
+Primitive primitive07 = new Primitive(material07, shape07, transform07);
+Primitive primitive08 = new Primitive(material08, shape08, transform08);
+Primitive primitive09 = new Primitive(material09, shape09, transform09, areaLight09);
 
 Camera camera = new Camera(new Point3F(0.0F, 2.5F, 1.0F));
 camera.setResolution(1024.0F, 768.0F);

@@ -28,13 +28,11 @@ import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
-import org.dayflower.scene.Texture;
 import org.dayflower.scene.Transform;
 import org.dayflower.scene.pbrt.GlassMaterial;
 import org.dayflower.scene.pbrt.HairMaterial;
@@ -48,7 +46,6 @@ import org.dayflower.scene.rayito.AshikhminShirleyMaterial;
 import org.dayflower.scene.rayito.LambertianMaterial;
 import org.dayflower.scene.rayito.ReflectionMaterial;
 import org.dayflower.scene.rayito.RefractionMaterial;
-import org.dayflower.scene.texture.ConstantTexture;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -192,12 +189,9 @@ final class SceneBox extends VBox {
 	
 	private void doAddPrimitiveByMaterialAndShape(final Material material, final Shape3F shape) {
 		getExecutorService().execute(() -> {
-			final Texture textureAlbedo = new ConstantTexture(Color3F.GRAY);
-			final Texture textureEmittance = new ConstantTexture(Color3F.BLACK);
-			
 			final Transform transform = new Transform(doGetPointByShape(shape));
 			
-			final Primitive primitive = new Primitive(material, shape, textureAlbedo, textureEmittance, transform);
+			final Primitive primitive = new Primitive(material, shape, transform);
 			
 			final
 			Scene scene = doGetScene();

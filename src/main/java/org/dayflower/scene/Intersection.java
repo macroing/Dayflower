@@ -60,7 +60,7 @@ public final class Intersection {
 	public Intersection(final Primitive primitive, final SurfaceIntersection3F surfaceIntersectionObjectSpace) {
 		this.primitive = Objects.requireNonNull(primitive, "primitive == null");
 		this.surfaceIntersectionObjectSpace = Objects.requireNonNull(surfaceIntersectionObjectSpace, "surfaceIntersectionObjectSpace == null");
-		this.surfaceIntersectionWorldSpace = SurfaceIntersection3F.transform(surfaceIntersectionObjectSpace, primitive.getObjectToWorld(), primitive.getWorldToObject());
+		this.surfaceIntersectionWorldSpace = SurfaceIntersection3F.transform(surfaceIntersectionObjectSpace, primitive.getTransform().getObjectToWorld(), primitive.getTransform().getWorldToObject());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -420,6 +420,8 @@ public final class Transform implements Node {
 	}
 	
 	private Matrix44F doAttemptToCalculateWorldToObject() {
+		doAttemptToCalculateObjectToWorld();
+		
 		if(this.objectToWorld != null && this.worldToObject == null) {
 			this.worldToObject = Matrix44F.inverse(this.objectToWorld);
 			

@@ -1238,6 +1238,15 @@ public final class Scene implements Node {
 		}
 		
 		@Override
+		public void onChangeTransform(final Primitive primitive, final Transform oldTransform, final Transform newTransform) {
+			Objects.requireNonNull(primitive, "primitive == null");
+			Objects.requireNonNull(oldTransform, "oldTransform == null");
+			Objects.requireNonNull(newTransform, "newTransform == null");
+			
+			doOnChangePrimitive(primitive);
+		}
+		
+		@Override
 		public void onChangeWorldToObject(final Primitive primitive, final Matrix44F oldWorldToObject, final Matrix44F newWorldToObject) {
 			Objects.requireNonNull(primitive, "primitive == null");
 			Objects.requireNonNull(oldWorldToObject, "oldWorldToObject == null");

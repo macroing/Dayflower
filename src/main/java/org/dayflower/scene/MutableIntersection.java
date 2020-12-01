@@ -110,7 +110,9 @@ public final class MutableIntersection {
 		final Primitive primitive = this.primitive;
 		
 		if(primitive != null) {
-			final Matrix44F worldToObject = primitive.getWorldToObject();
+			final Transform transform = primitive.getTransform();
+			
+			final Matrix44F worldToObject = transform.getWorldToObject();
 			
 			final Ray3F rayWorldSpace = this.mutableSurfaceIntersection.getRay();
 			final Ray3F rayObjectSpace = Ray3F.transform(worldToObject, rayWorldSpace);
@@ -194,7 +196,9 @@ public final class MutableIntersection {
 		boolean isIntersecting = false;
 		
 		if(this.mutableSurfaceIntersection.isIntersecting(primitive.getBoundingVolume())) {
-			this.mutableSurfaceIntersection.transform(primitive.getWorldToObject());
+			final Transform transform = primitive.getTransform();
+			
+			this.mutableSurfaceIntersection.transform(transform.getWorldToObject());
 			
 			if(primitive.getShape().intersection(this.mutableSurfaceIntersection)) {
 				this.primitive = primitive;
@@ -202,7 +206,7 @@ public final class MutableIntersection {
 				isIntersecting = true;
 			}
 			
-			this.mutableSurfaceIntersection.transform(primitive.getObjectToWorld());
+			this.mutableSurfaceIntersection.transform(transform.getObjectToWorld());
 		}
 		
 		return isIntersecting;

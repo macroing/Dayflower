@@ -161,6 +161,23 @@ public abstract class AbstractPrimitiveObserver implements PrimitiveObserver {
 	}
 	
 	/**
+	 * This method is called by {@code primitive} when the {@link Transform} instance changes.
+	 * <p>
+	 * If either {@code primitive}, {@code oldTransform} or {@code newTransform} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param primitive the {@link Primitive} instance that called this method
+	 * @param oldTransform the old {@code Transform} instance
+	 * @param newTransform the new {@code Transform} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldTransform} or {@code newTransform} are {@code null}
+	 */
+	@Override
+	public void onChangeTransform(final Primitive primitive, final Transform oldTransform, final Transform newTransform) {
+		Objects.requireNonNull(primitive, "primitive == null");
+		Objects.requireNonNull(oldTransform, "oldTransform == null");
+		Objects.requireNonNull(newTransform, "newTransform == null");
+	}
+	
+	/**
 	 * This method is called by {@code primitive} when the {@link Matrix44F} instance that transforms from world space to object space changes.
 	 * <p>
 	 * If either {@code primitive}, {@code oldWorldToObject} or {@code newWorldToObject} are {@code null}, a {@code NullPointerException} will be thrown.

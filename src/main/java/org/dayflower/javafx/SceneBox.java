@@ -21,7 +21,6 @@ package org.dayflower.javafx;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
-import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Plane3F;
@@ -36,6 +35,7 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Texture;
+import org.dayflower.scene.Transform;
 import org.dayflower.scene.pbrt.GlassMaterial;
 import org.dayflower.scene.pbrt.HairMaterial;
 import org.dayflower.scene.pbrt.MatteMaterial;
@@ -195,9 +195,9 @@ final class SceneBox extends VBox {
 			final Texture textureAlbedo = new ConstantTexture(Color3F.GRAY);
 			final Texture textureEmittance = new ConstantTexture(Color3F.BLACK);
 			
-			final Matrix44F objectToWorld = Matrix44F.translate(doGetPointByShape(shape));
+			final Transform transform = new Transform(doGetPointByShape(shape));
 			
-			final Primitive primitive = new Primitive(material, shape, textureAlbedo, textureEmittance, objectToWorld);
+			final Primitive primitive = new Primitive(material, shape, textureAlbedo, textureEmittance, transform);
 			
 			final
 			Scene scene = doGetScene();

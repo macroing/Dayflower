@@ -30,6 +30,7 @@ import java.util.Optional;
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
@@ -52,13 +53,13 @@ import org.dayflower.util.ParameterArguments;
 public final class Primitive implements Node {
 	private AreaLight areaLight;
 	private BoundingVolume3F boundingVolume;
-	private List<PrimitiveObserver> primitiveObservers;
+	private final List<PrimitiveObserver> primitiveObservers;
 	private Material material;
-	private Matrix44F objectToWorld;
-	private Matrix44F worldToObject;
 	private Shape3F shape;
 	private Texture textureAlbedo;
 	private Texture textureEmittance;
+	private Transform transform;
+	private final TransformObserver transformObserver;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -70,7 +71,7 @@ public final class Primitive implements Node {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Primitive(material, shape, textureAlbedo, textureEmittance, Matrix44F.identity());
+	 * new Primitive(material, shape, textureAlbedo, textureEmittance, new Transform());
 	 * }
 	 * </pre>
 	 * 
@@ -81,62 +82,58 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
 	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance) {
-		this(material, shape, textureAlbedo, textureEmittance, Matrix44F.identity());
+		this(material, shape, textureAlbedo, textureEmittance, new Transform());
 	}
 	
 	/**
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
-	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code objectToWorld} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code objectToWorld} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
+	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code transform} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
 	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
 	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
-	 * @param objectToWorld the {@link Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
-	 * @throws IllegalArgumentException thrown if, and only if, {@code objectToWorld} cannot be inverted
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code objectToWorld} are {@code null}
+	 * @param transform the {@link Transform} instance that is associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance} or {@code transform} are {@code null}
 	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Matrix44F objectToWorld) {
+	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Transform transform) {
 		this.areaLight = null;
-		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
+		this.boundingVolume = shape.getBoundingVolume().transform(transform.getObjectToWorld());
 		this.primitiveObservers = new ArrayList<>();
 		this.material = Objects.requireNonNull(material, "material == null");
-		this.objectToWorld = objectToWorld;
-		this.worldToObject = Matrix44F.inverse(objectToWorld);
 		this.shape = shape;
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+		this.transformObserver = new TransformObserverImpl(this::doSetBoundingVolume);
+		this.transform = transform;
+		this.transform.addTransformObserver(this.transformObserver);
 	}
 	
 	/**
 	 * Constructs a new {@code Primitive} instance.
 	 * <p>
-	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code objectToWorld} or {@code areaLight} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code objectToWorld} cannot be inverted, an {@code IllegalArgumentException} will be thrown.
+	 * If either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code transform} or {@code areaLight} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param material the {@link Material} instance associated with this {@code Primitive} instance
 	 * @param shape the {@link Shape3F} instance associated with this {@code Primitive} instance
 	 * @param textureAlbedo the {@link Texture} instance for the albedo color that is associated with this {@code Primitive} instance
 	 * @param textureEmittance the {@code Texture} instance for the emittance that is associated with this {@code Primitive} instance
-	 * @param objectToWorld the {@link Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
+	 * @param transform the {@link Transform} instance that is associated with this {@code Primitive} instance
 	 * @param areaLight the {@link AreaLight} instance associated with this {@code Primitive} instance
-	 * @throws IllegalArgumentException thrown if, and only if, {@code objectToWorld} cannot be inverted
-	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code objectToWorld} or {@code areaLight} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code material}, {@code shape}, {@code textureAlbedo}, {@code textureEmittance}, {@code transform} or {@code areaLight} are {@code null}
 	 */
-	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Matrix44F objectToWorld, final AreaLight areaLight) {
+	public Primitive(final Material material, final Shape3F shape, final Texture textureAlbedo, final Texture textureEmittance, final Transform transform, final AreaLight areaLight) {
 		this.areaLight = Objects.requireNonNull(areaLight, "areaLight == null");
-		this.boundingVolume = shape.getBoundingVolume().transform(objectToWorld);
+		this.boundingVolume = shape.getBoundingVolume().transform(transform.getObjectToWorld());
 		this.primitiveObservers = new ArrayList<>();
 		this.material = Objects.requireNonNull(material, "material == null");
-		this.objectToWorld = objectToWorld;
-		this.worldToObject = Matrix44F.inverse(objectToWorld);
 		this.shape = shape;
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+		this.transformObserver = new TransformObserverImpl(this::doSetBoundingVolume);
+		this.transform = transform;
+		this.transform.addTransformObserver(this.transformObserver);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +157,7 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	public Color3F calculateAlbedoRGB(final Intersection intersection) {
-		return this.textureAlbedo.getColorRGB(Objects.requireNonNull(intersection, "intersection == null"));
+		return getTextureAlbedo().getColorRGB(Objects.requireNonNull(intersection, "intersection == null"));
 	}
 	
 	/**
@@ -173,7 +170,7 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	public Color3F calculateAlbedoXYZ(final Intersection intersection) {
-		return this.textureAlbedo.getColorXYZ(Objects.requireNonNull(intersection, "intersection == null"));
+		return getTextureAlbedo().getColorXYZ(Objects.requireNonNull(intersection, "intersection == null"));
 	}
 	
 	/**
@@ -186,7 +183,7 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	public Color3F calculateEmittanceRGB(final Intersection intersection) {
-		return this.textureEmittance.getColorRGB(Objects.requireNonNull(intersection, "intersection == null"));
+		return getTextureEmittance().getColorRGB(Objects.requireNonNull(intersection, "intersection == null"));
 	}
 	
 	/**
@@ -199,7 +196,7 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	public Color3F calculateEmittanceXYZ(final Intersection intersection) {
-		return this.textureEmittance.getColorXYZ(Objects.requireNonNull(intersection, "intersection == null"));
+		return getTextureEmittance().getColorXYZ(Objects.requireNonNull(intersection, "intersection == null"));
 	}
 	
 	/**
@@ -220,24 +217,6 @@ public final class Primitive implements Node {
 	 */
 	public Material getMaterial() {
 		return this.material;
-	}
-	
-	/**
-	 * Returns the {@link Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance.
-	 * 
-	 * @return the {@code Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
-	 */
-	public Matrix44F getObjectToWorld() {
-		return this.objectToWorld;
-	}
-	
-	/**
-	 * Returns the {@link Matrix44F} instance that is used to transform from world space to object space and is associated with this {@code Primitive} instance.
-	 * 
-	 * @return the {@code Matrix44F} instance that is used to transform from world space to object space and is associated with this {@code Primitive} instance
-	 */
-	public Matrix44F getWorldToObject() {
-		return this.worldToObject;
 	}
 	
 	/**
@@ -263,13 +242,21 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		if(this.boundingVolume.contains(ray.getOrigin()) || this.boundingVolume.intersects(ray, tMinimum, tMaximum)) {
-			final Ray3F rayObjectSpace = Ray3F.transform(this.worldToObject, ray);
+		final BoundingVolume3F boundingVolume = getBoundingVolume();
+		
+		if(boundingVolume.contains(ray.getOrigin()) || boundingVolume.intersects(ray, tMinimum, tMaximum)) {
+			final Transform transform = getTransform();
+			
+			final Matrix44F worldToObject = transform.getWorldToObject();
+			
+			final Ray3F rayObjectSpace = Ray3F.transform(worldToObject, ray);
 			
 			final float tMinimumObjectSpace = tMinimum;
-			final float tMaximumObjectSpace = doTransformT(this.worldToObject, ray, rayObjectSpace, tMaximum);
+			final float tMaximumObjectSpace = doTransformT(worldToObject, ray, rayObjectSpace, tMaximum);
 			
-			final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionObjectSpace = this.shape.intersection(rayObjectSpace, tMinimumObjectSpace, tMaximumObjectSpace);
+			final Shape3F shape = getShape();
+			
+			final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionObjectSpace = shape.intersection(rayObjectSpace, tMinimumObjectSpace, tMaximumObjectSpace);
 			
 			if(optionalSurfaceIntersectionObjectSpace.isPresent()) {
 				final SurfaceIntersection3F surfaceIntersectionObjectSpace = optionalSurfaceIntersectionObjectSpace.get();
@@ -304,11 +291,18 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
 	 */
 	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = this.shape.sample(Point3F.transformAndDivide(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), u, v);
+		final Transform transform = getTransform();
+		
+		final Matrix44F objectToWorld = transform.getObjectToWorld();
+		final Matrix44F worldToObject = transform.getWorldToObject();
+		
+		final Shape3F shape = getShape();
+		
+		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = shape.sample(Point3F.transformAndDivide(worldToObject, referencePoint), Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal), u, v);
 		
 		if(optionalSurfaceSampleObjectSpace.isPresent()) {
 			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSampleObjectSpace.get();
-			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleObjectSpace, this.objectToWorld, this.worldToObject);
+			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleObjectSpace, objectToWorld, worldToObject);
 			
 			if(Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.direction(surfaceSampleWorldSpace.getPoint(), referencePoint)) >= 0.0F) {
 				return Optional.of(surfaceSampleWorldSpace);
@@ -334,7 +328,7 @@ public final class Primitive implements Node {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Primitive(%s, %s, %s, %s, %s)", this.material, this.shape, this.textureAlbedo, this.textureEmittance, this.objectToWorld);
+		return String.format("new Primitive(%s, %s, %s, %s, %s)", this.material, this.shape, this.textureAlbedo, this.textureEmittance, this.transform);
 	}
 	
 	/**
@@ -353,6 +347,15 @@ public final class Primitive implements Node {
 	 */
 	public Texture getTextureEmittance() {
 		return this.textureEmittance;
+	}
+	
+	/**
+	 * Returns the {@link Transform} instance associated with this {@code Primitive} instance.
+	 * 
+	 * @return the {@code Transform} instance associated with this {@code Primitive} instance
+	 */
+	public Transform getTransform() {
+		return this.transform;
 	}
 	
 	/**
@@ -394,14 +397,6 @@ public final class Primitive implements Node {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.objectToWorld.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.worldToObject.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
 				if(!this.shape.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -411,6 +406,10 @@ public final class Primitive implements Node {
 				}
 				
 				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.transform.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -458,15 +457,13 @@ public final class Primitive implements Node {
 			return false;
 		} else if(!Objects.equals(this.material, Primitive.class.cast(object).material)) {
 			return false;
-		} else if(!Objects.equals(this.objectToWorld, Primitive.class.cast(object).objectToWorld)) {
-			return false;
-		} else if(!Objects.equals(this.worldToObject, Primitive.class.cast(object).worldToObject)) {
-			return false;
 		} else if(!Objects.equals(this.shape, Primitive.class.cast(object).shape)) {
 			return false;
 		} else if(!Objects.equals(this.textureAlbedo, Primitive.class.cast(object).textureAlbedo)) {
 			return false;
 		} else if(!Objects.equals(this.textureEmittance, Primitive.class.cast(object).textureEmittance)) {
+			return false;
+		} else if(!Objects.equals(this.transform, Primitive.class.cast(object).transform)) {
 			return false;
 		} else {
 			return true;
@@ -516,7 +513,14 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
 	 */
 	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-		return this.shape.calculateProbabilityDensityFunctionValueForSolidAngle(Point3F.transformAndDivide(this.worldToObject, referencePoint), Vector3F.transformTranspose(this.objectToWorld, referenceSurfaceNormal), Point3F.transformAndDivide(this.worldToObject, point), Vector3F.transformTranspose(this.objectToWorld, surfaceNormal));
+		final Transform transform = getTransform();
+		
+		final Matrix44F objectToWorld = transform.getObjectToWorld();
+		final Matrix44F worldToObject = transform.getWorldToObject();
+		
+		final Shape3F shape = getShape();
+		
+		return shape.calculateProbabilityDensityFunctionValueForSolidAngle(Point3F.transformAndDivide(worldToObject, referencePoint), Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal), Point3F.transformAndDivide(worldToObject, point), Vector3F.transformTranspose(objectToWorld, surfaceNormal));
 	}
 	
 	/**
@@ -554,23 +558,32 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		if(!this.boundingVolume.contains(ray.getOrigin()) && !this.boundingVolume.intersects(ray, tMinimum, tMaximum)) {
+		final BoundingVolume3F boundingVolume = getBoundingVolume();
+		
+		if(!boundingVolume.contains(ray.getOrigin()) && !boundingVolume.intersects(ray, tMinimum, tMaximum)) {
 			return Float.NaN;
 		}
 		
+		final Transform transform = getTransform();
+		
+		final Matrix44F objectToWorld = transform.getObjectToWorld();
+		final Matrix44F worldToObject = transform.getWorldToObject();
+		
 		final Ray3F rayWorldSpace = ray;
-		final Ray3F rayObjectSpace = Ray3F.transform(this.worldToObject, rayWorldSpace);
+		final Ray3F rayObjectSpace = Ray3F.transform(worldToObject, rayWorldSpace);
+		
+		final Shape3F shape = getShape();
 		
 		final float tMinimumObjectSpace = tMinimum;
-		final float tMaximumObjectSpace = doTransformT(this.worldToObject, rayWorldSpace, rayObjectSpace, tMaximum);
+		final float tMaximumObjectSpace = doTransformT(worldToObject, rayWorldSpace, rayObjectSpace, tMaximum);
 		
-		final float tObjectSpace = this.shape.intersectionT(rayObjectSpace, tMinimumObjectSpace, tMaximumObjectSpace);
+		final float tObjectSpace = shape.intersectionT(rayObjectSpace, tMinimumObjectSpace, tMaximumObjectSpace);
 		
 		if(isNaN(tObjectSpace)) {
 			return Float.NaN;
 		}
 		
-		final float tWorldSpace = doTransformT(this.objectToWorld, rayObjectSpace, rayWorldSpace, tObjectSpace);
+		final float tWorldSpace = doTransformT(objectToWorld, rayObjectSpace, rayWorldSpace, tObjectSpace);
 		
 		if(tWorldSpace <= tMinimum || tWorldSpace >= tMaximum) {
 			return Float.NaN;
@@ -586,15 +599,17 @@ public final class Primitive implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.areaLight, this.boundingVolume, this.primitiveObservers, this.material, this.objectToWorld, this.worldToObject, this.shape, this.textureAlbedo, this.textureEmittance);
+		return Objects.hash(this.areaLight, this.boundingVolume, this.primitiveObservers, this.material, this.shape, this.textureAlbedo, this.textureEmittance, this.transform);
 	}
 	
 	/**
 	 * Clears the {@link AreaLight} instance associated with this {@code Primitive} instance.
 	 */
 	public void clearAreaLight() {
-		if(!Objects.equals(this.areaLight, null)) {
-			final Optional<AreaLight> oldOptionalAreaLight = Optional.ofNullable(this.areaLight);
+		final AreaLight areaLight = this.areaLight;
+		
+		if(!Objects.equals(areaLight, null)) {
+			final Optional<AreaLight> oldOptionalAreaLight = Optional.ofNullable(areaLight);
 			final Optional<AreaLight> newOptionalAreaLight = Optional.empty();
 			
 			this.areaLight = null;
@@ -660,29 +675,8 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code primitiveObservers} or at least one of its elements are {@code null}
 	 */
 	public void setPrimitiveObservers(final List<PrimitiveObserver> primitiveObservers) {
-		this.primitiveObservers = new ArrayList<>(ParameterArguments.requireNonNullList(primitiveObservers, "primitiveObservers"));
-	}
-	
-	/**
-	 * Sets the {@link Matrix44F} instance that is used to transform from object space to world space.
-	 * <p>
-	 * If {@code objectToWorld} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code objectToWorld} cannot be inverted, an {@code IllegalStateException} will be thrown.
-	 * <p>
-	 * This method will also set the {@code Matrix44F} instance that is used to transform from world space to object space.
-	 * 
-	 * @param objectToWorld the {@code Matrix44F} instance that is used to transform from object space to world space and is associated with this {@code Primitive} instance
-	 * @throws IllegalStateException thrown if, and only if, {@code objectToWorld} cannot be inverted
-	 * @throws NullPointerException thrown if, and only if, {@code objectToWorld} is {@code null}
-	 */
-	public void setObjectToWorld(final Matrix44F objectToWorld) {
-		Objects.requireNonNull(objectToWorld, "objectToWorld == null");
-		
-		if(doSetObjectToWorld(objectToWorld)) {
-			doSetWorldToObject();
-			doSetBoundingVolume();
-		}
+		this.primitiveObservers.clear();
+		this.primitiveObservers.addAll(ParameterArguments.requireNonNullList(primitiveObservers, "primitiveObservers"));
 	}
 	
 	/**
@@ -748,31 +742,32 @@ public final class Primitive implements Node {
 	}
 	
 	/**
-	 * Sets the {@link Matrix44F} instance that is used to transform from world space to object space.
+	 * Sets the {@link Transform} instance that is associated with this {@code Primitive} instance to {@code transform}.
 	 * <p>
-	 * If {@code worldToObject} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code worldToObject} cannot be inverted, an {@code IllegalStateException} will be thrown.
-	 * <p>
-	 * This method will also set the {@code Matrix44F} instance that is used to transform from object space to world space.
+	 * If {@code transform} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param worldToObject the {@code Matrix44F} instance that is used to transform from world space to object space and is associated with this {@code Primitive} instance
-	 * @throws IllegalStateException thrown if, and only if, {@code worldToObject} cannot be inverted
-	 * @throws NullPointerException thrown if, and only if, {@code worldToObject} is {@code null}
+	 * @param transform the {@code Transform} instance that is associated with this {@code Primitive} instance
+	 * @throws NullPointerException thrown if, and only if, {@code transform} is {@code null}
 	 */
-	public void setWorldToObject(final Matrix44F worldToObject) {
-		Objects.requireNonNull(worldToObject, "worldToObject == null");
+	public void setTransform(final Transform transform) {
+		Objects.requireNonNull(transform, "transform == null");
 		
-		if(doSetWorldToObject(worldToObject)) {
-			doSetObjectToWorld();
-			doSetBoundingVolume();
+		final Transform oldTransform = this.transform;
+		final Transform newTransform =      transform;
+		
+		this.transform.removeTransformObserver(this.transformObserver);
+		this.transform = transform;
+		this.transform.addTransformObserver(this.transformObserver);
+		
+		for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
+			primitiveObserver.onChangeTransform(this, oldTransform, newTransform);
 		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private boolean doSetBoundingVolume() {
-		return doSetBoundingVolume(this.shape.getBoundingVolume().transform(this.objectToWorld));
+		return doSetBoundingVolume(this.shape.getBoundingVolume().transform(this.transform.getObjectToWorld()));
 	}
 	
 	private boolean doSetBoundingVolume(final BoundingVolume3F boundingVolume) {
@@ -786,29 +781,6 @@ public final class Primitive implements Node {
 			
 			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
 				primitiveObserver.onChangeBoundingVolume(this, oldBoundingVolume, newBoundingVolume);
-			}
-			
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private boolean doSetObjectToWorld() {
-		return doSetObjectToWorld(Matrix44F.inverse(this.worldToObject));
-	}
-	
-	private boolean doSetObjectToWorld(final Matrix44F objectToWorld) {
-		Objects.requireNonNull(objectToWorld, "objectToWorld == null");
-		
-		if(!Objects.equals(this.objectToWorld, objectToWorld)) {
-			final Matrix44F oldObjectToWorld = this.objectToWorld;
-			final Matrix44F newObjectToWorld =      objectToWorld;
-			
-			this.objectToWorld = objectToWorld;
-			
-			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
-				primitiveObserver.onChangeObjectToWorld(this, oldObjectToWorld, newObjectToWorld);
 			}
 			
 			return true;
@@ -836,32 +808,58 @@ public final class Primitive implements Node {
 		return false;
 	}
 	
-	private boolean doSetWorldToObject() {
-		return doSetWorldToObject(Matrix44F.inverse(this.objectToWorld));
-	}
-	
-	private boolean doSetWorldToObject(final Matrix44F worldToObject) {
-		Objects.requireNonNull(worldToObject, "worldToObject == null");
-		
-		if(!Objects.equals(this.worldToObject, worldToObject)) {
-			final Matrix44F oldWorldToObject = this.worldToObject;
-			final Matrix44F newWorldToObject =      worldToObject;
-			
-			this.worldToObject = worldToObject;
-			
-			for(final PrimitiveObserver primitiveObserver : this.primitiveObservers) {
-				primitiveObserver.onChangeWorldToObject(this, oldWorldToObject, newWorldToObject);
-			}
-			
-			return true;
-		}
-		
-		return false;
-	}
-	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float doTransformT(final Matrix44F matrix, final Ray3F rayOldSpace, final Ray3F rayNewSpace, final float t) {
 		return !isNaN(t) && !isZero(t) && t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class TransformObserverImpl implements TransformObserver {
+		private final Runnable updateBoundingVolumeRunnable;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public TransformObserverImpl(final Runnable updateBoundingVolumeRunnable) {
+			this.updateBoundingVolumeRunnable = Objects.requireNonNull(updateBoundingVolumeRunnable, "updateBoundingVolumeRunnable == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void onChangeObjectToWorld(final Transform transform, final Matrix44F newObjectToWorld) {
+			Objects.requireNonNull(transform, "transform == null");
+			Objects.requireNonNull(newObjectToWorld, "newObjectToWorld == null");
+			
+			this.updateBoundingVolumeRunnable.run();
+		}
+		
+		@Override
+		public void onChangePosition(final Transform transform, final Point3F oldPosition, final Point3F newPosition) {
+			Objects.requireNonNull(transform, "transform == null");
+			Objects.requireNonNull(oldPosition, "oldPosition == null");
+			Objects.requireNonNull(newPosition, "newPosition == null");
+		}
+		
+		@Override
+		public void onChangeRotation(final Transform transform, final Quaternion4F oldRotation, final Quaternion4F newRotation) {
+			Objects.requireNonNull(transform, "transform == null");
+			Objects.requireNonNull(oldRotation, "oldRotation == null");
+			Objects.requireNonNull(newRotation, "newRotation == null");
+		}
+		
+		@Override
+		public void onChangeScale(final Transform transform, final Vector3F oldScale, final Vector3F newScale) {
+			Objects.requireNonNull(transform, "transform == null");
+			Objects.requireNonNull(oldScale, "oldScale == null");
+			Objects.requireNonNull(newScale, "newScale == null");
+		}
+		
+		@Override
+		public void onChangeWorldToObject(final Transform transform, final Matrix44F newWorldToObject) {
+			Objects.requireNonNull(transform, "transform == null");
+			Objects.requireNonNull(newWorldToObject, "newWorldToObject == null");
+		}
 	}
 }

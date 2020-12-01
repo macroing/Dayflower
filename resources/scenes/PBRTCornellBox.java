@@ -18,27 +18,27 @@ Shape3F shape07 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
 Shape3F shape08 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
 Shape3F shape09 = new Triangle3F();
 
-Matrix44F matrix01 = Matrix44F.translate( 0.0F, 0.0F,  0.0F);
-Matrix44F matrix02 = Matrix44F.translate( 0.0F, 5.0F,  0.0F);
-Matrix44F matrix03 = Matrix44F.translate( 0.0F, 0.0F,  0.0F);
-Matrix44F matrix04 = Matrix44F.translate( 0.0F, 0.0F, 10.0F);
-Matrix44F matrix05 = Matrix44F.translate( 3.0F, 0.0F,  0.0F);
-Matrix44F matrix06 = Matrix44F.translate(-3.0F, 0.0F,  0.0F);
-Matrix44F matrix07 = Matrix44F.translate(-1.5F, 1.0F,  8.0F);
-Matrix44F matrix08 = Matrix44F.translate( 1.5F, 1.0F,  7.0F);
-Matrix44F matrix09 = Matrix44F.multiply(Matrix44F.multiply(Matrix44F.translate(0.0F, 4.99F, 9.0F), Matrix44F.rotateX(AngleF.degrees(270.0F))), Matrix44F.scale(0.25F));
+Transform transform01 = new Transform(new Point3F( 0.0F, 0.0F,  0.0F));
+Transform transform02 = new Transform(new Point3F( 0.0F, 5.0F,  0.0F));
+Transform transform03 = new Transform(new Point3F( 0.0F, 0.0F,  0.0F));
+Transform transform04 = new Transform(new Point3F( 0.0F, 0.0F, 10.0F));
+Transform transform05 = new Transform(new Point3F( 3.0F, 0.0F,  0.0F));
+Transform transform06 = new Transform(new Point3F(-3.0F, 0.0F,  0.0F));
+Transform transform07 = new Transform(new Point3F(-1.5F, 1.0F,  8.0F));
+Transform transform08 = new Transform(new Point3F( 1.5F, 1.0F,  7.0F));
+Transform transform09 = new Transform(new Point3F( 0.0F, 4.99F, 9.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))), new Vector3F(0.25F));
 
-AreaLight areaLight09 = new DiffuseAreaLight(matrix09, 1, new Color3F(12.0F), shape09, false);
+AreaLight areaLight09 = new DiffuseAreaLight(transform09.getObjectToWorld(), 1, new Color3F(12.0F), shape09, false);
 
-Primitive primitive01 = new Primitive(material01, shape01, new ConstantTexture(), new ConstantTexture(), matrix01);
-Primitive primitive02 = new Primitive(material02, shape02, new ConstantTexture(), new ConstantTexture(), matrix02);
-Primitive primitive03 = new Primitive(material03, shape03, new ConstantTexture(), new ConstantTexture(), matrix03);
-Primitive primitive04 = new Primitive(material04, shape04, new ConstantTexture(), new ConstantTexture(), matrix04);
-Primitive primitive05 = new Primitive(material05, shape05, new ConstantTexture(), new ConstantTexture(), matrix05);
-Primitive primitive06 = new Primitive(material06, shape06, new ConstantTexture(), new ConstantTexture(), matrix06);
-Primitive primitive07 = new Primitive(material07, shape07, new ConstantTexture(), new ConstantTexture(), matrix07);
-Primitive primitive08 = new Primitive(material08, shape08, new ConstantTexture(), new ConstantTexture(), matrix08);
-Primitive primitive09 = new Primitive(material09, shape09, new ConstantTexture(), new ConstantTexture(), matrix09, areaLight09);
+Primitive primitive01 = new Primitive(material01, shape01, new ConstantTexture(), new ConstantTexture(), transform01);
+Primitive primitive02 = new Primitive(material02, shape02, new ConstantTexture(), new ConstantTexture(), transform02);
+Primitive primitive03 = new Primitive(material03, shape03, new ConstantTexture(), new ConstantTexture(), transform03);
+Primitive primitive04 = new Primitive(material04, shape04, new ConstantTexture(), new ConstantTexture(), transform04);
+Primitive primitive05 = new Primitive(material05, shape05, new ConstantTexture(), new ConstantTexture(), transform05);
+Primitive primitive06 = new Primitive(material06, shape06, new ConstantTexture(), new ConstantTexture(), transform06);
+Primitive primitive07 = new Primitive(material07, shape07, new ConstantTexture(), new ConstantTexture(), transform07);
+Primitive primitive08 = new Primitive(material08, shape08, new ConstantTexture(), new ConstantTexture(), transform08);
+Primitive primitive09 = new Primitive(material09, shape09, new ConstantTexture(), new ConstantTexture(), transform09, areaLight09);
 
 Camera camera = new Camera(new Point3F(0.0F, 2.5F, 1.0F));
 camera.setResolution(1024.0F, 768.0F);

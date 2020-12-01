@@ -116,6 +116,18 @@ public interface PrimitiveObserver {
 	void onChangeTextureEmittance(final Primitive primitive, final Texture oldTextureEmittance, final Texture newTextureEmittance);
 	
 	/**
+	 * This method is called by {@code primitive} when the {@link Transform} instance changes.
+	 * <p>
+	 * If either {@code primitive}, {@code oldTransform} or {@code newTransform} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param primitive the {@link Primitive} instance that called this method
+	 * @param oldTransform the old {@code Transform} instance
+	 * @param newTransform the new {@code Transform} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code primitive}, {@code oldTransform} or {@code newTransform} are {@code null}
+	 */
+	void onChangeTransform(final Primitive primitive, final Transform oldTransform, final Transform newTransform);
+	
+	/**
 	 * This method is called by {@code primitive} when the {@link Matrix44F} instance that transforms from world space to object space changes.
 	 * <p>
 	 * If either {@code primitive}, {@code oldWorldToObject} or {@code newWorldToObject} are {@code null}, a {@code NullPointerException} will be thrown.

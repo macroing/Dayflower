@@ -37,6 +37,13 @@ import org.dayflower.scene.texture.ConstantTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class PlasticMaterial implements PBRTMaterial {
+	/**
+	 * The name of this {@code PlasticMaterial} class.
+	 */
+	public static final String NAME = "PBRT - Plastic";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureDiffuse;
 	private final Texture textureRoughness;
 	private final Texture textureSpecular;
@@ -143,6 +150,16 @@ public final class PlasticMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code PlasticMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code PlasticMaterial} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

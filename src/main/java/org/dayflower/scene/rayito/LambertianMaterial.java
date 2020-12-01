@@ -36,6 +36,13 @@ import org.dayflower.scene.texture.ConstantTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class LambertianMaterial implements RayitoMaterial {
+	/**
+	 * The name of this {@code LambertianMaterial} class.
+	 */
+	public static final String NAME = "Rayito - Matte";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final BXDF selectedBXDF;
 	private final Texture textureAlbedo;
 	private final Texture textureEmittance;
@@ -159,6 +166,16 @@ public final class LambertianMaterial implements RayitoMaterial {
 	@Override
 	public MaterialResult evaluate(final Intersection intersection) {
 		return new MaterialResult(this.textureAlbedo.getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code LambertianMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code LambertianMaterial} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

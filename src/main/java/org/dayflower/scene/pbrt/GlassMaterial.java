@@ -40,6 +40,13 @@ import org.dayflower.scene.texture.ConstantTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class GlassMaterial implements PBRTMaterial {
+	/**
+	 * The name of this {@code GlassMaterial} class.
+	 */
+	public static final String NAME = "PBRT - Glass";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureEta;
 	private final Texture textureKReflection;
 	private final Texture textureKTransmission;
@@ -177,6 +184,16 @@ public final class GlassMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code GlassMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code GlassMaterial} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

@@ -39,6 +39,13 @@ import org.dayflower.node.NodeTraversalException;
 
 //TODO: Add Javadocs!
 public final class ConstructiveSolidGeometry3F implements Shape3F {
+	/**
+	 * The name of this {@code ConstructiveSolidGeometry3F} class.
+	 */
+	public static final String NAME = "Constructive Solid Geometry";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final BoundingVolume3F boundingVolume;
 	private final Operation operation;
 	private final Shape3F shapeL;
@@ -179,6 +186,16 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 				return SurfaceIntersection3F.EMPTY;
 			}
 		}
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code ConstructiveSolidGeometry3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code ConstructiveSolidGeometry3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

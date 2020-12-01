@@ -62,6 +62,11 @@ import org.dayflower.node.NodeTraversalException;
  */
 public final class Sphere3F implements Shape3F {
 	/**
+	 * The name of this {@code Sphere3F} class.
+	 */
+	public static final String NAME = "Sphere";
+	
+	/**
 	 * The offset for the {@link Point3F} instance representing the center in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_CENTER = 0;
@@ -263,6 +268,16 @@ public final class Sphere3F implements Shape3F {
 	 */
 	public Point3F getCenter() {
 		return this.center;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Sphere3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Sphere3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

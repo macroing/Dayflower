@@ -48,6 +48,11 @@ import org.dayflower.node.NodeTraversalException;
  */
 public final class Plane3F implements Shape3F {
 	/**
+	 * The name of this {@code Plane3F} class.
+	 */
+	public static final String NAME = "Plane";
+	
+	/**
 	 * The offset for the {@link Point3F} instance denoted by {@code A} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_A = 0;
@@ -253,6 +258,16 @@ public final class Plane3F implements Shape3F {
 	 */
 	public Point3F getC() {
 		return this.c;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Plane3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Plane3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

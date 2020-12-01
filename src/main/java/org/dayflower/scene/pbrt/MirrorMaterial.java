@@ -36,6 +36,13 @@ import org.dayflower.scene.texture.ConstantTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class MirrorMaterial implements PBRTMaterial {
+	/**
+	 * The name of this {@code MirrorMaterial} class.
+	 */
+	public static final String NAME = "PBRT - Mirror";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureReflectanceScale;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +121,16 @@ public final class MirrorMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code MirrorMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code MirrorMaterial} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

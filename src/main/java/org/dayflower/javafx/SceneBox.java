@@ -55,26 +55,6 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
 
 final class SceneBox extends VBox {
-	private static final String MATERIAL_P_B_R_T_GLASS = "PBRT Glass";
-	private static final String MATERIAL_P_B_R_T_HAIR = "PBRT Hair";
-	private static final String MATERIAL_P_B_R_T_MATTE = "PBRT Matte";
-	private static final String MATERIAL_P_B_R_T_METAL = "PBRT Metal";
-	private static final String MATERIAL_P_B_R_T_MIRROR = "PBRT Mirror";
-	private static final String MATERIAL_P_B_R_T_PLASTIC = "PBRT Plastic";
-	private static final String MATERIAL_P_B_R_T_SUBSTRATE = "PBRT Substrate";
-	private static final String MATERIAL_P_B_R_T_UBER = "PBRT Uber";
-	private static final String MATERIAL_RAYITO_GLASS = "Rayito Glass";
-	private static final String MATERIAL_RAYITO_MATTE = "Rayito Matte";
-	private static final String MATERIAL_RAYITO_METAL = "Rayito Metal";
-	private static final String MATERIAL_RAYITO_MIRROR = "Rayito Mirror";
-	private static final String SHAPE_PLANE = "Plane";
-	private static final String SHAPE_RECTANGULAR_CUBOID = "Rectangular Cuboid";
-	private static final String SHAPE_SPHERE = "Sphere";
-	private static final String SHAPE_TORUS = "Torus";
-	private static final String SHAPE_TRIANGLE = "Triangle";
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private final Button buttonBuildAccelerationStructure;
 	private final Button buttonClearAccelerationStructure;
 	private final Button buttonPrimitiveAdd;
@@ -118,29 +98,29 @@ final class SceneBox extends VBox {
 		
 		if(selectedItem != null) {
 			switch(selectedItem) {
-				case MATERIAL_P_B_R_T_GLASS:
+				case GlassMaterial.NAME:
 					return new GlassMaterial();
-				case MATERIAL_P_B_R_T_HAIR:
+				case HairMaterial.NAME:
 					return new HairMaterial();
-				case MATERIAL_P_B_R_T_MATTE:
+				case MatteMaterial.NAME:
 					return new MatteMaterial();
-				case MATERIAL_P_B_R_T_METAL:
+				case MetalMaterial.NAME:
 					return new MetalMaterial();
-				case MATERIAL_P_B_R_T_MIRROR:
+				case MirrorMaterial.NAME:
 					return new MirrorMaterial();
-				case MATERIAL_P_B_R_T_PLASTIC:
+				case PlasticMaterial.NAME:
 					return new PlasticMaterial();
-				case MATERIAL_P_B_R_T_SUBSTRATE:
+				case SubstrateMaterial.NAME:
 					return new SubstrateMaterial();
-				case MATERIAL_P_B_R_T_UBER:
+				case UberMaterial.NAME:
 					return new UberMaterial();
-				case MATERIAL_RAYITO_GLASS:
+				case RefractionMaterial.NAME:
 					return new RefractionMaterial();
-				case MATERIAL_RAYITO_MATTE:
+				case LambertianMaterial.NAME:
 					return new LambertianMaterial();
-				case MATERIAL_RAYITO_METAL:
+				case AshikhminShirleyMaterial.NAME:
 					return new AshikhminShirleyMaterial();
-				case MATERIAL_RAYITO_MIRROR:
+				case ReflectionMaterial.NAME:
 					return new ReflectionMaterial();
 				default:
 					return null;
@@ -175,15 +155,15 @@ final class SceneBox extends VBox {
 		
 		if(selectedItem != null) {
 			switch(selectedItem) {
-				case SHAPE_PLANE:
+				case Plane3F.NAME:
 					return new Plane3F();
-				case SHAPE_RECTANGULAR_CUBOID:
+				case RectangularCuboid3F.NAME:
 					return new RectangularCuboid3F();
-				case SHAPE_SPHERE:
+				case Sphere3F.NAME:
 					return new Sphere3F();
-				case SHAPE_TORUS:
+				case Torus3F.NAME:
 					return new Torus3F();
-				case SHAPE_TRIANGLE:
+				case Triangle3F.NAME:
 					return new Triangle3F();
 				default:
 					return null;
@@ -226,29 +206,29 @@ final class SceneBox extends VBox {
 		this.buttonPrimitiveAdd.setText("Add Primitive");
 		
 //		Configure the ComboBox for Primitive Add Material:
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_P_B_R_T_GLASS);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_P_B_R_T_HAIR);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_P_B_R_T_MATTE);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_P_B_R_T_METAL);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_P_B_R_T_MIRROR);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_P_B_R_T_PLASTIC);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_P_B_R_T_SUBSTRATE);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_P_B_R_T_UBER);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_RAYITO_GLASS);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_RAYITO_MATTE);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_RAYITO_METAL);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MATERIAL_RAYITO_MIRROR);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(GlassMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(HairMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(MatteMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(MetalMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(MirrorMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(PlasticMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(SubstrateMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(UberMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(RefractionMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(LambertianMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(AshikhminShirleyMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(ReflectionMaterial.NAME);
 		this.comboBoxPrimitiveAddMaterial.setMaxWidth(Double.MAX_VALUE);
-		this.comboBoxPrimitiveAddMaterial.setValue(MATERIAL_P_B_R_T_MATTE);
+		this.comboBoxPrimitiveAddMaterial.setValue(MatteMaterial.NAME);
 		
 //		Configure the ComboBox for Primitive Add Shape:
-		this.comboBoxPrimitiveAddShape.getItems().add(SHAPE_PLANE);
-		this.comboBoxPrimitiveAddShape.getItems().add(SHAPE_RECTANGULAR_CUBOID);
-		this.comboBoxPrimitiveAddShape.getItems().add(SHAPE_SPHERE);
-		this.comboBoxPrimitiveAddShape.getItems().add(SHAPE_TORUS);
-		this.comboBoxPrimitiveAddShape.getItems().add(SHAPE_TRIANGLE);
+		this.comboBoxPrimitiveAddShape.getItems().add(Plane3F.NAME);
+		this.comboBoxPrimitiveAddShape.getItems().add(RectangularCuboid3F.NAME);
+		this.comboBoxPrimitiveAddShape.getItems().add(Sphere3F.NAME);
+		this.comboBoxPrimitiveAddShape.getItems().add(Torus3F.NAME);
+		this.comboBoxPrimitiveAddShape.getItems().add(Triangle3F.NAME);
 		this.comboBoxPrimitiveAddShape.setMaxWidth(Double.MAX_VALUE);
-		this.comboBoxPrimitiveAddShape.setValue(SHAPE_PLANE);
+		this.comboBoxPrimitiveAddShape.setValue(Plane3F.NAME);
 		
 //		Configure the SceneBox:
 		getChildren().add(JavaFX.createLabel("Scene Configuration", 16.0D));

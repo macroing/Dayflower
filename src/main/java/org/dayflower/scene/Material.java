@@ -29,5 +29,10 @@ import org.dayflower.node.Node;
  * @author J&#246;rgen Lundgren
  */
 public interface Material extends Node {
-	
+	/**
+	 * Returns a {@code String} with the name of this {@code Material} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Material} instance
+	 */
+	String getName();
 }

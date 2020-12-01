@@ -38,6 +38,13 @@ import org.dayflower.scene.texture.ConstantTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class HairMaterial implements PBRTMaterial {
+	/**
+	 * The name of this {@code HairMaterial} class.
+	 */
+	public static final String NAME = "PBRT - Hair";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureAlpha;
 	private final Texture textureBetaM;
 	private final Texture textureBetaN;
@@ -151,6 +158,16 @@ public final class HairMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code HairMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code HairMaterial} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

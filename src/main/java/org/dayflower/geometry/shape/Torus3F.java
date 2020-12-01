@@ -58,6 +58,11 @@ import org.dayflower.node.NodeTraversalException;
  */
 public final class Torus3F implements Shape3F {
 	/**
+	 * The name of this {@code Torus3F} class.
+	 */
+	public static final String NAME = "Torus";
+	
+	/**
 	 * The offset for the inner radius in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_RADIUS_INNER = 0;
@@ -209,6 +214,16 @@ public final class Torus3F implements Shape3F {
 		}
 		
 		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Torus3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Torus3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

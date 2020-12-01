@@ -49,6 +49,13 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class Curves3F implements Shape3F {
+	/**
+	 * The name of this {@code Curves3F} class.
+	 */
+	public static final String NAME = "Curves";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final List<Curve3F> curves;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,6 +132,16 @@ public final class Curves3F implements Shape3F {
 		}
 		
 		return mutableSurfaceIntersection.computeSurfaceIntersection();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Curves3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Curves3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

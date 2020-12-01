@@ -72,6 +72,13 @@ public interface Shape3F extends Node {
 	Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
 	/**
+	 * Returns a {@code String} with the name of this {@code Shape3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Shape3F} instance
+	 */
+	String getName();
+	
+	/**
 	 * Returns the probability density function (PDF) value for solid angle.
 	 * <p>
 	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.

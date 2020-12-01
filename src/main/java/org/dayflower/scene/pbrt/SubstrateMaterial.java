@@ -36,6 +36,13 @@ import org.dayflower.scene.texture.ConstantTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class SubstrateMaterial implements PBRTMaterial {
+	/**
+	 * The name of this {@code SubstrateMaterial} class.
+	 */
+	public static final String NAME = "PBRT - Substrate";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureDiffuse;
 	private final Texture textureRoughnessU;
 	private final Texture textureRoughnessV;
@@ -135,6 +142,16 @@ public final class SubstrateMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code SubstrateMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code SubstrateMaterial} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

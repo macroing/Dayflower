@@ -50,6 +50,11 @@ import org.dayflower.node.NodeTraversalException;
  */
 public final class RectangularCuboid3F implements Shape3F {
 	/**
+	 * The name of this {@code RectangularCuboid3F} class.
+	 */
+	public static final String NAME = "Rectangular Cuboid";
+	
+	/**
 	 * The offset for the {@link Point3F} instance representing the maximum point in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_MAXIMUM = 0;
@@ -202,6 +207,16 @@ public final class RectangularCuboid3F implements Shape3F {
 	 */
 	public Point3F getMinimum() {
 		return this.minimum;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code RectangularCuboid3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code RectangularCuboid3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

@@ -65,6 +65,13 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class Curve3F implements Shape3F {
+	/**
+	 * The name of this {@code Curve3F} class.
+	 */
+	public static final String NAME = "Curve";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Data data;
 	private final float uMaximum;
 	private final float uMinimum;
@@ -223,6 +230,16 @@ public final class Curve3F implements Shape3F {
 		final int depth = saturate(doLog2(1.41421356237F * 6.0F * l03 / (8.0F * (max(widthA, widthB) * 0.05F))) / 2, 0, 10);
 		
 		return doIntersectionRecursive(ray, tMinimum, tMaximum, objectToRay, rayToObject, pointI, pointJ, pointK, pointL, uMinimum, uMaximum, depth);
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Curve3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Curve3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

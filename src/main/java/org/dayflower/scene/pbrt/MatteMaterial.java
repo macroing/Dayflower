@@ -40,6 +40,13 @@ import org.dayflower.scene.texture.ConstantTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class MatteMaterial implements PBRTMaterial {
+	/**
+	 * The name of this {@code MatteMaterial} class.
+	 */
+	public static final String NAME = "PBRT - Matte";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureAngle;
 	private final Texture textureDiffuse;
 	
@@ -128,6 +135,16 @@ public final class MatteMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code MatteMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code MatteMaterial} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

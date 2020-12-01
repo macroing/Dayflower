@@ -46,6 +46,13 @@ import org.dayflower.util.Floats;
  * @author J&#246;rgen Lundgren
  */
 public final class ProceduralTerrain3F implements Shape3F {
+	/**
+	 * The name of this {@code ProceduralTerrain3F} class.
+	 */
+	public static final String NAME = "Procedural Terrain";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final FloatBinaryOperator floatBinaryOperator;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +141,16 @@ public final class ProceduralTerrain3F implements Shape3F {
 		}
 		
 		return SurfaceIntersection3F.EMPTY;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code ProceduralTerrain3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code ProceduralTerrain3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

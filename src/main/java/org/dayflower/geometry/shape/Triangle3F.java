@@ -49,6 +49,13 @@ import org.dayflower.node.NodeTraversalException;
  * @author J&#246;rgen Lundgren
  */
 public final class Triangle3F implements Shape3F {
+	/**
+	 * The name of this {@code Triangle3F} class.
+	 */
+	public static final String NAME = "Triangle";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Vector3F surfaceNormal;
 	private final Vertex3F a;
 	private final Vertex3F b;
@@ -217,6 +224,16 @@ public final class Triangle3F implements Shape3F {
 		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
 		
 		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code Triangle3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Triangle3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

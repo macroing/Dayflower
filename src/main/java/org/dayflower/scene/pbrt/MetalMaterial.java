@@ -36,6 +36,13 @@ import org.dayflower.scene.texture.ConstantTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class MetalMaterial implements PBRTMaterial {
+	/**
+	 * The name of this {@code MetalMaterial} class.
+	 */
+	public static final String NAME = "PBRT - Metal";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureEta;
 	private final Texture textureK;
 	private final Texture textureRoughnessU;
@@ -153,6 +160,16 @@ public final class MetalMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code MetalMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code MetalMaterial} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

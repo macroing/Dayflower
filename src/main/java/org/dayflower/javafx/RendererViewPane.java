@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.image.Image;
+import org.dayflower.node.Node;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 
@@ -37,6 +38,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -76,7 +79,9 @@ final class RendererViewPane extends BorderPane {
 	private final Renderer renderer;
 	private final RendererBox rendererBox;
 	private final SceneBox sceneBox;
-	private final VBox vBox;
+	private final TreeView<String> treeView;
+	private final VBox vBoxL;
+	private final VBox vBoxR;
 	private final WritableImage writableImage;
 	private final boolean[] isKeyPressed;
 	private final boolean[] isKeyPressedOnce;
@@ -112,7 +117,9 @@ final class RendererViewPane extends BorderPane {
 		this.renderer = renderer;
 		this.rendererBox = new RendererBox(renderer, executorService);
 		this.sceneBox = new SceneBox(renderer, executorService);
-		this.vBox = new VBox();
+		this.treeView = new SceneTreeView(renderer.getRendererConfiguration().getScene());
+		this.vBoxL = new VBox();
+		this.vBoxR = new VBox();
 		this.writableImage = new WritableImage(renderer.getRendererConfiguration().getImage().getResolutionX(), renderer.getRendererConfiguration().getImage().getResolutionY());
 		this.isKeyPressed = new boolean[KeyCode.values().length];
 		this.isKeyPressedOnce = new boolean[KeyCode.values().length];
@@ -406,18 +413,29 @@ final class RendererViewPane extends BorderPane {
 //		Configure the Renderer:
 		this.renderer.setRendererObserver(new RendererObserverImpl(this.labelRenderPass, this.labelRenderTime, this.labelRenderTimePerPass, this.progressBar));
 		
-//		Configure the VBox:
-		this.vBox.getChildren().add(this.rendererBox);
-		this.vBox.getChildren().add(this.sceneBox);
-		this.vBox.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 1.0D, 0.0D, 0.0D))));
-		this.vBox.setFillWidth(true);
-		this.vBox.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
-		this.vBox.setSpacing(20.0D);
+//		Configure the TreeView:
+		
+		
+//		Configure the VBox for L:
+		this.vBoxL.getChildren().add(this.rendererBox);
+		this.vBoxL.getChildren().add(this.sceneBox);
+		this.vBoxL.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 1.0D, 0.0D, 0.0D))));
+		this.vBoxL.setFillWidth(true);
+		this.vBoxL.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
+		this.vBoxL.setSpacing(20.0D);
+		
+//		Configure the VBox for R:
+		this.vBoxR.getChildren().add(this.treeView);
+		this.vBoxR.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 0.0D, 0.0D, 1.0D))));
+		this.vBoxR.setFillWidth(true);
+		this.vBoxR.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
+		this.vBoxR.setSpacing(20.0D);
 		
 //		Configure the RendererViewPane:
 		setBottom(this.hBox);
 		setCenter(this.canvas);
-		setLeft(this.vBox);
+		setLeft(this.vBoxL);
+		setRight(this.vBoxR);
 	}
 	
 	private void doOnKeyPressed(final KeyEvent keyEvent) {

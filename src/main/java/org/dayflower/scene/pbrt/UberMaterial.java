@@ -37,6 +37,13 @@ import org.dayflower.scene.texture.ConstantTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class UberMaterial implements PBRTMaterial {
+	/**
+	 * The name of this {@code UberMaterial} class.
+	 */
+	public static final String NAME = "PBRT - Uber";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureEta;
 	private final Texture textureKD;
 	private final Texture textureKR;
@@ -171,6 +178,16 @@ public final class UberMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code UberMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code UberMaterial} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

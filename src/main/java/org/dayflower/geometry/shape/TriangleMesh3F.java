@@ -65,6 +65,13 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class TriangleMesh3F implements Shape3F {
+	/**
+	 * The name of this {@code TriangleMesh3F} class.
+	 */
+	public static final String NAME = "Triangle Mesh";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final BVHNode bVHNode;
 	private final BoundingVolume3F boundingVolume;
 	private final List<Triangle3F> triangles;
@@ -201,6 +208,16 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	public String getMaterialName() {
 		return this.materialName;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code TriangleMesh3F} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code TriangleMesh3F} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
 	}
 	
 	/**

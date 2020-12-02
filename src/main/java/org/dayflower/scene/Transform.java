@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +31,14 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.util.ParameterArguments;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Transform} contains a position, a rotation and a scale.
+ * <p>
+ * This class is mutable and therefore not thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Transform implements Node {
 	private List<TransformObserver> transformObservers;
 	private Matrix44F objectToWorld;
@@ -153,12 +159,20 @@ public final class Transform implements Node {
 		return doAttemptToCalculateWorldToObject();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Point3F} instance with the position associated with this {@code Transform} instance.
+	 * 
+	 * @return a {@code Point3F} instance with the position associated with this {@code Transform} instance
+	 */
 	public Point3F getPosition() {
 		return this.position;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Quaternion4F} instance with the rotation associated with this {@code Transform} instance.
+	 * 
+	 * @return a {@code Quaternion4F} instance with the rotation associated with this {@code Transform} instance
+	 */
 	public Quaternion4F getRotation() {
 		return this.rotation;
 	}
@@ -173,7 +187,11 @@ public final class Transform implements Node {
 		return String.format("new Transform(%s, %s, %s)", this.position, this.rotation, this.scale);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Vector3F} instance with the scale associated with this {@code Transform} instance.
+	 * 
+	 * @return a {@code Vector3F} instance with the scale associated with this {@code Transform} instance
+	 */
 	public Vector3F getScale() {
 		return this.scale;
 	}
@@ -303,36 +321,62 @@ public final class Transform implements Node {
 		return Objects.hash(this.transformObservers, this.objectToWorld, this.worldToObject, this.position, this.rotation, this.scale);
 	}
 	
-//	TODO: Add Javadocs!
-	public void moveX(final float x) {
+	/**
+	 * Moves the position associated with this {@code Transform} instance along the X-axis with a distance of {@code distance}.
+	 * 
+	 * @param distance the distance to move along the X-axis
+	 */
+	public void moveX(final float distance) {
 		final Point3F oldPosition = this.position;
-		final Point3F newPosition = new Point3F(oldPosition.getX() + x, oldPosition.getY(), oldPosition.getZ());
+		final Point3F newPosition = new Point3F(oldPosition.getX() + distance, oldPosition.getY(), oldPosition.getZ());
 		
 		setPosition(newPosition);
 	}
 	
-//	TODO: Add Javadocs!
-	public void moveY(final float y) {
+	/**
+	 * Moves the position associated with this {@code Transform} instance along the Y-axis with a distance of {@code distance}.
+	 * 
+	 * @param distance the distance to move along the Y-axis
+	 */
+	public void moveY(final float distance) {
 		final Point3F oldPosition = this.position;
-		final Point3F newPosition = new Point3F(oldPosition.getX(), oldPosition.getY() + y, oldPosition.getZ());
+		final Point3F newPosition = new Point3F(oldPosition.getX(), oldPosition.getY() + distance, oldPosition.getZ());
 		
 		setPosition(newPosition);
 	}
 	
-//	TODO: Add Javadocs!
-	public void moveZ(final float z) {
+	/**
+	 * Moves the position associated with this {@code Transform} instance along the Z-axis with a distance of {@code distance}.
+	 * 
+	 * @param distance the distance to move along the Z-axis
+	 */
+	public void moveZ(final float distance) {
 		final Point3F oldPosition = this.position;
-		final Point3F newPosition = new Point3F(oldPosition.getX(), oldPosition.getY(), oldPosition.getZ() + z);
+		final Point3F newPosition = new Point3F(oldPosition.getX(), oldPosition.getY(), oldPosition.getZ() + distance);
 		
 		setPosition(newPosition);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Rotates this {@code Transform} instance with {@code rotation}.
+	 * <p>
+	 * If {@code rotation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rotation a {@link Quaternion4F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rotation} is {@code null}
+	 */
 	public void rotate(final Quaternion4F rotation) {
 		setRotation(Quaternion4F.normalize(Quaternion4F.multiply(rotation, this.rotation)));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the position associated with this {@code Transform} instance to {@code position}.
+	 * <p>
+	 * If {@code position} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param position a {@link Point3F} instance with the position associated with this {@code Transform} instance
+	 * @throws NullPointerException thrown if, and only if, {@code position} is {@code null}
+	 */
 	public void setPosition(final Point3F position) {
 		Objects.requireNonNull(position, "position == null");
 		
@@ -351,7 +395,14 @@ public final class Transform implements Node {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the rotation associated with this {@code Transform} instance to {@code rotation}.
+	 * <p>
+	 * If {@code rotation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rotation a {@link Quaternion4F} instance with the rotation associated with this {@code Transform} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rotation} is {@code null}
+	 */
 	public void setRotation(final Quaternion4F rotation) {
 		Objects.requireNonNull(rotation, "rotation == null");
 		
@@ -370,7 +421,14 @@ public final class Transform implements Node {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the scale associated with this {@code Transform} instance to {@code scale}.
+	 * <p>
+	 * If {@code scale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param scale a {@link Vector3F} instance with the scale associated with this {@code Transform} instance
+	 * @throws NullPointerException thrown if, and only if, {@code scale} is {@code null}
+	 */
 	public void setScale(final Vector3F scale) {
 		Objects.requireNonNull(scale, "scale == null");
 		

@@ -84,12 +84,11 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be evaluated, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
 		return new RayitoBXDFResult(o, n, i, 0.0F, 0.0F);
 	}
 	
@@ -105,13 +104,12 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be sampled, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
-		return doSampleSolidAngle3(o, n, isProjected);
+	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+		return doSampleSolidAngle3(o, n);
 	}
 	
 	/**
@@ -155,12 +153,11 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be used, {@code false} otherwise
 	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
 		Objects.requireNonNull(o, "o == null");
 		Objects.requireNonNull(n, "n == null");
 		Objects.requireNonNull(i, "i == null");
@@ -181,7 +178,7 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("unused")
-	private RayitoBXDFResult doSampleSolidAngle1(final Vector3F o, final Vector3F n, final boolean isProjected) {
+	private RayitoBXDFResult doSampleSolidAngle1(final Vector3F o, final Vector3F n) {
 		final Vector3F d = Vector3F.negate(o);
 		
 		final float nDotD = Vector3F.dotProduct(n, d);
@@ -208,17 +205,13 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		
 		final Vector3F i = Vector3F.normalize(Vector3F.add(Vector3F.multiply(d, eta), Vector3F.multiply(nCorrectlyOriented, eta * cosTheta - sqrt(k))));
 		
-		if(isProjected) {
-			return new RayitoBXDFResult(o, n, Vector3F.negate(i), 1.0F, 1.0F);
-		}
-		
 		final float nDotI = Vector3F.dotProduct(n, i);
 		
 		return new RayitoBXDFResult(o, n, Vector3F.negate(i), abs(nDotI), 1.0F);
 	}
 	
 	@SuppressWarnings("unused")
-	private RayitoBXDFResult doSampleSolidAngle2(final Vector3F o, final Vector3F n, final boolean isProjected) {
+	private RayitoBXDFResult doSampleSolidAngle2(final Vector3F o, final Vector3F n) {
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		final Vector3F d = Vector3F.negate(o);
@@ -236,15 +229,15 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float k = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 		
 		if(k < 0.0F) {
-			return isProjected ? new RayitoBXDFResult(o, n, reflection, 1.0F, 1.0F) : new RayitoBXDFResult(o, n, reflection, abs(Vector3F.dotProduct(n, reflection)), 1.0F);
+			return new RayitoBXDFResult(o, n, reflection, abs(Vector3F.dotProduct(n, reflection)), 1.0F);
 		}
 		
 		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (eta * cosTheta + sqrt(k)))));
 		
-		return isProjected ? new RayitoBXDFResult(o, n, Vector3F.negate(transmission), 1.0F, 1.0F) : new RayitoBXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), 1.0F);
+		return new RayitoBXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), 1.0F);
 	}
 	
-	private RayitoBXDFResult doSampleSolidAngle3(final Vector3F o, final Vector3F n, final boolean isProjected) {
+	private RayitoBXDFResult doSampleSolidAngle3(final Vector3F o, final Vector3F n) {
 		final Vector3F d = Vector3F.negate(o);
 		final Vector3F reflection = Vector3F.reflection(d, n, true);
 		final Vector3F nCorrectlyOriented = Vector3F.dotProduct(n, d) < 0.0F ? n : Vector3F.negate(n);
@@ -259,7 +252,8 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 		
 		if(cosTheta2Squared < 0.0F) {
-			return isProjected ? new RayitoBXDFResult(o, n, Vector3F.negate(reflection), 1.0F, 1.0F) : new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), 1.0F);
+//			TODO: Find out why PDF is not 1.0F?
+			return new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), 1.0F);
 		}
 		
 		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
@@ -275,9 +269,11 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 		
 		if(random() < probabilityRussianRoulette) {
-			return isProjected ? new RayitoBXDFResult(o, n, Vector3F.negate(reflection), 1.0F, probabilityRussianRouletteReflection) : new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), probabilityRussianRouletteReflection);
+//			TODO: Find out why PDF is not 1.0F?
+			return new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), probabilityRussianRouletteReflection);
 		}
 		
-		return isProjected ? new RayitoBXDFResult(o, n, Vector3F.negate(transmission), 1.0F, probabilityRussianRouletteTransmission) : new RayitoBXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), probabilityRussianRouletteTransmission);
+//		TODO: Find out why PDF is not 1.0F?
+		return new RayitoBXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), probabilityRussianRouletteTransmission);
 	}
 }

@@ -47,30 +47,6 @@ public abstract class RayitoBXDF extends BXDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Evaluates the solid angle for {@code o}, {@code n} and {@code i}.
-	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
-	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * currentRayitoBXDF.evaluateSolidAngle(o, n, i, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
-	 */
-	public final RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
-		return evaluateSolidAngle(o, n, i, false);
-	}
-	
-	/**
 	 * Evaluates the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
 	 * <p>
 	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
@@ -80,37 +56,10 @@ public abstract class RayitoBXDF extends BXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be evaluated, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
-	public abstract RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected);
-	
-	/**
-	 * Samples the solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
-	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
-	 * <p>
-	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * currentRayitoBXDF.sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
-	 * @param u the U-coordinate
-	 * @param v the V-coordinate
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
-	 */
-	public final RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
-		return sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
-	}
+	public abstract RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i);
 	
 	/**
 	 * Samples the solid angle or the projected solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
@@ -124,33 +73,10 @@ public abstract class RayitoBXDF extends BXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be sampled, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
-	public abstract RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected);
-	
-	/**
-	 * Returns the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}.
-	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * currentRayitoBXDF.probabilityDensityFunctionSolidAngle(o, n, i, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
-	 */
-	public final float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
-		return probabilityDensityFunctionSolidAngle(o, n, i, false);
-	}
+	public abstract RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v);
 	
 	/**
 	 * Returns the probability density function (PDF) value of the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
@@ -160,9 +86,8 @@ public abstract class RayitoBXDF extends BXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be used, {@code false} otherwise
 	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
-	public abstract float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected);
+	public abstract float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i);
 }

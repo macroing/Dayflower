@@ -84,12 +84,11 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be evaluated, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
 		final Vector3F h = Vector3F.half(o, n, i);
 		
 		final float nDotH = Vector3F.dotProduct(n, h);
@@ -102,11 +101,10 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 		
 		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
 			return new RayitoBXDFResult(o, n, i, 0.0F, 0.0F);
-		} else if(isProjected) {
-			return new RayitoBXDFResult(o, n, i, d / (4.0F * abs(oDotH) * abs(nDotI)), f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
-		} else {
-			return new RayitoBXDFResult(o, n, i, d / (4.0F * abs(oDotH)),              f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
 		}
+		
+		return new RayitoBXDFResult(o, n, i, probabilityDensityFunctionSolidAngle(o, n, i), f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
+//		return new RayitoBXDFResult(o, n, i, d / (4.0F * abs(oDotH)),                       f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
 	}
 	
 	/**
@@ -121,12 +119,11 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be sampled, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
+	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		final Vector3F hLocalSpace = SampleGeneratorF.sampleHemispherePowerCosineDistribution(u, v, this.exponent);
@@ -137,7 +134,7 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 		
 		final Vector3F i = Vector3F.subtract(o, Vector3F.multiply(h, 2.0F * oDotH));
 		
-		return evaluateSolidAngle(o, n, i, isProjected);
+		return evaluateSolidAngle(o, n, i);
 	}
 	
 	/**
@@ -181,12 +178,11 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be used, {@code false} otherwise
 	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
 		final Vector3F h = Vector3F.half(o, n, i);
 		
 		final float nDotH = Vector3F.dotProduct(n, h);
@@ -196,11 +192,9 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 		
 		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
 			return 0.0F;
-		} else if(isProjected) {
-			return (this.exponent + 1.0F) * pow(abs(nDotH), this.exponent) / (PI * 8.0F * abs(oDotH) * abs(nDotI));
-		} else {
-			return (this.exponent + 1.0F) * pow(abs(nDotH), this.exponent) / (PI * 8.0F * abs(oDotH));
 		}
+		
+		return (this.exponent + 1.0F) * pow(abs(nDotH), this.exponent) / (PI * 8.0F * abs(oDotH));
 	}
 	
 	/**

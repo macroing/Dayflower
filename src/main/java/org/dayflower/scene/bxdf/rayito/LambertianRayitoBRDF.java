@@ -56,22 +56,19 @@ public final class LambertianRayitoBRDF extends RayitoBXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be evaluated, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
 		final float nDotI = Vector3F.dotProduct(n, i);
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
-			return new RayitoBXDFResult(o, n, i, 0.0F,                       0.0F);
-		} else if(isProjected) {
-			return new RayitoBXDFResult(o, n, i, PI_RECIPROCAL,              PI_RECIPROCAL);
-		} else {
-			return new RayitoBXDFResult(o, n, i, PI_RECIPROCAL * abs(nDotI), PI_RECIPROCAL);
+			return new RayitoBXDFResult(o, n, i, 0.0F, 0.0F);
 		}
+		
+		return new RayitoBXDFResult(o, n, i, PI_RECIPROCAL * abs(nDotI), PI_RECIPROCAL);
 	}
 	
 	/**
@@ -86,21 +83,16 @@ public final class LambertianRayitoBRDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be sampled, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
+	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		final Vector3F iLocalSpace = Vector3F.negate(SampleGeneratorF.sampleHemisphereCosineDistribution(u, v));
 		final Vector3F iTransformed = Vector3F.transform(iLocalSpace, orthonormalBasis);
 		final Vector3F i = nDotO < 0.0F ? Vector3F.negate(iTransformed) : iTransformed;
-		
-		if(isProjected) {
-			return new RayitoBXDFResult(o, n, i, PI_RECIPROCAL, PI_RECIPROCAL);
-		}
 		
 		final float nDotI = Vector3F.dotProduct(n, i);
 		
@@ -144,22 +136,19 @@ public final class LambertianRayitoBRDF extends RayitoBXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be used, {@code false} otherwise
 	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
 		final float nDotI = Vector3F.dotProduct(n, i);
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
 			return 0.0F;
-		} else if(isProjected) {
-			return PI_RECIPROCAL;
-		} else {
-			return PI_RECIPROCAL * abs(nDotI);
 		}
+		
+		return PI_RECIPROCAL * abs(nDotI);
 	}
 	
 	/**

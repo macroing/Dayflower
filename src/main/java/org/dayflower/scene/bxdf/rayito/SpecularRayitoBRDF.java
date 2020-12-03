@@ -54,12 +54,11 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be evaluated, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
 		return new RayitoBXDFResult(o, n, i, 0.0F, 0.0F);
 	}
 	
@@ -75,24 +74,20 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be sampled, {@code false} otherwise
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
+	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
 		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
 		
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		final Vector3F i = nDotO < 0.0F ? Vector3F.add(o, Vector3F.multiply(n, 2.0F * nDotO)) : Vector3F.subtract(o, Vector3F.multiply(n, 2.0F * nDotO));
 		
-		if(isProjected) {
-			return new RayitoBXDFResult(o, n, i, 1.0F, 1.0F);
-		}
-		
 		final float nDotI = Vector3F.dotProduct(n, i);
 		
+//		TODO: Find out why PDF is not 1.0F?
 		return new RayitoBXDFResult(o, n, i, abs(nDotI), 1.0F);
 	}
 	
@@ -133,12 +128,11 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @param isProjected {@code true} if, and only if, the projected solid angle should be used, {@code false} otherwise
 	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
 		Objects.requireNonNull(o, "o == null");
 		Objects.requireNonNull(n, "n == null");
 		Objects.requireNonNull(i, "i == null");

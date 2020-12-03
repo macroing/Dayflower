@@ -14,20 +14,27 @@ Below follows a few lists of features available in the Scene API.
 * `Primitive` - A primitive (or object) that can be rendered. It is associated with a `Scene` instance.
 * `Scene` - Contains a `Camera`, a list of `Light` instances and a list of `Primitive` instances.
 * `SceneLoader` - Loads a `Scene` instance.
-* `Texture` - A texture assigned to a specific `Primitive` instance or a specific `Material` instance.
+* `Texture` - A texture assigned to a specific `Material` instance.
+* `Transform` - A transform assigned to a specific `Primitive` instance.
 
 #### The Scene Loader API
 * `JavaSceneLoader` - A `SceneLoader` that produces `Scene` instances by loading, compiling and executing snippets of Java source code.
 
-#### The Scene PBRT API
-* `GlassMaterial` - A `Material` that represents glass.
-* `HairMaterial` - A `Material` that represents hair.
-* `MatteMaterial` - A `Material` that is used for matte surfaces.
-* `MetalMaterial` - A `Material` that represents metal.
-* `MirrorMaterial` - A `Material` that represents a mirror.
-* `PlasticMaterial` - A `Material` that represents plastic.
-* `SubstrateMaterial` - A `Material` that represents a substrate material.
-* `UberMaterial` - A `Material` that can represent a wide variety of materials.
+#### The Scene Material PBRT API
+* `GlassPBRTMaterial` - A `Material` that represents glass.
+* `HairPBRTMaterial` - A `Material` that represents hair.
+* `MattePBRTMaterial` - A `Material` that is used for matte surfaces.
+* `MetalPBRTMaterial` - A `Material` that represents metal.
+* `MirrorPBRTMaterial` - A `Material` that represents a mirror.
+* `PlasticPBRTMaterial` - A `Material` that represents plastic.
+* `SubstratePBRTMaterial` - A `Material` that represents a substrate material.
+* `UberPBRTMaterial` - A `Material` that can represent a wide variety of materials.
+
+#### The Scene Material Rayito API
+* `GlassRayitoMaterial` - A `Material` that represents glass.
+* `MatteRayitoMaterial` - A `Material` that is used for matte surfaces.
+* `MetalRayitoMaterial` - A `Material` that represents metal.
+* `MirrorRayitoMaterial` - A `Material` that represents a mirror.
 
 #### The Scene Texture API
 * `BlendTexture` - Returns a `Color3F` by blending two `Texture` instances together.
@@ -45,10 +52,15 @@ Packages
 --------
 * `org.dayflower.scene` - The Scene API.
 * `org.dayflower.scene.background` - The Scene Background API.
+* `org.dayflower.scene.bssrdf` - The Scene BSSRDF API.
+* `org.dayflower.scene.bxdf.pbrt` - The Scene BXDF PBRT API.
+* `org.dayflower.scene.bxdf.rayito` - The Scene BXDF Rayito API.
+* `org.dayflower.scene.fresnel` - The Scene Fresnel API.
 * `org.dayflower.scene.light` - The Scene Light API.
 * `org.dayflower.scene.loader` - The Scene Loader API.
-* `org.dayflower.scene.pbrt` - The Scene PBRT API.
-* `org.dayflower.scene.rayito` - The Scene Rayito API.
+* `org.dayflower.scene.material.pbrt` - The Scene Material PBRT API.
+* `org.dayflower.scene.material.rayito` - The Scene Material Rayito API.
+* `org.dayflower.scene.microfacet` - The Scene Microfacet API.
 * `org.dayflower.scene.texture` - The Scene Texture API.
 
 Examples

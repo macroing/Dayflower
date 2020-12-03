@@ -27,8 +27,8 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.BSDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularBRDF;
+import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
+import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
 import org.dayflower.scene.fresnel.ConstantFresnel;
 import org.dayflower.scene.texture.ConstantTexture;
 
@@ -81,7 +81,7 @@ public final class MirrorMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Computes the {@link BSDF} at {@code intersection}.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
 	 * <p>
@@ -94,14 +94,14 @@ public final class MirrorMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		final Color3F colorReflectanceScale = Color3F.saturate(this.textureReflectanceScale.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorReflectanceScale.isBlack()) {
-			return Optional.of(new BSDF(intersection, Arrays.asList(new SpecularBRDF(colorReflectanceScale, new ConstantFresnel()))));
+			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new SpecularPBRTBRDF(colorReflectanceScale, new ConstantFresnel()))));
 		}
 		
 		return Optional.empty();

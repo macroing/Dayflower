@@ -28,32 +28,32 @@ import org.dayflower.image.Color3F;
 import org.dayflower.util.ParameterArguments;
 
 /**
- * A {@code ScaledBXDF} is an implementation of {@link BXDF} that scales the result of another {@code BXDF} instance.
+ * A {@code ScaledPBRTBXDF} is an implementation of {@link PBRTBXDF} that scales the result of another {@code BXDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ScaledBXDF extends BXDF {
-	private final BXDF bXDF;
+public final class ScaledPBRTBXDF extends PBRTBXDF {
 	private final Color3F scale;
+	private final PBRTBXDF pBRTBXDF;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code ScaledBXDF} instance.
+	 * Constructs a new {@code ScaledPBRTBXDF} instance.
 	 * <p>
-	 * If either {@code bXDF} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code pBRTBXDF} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param bXDF the {@link BXDF} instance to scale
+	 * @param pBRTBXDF the {@link PBRTBXDF} instance to scale
 	 * @param scale the {@link Color3F} instance to use as the scale
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDF} or {@code scale} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code pBRTBXDF} or {@code scale} are {@code null}
 	 */
-	public ScaledBXDF(final BXDF bXDF, final Color3F scale) {
-		super(Objects.requireNonNull(bXDF, "bXDF == null").getBXDFType());
+	public ScaledPBRTBXDF(final PBRTBXDF pBRTBXDF, final Color3F scale) {
+		super(Objects.requireNonNull(pBRTBXDF, "pBRTBXDF == null").getBXDFType());
 		
-		this.bXDF = bXDF;
+		this.pBRTBXDF = pBRTBXDF;
 		this.scale = Objects.requireNonNull(scale, "scale == null");
 	}
 	
@@ -78,7 +78,7 @@ public final class ScaledBXDF extends BXDF {
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
-		return Color3F.multiply(this.bXDF.computeReflectanceFunction(samplesA, samplesB), this.scale);
+		return Color3F.multiply(this.pBRTBXDF.computeReflectanceFunction(samplesA, samplesB), this.scale);
 	}
 	
 	/**
@@ -101,7 +101,7 @@ public final class ScaledBXDF extends BXDF {
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		
-		return Color3F.multiply(this.bXDF.computeReflectanceFunction(samplesA, outgoing), this.scale);
+		return Color3F.multiply(this.pBRTBXDF.computeReflectanceFunction(samplesA, outgoing), this.scale);
 	}
 	
 	/**
@@ -123,13 +123,13 @@ public final class ScaledBXDF extends BXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Color3F.multiply(this.bXDF.evaluateDistributionFunction(outgoing, incoming), this.scale);
+		return Color3F.multiply(this.pBRTBXDF.evaluateDistributionFunction(outgoing, incoming), this.scale);
 	}
 	
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link BXDFResult} with the result of the sampling.
+	 * Returns an optional {@link PBRTBXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -137,50 +137,50 @@ public final class ScaledBXDF extends BXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code BXDFResult} with the result of the sampling
+	 * @return an optional {@code PBRTBXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<PBRTBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Optional<BXDFResult> optionalBXDFResult = this.bXDF.sampleDistributionFunction(outgoing, sample);
+		final Optional<PBRTBXDFResult> optionalBXDFResult = this.pBRTBXDF.sampleDistributionFunction(outgoing, sample);
 		
 		if(optionalBXDFResult.isPresent()) {
-			return Optional.of(BXDFResult.scale(optionalBXDFResult.get(), this.scale));
+			return Optional.of(PBRTBXDFResult.scale(optionalBXDFResult.get(), this.scale));
 		}
 		
 		return Optional.empty();
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code ScaledBXDF} instance.
+	 * Returns a {@code String} representation of this {@code ScaledPBRTBXDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code ScaledBXDF} instance
+	 * @return a {@code String} representation of this {@code ScaledPBRTBXDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ScaledBXDF(%s, %s)", this.bXDF, this.scale);
+		return String.format("new ScaledPBRTBXDF(%s, %s)", this.pBRTBXDF, this.scale);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code ScaledBXDF} instance for equality.
+	 * Compares {@code object} to this {@code ScaledPBRTBXDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ScaledBXDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ScaledPBRTBXDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code ScaledBXDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ScaledBXDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code ScaledPBRTBXDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ScaledPBRTBXDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof ScaledBXDF)) {
+		} else if(!(object instanceof ScaledPBRTBXDF)) {
 			return false;
-		} else if(!Objects.equals(this.bXDF, ScaledBXDF.class.cast(object).bXDF)) {
+		} else if(!Objects.equals(this.scale, ScaledPBRTBXDF.class.cast(object).scale)) {
 			return false;
-		} else if(!Objects.equals(this.scale, ScaledBXDF.class.cast(object).scale)) {
+		} else if(!Objects.equals(this.pBRTBXDF, ScaledPBRTBXDF.class.cast(object).pBRTBXDF)) {
 			return false;
 		} else {
 			return true;
@@ -206,16 +206,16 @@ public final class ScaledBXDF extends BXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return this.bXDF.evaluateProbabilityDensityFunction(outgoing, incoming);
+		return this.pBRTBXDF.evaluateProbabilityDensityFunction(outgoing, incoming);
 	}
 	
 	/**
-	 * Returns a hash code for this {@code ScaledBXDF} instance.
+	 * Returns a hash code for this {@code ScaledPBRTBXDF} instance.
 	 * 
-	 * @return a hash code for this {@code ScaledBXDF} instance
+	 * @return a hash code for this {@code ScaledPBRTBXDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.bXDF, this.scale);
+		return Objects.hash(this.scale, this.pBRTBXDF);
 	}
 }

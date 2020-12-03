@@ -29,12 +29,12 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.MicrofacetDistribution;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.BSDF;
-import org.dayflower.scene.bxdf.pbrt.BXDF;
-import org.dayflower.scene.bxdf.pbrt.LambertianBRDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularBRDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularBTDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowBRDF;
+import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
+import org.dayflower.scene.bxdf.pbrt.PBRTBXDF;
+import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
+import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
+import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
+import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -114,7 +114,7 @@ public final class UberMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Computes the {@link BSDF} at {@code intersection}.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
 	 * <p>
@@ -127,7 +127,7 @@ public final class UberMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
@@ -145,29 +145,29 @@ public final class UberMaterial implements PBRTMaterial {
 		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
 		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
 		
-		final List<BXDF> bXDFs = new ArrayList<>();
+		final List<PBRTBXDF> bXDFs = new ArrayList<>();
 		
 		if(!colorTransmittanceScale.isBlack()) {
-			bXDFs.add(new SpecularBTDF(colorTransmittanceScale, transportMode, 1.0F, 1.0F));
+			bXDFs.add(new SpecularPBRTBTDF(colorTransmittanceScale, transportMode, 1.0F, 1.0F));
 		}
 		
 		if(!colorKD.isBlack()) {
-			bXDFs.add(new LambertianBRDF(colorKD));
+			bXDFs.add(new LambertianPBRTBRDF(colorKD));
 		}
 		
 		if(!colorKS.isBlack()) {
-			bXDFs.add(new TorranceSparrowBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV)));
+			bXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV)));
 		}
 		
 		if(!colorKR.isBlack()) {
-			bXDFs.add(new SpecularBRDF(colorKR, new DielectricFresnel(1.0F, eta)));
+			bXDFs.add(new SpecularPBRTBRDF(colorKR, new DielectricFresnel(1.0F, eta)));
 		}
 		
 		if(!colorKT.isBlack()) {
-			bXDFs.add(new SpecularBTDF(colorKT, transportMode, 1.0F, eta));
+			bXDFs.add(new SpecularPBRTBTDF(colorKT, transportMode, 1.0F, eta));
 		}
 		
-		return Optional.of(new BSDF(intersection, bXDFs, colorTransmittanceScale.isBlack() ? eta : 1.0F));
+		return Optional.of(new PBRTBSDF(intersection, bXDFs, colorTransmittanceScale.isBlack() ? eta : 1.0F));
 	}
 	
 	/**

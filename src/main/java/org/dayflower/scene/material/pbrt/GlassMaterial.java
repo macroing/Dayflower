@@ -33,13 +33,13 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.MicrofacetDistribution;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.BSDF;
-import org.dayflower.scene.bxdf.pbrt.BXDF;
-import org.dayflower.scene.bxdf.pbrt.FresnelSpecularBXDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularBRDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularBTDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowBRDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowBTDF;
+import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
+import org.dayflower.scene.bxdf.pbrt.PBRTBXDF;
+import org.dayflower.scene.bxdf.pbrt.FresnelSpecularPBRTBXDF;
+import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
+import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
+import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
+import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBTDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -108,7 +108,7 @@ public final class GlassMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Computes the {@link BSDF} at {@code intersection}.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
 	 * <p>
@@ -121,7 +121,7 @@ public final class GlassMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
@@ -142,40 +142,40 @@ public final class GlassMaterial implements PBRTMaterial {
 		final boolean isSpecular = isZero(roughnessU) && isZero(roughnessV);
 		
 		if(isSpecular && isAllowingMultipleLobes) {
-			return Optional.of(new BSDF(intersection, Arrays.asList(new FresnelSpecularBXDF(colorKReflection, colorKTransmission, transportMode, 1.0F, eta)), eta));
+			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new FresnelSpecularPBRTBXDF(colorKReflection, colorKTransmission, transportMode, 1.0F, eta)), eta));
 		}
 		
 		if(isSpecular) {
-			final List<BXDF> bXDFs = new ArrayList<>();
+			final List<PBRTBXDF> bXDFs = new ArrayList<>();
 			
 			if(!colorKReflection.isBlack()) {
 				final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 				
-				bXDFs.add(new SpecularBRDF(colorKReflection, fresnel));
+				bXDFs.add(new SpecularPBRTBRDF(colorKReflection, fresnel));
 			}
 			
 			if(!colorKTransmission.isBlack()) {
-				bXDFs.add(new SpecularBTDF(colorKTransmission, transportMode, 1.0F, eta));
+				bXDFs.add(new SpecularPBRTBTDF(colorKTransmission, transportMode, 1.0F, eta));
 			}
 			
-			return Optional.of(new BSDF(intersection, bXDFs, eta));
+			return Optional.of(new PBRTBSDF(intersection, bXDFs, eta));
 		}
 		
-		final List<BXDF> bXDFs = new ArrayList<>();
+		final List<PBRTBXDF> bXDFs = new ArrayList<>();
 		
 		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
 		
 		if(!colorKReflection.isBlack()) {
 			final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 			
-			bXDFs.add(new TorranceSparrowBRDF(colorKReflection, fresnel, microfacetDistribution));
+			bXDFs.add(new TorranceSparrowPBRTBRDF(colorKReflection, fresnel, microfacetDistribution));
 		}
 		
 		if(!colorKTransmission.isBlack()) {
-			bXDFs.add(new TorranceSparrowBTDF(colorKTransmission, microfacetDistribution, transportMode, 1.0F, eta));
+			bXDFs.add(new TorranceSparrowPBRTBTDF(colorKTransmission, microfacetDistribution, transportMode, 1.0F, eta));
 		}
 		
-		return Optional.of(new BSDF(intersection, bXDFs, eta));
+		return Optional.of(new PBRTBSDF(intersection, bXDFs, eta));
 	}
 	
 	/**

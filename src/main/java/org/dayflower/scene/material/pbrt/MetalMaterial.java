@@ -29,8 +29,8 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.MicrofacetDistribution;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.BSDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowBRDF;
+import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
+import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.fresnel.ConductorFresnel;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -116,7 +116,7 @@ public final class MetalMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Computes the {@link BSDF} at {@code intersection}.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
 	 * <p>
@@ -129,7 +129,7 @@ public final class MetalMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
@@ -146,7 +146,7 @@ public final class MetalMaterial implements PBRTMaterial {
 		
 		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
 		
-		return Optional.of(new BSDF(intersection, Arrays.asList(new TorranceSparrowBRDF(Color3F.WHITE, fresnel, microfacetDistribution))));
+		return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new TorranceSparrowPBRTBRDF(Color3F.WHITE, fresnel, microfacetDistribution))));
 	}
 	
 	/**

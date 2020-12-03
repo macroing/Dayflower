@@ -37,50 +37,50 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.util.ParameterArguments;
 
 /**
- * A {@code BSDF} represents a BSDF (Bidirectional Scattering Distribution Function).
+ * A {@code PBRTBSDF} represents a BSDF (Bidirectional Scattering Distribution Function).
  * <p>
  * This class is indirectly mutable and therefore not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class BSDF {
+public final class PBRTBSDF {
 	private final Intersection intersection;
-	private final List<BXDF> bXDFs;
+	private final List<PBRTBXDF> bXDFs;
 	private final float eta;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code BSDF} instance.
+	 * Constructs a new {@code PBRTBSDF} instance.
 	 * <p>
 	 * If either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * The {@code List} {@code bXDFs} will be copied.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @param bXDFs a {@code List} of {@link BXDF} instances
+	 * @param bXDFs a {@code List} of {@link PBRTBXDF} instances
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}
 	 */
-	public BSDF(final Intersection intersection, final List<BXDF> bXDFs) {
+	public PBRTBSDF(final Intersection intersection, final List<PBRTBXDF> bXDFs) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.bXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(bXDFs, "bXDFs"));
 		this.eta = 1.0F;
 	}
 	
 	/**
-	 * Constructs a new {@code BSDF} instance.
+	 * Constructs a new {@code PBRTBSDF} instance.
 	 * <p>
 	 * If either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * The {@code List} {@code bXDFs} will be copied.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @param bXDFs a {@code List} of {@link BXDF} instances
+	 * @param bXDFs a {@code List} of {@link PBRTBXDF} instances
 	 * @param eta the index of refraction (IOR)
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}
 	 */
-	public BSDF(final Intersection intersection, final List<BXDF> bXDFs, final float eta) {
+	public PBRTBSDF(final Intersection intersection, final List<PBRTBXDF> bXDFs, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.bXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(bXDFs, "bXDFs"));
 		this.eta = eta;
@@ -111,7 +111,7 @@ public final class BSDF {
 		
 		Color3F reflectance = Color3F.BLACK;
 		
-		for(final BXDF bXDF : this.bXDFs) {
+		for(final PBRTBXDF bXDF : this.bXDFs) {
 			if(bXDF.getBXDFType().matches(bXDFType)) {
 				reflectance = Color3F.add(reflectance, bXDF.computeReflectanceFunction(samplesA, samplesB));
 			}
@@ -146,7 +146,7 @@ public final class BSDF {
 		
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
 		
-		for(final BXDF bXDF : this.bXDFs) {
+		for(final PBRTBXDF bXDF : this.bXDFs) {
 			if(bXDF.getBXDFType().matches(bXDFType)) {
 				reflectance = Color3F.add(reflectance, bXDF.computeReflectanceFunction(samplesA, outgoing));
 			}
@@ -184,7 +184,7 @@ public final class BSDF {
 		
 		Color3F result = Color3F.BLACK;
 		
-		for(final BXDF bXDF : this.bXDFs) {
+		for(final PBRTBXDF bXDF : this.bXDFs) {
 			if(bXDF.getBXDFType().matches(bXDFType) && (isReflecting && bXDF.getBXDFType().hasReflection() || !isReflecting && bXDF.getBXDFType().hasTransmission())) {
 				result = Color3F.add(result, bXDF.evaluateDistributionFunction(outgoing, incoming));
 			}
@@ -196,7 +196,7 @@ public final class BSDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link BSDFResult} with the result of the sampling.
+	 * Returns an optional {@link PBRTBSDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -208,7 +208,7 @@ public final class BSDF {
 	 * @return an optional {@code BSDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}
 	 */
-	public Optional<BSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Point2F sample) {
+	public Optional<PBRTBSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Point2F sample) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
 		Objects.requireNonNull(sample, "sample == null");
@@ -221,7 +221,7 @@ public final class BSDF {
 		
 		final int match = min((int)(floor(sample.getU() * matches)), matches - 1);
 		
-		final BXDF matchingBXDF = doGetMatchingBXDF(bXDFType, match);
+		final PBRTBXDF matchingBXDF = doGetMatchingBXDF(bXDFType, match);
 		
 		if(matchingBXDF == null) {
 			return Optional.empty();
@@ -235,13 +235,13 @@ public final class BSDF {
 			return Optional.empty();
 		}
 		
-		final Optional<BXDFResult> optionalBXDFResult = matchingBXDF.sampleDistributionFunction(outgoing, sampleRemapped);
+		final Optional<PBRTBXDFResult> optionalBXDFResult = matchingBXDF.sampleDistributionFunction(outgoing, sampleRemapped);
 		
 		if(!optionalBXDFResult.isPresent()) {
 			return Optional.empty();
 		}
 		
-		final BXDFResult bXDFResult = optionalBXDFResult.get();
+		final PBRTBXDFResult bXDFResult = optionalBXDFResult.get();
 		
 		final Vector3F incoming = bXDFResult.getIncoming();
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
@@ -252,7 +252,7 @@ public final class BSDF {
 		float probabilityDensityFunctionValue = bXDFResult.getProbabilityDensityFunctionValue();
 		
 		if(matches > 1 && !matchingBXDF.getBXDFType().isSpecular()) {
-			for(final BXDF bXDF : this.bXDFs) {
+			for(final PBRTBXDF bXDF : this.bXDFs) {
 				if(matchingBXDF != bXDF && bXDF.getBXDFType().matches(bXDFType)) {
 					probabilityDensityFunctionValue += bXDF.evaluateProbabilityDensityFunction(outgoing, incoming);
 				}
@@ -268,45 +268,45 @@ public final class BSDF {
 			
 			result = Color3F.BLACK;
 			
-			for(final BXDF bXDF : this.bXDFs) {
+			for(final PBRTBXDF bXDF : this.bXDFs) {
 				if(bXDF.getBXDFType().matches(bXDFType) && (isReflecting && bXDF.getBXDFType().hasReflection() || !isReflecting && bXDF.getBXDFType().hasTransmission())) {
 					result = Color3F.add(result, bXDF.evaluateDistributionFunction(outgoing, incoming));
 				}
 			}
 		}
 		
-		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
+		return Optional.of(new PBRTBSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code BSDF} instance.
+	 * Returns a {@code String} representation of this {@code PBRTBSDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code BSDF} instance
+	 * @return a {@code String} representation of this {@code PBRTBSDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new BSDF(%s, %s, %+.10f)", this.intersection, "...", Float.valueOf(this.eta));
+		return String.format("new PBRTBSDF(%s, %s, %+.10f)", this.intersection, "...", Float.valueOf(this.eta));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code BSDF} instance for equality.
+	 * Compares {@code object} to this {@code PBRTBSDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BSDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PBRTBSDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code BSDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BSDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code PBRTBSDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PBRTBSDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof BSDF)) {
+		} else if(!(object instanceof PBRTBSDF)) {
 			return false;
-		} else if(!Objects.equals(this.intersection, BSDF.class.cast(object).intersection)) {
+		} else if(!Objects.equals(this.intersection, PBRTBSDF.class.cast(object).intersection)) {
 			return false;
-		} else if(!Objects.equals(this.bXDFs, BSDF.class.cast(object).bXDFs)) {
+		} else if(!Objects.equals(this.bXDFs, PBRTBSDF.class.cast(object).bXDFs)) {
 			return false;
-		} else if(!equal(this.eta, BSDF.class.cast(object).eta)) {
+		} else if(!equal(this.eta, PBRTBSDF.class.cast(object).eta)) {
 			return false;
 		} else {
 			return true;
@@ -348,7 +348,7 @@ public final class BSDF {
 		
 		int matches = 0;
 		
-		for(final BXDF bXDF : this.bXDFs) {
+		for(final PBRTBXDF bXDF : this.bXDFs) {
 			if(bXDF.getBXDFType().matches(bXDFType)) {
 				matches++;
 				
@@ -373,7 +373,7 @@ public final class BSDF {
 	}
 	
 	/**
-	 * Returns the {@link BXDF} count by specular or non-specular type.
+	 * Returns the {@link PBRTBXDF} count by specular or non-specular type.
 	 * 
 	 * @param isSpecular {@code true} if, and only if, specular types should be counted, {@code false} otherwise
 	 * @return the {@code BXDF} count by specular or non-specular type
@@ -381,7 +381,7 @@ public final class BSDF {
 	public int countBXDFsBySpecularType(final boolean isSpecular) {
 		int count = 0;
 		
-		for(final BXDF bXDF : this.bXDFs) {
+		for(final PBRTBXDF bXDF : this.bXDFs) {
 			if(bXDF.getBXDFType().isSpecular() == isSpecular) {
 				count++;
 			}
@@ -391,9 +391,9 @@ public final class BSDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code BSDF} instance.
+	 * Returns a hash code for this {@code PBRTBSDF} instance.
 	 * 
-	 * @return a hash code for this {@code BSDF} instance
+	 * @return a hash code for this {@code PBRTBSDF} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -402,9 +402,9 @@ public final class BSDF {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private BXDF doGetMatchingBXDF(final BXDFType bXDFType, final int match) {
+	private PBRTBXDF doGetMatchingBXDF(final BXDFType bXDFType, final int match) {
 		for(int i = 0, j = match; i < this.bXDFs.size(); i++) {
-			final BXDF bXDF = this.bXDFs.get(i);
+			final PBRTBXDF bXDF = this.bXDFs.get(i);
 			
 			if(bXDF.getBXDFType().matches(bXDFType) && j-- == 0) {
 				return bXDF;
@@ -425,7 +425,7 @@ public final class BSDF {
 	private int doComputeMatches(final BXDFType bXDFType) {
 		int matches = 0;
 		
-		for(final BXDF bXDF : this.bXDFs) {
+		for(final PBRTBXDF bXDF : this.bXDFs) {
 			if(bXDF.getBXDFType().matches(bXDFType)) {
 				matches++;
 			}

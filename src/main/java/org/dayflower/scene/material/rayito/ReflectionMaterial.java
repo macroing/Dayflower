@@ -18,19 +18,18 @@
  */
 package org.dayflower.scene.material.rayito;
 
-import static org.dayflower.util.Floats.equal;
-
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
-import org.dayflower.scene.bxdf.rayito.BXDF;
-import org.dayflower.scene.bxdf.rayito.ReflectionBRDF;
+import org.dayflower.scene.bxdf.rayito.RayitoBXDF;
+import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
+import org.dayflower.scene.bxdf.rayito.SpecularRayitoBRDF;
 import org.dayflower.scene.texture.ConstantTexture;
 
 /**
- * A {@code ReflectionMaterial} is an implementation of {@link RayitoMaterial} that uses a {@link ReflectionBRDF} instance.
+ * A {@code ReflectionMaterial} is an implementation of {@link RayitoMaterial} that uses a {@link SpecularRayitoBRDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
@@ -45,10 +44,9 @@ public final class ReflectionMaterial implements RayitoMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final BXDF selectedBXDF;
+	private final RayitoBXDF selectedBXDF;
 	private final Texture textureAlbedo;
 	private final Texture textureEmittance;
-	private final float selectedBXDFWeight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -134,10 +132,9 @@ public final class ReflectionMaterial implements RayitoMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
 	public ReflectionMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
-		this.selectedBXDF = new ReflectionBRDF();
+		this.selectedBXDF = new SpecularRayitoBRDF();
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
-		this.selectedBXDFWeight = 1.0F;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,17 +154,17 @@ public final class ReflectionMaterial implements RayitoMaterial {
 	}
 	
 	/**
-	 * Returns a {@link MaterialResult} instance with information about this {@code ReflectionMaterial} instance at {@code intersection}.
+	 * Returns a {@link RayitoBSDF} instance with information about this {@code ReflectionMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code MaterialResult} instance with information about this {@code ReflectionMaterial} instance at {@code intersection}
+	 * @return a {@code RayitoBSDF} instance with information about this {@code ReflectionMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
-	public MaterialResult evaluate(final Intersection intersection) {
-		return new MaterialResult(this.textureAlbedo.getColorRGB(intersection), this.selectedBXDF, this.selectedBXDFWeight);
+	public RayitoBSDF evaluate(final Intersection intersection) {
+		return new RayitoBSDF(this.textureAlbedo.getColorRGB(intersection), this.selectedBXDF);
 	}
 	
 	/**
@@ -210,8 +207,6 @@ public final class ReflectionMaterial implements RayitoMaterial {
 			return false;
 		} else if(!Objects.equals(this.textureEmittance, ReflectionMaterial.class.cast(object).textureEmittance)) {
 			return false;
-		} else if(!equal(this.selectedBXDFWeight, ReflectionMaterial.class.cast(object).selectedBXDFWeight)) {
-			return false;
 		} else {
 			return true;
 		}
@@ -224,6 +219,6 @@ public final class ReflectionMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.selectedBXDF, this.textureAlbedo, this.textureEmittance, Float.valueOf(this.selectedBXDFWeight));
+		return Objects.hash(this.selectedBXDF, this.textureAlbedo, this.textureEmittance);
 	}
 }

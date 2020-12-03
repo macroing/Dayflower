@@ -21,6 +21,7 @@ package org.dayflower.scene.material.rayito;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
+import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 
 /**
  * A {@code RayitoMaterial} represents a material.
@@ -43,13 +44,13 @@ public interface RayitoMaterial extends Material {
 	Color3F emittance(final Intersection intersection);
 	
 	/**
-	 * Returns a {@link MaterialResult} instance with information about this {@code RayitoMaterial} instance at {@code intersection}.
+	 * Returns a {@link RayitoBSDF} instance with information about this {@code RayitoMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code MaterialResult} instance with information about this {@code RayitoMaterial} instance at {@code intersection}
+	 * @return a {@code RayitoBSDF} instance with information about this {@code RayitoMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
-	MaterialResult evaluate(final Intersection intersection);
+	RayitoBSDF evaluate(final Intersection intersection);
 }

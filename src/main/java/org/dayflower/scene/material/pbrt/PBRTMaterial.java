@@ -24,7 +24,7 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.BSDF;
+import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 
 /**
  * A {@code PBRTMaterial} represents a material.
@@ -36,7 +36,7 @@ import org.dayflower.scene.bxdf.pbrt.BSDF;
  */
 public interface PBRTMaterial extends Material {
 	/**
-	 * Computes the {@link BSDF} at {@code intersection}.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
 	 * <p>
@@ -48,7 +48,7 @@ public interface PBRTMaterial extends Material {
 	 * @return an optional {@code BSDF} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
-	Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes);
+	Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes);
 	
 	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.

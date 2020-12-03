@@ -31,40 +31,40 @@ import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Vector3F;
 
 /**
- * A {@code RefractionBTDF} is an implementation of {@link BXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) with refraction.
+ * A {@code SpecularRayitoBTDF} is an implementation of {@link RayitoBXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for specular transmission.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class RefractionBTDF implements BXDF {
+public final class SpecularRayitoBTDF implements RayitoBXDF {
 	private final float etaA;
 	private final float etaB;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code RefractionBTDF} instance.
+	 * Constructs a new {@code SpecularRayitoBTDF} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RefractionBTDF(1.0F, 1.5F);
+	 * new SpecularRayitoBTDF(1.0F, 1.5F);
 	 * }
 	 * </pre>
 	 */
-	public RefractionBTDF() {
+	public SpecularRayitoBTDF() {
 		this(1.0F, 1.5F);
 	}
 	
 	/**
-	 * Constructs a new {@code RefractionBTDF} instance.
+	 * Constructs a new {@code SpecularRayitoBTDF} instance.
 	 * 
 	 * @param etaA the index of refraction denoted by {@code A}
 	 * @param etaB the index of refraction denoted by {@code B}
 	 */
-	public RefractionBTDF(final float etaA, final float etaB) {
+	public SpecularRayitoBTDF(final float etaA, final float etaB) {
 		this.etaA = etaA;
 		this.etaB = etaB;
 	}
@@ -74,32 +74,32 @@ public final class RefractionBTDF implements BXDF {
 	/**
 	 * Evaluates the solid angle for {@code o}, {@code n} and {@code i}.
 	 * <p>
-	 * Returns a {@link BXDFResult} with the result of the operation.
+	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * refractionBTDF.evaluateSolidAngle(o, n, i, false);
+	 * specularRayitoBTDF.evaluateSolidAngle(o, n, i, false);
 	 * }
 	 * </pre>
 	 * 
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return a {@code BXDFResult} with the result of the operation
+	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public BXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
+	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
 		return evaluateSolidAngle(o, n, i, false);
 	}
 	
 	/**
 	 * Evaluates the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
 	 * <p>
-	 * Returns a {@link BXDFResult} with the result of the operation.
+	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -107,25 +107,25 @@ public final class RefractionBTDF implements BXDF {
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
 	 * @param isProjected {@code true} if, and only if, the projected solid angle should be evaluated, {@code false} otherwise
-	 * @return a {@code BXDFResult} with the result of the operation
+	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public BXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
-		return new BXDFResult(o, n, i, 0.0F, 0.0F);
+	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
+		return new RayitoBXDFResult(o, n, i, 0.0F, 0.0F);
 	}
 	
 	/**
 	 * Samples the solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
 	 * <p>
-	 * Returns a {@link BXDFResult} with the result of the operation.
+	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * refractionBTDF.sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
+	 * specularRayitoBTDF.sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
 	 * }
 	 * </pre>
 	 * 
@@ -134,18 +134,18 @@ public final class RefractionBTDF implements BXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @return a {@code BXDFResult} with the result of the operation
+	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public BXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
 		return sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
 	}
 	
 	/**
 	 * Samples the solid angle or the projected solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
 	 * <p>
-	 * Returns a {@link BXDFResult} with the result of the operation.
+	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -155,41 +155,41 @@ public final class RefractionBTDF implements BXDF {
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
 	 * @param isProjected {@code true} if, and only if, the projected solid angle should be sampled, {@code false} otherwise
-	 * @return a {@code BXDFResult} with the result of the operation
+	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public BXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
+	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected) {
 		return doSampleSolidAngle3(o, n, isProjected);
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code RefractionBTDF} instance.
+	 * Returns a {@code String} representation of this {@code SpecularRayitoBTDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code RefractionBTDF} instance
+	 * @return a {@code String} representation of this {@code SpecularRayitoBTDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new RefractionBTDF(%+.10f, %+.10f)", Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+		return String.format("new SpecularRayitoBTDF(%+.10f, %+.10f)", Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code RefractionBTDF} instance for equality.
+	 * Compares {@code object} to this {@code SpecularRayitoBTDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code RefractionBTDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SpecularRayitoBTDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code RefractionBTDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code RefractionBTDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code SpecularRayitoBTDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SpecularRayitoBTDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof RefractionBTDF)) {
+		} else if(!(object instanceof SpecularRayitoBTDF)) {
 			return false;
-		} else if(!equal(this.etaA, RefractionBTDF.class.cast(object).etaA)) {
+		} else if(!equal(this.etaA, SpecularRayitoBTDF.class.cast(object).etaA)) {
 			return false;
-		} else if(!equal(this.etaB, RefractionBTDF.class.cast(object).etaB)) {
+		} else if(!equal(this.etaB, SpecularRayitoBTDF.class.cast(object).etaB)) {
 			return false;
 		} else {
 			return true;
@@ -197,11 +197,11 @@ public final class RefractionBTDF implements BXDF {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code RefractionBTDF} instance is using a Dirac distribution, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code SpecularRayitoBTDF} instance is using a Dirac distribution, {@code false} otherwise.
 	 * <p>
 	 * This method always returns {@code true}.
 	 * 
-	 * @return {@code true} if, and only if, this {@code RefractionBTDF} instance is using a Dirac distribution, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code SpecularRayitoBTDF} instance is using a Dirac distribution, {@code false} otherwise
 	 */
 	@Override
 	public boolean isDiracDistribution() {
@@ -216,7 +216,7 @@ public final class RefractionBTDF implements BXDF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * refractionBTDF.probabilityDensityFunctionSolidAngle(o, n, i, false);
+	 * specularRayitoBTDF.probabilityDensityFunctionSolidAngle(o, n, i, false);
 	 * }
 	 * </pre>
 	 * 
@@ -253,9 +253,9 @@ public final class RefractionBTDF implements BXDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code RefractionBTDF} instance.
+	 * Returns a hash code for this {@code SpecularRayitoBTDF} instance.
 	 * 
-	 * @return a hash code for this {@code RefractionBTDF} instance
+	 * @return a hash code for this {@code SpecularRayitoBTDF} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -265,7 +265,7 @@ public final class RefractionBTDF implements BXDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("unused")
-	private BXDFResult doSampleSolidAngle1(final Vector3F o, final Vector3F n, final boolean isProjected) {
+	private RayitoBXDFResult doSampleSolidAngle1(final Vector3F o, final Vector3F n, final boolean isProjected) {
 		final Vector3F d = Vector3F.negate(o);
 		
 		final float nDotD = Vector3F.dotProduct(n, d);
@@ -287,22 +287,22 @@ public final class RefractionBTDF implements BXDF {
 		final float k = 1.0F - eta * eta * (1.0F - cosThetaAbs * cosThetaAbs);
 		
 		if(k < 0.0F) {
-			return new BXDFResult(o, n, new Vector3F(), 0.0F, 0.0F);
+			return new RayitoBXDFResult(o, n, new Vector3F(), 0.0F, 0.0F);
 		}
 		
 		final Vector3F i = Vector3F.normalize(Vector3F.add(Vector3F.multiply(d, eta), Vector3F.multiply(nCorrectlyOriented, eta * cosTheta - sqrt(k))));
 		
 		if(isProjected) {
-			return new BXDFResult(o, n, Vector3F.negate(i), 1.0F, 1.0F);
+			return new RayitoBXDFResult(o, n, Vector3F.negate(i), 1.0F, 1.0F);
 		}
 		
 		final float nDotI = Vector3F.dotProduct(n, i);
 		
-		return new BXDFResult(o, n, Vector3F.negate(i), abs(nDotI), 1.0F);
+		return new RayitoBXDFResult(o, n, Vector3F.negate(i), abs(nDotI), 1.0F);
 	}
 	
 	@SuppressWarnings("unused")
-	private BXDFResult doSampleSolidAngle2(final Vector3F o, final Vector3F n, final boolean isProjected) {
+	private RayitoBXDFResult doSampleSolidAngle2(final Vector3F o, final Vector3F n, final boolean isProjected) {
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		final Vector3F d = Vector3F.negate(o);
@@ -320,15 +320,15 @@ public final class RefractionBTDF implements BXDF {
 		final float k = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 		
 		if(k < 0.0F) {
-			return isProjected ? new BXDFResult(o, n, reflection, 1.0F, 1.0F) : new BXDFResult(o, n, reflection, abs(Vector3F.dotProduct(n, reflection)), 1.0F);
+			return isProjected ? new RayitoBXDFResult(o, n, reflection, 1.0F, 1.0F) : new RayitoBXDFResult(o, n, reflection, abs(Vector3F.dotProduct(n, reflection)), 1.0F);
 		}
 		
 		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (eta * cosTheta + sqrt(k)))));
 		
-		return isProjected ? new BXDFResult(o, n, Vector3F.negate(transmission), 1.0F, 1.0F) : new BXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), 1.0F);
+		return isProjected ? new RayitoBXDFResult(o, n, Vector3F.negate(transmission), 1.0F, 1.0F) : new RayitoBXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), 1.0F);
 	}
 	
-	private BXDFResult doSampleSolidAngle3(final Vector3F o, final Vector3F n, final boolean isProjected) {
+	private RayitoBXDFResult doSampleSolidAngle3(final Vector3F o, final Vector3F n, final boolean isProjected) {
 		final Vector3F d = Vector3F.negate(o);
 		final Vector3F reflection = Vector3F.reflection(d, n, true);
 		final Vector3F nCorrectlyOriented = Vector3F.dotProduct(n, d) < 0.0F ? n : Vector3F.negate(n);
@@ -343,7 +343,7 @@ public final class RefractionBTDF implements BXDF {
 		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 		
 		if(cosTheta2Squared < 0.0F) {
-			return isProjected ? new BXDFResult(o, n, Vector3F.negate(reflection), 1.0F, 1.0F) : new BXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), 1.0F);
+			return isProjected ? new RayitoBXDFResult(o, n, Vector3F.negate(reflection), 1.0F, 1.0F) : new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), 1.0F);
 		}
 		
 		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
@@ -359,9 +359,9 @@ public final class RefractionBTDF implements BXDF {
 		final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 		
 		if(random() < probabilityRussianRoulette) {
-			return isProjected ? new BXDFResult(o, n, Vector3F.negate(reflection), 1.0F, probabilityRussianRouletteReflection) : new BXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), probabilityRussianRouletteReflection);
+			return isProjected ? new RayitoBXDFResult(o, n, Vector3F.negate(reflection), 1.0F, probabilityRussianRouletteReflection) : new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), probabilityRussianRouletteReflection);
 		}
 		
-		return isProjected ? new BXDFResult(o, n, Vector3F.negate(transmission), 1.0F, probabilityRussianRouletteTransmission) : new BXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), probabilityRussianRouletteTransmission);
+		return isProjected ? new RayitoBXDFResult(o, n, Vector3F.negate(transmission), 1.0F, probabilityRussianRouletteTransmission) : new RayitoBXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), probabilityRussianRouletteTransmission);
 	}
 }

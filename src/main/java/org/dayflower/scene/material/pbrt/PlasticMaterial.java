@@ -30,10 +30,10 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.MicrofacetDistribution;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.BSDF;
-import org.dayflower.scene.bxdf.pbrt.BXDF;
-import org.dayflower.scene.bxdf.pbrt.LambertianBRDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowBRDF;
+import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
+import org.dayflower.scene.bxdf.pbrt.PBRTBXDF;
+import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
+import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -96,7 +96,7 @@ public final class PlasticMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Computes the {@link BSDF} at {@code intersection}.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
 	 * <p>
@@ -109,17 +109,17 @@ public final class PlasticMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final List<BXDF> bXDFs = new ArrayList<>();
+		final List<PBRTBXDF> bXDFs = new ArrayList<>();
 		
 		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
 		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorDiffuse.isBlack()) {
-			bXDFs.add(new LambertianBRDF(colorDiffuse));
+			bXDFs.add(new LambertianPBRTBRDF(colorDiffuse));
 		}
 		
 		if(!colorSpecular.isBlack()) {
@@ -131,11 +131,11 @@ public final class PlasticMaterial implements PBRTMaterial {
 			
 			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughness, roughness);
 			
-			bXDFs.add(new TorranceSparrowBRDF(colorSpecular, fresnel, microfacetDistribution));
+			bXDFs.add(new TorranceSparrowPBRTBRDF(colorSpecular, fresnel, microfacetDistribution));
 		}
 		
 		if(bXDFs.size() > 0) {
-			return Optional.of(new BSDF(intersection, bXDFs));
+			return Optional.of(new PBRTBSDF(intersection, bXDFs));
 		}
 		
 		return Optional.empty();

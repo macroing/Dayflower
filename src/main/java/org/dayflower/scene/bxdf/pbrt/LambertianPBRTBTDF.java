@@ -18,17 +18,12 @@
  */
 package org.dayflower.scene.bxdf.pbrt;
 
-import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_RECIPROCAL;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.random;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
@@ -37,37 +32,30 @@ import org.dayflower.scene.BXDFType;
 import org.dayflower.util.ParameterArguments;
 
 /**
- * An {@code OrenNayarBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Oren-Nayar.
+ * A {@code LambertianPBRTBTDF} is an implementation of {@link PBRTBXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for Lambertian transmission.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class OrenNayarBRDF extends BXDF {
-	private final AngleF angle;
-	private final Color3F reflectanceScale;
-	private final float a;
-	private final float b;
+public final class LambertianPBRTBTDF extends PBRTBXDF {
+	private final Color3F transmittanceScale;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code OrenNayarBRDF} instance.
+	 * Constructs a new {@code LambertianPBRTBTDF} instance.
 	 * <p>
-	 * If either {@code angle} or {@code reflectanceScale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code transmittanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param angle an {@link AngleF} instance
-	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
-	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code reflectanceScale} are {@code null}
+	 * @param transmittanceScale a {@link Color3F} instance that represents the transmittance scale
+	 * @throws NullPointerException thrown if, and only if, {@code transmittanceScale} is {@code null}
 	 */
-	public OrenNayarBRDF(final AngleF angle, final Color3F reflectanceScale) {
-		super(BXDFType.DIFFUSE_REFLECTION);
+	public LambertianPBRTBTDF(final Color3F transmittanceScale) {
+		super(BXDFType.DIFFUSE_TRANSMISSION);
 		
-		this.angle = Objects.requireNonNull(angle, "angle == null");
-		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
-		this.a = 1.0F - ((angle.getRadians() * angle.getRadians()) / (2.0F * ((angle.getRadians() * angle.getRadians()) + 0.33F)));
-		this.b = 0.45F * (angle.getRadians() * angle.getRadians()) / ((angle.getRadians() * angle.getRadians()) + 0.09F);
+		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,38 +76,12 @@ public final class OrenNayarBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
-//		PBRT: Implementation of BxDF.
+//		PBRT: Implementation of LambertianTransmission.
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
-		Color3F reflectance = Color3F.BLACK;
-		
-		for(int i = 0; i < samplesA.size(); i++) {
-			final Point2F sampleA = samplesA.get(i);
-			final Point2F sampleB = i < samplesB.size() ? samplesB.get(i) : new Point2F(random(), random());
-			
-			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
-			
-			final Optional<BXDFResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
-			
-			if(optionalBXDFDistributionFunctionResult.isPresent()) {
-				final BXDFResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
-				
-				final float probabilityDensityFunctionValueIncoming = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
-				final float probabilityDensityFunctionValueOutgoing = SampleGeneratorF.hemisphereUniformDistributionProbabilityDensityFunction();
-				
-				if(probabilityDensityFunctionValueIncoming > 0.0F) {
-					final Color3F result = bXDFDistributionFunctionResult.getResult();
-					
-					final Vector3F incoming = bXDFDistributionFunctionResult.getIncoming();
-					
-					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(Color3F.multiply(result, incoming.cosThetaAbs()), outgoing.cosThetaAbs()), probabilityDensityFunctionValueOutgoing * probabilityDensityFunctionValueIncoming));
-				}
-			}
-		}
-		
-		return Color3F.divide(reflectance, PI * samplesA.size());
+		return this.transmittanceScale;
 	}
 	
 	/**
@@ -138,35 +100,13 @@ public final class OrenNayarBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
-//		PBRT: Implementation of BxDF.
+//		PBRT: Implementation of LambertianTransmission.
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		
-		Color3F reflectance = Color3F.BLACK;
-		
-		for(int i = 0; i < samplesA.size(); i++) {
-			final Point2F sampleA = samplesA.get(i);
-			
-			final Optional<BXDFResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
-			
-			if(optionalBXDFDistributionFunctionResult.isPresent()) {
-				final BXDFResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
-				
-				final float probabilityDensityFunctionValue = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
-				
-				if(probabilityDensityFunctionValue > 0.0F) {
-					final Color3F result = bXDFDistributionFunctionResult.getResult();
-					
-					final Vector3F incoming = bXDFDistributionFunctionResult.getIncoming();
-					
-					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(result, incoming.cosThetaAbs()), probabilityDensityFunctionValue));
-				}
-			}
-		}
-		
-		return Color3F.divide(reflectance, samplesA.size());
+		return this.transmittanceScale;
 	}
 	
 	/**
@@ -185,33 +125,18 @@ public final class OrenNayarBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
-//		PBRT: Implementation of OrenNayar.
+//		PBRT: Implementation of LambertianTransmission.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
-		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
-		
-		final float sinThetaIncoming = incoming.sinTheta();
-		final float sinThetaOutgoing = outgoing.sinTheta();
-		
-		final float maxCos = sinThetaIncoming > 1.0e-4F && sinThetaOutgoing > 1.0e-4F ? max(0.0F, incoming.cosPhi() * outgoing.cosPhi() + incoming.sinPhi() * outgoing.sinPhi()) : 0.0F;
-		
-		final float sinA = cosThetaAbsIncoming > cosThetaAbsOutgoing ? sinThetaOutgoing : sinThetaIncoming;
-		final float tanB = cosThetaAbsIncoming > cosThetaAbsOutgoing ? sinThetaIncoming / cosThetaAbsIncoming : sinThetaOutgoing / cosThetaAbsOutgoing;
-		
-		final float a = this.a;
-		final float b = this.b;
-		final float c = (a + b * maxCos * sinA * tanB);
-		
-		return Color3F.multiply(Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL), c);
+		return Color3F.multiply(this.transmittanceScale, PI_RECIPROCAL);
 	}
 	
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link BXDFResult} with the result of the sampling.
+	 * Returns an optional {@link PBRTBXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -219,18 +144,18 @@ public final class OrenNayarBRDF extends BXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code BXDFResult} with the result of the sampling
+	 * @return an optional {@code PBRTBXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
-//		PBRT: Implementation of BxDF.
+	public Optional<PBRTBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+//		PBRT: Implementation of LambertianTransmission.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
 		final Vector3F incoming = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
-		final Vector3F incomingCorrectlyOriented = outgoing.getZ() < 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
+		final Vector3F incomingCorrectlyOriented = outgoing.getZ() > 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
 		
 		final BXDFType bXDFType = getBXDFType();
 		
@@ -238,40 +163,34 @@ public final class OrenNayarBRDF extends BXDF {
 		
 		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, incomingCorrectlyOriented);
 		
-		return Optional.of(new BXDFResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new PBRTBXDFResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code OrenNayarBRDF} instance.
+	 * Returns a {@code String} representation of this {@code LambertianPBRTBTDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code OrenNayarBRDF} instance
+	 * @return a {@code String} representation of this {@code LambertianPBRTBTDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new OrenNayarBRDF(%s, %s)", this.angle, this.reflectanceScale);
+		return String.format("new LambertianPBRTBTDF(%s)", this.transmittanceScale);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code OrenNayarBRDF} instance for equality.
+	 * Compares {@code object} to this {@code LambertianPBRTBTDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianPBRTBTDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code OrenNayarBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LambertianPBRTBTDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianPBRTBTDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof OrenNayarBRDF)) {
+		} else if(!(object instanceof LambertianPBRTBTDF)) {
 			return false;
-		} else if(!Objects.equals(this.angle, OrenNayarBRDF.class.cast(object).angle)) {
-			return false;
-		} else if(!Objects.equals(this.reflectanceScale, OrenNayarBRDF.class.cast(object).reflectanceScale)) {
-			return false;
-		} else if(!equal(this.a, OrenNayarBRDF.class.cast(object).a)) {
-			return false;
-		} else if(!equal(this.b, OrenNayarBRDF.class.cast(object).b)) {
+		} else if(!Objects.equals(this.transmittanceScale, LambertianPBRTBTDF.class.cast(object).transmittanceScale)) {
 			return false;
 		} else {
 			return true;
@@ -294,21 +213,21 @@ public final class OrenNayarBRDF extends BXDF {
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {
-//		PBRT: Implementation of BxDF.
+//		PBRT: Implementation of LambertianTransmission.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Vector3F.sameHemisphere(outgoing, incoming) ? incoming.cosThetaAbs() * PI_RECIPROCAL : 0.0F;
+		return Vector3F.sameHemisphere(outgoing, incoming) ? 0.0F : incoming.cosThetaAbs() * PI_RECIPROCAL;
 	}
 	
 	/**
-	 * Returns a hash code for this {@code OrenNayarBRDF} instance.
+	 * Returns a hash code for this {@code LambertianPBRTBTDF} instance.
 	 * 
-	 * @return a hash code for this {@code OrenNayarBRDF} instance
+	 * @return a hash code for this {@code LambertianPBRTBTDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.angle, this.reflectanceScale, Float.valueOf(this.a), Float.valueOf(this.b));
+		return Objects.hash(this.transmittanceScale);
 	}
 }

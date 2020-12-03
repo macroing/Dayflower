@@ -18,50 +18,47 @@
  */
 package org.dayflower.scene.bxdf.pbrt;
 
+import static org.dayflower.util.Floats.PI_RECIPROCAL;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.util.ParameterArguments;
 
 /**
- * A {@code BXDF} represents a BRDF (Bidirectional Reflectance Distribution Function) or a BTDF (Bidirectional Transmittance Distribution Function).
+ * A {@code LambertianPBRTBRDF} is an implementation of {@link PBRTBXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Lambertian reflection.
  * <p>
- * All official implementations of this class are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
+ * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class BXDF {
-	private final BXDFType bXDFType;
+public final class LambertianPBRTBRDF extends PBRTBXDF {
+	private final Color3F reflectanceScale;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code BXDF} instance.
+	 * Constructs a new {@code LambertianPBRTBRDF} instance.
 	 * <p>
-	 * If {@code bXDFType} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param bXDFType a {@link BXDFType} that contains information about the behaviour for this {@code BXDF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code bXDFType} is {@code null}
+	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	protected BXDF(final BXDFType bXDFType) {
-		this.bXDFType = Objects.requireNonNull(bXDFType, "bXDFType == null");
+	public LambertianPBRTBRDF(final Color3F reflectanceScale) {
+		super(BXDFType.DIFFUSE_REFLECTION);
+		
+		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@link BXDFType} that contains information about the behaviour for this {@code BXDF} instance.
-	 * 
-	 * @return a {@code BXDFType} that contains information about the behaviour for this {@code BXDF} instance
-	 */
-	public final BXDFType getBXDFType() {
-		return this.bXDFType;
-	}
 	
 	/**
 	 * Computes the reflectance function.
@@ -77,7 +74,15 @@ public abstract class BXDF {
 	 * @return a {@code Color3F} instance with the result of the computation
 	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
-	public abstract Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB);
+	@Override
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
+//		PBRT: Implementation of LambertianReflection.
+		
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesB, "samplesB");
+		
+		return this.reflectanceScale;
+	}
 	
 	/**
 	 * Computes the reflectance function.
@@ -93,7 +98,16 @@ public abstract class BXDF {
 	 * @return a {@code Color3F} instance with the result of the computation
 	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}
 	 */
-	public abstract Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing);
+	@Override
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
+//		PBRT: Implementation of LambertianReflection.
+		
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
+		
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		
+		return this.reflectanceScale;
+	}
 	
 	/**
 	 * Evaluates the distribution function.
@@ -109,12 +123,20 @@ public abstract class BXDF {
 	 * @return a {@code Color3F} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
-	public abstract Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming);
+	@Override
+	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+//		PBRT: Implementation of LambertianReflection.
+		
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
+		return Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL);
+	}
 	
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link BXDFResult} with the result of the sampling.
+	 * Returns an optional {@link PBRTBXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -122,10 +144,58 @@ public abstract class BXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code BXDFResult} with the result of the sampling
+	 * @return an optional {@code PBRTBXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
-	public abstract Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample);
+	@Override
+	public Optional<PBRTBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+//		PBRT: Implementation of BxDF.
+		
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(sample, "sample == null");
+		
+		final Vector3F incoming = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incomingCorrectlyOriented = outgoing.getZ() < 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
+		
+		final BXDFType bXDFType = getBXDFType();
+		
+		final Color3F result = evaluateDistributionFunction(outgoing, incomingCorrectlyOriented);
+		
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, incomingCorrectlyOriented);
+		
+		return Optional.of(new PBRTBXDFResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
+	}
+	
+	/**
+	 * Returns a {@code String} representation of this {@code LambertianPBRTBRDF} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code LambertianPBRTBRDF} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new LambertianPBRTBRDF(%s)", this.reflectanceScale);
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code LambertianPBRTBRDF} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianPBRTBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code LambertianPBRTBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianPBRTBRDF}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof LambertianPBRTBRDF)) {
+			return false;
+		} else if(!Objects.equals(this.reflectanceScale, LambertianPBRTBRDF.class.cast(object).reflectanceScale)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
 	/**
 	 * Evaluates the probability density function (PDF).
@@ -141,5 +211,23 @@ public abstract class BXDF {
 	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
-	public abstract float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming);
+	@Override
+	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {
+//		PBRT: Implementation of BxDF.
+		
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
+		return Vector3F.sameHemisphere(outgoing, incoming) ? incoming.cosThetaAbs() * PI_RECIPROCAL : 0.0F;
+	}
+	
+	/**
+	 * Returns a hash code for this {@code LambertianPBRTBRDF} instance.
+	 * 
+	 * @return a hash code for this {@code LambertianPBRTBRDF} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.reflectanceScale);
+	}
 }

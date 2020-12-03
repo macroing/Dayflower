@@ -33,16 +33,16 @@ import org.dayflower.scene.fresnel.ConstantFresnel;
 import org.dayflower.scene.texture.ConstantTexture;
 
 /**
- * A {@code MirrorMaterial} is an implementation of {@link PBRTMaterial} that represents a mirror.
+ * A {@code MirrorPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents a mirror.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is immutable and thread-safe as long as its {@link Texture} instance is.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MirrorMaterial implements PBRTMaterial {
+public final class MirrorPBRTMaterial implements PBRTMaterial {
 	/**
-	 * The name of this {@code MirrorMaterial} class.
+	 * The name of this {@code MirrorPBRTMaterial} class.
 	 */
 	public static final String NAME = "PBRT - Mirror";
 	
@@ -53,59 +53,32 @@ public final class MirrorMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code MirrorMaterial} instance.
+	 * Constructs a new {@code MirrorPBRTMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorMaterial(new ConstantTexture(new Color3F(0.9F)));
+	 * new MirrorPBRTMaterial(new ConstantTexture(new Color3F(0.9F)));
 	 * }
 	 * </pre>
 	 */
-	public MirrorMaterial() {
+	public MirrorPBRTMaterial() {
 		this(new ConstantTexture(new Color3F(0.9F)));
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorMaterial} instance.
+	 * Constructs a new {@code MirrorPBRTMaterial} instance.
 	 * <p>
 	 * If {@code textureReflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param textureReflectanceScale a {@link Texture} instance used for the reflectance scale
 	 * @throws NullPointerException thrown if, and only if, {@code textureReflectanceScale} is {@code null}
 	 */
-	public MirrorMaterial(final Texture textureReflectanceScale) {
+	public MirrorPBRTMaterial(final Texture textureReflectanceScale) {
 		this.textureReflectanceScale = Objects.requireNonNull(textureReflectanceScale, "textureReflectanceScale == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code BSDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		final Color3F colorReflectanceScale = Color3F.saturate(this.textureReflectanceScale.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
-		
-		if(!colorReflectanceScale.isBlack()) {
-			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new SpecularPBRTBRDF(colorReflectanceScale, new ConstantFresnel()))));
-		}
-		
-		return Optional.empty();
-	}
 	
 	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
@@ -129,9 +102,36 @@ public final class MirrorMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code MirrorMaterial} instance.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code PBRTBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @return a {@code String} with the name of this {@code MirrorMaterial} instance
+	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code PBRTBSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		final Color3F colorReflectanceScale = Color3F.saturate(this.textureReflectanceScale.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
+		
+		if(!colorReflectanceScale.isBlack()) {
+			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new SpecularPBRTBRDF(colorReflectanceScale, new ConstantFresnel()))));
+		}
+		
+		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code MirrorPBRTMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code MirrorPBRTMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -139,30 +139,30 @@ public final class MirrorMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code MirrorMaterial} instance.
+	 * Returns a {@code String} representation of this {@code MirrorPBRTMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code MirrorMaterial} instance
+	 * @return a {@code String} representation of this {@code MirrorPBRTMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MirrorMaterial(%s)", this.textureReflectanceScale);
+		return String.format("new MirrorPBRTMaterial(%s)", this.textureReflectanceScale);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code MirrorMaterial} instance for equality.
+	 * Compares {@code object} to this {@code MirrorPBRTMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MirrorMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MirrorPBRTMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code MirrorMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MirrorMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code MirrorPBRTMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MirrorPBRTMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof MirrorMaterial)) {
+		} else if(!(object instanceof MirrorPBRTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureReflectanceScale, MirrorMaterial.class.cast(object).textureReflectanceScale)) {
+		} else if(!Objects.equals(this.textureReflectanceScale, MirrorPBRTMaterial.class.cast(object).textureReflectanceScale)) {
 			return false;
 		} else {
 			return true;
@@ -170,9 +170,9 @@ public final class MirrorMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code MirrorMaterial} instance.
+	 * Returns a hash code for this {@code MirrorPBRTMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code MirrorMaterial} instance
+	 * @return a hash code for this {@code MirrorPBRTMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

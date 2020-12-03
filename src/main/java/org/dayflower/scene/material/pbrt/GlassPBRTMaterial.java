@@ -45,16 +45,16 @@ import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.ConstantTexture;
 
 /**
- * A {@code GlassMaterial} is an implementation of {@link PBRTMaterial} that represents glass.
+ * A {@code GlassPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents glass.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class GlassMaterial implements PBRTMaterial {
+public final class GlassPBRTMaterial implements PBRTMaterial {
 	/**
-	 * The name of this {@code GlassMaterial} class.
+	 * The name of this {@code GlassPBRTMaterial} class.
 	 */
 	public static final String NAME = "PBRT - Glass";
 	
@@ -70,21 +70,21 @@ public final class GlassMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code GlassMaterial} instance.
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassMaterial(ConstantTexture.GRAY_1_50, ConstantTexture.WHITE, ConstantTexture.WHITE, ConstantTexture.BLACK, ConstantTexture.BLACK, false);
+	 * new GlassPBRTMaterial(ConstantTexture.GRAY_1_50, ConstantTexture.WHITE, ConstantTexture.WHITE, ConstantTexture.BLACK, ConstantTexture.BLACK, false);
 	 * }
 	 * </pre>
 	 */
-	public GlassMaterial() {
+	public GlassPBRTMaterial() {
 		this(ConstantTexture.GRAY_1_50, ConstantTexture.WHITE, ConstantTexture.WHITE, ConstantTexture.BLACK, ConstantTexture.BLACK, false);
 	}
 	
 	/**
-	 * Constructs a new {@code GlassMaterial} instance.
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
 	 * <p>
 	 * If either {@code textureEta}, {@code textureKReflection}, {@code textureKTransmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -96,7 +96,7 @@ public final class GlassMaterial implements PBRTMaterial {
 	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code textureEta}, {@code textureKReflection}, {@code textureKTransmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
 	 */
-	public GlassMaterial(final Texture textureEta, final Texture textureKReflection, final Texture textureKTransmission, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
+	public GlassPBRTMaterial(final Texture textureEta, final Texture textureKReflection, final Texture textureKTransmission, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
 		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
 		this.textureKReflection = Objects.requireNonNull(textureKReflection, "textureKReflection == null");
 		this.textureKTransmission = Objects.requireNonNull(textureKTransmission, "textureKTransmission == null");
@@ -108,16 +108,37 @@ public final class GlassMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
+	 * Computes the {@link BSSRDF} at {@code intersection}.
 	 * <p>
-	 * Returns an optional {@code BSDF} instance.
+	 * Returns an optional {@code BSSRDF} instance.
 	 * <p>
 	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
 	 * @param transportMode the {@link TransportMode} to use
 	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSDF} instance
+	 * @return an optional {@code BSSRDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		return Optional.empty();
+	}
+	
+	/**
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code PBRTBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code PBRTBSDF} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
@@ -146,63 +167,42 @@ public final class GlassMaterial implements PBRTMaterial {
 		}
 		
 		if(isSpecular) {
-			final List<PBRTBXDF> bXDFs = new ArrayList<>();
+			final List<PBRTBXDF> pBRTBXDFs = new ArrayList<>();
 			
 			if(!colorKReflection.isBlack()) {
 				final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 				
-				bXDFs.add(new SpecularPBRTBRDF(colorKReflection, fresnel));
+				pBRTBXDFs.add(new SpecularPBRTBRDF(colorKReflection, fresnel));
 			}
 			
 			if(!colorKTransmission.isBlack()) {
-				bXDFs.add(new SpecularPBRTBTDF(colorKTransmission, transportMode, 1.0F, eta));
+				pBRTBXDFs.add(new SpecularPBRTBTDF(colorKTransmission, transportMode, 1.0F, eta));
 			}
 			
-			return Optional.of(new PBRTBSDF(intersection, bXDFs, eta));
+			return Optional.of(new PBRTBSDF(intersection, pBRTBXDFs, eta));
 		}
 		
-		final List<PBRTBXDF> bXDFs = new ArrayList<>();
+		final List<PBRTBXDF> pBRTBXDFs = new ArrayList<>();
 		
 		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
 		
 		if(!colorKReflection.isBlack()) {
 			final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 			
-			bXDFs.add(new TorranceSparrowPBRTBRDF(colorKReflection, fresnel, microfacetDistribution));
+			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorKReflection, fresnel, microfacetDistribution));
 		}
 		
 		if(!colorKTransmission.isBlack()) {
-			bXDFs.add(new TorranceSparrowPBRTBTDF(colorKTransmission, microfacetDistribution, transportMode, 1.0F, eta));
+			pBRTBXDFs.add(new TorranceSparrowPBRTBTDF(colorKTransmission, microfacetDistribution, transportMode, 1.0F, eta));
 		}
 		
-		return Optional.of(new PBRTBSDF(intersection, bXDFs, eta));
+		return Optional.of(new PBRTBSDF(intersection, pBRTBXDFs, eta));
 	}
 	
 	/**
-	 * Computes the {@link BSSRDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code BSSRDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns a {@code String} with the name of this {@code GlassPBRTMaterial} instance.
 	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSSRDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		return Optional.empty();
-	}
-	
-	/**
-	 * Returns a {@code String} with the name of this {@code GlassMaterial} instance.
-	 * 
-	 * @return a {@code String} with the name of this {@code GlassMaterial} instance
+	 * @return a {@code String} with the name of this {@code GlassPBRTMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -210,40 +210,40 @@ public final class GlassMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code GlassMaterial} instance.
+	 * Returns a {@code String} representation of this {@code GlassPBRTMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code GlassMaterial} instance
+	 * @return a {@code String} representation of this {@code GlassPBRTMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new GlassMaterial(%s, %s, %s, %s, %s, %s)", this.textureEta, this.textureKReflection, this.textureKTransmission, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+		return String.format("new GlassPBRTMaterial(%s, %s, %s, %s, %s, %s)", this.textureEta, this.textureKReflection, this.textureKTransmission, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code GlassMaterial} instance for equality.
+	 * Compares {@code object} to this {@code GlassPBRTMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code GlassMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code GlassPBRTMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code GlassMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code GlassMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code GlassPBRTMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code GlassPBRTMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof GlassMaterial)) {
+		} else if(!(object instanceof GlassPBRTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureEta, GlassMaterial.class.cast(object).textureEta)) {
+		} else if(!Objects.equals(this.textureEta, GlassPBRTMaterial.class.cast(object).textureEta)) {
 			return false;
-		} else if(!Objects.equals(this.textureKReflection, GlassMaterial.class.cast(object).textureKReflection)) {
+		} else if(!Objects.equals(this.textureKReflection, GlassPBRTMaterial.class.cast(object).textureKReflection)) {
 			return false;
-		} else if(!Objects.equals(this.textureKTransmission, GlassMaterial.class.cast(object).textureKTransmission)) {
+		} else if(!Objects.equals(this.textureKTransmission, GlassPBRTMaterial.class.cast(object).textureKTransmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureRoughnessU, GlassMaterial.class.cast(object).textureRoughnessU)) {
+		} else if(!Objects.equals(this.textureRoughnessU, GlassPBRTMaterial.class.cast(object).textureRoughnessU)) {
 			return false;
-		} else if(!Objects.equals(this.textureRoughnessV, GlassMaterial.class.cast(object).textureRoughnessV)) {
+		} else if(!Objects.equals(this.textureRoughnessV, GlassPBRTMaterial.class.cast(object).textureRoughnessV)) {
 			return false;
-		} else if(this.isRemappingRoughness != GlassMaterial.class.cast(object).isRemappingRoughness) {
+		} else if(this.isRemappingRoughness != GlassPBRTMaterial.class.cast(object).isRemappingRoughness) {
 			return false;
 		} else {
 			return true;
@@ -251,9 +251,9 @@ public final class GlassMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code GlassMaterial} instance.
+	 * Returns a hash code for this {@code GlassPBRTMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code GlassMaterial} instance
+	 * @return a hash code for this {@code GlassPBRTMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

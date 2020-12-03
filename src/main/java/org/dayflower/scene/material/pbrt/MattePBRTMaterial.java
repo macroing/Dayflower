@@ -37,16 +37,16 @@ import org.dayflower.scene.bxdf.pbrt.OrenNayarPBRTBRDF;
 import org.dayflower.scene.texture.ConstantTexture;
 
 /**
- * A {@code MatteMaterial} is an implementation of {@link PBRTMaterial} and is used for matte surfaces.
+ * A {@code MattePBRTMaterial} is an implementation of {@link PBRTMaterial} and is used for matte surfaces.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MatteMaterial implements PBRTMaterial {
+public final class MattePBRTMaterial implements PBRTMaterial {
 	/**
-	 * The name of this {@code MatteMaterial} class.
+	 * The name of this {@code MattePBRTMaterial} class.
 	 */
 	public static final String NAME = "PBRT - Matte";
 	
@@ -58,21 +58,21 @@ public final class MatteMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code MattePBRTMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteMaterial(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY));
+	 * new MattePBRTMaterial(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY));
 	 * }
 	 * </pre>
 	 */
-	public MatteMaterial() {
+	public MattePBRTMaterial() {
 		this(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY));
 	}
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code MattePBRTMaterial} instance.
 	 * <p>
 	 * If either {@code textureAngle} or {@code textureDiffuse} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -80,7 +80,7 @@ public final class MatteMaterial implements PBRTMaterial {
 	 * @param textureDiffuse a {@code Texture} instance used for the diffuse component
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAngle} or {@code textureDiffuse} are {@code null}
 	 */
-	public MatteMaterial(final Texture textureAngle, final Texture textureDiffuse) {
+	public MattePBRTMaterial(final Texture textureAngle, final Texture textureDiffuse) {
 		this.textureAngle = Objects.requireNonNull(textureAngle, "textureAngle == null");
 		this.textureDiffuse = Objects.requireNonNull(textureDiffuse, "textureDiffuse == null");
 	}
@@ -88,16 +88,37 @@ public final class MatteMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
+	 * Computes the {@link BSSRDF} at {@code intersection}.
 	 * <p>
-	 * Returns an optional {@code BSDF} instance.
+	 * Returns an optional {@code BSSRDF} instance.
 	 * <p>
 	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
 	 * @param transportMode the {@link TransportMode} to use
 	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSDF} instance
+	 * @return an optional {@code BSSRDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		return Optional.empty();
+	}
+	
+	/**
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code PBRTBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code PBRTBSDF} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
@@ -122,30 +143,9 @@ public final class MatteMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Computes the {@link BSSRDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code BSSRDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns a {@code String} with the name of this {@code MattePBRTMaterial} instance.
 	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSSRDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		return Optional.empty();
-	}
-	
-	/**
-	 * Returns a {@code String} with the name of this {@code MatteMaterial} instance.
-	 * 
-	 * @return a {@code String} with the name of this {@code MatteMaterial} instance
+	 * @return a {@code String} with the name of this {@code MattePBRTMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -153,32 +153,32 @@ public final class MatteMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code MatteMaterial} instance.
+	 * Returns a {@code String} representation of this {@code MattePBRTMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code MatteMaterial} instance
+	 * @return a {@code String} representation of this {@code MattePBRTMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MatteMaterial(%s, %s)", this.textureAngle, this.textureDiffuse);
+		return String.format("new MattePBRTMaterial(%s, %s)", this.textureAngle, this.textureDiffuse);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code MatteMaterial} instance for equality.
+	 * Compares {@code object} to this {@code MattePBRTMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MatteMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MattePBRTMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code MatteMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MatteMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code MattePBRTMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MattePBRTMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof MatteMaterial)) {
+		} else if(!(object instanceof MattePBRTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureAngle, MatteMaterial.class.cast(object).textureAngle)) {
+		} else if(!Objects.equals(this.textureAngle, MattePBRTMaterial.class.cast(object).textureAngle)) {
 			return false;
-		} else if(!Objects.equals(this.textureDiffuse, MatteMaterial.class.cast(object).textureDiffuse)) {
+		} else if(!Objects.equals(this.textureDiffuse, MattePBRTMaterial.class.cast(object).textureDiffuse)) {
 			return false;
 		} else {
 			return true;
@@ -186,9 +186,9 @@ public final class MatteMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code MatteMaterial} instance.
+	 * Returns a hash code for this {@code MattePBRTMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code MatteMaterial} instance
+	 * @return a hash code for this {@code MattePBRTMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

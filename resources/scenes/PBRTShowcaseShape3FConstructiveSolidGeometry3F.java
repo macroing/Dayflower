@@ -4,8 +4,8 @@ Shape3F shapeB = new Sphere3F(0.5F, new Point3F(0.0F, 0.0F, -1.0F));
 Shape3F shape0 = new Plane3F();
 Shape3F shape1 = new ConstructiveSolidGeometry3F(Operation.DIFFERENCE, shapeA, shapeB);
 
-Material material0 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.GRAY));
-Material material1 = new PlasticMaterial(FunctionTexture.createShapeIdentity(shapeA, new ConstantTexture(new Color3F(1.0F, 0.1F, 0.1F)), shapeB, new ConstantTexture(new Color3F(0.1F, 1.0F, 0.1F))), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+Material material0 = new MattePBRTMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.GRAY));
+Material material1 = new PlasticPBRTMaterial(FunctionTexture.createShapeIdentity(shapeA, new ConstantTexture(new Color3F(1.0F, 0.1F, 0.1F)), shapeB, new ConstantTexture(new Color3F(0.1F, 1.0F, 0.1F))), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
 
 Transform transform0 = new Transform(new Point3F(0.0F, 0.0F, 7.5F));
 Transform transform1 = new Transform(new Point3F(0.0F, 2.0F, 2.0F), Quaternion4F.from(Matrix44F.multiply(Matrix44F.rotateX(AngleF.degrees(0.0F)), Matrix44F.rotateY(AngleF.degrees(60.0F)))));

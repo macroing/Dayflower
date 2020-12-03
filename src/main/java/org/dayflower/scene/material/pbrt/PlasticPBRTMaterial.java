@@ -39,16 +39,16 @@ import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.ConstantTexture;
 
 /**
- * A {@code PlasticMaterial} is an implementation of {@link PBRTMaterial} that represents plastic.
+ * A {@code PlasticPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents plastic.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PlasticMaterial implements PBRTMaterial {
+public final class PlasticPBRTMaterial implements PBRTMaterial {
 	/**
-	 * The name of this {@code PlasticMaterial} class.
+	 * The name of this {@code PlasticPBRTMaterial} class.
 	 */
 	public static final String NAME = "PBRT - Plastic";
 	
@@ -62,21 +62,21 @@ public final class PlasticMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code PlasticMaterial} instance.
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PlasticMaterial(ConstantTexture.GRAY_0_25, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_25, true);
+	 * new PlasticPBRTMaterial(ConstantTexture.GRAY_0_25, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_25, true);
 	 * }
 	 * </pre>
 	 */
-	public PlasticMaterial() {
+	public PlasticPBRTMaterial() {
 		this(ConstantTexture.GRAY_0_25, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_25, true);
 	}
 	
 	/**
-	 * Constructs a new {@code PlasticMaterial} instance.
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
 	 * <p>
 	 * If either {@code textureDiffuse}, {@code textureRoughness} or {@code textureSpecular} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -86,7 +86,7 @@ public final class PlasticMaterial implements PBRTMaterial {
 	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code textureDiffuse}, {@code textureRoughness} or {@code textureSpecular} are {@code null}
 	 */
-	public PlasticMaterial(final Texture textureDiffuse, final Texture textureRoughness, final Texture textureSpecular, final boolean isRemappingRoughness) {
+	public PlasticPBRTMaterial(final Texture textureDiffuse, final Texture textureRoughness, final Texture textureSpecular, final boolean isRemappingRoughness) {
 		this.textureDiffuse = Objects.requireNonNull(textureDiffuse, "textureDiffuse == null");
 		this.textureRoughness = Objects.requireNonNull(textureRoughness, "textureRoughness == null");
 		this.textureSpecular = Objects.requireNonNull(textureSpecular, "textureSpecular == null");
@@ -94,52 +94,6 @@ public final class PlasticMaterial implements PBRTMaterial {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code BSDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		final List<PBRTBXDF> bXDFs = new ArrayList<>();
-		
-		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
-		
-		if(!colorDiffuse.isBlack()) {
-			bXDFs.add(new LambertianPBRTBRDF(colorDiffuse));
-		}
-		
-		if(!colorSpecular.isBlack()) {
-			final Fresnel fresnel = new DielectricFresnel(1.5F, 1.0F);
-			
-			final Color3F colorRoughness = this.textureRoughness.getColorRGB(intersection);
-			
-			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughness.average()) : colorRoughness.average();
-			
-			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughness, roughness);
-			
-			bXDFs.add(new TorranceSparrowPBRTBRDF(colorSpecular, fresnel, microfacetDistribution));
-		}
-		
-		if(bXDFs.size() > 0) {
-			return Optional.of(new PBRTBSDF(intersection, bXDFs));
-		}
-		
-		return Optional.empty();
-	}
 	
 	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
@@ -163,9 +117,55 @@ public final class PlasticMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code PlasticMaterial} instance.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code PBRTBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @return a {@code String} with the name of this {@code PlasticMaterial} instance
+	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code PBRTBSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		final List<PBRTBXDF> pBRTBXDFs = new ArrayList<>();
+		
+		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
+		
+		if(!colorDiffuse.isBlack()) {
+			pBRTBXDFs.add(new LambertianPBRTBRDF(colorDiffuse));
+		}
+		
+		if(!colorSpecular.isBlack()) {
+			final Fresnel fresnel = new DielectricFresnel(1.5F, 1.0F);
+			
+			final Color3F colorRoughness = this.textureRoughness.getColorRGB(intersection);
+			
+			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughness.average()) : colorRoughness.average();
+			
+			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughness, roughness);
+			
+			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorSpecular, fresnel, microfacetDistribution));
+		}
+		
+		if(pBRTBXDFs.size() > 0) {
+			return Optional.of(new PBRTBSDF(intersection, pBRTBXDFs));
+		}
+		
+		return Optional.empty();
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code PlasticPBRTMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code PlasticPBRTMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -173,36 +173,36 @@ public final class PlasticMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code PlasticMaterial} instance.
+	 * Returns a {@code String} representation of this {@code PlasticPBRTMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code PlasticMaterial} instance
+	 * @return a {@code String} representation of this {@code PlasticPBRTMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PlasticMaterial(%s, %s, %s, %s)", this.textureDiffuse, this.textureRoughness, this.textureSpecular, Boolean.toString(this.isRemappingRoughness));
+		return String.format("new PlasticPBRTMaterial(%s, %s, %s, %s)", this.textureDiffuse, this.textureRoughness, this.textureSpecular, Boolean.toString(this.isRemappingRoughness));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code PlasticMaterial} instance for equality.
+	 * Compares {@code object} to this {@code PlasticPBRTMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PlasticMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PlasticPBRTMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code PlasticMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PlasticMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code PlasticPBRTMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PlasticPBRTMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof PlasticMaterial)) {
+		} else if(!(object instanceof PlasticPBRTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureDiffuse, PlasticMaterial.class.cast(object).textureDiffuse)) {
+		} else if(!Objects.equals(this.textureDiffuse, PlasticPBRTMaterial.class.cast(object).textureDiffuse)) {
 			return false;
-		} else if(!Objects.equals(this.textureRoughness, PlasticMaterial.class.cast(object).textureRoughness)) {
+		} else if(!Objects.equals(this.textureRoughness, PlasticPBRTMaterial.class.cast(object).textureRoughness)) {
 			return false;
-		} else if(!Objects.equals(this.textureSpecular, PlasticMaterial.class.cast(object).textureSpecular)) {
+		} else if(!Objects.equals(this.textureSpecular, PlasticPBRTMaterial.class.cast(object).textureSpecular)) {
 			return false;
-		} else if(this.isRemappingRoughness != PlasticMaterial.class.cast(object).isRemappingRoughness) {
+		} else if(this.isRemappingRoughness != PlasticPBRTMaterial.class.cast(object).isRemappingRoughness) {
 			return false;
 		} else {
 			return true;
@@ -210,9 +210,9 @@ public final class PlasticMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code PlasticMaterial} instance.
+	 * Returns a hash code for this {@code PlasticPBRTMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code PlasticMaterial} instance
+	 * @return a hash code for this {@code PlasticPBRTMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

@@ -21,6 +21,7 @@ package org.dayflower.scene.bxdf.rayito;
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BSDF;
 
 /**
  * A {@code RayitoBSDF} represents a BSDF (Bidirectional Scattering Distribution Function).
@@ -30,7 +31,7 @@ import org.dayflower.image.Color3F;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class RayitoBSDF {
+public final class RayitoBSDF implements BSDF {
 	private final Color3F color;
 	private final RayitoBXDF rayitoBXDF;
 	

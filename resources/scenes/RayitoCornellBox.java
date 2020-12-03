@@ -1,12 +1,12 @@
-Material material01 = new LambertianMaterial(Color3F.GRAY);
-Material material02 = new LambertianMaterial(Color3F.GRAY);
-Material material03 = new LambertianMaterial(Color3F.GRAY);
-Material material04 = new LambertianMaterial(Color3F.GRAY);
-Material material05 = new LambertianMaterial(new Color3F(0.25F, 0.25F, 0.75F));
-Material material06 = new LambertianMaterial(new Color3F(0.75F, 0.25F, 0.25F));
-Material material07 = new ReflectionMaterial();
-Material material08 = new RefractionMaterial();
-Material material09 = new LambertianMaterial(Color3F.WHITE, new Color3F(12.0F));
+Material material01 = new MatteRayitoMaterial(Color3F.GRAY);
+Material material02 = new MatteRayitoMaterial(Color3F.GRAY);
+Material material03 = new MatteRayitoMaterial(Color3F.GRAY);
+Material material04 = new MatteRayitoMaterial(Color3F.GRAY);
+Material material05 = new MatteRayitoMaterial(new Color3F(0.25F, 0.25F, 0.75F));
+Material material06 = new MatteRayitoMaterial(new Color3F(0.75F, 0.25F, 0.25F));
+Material material07 = new MirrorRayitoMaterial();
+Material material08 = new GlassRayitoMaterial();
+Material material09 = new MatteRayitoMaterial(Color3F.WHITE, new Color3F(12.0F));
 
 Shape3F shape01 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F,  1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Bottom
 Shape3F shape02 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F, -1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Top

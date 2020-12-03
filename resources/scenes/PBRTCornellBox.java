@@ -1,12 +1,12 @@
-Material material01 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.GRAY));
-Material material02 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.GRAY));
-Material material03 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.GRAY));
-Material material04 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.GRAY));
-Material material05 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(new Color3F(0.25F, 0.25F, 0.75F)));
-Material material06 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(new Color3F(0.75F, 0.25F, 0.25F)));
-Material material07 = new MirrorMaterial();
-Material material08 = new GlassMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), new ConstantTexture(), false);
-Material material09 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.WHITE));
+Material material01 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.GRAY));
+Material material02 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.GRAY));
+Material material03 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.GRAY));
+Material material04 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.GRAY));
+Material material05 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(new Color3F(0.25F, 0.25F, 0.75F)));
+Material material06 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(new Color3F(0.75F, 0.25F, 0.25F)));
+Material material07 = new MirrorPBRTMaterial();
+Material material08 = new GlassPBRTMaterial(new ConstantTexture(new Color3F(1.5F)), new ConstantTexture(Color3F.WHITE), new ConstantTexture(Color3F.WHITE), new ConstantTexture(), new ConstantTexture(), false);
+Material material09 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), new ConstantTexture(Color3F.WHITE));
 
 Shape3F shape01 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F,  1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Bottom
 Shape3F shape02 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  0.0F, -1.0F), new Point3F(1.0F, 0.0F,  0.0F));//Top

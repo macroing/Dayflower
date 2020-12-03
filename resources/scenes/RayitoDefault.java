@@ -1,8 +1,8 @@
-Material material1 = new LambertianMaterial(new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F)));
-Material material2 = new AshikhminShirleyMaterial(new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 0.5F));
-Material material3 = new AshikhminShirleyMaterial(new Color3F(1.0F, 1.0F, 0.1F));
-Material material4 = new AshikhminShirleyMaterial(Color3F.GRAY);
-Material material5 = new RefractionMaterial();
+Material material1 = new MatteRayitoMaterial(new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F)));
+Material material2 = new MetalRayitoMaterial(new BullseyeTexture(new Color3F(1.0F, 0.1F, 0.1F), new Color3F(0.1F, 1.0F, 0.1F), new Point3F(0.0F, 10.0F, 0.0F), 0.5F));
+Material material3 = new MetalRayitoMaterial(new Color3F(1.0F, 1.0F, 0.1F));
+Material material4 = new MetalRayitoMaterial(Color3F.GRAY);
+Material material5 = new GlassRayitoMaterial();
 
 Shape3F shape1 = new Plane3F();
 Shape3F shape2 = new Sphere3F(7.5F);

@@ -63,12 +63,11 @@ import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.PrimitiveLight;
 import org.dayflower.scene.material.pbrt.PBRTMaterial;
-import org.dayflower.scene.material.rayito.AshikhminShirleyMaterial;
-import org.dayflower.scene.material.rayito.LambertianMaterial;
-import org.dayflower.scene.material.rayito.OrenNayarMaterial;
+import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
+import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.RayitoMaterial;
-import org.dayflower.scene.material.rayito.ReflectionMaterial;
-import org.dayflower.scene.material.rayito.RefractionMaterial;
+import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
+import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
 
 final class RenderingAlgorithms {
 	private static final float T_MAXIMUM = Float.MAX_VALUE;
@@ -287,7 +286,13 @@ final class RenderingAlgorithms {
 				
 				final RayitoMaterial rayitoMaterial = RayitoMaterial.class.cast(material);
 				
-				final RayitoBSDF rayitoBSDF = rayitoMaterial.evaluate(intersection);
+				final Optional<RayitoBSDF> optionalRayitoBSDF = rayitoMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
+				
+				if(!optionalRayitoBSDF.isPresent()) {
+					break;
+				}
+				
+				final RayitoBSDF rayitoBSDF = optionalRayitoBSDF.get();
 				
 				final RayitoBXDF rayitoBXDF = rayitoBSDF.getRayitoBXDF();
 				
@@ -387,7 +392,7 @@ final class RenderingAlgorithms {
 				final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
 				final Vector3F surfaceNormalCorrectlyOriented = Vector3F.dotProduct(currentDirection, surfaceNormal) < 0.0F ? surfaceNormal : Vector3F.negate(surfaceNormal);
 				
-				Color3F albedo = material instanceof RayitoMaterial ? RayitoMaterial.class.cast(material).evaluate(intersection).getColor() : Color3F.BLACK;
+				Color3F albedo = material instanceof RayitoMaterial ? RayitoMaterial.class.cast(material).computeBSDF(intersection, TransportMode.RADIANCE, true).map(rayitoBSDF -> rayitoBSDF.getColor()).orElse(Color3F.BLACK) : Color3F.BLACK;
 				Color3F emittance = material instanceof RayitoMaterial ? RayitoMaterial.class.cast(material).emittance(intersection) : Color3F.BLACK;
 				
 				if(currentBounce >= minimumBounceRussianRoulette) {
@@ -402,7 +407,7 @@ final class RenderingAlgorithms {
 				
 				radiance = Color3F.add(radiance, Color3F.multiply(throughput, emittance));
 				
-				if(material instanceof AshikhminShirleyMaterial) {
+				if(material instanceof MetalRayitoMaterial) {
 					final Vector3F s = SampleGeneratorF.sampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
 					final Vector3F w = Vector3F.normalize(Vector3F.reflection(currentDirection, surfaceNormal, true));
 					final Vector3F v = Vector3F.computeV(w);
@@ -418,7 +423,7 @@ final class RenderingAlgorithms {
 					currentRay = surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
-				} else if(material instanceof LambertianMaterial || material instanceof OrenNayarMaterial) {
+				} else if(material instanceof MatteRayitoMaterial) {
 					final Vector3F s = SampleGeneratorF.sampleHemisphereCosineDistribution2();
 					final Vector3F w = surfaceNormalCorrectlyOriented;
 					final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? Vector3F.y() : Vector3F.x(), w));
@@ -434,13 +439,13 @@ final class RenderingAlgorithms {
 					currentRay = surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
-				} else if(material instanceof ReflectionMaterial) {
+				} else if(material instanceof MirrorRayitoMaterial) {
 					final Vector3F d = Vector3F.reflection(currentDirection, surfaceNormal, true);
 					
 					currentRay = surfaceIntersection.createRay(d);
 					
 					throughput = Color3F.multiply(throughput, albedo);
-				} else if(material instanceof RefractionMaterial) {
+				} else if(material instanceof GlassRayitoMaterial) {
 					final Vector3F reflectionDirection = Vector3F.reflection(currentDirection, surfaceNormal, true);
 					
 					final boolean isEntering = Vector3F.dotProduct(surfaceNormal, surfaceNormalCorrectlyOriented) > 0.0F;
@@ -521,7 +526,7 @@ final class RenderingAlgorithms {
 			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
 			final Vector3F surfaceNormalCorrectlyOriented = Vector3F.dotProduct(direction, surfaceNormal) < 0.0F ? surfaceNormal : Vector3F.negate(surfaceNormal);
 			
-			Color3F albedo = material instanceof RayitoMaterial ? RayitoMaterial.class.cast(material).evaluate(intersection).getColor() : Color3F.BLACK;
+			Color3F albedo = material instanceof RayitoMaterial ? RayitoMaterial.class.cast(material).computeBSDF(intersection, TransportMode.RADIANCE, true).map(rayitoBSDF -> rayitoBSDF.getColor()).orElse(Color3F.BLACK) : Color3F.BLACK;
 			Color3F emittance = material instanceof RayitoMaterial ? RayitoMaterial.class.cast(material).emittance(intersection) : Color3F.BLACK;
 			
 			final int currentBounce = bounce + 1;
@@ -536,7 +541,7 @@ final class RenderingAlgorithms {
 				albedo = Color3F.divide(albedo, probability);
 			}
 			
-			if(material instanceof AshikhminShirleyMaterial) {
+			if(material instanceof MetalRayitoMaterial) {
 				final Vector3F s = SampleGeneratorF.sampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
 				final Vector3F w = Vector3F.normalize(Vector3F.reflection(direction, surfaceNormal, true));
 				final Vector3F v = Vector3F.computeV(w);
@@ -544,7 +549,7 @@ final class RenderingAlgorithms {
 				final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 				
 				return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce)));
-			} else if(material instanceof LambertianMaterial || material instanceof OrenNayarMaterial) {
+			} else if(material instanceof MatteRayitoMaterial) {
 				final Vector3F s = SampleGeneratorF.sampleHemisphereCosineDistribution2();
 				final Vector3F w = surfaceNormalCorrectlyOriented;
 				final Vector3F u = Vector3F.normalize(Vector3F.crossProduct(abs(w.getX()) > 0.1F ? Vector3F.y() : Vector3F.x(), w));
@@ -552,11 +557,11 @@ final class RenderingAlgorithms {
 				final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 				
 				return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce)));
-			} else if(material instanceof ReflectionMaterial) {
+			} else if(material instanceof MirrorRayitoMaterial) {
 				final Vector3F d = Vector3F.reflection(direction, surfaceNormal, true);
 				
 				return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce)));
-			} else if(material instanceof RefractionMaterial) {
+			} else if(material instanceof GlassRayitoMaterial) {
 				final Vector3F reflectionDirection = Vector3F.reflection(direction, surfaceNormal, true);
 				
 				final Ray3F reflectionRay = surfaceIntersection.createRay(reflectionDirection);
@@ -658,45 +663,51 @@ final class RenderingAlgorithms {
 			
 			final RayitoMaterial rayitoMaterial = RayitoMaterial.class.cast(material);
 			
-			final RayitoBSDF materialResult = rayitoMaterial.evaluate(intersection);
+			final Optional<RayitoBSDF> optionalRayitoBSDF = rayitoMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
 			
-			final Color3F albedo = materialResult.getColor();
-			final Color3F ambient = new Color3F(0.05F);
-			final Color3F diffuse = new Color3F(1.0F);
-			final Color3F specular = new Color3F(1.0F);
+			Color3F radiance = Color3F.BLACK;
 			
-			final float specularPower = 250.0F;
-			
-			Color3F radiance = Color3F.multiply(ambient, albedo);
-			
-			for(final Light light : scene.getLights()) {
-				if(light instanceof PointLight) {
-					final PointLight pointLight = PointLight.class.cast(light);
-					
-					final Color3F intensity = pointLight.getIntensity();
-					
-					final Point3F position = pointLight.getPosition();
-					
-					final Vector3F surfaceIntersectionPointToPosition = Vector3F.direction(surfaceIntersectionPoint, position);
-					final Vector3F surfaceIntersectionPointToPositionNormalized = Vector3F.normalize(surfaceIntersectionPointToPosition);
-					final Vector3F positionToSurfaceIntersectionPointNormalized = Vector3F.negate(surfaceIntersectionPointToPositionNormalized);
-					final Vector3F reflectionDirectionNormalized = Vector3F.reflectionNormalized(positionToSurfaceIntersectionPointNormalized, surfaceNormalS, true);
-					
-					final Point3F origin = Point3F.add(surfaceIntersectionPoint, surfaceNormalG, 0.0001F);
-					
-					final Vector3F direction = surfaceIntersectionPointToPositionNormalized;
-					
-					final Ray3F shadowRay = new Ray3F(origin, direction);
-					
-					final float t = scene.intersectionT(shadowRay, T_MINIMUM, T_MAXIMUM);
-					
-					if(isNaN(t) || t * t > surfaceIntersectionPointToPosition.lengthSquared()) {
-						final float nDotL = Vector3F.dotProduct(surfaceNormalS, surfaceIntersectionPointToPositionNormalized);
-						final float rDotL = Vector3F.dotProduct(reflectionDirectionNormalized, surfaceIntersectionPointToPositionNormalized);
+			if(optionalRayitoBSDF.isPresent()) {
+				final RayitoBSDF rayitoBSDF = optionalRayitoBSDF.get();
+				
+				final Color3F albedo = rayitoBSDF.getColor();
+				final Color3F ambient = new Color3F(0.05F);
+				final Color3F diffuse = new Color3F(1.0F);
+				final Color3F specular = new Color3F(1.0F);
+				
+				final float specularPower = 250.0F;
+				
+				radiance = Color3F.multiply(ambient, albedo);
+				
+				for(final Light light : scene.getLights()) {
+					if(light instanceof PointLight) {
+						final PointLight pointLight = PointLight.class.cast(light);
 						
-						if(nDotL > 0.0F) {
-							radiance = Color3F.add(radiance, Color3F.multiply(intensity, Color3F.multiply(diffuse, Color3F.multiply(albedo, max(0.0F, nDotL)))));
-							radiance = Color3F.add(radiance, Color3F.multiply(intensity, Color3F.multiply(specular, pow(max(0.0F, rDotL), specularPower))));
+						final Color3F intensity = pointLight.getIntensity();
+						
+						final Point3F position = pointLight.getPosition();
+						
+						final Vector3F surfaceIntersectionPointToPosition = Vector3F.direction(surfaceIntersectionPoint, position);
+						final Vector3F surfaceIntersectionPointToPositionNormalized = Vector3F.normalize(surfaceIntersectionPointToPosition);
+						final Vector3F positionToSurfaceIntersectionPointNormalized = Vector3F.negate(surfaceIntersectionPointToPositionNormalized);
+						final Vector3F reflectionDirectionNormalized = Vector3F.reflectionNormalized(positionToSurfaceIntersectionPointNormalized, surfaceNormalS, true);
+						
+						final Point3F origin = Point3F.add(surfaceIntersectionPoint, surfaceNormalG, 0.0001F);
+						
+						final Vector3F direction = surfaceIntersectionPointToPositionNormalized;
+						
+						final Ray3F shadowRay = new Ray3F(origin, direction);
+						
+						final float t = scene.intersectionT(shadowRay, T_MINIMUM, T_MAXIMUM);
+						
+						if(isNaN(t) || t * t > surfaceIntersectionPointToPosition.lengthSquared()) {
+							final float nDotL = Vector3F.dotProduct(surfaceNormalS, surfaceIntersectionPointToPositionNormalized);
+							final float rDotL = Vector3F.dotProduct(reflectionDirectionNormalized, surfaceIntersectionPointToPositionNormalized);
+							
+							if(nDotL > 0.0F) {
+								radiance = Color3F.add(radiance, Color3F.multiply(intensity, Color3F.multiply(diffuse, Color3F.multiply(albedo, max(0.0F, nDotL)))));
+								radiance = Color3F.add(radiance, Color3F.multiply(intensity, Color3F.multiply(specular, pow(max(0.0F, rDotL), specularPower))));
+							}
 						}
 					}
 				}

@@ -19,79 +19,82 @@
 package org.dayflower.scene.material.rayito;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
+import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.rayito.AshikhminShirleyRayitoBRDF;
 import org.dayflower.scene.bxdf.rayito.RayitoBXDF;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.texture.ConstantTexture;
 
 /**
- * An {@code AshikhminShirleyMaterial} is an implementation of {@link RayitoMaterial} that uses an {@link AshikhminShirleyRayitoBRDF} instance.
+ * A {@code MetalRayitoMaterial} is an implementation of {@link RayitoMaterial} that represents metal.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class AshikhminShirleyMaterial implements RayitoMaterial {
+public final class MetalRayitoMaterial implements RayitoMaterial {
 	/**
-	 * The name of this {@code AshikhminShirleyMaterial} class.
+	 * The name of this {@code MetalRayitoMaterial} class.
 	 */
 	public static final String NAME = "Rayito - Metal";
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final RayitoBXDF selectedBXDF;
+	private final RayitoBXDF rayitoBXDF;
 	private final Texture textureAlbedo;
 	private final Texture textureEmittance;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AshikhminShirleyMaterial(Color3F.GRAY);
+	 * new MetalRayitoMaterial(Color3F.GRAY);
 	 * }
 	 * </pre>
 	 */
-	public AshikhminShirleyMaterial() {
+	public MetalRayitoMaterial() {
 		this(Color3F.GRAY);
 	}
 	
 	/**
-	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
 	 * If {@code colorAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AshikhminShirleyMaterial(colorAlbedo, Color3F.BLACK);
+	 * new MetalRayitoMaterial(colorAlbedo, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
 	 * @throws NullPointerException thrown if, and only if, {@code colorAlbedo} is {@code null}
 	 */
-	public AshikhminShirleyMaterial(final Color3F colorAlbedo) {
+	public MetalRayitoMaterial(final Color3F colorAlbedo) {
 		this(colorAlbedo, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
 	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AshikhminShirleyMaterial(colorAlbedo, colorEmittance, 0.05F);
+	 * new MetalRayitoMaterial(colorAlbedo, colorEmittance, 0.05F);
 	 * }
 	 * </pre>
 	 * 
@@ -99,19 +102,19 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	 * @param colorEmittance a {@code Color3F} instance with the emittance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
 	 */
-	public AshikhminShirleyMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
+	public MetalRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
 		this(colorAlbedo, colorEmittance, 0.05F);
 	}
 	
 	/**
-	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
 	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AshikhminShirleyMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), roughness);
+	 * new MetalRayitoMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), roughness);
 	 * }
 	 * </pre>
 	 * 
@@ -120,38 +123,38 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	 * @param roughness the roughness to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
 	 */
-	public AshikhminShirleyMaterial(final Color3F colorAlbedo, final Color3F colorEmittance, final float roughness) {
+	public MetalRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance, final float roughness) {
 		this(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), roughness);
 	}
 	
 	/**
-	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
 	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AshikhminShirleyMaterial(textureAlbedo, ConstantTexture.BLACK);
+	 * new MetalRayitoMaterial(textureAlbedo, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureAlbedo a {@link Texture} instance with the albedo color
 	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
 	 */
-	public AshikhminShirleyMaterial(final Texture textureAlbedo) {
+	public MetalRayitoMaterial(final Texture textureAlbedo) {
 		this(textureAlbedo, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
 	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new AshikhminShirleyMaterial(textureAlbedo, textureEmittance, 0.05F);
+	 * new MetalRayitoMaterial(textureAlbedo, textureEmittance, 0.05F);
 	 * }
 	 * </pre>
 	 * 
@@ -159,12 +162,12 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	 * @param textureEmittance a {@code Texture} instance with the emittance
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
-	public AshikhminShirleyMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
+	public MetalRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
 		this(textureAlbedo, textureEmittance, 0.05F);
 	}
 	
 	/**
-	 * Constructs a new {@code AshikhminShirleyMaterial} instance.
+	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
 	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -173,8 +176,8 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	 * @param roughness the roughness to use
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
-	public AshikhminShirleyMaterial(final Texture textureAlbedo, final Texture textureEmittance, final float roughness) {
-		this.selectedBXDF = new AshikhminShirleyRayitoBRDF(roughness);
+	public MetalRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance, final float roughness) {
+		this.rayitoBXDF = new AshikhminShirleyRayitoBRDF(roughness);
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 	}
@@ -182,12 +185,12 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code AshikhminShirleyMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code MetalRayitoMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code AshikhminShirleyMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code MetalRayitoMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -196,23 +199,51 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	}
 	
 	/**
-	 * Returns a {@link RayitoBSDF} instance with information about this {@code AshikhminShirleyMaterial} instance at {@code intersection}.
+	 * Computes the {@link BSSRDF} at {@code intersection}.
 	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns an optional {@code BSSRDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code RayitoBSDF} instance with information about this {@code AshikhminShirleyMaterial} instance at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSSRDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public RayitoBSDF evaluate(final Intersection intersection) {
-		return new RayitoBSDF(this.textureAlbedo.getColorRGB(intersection), this.selectedBXDF);
+	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		return Optional.empty();
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code AshikhminShirleyMaterial} instance.
+	 * Computes the {@link RayitoBSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code RayitoBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @return a {@code String} with the name of this {@code AshikhminShirleyMaterial} instance
+	 * @param intersection the {@link Intersection} to compute the {@code RayitoBSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code RayitoBSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<RayitoBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		return Optional.of(new RayitoBSDF(this.textureAlbedo.getColorRGB(intersection), this.rayitoBXDF));
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code MetalRayitoMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code MetalRayitoMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -220,34 +251,34 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code AshikhminShirleyMaterial} instance.
+	 * Returns a {@code String} representation of this {@code MetalRayitoMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code AshikhminShirleyMaterial} instance
+	 * @return a {@code String} representation of this {@code MetalRayitoMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return "new AshikhminShirleyMaterial(...)";
+		return "new MetalRayitoMaterial(...)";
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code AshikhminShirleyMaterial} instance for equality.
+	 * Compares {@code object} to this {@code MetalRayitoMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code AshikhminShirleyMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MetalRayitoMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code AshikhminShirleyMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code AshikhminShirleyMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code MetalRayitoMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MetalRayitoMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof AshikhminShirleyMaterial)) {
+		} else if(!(object instanceof MetalRayitoMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.selectedBXDF, AshikhminShirleyMaterial.class.cast(object).selectedBXDF)) {
+		} else if(!Objects.equals(this.rayitoBXDF, MetalRayitoMaterial.class.cast(object).rayitoBXDF)) {
 			return false;
-		} else if(!Objects.equals(this.textureAlbedo, AshikhminShirleyMaterial.class.cast(object).textureAlbedo)) {
+		} else if(!Objects.equals(this.textureAlbedo, MetalRayitoMaterial.class.cast(object).textureAlbedo)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, AshikhminShirleyMaterial.class.cast(object).textureEmittance)) {
+		} else if(!Objects.equals(this.textureEmittance, MetalRayitoMaterial.class.cast(object).textureEmittance)) {
 			return false;
 		} else {
 			return true;
@@ -255,12 +286,12 @@ public final class AshikhminShirleyMaterial implements RayitoMaterial {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code AshikhminShirleyMaterial} instance.
+	 * Returns a hash code for this {@code MetalRayitoMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code AshikhminShirleyMaterial} instance
+	 * @return a hash code for this {@code MetalRayitoMaterial} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.selectedBXDF, this.textureAlbedo, this.textureEmittance);
+		return Objects.hash(this.rayitoBXDF, this.textureAlbedo, this.textureEmittance);
 	}
 }

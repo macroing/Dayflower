@@ -4,21 +4,21 @@ List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./reso
 
 Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
 
-Material material11 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
-Material material12 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
-Material material13 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
-Material material14 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
-Material material15 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
-Material material16 = new MatteMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
-Material material21 = new PlasticMaterial(new ConstantTexture(new Color3F(227, 161, 115)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-Material material22 = new PlasticMaterial(new ConstantTexture(new Color3F(227, 161, 115)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-Material material23 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.001F)), new ConstantTexture(Color3F.WHITE), true);
-Material material24 = new PlasticMaterial(new ConstantTexture(new Color3F(216, 192, 120)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-Material material25 = new PlasticMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.001F)), new ConstantTexture(Color3F.WHITE), true);
-Material material26 = new PlasticMaterial(new ConstantTexture(new Color3F(227, 161, 115)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-Material material27 = new PlasticMaterial(new ConstantTexture(new Color3F(1.0F, 1.0F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-Material material28 = new PlasticMaterial(new ConstantTexture(new Color3F(227, 161, 115)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
-Material material31 = new MatteMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE));
+Material material11 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
+Material material12 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
+Material material13 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
+Material material14 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
+Material material15 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
+Material material16 = new MattePBRTMaterial(new ConstantTexture(new Color3F(20.0F)), textureLaminate);
+Material material21 = new PlasticPBRTMaterial(new ConstantTexture(new Color3F(227, 161, 115)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+Material material22 = new PlasticPBRTMaterial(new ConstantTexture(new Color3F(227, 161, 115)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+Material material23 = new PlasticPBRTMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.001F)), new ConstantTexture(Color3F.WHITE), true);
+Material material24 = new PlasticPBRTMaterial(new ConstantTexture(new Color3F(216, 192, 120)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+Material material25 = new PlasticPBRTMaterial(new ConstantTexture(new Color3F(0.2F, 0.2F, 1.0F)), new ConstantTexture(new Color3F(0.001F)), new ConstantTexture(Color3F.WHITE), true);
+Material material26 = new PlasticPBRTMaterial(new ConstantTexture(new Color3F(227, 161, 115)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+Material material27 = new PlasticPBRTMaterial(new ConstantTexture(new Color3F(1.0F, 1.0F, 1.0F)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+Material material28 = new PlasticPBRTMaterial(new ConstantTexture(new Color3F(227, 161, 115)), new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(Color3F.WHITE), true);
+Material material31 = new MattePBRTMaterial(new ConstantTexture(new Color3F(0.0F)), new ConstantTexture(Color3F.WHITE));
 
 Shape3F shape11 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, +1.0F), new Point3F(1.0F, 0.0F, +0.0F));//B
 Shape3F shape12 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, +0.0F, -1.0F), new Point3F(1.0F, 0.0F, +0.0F));//T

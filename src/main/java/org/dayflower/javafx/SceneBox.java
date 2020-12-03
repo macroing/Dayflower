@@ -34,18 +34,18 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
-import org.dayflower.scene.material.pbrt.GlassMaterial;
-import org.dayflower.scene.material.pbrt.HairMaterial;
-import org.dayflower.scene.material.pbrt.MatteMaterial;
-import org.dayflower.scene.material.pbrt.MetalMaterial;
-import org.dayflower.scene.material.pbrt.MirrorMaterial;
-import org.dayflower.scene.material.pbrt.PlasticMaterial;
-import org.dayflower.scene.material.pbrt.SubstrateMaterial;
-import org.dayflower.scene.material.pbrt.UberMaterial;
-import org.dayflower.scene.material.rayito.AshikhminShirleyMaterial;
-import org.dayflower.scene.material.rayito.LambertianMaterial;
-import org.dayflower.scene.material.rayito.ReflectionMaterial;
-import org.dayflower.scene.material.rayito.RefractionMaterial;
+import org.dayflower.scene.material.pbrt.GlassPBRTMaterial;
+import org.dayflower.scene.material.pbrt.HairPBRTMaterial;
+import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
+import org.dayflower.scene.material.pbrt.MetalPBRTMaterial;
+import org.dayflower.scene.material.pbrt.MirrorPBRTMaterial;
+import org.dayflower.scene.material.pbrt.PlasticPBRTMaterial;
+import org.dayflower.scene.material.pbrt.SubstratePBRTMaterial;
+import org.dayflower.scene.material.pbrt.UberPBRTMaterial;
+import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
+import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
+import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
+import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -98,30 +98,30 @@ final class SceneBox extends VBox {
 		
 		if(selectedItem != null) {
 			switch(selectedItem) {
-				case GlassMaterial.NAME:
-					return new GlassMaterial();
-				case HairMaterial.NAME:
-					return new HairMaterial();
-				case MatteMaterial.NAME:
-					return new MatteMaterial();
-				case MetalMaterial.NAME:
-					return new MetalMaterial();
-				case MirrorMaterial.NAME:
-					return new MirrorMaterial();
-				case PlasticMaterial.NAME:
-					return new PlasticMaterial();
-				case SubstrateMaterial.NAME:
-					return new SubstrateMaterial();
-				case UberMaterial.NAME:
-					return new UberMaterial();
-				case RefractionMaterial.NAME:
-					return new RefractionMaterial();
-				case LambertianMaterial.NAME:
-					return new LambertianMaterial();
-				case AshikhminShirleyMaterial.NAME:
-					return new AshikhminShirleyMaterial();
-				case ReflectionMaterial.NAME:
-					return new ReflectionMaterial();
+				case GlassPBRTMaterial.NAME:
+					return new GlassPBRTMaterial();
+				case HairPBRTMaterial.NAME:
+					return new HairPBRTMaterial();
+				case MattePBRTMaterial.NAME:
+					return new MattePBRTMaterial();
+				case MetalPBRTMaterial.NAME:
+					return new MetalPBRTMaterial();
+				case MirrorPBRTMaterial.NAME:
+					return new MirrorPBRTMaterial();
+				case PlasticPBRTMaterial.NAME:
+					return new PlasticPBRTMaterial();
+				case SubstratePBRTMaterial.NAME:
+					return new SubstratePBRTMaterial();
+				case UberPBRTMaterial.NAME:
+					return new UberPBRTMaterial();
+				case GlassRayitoMaterial.NAME:
+					return new GlassRayitoMaterial();
+				case MatteRayitoMaterial.NAME:
+					return new MatteRayitoMaterial();
+				case MetalRayitoMaterial.NAME:
+					return new MetalRayitoMaterial();
+				case MirrorRayitoMaterial.NAME:
+					return new MirrorRayitoMaterial();
 				default:
 					return null;
 			}
@@ -206,20 +206,20 @@ final class SceneBox extends VBox {
 		this.buttonPrimitiveAdd.setText("Add Primitive");
 		
 //		Configure the ComboBox for Primitive Add Material:
-		this.comboBoxPrimitiveAddMaterial.getItems().add(GlassMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(HairMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MatteMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MetalMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(MirrorMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(PlasticMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(SubstrateMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(UberMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(RefractionMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(LambertianMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(AshikhminShirleyMaterial.NAME);
-		this.comboBoxPrimitiveAddMaterial.getItems().add(ReflectionMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(GlassPBRTMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(HairPBRTMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(MattePBRTMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(MetalPBRTMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(MirrorPBRTMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(PlasticPBRTMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(SubstratePBRTMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(UberPBRTMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(GlassRayitoMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(MatteRayitoMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(MetalRayitoMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.getItems().add(MirrorRayitoMaterial.NAME);
 		this.comboBoxPrimitiveAddMaterial.setMaxWidth(Double.MAX_VALUE);
-		this.comboBoxPrimitiveAddMaterial.setValue(MatteMaterial.NAME);
+		this.comboBoxPrimitiveAddMaterial.setValue(MattePBRTMaterial.NAME);
 		
 //		Configure the ComboBox for Primitive Add Shape:
 		this.comboBoxPrimitiveAddShape.getItems().add(Plane3F.NAME);

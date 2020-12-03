@@ -40,16 +40,16 @@ import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.ConstantTexture;
 
 /**
- * A {@code GlassMaterial} is an implementation of {@link PBRTMaterial} that can represent a wide variety of materials.
+ * An {@code UberPBRTMaterial} is an implementation of {@link PBRTMaterial} that can represent a wide variety of materials.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class UberMaterial implements PBRTMaterial {
+public final class UberPBRTMaterial implements PBRTMaterial {
 	/**
-	 * The name of this {@code UberMaterial} class.
+	 * The name of this {@code UberPBRTMaterial} class.
 	 */
 	public static final String NAME = "PBRT - Uber";
 	
@@ -68,21 +68,21 @@ public final class UberMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code UberMaterial} instance.
+	 * Constructs a new {@code UberPBRTMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberMaterial(new Color3F(1.5F)), ConstantTexture.GRAY_0_25, ConstantTexture.BLACK, ConstantTexture.GRAY_0_25, ConstantTexture.BLACK, ConstantTexture.WHITE, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_10, true);
+	 * new UberPBRTMaterial(new Color3F(1.5F)), ConstantTexture.GRAY_0_25, ConstantTexture.BLACK, ConstantTexture.GRAY_0_25, ConstantTexture.BLACK, ConstantTexture.WHITE, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_10, true);
 	 * }
 	 * </pre>
 	 */
-	public UberMaterial() {
+	public UberPBRTMaterial() {
 		this(new ConstantTexture(new Color3F(1.5F)), ConstantTexture.GRAY_0_25, ConstantTexture.BLACK, ConstantTexture.GRAY_0_25, ConstantTexture.BLACK, ConstantTexture.WHITE, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_10, true);
 	}
 	
 	/**
-	 * Constructs a new {@code UberMaterial} instance.
+	 * Constructs a new {@code UberPBRTMaterial} instance.
 	 * <p>
 	 * If either {@code textureEta}, {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureOpacity}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be
 	 * thrown.
@@ -99,7 +99,7 @@ public final class UberMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureEta}, {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureOpacity}, {@code textureRoughnessU} or {@code textureRoughnessV} are
 	 *                              {@code null}
 	 */
-	public UberMaterial(final Texture textureEta, final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureOpacity, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
+	public UberPBRTMaterial(final Texture textureEta, final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureOpacity, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
 		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
 		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
 		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
@@ -112,63 +112,6 @@ public final class UberMaterial implements PBRTMaterial {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code BSDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		final Color3F colorEta = this.textureEta.getColorRGB(intersection);
-		final Color3F colorOpacity = Color3F.saturate(this.textureOpacity.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKD = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKD.getColorRGB(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorKR = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKR.getColorRGB(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorKS = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKS.getColorRGB(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorKT = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKT.getColorRGB(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorRoughnessU = this.textureRoughnessU.getColorRGB(intersection);
-		final Color3F colorRoughnessV = this.textureRoughnessV.getColorRGB(intersection);
-		final Color3F colorTransmittanceScale = Color3F.saturate(Color3F.subtract(Color3F.WHITE, colorOpacity), 0.0F, Float.MAX_VALUE);
-		
-		final float eta = colorEta.average();
-		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
-		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
-		
-		final List<PBRTBXDF> bXDFs = new ArrayList<>();
-		
-		if(!colorTransmittanceScale.isBlack()) {
-			bXDFs.add(new SpecularPBRTBTDF(colorTransmittanceScale, transportMode, 1.0F, 1.0F));
-		}
-		
-		if(!colorKD.isBlack()) {
-			bXDFs.add(new LambertianPBRTBRDF(colorKD));
-		}
-		
-		if(!colorKS.isBlack()) {
-			bXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV)));
-		}
-		
-		if(!colorKR.isBlack()) {
-			bXDFs.add(new SpecularPBRTBRDF(colorKR, new DielectricFresnel(1.0F, eta)));
-		}
-		
-		if(!colorKT.isBlack()) {
-			bXDFs.add(new SpecularPBRTBTDF(colorKT, transportMode, 1.0F, eta));
-		}
-		
-		return Optional.of(new PBRTBSDF(intersection, bXDFs, colorTransmittanceScale.isBlack() ? eta : 1.0F));
-	}
 	
 	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
@@ -192,9 +135,66 @@ public final class UberMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code UberMaterial} instance.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code PBRTBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @return a {@code String} with the name of this {@code UberMaterial} instance
+	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code PBRTBSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		final Color3F colorEta = this.textureEta.getColorRGB(intersection);
+		final Color3F colorOpacity = Color3F.saturate(this.textureOpacity.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKD = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKD.getColorRGB(intersection), 0.0F, Float.MAX_VALUE));
+		final Color3F colorKR = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKR.getColorRGB(intersection), 0.0F, Float.MAX_VALUE));
+		final Color3F colorKS = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKS.getColorRGB(intersection), 0.0F, Float.MAX_VALUE));
+		final Color3F colorKT = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKT.getColorRGB(intersection), 0.0F, Float.MAX_VALUE));
+		final Color3F colorRoughnessU = this.textureRoughnessU.getColorRGB(intersection);
+		final Color3F colorRoughnessV = this.textureRoughnessV.getColorRGB(intersection);
+		final Color3F colorTransmittanceScale = Color3F.saturate(Color3F.subtract(Color3F.WHITE, colorOpacity), 0.0F, Float.MAX_VALUE);
+		
+		final float eta = colorEta.average();
+		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
+		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
+		
+		final List<PBRTBXDF> pBRTBXDFs = new ArrayList<>();
+		
+		if(!colorTransmittanceScale.isBlack()) {
+			pBRTBXDFs.add(new SpecularPBRTBTDF(colorTransmittanceScale, transportMode, 1.0F, 1.0F));
+		}
+		
+		if(!colorKD.isBlack()) {
+			pBRTBXDFs.add(new LambertianPBRTBRDF(colorKD));
+		}
+		
+		if(!colorKS.isBlack()) {
+			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV)));
+		}
+		
+		if(!colorKR.isBlack()) {
+			pBRTBXDFs.add(new SpecularPBRTBRDF(colorKR, new DielectricFresnel(1.0F, eta)));
+		}
+		
+		if(!colorKT.isBlack()) {
+			pBRTBXDFs.add(new SpecularPBRTBTDF(colorKT, transportMode, 1.0F, eta));
+		}
+		
+		return Optional.of(new PBRTBSDF(intersection, pBRTBXDFs, colorTransmittanceScale.isBlack() ? eta : 1.0F));
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code UberPBRTMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code UberPBRTMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -202,46 +202,46 @@ public final class UberMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code UberMaterial} instance.
+	 * Returns a {@code String} representation of this {@code UberPBRTMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code UberMaterial} instance
+	 * @return a {@code String} representation of this {@code UberPBRTMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new UberMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureEta, this.textureKD, this.textureKR, this.textureKS, this.textureKT, this.textureOpacity, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+		return String.format("new UberPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureEta, this.textureKD, this.textureKR, this.textureKS, this.textureKT, this.textureOpacity, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code UberMaterial} instance for equality.
+	 * Compares {@code object} to this {@code UberPBRTMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code UberMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code UberPBRTMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code UberMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code UberMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code UberPBRTMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code UberPBRTMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof UberMaterial)) {
+		} else if(!(object instanceof UberPBRTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureEta, UberMaterial.class.cast(object).textureEta)) {
+		} else if(!Objects.equals(this.textureEta, UberPBRTMaterial.class.cast(object).textureEta)) {
 			return false;
-		} else if(!Objects.equals(this.textureKD, UberMaterial.class.cast(object).textureKD)) {
+		} else if(!Objects.equals(this.textureKD, UberPBRTMaterial.class.cast(object).textureKD)) {
 			return false;
-		} else if(!Objects.equals(this.textureKR, UberMaterial.class.cast(object).textureKR)) {
+		} else if(!Objects.equals(this.textureKR, UberPBRTMaterial.class.cast(object).textureKR)) {
 			return false;
-		} else if(!Objects.equals(this.textureKS, UberMaterial.class.cast(object).textureKS)) {
+		} else if(!Objects.equals(this.textureKS, UberPBRTMaterial.class.cast(object).textureKS)) {
 			return false;
-		} else if(!Objects.equals(this.textureKT, UberMaterial.class.cast(object).textureKT)) {
+		} else if(!Objects.equals(this.textureKT, UberPBRTMaterial.class.cast(object).textureKT)) {
 			return false;
-		} else if(!Objects.equals(this.textureOpacity, UberMaterial.class.cast(object).textureOpacity)) {
+		} else if(!Objects.equals(this.textureOpacity, UberPBRTMaterial.class.cast(object).textureOpacity)) {
 			return false;
-		} else if(!Objects.equals(this.textureRoughnessU, UberMaterial.class.cast(object).textureRoughnessU)) {
+		} else if(!Objects.equals(this.textureRoughnessU, UberPBRTMaterial.class.cast(object).textureRoughnessU)) {
 			return false;
-		} else if(!Objects.equals(this.textureRoughnessV, UberMaterial.class.cast(object).textureRoughnessV)) {
+		} else if(!Objects.equals(this.textureRoughnessV, UberPBRTMaterial.class.cast(object).textureRoughnessV)) {
 			return false;
-		} else if(this.isRemappingRoughness != UberMaterial.class.cast(object).isRemappingRoughness) {
+		} else if(this.isRemappingRoughness != UberPBRTMaterial.class.cast(object).isRemappingRoughness) {
 			return false;
 		} else {
 			return true;
@@ -249,9 +249,9 @@ public final class UberMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code UberMaterial} instance.
+	 * Returns a hash code for this {@code UberPBRTMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code UberMaterial} instance
+	 * @return a hash code for this {@code UberPBRTMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

@@ -34,16 +34,16 @@ import org.dayflower.scene.bxdf.pbrt.HairPBRTBXDF;
 import org.dayflower.scene.texture.ConstantTexture;
 
 /**
- * A {@code HairMaterial} is an implementation of {@link PBRTMaterial} that represents hair.
+ * A {@code HairPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents hair.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class HairMaterial implements PBRTMaterial {
+public final class HairPBRTMaterial implements PBRTMaterial {
 	/**
-	 * The name of this {@code HairMaterial} class.
+	 * The name of this {@code HairPBRTMaterial} class.
 	 */
 	public static final String NAME = "PBRT - Hair";
 	
@@ -61,7 +61,7 @@ public final class HairMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code HairMaterial} instance.
+	 * Constructs a new {@code HairPBRTMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
@@ -73,18 +73,18 @@ public final class HairMaterial implements PBRTMaterial {
 	 * Texture textureEta = ConstantTexture.GRAY_1_55;
 	 * Texture textureEumelanin = ConstantTexture.BLACK;
 	 * Texture texturePheomelanin = ConstantTexture.BLACK;
-	 * Texture textureSigmaA = new ConstantTexture(HairBXDF.computeSigmaAFromConcentration(1.3F, 0.0F));
+	 * Texture textureSigmaA = new ConstantTexture(HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F));
 	 * 
-	 * new HairMaterial(textureAlpha, textureBetaM, textureBetaN, textureColor, textureEta, textureEumelanin, texturePheomelanin, textureSigmaA);
+	 * new HairPBRTMaterial(textureAlpha, textureBetaM, textureBetaN, textureColor, textureEta, textureEumelanin, texturePheomelanin, textureSigmaA);
 	 * }
 	 * </pre>
 	 */
-	public HairMaterial() {
+	public HairPBRTMaterial() {
 		this(ConstantTexture.GRAY_2_00, ConstantTexture.GRAY_0_30, ConstantTexture.GRAY_0_30, ConstantTexture.BLACK, ConstantTexture.GRAY_1_55, ConstantTexture.BLACK, ConstantTexture.BLACK, new ConstantTexture(HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F)));
 	}
 	
 	/**
-	 * Constructs a new {@code HairMaterial} instance.
+	 * Constructs a new {@code HairPBRTMaterial} instance.
 	 * <p>
 	 * If either {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureColor}, {@code textureEta}, {@code textureEumelanin}, {@code texturePheomelanin} or {@code textureSigmaA} are {@code null}, a {@code NullPointerException}
 	 * will be thrown.
@@ -100,7 +100,7 @@ public final class HairMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureColor}, {@code textureEta}, {@code textureEumelanin}, {@code texturePheomelanin} or {@code textureSigmaA}
 	 *                              are {@code null}
 	 */
-	public HairMaterial(final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN, final Texture textureColor, final Texture textureEta, final Texture textureEumelanin, final Texture texturePheomelanin, final Texture textureSigmaA) {
+	public HairPBRTMaterial(final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN, final Texture textureColor, final Texture textureEta, final Texture textureEumelanin, final Texture texturePheomelanin, final Texture textureSigmaA) {
 		this.textureAlpha = Objects.requireNonNull(textureAlpha, "textureAlpha == null");
 		this.textureBetaM = Objects.requireNonNull(textureBetaM, "textureBetaM == null");
 		this.textureBetaN = Objects.requireNonNull(textureBetaN, "textureBetaN == null");
@@ -112,36 +112,6 @@ public final class HairMaterial implements PBRTMaterial {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code BSDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		final float alpha = this.textureAlpha.getColorRGB(intersection).average();
-		final float betaM = this.textureBetaM.getColorRGB(intersection).average();
-		final float betaN = this.textureBetaN.getColorRGB(intersection).average();
-		final float eta = this.textureEta.getColorRGB(intersection).average();
-		
-		final Color3F sigmaA = doComputeSigmaA(intersection, betaN);
-		
-		final float h = -1.0F + 2.0F * intersection.getSurfaceIntersectionWorldSpace().getTextureCoordinates().getV();
-		
-		return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new HairPBRTBXDF(sigmaA, alpha, betaM, betaN, eta, h)), eta));
-	}
 	
 	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
@@ -165,9 +135,39 @@ public final class HairMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code HairMaterial} instance.
+	 * Computes the {@link PBRTBSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code PBRTBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @return a {@code String} with the name of this {@code HairMaterial} instance
+	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code PBRTBSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		final float alpha = this.textureAlpha.getColorRGB(intersection).average();
+		final float betaM = this.textureBetaM.getColorRGB(intersection).average();
+		final float betaN = this.textureBetaN.getColorRGB(intersection).average();
+		final float eta = this.textureEta.getColorRGB(intersection).average();
+		
+		final Color3F sigmaA = doComputeSigmaA(intersection, betaN);
+		
+		final float h = -1.0F + 2.0F * intersection.getSurfaceIntersectionWorldSpace().getTextureCoordinates().getV();
+		
+		return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new HairPBRTBXDF(sigmaA, alpha, betaM, betaN, eta, h)), eta));
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code HairPBRTMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code HairPBRTMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -175,44 +175,44 @@ public final class HairMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code HairMaterial} instance.
+	 * Returns a {@code String} representation of this {@code HairPBRTMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code HairMaterial} instance
+	 * @return a {@code String} representation of this {@code HairPBRTMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new HairMaterial(%s, %s, %s, %s, %s, %s, %s, %s)", this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureColor, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.textureSigmaA);
+		return String.format("new HairPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s)", this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureColor, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.textureSigmaA);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code HairMaterial} instance for equality.
+	 * Compares {@code object} to this {@code HairPBRTMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code HairMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code HairPBRTMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code HairMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code HairMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code HairPBRTMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code HairPBRTMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof HairMaterial)) {
+		} else if(!(object instanceof HairPBRTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureAlpha, HairMaterial.class.cast(object).textureAlpha)) {
+		} else if(!Objects.equals(this.textureAlpha, HairPBRTMaterial.class.cast(object).textureAlpha)) {
 			return false;
-		} else if(!Objects.equals(this.textureBetaM, HairMaterial.class.cast(object).textureBetaM)) {
+		} else if(!Objects.equals(this.textureBetaM, HairPBRTMaterial.class.cast(object).textureBetaM)) {
 			return false;
-		} else if(!Objects.equals(this.textureBetaN, HairMaterial.class.cast(object).textureBetaN)) {
+		} else if(!Objects.equals(this.textureBetaN, HairPBRTMaterial.class.cast(object).textureBetaN)) {
 			return false;
-		} else if(!Objects.equals(this.textureColor, HairMaterial.class.cast(object).textureColor)) {
+		} else if(!Objects.equals(this.textureColor, HairPBRTMaterial.class.cast(object).textureColor)) {
 			return false;
-		} else if(!Objects.equals(this.textureEta, HairMaterial.class.cast(object).textureEta)) {
+		} else if(!Objects.equals(this.textureEta, HairPBRTMaterial.class.cast(object).textureEta)) {
 			return false;
-		} else if(!Objects.equals(this.textureEumelanin, HairMaterial.class.cast(object).textureEumelanin)) {
+		} else if(!Objects.equals(this.textureEumelanin, HairPBRTMaterial.class.cast(object).textureEumelanin)) {
 			return false;
-		} else if(!Objects.equals(this.texturePheomelanin, HairMaterial.class.cast(object).texturePheomelanin)) {
+		} else if(!Objects.equals(this.texturePheomelanin, HairPBRTMaterial.class.cast(object).texturePheomelanin)) {
 			return false;
-		} else if(!Objects.equals(this.textureSigmaA, HairMaterial.class.cast(object).textureSigmaA)) {
+		} else if(!Objects.equals(this.textureSigmaA, HairPBRTMaterial.class.cast(object).textureSigmaA)) {
 			return false;
 		} else {
 			return true;
@@ -220,9 +220,9 @@ public final class HairMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code HairMaterial} instance.
+	 * Returns a hash code for this {@code HairPBRTMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code HairMaterial} instance
+	 * @return a hash code for this {@code HairPBRTMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

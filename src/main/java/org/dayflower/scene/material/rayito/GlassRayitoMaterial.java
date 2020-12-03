@@ -19,79 +19,82 @@
 package org.dayflower.scene.material.rayito;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
+import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.rayito.RayitoBXDF;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.bxdf.rayito.SpecularRayitoBTDF;
 import org.dayflower.scene.texture.ConstantTexture;
 
 /**
- * A {@code RefractionMaterial} is an implementation of {@link RayitoMaterial} that uses a {@link SpecularRayitoBTDF} instance.
+ * A {@code GlassRayitoMaterial} is an implementation of {@link RayitoMaterial} that represents glass.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class RefractionMaterial implements RayitoMaterial {
+public final class GlassRayitoMaterial implements RayitoMaterial {
 	/**
-	 * The name of this {@code RefractionMaterial} class.
+	 * The name of this {@code GlassRayitoMaterial} class.
 	 */
 	public static final String NAME = "Rayito - Glass";
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final RayitoBXDF selectedBXDF;
+	private final RayitoBXDF rayitoBXDF;
 	private final Texture textureAlbedo;
 	private final Texture textureEmittance;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code RefractionMaterial} instance.
+	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RefractionMaterial(Color3F.WHITE);
+	 * new GlassRayitoMaterial(Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
-	public RefractionMaterial() {
+	public GlassRayitoMaterial() {
 		this(Color3F.WHITE);
 	}
 	
 	/**
-	 * Constructs a new {@code RefractionMaterial} instance.
+	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
 	 * If {@code colorAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RefractionMaterial(colorAlbedo, Color3F.BLACK);
+	 * new GlassRayitoMaterial(colorAlbedo, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
 	 * @throws NullPointerException thrown if, and only if, {@code colorAlbedo} is {@code null}
 	 */
-	public RefractionMaterial(final Color3F colorAlbedo) {
+	public GlassRayitoMaterial(final Color3F colorAlbedo) {
 		this(colorAlbedo, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code RefractionMaterial} instance.
+	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
 	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RefractionMaterial(colorAlbedo, colorEmittance, 1.0F, 1.5F);
+	 * new GlassRayitoMaterial(colorAlbedo, colorEmittance, 1.0F, 1.5F);
 	 * }
 	 * </pre>
 	 * 
@@ -99,19 +102,19 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 * @param colorEmittance a {@code Color3F} instance with the emittance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
 	 */
-	public RefractionMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
+	public GlassRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
 		this(colorAlbedo, colorEmittance, 1.0F, 1.5F);
 	}
 	
 	/**
-	 * Constructs a new {@code RefractionMaterial} instance.
+	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
 	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RefractionMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), etaA, etaB);
+	 * new GlassRayitoMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), etaA, etaB);
 	 * }
 	 * </pre>
 	 * 
@@ -121,38 +124,38 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 * @param etaB the index of refraction denoted by {@code B}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
 	 */
-	public RefractionMaterial(final Color3F colorAlbedo, final Color3F colorEmittance, final float etaA, final float etaB) {
+	public GlassRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance, final float etaA, final float etaB) {
 		this(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), etaA, etaB);
 	}
 	
 	/**
-	 * Constructs a new {@code RefractionMaterial} instance.
+	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
 	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RefractionMaterial(textureAlbedo, ConstantTexture.BLACK);
+	 * new GlassRayitoMaterial(textureAlbedo, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureAlbedo a {@link Texture} instance with the albedo color
 	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
 	 */
-	public RefractionMaterial(final Texture textureAlbedo) {
+	public GlassRayitoMaterial(final Texture textureAlbedo) {
 		this(textureAlbedo, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code RefractionMaterial} instance.
+	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
 	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new RefractionMaterial(textureAlbedo, textureEmittance, 1.0F, 1.5F);
+	 * new GlassRayitoMaterial(textureAlbedo, textureEmittance, 1.0F, 1.5F);
 	 * }
 	 * </pre>
 	 * 
@@ -160,12 +163,12 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 * @param textureEmittance a {@code Texture} instance with the emittance
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
-	public RefractionMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
+	public GlassRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
 		this(textureAlbedo, textureEmittance, 1.0F, 1.5F);
 	}
 	
 	/**
-	 * Constructs a new {@code RefractionMaterial} instance.
+	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
 	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -175,8 +178,8 @@ public final class RefractionMaterial implements RayitoMaterial {
 	 * @param etaB the index of refraction denoted by {@code B}
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
-	public RefractionMaterial(final Texture textureAlbedo, final Texture textureEmittance, final float etaA, final float etaB) {
-		this.selectedBXDF = new SpecularRayitoBTDF(etaA, etaB);
+	public GlassRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance, final float etaA, final float etaB) {
+		this.rayitoBXDF = new SpecularRayitoBTDF(etaA, etaB);
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 	}
@@ -184,12 +187,12 @@ public final class RefractionMaterial implements RayitoMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code RefractionMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code GlassRayitoMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code RefractionMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code GlassRayitoMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -198,23 +201,51 @@ public final class RefractionMaterial implements RayitoMaterial {
 	}
 	
 	/**
-	 * Returns a {@link RayitoBSDF} instance with information about this {@code RefractionMaterial} instance at {@code intersection}.
+	 * Computes the {@link BSSRDF} at {@code intersection}.
 	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns an optional {@code BSSRDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code RayitoBSDF} instance with information about this {@code RefractionMaterial} instance at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSSRDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public RayitoBSDF evaluate(final Intersection intersection) {
-		return new RayitoBSDF(this.textureAlbedo.getColorRGB(intersection), this.selectedBXDF);
+	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		return Optional.empty();
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code RefractionMaterial} instance.
+	 * Computes the {@link RayitoBSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code RayitoBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @return a {@code String} with the name of this {@code RefractionMaterial} instance
+	 * @param intersection the {@link Intersection} to compute the {@code RayitoBSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code RayitoBSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<RayitoBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		return Optional.of(new RayitoBSDF(this.textureAlbedo.getColorRGB(intersection), this.rayitoBXDF));
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code GlassRayitoMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code GlassRayitoMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -222,34 +253,34 @@ public final class RefractionMaterial implements RayitoMaterial {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code RefractionMaterial} instance.
+	 * Returns a {@code String} representation of this {@code GlassRayitoMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code RefractionMaterial} instance
+	 * @return a {@code String} representation of this {@code GlassRayitoMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return "new RefractionMaterial(...)";
+		return "new GlassRayitoMaterial(...)";
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code RefractionMaterial} instance for equality.
+	 * Compares {@code object} to this {@code GlassRayitoMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code RefractionMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code GlassRayitoMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code RefractionMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code RefractionMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code GlassRayitoMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code GlassRayitoMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof RefractionMaterial)) {
+		} else if(!(object instanceof GlassRayitoMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.selectedBXDF, RefractionMaterial.class.cast(object).selectedBXDF)) {
+		} else if(!Objects.equals(this.rayitoBXDF, GlassRayitoMaterial.class.cast(object).rayitoBXDF)) {
 			return false;
-		} else if(!Objects.equals(this.textureAlbedo, RefractionMaterial.class.cast(object).textureAlbedo)) {
+		} else if(!Objects.equals(this.textureAlbedo, GlassRayitoMaterial.class.cast(object).textureAlbedo)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, RefractionMaterial.class.cast(object).textureEmittance)) {
+		} else if(!Objects.equals(this.textureEmittance, GlassRayitoMaterial.class.cast(object).textureEmittance)) {
 			return false;
 		} else {
 			return true;
@@ -257,12 +288,12 @@ public final class RefractionMaterial implements RayitoMaterial {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code RefractionMaterial} instance.
+	 * Returns a hash code for this {@code GlassRayitoMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code RefractionMaterial} instance
+	 * @return a hash code for this {@code GlassRayitoMaterial} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.selectedBXDF, this.textureAlbedo, this.textureEmittance);
+		return Objects.hash(this.rayitoBXDF, this.textureAlbedo, this.textureEmittance);
 	}
 }

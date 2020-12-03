@@ -1,14 +1,14 @@
 List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/aphroditegirl.obj", true, 100.0F);
 
-Material material1 = new LambertianMaterial(new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F)));
-Material material2 = new LambertianMaterial(new Color3F(227, 161, 115));
-Material material3 = new LambertianMaterial(new Color3F(227, 161, 115));
-Material material4 = new LambertianMaterial(new Color3F(0.8F, 0.1F, 0.8F));
-Material material5 = new LambertianMaterial(new Color3F(216, 192, 120));
-Material material6 = new LambertianMaterial(new Color3F(0.8F, 0.1F, 0.8F));
-Material material7 = new LambertianMaterial(new Color3F(227, 161, 115));
-Material material8 = new LambertianMaterial(new Color3F(1.0F, 1.0F, 1.0F));
-Material material9 = new LambertianMaterial(new Color3F(227, 161, 115));
+Material material1 = new MatteRayitoMaterial(new CheckerboardTexture(new Color3F(0.1F), new Color3F(1.0F), AngleF.degrees(90.0F), new Vector2F(0.5F, 0.5F)));
+Material material2 = new MatteRayitoMaterial(new Color3F(227, 161, 115));
+Material material3 = new MatteRayitoMaterial(new Color3F(227, 161, 115));
+Material material4 = new MatteRayitoMaterial(new Color3F(0.8F, 0.1F, 0.8F));
+Material material5 = new MatteRayitoMaterial(new Color3F(216, 192, 120));
+Material material6 = new MatteRayitoMaterial(new Color3F(0.8F, 0.1F, 0.8F));
+Material material7 = new MatteRayitoMaterial(new Color3F(227, 161, 115));
+Material material8 = new MatteRayitoMaterial(new Color3F(1.0F, 1.0F, 1.0F));
+Material material9 = new MatteRayitoMaterial(new Color3F(227, 161, 115));
 
 Shape3F shape1 = new Plane3F();
 Shape3F shape2 = triangleMeshes.get(0);

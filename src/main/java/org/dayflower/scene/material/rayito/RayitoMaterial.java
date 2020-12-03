@@ -18,9 +18,12 @@
  */
 package org.dayflower.scene.material.rayito;
 
+import java.util.Optional;
+
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
+import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 
 /**
@@ -44,13 +47,18 @@ public interface RayitoMaterial extends Material {
 	Color3F emittance(final Intersection intersection);
 	
 	/**
-	 * Returns a {@link RayitoBSDF} instance with information about this {@code RayitoMaterial} instance at {@code intersection}.
+	 * Computes the {@link RayitoBSDF} at {@code intersection}.
 	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns an optional {@code RayitoBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code RayitoBSDF} instance with information about this {@code RayitoMaterial} instance at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 * @param intersection the {@link Intersection} to compute the {@code RayitoBSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code RayitoBSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
-	RayitoBSDF evaluate(final Intersection intersection);
+	@Override
+	Optional<RayitoBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes);
 }

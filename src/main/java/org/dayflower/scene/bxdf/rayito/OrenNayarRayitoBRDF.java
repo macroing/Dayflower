@@ -29,6 +29,7 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BXDFType;
 
 /**
  * An {@code OrenNayarRayitoBRDF} is an implementation of {@link RayitoBXDF} that represents an Oren-Nayar BRDF (Bidirectional Reflectance Distribution Function).
@@ -38,7 +39,7 @@ import org.dayflower.geometry.Vector3F;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class OrenNayarRayitoBRDF implements RayitoBXDF {
+public final class OrenNayarRayitoBRDF extends RayitoBXDF {
 	private final AngleF angle;
 	private final float a;
 	private final float b;
@@ -68,37 +69,14 @@ public final class OrenNayarRayitoBRDF implements RayitoBXDF {
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public OrenNayarRayitoBRDF(final AngleF angle) {
+		super(BXDFType.DIFFUSE_REFLECTION);
+		
 		this.angle = Objects.requireNonNull(angle, "angle == null");
 		this.a = 1.0F - (angle.getRadians() * angle.getRadians() / (2.0F * (angle.getRadians() * angle.getRadians() + 0.33F)));
 		this.b = 0.45F * angle.getRadians() * angle.getRadians() / (angle.getRadians() * angle.getRadians() + 0.09F);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Evaluates the solid angle for {@code o}, {@code n} and {@code i}.
-	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
-	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * orenNayarRayitoBRDF.evaluateSolidAngle(o, n, i, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
-	 */
-	@Override
-	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
-		return evaluateSolidAngle(o, n, i, false);
-	}
 	
 	/**
 	 * Evaluates the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
@@ -146,33 +124,6 @@ public final class OrenNayarRayitoBRDF implements RayitoBXDF {
 		} else {
 			return new RayitoBXDFResult(o, n, i, PI_RECIPROCAL * c * abs(nDotI), PI_RECIPROCAL * c);
 		}
-	}
-	
-	/**
-	 * Samples the solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
-	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
-	 * <p>
-	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * orenNayarRayitoBRDF.sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
-	 * @param u the U-coordinate
-	 * @param v the V-coordinate
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
-	 */
-	@Override
-	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
-		return sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
 	}
 	
 	/**
@@ -261,41 +212,6 @@ public final class OrenNayarRayitoBRDF implements RayitoBXDF {
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, this {@code OrenNayarRayitoBRDF} instance is using a Dirac distribution, {@code false} otherwise.
-	 * <p>
-	 * This method always returns {@code false}.
-	 * 
-	 * @return {@code true} if, and only if, this {@code OrenNayarRayitoBRDF} instance is using a Dirac distribution, {@code false} otherwise
-	 */
-	@Override
-	public boolean isDiracDistribution() {
-		return false;
-	}
-	
-	/**
-	 * Returns the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}.
-	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * orenNayarRayitoBRDF.probabilityDensityFunctionSolidAngle(o, n, i, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
-	 */
-	@Override
-	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
-		return probabilityDensityFunctionSolidAngle(o, n, i, false);
 	}
 	
 	/**

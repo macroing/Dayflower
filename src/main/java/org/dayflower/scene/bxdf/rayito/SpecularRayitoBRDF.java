@@ -24,6 +24,7 @@ import java.util.Objects;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BXDFType;
 
 /**
  * A {@code SpecularRayitoBRDF} is an implementation of {@link RayitoBXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for specular reflection.
@@ -33,40 +34,15 @@ import org.dayflower.geometry.Vector3F;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class SpecularRayitoBRDF implements RayitoBXDF {
+public final class SpecularRayitoBRDF extends RayitoBXDF {
 	/**
 	 * Constructs a new {@code SpecularRayitoBRDF} instance.
 	 */
 	public SpecularRayitoBRDF() {
-		
+		super(BXDFType.SPECULAR_REFLECTION);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Evaluates the solid angle for {@code o}, {@code n} and {@code i}.
-	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
-	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * specularRayitoBRDF.evaluateSolidAngle(o, n, i, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
-	 */
-	@Override
-	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
-		return evaluateSolidAngle(o, n, i, false);
-	}
 	
 	/**
 	 * Evaluates the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
@@ -85,33 +61,6 @@ public final class SpecularRayitoBRDF implements RayitoBXDF {
 	@Override
 	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected) {
 		return new RayitoBXDFResult(o, n, i, 0.0F, 0.0F);
-	}
-	
-	/**
-	 * Samples the solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
-	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
-	 * <p>
-	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * specularRayitoBRDF.sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
-	 * @param u the U-coordinate
-	 * @param v the V-coordinate
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
-	 */
-	@Override
-	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
-		return sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
 	}
 	
 	/**
@@ -177,41 +126,6 @@ public final class SpecularRayitoBRDF implements RayitoBXDF {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code SpecularRayitoBRDF} instance is using a Dirac distribution, {@code false} otherwise.
-	 * <p>
-	 * This method always returns {@code true}.
-	 * 
-	 * @return {@code true} if, and only if, this {@code SpecularRayitoBRDF} instance is using a Dirac distribution, {@code false} otherwise
-	 */
-	@Override
-	public boolean isDiracDistribution() {
-		return true;
-	}
-	
-	/**
-	 * Returns the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}.
-	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * specularRayitoBRDF.probabilityDensityFunctionSolidAngle(o, n, i, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
-	 */
-	@Override
-	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
-		return probabilityDensityFunctionSolidAngle(o, n, i, false);
-	}
-	
-	/**
 	 * Returns the probability density function (PDF) value of the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -229,7 +143,7 @@ public final class SpecularRayitoBRDF implements RayitoBXDF {
 		Objects.requireNonNull(n, "n == null");
 		Objects.requireNonNull(i, "i == null");
 		
-		return isProjected ? 1.0F : abs(Vector3F.dotProduct(n, i));
+		return 0.0F;
 	}
 	
 	/**

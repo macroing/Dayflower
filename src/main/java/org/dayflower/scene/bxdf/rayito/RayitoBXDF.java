@@ -20,6 +20,8 @@ package org.dayflower.scene.bxdf.rayito;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BXDF;
+import org.dayflower.scene.BXDFType;
 
 /**
  * A {@code RayitoBXDF} represents a BRDF (Bidirectional Reflectance Distribution Function) or a BTDF (Bidirectional Transmittance Distribution Function).
@@ -29,7 +31,21 @@ import org.dayflower.geometry.Vector3F;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface RayitoBXDF {
+public abstract class RayitoBXDF extends BXDF {
+	/**
+	 * Constructs a new {@code RayitoBXDF} instance.
+	 * <p>
+	 * If {@code bXDFType} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bXDFType a {@link BXDFType} that contains information about the behaviour for this {@code RayitoBXDF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code bXDFType} is {@code null}
+	 */
+	protected RayitoBXDF(final BXDFType bXDFType) {
+		super(bXDFType);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Evaluates the solid angle for {@code o}, {@code n} and {@code i}.
 	 * <p>
@@ -50,7 +66,9 @@ public interface RayitoBXDF {
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
-	RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i);
+	public final RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
+		return evaluateSolidAngle(o, n, i, false);
+	}
 	
 	/**
 	 * Evaluates the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
@@ -66,7 +84,7 @@ public interface RayitoBXDF {
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
-	RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected);
+	public abstract RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected);
 	
 	/**
 	 * Samples the solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
@@ -90,7 +108,9 @@ public interface RayitoBXDF {
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
-	RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v);
+	public final RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+		return sampleSolidAngle(o, n, orthonormalBasis, u, v, false);
+	}
 	
 	/**
 	 * Samples the solid angle or the projected solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
@@ -108,14 +128,7 @@ public interface RayitoBXDF {
 	 * @return a {@code RayitoBXDFResult} with the result of the operation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
-	RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected);
-	
-	/**
-	 * Returns {@code true} if, and only if, this {@code RayitoBXDF} instance is using a Dirac distribution, {@code false} otherwise.
-	 * 
-	 * @return {@code true} if, and only if, this {@code RayitoBXDF} instance is using a Dirac distribution, {@code false} otherwise
-	 */
-	boolean isDiracDistribution();
+	public abstract RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v, final boolean isProjected);
 	
 	/**
 	 * Returns the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}.
@@ -135,7 +148,9 @@ public interface RayitoBXDF {
 	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
-	float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i);
+	public final float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
+		return probabilityDensityFunctionSolidAngle(o, n, i, false);
+	}
 	
 	/**
 	 * Returns the probability density function (PDF) value of the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
@@ -149,5 +164,5 @@ public interface RayitoBXDF {
 	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
-	float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected);
+	public abstract float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i, final boolean isProjected);
 }

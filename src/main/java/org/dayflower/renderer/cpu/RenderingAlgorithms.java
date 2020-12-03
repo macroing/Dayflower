@@ -265,7 +265,7 @@ final class RenderingAlgorithms {
 		Ray3F currentRay = ray;
 		
 		int currentBounce = 0;
-		int currentBounceDiracDistribution = 0;
+		int currentBounceSpecular = 0;
 		
 		while(currentBounce < maximumBounce) {
 			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay, T_MINIMUM, T_MAXIMUM);
@@ -304,12 +304,12 @@ final class RenderingAlgorithms {
 				
 				final Vector3F surfaceNormalS = orthonormalBasisS.getW();
 				
-				if(currentBounce == 0 || currentBounce == currentBounceDiracDistribution) {
+				if(currentBounce == 0 || currentBounce == currentBounceSpecular) {
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, rayitoMaterial.emittance(intersection)));
 				}
 				
-				if(rayitoBXDF.isDiracDistribution()) {
-					currentBounceDiracDistribution++;
+				if(rayitoBXDF.getBXDFType().isSpecular()) {
+					currentBounceSpecular++;
 					
 				} else {
 					radiance = Color3F.add(radiance, doGetRadianceLights(throughput, rayitoBSDF, scene, surfaceIntersection, currentRayDirectionO, lights, primitive));

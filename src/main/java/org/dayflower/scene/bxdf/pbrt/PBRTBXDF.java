@@ -19,12 +19,12 @@
 package org.dayflower.scene.bxdf.pbrt;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFType;
 
 /**
@@ -35,33 +35,20 @@ import org.dayflower.scene.BXDFType;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class PBRTBXDF {
-	private final BXDFType bXDFType;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+public abstract class PBRTBXDF extends BXDF {
 	/**
 	 * Constructs a new {@code PBRTBXDF} instance.
 	 * <p>
 	 * If {@code bXDFType} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param bXDFType a {@link BXDFType} that contains information about the behaviour for this {@code BXDF} instance
+	 * @param bXDFType a {@link BXDFType} that contains information about the behaviour for this {@code PBRTBXDF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code bXDFType} is {@code null}
 	 */
 	protected PBRTBXDF(final BXDFType bXDFType) {
-		this.bXDFType = Objects.requireNonNull(bXDFType, "bXDFType == null");
+		super(bXDFType);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@link BXDFType} that contains information about the behaviour for this {@code PBRTBXDF} instance.
-	 * 
-	 * @return a {@code BXDFType} that contains information about the behaviour for this {@code PBRTBXDF} instance
-	 */
-	public final BXDFType getBXDFType() {
-		return this.bXDFType;
-	}
 	
 	/**
 	 * Computes the reflectance function.

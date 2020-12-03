@@ -105,18 +105,18 @@ public final class SpecularPBRTBTDF extends PBRTBXDF {
 			
 			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
 			
-			final Optional<PBRTBXDFResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<PBRTBXDFResult> optionalPBRTBXDFResult = sampleDistributionFunction(outgoing, sampleA);
 			
-			if(optionalBXDFDistributionFunctionResult.isPresent()) {
-				final PBRTBXDFResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
+			if(optionalPBRTBXDFResult.isPresent()) {
+				final PBRTBXDFResult pBRTBXDFResult = optionalPBRTBXDFResult.get();
 				
-				final float probabilityDensityFunctionValueIncoming = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
+				final float probabilityDensityFunctionValueIncoming = pBRTBXDFResult.getProbabilityDensityFunctionValue();
 				final float probabilityDensityFunctionValueOutgoing = SampleGeneratorF.hemisphereUniformDistributionProbabilityDensityFunction();
 				
 				if(probabilityDensityFunctionValueIncoming > 0.0F) {
-					final Color3F result = bXDFDistributionFunctionResult.getResult();
+					final Color3F result = pBRTBXDFResult.getResult();
 					
-					final Vector3F incoming = bXDFDistributionFunctionResult.getIncoming();
+					final Vector3F incoming = pBRTBXDFResult.getIncoming();
 					
 					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(Color3F.multiply(result, incoming.cosThetaAbs()), outgoing.cosThetaAbs()), probabilityDensityFunctionValueOutgoing * probabilityDensityFunctionValueIncoming));
 				}
@@ -153,17 +153,17 @@ public final class SpecularPBRTBTDF extends PBRTBXDF {
 		for(int i = 0; i < samplesA.size(); i++) {
 			final Point2F sampleA = samplesA.get(i);
 			
-			final Optional<PBRTBXDFResult> optionalBXDFDistributionFunctionResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<PBRTBXDFResult> optionalPBRTBXDFResult = sampleDistributionFunction(outgoing, sampleA);
 			
-			if(optionalBXDFDistributionFunctionResult.isPresent()) {
-				final PBRTBXDFResult bXDFDistributionFunctionResult = optionalBXDFDistributionFunctionResult.get();
+			if(optionalPBRTBXDFResult.isPresent()) {
+				final PBRTBXDFResult pBRTBXDFResult = optionalPBRTBXDFResult.get();
 				
-				final float probabilityDensityFunctionValue = bXDFDistributionFunctionResult.getProbabilityDensityFunctionValue();
+				final float probabilityDensityFunctionValue = pBRTBXDFResult.getProbabilityDensityFunctionValue();
 				
 				if(probabilityDensityFunctionValue > 0.0F) {
-					final Color3F result = bXDFDistributionFunctionResult.getResult();
+					final Color3F result = pBRTBXDFResult.getResult();
 					
-					final Vector3F incoming = bXDFDistributionFunctionResult.getIncoming();
+					final Vector3F incoming = pBRTBXDFResult.getIncoming();
 					
 					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(result, incoming.cosThetaAbs()), probabilityDensityFunctionValue));
 				}

@@ -252,7 +252,7 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 		
 		if(cosTheta2Squared < 0.0F) {
-//			TODO: Find out why PDF is not 1.0F?
+//			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
 			return new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), 1.0F);
 		}
 		
@@ -269,11 +269,11 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 		
 		if(random() < probabilityRussianRoulette) {
-//			TODO: Find out why PDF is not 1.0F?
+//			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
 			return new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), probabilityRussianRouletteReflection);
 		}
 		
-//		TODO: Find out why PDF is not 1.0F?
+//		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
 		return new RayitoBXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), probabilityRussianRouletteTransmission);
 	}
 }

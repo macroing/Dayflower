@@ -87,7 +87,7 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 		
 		final float nDotI = Vector3F.dotProduct(n, i);
 		
-//		TODO: Find out why PDF is not 1.0F?
+//		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
 		return new RayitoBXDFResult(o, n, i, abs(nDotI), 1.0F);
 	}
 	

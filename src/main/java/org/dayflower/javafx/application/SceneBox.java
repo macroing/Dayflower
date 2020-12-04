@@ -28,6 +28,7 @@ import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
+import org.dayflower.javafx.scene.control.Labels;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
@@ -227,7 +228,7 @@ final class SceneBox extends VBox {
 		this.comboBoxPrimitiveAddShape.setValue(Plane3F.NAME);
 		
 //		Configure the SceneBox:
-		getChildren().add(JavaFX.createLabel("Scene Configuration", 16.0D));
+		getChildren().add(Labels.createLabel("Scene Configuration", 16.0D));
 		getChildren().add(this.comboBoxPrimitiveAddMaterial);
 		getChildren().add(this.comboBoxPrimitiveAddShape);
 		getChildren().add(this.buttonPrimitiveAdd);

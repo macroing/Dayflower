@@ -20,6 +20,8 @@ package org.dayflower.javafx.application;
 
 import java.util.Objects;
 
+import org.dayflower.javafx.scene.layout.GridPanes;
+import org.dayflower.javafx.scene.layout.Regions;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RenderingAlgorithm;
 
@@ -27,6 +29,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -44,7 +47,7 @@ final class RendererInfoPane extends BorderPane {
 	
 	public RendererInfoPane(final Renderer renderer) {
 		this.comboBoxRenderingAlgorithm = new ComboBox<>();
-		this.gridPaneRendererConfiguration = JavaFX.createGridPane(10.0D, 10.0D);
+		this.gridPaneRendererConfiguration = GridPanes.createGridPane(10.0D, 10.0D);
 		this.labelRendererConfiguration = new Label();
 		this.labelRenderingAlgorithm = new Label();
 		this.renderer = Objects.requireNonNull(renderer, "renderer == null");
@@ -81,10 +84,10 @@ final class RendererInfoPane extends BorderPane {
 		
 		this.gridPaneRendererConfiguration.add(this.labelRenderingAlgorithm, 0, 0);
 		this.gridPaneRendererConfiguration.add(this.comboBoxRenderingAlgorithm, 1, 0);
-		this.gridPaneRendererConfiguration.getColumnConstraints().addAll(JavaFX.createHorizontalColumnConstraints(Priority.ALWAYS, 200.0D), JavaFX.createHorizontalColumnConstraints(Priority.NEVER));
+		this.gridPaneRendererConfiguration.getColumnConstraints().addAll(GridPanes.createHorizontalColumnConstraints(Priority.ALWAYS, 200.0D), GridPanes.createHorizontalColumnConstraints(Priority.NEVER));
 		
 //		Configure the VBox:
-		this.vBox.getChildren().addAll(this.labelRendererConfiguration, JavaFX.createRegion(10.0D, 0.0D, 0.0D, 0.0D), JavaFX.createSeparator(), JavaFX.createRegion(10.0D, 0.0D, 0.0D, 0.0D), this.gridPaneRendererConfiguration);
+		this.vBox.getChildren().addAll(this.labelRendererConfiguration, Regions.createRegion(10.0D, 0.0D, 0.0D, 0.0D), new Separator(), Regions.createRegion(10.0D, 0.0D, 0.0D, 0.0D), this.gridPaneRendererConfiguration);
 		this.vBox.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
 		
 //		Configure the RendererInfoPane:

@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.image.Image;
-import org.dayflower.node.Node;
+import org.dayflower.javafx.scene.layout.Regions;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 
@@ -38,7 +38,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
@@ -392,7 +391,7 @@ final class RendererViewPane extends BorderPane {
 		this.hBox.getChildren().add(this.labelRenderPass);
 		this.hBox.getChildren().add(this.labelRenderTime);
 		this.hBox.getChildren().add(this.labelRenderTimePerPass);
-		this.hBox.getChildren().add(JavaFX.createRegionHBoxGrowAlways());
+		this.hBox.getChildren().add(Regions.createRegionHBoxHorizontalGrowAlways());
 		this.hBox.getChildren().add(this.progressBar);
 		this.hBox.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1.0D, 0.0D, 0.0D, 0.0D))));
 		this.hBox.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));

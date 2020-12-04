@@ -21,6 +21,7 @@ package org.dayflower.javafx.application;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
+import org.dayflower.javafx.scene.control.Labels;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RenderingAlgorithm;
 
@@ -76,7 +77,7 @@ final class RendererBox extends VBox {
 		this.comboBoxRenderingAlgorithm.setValue(this.renderer.getRendererConfiguration().getRenderingAlgorithm());
 		
 //		Configure the RendererBox:
-		getChildren().add(JavaFX.createLabel("Renderer Configuration", 16.0D));
+		getChildren().add(Labels.createLabel("Renderer Configuration", 16.0D));
 		getChildren().add(this.comboBoxRenderingAlgorithm);
 		getChildren().add(this.buttonUpdateRenderer);
 		setAlignment(Pos.CENTER);

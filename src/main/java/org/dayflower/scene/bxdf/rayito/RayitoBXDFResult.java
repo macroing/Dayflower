@@ -35,9 +35,9 @@ import org.dayflower.image.Color3F;
  */
 public final class RayitoBXDFResult {
 	private final Color3F result;
-	private final Vector3F i;
-	private final Vector3F n;
-	private final Vector3F o;
+	private final Vector3F incoming;
+	private final Vector3F normal;
+	private final Vector3F outgoing;
 	private final float probabilityDensityFunctionValue;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,20 +45,20 @@ public final class RayitoBXDFResult {
 	/**
 	 * Constructs a new {@code RayitoBXDFResult} instance.
 	 * <p>
-	 * If either {@code result}, {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code result}, {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param result a {@link Color3F} instance with the result that is associated with this {@code RayitoBXDFResult} instance
-	 * @param o a {@link Vector3F} instance with the outgoing direction that is associated with this {@code RayitoBXDFResult} instance
-	 * @param n a {@code Vector3F} instance with the surface normal that is associated with this {@code RayitoBXDFResult} instance
-	 * @param i a {@code Vector3F} instance with the incoming direction that is associated with this {@code RayitoBXDFResult} instance
+	 * @param outgoing a {@link Vector3F} instance with the outgoing direction that is associated with this {@code RayitoBXDFResult} instance
+	 * @param normal a {@code Vector3F} instance with the normal that is associated with this {@code RayitoBXDFResult} instance
+	 * @param incoming a {@code Vector3F} instance with the incoming direction that is associated with this {@code RayitoBXDFResult} instance
 	 * @param probabilityDensityFunctionValue the probability density function (PDF) value associated with this {@code RayitoBXDFResult} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
-	public RayitoBXDFResult(final Color3F result, final Vector3F o, final Vector3F n, final Vector3F i, final float probabilityDensityFunctionValue) {
+	public RayitoBXDFResult(final Color3F result, final Vector3F outgoing, final Vector3F normal, final Vector3F incoming, final float probabilityDensityFunctionValue) {
 		this.result = Objects.requireNonNull(result, "result == null");
-		this.o = Objects.requireNonNull(o, "o == null");
-		this.n = Objects.requireNonNull(n, "n == null");
-		this.i = Objects.requireNonNull(i, "i == null");
+		this.outgoing = Objects.requireNonNull(outgoing, "outgoing == null");
+		this.normal = Objects.requireNonNull(normal, "normal == null");
+		this.incoming = Objects.requireNonNull(incoming, "incoming == null");
 		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
 	}
 	
@@ -80,7 +80,7 @@ public final class RayitoBXDFResult {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new RayitoBXDFResult(%s, %s, %s, %s, %+.10f)", this.result, this.o, this.n, this.i, Float.valueOf(this.probabilityDensityFunctionValue));
+		return String.format("new RayitoBXDFResult(%s, %s, %s, %s, %+.10f)", this.result, this.outgoing, this.normal, this.incoming, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -90,17 +90,17 @@ public final class RayitoBXDFResult {
 	 * 
 	 * @return a {@code Vector3F} instance with the incoming direction that is associated with this {@code RayitoBXDFResult} instance
 	 */
-	public Vector3F getI() {
-		return this.i;
+	public Vector3F getIncoming() {
+		return this.incoming;
 	}
 	
 	/**
-	 * Returns a {@link Vector3F} instance with the surface normal that is associated with this {@code RayitoBXDFResult} instance.
+	 * Returns a {@link Vector3F} instance with the normal that is associated with this {@code RayitoBXDFResult} instance.
 	 * 
-	 * @return a {@code Vector3F} instance with the surface normal that is associated with this {@code RayitoBXDFResult} instance
+	 * @return a {@code Vector3F} instance with the normal that is associated with this {@code RayitoBXDFResult} instance
 	 */
-	public Vector3F getN() {
-		return this.n;
+	public Vector3F getNormal() {
+		return this.normal;
 	}
 	
 	/**
@@ -110,8 +110,8 @@ public final class RayitoBXDFResult {
 	 * 
 	 * @return a {@code Vector3F} instance with the outgoing direction that is associated with this {@code RayitoBXDFResult} instance
 	 */
-	public Vector3F getO() {
-		return this.o;
+	public Vector3F getOutgoing() {
+		return this.outgoing;
 	}
 	
 	/**
@@ -130,11 +130,11 @@ public final class RayitoBXDFResult {
 			return false;
 		} else if(!Objects.equals(this.result, RayitoBXDFResult.class.cast(object).result)) {
 			return false;
-		} else if(!Objects.equals(this.i, RayitoBXDFResult.class.cast(object).i)) {
+		} else if(!Objects.equals(this.incoming, RayitoBXDFResult.class.cast(object).incoming)) {
 			return false;
-		} else if(!Objects.equals(this.n, RayitoBXDFResult.class.cast(object).n)) {
+		} else if(!Objects.equals(this.normal, RayitoBXDFResult.class.cast(object).normal)) {
 			return false;
-		} else if(!Objects.equals(this.o, RayitoBXDFResult.class.cast(object).o)) {
+		} else if(!Objects.equals(this.outgoing, RayitoBXDFResult.class.cast(object).outgoing)) {
 			return false;
 		} else if(!equal(this.probabilityDensityFunctionValue, RayitoBXDFResult.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
@@ -168,6 +168,6 @@ public final class RayitoBXDFResult {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.result, this.i, this.n, this.o, Float.valueOf(this.probabilityDensityFunctionValue));
+		return Objects.hash(this.result, this.incoming, this.normal, this.outgoing, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 }

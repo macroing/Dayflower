@@ -337,7 +337,7 @@ final class RenderingAlgorithms {
 				final float probabilityDensityFunctionValue = rayitoBXDFResult.getProbabilityDensityFunctionValue();
 				
 				if(probabilityDensityFunctionValue > 0.0F) {
-					currentRay = surfaceIntersection.createRay(Vector3F.negate(Vector3F.normalize(rayitoBXDFResult.getI())));
+					currentRay = surfaceIntersection.createRay(Vector3F.negate(Vector3F.normalize(rayitoBXDFResult.getIncoming())));
 					
 //					The version used in the PBRT implementation:
 //					throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(Color3F.multiply(color, reflectance), abs(Vector3F.dotProduct(currentRay.getDirection(), surfaceNormalS))), probabilityDensityFunctionValue));
@@ -873,7 +873,7 @@ final class RenderingAlgorithms {
 							final float probabilityDensityFunctionValueA2 = rayitoBXDFResult.getProbabilityDensityFunctionValue();
 							
 							if(probabilityDensityFunctionValueA2 > 0.0F && !result.isBlack()) {
-								final Vector3F selectedDirectionI = rayitoBXDFResult.getI();
+								final Vector3F selectedDirectionI = rayitoBXDFResult.getIncoming();
 								final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
 								
 								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);

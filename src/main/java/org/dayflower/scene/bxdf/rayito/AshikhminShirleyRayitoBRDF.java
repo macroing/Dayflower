@@ -81,31 +81,31 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
+	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
+	 * @param normal a {@code Vector3F} instance with the normal
+	 * @param incoming a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
 	 * @return a {@code Color3F} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public Color3F evaluateDistributionFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
-		final Vector3F h = Vector3F.half(o, n, i);
+	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
+		final Vector3F half = Vector3F.half(outgoing, normal, incoming);
 		
-		final float nDotH = Vector3F.dotProduct(n, h);
-		final float nDotI = Vector3F.dotProduct(n, i);
-		final float nDotO = Vector3F.dotProduct(n, o);
-		final float oDotH = Vector3F.dotProduct(o, h);
+		final float normalDotHalf = Vector3F.dotProduct(normal, half);
+		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
+		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
+		final float outgoingDotHalf = Vector3F.dotProduct(outgoing, half);
 		
-		final float d = (this.exponent + 1.0F) * pow(abs(nDotH), this.exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float f = fresnelDielectricSchlick(oDotH, 1.0F);
+		final float d = (this.exponent + 1.0F) * pow(abs(normalDotHalf), this.exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float f = fresnelDielectricSchlick(outgoingDotHalf, 1.0F);
 		
-		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
+		if(normalDotIncoming > 0.0F && normalDotOutgoing > 0.0F || normalDotIncoming < 0.0F && normalDotOutgoing < 0.0F) {
 			return Color3F.BLACK;
 		}
 		
-		return new Color3F(f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
+		return new Color3F(f * d / (4.0F * abs(normalDotOutgoing + -normalDotIncoming - normalDotOutgoing * -normalDotIncoming)));
 	}
 	
 	/**
@@ -113,33 +113,33 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * <p>
 	 * Returns an optional {@link RayitoBXDFResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
+	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
+	 * @param normal a {@code Vector3F} instance with the normal
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
 	 * @return an optional {@code RayitoBXDFResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
-		final float nDotO = Vector3F.dotProduct(n, o);
+	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
 		
-		final Vector3F hLocalSpace = SampleGeneratorF.sampleHemispherePowerCosineDistribution(u, v, this.exponent);
-		final Vector3F hTransformed = Vector3F.transform(hLocalSpace, orthonormalBasis);
-		final Vector3F h = nDotO < 0.0F ? Vector3F.negate(hTransformed) : hTransformed;
+		final Vector3F halfLocalSpace = SampleGeneratorF.sampleHemispherePowerCosineDistribution(u, v, this.exponent);
+		final Vector3F halfTransformed = Vector3F.transform(halfLocalSpace, orthonormalBasis);
+		final Vector3F half = normalDotOutgoing < 0.0F ? Vector3F.negate(halfTransformed) : halfTransformed;
 		
-		final float oDotH = Vector3F.dotProduct(o, h);
+		final float outgoingDotHalf = Vector3F.dotProduct(outgoing, half);
 		
-		final Vector3F i = Vector3F.subtract(o, Vector3F.multiply(h, 2.0F * oDotH));
+		final Vector3F incoming = Vector3F.subtract(outgoing, Vector3F.multiply(half, 2.0F * outgoingDotHalf));
 		
-		final Color3F result = evaluateDistributionFunction(o, n, i);
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 		
-		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(o, n, i);
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 		
-		return Optional.of(new RayitoBXDFResult(result, o, n, i, probabilityDensityFunctionValue));
+		return Optional.of(new RayitoBXDFResult(result, outgoing, normal, incoming, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -180,28 +180,28 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
+	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
+	 * @param normal a {@code Vector3F} instance with the normal
+	 * @param incoming a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
 	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public float evaluateProbabilityDensityFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
-		final Vector3F h = Vector3F.half(o, n, i);
+	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
+		final Vector3F half = Vector3F.half(outgoing, normal, incoming);
 		
-		final float nDotH = Vector3F.dotProduct(n, h);
-		final float nDotI = Vector3F.dotProduct(n, i);
-		final float nDotO = Vector3F.dotProduct(n, o);
-		final float oDotH = Vector3F.dotProduct(o, h);
+		final float normalDotHalf = Vector3F.dotProduct(normal, half);
+		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
+		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
+		final float outgoingDotHalf = Vector3F.dotProduct(outgoing, half);
 		
-		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
+		if(normalDotIncoming > 0.0F && normalDotOutgoing > 0.0F || normalDotIncoming < 0.0F && normalDotOutgoing < 0.0F) {
 			return 0.0F;
 		}
 		
-		return (this.exponent + 1.0F) * pow(abs(nDotH), this.exponent) / (PI * 8.0F * abs(oDotH));
+		return (this.exponent + 1.0F) * pow(abs(normalDotHalf), this.exponent) / (PI * 8.0F * abs(outgoingDotHalf));
 	}
 	
 	/**

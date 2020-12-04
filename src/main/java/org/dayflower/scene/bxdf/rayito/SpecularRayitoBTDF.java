@@ -81,19 +81,19 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
+	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
+	 * @param normal a {@code Vector3F} instance with the normal
+	 * @param incoming a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
 	 * @return a {@code Color3F} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public Color3F evaluateDistributionFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
-		Objects.requireNonNull(o, "o == null");
-		Objects.requireNonNull(n, "n == null");
-		Objects.requireNonNull(i, "i == null");
+	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
+		Objects.requireNonNull(incoming, "incoming == null");
 		
 		return Color3F.BLACK;
 	}
@@ -103,23 +103,23 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 * <p>
 	 * Returns an optional {@link RayitoBXDFResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
+	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
+	 * @param normal a {@code Vector3F} instance with the normal
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
 	 * @return an optional {@code RayitoBXDFResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
-		Objects.requireNonNull(o, "o == null");
-		Objects.requireNonNull(n, "n == null");
+	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
 		
-		return Optional.of(doSampleSolidAngle3(o, n));
+		return Optional.of(doSampleSolidAngle3(outgoing, normal));
 	}
 	
 	/**
@@ -160,19 +160,19 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param n a {@code Vector3F} instance with the surface normal
-	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
+	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
+	 * @param normal a {@code Vector3F} instance with the normal
+	 * @param incoming a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
 	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public float evaluateProbabilityDensityFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
-		Objects.requireNonNull(o, "o == null");
-		Objects.requireNonNull(n, "n == null");
-		Objects.requireNonNull(i, "i == null");
+	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
+		Objects.requireNonNull(incoming, "incoming == null");
 		
 		return 0.0F;
 	}
@@ -190,12 +190,12 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("unused")
-	private RayitoBXDFResult doSampleSolidAngle1(final Vector3F o, final Vector3F n) {
-		final Vector3F d = Vector3F.negate(o);
+	private RayitoBXDFResult doSampleSolidAngle1(final Vector3F outgoing, final Vector3F normal) {
+		final Vector3F direction = Vector3F.negate(outgoing);
 		
-		final float nDotD = Vector3F.dotProduct(n, d);
+		final float normalDotDirection = Vector3F.dotProduct(normal, direction);
 		
-		final float cosTheta = saturate(nDotD, -1.0F, 1.0F);
+		final float cosTheta = saturate(normalDotDirection, -1.0F, 1.0F);
 		final float cosThetaAbs = abs(cosTheta);
 		
 		final boolean isEntering = cosTheta < 0.0F;
@@ -205,34 +205,34 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float etaI = isEntering ? etaA : etaB;
 		final float etaT = isEntering ? etaB : etaA;
 		
-		final Vector3F nCorrectlyOriented = isEntering ? n : Vector3F.negate(n);
+		final Vector3F normalCorrectlyOriented = isEntering ? normal : Vector3F.negate(normal);
 		
 		final float eta = etaI / etaT;
 		
 		final float k = 1.0F - eta * eta * (1.0F - cosThetaAbs * cosThetaAbs);
 		
 		if(k < 0.0F) {
-			return new RayitoBXDFResult(Color3F.BLACK, o, n, new Vector3F(), 0.0F);
+			return new RayitoBXDFResult(Color3F.BLACK, outgoing, normal, new Vector3F(), 0.0F);
 		}
 		
-		final Vector3F i = Vector3F.normalize(Vector3F.add(Vector3F.multiply(d, eta), Vector3F.multiply(nCorrectlyOriented, eta * cosTheta - sqrt(k))));
+		final Vector3F incoming = Vector3F.normalize(Vector3F.add(Vector3F.multiply(direction, eta), Vector3F.multiply(normalCorrectlyOriented, eta * cosTheta - sqrt(k))));
 		
-		final float nDotI = Vector3F.dotProduct(n, i);
+		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
 		
-		return new RayitoBXDFResult(Color3F.WHITE, o, n, Vector3F.negate(i), abs(nDotI));
+		return new RayitoBXDFResult(Color3F.WHITE, outgoing, normal, Vector3F.negate(incoming), abs(normalDotIncoming));
 	}
 	
 	@SuppressWarnings("unused")
-	private RayitoBXDFResult doSampleSolidAngle2(final Vector3F o, final Vector3F n) {
-		final float nDotO = Vector3F.dotProduct(n, o);
+	private RayitoBXDFResult doSampleSolidAngle2(final Vector3F outgoing, final Vector3F normal) {
+		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
 		
-		final Vector3F d = Vector3F.negate(o);
-		final Vector3F nCorrectlyOriented = Vector3F.dotProduct(n, d) < 0.0F ? n : Vector3F.negate(n);
-		final Vector3F reflection = nDotO < 0.0F ? Vector3F.add(o, Vector3F.multiply(n, 2.0F * nDotO)) : Vector3F.subtract(o, Vector3F.multiply(n, 2.0F * nDotO));
+		final Vector3F direction = Vector3F.negate(outgoing);
+		final Vector3F normalCorrectlyOriented = Vector3F.dotProduct(normal, direction) < 0.0F ? normal : Vector3F.negate(normal);
+		final Vector3F reflection = normalDotOutgoing < 0.0F ? Vector3F.add(outgoing, Vector3F.multiply(normal, 2.0F * normalDotOutgoing)) : Vector3F.subtract(outgoing, Vector3F.multiply(normal, 2.0F * normalDotOutgoing));
 		
-		final float cosTheta = Vector3F.dotProduct(d, nCorrectlyOriented);
+		final float cosTheta = Vector3F.dotProduct(direction, normalCorrectlyOriented);
 		
-		final boolean isEntering = Vector3F.dotProduct(n, nCorrectlyOriented) > 0.0F;
+		final boolean isEntering = Vector3F.dotProduct(normal, normalCorrectlyOriented) > 0.0F;
 		
 		final float etaA = this.etaA;
 		final float etaB = this.etaB;
@@ -241,39 +241,39 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float k = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 		
 		if(k < 0.0F) {
-			return new RayitoBXDFResult(Color3F.WHITE, o, n, reflection, abs(Vector3F.dotProduct(n, reflection)));
+			return new RayitoBXDFResult(Color3F.WHITE, outgoing, normal, reflection, abs(Vector3F.dotProduct(normal, reflection)));
 		}
 		
-		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (eta * cosTheta + sqrt(k)))));
+		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(direction, eta), Vector3F.multiply(normal, (isEntering ? 1.0F : -1.0F) * (eta * cosTheta + sqrt(k)))));
 		
-		return new RayitoBXDFResult(Color3F.WHITE, o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)));
+		return new RayitoBXDFResult(Color3F.WHITE, outgoing, normal, Vector3F.negate(transmission), abs(Vector3F.dotProduct(normal, transmission)));
 	}
 	
-	private RayitoBXDFResult doSampleSolidAngle3(final Vector3F o, final Vector3F n) {
-		final Vector3F d = Vector3F.negate(o);
-		final Vector3F reflection = Vector3F.reflection(d, n, true);
-		final Vector3F nCorrectlyOriented = Vector3F.dotProduct(n, d) < 0.0F ? n : Vector3F.negate(n);
+	private RayitoBXDFResult doSampleSolidAngle3(final Vector3F outgoing, final Vector3F normal) {
+		final Vector3F direction = Vector3F.negate(outgoing);
+		final Vector3F reflection = Vector3F.reflection(direction, normal, true);
+		final Vector3F normalCorrectlyOriented = Vector3F.dotProduct(normal, direction) < 0.0F ? normal : Vector3F.negate(normal);
 		
-		final boolean isEntering = Vector3F.dotProduct(n, nCorrectlyOriented) > 0.0F;
+		final boolean isEntering = Vector3F.dotProduct(normal, normalCorrectlyOriented) > 0.0F;
 		
 		final float etaA = this.etaA;
 		final float etaB = this.etaB;
 		final float eta = isEntering ? etaA / etaB : etaB / etaA;
 		
-		final float cosTheta = Vector3F.dotProduct(d, nCorrectlyOriented);
+		final float cosTheta = Vector3F.dotProduct(direction, normalCorrectlyOriented);
 		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 		
 		if(cosTheta2Squared < 0.0F) {
 //			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-			return new RayitoBXDFResult(Color3F.WHITE, o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)));
+			return new RayitoBXDFResult(Color3F.WHITE, outgoing, normal, Vector3F.negate(reflection), abs(Vector3F.dotProduct(normal, reflection)));
 		}
 		
-		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
+		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(direction, eta), Vector3F.multiply(normal, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
 		
 		final float a = etaB - etaA;
 		final float b = etaB + etaA;
 		
-		final float reflectance = fresnelDielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmission, n), a * a / (b * b));
+		final float reflectance = fresnelDielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmission, normal), a * a / (b * b));
 		final float transmittance = 1.0F - reflectance;
 		
 		final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
@@ -282,10 +282,10 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		
 		if(random() < probabilityRussianRoulette) {
 //			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-			return new RayitoBXDFResult(new Color3F(probabilityRussianRouletteReflection), o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)));
+			return new RayitoBXDFResult(new Color3F(probabilityRussianRouletteReflection), outgoing, normal, Vector3F.negate(reflection), abs(Vector3F.dotProduct(normal, reflection)));
 		}
 		
 //		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-		return new RayitoBXDFResult(new Color3F(probabilityRussianRouletteTransmission), o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)));
+		return new RayitoBXDFResult(new Color3F(probabilityRussianRouletteTransmission), outgoing, normal, Vector3F.negate(transmission), abs(Vector3F.dotProduct(normal, transmission)));
 	}
 }

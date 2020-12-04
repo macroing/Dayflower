@@ -26,6 +26,7 @@ import java.util.Optional;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 
 /**
@@ -71,7 +72,7 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link RayitoBXDFResult} with the result of the sampling.
+	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -80,11 +81,11 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @return an optional {@code RayitoBXDFResult} with the result of the sampling
+	 * @return an optional {@code BXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
@@ -96,7 +97,7 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
 		
 //		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-		return Optional.of(new RayitoBXDFResult(Color3F.WHITE, outgoing, normal, incoming, abs(normalDotIncoming)));
+		return Optional.of(new BXDFResult(getBXDFType(), Color3F.WHITE, incoming, outgoing, abs(normalDotIncoming)));
 	}
 	
 	/**

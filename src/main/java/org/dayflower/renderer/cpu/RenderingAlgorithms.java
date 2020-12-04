@@ -47,6 +47,7 @@ import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.AreaLight;
+import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
@@ -58,7 +59,6 @@ import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.PBRTBSDFResult;
 import org.dayflower.scene.bxdf.rayito.RayitoBXDF;
-import org.dayflower.scene.bxdf.rayito.RayitoBXDFResult;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.PrimitiveLight;
@@ -315,29 +315,20 @@ final class RenderingAlgorithms {
 					radiance = Color3F.add(radiance, doGetRadianceLights(throughput, rayitoBSDF, scene, surfaceIntersection, currentRayDirectionO, lights, primitive));
 				}
 				
-				final Optional<RayitoBXDFResult> optionalRayitoBXDFResult = rayitoBXDF.sampleDistributionFunction(currentRayDirectionO, surfaceNormalS, orthonormalBasisS, random(), random());
+				final Optional<BXDFResult> optionalBXDFResult = rayitoBXDF.sampleDistributionFunction(currentRayDirectionO, surfaceNormalS, orthonormalBasisS, random(), random());
 				
-				if(!optionalRayitoBXDFResult.isPresent()) {
+				if(!optionalBXDFResult.isPresent()) {
 					break;
 				}
 				
-				final RayitoBXDFResult rayitoBXDFResult = optionalRayitoBXDFResult.get();
+				final BXDFResult bXDFResult = optionalBXDFResult.get();
 				
-				if(!rayitoBXDFResult.isFinite()) {
-					System.out.printf("A RayitoBXDFResult must have finite values!%n");
-					System.out.printf("RayitoBXDF: %s%n", rayitoBXDF.getClass().getSimpleName());
-					System.out.printf("Probability Density Function Value: %f%n", Float.valueOf(rayitoBXDFResult.getProbabilityDensityFunctionValue()));
-					System.out.printf("Result: %s%n", rayitoBXDFResult.getResult());
-					
-					break;
-				}
+				final Color3F result = bXDFResult.getResult();
 				
-				final Color3F result = rayitoBXDFResult.getResult();
-				
-				final float probabilityDensityFunctionValue = rayitoBXDFResult.getProbabilityDensityFunctionValue();
+				final float probabilityDensityFunctionValue = bXDFResult.getProbabilityDensityFunctionValue();
 				
 				if(probabilityDensityFunctionValue > 0.0F) {
-					currentRay = surfaceIntersection.createRay(Vector3F.negate(Vector3F.normalize(rayitoBXDFResult.getIncoming())));
+					currentRay = surfaceIntersection.createRay(Vector3F.negate(Vector3F.normalize(bXDFResult.getIncoming())));
 					
 //					The version used in the PBRT implementation:
 //					throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(Color3F.multiply(color, reflectance), abs(Vector3F.dotProduct(currentRay.getDirection(), surfaceNormalS))), probabilityDensityFunctionValue));
@@ -863,17 +854,17 @@ final class RenderingAlgorithms {
 							}
 						}
 						
-						final Optional<RayitoBXDFResult> optionalRayitoBXDFResult = rayitoBXDF.sampleDistributionFunction(directionO, surfaceNormal, orthonormalBasis, random(), random());
+						final Optional<BXDFResult> optionalBXDFResult = rayitoBXDF.sampleDistributionFunction(directionO, surfaceNormal, orthonormalBasis, random(), random());
 						
-						if(optionalRayitoBXDFResult.isPresent()) {
-							final RayitoBXDFResult rayitoBXDFResult = optionalRayitoBXDFResult.get();
+						if(optionalBXDFResult.isPresent()) {
+							final BXDFResult bXDFResult = optionalBXDFResult.get();
 							
-							final Color3F result = rayitoBXDFResult.getResult();
+							final Color3F result = bXDFResult.getResult();
 							
-							final float probabilityDensityFunctionValueA2 = rayitoBXDFResult.getProbabilityDensityFunctionValue();
+							final float probabilityDensityFunctionValueA2 = bXDFResult.getProbabilityDensityFunctionValue();
 							
 							if(probabilityDensityFunctionValueA2 > 0.0F && !result.isBlack()) {
-								final Vector3F selectedDirectionI = rayitoBXDFResult.getIncoming();
+								final Vector3F selectedDirectionI = bXDFResult.getIncoming();
 								final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
 								
 								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);

@@ -33,6 +33,7 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSDF;
+import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
 import org.dayflower.util.ParameterArguments;
@@ -236,21 +237,21 @@ public final class PBRTBSDF implements BSDF {
 			return Optional.empty();
 		}
 		
-		final Optional<PBRTBXDFResult> optionalPBRTBXDFResult = matchingPBRTBXDF.sampleDistributionFunction(outgoing, sampleRemapped);
+		final Optional<BXDFResult> optionalBXDFResult = matchingPBRTBXDF.sampleDistributionFunction(outgoing, sampleRemapped);
 		
-		if(!optionalPBRTBXDFResult.isPresent()) {
+		if(!optionalBXDFResult.isPresent()) {
 			return Optional.empty();
 		}
 		
-		final PBRTBXDFResult pBRTBXDFResult = optionalPBRTBXDFResult.get();
+		final BXDFResult bXDFResult = optionalBXDFResult.get();
 		
-		final Vector3F incoming = pBRTBXDFResult.getIncoming();
+		final Vector3F incoming = bXDFResult.getIncoming();
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
 		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
 		
-		Color3F result = pBRTBXDFResult.getResult();
+		Color3F result = bXDFResult.getResult();
 		
-		float probabilityDensityFunctionValue = pBRTBXDFResult.getProbabilityDensityFunctionValue();
+		float probabilityDensityFunctionValue = bXDFResult.getProbabilityDensityFunctionValue();
 		
 		if(matches > 1 && !matchingPBRTBXDF.getBXDFType().isSpecular()) {
 			for(final PBRTBXDF pBRTBXDF : this.pBRTBXDFs) {
@@ -276,7 +277,7 @@ public final class PBRTBSDF implements BSDF {
 			}
 		}
 		
-		return Optional.of(new PBRTBSDFResult(pBRTBXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
+		return Optional.of(new PBRTBSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**

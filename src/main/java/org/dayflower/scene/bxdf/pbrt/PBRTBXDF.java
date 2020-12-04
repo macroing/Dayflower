@@ -25,6 +25,7 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BXDF;
+import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 
 /**
@@ -101,7 +102,7 @@ public abstract class PBRTBXDF extends BXDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link PBRTBXDFResult} with the result of the sampling.
+	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -109,10 +110,10 @@ public abstract class PBRTBXDF extends BXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code PBRTBXDFResult} with the result of the sampling
+	 * @return an optional {@code BXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
-	public abstract Optional<PBRTBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample);
+	public abstract Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample);
 	
 	/**
 	 * Evaluates the probability density function (PDF).

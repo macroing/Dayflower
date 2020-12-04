@@ -34,6 +34,7 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.MicrofacetDistribution;
 import org.dayflower.util.ParameterArguments;
@@ -106,18 +107,18 @@ public final class FresnelBlendPBRTBRDF extends PBRTBXDF {
 			
 			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
 			
-			final Optional<PBRTBXDFResult> optionalPBRTBXDFResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, sampleA);
 			
-			if(optionalPBRTBXDFResult.isPresent()) {
-				final PBRTBXDFResult bBRTBXDFResult = optionalPBRTBXDFResult.get();
+			if(optionalBXDFResult.isPresent()) {
+				final BXDFResult bXDFResult = optionalBXDFResult.get();
 				
-				final float probabilityDensityFunctionValueIncoming = bBRTBXDFResult.getProbabilityDensityFunctionValue();
+				final float probabilityDensityFunctionValueIncoming = bXDFResult.getProbabilityDensityFunctionValue();
 				final float probabilityDensityFunctionValueOutgoing = SampleGeneratorF.hemisphereUniformDistributionProbabilityDensityFunction();
 				
 				if(probabilityDensityFunctionValueIncoming > 0.0F) {
-					final Color3F result = bBRTBXDFResult.getResult();
+					final Color3F result = bXDFResult.getResult();
 					
-					final Vector3F incoming = bBRTBXDFResult.getIncoming();
+					final Vector3F incoming = bXDFResult.getIncoming();
 					
 					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(Color3F.multiply(result, incoming.cosThetaAbs()), outgoing.cosThetaAbs()), probabilityDensityFunctionValueOutgoing * probabilityDensityFunctionValueIncoming));
 				}
@@ -154,17 +155,17 @@ public final class FresnelBlendPBRTBRDF extends PBRTBXDF {
 		for(int i = 0; i < samplesA.size(); i++) {
 			final Point2F sampleA = samplesA.get(i);
 			
-			final Optional<PBRTBXDFResult> optionalPBRTBXDFResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, sampleA);
 			
-			if(optionalPBRTBXDFResult.isPresent()) {
-				final PBRTBXDFResult pBRTBXDFResult = optionalPBRTBXDFResult.get();
+			if(optionalBXDFResult.isPresent()) {
+				final BXDFResult bXDFResult = optionalBXDFResult.get();
 				
-				final float probabilityDensityFunctionValue = pBRTBXDFResult.getProbabilityDensityFunctionValue();
+				final float probabilityDensityFunctionValue = bXDFResult.getProbabilityDensityFunctionValue();
 				
 				if(probabilityDensityFunctionValue > 0.0F) {
-					final Color3F result = pBRTBXDFResult.getResult();
+					final Color3F result = bXDFResult.getResult();
 					
-					final Vector3F incoming = pBRTBXDFResult.getIncoming();
+					final Vector3F incoming = bXDFResult.getIncoming();
 					
 					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(result, incoming.cosThetaAbs()), probabilityDensityFunctionValue));
 				}
@@ -222,7 +223,7 @@ public final class FresnelBlendPBRTBRDF extends PBRTBXDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link PBRTBXDFResult} with the result of the sampling.
+	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -230,11 +231,11 @@ public final class FresnelBlendPBRTBRDF extends PBRTBXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code PBRTBXDFResult} with the result of the sampling
+	 * @return an optional {@code BXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<PBRTBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
 //		PBRT: Implementation of FresnelBlend.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
@@ -253,7 +254,7 @@ public final class FresnelBlendPBRTBRDF extends PBRTBXDF {
 			
 			final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, incoming);
 			
-			return Optional.of(new PBRTBXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 		}
 		
 		final float u = min(2.0F * (sample.getU() - 0.5F), ONE_MINUS_EPSILON);
@@ -273,7 +274,7 @@ public final class FresnelBlendPBRTBRDF extends PBRTBXDF {
 		
 		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, incoming);
 		
-		return Optional.of(new PBRTBXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**

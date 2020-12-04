@@ -22,7 +22,6 @@ import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.fresnelDielectricSchlick;
 import static org.dayflower.util.Floats.random;
-import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
@@ -31,6 +30,7 @@ import java.util.Optional;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 
 /**
@@ -101,7 +101,7 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link RayitoBXDFResult} with the result of the sampling.
+	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -110,16 +110,52 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @return an optional {@code RayitoBXDFResult} with the result of the sampling
+	 * @return an optional {@code BXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
 		
-		return Optional.of(doSampleSolidAngle3(outgoing, normal));
+		final Vector3F direction = Vector3F.negate(outgoing);
+		final Vector3F reflection = Vector3F.reflection(direction, normal, true);
+		final Vector3F normalCorrectlyOriented = Vector3F.dotProduct(normal, direction) < 0.0F ? normal : Vector3F.negate(normal);
+		
+		final boolean isEntering = Vector3F.dotProduct(normal, normalCorrectlyOriented) > 0.0F;
+		
+		final float etaA = this.etaA;
+		final float etaB = this.etaB;
+		final float eta = isEntering ? etaA / etaB : etaB / etaA;
+		
+		final float cosTheta = Vector3F.dotProduct(direction, normalCorrectlyOriented);
+		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
+		
+		if(cosTheta2Squared < 0.0F) {
+//			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
+			return Optional.of(new BXDFResult(getBXDFType(), Color3F.WHITE, Vector3F.negate(reflection), outgoing, abs(Vector3F.dotProduct(normal, reflection))));
+		}
+		
+		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(direction, eta), Vector3F.multiply(normal, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
+		
+		final float a = etaB - etaA;
+		final float b = etaB + etaA;
+		
+		final float reflectance = fresnelDielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmission, normal), a * a / (b * b));
+		final float transmittance = 1.0F - reflectance;
+		
+		final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+		final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+		final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+		
+		if(random() < probabilityRussianRoulette) {
+//			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
+			return Optional.of(new BXDFResult(getBXDFType(), new Color3F(probabilityRussianRouletteReflection), Vector3F.negate(reflection), outgoing, abs(Vector3F.dotProduct(normal, reflection))));
+		}
+		
+//		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
+		return Optional.of(new BXDFResult(getBXDFType(), new Color3F(probabilityRussianRouletteTransmission), Vector3F.negate(transmission), outgoing, abs(Vector3F.dotProduct(normal, transmission))));
 	}
 	
 	/**
@@ -185,107 +221,5 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Float.valueOf(this.etaA), Float.valueOf(this.etaB));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("unused")
-	private RayitoBXDFResult doSampleSolidAngle1(final Vector3F outgoing, final Vector3F normal) {
-		final Vector3F direction = Vector3F.negate(outgoing);
-		
-		final float normalDotDirection = Vector3F.dotProduct(normal, direction);
-		
-		final float cosTheta = saturate(normalDotDirection, -1.0F, 1.0F);
-		final float cosThetaAbs = abs(cosTheta);
-		
-		final boolean isEntering = cosTheta < 0.0F;
-		
-		final float etaA = this.etaA;
-		final float etaB = this.etaB;
-		final float etaI = isEntering ? etaA : etaB;
-		final float etaT = isEntering ? etaB : etaA;
-		
-		final Vector3F normalCorrectlyOriented = isEntering ? normal : Vector3F.negate(normal);
-		
-		final float eta = etaI / etaT;
-		
-		final float k = 1.0F - eta * eta * (1.0F - cosThetaAbs * cosThetaAbs);
-		
-		if(k < 0.0F) {
-			return new RayitoBXDFResult(Color3F.BLACK, outgoing, normal, new Vector3F(), 0.0F);
-		}
-		
-		final Vector3F incoming = Vector3F.normalize(Vector3F.add(Vector3F.multiply(direction, eta), Vector3F.multiply(normalCorrectlyOriented, eta * cosTheta - sqrt(k))));
-		
-		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
-		
-		return new RayitoBXDFResult(Color3F.WHITE, outgoing, normal, Vector3F.negate(incoming), abs(normalDotIncoming));
-	}
-	
-	@SuppressWarnings("unused")
-	private RayitoBXDFResult doSampleSolidAngle2(final Vector3F outgoing, final Vector3F normal) {
-		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
-		
-		final Vector3F direction = Vector3F.negate(outgoing);
-		final Vector3F normalCorrectlyOriented = Vector3F.dotProduct(normal, direction) < 0.0F ? normal : Vector3F.negate(normal);
-		final Vector3F reflection = normalDotOutgoing < 0.0F ? Vector3F.add(outgoing, Vector3F.multiply(normal, 2.0F * normalDotOutgoing)) : Vector3F.subtract(outgoing, Vector3F.multiply(normal, 2.0F * normalDotOutgoing));
-		
-		final float cosTheta = Vector3F.dotProduct(direction, normalCorrectlyOriented);
-		
-		final boolean isEntering = Vector3F.dotProduct(normal, normalCorrectlyOriented) > 0.0F;
-		
-		final float etaA = this.etaA;
-		final float etaB = this.etaB;
-		final float eta = isEntering ? etaA / etaB : etaB / etaA;
-		
-		final float k = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
-		
-		if(k < 0.0F) {
-			return new RayitoBXDFResult(Color3F.WHITE, outgoing, normal, reflection, abs(Vector3F.dotProduct(normal, reflection)));
-		}
-		
-		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(direction, eta), Vector3F.multiply(normal, (isEntering ? 1.0F : -1.0F) * (eta * cosTheta + sqrt(k)))));
-		
-		return new RayitoBXDFResult(Color3F.WHITE, outgoing, normal, Vector3F.negate(transmission), abs(Vector3F.dotProduct(normal, transmission)));
-	}
-	
-	private RayitoBXDFResult doSampleSolidAngle3(final Vector3F outgoing, final Vector3F normal) {
-		final Vector3F direction = Vector3F.negate(outgoing);
-		final Vector3F reflection = Vector3F.reflection(direction, normal, true);
-		final Vector3F normalCorrectlyOriented = Vector3F.dotProduct(normal, direction) < 0.0F ? normal : Vector3F.negate(normal);
-		
-		final boolean isEntering = Vector3F.dotProduct(normal, normalCorrectlyOriented) > 0.0F;
-		
-		final float etaA = this.etaA;
-		final float etaB = this.etaB;
-		final float eta = isEntering ? etaA / etaB : etaB / etaA;
-		
-		final float cosTheta = Vector3F.dotProduct(direction, normalCorrectlyOriented);
-		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
-		
-		if(cosTheta2Squared < 0.0F) {
-//			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-			return new RayitoBXDFResult(Color3F.WHITE, outgoing, normal, Vector3F.negate(reflection), abs(Vector3F.dotProduct(normal, reflection)));
-		}
-		
-		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(direction, eta), Vector3F.multiply(normal, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
-		
-		final float a = etaB - etaA;
-		final float b = etaB + etaA;
-		
-		final float reflectance = fresnelDielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmission, normal), a * a / (b * b));
-		final float transmittance = 1.0F - reflectance;
-		
-		final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
-		final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
-		final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
-		
-		if(random() < probabilityRussianRoulette) {
-//			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-			return new RayitoBXDFResult(new Color3F(probabilityRussianRouletteReflection), outgoing, normal, Vector3F.negate(reflection), abs(Vector3F.dotProduct(normal, reflection)));
-		}
-		
-//		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-		return new RayitoBXDFResult(new Color3F(probabilityRussianRouletteTransmission), outgoing, normal, Vector3F.negate(transmission), abs(Vector3F.dotProduct(normal, transmission)));
 	}
 }

@@ -32,6 +32,7 @@ import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 
 /**
@@ -111,7 +112,7 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link RayitoBXDFResult} with the result of the sampling.
+	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -120,11 +121,11 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @return an optional {@code RayitoBXDFResult} with the result of the sampling
+	 * @return an optional {@code BXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
 		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
 		
 		final Vector3F halfLocalSpace = SampleGeneratorF.sampleHemispherePowerCosineDistribution(u, v, this.exponent);
@@ -139,7 +140,7 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 		
 		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 		
-		return Optional.of(new RayitoBXDFResult(result, outgoing, normal, incoming, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(getBXDFType(), result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**

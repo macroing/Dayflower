@@ -25,6 +25,7 @@ import java.util.Optional;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.scene.BXDFResult;
 import org.dayflower.util.ParameterArguments;
 
 /**
@@ -129,7 +130,7 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link PBRTBXDFResult} with the result of the sampling.
+	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -137,18 +138,18 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 	 * 
 	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
 	 * @param sample the sample point
-	 * @return an optional {@code PBRTBXDFResult} with the result of the sampling
+	 * @return an optional {@code BXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<PBRTBXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Optional<PBRTBXDFResult> optionalBXDFResult = this.pBRTBXDF.sampleDistributionFunction(outgoing, sample);
+		final Optional<BXDFResult> optionalBXDFResult = this.pBRTBXDF.sampleDistributionFunction(outgoing, sample);
 		
 		if(optionalBXDFResult.isPresent()) {
-			return Optional.of(PBRTBXDFResult.scale(optionalBXDFResult.get(), this.scale));
+			return Optional.of(BXDFResult.scale(optionalBXDFResult.get(), this.scale));
 		}
 		
 		return Optional.empty();

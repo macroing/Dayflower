@@ -34,10 +34,10 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
-import org.dayflower.scene.Fresnel;
-import org.dayflower.scene.MicrofacetDistribution;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.fresnel.DielectricFresnel;
+import org.dayflower.scene.fresnel.Fresnel;
+import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.util.ParameterArguments;
 
 /**

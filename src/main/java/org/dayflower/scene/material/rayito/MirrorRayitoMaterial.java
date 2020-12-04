@@ -25,11 +25,11 @@ import java.util.Optional;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.bxdf.rayito.SpecularRayitoBRDF;
 import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.Texture;
 
 /**
  * A {@code MirrorRayitoMaterial} is an implementation of {@link RayitoMaterial} that represents a mirror.

@@ -45,8 +45,6 @@ import org.dayflower.image.ConstantSpectralCurve;
 import org.dayflower.image.IrregularSpectralCurve;
 import org.dayflower.image.RegularSpectralCurve;
 import org.dayflower.image.SpectralCurve;
-import org.dayflower.scene.Background;
-import org.dayflower.scene.BackgroundSample;
 import org.dayflower.scene.Intersection;
 
 /**

@@ -21,7 +21,6 @@ package org.dayflower.scene.fresnel;
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
-import org.dayflower.scene.Fresnel;
 
 /**
  * A {@code ConstantFresnel} is used to ignore computing the Fresnel equation in certain situations.

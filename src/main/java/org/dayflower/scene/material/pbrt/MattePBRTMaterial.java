@@ -29,12 +29,12 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.OrenNayarPBRTBRDF;
 import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.Texture;
 
 /**
  * A {@code MattePBRTMaterial} is an implementation of {@link PBRTMaterial} and is used for matte surfaces.

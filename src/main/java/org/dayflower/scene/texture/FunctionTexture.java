@@ -24,7 +24,6 @@ import java.util.function.Function;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Texture;
 
 /**
  * A {@code FunctionTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from another {@code Texture} instance obtained by applying an {@link Intersection} instance to a {@code Function} instance.

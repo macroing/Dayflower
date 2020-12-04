@@ -27,7 +27,6 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Texture;
 
 /**
  * A {@code BullseyeTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between two other {@code Texture} instances in a bullseye pattern.

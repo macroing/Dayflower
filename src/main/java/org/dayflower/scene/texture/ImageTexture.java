@@ -44,7 +44,6 @@ import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Texture;
 import org.dayflower.util.BufferedImages;
 import org.dayflower.util.ParameterArguments;
 

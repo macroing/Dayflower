@@ -24,8 +24,6 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.scene.Background;
-import org.dayflower.scene.BackgroundSample;
 import org.dayflower.scene.Intersection;
 
 /**

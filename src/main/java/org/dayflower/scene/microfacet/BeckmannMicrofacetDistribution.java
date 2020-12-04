@@ -40,7 +40,6 @@ import java.util.Objects;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.scene.MicrofacetDistribution;
 
 /**
  * A {@code BeckmannMicrofacetDistribution} is an implementation of {@link MicrofacetDistribution} that represents a Beckmann microfacet distribution.

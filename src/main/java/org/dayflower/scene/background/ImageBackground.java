@@ -31,8 +31,6 @@ import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
-import org.dayflower.scene.Background;
-import org.dayflower.scene.BackgroundSample;
 import org.dayflower.scene.Intersection;
 import org.dayflower.util.BufferedImages;
 import org.dayflower.util.ParameterArguments;

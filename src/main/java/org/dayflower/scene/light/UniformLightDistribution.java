@@ -24,7 +24,6 @@ import java.lang.reflect.Field;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.sampler.Distribution1F;
-import org.dayflower.scene.LightDistribution;
 import org.dayflower.scene.Scene;
 
 //TODO: Add Javadocs!

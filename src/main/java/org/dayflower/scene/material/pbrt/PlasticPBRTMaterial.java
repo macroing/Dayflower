@@ -25,18 +25,18 @@ import java.util.Optional;
 
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSSRDF;
-import org.dayflower.scene.Fresnel;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.MicrofacetDistribution;
-import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.PBRTBXDF;
 import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
+import org.dayflower.scene.fresnel.Fresnel;
+import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.Texture;
 
 /**
  * A {@code PlasticPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents plastic.

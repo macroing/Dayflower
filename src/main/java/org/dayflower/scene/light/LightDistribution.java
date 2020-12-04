@@ -16,24 +16,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.light;
 
-import org.dayflower.image.Color3F;
+import java.lang.reflect.Field;
 
-/**
- * A {@code Fresnel} is used to compute the Fresnel equations.
- * <p>
- * All official implementations of this interface are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
- * 
- * @since 1.0.0
- * @author J&#246;rgen Lundgren
- */
-public interface Fresnel {
-	/**
-	 * Returns a {@link Color3F} instance that represents the amount of light reflected by the surface.
-	 * 
-	 * @param cosThetaI the cosine of the angle made by the incoming direction and the surface normal
-	 * @return a {@code Color3F} instance that represents the amount of light reflected by the surface
-	 */
-	Color3F evaluate(final float cosThetaI);
+import org.dayflower.geometry.Point3F;
+import org.dayflower.sampler.Distribution1F;
+
+//TODO: Add Javadocs!
+public interface LightDistribution {
+//	TODO: Add Javadocs!
+	Distribution1F find(final Point3F point);
 }

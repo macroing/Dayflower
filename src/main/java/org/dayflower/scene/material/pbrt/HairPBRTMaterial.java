@@ -27,11 +27,11 @@ import java.util.Optional;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.HairPBRTBXDF;
 import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.Texture;
 
 /**
  * A {@code HairPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents hair.

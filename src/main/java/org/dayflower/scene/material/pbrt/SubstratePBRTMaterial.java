@@ -25,13 +25,13 @@ import java.util.Optional;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.MicrofacetDistribution;
-import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.FresnelBlendPBRTBRDF;
+import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.Texture;
 
 /**
  * A {@code SubstratePBRTMaterial} is an implementation of {@link PBRTMaterial} that represents a substrate material.

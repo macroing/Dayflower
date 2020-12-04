@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene;
+package org.dayflower.scene.texture;
 
 import org.dayflower.image.Color3F;
 import org.dayflower.node.Node;
+import org.dayflower.scene.Intersection;
 
 /**
  * A {@code Texture} represents a texture of a surface.

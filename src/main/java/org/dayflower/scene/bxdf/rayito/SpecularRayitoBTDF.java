@@ -42,6 +42,7 @@ import org.dayflower.scene.BXDFType;
  * @author J&#246;rgen Lundgren
  */
 public final class SpecularRayitoBTDF extends RayitoBXDF {
+	private final Color3F transmittanceScale;
 	private final float etaA;
 	private final float etaB;
 	
@@ -50,26 +51,17 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	/**
 	 * Constructs a new {@code SpecularRayitoBTDF} instance.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new SpecularRayitoBTDF(1.0F, 1.5F);
-	 * }
-	 * </pre>
-	 */
-	public SpecularRayitoBTDF() {
-		this(1.0F, 1.5F);
-	}
-	
-	/**
-	 * Constructs a new {@code SpecularRayitoBTDF} instance.
+	 * If {@code transmittanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param transmittanceScale a {@link Color3F} instance that represents the transmittance scale
 	 * @param etaA the index of refraction denoted by {@code A}
 	 * @param etaB the index of refraction denoted by {@code B}
+	 * @throws NullPointerException thrown if, and only if, {@code transmittanceScale} is {@code null}
 	 */
-	public SpecularRayitoBTDF(final float etaA, final float etaB) {
+	public SpecularRayitoBTDF(final Color3F transmittanceScale, final float etaA, final float etaB) {
 		super(BXDFType.SPECULAR_TRANSMISSION);
 		
+		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
 		this.etaA = etaA;
 		this.etaB = etaB;
 	}
@@ -132,9 +124,17 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float cosTheta = Vector3F.dotProduct(direction, normalCorrectlyOriented);
 		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 		
+		final BXDFType bXDFType = getBXDFType();
+		
 		if(cosTheta2Squared < 0.0F) {
-//			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-			return Optional.of(new BXDFResult(getBXDFType(), Color3F.WHITE, Vector3F.negate(reflection), outgoing, abs(Vector3F.dotProduct(normal, reflection))));
+			final Color3F result = Color3F.WHITE;
+			
+			final Vector3F incoming = Vector3F.negate(reflection);
+			
+			final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, reflection));
+			
+//			TODO: Find out why the PDF and Result variables seems to be swapped? Swapping them does not work.
+			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 		}
 		
 		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(direction, eta), Vector3F.multiply(normal, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
@@ -150,12 +150,24 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 		
 		if(random() < probabilityRussianRoulette) {
-//			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-			return Optional.of(new BXDFResult(getBXDFType(), new Color3F(probabilityRussianRouletteReflection), Vector3F.negate(reflection), outgoing, abs(Vector3F.dotProduct(normal, reflection))));
+			final Color3F result = new Color3F(probabilityRussianRouletteReflection);
+			
+			final Vector3F incoming = Vector3F.negate(reflection);
+			
+			final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, reflection));
+			
+//			TODO: Find out why the PDF and Result variables seems to be swapped? Swapping them does not work.
+			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 		}
 		
-//		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-		return Optional.of(new BXDFResult(getBXDFType(), new Color3F(probabilityRussianRouletteTransmission), Vector3F.negate(transmission), outgoing, abs(Vector3F.dotProduct(normal, transmission))));
+		final Color3F result = new Color3F(probabilityRussianRouletteTransmission);
+		
+		final Vector3F incoming = Vector3F.negate(transmission);
+		
+		final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, transmission));
+		
+//		TODO: Find out why the PDF and Result variables seems to be swapped? Swapping them does not work.
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -165,7 +177,7 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new SpecularRayitoBTDF(%+.10f, %+.10f)", Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+		return String.format("new SpecularRayitoBTDF(%s, %+.10f, %+.10f)", this.transmittanceScale, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 	
 	/**
@@ -181,6 +193,8 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof SpecularRayitoBTDF)) {
+			return false;
+		} else if(!Objects.equals(this.transmittanceScale, SpecularRayitoBTDF.class.cast(object).transmittanceScale)) {
 			return false;
 		} else if(!equal(this.etaA, SpecularRayitoBTDF.class.cast(object).etaA)) {
 			return false;
@@ -220,6 +234,6 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+		return Objects.hash(this.transmittanceScale, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 }

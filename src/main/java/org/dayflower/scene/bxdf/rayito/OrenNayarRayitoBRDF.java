@@ -44,6 +44,7 @@ import org.dayflower.scene.BXDFType;
  */
 public final class OrenNayarRayitoBRDF extends RayitoBXDF {
 	private final AngleF angle;
+	private final Color3F reflectanceScale;
 	private final float a;
 	private final float b;
 	
@@ -52,29 +53,17 @@ public final class OrenNayarRayitoBRDF extends RayitoBXDF {
 	/**
 	 * Constructs a new {@code OrenNayarRayitoBRDF} instance.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new OrenNayarRayitoBRDF(AngleF.degrees(20.0F));
-	 * }
-	 * </pre>
-	 */
-	public OrenNayarRayitoBRDF() {
-		this(AngleF.degrees(20.0F));
-	}
-	
-	/**
-	 * Constructs a new {@code OrenNayarRayitoBRDF} instance.
-	 * <p>
-	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code angle} or {@code reflectanceScale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param angle an {@link AngleF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code reflectanceScale} are {@code null}
 	 */
-	public OrenNayarRayitoBRDF(final AngleF angle) {
+	public OrenNayarRayitoBRDF(final AngleF angle, final Color3F reflectanceScale) {
 		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.angle = Objects.requireNonNull(angle, "angle == null");
+		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 		this.a = 1.0F - (angle.getRadians() * angle.getRadians() / (2.0F * (angle.getRadians() * angle.getRadians() + 0.33F)));
 		this.b = 0.45F * angle.getRadians() * angle.getRadians() / (angle.getRadians() * angle.getRadians() + 0.09F);
 	}
@@ -123,7 +112,7 @@ public final class OrenNayarRayitoBRDF extends RayitoBXDF {
 			return Color3F.BLACK;
 		}
 		
-		return new Color3F(PI_RECIPROCAL * c);
+		return Color3F.multiply(Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL), c);
 	}
 	
 	/**
@@ -149,29 +138,13 @@ public final class OrenNayarRayitoBRDF extends RayitoBXDF {
 		final Vector3F incomingTransformed = Vector3F.normalize(Vector3F.transform(incomingLocalSpace, orthonormalBasis));
 		final Vector3F incoming = normalDotOutgoing < 0.0F ? Vector3F.negate(incomingTransformed) : incomingTransformed;
 		
-		final OrthonormalBasis33F orthonormalBasisShadeSpace = new OrthonormalBasis33F();
+		final BXDFType bXDFType = getBXDFType();
 		
-		final Vector3F incomingShadeSpace = Vector3F.normalize(Vector3F.transformReverse(Vector3F.negate(incoming), orthonormalBasisShadeSpace));
-		final Vector3F outgoingShadeSpace = Vector3F.normalize(Vector3F.transformReverse(outgoing, orthonormalBasisShadeSpace));
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 		
-		final float cosThetaAbsIncomingShadeSpace = incomingShadeSpace.cosThetaAbs();
-		final float cosThetaAbsOutgoingShadeSpace = outgoingShadeSpace.cosThetaAbs();
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 		
-		final float sinThetaIncomingShadeSpace = incomingShadeSpace.sinTheta();
-		final float sinThetaOutgoingShadeSpace = outgoingShadeSpace.sinTheta();
-		
-		final float maxCos = sinThetaIncomingShadeSpace > 1.0e-4F && sinThetaOutgoingShadeSpace > 1.0e-4F ? max(0.0F, incomingShadeSpace.cosPhi() * outgoingShadeSpace.cosPhi() + incomingShadeSpace.sinPhi() * outgoingShadeSpace.sinPhi()) : 0.0F;
-		
-		final float sinA = cosThetaAbsIncomingShadeSpace > cosThetaAbsOutgoingShadeSpace ? sinThetaOutgoingShadeSpace : sinThetaIncomingShadeSpace;
-		final float tanB = cosThetaAbsIncomingShadeSpace > cosThetaAbsOutgoingShadeSpace ? sinThetaIncomingShadeSpace / cosThetaAbsIncomingShadeSpace : sinThetaOutgoingShadeSpace / cosThetaAbsOutgoingShadeSpace;
-		
-		final float a = this.a;
-		final float b = this.b;
-		final float c = (a + b * maxCos * sinA * tanB);
-		
-		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
-		
-		return Optional.of(new BXDFResult(getBXDFType(), new Color3F(PI_RECIPROCAL * c), incoming, outgoing, PI_RECIPROCAL * c * abs(normalDotIncoming)));
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -181,7 +154,7 @@ public final class OrenNayarRayitoBRDF extends RayitoBXDF {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new OrenNayarRayitoBRDF(%s)", this.angle);
+		return String.format("new OrenNayarRayitoBRDF(%s, %s)", this.angle, this.reflectanceScale);
 	}
 	
 	/**
@@ -199,6 +172,8 @@ public final class OrenNayarRayitoBRDF extends RayitoBXDF {
 		} else if(!(object instanceof OrenNayarRayitoBRDF)) {
 			return false;
 		} else if(!Objects.equals(this.angle, OrenNayarRayitoBRDF.class.cast(object).angle)) {
+			return false;
+		} else if(!Objects.equals(this.reflectanceScale, OrenNayarRayitoBRDF.class.cast(object).reflectanceScale)) {
 			return false;
 		} else if(!equal(this.a, OrenNayarRayitoBRDF.class.cast(object).a)) {
 			return false;
@@ -261,6 +236,6 @@ public final class OrenNayarRayitoBRDF extends RayitoBXDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.angle, Float.valueOf(this.a), Float.valueOf(this.b));
+		return Objects.hash(this.angle, this.reflectanceScale, Float.valueOf(this.a), Float.valueOf(this.b));
 	}
 }

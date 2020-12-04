@@ -44,6 +44,7 @@ import org.dayflower.scene.BXDFType;
  * @author J&#246;rgen Lundgren
  */
 public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
+	private final Color3F reflectanceScale;
 	private final float exponent;
 	private final float roughness;
 	
@@ -52,25 +53,16 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	/**
 	 * Constructs a new {@code AshikhminShirleyRayitoBRDF} instance.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new AshikhminShirleyRayitoBRDF(0.05F);
-	 * }
-	 * </pre>
-	 */
-	public AshikhminShirleyRayitoBRDF() {
-		this(0.05F);
-	}
-	
-	/**
-	 * Constructs a new {@code AshikhminShirleyRayitoBRDF} instance.
+	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
 	 * @param roughness the roughness to use
+	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public AshikhminShirleyRayitoBRDF(final float roughness) {
+	public AshikhminShirleyRayitoBRDF(final Color3F reflectanceScale, final float roughness) {
 		super(BXDFType.GLOSSY_REFLECTION);
 		
+		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 		this.exponent = 1.0F / (roughness * roughness);
 		this.roughness = roughness;
 	}
@@ -106,7 +98,7 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 			return Color3F.BLACK;
 		}
 		
-		return new Color3F(f * d / (4.0F * abs(normalDotOutgoing + -normalDotIncoming - normalDotOutgoing * -normalDotIncoming)));
+		return Color3F.divide(Color3F.multiply(Color3F.multiply(this.reflectanceScale, d), f), 4.0F * abs(normalDotOutgoing + -normalDotIncoming - normalDotOutgoing * -normalDotIncoming));
 	}
 	
 	/**
@@ -136,11 +128,13 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 		
 		final Vector3F incoming = Vector3F.subtract(outgoing, Vector3F.multiply(half, 2.0F * outgoingDotHalf));
 		
+		final BXDFType bXDFType = getBXDFType();
+		
 		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 		
 		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 		
-		return Optional.of(new BXDFResult(getBXDFType(), result, incoming, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -150,7 +144,7 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new AshikhminShirleyRayitoBRDF(%+.10f)", Float.valueOf(this.roughness));
+		return String.format("new AshikhminShirleyRayitoBRDF(%s, %+.10f)", this.reflectanceScale, Float.valueOf(this.roughness));
 	}
 	
 	/**
@@ -166,6 +160,8 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof AshikhminShirleyRayitoBRDF)) {
+			return false;
+		} else if(!Objects.equals(this.reflectanceScale, AshikhminShirleyRayitoBRDF.class.cast(object).reflectanceScale)) {
 			return false;
 		} else if(!equal(this.exponent, AshikhminShirleyRayitoBRDF.class.cast(object).exponent)) {
 			return false;
@@ -212,6 +208,6 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.exponent), Float.valueOf(this.roughness));
+		return Objects.hash(this.reflectanceScale, Float.valueOf(this.exponent), Float.valueOf(this.roughness));
 	}
 }

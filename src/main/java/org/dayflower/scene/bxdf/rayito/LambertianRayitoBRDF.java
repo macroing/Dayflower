@@ -40,11 +40,22 @@ import org.dayflower.scene.BXDFType;
  * @author J&#246;rgen Lundgren
  */
 public final class LambertianRayitoBRDF extends RayitoBXDF {
+	private final Color3F reflectanceScale;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code LambertianRayitoBRDF} instance.
+	 * <p>
+	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public LambertianRayitoBRDF() {
+	public LambertianRayitoBRDF(final Color3F reflectanceScale) {
 		super(BXDFType.DIFFUSE_REFLECTION);
+		
+		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +82,7 @@ public final class LambertianRayitoBRDF extends RayitoBXDF {
 			return Color3F.BLACK;
 		}
 		
-		return new Color3F(PI_RECIPROCAL);
+		return Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL);
 	}
 	
 	/**
@@ -97,9 +108,13 @@ public final class LambertianRayitoBRDF extends RayitoBXDF {
 		final Vector3F incomingTransformed = Vector3F.transform(incomingLocalSpace, orthonormalBasis);
 		final Vector3F incoming = normalDotOutgoing < 0.0F ? Vector3F.negate(incomingTransformed) : incomingTransformed;
 		
-		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
+		final BXDFType bXDFType = getBXDFType();
 		
-		return Optional.of(new BXDFResult(getBXDFType(), new Color3F(PI_RECIPROCAL), incoming, outgoing, PI_RECIPROCAL * abs(normalDotIncoming)));
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
+		
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
+		
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -109,7 +124,7 @@ public final class LambertianRayitoBRDF extends RayitoBXDF {
 	 */
 	@Override
 	public String toString() {
-		return "new LambertianRayitoBRDF()";
+		return String.format("new LambertianRayitoBRDF(%s)", this.reflectanceScale);
 	}
 	
 	/**
@@ -125,6 +140,8 @@ public final class LambertianRayitoBRDF extends RayitoBXDF {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof LambertianRayitoBRDF)) {
+			return false;
+		} else if(!Objects.equals(this.reflectanceScale, LambertianRayitoBRDF.class.cast(object).reflectanceScale)) {
 			return false;
 		} else {
 			return true;
@@ -163,6 +180,6 @@ public final class LambertianRayitoBRDF extends RayitoBXDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash();
+		return Objects.hash(this.reflectanceScale);
 	}
 }

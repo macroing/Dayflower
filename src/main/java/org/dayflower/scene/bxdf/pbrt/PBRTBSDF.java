@@ -33,6 +33,7 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSDF;
+import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
@@ -198,7 +199,7 @@ public final class PBRTBSDF implements BSDF {
 	/**
 	 * Samples the distribution function.
 	 * <p>
-	 * Returns an optional {@link PBRTBSDFResult} with the result of the sampling.
+	 * Returns an optional {@link BSDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -210,7 +211,7 @@ public final class PBRTBSDF implements BSDF {
 	 * @return an optional {@code BSDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}
 	 */
-	public Optional<PBRTBSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Point2F sample) {
+	public Optional<BSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Point2F sample) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
 		Objects.requireNonNull(sample, "sample == null");
@@ -277,7 +278,7 @@ public final class PBRTBSDF implements BSDF {
 			}
 		}
 		
-		return Optional.of(new PBRTBSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
+		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -378,7 +379,7 @@ public final class PBRTBSDF implements BSDF {
 	 * Returns the {@link PBRTBXDF} count by specular or non-specular type.
 	 * 
 	 * @param isSpecular {@code true} if, and only if, specular types should be counted, {@code false} otherwise
-	 * @return the {@code BXDF} count by specular or non-specular type
+	 * @return the {@code PBRTBXDF} count by specular or non-specular type
 	 */
 	public int countBXDFsBySpecularType(final boolean isSpecular) {
 		int count = 0;

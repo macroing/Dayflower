@@ -18,6 +18,9 @@
  */
 package org.dayflower.scene.material.rayito;
 
+import static org.dayflower.util.Floats.equal;
+
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,7 +29,6 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.RayitoBXDF;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.bxdf.rayito.SpecularRayitoBTDF;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -47,9 +49,10 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final RayitoBXDF rayitoBXDF;
 	private final Texture textureAlbedo;
 	private final Texture textureEmittance;
+	private final float etaA;
+	private final float etaB;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -179,9 +182,10 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
 	public GlassRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance, final float etaA, final float etaB) {
-		this.rayitoBXDF = new SpecularRayitoBTDF(etaA, etaB);
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+		this.etaA = etaA;
+		this.etaB = etaB;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,7 +243,7 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		return Optional.of(new RayitoBSDF(this.textureAlbedo.getColorRGB(intersection), this.rayitoBXDF));
+		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBTDF(this.textureAlbedo.getColorRGB(intersection), this.etaA, this.etaB))));
 	}
 	
 	/**
@@ -276,11 +280,13 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 			return true;
 		} else if(!(object instanceof GlassRayitoMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.rayitoBXDF, GlassRayitoMaterial.class.cast(object).rayitoBXDF)) {
-			return false;
 		} else if(!Objects.equals(this.textureAlbedo, GlassRayitoMaterial.class.cast(object).textureAlbedo)) {
 			return false;
 		} else if(!Objects.equals(this.textureEmittance, GlassRayitoMaterial.class.cast(object).textureEmittance)) {
+			return false;
+		} else if(!equal(this.etaA, GlassRayitoMaterial.class.cast(object).etaA)) {
+			return false;
+		} else if(!equal(this.etaB, GlassRayitoMaterial.class.cast(object).etaB)) {
 			return false;
 		} else {
 			return true;
@@ -294,6 +300,6 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.rayitoBXDF, this.textureAlbedo, this.textureEmittance);
+		return Objects.hash(this.textureAlbedo, this.textureEmittance, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 }

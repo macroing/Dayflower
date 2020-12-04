@@ -38,11 +38,22 @@ import org.dayflower.scene.BXDFType;
  * @author J&#246;rgen Lundgren
  */
 public final class SpecularRayitoBRDF extends RayitoBXDF {
+	private final Color3F reflectanceScale;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code SpecularRayitoBRDF} instance.
+	 * <p>
+	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public SpecularRayitoBRDF() {
+	public SpecularRayitoBRDF(final Color3F reflectanceScale) {
 		super(BXDFType.SPECULAR_REFLECTION);
+		
+		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,10 +105,14 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 		
 		final Vector3F incoming = normalDotOutgoing < 0.0F ? Vector3F.add(outgoing, Vector3F.multiply(normal, 2.0F * normalDotOutgoing)) : Vector3F.subtract(outgoing, Vector3F.multiply(normal, 2.0F * normalDotOutgoing));
 		
-		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
+		final BXDFType bXDFType = getBXDFType();
+		
+		final Color3F result = this.reflectanceScale;
+		
+		final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, incoming));
 		
 //		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-		return Optional.of(new BXDFResult(getBXDFType(), Color3F.WHITE, incoming, outgoing, abs(normalDotIncoming)));
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -107,7 +122,7 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	 */
 	@Override
 	public String toString() {
-		return "new SpecularRayitoBRDF()";
+		return String.format("new SpecularRayitoBRDF(%s)", this.reflectanceScale);
 	}
 	
 	/**
@@ -123,6 +138,8 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof SpecularRayitoBRDF)) {
+			return false;
+		} else if(!Objects.equals(this.reflectanceScale, SpecularRayitoBRDF.class.cast(object).reflectanceScale)) {
 			return false;
 		} else {
 			return true;
@@ -158,6 +175,6 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash();
+		return Objects.hash(this.reflectanceScale);
 	}
 }

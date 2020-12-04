@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.material.rayito;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,7 +27,6 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Texture;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.RayitoBXDF;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.bxdf.rayito.SpecularRayitoBRDF;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -47,7 +47,6 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final RayitoBXDF rayitoBXDF;
 	private final Texture textureAlbedo;
 	private final Texture textureEmittance;
 	
@@ -135,7 +134,6 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
 	public MirrorRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
-		this.rayitoBXDF = new SpecularRayitoBRDF();
 		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
 		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 	}
@@ -195,7 +193,7 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		return Optional.of(new RayitoBSDF(this.textureAlbedo.getColorRGB(intersection), this.rayitoBXDF));
+		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBRDF(this.textureAlbedo.getColorRGB(intersection)))));
 	}
 	
 	/**
@@ -232,8 +230,6 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 			return true;
 		} else if(!(object instanceof MirrorRayitoMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.rayitoBXDF, MirrorRayitoMaterial.class.cast(object).rayitoBXDF)) {
-			return false;
 		} else if(!Objects.equals(this.textureAlbedo, MirrorRayitoMaterial.class.cast(object).textureAlbedo)) {
 			return false;
 		} else if(!Objects.equals(this.textureEmittance, MirrorRayitoMaterial.class.cast(object).textureEmittance)) {
@@ -250,6 +246,6 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.rayitoBXDF, this.textureAlbedo, this.textureEmittance);
+		return Objects.hash(this.textureAlbedo, this.textureEmittance);
 	}
 }

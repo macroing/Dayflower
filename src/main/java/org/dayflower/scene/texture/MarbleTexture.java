@@ -111,6 +111,33 @@ public final class MarbleTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns one of the three {@link Color3F} instances associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return one of the three {@code Color3F} instances associated with this {@code MarbleTexture} instance
+	 */
+	public Color3F getColorA() {
+		return this.colorA;
+	}
+	
+	/**
+	 * Returns one of the three {@link Color3F} instances associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return one of the three {@code Color3F} instances associated with this {@code MarbleTexture} instance
+	 */
+	public Color3F getColorB() {
+		return this.colorB;
+	}
+	
+	/**
+	 * Returns one of the three {@link Color3F} instances associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return one of the three {@code Color3F} instances associated with this {@code MarbleTexture} instance
+	 */
+	public Color3F getColorC() {
+		return this.colorC;
+	}
+	
+	/**
 	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -189,6 +216,33 @@ public final class MarbleTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns the scale associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return the scale associated with this {@code MarbleTexture} instance
+	 */
+	public float getScale() {
+		return this.scale;
+	}
+	
+	/**
+	 * Returns the stripes associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return the stripes associated with this {@code MarbleTexture} instance
+	 */
+	public float getStripes() {
+		return this.stripes;
+	}
+	
+	/**
+	 * Returns the octaves associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return the octaves associated with this {@code MarbleTexture} instance
+	 */
+	public int getOctaves() {
+		return this.octaves;
 	}
 	
 	/**

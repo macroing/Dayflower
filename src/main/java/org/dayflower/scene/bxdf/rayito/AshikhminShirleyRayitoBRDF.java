@@ -26,10 +26,12 @@ import static org.dayflower.util.Floats.fresnelDielectricSchlick;
 import static org.dayflower.util.Floats.pow;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.image.Color3F;
 import org.dayflower.scene.BXDFType;
 
 /**
@@ -75,20 +77,20 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Evaluates the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
+	 * Evaluates the distribution function.
 	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
+	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
+	 * @return a {@code Color3F} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
+	public Color3F evaluateDistributionFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
 		final Vector3F h = Vector3F.half(o, n, i);
 		
 		final float nDotH = Vector3F.dotProduct(n, h);
@@ -100,17 +102,16 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 		final float f = fresnelDielectricSchlick(oDotH, 1.0F);
 		
 		if(nDotI > 0.0F && nDotO > 0.0F || nDotI < 0.0F && nDotO < 0.0F) {
-			return new RayitoBXDFResult(o, n, i, 0.0F, 0.0F);
+			return Color3F.BLACK;
 		}
 		
-		return new RayitoBXDFResult(o, n, i, probabilityDensityFunctionSolidAngle(o, n, i), f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
-//		return new RayitoBXDFResult(o, n, i, d / (4.0F * abs(oDotH)),                       f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
+		return new Color3F(f * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI)));
 	}
 	
 	/**
-	 * Samples the solid angle or the projected solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
+	 * Samples the distribution function.
 	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
+	 * Returns an optional {@link RayitoBXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -119,11 +120,11 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
+	 * @return an optional {@code RayitoBXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
 		final float nDotO = Vector3F.dotProduct(n, o);
 		
 		final Vector3F hLocalSpace = SampleGeneratorF.sampleHemispherePowerCosineDistribution(u, v, this.exponent);
@@ -134,7 +135,11 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 		
 		final Vector3F i = Vector3F.subtract(o, Vector3F.multiply(h, 2.0F * oDotH));
 		
-		return evaluateSolidAngle(o, n, i);
+		final Color3F result = evaluateDistributionFunction(o, n, i);
+		
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(o, n, i);
+		
+		return Optional.of(new RayitoBXDFResult(result, o, n, i, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -171,18 +176,20 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	}
 	
 	/**
-	 * Returns the probability density function (PDF) value of the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
+	 * Evaluates the probability density function (PDF).
+	 * <p>
+	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
+	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
+	public float evaluateProbabilityDensityFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
 		final Vector3F h = Vector3F.half(o, n, i);
 		
 		final float nDotH = Vector3F.dotProduct(n, h);

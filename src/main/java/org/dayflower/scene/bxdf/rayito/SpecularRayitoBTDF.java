@@ -26,9 +26,11 @@ import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.image.Color3F;
 import org.dayflower.scene.BXDFType;
 
 /**
@@ -75,27 +77,31 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Evaluates the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
+	 * Evaluates the distribution function.
 	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
+	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
+	 * @return a {@code Color3F} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
-		return new RayitoBXDFResult(o, n, i, 0.0F, 0.0F);
+	public Color3F evaluateDistributionFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
+		Objects.requireNonNull(o, "o == null");
+		Objects.requireNonNull(n, "n == null");
+		Objects.requireNonNull(i, "i == null");
+		
+		return Color3F.BLACK;
 	}
 	
 	/**
-	 * Samples the solid angle or the projected solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
+	 * Samples the distribution function.
 	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
+	 * Returns an optional {@link RayitoBXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -104,12 +110,16 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
+	 * @return an optional {@code RayitoBXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
-		return doSampleSolidAngle3(o, n);
+	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+		Objects.requireNonNull(o, "o == null");
+		Objects.requireNonNull(n, "n == null");
+		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
+		
+		return Optional.of(doSampleSolidAngle3(o, n));
 	}
 	
 	/**
@@ -146,18 +156,20 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	}
 	
 	/**
-	 * Returns the probability density function (PDF) value of the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
+	 * Evaluates the probability density function (PDF).
+	 * <p>
+	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
+	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
+	public float evaluateProbabilityDensityFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
 		Objects.requireNonNull(o, "o == null");
 		Objects.requireNonNull(n, "n == null");
 		Objects.requireNonNull(i, "i == null");
@@ -200,14 +212,14 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float k = 1.0F - eta * eta * (1.0F - cosThetaAbs * cosThetaAbs);
 		
 		if(k < 0.0F) {
-			return new RayitoBXDFResult(o, n, new Vector3F(), 0.0F, 0.0F);
+			return new RayitoBXDFResult(Color3F.BLACK, o, n, new Vector3F(), 0.0F);
 		}
 		
 		final Vector3F i = Vector3F.normalize(Vector3F.add(Vector3F.multiply(d, eta), Vector3F.multiply(nCorrectlyOriented, eta * cosTheta - sqrt(k))));
 		
 		final float nDotI = Vector3F.dotProduct(n, i);
 		
-		return new RayitoBXDFResult(o, n, Vector3F.negate(i), abs(nDotI), 1.0F);
+		return new RayitoBXDFResult(Color3F.WHITE, o, n, Vector3F.negate(i), abs(nDotI));
 	}
 	
 	@SuppressWarnings("unused")
@@ -229,12 +241,12 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		final float k = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 		
 		if(k < 0.0F) {
-			return new RayitoBXDFResult(o, n, reflection, abs(Vector3F.dotProduct(n, reflection)), 1.0F);
+			return new RayitoBXDFResult(Color3F.WHITE, o, n, reflection, abs(Vector3F.dotProduct(n, reflection)));
 		}
 		
 		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (eta * cosTheta + sqrt(k)))));
 		
-		return new RayitoBXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), 1.0F);
+		return new RayitoBXDFResult(Color3F.WHITE, o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)));
 	}
 	
 	private RayitoBXDFResult doSampleSolidAngle3(final Vector3F o, final Vector3F n) {
@@ -253,7 +265,7 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		
 		if(cosTheta2Squared < 0.0F) {
 //			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-			return new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), 1.0F);
+			return new RayitoBXDFResult(Color3F.WHITE, o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)));
 		}
 		
 		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(d, eta), Vector3F.multiply(n, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
@@ -270,10 +282,10 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		
 		if(random() < probabilityRussianRoulette) {
 //			TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-			return new RayitoBXDFResult(o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)), probabilityRussianRouletteReflection);
+			return new RayitoBXDFResult(new Color3F(probabilityRussianRouletteReflection), o, n, Vector3F.negate(reflection), abs(Vector3F.dotProduct(n, reflection)));
 		}
 		
 //		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-		return new RayitoBXDFResult(o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)), probabilityRussianRouletteTransmission);
+		return new RayitoBXDFResult(new Color3F(probabilityRussianRouletteTransmission), o, n, Vector3F.negate(transmission), abs(Vector3F.dotProduct(n, transmission)));
 	}
 }

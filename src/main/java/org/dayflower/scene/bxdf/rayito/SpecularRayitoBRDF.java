@@ -21,9 +21,11 @@ package org.dayflower.scene.bxdf.rayito;
 import static org.dayflower.util.Floats.abs;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.image.Color3F;
 import org.dayflower.scene.BXDFType;
 
 /**
@@ -45,27 +47,31 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Evaluates the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
+	 * Evaluates the distribution function.
 	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
+	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
+	 * @return a {@code Color3F} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult evaluateSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
-		return new RayitoBXDFResult(o, n, i, 0.0F, 0.0F);
+	public Color3F evaluateDistributionFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
+		Objects.requireNonNull(o, "o == null");
+		Objects.requireNonNull(n, "n == null");
+		Objects.requireNonNull(i, "i == null");
+		
+		return Color3F.BLACK;
 	}
 	
 	/**
-	 * Samples the solid angle or the projected solid angle for {@code o}, {@code n} and {@code orthonormalBasis}.
+	 * Samples the distribution function.
 	 * <p>
-	 * Returns a {@link RayitoBXDFResult} with the result of the operation.
+	 * Returns an optional {@link RayitoBXDFResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -74,11 +80,13 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
 	 * @param u the U-coordinate
 	 * @param v the V-coordinate
-	 * @return a {@code RayitoBXDFResult} with the result of the operation
+	 * @return an optional {@code RayitoBXDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code orthonormalBasis} are {@code null}
 	 */
 	@Override
-	public RayitoBXDFResult sampleSolidAngle(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+	public Optional<RayitoBXDFResult> sampleDistributionFunction(final Vector3F o, final Vector3F n, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+		Objects.requireNonNull(o, "o == null");
+		Objects.requireNonNull(n, "n == null");
 		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
 		
 		final float nDotO = Vector3F.dotProduct(n, o);
@@ -88,7 +96,7 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 		final float nDotI = Vector3F.dotProduct(n, i);
 		
 //		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
-		return new RayitoBXDFResult(o, n, i, abs(nDotI), 1.0F);
+		return Optional.of(new RayitoBXDFResult(Color3F.WHITE, o, n, i, abs(nDotI)));
 	}
 	
 	/**
@@ -121,18 +129,20 @@ public final class SpecularRayitoBRDF extends RayitoBXDF {
 	}
 	
 	/**
-	 * Returns the probability density function (PDF) value of the solid angle or the projected solid angle for {@code o}, {@code n} and {@code i}.
+	 * Evaluates the probability density function (PDF).
+	 * <p>
+	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
 	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param o a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
 	 * @param n a {@code Vector3F} instance with the surface normal
 	 * @param i a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
-	 * @return the probability density function (PDF) value of the solid angle for {@code o}, {@code n} and {@code i}
+	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
 	@Override
-	public float probabilityDensityFunctionSolidAngle(final Vector3F o, final Vector3F n, final Vector3F i) {
+	public float evaluateProbabilityDensityFunction(final Vector3F o, final Vector3F n, final Vector3F i) {
 		Objects.requireNonNull(o, "o == null");
 		Objects.requireNonNull(n, "n == null");
 		Objects.requireNonNull(i, "i == null");

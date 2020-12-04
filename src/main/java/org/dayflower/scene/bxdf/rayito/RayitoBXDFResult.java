@@ -23,6 +23,7 @@ import static org.dayflower.util.Floats.equal;
 import java.util.Objects;
 
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.image.Color3F;
 
 /**
  * A {@code RayitoBXDFResult} represents a result produced by a {@link RayitoBXDF} instance.
@@ -33,35 +34,44 @@ import org.dayflower.geometry.Vector3F;
  * @author J&#246;rgen Lundgren
  */
 public final class RayitoBXDFResult {
+	private final Color3F result;
 	private final Vector3F i;
 	private final Vector3F n;
 	private final Vector3F o;
 	private final float probabilityDensityFunctionValue;
-	private final float reflectance;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code RayitoBXDFResult} instance.
 	 * <p>
-	 * If either {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code result}, {@code o}, {@code n} or {@code i} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param result a {@link Color3F} instance with the result that is associated with this {@code RayitoBXDFResult} instance
 	 * @param o a {@link Vector3F} instance with the outgoing direction that is associated with this {@code RayitoBXDFResult} instance
 	 * @param n a {@code Vector3F} instance with the surface normal that is associated with this {@code RayitoBXDFResult} instance
 	 * @param i a {@code Vector3F} instance with the incoming direction that is associated with this {@code RayitoBXDFResult} instance
 	 * @param probabilityDensityFunctionValue the probability density function (PDF) value associated with this {@code RayitoBXDFResult} instance
-	 * @param reflectance the reflectance associated with this {@code RayitoBXDFResult} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code o}, {@code n} or {@code i} are {@code null}
 	 */
-	public RayitoBXDFResult(final Vector3F o, final Vector3F n, final Vector3F i, final float probabilityDensityFunctionValue, final float reflectance) {
+	public RayitoBXDFResult(final Color3F result, final Vector3F o, final Vector3F n, final Vector3F i, final float probabilityDensityFunctionValue) {
+		this.result = Objects.requireNonNull(result, "result == null");
 		this.o = Objects.requireNonNull(o, "o == null");
 		this.n = Objects.requireNonNull(n, "n == null");
 		this.i = Objects.requireNonNull(i, "i == null");
 		this.probabilityDensityFunctionValue = probabilityDensityFunctionValue;
-		this.reflectance = reflectance;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Color3F} instance with the result associated with this {@code RayitoBXDFResult} instance.
+	 * 
+	 * @return a {@code Color3F} instance with the result associated with this {@code RayitoBXDFResult} instance
+	 */
+	public Color3F getResult() {
+		return this.result;
+	}
 	
 	/**
 	 * Returns a {@code String} representation of this {@code RayitoBXDFResult} instance.
@@ -70,7 +80,7 @@ public final class RayitoBXDFResult {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new RayitoBXDFResult(%s, %s, %s, %+.10f, %+.10f)", this.o, this.n, this.i, Float.valueOf(this.probabilityDensityFunctionValue), Float.valueOf(this.reflectance));
+		return String.format("new RayitoBXDFResult(%s, %s, %s, %s, %+.10f)", this.result, this.o, this.n, this.i, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -118,6 +128,8 @@ public final class RayitoBXDFResult {
 			return true;
 		} else if(!(object instanceof RayitoBXDFResult)) {
 			return false;
+		} else if(!Objects.equals(this.result, RayitoBXDFResult.class.cast(object).result)) {
+			return false;
 		} else if(!Objects.equals(this.i, RayitoBXDFResult.class.cast(object).i)) {
 			return false;
 		} else if(!Objects.equals(this.n, RayitoBXDFResult.class.cast(object).n)) {
@@ -126,20 +138,18 @@ public final class RayitoBXDFResult {
 			return false;
 		} else if(!equal(this.probabilityDensityFunctionValue, RayitoBXDFResult.class.cast(object).probabilityDensityFunctionValue)) {
 			return false;
-		} else if(!equal(this.reflectance, RayitoBXDFResult.class.cast(object).reflectance)) {
-			return false;
 		} else {
 			return true;
 		}
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, the probability density function (PDF) value and the reflectance are represented by finite values, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, the probability density function (PDF) value is represented by a finite value, {@code false} otherwise.
 	 * 
-	 * @return {@code true} if, and only if, the probability density function (PDF) value and the reflectance are represented by finite values, {@code false} otherwise
+	 * @return {@code true} if, and only if, the probability density function (PDF) value is represented by a finite value, {@code false} otherwise
 	 */
 	public boolean isFinite() {
-		return Float.isFinite(this.probabilityDensityFunctionValue) && Float.isFinite(this.reflectance);
+		return Float.isFinite(this.probabilityDensityFunctionValue);
 	}
 	
 	/**
@@ -152,21 +162,12 @@ public final class RayitoBXDFResult {
 	}
 	
 	/**
-	 * Returns the reflectance associated with this {@code RayitoBXDFResult} instance.
-	 * 
-	 * @return the reflectance associated with this {@code RayitoBXDFResult} instance
-	 */
-	public float getReflectance() {
-		return this.reflectance;
-	}
-	
-	/**
 	 * Returns a hash code for this {@code RayitoBXDFResult} instance.
 	 * 
 	 * @return a hash code for this {@code RayitoBXDFResult} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.i, this.n, this.o, Float.valueOf(this.probabilityDensityFunctionValue), Float.valueOf(this.reflectance));
+		return Objects.hash(this.result, this.i, this.n, this.o, Float.valueOf(this.probabilityDensityFunctionValue));
 	}
 }

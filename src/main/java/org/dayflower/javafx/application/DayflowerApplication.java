@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.javafx;
+package org.dayflower.javafx.application;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -27,6 +27,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.image.Image;
+import org.dayflower.javafx.scene.control.HierarchicalMenuBar;
+import org.dayflower.javafx.scene.control.SelectionTabPane;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.cpu.CPURenderer;

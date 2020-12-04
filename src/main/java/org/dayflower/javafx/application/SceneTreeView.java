@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.javafx;
+package org.dayflower.javafx.application;
 
 import java.util.Objects;
 
@@ -131,20 +131,8 @@ final class SceneTreeView extends TreeView<String> implements SceneObserver {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class MaterialTreeItem extends TreeItem<String> {
-		private final Material material;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
 		public MaterialTreeItem(final Material material) {
 			super(material.getName());
-			
-			this.material = material;
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Material getMaterial() {
-			return this.material;
 		}
 	}
 	
@@ -174,14 +162,8 @@ final class SceneTreeView extends TreeView<String> implements SceneObserver {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class SceneTreeItem extends TreeItem<String> {
-		private final Scene scene;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
 		public SceneTreeItem(final Scene scene) {
 			super(scene.getName());
-			
-			this.scene = Objects.requireNonNull(scene, "scene == null");
 			
 			for(final Primitive primitive : scene.getPrimitives()) {
 				getChildren().add(new PrimitiveTreeItem(primitive));
@@ -191,10 +173,6 @@ final class SceneTreeView extends TreeView<String> implements SceneObserver {
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Scene getScene() {
-			return this.scene;
-		}
 		
 		public void addPrimitive(final Primitive primitive) {
 			getChildren().add(new PrimitiveTreeItem(primitive));
@@ -218,20 +196,8 @@ final class SceneTreeView extends TreeView<String> implements SceneObserver {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class ShapeTreeItem extends TreeItem<String> {
-		private final Shape3F shape;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
 		public ShapeTreeItem(final Shape3F shape) {
 			super(shape.getName());
-			
-			this.shape = shape;
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Shape3F getShape() {
-			return this.shape;
 		}
 	}
 	

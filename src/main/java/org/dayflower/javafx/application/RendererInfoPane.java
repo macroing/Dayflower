@@ -16,42 +16,44 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.javafx;
+package org.dayflower.javafx.application;
 
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
 
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RenderingAlgorithm;
 
-import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-final class RendererBox extends VBox {
-	private final Button buttonUpdateRenderer;
+final class RendererInfoPane extends BorderPane {
 	private final ComboBox<RenderingAlgorithm> comboBoxRenderingAlgorithm;
-	private final ExecutorService executorService;
+	private final GridPane gridPaneRendererConfiguration;
+	private final Label labelRendererConfiguration;
+	private final Label labelRenderingAlgorithm;
 	private final Renderer renderer;
+	private final VBox vBox;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public RendererBox(final Renderer renderer, final ExecutorService executorService) {
-		this.buttonUpdateRenderer = new Button();
+	public RendererInfoPane(final Renderer renderer) {
 		this.comboBoxRenderingAlgorithm = new ComboBox<>();
-		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
+		this.gridPaneRendererConfiguration = JavaFX.createGridPane(10.0D, 10.0D);
+		this.labelRendererConfiguration = new Label();
+		this.labelRenderingAlgorithm = new Label();
 		this.renderer = Objects.requireNonNull(renderer, "renderer == null");
+		this.vBox = new VBox();
 		
 		doConfigure();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public ExecutorService getExecutorService() {
-		return this.executorService;
-	}
 	
 	public Renderer getRenderer() {
 		return this.renderer;
@@ -60,11 +62,6 @@ final class RendererBox extends VBox {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private void doConfigure() {
-//		Configure the Button for Update Renderer:
-		this.buttonUpdateRenderer.setMaxWidth(Double.MAX_VALUE);
-		this.buttonUpdateRenderer.setOnAction(this::doOnActionButtonUpdateRenderer);
-		this.buttonUpdateRenderer.setText("Update Renderer");
-		
 //		Configure the ComboBox for Rendering Algorithm:
 		this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.AMBIENT_OCCLUSION);
 		this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.PATH_TRACING);
@@ -73,26 +70,30 @@ final class RendererBox extends VBox {
 		this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE);
 		this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.PATH_TRACING_SMALL_P_T_RECURSIVE);
 		this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.RAY_CASTING);
+		this.comboBoxRenderingAlgorithm.getSelectionModel().selectedItemProperty().addListener(this::doHandleChangeComboBoxRenderingAlgorithm);
 		this.comboBoxRenderingAlgorithm.setValue(this.renderer.getRendererConfiguration().getRenderingAlgorithm());
 		
-//		Configure the RendererBox:
-		getChildren().add(JavaFX.createLabel("Renderer Configuration", 16.0D));
-		getChildren().add(this.comboBoxRenderingAlgorithm);
-		getChildren().add(this.buttonUpdateRenderer);
-		setAlignment(Pos.CENTER);
-		setFillWidth(true);
-		setSpacing(10.0D);
+//		Configure the Label for Renderer Configuration:
+		this.labelRendererConfiguration.setText("Configuration");
+		
+//		Configure the Label for Rendering Algorithm:
+		this.labelRenderingAlgorithm.setText("Algorithm:");
+		
+		this.gridPaneRendererConfiguration.add(this.labelRenderingAlgorithm, 0, 0);
+		this.gridPaneRendererConfiguration.add(this.comboBoxRenderingAlgorithm, 1, 0);
+		this.gridPaneRendererConfiguration.getColumnConstraints().addAll(JavaFX.createHorizontalColumnConstraints(Priority.ALWAYS, 200.0D), JavaFX.createHorizontalColumnConstraints(Priority.NEVER));
+		
+//		Configure the VBox:
+		this.vBox.getChildren().addAll(this.labelRendererConfiguration, JavaFX.createRegion(10.0D, 0.0D, 0.0D, 0.0D), JavaFX.createSeparator(), JavaFX.createRegion(10.0D, 0.0D, 0.0D, 0.0D), this.gridPaneRendererConfiguration);
+		this.vBox.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
+		
+//		Configure the RendererInfoPane:
+		setCenter(this.vBox);
 	}
 	
 	@SuppressWarnings("unused")
-	private void doOnActionButtonUpdateRenderer(final ActionEvent actionEvent) {
-		final RenderingAlgorithm renderingAlgorithm = this.comboBoxRenderingAlgorithm.getValue();
-		
-		if(renderingAlgorithm != null) {
-			getExecutorService().execute(() -> {
-				this.renderer.getRendererConfiguration().setRenderingAlgorithm(renderingAlgorithm);
-				this.renderer.clear();
-			});
-		}
+	private void doHandleChangeComboBoxRenderingAlgorithm(final ObservableValue<? extends RenderingAlgorithm> observableValue, final RenderingAlgorithm oldRenderingAlgorithm, final RenderingAlgorithm newRenderingAlgorithm) {
+		this.renderer.getRendererConfiguration().setRenderingAlgorithm(newRenderingAlgorithm);
+		this.renderer.clear();
 	}
 }

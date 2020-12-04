@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.javafx;
+package org.dayflower.javafx.scene.control;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -29,14 +29,24 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneObserver;
 
 import javafx.application.Platform;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.TextFieldTreeCell;
 
 final class SceneTreeView extends TreeView<String> implements SceneObserver {
+	private final Scene scene;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	public SceneTreeView(final Scene scene) {
 		super(new SceneTreeItem(scene));
 		
-		scene.addSceneObserver(this);
+		this.scene = scene;
+		
+		doConfigure();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,6 +115,21 @@ final class SceneTreeView extends TreeView<String> implements SceneObserver {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	@SuppressWarnings("unused")
+	private TreeCell<String> doCreateTreeCell(final TreeView<String> treeView) {
+		return new TextFieldTreeCellImpl(this.scene);
+	}
+	
+	private void doConfigure() {
+//		Configure the Scene:
+		this.scene.addSceneObserver(this);
+		
+//		Configure the SceneTreeView:
+		setCellFactory(this::doCreateTreeCell);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static final class MaterialTreeItem extends TreeItem<String> {
 		private final Material material;
 		
@@ -114,6 +139,12 @@ final class SceneTreeView extends TreeView<String> implements SceneObserver {
 			super(material.getName());
 			
 			this.material = material;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Material getMaterial() {
+			return this.material;
 		}
 	}
 	
@@ -148,7 +179,7 @@ final class SceneTreeView extends TreeView<String> implements SceneObserver {
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		public SceneTreeItem(final Scene scene) {
-			super("Scene");
+			super(scene.getName());
 			
 			this.scene = Objects.requireNonNull(scene, "scene == null");
 			
@@ -160,6 +191,10 @@ final class SceneTreeView extends TreeView<String> implements SceneObserver {
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Scene getScene() {
+			return this.scene;
+		}
 		
 		public void addPrimitive(final Primitive primitive) {
 			getChildren().add(new PrimitiveTreeItem(primitive));
@@ -191,6 +226,56 @@ final class SceneTreeView extends TreeView<String> implements SceneObserver {
 			super(shape.getName());
 			
 			this.shape = shape;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Shape3F getShape() {
+			return this.shape;
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class TextFieldTreeCellImpl extends TextFieldTreeCell<String> {
+		private final Scene scene;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public TextFieldTreeCellImpl(final Scene scene) {
+			this.scene = Objects.requireNonNull(scene, "scene == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void updateItem(final String string, final boolean isEmpty) {
+			super.updateItem(string, isEmpty);
+			
+			if(getTreeItem() instanceof PrimitiveTreeItem) {
+				setContextMenu(doCreateContextMenu(PrimitiveTreeItem.class.cast(getTreeItem()).getPrimitive()));
+			} else {
+				setContextMenu(null);
+			}
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private ContextMenu doCreateContextMenu(final Primitive primitive) {
+			final
+			MenuItem menuItem = new MenuItem();
+			menuItem.setOnAction(actionEvent -> doRemovePrimitive(primitive));
+			menuItem.setText("Delete");
+			
+			final
+			ContextMenu contextMenu = new ContextMenu();
+			contextMenu.getItems().add(menuItem);
+			
+			return contextMenu;
+		}
+		
+		private void doRemovePrimitive(final Primitive primitive) {
+			this.scene.removePrimitive(primitive);
 		}
 	}
 }

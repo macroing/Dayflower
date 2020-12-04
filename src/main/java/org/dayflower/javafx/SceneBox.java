@@ -174,7 +174,7 @@ final class SceneBox extends VBox {
 	}
 	
 	private void doAddPrimitiveByMaterialAndShape(final Material material, final Shape3F shape) {
-		getExecutorService().execute(() -> {
+//		getExecutorService().execute(() -> {
 			final Transform transform = new Transform(doGetPointByShape(shape));
 			
 			final Primitive primitive = new Primitive(material, shape, transform);
@@ -182,11 +182,7 @@ final class SceneBox extends VBox {
 			final
 			Scene scene = doGetScene();
 			scene.addPrimitive(primitive);
-			
-			final
-			Renderer renderer = getRenderer();
-			renderer.clear();
-		});
+//		});
 	}
 	
 	private void doConfigure() {

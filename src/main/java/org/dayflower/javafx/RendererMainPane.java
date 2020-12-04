@@ -69,6 +69,9 @@ final class RendererMainPane extends BorderPane {
 		this.tabPane.getSelectionModel().select(0);
 		this.tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 		
+//		Configure the Scene:
+		this.renderer.getRendererConfiguration().getScene().addSceneObserver(new SceneObserverImpl(this.renderer));
+		
 //		Configure the RendererMainPane:
 		setCenter(this.tabPane);
 	}

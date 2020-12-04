@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.BoundingVolume3F;
@@ -110,8 +111,8 @@ public final class Scene implements Node {
 	public Scene(final Camera camera, final String name) {
 		this.bVHNode = null;
 		this.lights = new ArrayList<>();
-		this.primitives = new ArrayList<>();
-		this.primitivesExternalToBVH = new ArrayList<>();
+		this.primitives = new CopyOnWriteArrayList<>();
+		this.primitivesExternalToBVH = new CopyOnWriteArrayList<>();
 		this.sceneObservers = new ArrayList<>();
 		this.cameraObserver = new CameraObserverImpl(this, this.sceneObservers);
 		this.camera = Objects.requireNonNull(camera, "camera == null");

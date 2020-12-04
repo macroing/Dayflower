@@ -21,17 +21,17 @@ package org.dayflower.javafx.application;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.javafx.scene.control.SelectionTabPane;
+import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.renderer.Renderer;
 
 import javafx.animation.AnimationTimer;
 
 final class RendererAnimationTimer extends AnimationTimer {
-	private final SelectionTabPane<RendererMainPane, Renderer> selectionTabPane;
+	private final NodeSelectionTabPane<RendererMainPane, Renderer> selectionTabPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public RendererAnimationTimer(final SelectionTabPane<RendererMainPane, Renderer> selectionTabPane) {
+	public RendererAnimationTimer(final NodeSelectionTabPane<RendererMainPane, Renderer> selectionTabPane) {
 		this.selectionTabPane = Objects.requireNonNull(selectionTabPane, "selectionTabPane == null");
 	}
 	

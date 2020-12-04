@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.image.Image;
 import org.dayflower.javafx.scene.control.HierarchicalMenuBar;
-import org.dayflower.javafx.scene.control.SelectionTabPane;
+import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.cpu.CPURenderer;
@@ -79,7 +79,7 @@ public final class DayflowerApplication extends Application {
 	private final BorderPane borderPane;
 	private final ExecutorService executorService;
 	private final HierarchicalMenuBar hierarchicalMenuBar;
-	private final SelectionTabPane<RendererMainPane, Renderer> selectionTabPane;
+	private final NodeSelectionTabPane<RendererMainPane, Renderer> nodeSelectionTabPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -89,7 +89,7 @@ public final class DayflowerApplication extends Application {
 		this.borderPane = new BorderPane();
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.hierarchicalMenuBar = new HierarchicalMenuBar();
-		this.selectionTabPane = new SelectionTabPane<>(RendererMainPane.class, (a, b) -> a.equals(b), rendererPane -> rendererPane.getRenderer(), renderer -> new RendererMainPane(renderer, this.executorService), renderer -> renderer.getRendererConfiguration().getScene().getName());
+		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererMainPane.class, rendererPane -> rendererPane.getRenderer(), renderer -> new RendererMainPane(renderer, this.executorService), (a, b) -> a.equals(b), renderer -> renderer.getRendererConfiguration().getScene().getName());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ public final class DayflowerApplication extends Application {
 		doSetStage(stage);
 		doConfigureBorderPane();
 		doConfigureHierarchicalMenuBar();
-		doConfigureSelectionTabPane();
+		doConfigureNodeSelectionTabPane();
 		doConfigureAndShowStage();
 		doCreateAndStartAnimationTimer();
 	}
@@ -146,7 +146,7 @@ public final class DayflowerApplication extends Application {
 			
 			final Renderer renderer = new CPURenderer(rendererConfiguration, new NoOpRendererObserver());
 			
-			Platform.runLater(() -> this.selectionTabPane.add(renderer));
+			Platform.runLater(() -> this.nodeSelectionTabPane.add(renderer));
 		});
 	}
 	
@@ -162,7 +162,7 @@ public final class DayflowerApplication extends Application {
 	}
 	
 	private void doConfigureBorderPane() {
-		this.borderPane.setCenter(this.selectionTabPane);
+		this.borderPane.setCenter(this.nodeSelectionTabPane);
 		this.borderPane.setTop(this.hierarchicalMenuBar);
 	}
 	
@@ -177,13 +177,13 @@ public final class DayflowerApplication extends Application {
 		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, this::doHandleEventFileExit, null, true);
 	}
 	
-	private void doConfigureSelectionTabPane() {
-		this.selectionTabPane.getSelectionModel().selectedItemProperty().addListener(this::doHandleTabChangeSelectionTabPane);
+	private void doConfigureNodeSelectionTabPane() {
+		this.nodeSelectionTabPane.getSelectionModel().selectedItemProperty().addListener(this::doHandleTabChangeSelectionTabPane);
 	}
 	
 	private void doCreateAndStartAnimationTimer() {
 		final
-		AnimationTimer animationTimer = new RendererAnimationTimer(this.selectionTabPane);
+		AnimationTimer animationTimer = new RendererAnimationTimer(this.nodeSelectionTabPane);
 		animationTimer.start();
 	}
 	
@@ -217,7 +217,7 @@ public final class DayflowerApplication extends Application {
 	
 	@SuppressWarnings("unused")
 	private void doHandleEventFileSave(final ActionEvent actionEvent) {
-		final Optional<RendererMainPane> optionalRendererMainPane = this.selectionTabPane.getSelectedNode();
+		final Optional<RendererMainPane> optionalRendererMainPane = this.nodeSelectionTabPane.getSelectedNode();
 		
 		if(optionalRendererMainPane.isPresent()) {
 			final RendererMainPane rendererMainPane = optionalRendererMainPane.get();
@@ -246,7 +246,7 @@ public final class DayflowerApplication extends Application {
 	
 	@SuppressWarnings("unused")
 	private void doHandleEventFileSaveAs(final ActionEvent actionEvent) {
-		final Optional<RendererMainPane> optionalRendererMainPane = this.selectionTabPane.getSelectedNode();
+		final Optional<RendererMainPane> optionalRendererMainPane = this.nodeSelectionTabPane.getSelectedNode();
 		
 		if(optionalRendererMainPane.isPresent()) {
 			final RendererMainPane rendererMainPane = optionalRendererMainPane.get();

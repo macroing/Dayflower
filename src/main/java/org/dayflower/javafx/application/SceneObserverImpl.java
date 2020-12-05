@@ -27,13 +27,17 @@ import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneObserver;
 
+import javafx.application.Platform;
+
 final class SceneObserverImpl implements SceneObserver {
 	private final Renderer renderer;
+	private final RendererMainPane rendererMainPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public SceneObserverImpl(final Renderer renderer) {
+	public SceneObserverImpl(final Renderer renderer, final RendererMainPane rendererMainPane) {
 		this.renderer = Objects.requireNonNull(renderer, "renderer == null");
+		this.rendererMainPane = Objects.requireNonNull(rendererMainPane, "rendererMainPane == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,6 +52,8 @@ final class SceneObserverImpl implements SceneObserver {
 	public void onAddPrimitive(final Scene scene, final Primitive newPrimitive) {
 		Objects.requireNonNull(scene, "scene == null");
 		Objects.requireNonNull(newPrimitive, "newPrimitive == null");
+		
+		Platform.runLater(() -> this.rendererMainPane.getRendererViewPane().getObjectTreeView().add(newPrimitive));
 		
 		this.renderer.renderShutdown();
 		this.renderer.clear();
@@ -89,6 +95,8 @@ final class SceneObserverImpl implements SceneObserver {
 	public void onRemovePrimitive(final Scene scene, final Primitive oldPrimitive) {
 		Objects.requireNonNull(scene, "scene == null");
 		Objects.requireNonNull(oldPrimitive, "oldPrimitive == null");
+		
+		Platform.runLater(() -> this.rendererMainPane.getRendererViewPane().getObjectTreeView().remove(oldPrimitive));
 		
 		this.renderer.renderShutdown();
 		this.renderer.clear();

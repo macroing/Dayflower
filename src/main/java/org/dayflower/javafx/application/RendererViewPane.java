@@ -20,6 +20,8 @@ package org.dayflower.javafx.application;
 
 import java.io.File;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -27,18 +29,25 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
+import org.dayflower.geometry.Shape3F;
 import org.dayflower.image.Image;
+import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.layout.Regions;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
+import org.dayflower.scene.Material;
+import org.dayflower.scene.Primitive;
+import org.dayflower.scene.Scene;
 
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TreeView;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -74,11 +83,11 @@ final class RendererViewPane extends BorderPane {
 	private final Label labelRenderPass;
 	private final Label labelRenderTime;
 	private final Label labelRenderTimePerPass;
+	private final ObjectTreeView<String, Object> objectTreeView;
 	private final ProgressBar progressBar;
 	private final Renderer renderer;
 	private final RendererBox rendererBox;
 	private final SceneBox sceneBox;
-	private final TreeView<String> treeView;
 	private final VBox vBoxL;
 	private final VBox vBoxR;
 	private final WritableImage writableImage;
@@ -112,11 +121,11 @@ final class RendererViewPane extends BorderPane {
 		this.labelRenderPass = new Label();
 		this.labelRenderTime = new Label();
 		this.labelRenderTimePerPass = new Label();
+		this.objectTreeView = doCreateObjectTreeView(renderer.getRendererConfiguration().getScene());
 		this.progressBar = new ProgressBar();
 		this.renderer = renderer;
 		this.rendererBox = new RendererBox(renderer, executorService);
 		this.sceneBox = new SceneBox(renderer, executorService);
-		this.treeView = new SceneTreeView(renderer.getRendererConfiguration().getScene());
 		this.vBoxL = new VBox();
 		this.vBoxR = new VBox();
 		this.writableImage = new WritableImage(renderer.getRendererConfiguration().getImage().getResolutionX(), renderer.getRendererConfiguration().getImage().getResolutionY());
@@ -137,6 +146,15 @@ final class RendererViewPane extends BorderPane {
 	 */
 	public ExecutorService getExecutorService() {
 		return this.executorService;
+	}
+	
+	/**
+	 * Returns the {@code ObjectTreeView} instance associated with this {@code RendererViewPane} instance.
+	 * 
+	 * @return the {@code ObjectTreeView} instance associated with this {@code RendererViewPane} instance
+	 */
+	public ObjectTreeView<String, Object> getObjectTreeView() {
+		return this.objectTreeView;
 	}
 	
 	/**
@@ -367,6 +385,29 @@ final class RendererViewPane extends BorderPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private Function<Object, ContextMenu> doCreateMapperUToContextMenu() {
+		return object -> {
+			if(object instanceof Primitive) {
+				final
+				MenuItem menuItem = new MenuItem();
+				menuItem.setOnAction(actionEvent -> doOnActionDelete(Primitive.class.cast(object)));
+				menuItem.setText("Delete");
+				
+				final
+				ContextMenu contextMenu = new ContextMenu();
+				contextMenu.getItems().add(menuItem);
+				
+				return contextMenu;
+			}
+			
+			return null;
+		};
+	}
+	
+	private ObjectTreeView<String, Object> doCreateObjectTreeView(final Scene scene) {
+		return new ObjectTreeView<>(doCreateMapperUToContextMenu(), doCreateMapperUToListU(), doCreateMapperUToT(), scene);
+	}
+	
 	private void doConfigure() {
 //		Retrieve the Image and its resolution:
 		final Image image = this.renderer.getRendererConfiguration().getImage();
@@ -412,9 +453,6 @@ final class RendererViewPane extends BorderPane {
 //		Configure the Renderer:
 		this.renderer.setRendererObserver(new RendererObserverImpl(this.labelRenderPass, this.labelRenderTime, this.labelRenderTimePerPass, this.progressBar));
 		
-//		Configure the TreeView:
-		
-		
 //		Configure the VBox for L:
 		this.vBoxL.getChildren().add(this.rendererBox);
 		this.vBoxL.getChildren().add(this.sceneBox);
@@ -424,7 +462,7 @@ final class RendererViewPane extends BorderPane {
 		this.vBoxL.setSpacing(20.0D);
 		
 //		Configure the VBox for R:
-		this.vBoxR.getChildren().add(this.treeView);
+		this.vBoxR.getChildren().add(this.objectTreeView);
 		this.vBoxR.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 0.0D, 0.0D, 1.0D))));
 		this.vBoxR.setFillWidth(true);
 		this.vBoxR.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
@@ -435,6 +473,10 @@ final class RendererViewPane extends BorderPane {
 		setCenter(this.canvas);
 		setLeft(this.vBoxL);
 		setRight(this.vBoxR);
+	}
+	
+	private void doOnActionDelete(final Primitive primitive) {
+		this.renderer.getRendererConfiguration().getScene().removePrimitive(primitive);
 	}
 	
 	private void doOnKeyPressed(final KeyEvent keyEvent) {
@@ -479,5 +521,38 @@ final class RendererViewPane extends BorderPane {
 		
 		this.isMouseButtonPressed[mouseEvent.getButton().ordinal()] = false;
 		this.isMouseButtonPressedOnce[mouseEvent.getButton().ordinal()] = false;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static Function<Object, List<Object>> doCreateMapperUToListU() {
+		return object -> {
+			final List<Object> list = new ArrayList<>();
+			
+			if(object instanceof Primitive) {
+				final Primitive primitive = Primitive.class.cast(object);
+				
+				list.add(primitive.getMaterial());
+				list.add(primitive.getShape());
+			}
+			
+			return list;
+		};
+	}
+	
+	private static Function<Object, String> doCreateMapperUToT() {
+		return object -> {
+			if(object instanceof Material) {
+				return Material.class.cast(object).getName();
+			} else if(object instanceof Primitive) {
+				return "Primitive";
+			} else if(object instanceof Scene) {
+				return Scene.class.cast(object).getName();
+			} else if(object instanceof Shape3F) {
+				return Shape3F.class.cast(object).getName();
+			} else {
+				return "";
+			}
+		};
 	}
 }

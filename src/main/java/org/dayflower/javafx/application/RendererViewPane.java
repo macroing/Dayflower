@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,23 +33,53 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.RectangularCuboid3F;
+import org.dayflower.geometry.shape.Sphere3F;
+import org.dayflower.geometry.shape.Torus3F;
+import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.image.Image;
+import org.dayflower.javafx.scene.control.Labels;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.layout.Regions;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
+import org.dayflower.renderer.RendererObserver;
+import org.dayflower.renderer.RenderingAlgorithm;
+import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.Transform;
+import org.dayflower.scene.material.pbrt.GlassPBRTMaterial;
+import org.dayflower.scene.material.pbrt.HairPBRTMaterial;
+import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
+import org.dayflower.scene.material.pbrt.MetalPBRTMaterial;
+import org.dayflower.scene.material.pbrt.MirrorPBRTMaterial;
+import org.dayflower.scene.material.pbrt.PlasticPBRTMaterial;
+import org.dayflower.scene.material.pbrt.SubstratePBRTMaterial;
+import org.dayflower.scene.material.pbrt.UberPBRTMaterial;
+import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
+import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
+import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
+import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Separator;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -124,8 +156,8 @@ final class RendererViewPane extends BorderPane {
 		this.objectTreeView = doCreateObjectTreeView(renderer.getRendererConfiguration().getScene());
 		this.progressBar = new ProgressBar();
 		this.renderer = renderer;
-		this.rendererBox = new RendererBox(renderer, executorService);
-		this.sceneBox = new SceneBox(renderer, executorService);
+		this.rendererBox = new RendererBox(renderer);
+		this.sceneBox = new SceneBox(renderer);
 		this.vBoxL = new VBox();
 		this.vBoxR = new VBox();
 		this.writableImage = new WritableImage(renderer.getRendererConfiguration().getImage().getResolutionX(), renderer.getRendererConfiguration().getImage().getResolutionY());
@@ -447,6 +479,11 @@ final class RendererViewPane extends BorderPane {
 //		Configure the Label for Render Time Per Pass:
 		this.labelRenderTimePerPass.setText("Render Time Per Pass: 0");
 		
+//		Configure the ObjectTreeView:
+		for(final Primitive primitive : this.renderer.getRendererConfiguration().getScene().getPrimitives()) {
+			this.objectTreeView.add(primitive);
+		}
+		
 //		Configure the ProgressBar:
 		this.progressBar.setProgress(0.0D);
 		
@@ -554,5 +591,364 @@ final class RendererViewPane extends BorderPane {
 				return "";
 			}
 		};
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class RendererBox extends VBox {
+		private final Button buttonUpdateRenderer;
+		private final ComboBox<RenderingAlgorithm> comboBoxRenderingAlgorithm;
+		private final Renderer renderer;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public RendererBox(final Renderer renderer) {
+			this.buttonUpdateRenderer = new Button();
+			this.comboBoxRenderingAlgorithm = new ComboBox<>();
+			this.renderer = Objects.requireNonNull(renderer, "renderer == null");
+			
+			doConfigure();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private void doConfigure() {
+//			Configure the Button for Update Renderer:
+			this.buttonUpdateRenderer.setMaxWidth(Double.MAX_VALUE);
+			this.buttonUpdateRenderer.setOnAction(this::doOnActionButtonUpdateRenderer);
+			this.buttonUpdateRenderer.setText("Update Renderer");
+			
+//			Configure the ComboBox for Rendering Algorithm:
+			this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.AMBIENT_OCCLUSION);
+			this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.PATH_TRACING);
+			this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.PATH_TRACING_P_B_R_T);
+			this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.PATH_TRACING_RAYITO);
+			this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE);
+			this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.PATH_TRACING_SMALL_P_T_RECURSIVE);
+			this.comboBoxRenderingAlgorithm.getItems().add(RenderingAlgorithm.RAY_CASTING);
+			this.comboBoxRenderingAlgorithm.setValue(this.renderer.getRendererConfiguration().getRenderingAlgorithm());
+			
+//			Configure the RendererBox:
+			getChildren().add(Labels.createLabel("Renderer Configuration", 16.0D));
+			getChildren().add(this.comboBoxRenderingAlgorithm);
+			getChildren().add(this.buttonUpdateRenderer);
+			setAlignment(Pos.CENTER);
+			setFillWidth(true);
+			setSpacing(10.0D);
+		}
+		
+		@SuppressWarnings("unused")
+		private void doOnActionButtonUpdateRenderer(final ActionEvent actionEvent) {
+			final RenderingAlgorithm renderingAlgorithm = this.comboBoxRenderingAlgorithm.getValue();
+			
+			if(renderingAlgorithm != null) {
+				this.renderer.getRendererConfiguration().setRenderingAlgorithm(renderingAlgorithm);
+				this.renderer.renderShutdown();
+				this.renderer.clear();
+			}
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class RendererObserverImpl implements RendererObserver {
+		private final Label labelRenderPass;
+		private final Label labelRenderTime;
+		private final Label labelRenderTimePerPass;
+		private final ProgressBar progressBar;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public RendererObserverImpl(final Label labelRenderPass, final Label labelRenderTime, final Label labelRenderTimePerPass, final ProgressBar progressBar) {
+			this.labelRenderPass = Objects.requireNonNull(labelRenderPass, "labelRenderPass == null");
+			this.labelRenderTime = Objects.requireNonNull(labelRenderTime, "labelRenderTime == null");
+			this.labelRenderTimePerPass = Objects.requireNonNull(labelRenderTimePerPass, "labelRenderTimePerPass == null");
+			this.progressBar = Objects.requireNonNull(progressBar, "progressBar == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void onRenderDisplay(final Renderer renderer, final Image image) {
+//			Do nothing.
+		}
+		
+		@Override
+		public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
+			Platform.runLater(() -> {
+				this.labelRenderPass.setText("Render Pass: " + renderer.getRendererConfiguration().getRenderPass());
+				this.labelRenderTime.setText("Render Time: " + renderer.getRendererConfiguration().getTimer().getTime());
+				this.labelRenderTimePerPass.setText("Render Time Per Pass: " + elapsedTimeMillis);
+				
+				this.progressBar.setProgress(1.0D);
+			});
+		}
+		
+		@Override
+		public void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent) {
+			Platform.runLater(() -> {
+				this.labelRenderPass.setText("Render Pass: " + renderer.getRendererConfiguration().getRenderPass());
+				this.labelRenderTime.setText("Render Time: " + renderer.getRendererConfiguration().getTimer().getTime());
+				
+				this.progressBar.setProgress(percent);
+			});
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class RendererTask extends Task<Boolean> {
+		private final Callable<Boolean> callableCall;
+		private final Runnable runnableSucceeded;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public RendererTask(final Callable<Boolean> callableCall, final Runnable runnableSucceeded) {
+			this.callableCall = Objects.requireNonNull(callableCall, "callableCall == null");
+			this.runnableSucceeded = Objects.requireNonNull(runnableSucceeded, "runnableSucceeded == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		protected Boolean call() {
+			try {
+				return this.callableCall.call();
+			} catch(final Exception e) {
+				doReportException(e);
+				
+				return Boolean.FALSE;
+			}
+		}
+		
+		@Override
+		protected void succeeded() {
+			try {
+				if(get().booleanValue()) {
+					this.runnableSucceeded.run();
+				}
+			} catch(final ExecutionException | InterruptedException e) {
+				doReportException(e);
+			}
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private static void doReportException(final Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class SceneBox extends VBox {
+		private final Button buttonBuildAccelerationStructure;
+		private final Button buttonClearAccelerationStructure;
+		private final Button buttonPrimitiveAdd;
+		private final ComboBox<String> comboBoxPrimitiveAddMaterial;
+		private final ComboBox<String> comboBoxPrimitiveAddShape;
+		private final Renderer renderer;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public SceneBox(final Renderer renderer) {
+			this.buttonBuildAccelerationStructure = new Button();
+			this.buttonClearAccelerationStructure = new Button();
+			this.buttonPrimitiveAdd = new Button();
+			this.comboBoxPrimitiveAddMaterial = new ComboBox<>();
+			this.comboBoxPrimitiveAddShape = new ComboBox<>();
+			this.renderer = Objects.requireNonNull(renderer, "renderer == null");
+			
+			doConfigure();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public Renderer getRenderer() {
+			return this.renderer;
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private Camera doGetCamera() {
+			return doGetScene().getCamera();
+		}
+		
+		private Material doCreateMaterial() {
+			final String selectedItem = this.comboBoxPrimitiveAddMaterial.getSelectionModel().getSelectedItem();
+			
+			if(selectedItem != null) {
+				switch(selectedItem) {
+					case GlassPBRTMaterial.NAME:
+						return new GlassPBRTMaterial();
+					case HairPBRTMaterial.NAME:
+						return new HairPBRTMaterial();
+					case MattePBRTMaterial.NAME:
+						return new MattePBRTMaterial();
+					case MetalPBRTMaterial.NAME:
+						return new MetalPBRTMaterial();
+					case MirrorPBRTMaterial.NAME:
+						return new MirrorPBRTMaterial();
+					case PlasticPBRTMaterial.NAME:
+						return new PlasticPBRTMaterial();
+					case SubstratePBRTMaterial.NAME:
+						return new SubstratePBRTMaterial();
+					case UberPBRTMaterial.NAME:
+						return new UberPBRTMaterial();
+					case GlassRayitoMaterial.NAME:
+						return new GlassRayitoMaterial();
+					case MatteRayitoMaterial.NAME:
+						return new MatteRayitoMaterial();
+					case MetalRayitoMaterial.NAME:
+						return new MetalRayitoMaterial();
+					case MirrorRayitoMaterial.NAME:
+						return new MirrorRayitoMaterial();
+					default:
+						return null;
+				}
+			}
+			
+			return null;
+		}
+		
+		private Point3F doGetPointByShape(final Shape3F shape) {
+			if(shape instanceof Plane3F) {
+				return doGetCamera().getPointBelowEye(1.0F);
+			} else if(shape instanceof RectangularCuboid3F) {
+				return doGetCamera().getPointInfrontOfEye(7.5F);
+			} else if(shape instanceof Sphere3F) {
+				return doGetCamera().getPointInfrontOfEye(7.5F);
+			} else if(shape instanceof Torus3F) {
+				return doGetCamera().getPointInfrontOfEye(7.5F);
+			} else if(shape instanceof Triangle3F) {
+				return doGetCamera().getPointInfrontOfEye(7.5F);
+			} else {
+				return new Point3F();
+			}
+		}
+		
+		private Scene doGetScene() {
+			return getRenderer().getRendererConfiguration().getScene();
+		}
+		
+		private Shape3F doCreateShape() {
+			final String selectedItem = this.comboBoxPrimitiveAddShape.getSelectionModel().getSelectedItem();
+			
+			if(selectedItem != null) {
+				switch(selectedItem) {
+					case Plane3F.NAME:
+						return new Plane3F();
+					case RectangularCuboid3F.NAME:
+						return new RectangularCuboid3F();
+					case Sphere3F.NAME:
+						return new Sphere3F();
+					case Torus3F.NAME:
+						return new Torus3F();
+					case Triangle3F.NAME:
+						return new Triangle3F();
+					default:
+						return null;
+				}
+			}
+			
+			return null;
+		}
+		
+		private void doAddPrimitiveByMaterialAndShape(final Material material, final Shape3F shape) {
+//			getExecutorService().execute(() -> {
+				final Transform transform = new Transform(doGetPointByShape(shape));
+				
+				final Primitive primitive = new Primitive(material, shape, transform);
+				
+				final
+				Scene scene = doGetScene();
+				scene.addPrimitive(primitive);
+//			});
+		}
+		
+		private void doConfigure() {
+//			Configure the Button for Build Acceleration Structure:
+			this.buttonBuildAccelerationStructure.setMaxWidth(Double.MAX_VALUE);
+			this.buttonBuildAccelerationStructure.setOnAction(this::doOnActionButtonBuildAccelerationStructure);
+			this.buttonBuildAccelerationStructure.setText("Build Acceleration Structure");
+			
+//			Configure the Button for Clear Acceleration Structure:
+			this.buttonClearAccelerationStructure.setMaxWidth(Double.MAX_VALUE);
+			this.buttonClearAccelerationStructure.setOnAction(this::doOnActionButtonClearAccelerationStructure);
+			this.buttonClearAccelerationStructure.setText("Clear Acceleration Structure");
+			
+//			Configure the Button for Primitive Add:
+			this.buttonPrimitiveAdd.setMaxWidth(Double.MAX_VALUE);
+			this.buttonPrimitiveAdd.setOnAction(this::doOnActionButtonPrimitiveAdd);
+			this.buttonPrimitiveAdd.setText("Add Primitive");
+			
+//			Configure the ComboBox for Primitive Add Material:
+			this.comboBoxPrimitiveAddMaterial.getItems().add(GlassPBRTMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(HairPBRTMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(MattePBRTMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(MetalPBRTMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(MirrorPBRTMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(PlasticPBRTMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(SubstratePBRTMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(UberPBRTMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(GlassRayitoMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(MatteRayitoMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(MetalRayitoMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.getItems().add(MirrorRayitoMaterial.NAME);
+			this.comboBoxPrimitiveAddMaterial.setMaxWidth(Double.MAX_VALUE);
+			this.comboBoxPrimitiveAddMaterial.setValue(MattePBRTMaterial.NAME);
+			
+//			Configure the ComboBox for Primitive Add Shape:
+			this.comboBoxPrimitiveAddShape.getItems().add(Plane3F.NAME);
+			this.comboBoxPrimitiveAddShape.getItems().add(RectangularCuboid3F.NAME);
+			this.comboBoxPrimitiveAddShape.getItems().add(Sphere3F.NAME);
+			this.comboBoxPrimitiveAddShape.getItems().add(Torus3F.NAME);
+			this.comboBoxPrimitiveAddShape.getItems().add(Triangle3F.NAME);
+			this.comboBoxPrimitiveAddShape.setMaxWidth(Double.MAX_VALUE);
+			this.comboBoxPrimitiveAddShape.setValue(Plane3F.NAME);
+			
+//			Configure the SceneBox:
+			getChildren().add(Labels.createLabel("Scene Configuration", 16.0D));
+			getChildren().add(this.comboBoxPrimitiveAddMaterial);
+			getChildren().add(this.comboBoxPrimitiveAddShape);
+			getChildren().add(this.buttonPrimitiveAdd);
+			getChildren().add(new Separator());
+			getChildren().add(this.buttonBuildAccelerationStructure);
+			getChildren().add(this.buttonClearAccelerationStructure);
+			setAlignment(Pos.CENTER);
+			setFillWidth(true);
+			setSpacing(10.0D);
+		}
+		
+		@SuppressWarnings("unused")
+		private void doOnActionButtonBuildAccelerationStructure(final ActionEvent actionEvent) {
+			final
+			Scene scene = doGetScene();
+			scene.buildAccelerationStructure();
+			
+			this.renderer.renderShutdown();
+			this.renderer.clear();
+		}
+		
+		@SuppressWarnings("unused")
+		private void doOnActionButtonClearAccelerationStructure(final ActionEvent actionEvent) {
+			final
+			Scene scene = doGetScene();
+			scene.clearAccelerationStructure();
+			
+			this.renderer.renderShutdown();
+			this.renderer.clear();
+		}
+		
+		@SuppressWarnings("unused")
+		private void doOnActionButtonPrimitiveAdd(final ActionEvent actionEvent) {
+			final Material material = doCreateMaterial();
+			
+			final Shape3F shape = doCreateShape();
+			
+			if(material != null && shape != null) {
+				doAddPrimitiveByMaterialAndShape(material, shape);
+			}
+		}
 	}
 }

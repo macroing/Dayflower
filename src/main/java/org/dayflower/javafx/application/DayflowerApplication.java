@@ -79,7 +79,7 @@ public final class DayflowerApplication extends Application {
 	private final BorderPane borderPane;
 	private final ExecutorService executorService;
 	private final HierarchicalMenuBar hierarchicalMenuBar;
-	private final NodeSelectionTabPane<RendererMainPane, Renderer> nodeSelectionTabPane;
+	private final NodeSelectionTabPane<RendererTabPane, Renderer> nodeSelectionTabPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -89,7 +89,7 @@ public final class DayflowerApplication extends Application {
 		this.borderPane = new BorderPane();
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.hierarchicalMenuBar = new HierarchicalMenuBar();
-		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererMainPane.class, rendererPane -> rendererPane.getRenderer(), renderer -> new RendererMainPane(renderer, this.executorService), (a, b) -> a.equals(b), renderer -> renderer.getRendererConfiguration().getScene().getName());
+		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererPane -> rendererPane.getRenderer(), renderer -> new RendererTabPane(renderer, this.executorService), (a, b) -> a.equals(b), renderer -> renderer.getRendererConfiguration().getScene().getName());
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,7 +189,9 @@ public final class DayflowerApplication extends Application {
 	
 	@SuppressWarnings("unused")
 	private void doHandleEventFileExit(final ActionEvent actionEvent) {
-//		TODO: Implement!
+		this.executorService.shutdown();
+		
+		Platform.exit();
 	}
 	
 	@SuppressWarnings("unused")
@@ -217,12 +219,12 @@ public final class DayflowerApplication extends Application {
 	
 	@SuppressWarnings("unused")
 	private void doHandleEventFileSave(final ActionEvent actionEvent) {
-		final Optional<RendererMainPane> optionalRendererMainPane = this.nodeSelectionTabPane.getSelectedNode();
+		final Optional<RendererTabPane> optionalRendererTabPane = this.nodeSelectionTabPane.getSelectedNode();
 		
-		if(optionalRendererMainPane.isPresent()) {
-			final RendererMainPane rendererMainPane = optionalRendererMainPane.get();
+		if(optionalRendererTabPane.isPresent()) {
+			final RendererTabPane rendererTabPane = optionalRendererTabPane.get();
 			
-			final RendererViewPane rendererViewPane = rendererMainPane.getRendererViewPane();
+			final RendererViewPane rendererViewPane = rendererTabPane.getRendererViewPane();
 			
 			final Optional<File> optionalFile = rendererViewPane.getFile();
 			
@@ -246,12 +248,12 @@ public final class DayflowerApplication extends Application {
 	
 	@SuppressWarnings("unused")
 	private void doHandleEventFileSaveAs(final ActionEvent actionEvent) {
-		final Optional<RendererMainPane> optionalRendererMainPane = this.nodeSelectionTabPane.getSelectedNode();
+		final Optional<RendererTabPane> optionalRendererTabPane = this.nodeSelectionTabPane.getSelectedNode();
 		
-		if(optionalRendererMainPane.isPresent()) {
-			final RendererMainPane rendererMainPane = optionalRendererMainPane.get();
+		if(optionalRendererTabPane.isPresent()) {
+			final RendererTabPane rendererTabPane = optionalRendererTabPane.get();
 			
-			final RendererViewPane rendererViewPane = rendererMainPane.getRendererViewPane();
+			final RendererViewPane rendererViewPane = rendererTabPane.getRendererViewPane();
 			
 			final
 			FileChooser fileChooser = new FileChooser();
@@ -290,5 +292,30 @@ public final class DayflowerApplication extends Application {
 	
 	private void doSetStage(final Stage stage) {
 		this.stage.set(Objects.requireNonNull(stage, "stage == null"));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class RendererAnimationTimer extends AnimationTimer {
+		private final NodeSelectionTabPane<RendererTabPane, Renderer> selectionTabPane;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public RendererAnimationTimer(final NodeSelectionTabPane<RendererTabPane, Renderer> selectionTabPane) {
+			this.selectionTabPane = Objects.requireNonNull(selectionTabPane, "selectionTabPane == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void handle(final long now) {
+			final Optional<RendererTabPane> optionalRendererTabPane = this.selectionTabPane.getSelectedNode();
+			
+			if(optionalRendererTabPane.isPresent()) {
+				final
+				RendererViewPane rendererViewPane = optionalRendererTabPane.get().getRendererViewPane();
+				rendererViewPane.render();
+			}
+		}
 	}
 }

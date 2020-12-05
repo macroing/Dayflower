@@ -19,15 +19,11 @@
 package org.dayflower.javafx.application;
 
 import java.io.File;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
@@ -39,7 +35,7 @@ import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.image.Image;
-import org.dayflower.javafx.concurrent.PredicateTask;
+import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.scene.control.Labels;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.layout.Regions;
@@ -69,8 +65,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -78,13 +72,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -96,18 +83,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 final class RendererViewPane extends BorderPane {
-	private static final PixelFormat<ByteBuffer> PIXEL_FORMAT = PixelFormat.getByteBgraPreInstance();
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private final AtomicInteger keysPressed;
-	private final AtomicInteger mouseButtonsPressed;
-	private final AtomicLong mouseX;
-	private final AtomicLong mouseY;
 	private final AtomicReference<File> file;
-	private final AtomicReference<PredicateTask> predicateTask;
-	private final ByteBuffer byteBuffer;
-	private final Canvas canvas;
+	private final ConcurrentImageCanvas concurrentImageCanvas;
 	private final ExecutorService executorService;
 	private final HBox hBox;
 	private final Label labelRenderPass;
@@ -120,11 +97,6 @@ final class RendererViewPane extends BorderPane {
 	private final SceneBox sceneBox;
 	private final VBox vBoxL;
 	private final VBox vBoxR;
-	private final WritableImage writableImage;
-	private final boolean[] isKeyPressed;
-	private final boolean[] isKeyPressedOnce;
-	private final boolean[] isMouseButtonPressed;
-	private final boolean[] isMouseButtonPressedOnce;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -138,14 +110,8 @@ final class RendererViewPane extends BorderPane {
 	 * @throws NullPointerException thrown if, and only if, either {@code renderer} or {@code executorService} are {@code null}
 	 */
 	public RendererViewPane(final Renderer renderer, final ExecutorService executorService) {
-		this.keysPressed = new AtomicInteger();
-		this.mouseButtonsPressed = new AtomicInteger();
-		this.mouseX = new AtomicLong(Double.doubleToLongBits(0.0D));
-		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.file = new AtomicReference<>();
-		this.predicateTask = new AtomicReference<>();
-		this.byteBuffer = ByteBuffer.allocate(renderer.getRendererConfiguration().getImage().getResolutionX() * renderer.getRendererConfiguration().getImage().getResolutionY() * 4);
-		this.canvas = new Canvas();
+		this.concurrentImageCanvas = new ConcurrentImageCanvas(executorService, renderer.getRendererConfiguration().getImage(), this::doRender);
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
 		this.hBox = new HBox();
 		this.labelRenderPass = new Label();
@@ -158,11 +124,6 @@ final class RendererViewPane extends BorderPane {
 		this.sceneBox = new SceneBox(renderer);
 		this.vBoxL = new VBox();
 		this.vBoxR = new VBox();
-		this.writableImage = new WritableImage(renderer.getRendererConfiguration().getImage().getResolutionX(), renderer.getRendererConfiguration().getImage().getResolutionY());
-		this.isKeyPressed = new boolean[KeyCode.values().length];
-		this.isKeyPressedOnce = new boolean[KeyCode.values().length];
-		this.isMouseButtonPressed = new boolean[MouseButton.values().length];
-		this.isMouseButtonPressedOnce = new boolean[MouseButton.values().length];
 		
 		doConfigure();
 	}
@@ -206,180 +167,10 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, at least one key is being pressed, {@code false} otherwise.
-	 * 
-	 * @return {@code true} if, and only if, at least one key is being pressed, {@code false} otherwise
-	 */
-	public boolean isKeyPressed() {
-		return this.keysPressed.get() > 0;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the key denoted by {@code keyCode} is being pressed, {@code false} otherwise.
-	 * <p>
-	 * Calling this method is equivalent to calling {@code isKeyPressed(keyCode, false)}.
-	 * <p>
-	 * If {@code keyCode} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param keyCode a {@code KeyCode}
-	 * @return {@code true} if, and only if, the key denoted by {@code keyCode} is being pressed, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code keyCode} is {@code null}
-	 */
-	public boolean isKeyPressed(final KeyCode keyCode) {
-		return isKeyPressed(keyCode, false);
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the key denoted by {@code keyCode} is being pressed, {@code false} otherwise.
-	 * <p>
-	 * If {@code isKeyPressedOnce} is {@code true}, only the first call to this method will return {@code true} per press-release cycle given a specific key.
-	 * <p>
-	 * If {@code keyCode} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param keyCode a {@code KeyCode}
-	 * @param isKeyPressedOnce {@code true} if, and only if, a key press should occur at most one time per press-release cycle, {@code false} otherwise
-	 * @return {@code true} if, and only if, the key denoted by {@code keyCode} is being pressed, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code keyCode} is {@code null}
-	 */
-	public boolean isKeyPressed(final KeyCode keyCode, final boolean isKeyPressedOnce) {
-		final boolean isKeyPressed = this.isKeyPressed[keyCode.ordinal()];
-		
-		if(isKeyPressedOnce) {
-			final boolean isKeyPressedOnce0 = this.isKeyPressedOnce[keyCode.ordinal()];
-			
-			if(isKeyPressed && !isKeyPressedOnce0) {
-				this.isKeyPressedOnce[keyCode.ordinal()] = true;
-				
-				return true;
-			}
-			
-			return false;
-		}
-		
-		return isKeyPressed;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, at least one mouse button is being pressed, {@code false} otherwise.
-	 * 
-	 * @return {@code true} if, and only if, at least one mouse button is being pressed, {@code false} otherwise
-	 */
-	public boolean isMouseButtonPressed() {
-		return this.mouseButtonsPressed.get() > 0;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the mouse button denoted by {@code mouseButton} is being pressed, {@code false} otherwise.
-	 * <p>
-	 * Calling this method is equivalent to calling {@code isMouseButtonPressed(mouseButton, false)}.
-	 * <p>
-	 * If {@code mouseButton} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param mouseButton a {@code MouseButton}
-	 * @return {@code true} if, and only if, the mouse button denoted by {@code mouseButton} is being pressed, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code mouseButton} is {@code null}
-	 */
-	public boolean isMouseButtonPressed(final MouseButton mouseButton) {
-		return isMouseButtonPressed(mouseButton, false);
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the mouse button denoted by {@code mouseButton} is being pressed, {@code false} otherwise.
-	 * <p>
-	 * If {@code isMouseButtonPressedOnce} is {@code true}, only the first call to this method will return {@code true} per press-release cycle given a specific mouse button.
-	 * <p>
-	 * If {@code mouseButton} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param mouseButton a {@code MouseButton}
-	 * @param isMouseButtonPressedOnce {@code true} if, and only if, a mouse button press should occur at most one time per press-release cycle, {@code false} otherwise
-	 * @return {@code true} if, and only if, the mouse button denoted by {@code mouseButton} is being pressed, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code mouseButton} is {@code null}
-	 */
-	public boolean isMouseButtonPressed(final MouseButton mouseButton, final boolean isMouseButtonPressedOnce) {
-		final boolean isMouseButtonPressed = this.isMouseButtonPressed[mouseButton.ordinal()];
-		
-		if(isMouseButtonPressedOnce) {
-			final boolean isMouseButtonPressedOnce0 = this.isMouseButtonPressedOnce[mouseButton.ordinal()];
-			
-			if(isMouseButtonPressed && !isMouseButtonPressedOnce0) {
-				this.isMouseButtonPressedOnce[mouseButton.ordinal()] = true;
-				
-				return true;
-			}
-			
-			return false;
-		}
-		
-		return isMouseButtonPressed;
-	}
-	
-	/**
-	 * Returns the X-coordinate of the mouse.
-	 * 
-	 * @return the X-coordinate of the mouse
-	 */
-	public double getMouseX() {
-		return Double.longBitsToDouble(this.mouseX.get());
-	}
-	
-	/**
-	 * Returns the Y-coordinate of the mouse.
-	 * 
-	 * @return the Y-coordinate of the mouse
-	 */
-	public double getMouseY() {
-		return Double.longBitsToDouble(this.mouseY.get());
-	}
-	
-	/**
 	 * This method is called when it's time to render.
 	 */
 	public void render() {
-		final ExecutorService executorService = this.executorService;
-		
-		if(!executorService.isShutdown()) {
-			final AtomicReference<PredicateTask> predicateTask = this.predicateTask;
-			
-			final PredicateTask oldPredicateTask = predicateTask.get();
-			
-			if(oldPredicateTask == null || oldPredicateTask.isCancelled() || oldPredicateTask.isDone()) {
-				final ByteBuffer byteBuffer = this.byteBuffer;
-				
-				final Canvas canvas = this.canvas;
-				
-				final Renderer renderer = this.renderer;
-				
-				final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
-				
-				final Image image = rendererConfiguration.getImage();
-				
-				final double resolutionX = image.getResolutionX();
-				final double resolutionY = image.getResolutionY();
-				
-				final WritableImage writableImage = this.writableImage;
-				
-				final PredicateTask newPredicateTask = new PredicateTask(() -> Boolean.valueOf(renderer.render()), () -> {
-					image.copyTo(byteBuffer.array());
-					
-					final
-					PixelWriter pixelWriter = writableImage.getPixelWriter();
-					pixelWriter.setPixels(0, 0, image.getResolutionX(), image.getResolutionY(), PIXEL_FORMAT, byteBuffer, image.getResolutionX() * 4);
-					
-					final
-					GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-					graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, resolutionX, resolutionY);
-				});
-				
-				predicateTask.set(newPredicateTask);
-				
-				try {
-					executorService.execute(newPredicateTask);
-				} catch(final RejectedExecutionException e) {
-//					One of the methods shutdown() and shutdownNow() of the ExecutorService has been called.
-//					The next time this render() method is called, nothing will happen.
-				}
-			}
-		}
+		this.concurrentImageCanvas.render();
 	}
 	
 	/**
@@ -438,26 +229,12 @@ final class RendererViewPane extends BorderPane {
 		return new ObjectTreeView<>(doCreateMapperUToContextMenu(), doCreateMapperUToListU(), doCreateMapperUToT(), scene);
 	}
 	
+	@SuppressWarnings("unused")
+	private boolean doRender(final Image image) {
+		return this.renderer.render();
+	}
+	
 	private void doConfigure() {
-//		Retrieve the Image and its resolution:
-		final Image image = this.renderer.getRendererConfiguration().getImage();
-		
-		final double resolutionX = image.getResolutionX();
-		final double resolutionY = image.getResolutionY();
-		
-//		Configure the Canvas:
-		this.canvas.addEventFilter(MouseEvent.ANY, e -> this.canvas.requestFocus());
-		this.canvas.addEventFilter(KeyEvent.ANY, e -> this.canvas.requestFocus());
-		this.canvas.setFocusTraversable(true);
-		this.canvas.setHeight(resolutionY);
-		this.canvas.setOnKeyPressed(this::doOnKeyPressed);
-		this.canvas.setOnKeyReleased(this::doOnKeyReleased);
-		this.canvas.setOnMouseDragged(this::doOnMouseDragged);
-		this.canvas.setOnMouseMoved(this::doOnMouseMoved);
-		this.canvas.setOnMousePressed(this::doOnMousePressed);
-		this.canvas.setOnMouseReleased(this::doOnMouseReleased);
-		this.canvas.setWidth(resolutionX);
-		
 //		Configure the HBox:
 		this.hBox.getChildren().add(this.labelRenderPass);
 		this.hBox.getChildren().add(this.labelRenderTime);
@@ -505,57 +282,13 @@ final class RendererViewPane extends BorderPane {
 		
 //		Configure the RendererViewPane:
 		setBottom(this.hBox);
-		setCenter(this.canvas);
+		setCenter(this.concurrentImageCanvas);
 		setLeft(this.vBoxL);
 		setRight(this.vBoxR);
 	}
 	
 	private void doOnActionDelete(final Primitive primitive) {
 		this.renderer.getRendererConfiguration().getScene().removePrimitive(primitive);
-	}
-	
-	private void doOnKeyPressed(final KeyEvent keyEvent) {
-		if(!this.isKeyPressed[keyEvent.getCode().ordinal()]) {
-			this.keysPressed.incrementAndGet();
-		}
-		
-		this.isKeyPressed[keyEvent.getCode().ordinal()] = true;
-	}
-	
-	private void doOnKeyReleased(final KeyEvent keyEvent) {
-		if(this.isKeyPressed[keyEvent.getCode().ordinal()]) {
-			this.keysPressed.decrementAndGet();
-		}
-		
-		this.isKeyPressed[keyEvent.getCode().ordinal()] = false;
-		this.isKeyPressedOnce[keyEvent.getCode().ordinal()] = false;
-	}
-	
-	private void doOnMouseDragged(final MouseEvent mouseEvent) {
-		this.mouseX.set(Double.doubleToLongBits(mouseEvent.getX()));
-		this.mouseY.set(Double.doubleToLongBits(mouseEvent.getY()));
-	}
-	
-	private void doOnMouseMoved(final MouseEvent mouseEvent) {
-		this.mouseX.set(Double.doubleToLongBits(mouseEvent.getX()));
-		this.mouseY.set(Double.doubleToLongBits(mouseEvent.getY()));
-	}
-	
-	private void doOnMousePressed(final MouseEvent mouseEvent) {
-		if(!this.isMouseButtonPressed[mouseEvent.getButton().ordinal()]) {
-			this.mouseButtonsPressed.incrementAndGet();
-		}
-		
-		this.isMouseButtonPressed[mouseEvent.getButton().ordinal()] = true;
-	}
-	
-	private void doOnMouseReleased(final MouseEvent mouseEvent) {
-		if(this.isMouseButtonPressed[mouseEvent.getButton().ordinal()]) {
-			this.mouseButtonsPressed.decrementAndGet();
-		}
-		
-		this.isMouseButtonPressed[mouseEvent.getButton().ordinal()] = false;
-		this.isMouseButtonPressedOnce[mouseEvent.getButton().ordinal()] = false;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

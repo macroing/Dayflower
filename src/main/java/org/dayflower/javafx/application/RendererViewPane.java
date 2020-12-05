@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -41,6 +39,7 @@ import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.image.Image;
+import org.dayflower.javafx.concurrent.PredicateTask;
 import org.dayflower.javafx.scene.control.Labels;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.layout.Regions;
@@ -67,7 +66,6 @@ import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
 import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
 
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -107,7 +105,7 @@ final class RendererViewPane extends BorderPane {
 	private final AtomicLong mouseX;
 	private final AtomicLong mouseY;
 	private final AtomicReference<File> file;
-	private final AtomicReference<RendererTask> rendererTask;
+	private final AtomicReference<PredicateTask> predicateTask;
 	private final ByteBuffer byteBuffer;
 	private final Canvas canvas;
 	private final ExecutorService executorService;
@@ -145,7 +143,7 @@ final class RendererViewPane extends BorderPane {
 		this.mouseX = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.file = new AtomicReference<>();
-		this.rendererTask = new AtomicReference<>();
+		this.predicateTask = new AtomicReference<>();
 		this.byteBuffer = ByteBuffer.allocate(renderer.getRendererConfiguration().getImage().getResolutionX() * renderer.getRendererConfiguration().getImage().getResolutionY() * 4);
 		this.canvas = new Canvas();
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
@@ -340,11 +338,11 @@ final class RendererViewPane extends BorderPane {
 		final ExecutorService executorService = this.executorService;
 		
 		if(!executorService.isShutdown()) {
-			final AtomicReference<RendererTask> rendererTask = this.rendererTask;
+			final AtomicReference<PredicateTask> predicateTask = this.predicateTask;
 			
-			final RendererTask oldRendererTask = rendererTask.get();
+			final PredicateTask oldPredicateTask = predicateTask.get();
 			
-			if(oldRendererTask == null || oldRendererTask.isCancelled() || oldRendererTask.isDone()) {
+			if(oldPredicateTask == null || oldPredicateTask.isCancelled() || oldPredicateTask.isDone()) {
 				final ByteBuffer byteBuffer = this.byteBuffer;
 				
 				final Canvas canvas = this.canvas;
@@ -360,7 +358,7 @@ final class RendererViewPane extends BorderPane {
 				
 				final WritableImage writableImage = this.writableImage;
 				
-				final RendererTask newRendererTask = new RendererTask(() -> Boolean.valueOf(renderer.render()), () -> {
+				final PredicateTask newPredicateTask = new PredicateTask(() -> Boolean.valueOf(renderer.render()), () -> {
 					image.copyTo(byteBuffer.array());
 					
 					final
@@ -372,10 +370,10 @@ final class RendererViewPane extends BorderPane {
 					graphicsContext.drawImage(writableImage, 0.0D, 0.0D, writableImage.getWidth(), writableImage.getHeight(), 0.0D, 0.0D, resolutionX, resolutionY);
 				});
 				
-				rendererTask.set(newRendererTask);
+				predicateTask.set(newPredicateTask);
 				
 				try {
-					executorService.execute(newRendererTask);
+					executorService.execute(newPredicateTask);
 				} catch(final RejectedExecutionException e) {
 //					One of the methods shutdown() and shutdownNow() of the ExecutorService has been called.
 //					The next time this render() method is called, nothing will happen.
@@ -697,50 +695,6 @@ final class RendererViewPane extends BorderPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final class RendererTask extends Task<Boolean> {
-		private final Callable<Boolean> callableCall;
-		private final Runnable runnableSucceeded;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public RendererTask(final Callable<Boolean> callableCall, final Runnable runnableSucceeded) {
-			this.callableCall = Objects.requireNonNull(callableCall, "callableCall == null");
-			this.runnableSucceeded = Objects.requireNonNull(runnableSucceeded, "runnableSucceeded == null");
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		@Override
-		protected Boolean call() {
-			try {
-				return this.callableCall.call();
-			} catch(final Exception e) {
-				doReportException(e);
-				
-				return Boolean.FALSE;
-			}
-		}
-		
-		@Override
-		protected void succeeded() {
-			try {
-				if(get().booleanValue()) {
-					this.runnableSucceeded.run();
-				}
-			} catch(final ExecutionException | InterruptedException e) {
-				doReportException(e);
-			}
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		private static void doReportException(final Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private static final class SceneBox extends VBox {
 		private final Button buttonBuildAccelerationStructure;
 		private final Button buttonClearAccelerationStructure;
@@ -855,15 +809,13 @@ final class RendererViewPane extends BorderPane {
 		}
 		
 		private void doAddPrimitiveByMaterialAndShape(final Material material, final Shape3F shape) {
-//			getExecutorService().execute(() -> {
-				final Transform transform = new Transform(doGetPointByShape(shape));
-				
-				final Primitive primitive = new Primitive(material, shape, transform);
-				
-				final
-				Scene scene = doGetScene();
-				scene.addPrimitive(primitive);
-//			});
+			final Transform transform = new Transform(doGetPointByShape(shape));
+			
+			final Primitive primitive = new Primitive(material, shape, transform);
+			
+			final
+			Scene scene = doGetScene();
+			scene.addPrimitive(primitive);
 		}
 		
 		private void doConfigure() {

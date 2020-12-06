@@ -312,7 +312,7 @@ final class RenderingAlgorithms {
 					radiance = Color3F.add(radiance, doGetRadianceLights(throughput, rayitoBSDF, scene, surfaceIntersection, currentRayDirectionO, lights, primitive));
 				}
 				
-				final Optional<BSDFResult> optionalBSDFResult = rayitoBSDF.sampleDistributionFunction(currentRayDirectionO, surfaceNormalS, orthonormalBasisS, random(), random());
+				final Optional<BSDFResult> optionalBSDFResult = rayitoBSDF.sampleDistributionFunction(BXDFType.ALL, currentRayDirectionO, surfaceNormalS, new Point2F(random(), random()));
 				
 				if(!optionalBSDFResult.isPresent()) {
 					break;
@@ -835,9 +835,9 @@ final class RenderingAlgorithms {
 							final Vector3F selectedDirectionI = Vector3F.normalize(Vector3F.direction(point, surfaceIntersectionPoint));
 							final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
 							
-							final float probabilityDensityFunctionValueB1 = rayitoBSDF.evaluateProbabilityDensityFunction(directionO, surfaceNormal, selectedDirectionI);
+							final float probabilityDensityFunctionValueB1 = rayitoBSDF.evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionI);
 							
-							final Color3F result = rayitoBSDF.evaluateDistributionFunction(directionO, surfaceNormal, selectedDirectionI);
+							final Color3F result = rayitoBSDF.evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionI);
 							
 							if(probabilityDensityFunctionValueB1 > 0.0F && !result.isBlack()) {
 								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
@@ -869,7 +869,7 @@ final class RenderingAlgorithms {
 							}
 						}
 						
-						final Optional<BSDFResult> optionalBSDFResult = rayitoBSDF.sampleDistributionFunction(directionO, surfaceNormal, orthonormalBasis, random(), random());
+						final Optional<BSDFResult> optionalBSDFResult = rayitoBSDF.sampleDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, new Point2F(random(), random()));
 						
 						if(optionalBSDFResult.isPresent()) {
 							final BSDFResult bSDFResult = optionalBSDFResult.get();

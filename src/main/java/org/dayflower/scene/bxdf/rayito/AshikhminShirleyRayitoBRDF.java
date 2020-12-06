@@ -28,7 +28,7 @@ import static org.dayflower.util.Floats.pow;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
@@ -60,7 +60,7 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
 	public AshikhminShirleyRayitoBRDF(final Color3F reflectanceScale, final float roughness) {
-		super(BXDFType.GLOSSY_REFLECTION);
+		super(BXDFType.GLOSSY_REFLECTION_AND_TRANSMISSION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 		this.exponent = 1.0F / (roughness * roughness);
@@ -76,14 +76,18 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * <p>
 	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param normal a {@code Vector3F} instance with the normal
-	 * @param incoming a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
 	 * @return a {@code Color3F} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
 		final Vector3F half = Vector3F.half(outgoing, normal, incoming);
 		
 		final float normalDotHalf = Vector3F.dotProduct(normal, half);
@@ -106,23 +110,24 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * <p>
 	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code outgoing}, {@code normal} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param normal a {@code Vector3F} instance with the normal
-	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
-	 * @param u the U-coordinate
-	 * @param v the V-coordinate
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param sample the sample point
 	 * @return an optional {@code BXDFResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
+		Objects.requireNonNull(sample, "sample == null");
+		
 		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
 		
-		final Vector3F halfLocalSpace = SampleGeneratorF.sampleHemispherePowerCosineDistribution(u, v, this.exponent);
-		final Vector3F halfTransformed = Vector3F.transform(halfLocalSpace, orthonormalBasis);
-		final Vector3F half = normalDotOutgoing < 0.0F ? Vector3F.negate(halfTransformed) : halfTransformed;
+		final Vector3F halfSample = SampleGeneratorF.sampleHemispherePowerCosineDistribution(sample.getU(), sample.getV(), this.exponent);
+		final Vector3F half = normalDotOutgoing < 0.0F ? Vector3F.negate(halfSample) : halfSample;
 		
 		final float outgoingDotHalf = Vector3F.dotProduct(outgoing, half);
 		
@@ -179,14 +184,18 @@ public final class AshikhminShirleyRayitoBRDF extends RayitoBXDF {
 	 * <p>
 	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param normal a {@code Vector3F} instance with the normal
-	 * @param incoming a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
 		final Vector3F half = Vector3F.half(outgoing, normal, incoming);
 		
 		final float normalDotHalf = Vector3F.dotProduct(normal, half);

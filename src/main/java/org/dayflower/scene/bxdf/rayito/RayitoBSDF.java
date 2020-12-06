@@ -19,18 +19,23 @@
 package org.dayflower.scene.bxdf.rayito;
 
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.floor;
+import static org.dayflower.util.Floats.isZero;
+import static org.dayflower.util.Floats.min;
+import static org.dayflower.util.Ints.min;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDFResult;
+import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
 import org.dayflower.util.ParameterArguments;
 
@@ -91,24 +96,38 @@ public final class RayitoBSDF implements BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
-	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param normal a {@code Vector3F} instance with the normal
-	 * @param incoming a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
+	 * @param bXDFType a {@link BXDFType} instance to match against
+	 * @param outgoingWorldSpace the outgoing direction
+	 * @param normalWorldSpace the normal
+	 * @param incomingWorldSpace the incoming direction
 	 * @return a {@code Color3F} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}
 	 */
-	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-		Objects.requireNonNull(outgoing, "outgoing == null");
-		Objects.requireNonNull(normal, "normal == null");
-		Objects.requireNonNull(incoming, "incoming == null");
+	public Color3F evaluateDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Vector3F incomingWorldSpace) {
+		Objects.requireNonNull(bXDFType, "bXDFType == null");
+		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
+		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
+		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
-		if(this.rayitoBXDFs.isEmpty()) {
-			return Color3F.BLACK;
+		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
+		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
+		
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
+		
+		final boolean isReflecting = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG) > 0.0F;
+		
+		Color3F result = Color3F.BLACK;
+		
+		for(final RayitoBXDF rayitoBXDF : this.rayitoBXDFs) {
+			if(rayitoBXDF.getBXDFType().matches(bXDFType) && (isReflecting && rayitoBXDF.getBXDFType().hasReflection() || !isReflecting && rayitoBXDF.getBXDFType().hasTransmission())) {
+				result = Color3F.add(result, rayitoBXDF.evaluateDistributionFunction(outgoing, normal, incoming));
+			}
 		}
 		
-		return this.rayitoBXDFs.get(0).evaluateDistributionFunction(outgoing, normal, incoming);
+		return result;
 	}
 	
 	/**
@@ -116,36 +135,85 @@ public final class RayitoBSDF implements BSDF {
 	 * <p>
 	 * Returns an optional {@link BSDFResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param normal a {@code Vector3F} instance with the normal
-	 * @param orthonormalBasis an {@link OrthonormalBasis33F} instance
-	 * @param u the U-coordinate
-	 * @param v the V-coordinate
+	 * @param bXDFType a {@link BXDFType} instance to match against
+	 * @param outgoingWorldSpace the outgoing direction
+	 * @param normalWorldSpace the normal
+	 * @param sample the sample point
 	 * @return an optional {@code BSDFResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code orthonormalBasis} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code sample} are {@code null}
 	 */
-	public Optional<BSDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final OrthonormalBasis33F orthonormalBasis, final float u, final float v) {
-		Objects.requireNonNull(outgoing, "outgoing == null");
-		Objects.requireNonNull(normal, "normal == null");
-		Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
+	public Optional<BSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Point2F sample) {
+		Objects.requireNonNull(bXDFType, "bXDFType == null");
+		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
+		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
+		Objects.requireNonNull(sample, "sample == null");
 		
-		if(this.rayitoBXDFs.isEmpty()) {
+		final int matches = doComputeMatches(bXDFType);
+		
+		if(matches == 0) {
 			return Optional.empty();
 		}
 		
-		final Optional<BXDFResult> optionalBXDFResult = this.rayitoBXDFs.get(0).sampleDistributionFunction(outgoing, normal, orthonormalBasis, u, v);
+		final int match = min((int)(floor(sample.getU() * matches)), matches - 1);
 		
-		if(optionalBXDFResult.isPresent()) {
-			final BXDFResult bXDFResult = optionalBXDFResult.get();
-			
-			final BSDFResult bSDFResult = new BSDFResult(bXDFResult.getBXDFType(), bXDFResult.getResult(), bXDFResult.getIncoming(), bXDFResult.getOutgoing(), bXDFResult.getProbabilityDensityFunctionValue());
-			
-			return Optional.of(bSDFResult);
+		final RayitoBXDF matchingRayitoBXDF = doGetMatchingRayitoBXDF(bXDFType, match);
+		
+		if(matchingRayitoBXDF == null) {
+			return Optional.empty();
 		}
 		
-		return Optional.empty();
+		final Point2F sampleRemapped = new Point2F(min(sample.getU() * matches - match, 0.99999994F), sample.getV());
+		
+		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
+		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+		
+		if(isZero(outgoing.getZ())) {
+			return Optional.empty();
+		}
+		
+		final Optional<BXDFResult> optionalBXDFResult = matchingRayitoBXDF.sampleDistributionFunction(outgoing, normal, sampleRemapped);
+		
+		if(!optionalBXDFResult.isPresent()) {
+			return Optional.empty();
+		}
+		
+		final BXDFResult bXDFResult = optionalBXDFResult.get();
+		
+		final Vector3F incoming = bXDFResult.getIncoming();
+		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
+		
+		Color3F result = bXDFResult.getResult();
+		
+		float probabilityDensityFunctionValue = bXDFResult.getProbabilityDensityFunctionValue();
+		
+		if(matches > 1 && !matchingRayitoBXDF.getBXDFType().isSpecular()) {
+			for(final RayitoBXDF rayitoBXDF : this.rayitoBXDFs) {
+				if(matchingRayitoBXDF != rayitoBXDF && rayitoBXDF.getBXDFType().matches(bXDFType)) {
+					probabilityDensityFunctionValue += rayitoBXDF.evaluateProbabilityDensityFunction(outgoing, normal, incoming);
+				}
+			}
+		}
+		
+		if(matches > 1) {
+			probabilityDensityFunctionValue /= matches;
+		}
+		
+		if(!matchingRayitoBXDF.getBXDFType().isSpecular()) {
+			final boolean isReflecting = Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) > 0.0F;
+			
+			result = Color3F.BLACK;
+			
+			for(final RayitoBXDF rayitoBXDF : this.rayitoBXDFs) {
+				if(rayitoBXDF.getBXDFType().matches(bXDFType) && (isReflecting && rayitoBXDF.getBXDFType().hasReflection() || !isReflecting && rayitoBXDF.getBXDFType().hasTransmission())) {
+					result = Color3F.add(result, rayitoBXDF.evaluateDistributionFunction(outgoing, normal, incoming));
+				}
+			}
+		}
+		
+		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -188,24 +256,50 @@ public final class RayitoBSDF implements BSDF {
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing a {@link Vector3F} instance with the outgoing direction from the surface intersection point to the origin of the ray
-	 * @param normal a {@code Vector3F} instance with the normal
-	 * @param incoming a {@code Vector3F} instance with the incoming direction from the light source to the surface intersection point
+	 * @param bXDFType a {@link BXDFType} instance to match against
+	 * @param outgoingWorldSpace the outgoing direction
+	 * @param normalWorldSpace the normal
+	 * @param incomingWorldSpace the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}
 	 */
-	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-		Objects.requireNonNull(outgoing, "outgoing == null");
-		Objects.requireNonNull(normal, "normal == null");
-		Objects.requireNonNull(incoming, "incoming == null");
+	public float evaluateProbabilityDensityFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Vector3F incomingWorldSpace) {
+		Objects.requireNonNull(bXDFType, "bXDFType == null");
+		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
+		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
+		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
-		if(this.rayitoBXDFs.isEmpty()) {
+		if(this.rayitoBXDFs.size() == 0) {
 			return 0.0F;
 		}
 		
-		return this.rayitoBXDFs.get(0).evaluateProbabilityDensityFunction(outgoing, normal, incoming);
+		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
+		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
+		
+		if(isZero(outgoing.getZ())) {
+			return 0.0F;
+		}
+		
+		float probabilityDensityFunctionValue = 0.0F;
+		
+		int matches = 0;
+		
+		for(final RayitoBXDF rayitoBXDF : this.rayitoBXDFs) {
+			if(rayitoBXDF.getBXDFType().matches(bXDFType)) {
+				matches++;
+				
+				probabilityDensityFunctionValue += rayitoBXDF.evaluateProbabilityDensityFunction(outgoing, normal, incoming);
+			}
+		}
+		
+		if(matches > 1) {
+			probabilityDensityFunctionValue /= matches;
+		}
+		
+		return probabilityDensityFunctionValue;
 	}
 	
 	/**
@@ -243,5 +337,39 @@ public final class RayitoBSDF implements BSDF {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.intersection, this.rayitoBXDFs, Float.valueOf(this.eta));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private RayitoBXDF doGetMatchingRayitoBXDF(final BXDFType bXDFType, final int match) {
+		for(int i = 0, j = match; i < this.rayitoBXDFs.size(); i++) {
+			final RayitoBXDF rayitoBXDF = this.rayitoBXDFs.get(i);
+			
+			if(rayitoBXDF.getBXDFType().matches(bXDFType) && j-- == 0) {
+				return rayitoBXDF;
+			}
+		}
+		
+		return null;
+	}
+	
+	private Vector3F doTransformToLocalSpace(final Vector3F vector) {
+		return Vector3F.normalize(Vector3F.transformReverse(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS()));
+	}
+	
+	private Vector3F doTransformToWorldSpace(final Vector3F vector) {
+		return Vector3F.normalize(Vector3F.transform(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS()));
+	}
+	
+	private int doComputeMatches(final BXDFType bXDFType) {
+		int matches = 0;
+		
+		for(final RayitoBXDF rayitoBXDF : this.rayitoBXDFs) {
+			if(rayitoBXDF.getBXDFType().matches(bXDFType)) {
+				matches++;
+			}
+		}
+		
+		return matches;
 	}
 }

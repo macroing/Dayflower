@@ -27,8 +27,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.image.Image;
-import org.dayflower.javafx.scene.control.HierarchicalMenuBar;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
+import org.dayflower.javafx.scene.control.PathMenuBar;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.cpu.CPURenderer;
@@ -78,8 +78,8 @@ public final class DayflowerApplication extends Application {
 	private final AtomicReference<Stage> stage;
 	private final BorderPane borderPane;
 	private final ExecutorService executorService;
-	private final HierarchicalMenuBar hierarchicalMenuBar;
 	private final NodeSelectionTabPane<RendererTabPane, Renderer> nodeSelectionTabPane;
+	private final PathMenuBar pathMenuBar;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -88,8 +88,8 @@ public final class DayflowerApplication extends Application {
 		this.stage = new AtomicReference<>();
 		this.borderPane = new BorderPane();
 		this.executorService = Executors.newFixedThreadPool(1);
-		this.hierarchicalMenuBar = new HierarchicalMenuBar();
 		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererPane -> rendererPane.getRenderer(), renderer -> new RendererTabPane(renderer, this.executorService), (a, b) -> a.equals(b), renderer -> renderer.getRendererConfiguration().getScene().getName());
+		this.pathMenuBar = new PathMenuBar();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,8 +99,8 @@ public final class DayflowerApplication extends Application {
 	public void start(final Stage stage) {
 		doSetStage(stage);
 		doConfigureBorderPane();
-		doConfigureHierarchicalMenuBar();
 		doConfigureNodeSelectionTabPane();
+		doConfigurePathMenuBar();
 		doConfigureAndShowStage();
 		doCreateAndStartAnimationTimer();
 	}
@@ -163,22 +163,22 @@ public final class DayflowerApplication extends Application {
 	
 	private void doConfigureBorderPane() {
 		this.borderPane.setCenter(this.nodeSelectionTabPane);
-		this.borderPane.setTop(this.hierarchicalMenuBar);
-	}
-	
-	private void doConfigureHierarchicalMenuBar() {
-		this.hierarchicalMenuBar.setPathElementText(PATH_ELEMENT_FILE, TEXT_FILE);
-		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_NEW, this::doHandleEventFileNew, new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), true);
-		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_OPEN, this::doHandleEventFileOpen, new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), true);
-		this.hierarchicalMenuBar.addSeparatorMenuItem(PATH_FILE);
-		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE, this::doHandleEventFileSave, new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), false);
-		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_AS, this::doHandleEventFileSaveAs, null, false);
-		this.hierarchicalMenuBar.addSeparatorMenuItem(PATH_FILE);
-		this.hierarchicalMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, this::doHandleEventFileExit, null, true);
+		this.borderPane.setTop(this.pathMenuBar);
 	}
 	
 	private void doConfigureNodeSelectionTabPane() {
 		this.nodeSelectionTabPane.getSelectionModel().selectedItemProperty().addListener(this::doHandleTabChangeSelectionTabPane);
+	}
+	
+	private void doConfigurePathMenuBar() {
+		this.pathMenuBar.setPathElementText(PATH_ELEMENT_FILE, TEXT_FILE);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_NEW, this::doHandleEventFileNew, new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), true);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_OPEN, this::doHandleEventFileOpen, new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), true);
+		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE, this::doHandleEventFileSave, new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), false);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_AS, this::doHandleEventFileSaveAs, null, false);
+		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
+		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, this::doHandleEventFileExit, null, true);
 	}
 	
 	private void doCreateAndStartAnimationTimer() {
@@ -272,11 +272,11 @@ public final class DayflowerApplication extends Application {
 	@SuppressWarnings("unused")
 	private void doHandleTabChangeSelectionTabPane(final ObservableValue<? extends Tab> observableValue, final Tab oldTab, final Tab newTab) {
 		if(newTab != null) {
-			this.hierarchicalMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE).setDisable(false);
-			this.hierarchicalMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_AS).setDisable(false);
+			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE).setDisable(false);
+			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_AS).setDisable(false);
 		} else {
-			this.hierarchicalMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE).setDisable(true);
-			this.hierarchicalMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_AS).setDisable(true);
+			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE).setDisable(true);
+			this.pathMenuBar.getMenuItem(PATH_FILE, TEXT_SAVE_AS).setDisable(true);
 		}
 		
 		Platform.runLater(() -> {

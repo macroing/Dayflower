@@ -32,7 +32,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCombination;
 
 /**
- * A {@code HierarchicalMenuBar} is a {@code MenuBar} that allows you to add {@code CheckMenuItem}, {@code MenuItem} and {@code SeparatorMenuItem} instances in a straight forward way.
+ * A {@code PathMenuBar} is a {@code MenuBar} that allows you to add {@code CheckMenuItem}, {@code MenuItem} and {@code SeparatorMenuItem} instances in a straight forward way.
  * <p>
  * To add a {@code CheckMenuItem}, a {@code MenuItem} or a {@code SeparatorMenuItem}, you need to specify a "path". A path is used to construct {@code Menu} instances in a hierarchical fashion. Each path is separated into "path elements". Each path
  * element corresponds to a single {@code Menu}. The default path delimiter that is used to separate a path into path elements is {@code "."} (a dot). But this may be changed.
@@ -41,19 +41,19 @@ import javafx.scene.input.KeyCombination;
  * <pre>
  * {@code
  * //The following example uses internationalization and translates the texts of Menus and MenuItems to Swedish.
- * HierarchicalMenuBar hierarchicalMenuBar = new HierarchicalMenuBar("\\.");
- * hierarchicalMenuBar.setPathElementText("File", "Arkiv");
- * hierarchicalMenuBar.setPathElementText("New", "Nytt");
- * hierarchicalMenuBar.addMenuItem("File.New", "Dokument", null, null, true);
- * hierarchicalMenuBar.addSeparatorMenuItem("File");
- * hierarchicalMenuBar.addMenuItem("File", "Avsluta", null, null, true);
+ * PathMenuBar pathMenuBar = new PathMenuBar("\\.");
+ * pathMenuBar.setPathElementText("File", "Arkiv");
+ * pathMenuBar.setPathElementText("New", "Nytt");
+ * pathMenuBar.addMenuItem("File.New", "Dokument", null, null, true);
+ * pathMenuBar.addSeparatorMenuItem("File");
+ * pathMenuBar.addMenuItem("File", "Avsluta", null, null, true);
  * }
  * </pre>
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class HierarchicalMenuBar extends MenuBar {
+public final class PathMenuBar extends MenuBar {
 	/**
 	 * The default path delimiter, which is {@code "\\."}.
 	 * <p>
@@ -69,28 +69,28 @@ public final class HierarchicalMenuBar extends MenuBar {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new empty {@code HierarchicalMenuBar} instance.
+	 * Constructs a new empty {@code PathMenuBar} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new HierarchicalMenuBar(HierarchicalMenuBar.DEFAULT_PATH_DELIMITER);
+	 * new PathMenuBar(PathMenuBar.DEFAULT_PATH_DELIMITER);
 	 * }
 	 * </pre>
 	 */
-	public HierarchicalMenuBar() {
+	public PathMenuBar() {
 		this(DEFAULT_PATH_DELIMITER);
 	}
 	
 	/**
-	 * Constructs a new empty {@code HierarchicalMenuBar} instance.
+	 * Constructs a new empty {@code PathMenuBar} instance.
 	 * <p>
 	 * If {@code pathDelimiter} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param pathDelimiter the path delimiter to use, in Regex
 	 * @throws NullPointerException thrown if, and only if, {@code pathDelimiter} is {@code null}
 	 */
-	public HierarchicalMenuBar(final String pathDelimiter) {
+	public PathMenuBar(final String pathDelimiter) {
 		this.pathElementTexts = new HashMap<>();
 		this.pathDelimiter = Objects.requireNonNull(pathDelimiter, "pathDelimiter == null");
 	}
@@ -98,7 +98,7 @@ public final class HierarchicalMenuBar extends MenuBar {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Adds a new {@code CheckMenuItem} to this {@code HierarchicalMenuBar} instance.
+	 * Adds a new {@code CheckMenuItem} to this {@code PathMenuBar} instance.
 	 * <p>
 	 * Returns the new {@code CheckMenuItem} instance.
 	 * <p>
@@ -188,7 +188,7 @@ public final class HierarchicalMenuBar extends MenuBar {
 	}
 	
 	/**
-	 * Adds a new {@code MenuItem} to this {@code HierarchicalMenuBar} instance.
+	 * Adds a new {@code MenuItem} to this {@code PathMenuBar} instance.
 	 * <p>
 	 * Returns the new {@code MenuItem} instance.
 	 * <p>
@@ -224,7 +224,7 @@ public final class HierarchicalMenuBar extends MenuBar {
 	}
 	
 	/**
-	 * Adds a new {@code SeparatorMenuItem} to this {@code HierarchicalMenuBar} instance.
+	 * Adds a new {@code SeparatorMenuItem} to this {@code PathMenuBar} instance.
 	 * <p>
 	 * Returns the new {@code SeparatorMenuItem} instance.
 	 * <p>

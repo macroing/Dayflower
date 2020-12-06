@@ -79,6 +79,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -279,6 +280,8 @@ final class RendererViewPane extends BorderPane {
 		this.vBoxR.setFillWidth(true);
 		this.vBoxR.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));
 		this.vBoxR.setSpacing(20.0D);
+		
+		VBox.setVgrow(this.objectTreeView, Priority.ALWAYS);
 		
 //		Configure the RendererViewPane:
 		setBottom(this.hBox);

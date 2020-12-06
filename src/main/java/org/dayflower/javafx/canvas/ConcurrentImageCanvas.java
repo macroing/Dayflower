@@ -18,7 +18,6 @@
  */
 package org.dayflower.javafx.canvas;
 
-import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -41,7 +40,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code ConcurrentImageCanvas} is a {@code Canvas} that performs rendering to an {@link Image} using an {@code ExecutorService} and updates the {@code Canvas} on the {@code FX Application Thread}.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class ConcurrentImageCanvas extends Canvas {
 	private static final PixelFormat<ByteBuffer> PIXEL_FORMAT = PixelFormat.getByteBgraPreInstance();
 	
@@ -64,7 +68,16 @@ public final class ConcurrentImageCanvas extends Canvas {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code ConcurrentImageCanvas} instance.
+	 * <p>
+	 * If either {@code executorService}, {@code image} or {@code renderPredicate} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param executorService the {@code ExecutorService} instance to use
+	 * @param image the {@link Image} instance to use
+	 * @param renderPredicate the {@code Predicate} of {@code Image} that performs the rendering itself
+	 * @throws NullPointerException thrown if, and only if, either {@code executorService}, {@code image} or {@code renderPredicate} are {@code null}
+	 */
 	public ConcurrentImageCanvas(final ExecutorService executorService, final Image image, final Predicate<Image> renderPredicate) {
 		this.keysPressed = new AtomicInteger();
 		this.mouseButtonsPressed = new AtomicInteger();
@@ -232,7 +245,12 @@ public final class ConcurrentImageCanvas extends Canvas {
 	}
 	
 	/**
-	 * This method is called when it's time to render.
+	 * Performs the rendering operation.
+	 * <p>
+	 * This method should be called each frame or render pass. Preferably in an {@code AnimationTimer} instance.
+	 * <p>
+	 * If the {@code ExecutorService} has been shutdown, nothing will happen. Otherwise, this method will create and execute a new {@link PredicateTask} using the {@code ExecutorService} if, and only if, there are no previous {@code PredicateTask} or
+	 * the previous {@code PredicateTask} is cancelled or done.
 	 */
 	public void render() {
 		final ExecutorService executorService = this.executorService;

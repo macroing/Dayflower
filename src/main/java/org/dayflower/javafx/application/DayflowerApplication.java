@@ -87,7 +87,7 @@ public final class DayflowerApplication extends Application {
 	public DayflowerApplication() {
 		this.stage = new AtomicReference<>();
 		this.borderPane = new BorderPane();
-		this.executorService = Executors.newFixedThreadPool(1);
+		this.executorService = Executors.newFixedThreadPool(4);
 		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererPane -> rendererPane.getRenderer(), renderer -> new RendererTabPane(renderer, this.executorService), (a, b) -> a.equals(b), renderer -> renderer.getRendererConfiguration().getScene().getName());
 		this.pathMenuBar = new PathMenuBar();
 	}
@@ -297,19 +297,19 @@ public final class DayflowerApplication extends Application {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class RendererAnimationTimer extends AnimationTimer {
-		private final NodeSelectionTabPane<RendererTabPane, Renderer> selectionTabPane;
+		private final NodeSelectionTabPane<RendererTabPane, Renderer> nodeSelectionTabPane;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public RendererAnimationTimer(final NodeSelectionTabPane<RendererTabPane, Renderer> selectionTabPane) {
-			this.selectionTabPane = Objects.requireNonNull(selectionTabPane, "selectionTabPane == null");
+		public RendererAnimationTimer(final NodeSelectionTabPane<RendererTabPane, Renderer> nodeSelectionTabPane) {
+			this.nodeSelectionTabPane = Objects.requireNonNull(nodeSelectionTabPane, "nodeSelectionTabPane == null");
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		@Override
 		public void handle(final long now) {
-			final Optional<RendererTabPane> optionalRendererTabPane = this.selectionTabPane.getSelectedNode();
+			final Optional<RendererTabPane> optionalRendererTabPane = this.nodeSelectionTabPane.getSelectedNode();
 			
 			if(optionalRendererTabPane.isPresent()) {
 				final

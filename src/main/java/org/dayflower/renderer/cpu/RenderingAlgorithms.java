@@ -21,11 +21,9 @@ package org.dayflower.renderer.cpu;
 import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.fresnelDielectricSchlick;
-import static org.dayflower.util.Floats.isNaN;
 import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.normalize;
-import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.random;
 import static org.dayflower.util.Floats.saturate;
 import static org.dayflower.util.Floats.sqrt;
@@ -58,7 +56,6 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
-import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.PrimitiveLight;
 import org.dayflower.scene.material.pbrt.GlassPBRTMaterial;
 import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
@@ -636,6 +633,29 @@ final class RenderingAlgorithms {
 	}
 	
 	public static Color3F radianceRayCasting(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
+		final Scene scene = rendererConfiguration.getScene();
+		
+		Color3F radiance = Color3F.BLACK;
+		
+		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
+		
+		if(optionalIntersection.isPresent()) {
+			final Intersection intersection = optionalIntersection.get();
+			
+			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+			
+			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
+			
+			radiance = Color3F.multiply(Color3F.GRAY, abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));
+		} else {
+			for(final Light light : scene.getLights()) {
+				radiance = Color3F.add(radiance, light.evaluateRadianceEmitted(ray));
+			}
+		}
+		
+		return radiance;
+		
+		/*
 		final Sampler sampler = rendererConfiguration.getSampler();
 		
 		final Scene scene = rendererConfiguration.getScene();
@@ -659,10 +679,12 @@ final class RenderingAlgorithms {
 		}
 		
 		return radiance;
+		*/
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/*
 	private static Color3F doGetRadiance(final Intersection intersection, final Material material, final Sampler sampler, final Scene scene) {
 		if(material instanceof PBRTMaterial) {
 			final PBRTMaterial pBRTMaterial = PBRTMaterial.class.cast(material);
@@ -791,6 +813,7 @@ final class RenderingAlgorithms {
 			return radiance;
 		}
 	}
+	*/
 	
 	private static Color3F doGetRadianceLights(final Color3F throughput, final RayitoBSDF rayitoBSDF, final Scene scene, final SurfaceIntersection3F surfaceIntersection, final Vector3F directionO, final List<Light> lights, final Primitive primitiveToSkip) {
 		float radianceR = 0.0F;

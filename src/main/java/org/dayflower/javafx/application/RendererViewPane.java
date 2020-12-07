@@ -20,9 +20,7 @@ package org.dayflower.javafx.application;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -324,12 +322,9 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	private static Function<Object, Node> doCreateMapperUToGraphic() {
-		final Map<Material, Node> materialsToGraphics = new HashMap<>();
-		final Map<Shape3F, Node> shapesToGraphics = new HashMap<>();
-		
 		return object -> {
 			if(object instanceof Material) {
-				return materialsToGraphics.computeIfAbsent(Material.class.cast(object), material -> ImageViews.createPreview(material));
+				return ImageViews.createPreview(Material.class.cast(object));
 			} else if(object instanceof Point3F) {
 				return null;
 			} else if(object instanceof Primitive) {
@@ -339,7 +334,7 @@ final class RendererViewPane extends BorderPane {
 			} else if(object instanceof Scene) {
 				return null;
 			} else if(object instanceof Shape3F) {
-				return shapesToGraphics.computeIfAbsent(Shape3F.class.cast(object), shape -> ImageViews.createPreview());
+				return ImageViews.createPreview(Shape3F.class.cast(object));
 			} else if(object instanceof Transform) {
 				return null;
 			} else if(object instanceof Vector3F) {

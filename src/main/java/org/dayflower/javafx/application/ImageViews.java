@@ -18,7 +18,11 @@
  */
 package org.dayflower.javafx.application;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
@@ -35,8 +39,14 @@ import org.dayflower.scene.material.rayito.RayitoMaterial;
 import org.dayflower.scene.preview.Previews;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 
 final class ImageViews {
+	private static final Map<Material, WritableImage> MATERIALS_TO_WRITABLE_IMAGES = new HashMap<>();
+	private static final Map<Shape3F, WritableImage> SHAPES_TO_WRITABLE_IMAGES = new HashMap<>();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private ImageViews() {
 		
 	}
@@ -44,29 +54,37 @@ final class ImageViews {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static ImageView createPreview(final Material material) {
-		final
-		Renderer renderer = new CPURenderer(doCreateRendererConfiguration(doCreateRenderingAlgorithm(material), Previews.createMaterialPreviewScene(material)), new NoOpRendererObserver());
-		renderer.render();
-		
-		final
-		Image image = renderer.getRendererConfiguration().getImage();
-		image.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(image.getResolutionX() - 1, image.getResolutionY() - 1)), new Color3F(181, 181, 181));
+		final WritableImage writableImage = MATERIALS_TO_WRITABLE_IMAGES.computeIfAbsent(material, key -> {
+			final
+			Renderer renderer = new CPURenderer(doCreateRendererConfiguration(doCreateRenderingAlgorithm(material), Previews.createMaterialPreviewScene(material)), new NoOpRendererObserver());
+			renderer.render();
+			
+			final
+			Image image = renderer.getRendererConfiguration().getImage();
+			image.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(image.getResolutionX() - 1, image.getResolutionY() - 1)), new Color3F(181, 181, 181));
+			
+			return image.toWritableImage();
+		});
 		
 		final
 		ImageView imageView = new ImageView();
-		imageView.setImage(image.toWritableImage());
+		imageView.setImage(writableImage);
 		
 		return imageView;
 	}
 	
-	public static ImageView createPreview() {
-		final
-		Image image = new Image(32, 32, Color3F.WHITE);
-		image.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(image.getResolutionX() - 1, image.getResolutionY() - 1)), new Color3F(181, 181, 181));
+	public static ImageView createPreview(final Shape3F shape) {
+		final WritableImage writableImage = SHAPES_TO_WRITABLE_IMAGES.computeIfAbsent(shape, key -> {
+			final
+			Image image = new Image(32, 32, Color3F.WHITE);
+			image.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(image.getResolutionX() - 1, image.getResolutionY() - 1)), new Color3F(181, 181, 181));
+			
+			return image.toWritableImage();
+		});
 		
 		final
 		ImageView imageView = new ImageView();
-		imageView.setImage(image.toWritableImage());
+		imageView.setImage(writableImage);
 		
 		return imageView;
 	}

@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.preview;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.geometry.AngleF;
@@ -38,7 +37,12 @@ import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
 import org.dayflower.scene.material.pbrt.PBRTMaterial;
 import org.dayflower.scene.material.rayito.RayitoMaterial;
 
-//TODO: Add Javadocs!
+/**
+ * A class that consists exclusively of static methods that returns {@link Scene} instances used for previews.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Previews {
 	private Previews() {
 		
@@ -46,7 +50,15 @@ public final class Previews {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Scene} instance for previewing {@code material}.
+	 * <p>
+	 * If {@code material} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param material a {@link Material} instance
+	 * @return a {@code Scene} instance for previewing {@code material}
+	 * @throws NullPointerException thrown if, and only if, {@code material} is {@code null}
+	 */
 	public static Scene createMaterialPreviewScene(final Material material) {
 		Objects.requireNonNull(material, "material == null");
 		
@@ -81,6 +93,7 @@ public final class Previews {
 		scene.addLight(new PerezLight());
 		scene.addPrimitive(primitive0);
 		scene.setCamera(camera);
+		scene.setName("Preview");
 		
 		return scene;
 	}
@@ -110,6 +123,7 @@ public final class Previews {
 		scene.addPrimitive(primitive0);
 		scene.addPrimitive(primitive1);
 		scene.setCamera(camera);
+		scene.setName("Preview");
 		
 		return scene;
 	}

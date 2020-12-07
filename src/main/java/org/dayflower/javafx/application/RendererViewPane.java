@@ -20,7 +20,9 @@ package org.dayflower.javafx.application;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -28,7 +30,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -306,6 +310,13 @@ final class RendererViewPane extends BorderPane {
 				
 				list.add(primitive.getMaterial());
 				list.add(primitive.getShape());
+//				list.add(primitive.getTransform());
+			} else if(object instanceof Transform) {
+				final Transform transform = Transform.class.cast(object);
+				
+				list.add(transform.getPosition());
+				list.add(transform.getRotation());
+				list.add(transform.getScale());
 			}
 			
 			return list;
@@ -313,15 +324,26 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	private static Function<Object, Node> doCreateMapperUToGraphic() {
+		final Map<Material, Node> materialsToGraphics = new HashMap<>();
+		final Map<Shape3F, Node> shapesToGraphics = new HashMap<>();
+		
 		return object -> {
 			if(object instanceof Material) {
-				return ImageViews.createPreview(Material.class.cast(object));
+				return materialsToGraphics.computeIfAbsent(Material.class.cast(object), material -> ImageViews.createPreview(material));
+			} else if(object instanceof Point3F) {
+				return null;
 			} else if(object instanceof Primitive) {
+				return null;
+			} else if(object instanceof Quaternion4F) {
 				return null;
 			} else if(object instanceof Scene) {
 				return null;
 			} else if(object instanceof Shape3F) {
-				return ImageViews.createPreview();
+				return shapesToGraphics.computeIfAbsent(Shape3F.class.cast(object), shape -> ImageViews.createPreview());
+			} else if(object instanceof Transform) {
+				return null;
+			} else if(object instanceof Vector3F) {
+				return null;
 			} else {
 				return null;
 			}
@@ -332,12 +354,26 @@ final class RendererViewPane extends BorderPane {
 		return object -> {
 			if(object instanceof Material) {
 				return Material.class.cast(object).getName();
+			} else if(object instanceof Point3F) {
+				final Point3F position = Point3F.class.cast(object);
+				
+				return String.format("[%+.10f, %+.10f, %+.10f]", Float.valueOf(position.getX()), Float.valueOf(position.getY()), Float.valueOf(position.getZ()));
 			} else if(object instanceof Primitive) {
 				return "Primitive";
+			} else if(object instanceof Quaternion4F) {
+				final Quaternion4F rotation = Quaternion4F.class.cast(object);
+				
+				return String.format("[%+.10f, %+.10f, %+.10f, %+.10f]", Float.valueOf(rotation.getX()), Float.valueOf(rotation.getY()), Float.valueOf(rotation.getZ()), Float.valueOf(rotation.getW()));
 			} else if(object instanceof Scene) {
 				return Scene.class.cast(object).getName();
 			} else if(object instanceof Shape3F) {
 				return Shape3F.class.cast(object).getName();
+			} else if(object instanceof Transform) {
+				return "Transform";
+			} else if(object instanceof Vector3F) {
+				final Vector3F scale = Vector3F.class.cast(object);
+				
+				return String.format("[%+.10f, %+.10f, %+.10f]", Float.valueOf(scale.getX()), Float.valueOf(scale.getY()), Float.valueOf(scale.getZ()));
 			} else {
 				return "";
 			}

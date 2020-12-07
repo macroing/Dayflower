@@ -27,24 +27,31 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
+import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.scene.control.Labels;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
+import org.dayflower.javafx.scene.image.WritableImageCache;
 import org.dayflower.javafx.scene.layout.Regions;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
+import org.dayflower.renderer.cpu.CPURenderer;
+import org.dayflower.renderer.observer.NoOpRendererObserver;
+import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
@@ -55,6 +62,7 @@ import org.dayflower.scene.material.pbrt.HairPBRTMaterial;
 import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
 import org.dayflower.scene.material.pbrt.MetalPBRTMaterial;
 import org.dayflower.scene.material.pbrt.MirrorPBRTMaterial;
+import org.dayflower.scene.material.pbrt.PBRTMaterial;
 import org.dayflower.scene.material.pbrt.PlasticPBRTMaterial;
 import org.dayflower.scene.material.pbrt.SubstratePBRTMaterial;
 import org.dayflower.scene.material.pbrt.UberPBRTMaterial;
@@ -62,6 +70,8 @@ import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
 import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
 import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
+import org.dayflower.scene.material.rayito.RayitoMaterial;
+import org.dayflower.scene.preview.Previews;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -75,6 +85,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -87,6 +99,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 final class RendererViewPane extends BorderPane {
+	private static final WritableImageCache<Material> WRITABLE_IMAGE_CACHE_MATERIAL = new WritableImageCache<>(RendererViewPane::doCreateWritableImageMaterial);
+	private static final WritableImageCache<Shape3F> WRITABLE_IMAGE_CACHE_SHAPE = new WritableImageCache<>(RendererViewPane::doCreateWritableImageShape);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AtomicReference<File> file;
 	private final ConcurrentImageCanvas concurrentImageCanvas;
 	private final ExecutorService executorService;
@@ -324,7 +341,7 @@ final class RendererViewPane extends BorderPane {
 	private static Function<Object, Node> doCreateMapperUToGraphic() {
 		return object -> {
 			if(object instanceof Material) {
-				return ImageViews.createPreview(Material.class.cast(object));
+				return new ImageView(WRITABLE_IMAGE_CACHE_MATERIAL.get(Material.class.cast(object)));
 			} else if(object instanceof Point3F) {
 				return null;
 			} else if(object instanceof Primitive) {
@@ -334,7 +351,7 @@ final class RendererViewPane extends BorderPane {
 			} else if(object instanceof Scene) {
 				return null;
 			} else if(object instanceof Shape3F) {
-				return ImageViews.createPreview(Shape3F.class.cast(object));
+				return new ImageView(WRITABLE_IMAGE_CACHE_SHAPE.get(Shape3F.class.cast(object)));
 			} else if(object instanceof Transform) {
 				return null;
 			} else if(object instanceof Vector3F) {
@@ -373,6 +390,50 @@ final class RendererViewPane extends BorderPane {
 				return "";
 			}
 		};
+	}
+	
+	private static RendererConfiguration doCreateRendererConfiguration(final RenderingAlgorithm renderingAlgorithm, final Scene scene) {
+		final
+		RendererConfiguration rendererConfiguration = new RendererConfiguration();
+		rendererConfiguration.setImage(new Image(32, 32));
+		rendererConfiguration.setPreviewMode(true);
+		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
+		rendererConfiguration.setRenderPasses(10);
+		rendererConfiguration.setSampler(new RandomSampler());
+		rendererConfiguration.setScene(scene);
+		
+		return rendererConfiguration;
+	}
+	
+	private static RenderingAlgorithm doCreateRenderingAlgorithm(final Material material) {
+		if(material instanceof PBRTMaterial) {
+			return RenderingAlgorithm.PATH_TRACING_P_B_R_T;
+		} else if(material instanceof RayitoMaterial) {
+			return RenderingAlgorithm.PATH_TRACING_RAYITO;
+		} else {
+			return RenderingAlgorithm.PATH_TRACING;
+		}
+	}
+	
+	private static WritableImage doCreateWritableImageMaterial(final Material material) {
+		final
+		Renderer renderer = new CPURenderer(doCreateRendererConfiguration(doCreateRenderingAlgorithm(material), Previews.createMaterialPreviewScene(material)), new NoOpRendererObserver());
+		renderer.render();
+		
+		final
+		Image image = renderer.getRendererConfiguration().getImage();
+		image.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(image.getResolutionX() - 1, image.getResolutionY() - 1)), new Color3F(181, 181, 181));
+		
+		return image.toWritableImage();
+	}
+	
+	@SuppressWarnings("unused")
+	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
+		final
+		Image image = new Image(32, 32, Color3F.WHITE);
+		image.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(image.getResolutionX() - 1, image.getResolutionY() - 1)), new Color3F(181, 181, 181));
+		
+		return image.toWritableImage();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

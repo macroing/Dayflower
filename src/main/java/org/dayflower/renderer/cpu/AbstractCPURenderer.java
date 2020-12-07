@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.image.Pixel;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
@@ -151,11 +152,24 @@ public abstract class AbstractCPURenderer implements Renderer {
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
 						
-						final Color3F colorRGB = radiance(ray);
-						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
+						final Optional<Color3F> optionalColorRGB = radiance(ray);
 						
-						if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
-							image.filmAddColorXYZ(x + sample.getX(), y + sample.getY(), colorXYZ);
+						if(optionalColorRGB.isPresent()) {
+							final Color3F colorRGB = optionalColorRGB.get();
+							final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
+							
+							if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
+								image.filmAddColorXYZ(x + sample.getX(), y + sample.getY(), colorXYZ);
+							}
+						} else {
+							final Optional<Pixel> optionalPixel = image.getPixel(x, y);
+							
+							if(optionalPixel.isPresent()) {
+								final
+								Pixel pixel = optionalPixel.get();
+								pixel.setAlpha(0.0F);
+								pixel.setColorRGB(Color3F.BLACK);
+							}
 						}
 					}
 				}
@@ -253,13 +267,13 @@ public abstract class AbstractCPURenderer implements Renderer {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
+	 * Returns an optional {@link Color3F} instance with the radiance along {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the radiance along {@code ray}
+	 * @return an optional {@code Color3F} instance with the radiance along {@code ray}
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	protected abstract Color3F radiance(final Ray3F ray);
+	protected abstract Optional<Color3F> radiance(final Ray3F ray);
 }

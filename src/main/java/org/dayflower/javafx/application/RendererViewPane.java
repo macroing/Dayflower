@@ -65,6 +65,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -227,7 +228,7 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	private ObjectTreeView<String, Object> doCreateObjectTreeView(final Scene scene) {
-		return new ObjectTreeView<>(doCreateMapperUToContextMenu(), doCreateMapperUToListU(), doCreateMapperUToT(), scene);
+		return new ObjectTreeView<>(doCreateMapperUToContextMenu(), doCreateMapperUToListU(), doCreateMapperUToGraphic(), doCreateMapperUToT(), scene);
 	}
 	
 	@SuppressWarnings("unused")
@@ -308,6 +309,22 @@ final class RendererViewPane extends BorderPane {
 			}
 			
 			return list;
+		};
+	}
+	
+	private static Function<Object, Node> doCreateMapperUToGraphic() {
+		return object -> {
+			if(object instanceof Material) {
+				return ImageViews.createPreview(Material.class.cast(object));
+			} else if(object instanceof Primitive) {
+				return null;
+			} else if(object instanceof Scene) {
+				return null;
+			} else if(object instanceof Shape3F) {
+				return ImageViews.createPreview();
+			} else {
+				return null;
+			}
 		};
 	}
 	

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -35,9 +36,10 @@ import javafx.scene.control.cell.TextFieldTreeCell;
  * {@code
  * Function<Object, ContextMenu> mapperUToContextMenu = object -> object instanceof Integer ? ContextMenus.createContextMenu(MenuItems.createMenuItem("Print", actionEvent -> System.out.println(object))) : null;
  * Function<Object, List<Object>> mapperUToListU = object -> object instanceof Integer ? Arrays.asList("A", "B", "C") : Arrays.asList();
+ * Function<Object, Node> mapperUToGraphic = object -> null;
  * Function<Object, String> mapperUToT = object -> object.toString();
  * 
- * ObjectTreeView<String, Object> objectTreeView = new ObjectTreeView<>(mapperUToContextMenu, mapperUToListU, mapperUToT, "Root");
+ * ObjectTreeView<String, Object> objectTreeView = new ObjectTreeView<>(mapperUToContextMenu, mapperUToListU, mapperUToGraphic, mapperUToT, "Root");
  * objectTreeView.add(Integer.valueOf(1));
  * objectTreeView.add(Integer.valueOf(2));
  * objectTreeView.add(Integer.valueOf(3));
@@ -51,16 +53,17 @@ public final class ObjectTreeView<T, U> extends TreeView<T> {
 	/**
 	 * Constructs a new {@code ObjectTreeView} instance.
 	 * <p>
-	 * If either {@code mapperUToContextMenu}, {@code mapperUToListU}, {@code mapperUToT} or {@code object} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code mapperUToContextMenu}, {@code mapperUToListU}, {@code mapperUToGraphic}, {@code mapperUToT} or {@code object} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param mapperUToContextMenu a {@code Function} that maps an {@code Object} instance, represented by {@code U}, to a {@code ContextMenu} instance
 	 * @param mapperUToListU a {@code Function} that maps an {@code Object} instance, represented by {@code U}, to child {@code Object} instances, also represented by {@code U}
+	 * @param mapperUToGraphic a {@code Function} that maps an {@code Object} instance, represented by {@code U}, to a graphic {@code Node}
 	 * @param mapperUToT a {@code Function} that maps an {@code Object} instance, represented by {@code U}, to an {@code Object} instance, represented by {@code T}, that acts as the value
 	 * @param object an {@code Object} instance, represented by {@code U}, that acts as the root
-	 * @throws NullPointerException thrown if, and only if, either {@code mapperUToContextMenu}, {@code mapperUToListU}, {@code mapperUToT} or {@code object} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code mapperUToContextMenu}, {@code mapperUToListU}, {@code mapperUToGraphic}, {@code mapperUToT} or {@code object} are {@code null}
 	 */
-	public ObjectTreeView(final Function<U, ContextMenu> mapperUToContextMenu, final Function<U, List<U>> mapperUToListU, final Function<U, T> mapperUToT, final U object) {
-		setCellFactory(treeView -> new ObjectTextFieldTreeCell<>(mapperUToContextMenu));
+	public ObjectTreeView(final Function<U, ContextMenu> mapperUToContextMenu, final Function<U, List<U>> mapperUToListU, final Function<U, Node> mapperUToGraphic, final Function<U, T> mapperUToT, final U object) {
+		setCellFactory(treeView -> new ObjectTextFieldTreeCell<>(mapperUToContextMenu, mapperUToGraphic));
 		setRoot(new ObjectTreeItem<>(mapperUToT.apply(Objects.requireNonNull(object, "object == null")), mapperUToContextMenu, mapperUToListU, mapperUToT, object));
 	}
 	
@@ -114,11 +117,13 @@ public final class ObjectTreeView<T, U> extends TreeView<T> {
 	
 	private static final class ObjectTextFieldTreeCell<T, U> extends TextFieldTreeCell<T> {
 		private final Function<U, ContextMenu> mapperUToContextMenu;
+		private final Function<U, Node> mapperUToGraphic;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public ObjectTextFieldTreeCell(final Function<U, ContextMenu> mapperUToContextMenu) {
+		public ObjectTextFieldTreeCell(final Function<U, ContextMenu> mapperUToContextMenu, final Function<U, Node> mapperUToGraphic) {
 			this.mapperUToContextMenu = Objects.requireNonNull(mapperUToContextMenu, "mapperUToContextMenu == null");
+			this.mapperUToGraphic = Objects.requireNonNull(mapperUToGraphic, "mapperUToGraphic == null");
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +134,10 @@ public final class ObjectTreeView<T, U> extends TreeView<T> {
 			
 			final TreeItem<T> treeItem = getTreeItem();
 			
-			if(treeItem instanceof ObjectTreeItem<?, ?>) {
+			if(isEmpty) {
+				setContextMenu(null);
+				setGraphic(null);
+			} else if(treeItem instanceof ObjectTreeItem<?, ?>) {
 				@SuppressWarnings("unchecked")
 				final ObjectTreeItem<T, U> objectTreeItem = ObjectTreeItem.class.cast(treeItem);
 				
@@ -137,7 +145,10 @@ public final class ObjectTreeView<T, U> extends TreeView<T> {
 				
 				final ContextMenu contextMenu = this.mapperUToContextMenu.apply(object);
 				
+				final Node graphic = this.mapperUToGraphic.apply(object);
+				
 				setContextMenu(contextMenu);
+				setGraphic(graphic);
 			}
 		}
 	}

@@ -53,6 +53,9 @@ import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.util.BufferedImages;
 import org.dayflower.util.ParameterArguments;
 
+import javafx.scene.image.PixelFormat;
+import javafx.scene.image.WritableImage;
+
 /**
  * An {@code Image} is an image that can be drawn to.
  * <p>
@@ -732,6 +735,19 @@ public final class Image {
 	}
 	
 	/**
+	 * Returns a {@code WritableImage} representation of this {@code Image} instance.
+	 * 
+	 * @return a {@code WritableImage} representation of this {@code Image} instance
+	 */
+	public WritableImage toWritableImage() {
+		final
+		WritableImage writableImage = new WritableImage(this.resolutionX, this.resolutionY);
+		writableImage.getPixelWriter().setPixels(0, 0, this.resolutionX, this.resolutionY, PixelFormat.getIntArgbInstance(), toIntArrayPackedForm(), 0, this.resolutionX);
+		
+		return writableImage;
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Image} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Image}, and their respective values are equal, {@code false} otherwise.
@@ -841,7 +857,7 @@ public final class Image {
 		final int[] intArray = new int[this.resolution];
 		
 		for(int i = 0; i < this.resolution; i++) {
-			intArray[i] = this.pixels[i].getColorRGB().pack(packedIntComponentOrder);
+			intArray[i] = this.pixels[i].pack(packedIntComponentOrder);
 		}
 		
 		return intArray;

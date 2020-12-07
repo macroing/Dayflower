@@ -80,14 +80,14 @@ final class RenderingAlgorithms {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Color3F radianceAmbientOcclusion(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
-		Color3F radiance = Color3F.BLACK;
-		
+	public static Optional<Color3F> radianceAmbientOcclusion(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
 		final Scene scene = rendererConfiguration.getScene();
 		
 		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 		
 		if(optionalIntersection.isPresent()) {
+			Color3F radiance = Color3F.BLACK;
+			
 			final Intersection intersection = optionalIntersection.get();
 			
 			final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
@@ -122,12 +122,16 @@ final class RenderingAlgorithms {
 			
 			radiance = Color3F.multiply(radiance, PI / samples);
 			radiance = Color3F.divide(radiance, PI);
+			
+			return Optional.of(radiance);
+		} else if(rendererConfiguration.isExcludingIntersectionMisses()) {
+			return Optional.empty();
+		} else {
+			return Optional.of(Color3F.BLACK);
 		}
-		
-		return radiance;
 	}
 	
-	public static Color3F radiancePathTracingPBRT(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
+	public static Optional<Color3F> radiancePathTracingPBRT(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
 		final Sampler sampler = rendererConfiguration.getSampler();
 		
 		final Scene scene = rendererConfiguration.getScene();
@@ -150,6 +154,10 @@ final class RenderingAlgorithms {
 			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay, T_MINIMUM, T_MAXIMUM);
 			
 			final boolean hasFoundIntersection = optionalIntersection.isPresent();
+			
+			if(currentBounce == 0 && !hasFoundIntersection && rendererConfiguration.isExcludingIntersectionMisses()) {
+				return Optional.empty();
+			}
 			
 			if(currentBounce == 0 || isSpecularBounce) {
 				if(hasFoundIntersection) {
@@ -247,10 +255,10 @@ final class RenderingAlgorithms {
 			}
 		}
 		
-		return radiance;
+		return Optional.of(radiance);
 	}
 	
-	public static Color3F radiancePathTracingRayito(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
+	public static Optional<Color3F> radiancePathTracingRayito(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
 		final Scene scene = rendererConfiguration.getScene();
 		
 		final List<Light> lights = scene.getLights();
@@ -344,6 +352,8 @@ final class RenderingAlgorithms {
 				}
 				
 				currentBounce++;
+			} else if(currentBounce == 0 && rendererConfiguration.isExcludingIntersectionMisses()) {
+				return Optional.empty();
 			} else {
 				for(final Light light : lights) {
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateRadianceEmitted(currentRay)));
@@ -353,10 +363,10 @@ final class RenderingAlgorithms {
 			}
 		}
 		
-		return radiance;
+		return Optional.of(radiance);
 	}
 	
-	public static Color3F radiancePathTracingSmallPTIterative(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
+	public static Optional<Color3F> radiancePathTracingSmallPTIterative(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
 		final Scene scene = rendererConfiguration.getScene();
 		
 		final int maximumBounce = rendererConfiguration.getMaximumBounce();
@@ -510,20 +520,20 @@ final class RenderingAlgorithms {
 			}
 		}
 		
-		return radiance;
+		return Optional.of(radiance);
 	}
 	
-	public static Color3F radiancePathTracingSmallPTRecursive(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
+	public static Optional<Color3F> radiancePathTracingSmallPTRecursive(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
 		return radiancePathTracingSmallPTRecursive(ray, rendererConfiguration, 1);
 	}
 	
-	public static Color3F radiancePathTracingSmallPTRecursive(final Ray3F ray, final RendererConfiguration rendererConfiguration, final int bounce) {
+	public static Optional<Color3F> radiancePathTracingSmallPTRecursive(final Ray3F ray, final RendererConfiguration rendererConfiguration, final int bounce) {
 		final Scene scene = rendererConfiguration.getScene();
 		
 		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 		
 		if(bounce >= rendererConfiguration.getMaximumBounce()) {
-			return Color3F.BLACK;
+			return Optional.of(Color3F.BLACK);
 		} else if(optionalIntersection.isPresent()) {
 			final Vector3F direction = ray.getDirection();
 			
@@ -549,7 +559,7 @@ final class RenderingAlgorithms {
 				final float probability = albedo.maximum();
 				
 				if(random() >= probability) {
-					return emittance;
+					return Optional.of(emittance);
 				}
 				
 				albedo = Color3F.divide(albedo, probability);
@@ -562,7 +572,7 @@ final class RenderingAlgorithms {
 				final Vector3F u = Vector3F.crossProduct(v, w);
 				final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 				
-				return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce)));
+				return Optional.of(Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce).get())));
 			} else if(material instanceof MattePBRTMaterial || material instanceof MatteRayitoMaterial) {
 				final Vector3F s = SampleGeneratorF.sampleHemisphereCosineDistribution2();
 				final Vector3F w = surfaceNormalCorrectlyOriented;
@@ -570,11 +580,11 @@ final class RenderingAlgorithms {
 				final Vector3F v = Vector3F.crossProduct(w, u);
 				final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 				
-				return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce)));
+				return Optional.of(Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce).get())));
 			} else if(material instanceof MirrorPBRTMaterial || material instanceof MirrorRayitoMaterial) {
 				final Vector3F d = Vector3F.reflection(direction, surfaceNormal, true);
 				
-				return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce)));
+				return Optional.of(Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce).get())));
 			} else if(material instanceof GlassPBRTMaterial || material instanceof GlassRayitoMaterial) {
 				final Vector3F reflectionDirection = Vector3F.reflection(direction, surfaceNormal, true);
 				
@@ -590,7 +600,7 @@ final class RenderingAlgorithms {
 				final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
 				
 				if(cosTheta2Squared < 0.0F) {
-					return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(reflectionRay, rendererConfiguration, currentBounce)));
+					return Optional.of(Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(reflectionRay, rendererConfiguration, currentBounce).get())));
 				}
 				
 				final Vector3F transmissionDirection = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(direction, eta), Vector3F.multiply(surfaceNormal, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
@@ -608,10 +618,10 @@ final class RenderingAlgorithms {
 				final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 				
 				if(random() < probabilityRussianRoulette) {
-					return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(reflectionRay, rendererConfiguration, currentBounce), probabilityRussianRouletteReflection));
+					return Optional.of(Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(reflectionRay, rendererConfiguration, currentBounce).get(), probabilityRussianRouletteReflection)));
 				}
 				
-				return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(transmissionRay, rendererConfiguration, currentBounce), probabilityRussianRouletteTransmission));
+				return Optional.of(Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(transmissionRay, rendererConfiguration, currentBounce).get(), probabilityRussianRouletteTransmission)));
 			} else {
 				final Vector3F s = SampleGeneratorF.sampleHemisphereCosineDistribution2();
 				final Vector3F w = surfaceNormalCorrectlyOriented;
@@ -619,7 +629,7 @@ final class RenderingAlgorithms {
 				final Vector3F v = Vector3F.crossProduct(w, u);
 				final Vector3F d = Vector3F.normalize(Vector3F.add(Vector3F.multiply(u, s.getX()), Vector3F.multiply(v, s.getY()), Vector3F.multiply(w, s.getZ())));
 				
-				return Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce)));
+				return Optional.of(Color3F.add(emittance, Color3F.multiply(albedo, radiancePathTracingSmallPTRecursive(surfaceIntersection.createRay(d), rendererConfiguration, currentBounce).get())));
 			}
 		}
 		
@@ -629,10 +639,10 @@ final class RenderingAlgorithms {
 			radiance = Color3F.add(radiance, light.evaluateRadianceEmitted(ray));
 		}
 		
-		return radiance;
+		return Optional.of(radiance);
 	}
 	
-	public static Color3F radianceRayCasting(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
+	public static Optional<Color3F> radianceRayCasting(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
 		final Scene scene = rendererConfiguration.getScene();
 		
 		Color3F radiance = Color3F.BLACK;
@@ -653,7 +663,7 @@ final class RenderingAlgorithms {
 			}
 		}
 		
-		return radiance;
+		return Optional.of(radiance);
 		
 		/*
 		final Sampler sampler = rendererConfiguration.getSampler();

@@ -19,6 +19,8 @@
 package org.dayflower.image;
 
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.saturate;
+import static org.dayflower.util.Ints.toInt;
 
 import java.awt.image.BufferedImage;
 import java.util.Objects;
@@ -36,6 +38,7 @@ public final class Pixel {
 	private Color3F colorRGB;
 	private Color3F colorXYZ;
 	private Color3F splatXYZ;
+	private float alpha;
 	private float filterWeightSum;
 	private int index;
 	private int x;
@@ -64,6 +67,7 @@ public final class Pixel {
 		this.colorRGB = Objects.requireNonNull(colorRGB, "colorRGB == null");
 		this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
 		this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
+		this.alpha = 1.0F;
 		this.filterWeightSum = filterWeightSum;
 		this.index = ParameterArguments.requireRange(index, 0, Integer.MAX_VALUE, "index");
 		this.x = ParameterArguments.requireRange(x, 0, Integer.MAX_VALUE, "x");
@@ -152,6 +156,15 @@ public final class Pixel {
 	}
 	
 	/**
+	 * Returns the alpha component of this {@code Pixel} instance.
+	 * 
+	 * @return the alpha component of this {@code Pixel} instance
+	 */
+	public float getAlpha() {
+		return this.alpha;
+	}
+	
+	/**
 	 * Returns the filter weight sum of this {@code Pixel} instance that is used by the film.
 	 * 
 	 * @return the filter weight sum of this {@code Pixel} instance that is used by the film
@@ -185,6 +198,46 @@ public final class Pixel {
 	 */
 	public int getY() {
 		return this.y;
+	}
+	
+	/**
+	 * Returns an {@code int} with the component values of {@code getColorRGB()} and {@code getAlpha()} in a packed form.
+	 * <p>
+	 * This method assumes that the component values are within the range [0.0, 1.0]. Any component value outside of this range will be saturated or clamped.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * pixel.pack(PackedIntComponentOrder.ARGB);
+	 * }
+	 * </pre>
+	 * 
+	 * @return an {@code int} with the component values of {@code getColorRGB()} and {@code getAlpha()} in a packed form
+	 */
+	public int pack() {
+		return pack(PackedIntComponentOrder.ARGB);
+	}
+	
+	/**
+	 * Returns an {@code int} with the component values of {@code getColorRGB()} and {@code getAlpha()} in a packed form.
+	 * <p>
+	 * This method assumes that the component values are within the range [0.0, 1.0]. Any component value outside of this range will be saturated or clamped.
+	 * <p>
+	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param packedIntComponentOrder the {@link PackedIntComponentOrder} to pack the component values with
+	 * @return an {@code int} with the component values of {@code getColorRGB()} and {@code getAlpha()} in a packed form
+	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
+	 */
+	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
+		final Color3F colorRGB = getColorRGB();
+		
+		final int r = colorRGB.getAsIntR();
+		final int g = colorRGB.getAsIntG();
+		final int b = colorRGB.getAsIntB();
+		final int a = toInt(saturate(getAlpha()) * 255.0F + 0.5F);
+		
+		return packedIntComponentOrder.pack(r, g, b, a);
 	}
 	
 	/**
@@ -222,6 +275,15 @@ public final class Pixel {
 	 */
 	public void addSplatXYZ(final Color3F splatXYZ) {
 		setSplatXYZ(Color3F.add(getSplatXYZ(), Objects.requireNonNull(splatXYZ, "splatXYZ == null")));
+	}
+	
+	/**
+	 * Sets the alpha component of this {@code Pixel} instance to {@code alpha}.
+	 * 
+	 * @param alpha the alpha component of this {@code Pixel} instance
+	 */
+	public void setAlpha(final float alpha) {
+		this.alpha = alpha;
 	}
 	
 	/**

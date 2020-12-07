@@ -40,6 +40,7 @@ public final class RendererConfiguration {
 	private Sampler sampler;
 	private Scene scene;
 	private Timer timer;
+	private boolean isExcludingIntersectionMisses;
 	private float maximumDistance;
 	private int maximumBounce;
 	private int minimumBounceRussianRoulette;
@@ -60,6 +61,7 @@ public final class RendererConfiguration {
 		this.sampler = new NRooksSampler();
 		this.scene = new Scene();
 		this.timer = new Timer();
+		this.isExcludingIntersectionMisses = false;
 		this.maximumDistance = 20.0F;
 		this.maximumBounce = 20;
 		this.minimumBounceRussianRoulette = 5;
@@ -171,6 +173,15 @@ public final class RendererConfiguration {
 	}
 	
 	/**
+	 * Returns the intersection miss exclusion state associated with this {@code RendererConfiguration} instance.
+	 * 
+	 * @return the intersection miss exclusion state associated with this {@code RendererConfiguration} instance
+	 */
+	public boolean isExcludingIntersectionMisses() {
+		return this.isExcludingIntersectionMisses;
+	}
+	
+	/**
 	 * Returns the maximum distance.
 	 * 
 	 * @return the maximum distance
@@ -262,6 +273,15 @@ public final class RendererConfiguration {
 	 */
 	public void setImage(final Image image) {
 		this.image = Objects.requireNonNull(image, "image == null");
+	}
+	
+	/**
+	 * Sets the intersection miss exclusion state associated with this {@code RendererConfiguration} instance to {@code isExcludingIntersectionMisses}.
+	 * 
+	 * @param isExcludingIntersectionMisses the intersection miss exclusion state associated with this {@code RendererConfiguration} instance
+	 */
+	public void setExcludingIntersectionMisses(final boolean isExcludingIntersectionMisses) {
+		this.isExcludingIntersectionMisses = isExcludingIntersectionMisses;
 	}
 	
 	/**

@@ -19,7 +19,6 @@
 package org.dayflower.javafx.application;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -55,7 +54,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-//TODO: Add Javadocs!
+/**
+ * This {@code DayflowerApplication} class is the main entry point for the Dayflower GUI.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class DayflowerApplication extends Application {
 	private static final File INITIAL_DIRECTORY_IMAGES = new File(".");
 	private static final File INITIAL_DIRECTORY_SCENES = new File("./resources/scenes");
@@ -83,7 +87,9 @@ public final class DayflowerApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code DayflowerApplication} instance.
+	 */
 	public DayflowerApplication() {
 		this.stage = new AtomicReference<>();
 		this.borderPane = new BorderPane();
@@ -94,7 +100,14 @@ public final class DayflowerApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Starts this {@code DayflowerApplication} instance.
+	 * <p>
+	 * If {@code stage} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param stage the main {@code Stage}
+	 * @throws NullPointerException thrown if, and only if, {@code stage} is {@code null}
+	 */
 	@Override
 	public void start(final Stage stage) {
 		doSetStage(stage);
@@ -107,7 +120,11 @@ public final class DayflowerApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Starts this {@code DayflowerApplication} instance.
+	 * 
+	 * @param args the parameter arguments supplied
+	 */
 	public static void main(final String[] args) {
 		launch(args);
 	}

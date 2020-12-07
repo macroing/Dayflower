@@ -40,7 +40,7 @@ public final class RendererConfiguration {
 	private Sampler sampler;
 	private Scene scene;
 	private Timer timer;
-	private boolean isExcludingIntersectionMisses;
+	private boolean isPreviewMode;
 	private float maximumDistance;
 	private int maximumBounce;
 	private int minimumBounceRussianRoulette;
@@ -61,7 +61,7 @@ public final class RendererConfiguration {
 		this.sampler = new NRooksSampler();
 		this.scene = new Scene();
 		this.timer = new Timer();
-		this.isExcludingIntersectionMisses = false;
+		this.isPreviewMode = false;
 		this.maximumDistance = 20.0F;
 		this.maximumBounce = 20;
 		this.minimumBounceRussianRoulette = 5;
@@ -173,12 +173,12 @@ public final class RendererConfiguration {
 	}
 	
 	/**
-	 * Returns the intersection miss exclusion state associated with this {@code RendererConfiguration} instance.
+	 * Returns the preview mode state associated with this {@code RendererConfiguration} instance.
 	 * 
-	 * @return the intersection miss exclusion state associated with this {@code RendererConfiguration} instance
+	 * @return the preview mode state associated with this {@code RendererConfiguration} instance
 	 */
-	public boolean isExcludingIntersectionMisses() {
-		return this.isExcludingIntersectionMisses;
+	public boolean isPreviewMode() {
+		return this.isPreviewMode;
 	}
 	
 	/**
@@ -276,15 +276,6 @@ public final class RendererConfiguration {
 	}
 	
 	/**
-	 * Sets the intersection miss exclusion state associated with this {@code RendererConfiguration} instance to {@code isExcludingIntersectionMisses}.
-	 * 
-	 * @param isExcludingIntersectionMisses the intersection miss exclusion state associated with this {@code RendererConfiguration} instance
-	 */
-	public void setExcludingIntersectionMisses(final boolean isExcludingIntersectionMisses) {
-		this.isExcludingIntersectionMisses = isExcludingIntersectionMisses;
-	}
-	
-	/**
 	 * Sets the maximum bounce to {@code maximumBounce}.
 	 * 
 	 * @param maximumBounce the maximum bounce
@@ -309,6 +300,15 @@ public final class RendererConfiguration {
 	 */
 	public void setMinimumBounceRussianRoulette(final int minimumBounceRussianRoulette) {
 		this.minimumBounceRussianRoulette = minimumBounceRussianRoulette;
+	}
+	
+	/**
+	 * Sets the preview mode state associated with this {@code RendererConfiguration} instance to {@code isPreviewMode}.
+	 * 
+	 * @param isPreviewMode the preview mode state associated with this {@code RendererConfiguration} instance
+	 */
+	public void setPreviewMode(final boolean isPreviewMode) {
+		this.isPreviewMode = isPreviewMode;
 	}
 	
 	/**

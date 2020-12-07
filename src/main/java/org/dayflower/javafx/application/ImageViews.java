@@ -18,6 +18,9 @@
  */
 package org.dayflower.javafx.application;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.dayflower.geometry.AngleF;
@@ -42,7 +45,9 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
 import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.SpotLight;
+import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
 import org.dayflower.scene.material.pbrt.PBRTMaterial;
+import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.RayitoMaterial;
 
 import javafx.scene.image.ImageView;
@@ -73,18 +78,7 @@ final class ImageViews {
 	}
 	
 	public static ImageView createPreview() {
-		final Image image = new Image(32, 32);
-		
-		for(int i = 0; i < image.getResolution(); i++) {
-			final Optional<Pixel> optionalPixel = image.getPixel(i);
-			
-			if(optionalPixel.isPresent()) {
-				final
-				Pixel pixel = optionalPixel.get();
-				pixel.setAlpha(0.0F);
-				pixel.setColorRGB(Color3F.BLACK);
-			}
-		}
+		final Image image = new Image(32, 32, Color3F.WHITE);
 		
 		doAddBorder(image);
 		
@@ -97,21 +91,25 @@ final class ImageViews {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Light doCreateLight(final Material material) {
+	private static List<Light> doCreateLights(final Material material) {
 		if(material instanceof PBRTMaterial) {
-			return new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(200.0F), Matrix44F.translate(0.0F, 2.0F, 0.0F), new Point3F(0.0F, 2.0F, 0.0F), new Point3F(0.0F, 2.0F, 20.0F));
+			final List<Light> lights = new ArrayList<>();
+			
+			lights.add(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(100.0F), Matrix44F.translate(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 20.0F)));
+			
+			return lights;
 		} else if(material instanceof RayitoMaterial) {
-			return new PerezLight();
+			return Arrays.asList(new PerezLight());
 		} else {
-			return new PerezLight();
+			return Arrays.asList(new PerezLight());
 		}
 	}
 	
 	private static Renderer doCreateRenderer(final RenderingAlgorithm renderingAlgorithm, final Scene scene) {
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
-		rendererConfiguration.setExcludingIntersectionMisses(true);
 		rendererConfiguration.setImage(new Image(32, 32));
+		rendererConfiguration.setPreviewMode(true);
 		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
 		rendererConfiguration.setRenderPasses(10);
 		rendererConfiguration.setSampler(new RandomSampler());
@@ -141,18 +139,32 @@ final class ImageViews {
 		camera.setFieldOfViewY();
 		camera.setOrthonormalBasis();
 		
-		final Shape3F shape = new Sphere3F();
+		final Material material0 = material;
+		final Material material1 = material instanceof PBRTMaterial ? new MattePBRTMaterial() : new MatteRayitoMaterial();
 		
-		final Transform transform = new Transform(camera.getPointInfrontOfEye(5.0F));
+		final Shape3F shape0 = new Sphere3F();
+		final Shape3F shape1 = new Sphere3F(10);
 		
-		final Primitive primitive = new Primitive(material, shape, transform);
+		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(5.0F));
+		final Transform transform1 = new Transform(camera.getEye());
 		
-		final Light light = doCreateLight(material);
+		final Primitive primitive0 = new Primitive(material0, shape0, transform0);
+		final Primitive primitive1 = new Primitive(material1, shape1, transform1);
 		
-		final
-		Scene scene = new Scene();
-		scene.addLight(light);
-		scene.addPrimitive(primitive);
+		final List<Light> lights = doCreateLights(material);
+		
+		final Scene scene = new Scene();
+		
+		for(final Light light : lights) {
+			scene.addLight(light);
+		}
+		
+		scene.addPrimitive(primitive0);
+		
+		if(material instanceof PBRTMaterial) {
+			scene.addPrimitive(primitive1);
+		}
+		
 		scene.setCamera(camera);
 		
 		return scene;

@@ -19,7 +19,6 @@
 package org.dayflower.renderer.cpu;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
@@ -83,16 +82,16 @@ public final class CPURenderer extends AbstractCPURenderer {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns an optional {@link Color3F} instance with the radiance along {@code ray}.
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param ray a {@link Ray3F} instance
-	 * @return an optional {@code Color3F} instance with the radiance along {@code ray}
+	 * @return a {@code Color3F} instance with the radiance along {@code ray}
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	protected Optional<Color3F> radiance(final Ray3F ray) {
+	protected Color3F radiance(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
 		
 		switch(getRendererConfiguration().getRenderingAlgorithm()) {
@@ -111,7 +110,7 @@ public final class CPURenderer extends AbstractCPURenderer {
 			case RAY_CASTING:
 				return RenderingAlgorithms.radianceRayCasting(ray, getRendererConfiguration());
 			default:
-				return Optional.of(Color3F.BLACK);
+				return Color3F.BLACK;
 		}
 	}
 }

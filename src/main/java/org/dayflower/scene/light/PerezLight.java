@@ -423,7 +423,8 @@ public final class PerezLight implements Light {
 		final float radius = this.radius;
 		
 		final Vector3F incomingLocal = new Vector3F(x, y, z);
-		final Vector3F incoming = Vector3F.negate(doTransformToWorldSpace(incomingLocal));
+		final Vector3F incoming = doTransformToWorldSpace(incomingLocal);
+//		final Vector3F incoming = Vector3F.negate(doTransformToWorldSpace(incomingLocal));
 		
 		final Color3F resultSky = doRadianceSky(incomingLocal);
 		final Color3F resultSun = doRadianceSun(incomingLocal);
@@ -546,7 +547,8 @@ public final class PerezLight implements Light {
 //			return distribution->Pdf(Point2f(phi * Inv2Pi, theta * InvPi)) / (2 * Pi * Pi * sinTheta);
 //		}
 		
-		final Vector3F incomingLocal = doTransformToLocalSpace(Vector3F.negate(incoming));
+//		final Vector3F incomingLocal = doTransformToLocalSpace(Vector3F.negate(incoming));
+		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
 		
 		final float phi = incomingLocal.sphericalPhi();
 		final float theta = incomingLocal.sphericalTheta();

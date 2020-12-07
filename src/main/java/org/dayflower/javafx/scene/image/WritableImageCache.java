@@ -18,7 +18,6 @@
  */
 package org.dayflower.javafx.scene.image;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -26,14 +25,35 @@ import java.util.function.Function;
 
 import javafx.scene.image.WritableImage;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code WritableImageCache} is a cache for {@code WritableImage} instances.
+ * <p>
+ * To use this class, consider the following example:
+ * <pre>
+ * {@code
+ * WritableImageCache<String> writableImageCache = new WritableImageCache<>(pathname -> Image.load(pathname).toWritableImage());
+ * 
+ * WritableImage writableImage = writableImageCache.get("Image.png");
+ * }
+ * </pre>
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class WritableImageCache<T> {
 	private final Function<T, WritableImage> writableImageFactory;
 	private final Map<T, WritableImage> writableImageCache;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code WritableImageCache} instance.
+	 * <p>
+	 * If {@code writableImageFactory} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param writableImageFactory a {@code Function} that creates a {@code WritableImage} instance
+	 * @throws NullPointerException thrown if, and only if, {@code writableImageFactory} is {@code null}
+	 */
 	public WritableImageCache(final Function<T, WritableImage> writableImageFactory) {
 		this.writableImageFactory = Objects.requireNonNull(writableImageFactory, "writableImageFactory == null");
 		this.writableImageCache = new HashMap<>();
@@ -41,8 +61,23 @@ public final class WritableImageCache<T> {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the newly created or previously cached {@code WritableImage} instance associated with {@code object}.
+	 * <p>
+	 * If either {@code object} or the newly created {@code WritableImage} instance are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param object the {@code Object} associated with the {@code WritableImage} instance to return
+	 * @return the newly created or previously cached {@code WritableImage} instance associated with {@code object}
+	 * @throws NullPointerException thrown if, and only if, either {@code object} or the newly created {@code WritableImage} instance are {@code null}
+	 */
 	public WritableImage get(final T object) {
 		return this.writableImageCache.computeIfAbsent(Objects.requireNonNull(object, "object == null"), key -> Objects.requireNonNull(this.writableImageFactory.apply(key)));
+	}
+	
+	/**
+	 * Clears this {@code WritableImageCache} instance.
+	 */
+	public void clear() {
+		this.writableImageCache.clear();
 	}
 }

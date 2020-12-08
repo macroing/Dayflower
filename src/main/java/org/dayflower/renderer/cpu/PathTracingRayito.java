@@ -108,7 +108,6 @@ final class PathTracingRayito {
 				final Vector3F surfaceNormalS = orthonormalBasisS.getW();
 				
 				if(currentBounce == 0 || currentBounce == currentBounceSpecular) {
-					radiance = Color3F.add(radiance, Color3F.multiply(throughput, intersection.evaluateRadianceEmitted(Vector3F.negate(ray.getDirection()))));
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, rayitoMaterial.emittance(intersection)));
 				}
 				

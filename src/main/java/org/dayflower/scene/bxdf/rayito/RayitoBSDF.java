@@ -113,8 +113,8 @@ public final class RayitoBSDF implements BSDF {
 		
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
 		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
-//		final Vector3F incoming = doTransformToLocalSpace(Vector3F.negate(incomingWorldSpace));
-		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
+		final Vector3F incoming = doTransformToLocalSpace(Vector3F.negate(incomingWorldSpace));
+//		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
 		
 		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
 		
@@ -214,8 +214,8 @@ public final class RayitoBSDF implements BSDF {
 			}
 		}
 		
-//		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, Vector3F.negate(incomingWorldSpace), outgoingWorldSpace, probabilityDensityFunctionValue));
-		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
+		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, Vector3F.negate(incomingWorldSpace), outgoingWorldSpace, probabilityDensityFunctionValue));
+//		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -279,8 +279,8 @@ public final class RayitoBSDF implements BSDF {
 		
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
 		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
-//		final Vector3F incoming = doTransformToLocalSpace(Vector3F.negate(incomingWorldSpace));
-		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
+		final Vector3F incoming = doTransformToLocalSpace(Vector3F.negate(incomingWorldSpace));
+//		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
 		
 		if(isZero(outgoing.getZ())) {
 			return 0.0F;

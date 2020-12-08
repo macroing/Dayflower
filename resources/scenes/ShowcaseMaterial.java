@@ -54,10 +54,12 @@ Transform transform28 = new Transform(new Point3F(+0.0F, 6.25F, + 5.0F));
 Transform transform29 = new Transform(new Point3F(+3.0F, 6.25F, + 5.0F));
 Transform transform31 = new Transform(new Point3F(+0.0F, 0.00F, + 0.0F));
 
-AreaLight areaLight31 = new DiffuseAreaLight(transform31.getObjectToWorld(), 1, new Color3F(20.0F), shape31, true);
+AreaLight areaLight31 = new DiffuseAreaLight(transform31.getObjectToWorld(), 1, new Color3F(20.0F), shape31, false);
 
 if(isInBox) {
-	scene.addLight(areaLight31);
+//	scene.addLight(areaLight31);
+	scene.addLight(new PointLight(new Point3F(0.0F, 3.75F, 0.0F), new Color3F(50.0F)));
+//	scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(50.0F), Matrix44F.translate(0.0F, 2.0F, 0.0F), new Point3F(0.0F, 2.0F, 0.0F), new Point3F(0.0F, 2.0F, 20.0F)));
 	scene.addPrimitive(new Primitive(material11, shape11, transform11));
 	scene.addPrimitive(new Primitive(material12, shape12, transform12));
 	scene.addPrimitive(new Primitive(material13, shape13, transform13));
@@ -73,7 +75,7 @@ if(isInBox) {
 	scene.addPrimitive(new Primitive(material27, shape27, transform27));
 	scene.addPrimitive(new Primitive(material28, shape28, transform28));
 	scene.addPrimitive(new Primitive(material29, shape29, transform29));
-	scene.addPrimitive(new Primitive(material31, shape31, transform31, areaLight31));
+//	scene.addPrimitive(new Primitive(material31, shape31, transform31, areaLight31));
 	scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
 	scene.setName("ShowcaseMaterial");
 } else {

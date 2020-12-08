@@ -166,7 +166,7 @@ final class PathTracing {
 			
 			final Color3F result = bSDFResult.getResult();
 			
-			final Vector3F incoming = bSDF instanceof PBRTBSDF ? bSDFResult.getIncoming() : Vector3F.negate(bSDFResult.getIncoming());
+			final Vector3F incoming = bSDF instanceof PBRTBSDF ? bSDFResult.getIncoming() : /*Vector3F.negate(*/bSDFResult.getIncoming()/*)*/;
 			
 			final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 			
@@ -247,9 +247,9 @@ final class PathTracing {
 							final Vector3F selectedDirectionI = Vector3F.normalize(Vector3F.direction(point, surfaceIntersectionPoint));
 							final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
 							
-							final float probabilityDensityFunctionValueB1 = bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, selectedDirectionO) : RayitoBSDF.class.cast(bSDF).evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionI);
+							final float probabilityDensityFunctionValueB1 = bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, selectedDirectionO) : RayitoBSDF.class.cast(bSDF).evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, surfaceNormal, /*selectedDirectionI*/selectedDirectionO);
 							
-							final Color3F result = bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateDistributionFunction(BXDFType.ALL, directionO, selectedDirectionO) : RayitoBSDF.class.cast(bSDF).evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionI);
+							final Color3F result = bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateDistributionFunction(BXDFType.ALL, directionO, selectedDirectionO) : RayitoBSDF.class.cast(bSDF).evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, /*selectedDirectionI*/selectedDirectionO);
 							
 							if(probabilityDensityFunctionValueB1 > 0.0F && !result.isBlack()) {
 								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
@@ -349,88 +349,17 @@ final class PathTracing {
 	}
 	
 	private static Color3F doLightEstimateDirectDeltaDistributionFalse(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final Scene scene, final boolean isSpecular) {
-//		TODO: Verify!
-//		BxDFType bsdfFlags = specular ? BSDF_ALL : BxDFType(BSDF_ALL & ~BSDF_SPECULAR);
-//		
 //		Spectrum Ld(0.f);
-//		
-//		Vector3f wi;
-//		
-//		Float lightPdf = 0, scatteringPdf = 0;
-//		
-//		VisibilityTester visibility;
-//		
-//		Spectrum Li = light.Sample_Li(it, uLight, &wi, &lightPdf, &visibility);
-//		
-//		if (lightPdf > 0 && !Li.IsBlack()) {
-//			Spectrum f;
-//			
-//			const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
-//			
-//			f = isect.bsdf->f(isect.wo, wi, bsdfFlags) * AbsDot(wi, isect.shading.n);
-//			
-//			scatteringPdf = isect.bsdf->Pdf(isect.wo, wi, bsdfFlags);
-//			
-//			if (!f.IsBlack() && visibility.Unoccluded(scene)) {
-//				Float weight = PowerHeuristic(1, lightPdf, 1, scatteringPdf);
-//				
-//				Ld += f * Li * weight / lightPdf;
-//			}
-//		}
-//		
-//		BxDFType sampledType;
-//		
-//		const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
-//		
-//		Spectrum f = isect.bsdf->Sample_f(isect.wo, &wi, uScattering, &scatteringPdf, bsdfFlags, &sampledType) * AbsDot(wi, isect.shading.n);
-//		
-//		bool sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
-//		
-//		if (!f.IsBlack() && scatteringPdf > 0) {
-//			Float weight = 1;
-//			
-//			if (!sampledSpecular) {
-//				lightPdf = light.Pdf_Li(it, wi);
-//				
-//				if (lightPdf == 0) {
-//					return Ld;
-//				}
-//				
-//				weight = PowerHeuristic(1, scatteringPdf, 1, lightPdf);
-//			}
-//			
-//			SurfaceInteraction lightIsect;
-//			
-//			Ray ray = it.SpawnRay(wi);
-//			
-//			Spectrum Tr(1.f);
-//			
-//			bool foundSurfaceInteraction = handleMedia ? scene.IntersectTr(ray, sampler, &lightIsect, &Tr) : scene.Intersect(ray, &lightIsect);
-//			
-//			Spectrum Li(0.f);
-//			
-//			if (foundSurfaceInteraction) {
-//				if (lightIsect.primitive->GetAreaLight() == &light) {
-//					Li = lightIsect.Le(-wi);
-//				}
-//			} else {
-//				Li = light.Le(ray);
-//			}
-//			
-//			if (!Li.IsBlack()) {
-//				Ld += f * Li * Tr * weight / scatteringPdf;
-//			}
-//		}
-//		
-//		return Ld;
-		
 		Color3F lightDirect = Color3F.BLACK;
 		
 		if(!light.isDeltaDistribution()) {
+//			BxDFType bsdfFlags = specular ? BSDF_ALL : BxDFType(BSDF_ALL & ~BSDF_SPECULAR);
 			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
 			
+//			Spectrum Li = light.Sample_Li(it, uLight, &wi, &lightPdf, &visibility);
 			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
 			
+//			const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
 			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 			
 			final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
@@ -445,22 +374,31 @@ final class PathTracing {
 				
 				final float lightProbabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
 				
+//				if (lightPdf > 0 && !Li.IsBlack()) {
 				if(!lightIncoming.isBlack() && lightProbabilityDensityFunctionValue > 0.0F) {
 					final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
 					final float incomingDotNormalAbs = abs(incomingDotNormal);
 					
-					final Color3F scatteringResult = Color3F.multiply(bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateDistributionFunction(bXDFType, outgoing, incoming) : RayitoBSDF.class.cast(bSDF).evaluateDistributionFunction(bXDFType, outgoing, normal, Vector3F.negate(incoming)), incomingDotNormalAbs);
+//					f = isect.bsdf->f(isect.wo, wi, bsdfFlags) * AbsDot(wi, isect.shading.n);
+					final Color3F scatteringResult = Color3F.multiply(bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateDistributionFunction(bXDFType, outgoing, incoming) : RayitoBSDF.class.cast(bSDF).evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), incomingDotNormalAbs);
 					
-					final float scatteringProbabilityDensityFunctionValue = bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateProbabilityDensityFunction(bXDFType, outgoing, incoming) : RayitoBSDF.class.cast(bSDF).evaluateProbabilityDensityFunction(bXDFType, outgoing, normal, Vector3F.negate(incoming));
+//					scatteringPdf = isect.bsdf->Pdf(isect.wo, wi, bsdfFlags);
+					final float scatteringProbabilityDensityFunctionValue = bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateProbabilityDensityFunction(bXDFType, outgoing, incoming) : RayitoBSDF.class.cast(bSDF).evaluateProbabilityDensityFunction(bXDFType, outgoing, normal, incoming);
 					
+//					if (!f.IsBlack() && visibility.Unoccluded(scene)) {
 					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
+//						Float weight = PowerHeuristic(1, lightPdf, 1, scatteringPdf);
 						final float weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightProbabilityDensityFunctionValue, scatteringProbabilityDensityFunctionValue, 1, 1);
 						
+//						Ld += f * Li * weight / lightPdf;
 						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming, weight), lightProbabilityDensityFunctionValue));
+//					}
 					}
+//				}
 				}
 			}
 			
+//			Spectrum f = isect.bsdf->Sample_f(isect.wo, &wi, uScattering, &scatteringPdf, bsdfFlags, &sampledType) * AbsDot(wi, isect.shading.n);
 			final Optional<BSDFResult> optionalBSDFResult = bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).sampleDistributionFunction(bXDFType, outgoing, sampleB) : RayitoBSDF.class.cast(bSDF).sampleDistributionFunction(bXDFType, outgoing, normal, sampleB);
 			
 			if(optionalBSDFResult.isPresent()) {
@@ -473,50 +411,78 @@ final class PathTracing {
 				
 				final Color3F scatteringResult = Color3F.multiply(bSDFResult.getResult(), incomingDotNormalAbs);
 				
+//				bool sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
 				final boolean hasSampledSpecular = bSDFResult.getBXDFType().isSpecular();
 				
 				final float scatteringProbabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 				
+//				if (!f.IsBlack() && scatteringPdf > 0) {
 				if(!scatteringResult.isBlack() && scatteringProbabilityDensityFunctionValue > 0.0F) {
+//					Float weight = 1;
 					Color3F weight = Color3F.WHITE;
 					
+//					if (!sampledSpecular) {
 					if(!hasSampledSpecular) {
+//						lightPdf = light.Pdf_Li(it, wi);
 						final float lightProbabilityDensityFunctionValue = light.evaluateProbabilityDensityFunctionRadianceIncoming(intersection, incoming);
 						
+//						if (lightPdf == 0) {
 						if(isZero(lightProbabilityDensityFunctionValue)) {
+//							return Ld;
 							return lightDirect;
+//						}
 						}
 						
+//						weight = PowerHeuristic(1, scatteringPdf, 1, lightPdf);
 						weight = new Color3F(SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(scatteringProbabilityDensityFunctionValue, lightProbabilityDensityFunctionValue, 1, 1));
+//					}
 					}
 					
+//					Ray ray = it.SpawnRay(wi);
 					final Ray3F ray = surfaceIntersection.createRay(incoming);
 					
+//					Spectrum Tr(1.f);
 					final Color3F transmittance = Color3F.WHITE;
 					
+//					bool foundSurfaceInteraction = handleMedia ? scene.IntersectTr(ray, sampler, &lightIsect, &Tr) : scene.Intersect(ray, &lightIsect);
 					final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 					
+//					if (foundSurfaceInteraction) {
 					if(optionalIntersectionLight.isPresent()) {
 						final Intersection intersectionLight = optionalIntersectionLight.get();
 						
+//						if (lightIsect.primitive->GetAreaLight() == &light) {
 						if(intersectionLight.getPrimitive().getAreaLight().isPresent() && intersectionLight.getPrimitive().getAreaLight().get() == light) {
-							final Color3F lightIncoming = intersectionLight.evaluateRadianceEmitted(incoming);
+//							Li = lightIsect.Le(-wi);
+							final Color3F lightIncoming = intersectionLight.evaluateRadianceEmitted(Vector3F.negate(incoming));
 							
+//							if (!Li.IsBlack()) {
 							if(!lightIncoming.isBlack()) {
+//								Ld += f * Li * Tr * weight / scatteringPdf;
 								lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming, transmittance, weight), scatteringProbabilityDensityFunctionValue));
+//							}
 							}
+//						}
 						}
+//					} else {
 					} else {
+//						Li = light.Le(ray);
 						final Color3F lightIncoming = light.evaluateRadianceEmitted(ray);
 						
+//						if (!Li.IsBlack()) {
 						if(!lightIncoming.isBlack()) {
+//							Ld += f * Li * Tr * weight / scatteringPdf;
 							lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming, transmittance, weight), scatteringProbabilityDensityFunctionValue));
+//						}
 						}
+//					}
 					}
+//				}
 				}
 			}
 		}
 		
+//		return Ld;
 		return lightDirect;
 	}
 	
@@ -546,7 +512,7 @@ final class PathTracing {
 					final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
 					final float incomingDotNormalAbs = abs(incomingDotNormal);
 					
-					final Color3F scatteringResult = Color3F.multiply(bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateDistributionFunction(bXDFType, outgoing, incoming) : RayitoBSDF.class.cast(bSDF).evaluateDistributionFunction(bXDFType, outgoing, normal, Vector3F.negate(incoming)), incomingDotNormalAbs);
+					final Color3F scatteringResult = Color3F.multiply(bSDF instanceof PBRTBSDF ? PBRTBSDF.class.cast(bSDF).evaluateDistributionFunction(bXDFType, outgoing, incoming) : RayitoBSDF.class.cast(bSDF).evaluateDistributionFunction(bXDFType, outgoing, normal, /*Vector3F.negate(*/incoming/*)*/), incomingDotNormalAbs);
 					
 					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
 						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming), lightProbabilityDensityFunctionValue));

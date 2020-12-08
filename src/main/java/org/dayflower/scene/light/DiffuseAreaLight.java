@@ -173,7 +173,7 @@ public final class DiffuseAreaLight extends AreaLight {
 		
 		final Color3F result = Color3F.BLACK;
 		
-		final float probabilityDensityFunctionValueDirection = this.isTwoSided ? 0.5F * SampleGeneratorF.hemisphereCosineDistributionProbabilityDensityFunction(abs(Vector3F.dotProduct(referenceSurfaceNormalWorldSpace, directionWorldSpace))) : SampleGeneratorF.hemisphereCosineDistributionProbabilityDensityFunction(abs(Vector3F.dotProduct(referenceSurfaceNormalWorldSpace, directionWorldSpace)));
+		final float probabilityDensityFunctionValueDirection = this.isTwoSided ? 0.5F * SampleGeneratorF.hemisphereCosineDistributionProbabilityDensityFunction(abs(Vector3F.dotProduct(referenceSurfaceNormalWorldSpace, directionWorldSpace))) : SampleGeneratorF.hemisphereCosineDistributionProbabilityDensityFunction(Vector3F.dotProduct(referenceSurfaceNormalWorldSpace, directionWorldSpace));
 		final float probabilityDensityFunctionValuePosition = this.shape.calculateProbabilityDensityFunctionValueForSolidAngle(referencePointLightSpace, referenceSurfaceNormalLightSpace, directionLightSpace);
 		
 		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));

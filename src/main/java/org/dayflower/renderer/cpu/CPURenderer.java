@@ -98,7 +98,7 @@ public final class CPURenderer extends AbstractCPURenderer {
 			case AMBIENT_OCCLUSION:
 				return AmbientOcclusion.radiance(ray, getRendererConfiguration());
 			case PATH_TRACING:
-				return PathTracingPBRT.radiance(ray, getRendererConfiguration());
+				return PathTracing.radiance(ray, getRendererConfiguration());
 			case PATH_TRACING_P_B_R_T:
 				return PathTracingPBRT.radiance(ray, getRendererConfiguration());
 			case PATH_TRACING_RAYITO:

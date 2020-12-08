@@ -647,9 +647,9 @@ public final class PerezLight implements Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F doRadianceSky(final Vector3F direction) {
-		if(direction.getZ() < 0.0F) {
-			return Color3F.BLACK;
-		}
+//		if(direction.getZ() < 0.0F) {
+//			return Color3F.BLACK;
+//		}
 		
 		final Vector3F directionSaturated = Vector3F.normalize(new Vector3F(direction.getX(), direction.getY(), max(direction.getZ(), 0.001F)));
 		

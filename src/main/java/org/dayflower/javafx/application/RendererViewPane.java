@@ -407,9 +407,9 @@ final class RendererViewPane extends BorderPane {
 	
 	private static RenderingAlgorithm doCreateRenderingAlgorithm(final Material material) {
 		if(material instanceof PBRTMaterial) {
-			return RenderingAlgorithm.PATH_TRACING_P_B_R_T;
+			return RenderingAlgorithm.PATH_TRACING;
 		} else if(material instanceof RayitoMaterial) {
-			return RenderingAlgorithm.PATH_TRACING_RAYITO;
+			return RenderingAlgorithm.PATH_TRACING;
 		} else {
 			return RenderingAlgorithm.PATH_TRACING;
 		}

@@ -35,6 +35,7 @@ import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.SpotLight;
 import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
 import org.dayflower.scene.material.pbrt.PBRTMaterial;
+import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.RayitoMaterial;
 
 /**
@@ -109,7 +110,7 @@ public final class Previews {
 		final Material material1 = new MattePBRTMaterial();
 		
 		final Shape3F shape0 = new Sphere3F();
-		final Shape3F shape1 = new Sphere3F(10);
+		final Shape3F shape1 = new Sphere3F(10.0F);
 		
 		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(5.0F));
 		final Transform transform1 = new Transform(camera.getEye());
@@ -136,18 +137,24 @@ public final class Previews {
 		camera.setOrthonormalBasis();
 		
 		final Material material0 = rayitoMaterial;
+		final Material material1 = new MatteRayitoMaterial();
 		
 		final Shape3F shape0 = new Sphere3F();
+		final Shape3F shape1 = new Sphere3F(10.0F);
 		
 		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(5.0F));
+		final Transform transform1 = new Transform(camera.getEye());
 		
 		final Primitive primitive0 = new Primitive(material0, shape0, transform0);
+		final Primitive primitive1 = new Primitive(material1, shape1, transform1);
 		
 		final
 		Scene scene = new Scene();
-		scene.addLight(new PerezLight());
+		scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(100.0F), Matrix44F.translate(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 20.0F)));
 		scene.addPrimitive(primitive0);
+		scene.addPrimitive(primitive1);
 		scene.setCamera(camera);
+		scene.setName("Preview");
 		
 		return scene;
 	}

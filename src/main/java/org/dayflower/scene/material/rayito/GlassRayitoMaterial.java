@@ -243,7 +243,7 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBTDF(this.textureAlbedo.getColorRGB(intersection), this.etaA, this.etaB))));
+		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBTDF(this.textureAlbedo.getColorRGB(intersection), this.etaA, this.etaB)), this.etaB));
 	}
 	
 	/**

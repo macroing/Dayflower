@@ -19,16 +19,16 @@ Transform transform4 = new Transform(new Point3F( 0.0F, 1.00F,  5.0F), Quaternio
 Transform transform5 = new Transform(new Point3F( 3.0F, 1.25F,  5.0F));
 Transform transform6 = new Transform(new Point3F( 0.0F, 10.00F, 0.0F));
 
-AreaLight areaLight = new DiffuseAreaLight(transform6.getObjectToWorld(), 1, new Color3F(50.0F), shape6, false);
+AreaLight areaLight6 = new DiffuseAreaLight(transform6.getObjectToWorld(), 1, new Color3F(50.0F), shape6, false);
 
-//scene.addLight(areaLight);
+//scene.addLight(areaLight6);
 scene.addLight(new PerezLight());
-//scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 0.0F), new Color3F(200.0F)));
+//scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 0.0F), new Color3F(50.0F)));
 scene.addPrimitive(new Primitive(material1, shape1, transform1));
 scene.addPrimitive(new Primitive(material2, shape2, transform2));
 scene.addPrimitive(new Primitive(material3, shape3, transform3));
 scene.addPrimitive(new Primitive(material4, shape4, transform4));
 scene.addPrimitive(new Primitive(material5, shape5, transform5));
-scene.addPrimitive(new Primitive(material6, shape6, transform6, areaLight));
+//scene.addPrimitive(new Primitive(material6, shape6, transform6, areaLight6));
 scene.setCamera(new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)));
 scene.setName("RayitoDefault");

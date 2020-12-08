@@ -96,19 +96,19 @@ public final class CPURenderer extends AbstractCPURenderer {
 		
 		switch(getRendererConfiguration().getRenderingAlgorithm()) {
 			case AMBIENT_OCCLUSION:
-				return RenderingAlgorithms.radianceAmbientOcclusion(ray, getRendererConfiguration());
+				return AmbientOcclusion.radiance(ray, getRendererConfiguration());
 			case PATH_TRACING:
-				return RenderingAlgorithms.radiancePathTracingPBRT(ray, getRendererConfiguration());
+				return PathTracingPBRT.radiance(ray, getRendererConfiguration());
 			case PATH_TRACING_P_B_R_T:
-				return RenderingAlgorithms.radiancePathTracingPBRT(ray, getRendererConfiguration());
-			case PATH_TRACING_SMALL_P_T_ITERATIVE:
-				return RenderingAlgorithms.radiancePathTracingSmallPTIterative(ray, getRendererConfiguration());
-			case PATH_TRACING_SMALL_P_T_RECURSIVE:
-				return RenderingAlgorithms.radiancePathTracingSmallPTRecursive(ray, getRendererConfiguration());
+				return PathTracingPBRT.radiance(ray, getRendererConfiguration());
 			case PATH_TRACING_RAYITO:
-				return RenderingAlgorithms.radiancePathTracingRayito(ray, getRendererConfiguration());
+				return PathTracingRayito.radiance(ray, getRendererConfiguration());
+			case PATH_TRACING_SMALL_P_T_ITERATIVE:
+				return PathTracingSmallPTIterative.radiance(ray, getRendererConfiguration());
+			case PATH_TRACING_SMALL_P_T_RECURSIVE:
+				return PathTracingSmallPTRecursive.radiance(ray, getRendererConfiguration());
 			case RAY_CASTING:
-				return RenderingAlgorithms.radianceRayCasting(ray, getRendererConfiguration());
+				return RayCasting.radiance(ray, getRendererConfiguration());
 			default:
 				return Color3F.BLACK;
 		}

@@ -28,6 +28,8 @@ Transform transform07 = new Transform(new Point3F(-1.5F, 1.00F,  8.0F));
 Transform transform08 = new Transform(new Point3F( 1.5F, 1.00F,  7.0F));
 Transform transform09 = new Transform(new Point3F( 0.0F, 4.99F,  9.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))), new Vector3F(0.25F));
 
+AreaLight areaLight09 = new DiffuseAreaLight(transform09.getObjectToWorld(), 1, new Color3F(12.0F), shape09, false);
+
 Primitive primitive01 = new Primitive(material01, shape01, transform01);
 Primitive primitive02 = new Primitive(material02, shape02, transform02);
 Primitive primitive03 = new Primitive(material03, shape03, transform03);
@@ -36,14 +38,15 @@ Primitive primitive05 = new Primitive(material05, shape05, transform05);
 Primitive primitive06 = new Primitive(material06, shape06, transform06);
 Primitive primitive07 = new Primitive(material07, shape07, transform07);
 Primitive primitive08 = new Primitive(material08, shape08, transform08);
-Primitive primitive09 = new Primitive(material09, shape09, transform09);
+Primitive primitive09 = new Primitive(material09, shape09, transform09, areaLight09);
 
 Camera camera = new Camera(new Point3F(0.0F, 2.5F, 1.0F));
 camera.setResolution(1024.0F, 768.0F);
 camera.setFieldOfViewY(AngleF.degrees(58.0F));
 camera.setFieldOfViewX();
 
-scene.addLight(new PrimitiveLight(primitive09));
+scene.addLight(areaLight09);
+//scene.addLight(new PrimitiveLight(primitive09));
 scene.addPrimitive(primitive01);
 scene.addPrimitive(primitive02);
 scene.addPrimitive(primitive03);

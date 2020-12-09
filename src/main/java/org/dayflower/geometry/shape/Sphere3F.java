@@ -175,10 +175,12 @@ public final class Sphere3F implements Shape3F {
 			
 			final Point3F point = Point3F.add(center, surfaceNormal, radius);
 			
-			final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
+//			final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
+			final Vector3F directionToSurface = Vector3F.direction(referencePoint, point);
 			final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
 			
-			final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
+			final float probabilityDensityFunctionValue = (1.0F / getSurfaceArea()) * (directionToSurface.lengthSquared() / abs(Vector3F.dotProduct(Vector3F.negate(directionToSurfaceNormalized), surfaceNormal)));
+//			final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
 			
 			return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
 		}

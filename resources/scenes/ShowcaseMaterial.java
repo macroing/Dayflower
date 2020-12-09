@@ -1,5 +1,5 @@
 boolean isInBox = true;
-boolean isTorus = true;
+boolean isTorus = false;
 
 Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
 
@@ -35,7 +35,7 @@ Shape3F shape26 = isTorus ? new Torus3F() : new Sphere3F();
 Shape3F shape27 = isTorus ? new Torus3F() : new Sphere3F();
 Shape3F shape28 = isTorus ? new Torus3F() : new Sphere3F();
 Shape3F shape29 = isTorus ? new Torus3F() : new Sphere3F();
-Shape3F shape31 = new Sphere3F();
+Shape3F shape31 = new Triangle3F();
 
 Transform transform11 = new Transform(new Point3F(+0.0F, 0.00F, + 0.0F));
 Transform transform12 = new Transform(new Point3F(+0.0F, 8.00F, + 0.0F));
@@ -52,9 +52,9 @@ Transform transform26 = new Transform(new Point3F(+3.0F, 3.75F, + 5.0F));
 Transform transform27 = new Transform(new Point3F(-3.0F, 6.25F, + 5.0F));
 Transform transform28 = new Transform(new Point3F(+0.0F, 6.25F, + 5.0F));
 Transform transform29 = new Transform(new Point3F(+3.0F, 6.25F, + 5.0F));
-Transform transform31 = new Transform(new Point3F(+0.0F, 1.00F, + 0.0F));
+Transform transform31 = new Transform(new Point3F(+0.0F, 7.99F, + 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))), new Vector3F(0.5F, 0.5F, 0.5F));
 
-AreaLight areaLight31 = new DiffuseAreaLight(transform31.getObjectToWorld(), 1, new Color3F(20.0F), shape31, false);
+AreaLight areaLight31 = new DiffuseAreaLight(transform31.getObjectToWorld(), 1, new Color3F(20.0F), shape31, true);
 
 if(isInBox) {
 	scene.addLight(areaLight31);

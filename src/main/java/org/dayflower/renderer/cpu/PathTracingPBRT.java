@@ -92,7 +92,7 @@ final class PathTracingPBRT {
 			
 			if(currentBounce == 0 || isSpecularBounce) {
 				if(hasFoundIntersection) {
-					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(Vector3F.negate(ray.getDirection()))));
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(Vector3F.negate(currentRay.getDirection()))));
 				} else {
 					for(final Light light : lights) {
 						radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateRadianceEmitted(currentRay)));

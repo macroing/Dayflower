@@ -38,6 +38,7 @@ import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
+import org.dayflower.image.BoxFilter;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
@@ -395,7 +396,7 @@ final class RendererViewPane extends BorderPane {
 	private static RendererConfiguration doCreateRendererConfiguration(final RenderingAlgorithm renderingAlgorithm, final Scene scene) {
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
-		rendererConfiguration.setImage(new Image(32, 32));
+		rendererConfiguration.setImage(new Image(32, 32, Color3F.BLACK, new BoxFilter()));
 		rendererConfiguration.setPreviewMode(true);
 		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
 		rendererConfiguration.setRenderPasses(10);

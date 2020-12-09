@@ -96,7 +96,7 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalRayitoMaterial(colorAlbedo, colorEmittance, 0.05F);
+	 * new MetalRayitoMaterial(colorAlbedo, colorEmittance, 0.2F);
 	 * }
 	 * </pre>
 	 * 
@@ -105,7 +105,7 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
 	 */
 	public MetalRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
-		this(colorAlbedo, colorEmittance, 0.05F);
+		this(colorAlbedo, colorEmittance, 0.2F);
 	}
 	
 	/**
@@ -156,7 +156,7 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalRayitoMaterial(textureAlbedo, textureEmittance, 0.05F);
+	 * new MetalRayitoMaterial(textureAlbedo, textureEmittance, 0.2F);
 	 * }
 	 * </pre>
 	 * 
@@ -165,7 +165,7 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
 	 */
 	public MetalRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
-		this(textureAlbedo, textureEmittance, 0.05F);
+		this(textureAlbedo, textureEmittance, 0.2F);
 	}
 	
 	/**

@@ -188,7 +188,6 @@ final class PathTracing {
 				throughput = Color3F.divide(throughput, probability);
 			}
 			*/
-			
 			if(bXDFType.hasTransmission() && bXDFType.isSpecular()) {
 				final float eta = bSDF.getEta();
 				

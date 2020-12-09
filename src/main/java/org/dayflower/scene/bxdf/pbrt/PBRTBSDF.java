@@ -163,19 +163,20 @@ public final class PBRTBSDF implements BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
-	 * If either {@code bXDFType}, {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BSDF} method {@code f(const Vector3f &woW, const Vector3f &wiW, BxDFType flags)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
-	 * @param outgoingWorldSpace the outgoing direction, called {@code woW} in PBRT
-	 * @param incomingWorldSpace the incoming direction, called {@code wiW} in PBRT
+	 * @param outgoingWorldSpace the outgoing direction
+	 * @param normalWorldSpace the normal
+	 * @param incomingWorldSpace the incoming direction
 	 * @return a {@code Color3F} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}
 	 */
-	public Color3F evaluateDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F incomingWorldSpace) {
+	@Override
+	public Color3F evaluateDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Vector3F incomingWorldSpace) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
+		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
 		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
@@ -201,19 +202,20 @@ public final class PBRTBSDF implements BSDF {
 	 * <p>
 	 * Returns an optional {@link BSDFResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BSDF} method {@code Sample_f(const Vector3f &woWorld, Vector3f *wiWorld, const Point2f &u, Float *pdf, BxDFType type, BxDFType *sampledType)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
-	 * @param outgoingWorldSpace the outgoing direction, called {@code woWorld} in PBRT
+	 * @param outgoingWorldSpace the outgoing direction
+	 * @param normalWorldSpace the normal
 	 * @param sample the sample point
 	 * @return an optional {@code BSDFResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace} or {@code sample} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code sample} are {@code null}
 	 */
-	public Optional<BSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Point2F sample) {
+	@Override
+	public Optional<BSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Point2F sample) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
+		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
 		final int matches = doComputeMatches(bXDFType);
@@ -321,19 +323,20 @@ public final class PBRTBSDF implements BSDF {
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code bXDFType}, {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BSDF} method {@code Pdf(const Vector3f &woWorld, const Vector3f &wiWorld, BxDFType flags)} that returns a {@code Float} in PBRT.
+	 * If either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
-	 * @param outgoingWorldSpace the outgoing direction, called {@code woWorld} in PBRT
-	 * @param incomingWorldSpace the incoming direction, called {@code wiWorld} in PBRT
+	 * @param outgoingWorldSpace the outgoing direction
+	 * @param normalWorldSpace the normal
+	 * @param incomingWorldSpace the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace} or {@code incomingWorldSpace} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}
 	 */
-	public float evaluateProbabilityDensityFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F incomingWorldSpace) {
+	@Override
+	public float evaluateProbabilityDensityFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Vector3F incomingWorldSpace) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
+		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
 		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
 		if(this.pBRTBXDFs.size() == 0) {
@@ -371,6 +374,7 @@ public final class PBRTBSDF implements BSDF {
 	 * 
 	 * @return the index of refraction (IOR)
 	 */
+	@Override
 	public float getEta() {
 		return this.eta;
 	}
@@ -381,6 +385,7 @@ public final class PBRTBSDF implements BSDF {
 	 * @param isSpecular {@code true} if, and only if, specular types should be counted, {@code false} otherwise
 	 * @return the {@code PBRTBXDF} count by specular or non-specular type
 	 */
+	@Override
 	public int countBXDFsBySpecularType(final boolean isSpecular) {
 		int count = 0;
 		

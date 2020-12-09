@@ -141,7 +141,7 @@ final class PathTracingPBRT {
 			
 			final Sample2F sample = sampler.sample2();
 			
-			final Optional<BSDFResult> optionalBSDFResult = pBRTBSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, new Point2F(sample.getU(), sample.getV()));
+			final Optional<BSDFResult> optionalBSDFResult = pBRTBSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, surfaceNormalS, new Point2F(sample.getU(), sample.getV()));
 			
 			if(!optionalBSDFResult.isPresent()) {
 				break;
@@ -300,9 +300,9 @@ final class PathTracingPBRT {
 					final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
 					final float incomingDotNormalAbs = abs(incomingDotNormal);
 					
-					final Color3F scatteringResult = Color3F.multiply(pBRTBSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), incomingDotNormalAbs);
+					final Color3F scatteringResult = Color3F.multiply(pBRTBSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), incomingDotNormalAbs);
 					
-					final float scatteringProbabilityDensityFunctionValue = pBRTBSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, incoming);
+					final float scatteringProbabilityDensityFunctionValue = pBRTBSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, normal, incoming);
 					
 					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
 						final float weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightProbabilityDensityFunctionValue, scatteringProbabilityDensityFunctionValue, 1, 1);
@@ -312,7 +312,7 @@ final class PathTracingPBRT {
 				}
 			}
 			
-			final Optional<BSDFResult> optionalBSDFResult = pBRTBSDF.sampleDistributionFunction(bXDFType, outgoing, sampleB);
+			final Optional<BSDFResult> optionalBSDFResult = pBRTBSDF.sampleDistributionFunction(bXDFType, outgoing, normal, sampleB);
 			
 			if(optionalBSDFResult.isPresent()) {
 				final BSDFResult bSDFResult = optionalBSDFResult.get();
@@ -397,7 +397,7 @@ final class PathTracingPBRT {
 					final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
 					final float incomingDotNormalAbs = abs(incomingDotNormal);
 					
-					final Color3F scatteringResult = Color3F.multiply(pBRTBSDF.evaluateDistributionFunction(bXDFType, outgoing, incoming), incomingDotNormalAbs);
+					final Color3F scatteringResult = Color3F.multiply(pBRTBSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), incomingDotNormalAbs);
 					
 					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
 						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming), lightProbabilityDensityFunctionValue));

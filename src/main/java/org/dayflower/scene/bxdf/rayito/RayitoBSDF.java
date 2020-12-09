@@ -105,6 +105,7 @@ public final class RayitoBSDF implements BSDF {
 	 * @return a {@code Color3F} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}
 	 */
+	@Override
 	public Color3F evaluateDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Vector3F incomingWorldSpace) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
@@ -145,6 +146,7 @@ public final class RayitoBSDF implements BSDF {
 	 * @return an optional {@code BSDFResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code sample} are {@code null}
 	 */
+	@Override
 	public Optional<BSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Point2F sample) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
@@ -267,6 +269,7 @@ public final class RayitoBSDF implements BSDF {
 	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}
 	 */
+	@Override
 	public float evaluateProbabilityDensityFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Vector3F incomingWorldSpace) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
@@ -310,6 +313,7 @@ public final class RayitoBSDF implements BSDF {
 	 * 
 	 * @return the index of refraction (IOR)
 	 */
+	@Override
 	public float getEta() {
 		return this.eta;
 	}
@@ -320,6 +324,7 @@ public final class RayitoBSDF implements BSDF {
 	 * @param isSpecular {@code true} if, and only if, specular types should be counted, {@code false} otherwise
 	 * @return the {@code RayitoBXDF} count by specular or non-specular type
 	 */
+	@Override
 	public int countBXDFsBySpecularType(final boolean isSpecular) {
 		int count = 0;
 		

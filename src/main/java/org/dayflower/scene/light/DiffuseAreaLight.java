@@ -257,6 +257,28 @@ public final class DiffuseAreaLight extends AreaLight {
 	 */
 	@Override
 	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
+//		Spectrum DiffuseAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis) const {
+//			Interaction pShape = shape->Sample(ref, u, pdf);
+//			
+//			pShape.mediumInterface = mediumInterface;
+//			
+//			if (*pdf == 0 || (pShape.p - ref.p).LengthSquared() == 0) {
+//				*pdf = 0;
+//				
+//				return 0.f;
+//			}
+//			
+//			*wi = Normalize(pShape.p - ref.p);
+//			
+//			*vis = VisibilityTester(ref, pShape);
+//			
+//			return L(pShape, -*wi);
+//		}
+//		
+//		Spectrum L(const Interaction &intr, const Vector3f &w) const {
+//			return (twoSided || Dot(intr.n, w) > 0) ? Lemit : Spectrum(0.f);
+//		}
+		
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		

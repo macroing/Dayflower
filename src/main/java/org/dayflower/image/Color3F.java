@@ -32,6 +32,7 @@ import static org.dayflower.util.Floats.simplexFractionalBrownianMotionXY;
 import static org.dayflower.util.Floats.toFloat;
 import static org.dayflower.util.Ints.toInt;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -844,6 +845,33 @@ public final class Color3F {
 		final float component1 = colorLHS.component1 + scalarRHS;
 		final float component2 = colorLHS.component2 + scalarRHS;
 		final float component3 = colorLHS.component3 + scalarRHS;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+//	TODO: Add Javadocs!
+	public static Color3F addMultiplyAndDivide(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final Color3F colorMultiplyC, final float scalarMultiply, final float scalarDivide) {
+		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * colorMultiplyC.component1 * scalarMultiply / scalarDivide;
+		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * colorMultiplyC.component2 * scalarMultiply / scalarDivide;
+		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3 * colorMultiplyC.component3 * scalarMultiply / scalarDivide;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+//	TODO: Add Javadocs!
+	public static Color3F addMultiplyAndDivide(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final float scalarDivide) {
+		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 / scalarDivide;
+		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 / scalarDivide;
+		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3 / scalarDivide;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+//	TODO: Add Javadocs!
+	public static Color3F addMultiplyAndDivide(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final float scalarMultiply, final float scalarDivide) {
+		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * scalarMultiply / scalarDivide;
+		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * scalarMultiply / scalarDivide;
+		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3 * scalarMultiply / scalarDivide;
 		
 		return new Color3F(component1, component2, component3);
 	}

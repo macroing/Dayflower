@@ -398,7 +398,7 @@ final class PathTracing {
 						final float weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightPDFValue, scatteringPDFValue, 1, 1);
 						
 //						Ld += f * Li * weight / lightPdf;
-						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming, weight), lightPDFValue));
+						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, weight, lightPDFValue);
 //					}
 					}
 //				}
@@ -463,7 +463,7 @@ final class PathTracing {
 //							if (!Li.IsBlack()) {
 							if(!lightIncoming.isBlack()) {
 //								Ld += f * Li * Tr * weight / scatteringPdf;
-								lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming, transmittance, new Color3F(weight)), scatteringPDFValue));
+								lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, transmittance, weight, scatteringPDFValue);
 //							}
 							}
 //						}
@@ -476,7 +476,7 @@ final class PathTracing {
 //						if (!Li.IsBlack()) {
 						if(!lightIncoming.isBlack()) {
 //							Ld += f * Li * Tr * weight / scatteringPdf;
-							lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming, transmittance, new Color3F(weight)), scatteringPDFValue));
+							lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, transmittance, weight, scatteringPDFValue);
 //						}
 						}
 //					}
@@ -516,7 +516,7 @@ final class PathTracing {
 					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), abs(Vector3F.dotProduct(incoming, normal)));
 					
 					if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
-						lightDirect = Color3F.add(lightDirect, Color3F.divide(Color3F.multiply(scatteringResult, lightIncoming), lightPDFValue));
+						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, lightPDFValue);
 					}
 				}
 			}

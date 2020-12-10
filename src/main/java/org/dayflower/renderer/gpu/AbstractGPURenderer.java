@@ -398,6 +398,11 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 //	TODO: Add Javadocs!
 	protected final boolean intersectsSphere3F() {
+		return intersectionTSphere3F() > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float intersectionTSphere3F() {
 		final float originX = this.ray3FArray_$private$8[0];
 		final float originY = this.ray3FArray_$private$8[1];
 		final float originZ = this.ray3FArray_$private$8[2];
@@ -424,25 +429,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		final float b = 2.0F * (centerToOriginX * directionX + centerToOriginY * directionY + centerToOriginZ * directionZ);
 		final float c = (centerToOriginX * centerToOriginX + centerToOriginY * centerToOriginY + centerToOriginZ * centerToOriginZ) - radiusSquared;
 		
-		final float discriminantSquared = b * b - 4.0F * a * c;
+		final float t = doSolveQuadraticSystem(a, b, c, tMinimum, tMaximum);
 		
-		if(discriminantSquared == -0.0F || discriminantSquared == +0.0F) {
-			final float q = -0.5F * b / a;
-			final float t = q > tMinimum && q < tMaximum ? q : 0.0F;
-			
-			return t > 0.0F;
-		} else if(discriminantSquared > 0.0F) {
-			final float discriminant = sqrt(discriminantSquared);
-			
-			final float q = -0.5F * (b > 0.0F ? b + discriminant : b - discriminant);
-			final float r = q / a;
-			final float s = c / q;
-			final float t = r < s && r > tMinimum && r < tMaximum ? r : s < r && s > tMinimum && s < tMaximum ? s : 0.0F;
-			
-			return t > 0.0F;
-		} else {
-			return false;
-		}
+		return t;
 	}
 	
 	/**
@@ -462,6 +451,30 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	private Scene doGetScene() {
 		return getRendererConfiguration().getScene();
+	}
+	
+	private float doSolveQuadraticSystem(final float a, final float b, final float c, final float minimum, final float maximum) {
+		final float discriminantSquared = b * b - 4.0F * a * c;
+		
+		if(discriminantSquared == -0.0F || discriminantSquared == +0.0F) {
+			final float q0 = -0.5F * b / a;
+			final float q1 = q0 > minimum && q0 < maximum ? q0 : 0.0F;
+			
+			return q1;
+		} else if(discriminantSquared > 0.0F) {
+			final float discriminant = sqrt(discriminantSquared);
+			
+			final float q0 = -0.5F * (b > 0.0F ? b + discriminant : b - discriminant);
+			final float q1 = q0 / a;
+			final float q2 = c / q0;
+			final float q3 = min(q1, q2);
+			final float q4 = max(q1, q2);
+			final float q5 = q3 > minimum && q3 < maximum ? q3 : q4 > minimum && q4 < maximum ? q4 : 0.0F;
+			
+			return q5;
+		} else {
+			return 0.0F;
+		}
 	}
 	
 	private float[] doGetAndReturn(final float[] array) {

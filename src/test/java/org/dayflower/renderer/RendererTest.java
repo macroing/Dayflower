@@ -18,11 +18,14 @@
  */
 package org.dayflower.renderer;
 
+import java.io.File;
+
 import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.cpu.CPURenderer;
+import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.FileRendererObserver;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.loader.JavaSceneLoader;
@@ -37,10 +40,11 @@ public final class RendererTest {
 	public static void main(final String[] args) {
 //		doTestCPURendererAmbientOcclusion();
 //		doTestCPURendererPathTracingPBRT();
-		doTestCPURendererPathTracingRayito();
+//		doTestCPURendererPathTracingRayito();
 //		doTestCPURendererPathTracingSmallPTIterative();
 //		doTestCPURendererPathTracingSmallPTRecursive();
 //		doTestCPURendererRayCasting();
+		doTestGPURenderer();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,6 +83,15 @@ public final class RendererTest {
 		final
 		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.RAY_CASTING, "./resources/scenes/RayitoDefault.java");
 		renderer.render();
+	}
+	
+	static void doTestGPURenderer() {
+		final
+		Renderer renderer = new GPURenderer(new RendererConfiguration(), new FileRendererObserver(new File("Image.png"), true));
+		renderer.getRendererConfiguration().setRenderPasses(10);
+		renderer.setup();
+		renderer.render();
+		renderer.dispose();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

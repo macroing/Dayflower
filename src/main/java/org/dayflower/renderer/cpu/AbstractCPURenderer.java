@@ -140,6 +140,8 @@ public abstract class AbstractCPURenderer implements Renderer {
 				timer.restart();
 			}
 			
+			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 0.0D);
+			
 			final long currentTimeMillis = System.currentTimeMillis();
 			
 			for(int y = 0; y < resolutionY; y++) {
@@ -160,22 +162,22 @@ public abstract class AbstractCPURenderer implements Renderer {
 					}
 				}
 				
-				if(!this.isRendering.get()) {
-					return false;
-				}
-				
 				final double percent = ((y + 1.0D) * resolutionX) / (resolutionX * resolutionY);
 				
 				rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, percent);
+				
+				if(!this.isRendering.get()) {
+					return false;
+				}
 			}
+			
+			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
 			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
 				image.filmRender();
 				
 				rendererObserver.onRenderDisplay(this, image);
 			}
-			
-			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
 			rendererConfiguration.setRenderPass(rendererConfiguration.getRenderPass() + 1);
 			rendererConfiguration.setRenderTime(elapsedTimeMillis);

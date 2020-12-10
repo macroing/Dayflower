@@ -24,6 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
@@ -32,6 +33,7 @@ import org.dayflower.scene.Scene;
 import org.dayflower.util.Timer;
 
 import com.amd.aparapi.Kernel;
+import com.amd.aparapi.Range;
 
 /**
  * An {@code AbstractGPURenderer} is an abstract implementation of {@link Renderer} that takes care of most aspects.
@@ -47,6 +49,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	protected float[] radiances;
+	protected float[] rays_$private$6;
+	protected float[] samples;
 	protected long[] seeds;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +73,10 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
 	 */
 	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
+		this.radiances = new float[0];
+		this.rays_$private$6 = new float[0];
+		this.samples = new float[0];
+		this.seeds = new long[0];
 		this.isClearing = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
 		this.rendererConfiguration = new AtomicReference<>(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
@@ -127,6 +136,10 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		
 		final int renderPasses = rendererConfiguration.getRenderPasses();
 		final int renderPassesPerDisplayUpdate = rendererConfiguration.getRenderPassesPerDisplayUpdate();
+		final int resolutionX = image.getResolutionX();
+		final int resolutionY = image.getResolutionY();
+		
+		final Range range = Range.create(resolutionX * resolutionY);
 		
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
 			if(this.isClearing.compareAndSet(true, false)) {
@@ -141,21 +154,46 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 				timer.restart();
 			}
 			
+			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 0.0D);
+			
 			final long currentTimeMillis = System.currentTimeMillis();
 			
-//			TODO: Implement rendering via Kernel!
+			execute(range);
 			
-			if(!this.isRendering.get()) {
-				return false;
+			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
+			
+			final float[] radiances = doGetRadiances();
+			final float[] samples = doGetSamples();
+			
+			for(int y = 0; y < resolutionY; y++) {
+				for(int x = 0; x < resolutionX; x++) {
+					final int index = y * resolutionX + x;
+					final int indexRadiances = index * 3;
+					final int indexSamples = index * 2;
+					
+					final float r = radiances[indexRadiances + 0];
+					final float g = radiances[indexRadiances + 1];
+					final float b = radiances[indexRadiances + 2];
+					
+					final float sampleX = samples[indexSamples + 0];
+					final float sampleY = samples[indexSamples + 1];
+					
+					final Color3F colorRGB = new Color3F(r, g, b);
+					final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
+					
+					if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
+						image.filmAddColorXYZ(x + sampleX, y + sampleY, colorXYZ);
+					}
+				}
 			}
+			
+			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 1.0D);
 			
 			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
 				image.filmRender();
 				
 				rendererObserver.onRenderDisplay(this, image);
 			}
-			
-			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
 			rendererConfiguration.setRenderPass(rendererConfiguration.getRenderPass() + 1);
 			rendererConfiguration.setRenderTime(elapsedTimeMillis);
@@ -227,6 +265,10 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 */
 	@Override
 	public final void setup() {
+		setExplicit(true);
+		
+		doSetupRadiances();
+		doSetupSamples();
 		doSetupSeeds();
 	}
 	
@@ -243,6 +285,18 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private float[] doGetRadiances() {
+		get(this.radiances);
+		
+		return this.radiances;
+	}
+	
+	private float[] doGetSamples() {
+		get(this.samples);
+		
+		return this.samples;
+	}
+	
 	private int doNext(final int bits) {
 		final int index = getGlobalId();
 		
@@ -252,6 +306,26 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		this.seeds[index] = newSeed;
 		
 		return (int)(newSeed >>> (48 - bits));
+	}
+	
+	private void doSetupRadiances() {
+		this.radiances = new float[this.rendererConfiguration.get().getImage().getResolution() * 3];
+		
+		for(int i = 0; i < this.radiances.length; i++) {
+			this.radiances[i] = 0.0F;
+		}
+		
+		put(this.radiances);
+	}
+	
+	private void doSetupSamples() {
+		this.samples = new float[this.rendererConfiguration.get().getImage().getResolution() * 2];
+		
+		for(int i = 0; i < this.samples.length; i++) {
+			this.samples[i] = 0.0F;
+		}
+		
+		put(this.samples);
 	}
 	
 	private void doSetupSeeds() {

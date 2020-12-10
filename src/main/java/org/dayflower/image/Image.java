@@ -1575,10 +1575,12 @@ public final class Image {
 		final int maximumFilterX = toInt(min(floor(deltaX + filterResolutionX), resolutionX - 1));
 		final int minimumFilterY = toInt(max(ceil(deltaY - filterResolutionY), 0));
 		final int maximumFilterY = toInt(min(floor(deltaY + filterResolutionY), resolutionY - 1));
+		final int maximumFilterXMinimumFilterX = maximumFilterX - minimumFilterX;
+		final int maximumFilterYMinimumFilterY = maximumFilterY - minimumFilterY;
 		
-		if(maximumFilterX - minimumFilterX >= 0 && maximumFilterY - minimumFilterY >= 0) {
-			final int[] filterOffsetX = new int[maximumFilterX - minimumFilterX + 1];
-			final int[] filterOffsetY = new int[maximumFilterY - minimumFilterY + 1];
+		if(maximumFilterXMinimumFilterX >= 0 && maximumFilterYMinimumFilterY >= 0) {
+			final int[] filterOffsetX = new int[maximumFilterXMinimumFilterX + 1];
+			final int[] filterOffsetY = new int[maximumFilterYMinimumFilterY + 1];
 			
 			for(int filterX = minimumFilterX; filterX <= maximumFilterX; filterX++) {
 				filterOffsetX[filterX - minimumFilterX] = min(toInt(floor(abs((filterX - deltaX) * filterResolutionXReciprocal * FILTER_TABLE_SIZE))), FILTER_TABLE_SIZE - 1);
@@ -1589,10 +1591,13 @@ public final class Image {
 			}
 			
 			for(int filterY = minimumFilterY; filterY <= maximumFilterY; filterY++) {
+				final int filterYResolutionX = filterY * resolutionX;
+				final int filterOffsetYOffsetFilterTableSize = filterOffsetY[filterY - minimumFilterY] * FILTER_TABLE_SIZE;
+				
 				for(int filterX = minimumFilterX; filterX <= maximumFilterX; filterX++) {
 					final
-					Pixel pixel = pixels[filterY * resolutionX + filterX];
-					pixel.addColorXYZ(colorXYZ, sampleWeight, filterTable[filterOffsetY[filterY - minimumFilterY] * FILTER_TABLE_SIZE + filterOffsetX[filterX - minimumFilterX]]);
+					Pixel pixel = pixels[filterYResolutionX + filterX];
+					pixel.addColorXYZ(colorXYZ, sampleWeight, filterTable[filterOffsetYOffsetFilterTableSize + filterOffsetX[filterX - minimumFilterX]]);
 				}
 			}
 		}

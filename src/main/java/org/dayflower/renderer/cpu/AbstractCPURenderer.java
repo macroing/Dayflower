@@ -148,7 +148,12 @@ public abstract class AbstractCPURenderer implements Renderer {
 				for(int x = 0; x < resolutionX; x++) {
 					final Sample2F sample = sampler.sample2();
 					
-					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(x, y, sample.getX(), sample.getY());
+					final float imageX = x;
+					final float imageY = y;
+					final float pixelX = sample.getX();
+					final float pixelY = sample.getY();
+					
+					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(imageX, imageY, pixelX, pixelY);
 					
 					if(optionalRay.isPresent()) {
 						final Ray3F ray = optionalRay.get();
@@ -157,7 +162,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
 						
 						if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
-							image.filmAddColorXYZ(x + sample.getX(), y + sample.getY(), colorXYZ);
+							image.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
 						}
 					}
 				}

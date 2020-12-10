@@ -49,6 +49,68 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class Camera implements Node {
+	/**
+	 * The offset for the aperture radius in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_APERTURE_RADIUS = 15;
+	
+	/**
+	 * The offset for the {@link Point3F} instance representing the eye in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_EYE = 12;
+	
+	/**
+	 * The offset for the {@link AngleF} instance representing the field of view on the X-axis in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_FIELD_OF_VIEW_X = 0;
+	
+	/**
+	 * The offset for the {@link AngleF} instance representing the field of view on the Y-axis in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_FIELD_OF_VIEW_Y = 1;
+	
+	/**
+	 * The offset for the focal distance in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_FOCAL_DISTANCE = 16;
+	
+	/**
+	 * The offset for the {@link Lens} instance representing the lens in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_LENS = 2;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance pointing in the U-direction of the {@link OrthonormalBasis33F} instance in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_ORTHONORMAL_BASIS_U = 3;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance pointing in the V-direction of the {@link OrthonormalBasis33F} instance in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_ORTHONORMAL_BASIS_V = 6;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance pointing in the W-direction of the {@link OrthonormalBasis33F} instance in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_ORTHONORMAL_BASIS_W = 9;
+	
+	/**
+	 * The offset for the resolution on the X-axis in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RESOLUTION_X = 17;
+	
+	/**
+	 * The offset for the resolution on the Y-axis in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RESOLUTION_Y = 18;
+	
+	/**
+	 * The size of the {@code float[]}.
+	 */
+	public static final int ARRAY_SIZE = 19;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private AngleF fieldOfViewX;
 	private AngleF fieldOfViewY;
 	private AngleF pitch;
@@ -213,17 +275,17 @@ public final class Camera implements Node {
 	}
 	
 	/**
-	 * Creates a new primary {@link Ray3F} instance given {@code pixelX} and {@code pixelY} as the pixel coordinates and {@code sampleX} and {@code sampleY} as the sample coordinates within a pixel.
+	 * Creates a new primary {@link Ray3F} instance given {@code imageX} and {@code imageY} as the image coordinates and {@code pixelX} and {@code pixelY} as the pixel coordinates.
 	 * <p>
 	 * Returns an {@code Optional} with an optional {@code Ray3F} instance.
 	 * 
+	 * @param imageX the X-coordinate of the image
+	 * @param imageY the Y-coordinate of the image
 	 * @param pixelX the X-coordinate of the pixel
 	 * @param pixelY the Y-coordinate of the pixel
-	 * @param sampleX the X-coordinate of the sample inside the pixel
-	 * @param sampleY the Y-coordinate of the sample inside the pixel
 	 * @return an {@code Optional} with an optional {@code Ray3F} instance
 	 */
-	public Optional<Ray3F> createPrimaryRay(final float pixelX, final float pixelY, final float sampleX, final float sampleY) {
+	public Optional<Ray3F> createPrimaryRay(final float imageX, final float imageY, final float pixelX, final float pixelY) {
 		final float apertureRadius = this.apertureRadius;
 		final float fieldOfViewX = tan(+this.fieldOfViewX.getRadians() * 0.5F);
 		final float fieldOfViewY = tan(-this.fieldOfViewY.getRadians() * 0.5F);
@@ -239,13 +301,13 @@ public final class Camera implements Node {
 		final Vector3F v = orthonormalBasis.getV();
 		final Vector3F w = orthonormalBasis.getW();
 		
-		final float sx = 2.0F * ((pixelX + sampleX) / (resolutionX - 1.0F)) - 1.0F;
-		final float sy = 2.0F * ((pixelY + sampleY) / (resolutionY - 1.0F)) - 1.0F;
+		final float cameraX = 2.0F * ((imageX + pixelX) / (resolutionX - 1.0F)) - 1.0F;
+		final float cameraY = 2.0F * ((imageY + pixelY) / (resolutionY - 1.0F)) - 1.0F;
 		
 		float wFactor = 1.0F;
 		
 		if(this.lens == Lens.FISHEYE) {
-			final float dotProduct = sx * sx + sy * sy;
+			final float dotProduct = cameraX * cameraX + cameraY * cameraY;
 			
 			if(dotProduct > 1.0F) {
 				return Optional.empty();
@@ -256,7 +318,7 @@ public final class Camera implements Node {
 		
 		final Point2F point = SampleGeneratorF.sampleDiskUniformDistribution();
 		
-		final Point3F pointOnPlaneOneUnitAwayFromEye = new Point3F(Vector3F.add(Vector3F.add(Vector3F.multiply(u, fieldOfViewX * sx), Vector3F.multiply(v, fieldOfViewY * sy)), Vector3F.add(new Vector3F(eye), Vector3F.multiply(w, wFactor))));
+		final Point3F pointOnPlaneOneUnitAwayFromEye = new Point3F(Vector3F.add(Vector3F.add(Vector3F.multiply(u, fieldOfViewX * cameraX), Vector3F.multiply(v, fieldOfViewY * cameraY)), Vector3F.add(new Vector3F(eye), Vector3F.multiply(w, wFactor))));
 		final Point3F pointOnImagePlane = Point3F.add(eye, Vector3F.direction(eye, pointOnPlaneOneUnitAwayFromEye), focalDistance);
 		final Point3F origin = apertureRadius > 0.00001F ? Point3F.add(eye, Vector3F.add(Vector3F.multiply(u, point.getU() * apertureRadius), Vector3F.multiply(v, point.getV() * apertureRadius))) : eye;
 		
@@ -521,6 +583,37 @@ public final class Camera implements Node {
 	 */
 	public float getResolutionY() {
 		return this.resolutionY;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code Camera} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Camera} instance
+	 */
+	public float[] toArray() {
+		final float[] array = new float[ARRAY_SIZE];
+		
+		array[ARRAY_OFFSET_FIELD_OF_VIEW_X] = this.fieldOfViewX.getRadians();
+		array[ARRAY_OFFSET_FIELD_OF_VIEW_Y] = this.fieldOfViewY.getRadians();
+		array[ARRAY_OFFSET_LENS] = this.lens.ordinal();
+		array[ARRAY_OFFSET_ORTHONORMAL_BASIS_U + 0] = this.orthonormalBasis.getU().getX();
+		array[ARRAY_OFFSET_ORTHONORMAL_BASIS_U + 1] = this.orthonormalBasis.getU().getY();
+		array[ARRAY_OFFSET_ORTHONORMAL_BASIS_U + 2] = this.orthonormalBasis.getU().getZ();
+		array[ARRAY_OFFSET_ORTHONORMAL_BASIS_V + 0] = this.orthonormalBasis.getV().getX();
+		array[ARRAY_OFFSET_ORTHONORMAL_BASIS_V + 1] = this.orthonormalBasis.getV().getY();
+		array[ARRAY_OFFSET_ORTHONORMAL_BASIS_V + 2] = this.orthonormalBasis.getV().getZ();
+		array[ARRAY_OFFSET_ORTHONORMAL_BASIS_W + 0] = this.orthonormalBasis.getW().getX();
+		array[ARRAY_OFFSET_ORTHONORMAL_BASIS_W + 1] = this.orthonormalBasis.getW().getY();
+		array[ARRAY_OFFSET_ORTHONORMAL_BASIS_W + 2] = this.orthonormalBasis.getW().getZ();
+		array[ARRAY_OFFSET_EYE + 0] = this.eye.getX();
+		array[ARRAY_OFFSET_EYE + 1] = this.eye.getY();
+		array[ARRAY_OFFSET_EYE + 2] = this.eye.getZ();
+		array[ARRAY_OFFSET_APERTURE_RADIUS] = this.apertureRadius;
+		array[ARRAY_OFFSET_FOCAL_DISTANCE] = this.focalDistance;
+		array[ARRAY_OFFSET_RESOLUTION_X] = this.resolutionX;
+		array[ARRAY_OFFSET_RESOLUTION_Y] = this.resolutionY;
+		
+		return array;
 	}
 	
 	/**

@@ -18,6 +18,8 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
+
 import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,7 +31,10 @@ import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
+import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
+import org.dayflower.util.Floats;
+import org.dayflower.util.Longs;
 import org.dayflower.util.Timer;
 
 import com.amd.aparapi.Kernel;
@@ -49,10 +54,13 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	protected float[] radiances;
-	protected float[] rays_$private$6;
-	protected float[] samples;
-	protected long[] seeds;
+	protected float[] cameraArray;
+	protected float[] pixelArray;
+	protected float[] radianceArray;
+	protected float[] rayArray_$private$6;
+	protected int resolutionX;
+	protected int resolutionY;
+	protected long[] seedArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -73,10 +81,11 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
 	 */
 	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
-		this.radiances = new float[0];
-		this.rays_$private$6 = new float[0];
-		this.samples = new float[0];
-		this.seeds = new long[0];
+		this.cameraArray = new float[0];
+		this.pixelArray = new float[0];
+		this.radianceArray = new float[0];
+		this.rayArray_$private$6 = new float[0];
+		this.seedArray = new long[0];
 		this.isClearing = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
 		this.rendererConfiguration = new AtomicReference<>(Objects.requireNonNull(rendererConfiguration, "rendererConfiguration == null"));
@@ -162,27 +171,30 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 			
 			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
-			final float[] radiances = doGetRadiances();
-			final float[] samples = doGetSamples();
+			final float[] pixelArray = doGetPixelArray();
+			final float[] radianceArray = doGetRadianceArray();
 			
+//			TODO: Fix the following bottleneck using the Kernel itself in a different mode! It taks around 200 milliseconds per render pass.
 			for(int y = 0; y < resolutionY; y++) {
 				for(int x = 0; x < resolutionX; x++) {
 					final int index = y * resolutionX + x;
-					final int indexRadiances = index * 3;
-					final int indexSamples = index * 2;
+					final int indexPixelArray = index * 2;
+					final int indexRadianceArray = index * 3;
 					
-					final float r = radiances[indexRadiances + 0];
-					final float g = radiances[indexRadiances + 1];
-					final float b = radiances[indexRadiances + 2];
+					final float r = radianceArray[indexRadianceArray + 0];
+					final float g = radianceArray[indexRadianceArray + 1];
+					final float b = radianceArray[indexRadianceArray + 2];
 					
-					final float sampleX = samples[indexSamples + 0];
-					final float sampleY = samples[indexSamples + 1];
+					final float imageX = x;
+					final float imageY = y;
+					final float pixelX = pixelArray[indexPixelArray + 0];
+					final float pixelY = pixelArray[indexPixelArray + 1];
 					
 					final Color3F colorRGB = new Color3F(r, g, b);
 					final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
 					
 					if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
-						image.filmAddColorXYZ(x + sampleX, y + sampleY, colorXYZ);
+						image.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
 					}
 				}
 			}
@@ -267,12 +279,122 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	public final void setup() {
 		setExplicit(true);
 		
-		doSetupRadiances();
-		doSetupSamples();
-		doSetupSeeds();
+		doSetupPixelArray();
+		doSetupRadianceArray();
+		doSetupResolution();
+		doSetupScene();
+		doSetupSeedArray();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	protected final boolean cameraGenerateRay() {
+//		Retrieve the image coordinates:
+		final float imageX = getImageX();
+		final float imageY = getImageY();
+		
+//		Retrieve the pixel coordinates:
+		final float pixelX = random();
+		final float pixelY = random();
+		
+//		Retrieve all values from the 'cameraArray' in the correct order:
+		final float fieldOfViewX = tan(+this.cameraArray[Camera.ARRAY_OFFSET_FIELD_OF_VIEW_X] * 0.5F);
+		final float fieldOfViewY = tan(-this.cameraArray[Camera.ARRAY_OFFSET_FIELD_OF_VIEW_Y] * 0.5F);
+		final float lens = this.cameraArray[Camera.ARRAY_OFFSET_LENS];
+		final float uX = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_U + 0];
+		final float uY = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_U + 1];
+		final float uZ = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_U + 2];
+		final float vX = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_V + 0];
+		final float vY = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_V + 1];
+		final float vZ = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_V + 2];
+		final float wX = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_W + 0];
+		final float wY = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_W + 1];
+		final float wZ = this.cameraArray[Camera.ARRAY_OFFSET_ORTHONORMAL_BASIS_W + 2];
+		final float eyeX = this.cameraArray[Camera.ARRAY_OFFSET_EYE + 0];
+		final float eyeY = this.cameraArray[Camera.ARRAY_OFFSET_EYE + 1];
+		final float eyeZ = this.cameraArray[Camera.ARRAY_OFFSET_EYE + 2];
+		final float apertureRadius = this.cameraArray[Camera.ARRAY_OFFSET_APERTURE_RADIUS];
+		final float focalDistance = this.cameraArray[Camera.ARRAY_OFFSET_FOCAL_DISTANCE];
+		final float resolutionX = this.cameraArray[Camera.ARRAY_OFFSET_RESOLUTION_X];
+		final float resolutionY = this.cameraArray[Camera.ARRAY_OFFSET_RESOLUTION_Y];
+		
+//		Compute the camera coordinates:
+		final float cameraX = 2.0F * ((imageX + pixelX) / (resolutionX - 1.0F)) - 1.0F;
+		final float cameraY = 2.0F * ((imageY + pixelY) / (resolutionY - 1.0F)) - 1.0F;
+		
+//		Compute the 'wFactor' that is used for the fisheye lens:
+		float wFactor = 1.0F;
+		
+		if(lens == 0.0F) {
+			final float dotProduct = cameraX * cameraX + cameraY * cameraY;
+			
+			if(dotProduct > 1.0F) {
+				return false;
+			}
+			
+			wFactor = sqrt(1.0F - dotProduct);
+		}
+		
+//		Sample the disk with a uniform distribution:
+		final float u = random();
+		final float v = random();
+		final float r = sqrt(u);
+		final float theta = PI_MULTIPLIED_BY_2 * v;
+		final float diskX = r * cos(theta);
+		final float diskY = r * sin(theta);
+		
+//		Compute the point on the plane one unit away from the eye:
+		final float pointOnPlaneOneUnitAwayFromEyeX = (uX * fieldOfViewX * cameraX) + (vX * fieldOfViewY * cameraY) + (eyeX + wX * wFactor);
+		final float pointOnPlaneOneUnitAwayFromEyeY = (uY * fieldOfViewX * cameraX) + (vY * fieldOfViewY * cameraY) + (eyeY + wY * wFactor);
+		final float pointOnPlaneOneUnitAwayFromEyeZ = (uZ * fieldOfViewX * cameraX) + (vZ * fieldOfViewY * cameraY) + (eyeZ + wZ * wFactor);
+		
+//		Compute the point on the image plane:
+		final float pointOnImagePlaneX = eyeX + (pointOnPlaneOneUnitAwayFromEyeX - eyeX) * focalDistance;
+		final float pointOnImagePlaneY = eyeY + (pointOnPlaneOneUnitAwayFromEyeY - eyeY) * focalDistance;
+		final float pointOnImagePlaneZ = eyeZ + (pointOnPlaneOneUnitAwayFromEyeZ - eyeZ) * focalDistance;
+		
+//		Compute the ray origin:
+		final float originX = apertureRadius > 0.00001F ? eyeX + ((uX * diskX * apertureRadius) + (vX * diskY * apertureRadius)) : eyeX;
+		final float originY = apertureRadius > 0.00001F ? eyeY + ((uY * diskX * apertureRadius) + (vY * diskY * apertureRadius)) : eyeY;
+		final float originZ = apertureRadius > 0.00001F ? eyeZ + ((uZ * diskX * apertureRadius) + (vZ * diskY * apertureRadius)) : eyeZ;
+		
+//		Compute the ray direction:
+		final float directionX = pointOnImagePlaneX - originX;
+		final float directionY = pointOnImagePlaneY - originY;
+		final float directionZ = pointOnImagePlaneZ - originZ;
+		final float directionLengthReciprocal = rsqrt(directionX * directionX + directionY * directionY + directionZ * directionZ);
+		final float directionNormalizedX = directionX * directionLengthReciprocal;
+		final float directionNormalizedY = directionY * directionLengthReciprocal;
+		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
+		
+//		Compute offsets:
+		final int pixelArrayOffset = getGlobalId() * 2;
+		
+//		Fill in the ray array:
+		this.rayArray_$private$6[0] = originX;
+		this.rayArray_$private$6[1] = originY;
+		this.rayArray_$private$6[2] = originZ;
+		this.rayArray_$private$6[3] = directionNormalizedX;
+		this.rayArray_$private$6[4] = directionNormalizedY;
+		this.rayArray_$private$6[5] = directionNormalizedZ;
+		
+//		Fill in the pixel array:
+		this.pixelArray[pixelArrayOffset + 0] = pixelX;
+		this.pixelArray[pixelArrayOffset + 1] = pixelY;
+		
+		return true;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float getImageX() {
+		return getGlobalId() % this.resolutionX;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float getImageY() {
+		return getGlobalId() / this.resolutionX;
+	}
 	
 	/**
 	 * Returns a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive).
@@ -285,56 +407,61 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private float[] doGetRadiances() {
-		get(this.radiances);
-		
-		return this.radiances;
+	private Image doGetImage() {
+		return getRendererConfiguration().getImage();
 	}
 	
-	private float[] doGetSamples() {
-		get(this.samples);
+	private Scene doGetScene() {
+		return getRendererConfiguration().getScene();
+	}
+	
+	private float[] doGetAndReturn(final float[] array) {
+		get(array);
 		
-		return this.samples;
+		return array;
+	}
+	
+	private float[] doGetPixelArray() {
+		return doGetAndReturn(this.pixelArray);
+	}
+	
+	private float[] doGetRadianceArray() {
+		return doGetAndReturn(this.radianceArray);
+	}
+	
+	private int doGetResolution() {
+		return doGetImage().getResolution();
 	}
 	
 	private int doNext(final int bits) {
 		final int index = getGlobalId();
 		
-		final long oldSeed = this.seeds[index];
+		final long oldSeed = this.seedArray[index];
 		final long newSeed = (oldSeed * PRNG_MULTIPLIER + PRNG_ADDEND) & PRNG_MASK;
 		
-		this.seeds[index] = newSeed;
+		this.seedArray[index] = newSeed;
 		
 		return (int)(newSeed >>> (48 - bits));
 	}
 	
-	private void doSetupRadiances() {
-		this.radiances = new float[this.rendererConfiguration.get().getImage().getResolution() * 3];
-		
-		for(int i = 0; i < this.radiances.length; i++) {
-			this.radiances[i] = 0.0F;
-		}
-		
-		put(this.radiances);
+	private void doSetupPixelArray() {
+		put(this.pixelArray = Floats.array(doGetResolution() * 2, 0.0F));
 	}
 	
-	private void doSetupSamples() {
-		this.samples = new float[this.rendererConfiguration.get().getImage().getResolution() * 2];
-		
-		for(int i = 0; i < this.samples.length; i++) {
-			this.samples[i] = 0.0F;
-		}
-		
-		put(this.samples);
+	private void doSetupRadianceArray() {
+		put(this.radianceArray = Floats.array(doGetResolution() * 3, 0.0F));
 	}
 	
-	private void doSetupSeeds() {
-		this.seeds = new long[this.rendererConfiguration.get().getImage().getResolution()];
-		
-		for(int i = 0; i < this.seeds.length; i++) {
-			this.seeds[i] = ThreadLocalRandom.current().nextLong();
-		}
-		
-		put(this.seeds);
+	private void doSetupResolution() {
+		this.resolutionX = doGetImage().getResolutionX();
+		this.resolutionY = doGetImage().getResolutionY();
+	}
+	
+	private void doSetupScene() {
+		put(this.cameraArray = doGetScene().getCamera().toArray());
+	}
+	
+	private void doSetupSeedArray() {
+		put(this.seedArray = Longs.array(doGetResolution(), () -> ThreadLocalRandom.current().nextLong()));
 	}
 }

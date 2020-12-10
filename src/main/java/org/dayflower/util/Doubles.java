@@ -19,7 +19,9 @@
 package org.dayflower.util;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.DoubleSupplier;
 
 /**
  * The class {@code Doubles} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.
@@ -1955,6 +1957,31 @@ public class Doubles {
 	 */
 	public static double[] array(final int length) {
 		return array(length, 0.0D);
+	}
+	
+	/**
+	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code double} values from {@code doubleSupplier}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code doubleSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param length the length of the {@code double[]}
+	 * @param doubleSupplier the {@code DoubleSupplier} to fill the {@code double[]} with
+	 * @return a {@code double[]} with a length of {@code length} and is filled with {@code double} values from {@code doubleSupplier}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code doubleSupplier} is {@code null}
+	 */
+	public static double[] array(final int length, final DoubleSupplier doubleSupplier) {
+		final double[] array = new double[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Objects.requireNonNull(doubleSupplier, "doubleSupplier == null");
+		
+		for(int i = 0; i < array.length; i++) {
+			array[i] = doubleSupplier.getAsDouble();
+		}
+		
+		return array;
 	}
 	
 	/**

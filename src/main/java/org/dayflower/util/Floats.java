@@ -19,6 +19,7 @@
 package org.dayflower.util;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -1956,6 +1957,31 @@ public final class Floats {
 	 */
 	public static float[] array(final int length) {
 		return array(length, 0.0F);
+	}
+	
+	/**
+	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code float} values from {@code floatSupplier}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code floatSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param length the length of the {@code float[]}
+	 * @param floatSupplier the {@link FloatSupplier} to fill the {@code float[]} with
+	 * @return a {@code float[]} with a length of {@code length} and is filled with {@code float} values from {@code floatSupplier}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code floatSupplier} is {@code null}
+	 */
+	public static float[] array(final int length, final FloatSupplier floatSupplier) {
+		final float[] array = new float[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Objects.requireNonNull(floatSupplier, "floatSupplier == null");
+		
+		for(int i = 0; i < array.length; i++) {
+			array[i] = floatSupplier.getAsFloat();
+		}
+		
+		return array;
 	}
 	
 	/**

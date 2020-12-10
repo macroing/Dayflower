@@ -52,8 +52,8 @@ public final class GPURenderer extends AbstractGPURenderer {
 		final float g = random();
 		final float b = random();
 		
-		this.radiances[index + 0] = r;
-		this.radiances[index + 1] = g;
-		this.radiances[index + 2] = b;
+		this.radianceArray[index + 0] = r;
+		this.radianceArray[index + 1] = g;
+		this.radianceArray[index + 2] = b;
 	}
 }

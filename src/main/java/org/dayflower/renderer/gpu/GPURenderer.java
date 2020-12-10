@@ -48,12 +48,20 @@ public final class GPURenderer extends AbstractGPURenderer {
 	public void run() {
 		final int index = getGlobalId() * 3;
 		
-		final float r = random();
-		final float g = random();
-		final float b = random();
-		
-		this.radianceArray[index + 0] = r;
-		this.radianceArray[index + 1] = g;
-		this.radianceArray[index + 2] = b;
+		if(cameraGenerateRay()) {
+			if(intersectsSphere3F()) {
+				this.radianceArray[index + 0] = 1.0F;
+				this.radianceArray[index + 1] = 0.0F;
+				this.radianceArray[index + 2] = 0.0F;
+			} else {
+				this.radianceArray[index + 0] = 0.0F;
+				this.radianceArray[index + 1] = 0.0F;
+				this.radianceArray[index + 2] = 0.0F;
+			}
+		} else {
+			this.radianceArray[index + 0] = 1.0F;
+			this.radianceArray[index + 1] = 1.0F;
+			this.radianceArray[index + 2] = 1.0F;
+		}
 	}
 }

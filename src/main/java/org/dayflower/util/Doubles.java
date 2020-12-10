@@ -2019,7 +2019,7 @@ public class Doubles {
 		
 		final double discriminantSquared = b * b - 4.0D * a * c;
 		
-		if(equal(discriminantSquared, 0.0D)) {
+		if(isZero(discriminantSquared)) {
 			final double q = -0.5D * b / a;
 			
 			final double result0 = q;

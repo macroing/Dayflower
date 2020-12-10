@@ -309,39 +309,39 @@ public final class Point3D implements Node {
 	}
 	
 	/**
-	 * Returns a {@code Map} that maps distinct {@code Point3D} instances to their indices.
+	 * Returns a {@code Map} that maps distinct {@code Point3D} instances to their offsets.
 	 * <p>
 	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Point3D.mapDistinctToIndices(distinctPoints, 1);
+	 * Point3D.mapDistinctToOffsets(distinctPoints, 1);
 	 * }
 	 * </pre>
 	 * 
 	 * @param distinctPoints a {@code List} with distinct {@code Point3D} instances
-	 * @return a {@code Map} that maps distinct {@code Point3D} instances to their indices
+	 * @return a {@code Map} that maps distinct {@code Point3D} instances to their offsets
 	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
 	 */
-	public static Map<Point3D, Integer> mapDistinctToIndices(final List<Point3D> distinctPoints) {
-		return mapDistinctToIndices(distinctPoints, 1);
+	public static Map<Point3D, Integer> mapDistinctToOffsets(final List<Point3D> distinctPoints) {
+		return mapDistinctToOffsets(distinctPoints, 1);
 	}
 	
 	/**
-	 * Returns a {@code Map} that maps distinct {@code Point3D} instances to their indices.
+	 * Returns a {@code Map} that maps distinct {@code Point3D} instances to their offsets.
 	 * <p>
 	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code sizePoint} is less than {@code 1} or at least one index is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code sizePoint} is less than {@code 1} or at least one offset is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param distinctPoints a {@code List} with distinct {@code Point3D} instances
 	 * @param sizePoint the size of a {@code Point3D} instance
-	 * @return a {@code Map} that maps distinct {@code Point3D} instances to their indices
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sizePoint} is less than {@code 1} or at least one index is less than {@code 0}
+	 * @return a {@code Map} that maps distinct {@code Point3D} instances to their offsets
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sizePoint} is less than {@code 1} or at least one offset is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
 	 */
-	public static Map<Point3D, Integer> mapDistinctToIndices(final List<Point3D> distinctPoints, final int sizePoint) {
+	public static Map<Point3D, Integer> mapDistinctToOffsets(final List<Point3D> distinctPoints, final int sizePoint) {
 		ParameterArguments.requireNonNullList(distinctPoints, "distinctPoints");
 		ParameterArguments.requireRange(sizePoint, 1, Integer.MAX_VALUE, "sizePoint");
 		

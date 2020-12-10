@@ -54,6 +54,11 @@ public final class Curves3F implements Shape3F {
 	 */
 	public static final String NAME = "Curves";
 	
+	/**
+	 * The ID of this {@code Curves3F} class.
+	 */
+	public static final int ID = 3;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final List<Curve3F> curves;
@@ -341,6 +346,16 @@ public final class Curves3F implements Shape3F {
 	@Override
 	public float[] toArray() {
 		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Curves3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Curves3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

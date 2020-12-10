@@ -70,6 +70,11 @@ public final class TriangleMesh3F implements Shape3F {
 	 */
 	public static final String NAME = "Triangle Mesh";
 	
+	/**
+	 * The ID of this {@code TriangleMesh3F} class.
+	 */
+	public static final int ID = 10;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final BVHNode bVHNode;
@@ -478,6 +483,16 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public float[] toArray() {
 		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code TriangleMesh3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code TriangleMesh3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

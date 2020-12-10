@@ -69,6 +69,11 @@ public final class RectangularCuboid3F implements Shape3F {
 	 */
 	public static final int ARRAY_SIZE = 6;
 	
+	/**
+	 * The ID of this {@code RectangularCuboid3F} class.
+	 */
+	public static final int ID = 6;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Point3F maximum;
@@ -434,6 +439,16 @@ public final class RectangularCuboid3F implements Shape3F {
 		array[ARRAY_OFFSET_MINIMUM + 2] = this.minimum.getZ();
 		
 		return array;
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code RectangularCuboid3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code RectangularCuboid3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

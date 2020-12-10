@@ -148,6 +148,13 @@ public interface Shape3F extends Node {
 	 */
 	float[] toArray();
 	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Shape3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Shape3F} instance
+	 */
+	int getID();
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

@@ -218,39 +218,39 @@ public final class Point2F implements Node {
 	}
 	
 	/**
-	 * Returns a {@code Map} that maps distinct {@code Point2F} instances to their indices.
+	 * Returns a {@code Map} that maps distinct {@code Point2F} instances to their offsets.
 	 * <p>
 	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Point2F.mapDistinctToIndices(distinctPoints, 1);
+	 * Point2F.mapDistinctToOffsets(distinctPoints, 1);
 	 * }
 	 * </pre>
 	 * 
 	 * @param distinctPoints a {@code List} with distinct {@code Point2F} instances
-	 * @return a {@code Map} that maps distinct {@code Point2F} instances to their indices
+	 * @return a {@code Map} that maps distinct {@code Point2F} instances to their offsets
 	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
 	 */
-	public static Map<Point2F, Integer> mapDistinctToIndices(final List<Point2F> distinctPoints) {
-		return mapDistinctToIndices(distinctPoints, 1);
+	public static Map<Point2F, Integer> mapDistinctToOffsets(final List<Point2F> distinctPoints) {
+		return mapDistinctToOffsets(distinctPoints, 1);
 	}
 	
 	/**
-	 * Returns a {@code Map} that maps distinct {@code Point2F} instances to their indices.
+	 * Returns a {@code Map} that maps distinct {@code Point2F} instances to their offsets.
 	 * <p>
 	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code sizePoint} is less than {@code 1} or at least one index is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code sizePoint} is less than {@code 1} or at least one offset is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param distinctPoints a {@code List} with distinct {@code Point2F} instances
 	 * @param sizePoint the size of a {@code Point2F} instance
-	 * @return a {@code Map} that maps distinct {@code Point2F} instances to their indices
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sizePoint} is less than {@code 1} or at least one index is less than {@code 0}
+	 * @return a {@code Map} that maps distinct {@code Point2F} instances to their offsets
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sizePoint} is less than {@code 1} or at least one offset is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
 	 */
-	public static Map<Point2F, Integer> mapDistinctToIndices(final List<Point2F> distinctPoints, final int sizePoint) {
+	public static Map<Point2F, Integer> mapDistinctToOffsets(final List<Point2F> distinctPoints, final int sizePoint) {
 		ParameterArguments.requireNonNullList(distinctPoints, "distinctPoints");
 		ParameterArguments.requireRange(sizePoint, 1, Integer.MAX_VALUE, "sizePoint");
 		

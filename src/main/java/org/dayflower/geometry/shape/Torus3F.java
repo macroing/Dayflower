@@ -77,6 +77,11 @@ public final class Torus3F implements Shape3F {
 	 */
 	public static final int ARRAY_SIZE = 2;
 	
+	/**
+	 * The ID of this {@code Torus3F} class.
+	 */
+	public static final int ID = 8;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final BoundingVolume3F boundingVolume;
@@ -481,6 +486,16 @@ public final class Torus3F implements Shape3F {
 		array[ARRAY_OFFSET_RADIUS_OUTER] = this.radiusOuter;
 		
 		return array;
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Torus3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Torus3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

@@ -35,6 +35,10 @@ import static org.dayflower.util.Floats.solveQuadraticSystem;
 import static org.dayflower.util.Floats.sqrt;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -49,8 +53,11 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
+import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Sphere3F} denotes a 3-dimensional sphere that uses the data type {@code float}.
@@ -80,6 +87,11 @@ public final class Sphere3F implements Shape3F {
 	 * The size of the {@code float[]}.
 	 */
 	public static final int ARRAY_SIZE = 4;
+	
+	/**
+	 * The ID of this {@code Sphere3F} class.
+	 */
+	public static final int ID = 7;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -558,6 +570,16 @@ public final class Sphere3F implements Shape3F {
 	}
 	
 	/**
+	 * Returns an {@code int} with the ID of this {@code Sphere3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Sphere3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Sphere3F} instance.
 	 * 
 	 * @return a hash code for this {@code Sphere3F} instance
@@ -565,6 +587,99 @@ public final class Sphere3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.center, Float.valueOf(this.radius));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code List} with all {@code Sphere3F} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all {@code Sphere3F} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Sphere3F> filterAll(final Node node) {
+		return NodeFilter.filter(node, NodeFilter.any(), Sphere3F.class);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@code Sphere3F} instances in {@code node}.
+	 * <p>
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param node a {@link Node} instance
+	 * @return a {@code List} with all distinct {@code Sphere3F} instances in {@code node}
+	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 */
+	public static List<Sphere3F> filterAllDistinct(final Node node) {
+		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
+	
+	/**
+	 * Returns a {@code Map} that maps distinct {@code Sphere3F} instances to their offsets.
+	 * <p>
+	 * If {@code distinctSpheres} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Sphere3F.mapDistinctToOffsets(distinctSpheres, 1);
+	 * }
+	 * </pre>
+	 * 
+	 * @param distinctSpheres a {@code List} with distinct {@code Sphere3F} instances
+	 * @return a {@code Map} that maps distinct {@code Sphere3F} instances to their offsets
+	 * @throws NullPointerException thrown if, and only if, {@code distinctSpheres} or at least one of its elements are {@code null}
+	 */
+	public static Map<Sphere3F, Integer> mapDistinctToOffsets(final List<Sphere3F> distinctSpheres) {
+		return mapDistinctToOffsets(distinctSpheres, 1);
+	}
+	
+	/**
+	 * Returns a {@code Map} that maps distinct {@code Sphere3F} instances to their offsets.
+	 * <p>
+	 * If {@code distinctSpheres} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sizeSphere} is less than {@code 1} or at least one offset is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param distinctSpheres a {@code List} with distinct {@code Sphere3F} instances
+	 * @param sizeSphere the size of a {@code Sphere3F} instance
+	 * @return a {@code Map} that maps distinct {@code Sphere3F} instances to their offsets
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sizeSphere} is less than {@code 1} or at least one offset is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code distinctSpheres} or at least one of its elements are {@code null}
+	 */
+	public static Map<Sphere3F, Integer> mapDistinctToOffsets(final List<Sphere3F> distinctSpheres, final int sizeSphere) {
+		ParameterArguments.requireNonNullList(distinctSpheres, "distinctSpheres");
+		ParameterArguments.requireRange(sizeSphere, 1, Integer.MAX_VALUE, "sizeSphere");
+		
+		final Map<Sphere3F, Integer> map = new LinkedHashMap<>();
+		
+		for(int i = 0; i < distinctSpheres.size(); i++) {
+			map.put(distinctSpheres.get(i), Integer.valueOf(ParameterArguments.requireRangef(i * sizeSphere, 0, Integer.MAX_VALUE, "(%d * %d)", Integer.valueOf(i), Integer.valueOf(sizeSphere))));
+		}
+		
+		return map;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of {@code spheres}.
+	 * <p>
+	 * If either {@code spheres} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param spheres a {@code List} of {@code Sphere3F} instances
+	 * @return a {@code float[]} representation of {@code spheres}
+	 * @throws NullPointerException thrown if, and only if, either {@code spheres} or at least one of its elements are {@code null}
+	 */
+	public static float[] toArray(final List<Sphere3F> spheres) {
+		final float[] array = new float[spheres.size() * ARRAY_SIZE];
+		
+		for(int i = 0, j = 0; i < spheres.size(); i++, j += ARRAY_SIZE) {
+			System.arraycopy(spheres.get(i).toArray(), 0, array, j, ARRAY_SIZE);
+		}
+		
+		return array;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

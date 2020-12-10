@@ -70,6 +70,11 @@ public final class Curve3F implements Shape3F {
 	 */
 	public static final String NAME = "Curve";
 	
+	/**
+	 * The ID of this {@code Curve3F} class.
+	 */
+	public static final int ID = 2;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Data data;
@@ -504,6 +509,16 @@ public final class Curve3F implements Shape3F {
 	@Override
 	public float[] toArray() {
 		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Curve3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Curve3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

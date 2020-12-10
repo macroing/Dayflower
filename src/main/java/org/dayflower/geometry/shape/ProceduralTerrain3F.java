@@ -51,6 +51,11 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 */
 	public static final String NAME = "Procedural Terrain";
 	
+	/**
+	 * The ID of this {@code ProceduralTerrain3F} class.
+	 */
+	public static final int ID = 5;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final FloatBinaryOperator floatBinaryOperator;
@@ -294,6 +299,16 @@ public final class ProceduralTerrain3F implements Shape3F {
 	@Override
 	public float[] toArray() {
 		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code ProceduralTerrain3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code ProceduralTerrain3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

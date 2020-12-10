@@ -38,6 +38,93 @@ import org.dayflower.node.Node;
  * @author J&#246;rgen Lundgren
  */
 public final class Matrix44D implements Node {
+	/**
+	 * The offset for the element at index 0 or row 1 and column 1 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_1_1 = 0;
+	
+	/**
+	 * The offset for the element at index 1 or row 1 and column 2 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_1_2 = 1;
+	
+	/**
+	 * The offset for the element at index 2 or row 1 and column 3 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_1_3 = 2;
+	
+	/**
+	 * The offset for the element at index 3 or row 1 and column 4 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_1_4 = 3;
+	
+	/**
+	 * The offset for the element at index 4 or row 2 and column 1 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_2_1 = 4;
+	
+	/**
+	 * The offset for the element at index 5 or row 2 and column 2 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_2_2 = 5;
+	
+	/**
+	 * The offset for the element at index 6 or row 2 and column 3 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_2_3 = 6;
+	
+	/**
+	 * The offset for the element at index 7 or row 2 and column 4 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_2_4 = 7;
+	
+	/**
+	 * The offset for the element at index 8 or row 3 and column 1 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_3_1 = 8;
+	
+	/**
+	 * The offset for the element at index 9 or row 3 and column 2 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_3_2 = 9;
+	
+	/**
+	 * The offset for the element at index 10 or row 3 and column 3 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_3_3 = 10;
+	
+	/**
+	 * The offset for the element at index 11 or row 3 and column 4 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_3_4 = 11;
+	
+	/**
+	 * The offset for the element at index 12 or row 4 and column 1 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_4_1 = 12;
+	
+	/**
+	 * The offset for the element at index 13 or row 4 and column 2 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_4_2 = 13;
+	
+	/**
+	 * The offset for the element at index 14 or row 4 and column 3 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_4_3 = 14;
+	
+	/**
+	 * The offset for the element at index 15 or row 4 and column 4 in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_ELEMENT_4_4 = 15;
+	
+	/**
+	 * The size of the {@code double[]}.
+	 */
+	public static final int ARRAY_SIZE = 16;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final double element11;
 	private final double element12;
 	private final double element13;
@@ -425,6 +512,34 @@ public final class Matrix44D implements Node {
 	 */
 	public double getElement44() {
 		return this.element44;
+	}
+	
+	/**
+	 * Returns a {@code double[]} representation of this {@code Matrix44D} instance.
+	 * 
+	 * @return a {@code double[]} representation of this {@code Matrix44D} instance
+	 */
+	public double[] toArray() {
+		final double[] array = new double[ARRAY_SIZE];
+		
+		array[ARRAY_OFFSET_ELEMENT_1_1] = this.element11;
+		array[ARRAY_OFFSET_ELEMENT_1_2] = this.element12;
+		array[ARRAY_OFFSET_ELEMENT_1_3] = this.element13;
+		array[ARRAY_OFFSET_ELEMENT_1_4] = this.element14;
+		array[ARRAY_OFFSET_ELEMENT_2_1] = this.element21;
+		array[ARRAY_OFFSET_ELEMENT_2_2] = this.element22;
+		array[ARRAY_OFFSET_ELEMENT_2_3] = this.element23;
+		array[ARRAY_OFFSET_ELEMENT_2_4] = this.element24;
+		array[ARRAY_OFFSET_ELEMENT_3_1] = this.element31;
+		array[ARRAY_OFFSET_ELEMENT_3_2] = this.element32;
+		array[ARRAY_OFFSET_ELEMENT_3_3] = this.element33;
+		array[ARRAY_OFFSET_ELEMENT_3_4] = this.element34;
+		array[ARRAY_OFFSET_ELEMENT_4_1] = this.element41;
+		array[ARRAY_OFFSET_ELEMENT_4_2] = this.element42;
+		array[ARRAY_OFFSET_ELEMENT_4_3] = this.element43;
+		array[ARRAY_OFFSET_ELEMENT_4_4] = this.element44;
+		
+		return array;
 	}
 	
 	/**

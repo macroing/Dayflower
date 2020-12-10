@@ -21,35 +21,35 @@ package org.dayflower.renderer.gpu;
 import java.util.Objects;
 
 final class CompiledScene {
-	private final float[] matrix44Fs;
-	private final float[] point2Fs;
-	private final float[] point3Fs;
-	private final float[] vector3Fs;
+	private final float[] cameraArray;
+	private final float[] matrix44FArray;
+	private final float[] sphere3FArray;
+	private final int[] primitiveArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public CompiledScene(final float[] matrix44Fs, final float[] point2Fs, final float[] point3Fs, final float[] vector3Fs) {
-		this.matrix44Fs = Objects.requireNonNull(matrix44Fs, "matrix44Fs == null");
-		this.point2Fs = Objects.requireNonNull(point2Fs, "point2Fs == null");
-		this.point3Fs = Objects.requireNonNull(point3Fs, "point3Fs == null");
-		this.vector3Fs = Objects.requireNonNull(vector3Fs, "vector3Fs == null");
+	public CompiledScene(final float[] cameraArray, final float[] matrix44FArray, final float[] sphere3FArray, final int[] primitiveArray) {
+		this.cameraArray = Objects.requireNonNull(cameraArray, "cameraArray == null");
+		this.matrix44FArray = Objects.requireNonNull(matrix44FArray, "matrix44FArray == null");
+		this.sphere3FArray = Objects.requireNonNull(sphere3FArray, "sphere3FArray == null");
+		this.primitiveArray = Objects.requireNonNull(primitiveArray, "primitiveArray == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public float[] getMatrix44Fs() {
-		return this.matrix44Fs;
+	public float[] getCameraArray() {
+		return this.cameraArray;
 	}
 	
-	public float[] getPoint2Fs() {
-		return this.point2Fs;
+	public float[] getMatrix44FArray() {
+		return this.matrix44FArray;
 	}
 	
-	public float[] getPoint3Fs() {
-		return this.point3Fs;
+	public float[] getSphere3FArray() {
+		return this.sphere3FArray;
 	}
 	
-	public float[] getVector3Fs() {
-		return this.vector3Fs;
+	public int[] getPrimitiveArray() {
+		return this.primitiveArray;
 	}
 }

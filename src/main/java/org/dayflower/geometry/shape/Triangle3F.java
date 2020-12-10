@@ -54,6 +54,11 @@ public final class Triangle3F implements Shape3F {
 	 */
 	public static final String NAME = "Triangle";
 	
+	/**
+	 * The ID of this {@code Triangle3F} class.
+	 */
+	public static final int ID = 9;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Vector3F surfaceNormal;
@@ -527,6 +532,16 @@ public final class Triangle3F implements Shape3F {
 	@Override
 	public float[] toArray() {
 		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Triangle3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Triangle3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

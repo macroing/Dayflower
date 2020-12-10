@@ -2019,7 +2019,7 @@ public final class Floats {
 		
 		final float discriminantSquared = b * b - 4.0F * a * c;
 		
-		if(equal(discriminantSquared, 0.0F)) {
+		if(isZero(discriminantSquared)) {
 			final float q = -0.5F * b / a;
 			
 			final float result0 = q;

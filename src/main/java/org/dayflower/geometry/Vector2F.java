@@ -235,39 +235,39 @@ public final class Vector2F implements Node {
 	}
 	
 	/**
-	 * Returns a {@code Map} that maps distinct {@code Vector2F} instances to their indices.
+	 * Returns a {@code Map} that maps distinct {@code Vector2F} instances to their offsets.
 	 * <p>
 	 * If {@code distinctVectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Vector2F.mapDistinctToIndices(distinctVectors, 1);
+	 * Vector2F.mapDistinctToOffsets(distinctVectors, 1);
 	 * }
 	 * </pre>
 	 * 
 	 * @param distinctVectors a {@code List} with distinct {@code Vector2F} instances
-	 * @return a {@code Map} that maps distinct {@code Vector2F} instances to their indices
+	 * @return a {@code Map} that maps distinct {@code Vector2F} instances to their offsets
 	 * @throws NullPointerException thrown if, and only if, {@code distinctVectors} or at least one of its elements are {@code null}
 	 */
-	public static Map<Vector2F, Integer> mapDistinctToIndices(final List<Vector2F> distinctVectors) {
-		return mapDistinctToIndices(distinctVectors, 1);
+	public static Map<Vector2F, Integer> mapDistinctToOffsets(final List<Vector2F> distinctVectors) {
+		return mapDistinctToOffsets(distinctVectors, 1);
 	}
 	
 	/**
-	 * Returns a {@code Map} that maps distinct {@code Vector2F} instances to their indices.
+	 * Returns a {@code Map} that maps distinct {@code Vector2F} instances to their offsets.
 	 * <p>
 	 * If {@code distinctVectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code sizeVector} is less than {@code 1} or at least one index is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code sizeVector} is less than {@code 1} or at least one offset is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param distinctVectors a {@code List} with distinct {@code Vector2F} instances
 	 * @param sizeVector the size of a {@code Vector2F} instance
-	 * @return a {@code Map} that maps distinct {@code Vector2F} instances to their indices
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sizeVector} is less than {@code 1} or at least one index is less than {@code 0}
+	 * @return a {@code Map} that maps distinct {@code Vector2F} instances to their offsets
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sizeVector} is less than {@code 1} or at least one offset is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code distinctVectors} or at least one of its elements are {@code null}
 	 */
-	public static Map<Vector2F, Integer> mapDistinctToIndices(final List<Vector2F> distinctVectors, final int sizeVector) {
+	public static Map<Vector2F, Integer> mapDistinctToOffsets(final List<Vector2F> distinctVectors, final int sizeVector) {
 		ParameterArguments.requireNonNullList(distinctVectors, "distinctVectors");
 		ParameterArguments.requireRange(sizeVector, 1, Integer.MAX_VALUE, "sizeVector");
 		

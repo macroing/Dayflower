@@ -55,11 +55,14 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	protected float[] cameraArray;
+	protected float[] matrix44FArray;
 	protected float[] pixelArray;
 	protected float[] radianceArray;
-	protected float[] rayArray_$private$6;
+	protected float[] ray3FArray_$private$8;
+	protected float[] sphere3FArray;
 	protected int resolutionX;
 	protected int resolutionY;
+	protected int[] primitiveArray;
 	protected long[] seedArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,9 +85,14 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 */
 	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
 		this.cameraArray = new float[0];
+		this.matrix44FArray = new float[0];
 		this.pixelArray = new float[0];
 		this.radianceArray = new float[0];
-		this.rayArray_$private$6 = new float[0];
+		this.ray3FArray_$private$8 = new float[8];
+		this.sphere3FArray = new float[0];
+		this.resolutionX = 0;
+		this.resolutionY = 0;
+		this.primitiveArray = new int[0];
 		this.seedArray = new long[0];
 		this.isClearing = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
@@ -291,8 +299,8 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 //	TODO: Add Javadocs!
 	protected final boolean cameraGenerateRay() {
 //		Retrieve the image coordinates:
-		final float imageX = getImageX();
-		final float imageY = getImageY();
+		final float imageX = getGlobalId() % this.resolutionX;
+		final float imageY = getGlobalId() / this.resolutionX;
 		
 //		Retrieve the pixel coordinates:
 		final float pixelX = random();
@@ -372,12 +380,14 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		final int pixelArrayOffset = getGlobalId() * 2;
 		
 //		Fill in the ray array:
-		this.rayArray_$private$6[0] = originX;
-		this.rayArray_$private$6[1] = originY;
-		this.rayArray_$private$6[2] = originZ;
-		this.rayArray_$private$6[3] = directionNormalizedX;
-		this.rayArray_$private$6[4] = directionNormalizedY;
-		this.rayArray_$private$6[5] = directionNormalizedZ;
+		this.ray3FArray_$private$8[0] = originX;
+		this.ray3FArray_$private$8[1] = originY;
+		this.ray3FArray_$private$8[2] = originZ;
+		this.ray3FArray_$private$8[3] = directionNormalizedX;
+		this.ray3FArray_$private$8[4] = directionNormalizedY;
+		this.ray3FArray_$private$8[5] = directionNormalizedZ;
+		this.ray3FArray_$private$8[6] = 0.001F;
+		this.ray3FArray_$private$8[7] = Float.MAX_VALUE;
 		
 //		Fill in the pixel array:
 		this.pixelArray[pixelArrayOffset + 0] = pixelX;
@@ -387,13 +397,52 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float getImageX() {
-		return getGlobalId() % this.resolutionX;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final float getImageY() {
-		return getGlobalId() / this.resolutionX;
+	protected final boolean intersectsSphere3F() {
+		final float originX = this.ray3FArray_$private$8[0];
+		final float originY = this.ray3FArray_$private$8[1];
+		final float originZ = this.ray3FArray_$private$8[2];
+		
+		final float directionX = this.ray3FArray_$private$8[3];
+		final float directionY = this.ray3FArray_$private$8[4];
+		final float directionZ = this.ray3FArray_$private$8[5];
+		
+		final float tMinimum = this.ray3FArray_$private$8[6];
+		final float tMaximum = this.ray3FArray_$private$8[7];
+		
+		final float centerX = 0.0F;
+		final float centerY = 0.0F;
+		final float centerZ = 5.0F;
+		
+		final float radius = 1.0F;
+		final float radiusSquared = radius * radius;
+		
+		final float centerToOriginX = originX - centerX;
+		final float centerToOriginY = originY - centerY;
+		final float centerToOriginZ = originZ - centerZ;
+		
+		final float a = directionX * directionX + directionY * directionY + directionZ * directionZ;
+		final float b = 2.0F * (centerToOriginX * directionX + centerToOriginY * directionY + centerToOriginZ * directionZ);
+		final float c = (centerToOriginX * centerToOriginX + centerToOriginY * centerToOriginY + centerToOriginZ * centerToOriginZ) - radiusSquared;
+		
+		final float discriminantSquared = b * b - 4.0F * a * c;
+		
+		if(discriminantSquared == -0.0F || discriminantSquared == +0.0F) {
+			final float q = -0.5F * b / a;
+			final float t = q > tMinimum && q < tMaximum ? q : 0.0F;
+			
+			return t > 0.0F;
+		} else if(discriminantSquared > 0.0F) {
+			final float discriminant = sqrt(discriminantSquared);
+			
+			final float q = -0.5F * (b > 0.0F ? b + discriminant : b - discriminant);
+			final float r = q / a;
+			final float s = c / q;
+			final float t = r < s && r > tMinimum && r < tMaximum ? r : s < r && s > tMinimum && s < tMaximum ? s : 0.0F;
+			
+			return t > 0.0F;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -458,7 +507,12 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 	private void doSetupScene() {
-		put(this.cameraArray = doGetScene().getCamera().toArray());
+		final CompiledScene compiledScene = SceneCompiler.compile(doGetScene());
+		
+		put(this.cameraArray = compiledScene.getCameraArray());
+		put(this.matrix44FArray = compiledScene.getMatrix44FArray());
+		put(this.primitiveArray = compiledScene.getPrimitiveArray());
+		put(this.sphere3FArray = compiledScene.getSphere3FArray());
 	}
 	
 	private void doSetupSeedArray() {

@@ -77,6 +77,11 @@ public final class Plane3F implements Shape3F {
 	 */
 	public static final int ARRAY_SIZE = 12;
 	
+	/**
+	 * The ID of this {@code Plane3F} class.
+	 */
+	public static final int ID = 4;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Point3F a;
@@ -509,6 +514,16 @@ public final class Plane3F implements Shape3F {
 		array[ARRAY_OFFSET_SURFACE_NORMAL + 2] = this.surfaceNormal.getZ();
 		
 		return array;
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Plane3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Plane3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

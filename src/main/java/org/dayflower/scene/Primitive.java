@@ -50,6 +50,53 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class Primitive implements Node {
+	/**
+	 * The offset for the {@link AreaLight} ID in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_AREA_LIGHT_ID = 0;
+	
+	/**
+	 * The offset for the {@link AreaLight} offset in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_AREA_LIGHT_OFFSET = 1;
+	
+	/**
+	 * The offset for the {@link BoundingVolume3F} ID in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_BOUNDING_VOLUME_ID = 2;
+	
+	/**
+	 * The offset for the {@link BoundingVolume3F} offset in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET = 3;
+	
+	/**
+	 * The offset for the {@link Material} ID in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_MATERIAL_ID = 4;
+	
+	/**
+	 * The offset for the {@link Material} offset in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_MATERIAL_OFFSET = 5;
+	
+	/**
+	 * The offset for the {@link Shape3F} ID in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_SHAPE_ID = 6;
+	
+	/**
+	 * The offset for the {@link Shape3F} offset in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_SHAPE_OFFSET = 7;
+	
+	/**
+	 * The size of the {@code int[]}.
+	 */
+	public static final int ARRAY_SIZE = 8;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private AreaLight areaLight;
 	private BoundingVolume3F boundingVolume;
 	private final List<PrimitiveObserver> primitiveObservers;
@@ -508,6 +555,26 @@ public final class Primitive implements Node {
 	}
 	
 	/**
+	 * Returns an {@code int[]} representation of this {@code Primitive} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code Primitive} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_SIZE];
+		
+		array[ARRAY_OFFSET_AREA_LIGHT_ID] = 0;
+		array[ARRAY_OFFSET_AREA_LIGHT_OFFSET] = 0;
+		array[ARRAY_OFFSET_BOUNDING_VOLUME_ID] = 0;
+		array[ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET] = 0;
+		array[ARRAY_OFFSET_MATERIAL_ID] = 0;
+		array[ARRAY_OFFSET_MATERIAL_OFFSET] = 0;
+		array[ARRAY_OFFSET_SHAPE_ID] = this.shape.getID();
+		array[ARRAY_OFFSET_SHAPE_OFFSET] = 0;
+		
+		return array;
+	}
+	
+	/**
 	 * Clears the {@link AreaLight} instance associated with this {@code Primitive} instance.
 	 */
 	public void clearAreaLight() {
@@ -623,6 +690,27 @@ public final class Primitive implements Node {
 		}
 		
 		doSetBoundingVolume();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns an {@code int[]} representation of {@code primitives}.
+	 * <p>
+	 * If either {@code primitives} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param primitives a {@code List} of {@code Primitive} instances
+	 * @return an {@code int[]} representation of {@code primitives}
+	 * @throws NullPointerException thrown if, and only if, either {@code primitives} or at least one of its elements are {@code null}
+	 */
+	public static int[] toArray(final List<Primitive> primitives) {
+		final int[] array = new int[primitives.size() * ARRAY_SIZE];
+		
+		for(int i = 0, j = 0; i < primitives.size(); i++, j += ARRAY_SIZE) {
+			System.arraycopy(primitives.get(i).toArray(), 0, array, j, ARRAY_SIZE);
+		}
+		
+		return array;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

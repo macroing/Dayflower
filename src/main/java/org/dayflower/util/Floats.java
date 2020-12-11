@@ -1942,6 +1942,31 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns a {@code float[]} that is a combination of all {@code float[]} instances in {@code arrays}.
+	 * <p>
+	 * If either {@code arrays} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrays the {@code float[][]} instance to combine into one {@code float[]}
+	 * @return a {@code float[]} that is a combination of all {@code float[]} instances in {@code arrays}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrays} or at least one of its elements are {@code null}
+	 */
+	public static float[] array(final float[]... arrays) {
+		Objects.requireNonNull(arrays, "arrays == null");
+		
+		for(int i = 0; i < arrays.length; i++) {
+			Objects.requireNonNull(arrays[i], "arrays[" + i + "] == null");
+		}
+		
+		try(final FloatArrayOutputStream floatArrayOutputStream = new FloatArrayOutputStream()) {
+			for(final float[] array : arrays) {
+				floatArrayOutputStream.write(array);
+			}
+			
+			return floatArrayOutputStream.toFloatArray();
+		}
+	}
+	
+	/**
 	 * Returns a {@code float[]} with a length of {@code length} and is filled with {@code 0.0F}.
 	 * <p>
 	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.

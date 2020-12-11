@@ -19,7 +19,6 @@
 package org.dayflower.renderer.gpu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +28,7 @@ import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.util.Floats;
+import org.dayflower.util.Lists;
 
 final class SceneCompiler {
 	private SceneCompiler() {
@@ -40,9 +40,10 @@ final class SceneCompiler {
 	public static CompiledScene compile(final Scene scene) {
 //		Retrieve Lists for all distinct types:
 		final List<Sphere3F> distinctSpheres = NodeFilter.filterAllDistinct(scene, Sphere3F.class);
+		final List<Shape3F> distinctShapes = Lists.merge(distinctSpheres);
 		
 //		Retrieve a List of filtered Primitives:
-		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctSpheres);
+		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctShapes);
 		
 //		Retrieve index mappings for all distinct types:
 		final Map<Sphere3F, Integer> distinctToOffsetsSpheres = NodeFilter.mapDistinctToOffsets(distinctSpheres, Sphere3F.ARRAY_SIZE);
@@ -62,12 +63,12 @@ final class SceneCompiler {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static List<Primitive> doFilterPrimitives(final Scene scene, final List<Sphere3F> distinctSpheres) {
-		return scene.getPrimitives().stream().filter(primitive -> distinctSpheres.contains(primitive.getShape())).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	private static List<Primitive> doFilterPrimitives(final Scene scene, final List<Shape3F> distinctShapes) {
+		return scene.getPrimitives().stream().filter(primitive -> distinctShapes.contains(primitive.getShape())).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	}
 	
 	private static float[] doCreateMatrix44FArray(final List<Primitive> primitives) {
-		return Floats.toArray(primitives, primitive -> Floats.toArray(Arrays.asList(primitive.getTransform().getObjectToWorld(), primitive.getTransform().getWorldToObject()), matrix -> matrix.toArray()));
+		return Floats.toArray(primitives, primitive -> primitive.getTransform().toArray());
 	}
 	
 	private static void doPopulatePrimitiveArray(final List<Primitive> primitives, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final int[] primitiveArray) {

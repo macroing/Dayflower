@@ -18,8 +18,6 @@
  */
 package org.dayflower.renderer;
 
-import java.io.File;
-
 import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
@@ -87,9 +85,7 @@ public final class RendererTest {
 	
 	static void doTestGPURenderer() {
 		final
-		Renderer renderer = new GPURenderer(new RendererConfiguration(), new FileRendererObserver(new File("Image.png"), true));
-		renderer.getRendererConfiguration().getScene().getCamera().moveBackward(5.0F);
-		renderer.getRendererConfiguration().setRenderPasses(10);
+		Renderer renderer = doCreateGPURenderer(RenderingAlgorithm.PATH_TRACING, "./resources/scenes/GPUTest.java");
 		renderer.setup();
 		renderer.render();
 		renderer.dispose();
@@ -104,6 +100,19 @@ public final class RendererTest {
 		cPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), cPURenderer.getRendererConfiguration().getScene().getName()));
 		
 		return cPURenderer;
+	}
+	
+	private static GPURenderer doCreateGPURenderer(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
+		final
+		RendererConfiguration rendererConfiguration = doCreateRendererConfiguration(renderingAlgorithm, pathname);
+		rendererConfiguration.setRenderPasses(10);
+		
+		final
+		GPURenderer gPURenderer = new GPURenderer();
+		gPURenderer.setRendererConfiguration(rendererConfiguration);
+		gPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), gPURenderer.getRendererConfiguration().getScene().getName()));
+		
+		return gPURenderer;
 	}
 	
 	private static RendererConfiguration doCreateRendererConfiguration(final RenderingAlgorithm renderingAlgorithm, final String pathname) {

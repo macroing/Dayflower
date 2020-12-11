@@ -19,15 +19,16 @@
 package org.dayflower.renderer.gpu;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Sphere3F;
+import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
-import org.dayflower.scene.Transform;
+import org.dayflower.util.Floats;
 
 final class SceneCompiler {
 	private SceneCompiler() {
@@ -38,18 +39,18 @@ final class SceneCompiler {
 	
 	public static CompiledScene compile(final Scene scene) {
 //		Retrieve Lists for all distinct types:
-		final List<Sphere3F> distinctSpheres = Sphere3F.filterAllDistinct(scene);
+		final List<Sphere3F> distinctSpheres = NodeFilter.filterAllDistinct(scene, Sphere3F.class);
 		
 //		Retrieve a List of filtered Primitives:
 		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctSpheres);
 		
 //		Retrieve index mappings for all distinct types:
-		final Map<Sphere3F, Integer> distinctToOffsetsSpheres = Sphere3F.mapDistinctToOffsets(distinctSpheres, Sphere3F.ARRAY_SIZE);
+		final Map<Sphere3F, Integer> distinctToOffsetsSpheres = NodeFilter.mapDistinctToOffsets(distinctSpheres, Sphere3F.ARRAY_SIZE);
 		
 //		Retrieve float[] or int[] for all types:
 		final float[] cameraArray = scene.getCamera().toArray();
 		final float[] matrix44FArray = doCreateMatrix44FArray(filteredPrimitives);
-		final float[] sphere3FArray = Sphere3F.toArray(distinctSpheres);
+		final float[] sphere3FArray = Floats.toArray(distinctSpheres, sphere -> sphere.toArray());
 		
 		final int[] primitiveArray = Primitive.toArray(filteredPrimitives);
 		
@@ -66,21 +67,7 @@ final class SceneCompiler {
 	}
 	
 	private static float[] doCreateMatrix44FArray(final List<Primitive> primitives) {
-		final float[] array = new float[primitives.size() * Matrix44F.ARRAY_SIZE * 2];
-		
-		for(int i = 0; i < primitives.size(); i++) {
-			final Primitive primitive = primitives.get(i);
-			
-			final Transform transform = primitive.getTransform();
-			
-			final Matrix44F objectToWorld = transform.getObjectToWorld();
-			final Matrix44F worldToObject = transform.getWorldToObject();
-			
-			System.arraycopy(objectToWorld.toArray(), 0, array, i * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE * 0, Matrix44F.ARRAY_SIZE);
-			System.arraycopy(worldToObject.toArray(), 0, array, i * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE * 1, Matrix44F.ARRAY_SIZE);
-		}
-		
-		return array;
+		return Floats.toArray(primitives, primitive -> Floats.toArray(Arrays.asList(primitive.getTransform().getObjectToWorld(), primitive.getTransform().getWorldToObject()), matrix -> matrix.toArray()));
 	}
 	
 	private static void doPopulatePrimitiveArray(final List<Primitive> primitives, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final int[] primitiveArray) {

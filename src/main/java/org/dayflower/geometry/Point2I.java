@@ -18,15 +18,9 @@
  */
 package org.dayflower.geometry;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.node.NodeFilter;
-import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Point2I} denotes a 2-dimensional point with two coordinates, of type {@code int}.
@@ -166,99 +160,15 @@ public final class Point2I implements Node {
 		return Objects.hash(Integer.valueOf(this.component1), Integer.valueOf(this.component2));
 	}
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
-	 * Returns a {@code List} with all {@code Point2I} instances in {@code node}.
-	 * <p>
-	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns a {@code int[]} representation of this {@code Point2I} instance.
 	 * 
-	 * @param node a {@link Node} instance
-	 * @return a {@code List} with all {@code Point2I} instances in {@code node}
-	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
+	 * @return a {@code int[]} representation of this {@code Point2I} instance
 	 */
-	public static List<Point2I> filterAll(final Node node) {
-		return NodeFilter.filter(node, NodeFilter.any(), Point2I.class);
-	}
-	
-	/**
-	 * Returns a {@code List} with all distinct {@code Point2I} instances in {@code node}.
-	 * <p>
-	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param node a {@link Node} instance
-	 * @return a {@code List} with all distinct {@code Point2I} instances in {@code node}
-	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
-	 */
-	public static List<Point2I> filterAllDistinct(final Node node) {
-		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-	}
-	
-	/**
-	 * Returns a {@code Map} that maps distinct {@code Point2I} instances to their offsets.
-	 * <p>
-	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Point2I.mapDistinctToOffsets(distinctPoints, 1);
-	 * }
-	 * </pre>
-	 * 
-	 * @param distinctPoints a {@code List} with distinct {@code Point2I} instances
-	 * @return a {@code Map} that maps distinct {@code Point2I} instances to their offsets
-	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
-	 */
-	public static Map<Point2I, Integer> mapDistinctToOffsets(final List<Point2I> distinctPoints) {
-		return mapDistinctToOffsets(distinctPoints, 1);
-	}
-	
-	/**
-	 * Returns a {@code Map} that maps distinct {@code Point2I} instances to their offsets.
-	 * <p>
-	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code sizePoint} is less than {@code 1} or at least one offset is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param distinctPoints a {@code List} with distinct {@code Point2I} instances
-	 * @param sizePoint the size of a {@code Point2I} instance
-	 * @return a {@code Map} that maps distinct {@code Point2I} instances to their offsets
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sizePoint} is less than {@code 1} or at least one offset is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
-	 */
-	public static Map<Point2I, Integer> mapDistinctToOffsets(final List<Point2I> distinctPoints, final int sizePoint) {
-		ParameterArguments.requireNonNullList(distinctPoints, "distinctPoints");
-		ParameterArguments.requireRange(sizePoint, 1, Integer.MAX_VALUE, "sizePoint");
-		
-		final Map<Point2I, Integer> map = new LinkedHashMap<>();
-		
-		for(int i = 0; i < distinctPoints.size(); i++) {
-			map.put(distinctPoints.get(i), Integer.valueOf(ParameterArguments.requireRangef(i * sizePoint, 0, Integer.MAX_VALUE, "(%d * %d)", Integer.valueOf(i), Integer.valueOf(sizePoint))));
-		}
-		
-		return map;
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of {@code points}.
-	 * <p>
-	 * If either {@code points} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param points a {@code List} of {@code Point2I} instances
-	 * @return an {@code int[]} representation of {@code points}
-	 * @throws NullPointerException thrown if, and only if, either {@code points} or at least one of its elements are {@code null}
-	 */
-	public static int[] toArray(final List<Point2I> points) {
-		final int[] array = new int[points.size() * 2];
-		
-		for(int i = 0, j = 0; i < points.size(); i++, j += 2) {
-			final Point2I point = points.get(i);
-			
-			array[j + 0] = point.component1;
-			array[j + 1] = point.component2;
-		}
-		
-		return array;
+	public int[] toArray() {
+		return new int[] {
+			this.component1,
+			this.component2
+		};
 	}
 }

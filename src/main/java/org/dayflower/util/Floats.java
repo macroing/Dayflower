@@ -19,8 +19,10 @@
 package org.dayflower.util;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * The class {@code Floats} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.
@@ -2127,6 +2129,31 @@ public final class Floats {
 			};
 		} else {
 			return new float[0];
+		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code float[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code float[]} instances
+	 * @return a {@code float[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> float[] toArray(final List<T> objects, final Function<T, float[]> arrayFunction) {
+		ParameterArguments.requireNonNullList(objects, "objects");
+		
+		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
+		
+		try(final FloatArrayOutputStream floatArrayOutputStream = new FloatArrayOutputStream()) {
+			for(final T object : objects) {
+				floatArrayOutputStream.write(arrayFunction.apply(object));
+			}
+			
+			return floatArrayOutputStream.toFloatArray();
 		}
 	}
 	

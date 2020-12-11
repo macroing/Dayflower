@@ -22,15 +22,9 @@ import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.node.NodeFilter;
-import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Point2F} denotes a 2-dimensional point with two coordinates, of type {@code float}.
@@ -180,6 +174,18 @@ public final class Point2F implements Node {
 	}
 	
 	/**
+	 * Returns a {@code float[]} representation of this {@code Point2F} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Point2F} instance
+	 */
+	public float[] toArray() {
+		return new float[] {
+			this.component1,
+			this.component2
+		};
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Point2F} instance.
 	 * 
 	 * @return a hash code for this {@code Point2F} instance
@@ -190,78 +196,6 @@ public final class Point2F implements Node {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@code List} with all {@code Point2F} instances in {@code node}.
-	 * <p>
-	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param node a {@link Node} instance
-	 * @return a {@code List} with all {@code Point2F} instances in {@code node}
-	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
-	 */
-	public static List<Point2F> filterAll(final Node node) {
-		return NodeFilter.filter(node, NodeFilter.any(), Point2F.class);
-	}
-	
-	/**
-	 * Returns a {@code List} with all distinct {@code Point2F} instances in {@code node}.
-	 * <p>
-	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param node a {@link Node} instance
-	 * @return a {@code List} with all distinct {@code Point2F} instances in {@code node}
-	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
-	 */
-	public static List<Point2F> filterAllDistinct(final Node node) {
-		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-	}
-	
-	/**
-	 * Returns a {@code Map} that maps distinct {@code Point2F} instances to their offsets.
-	 * <p>
-	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Point2F.mapDistinctToOffsets(distinctPoints, 1);
-	 * }
-	 * </pre>
-	 * 
-	 * @param distinctPoints a {@code List} with distinct {@code Point2F} instances
-	 * @return a {@code Map} that maps distinct {@code Point2F} instances to their offsets
-	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
-	 */
-	public static Map<Point2F, Integer> mapDistinctToOffsets(final List<Point2F> distinctPoints) {
-		return mapDistinctToOffsets(distinctPoints, 1);
-	}
-	
-	/**
-	 * Returns a {@code Map} that maps distinct {@code Point2F} instances to their offsets.
-	 * <p>
-	 * If {@code distinctPoints} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code sizePoint} is less than {@code 1} or at least one offset is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param distinctPoints a {@code List} with distinct {@code Point2F} instances
-	 * @param sizePoint the size of a {@code Point2F} instance
-	 * @return a {@code Map} that maps distinct {@code Point2F} instances to their offsets
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sizePoint} is less than {@code 1} or at least one offset is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code distinctPoints} or at least one of its elements are {@code null}
-	 */
-	public static Map<Point2F, Integer> mapDistinctToOffsets(final List<Point2F> distinctPoints, final int sizePoint) {
-		ParameterArguments.requireNonNullList(distinctPoints, "distinctPoints");
-		ParameterArguments.requireRange(sizePoint, 1, Integer.MAX_VALUE, "sizePoint");
-		
-		final Map<Point2F, Integer> map = new LinkedHashMap<>();
-		
-		for(int i = 0; i < distinctPoints.size(); i++) {
-			map.put(distinctPoints.get(i), Integer.valueOf(ParameterArguments.requireRangef(i * sizePoint, 0, Integer.MAX_VALUE, "(%d * %d)", Integer.valueOf(i), Integer.valueOf(sizePoint))));
-		}
-		
-		return map;
-	}
 	
 	/**
 	 * Computes texture coordinates from three other texture coordinates via Barycentric interpolation.
@@ -404,27 +338,5 @@ public final class Point2F implements Node {
 	 */
 	public static float distanceSquared(final Point2F eye, final Point2F lookAt) {
 		return Vector2F.direction(eye, lookAt).lengthSquared();
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of {@code points}.
-	 * <p>
-	 * If either {@code points} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param points a {@code List} of {@code Point2F} instances
-	 * @return a {@code float[]} representation of {@code points}
-	 * @throws NullPointerException thrown if, and only if, either {@code points} or at least one of its elements are {@code null}
-	 */
-	public static float[] toArray(final List<Point2F> points) {
-		final float[] array = new float[points.size() * 2];
-		
-		for(int i = 0, j = 0; i < points.size(); i++, j += 2) {
-			final Point2F point = points.get(i);
-			
-			array[j + 0] = point.component1;
-			array[j + 1] = point.component2;
-		}
-		
-		return array;
 	}
 }

@@ -33,17 +33,12 @@ import static org.dayflower.util.Doubles.saturate;
 import static org.dayflower.util.Doubles.sin;
 import static org.dayflower.util.Doubles.sqrt;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
-import org.dayflower.node.NodeFilter;
-import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Vector3D} denotes a 3-dimensional vector with three components, of type {@code double}.
@@ -425,6 +420,19 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns a {@code double[]} representation of this {@code Vector3D} instance.
+	 * 
+	 * @return a {@code double[]} representation of this {@code Vector3D} instance
+	 */
+	public double[] toArray() {
+		return new double[] {
+			this.component1,
+			this.component2,
+			this.component3
+		};
+	}
+	
+	/**
 	 * Returns a hash code for this {@code Vector3D} instance.
 	 * 
 	 * @return a hash code for this {@code Vector3D} instance
@@ -435,78 +443,6 @@ public final class Vector3D implements Node {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@code List} with all {@code Vector3D} instances in {@code node}.
-	 * <p>
-	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param node a {@link Node} instance
-	 * @return a {@code List} with all {@code Vector3D} instances in {@code node}
-	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
-	 */
-	public static List<Vector3D> filterAll(final Node node) {
-		return NodeFilter.filter(node, NodeFilter.any(), Vector3D.class);
-	}
-	
-	/**
-	 * Returns a {@code List} with all distinct {@code Vector3D} instances in {@code node}.
-	 * <p>
-	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param node a {@link Node} instance
-	 * @return a {@code List} with all distinct {@code Vector3D} instances in {@code node}
-	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
-	 */
-	public static List<Vector3D> filterAllDistinct(final Node node) {
-		return filterAll(node).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-	}
-	
-	/**
-	 * Returns a {@code Map} that maps distinct {@code Vector3D} instances to their offsets.
-	 * <p>
-	 * If {@code distinctVectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * Vector3D.mapDistinctToOffsets(distinctVectors, 1);
-	 * }
-	 * </pre>
-	 * 
-	 * @param distinctVectors a {@code List} with distinct {@code Vector3D} instances
-	 * @return a {@code Map} that maps distinct {@code Vector3D} instances to their offsets
-	 * @throws NullPointerException thrown if, and only if, {@code distinctVectors} or at least one of its elements are {@code null}
-	 */
-	public static Map<Vector3D, Integer> mapDistinctToOffsets(final List<Vector3D> distinctVectors) {
-		return mapDistinctToOffsets(distinctVectors, 1);
-	}
-	
-	/**
-	 * Returns a {@code Map} that maps distinct {@code Vector3D} instances to their offsets.
-	 * <p>
-	 * If {@code distinctVectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code sizeVector} is less than {@code 1} or at least one offset is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param distinctVectors a {@code List} with distinct {@code Vector3D} instances
-	 * @param sizeVector the size of a {@code Vector3D} instance
-	 * @return a {@code Map} that maps distinct {@code Vector3D} instances to their offsets
-	 * @throws IllegalArgumentException thrown if, and only if, {@code sizeVector} is less than {@code 1} or at least one offset is less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code distinctVectors} or at least one of its elements are {@code null}
-	 */
-	public static Map<Vector3D, Integer> mapDistinctToOffsets(final List<Vector3D> distinctVectors, final int sizeVector) {
-		ParameterArguments.requireNonNullList(distinctVectors, "distinctVectors");
-		ParameterArguments.requireRange(sizeVector, 1, Integer.MAX_VALUE, "sizeVector");
-		
-		final Map<Vector3D, Integer> map = new LinkedHashMap<>();
-		
-		for(int i = 0; i < distinctVectors.size(); i++) {
-			map.put(distinctVectors.get(i), Integer.valueOf(ParameterArguments.requireRangef(i * sizeVector, 0, Integer.MAX_VALUE, "(%d * %d)", Integer.valueOf(i), Integer.valueOf(sizeVector))));
-		}
-		
-		return map;
-	}
 	
 	/**
 	 * Returns an optional {@code Vector3D} instance that represents the refraction of {@code direction} with regards to {@code normal}.
@@ -1350,29 +1286,6 @@ public final class Vector3D implements Node {
 	 */
 	public static double dotProduct(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3;
-	}
-	
-	/**
-	 * Returns a {@code double[]} representation of {@code vectors}.
-	 * <p>
-	 * If either {@code vectors} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param vectors a {@code List} of {@code Vector3D} instances
-	 * @return a {@code double[]} representation of {@code vectors}
-	 * @throws NullPointerException thrown if, and only if, either {@code vectors} or at least one of its elements are {@code null}
-	 */
-	public static double[] toArray(final List<Vector3D> vectors) {
-		final double[] array = new double[vectors.size() * 3];
-		
-		for(int i = 0, j = 0; i < vectors.size(); i++, j += 3) {
-			final Vector3D vector = vectors.get(i);
-			
-			array[j + 0] = vector.component1;
-			array[j + 1] = vector.component2;
-			array[j + 2] = vector.component3;
-		}
-		
-		return array;
 	}
 	
 	/**

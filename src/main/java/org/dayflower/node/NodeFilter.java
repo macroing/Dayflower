@@ -20,7 +20,9 @@ package org.dayflower.node;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.util.ParameterArguments;
@@ -40,7 +42,7 @@ public interface NodeFilter {
 	/**
 	 * Returns {@code true} if, and only if, {@code node} is accepted, {@code false} otherwise.
 	 * <p>
-	 * If {@code node} is {@code null}, a {@code NullPointerException} may be thrown. But no guarantees can be made.
+	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param node the {@code Node} to accept or reject
 	 * @return {@code true} if, and only if, {@code node} is accepted, {@code false} otherwise
@@ -51,14 +53,21 @@ public interface NodeFilter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@code List} with all {@link Node}s.
-	 * <p>
-	 * All {@code Node}s are found by traversing {@code node} using a simple {@link NodeHierarchicalVisitor} implementation.
+	 * Returns a {@code List} with all {@link Node} instances in {@code node}.
 	 * <p>
 	 * If {@code node} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * All {@code Node} instances are found by traversing {@code node} using a simple {@link NodeHierarchicalVisitor} implementation.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * NodeFilter.filter(node, NodeFilter.any());
+	 * }
+	 * </pre>
 	 * 
-	 * @param node the {@code Node} to start traversal from
-	 * @return a {@code List} with all {@code Node}s
+	 * @param node the {@code Node} instance to start traversal from
+	 * @return a {@code List} with all {@code Node} instances in {@code node}
 	 * @throws NullPointerException thrown if, and only if, {@code node} is {@code null}
 	 */
 	static List<Node> filter(final Node node) {
@@ -66,15 +75,22 @@ public interface NodeFilter {
 	}
 	
 	/**
-	 * Returns a {@code List} with the {@link Node}s that satisfies the criterion specified by {@code nodeFilter}.
-	 * <p>
-	 * All {@code Node}s are found by traversing {@code node} using a simple {@link NodeHierarchicalVisitor} implementation.
+	 * Returns a {@code List} with the {@link Node} instances in {@code node} that satisfies the criterion specified by {@code nodeFilter}.
 	 * <p>
 	 * If either {@code node} or {@code nodeFilter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * All {@code Node} instances are found by traversing {@code node} using a simple {@link NodeHierarchicalVisitor} implementation.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * NodeFilter.filter(node, nodeFilter, Node.class);
+	 * }
+	 * </pre>
 	 * 
-	 * @param node the {@code Node} to start traversal from
-	 * @param nodeFilter the {@code NodeFilter} to accept or reject {@code Node}s
-	 * @return a {@code List} with the {@code Node}s that satisfies the criterion specified by {@code nodeFilter}
+	 * @param node the {@code Node} instance to start traversal from
+	 * @param nodeFilter the {@code NodeFilter} instance that accepts or rejects {@code Node} instances
+	 * @return a {@code List} with the {@code Node} instances in {@code node} that satisfies the criterion specified by {@code nodeFilter}
 	 * @throws NullPointerException thrown if, and only if, either {@code node} or {@code nodeFilter} are {@code null}
 	 */
 	static List<Node> filter(final Node node, final NodeFilter nodeFilter) {
@@ -82,19 +98,19 @@ public interface NodeFilter {
 	}
 	
 	/**
-	 * Returns a {@code List} with the {@link Node}s that satisfies the criterion specified by {@code nodeFilter}, but only if they are assignment compatible to {@code clazz}.
+	 * Returns a {@code List} with the {@link Node} instances in {@code node} that satisfies the criterion specified by {@code nodeFilter}, but only if they are assignment compatible to {@code clazz}.
+	 * <p>
+	 * If either {@code node}, {@code nodeFilter} or {@code clazz} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * The {@code List} returned will be cast to the {@code Class} specified by {@code clazz}.
 	 * <p>
-	 * All {@code Node}s are found by traversing {@code node} using a simple {@link NodeHierarchicalVisitor} implementation.
-	 * <p>
-	 * If either {@code node}, {@code nodeFilter} or {@code clazz} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * All {@code Node} instances are found by traversing {@code node} using a simple {@link NodeHierarchicalVisitor} implementation.
 	 * 
 	 * @param <T> the type the {@code List} should be cast to
-	 * @param node the {@code Node} to start traversal from
-	 * @param nodeFilter the {@code NodeFilter} to accept or reject {@code Node}s
+	 * @param node the {@code Node} instance to start traversal from
+	 * @param nodeFilter the {@code NodeFilter} instance that accepts or rejects {@code Node} instances
 	 * @param clazz the {@code Class} that is of the type {@code T}
-	 * @return a {@code List} with the {@code Node}s that satisfies the criterion specified by {@code nodeFilter}, but only if they are assignment compatible to {@code clazz}
+	 * @return a {@code List} with the {@code Node} instances in {@code node} that satisfies the criterion specified by {@code nodeFilter}, but only if they are assignment compatible to {@code clazz}
 	 * @throws NullPointerException thrown if, and only if, either {@code node}, {@code nodeFilter} or {@code clazz} are {@code null}
 	 */
 	static <T extends Node> List<T> filter(final Node node, final NodeFilter nodeFilter, final Class<T> clazz) {
@@ -106,20 +122,111 @@ public interface NodeFilter {
 	}
 	
 	/**
-	 * Returns a {@link NodeFilter} that accepts all {@link Node}s that are accepted by all of the aggregated {@code NodeFilter}s.
+	 * Returns a {@code List} with all {@link Node} instances in {@code node} that are assignment compatible to {@code clazz}.
 	 * <p>
-	 * This means that this {@code NodeFilter} does not on its own contain any filtering logic. The logic that determines whether a {@code Node} is accepted or rejected, is fully up to the aggregated {@code NodeFilter}s.
+	 * If either {@code node} or {@code clazz} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * When {@code isAccepted(Node)} is called, it iterates over the aggregated {@code NodeFilter}s until either one of them rejects the {@code Node}, in which case {@code false} is returned, or all of them accepts, in which case {@code true} is
-	 * returned.
+	 * The {@code List} returned will be cast to the {@code Class} specified by {@code clazz}.
 	 * <p>
-	 * If either {@code nodeFilters}, or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * All {@code Node} instances are found by traversing {@code node} using a simple {@link NodeHierarchicalVisitor} implementation.
 	 * <p>
-	 * The {@code NodeFilter} returned by this method will throw a {@code NullPointerException} if, and only if, the {@code Node} to accept or reject is {@code null}.
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * NodeFilter.filter(node, NodeFilter.any(), clazz);
+	 * }
+	 * </pre>
 	 * 
-	 * @param nodeFilters the aggregated {@code NodeFilter}s that make up the filtering logic
-	 * @return a {@code NodeFilter} that accepts all {@code Node}s that are accepted by all of the aggregated {@code NodeFilter}s
-	 * @throws NullPointerException thrown if, and only if, either {@code nodeFilters}, or at least one of its elements are {@code null}
+	 * @param <T> the type the {@code List} should be cast to
+	 * @param node the {@code Node} instance to start traversal from
+	 * @param clazz the {@code Class} that is of the type {@code T}
+	 * @return a {@code List} with all {@code Node} instances in {@code node} that are assignment compatible to {@code clazz}
+	 * @throws NullPointerException thrown if, and only if, either {@code node} or {@code clazz} are {@code null}
+	 */
+	static <T extends Node> List<T> filterAll(final Node node, final Class<T> clazz) {
+		return filter(node, any(), clazz);
+	}
+	
+	/**
+	 * Returns a {@code List} with all distinct {@link Node} instances in {@code node} that are assignment compatible to {@code clazz}.
+	 * <p>
+	 * If either {@code node} or {@code clazz} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The {@code List} returned will be cast to the {@code Class} specified by {@code clazz}.
+	 * <p>
+	 * All {@code Node} instances are found by traversing {@code node} using a simple {@link NodeHierarchicalVisitor} implementation.
+	 * 
+	 * @param <T> the type the {@code List} should be cast to
+	 * @param node the {@code Node} instance to start traversal from
+	 * @param clazz the {@code Class} that is of the type {@code T}
+	 * @return a {@code List} with all distinct {@code Node} instances in {@code node} that are assignment compatible to {@code clazz}
+	 * @throws NullPointerException thrown if, and only if, either {@code node} or {@code clazz} are {@code null}
+	 */
+	static <T extends Node> List<T> filterAllDistinct(final Node node, final Class<T> clazz) {
+		return filterAll(node, clazz).stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	}
+	
+	/**
+	 * Returns a {@code Map} that maps distinct {@code Node} instances to their offsets.
+	 * <p>
+	 * If {@code distinctNodes} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * NodeFilter.mapDistinctToOffsets(distinctNodes, 1);
+	 * }
+	 * </pre>
+	 * 
+	 * @param <T> the generic type
+	 * @param distinctNodes a {@code List} with distinct {@code Node} instances
+	 * @return a {@code Map} that maps distinct {@code Node} instances to their offsets
+	 * @throws NullPointerException thrown if, and only if, {@code distinctNodes} or at least one of its elements are {@code null}
+	 */
+	static <T extends Node> Map<T, Integer> mapDistinctToOffsets(final List<T> distinctNodes) {
+		return mapDistinctToOffsets(distinctNodes, 1);
+	}
+	
+	/**
+	 * Returns a {@code Map} that maps distinct {@code Node} instances to their offsets.
+	 * <p>
+	 * If {@code distinctNodes} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sizeNode} is less than {@code 1} or at least one offset is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param <T> the generic type
+	 * @param distinctNodes a {@code List} with distinct {@code Node} instances
+	 * @param sizeNode the size of a {@code Node} instance
+	 * @return a {@code Map} that maps distinct {@code Node} instances to their offsets
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sizeNode} is less than {@code 1} or at least one offset is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code distinctNodes} or at least one of its elements are {@code null}
+	 */
+	static <T extends Node> Map<T, Integer> mapDistinctToOffsets(final List<T> distinctNodes, final int sizeNode) {
+		ParameterArguments.requireNonNullList(distinctNodes, "distinctNodes");
+		ParameterArguments.requireRange(sizeNode, 1, Integer.MAX_VALUE, "sizeNode");
+		
+		final Map<T, Integer> map = new LinkedHashMap<>();
+		
+		for(int i = 0; i < distinctNodes.size(); i++) {
+			map.put(distinctNodes.get(i), Integer.valueOf(ParameterArguments.requireRangef(i * sizeNode, 0, Integer.MAX_VALUE, "(%d * %d)", Integer.valueOf(i), Integer.valueOf(sizeNode))));
+		}
+		
+		return map;
+	}
+	
+	/**
+	 * Returns a {@link NodeFilter} instance that accepts all {@link Node} instances that are accepted by all of the aggregated {@code NodeFilter} instances.
+	 * <p>
+	 * If either {@code nodeFilters} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The returned {@code NodeFilter} instance does not contain any filtering logic by itself. The filtering logic that determines whether a {@code Node} instance is accepted or rejected, is fully up to the aggregated {@code NodeFilter} instances.
+	 * <p>
+	 * When {@code isAccepted(Node)} is called, it iterates over the aggregated {@code NodeFilter} instances until either one of them rejects the {@code Node} instance, in which case {@code false} is returned, or all of them accepts, in which case
+	 * {@code true} is returned.
+	 * 
+	 * @param nodeFilters the aggregated {@code NodeFilter} instances that make up the filtering logic
+	 * @return a {@code NodeFilter} instance that accepts all {@code Node} instances that are accepted by all of the aggregated {@code NodeFilter} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code nodeFilters} or at least one of its elements are {@code null}
 	 */
 	static NodeFilter and(final NodeFilter... nodeFilters) {
 		ParameterArguments.requireNonNullArray(nodeFilters, "nodeFilters");
@@ -132,11 +239,9 @@ public interface NodeFilter {
 	}
 	
 	/**
-	 * Returns a {@link NodeFilter} that accepts any {@link Node}.
-	 * <p>
-	 * The {@code NodeFilter} returned by this method will throw a {@code NullPointerException} if, and only if, the {@code Node} to accept or reject is {@code null}.
+	 * Returns a {@link NodeFilter} instance that accepts any {@link Node} instance.
 	 * 
-	 * @return a {@code NodeFilter} that accepts any {@code Node}
+	 * @return a {@code NodeFilter} instance that accepts any {@code Node} instance
 	 */
 	static NodeFilter any() {
 		return node -> {
@@ -147,20 +252,18 @@ public interface NodeFilter {
 	}
 	
 	/**
-	 * Returns a {@link NodeFilter} that accepts all {@link Node}s that are accepted by at least one of the aggregated {@code NodeFilter}s.
+	 * Returns a {@link NodeFilter} instance that accepts all {@link Node} instances that are accepted by at least one of the aggregated {@code NodeFilter} instances.
 	 * <p>
-	 * This means that this {@code NodeFilter} does not on its own contain any filtering logic. The logic that determines whether a {@code Node} is accepted or rejected, is fully up to the aggregated {@code NodeFilter}s.
+	 * If either {@code nodeFilters} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * When {@code isAccepted(Node)} is called, it iterates over the aggregated {@code NodeFilter}s until either one of them accepts the {@code Node}, in which case {@code true} is returned, or none of them does, in which case {@code false} is
-	 * returned.
+	 * The returned {@code NodeFilter} instance does not contain any filtering logic by itself. The filtering logic that determines whether a {@code Node} instance is accepted or rejected, is fully up to the aggregated {@code NodeFilter} instances.
 	 * <p>
-	 * If either {@code nodeFilters}, or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * The {@code NodeFilter} returned by this method will throw a {@code NullPointerException} if, and only if, the {@code Node} to accept or reject is {@code null}.
+	 * When {@code isAccepted(Node)} is called, it iterates over the aggregated {@code NodeFilter} instances until either one of them accepts the {@code Node} instance, in which case {@code true} is returned, or none of them does, in which case
+	 * {@code false} is returned.
 	 * 
-	 * @param nodeFilters the aggregated {@code NodeFilter}s that make up the filtering logic
-	 * @return a {@code NodeFilter} that accepts all {@code Node}s that are accepted by at least one of the aggregated {@code NodeFilter}s
-	 * @throws NullPointerException thrown if, and only if, either {@code nodeFilters}, or at least one of its elements are {@code null}
+	 * @param nodeFilters the aggregated {@code NodeFilter} instances that make up the filtering logic
+	 * @return a {@code NodeFilter} instance that accepts all {@code Node} instances that are accepted by at least one of the aggregated {@code NodeFilter} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code nodeFilters} or at least one of its elements are {@code null}
 	 */
 	static NodeFilter or(final NodeFilter... nodeFilters) {
 		ParameterArguments.requireNonNullArray(nodeFilters, "nodeFilters");
@@ -173,14 +276,12 @@ public interface NodeFilter {
 	}
 	
 	/**
-	 * Returns a {@link NodeFilter} that accepts all {@link Node}s that have a {@code toString()} method that matches the given Regex.
+	 * Returns a {@link NodeFilter} instance that accepts all {@link Node} instances that have a {@code toString()} method that matches the given Regex.
 	 * <p>
 	 * If {@code regex} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * The {@code NodeFilter} returned by this method will throw a {@code NullPointerException} if, and only if, the {@code Node} to accept or reject is {@code null}.
 	 * 
 	 * @param regex a {@code String} representing the Regex to be used in the filtering process
-	 * @return a {@code NodeFilter} that accepts all {@code Node}s that have a {@code toString()} method that matches the given Regex
+	 * @return a {@code NodeFilter} instance that accepts all {@code Node} instances that have a {@code toString()} method that matches the given Regex
 	 * @throws NullPointerException thrown if, and only if, {@code regex} is {@code null}
 	 */
 	static NodeFilter regex(final String regex) {

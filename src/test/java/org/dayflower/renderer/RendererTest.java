@@ -88,6 +88,7 @@ public final class RendererTest {
 	static void doTestGPURenderer() {
 		final
 		Renderer renderer = new GPURenderer(new RendererConfiguration(), new FileRendererObserver(new File("Image.png"), true));
+		renderer.getRendererConfiguration().getScene().getCamera().moveBackward(5.0F);
 		renderer.getRendererConfiguration().setRenderPasses(10);
 		renderer.setup();
 		renderer.render();

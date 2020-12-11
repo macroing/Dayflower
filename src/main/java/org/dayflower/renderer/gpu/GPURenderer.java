@@ -49,7 +49,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		final int index = getGlobalId() * 3;
 		
 		if(cameraGenerateRay()) {
-			if(intersectsSphere3F()) {
+			if(/*intersectsSphere3F()*/intersectsTorus3F()) {
 				this.radianceArray[index + 0] = 1.0F;
 				this.radianceArray[index + 1] = 0.0F;
 				this.radianceArray[index + 2] = 0.0F;

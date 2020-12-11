@@ -402,6 +402,11 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final boolean intersectsTorus3F() {
+		return intersectionTTorus3F() > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final float intersectionTSphere3F() {
 		final float originX = this.ray3FArray_$private$8[0];
 		final float originY = this.ray3FArray_$private$8[1];
@@ -434,6 +439,43 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		return t;
 	}
 	
+//	TODO: Add Javadocs!
+	protected final float intersectionTTorus3F() {
+		final float originX = this.ray3FArray_$private$8[0];
+		final float originY = this.ray3FArray_$private$8[1];
+		final float originZ = this.ray3FArray_$private$8[2];
+		
+		final float directionX = this.ray3FArray_$private$8[3];
+		final float directionY = this.ray3FArray_$private$8[4];
+		final float directionZ = this.ray3FArray_$private$8[5];
+		
+		final float tMinimum = this.ray3FArray_$private$8[6];
+		final float tMaximum = this.ray3FArray_$private$8[7];
+		
+		final float radiusInner = 0.25F;
+		final float radiusInnerSquared = radiusInner * radiusInner;
+		final float radiusOuter = 1.0F;
+		final float radiusOuterSquared = radiusOuter * radiusOuter;
+		
+		final float f0 = directionX * directionX + directionY * directionY + directionZ * directionZ;
+		final float f1 = (originX * directionX + originY * directionY + originZ * directionZ) * 2.0F;
+		final float f2 = radiusInnerSquared;
+		final float f3 = radiusOuterSquared;
+		final float f4 = (originX * originX + originY * originY + originZ * originZ) - f2 - f3;
+		final float f5 = directionZ;
+		final float f6 = originZ;
+		
+		final float a = f0 * f0;
+		final float b = f0 * 2.0F * f1;
+		final float c = f1 * f1 + 2.0F * f0 * f4 + 4.0F * f3 * f5 * f5;
+		final float d = f1 * 2.0F * f4 + 8.0F * f3 * f6 * f5;
+		final float e = f4 * f4 + 4.0F * f3 * f6 * f6 - 4.0F * f3 * f2;
+		
+		final float t = doSolveQuarticSystem(a, b, c, d, e, tMinimum, tMaximum);
+		
+		return t;
+	}
+	
 	/**
 	 * Returns a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive).
 	 * 
@@ -451,6 +493,30 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	private Scene doGetScene() {
 		return getRendererConfiguration().getScene();
+	}
+	
+	private float doSolveCubicForQuarticSystem(final float p, final float q, final float r) {
+		final float pSquared = p * p;
+		final float q0 = (pSquared - 3.0F * q) / 9.0F;
+		final float q0Cubed = q0 * q0 * q0;
+		final float r0 = (p * (pSquared - 4.5F * q) + 13.5F * r) / 27.0F;
+		final float r0Squared = r0 * r0;
+		final float d = q0Cubed - r0Squared;
+		final float e = p / 3.0F;
+		
+		if(d >= 0.0F) {
+			final float d0 = r0 / sqrt(q0Cubed);
+			final float theta = acos(d0) / 3.0F;
+			final float q1 = -2.0F * sqrt(q0);
+			final float q2 = q1 * cos(theta) - e;
+			
+			return q2;
+		}
+		
+		final float q1 = pow(sqrt(r0Squared - q0Cubed) + abs(r0), 1.0F / 3.0F);
+		final float q2 = r0 < 0.0F ? (q1 + q0 / q1) - e : -(q1 + q0 / q1) - e;
+		
+		return q2;
 	}
 	
 	private float doSolveQuadraticSystem(final float a, final float b, final float c, final float minimum, final float maximum) {
@@ -472,6 +538,129 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 			final float q5 = q3 > minimum && q3 < maximum ? q3 : q4 > minimum && q4 < maximum ? q4 : 0.0F;
 			
 			return q5;
+		} else {
+			return 0.0F;
+		}
+	}
+	
+	private float doSolveQuarticSystem(final float a, final float b, final float c, final float d, final float e, final float minimum, final float maximum) {
+		final float aReciprocal = 1.0F / a;
+		final float bA = b * aReciprocal;
+		final float bASquared = bA * bA;
+		final float cA = c * aReciprocal;
+		final float dA = d * aReciprocal;
+		final float eA = e * aReciprocal;
+		final float p = -0.375F * bASquared + cA;
+		final float q = 0.125F * bASquared * bA - 0.5F * bA * cA + dA;
+		final float r = -0.01171875F * bASquared * bASquared + 0.0625F * bASquared * cA - 0.25F * bA * dA + eA;
+		final float z = doSolveCubicForQuarticSystem(-0.5F * p, -r, 0.5F * r * p - 0.125F * q * q);
+		
+		float d1 = 2.0F * z - p;
+		float d2 = 0.0F;
+		
+		if(d1 < 0.0F) {
+			return 0.0F;
+		} else if(d1 < 1.0e-10F) {
+			d2 = z * z - r;
+			
+			if(d2 < 0.0F) {
+				return 0.0F;
+			}
+			
+			d2 = sqrt(d2);
+		} else {
+			d1 = sqrt(d1);
+			d2 = 0.5F * q / d1;
+		}
+		
+		final float q1 = d1 * d1;
+		final float q2 = -0.25F * bA;
+		final float pm = q1 - 4.0F * (z - d2);
+		final float pp = q1 - 4.0F * (z + d2);
+		
+		if(pm >= 0.0F && pp >= 0.0F) {
+			final float pmSqrt = sqrt(pm);
+			final float ppSqrt = sqrt(pp);
+			
+			float result0 = -0.5F * (d1 + pmSqrt) + q2;
+			float result1 = -0.5F * (d1 - pmSqrt) + q2;
+			float result2 = +0.5F * (d1 + ppSqrt) + q2;
+			float result3 = +0.5F * (d1 - ppSqrt) + q2;
+			float result4 = 0.0F;
+			
+			if(result0 > result1) {
+				result4 = result0;
+				result0 = result1;
+				result1 = result4;
+			}
+			
+			if(result2 > result3) {
+				result4 = result2;
+				result2 = result3;
+				result3 = result4;
+			}
+			
+			if(result0 > result2) {
+				result4 = result0;
+				result0 = result2;
+				result2 = result4;
+			}
+			
+			if(result1 > result3) {
+				result4 = result1;
+				result1 = result3;
+				result3 = result4;
+			}
+			
+			if(result1 > result2) {
+				result4 = result1;
+				result1 = result2;
+				result2 = result4;
+			}
+			
+			if(result0 >= maximum || result3 <= minimum) {
+				return 0.0F;
+			} else if(result0 > minimum) {
+				return result0;
+			} else if(result1 > minimum) {
+				return result1;
+			} else if(result2 > minimum) {
+				return result2;
+			} else if(result3 > minimum) {
+				return result3;
+			} else {
+				return 0.0F;
+			}
+		} else if(pm >= 0.0F) {
+			final float pmSqrt = sqrt(pm);
+			
+			final float result0 = -0.5F * (d1 + pmSqrt) + q2;
+			final float result1 = -0.5F * (d1 - pmSqrt) + q2;
+			
+			if(result0 >= maximum || result1 <= minimum) {
+				return 0.0F;
+			} else if(result0 > minimum) {
+				return result0;
+			} else if(result1 > minimum) {
+				return result1;
+			} else {
+				return 0.0F;
+			}
+		} else if(pp >= 0.0F) {
+			final float ppSqrt = sqrt(pp);
+			
+			final float result0 = +0.5F * (d1 - ppSqrt) + q2;
+			final float result1 = +0.5F * (d1 + ppSqrt) + q2;
+			
+			if(result0 >= maximum || result1 <= minimum) {
+				return 0.0F;
+			} else if(result0 > minimum) {
+				return result0;
+			} else if(result1 > minimum) {
+				return result1;
+			} else {
+				return 0.0F;
+			}
 		} else {
 			return 0.0F;
 		}

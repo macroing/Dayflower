@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.node.NodeFilter;
@@ -44,33 +46,41 @@ final class SceneCompiler {
 		final long currentTimeMillis = System.currentTimeMillis();
 		
 //		Retrieve Lists for all distinct types:
+		final List<Plane3F> distinctPlanes = NodeFilter.filterAllDistinct(scene, Plane3F.class);
+		final List<RectangularCuboid3F> distinctRectangularCuboids = NodeFilter.filterAllDistinct(scene, RectangularCuboid3F.class);
 		final List<Sphere3F> distinctSpheres = NodeFilter.filterAllDistinct(scene, Sphere3F.class);
 		final List<Torus3F> distinctToruses = NodeFilter.filterAllDistinct(scene, Torus3F.class);
-		final List<Shape3F> distinctShapes = Lists.merge(distinctSpheres, distinctToruses);
+		final List<Shape3F> distinctShapes = Lists.merge(distinctPlanes, distinctRectangularCuboids, distinctSpheres, distinctToruses);
 		
 //		Retrieve a List of filtered Primitives:
 		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctShapes);
 		
 //		Retrieve index mappings for all distinct types:
+		final Map<Plane3F, Integer> distinctToOffsetsPlanes = NodeFilter.mapDistinctToOffsets(distinctPlanes, Plane3F.ARRAY_SIZE);
+		final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids = NodeFilter.mapDistinctToOffsets(distinctRectangularCuboids, RectangularCuboid3F.ARRAY_SIZE);
 		final Map<Sphere3F, Integer> distinctToOffsetsSpheres = NodeFilter.mapDistinctToOffsets(distinctSpheres, Sphere3F.ARRAY_SIZE);
 		final Map<Torus3F, Integer> distinctToOffsetsToruses = NodeFilter.mapDistinctToOffsets(distinctToruses, Torus3F.ARRAY_SIZE);
 		
 //		Retrieve float[] or int[] for all types:
 		final float[] cameraArray = scene.getCamera().toArray();
 		final float[] matrix44FArray = doCreateMatrix44FArray(filteredPrimitives);
+		final float[] shape3FPlane3FArray = Floats.toArray(distinctPlanes, plane -> plane.toArray(), 1);
+		final float[] shape3FRectangularCuboid3FArray = Floats.toArray(distinctRectangularCuboids, rectangularCuboid -> rectangularCuboid.toArray(), 1);
 		final float[] shape3FSphere3FArray = Floats.toArray(distinctSpheres, sphere -> sphere.toArray(), 1);
 		final float[] shape3FTorus3FArray = Floats.toArray(distinctToruses, torus -> torus.toArray(), 1);
 		
 		final int[] primitiveArray = Primitive.toArray(filteredPrimitives);
 		
 //		Populate the float[] or int[] with data:
-		doPopulatePrimitiveArray(filteredPrimitives, distinctToOffsetsSpheres, distinctToOffsetsToruses, primitiveArray);
+		doPopulatePrimitiveArray(filteredPrimitives, distinctToOffsetsPlanes, distinctToOffsetsRectangularCuboids, distinctToOffsetsSpheres, distinctToOffsetsToruses, primitiveArray);
 		
 		final
 		CompiledScene compiledScene = new CompiledScene();
 		compiledScene.setCameraArray(cameraArray);
 		compiledScene.setMatrix44FArray(matrix44FArray);
 		compiledScene.setPrimitiveArray(primitiveArray);
+		compiledScene.setShape3FPlane3FArray(shape3FPlane3FArray);
+		compiledScene.setShape3FRectangularCuboid3FArray(shape3FRectangularCuboid3FArray);
 		compiledScene.setShape3FSphere3FArray(shape3FSphere3FArray);
 		compiledScene.setShape3FTorus3FArray(shape3FTorus3FArray);
 		
@@ -91,13 +101,23 @@ final class SceneCompiler {
 		return Floats.toArray(primitives, primitive -> primitive.getTransform().toArray(), 1);
 	}
 	
-	private static void doPopulatePrimitiveArray(final List<Primitive> primitives, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final Map<Torus3F, Integer> distinctToOffsetsToruses, final int[] primitiveArray) {
+	private static void doPopulatePrimitiveArray(final List<Primitive> primitives, final Map<Plane3F, Integer> distinctToOffsetsPlanes, final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final Map<Torus3F, Integer> distinctToOffsetsToruses, final int[] primitiveArray) {
 		for(int i = 0; i < primitives.size(); i++) {
 			final Primitive primitive = primitives.get(i);
 			
 			final Shape3F shape = primitive.getShape();
 			
-			if(shape instanceof Sphere3F) {
+			if(shape instanceof Plane3F) {
+				final int planeOffset = distinctToOffsetsPlanes.get(Plane3F.class.cast(shape)).intValue();
+				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+				
+				primitiveArray[primitiveArrayOffset] = planeOffset;
+			} else if(shape instanceof RectangularCuboid3F) {
+				final int rectangularCuboidOffset = distinctToOffsetsRectangularCuboids.get(RectangularCuboid3F.class.cast(shape)).intValue();
+				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+				
+				primitiveArray[primitiveArrayOffset] = rectangularCuboidOffset;
+			} else if(shape instanceof Sphere3F) {
 				final int sphereOffset = distinctToOffsetsSpheres.get(Sphere3F.class.cast(shape)).intValue();
 				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
 				

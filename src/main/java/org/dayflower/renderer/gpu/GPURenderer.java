@@ -77,7 +77,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 	}
 	
 	private void doTestShape3FPlane3F(final int index) {
-		if(intersectsShape3FPlane3F()) {
+		if(intersectsShape3FPlane3F(0)) {
 			this.radianceArray[index + 0] = 1.0F;
 			this.radianceArray[index + 1] = 0.0F;
 			this.radianceArray[index + 2] = 0.0F;
@@ -89,7 +89,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 	}
 	
 	private void doTestShape3FRectangularCuboid3F(final int index) {
-		if(intersectsShape3FRectangularCuboid3F()) {
+		if(intersectsShape3FRectangularCuboid3F(0)) {
 			this.radianceArray[index + 0] = 1.0F;
 			this.radianceArray[index + 1] = 0.0F;
 			this.radianceArray[index + 2] = 0.0F;

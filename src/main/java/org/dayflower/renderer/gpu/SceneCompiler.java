@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Sphere3F;
+import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
@@ -38,27 +39,46 @@ final class SceneCompiler {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static CompiledScene compile(final Scene scene) {
+		System.out.println("Compiling...");
+		
+		final long currentTimeMillis = System.currentTimeMillis();
+		
 //		Retrieve Lists for all distinct types:
 		final List<Sphere3F> distinctSpheres = NodeFilter.filterAllDistinct(scene, Sphere3F.class);
-		final List<Shape3F> distinctShapes = Lists.merge(distinctSpheres);
+		final List<Torus3F> distinctToruses = NodeFilter.filterAllDistinct(scene, Torus3F.class);
+		final List<Shape3F> distinctShapes = Lists.merge(distinctSpheres, distinctToruses);
 		
 //		Retrieve a List of filtered Primitives:
 		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctShapes);
 		
 //		Retrieve index mappings for all distinct types:
 		final Map<Sphere3F, Integer> distinctToOffsetsSpheres = NodeFilter.mapDistinctToOffsets(distinctSpheres, Sphere3F.ARRAY_SIZE);
+		final Map<Torus3F, Integer> distinctToOffsetsToruses = NodeFilter.mapDistinctToOffsets(distinctToruses, Torus3F.ARRAY_SIZE);
 		
 //		Retrieve float[] or int[] for all types:
 		final float[] cameraArray = scene.getCamera().toArray();
 		final float[] matrix44FArray = doCreateMatrix44FArray(filteredPrimitives);
-		final float[] sphere3FArray = Floats.toArray(distinctSpheres, sphere -> sphere.toArray());
+		final float[] shape3FSphere3FArray = Floats.toArray(distinctSpheres, sphere -> sphere.toArray(), 1);
+		final float[] shape3FTorus3FArray = Floats.toArray(distinctToruses, torus -> torus.toArray(), 1);
 		
 		final int[] primitiveArray = Primitive.toArray(filteredPrimitives);
 		
 //		Populate the float[] or int[] with data:
-		doPopulatePrimitiveArray(filteredPrimitives, distinctToOffsetsSpheres, primitiveArray);
+		doPopulatePrimitiveArray(filteredPrimitives, distinctToOffsetsSpheres, distinctToOffsetsToruses, primitiveArray);
 		
-		return new CompiledScene(cameraArray, matrix44FArray, sphere3FArray, primitiveArray);
+		final
+		CompiledScene compiledScene = new CompiledScene();
+		compiledScene.setCameraArray(cameraArray);
+		compiledScene.setMatrix44FArray(matrix44FArray);
+		compiledScene.setPrimitiveArray(primitiveArray);
+		compiledScene.setShape3FSphere3FArray(shape3FSphere3FArray);
+		compiledScene.setShape3FTorus3FArray(shape3FTorus3FArray);
+		
+		final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
+		
+		System.out.println("- Compilation took " + elapsedTimeMillis + " milliseconds.");
+		
+		return compiledScene;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,10 +88,10 @@ final class SceneCompiler {
 	}
 	
 	private static float[] doCreateMatrix44FArray(final List<Primitive> primitives) {
-		return Floats.toArray(primitives, primitive -> primitive.getTransform().toArray());
+		return Floats.toArray(primitives, primitive -> primitive.getTransform().toArray(), 1);
 	}
 	
-	private static void doPopulatePrimitiveArray(final List<Primitive> primitives, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final int[] primitiveArray) {
+	private static void doPopulatePrimitiveArray(final List<Primitive> primitives, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final Map<Torus3F, Integer> distinctToOffsetsToruses, final int[] primitiveArray) {
 		for(int i = 0; i < primitives.size(); i++) {
 			final Primitive primitive = primitives.get(i);
 			
@@ -82,6 +102,11 @@ final class SceneCompiler {
 				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
 				
 				primitiveArray[primitiveArrayOffset] = sphereOffset;
+			} else if(shape instanceof Torus3F) {
+				final int torusOffset = distinctToOffsetsToruses.get(Torus3F.class.cast(shape)).intValue();
+				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+				
+				primitiveArray[primitiveArrayOffset] = torusOffset;
 			}
 		}
 	}

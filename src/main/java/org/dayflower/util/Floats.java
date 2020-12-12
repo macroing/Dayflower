@@ -2161,6 +2161,13 @@ public final class Floats {
 	 * Returns a {@code float[]} representation of {@code objects} using {@code arrayFunction}.
 	 * <p>
 	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Floats.toArray(objects, arrayFunction, 0);
+	 * }
+	 * </pre>
 	 * 
 	 * @param <T> the generic type
 	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code float[]} instances
@@ -2169,9 +2176,34 @@ public final class Floats {
 	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
 	 */
 	public static <T> float[] toArray(final List<T> objects, final Function<T, float[]> arrayFunction) {
+		return toArray(objects, arrayFunction, 0);
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code float[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code float[]} instances
+	 * @param minimumLength the minimum length of the returned {@code float[]} if, and only if, {@code objects.isEmpty()}
+	 * @return a {@code float[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> float[] toArray(final List<T> objects, final Function<T, float[]> arrayFunction, final int minimumLength) {
 		ParameterArguments.requireNonNullList(objects, "objects");
 		
 		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
+		
+		ParameterArguments.requireRange(minimumLength, 0, Integer.MAX_VALUE, "minimumLength");
+		
+		if(objects.isEmpty()) {
+			return array(minimumLength);
+		}
 		
 		try(final FloatArrayOutputStream floatArrayOutputStream = new FloatArrayOutputStream()) {
 			for(final T object : objects) {

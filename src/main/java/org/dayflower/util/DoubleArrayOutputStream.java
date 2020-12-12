@@ -24,31 +24,31 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 
 //TODO: Add Javadocs!
-public final class FloatArrayOutputStream extends OutputStream {
+public final class DoubleArrayOutputStream extends OutputStream {
 	private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private float[] buffer;
+	private double[] buffer;
 	private int size;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public FloatArrayOutputStream() {
+	public DoubleArrayOutputStream() {
 		this(32);
 	}
 	
 //	TODO: Add Javadocs!
-	public FloatArrayOutputStream(final int size) {
-		this.buffer = new float[ParameterArguments.requireRange(size, 0, Integer.MAX_VALUE, "size")];
+	public DoubleArrayOutputStream(final int size) {
+		this.buffer = new double[ParameterArguments.requireRange(size, 0, Integer.MAX_VALUE, "size")];
 		this.size = 0;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public synchronized float[] toFloatArray() {
+	public synchronized double[] toDoubleArray() {
 		return Arrays.copyOf(this.buffer, this.size);
 	}
 	
@@ -69,36 +69,36 @@ public final class FloatArrayOutputStream extends OutputStream {
 	}
 	
 //	TODO: Add Javadocs!
-	public synchronized void write(final float[] f) {
-		write(f, 0, f.length);
+	public synchronized void write(final double[] d) {
+		write(d, 0, d.length);
 	}
 	
 //	TODO: Add Javadocs!
-	public synchronized void write(final float[] f, final int off, final int len) {
-//		Similar to ByteArrayOutputStream. It looks like 'off > f.length' is a bug. Should it not be 'off >= f.length'?
-		if(off < 0 || off > f.length || len < 0 || off + len - f.length > 0) {
+	public synchronized void write(final double[] d, final int off, final int len) {
+//		Similar to ByteArrayOutputStream. It looks like 'off > d.length' is a bug. Should it not be 'off >= d.length'?
+		if(off < 0 || off > d.length || len < 0 || off + len - d.length > 0) {
 			throw new IndexOutOfBoundsException();
 		}
 		
 		doEnsureCapacity(this.size + len);
 		
-		System.arraycopy(f, off, this.buffer, this.size, len);
+		System.arraycopy(d, off, this.buffer, this.size, len);
 		
 		this.size += len;
 	}
 	
 //	TODO: Add Javadocs!
-	public synchronized void write(final float f) {
+	public synchronized void write(final double d) {
 		doEnsureCapacity(this.size + 1);
 		
-		this.buffer[this.size] = f;
+		this.buffer[this.size] = d;
 		this.size += 1;
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public synchronized void write(final int b) throws IOException {
-		write((float)(b));
+		write((double)(b));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

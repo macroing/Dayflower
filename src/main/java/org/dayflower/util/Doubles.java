@@ -19,9 +19,11 @@
 package org.dayflower.util;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
 
 /**
  * The class {@code Doubles} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.
@@ -1940,6 +1942,31 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns a {@code double[]} that is a combination of all {@code double[]} instances in {@code arrays}.
+	 * <p>
+	 * If either {@code arrays} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrays the {@code double[][]} instance to combine into one {@code double[]}
+	 * @return a {@code double[]} that is a combination of all {@code double[]} instances in {@code arrays}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrays} or at least one of its elements are {@code null}
+	 */
+	public static double[] array(final double[]... arrays) {
+		Objects.requireNonNull(arrays, "arrays == null");
+		
+		for(int i = 0; i < arrays.length; i++) {
+			Objects.requireNonNull(arrays[i], "arrays[" + i + "] == null");
+		}
+		
+		try(final DoubleArrayOutputStream doubleArrayOutputStream = new DoubleArrayOutputStream()) {
+			for(final double[] array : arrays) {
+				doubleArrayOutputStream.write(array);
+			}
+			
+			return doubleArrayOutputStream.toDoubleArray();
+		}
+	}
+	
+	/**
 	 * Returns a {@code double[]} with a length of {@code length} and is filled with {@code 0.0D}.
 	 * <p>
 	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
@@ -2127,6 +2154,63 @@ public class Doubles {
 			};
 		} else {
 			return new double[0];
+		}
+	}
+	
+	/**
+	 * Returns a {@code double[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Doubles.toArray(objects, arrayFunction, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code double[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code double[]} instances
+	 * @return a {@code double[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> double[] toArray(final List<T> objects, final Function<T, double[]> arrayFunction) {
+		return toArray(objects, arrayFunction, 0);
+	}
+	
+	/**
+	 * Returns a {@code double[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code double[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code double[]} instances
+	 * @param minimumLength the minimum length of the returned {@code double[]} if, and only if, {@code objects.isEmpty()}
+	 * @return a {@code double[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> double[] toArray(final List<T> objects, final Function<T, double[]> arrayFunction, final int minimumLength) {
+		ParameterArguments.requireNonNullList(objects, "objects");
+		
+		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
+		
+		ParameterArguments.requireRange(minimumLength, 0, Integer.MAX_VALUE, "minimumLength");
+		
+		if(objects.isEmpty()) {
+			return array(minimumLength);
+		}
+		
+		try(final DoubleArrayOutputStream doubleArrayOutputStream = new DoubleArrayOutputStream()) {
+			for(final T object : objects) {
+				doubleArrayOutputStream.write(arrayFunction.apply(object));
+			}
+			
+			return doubleArrayOutputStream.toDoubleArray();
 		}
 	}
 	

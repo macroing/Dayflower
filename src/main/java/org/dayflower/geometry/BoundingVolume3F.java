@@ -109,6 +109,20 @@ public interface BoundingVolume3F extends Node {
 	 */
 	float intersection(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
+	/**
+	 * Returns a {@code float[]} representation of this {@code BoundingVolume3F} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code BoundingVolume3F} instance
+	 */
+	float[] toArray();
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code BoundingVolume3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code BoundingVolume3F} instance
+	 */
+	int getID();
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

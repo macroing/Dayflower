@@ -40,6 +40,13 @@ import org.dayflower.node.NodeTraversalException;
  * @author J&#246;rgen Lundgren
  */
 public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
+	/**
+	 * The ID of this {@code AxisAlignedBoundingBox3F} class.
+	 */
+	public static final int ID = 1;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Point3F maximum;
 	private final Point3F minimum;
 	
@@ -359,6 +366,28 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 		final float t = currentTMinimum > tMinimum && currentTMinimum < tMaximum ? currentTMinimum : currentTMaximum > tMinimum && currentTMaximum < tMaximum ? currentTMaximum : Float.NaN;
 		
 		return t;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code AxisAlignedBoundingBox3F} instance.
+	 * <p>
+	 * Note: This method has not been implemented yet.
+	 * 
+	 * @return a {@code float[]} representation of this {@code AxisAlignedBoundingBox3F} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code AxisAlignedBoundingBox3F} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code AxisAlignedBoundingBox3F} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

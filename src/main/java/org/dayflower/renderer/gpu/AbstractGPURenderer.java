@@ -19,8 +19,6 @@
 package org.dayflower.renderer.gpu;
 
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -28,12 +26,16 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.shape.Sphere3F;
+import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.scene.Camera;
+import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.util.Floats;
 import org.dayflower.util.Longs;
@@ -49,6 +51,7 @@ import com.amd.aparapi.Range;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractGPURenderer extends Kernel implements Renderer {
+	private static final float MAX_VALUE = Float.MAX_VALUE;
 	private static final float PRNG_NEXT_FLOAT_RECIPROCAL = 1.0F / (1 << 24);
 	private static final long PRNG_ADDEND = 0xBL;
 	private static final long PRNG_MASK = (1L << 48L) - 1L;
@@ -56,12 +59,21 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	protected float[] boundingVolume3FAxisAlignedBoundingVolume3FArray;
+	protected float[] boundingVolume3FBoundingSphere3FArray;
 	protected float[] cameraArray;
 	protected float[] matrix44FArray;
 	protected float[] pixelArray;
+	protected float[] point3FArray_$private$3;
 	protected float[] radianceArray;
 	protected float[] ray3FArray_$private$8;
-	protected float[] sphere3FArray;
+	protected float[] shape3FPlane3FArray;
+	protected float[] shape3FRectangularCuboid3FArray;
+	protected float[] shape3FSphere3FArray;
+	protected float[] shape3FTorus3FArray;
+	protected float[] shape3FTriangle3FArray;
+	protected float[] vector3FArray_$private$3;
+	protected int primitiveCount;
 	protected int resolutionX;
 	protected int resolutionY;
 	protected int[] primitiveArray;
@@ -86,12 +98,21 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
 	 */
 	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
+		this.boundingVolume3FAxisAlignedBoundingVolume3FArray = new float[0];
+		this.boundingVolume3FBoundingSphere3FArray = new float[0];
 		this.cameraArray = new float[0];
 		this.matrix44FArray = new float[0];
 		this.pixelArray = new float[0];
+		this.point3FArray_$private$3 = new float[3];
 		this.radianceArray = new float[0];
 		this.ray3FArray_$private$8 = new float[8];
-		this.sphere3FArray = new float[0];
+		this.shape3FPlane3FArray = new float[0];
+		this.shape3FRectangularCuboid3FArray = new float[0];
+		this.shape3FSphere3FArray = new float[0];
+		this.shape3FTorus3FArray = new float[0];
+		this.shape3FTriangle3FArray = new float[0];
+		this.vector3FArray_$private$3 = new float[3];
+		this.primitiveCount = 0;
 		this.resolutionX = 0;
 		this.resolutionY = 0;
 		this.primitiveArray = new int[0];
@@ -299,7 +320,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	protected final boolean cameraGenerateRay() {
+	protected final boolean ray3FCameraGenerate() {
 //		Retrieve the image coordinates:
 		final float imageX = getGlobalId() % this.resolutionX;
 		final float imageY = getGlobalId() / this.resolutionX;
@@ -389,7 +410,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		this.ray3FArray_$private$8[4] = directionNormalizedY;
 		this.ray3FArray_$private$8[5] = directionNormalizedZ;
 		this.ray3FArray_$private$8[6] = 0.001F;
-		this.ray3FArray_$private$8[7] = Float.MAX_VALUE;
+		this.ray3FArray_$private$8[7] = MAX_VALUE;
 		
 //		Fill in the pixel array:
 		this.pixelArray[pixelArrayOffset + 0] = pixelX;
@@ -399,32 +420,77 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final boolean intersectsPlane3F() {
-		return intersectionTPlane3F() > 0.0F;
+	protected final boolean intersectsShape3F() {
+		return intersectionTShape3F() > 0.0F;
 	}
 	
 //	TODO: Add Javadocs!
-	protected final boolean intersectsRectangularCuboid3F() {
-		return intersectionTRectangularCuboid3F() > 0.0F;
+	protected final boolean intersectsShape3FPlane3F() {
+		return intersectionTShape3FPlane3F() > 0.0F;
 	}
 	
 //	TODO: Add Javadocs!
-	protected final boolean intersectsSphere3F() {
-		return intersectionTSphere3F() > 0.0F;
+	protected final boolean intersectsShape3FRectangularCuboid3F() {
+		return intersectionTShape3FRectangularCuboid3F() > 0.0F;
 	}
 	
 //	TODO: Add Javadocs!
-	protected final boolean intersectsTorus3F() {
-		return intersectionTTorus3F() > 0.0F;
+	protected final boolean intersectsShape3FSphere3F(final int shape3FSphere3FArrayOffset) {
+		return intersectionTShape3FSphere3F(shape3FSphere3FArrayOffset) > 0.0F;
 	}
 	
 //	TODO: Add Javadocs!
-	protected final boolean intersectsTriangle3F() {
-		return intersectionTTriangle3F() > 0.0F;
+	protected final boolean intersectsShape3FTorus3F(final int shape3FTorus3FArrayOffset) {
+		return intersectionTShape3FTorus3F(shape3FTorus3FArrayOffset) > 0.0F;
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float intersectionTPlane3F() {
+	protected final boolean intersectsShape3FTriangle3F() {
+		return intersectionTShape3FTriangle3F() > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float intersectionTShape3F() {
+		float minimumT = MAX_VALUE;
+		
+		for(int index = 0; index < this.primitiveCount; index++) {
+			final int primitiveArrayOffset = index * Primitive.ARRAY_SIZE;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+			
+			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
+			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
+			
+			if(shapeID == Sphere3F.ID) {
+				ray3FTransformWorldToObject(index);
+				
+				final float t = intersectionTShape3FSphere3F(shapeOffset);
+				
+				if(t > 0.0F && t < minimumT) {
+					minimumT = t;
+				}
+				
+				ray3FTransformObjectToWorld(index);
+			}
+			
+			if(shapeID == Torus3F.ID) {
+				ray3FTransformWorldToObject(index);
+				
+				final float t = intersectionTShape3FTorus3F(shapeOffset);
+				
+				if(t > 0.0F && t < minimumT) {
+					minimumT = t;
+				}
+				
+				ray3FTransformObjectToWorld(index);
+			}
+		}
+		
+		return minimumT < MAX_VALUE ? minimumT : 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float intersectionTShape3FPlane3F() {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = this.ray3FArray_$private$8[0];
 		final float rayOriginY = this.ray3FArray_$private$8[1];
@@ -467,7 +533,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float intersectionTRectangularCuboid3F() {
+	protected final float intersectionTShape3FRectangularCuboid3F() {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[0];
 		final float rayOriginY = this.ray3FArray_$private$8[1];
@@ -512,7 +578,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float intersectionTSphere3F() {
+	protected final float intersectionTShape3FSphere3F(final int shape3FSphere3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[0];
 		final float rayOriginY = this.ray3FArray_$private$8[1];
@@ -524,10 +590,10 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		final float rayTMaximum = this.ray3FArray_$private$8[7];
 		
 //		Retrieve the sphere variables:
-		final float sphereCenterX = 0.0F;
-		final float sphereCenterY = 0.0F;
-		final float sphereCenterZ = 5.0F;
-		final float sphereRadius = 1.0F;
+		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 0];
+		final float sphereCenterY = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 1];
+		final float sphereCenterZ = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 2];
+		final float sphereRadius = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_RADIUS];
 		final float sphereRadiusSquared = sphereRadius * sphereRadius;
 		
 //		Compute the direction from the sphere center to the ray origin:
@@ -547,7 +613,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float intersectionTTorus3F() {
+	protected final float intersectionTShape3FTorus3F(final int shape3FTorus3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[0];
 		final float rayOriginY = this.ray3FArray_$private$8[1];
@@ -559,9 +625,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		final float rayTMaximum = this.ray3FArray_$private$8[7];
 		
 //		Retrieve the torus variables:
-		final float torusRadiusInner = 0.25F;
+		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_INNER];
 		final float torusRadiusInnerSquared = torusRadiusInner * torusRadiusInner;
-		final float torusRadiusOuter = 1.0F;
+		final float torusRadiusOuter = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_OUTER];
 		final float torusRadiusOuterSquared = torusRadiusOuter * torusRadiusOuter;
 		
 //		Compute the variables used in the process of computing the variables for the quartic system:
@@ -587,7 +653,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float intersectionTTriangle3F() {
+	protected final float intersectionTShape3FTriangle3F() {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = this.ray3FArray_$private$8[0];
 		final float rayOriginY = this.ray3FArray_$private$8[1];
@@ -686,6 +752,16 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		return min(min(a, b), c);
 	}
 	
+//	TODO: Add Javadocs!
+	protected final float point3FDistance(final float eyeComponent1, final float eyeComponent2, final float eyeComponent3, final float lookAtComponent1, final float lookAtComponent2, final float lookAtComponent3) {
+		return sqrt(point3FDistanceSquared(eyeComponent1, eyeComponent2, eyeComponent3, lookAtComponent1, lookAtComponent2, lookAtComponent3));
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float point3FDistanceSquared(final float eyeComponent1, final float eyeComponent2, final float eyeComponent3, final float lookAtComponent1, final float lookAtComponent2, final float lookAtComponent3) {
+		return vector3FLengthSquared(lookAtComponent1 - eyeComponent1, lookAtComponent2 - eyeComponent2, lookAtComponent3 - eyeComponent3);
+	}
+	
 	/**
 	 * Returns a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive).
 	 * 
@@ -693,6 +769,33 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 */
 	protected final float random() {
 		return doNext(24) * PRNG_NEXT_FLOAT_RECIPROCAL;
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("static-method")
+	protected final float vector3FDotProduct(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		return component1LHS * component1RHS + component2LHS * component2RHS + component3LHS * component3RHS;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FLength(final float component1, final float component2, final float component3) {
+		return sqrt(vector3FLengthSquared(component1, component2, component3));
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("static-method")
+	protected final float vector3FLengthSquared(final float component1, final float component2, final float component3) {
+		return component1 * component1 + component2 * component2 + component3 * component3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void ray3FTransformObjectToWorld(final int primitiveIndex) {
+		doRay3FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void ray3FTransformWorldToObject(final int primitiveIndex) {
+		doRay3FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -770,7 +873,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		
 		if(d1 < 0.0F) {
 			return 0.0F;
-		} else if(d1 < 1.0e-10F) {
+		} else if(d1 < 1.0e-4F) {
+//			The expression in the if-statement was changed from 'd1 < 1.0e-10F' to 'd1 < 1.0e-4F' because of artifacts on the torus.
+			
 			d2 = z * z - r;
 			
 			if(d2 < 0.0F) {
@@ -905,6 +1010,125 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		return (int)(newSeed >>> (48 - bits));
 	}
 	
+	private void doPoint3FTransform(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float element41, final float element42, final float element43, final float element44, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3 + element14;
+		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3 + element24;
+		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3 + element34;
+		final float newComponent4 = element41 * oldComponent1 + element42 * oldComponent2 + element43 * oldComponent3 + element44;
+		
+		this.point3FArray_$private$3[0] = newComponent4 == 0.0F || newComponent4 == 1.0F ? newComponent1 : newComponent1 / newComponent4;
+		this.point3FArray_$private$3[1] = newComponent4 == 0.0F || newComponent4 == 1.0F ? newComponent2 : newComponent2 / newComponent4;
+		this.point3FArray_$private$3[2] = newComponent4 == 0.0F || newComponent4 == 1.0F ? newComponent3 : newComponent3 / newComponent4;
+	}
+	
+	private void doRay3FTransform(final int matrix44FArrayOffset) {
+//		Retrieve the matrix elements:
+		final float element11 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
+		final float element12 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
+		final float element13 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_3];
+		final float element14 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_4];
+		final float element21 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_1];
+		final float element22 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_2];
+		final float element23 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_3];
+		final float element24 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_2_4];
+		final float element31 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_1];
+		final float element32 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_2];
+		final float element33 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_3];
+		final float element34 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_3_4];
+		final float element41 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_1];
+		final float element42 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_2];
+		final float element43 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_3];
+		final float element44 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_4];
+		
+//		Retrieve the ray origin components from the old space:
+		final float oldOriginX = this.ray3FArray_$private$8[0];
+		final float oldOriginY = this.ray3FArray_$private$8[1];
+		final float oldOriginZ = this.ray3FArray_$private$8[2];
+		
+//		Retrieve the ray direction components from the old space:
+		final float oldDirectionX = this.ray3FArray_$private$8[3];
+		final float oldDirectionY = this.ray3FArray_$private$8[4];
+		final float oldDirectionZ = this.ray3FArray_$private$8[5];
+		
+//		Retrieve the ray boundary variables from the old space:
+		final float oldTMinimum = this.ray3FArray_$private$8[6];
+		final float oldTMaximum = this.ray3FArray_$private$8[7];
+		
+//		Transform the ray origin from the old space to the new space:
+		doPoint3FTransform(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldOriginX, oldOriginY, oldOriginZ);
+		
+//		Transform the ray direction from the old space to the new space:
+		doVector3FTransform(element11, element12, element13, element21, element22, element23, element31, element32, element33, oldDirectionX, oldDirectionY, oldDirectionZ);
+		
+//		Retrieve the ray origin components from the new space:
+		final float newOriginX = this.point3FArray_$private$3[0];
+		final float newOriginY = this.point3FArray_$private$3[1];
+		final float newOriginZ = this.point3FArray_$private$3[2];
+		
+//		Retrieve the ray direction components from the new space:
+		final float newDirectionX = this.vector3FArray_$private$3[0];
+		final float newDirectionY = this.vector3FArray_$private$3[1];
+		final float newDirectionZ = this.vector3FArray_$private$3[2];
+		
+//		Initialize the ray boundary variables of the new space to the ray boundary variables from the old space:
+		float newTMinimum = oldTMinimum;
+		float newTMaximum = oldTMaximum;
+		
+//		Check if the new minimum ray boundary should be computed:
+		if(newTMinimum > 0.0F && newTMinimum < MAX_VALUE) {
+//			Compute a reference point in the old space:
+			final float oldReferencePointTMinimumX = oldOriginX + oldDirectionX * oldTMinimum;
+			final float oldReferencePointTMinimumY = oldOriginY + oldDirectionY * oldTMinimum;
+			final float oldReferencePointTMinimumZ = oldOriginZ + oldDirectionZ * oldTMinimum;
+			
+//			Transform the reference point from the old space to the new space:
+			doPoint3FTransform(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMinimumX, oldReferencePointTMinimumY, oldReferencePointTMinimumZ);
+			
+//			Retrieve the reference point from the new space:
+			final float newReferencePointTMinimumX = this.point3FArray_$private$3[0];
+			final float newReferencePointTMinimumY = this.point3FArray_$private$3[1];
+			final float newReferencePointTMinimumZ = this.point3FArray_$private$3[2];
+			
+//			Compute the distance from the origin in the new space to the reference point in the new space:
+			final float distanceOriginToReferencePointTMinimum = point3FDistance(newOriginX, newOriginY, newOriginZ, newReferencePointTMinimumX, newReferencePointTMinimumY, newReferencePointTMinimumZ);
+			
+//			Update the new minimum ray boundary:
+			newTMinimum = abs(distanceOriginToReferencePointTMinimum);
+		}
+		
+//		Check if the new maximum ray bounday should be computed:
+		if(newTMaximum > 0.0F && newTMaximum < MAX_VALUE) {
+//			Compute a reference point in the old space:
+			final float oldReferencePointTMaximumX = oldOriginX + oldDirectionX * oldTMaximum;
+			final float oldReferencePointTMaximumY = oldOriginY + oldDirectionY * oldTMaximum;
+			final float oldReferencePointTMaximumZ = oldOriginZ + oldDirectionZ * oldTMaximum;
+			
+//			Transform the reference point from the old space to the new space:
+			doPoint3FTransform(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMaximumX, oldReferencePointTMaximumY, oldReferencePointTMaximumZ);
+			
+//			Retrieve the reference point from the new space:
+			final float newReferencePointTMaximumX = this.point3FArray_$private$3[0];
+			final float newReferencePointTMaximumY = this.point3FArray_$private$3[1];
+			final float newReferencePointTMaximumZ = this.point3FArray_$private$3[2];
+			
+//			Compute the distance from the origin in the new space to the reference point in the new space:
+			final float distanceOriginToReferencePointTMaximum = point3FDistance(newOriginX, newOriginY, newOriginZ, newReferencePointTMaximumX, newReferencePointTMaximumY, newReferencePointTMaximumZ);
+			
+//			Update the new maximum ray boundary:
+			newTMinimum = abs(distanceOriginToReferencePointTMaximum);
+		}
+		
+//		Set the new variables:
+		this.ray3FArray_$private$8[0] = newOriginX;
+		this.ray3FArray_$private$8[1] = newOriginY;
+		this.ray3FArray_$private$8[2] = newOriginZ;
+		this.ray3FArray_$private$8[3] = newDirectionX;
+		this.ray3FArray_$private$8[4] = newDirectionY;
+		this.ray3FArray_$private$8[5] = newDirectionZ;
+		this.ray3FArray_$private$8[6] = newTMinimum;
+		this.ray3FArray_$private$8[7] = newTMaximum;
+	}
+	
 	private void doSetupPixelArray() {
 		put(this.pixelArray = Floats.array(doGetResolution() * 2, 0.0F));
 	}
@@ -921,13 +1145,31 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	private void doSetupScene() {
 		final CompiledScene compiledScene = SceneCompiler.compile(doGetScene());
 		
+		put(this.boundingVolume3FAxisAlignedBoundingVolume3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
+		put(this.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
 		put(this.cameraArray = compiledScene.getCameraArray());
 		put(this.matrix44FArray = compiledScene.getMatrix44FArray());
 		put(this.primitiveArray = compiledScene.getPrimitiveArray());
-		put(this.sphere3FArray = compiledScene.getSphere3FArray());
+		put(this.shape3FPlane3FArray = compiledScene.getShape3FPlane3FArray());
+		put(this.shape3FRectangularCuboid3FArray = compiledScene.getShape3FRectangularCuboid3FArray());
+		put(this.shape3FSphere3FArray = compiledScene.getShape3FSphere3FArray());
+		put(this.shape3FTorus3FArray = compiledScene.getShape3FTorus3FArray());
+		put(this.shape3FTriangle3FArray = compiledScene.getShape3FTriangle3FArray());
+		
+		this.primitiveCount = compiledScene.getPrimitiveCount();
 	}
 	
 	private void doSetupSeedArray() {
 		put(this.seedArray = Longs.array(doGetResolution(), () -> ThreadLocalRandom.current().nextLong()));
+	}
+	
+	private void doVector3FTransform(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3;
+		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3;
+		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3;
+		
+		this.vector3FArray_$private$3[0] = newComponent1;
+		this.vector3FArray_$private$3[1] = newComponent2;
+		this.vector3FArray_$private$3[2] = newComponent3;
 	}
 }

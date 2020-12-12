@@ -93,6 +93,12 @@ public abstract class AbstractKernel extends Kernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
+	@SuppressWarnings("static-method")
+	protected final float addIfLessThanThreshold(final float value, final float threshold, final float valueAdd) {
+		return value < threshold ? value + valueAdd : value;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final float max(final float a, final float b, final float c) {
 		return max(max(a, b), c);
 	}
@@ -100,6 +106,15 @@ public abstract class AbstractKernel extends Kernel {
 //	TODO: Add Javadocs!
 	protected final float min(final float a, final float b, final float c) {
 		return min(min(a, b), c);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float normalize(final float value, final float a, final float b) {
+		final float maximum = max(a, b);
+		final float minimum = min(a, b);
+		final float valueNormalized = (value - minimum) / (maximum - minimum);
+		
+		return valueNormalized;
 	}
 	
 //	TODO: Add Javadocs!
@@ -119,6 +134,20 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected final float random() {
 		return doNext(24) * PRNG_NEXT_FLOAT_RECIPROCAL;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float saturate(final float value, final float edgeA, final float edgeB) {
+		final float minimum = min(edgeA, edgeB);
+		final float maximum = max(edgeA, edgeB);
+		
+		if(value < minimum) {
+			return minimum;
+		} else if(value > maximum) {
+			return maximum;
+		} else {
+			return value;
+		}
 	}
 	
 //	TODO: Add Javadocs!

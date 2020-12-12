@@ -19,6 +19,8 @@
 package org.dayflower.renderer.gpu;
 
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.min;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -397,6 +399,11 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final boolean intersectsRectangularCuboid3F() {
+		return intersectionTRectangularCuboid3F() > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final boolean intersectsSphere3F() {
 		return intersectionTSphere3F() > 0.0F;
 	}
@@ -407,73 +414,228 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final boolean intersectsTriangle3F() {
+		return intersectionTTriangle3F() > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float intersectionTRectangularCuboid3F() {
+//		Retrieve the ray variables:
+		final float rayOriginX = this.ray3FArray_$private$8[0];
+		final float rayOriginY = this.ray3FArray_$private$8[1];
+		final float rayOriginZ = this.ray3FArray_$private$8[2];
+		final float rayDirectionReciprocalX = 1.0F / this.ray3FArray_$private$8[3];
+		final float rayDirectionReciprocalY = 1.0F / this.ray3FArray_$private$8[4];
+		final float rayDirectionReciprocalZ = 1.0F / this.ray3FArray_$private$8[5];
+		final float rayTMinimum = this.ray3FArray_$private$8[6];
+		final float rayTMaximum = this.ray3FArray_$private$8[7];
+		
+//		Retrieve the rectangular cuboid variables:
+		final float rectangularCuboidMaximumX = +0.5F;
+		final float rectangularCuboidMaximumY = +0.5F;
+		final float rectangularCuboidMaximumZ = +0.5F;
+		final float rectangularCuboidMinimumX = -0.5F;
+		final float rectangularCuboidMinimumY = -0.5F;
+		final float rectangularCuboidMinimumZ = -0.5F;
+		
+//		Compute the intersection:
+		final float intersectionTMinimumX = (rectangularCuboidMinimumX - rayOriginX) * rayDirectionReciprocalX;
+		final float intersectionTMinimumY = (rectangularCuboidMinimumY - rayOriginY) * rayDirectionReciprocalY;
+		final float intersectionTMinimumZ = (rectangularCuboidMinimumZ - rayOriginZ) * rayDirectionReciprocalZ;
+		final float intersectionTMaximumX = (rectangularCuboidMaximumX - rayOriginX) * rayDirectionReciprocalX;
+		final float intersectionTMaximumY = (rectangularCuboidMaximumY - rayOriginY) * rayDirectionReciprocalY;
+		final float intersectionTMaximumZ = (rectangularCuboidMaximumZ - rayOriginZ) * rayDirectionReciprocalZ;
+		final float intersectionTMinimum = max(min(intersectionTMinimumX, intersectionTMaximumX), min(intersectionTMinimumY, intersectionTMaximumY), min(intersectionTMinimumZ, intersectionTMaximumZ));
+		final float intersectionTMaximum = min(max(intersectionTMinimumX, intersectionTMaximumX), max(intersectionTMinimumY, intersectionTMaximumY), max(intersectionTMinimumZ, intersectionTMaximumZ));
+		
+		if(intersectionTMinimum > intersectionTMaximum) {
+			return 0.0F;
+		}
+		
+		if(intersectionTMinimum > rayTMinimum && intersectionTMinimum < rayTMaximum) {
+			return intersectionTMinimum;
+		}
+		
+		if(intersectionTMaximum > rayTMinimum && intersectionTMaximum < rayTMaximum) {
+			return intersectionTMaximum;
+		}
+		
+		return 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final float intersectionTSphere3F() {
-		final float originX = this.ray3FArray_$private$8[0];
-		final float originY = this.ray3FArray_$private$8[1];
-		final float originZ = this.ray3FArray_$private$8[2];
+//		Retrieve the ray variables:
+		final float rayOriginX = this.ray3FArray_$private$8[0];
+		final float rayOriginY = this.ray3FArray_$private$8[1];
+		final float rayOriginZ = this.ray3FArray_$private$8[2];
+		final float rayDirectionX = this.ray3FArray_$private$8[3];
+		final float rayDirectionY = this.ray3FArray_$private$8[4];
+		final float rayDirectionZ = this.ray3FArray_$private$8[5];
+		final float rayTMinimum = this.ray3FArray_$private$8[6];
+		final float rayTMaximum = this.ray3FArray_$private$8[7];
 		
-		final float directionX = this.ray3FArray_$private$8[3];
-		final float directionY = this.ray3FArray_$private$8[4];
-		final float directionZ = this.ray3FArray_$private$8[5];
+//		Retrieve the sphere variables:
+		final float sphereCenterX = 0.0F;
+		final float sphereCenterY = 0.0F;
+		final float sphereCenterZ = 5.0F;
+		final float sphereRadius = 1.0F;
+		final float sphereRadiusSquared = sphereRadius * sphereRadius;
 		
-		final float tMinimum = this.ray3FArray_$private$8[6];
-		final float tMaximum = this.ray3FArray_$private$8[7];
+//		Compute the direction from the sphere center to the ray origin:
+		final float sphereCenterToRayOriginX = rayOriginX - sphereCenterX;
+		final float sphereCenterToRayOriginY = rayOriginY - sphereCenterY;
+		final float sphereCenterToRayOriginZ = rayOriginZ - sphereCenterZ;
 		
-		final float centerX = 0.0F;
-		final float centerY = 0.0F;
-		final float centerZ = 5.0F;
+//		Compute the variables for the quadratic system:
+		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
+		final float b = 2.0F * (sphereCenterToRayOriginX * rayDirectionX + sphereCenterToRayOriginY * rayDirectionY + sphereCenterToRayOriginZ * rayDirectionZ);
+		final float c = (sphereCenterToRayOriginX * sphereCenterToRayOriginX + sphereCenterToRayOriginY * sphereCenterToRayOriginY + sphereCenterToRayOriginZ * sphereCenterToRayOriginZ) - sphereRadiusSquared;
 		
-		final float radius = 1.0F;
-		final float radiusSquared = radius * radius;
-		
-		final float centerToOriginX = originX - centerX;
-		final float centerToOriginY = originY - centerY;
-		final float centerToOriginZ = originZ - centerZ;
-		
-		final float a = directionX * directionX + directionY * directionY + directionZ * directionZ;
-		final float b = 2.0F * (centerToOriginX * directionX + centerToOriginY * directionY + centerToOriginZ * directionZ);
-		final float c = (centerToOriginX * centerToOriginX + centerToOriginY * centerToOriginY + centerToOriginZ * centerToOriginZ) - radiusSquared;
-		
-		final float t = doSolveQuadraticSystem(a, b, c, tMinimum, tMaximum);
+//		Compute the intersection by solving the quadratic system and checking the valid intersection interval:
+		final float t = doSolveQuadraticSystem(a, b, c, rayTMinimum, rayTMaximum);
 		
 		return t;
 	}
 	
 //	TODO: Add Javadocs!
 	protected final float intersectionTTorus3F() {
-		final float originX = this.ray3FArray_$private$8[0];
-		final float originY = this.ray3FArray_$private$8[1];
-		final float originZ = this.ray3FArray_$private$8[2];
+//		Retrieve the ray variables:
+		final float rayOriginX = this.ray3FArray_$private$8[0];
+		final float rayOriginY = this.ray3FArray_$private$8[1];
+		final float rayOriginZ = this.ray3FArray_$private$8[2];
+		final float rayDirectionX = this.ray3FArray_$private$8[3];
+		final float rayDirectionY = this.ray3FArray_$private$8[4];
+		final float rayDirectionZ = this.ray3FArray_$private$8[5];
+		final float rayTMinimum = this.ray3FArray_$private$8[6];
+		final float rayTMaximum = this.ray3FArray_$private$8[7];
 		
-		final float directionX = this.ray3FArray_$private$8[3];
-		final float directionY = this.ray3FArray_$private$8[4];
-		final float directionZ = this.ray3FArray_$private$8[5];
+//		Retrieve the torus variables:
+		final float torusRadiusInner = 0.25F;
+		final float torusRadiusInnerSquared = torusRadiusInner * torusRadiusInner;
+		final float torusRadiusOuter = 1.0F;
+		final float torusRadiusOuterSquared = torusRadiusOuter * torusRadiusOuter;
 		
-		final float tMinimum = this.ray3FArray_$private$8[6];
-		final float tMaximum = this.ray3FArray_$private$8[7];
+//		Compute the variables used in the process of computing the variables for the quartic system:
+		final float f0 = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
+		final float f1 = (rayOriginX * rayDirectionX + rayOriginY * rayDirectionY + rayOriginZ * rayDirectionZ) * 2.0F;
+		final float f2 = torusRadiusInnerSquared;
+		final float f3 = torusRadiusOuterSquared;
+		final float f4 = (rayOriginX * rayOriginX + rayOriginY * rayOriginY + rayOriginZ * rayOriginZ) - f2 - f3;
+		final float f5 = rayDirectionZ;
+		final float f6 = rayOriginZ;
 		
-		final float radiusInner = 0.25F;
-		final float radiusInnerSquared = radiusInner * radiusInner;
-		final float radiusOuter = 1.0F;
-		final float radiusOuterSquared = radiusOuter * radiusOuter;
-		
-		final float f0 = directionX * directionX + directionY * directionY + directionZ * directionZ;
-		final float f1 = (originX * directionX + originY * directionY + originZ * directionZ) * 2.0F;
-		final float f2 = radiusInnerSquared;
-		final float f3 = radiusOuterSquared;
-		final float f4 = (originX * originX + originY * originY + originZ * originZ) - f2 - f3;
-		final float f5 = directionZ;
-		final float f6 = originZ;
-		
+//		Compute the variables for the quartic system:
 		final float a = f0 * f0;
 		final float b = f0 * 2.0F * f1;
 		final float c = f1 * f1 + 2.0F * f0 * f4 + 4.0F * f3 * f5 * f5;
 		final float d = f1 * 2.0F * f4 + 8.0F * f3 * f6 * f5;
 		final float e = f4 * f4 + 4.0F * f3 * f6 * f6 - 4.0F * f3 * f2;
 		
-		final float t = doSolveQuarticSystem(a, b, c, d, e, tMinimum, tMaximum);
+//		Compute the intersection by solving the quartic system and checking the valid intersection interval:
+		final float t = doSolveQuarticSystem(a, b, c, d, e, rayTMinimum, rayTMaximum);
 		
 		return t;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float intersectionTTriangle3F() {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = this.ray3FArray_$private$8[0];
+		final float rayOriginY = this.ray3FArray_$private$8[1];
+		final float rayOriginZ = this.ray3FArray_$private$8[2];
+		final float rayDirectionX = this.ray3FArray_$private$8[3];
+		final float rayDirectionY = this.ray3FArray_$private$8[4];
+		final float rayDirectionZ = this.ray3FArray_$private$8[5];
+		final float rayTMinimum = this.ray3FArray_$private$8[6];
+		final float rayTMaximum = this.ray3FArray_$private$8[7];
+		
+//		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
+		final float triangleAPositionX = +0.0F;
+		final float triangleAPositionY = +1.0F;
+		final float triangleAPositionZ = +5.0F;
+		final float triangleBPositionX = +1.0F;
+		final float triangleBPositionY = -1.0F;
+		final float triangleBPositionZ = +5.0F;
+		final float triangleCPositionX = -1.0F;
+		final float triangleCPositionY = -1.0F;
+		final float triangleCPositionZ = +5.0F;
+		
+//		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'direction0' in the comments:
+		final float direction0X = triangleBPositionX - triangleAPositionX;
+		final float direction0Y = triangleBPositionY - triangleAPositionY;
+		final float direction0Z = triangleBPositionZ - triangleAPositionZ;
+		
+//		Compute the direction from 'triangleAPosition' to 'triangleCPosition', denoted by 'direction1' in the comments:
+		final float direction1X = triangleCPositionX - triangleAPositionX;
+		final float direction1Y = triangleCPositionY - triangleAPositionY;
+		final float direction1Z = triangleCPositionZ - triangleAPositionZ;
+		
+//		Compute the cross product between 'rayDirection' and 'direction1', denoted by 'direction2' in the comments:
+		final float direction2X = rayDirectionY * direction1Z - rayDirectionZ * direction1Y;
+		final float direction2Y = rayDirectionZ * direction1X - rayDirectionX * direction1Z;
+		final float direction2Z = rayDirectionX * direction1Y - rayDirectionY * direction1X;
+		
+//		Compute the determinant, which is the dot product between 'direction0' and 'direction2':
+		final float determinant = direction0X * direction2X + direction0Y * direction2Y + direction0Z * direction2Z;
+		
+//		Check if the determinant is close to 0.0 and, if that is the case, return a miss:
+		if(determinant >= -0.0001F && determinant <= +0.0001F) {
+			return 0.0F;
+		}
+		
+//		Compute the direction from 'triangleAPosition' to 'rayOrigin', denoted by 'direction3' in the comments:
+		final float direction3X = rayOriginX - triangleAPositionX;
+		final float direction3Y = rayOriginY - triangleAPositionY;
+		final float direction3Z = rayOriginZ - triangleAPositionZ;
+		
+//		Compute the reciprocal (or inverse) of the determinant, such that multiplications can be used instead of divisions:
+		final float determinantReciprocal = 1.0F / determinant;
+		
+//		Compute the Barycentric U-coordinate as the dot product between 'direction3' and 'direction2' followed by a multiplication with the reciprocal (or inverse) determinant:
+		final float barycentricU = (direction3X * direction2X + direction3Y * direction2Y + direction3Z * direction2Z) * determinantReciprocal;
+		
+//		Check that the Barycentric U-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
+		if(barycentricU < 0.0F || barycentricU > 1.0F) {
+			return 0.0F;
+		}
+		
+//		Compute the cross product between 'direction3' and 'direction0', denoted by 'direction4' in the comments:
+		final float direction4X = direction3Y * direction0Z - direction3Z * direction0Y;
+		final float direction4Y = direction3Z * direction0X - direction3X * direction0Z;
+		final float direction4Z = direction3X * direction0Y - direction3Y * direction0X;
+		
+//		Compute the Barycentric V-coordinate as the dot product between 'rayDirection' and 'direction4' followed by a multiplication with the reciprocal (or inverse) determinant:
+		final float barycentricV = (rayDirectionX * direction4X + rayDirectionY * direction4Y + rayDirectionZ * direction4Z) * determinantReciprocal;
+		
+//		Check that the Barycentric V-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
+		if(barycentricV < 0.0F || barycentricV > 1.0F) {
+			return 0.0F;
+		}
+		
+//		Check that the sum of the Barycentric U-coordinate and the Barycentric V-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
+		if(barycentricU + barycentricV > 1.0F) {
+			return 0.0F;
+		}
+		
+//		Compute the intersection as the dot product between 'direction1' and 'direction4' followed by a multiplication with the reciprocal (or inverse) determinant:
+		final float intersectionT = (direction1X * direction4X + direction1Y * direction4Y + direction1Z * direction4Z) * determinantReciprocal;
+		
+		if(intersectionT > rayTMinimum && intersectionT < rayTMaximum) {
+			return intersectionT;
+		}
+		
+		return 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float max(final float a, final float b, final float c) {
+		return max(max(a, b), c);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float min(final float a, final float b, final float c) {
+		return min(min(a, b), c);
 	}
 	
 	/**

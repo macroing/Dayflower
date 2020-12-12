@@ -27,6 +27,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
+import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -71,13 +74,13 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	protected float[] boundingVolume3FAxisAlignedBoundingVolume3FArray;
+	protected float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
 	protected float[] boundingVolume3FBoundingSphere3FArray;
 	protected float[] cameraArray;
 	protected float[] matrix44FArray;
 	protected float[] pixelArray;
 	protected float[] point3FArray_$private$3;
-	protected float[] radianceArray;
+	protected float[] radianceRGBArray;
 	protected float[] ray3FArray_$private$8;
 	protected float[] shape3FPlane3FArray;
 	protected float[] shape3FRectangularCuboid3FArray;
@@ -110,13 +113,13 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
 	 */
 	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
-		this.boundingVolume3FAxisAlignedBoundingVolume3FArray = new float[0];
+		this.boundingVolume3FAxisAlignedBoundingBox3FArray = new float[0];
 		this.boundingVolume3FBoundingSphere3FArray = new float[0];
 		this.cameraArray = new float[0];
 		this.matrix44FArray = new float[0];
 		this.pixelArray = new float[0];
 		this.point3FArray_$private$3 = new float[3];
-		this.radianceArray = new float[0];
+		this.radianceRGBArray = new float[0];
 		this.ray3FArray_$private$8 = new float[8];
 		this.shape3FPlane3FArray = new float[0];
 		this.shape3FRectangularCuboid3FArray = new float[0];
@@ -215,7 +218,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
 			final float[] pixelArray = doGetPixelArray();
-			final float[] radianceArray = doGetRadianceArray();
+			final float[] radianceRGBArray = doGetRadianceRGBArray();
+			
+//			final long time0 = System.currentTimeMillis();
 			
 //			TODO: Fix the following bottleneck using the Kernel itself in a different mode! It taks around 200 milliseconds per render pass.
 			for(int y = 0; y < resolutionY; y++) {
@@ -224,9 +229,9 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 					final int indexPixelArray = index * 2;
 					final int indexRadianceArray = index * 3;
 					
-					final float r = radianceArray[indexRadianceArray + 0];
-					final float g = radianceArray[indexRadianceArray + 1];
-					final float b = radianceArray[indexRadianceArray + 2];
+					final float r = radianceRGBArray[indexRadianceArray + 0];
+					final float g = radianceRGBArray[indexRadianceArray + 1];
+					final float b = radianceRGBArray[indexRadianceArray + 2];
 					
 					final float imageX = x;
 					final float imageY = y;
@@ -241,6 +246,11 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 					}
 				}
 			}
+			
+//			final long time1 = System.currentTimeMillis();
+//			final long time2 = time1 - time0;
+			
+//			System.out.println("RGB -> XYZ = " + time2 + " millis.");
 			
 			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 1.0D);
 			
@@ -323,7 +333,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		setExplicit(true);
 		
 		doSetupPixelArray();
-		doSetupRadianceArray();
+		doSetupRadianceRGBArray();
 		doSetupResolution();
 		doSetupScene();
 		doSetupSeedArray();
@@ -432,6 +442,16 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final boolean intersectsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset) {
+		return intersectionTBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolume3FAxisAlignedBoundingBox3FArrayOffset) > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final boolean intersectsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset) {
+		return intersectionTBoundingVolume3FBoundingSphere3F(boundingVolume3FBoundingSphere3FArrayOffset) > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final boolean intersectsShape3F() {
 		return intersectionTShape3F() > 0.0F;
 	}
@@ -462,43 +482,143 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final float intersectionTBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
+		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
+		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
+		final float rayDirectionReciprocalX = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float rayDirectionReciprocalY = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float rayDirectionReciprocalZ = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
+		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+		
+//		Retrieve the axis aligned bounding box variables:
+		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
+		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
+		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 2];
+		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 0];
+		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 1];
+		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 2];
+		
+//		Compute the intersection:
+		final float intersectionTMinimumX = (axisAlignedBoundingBoxMinimumX - rayOriginX) * rayDirectionReciprocalX;
+		final float intersectionTMinimumY = (axisAlignedBoundingBoxMinimumY - rayOriginY) * rayDirectionReciprocalY;
+		final float intersectionTMinimumZ = (axisAlignedBoundingBoxMinimumZ - rayOriginZ) * rayDirectionReciprocalZ;
+		final float intersectionTMaximumX = (axisAlignedBoundingBoxMaximumX - rayOriginX) * rayDirectionReciprocalX;
+		final float intersectionTMaximumY = (axisAlignedBoundingBoxMaximumY - rayOriginY) * rayDirectionReciprocalY;
+		final float intersectionTMaximumZ = (axisAlignedBoundingBoxMaximumZ - rayOriginZ) * rayDirectionReciprocalZ;
+		final float intersectionTMinimum = max(min(intersectionTMinimumX, intersectionTMaximumX), min(intersectionTMinimumY, intersectionTMaximumY), min(intersectionTMinimumZ, intersectionTMaximumZ));
+		final float intersectionTMaximum = min(max(intersectionTMinimumX, intersectionTMaximumX), max(intersectionTMinimumY, intersectionTMaximumY), max(intersectionTMinimumZ, intersectionTMaximumZ));
+		
+		if(intersectionTMinimum > intersectionTMaximum) {
+			return 0.0F;
+		}
+		
+		if(intersectionTMinimum > rayTMinimum && intersectionTMinimum < rayTMaximum) {
+			return intersectionTMinimum;
+		}
+		
+		if(intersectionTMaximum > rayTMinimum && intersectionTMaximum < rayTMaximum) {
+			return intersectionTMaximum;
+		}
+		
+		return 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float intersectionTBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
+		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
+		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
+		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
+		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+		
+//		Retrieve the bounding sphere variables:
+		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
+		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
+		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
+		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
+		final float boundingSphereRadiusSquared = boundingSphereRadius * boundingSphereRadius;
+		
+//		Compute the direction from the bounding sphere center to the ray origin:
+		final float boundingSphereCenterToRayOriginX = rayOriginX - boundingSphereCenterX;
+		final float boundingSphereCenterToRayOriginY = rayOriginY - boundingSphereCenterY;
+		final float boundingSphereCenterToRayOriginZ = rayOriginZ - boundingSphereCenterZ;
+		
+//		Compute the variables for the quadratic system:
+		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
+		final float b = 2.0F * (boundingSphereCenterToRayOriginX * rayDirectionX + boundingSphereCenterToRayOriginY * rayDirectionY + boundingSphereCenterToRayOriginZ * rayDirectionZ);
+		final float c = (boundingSphereCenterToRayOriginX * boundingSphereCenterToRayOriginX + boundingSphereCenterToRayOriginY * boundingSphereCenterToRayOriginY + boundingSphereCenterToRayOriginZ * boundingSphereCenterToRayOriginZ) - boundingSphereRadiusSquared;
+		
+//		Compute the intersection by solving the quadratic system and checking the valid intersection interval:
+		final float t = doSolveQuadraticSystem(a, b, c, rayTMinimum, rayTMaximum);
+		
+		return t;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final float intersectionTShape3F() {
 		boolean hasFoundIntersection = false;
 		
 		for(int index = 0; index < this.primitiveCount; index++) {
 			final int primitiveArrayOffset = index * Primitive.ARRAY_SIZE;
+			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_ID;
+			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
 			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
 			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
 			
+			final int boundingVolumeID = this.primitiveArray[primitiveArrayOffsetBoundingVolumeID];
+			final int boundingVolumeOffset = this.primitiveArray[primitiveArrayOffsetBoundingVolumeOffset];
 			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
 			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
 			
-			float t = 0.0F;
+			boolean isIntersectingBoundingVolume = false;
 			
-			ray3FTransformWorldToObject(index);
-			
-			if(shapeID == Plane3F.ID) {
-				t = intersectionTShape3FPlane3F(shapeOffset);
+			if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
+				isIntersectingBoundingVolume = intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset);
 			}
 			
-			if(shapeID == RectangularCuboid3F.ID) {
-				t = intersectionTShape3FRectangularCuboid3F(shapeOffset);
+			if(boundingVolumeID == BoundingSphere3F.ID) {
+				isIntersectingBoundingVolume = intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset);
 			}
 			
-			if(shapeID == Sphere3F.ID) {
-				t = intersectionTShape3FSphere3F(shapeOffset);
+			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
+				isIntersectingBoundingVolume = true;
 			}
 			
-			if(shapeID == Torus3F.ID) {
-				t = intersectionTShape3FTorus3F(shapeOffset);
-			}
-			
-			ray3FTransformObjectToWorld(index);
-			
-			if(t > 0.0F && t < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
-				this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = t;
+			if(isIntersectingBoundingVolume) {
+				float t = 0.0F;
 				
-				hasFoundIntersection = true;
+				ray3FTransformWorldToObject(index);
+				
+				if(shapeID == Plane3F.ID) {
+					t = intersectionTShape3FPlane3F(shapeOffset);
+				}
+				
+				if(shapeID == RectangularCuboid3F.ID) {
+					t = intersectionTShape3FRectangularCuboid3F(shapeOffset);
+				}
+				
+				if(shapeID == Sphere3F.ID) {
+					t = intersectionTShape3FSphere3F(shapeOffset);
+				}
+				
+				if(shapeID == Torus3F.ID) {
+					t = intersectionTShape3FTorus3F(shapeOffset);
+				}
+				
+				ray3FTransformObjectToWorld(index);
+				
+				if(t > 0.0F && t < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
+					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = t;
+					
+					hasFoundIntersection = true;
+				}
 			}
 		}
 		
@@ -1007,8 +1127,8 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		return doGetAndReturn(this.pixelArray);
 	}
 	
-	private float[] doGetRadianceArray() {
-		return doGetAndReturn(this.radianceArray);
+	private float[] doGetRadianceRGBArray() {
+		return doGetAndReturn(this.radianceRGBArray);
 	}
 	
 	private int doGetResolution() {
@@ -1151,8 +1271,8 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 		put(this.pixelArray = Floats.array(doGetResolution() * 2, 0.0F));
 	}
 	
-	private void doSetupRadianceArray() {
-		put(this.radianceArray = Floats.array(doGetResolution() * 3, 0.0F));
+	private void doSetupRadianceRGBArray() {
+		put(this.radianceRGBArray = Floats.array(doGetResolution() * 3, 0.0F));
 	}
 	
 	private void doSetupResolution() {
@@ -1163,7 +1283,7 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	private void doSetupScene() {
 		final CompiledScene compiledScene = SceneCompiler.compile(doGetScene());
 		
-		put(this.boundingVolume3FAxisAlignedBoundingVolume3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
+		put(this.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		put(this.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
 		put(this.cameraArray = compiledScene.getCameraArray());
 		put(this.matrix44FArray = compiledScene.getMatrix44FArray());

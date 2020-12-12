@@ -22,7 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
+import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
+import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -46,22 +50,30 @@ final class SceneCompiler {
 		final long currentTimeMillis = System.currentTimeMillis();
 		
 //		Retrieve Lists for all distinct types:
+		final List<AxisAlignedBoundingBox3F> distinctAxisAlignedBoundingBoxes = NodeFilter.filterAllDistinct(scene, AxisAlignedBoundingBox3F.class);
+		final List<BoundingSphere3F> distinctBoundingSpheres = NodeFilter.filterAllDistinct(scene, BoundingSphere3F.class);
+		final List<InfiniteBoundingVolume3F> distinctInfiniteBoundingVolumes = NodeFilter.filterAllDistinct(scene, InfiniteBoundingVolume3F.class);
 		final List<Plane3F> distinctPlanes = NodeFilter.filterAllDistinct(scene, Plane3F.class);
 		final List<RectangularCuboid3F> distinctRectangularCuboids = NodeFilter.filterAllDistinct(scene, RectangularCuboid3F.class);
 		final List<Sphere3F> distinctSpheres = NodeFilter.filterAllDistinct(scene, Sphere3F.class);
 		final List<Torus3F> distinctToruses = NodeFilter.filterAllDistinct(scene, Torus3F.class);
+		final List<BoundingVolume3F> distinctBoundingVolumes = Lists.merge(distinctAxisAlignedBoundingBoxes, distinctBoundingSpheres, distinctInfiniteBoundingVolumes);
 		final List<Shape3F> distinctShapes = Lists.merge(distinctPlanes, distinctRectangularCuboids, distinctSpheres, distinctToruses);
 		
 //		Retrieve a List of filtered Primitives:
-		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctShapes);
+		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctBoundingVolumes, distinctShapes);
 		
 //		Retrieve index mappings for all distinct types:
+		final Map<AxisAlignedBoundingBox3F, Integer> distinctToOffsetsAxisAlignedBoundingBoxes = NodeFilter.mapDistinctToOffsets(distinctAxisAlignedBoundingBoxes, AxisAlignedBoundingBox3F.ARRAY_SIZE);
+		final Map<BoundingSphere3F, Integer> distinctToOffsetsBoundingSpheres = NodeFilter.mapDistinctToOffsets(distinctBoundingSpheres, BoundingSphere3F.ARRAY_SIZE);
 		final Map<Plane3F, Integer> distinctToOffsetsPlanes = NodeFilter.mapDistinctToOffsets(distinctPlanes, Plane3F.ARRAY_SIZE);
 		final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids = NodeFilter.mapDistinctToOffsets(distinctRectangularCuboids, RectangularCuboid3F.ARRAY_SIZE);
 		final Map<Sphere3F, Integer> distinctToOffsetsSpheres = NodeFilter.mapDistinctToOffsets(distinctSpheres, Sphere3F.ARRAY_SIZE);
 		final Map<Torus3F, Integer> distinctToOffsetsToruses = NodeFilter.mapDistinctToOffsets(distinctToruses, Torus3F.ARRAY_SIZE);
 		
 //		Retrieve float[] or int[] for all types:
+		final float[] boundingVolume3FAxisAlignedBoundingBox3FArray = Floats.toArray(distinctAxisAlignedBoundingBoxes, axisAlignedBoundingBox -> axisAlignedBoundingBox.toArray(), 1);
+		final float[] boundingVolume3FBoundingSphere3FArray = Floats.toArray(distinctBoundingSpheres, boundingSphere -> boundingSphere.toArray(), 1);
 		final float[] cameraArray = scene.getCamera().toArray();
 		final float[] matrix44FArray = doCreateMatrix44FArray(filteredPrimitives);
 		final float[] shape3FPlane3FArray = Floats.toArray(distinctPlanes, plane -> plane.toArray(), 1);
@@ -72,10 +84,13 @@ final class SceneCompiler {
 		final int[] primitiveArray = Primitive.toArray(filteredPrimitives);
 		
 //		Populate the float[] or int[] with data:
-		doPopulatePrimitiveArray(filteredPrimitives, distinctToOffsetsPlanes, distinctToOffsetsRectangularCuboids, distinctToOffsetsSpheres, distinctToOffsetsToruses, primitiveArray);
+		doPopulatePrimitiveArrayWithBoundingVolumes(filteredPrimitives, distinctToOffsetsAxisAlignedBoundingBoxes, distinctToOffsetsBoundingSpheres, primitiveArray);
+		doPopulatePrimitiveArrayWithShapes(filteredPrimitives, distinctToOffsetsPlanes, distinctToOffsetsRectangularCuboids, distinctToOffsetsSpheres, distinctToOffsetsToruses, primitiveArray);
 		
 		final
 		CompiledScene compiledScene = new CompiledScene();
+		compiledScene.setBoundingVolume3FAxisAlignedBoundingBox3FArray(boundingVolume3FAxisAlignedBoundingBox3FArray);
+		compiledScene.setBoundingVolume3FBoundingSphere3FArray(boundingVolume3FBoundingSphere3FArray);
 		compiledScene.setCameraArray(cameraArray);
 		compiledScene.setMatrix44FArray(matrix44FArray);
 		compiledScene.setPrimitiveArray(primitiveArray);
@@ -93,15 +108,40 @@ final class SceneCompiler {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static List<Primitive> doFilterPrimitives(final Scene scene, final List<Shape3F> distinctShapes) {
-		return scene.getPrimitives().stream().filter(primitive -> distinctShapes.contains(primitive.getShape())).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	private static List<Primitive> doFilterPrimitives(final Scene scene, final List<BoundingVolume3F> distinctBoundingVolumes, final List<Shape3F> distinctShapes) {
+		return scene.getPrimitives().stream().filter(primitive -> distinctBoundingVolumes.contains(primitive.getBoundingVolume()) && distinctShapes.contains(primitive.getShape())).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 	}
 	
 	private static float[] doCreateMatrix44FArray(final List<Primitive> primitives) {
 		return Floats.toArray(primitives, primitive -> primitive.getTransform().toArray(), 1);
 	}
 	
-	private static void doPopulatePrimitiveArray(final List<Primitive> primitives, final Map<Plane3F, Integer> distinctToOffsetsPlanes, final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final Map<Torus3F, Integer> distinctToOffsetsToruses, final int[] primitiveArray) {
+	private static void doPopulatePrimitiveArrayWithBoundingVolumes(final List<Primitive> primitives, final Map<AxisAlignedBoundingBox3F, Integer> distinctToOffsetsAxisAlignedBoundingBoxes, final Map<BoundingSphere3F, Integer> distinctToOffsetsBoundingSpheres, final int[] primitiveArray) {
+		for(int i = 0; i < primitives.size(); i++) {
+			final Primitive primitive = primitives.get(i);
+			
+			final BoundingVolume3F boundingVolume = primitive.getBoundingVolume();
+			
+			if(boundingVolume instanceof AxisAlignedBoundingBox3F) {
+				final int axisAlignedBoundingBoxOffset = distinctToOffsetsAxisAlignedBoundingBoxes.get(AxisAlignedBoundingBox3F.class.cast(boundingVolume)).intValue();
+				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
+				
+				primitiveArray[primitiveArrayOffset] = axisAlignedBoundingBoxOffset;
+			} else if(boundingVolume instanceof BoundingSphere3F) {
+				final int boundingSphereOffset = distinctToOffsetsBoundingSpheres.get(BoundingSphere3F.class.cast(boundingVolume)).intValue();
+				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
+				
+				primitiveArray[primitiveArrayOffset] = boundingSphereOffset;
+			} else if(boundingVolume instanceof InfiniteBoundingVolume3F) {
+				final int infiniteBoundingVolumeOffset = 0;
+				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
+				
+				primitiveArray[primitiveArrayOffset] = infiniteBoundingVolumeOffset;
+			}
+		}
+	}
+	
+	private static void doPopulatePrimitiveArrayWithShapes(final List<Primitive> primitives, final Map<Plane3F, Integer> distinctToOffsetsPlanes, final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final Map<Torus3F, Integer> distinctToOffsetsToruses, final int[] primitiveArray) {
 		for(int i = 0; i < primitives.size(); i++) {
 			final Primitive primitive = primitives.get(i);
 			

@@ -47,6 +47,21 @@ import org.dayflower.node.NodeTraversalException;
  */
 public final class BoundingSphere3F implements BoundingVolume3F {
 	/**
+	 * The offset for the {@link Point3F} instance representing the center in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_CENTER = 0;
+	
+	/**
+	 * The offset for the radius in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RADIUS = 3;
+	
+	/**
+	 * The size of the {@code float[]}.
+	 */
+	public static final int ARRAY_SIZE = 4;
+	
+	/**
 	 * The ID of this {@code BoundingSphere3F} class.
 	 */
 	public static final int ID = 2;
@@ -342,14 +357,19 @@ public final class BoundingSphere3F implements BoundingVolume3F {
 	
 	/**
 	 * Returns a {@code float[]} representation of this {@code BoundingSphere3F} instance.
-	 * <p>
-	 * Note: This method has not been implemented yet.
 	 * 
 	 * @return a {@code float[]} representation of this {@code BoundingSphere3F} instance
 	 */
 	@Override
 	public float[] toArray() {
-		return new float[0];//TODO: Implement!
+		final float[] array = new float[ARRAY_SIZE];
+		
+		array[ARRAY_OFFSET_CENTER + 0] = this.center.getX();
+		array[ARRAY_OFFSET_CENTER + 1] = this.center.getY();
+		array[ARRAY_OFFSET_CENTER + 2] = this.center.getZ();
+		array[ARRAY_OFFSET_RADIUS] = this.radius;
+		
+		return array;
 	}
 	
 	/**

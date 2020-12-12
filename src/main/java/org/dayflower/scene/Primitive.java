@@ -564,7 +564,7 @@ public final class Primitive implements Node {
 		
 		array[ARRAY_OFFSET_AREA_LIGHT_ID] = 0;
 		array[ARRAY_OFFSET_AREA_LIGHT_OFFSET] = 0;
-		array[ARRAY_OFFSET_BOUNDING_VOLUME_ID] = 0;
+		array[ARRAY_OFFSET_BOUNDING_VOLUME_ID] = this.boundingVolume.getID();
 		array[ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET] = 0;
 		array[ARRAY_OFFSET_MATERIAL_ID] = 0;
 		array[ARRAY_OFFSET_MATERIAL_OFFSET] = 0;

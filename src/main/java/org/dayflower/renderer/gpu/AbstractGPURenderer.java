@@ -399,6 +399,11 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final boolean intersectsPlane3F() {
+		return intersectionTPlane3F() > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final boolean intersectsRectangularCuboid3F() {
 		return intersectionTRectangularCuboid3F() > 0.0F;
 	}
@@ -416,6 +421,49 @@ public abstract class AbstractGPURenderer extends Kernel implements Renderer {
 //	TODO: Add Javadocs!
 	protected final boolean intersectsTriangle3F() {
 		return intersectionTTriangle3F() > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float intersectionTPlane3F() {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = this.ray3FArray_$private$8[0];
+		final float rayOriginY = this.ray3FArray_$private$8[1];
+		final float rayOriginZ = this.ray3FArray_$private$8[2];
+		final float rayDirectionX = this.ray3FArray_$private$8[3];
+		final float rayDirectionY = this.ray3FArray_$private$8[4];
+		final float rayDirectionZ = this.ray3FArray_$private$8[5];
+		final float rayTMinimum = this.ray3FArray_$private$8[6];
+		final float rayTMaximum = this.ray3FArray_$private$8[7];
+		
+//		Retrieve the plane variables that will be referred to by 'planeA' and 'planeSurfaceNormal' in the comments:
+		final float planeAX = 0.0F;
+		final float planeAY = 0.0F;
+		final float planeAZ = 0.0F;
+		final float planeSurfaceNormalX = 0.0F;
+		final float planeSurfaceNormalY = 1.0F;
+		final float planeSurfaceNormalZ = 0.0F;
+		
+//		Compute the determinant, which is the dot product between 'planeSurfaceNormal' and 'rayDirection':
+		final float determinant = planeSurfaceNormalX * rayDirectionX + planeSurfaceNormalY * rayDirectionY + planeSurfaceNormalZ * rayDirectionZ;
+		
+//		Check if the determinant is close to 0.0 and, if that is the case, return a miss:
+		if(determinant >= -0.0001F && determinant <= +0.0001F) {
+			return 0.0F;
+		}
+		
+//		Compute the direction from 'rayOrigin' to 'planeA', denoted by 'rayOriginToPlaneA' in the comments:
+		final float rayOriginToPlaneAX = planeAX - rayOriginX;
+		final float rayOriginToPlaneAY = planeAY - rayOriginY;
+		final float rayOriginToPlaneAZ = planeAZ - rayOriginZ;
+		
+//		Compute the intersection as the dot product between 'rayOriginToPlaneA' and 'planeSurfaceNormal' followed by a division with the determinant:
+		final float intersectionT = (rayOriginToPlaneAX * planeSurfaceNormalX + rayOriginToPlaneAY * planeSurfaceNormalY + rayOriginToPlaneAZ * planeSurfaceNormalZ) / determinant;
+		
+		if(intersectionT > rayTMinimum && intersectionT < rayTMaximum) {
+			return intersectionT;
+		}
+		
+		return 0.0F;
 	}
 	
 //	TODO: Add Javadocs!

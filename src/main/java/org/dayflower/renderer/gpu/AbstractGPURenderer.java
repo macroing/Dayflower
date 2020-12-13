@@ -1862,7 +1862,7 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 			final float distanceOriginToReferencePointTMaximum = point3FDistance(newOriginX, newOriginY, newOriginZ, newReferencePointTMaximumX, newReferencePointTMaximumY, newReferencePointTMaximumZ);
 			
 //			Update the new maximum ray boundary:
-			newTMinimum = abs(distanceOriginToReferencePointTMaximum);
+			newTMaximum = abs(distanceOriginToReferencePointTMaximum);
 		}
 		
 //		Set the new variables:

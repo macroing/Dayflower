@@ -378,6 +378,17 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final void point3FTransform(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3 + element14;
+		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3 + element24;
+		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3 + element34;
+		
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
+		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final void point3FTransformAndDivide(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float element41, final float element42, final float element43, final float element44, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
 		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3 + element14;
 		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3 + element24;

@@ -39,6 +39,7 @@ import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.image.PixelImage;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
@@ -180,6 +181,12 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 		
 		final Image image = rendererConfiguration.getImage();
 		
+		if(!(image instanceof PixelImage)) {
+			return false;
+		}
+		
+		final PixelImage pixelImage = PixelImage.class.cast(image);
+		
 		final Timer timer = rendererConfiguration.getTimer();
 		
 		final int renderPasses = rendererConfiguration.getRenderPasses();
@@ -194,8 +201,8 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 				rendererConfiguration.setRenderPass(0);
 				rendererConfiguration.setRenderTime(0L);
 				
-				image.filmClear();
-				image.filmRender();
+				pixelImage.filmClear();
+				pixelImage.filmRender();
 				
 				rendererObserver.onRenderDisplay(this, image);
 				
@@ -235,7 +242,7 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 					final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
 					
 					if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
-						image.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
+						pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
 					}
 				}
 			}
@@ -248,7 +255,7 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 1.0D);
 			
 			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
-				image.filmRender();
+				pixelImage.filmRender();
 				
 				rendererObserver.onRenderDisplay(this, image);
 			}

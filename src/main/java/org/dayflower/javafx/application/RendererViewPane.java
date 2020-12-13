@@ -41,6 +41,7 @@ import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.image.BoxFilter;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.image.PixelImage;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.scene.control.Labels;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
@@ -396,7 +397,7 @@ final class RendererViewPane extends BorderPane {
 	private static RendererConfiguration doCreateRendererConfiguration(final RenderingAlgorithm renderingAlgorithm, final Scene scene) {
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
-		rendererConfiguration.setImage(new Image(32, 32, Color3F.BLACK, new BoxFilter()));
+		rendererConfiguration.setImage(new PixelImage(32, 32, Color3F.BLACK, new BoxFilter()));
 		rendererConfiguration.setPreviewMode(true);
 		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
 		rendererConfiguration.setRenderPasses(10);
@@ -422,19 +423,19 @@ final class RendererViewPane extends BorderPane {
 		renderer.render();
 		
 		final
-		Image image = renderer.getRendererConfiguration().getImage();
-		image.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(image.getResolutionX() - 1, image.getResolutionY() - 1)), new Color3F(181, 181, 181));
+		PixelImage pixelImage = PixelImage.class.cast(renderer.getRendererConfiguration().getImage());
+		pixelImage.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImage.getResolutionX() - 1, pixelImage.getResolutionY() - 1)), new Color3F(181, 181, 181));
 		
-		return image.toWritableImage();
+		return pixelImage.toWritableImage();
 	}
 	
 	@SuppressWarnings("unused")
 	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
 		final
-		Image image = new Image(32, 32, Color3F.WHITE);
-		image.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(image.getResolutionX() - 1, image.getResolutionY() - 1)), new Color3F(181, 181, 181));
+		PixelImage pixelImage = new PixelImage(32, 32, Color3F.WHITE);
+		pixelImage.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImage.getResolutionX() - 1, pixelImage.getResolutionY() - 1)), new Color3F(181, 181, 181));
 		
-		return image.toWritableImage();
+		return pixelImage.toWritableImage();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

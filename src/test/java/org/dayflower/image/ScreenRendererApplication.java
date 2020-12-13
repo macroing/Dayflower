@@ -34,26 +34,25 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public final class ScreenRendererApplication extends Application {
-	private final AtomicReference<Function<Image, Image>> function;
+	private final AtomicReference<Function<PixelImage, PixelImage>> function;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public ScreenRendererApplication() {
-		this.function = new AtomicReference<>(image -> image);
+		this.function = new AtomicReference<>(pixelImage -> pixelImage);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
 	public void start(final Stage stage) {
-		final AtomicReference<Function<Image, Image>> function = this.function;
+		final AtomicReference<Function<PixelImage, PixelImage>> function = this.function;
 		
 		final
 		ComboBox<String> comboBox = new ComboBox<>();
@@ -78,101 +77,101 @@ public final class ScreenRendererApplication extends Application {
 					case "Blend Blue":
 						final Color3F colorBlue = Color3F.randomComponent3();
 						
-						function.set(image -> {
-							image.update(color -> Color3F.blend(color, colorBlue, 0.5F));
+						function.set(pixelImage -> {
+							pixelImage.update(color -> Color3F.blend(color, colorBlue, 0.5F));
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
 					case "Blend Green":
 						final Color3F colorGreen = Color3F.randomComponent2();
 						
-						function.set(image -> {
-							image.update(color -> Color3F.blend(color, colorGreen, 0.5F));
+						function.set(pixelImage -> {
+							pixelImage.update(color -> Color3F.blend(color, colorGreen, 0.5F));
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
 					case "Blend Red":
 						final Color3F colorRed = Color3F.randomComponent1();
 						
-						function.set(image -> {
-							image.update(color -> Color3F.blend(color, colorRed, 0.5F));
+						function.set(pixelImage -> {
+							pixelImage.update(color -> Color3F.blend(color, colorRed, 0.5F));
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
 					case "Box Blur":
-						function.set(image -> {
-							image.multiply(ConvolutionKernel33F.BOX_BLUR);
+						function.set(pixelImage -> {
+							pixelImage.multiply(ConvolutionKernel33F.BOX_BLUR);
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
 					case "Edge Detection":
-						function.set(image -> {
-							image.multiply(ConvolutionKernel33F.EDGE_DETECTION);
+						function.set(pixelImage -> {
+							pixelImage.multiply(ConvolutionKernel33F.EDGE_DETECTION);
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
 					case "Emboss":
-						function.set(image -> {
-							image.multiply(ConvolutionKernel33F.EMBOSS);
+						function.set(pixelImage -> {
+							pixelImage.multiply(ConvolutionKernel33F.EMBOSS);
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
 					case "Fractional Brownian Motion":
 						Color3F base = Color3F.random();
 				        
-						function.set(image -> {
-							for(int index = 0; index < image.getResolution(); index++) {
-								final float x = (index % image.getResolutionX()) / (float)(image.getResolutionX());
-								final float y = (index / image.getResolutionX()) / (float)(image.getResolutionY());
+						function.set(pixelImage -> {
+							for(int index = 0; index < pixelImage.getResolution(); index++) {
+								final float x = (index % pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionX());
+								final float y = (index / pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionY());
 								
 								final float noise = Floats.simplexFractionalBrownianMotionXY(x, y, 5.0F, 0.5F, 0.0F, 1.0F, 8);
 								
 								final Color3F color = Color3F.redoGammaCorrectionSRGB(Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(base, noise))));
 								
-								image.setColorRGB(Color3F.blend(image.getColorRGB(index), color, 0.5F), index);
+								pixelImage.setColorRGB(Color3F.blend(pixelImage.getColorRGB(index), color, 0.5F), index);
 							}
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
 					case "None":
-						function.set(image -> image);
+						function.set(pixelImage -> pixelImage);
 						
 						break;
 					case "Random":
 						final ConvolutionKernel33F random = ConvolutionKernel33F.random();
 						
-						function.set(image -> {
-							image.multiply(random);
+						function.set(pixelImage -> {
+							pixelImage.multiply(random);
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
 					case "Sharpen":
-						function.set(image -> {
-							image.multiply(ConvolutionKernel33F.SHARPEN);
+						function.set(pixelImage -> {
+							pixelImage.multiply(ConvolutionKernel33F.SHARPEN);
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
 					case "Threshold":
-						function.set(image -> {
-							image.update(color -> {
+						function.set(pixelImage -> {
+							pixelImage.update(color -> {
 								if(color.isCyan()) {
 									return Color3F.CYAN;
 								} else if(color.isMagenta()) {
@@ -190,7 +189,7 @@ public final class ScreenRendererApplication extends Application {
 								}
 							});
 							
-							return image;
+							return pixelImage;
 						});
 						
 						break;
@@ -238,11 +237,9 @@ public final class ScreenRendererApplication extends Application {
 				final int width = (int)(boundsInScreen.getWidth());
 				final int height = (int)(boundsInScreen.getHeight());
 				
-				final Image image = function.get().apply(Image.createScreenCapture(new Rectangle2I(new Point2I(x - width, y), new Point2I(x, y + height))));
+				final PixelImage pixelImage = function.get().apply(PixelImage.createScreenCapture(new Rectangle2I(new Point2I(x - width, y), new Point2I(x, y + height))));
 				
-				final
-				WritableImage writableImage = new WritableImage(image.getResolutionX(), image.getResolutionY());
-				writableImage.getPixelWriter().setPixels(0, 0, image.getResolutionX(), image.getResolutionY(), PixelFormat.getIntArgbInstance(), image.toIntArrayPackedForm(), 0, image.getResolutionX());
+				final WritableImage writableImage = pixelImage.toWritableImage();
 				
 				final
 				GraphicsContext graphicsContext = canvas.getGraphicsContext2D();

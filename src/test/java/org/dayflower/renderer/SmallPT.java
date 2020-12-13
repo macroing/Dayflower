@@ -28,7 +28,7 @@ import static org.dayflower.util.Doubles.sin;
 import static org.dayflower.util.Doubles.sqrt;
 
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
+import org.dayflower.image.PixelImage;
 
 public final class SmallPT {
 	private static final Sphere[] SPHERES = {
@@ -194,13 +194,13 @@ public final class SmallPT {
 			}
 		}
 		
-		final Image image = new Image(w, h);
+		final PixelImage pixelImage = new PixelImage(w, h);
 		
 		for(int i = 0; i < c.length; i++) {
-			image.setColorRGB(new Color3F(toInt(c[i].x), toInt(c[i].y), toInt(c[i].z)), i);
+			pixelImage.setColorRGB(new Color3F(toInt(c[i].x), toInt(c[i].y), toInt(c[i].z)), i);
 		}
 		
-		image.save("./generated/SmallPT-Reference.png");
+		pixelImage.save("./generated/SmallPT-Reference.png");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -23,6 +23,7 @@ import static org.dayflower.util.Floats.equal;
 import java.util.Objects;
 
 import org.dayflower.image.Image;
+import org.dayflower.image.PixelImage;
 import org.dayflower.sampler.NRooksSampler;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Scene;
@@ -56,7 +57,7 @@ public final class RendererConfiguration {
 	 * Constructs a new {@code RendererConfiguration} instance.
 	 */
 	public RendererConfiguration() {
-		this.image = new Image(800, 800);
+		this.image = new PixelImage(800, 800);
 		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
 		this.sampler = new NRooksSampler();
 		this.scene = new Scene();

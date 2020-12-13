@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.image.PixelImage;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
@@ -114,6 +115,12 @@ public abstract class AbstractCPURenderer implements Renderer {
 		
 		final Image image = rendererConfiguration.getImage();
 		
+		if(!(image instanceof PixelImage)) {
+			return false;
+		}
+		
+		final PixelImage pixelImage = PixelImage.class.cast(image);
+		
 		final Sampler sampler = rendererConfiguration.getSampler();
 		
 		final Scene scene = rendererConfiguration.getScene();
@@ -132,8 +139,8 @@ public abstract class AbstractCPURenderer implements Renderer {
 				rendererConfiguration.setRenderPass(0);
 				rendererConfiguration.setRenderTime(0L);
 				
-				image.filmClear();
-				image.filmRender();
+				pixelImage.filmClear();
+				pixelImage.filmRender();
 				
 				rendererObserver.onRenderDisplay(this, image);
 				
@@ -162,7 +169,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
 						
 						if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
-							image.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
+							pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
 						}
 					}
 				}
@@ -179,7 +186,7 @@ public abstract class AbstractCPURenderer implements Renderer {
 			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
 			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
-				image.filmRender();
+				pixelImage.filmRender();
 				
 				rendererObserver.onRenderDisplay(this, image);
 			}

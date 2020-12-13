@@ -34,7 +34,7 @@ import org.dayflower.geometry.SampleGeneratorD;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.image.Color3D;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
+import org.dayflower.image.PixelImage;
 
 public final class SmallPTD {
 	private SmallPTD() {
@@ -184,14 +184,14 @@ public final class SmallPTD {
 			}
 		}
 		
-		final Image image = new Image(resolutionX, resolutionY);
+		final PixelImage pixelImage = new PixelImage(resolutionX, resolutionY);
 		
 		for(int i = 0; i < colors.length; i++) {
-			image.setColorRGB(new Color3F(colors[i]), i);
+			pixelImage.setColorRGB(new Color3F(colors[i]), i);
 		}
 		
-		image.redoGammaCorrectionSRGB();
-		image.save("./generated/SmallPT.png");
+		pixelImage.redoGammaCorrectionSRGB();
+		pixelImage.save("./generated/SmallPT.png");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

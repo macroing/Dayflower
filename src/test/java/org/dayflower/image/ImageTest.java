@@ -36,146 +36,146 @@ public final class ImageTest {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(final String[] args) {
-		doTestImageCopper();
-		doTestImageDrawCircle();
-		doTestImageDrawLine();
-		doTestImageDrawRectangle();
-		doTestImageDrawTriangle();
-		doTestImageFillCircle();
-		doTestImageFillImage();
-		doTestImageFillRectangle();
-		doTestImageFillTriangle();
-		doTestImageMultiplyConvolutionKernel33F();
-		doTestImageMultiplyConvolutionKernel55F();
-		doTestImageSamplerNRooksSampler();
-		doTestImageSamplerRandomSampler();
-		doTestImageScreenCapture();
-		doTestImageSave();
+		doTestPixelImageCopper();
+		doTestPixelImageDrawCircle();
+		doTestPixelImageDrawLine();
+		doTestPixelImageDrawRectangle();
+		doTestPixelImageDrawTriangle();
+		doTestPixelImageFillCircle();
+		doTestPixelImageFillPixelImage();
+		doTestPixelImageFillRectangle();
+		doTestPixelImageFillTriangle();
+		doTestPixelImageMultiplyConvolutionKernel33F();
+		doTestPixelImageMultiplyConvolutionKernel55F();
+		doTestPixelImageSamplerNRooksSampler();
+		doTestPixelImageSamplerRandomSampler();
+		doTestPixelImageScreenCapture();
+		doTestPixelImageSave();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	static void doTestImageCopper() {
+	static void doTestPixelImageCopper() {
 		final
-		Image image = new Image(800, 800, Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_K.toColorXYZ())));
-		image.save("./generated/doTestImageCopper.png");
+		PixelImage pixelImage = new PixelImage(800, 800, Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_K.toColorXYZ())));
+		pixelImage.save("./generated/doTestImageCopper.png");
 	}
 	
-	static void doTestImageDrawCircle() {
+	static void doTestPixelImageDrawCircle() {
 		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.drawCircle(new Circle2I(new Point2I(60, 60), 40));
-		image.save("./generated/doTestImageDrawCircle.png");
+		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		pixelImage.drawCircle(new Circle2I(new Point2I(60, 60), 40));
+		pixelImage.save("./generated/doTestImageDrawCircle.png");
 	}
 	
-	static void doTestImageDrawLine() {
+	static void doTestPixelImageDrawLine() {
 		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.drawLine(new Line2I(new Point2I(20, 20), new Point2I(100, 100)));
-		image.save("./generated/doTestImageDrawLine.png");
+		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		pixelImage.drawLine(new Line2I(new Point2I(20, 20), new Point2I(100, 100)));
+		pixelImage.save("./generated/doTestImageDrawLine.png");
 	}
 	
-	static void doTestImageDrawRectangle() {
+	static void doTestPixelImageDrawRectangle() {
 		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.drawRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
-		image.save("./generated/doTestImageDrawRectangle.png");
+		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		pixelImage.drawRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
+		pixelImage.save("./generated/doTestImageDrawRectangle.png");
 	}
 	
-	static void doTestImageDrawTriangle() {
+	static void doTestPixelImageDrawTriangle() {
 		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.drawTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
-		image.save("./generated/doTestImageDrawTriangle.png");
+		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		pixelImage.drawTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
+		pixelImage.save("./generated/doTestImageDrawTriangle.png");
 	}
 	
-	static void doTestImageFillCircle() {
+	static void doTestPixelImageFillCircle() {
 		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.fillCircle(new Circle2I(new Point2I(60, 60), 40));
-		image.save("./generated/doTestImageFillCircle.png");
+		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		pixelImage.fillCircle(new Circle2I(new Point2I(60, 60), 40));
+		pixelImage.save("./generated/doTestImageFillCircle.png");
 	}
 	
-	static void doTestImageFillImage() {
+	static void doTestPixelImageFillPixelImage() {
 		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.fillImage(Image.random(100, 100), new Rectangle2I(new Point2I(), new Point2I(100, 100)), new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-		image.save("./generated/doTestImageFillImage.png");
+		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		pixelImage.fillPixelImage(PixelImage.random(100, 100), new Rectangle2I(new Point2I(), new Point2I(100, 100)), new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		pixelImage.save("./generated/doTestImageFillImage.png");
 	}
 	
-	static void doTestImageFillRectangle() {
+	static void doTestPixelImageFillRectangle() {
 		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.fillRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
-		image.save("./generated/doTestImageFillRectangle.png");
+		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		pixelImage.fillRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
+		pixelImage.save("./generated/doTestImageFillRectangle.png");
 	}
 	
-	static void doTestImageFillTriangle() {
+	static void doTestPixelImageFillTriangle() {
 		final
-		Image image = new Image(800, 800, Color3F.WHITE);
-		image.fillTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
-		image.save("./generated/doTestImageFillTriangle.png");
+		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		pixelImage.fillTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
+		pixelImage.save("./generated/doTestImageFillTriangle.png");
 	}
 	
-	static void doTestImageMultiplyConvolutionKernel33F() {
+	static void doTestPixelImageMultiplyConvolutionKernel33F() {
 		final
-		Image image = Image.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-		image.multiply(ConvolutionKernel33F.GAUSSIAN_BLUR);
-		image.save("./generated/doTestImageMultiplyConvolutionKernel33F.png");
+		PixelImage pixelImage = PixelImage.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		pixelImage.multiply(ConvolutionKernel33F.GAUSSIAN_BLUR);
+		pixelImage.save("./generated/doTestImageMultiplyConvolutionKernel33F.png");
 	}
 	
-	static void doTestImageMultiplyConvolutionKernel55F() {
+	static void doTestPixelImageMultiplyConvolutionKernel55F() {
 		final
-		Image image = Image.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-		image.multiply(ConvolutionKernel55F.GAUSSIAN_BLUR);
-		image.save("./generated/doTestImageMultiplyConvolutionKernel55F.png");
+		PixelImage pixelImage = PixelImage.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		pixelImage.multiply(ConvolutionKernel55F.GAUSSIAN_BLUR);
+		pixelImage.save("./generated/doTestImageMultiplyConvolutionKernel55F.png");
 	}
 	
-	static void doTestImageSamplerNRooksSampler() {
-		final Image image = new Image(800, 800, Color3F.WHITE);
+	static void doTestPixelImageSamplerNRooksSampler() {
+		final PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
 		
 		final Sampler sampler = new NRooksSampler();
 		
-		for(int y = 0; y < image.getResolutionY(); y += 8) {
-			for(int x = 0; x < image.getResolutionX(); x += 8) {
+		for(int y = 0; y < pixelImage.getResolutionY(); y += 8) {
+			for(int x = 0; x < pixelImage.getResolutionX(); x += 8) {
 				final Sample2F sample = sampler.sample2();
 				
-				final int index = (int)(sample.getY() * 8 + y) * image.getResolutionX() + (int)(sample.getX() * 8 + x);
+				final int index = (int)(sample.getY() * 8 + y) * pixelImage.getResolutionX() + (int)(sample.getX() * 8 + x);
 				
-				image.setColorRGB(Color3F.BLACK, index);
+				pixelImage.setColorRGB(Color3F.BLACK, index);
 			}
 		}
 		
-		image.save("./generated/NRooksSampler.png");
+		pixelImage.save("./generated/NRooksSampler.png");
 	}
 	
-	static void doTestImageSamplerRandomSampler() {
-		final Image image = new Image(800, 800, Color3F.WHITE);
+	static void doTestPixelImageSamplerRandomSampler() {
+		final PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
 		
 		final Sampler sampler = new RandomSampler();
 		
-		for(int y = 0; y < image.getResolutionY(); y += 8) {
-			for(int x = 0; x < image.getResolutionX(); x += 8) {
+		for(int y = 0; y < pixelImage.getResolutionY(); y += 8) {
+			for(int x = 0; x < pixelImage.getResolutionX(); x += 8) {
 				final Sample2F sample = sampler.sample2();
 				
-				final int index = (int)(sample.getY() * 8 + y) * image.getResolutionX() + (int)(sample.getX() * 8 + x);
+				final int index = (int)(sample.getY() * 8 + y) * pixelImage.getResolutionX() + (int)(sample.getX() * 8 + x);
 				
-				image.setColorRGB(Color3F.BLACK, index);
+				pixelImage.setColorRGB(Color3F.BLACK, index);
 			}
 		}
 		
-		image.save("./generated/RandomSampler.png");
+		pixelImage.save("./generated/RandomSampler.png");
 	}
 	
-	static void doTestImageScreenCapture() {
+	static void doTestPixelImageScreenCapture() {
 		final
-		Image image = Image.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-		image.save("./generated/doTestImageScreenCapture.png");
+		PixelImage pixelImage = PixelImage.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		pixelImage.save("./generated/doTestImageScreenCapture.png");
 	}
 	
-	static void doTestImageSave() {
+	static void doTestPixelImageSave() {
 		final
-		Image image = Image.random();
-		image.save("./generated/doTestImageSave.png");
+		PixelImage pixelImage = PixelImage.random();
+		pixelImage.save("./generated/doTestImageSave.png");
 	}
 }

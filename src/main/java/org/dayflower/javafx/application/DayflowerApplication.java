@@ -26,6 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.image.Image;
+import org.dayflower.image.PixelImage;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
 import org.dayflower.renderer.Renderer;
@@ -154,7 +155,7 @@ public final class DayflowerApplication extends Application {
 			
 			final
 			RendererConfiguration rendererConfiguration = new RendererConfiguration();
-			rendererConfiguration.setImage(new Image(resolutionX, resolutionY));
+			rendererConfiguration.setImage(new PixelImage(resolutionX, resolutionY));
 			rendererConfiguration.setRenderPasses(1);
 			rendererConfiguration.setRenderPassesPerDisplayUpdate(1);
 			rendererConfiguration.setSamples(1);

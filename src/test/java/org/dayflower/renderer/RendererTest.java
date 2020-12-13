@@ -18,7 +18,7 @@
  */
 package org.dayflower.renderer;
 
-import org.dayflower.image.Image;
+import org.dayflower.image.PixelImage;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
@@ -119,7 +119,7 @@ public final class RendererTest {
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
 		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
-		rendererConfiguration.setImage(new Image((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
+		rendererConfiguration.setImage(new PixelImage((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
 		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
 		rendererConfiguration.setSampler(new RandomSampler());
 		

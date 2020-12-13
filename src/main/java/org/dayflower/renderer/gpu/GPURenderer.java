@@ -50,13 +50,20 @@ public final class GPURenderer extends AbstractGPURenderer {
 		
 		if(ray3FCameraGenerate()) {
 			if(intersectionComputeShape3F()) {
+				final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+				final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+				final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+				
 				final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
 				final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
 				final float surfaceNormalZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
 				
-				final float r = (surfaceNormalX + 1.0F) * 0.5F;
-				final float g = (surfaceNormalY + 1.0F) * 0.5F;
-				final float b = (surfaceNormalZ + 1.0F) * 0.5F;
+				final float rayDirectionDotSurfaceNormal = vector3FDotProduct(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+				final float rayDirectionDotSurfaceNormalAbs = abs(rayDirectionDotSurfaceNormal);
+				
+				final float r = 0.5F * rayDirectionDotSurfaceNormalAbs;
+				final float g = 0.5F * rayDirectionDotSurfaceNormalAbs;
+				final float b = 0.5F * rayDirectionDotSurfaceNormalAbs;
 				
 				this.radianceRGBArray[index + 0] = r;
 				this.radianceRGBArray[index + 1] = g;

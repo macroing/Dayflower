@@ -461,33 +461,33 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 			}
 			
 			if(isIntersectingBoundingVolume) {
-				float t = 0.0F;
-				
 				ray3FTransformWorldToObject(index);
 				
+				float tObjectSpace = 0.0F;
+				
 				if(shapeID == Plane3F.ID) {
-					t = intersectionTShape3FPlane3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset);
 				}
 				
 				if(shapeID == RectangularCuboid3F.ID) {
-					t = intersectionTShape3FRectangularCuboid3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FRectangularCuboid3F(shapeOffset);
 				}
 				
 				if(shapeID == Sphere3F.ID) {
-					t = intersectionTShape3FSphere3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FSphere3F(shapeOffset);
 				}
 				
 				if(shapeID == Torus3F.ID) {
-					t = intersectionTShape3FTorus3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FTorus3F(shapeOffset);
 				}
 				
-				ray3FTransformObjectToWorld(index);
-				
-				if(t > 0.0F && t < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
-					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = t;
+				if(tObjectSpace > this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] && tObjectSpace < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
+					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = tObjectSpace;
 					
 					primitiveIndex = index;
 				}
+				
+				ray3FTransformObjectToWorld(index);
 			}
 		}
 		
@@ -698,33 +698,33 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 			}
 			
 			if(isIntersectingBoundingVolume) {
-				float t = 0.0F;
-				
 				ray3FTransformWorldToObject(index);
 				
+				float tObjectSpace = 0.0F;
+				
 				if(shapeID == Plane3F.ID) {
-					t = intersectionTShape3FPlane3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset);
 				}
 				
 				if(shapeID == RectangularCuboid3F.ID) {
-					t = intersectionTShape3FRectangularCuboid3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FRectangularCuboid3F(shapeOffset);
 				}
 				
 				if(shapeID == Sphere3F.ID) {
-					t = intersectionTShape3FSphere3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FSphere3F(shapeOffset);
 				}
 				
 				if(shapeID == Torus3F.ID) {
-					t = intersectionTShape3FTorus3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FTorus3F(shapeOffset);
 				}
 				
-				ray3FTransformObjectToWorld(index);
-				
-				if(t > 0.0F && t < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
-					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = t;
+				if(tObjectSpace > this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] && tObjectSpace < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
+					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = tObjectSpace;
 					
 					hasFoundIntersection = true;
 				}
+				
+				ray3FTransformObjectToWorld(index);
 			}
 		}
 		

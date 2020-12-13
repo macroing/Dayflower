@@ -18,6 +18,7 @@
  */
 package org.dayflower.javafx.canvas;
 
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -53,11 +54,20 @@ public final class ConcurrentByteArrayCanvas extends Canvas {
 	
 	private final AtomicInteger keysPressed;
 	private final AtomicInteger mouseButtonsPressed;
+	private final AtomicInteger mouseDraggedDeltaX;
+	private final AtomicInteger mouseDraggedDeltaY;
+	private final AtomicInteger mouseDraggedX;
+	private final AtomicInteger mouseDraggedY;
+	private final AtomicInteger mouseMovedDeltaX;
+	private final AtomicInteger mouseMovedDeltaY;
+	private final AtomicInteger mouseMovedX;
+	private final AtomicInteger mouseMovedY;
 	private final AtomicLong mouseX;
 	private final AtomicLong mouseY;
 	private final AtomicReference<PredicateTask> predicateTask;
 	private final ByteBuffer byteBuffer;
 	private final ExecutorService executorService;
+	private final Observer observer;
 	private final Predicate<byte[]> renderPredicate;
 	private final WritableImage writableImage;
 	private final boolean[] isKeyPressed;
@@ -72,25 +82,35 @@ public final class ConcurrentByteArrayCanvas extends Canvas {
 	/**
 	 * Constructs a new {@code ConcurrentByteArrayCanvas} instance.
 	 * <p>
-	 * If either {@code executorService} or {@code renderPredicate} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code executorService}, {@code observer} or {@code renderPredicate} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param executorService the {@code ExecutorService} instance to use
+	 * @param observer the {@link Observer} instance to use
 	 * @param renderPredicate the {@code Predicate} of {@code byte[]} that performs the rendering itself
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code executorService} or {@code renderPredicate} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code executorService}, {@code observer} or {@code renderPredicate} are {@code null}
 	 */
-	public ConcurrentByteArrayCanvas(final ExecutorService executorService, final Predicate<byte[]> renderPredicate, final int resolutionX, final int resolutionY) {
+	public ConcurrentByteArrayCanvas(final ExecutorService executorService, final Observer observer, final Predicate<byte[]> renderPredicate, final int resolutionX, final int resolutionY) {
 		this.keysPressed = new AtomicInteger();
 		this.mouseButtonsPressed = new AtomicInteger();
+		this.mouseDraggedDeltaX = new AtomicInteger();
+		this.mouseDraggedDeltaY = new AtomicInteger();
+		this.mouseDraggedX = new AtomicInteger();
+		this.mouseDraggedY = new AtomicInteger();
+		this.mouseMovedDeltaX = new AtomicInteger();
+		this.mouseMovedDeltaY = new AtomicInteger();
+		this.mouseMovedX = new AtomicInteger();
+		this.mouseMovedY = new AtomicInteger();
 		this.mouseX = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.predicateTask = new AtomicReference<>();
 		this.byteBuffer = ByteBuffer.allocate(ParameterArguments.requireRange(ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX") * ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY"), 0, Integer.MAX_VALUE, "resolutionX * resolutionY") * 4);
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
+		this.observer = Objects.requireNonNull(observer, "observer == null");
 		this.renderPredicate = Objects.requireNonNull(renderPredicate, "renderPredicate == null");
 		this.writableImage = new WritableImage(resolutionX, resolutionY);
 		this.isKeyPressed = new boolean[KeyCode.values().length];
@@ -318,6 +338,14 @@ public final class ConcurrentByteArrayCanvas extends Canvas {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
+	public static interface Observer {
+//		TODO: Add Javadocs!
+		void onMouseDragged(final float x, final float y);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private void doOnKeyPressed(final KeyEvent keyEvent) {
 		if(!this.isKeyPressed[keyEvent.getCode().ordinal()]) {
 			this.keysPressed.incrementAndGet();
@@ -336,11 +364,22 @@ public final class ConcurrentByteArrayCanvas extends Canvas {
 	}
 	
 	private void doOnMouseDragged(final MouseEvent mouseEvent) {
+		this.mouseDraggedX.set(this.mouseDraggedDeltaX.get() - (int)(mouseEvent.getScreenX()));
+		this.mouseDraggedY.set(this.mouseDraggedDeltaY.get() - (int)(mouseEvent.getScreenY()));
+		this.mouseDraggedDeltaX.set((int)(mouseEvent.getScreenX()));
+		this.mouseDraggedDeltaY.set((int)(mouseEvent.getScreenY()));
+		this.mouseMovedDeltaX.set(0);
+		this.mouseMovedDeltaY.set(0);
+		this.mouseMovedX.set(0);
+		this.mouseMovedY.set(0);
 		this.mouseX.set(Double.doubleToLongBits(mouseEvent.getX()));
 		this.mouseY.set(Double.doubleToLongBits(mouseEvent.getY()));
+		this.observer.onMouseDragged(this.mouseDraggedX.getAndSet(0), this.mouseDraggedY.getAndSet(0));
 	}
 	
 	private void doOnMouseMoved(final MouseEvent mouseEvent) {
+		this.mouseDraggedX.set(0);
+		this.mouseDraggedY.set(0);
 		this.mouseX.set(Double.doubleToLongBits(mouseEvent.getX()));
 		this.mouseY.set(Double.doubleToLongBits(mouseEvent.getY()));
 	}
@@ -351,6 +390,9 @@ public final class ConcurrentByteArrayCanvas extends Canvas {
 		}
 		
 		this.isMouseButtonPressed[mouseEvent.getButton().ordinal()] = true;
+		
+		this.mouseDraggedDeltaX.set((int)(mouseEvent.getScreenX()));
+		this.mouseDraggedDeltaY.set((int)(mouseEvent.getScreenY()));
 	}
 	
 	private void doOnMouseReleased(final MouseEvent mouseEvent) {

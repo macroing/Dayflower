@@ -93,6 +93,13 @@ public abstract class AbstractKernel extends Kernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
+	protected final byte[] getAndReturn(final byte[] array) {
+		get(array);
+		
+		return array;
+	}
+	
+//	TODO: Add Javadocs!
 	@SuppressWarnings("static-method")
 	protected final float addIfLessThanThreshold(final float value, final float threshold, final float valueAdd) {
 		return value < threshold ? value + valueAdd : value;

@@ -18,6 +18,7 @@
  */
 package org.dayflower.renderer;
 
+import org.dayflower.image.ByteImage;
 import org.dayflower.image.PixelImage;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererConfiguration;
@@ -96,7 +97,7 @@ public final class RendererTest {
 	private static CPURenderer doCreateCPURenderer(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
 		final
 		CPURenderer cPURenderer = new CPURenderer();
-		cPURenderer.setRendererConfiguration(doCreateRendererConfiguration(renderingAlgorithm, pathname));
+		cPURenderer.setRendererConfiguration(doCreateRendererConfigurationCPU(renderingAlgorithm, pathname));
 		cPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), cPURenderer.getRendererConfiguration().getScene().getName()));
 		
 		return cPURenderer;
@@ -104,22 +105,30 @@ public final class RendererTest {
 	
 	private static GPURenderer doCreateGPURenderer(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
 		final
-		RendererConfiguration rendererConfiguration = doCreateRendererConfiguration(renderingAlgorithm, pathname);
-		rendererConfiguration.setRenderPasses(10);
-		
-		final
 		GPURenderer gPURenderer = new GPURenderer();
-		gPURenderer.setRendererConfiguration(rendererConfiguration);
+		gPURenderer.setRendererConfiguration(doCreateRendererConfigurationGPU(renderingAlgorithm, pathname));
 		gPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), gPURenderer.getRendererConfiguration().getScene().getName()));
 		
 		return gPURenderer;
 	}
 	
-	private static RendererConfiguration doCreateRendererConfiguration(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
+	private static RendererConfiguration doCreateRendererConfigurationCPU(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
 		final
 		RendererConfiguration rendererConfiguration = new RendererConfiguration();
 		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
 		rendererConfiguration.setImage(new PixelImage((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
+		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
+		rendererConfiguration.setSampler(new RandomSampler());
+		
+		return rendererConfiguration;
+	}
+	
+	private static RendererConfiguration doCreateRendererConfigurationGPU(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
+		final
+		RendererConfiguration rendererConfiguration = new RendererConfiguration();
+		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
+		rendererConfiguration.setImage(new ByteImage((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
+		rendererConfiguration.setRenderPasses(10);
 		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
 		rendererConfiguration.setSampler(new RandomSampler());
 		

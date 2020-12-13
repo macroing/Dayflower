@@ -741,6 +741,19 @@ public final class Camera implements Node {
 	}
 	
 	/**
+	 * Rotates this {@code Camera} instance along {@code vector} with an angle of {@code angle}.
+	 * <p>
+	 * If either {@code angle} or {@code vector} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @param vector a {@link Vector3F} instance that represents an axis
+	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code vector} are {@code null}
+	 */
+	public void rotate(final AngleF angle, final Vector3F vector) {
+		setOrthonormalBasis(OrthonormalBasis33F.transform(Matrix44F.rotate(angle, vector), this.orthonormalBasis));
+	}
+	
+	/**
 	 * Rotates this {@code Camera} instance along the X-axis with an angle of {@code angle}.
 	 * <p>
 	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.

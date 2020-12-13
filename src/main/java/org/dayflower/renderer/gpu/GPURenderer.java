@@ -65,18 +65,20 @@ public final class GPURenderer extends AbstractGPURenderer {
 				final float g = 0.5F * rayDirectionDotSurfaceNormalAbs;
 				final float b = 0.5F * rayDirectionDotSurfaceNormalAbs;
 				
-				this.radianceRGBArray[index + 0] = r;
-				this.radianceRGBArray[index + 1] = g;
-				this.radianceRGBArray[index + 2] = b;
+				this.radianceRGBFloatArray[index + 0] = r;
+				this.radianceRGBFloatArray[index + 1] = g;
+				this.radianceRGBFloatArray[index + 2] = b;
 			} else {
-				this.radianceRGBArray[index + 0] = 0.0F;
-				this.radianceRGBArray[index + 1] = 0.0F;
-				this.radianceRGBArray[index + 2] = 0.0F;
+				this.radianceRGBFloatArray[index + 0] = 0.0F;
+				this.radianceRGBFloatArray[index + 1] = 0.0F;
+				this.radianceRGBFloatArray[index + 2] = 0.0F;
 			}
 		} else {
-			this.radianceRGBArray[index + 0] = 1.0F;
-			this.radianceRGBArray[index + 1] = 1.0F;
-			this.radianceRGBArray[index + 2] = 1.0F;
+			this.radianceRGBFloatArray[index + 0] = 1.0F;
+			this.radianceRGBFloatArray[index + 1] = 1.0F;
+			this.radianceRGBFloatArray[index + 2] = 1.0F;
 		}
+		
+		imageCopyFloatToByte();
 	}
 }

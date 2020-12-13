@@ -31,11 +31,50 @@ import org.dayflower.renderer.RendererObserver;
  * @author J&#246;rgen Lundgren
  */
 public final class NoOpRendererObserver implements RendererObserver {
+	private final boolean isPrintingOnComplete;
+	private final boolean isPrintingOnProgress;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Constructs a new {@code NoOpRendererObserver} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new NoOpRendererObserver(false);
+	 * }
+	 * </pre>
 	 */
 	public NoOpRendererObserver() {
-		
+		this(false);
+	}
+	
+	/**
+	 * Constructs a new {@code NoOpRendererObserver} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new NoOpRendererObserver(isPrintingOnComplete, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param isPrintingOnComplete {@code true} if, and only if, printing to standard output on complete should be enabled, {@code false} otherwise
+	 */
+	public NoOpRendererObserver(final boolean isPrintingOnComplete) {
+		this(isPrintingOnComplete, false);
+	}
+	
+	/**
+	 * Constructs a new {@code NoOpRendererObserver} instance.
+	 * 
+	 * @param isPrintingOnComplete {@code true} if, and only if, printing to standard output on complete should be enabled, {@code false} otherwise
+	 * @param isPrintingOnProgress {@code true} if, and only if, printing to standard output on progress should be enabled, {@code false} otherwise
+	 */
+	public NoOpRendererObserver(final boolean isPrintingOnComplete, final boolean isPrintingOnProgress) {
+		this.isPrintingOnComplete = isPrintingOnComplete;
+		this.isPrintingOnProgress = isPrintingOnProgress;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +108,10 @@ public final class NoOpRendererObserver implements RendererObserver {
 	@Override
 	public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
 		Objects.requireNonNull(renderer, "renderer == null");
+		
+		if(this.isPrintingOnComplete) {
+			System.out.printf("Pass: %s/%s, Millis: %s%n", Integer.toString(renderPass), Integer.toString(renderPasses), Long.toString(elapsedTimeMillis));
+		}
 	}
 	
 	/**
@@ -85,5 +128,9 @@ public final class NoOpRendererObserver implements RendererObserver {
 	@Override
 	public void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent) {
 		Objects.requireNonNull(renderer, "renderer == null");
+		
+		if(this.isPrintingOnProgress) {
+			System.out.printf("%f%n", Double.valueOf(percent * 100.0D));
+		}
 	}
 }

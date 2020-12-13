@@ -74,10 +74,10 @@ public final class ByteImage implements Image {
 	 * @throws NullPointerException thrown if, and only if, {@code byteImage} is {@code null}
 	 */
 	public ByteImage(final ByteImage byteImage) {
+		this.bytes = byteImage.bytes.clone();
 		this.resolution = byteImage.resolution;
 		this.resolutionX = byteImage.resolutionX;
 		this.resolutionY = byteImage.resolutionY;
-		this.bytes = byteImage.bytes.clone();
 	}
 	
 	/**
@@ -222,6 +222,32 @@ public final class ByteImage implements Image {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a copy of the associated {@code byte[]}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * byteImage.getBytes(false);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a copy of the associated {@code byte[]}
+	 */
+	public byte[] getBytes() {
+		return getBytes(false);
+	}
+	
+	/**
+	 * Returns a copy of the associated {@code byte[]}, or the associated {@code byte[]} itself if {@code isWrapping} is {@code true}.
+	 * 
+	 * @param isWrapping {@code true} if, and only if, the associated {@code byte[]} should be returned, {@code false} otherwise
+	 * @return a copy of the associated {@code byte[]}, or the associated {@code byte[]} itself if {@code isWrapping} is {@code true}
+	 */
+	public byte[] getBytes(final boolean isWrapping) {
+		return isWrapping ? this.bytes : this.bytes.clone();
 	}
 	
 	/**

@@ -371,7 +371,7 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void point3FTransform(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float element41, final float element42, final float element43, final float element44, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+	protected final void point3FTransformAndDivide(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float element41, final float element42, final float element43, final float element44, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
 		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3 + element14;
 		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3 + element24;
 		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3 + element34;
@@ -392,6 +392,19 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final void vector3FNormalize(final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float oldLengthReciprocal = vector3FLengthReciprocal(oldComponent1, oldComponent2, oldComponent3);
+		
+		final float newComponent1 = oldComponent1 * oldLengthReciprocal;
+		final float newComponent2 = oldComponent2 * oldLengthReciprocal;
+		final float newComponent3 = oldComponent3 * oldLengthReciprocal;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final void vector3FTransform(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
 		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3;
 		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3;
@@ -400,6 +413,47 @@ public abstract class AbstractKernel extends Kernel {
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FTransformNormalize(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3;
+		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3;
+		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3;
+		final float newLengthReciprocal = vector3FLengthReciprocal(newComponent1, newComponent2, newComponent3);
+		final float newNormalizedComponent1 = newComponent1 * newLengthReciprocal;
+		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
+		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FTransformTranspose(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element21 * oldComponent2 + element31 * oldComponent3;
+		final float newComponent2 = element12 * oldComponent1 + element22 * oldComponent2 + element32 * oldComponent3;
+		final float newComponent3 = element13 * oldComponent1 + element23 * oldComponent2 + element33 * oldComponent3;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FTransformTransposeNormalize(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element21 * oldComponent2 + element31 * oldComponent3;
+		final float newComponent2 = element12 * oldComponent1 + element22 * oldComponent2 + element32 * oldComponent3;
+		final float newComponent3 = element13 * oldComponent1 + element23 * oldComponent2 + element33 * oldComponent3;
+		final float newLengthReciprocal = vector3FLengthReciprocal(newComponent1, newComponent2, newComponent3);
+		final float newNormalizedComponent1 = newComponent1 * newLengthReciprocal;
+		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
+		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

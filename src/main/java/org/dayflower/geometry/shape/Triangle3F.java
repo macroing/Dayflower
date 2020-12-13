@@ -55,6 +55,71 @@ public final class Triangle3F implements Shape3F {
 	public static final String NAME = "Triangle";
 	
 	/**
+	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V = 24;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance representing the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W = 15;
+	
+	/**
+	 * The offset for the {@link Point3F} instance representing the position of {@link Vertex} {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_A_POSITION = 0;
+	
+	/**
+	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex} {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_A_TEXTURE_COORDINATES = 9;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V = 27;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance representing the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W = 18;
+	
+	/**
+	 * The offset for the {@link Point3F} instance representing the position of {@link Vertex} {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_B_POSITION = 3;
+	
+	/**
+	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex} {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_B_TEXTURE_COORDINATES = 11;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code C} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V = 30;
+	
+	/**
+	 * The offset for the {@link Vector3F} instance representing the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code C} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W = 21;
+	
+	/**
+	 * The offset for the {@link Point3F} instance representing the position of {@link Vertex} {@code C} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_C_POSITION = 6;
+	
+	/**
+	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex} {@code C} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_C_TEXTURE_COORDINATES = 13;
+	
+	/**
+	 * The size of the {@code float[]}.
+	 */
+	public static final int ARRAY_SIZE = 40;
+	
+	/**
 	 * The ID of this {@code Triangle3F} class.
 	 */
 	public static final int ID = 9;
@@ -72,9 +137,9 @@ public final class Triangle3F implements Shape3F {
 	 * Constructs a new {@code Triangle3F} instance.
 	 */
 	public Triangle3F() {
-		this.a = new Vertex3F(new Point2F(0.5F, 0.0F), new Point3F(+0.0F, +5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F))/*, new Vector3F()*/);
-		this.b = new Vertex3F(new Point2F(1.0F, 1.0F), new Point3F(+5.0F, -5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F))/*, new Vector3F()*/);
-		this.c = new Vertex3F(new Point2F(0.0F, 1.0F), new Point3F(-5.0F, -5.0F, 0.0F), Vector3F.normalNormalized(new Point3F(+0.0F, +5.0F, 0.0F), new Point3F(+5.0F, -5.0F, 0.0F), new Point3F(-5.0F, -5.0F, 0.0F))/*, new Vector3F()*/);
+		this.a = new Vertex3F(new Point2F(0.5F, 0.0F), new Point3F(+0.0F, +1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
+		this.b = new Vertex3F(new Point2F(1.0F, 1.0F), new Point3F(+1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
+		this.c = new Vertex3F(new Point2F(0.0F, 1.0F), new Point3F(-1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
 		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()));
 	}
 	
@@ -131,9 +196,9 @@ public final class Triangle3F implements Shape3F {
 		final Point3F positionB = this.b.getPosition();
 		final Point3F positionC = this.c.getPosition();
 		
-		final Vector3F normalA = this.a.getNormal();
-		final Vector3F normalB = this.b.getNormal();
-		final Vector3F normalC = this.c.getNormal();
+		final Vector3F normalA = this.a.getOrthonormalBasis().getW();
+		final Vector3F normalB = this.b.getOrthonormalBasis().getW();
+		final Vector3F normalC = this.c.getOrthonormalBasis().getW();
 		
 		final float x = positionA.getX() * barycentricCoordinates.getX() + positionB.getX() * barycentricCoordinates.getY() + positionC.getX() * barycentricCoordinates.getZ();
 		final float y = positionA.getY() * barycentricCoordinates.getX() + positionB.getY() * barycentricCoordinates.getY() + positionC.getY() * barycentricCoordinates.getZ();
@@ -213,14 +278,18 @@ public final class Triangle3F implements Shape3F {
 		
 		final Point2F textureCoordinates = Point2F.createTextureCoordinates(this.a.getTextureCoordinates(), this.b.getTextureCoordinates(), this.c.getTextureCoordinates(), barycentricCoordinates);
 		
-		final Vector3F surfaceNormalG = this.surfaceNormal;
-		final Vector3F surfaceNormalS = Vector3F.normalNormalized(this.a.getNormal(), this.b.getNormal(), this.c.getNormal(), barycentricCoordinates);
+		final OrthonormalBasis33F aOrthonormalBasis = this.a.getOrthonormalBasis();
+		final OrthonormalBasis33F bOrthonormalBasis = this.b.getOrthonormalBasis();
+		final OrthonormalBasis33F cOrthonormalBasis = this.c.getOrthonormalBasis();
 		
-		final Vector3F surfaceTangentG = Vector3F.directionNormalized(a, b);
-		final Vector3F surfaceTangentS = Vector3F.normalNormalized(this.a.getTangent(), this.b.getTangent(), this.c.getTangent(), barycentricCoordinates);
+		final Vector3F gW = this.surfaceNormal;
+		final Vector3F sW = Vector3F.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
 		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG, surfaceTangentG);
-		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(surfaceNormalS, surfaceTangentS);
+		final Vector3F gV = Vector3F.directionNormalized(a, b);
+		final Vector3F sV = Vector3F.normalNormalized(aOrthonormalBasis.getV(), bOrthonormalBasis.getV(), cOrthonormalBasis.getV(), barycentricCoordinates);
+		
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW, gV);
+		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW, sV);
 		
 		final float xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
 		final float yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
@@ -524,14 +593,60 @@ public final class Triangle3F implements Shape3F {
 	
 	/**
 	 * Returns a {@code float[]} representation of this {@code Triangle3F} instance.
-	 * <p>
-	 * Note: This method has not been implemented yet.
 	 * 
 	 * @return a {@code float[]} representation of this {@code Triangle3F} instance
 	 */
 	@Override
 	public float[] toArray() {
-		return new float[0];//TODO: Implement!
+		final float[] array = new float[ARRAY_SIZE];
+		
+		array[ARRAY_OFFSET_A_POSITION + 0] = this.a.getPosition().getX();								//Block #1
+		array[ARRAY_OFFSET_A_POSITION + 1] = this.a.getPosition().getY();								//Block #1
+		array[ARRAY_OFFSET_A_POSITION + 2] = this.a.getPosition().getZ();								//Block #1
+		array[ARRAY_OFFSET_B_POSITION + 0] = this.b.getPosition().getX();								//Block #1
+		array[ARRAY_OFFSET_B_POSITION + 1] = this.b.getPosition().getY();								//Block #1
+		array[ARRAY_OFFSET_B_POSITION + 2] = this.b.getPosition().getZ();								//Block #1
+		array[ARRAY_OFFSET_C_POSITION + 0] = this.c.getPosition().getX();								//Block #1
+		array[ARRAY_OFFSET_C_POSITION + 1] = this.c.getPosition().getY();								//Block #1
+		array[ARRAY_OFFSET_C_POSITION + 2] = this.c.getPosition().getZ();								//Block #2
+		
+		array[ARRAY_OFFSET_A_TEXTURE_COORDINATES + 0] = this.a.getTextureCoordinates().getU();			//Block #2
+		array[ARRAY_OFFSET_A_TEXTURE_COORDINATES + 1] = this.a.getTextureCoordinates().getV();			//Block #2
+		array[ARRAY_OFFSET_B_TEXTURE_COORDINATES + 0] = this.b.getTextureCoordinates().getU();			//Block #2
+		array[ARRAY_OFFSET_B_TEXTURE_COORDINATES + 1] = this.b.getTextureCoordinates().getV();			//Block #2
+		array[ARRAY_OFFSET_C_TEXTURE_COORDINATES + 0] = this.c.getTextureCoordinates().getU();			//Block #2
+		array[ARRAY_OFFSET_C_TEXTURE_COORDINATES + 1] = this.c.getTextureCoordinates().getV();			//Block #2
+		
+		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 0] = this.a.getOrthonormalBasis().getW().getX();		//Block #2
+		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 1] = this.a.getOrthonormalBasis().getW().getY();		//Block #3
+		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 2] = this.a.getOrthonormalBasis().getW().getZ();		//Block #3
+		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 0] = this.b.getOrthonormalBasis().getW().getX();		//Block #3
+		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 1] = this.b.getOrthonormalBasis().getW().getY();		//Block #3
+		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 2] = this.b.getOrthonormalBasis().getW().getZ();		//Block #3
+		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 0] = this.c.getOrthonormalBasis().getW().getX();		//Block #3
+		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 1] = this.c.getOrthonormalBasis().getW().getY();		//Block #3
+		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 2] = this.c.getOrthonormalBasis().getW().getZ();		//Block #3
+		
+		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 0] = this.a.getOrthonormalBasis().getV().getX();		//Block #4
+		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 1] = this.a.getOrthonormalBasis().getV().getY();		//Block #4
+		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 2] = this.a.getOrthonormalBasis().getV().getZ();		//Block #4
+		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 0] = this.b.getOrthonormalBasis().getV().getX();		//Block #4
+		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 1] = this.b.getOrthonormalBasis().getV().getY();		//Block #4
+		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 2] = this.b.getOrthonormalBasis().getV().getZ();		//Block #4
+		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 0] = this.c.getOrthonormalBasis().getV().getX();		//Block #4
+		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 1] = this.c.getOrthonormalBasis().getV().getY();		//Block #4
+		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 2] = this.c.getOrthonormalBasis().getV().getZ();		//Block #5
+		
+//		Add padding:
+		array[33] = 0.0F;																				//Block #5
+		array[34] = 0.0F;																				//Block #5
+		array[35] = 0.0F;																				//Block #5
+		array[36] = 0.0F;																				//Block #5
+		array[37] = 0.0F;																				//Block #5
+		array[38] = 0.0F;																				//Block #5
+		array[39] = 0.0F;																				//Block #5
+		
+		return array;
 	}
 	
 	/**
@@ -565,46 +680,55 @@ public final class Triangle3F implements Shape3F {
 	 * @author J&#246;rgen Lundgren
 	 */
 	public static final class Vertex3F implements Node {
+		private final OrthonormalBasis33F orthonormalBasis;
 		private final Point2F textureCoordinates;
 		private final Point3F position;
-		private final Vector3F normal;
-		private final Vector3F tangent;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		/**
 		 * Constructs a new {@code Vertex3F} instance.
 		 * <p>
-		 * If either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * If either {@code textureCoordinates}, {@code position} or {@code w} are {@code null}, a {@code NullPointerException} will be thrown.
 		 * 
 		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3F} instance
 		 * @param position the position associated with this {@code Vertex3F} instance
-		 * @param normal the normal associated with this {@code Vertex3F} instance
-		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code normal} are {@code null}
+		 * @param w the W-direction associated with this {@code Vertex3F} instance
+		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code w} are {@code null}
 		 */
-		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F normal) {
-			this(textureCoordinates, position, normal, new Vector3F());
-		}
-		
-		/**
-		 * Constructs a new {@code Vertex3F} instance.
-		 * <p>
-		 * If either {@code textureCoordinates}, {@code position}, {@code normal} or {@code tangent} are {@code null}, a {@code NullPointerException} will be thrown.
-		 * 
-		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3F} instance
-		 * @param position the position associated with this {@code Vertex3F} instance
-		 * @param normal the normal associated with this {@code Vertex3F} instance
-		 * @param tangent the tangent associated with this {@code Vertex3F} instance
-		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position}, {@code normal} or {@code tangent} are {@code null}
-		 */
-		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F normal, final Vector3F tangent) {
+		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F w) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
 			this.position = Point3F.getCached(Objects.requireNonNull(position, "position == null"));
-			this.normal = Vector3F.getCached(Objects.requireNonNull(normal, "normal == null"));
-			this.tangent = Vector3F.getCached(Objects.requireNonNull(tangent, "tangent == null"));
+			this.orthonormalBasis = OrthonormalBasis33F.getCached(new OrthonormalBasis33F(Objects.requireNonNull(w, "w == null")));
+		}
+		
+		/**
+		 * Constructs a new {@code Vertex3F} instance.
+		 * <p>
+		 * If either {@code textureCoordinates}, {@code position}, {@code w} or {@code v} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3F} instance
+		 * @param position the position associated with this {@code Vertex3F} instance
+		 * @param w the W-direction associated with this {@code Vertex3F} instance
+		 * @param v the V-direction associated with this {@code Vertex3F} instance
+		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position}, {@code w} or {@code v} are {@code null}
+		 */
+		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F w, final Vector3F v) {
+			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
+			this.position = Point3F.getCached(Objects.requireNonNull(position, "position == null"));
+			this.orthonormalBasis = OrthonormalBasis33F.getCached(new OrthonormalBasis33F(Objects.requireNonNull(w, "w == null"), Objects.requireNonNull(v, "v == null")));
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Returns the orthonormal basis associated with this {@code Vertex3F} instance.
+		 * 
+		 * @return the orthonormal basis associated with this {@code Vertex3F} instance
+		 */
+		public OrthonormalBasis33F getOrthonormalBasis() {
+			return this.orthonormalBasis;
+		}
 		
 		/**
 		 * Returns the texture coordinates associated with this {@code Vertex3F} instance.
@@ -631,25 +755,7 @@ public final class Triangle3F implements Shape3F {
 		 */
 		@Override
 		public String toString() {
-			return String.format("new Vertex3F(%s, %s, %s, %s)", this.textureCoordinates, this.position, this.normal, this.tangent);
-		}
-		
-		/**
-		 * Returns the normal associated with this {@code Vertex3F} instance.
-		 * 
-		 * @return the normal associated with this {@code Vertex3F} instance
-		 */
-		public Vector3F getNormal() {
-			return this.normal;
-		}
-		
-		/**
-		 * Returns the tangent associated with this {@code Vertex3F} instance.
-		 * 
-		 * @return the tangent associated with this {@code Vertex3F} instance
-		 */
-		public Vector3F getTangent() {
-			return this.tangent;
+			return String.format("new Vertex3F(%s, %s, %s)", this.orthonormalBasis, this.textureCoordinates, this.position);
 		}
 		
 		/**
@@ -679,19 +785,15 @@ public final class Triangle3F implements Shape3F {
 			
 			try {
 				if(nodeHierarchicalVisitor.visitEnter(this)) {
+					if(!this.orthonormalBasis.accept(nodeHierarchicalVisitor)) {
+						return nodeHierarchicalVisitor.visitLeave(this);
+					}
+					
 					if(!this.textureCoordinates.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
 					
 					if(!this.position.accept(nodeHierarchicalVisitor)) {
-						return nodeHierarchicalVisitor.visitLeave(this);
-					}
-					
-					if(!this.normal.accept(nodeHierarchicalVisitor)) {
-						return nodeHierarchicalVisitor.visitLeave(this);
-					}
-					
-					if(!this.tangent.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
 				}
@@ -716,13 +818,11 @@ public final class Triangle3F implements Shape3F {
 				return true;
 			} else if(!(object instanceof Vertex3F)) {
 				return false;
+			} else if(!Objects.equals(this.orthonormalBasis, Vertex3F.class.cast(object).orthonormalBasis)) {
+				return false;
 			} else if(!Objects.equals(this.textureCoordinates, Vertex3F.class.cast(object).textureCoordinates)) {
 				return false;
 			} else if(!Objects.equals(this.position, Vertex3F.class.cast(object).position)) {
-				return false;
-			} else if(!Objects.equals(this.normal, Vertex3F.class.cast(object).normal)) {
-				return false;
-			} else if(!Objects.equals(this.tangent, Vertex3F.class.cast(object).tangent)) {
 				return false;
 			} else {
 				return true;
@@ -736,7 +836,7 @@ public final class Triangle3F implements Shape3F {
 		 */
 		@Override
 		public int hashCode() {
-			return Objects.hash(this.textureCoordinates, this.position, this.normal, this.tangent);
+			return Objects.hash(this.orthonormalBasis, this.textureCoordinates, this.position);
 		}
 	}
 }

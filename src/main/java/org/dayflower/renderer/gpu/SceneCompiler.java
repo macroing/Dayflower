@@ -31,6 +31,7 @@ import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
+import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
@@ -57,8 +58,9 @@ final class SceneCompiler {
 		final List<RectangularCuboid3F> distinctRectangularCuboids = NodeFilter.filterAllDistinct(scene, RectangularCuboid3F.class);
 		final List<Sphere3F> distinctSpheres = NodeFilter.filterAllDistinct(scene, Sphere3F.class);
 		final List<Torus3F> distinctToruses = NodeFilter.filterAllDistinct(scene, Torus3F.class);
+		final List<Triangle3F> distinctTriangles = NodeFilter.filterAllDistinct(scene, Triangle3F.class);
 		final List<BoundingVolume3F> distinctBoundingVolumes = Lists.merge(distinctAxisAlignedBoundingBoxes, distinctBoundingSpheres, distinctInfiniteBoundingVolumes);
-		final List<Shape3F> distinctShapes = Lists.merge(distinctPlanes, distinctRectangularCuboids, distinctSpheres, distinctToruses);
+		final List<Shape3F> distinctShapes = Lists.merge(distinctPlanes, distinctRectangularCuboids, distinctSpheres, distinctToruses, distinctTriangles);
 		
 //		Retrieve a List of filtered Primitives:
 		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctBoundingVolumes, distinctShapes);
@@ -70,6 +72,7 @@ final class SceneCompiler {
 		final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids = NodeFilter.mapDistinctToOffsets(distinctRectangularCuboids, RectangularCuboid3F.ARRAY_SIZE);
 		final Map<Sphere3F, Integer> distinctToOffsetsSpheres = NodeFilter.mapDistinctToOffsets(distinctSpheres, Sphere3F.ARRAY_SIZE);
 		final Map<Torus3F, Integer> distinctToOffsetsToruses = NodeFilter.mapDistinctToOffsets(distinctToruses, Torus3F.ARRAY_SIZE);
+		final Map<Triangle3F, Integer> distinctToOffsetsTriangles = NodeFilter.mapDistinctToOffsets(distinctTriangles, Triangle3F.ARRAY_SIZE);
 		
 //		Retrieve float[] or int[] for all types:
 		final float[] boundingVolume3FAxisAlignedBoundingBox3FArray = Floats.toArray(distinctAxisAlignedBoundingBoxes, axisAlignedBoundingBox -> axisAlignedBoundingBox.toArray(), 1);
@@ -80,12 +83,13 @@ final class SceneCompiler {
 		final float[] shape3FRectangularCuboid3FArray = Floats.toArray(distinctRectangularCuboids, rectangularCuboid -> rectangularCuboid.toArray(), 1);
 		final float[] shape3FSphere3FArray = Floats.toArray(distinctSpheres, sphere -> sphere.toArray(), 1);
 		final float[] shape3FTorus3FArray = Floats.toArray(distinctToruses, torus -> torus.toArray(), 1);
+		final float[] shape3FTriangle3FArray = Floats.toArray(distinctTriangles, triangle -> triangle.toArray(), 1);
 		
 		final int[] primitiveArray = Primitive.toArray(filteredPrimitives);
 		
 //		Populate the float[] or int[] with data:
 		doPopulatePrimitiveArrayWithBoundingVolumes(filteredPrimitives, distinctToOffsetsAxisAlignedBoundingBoxes, distinctToOffsetsBoundingSpheres, primitiveArray);
-		doPopulatePrimitiveArrayWithShapes(filteredPrimitives, distinctToOffsetsPlanes, distinctToOffsetsRectangularCuboids, distinctToOffsetsSpheres, distinctToOffsetsToruses, primitiveArray);
+		doPopulatePrimitiveArrayWithShapes(filteredPrimitives, distinctToOffsetsPlanes, distinctToOffsetsRectangularCuboids, distinctToOffsetsSpheres, distinctToOffsetsToruses, distinctToOffsetsTriangles, primitiveArray);
 		
 		final
 		CompiledScene compiledScene = new CompiledScene();
@@ -98,6 +102,7 @@ final class SceneCompiler {
 		compiledScene.setShape3FRectangularCuboid3FArray(shape3FRectangularCuboid3FArray);
 		compiledScene.setShape3FSphere3FArray(shape3FSphere3FArray);
 		compiledScene.setShape3FTorus3FArray(shape3FTorus3FArray);
+		compiledScene.setShape3FTriangle3FArray(shape3FTriangle3FArray);
 		
 		final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 		
@@ -141,7 +146,7 @@ final class SceneCompiler {
 		}
 	}
 	
-	private static void doPopulatePrimitiveArrayWithShapes(final List<Primitive> primitives, final Map<Plane3F, Integer> distinctToOffsetsPlanes, final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final Map<Torus3F, Integer> distinctToOffsetsToruses, final int[] primitiveArray) {
+	private static void doPopulatePrimitiveArrayWithShapes(final List<Primitive> primitives, final Map<Plane3F, Integer> distinctToOffsetsPlanes, final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final Map<Torus3F, Integer> distinctToOffsetsToruses, final Map<Triangle3F, Integer> distinctToOffsetsTriangles, final int[] primitiveArray) {
 		for(int i = 0; i < primitives.size(); i++) {
 			final Primitive primitive = primitives.get(i);
 			
@@ -167,6 +172,11 @@ final class SceneCompiler {
 				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
 				
 				primitiveArray[primitiveArrayOffset] = torusOffset;
+			} else if(shape instanceof Triangle3F) {
+				final int triangleOffset = distinctToOffsetsTriangles.get(Triangle3F.class.cast(shape)).intValue();
+				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+				
+				primitiveArray[primitiveArrayOffset] = triangleOffset;
 			}
 		}
 	}

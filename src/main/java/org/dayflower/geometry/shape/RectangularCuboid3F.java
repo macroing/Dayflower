@@ -67,7 +67,7 @@ public final class RectangularCuboid3F implements Shape3F {
 	/**
 	 * The size of the {@code float[]}.
 	 */
-	public static final int ARRAY_SIZE = 6;
+	public static final int ARRAY_SIZE = 8;
 	
 	/**
 	 * The ID of this {@code RectangularCuboid3F} class.
@@ -431,12 +431,14 @@ public final class RectangularCuboid3F implements Shape3F {
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		
-		array[ARRAY_OFFSET_MAXIMUM + 0] = this.maximum.getX();
-		array[ARRAY_OFFSET_MAXIMUM + 1] = this.maximum.getY();
-		array[ARRAY_OFFSET_MAXIMUM + 2] = this.maximum.getZ();
-		array[ARRAY_OFFSET_MINIMUM + 0] = this.minimum.getX();
-		array[ARRAY_OFFSET_MINIMUM + 1] = this.minimum.getY();
-		array[ARRAY_OFFSET_MINIMUM + 2] = this.minimum.getZ();
+		array[ARRAY_OFFSET_MAXIMUM + 0] = this.maximum.getX();	//Block #1
+		array[ARRAY_OFFSET_MAXIMUM + 1] = this.maximum.getY();	//Block #1
+		array[ARRAY_OFFSET_MAXIMUM + 2] = this.maximum.getZ();	//Block #1
+		array[ARRAY_OFFSET_MINIMUM + 0] = this.minimum.getX();	//Block #1
+		array[ARRAY_OFFSET_MINIMUM + 1] = this.minimum.getY();	//Block #1
+		array[ARRAY_OFFSET_MINIMUM + 2] = this.minimum.getZ();	//Block #1
+		array[6] = 0.0F;										//Block #1
+		array[7] = 0.0F;										//Block #1
 		
 		return array;
 	}

@@ -75,7 +75,7 @@ public final class Plane3F implements Shape3F {
 	/**
 	 * The size of the {@code float[]}.
 	 */
-	public static final int ARRAY_SIZE = 12;
+	public static final int ARRAY_SIZE = 16;
 	
 	/**
 	 * The ID of this {@code Plane3F} class.
@@ -500,18 +500,22 @@ public final class Plane3F implements Shape3F {
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		
-		array[ARRAY_OFFSET_A + 0] = this.a.getX();
-		array[ARRAY_OFFSET_A + 1] = this.a.getY();
-		array[ARRAY_OFFSET_A + 2] = this.a.getZ();
-		array[ARRAY_OFFSET_B + 0] = this.b.getX();
-		array[ARRAY_OFFSET_B + 1] = this.b.getY();
-		array[ARRAY_OFFSET_B + 2] = this.b.getZ();
-		array[ARRAY_OFFSET_C + 0] = this.c.getX();
-		array[ARRAY_OFFSET_C + 1] = this.c.getY();
-		array[ARRAY_OFFSET_C + 2] = this.c.getZ();
-		array[ARRAY_OFFSET_SURFACE_NORMAL + 0] = this.surfaceNormal.getX();
-		array[ARRAY_OFFSET_SURFACE_NORMAL + 1] = this.surfaceNormal.getY();
-		array[ARRAY_OFFSET_SURFACE_NORMAL + 2] = this.surfaceNormal.getZ();
+		array[ARRAY_OFFSET_A + 0] = this.a.getX();							//Block #1
+		array[ARRAY_OFFSET_A + 1] = this.a.getY();							//Block #1
+		array[ARRAY_OFFSET_A + 2] = this.a.getZ();							//Block #1
+		array[ARRAY_OFFSET_B + 0] = this.b.getX();							//Block #1
+		array[ARRAY_OFFSET_B + 1] = this.b.getY();							//Block #1
+		array[ARRAY_OFFSET_B + 2] = this.b.getZ();							//Block #1
+		array[ARRAY_OFFSET_C + 0] = this.c.getX();							//Block #1
+		array[ARRAY_OFFSET_C + 1] = this.c.getY();							//Block #1
+		array[ARRAY_OFFSET_C + 2] = this.c.getZ();							//Block #2
+		array[ARRAY_OFFSET_SURFACE_NORMAL + 0] = this.surfaceNormal.getX();	//Block #2
+		array[ARRAY_OFFSET_SURFACE_NORMAL + 1] = this.surfaceNormal.getY();	//Block #2
+		array[ARRAY_OFFSET_SURFACE_NORMAL + 2] = this.surfaceNormal.getZ();	//Block #2
+		array[12] = 0.0F;													//Block #2
+		array[13] = 0.0F;													//Block #2
+		array[14] = 0.0F;													//Block #2
+		array[15] = 0.0F;													//Block #2
 		
 		return array;
 	}

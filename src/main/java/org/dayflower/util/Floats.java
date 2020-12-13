@@ -2189,7 +2189,7 @@ public final class Floats {
 	 * @param <T> the generic type
 	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code float[]} instances
 	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code float[]} instances
-	 * @param minimumLength the minimum length of the returned {@code float[]} if, and only if, {@code objects.isEmpty()}
+	 * @param minimumLength the minimum length of the returned {@code float[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
 	 * @return a {@code float[]} representation of {@code objects} using {@code arrayFunction}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
@@ -2210,7 +2210,9 @@ public final class Floats {
 				floatArrayOutputStream.write(arrayFunction.apply(object));
 			}
 			
-			return floatArrayOutputStream.toFloatArray();
+			final float[] array = floatArrayOutputStream.toFloatArray();
+			
+			return array.length == 0 ? array(minimumLength) : array;
 		}
 	}
 	

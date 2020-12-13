@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -35,6 +37,10 @@ import org.dayflower.node.NodeTraversalException;
  * @author J&#246;rgen Lundgren
  */
 public final class OrthonormalBasis33F implements Node {
+	private static final Map<OrthonormalBasis33F, OrthonormalBasis33F> CACHE = new HashMap<>();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Vector3F u;
 	private final Vector3F v;
 	private final Vector3F w;
@@ -229,6 +235,19 @@ public final class OrthonormalBasis33F implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a cached version of {@code orthonormalBasis}.
+	 * <p>
+	 * If {@code orthonormalBasis} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param orthonormalBasis an {@code OrthonormalBasis33F} instance
+	 * @return a orthonormalBasis version of {@code orthonormalBasis}
+	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasis} is {@code null}
+	 */
+	public static OrthonormalBasis33F getCached(final OrthonormalBasis33F orthonormalBasis) {
+		return CACHE.computeIfAbsent(Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null"), key -> new OrthonormalBasis33F(Vector3F.getCached(orthonormalBasis.getW()), Vector3F.getCached(orthonormalBasis.getV()), Vector3F.getCached(orthonormalBasis.getU())));
+	}
+	
+	/**
 	 * Flips the directions of {@code orthonormalBasis}.
 	 * <p>
 	 * Returns a new {@code OrthonormalBasis33F} with the directions flipped.
@@ -326,5 +345,21 @@ public final class OrthonormalBasis33F implements Node {
 		final Vector3F w = Vector3F.normalize(Vector3F.transformTranspose(matrixLHS, orthonormalBasisRHS.w));
 		
 		return new OrthonormalBasis33F(w, v, u);
+	}
+	
+	/**
+	 * Returns the size of the cache.
+	 * 
+	 * @return the size of the cache
+	 */
+	public static int getCacheSize() {
+		return CACHE.size();
+	}
+	
+	/**
+	 * Clears the cache.
+	 */
+	public static void clearCache() {
+		CACHE.clear();
 	}
 }

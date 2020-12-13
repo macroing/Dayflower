@@ -36,6 +36,7 @@ import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
+import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.renderer.Renderer;
@@ -448,16 +449,13 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 			
 			boolean isIntersectingBoundingVolume = false;
 			
-			if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
-				isIntersectingBoundingVolume = intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset);
-			}
-			
-			if(boundingVolumeID == BoundingSphere3F.ID) {
-				isIntersectingBoundingVolume = intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset);
-			}
-			
+//			TODO: Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
+			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
+				isIntersectingBoundingVolume = intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset);
+			} else if(boundingVolumeID == BoundingSphere3F.ID) {
+				isIntersectingBoundingVolume = intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset);
 			}
 			
 			if(isIntersectingBoundingVolume) {
@@ -467,18 +465,14 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 				
 				if(shapeID == Plane3F.ID) {
 					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset);
-				}
-				
-				if(shapeID == RectangularCuboid3F.ID) {
+				} else if(shapeID == RectangularCuboid3F.ID) {
 					tObjectSpace = intersectionTShape3FRectangularCuboid3F(shapeOffset);
-				}
-				
-				if(shapeID == Sphere3F.ID) {
+				} else if(shapeID == Sphere3F.ID) {
 					tObjectSpace = intersectionTShape3FSphere3F(shapeOffset);
-				}
-				
-				if(shapeID == Torus3F.ID) {
+				} else if(shapeID == Torus3F.ID) {
 					tObjectSpace = intersectionTShape3FTorus3F(shapeOffset);
+				} else if(shapeID == Triangle3F.ID) {
+					tObjectSpace = intersectionTShape3FTriangle3F(shapeOffset);
 				}
 				
 				if(tObjectSpace > this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] && tObjectSpace < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
@@ -499,49 +493,23 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
 			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
 			
-//			ray3FTransformWorldToObject(primitiveIndex);
+			ray3FTransformWorldToObject(primitiveIndex);
 			
 			if(shapeID == Plane3F.ID) {
-				ray3FTransformWorldToObject(primitiveIndex);
-				
 				intersectionComputeShape3FPlane3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
-				
-				ray3FTransformObjectToWorld(primitiveIndex);
-				
-				return true;
-			}
-			
-			if(shapeID == RectangularCuboid3F.ID) {
-				ray3FTransformWorldToObject(primitiveIndex);
-				
+			} else if(shapeID == RectangularCuboid3F.ID) {
 				intersectionComputeShape3FRectangularCuboid3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
-				
-				ray3FTransformObjectToWorld(primitiveIndex);
-				
-				return true;
-			}
-			
-			if(shapeID == Sphere3F.ID) {
-				ray3FTransformWorldToObject(primitiveIndex);
-				
+			} else if(shapeID == Sphere3F.ID) {
 				intersectionComputeShape3FSphere3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
-				
-				ray3FTransformObjectToWorld(primitiveIndex);
-				
-				return true;
-			}
-			
-			if(shapeID == Torus3F.ID) {
-				ray3FTransformWorldToObject(primitiveIndex);
-				
+			} else if(shapeID == Torus3F.ID) {
 				intersectionComputeShape3FTorus3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
-				
-				ray3FTransformObjectToWorld(primitiveIndex);
-				
-				return true;
+			} else if(shapeID == Triangle3F.ID) {
+				intersectionComputeShape3FTriangle3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
 			}
 			
-//			ray3FTransformObjectToWorld(primitiveIndex);
+			ray3FTransformObjectToWorld(primitiveIndex);
+			
+			return true;
 		}
 		
 		return false;
@@ -583,8 +551,8 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 	}
 	
 //	TODO: Add Javadocs!
-	protected final boolean intersectsShape3FTriangle3F() {
-		return intersectionTShape3FTriangle3F() > 0.0F;
+	protected final boolean intersectsShape3FTriangle3F(final int shape3FTriangle3FArrayOffset) {
+		return intersectionTShape3FTriangle3F(shape3FTriangle3FArrayOffset) > 0.0F;
 	}
 	
 //	TODO: Add Javadocs!
@@ -685,16 +653,13 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 			
 			boolean isIntersectingBoundingVolume = false;
 			
-			if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
-				isIntersectingBoundingVolume = intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset);
-			}
-			
-			if(boundingVolumeID == BoundingSphere3F.ID) {
-				isIntersectingBoundingVolume = intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset);
-			}
-			
+//			TODO: Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
+			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
+				isIntersectingBoundingVolume = intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset);
+			} else if(boundingVolumeID == BoundingSphere3F.ID) {
+				isIntersectingBoundingVolume = intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset);
 			}
 			
 			if(isIntersectingBoundingVolume) {
@@ -704,18 +669,14 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 				
 				if(shapeID == Plane3F.ID) {
 					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset);
-				}
-				
-				if(shapeID == RectangularCuboid3F.ID) {
+				} else if(shapeID == RectangularCuboid3F.ID) {
 					tObjectSpace = intersectionTShape3FRectangularCuboid3F(shapeOffset);
-				}
-				
-				if(shapeID == Sphere3F.ID) {
+				} else if(shapeID == Sphere3F.ID) {
 					tObjectSpace = intersectionTShape3FSphere3F(shapeOffset);
-				}
-				
-				if(shapeID == Torus3F.ID) {
+				} else if(shapeID == Torus3F.ID) {
 					tObjectSpace = intersectionTShape3FTorus3F(shapeOffset);
+				} else if(shapeID == Triangle3F.ID) {
+					tObjectSpace = intersectionTShape3FTriangle3F(shapeOffset);
 				}
 				
 				if(tObjectSpace > this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] && tObjectSpace < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
@@ -895,7 +856,7 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float intersectionTShape3FTriangle3F() {
+	protected final float intersectionTShape3FTriangle3F(final int shape3FTriangle3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
 		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
@@ -907,15 +868,15 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 		
 //		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
-		final float triangleAPositionX = +0.0F;
-		final float triangleAPositionY = +1.0F;
-		final float triangleAPositionZ = +5.0F;
-		final float triangleBPositionX = +1.0F;
-		final float triangleBPositionY = -1.0F;
-		final float triangleBPositionZ = +5.0F;
-		final float triangleCPositionX = -1.0F;
-		final float triangleCPositionY = -1.0F;
-		final float triangleCPositionZ = +5.0F;
+		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 0];
+		final float triangleAPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 1];
+		final float triangleAPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 2];
+		final float triangleBPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 0];
+		final float triangleBPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 1];
+		final float triangleBPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 2];
+		final float triangleCPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 0];
+		final float triangleCPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 1];
+		final float triangleCPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 2];
 		
 //		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'direction0' in the comments:
 		final float direction0X = triangleBPositionX - triangleAPositionX;
@@ -1353,6 +1314,210 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = orthonormalBasisGWNormalizedX;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = orthonormalBasisGWNormalizedY;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = orthonormalBasisGWNormalizedZ;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX] = primitiveIndex;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = surfaceIntersectionPointX;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = surfaceIntersectionPointY;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = surfaceIntersectionPointZ;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = textureCoordinatesU;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = textureCoordinatesV;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void intersectionComputeShape3FTriangle3F(final float t, final int primitiveIndex, final int shape3FTriangle3FArrayOffset) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
+		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
+		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
+		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+//		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
+		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 0];
+		final float triangleAPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 1];
+		final float triangleAPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 2];
+		final float triangleBPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 0];
+		final float triangleBPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 1];
+		final float triangleBPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_POSITION + 2];
+		final float triangleCPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 0];
+		final float triangleCPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 1];
+		final float triangleCPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 2];
+		
+//		Retrieve the triangle variables that will be used for texturing:
+		final float triangleATextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_TEXTURE_COORDINATES + 0];
+		final float triangleATextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_TEXTURE_COORDINATES + 1];
+		final float triangleBTextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_TEXTURE_COORDINATES + 0];
+		final float triangleBTextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_TEXTURE_COORDINATES + 1];
+		final float triangleCTextureCoordinatesU = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_TEXTURE_COORDINATES + 0];
+		final float triangleCTextureCoordinatesV = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_TEXTURE_COORDINATES + 1];
+		
+//		Retrieve the triangle variables that will be used when constructing the geometric and shading orthonormal bases:
+		final float triangleAOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 0];
+		final float triangleAOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 1];
+		final float triangleAOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W + 2];
+		final float triangleBOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 0];
+		final float triangleBOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 1];
+		final float triangleBOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W + 2];
+		final float triangleCOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 0];
+		final float triangleCOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 1];
+		final float triangleCOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 2];
+		final float triangleAOrthonormalBasisVX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 0];
+		final float triangleAOrthonormalBasisVY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 1];
+		final float triangleAOrthonormalBasisVZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 2];
+		final float triangleBOrthonormalBasisVX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 0];
+		final float triangleBOrthonormalBasisVY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 1];
+		final float triangleBOrthonormalBasisVZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 2];
+		final float triangleCOrthonormalBasisVX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 0];
+		final float triangleCOrthonormalBasisVY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 1];
+		final float triangleCOrthonormalBasisVZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 2];
+		
+//		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'direction0' in the comments:
+		final float direction0X = triangleBPositionX - triangleAPositionX;
+		final float direction0Y = triangleBPositionY - triangleAPositionY;
+		final float direction0Z = triangleBPositionZ - triangleAPositionZ;
+		final float direction0LengthReciprocal = vector3FLengthReciprocal(direction0X, direction0Y, direction0Z);
+		final float direction0NormalizedX = direction0X * direction0LengthReciprocal;
+		final float direction0NormalizedY = direction0Y * direction0LengthReciprocal;
+		final float direction0NormalizedZ = direction0Z * direction0LengthReciprocal;
+		
+//		Compute the direction from 'triangleAPosition' to 'triangleCPosition', denoted by 'direction1' in the comments:
+		final float direction1X = triangleCPositionX - triangleAPositionX;
+		final float direction1Y = triangleCPositionY - triangleAPositionY;
+		final float direction1Z = triangleCPositionZ - triangleAPositionZ;
+		
+//		Compute the cross product between 'rayDirection' and 'direction1', denoted by 'direction2' in the comments:
+		final float direction2X = rayDirectionY * direction1Z - rayDirectionZ * direction1Y;
+		final float direction2Y = rayDirectionZ * direction1X - rayDirectionX * direction1Z;
+		final float direction2Z = rayDirectionX * direction1Y - rayDirectionY * direction1X;
+		
+//		Compute the determinant, which is the dot product between 'direction0' and 'direction2':
+		final float determinant = direction0X * direction2X + direction0Y * direction2Y + direction0Z * direction2Z;
+		
+//		Check if the determinant is close to 0.0 and, if that is the case, return a miss:
+		if(determinant >= -0.0001F && determinant <= +0.0001F) {
+			return;
+		}
+		
+//		Compute the direction from 'triangleAPosition' to 'rayOrigin', denoted by 'direction3' in the comments:
+		final float direction3X = rayOriginX - triangleAPositionX;
+		final float direction3Y = rayOriginY - triangleAPositionY;
+		final float direction3Z = rayOriginZ - triangleAPositionZ;
+		
+//		Compute the reciprocal (or inverse) of the determinant, such that multiplications can be used instead of divisions:
+		final float determinantReciprocal = 1.0F / determinant;
+		
+//		Compute the Barycentric U-coordinate as the dot product between 'direction3' and 'direction2' followed by a multiplication with the reciprocal (or inverse) determinant:
+		final float barycentricU = (direction3X * direction2X + direction3Y * direction2Y + direction3Z * direction2Z) * determinantReciprocal;
+		
+//		Check that the Barycentric U-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
+		if(barycentricU < 0.0F || barycentricU > 1.0F) {
+			return;
+		}
+		
+//		Compute the cross product between 'direction3' and 'direction0', denoted by 'direction4' in the comments:
+		final float direction4X = direction3Y * direction0Z - direction3Z * direction0Y;
+		final float direction4Y = direction3Z * direction0X - direction3X * direction0Z;
+		final float direction4Z = direction3X * direction0Y - direction3Y * direction0X;
+		
+//		Compute the Barycentric V-coordinate as the dot product between 'rayDirection' and 'direction4' followed by a multiplication with the reciprocal (or inverse) determinant:
+		final float barycentricV = (rayDirectionX * direction4X + rayDirectionY * direction4Y + rayDirectionZ * direction4Z) * determinantReciprocal;
+		
+//		Check that the Barycentric V-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
+		if(barycentricV < 0.0F || barycentricV > 1.0F) {
+			return;
+		}
+		
+//		Check that the sum of the Barycentric U-coordinate and the Barycentric V-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
+		if(barycentricU + barycentricV > 1.0F) {
+			return;
+		}
+		
+//		Compute the Barycentric W-coordinate:
+		final float barycentricW = 1.0F - barycentricU - barycentricV;
+		
+//		Compute the surface intersection point:
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+//		Compute the W-direction (surface normal) of the geometric orthonormal basis:
+		final float orthonormalBasisGWX = direction0Y * direction1Z - direction0Z * direction1Y;
+		final float orthonormalBasisGWY = direction0Z * direction1X - direction0X * direction1Z;
+		final float orthonormalBasisGWZ = direction0X * direction1Y - direction0Y * direction1X;
+		final float orthonormalBasisGWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGWX, orthonormalBasisGWY, orthonormalBasisGWZ);
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGWX * orthonormalBasisGWLengthReciprocal;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGWY * orthonormalBasisGWLengthReciprocal;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGWZ * orthonormalBasisGWLengthReciprocal;
+		
+//		Compute the U-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGUX = direction0NormalizedY * orthonormalBasisGWNormalizedZ - direction0NormalizedZ * orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGUY = direction0NormalizedZ * orthonormalBasisGWNormalizedX - direction0NormalizedX * orthonormalBasisGWNormalizedZ;
+		final float orthonormalBasisGUZ = direction0NormalizedX * orthonormalBasisGWNormalizedY - direction0NormalizedY * orthonormalBasisGWNormalizedX;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+//		Compute the V-direction of the geometric orthonormal basis:
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGWNormalizedY * orthonormalBasisGUNormalizedZ - orthonormalBasisGWNormalizedZ * orthonormalBasisGUNormalizedY;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGWNormalizedZ * orthonormalBasisGUNormalizedX - orthonormalBasisGWNormalizedX * orthonormalBasisGUNormalizedZ;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGWNormalizedX * orthonormalBasisGUNormalizedY - orthonormalBasisGWNormalizedY * orthonormalBasisGUNormalizedX;
+		
+//		Compute the W-direction of the shading orthonormal basis:
+		final float orthonormalBasisSWX = triangleAOrthonormalBasisWX * barycentricW + triangleBOrthonormalBasisWX * barycentricU + triangleCOrthonormalBasisWX * barycentricV;
+		final float orthonormalBasisSWY = triangleAOrthonormalBasisWY * barycentricW + triangleBOrthonormalBasisWY * barycentricU + triangleCOrthonormalBasisWY * barycentricV;
+		final float orthonormalBasisSWZ = triangleAOrthonormalBasisWZ * barycentricW + triangleBOrthonormalBasisWZ * barycentricU + triangleCOrthonormalBasisWZ * barycentricV;
+		final float orthonormalBasisSWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisSWX, orthonormalBasisSWY, orthonormalBasisSWZ);
+		final float orthonormalBasisSWNormalizedX = orthonormalBasisSWX * orthonormalBasisSWLengthReciprocal;
+		final float orthonormalBasisSWNormalizedY = orthonormalBasisSWY * orthonormalBasisSWLengthReciprocal;
+		final float orthonormalBasisSWNormalizedZ = orthonormalBasisSWZ * orthonormalBasisSWLengthReciprocal;
+		
+//		Compute a vector that will be used when constructing the U-direction of the shading orthonormal basis:
+		final float vX = triangleAOrthonormalBasisVX * barycentricW + triangleBOrthonormalBasisVX * barycentricU + triangleCOrthonormalBasisVX * barycentricV;
+		final float vY = triangleAOrthonormalBasisVY * barycentricW + triangleBOrthonormalBasisVY * barycentricU + triangleCOrthonormalBasisVY * barycentricV;
+		final float vZ = triangleAOrthonormalBasisVZ * barycentricW + triangleBOrthonormalBasisVZ * barycentricU + triangleCOrthonormalBasisVZ * barycentricV;
+		final float vLengthReciprocal = vector3FLengthReciprocal(vX, vY, vZ);
+		final float vNormalizedX = vX * vLengthReciprocal;
+		final float vNormalizedY = vY * vLengthReciprocal;
+		final float vNormalizedZ = vZ * vLengthReciprocal;
+		
+//		Compute the U-direction of the shading orthonormal basis:
+		final float orthonormalBasisSUX = vNormalizedY * orthonormalBasisSWNormalizedZ - vNormalizedZ * orthonormalBasisSWNormalizedY;
+		final float orthonormalBasisSUY = vNormalizedZ * orthonormalBasisSWNormalizedX - vNormalizedX * orthonormalBasisSWNormalizedZ;
+		final float orthonormalBasisSUZ = vNormalizedX * orthonormalBasisSWNormalizedY - vNormalizedY * orthonormalBasisSWNormalizedX;
+		final float orthonormalBasisSULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisSUX, orthonormalBasisSUY, orthonormalBasisSUZ);
+		final float orthonormalBasisSUNormalizedX = orthonormalBasisSUX * orthonormalBasisSULengthReciprocal;
+		final float orthonormalBasisSUNormalizedY = orthonormalBasisSUY * orthonormalBasisSULengthReciprocal;
+		final float orthonormalBasisSUNormalizedZ = orthonormalBasisSUZ * orthonormalBasisSULengthReciprocal;
+		
+//		Compute the V-direction of the shading orthonormal basis:
+		final float orthonormalBasisSVNormalizedX = orthonormalBasisSWNormalizedY * orthonormalBasisSUNormalizedZ - orthonormalBasisSWNormalizedZ * orthonormalBasisSUNormalizedY;
+		final float orthonormalBasisSVNormalizedY = orthonormalBasisSWNormalizedZ * orthonormalBasisSUNormalizedX - orthonormalBasisSWNormalizedX * orthonormalBasisSUNormalizedZ;
+		final float orthonormalBasisSVNormalizedZ = orthonormalBasisSWNormalizedX * orthonormalBasisSUNormalizedY - orthonormalBasisSWNormalizedY * orthonormalBasisSUNormalizedX;
+		
+//		Compute the texture coordinates:
+		final float textureCoordinatesU = triangleATextureCoordinatesU * barycentricW + triangleBTextureCoordinatesU * barycentricU + triangleCTextureCoordinatesU * barycentricV;
+		final float textureCoordinatesV = triangleATextureCoordinatesV * barycentricW + triangleBTextureCoordinatesV * barycentricU + triangleCTextureCoordinatesV * barycentricV;
+		
+//		Update the intersection array:
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = orthonormalBasisGUNormalizedX;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1] = orthonormalBasisGUNormalizedY;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2] = orthonormalBasisGUNormalizedZ;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0] = orthonormalBasisGVNormalizedX;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1] = orthonormalBasisGVNormalizedY;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2] = orthonormalBasisGVNormalizedZ;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0] = orthonormalBasisGWNormalizedX;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1] = orthonormalBasisGWNormalizedY;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2] = orthonormalBasisGWNormalizedZ;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = orthonormalBasisSUNormalizedX;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = orthonormalBasisSUNormalizedY;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2] = orthonormalBasisSUNormalizedZ;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0] = orthonormalBasisSVNormalizedX;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1] = orthonormalBasisSVNormalizedY;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2] = orthonormalBasisSVNormalizedZ;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] = orthonormalBasisSWNormalizedX;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] = orthonormalBasisSWNormalizedY;
+		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = orthonormalBasisSWNormalizedZ;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX] = primitiveIndex;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = surfaceIntersectionPointX;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = surfaceIntersectionPointY;

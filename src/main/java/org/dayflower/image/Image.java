@@ -18,8 +18,11 @@
  */
 package org.dayflower.image;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.UncheckedIOException;
+
+import javafx.scene.image.WritableImage;
 
 /**
  * An {@code Image} is an image that can be drawn to.
@@ -28,6 +31,27 @@ import java.io.UncheckedIOException;
  * @author J&#246;rgen Lundgren
  */
 public interface Image {
+	/**
+	 * Returns a {@code BufferedImage} representation of this {@code Image} instance.
+	 * 
+	 * @return a {@code BufferedImage} representation of this {@code Image} instance
+	 */
+	BufferedImage toBufferedImage();
+	
+	/**
+	 * Returns a copy of this {@code Image} instance.
+	 * 
+	 * @return a copy of this {@code Image} instance
+	 */
+	Image copy();
+	
+	/**
+	 * Returns a {@code WritableImage} representation of this {@code Image} instance.
+	 * 
+	 * @return a {@code WritableImage} representation of this {@code Image} instance
+	 */
+	WritableImage toWritableImage();
+	
 	/**
 	 * Returns the resolution of this {@code Image} instance.
 	 * <p>

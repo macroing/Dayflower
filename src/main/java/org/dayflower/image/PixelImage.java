@@ -57,9 +57,7 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
 
 /**
- * A {@code PixelImage} is an image that can be drawn to.
- * <p>
- * This class stores individual pixels as {@link Pixel} instances.
+ * A {@code PixelImage} is an {@link Image} implementation that stores individual pixels as {@link Pixel} instances.
  * <p>
  * An instance of this class requires a lot of memory. It is therefore not advised to keep multiple instances of it in memory at once, only to retrieve the pixel colors.
  * <p>
@@ -444,6 +442,7 @@ public final class PixelImage implements Image {
 	 * 
 	 * @return a {@code BufferedImage} representation of this {@code PixelImage} instance
 	 */
+	@Override
 	public BufferedImage toBufferedImage() {
 		final BufferedImage bufferedImage = new BufferedImage(this.resolutionX, this.resolutionY, BufferedImage.TYPE_INT_ARGB);
 		
@@ -711,6 +710,7 @@ public final class PixelImage implements Image {
 	 * 
 	 * @return a copy of this {@code PixelImage} instance
 	 */
+	@Override
 	public PixelImage copy() {
 		return new PixelImage(this);
 	}
@@ -739,6 +739,7 @@ public final class PixelImage implements Image {
 	 * 
 	 * @return a {@code WritableImage} representation of this {@code PixelImage} instance
 	 */
+	@Override
 	public WritableImage toWritableImage() {
 		final
 		WritableImage writableImage = new WritableImage(this.resolutionX, this.resolutionY);

@@ -18,12 +18,21 @@
  */
 package org.dayflower.renderer;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.dayflower.javafx.canvas.ConcurrentByteArrayCanvas;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public final class GPUApplication extends Application {
+	private final ExecutorService executorService;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	public GPUApplication() {
-		
+		this.executorService = Executors.newFixedThreadPool(1);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,5 +40,14 @@ public final class GPUApplication extends Application {
 	@Override
 	public void start(final Stage stage) {
 		
+		
+//		final
+//		ConcurrentByteArrayCanvas concurrentByteArrayCanvas = new ConcurrentByteArrayCanvas();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static void main(final String[] args) {
+		launch(args);
 	}
 }

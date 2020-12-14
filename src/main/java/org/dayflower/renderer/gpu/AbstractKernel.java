@@ -20,6 +20,8 @@ package org.dayflower.renderer.gpu;
 
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.cos;
+import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.pow;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 
@@ -38,6 +40,18 @@ import com.amd.aparapi.Kernel;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractKernel extends Kernel {
+//	TODO: Add Javadocs!
+	protected static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U = 0;
+	
+//	TODO: Add Javadocs!
+	protected static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V = 3;
+	
+//	TODO: Add Javadocs!
+	protected static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W = 6;
+	
+//	TODO: Add Javadocs!
+	protected static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE = 9;
+	
 //	TODO: Add Javadocs!
 	protected static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
 	
@@ -72,6 +86,9 @@ public abstract class AbstractKernel extends Kernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
+	protected float[] orthonormalBasis33FArray_$private$9;
+	
+//	TODO: Add Javadocs!
 	protected float[] point3FArray_$private$3;
 	
 //	TODO: Add Javadocs!
@@ -95,6 +112,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * Constructs a new {@code AbstractKernel} instance.
 	 */
 	protected AbstractKernel() {
+		this.orthonormalBasis33FArray_$private$9 = new float[ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE];
 		this.point3FArray_$private$3 = new float[POINT_3_F_ARRAY_SIZE];
 		this.vector3FArray_$private$3 = new float[VECTOR_3_F_ARRAY_SIZE];
 		this.resolutionX = 0;
@@ -572,7 +590,95 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void point3FTransform(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+	protected final void orthonormalBasis33FSetFromVector3F() {
+		final float orthonormalBasisWX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float orthonormalBasisWY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float orthonormalBasisWZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		
+		orthonormalBasis33FSetFromW(orthonormalBasisWX, orthonormalBasisWY, orthonormalBasisWZ);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void orthonormalBasis33FSetFromW(final float orthonormalBasisWX, final float orthonormalBasisWY, final float orthonormalBasisWZ) {
+//		Compute the normalized W-direction of the orthonormal basis:
+		final float orthonormalBasisWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisWX, orthonormalBasisWY, orthonormalBasisWZ);
+		final float orthonormalBasisWNormalizedX = orthonormalBasisWX * orthonormalBasisWLengthReciprocal;
+		final float orthonormalBasisWNormalizedY = orthonormalBasisWY * orthonormalBasisWLengthReciprocal;
+		final float orthonormalBasisWNormalizedZ = orthonormalBasisWZ * orthonormalBasisWLengthReciprocal;
+		
+//		Compute the absolute component values of the normalized W-direction, which are used to determine the orientation of the V-direction of the orthonormal basis:
+		final float orthonormalBasisWNormalizedXAbs = abs(orthonormalBasisWNormalizedX);
+		final float orthonormalBasisWNormalizedYAbs = abs(orthonormalBasisWNormalizedY);
+		final float orthonormalBasisWNormalizedZAbs = abs(orthonormalBasisWNormalizedZ);
+		
+//		Compute variables used to determine the orientation of the V-direction of the orthonormal basis:
+		final boolean isX = orthonormalBasisWNormalizedXAbs < orthonormalBasisWNormalizedYAbs && orthonormalBasisWNormalizedXAbs < orthonormalBasisWNormalizedZAbs;
+		final boolean isY = orthonormalBasisWNormalizedYAbs < orthonormalBasisWNormalizedZAbs;
+		
+//		Compute the normalized V-direction of the orthonormal basis:
+		final float orthonormalBasisVX = isX ? +0.0F                         : isY ? +orthonormalBasisWNormalizedZ : +orthonormalBasisWNormalizedY;
+		final float orthonormalBasisVY = isX ? +orthonormalBasisWNormalizedZ : isY ? +0.0F                         : -orthonormalBasisWNormalizedX;
+		final float orthonormalBasisVZ = isX ? -orthonormalBasisWNormalizedY : isY ? -orthonormalBasisWNormalizedX : +0.0F;
+		final float orthonormalBasisVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisVX, orthonormalBasisVY, orthonormalBasisVZ);
+		final float orthonormalBasisVNormalizedX = orthonormalBasisVX * orthonormalBasisVLengthReciprocal;
+		final float orthonormalBasisVNormalizedY = orthonormalBasisVY * orthonormalBasisVLengthReciprocal;
+		final float orthonormalBasisVNormalizedZ = orthonormalBasisVZ * orthonormalBasisVLengthReciprocal;
+		
+//		Compute the normalized U-direction of the orthonormal basis:
+		final float orthonormalBasisUNormalizedX = orthonormalBasisVNormalizedY * orthonormalBasisWNormalizedZ - orthonormalBasisVNormalizedZ * orthonormalBasisWNormalizedY;
+		final float orthonormalBasisUNormalizedY = orthonormalBasisVNormalizedZ * orthonormalBasisWNormalizedX - orthonormalBasisVNormalizedX * orthonormalBasisWNormalizedZ;
+		final float orthonormalBasisUNormalizedZ = orthonormalBasisVNormalizedX * orthonormalBasisWNormalizedY - orthonormalBasisVNormalizedY * orthonormalBasisWNormalizedX;
+		
+//		Set the orthonormal basis:
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0] = orthonormalBasisUNormalizedX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1] = orthonormalBasisUNormalizedY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2] = orthonormalBasisUNormalizedZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0] = orthonormalBasisVNormalizedX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1] = orthonormalBasisVNormalizedY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2] = orthonormalBasisVNormalizedZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0] = orthonormalBasisWNormalizedX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1] = orthonormalBasisWNormalizedY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2] = orthonormalBasisWNormalizedZ;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void orthonormalBasis33FSetFromWV(final float orthonormalBasisWX, final float orthonormalBasisWY, final float orthonormalBasisWZ, final float orthonormalBasisVReferenceX, final float orthonormalBasisVReferenceY, final float orthonormalBasisVReferenceZ) {
+//		Compute the normalized W-direction of the orthonormal basis:
+		final float orthonormalBasisWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisWX, orthonormalBasisWY, orthonormalBasisWZ);
+		final float orthonormalBasisWNormalizedX = orthonormalBasisWX * orthonormalBasisWLengthReciprocal;
+		final float orthonormalBasisWNormalizedY = orthonormalBasisWY * orthonormalBasisWLengthReciprocal;
+		final float orthonormalBasisWNormalizedZ = orthonormalBasisWZ * orthonormalBasisWLengthReciprocal;
+		
+//		Compute the normalized V-direction used as a reference for the orthonormal basis:
+		final float orthonormalBasisVReferenceLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisVReferenceX, orthonormalBasisVReferenceY, orthonormalBasisVReferenceZ);
+		final float orthonormalBasisVReferenceNormalizedX = orthonormalBasisVReferenceX * orthonormalBasisVReferenceLengthReciprocal;
+		final float orthonormalBasisVReferenceNormalizedY = orthonormalBasisVReferenceY * orthonormalBasisVReferenceLengthReciprocal;
+		final float orthonormalBasisVReferenceNormalizedZ = orthonormalBasisVReferenceZ * orthonormalBasisVReferenceLengthReciprocal;
+		
+//		Compute the normalized U-direction of the orthonormal basis:
+		final float orthonormalBasisUNormalizedX = orthonormalBasisVReferenceNormalizedY * orthonormalBasisWNormalizedZ - orthonormalBasisVReferenceNormalizedZ * orthonormalBasisWNormalizedY;
+		final float orthonormalBasisUNormalizedY = orthonormalBasisVReferenceNormalizedZ * orthonormalBasisWNormalizedX - orthonormalBasisVReferenceNormalizedX * orthonormalBasisWNormalizedZ;
+		final float orthonormalBasisUNormalizedZ = orthonormalBasisVReferenceNormalizedX * orthonormalBasisWNormalizedY - orthonormalBasisVReferenceNormalizedY * orthonormalBasisWNormalizedX;
+		
+//		Compute the normalized V-direction of the orthonormal basis:
+		final float orthonormalBasisVNormalizedX = orthonormalBasisWNormalizedY * orthonormalBasisUNormalizedZ - orthonormalBasisWNormalizedZ * orthonormalBasisUNormalizedY;
+		final float orthonormalBasisVNormalizedY = orthonormalBasisWNormalizedZ * orthonormalBasisUNormalizedX - orthonormalBasisWNormalizedX * orthonormalBasisUNormalizedZ;
+		final float orthonormalBasisVNormalizedZ = orthonormalBasisWNormalizedX * orthonormalBasisUNormalizedY - orthonormalBasisWNormalizedY * orthonormalBasisUNormalizedX;
+		
+//		Set the orthonormal basis:
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0] = orthonormalBasisUNormalizedX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1] = orthonormalBasisUNormalizedY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2] = orthonormalBasisUNormalizedZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0] = orthonormalBasisVNormalizedX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1] = orthonormalBasisVNormalizedY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2] = orthonormalBasisVNormalizedZ;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0] = orthonormalBasisWNormalizedX;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1] = orthonormalBasisWNormalizedY;
+		this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2] = orthonormalBasisWNormalizedZ;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void point3FSetMatrix44FTransform(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
 		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3 + element14;
 		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3 + element24;
 		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3 + element34;
@@ -583,7 +689,7 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void point3FTransformAndDivide(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float element41, final float element42, final float element43, final float element44, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+	protected final void point3FSetMatrix44FTransformAndDivide(final float element11, final float element12, final float element13, final float element14, final float element21, final float element22, final float element23, final float element24, final float element31, final float element32, final float element33, final float element34, final float element41, final float element42, final float element43, final float element44, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
 		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3 + element14;
 		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3 + element24;
 		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3 + element34;
@@ -604,28 +710,59 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void vector3FGenerateOrthonormalBasis33FUNormalizedFromWNormalized(final float orthonormalBasisWNormalizedX, final float orthonormalBasisWNormalizedY, final float orthonormalBasisWNormalizedZ) {
-		final float orthonormalBasisWNormalizedXAbs = abs(orthonormalBasisWNormalizedX);
+	protected final void vector3FSetMatrix44FTransform(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3;
+		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3;
+		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3;
 		
-		final float x = orthonormalBasisWNormalizedXAbs > 0.1F ? 0.0F : 1.0F;
-		final float y = orthonormalBasisWNormalizedXAbs > 0.1F ? 1.0F : 0.0F;
-		final float z = orthonormalBasisWNormalizedXAbs > 0.1F ? 0.0F : 0.0F;
-		
-		final float orthonormalBasisUX = y * orthonormalBasisWNormalizedZ - z * orthonormalBasisWNormalizedY;
-		final float orthonormalBasisUY = z * orthonormalBasisWNormalizedX - x * orthonormalBasisWNormalizedZ;
-		final float orthonormalBasisUZ = x * orthonormalBasisWNormalizedY - y * orthonormalBasisWNormalizedX;
-		final float orthonormalBasisULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisUX, orthonormalBasisUY, orthonormalBasisUZ);
-		final float orthonormalBasisUNormalizedX = orthonormalBasisUX * orthonormalBasisULengthReciprocal;
-		final float orthonormalBasisUNormalizedY = orthonormalBasisUY * orthonormalBasisULengthReciprocal;
-		final float orthonormalBasisUNormalizedZ = orthonormalBasisUZ * orthonormalBasisULengthReciprocal;
-		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = orthonormalBasisUNormalizedX;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = orthonormalBasisUNormalizedY;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = orthonormalBasisUNormalizedZ;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void vector3FNormalize(final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+	protected final void vector3FSetMatrix44FTransformNormalize(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3;
+		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3;
+		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3;
+		final float newLengthReciprocal = vector3FLengthReciprocal(newComponent1, newComponent2, newComponent3);
+		final float newNormalizedComponent1 = newComponent1 * newLengthReciprocal;
+		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
+		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FSetMatrix44FTransformTranspose(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element21 * oldComponent2 + element31 * oldComponent3;
+		final float newComponent2 = element12 * oldComponent1 + element22 * oldComponent2 + element32 * oldComponent3;
+		final float newComponent3 = element13 * oldComponent1 + element23 * oldComponent2 + element33 * oldComponent3;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FSetMatrix44FTransformTransposeNormalize(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float newComponent1 = element11 * oldComponent1 + element21 * oldComponent2 + element31 * oldComponent3;
+		final float newComponent2 = element12 * oldComponent1 + element22 * oldComponent2 + element32 * oldComponent3;
+		final float newComponent3 = element13 * oldComponent1 + element23 * oldComponent2 + element33 * oldComponent3;
+		final float newLengthReciprocal = vector3FLengthReciprocal(newComponent1, newComponent2, newComponent3);
+		final float newNormalizedComponent1 = newComponent1 * newLengthReciprocal;
+		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
+		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FSetNormalize(final float oldComponent1, final float oldComponent2, final float oldComponent3) {
 		final float oldLengthReciprocal = vector3FLengthReciprocal(oldComponent1, oldComponent2, oldComponent3);
 		
 		final float newComponent1 = oldComponent1 * oldLengthReciprocal;
@@ -638,7 +775,65 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void vector3FSampleHemisphereCosineDistribution2(final float u, final float v) {
+	protected final void vector3FSetOrthonormalBasis33FTransformNormalize(final float oldComponent1, final float oldComponent2, final float oldComponent3) {
+		final float orthonormalBasisUX = this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0];
+		final float orthonormalBasisUY = this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1];
+		final float orthonormalBasisUZ = this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2];
+		final float orthonormalBasisVX = this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0];
+		final float orthonormalBasisVY = this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1];
+		final float orthonormalBasisVZ = this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2];
+		final float orthonormalBasisWX = this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0];
+		final float orthonormalBasisWY = this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1];
+		final float orthonormalBasisWZ = this.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2];
+		
+		final float newComponent1 = orthonormalBasisUX * oldComponent1 + orthonormalBasisVX * oldComponent2 + orthonormalBasisWX * oldComponent3;
+		final float newComponent2 = orthonormalBasisUY * oldComponent1 + orthonormalBasisVY * oldComponent2 + orthonormalBasisWY * oldComponent3;
+		final float newComponent3 = orthonormalBasisUZ * oldComponent1 + orthonormalBasisVZ * oldComponent2 + orthonormalBasisWZ * oldComponent3;
+		final float newLengthReciprocal = vector3FLengthReciprocal(newComponent1, newComponent2, newComponent3);
+		final float newNormalizedComponent1 = newComponent1 * newLengthReciprocal;
+		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
+		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F() {
+		final float component1 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float component2 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float component3 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		
+		vector3FSetOrthonormalBasis33FTransformNormalize(component1, component2, component3);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FSetReflection(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final boolean isFacingSurface) {
+		final float directionDotNormal = vector3FDotProduct(directionX, directionY, directionZ, normalX, normalY, normalZ);
+		final float directionDotNormalMultipliedByTwo = directionDotNormal * 2.0F;
+		
+		if(isFacingSurface) {
+			final float reflectionX = directionX - normalX * directionDotNormalMultipliedByTwo;
+			final float reflectionY = directionY - normalY * directionDotNormalMultipliedByTwo;
+			final float reflectionZ = directionZ - normalZ * directionDotNormalMultipliedByTwo;
+			
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = reflectionX;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = reflectionY;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = reflectionZ;
+		} else {
+			final float reflectionX = normalX * directionDotNormalMultipliedByTwo - directionX;
+			final float reflectionY = normalY * directionDotNormalMultipliedByTwo - directionY;
+			final float reflectionZ = normalZ * directionDotNormalMultipliedByTwo - directionZ;
+			
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = reflectionX;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = reflectionY;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = reflectionZ;
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FSetSampleHemisphereCosineDistribution2(final float u, final float v) {
 		final float sinTheta = sqrt(v);
 		final float cosTheta = sqrt(1.0F - v);
 		final float phi = PI_MULTIPLIED_BY_2 * u;
@@ -653,55 +848,18 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void vector3FTransform(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
-		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3;
-		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3;
-		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3;
+	protected final void vector3FSetSampleHemispherePowerCosineDistribution(final float u, final float v, final float exponent) {
+		final float cosTheta = pow(1.0F - u, 1.0F / (exponent + 1.0F));
+		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float phi = PI_MULTIPLIED_BY_2 * v;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void vector3FTransformNormalize(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
-		final float newComponent1 = element11 * oldComponent1 + element12 * oldComponent2 + element13 * oldComponent3;
-		final float newComponent2 = element21 * oldComponent1 + element22 * oldComponent2 + element23 * oldComponent3;
-		final float newComponent3 = element31 * oldComponent1 + element32 * oldComponent2 + element33 * oldComponent3;
-		final float newLengthReciprocal = vector3FLengthReciprocal(newComponent1, newComponent2, newComponent3);
-		final float newNormalizedComponent1 = newComponent1 * newLengthReciprocal;
-		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
-		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
+		final float component1 = sinTheta * cos(phi);
+		final float component2 = sinTheta * sin(phi);
+		final float component3 = cosTheta;
 		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void vector3FTransformTranspose(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
-		final float newComponent1 = element11 * oldComponent1 + element21 * oldComponent2 + element31 * oldComponent3;
-		final float newComponent2 = element12 * oldComponent1 + element22 * oldComponent2 + element32 * oldComponent3;
-		final float newComponent3 = element13 * oldComponent1 + element23 * oldComponent2 + element33 * oldComponent3;
-		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void vector3FTransformTransposeNormalize(final float element11, final float element12, final float element13, final float element21, final float element22, final float element23, final float element31, final float element32, final float element33, final float oldComponent1, final float oldComponent2, final float oldComponent3) {
-		final float newComponent1 = element11 * oldComponent1 + element21 * oldComponent2 + element31 * oldComponent3;
-		final float newComponent2 = element12 * oldComponent1 + element22 * oldComponent2 + element32 * oldComponent3;
-		final float newComponent3 = element13 * oldComponent1 + element23 * oldComponent2 + element33 * oldComponent3;
-		final float newLengthReciprocal = vector3FLengthReciprocal(newComponent1, newComponent2, newComponent3);
-		final float newNormalizedComponent1 = newComponent1 * newLengthReciprocal;
-		final float newNormalizedComponent2 = newComponent2 * newLengthReciprocal;
-		final float newNormalizedComponent3 = newComponent3 * newLengthReciprocal;
-		
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newNormalizedComponent1;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newNormalizedComponent2;
-		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newNormalizedComponent3;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

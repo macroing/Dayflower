@@ -233,7 +233,7 @@ public final class GPUApplication extends Application {
 		
 		@Override
 		public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
-			Platform.runLater(() -> this.label.setText("Millis: " + Long.toString(elapsedTimeMillis)));
+			Platform.runLater(() -> this.label.setText("Millis: " + Long.toString(elapsedTimeMillis) + " Render Pass: " + renderer.getRendererConfiguration().getRenderPass()));
 		}
 		
 		@Override

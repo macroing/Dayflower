@@ -476,7 +476,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 			}
 			
 			if(isIntersectingBoundingVolume) {
-				ray3FTransformWorldToObject(index);
+				ray3FSetMatrix44FTransformWorldToObject(index);
 				
 				float tObjectSpace = 0.0F;
 				
@@ -498,7 +498,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 					primitiveIndex = index;
 				}
 				
-				ray3FTransformObjectToWorld(index);
+				ray3FSetMatrix44FTransformObjectToWorld(index);
 			}
 		}
 		
@@ -510,7 +510,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
 			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
 			
-			ray3FTransformWorldToObject(primitiveIndex);
+			ray3FSetMatrix44FTransformWorldToObject(primitiveIndex);
 			
 			if(shapeID == Plane3F.ID) {
 				intersectionComputeShape3FPlane3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
@@ -524,7 +524,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 				intersectionComputeShape3FTriangle3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
 			}
 			
-			ray3FTransformObjectToWorld(primitiveIndex);
+			ray3FSetMatrix44FTransformObjectToWorld(primitiveIndex);
 			
 			intersectionTransformObjectToWorld(primitiveIndex);
 			
@@ -682,7 +682,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 			}
 			
 			if(isIntersectingBoundingVolume) {
-				ray3FTransformWorldToObject(index);
+				ray3FSetMatrix44FTransformWorldToObject(index);
 				
 				float tObjectSpace = 0.0F;
 				
@@ -704,7 +704,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 					hasFoundIntersection = true;
 				}
 				
-				ray3FTransformObjectToWorld(index);
+				ray3FSetMatrix44FTransformObjectToWorld(index);
 			}
 		}
 		
@@ -1626,7 +1626,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		final float oldSurfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
 		
 //		Transform the U-direction of the geometric orthonormal basis:
-		vector3FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
 		
 //		Retrieve the transformed U-direction of the geometric orthonormal basis:
 		final float newOrthonormalBasisGUX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -1634,7 +1634,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		final float newOrthonormalBasisGUZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 		
 //		Transform the V-direction of the geometric orthonormal basis:
-		vector3FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGVX, oldOrthonormalBasisGVY, oldOrthonormalBasisGVZ);
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGVX, oldOrthonormalBasisGVY, oldOrthonormalBasisGVZ);
 		
 //		Retrieve the transformed V-direction of the geometric orthonormal basis:
 		final float newOrthonormalBasisGVX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -1642,7 +1642,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		final float newOrthonormalBasisGVZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 		
 //		Transform the W-direction of the geometric orthonormal basis:
-		vector3FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGWX, oldOrthonormalBasisGWY, oldOrthonormalBasisGWZ);
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGWX, oldOrthonormalBasisGWY, oldOrthonormalBasisGWZ);
 		
 //		Retrieve the transformed W-direction of the geometric orthonormal basis:
 		final float newOrthonormalBasisGWX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -1650,7 +1650,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		final float newOrthonormalBasisGWZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 		
 //		Transform the U-direction of the shading orthonormal basis:
-		vector3FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSUX, oldOrthonormalBasisSUY, oldOrthonormalBasisSUZ);
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSUX, oldOrthonormalBasisSUY, oldOrthonormalBasisSUZ);
 		
 //		Retrieve the transformed U-direction of the shading orthonormal basis:
 		final float newOrthonormalBasisSUX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -1658,7 +1658,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		final float newOrthonormalBasisSUZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 		
 //		Transform the V-direction of the shading orthonormal basis:
-		vector3FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSVX, oldOrthonormalBasisSVY, oldOrthonormalBasisSVZ);
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSVX, oldOrthonormalBasisSVY, oldOrthonormalBasisSVZ);
 		
 //		Retrieve the transformed V-direction of the shading orthonormal basis:
 		final float newOrthonormalBasisSVX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -1666,7 +1666,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		final float newOrthonormalBasisSVZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 		
 //		Transform the W-direction of the shading orthonormal basis:
-		vector3FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSWX, oldOrthonormalBasisSWY, oldOrthonormalBasisSWZ);
+		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSWX, oldOrthonormalBasisSWY, oldOrthonormalBasisSWZ);
 		
 //		Retrieve the transformed W-direction of the shading orthonormal basis:
 		final float newOrthonormalBasisSWX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -1674,7 +1674,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		final float newOrthonormalBasisSWZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 		
 //		Transform the surface intersection point:
-		point3FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
+		point3FSetMatrix44FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
 		
 //		Retrieve the transformed surface intersection point:
 		final float newSurfaceIntersectionPointX = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -1716,13 +1716,37 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void ray3FTransformObjectToWorld(final int primitiveIndex) {
-		doRay3FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
+	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3F() {
+		final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+		final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+		final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+		
+		final float directionX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float directionY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float directionZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		
+		final float originX = surfaceIntersectionPointX + directionX * 0.001F;
+		final float originY = surfaceIntersectionPointY + directionY * 0.001F;
+		final float originZ = surfaceIntersectionPointZ + directionZ * 0.001F;
+		
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0] = originX;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1] = originY;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2] = originZ;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0] = directionX;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1] = directionY;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2] = directionZ;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = DEFAULT_T_MINIMUM;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = DEFAULT_T_MAXIMUM;
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void ray3FTransformWorldToObject(final int primitiveIndex) {
-		doRay3FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
+	protected final void ray3FSetMatrix44FTransformObjectToWorld(final int primitiveIndex) {
+		doRay3FSetMatrix44FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void ray3FSetMatrix44FTransformWorldToObject(final int primitiveIndex) {
+		doRay3FSetMatrix44FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1739,7 +1763,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		return getAndReturn(this.pixelArray);
 	}
 	
-	private void doRay3FTransform(final int matrix44FArrayOffset) {
+	private void doRay3FSetMatrix44FTransform(final int matrix44FArrayOffset) {
 //		Retrieve the matrix elements:
 		final float element11 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
 		final float element12 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
@@ -1773,10 +1797,10 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		final float oldTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 		
 //		Transform the ray origin from the old space to the new space:
-		point3FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldOriginX, oldOriginY, oldOriginZ);
+		point3FSetMatrix44FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldOriginX, oldOriginY, oldOriginZ);
 		
 //		Transform the ray direction from the old space to the new space:
-		vector3FTransform(element11, element12, element13, element21, element22, element23, element31, element32, element33, oldDirectionX, oldDirectionY, oldDirectionZ);
+		vector3FSetMatrix44FTransform(element11, element12, element13, element21, element22, element23, element31, element32, element33, oldDirectionX, oldDirectionY, oldDirectionZ);
 		
 //		Retrieve the ray origin components from the new space:
 		final float newOriginX = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -1800,7 +1824,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 			final float oldReferencePointTMinimumZ = oldOriginZ + oldDirectionZ * oldTMinimum;
 			
 //			Transform the reference point from the old space to the new space:
-			point3FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMinimumX, oldReferencePointTMinimumY, oldReferencePointTMinimumZ);
+			point3FSetMatrix44FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMinimumX, oldReferencePointTMinimumY, oldReferencePointTMinimumZ);
 			
 //			Retrieve the reference point from the new space:
 			final float newReferencePointTMinimumX = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -1822,7 +1846,7 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 			final float oldReferencePointTMaximumZ = oldOriginZ + oldDirectionZ * oldTMaximum;
 			
 //			Transform the reference point from the old space to the new space:
-			point3FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMaximumX, oldReferencePointTMaximumY, oldReferencePointTMaximumZ);
+			point3FSetMatrix44FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMaximumX, oldReferencePointTMaximumY, oldReferencePointTMaximumZ);
 			
 //			Retrieve the reference point from the new space:
 			final float newReferencePointTMaximumX = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];

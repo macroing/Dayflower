@@ -28,6 +28,12 @@ import org.dayflower.renderer.observer.FileRendererObserver;
 
 //TODO: Add Javadocs!
 public final class GPURenderer extends AbstractGPURenderer {
+	private static final int MATERIAL_MATTE = 1;
+	private static final int MATERIAL_METAL = 2;
+	private static final int MATERIAL_MIRROR = 3;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 //	TODO: Add Javadocs!
 	public GPURenderer() {
 		this(new RendererConfiguration());
@@ -54,6 +60,39 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	@SuppressWarnings("static-method")
+	private int doCalculateMaterialForPrimitiveIndex(final int primitiveIndex) {
+		if(primitiveIndex == 0) {
+			return MATERIAL_METAL;
+		} else if(primitiveIndex == 1) {
+			return MATERIAL_MIRROR;
+		} else if(primitiveIndex == 2) {
+			return MATERIAL_MATTE;
+		} else if(primitiveIndex == 3) {
+			return MATERIAL_MIRROR;
+		} else if(primitiveIndex == 4) {
+			return MATERIAL_METAL;
+		} else {
+			return MATERIAL_MATTE;
+		}
+	}
+	
+	private int doCalculateReflectanceForPrimitiveIndex(final int primitiveIndex) {
+		if(primitiveIndex == 0) {
+			return colorRGBFloatToRGBInt(0.5F, 0.5F, 0.5F);
+		} else if(primitiveIndex == 1) {
+			return colorRGBFloatToRGBInt(1.0F, 0.1F, 0.1F);
+		} else if(primitiveIndex == 2) {
+			return colorRGBFloatToRGBInt(0.1F, 1.0F, 0.1F);
+		} else if(primitiveIndex == 3) {
+			return colorRGBFloatToRGBInt(0.5F, 0.5F, 0.5F);
+		} else if(primitiveIndex == 4) {
+			return colorRGBFloatToRGBInt(0.1F, 0.1F, 1.0F);
+		} else {
+			return colorRGBFloatToRGBInt(0.5F, 0.5F, 0.5F);
+		}
+	}
+	
 	private void doRunPathTracingSmallPT() {
 		final int maximumBounce = 20;
 		final int minimumBounceRussianRoulette = 5;
@@ -71,31 +110,32 @@ public final class GPURenderer extends AbstractGPURenderer {
 			
 			while(currentBounce < maximumBounce) {
 				if(intersectionComputeShape3F()) {
-					final float oldDirectionX = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-					final float oldDirectionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-					final float oldDirectionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+					final int primitiveIndex = (int)(super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+					
+					final float directionX = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+					final float directionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+					final float directionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
 					
 					float emittanceR = 0.0F;
 					float emittanceG = 0.0F;
 					float emittanceB = 0.0F;
 					
-					float reflectanceR = 0.5F;
-					float reflectanceG = 0.5F;
-					float reflectanceB = 0.5F;
+					final int material = doCalculateMaterialForPrimitiveIndex(primitiveIndex);
+					final int reflectanceRGB = doCalculateReflectanceForPrimitiveIndex(primitiveIndex);
 					
-					final float surfaceIntersectionPointX = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
-					final float surfaceIntersectionPointY = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
-					final float surfaceIntersectionPointZ = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+					float reflectanceR = colorRGBIntToRFloat(reflectanceRGB);
+					float reflectanceG = colorRGBIntToGFloat(reflectanceRGB);
+					float reflectanceB = colorRGBIntToBFloat(reflectanceRGB);
 					
 					final float surfaceNormalX = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 					final float surfaceNormalY = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
 					final float surfaceNormalZ = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
 					
-					final float oldDirectionDotSurfaceNormal = vector3FDotProduct(oldDirectionX, oldDirectionY, oldDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+					final float directionDotSurfaceNormal = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 					
-					final float surfaceNormalCorrectlyOrientedX = oldDirectionDotSurfaceNormal < 0.0F ? surfaceNormalX : -surfaceNormalX;
-					final float surfaceNormalCorrectlyOrientedY = oldDirectionDotSurfaceNormal < 0.0F ? surfaceNormalY : -surfaceNormalY;
-					final float surfaceNormalCorrectlyOrientedZ = oldDirectionDotSurfaceNormal < 0.0F ? surfaceNormalZ : -surfaceNormalZ;
+					final float surfaceNormalCorrectlyOrientedX = directionDotSurfaceNormal < 0.0F ? surfaceNormalX : -surfaceNormalX;
+					final float surfaceNormalCorrectlyOrientedY = directionDotSurfaceNormal < 0.0F ? surfaceNormalY : -surfaceNormalY;
+					final float surfaceNormalCorrectlyOrientedZ = directionDotSurfaceNormal < 0.0F ? surfaceNormalZ : -surfaceNormalZ;
 					
 					if(currentBounce >= minimumBounceRussianRoulette) {
 						final float probability = max(reflectanceR, reflectanceG, reflectanceB);
@@ -119,54 +159,39 @@ public final class GPURenderer extends AbstractGPURenderer {
 					radianceG += throughputG * emittanceG;
 					radianceB += throughputB * emittanceB;
 					
-//					Matte Material:
-					
-					vector3FSampleHemisphereCosineDistribution2(random(), random());
-					
-					final float sampleX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-					final float sampleY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-					final float sampleZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
-					
-					final float orthonormalBasisWNormalizedX = surfaceNormalCorrectlyOrientedX;
-					final float orthonormalBasisWNormalizedY = surfaceNormalCorrectlyOrientedY;
-					final float orthonormalBasisWNormalizedZ = surfaceNormalCorrectlyOrientedZ;
-					
-					vector3FGenerateOrthonormalBasis33FUNormalizedFromWNormalized(orthonormalBasisWNormalizedX, orthonormalBasisWNormalizedY, orthonormalBasisWNormalizedZ);
-					
-					final float orthonormalBasisUNormalizedX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-					final float orthonormalBasisUNormalizedY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-					final float orthonormalBasisUNormalizedZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
-					
-					final float orthonormalBasisVNormalizedX = orthonormalBasisWNormalizedY * orthonormalBasisUNormalizedZ - orthonormalBasisWNormalizedZ * orthonormalBasisUNormalizedY;
-					final float orthonormalBasisVNormalizedY = orthonormalBasisWNormalizedZ * orthonormalBasisUNormalizedX - orthonormalBasisWNormalizedX * orthonormalBasisUNormalizedZ;
-					final float orthonormalBasisVNormalizedZ = orthonormalBasisWNormalizedX * orthonormalBasisUNormalizedY - orthonormalBasisWNormalizedY * orthonormalBasisUNormalizedX;
-					
-					final float newDirectionX = orthonormalBasisUNormalizedX * sampleX + orthonormalBasisVNormalizedX * sampleY + orthonormalBasisWNormalizedX * sampleZ;
-					final float newDirectionY = orthonormalBasisUNormalizedY * sampleX + orthonormalBasisVNormalizedY * sampleY + orthonormalBasisWNormalizedY * sampleZ;
-					final float newDirectionZ = orthonormalBasisUNormalizedZ * sampleX + orthonormalBasisVNormalizedZ * sampleY + orthonormalBasisWNormalizedZ * sampleZ;
-					final float newDirectionLengthReciprocal = vector3FLengthReciprocal(newDirectionX, newDirectionY, newDirectionZ);
-					final float newDirectionNormalizedX = newDirectionX * newDirectionLengthReciprocal;
-					final float newDirectionNormalizedY = newDirectionY * newDirectionLengthReciprocal;
-					final float newDirectionNormalizedZ = newDirectionZ * newDirectionLengthReciprocal;
-					
-					final float newOriginX = surfaceIntersectionPointX + newDirectionNormalizedX * 0.001F;
-					final float newOriginY = surfaceIntersectionPointY + newDirectionNormalizedY * 0.001F;
-					final float newOriginZ = surfaceIntersectionPointZ + newDirectionNormalizedZ * 0.001F;
-					
-					super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0] = newOriginX;
-					super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1] = newOriginY;
-					super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2] = newOriginZ;
-					super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0] = newDirectionNormalizedX;
-					super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1] = newDirectionNormalizedY;
-					super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2] = newDirectionNormalizedZ;
-					super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = DEFAULT_T_MINIMUM;
-					super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = DEFAULT_T_MAXIMUM;
-					
-					throughputR *= reflectanceR;
-					throughputG *= reflectanceG;
-					throughputB *= reflectanceB;
-					
-//					Matte Material!
+					if(material == MATERIAL_MATTE) {
+						orthonormalBasis33FSetFromW(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
+						
+						vector3FSetSampleHemisphereCosineDistribution2(random(), random());
+						vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+						
+						ray3FSetFromSurfaceIntersectionPointAndVector3F();
+						
+						throughputR *= reflectanceR;
+						throughputG *= reflectanceG;
+						throughputB *= reflectanceB;
+					} else if(material == MATERIAL_METAL) {
+						vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+						
+						orthonormalBasis33FSetFromVector3F();
+						
+						vector3FSetSampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
+						vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+						
+						ray3FSetFromSurfaceIntersectionPointAndVector3F();
+						
+						throughputR *= reflectanceR;
+						throughputG *= reflectanceG;
+						throughputB *= reflectanceB;
+					} else if(material == MATERIAL_MIRROR) {
+						vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+						
+						ray3FSetFromSurfaceIntersectionPointAndVector3F();
+						
+						throughputR *= reflectanceR;
+						throughputG *= reflectanceG;
+						throughputB *= reflectanceB;
+					}
 					
 					currentBounce++;
 				} else {

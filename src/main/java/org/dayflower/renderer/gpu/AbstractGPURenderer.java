@@ -59,6 +59,8 @@ import com.amd.aparapi.Range;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractGPURenderer extends AbstractImageKernel implements Renderer {
+	protected static final float DEFAULT_T_MAXIMUM = Float.MAX_VALUE;
+	protected static final float DEFAULT_T_MINIMUM = 0.001F;
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U = 0;
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V = 3;
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W = 6;
@@ -436,8 +438,8 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0] = directionNormalizedX;
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1] = directionNormalizedY;
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2] = directionNormalizedZ;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = 0.001F;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = Float.MAX_VALUE;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = DEFAULT_T_MINIMUM;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = DEFAULT_T_MAXIMUM;
 		
 //		Fill in the pixel array:
 		this.pixelArray[pixelArrayOffset + 0] = pixelX;

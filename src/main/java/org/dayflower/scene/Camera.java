@@ -20,6 +20,8 @@ package org.dayflower.scene;
 
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
+import static org.dayflower.util.Floats.max;
+import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.sin;
 import static org.dayflower.util.Floats.sqrt;
 import static org.dayflower.util.Floats.tan;
@@ -751,6 +753,24 @@ public final class Camera implements Node {
 	 */
 	public void rotate(final AngleF angle, final Vector3F vector) {
 		setOrthonormalBasis(OrthonormalBasis33F.transform(Matrix44F.rotate(angle, vector), this.orthonormalBasis));
+	}
+	
+	/**
+	 * Rotates this {@code Camera} instance along {@code x} and {@code y} as movement on the screen.
+	 * 
+	 * @param x the X-coordinate on the screen
+	 * @param y the Y-coordinate on the screen
+	 */
+	public void rotate(final float x, final float y) {
+		final AngleF oldYaw = getYaw();
+		final AngleF newYaw = AngleF.add(oldYaw, AngleF.degrees(-x * 0.25F));
+		
+		final AngleF oldPitch = getPitch();
+		final AngleF newPitch = AngleF.degrees(max(min(oldPitch.getDegrees() + AngleF.degrees(y * 0.25F, -90.0F, 90.0F).getDegrees(), 90.00F), -90.00F), -90.00F, 90.00F);
+		
+		setYaw(newYaw);
+		setPitch(newPitch);
+		setOrthonormalBasis();
 	}
 	
 	/**

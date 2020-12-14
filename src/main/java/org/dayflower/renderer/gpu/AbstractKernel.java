@@ -18,6 +18,11 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.util.Floats.cos;
+import static org.dayflower.util.Floats.sin;
+import static org.dayflower.util.Floats.sqrt;
+
 import java.lang.reflect.Field;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -450,6 +455,27 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final void vector3FGenerateOrthonormalBasis33FUNormalizedFromWNormalized(final float orthonormalBasisWNormalizedX, final float orthonormalBasisWNormalizedY, final float orthonormalBasisWNormalizedZ) {
+		final float orthonormalBasisWNormalizedXAbs = abs(orthonormalBasisWNormalizedX);
+		
+		final float x = orthonormalBasisWNormalizedXAbs > 0.1F ? 0.0F : 1.0F;
+		final float y = orthonormalBasisWNormalizedXAbs > 0.1F ? 1.0F : 0.0F;
+		final float z = orthonormalBasisWNormalizedXAbs > 0.1F ? 0.0F : 0.0F;
+		
+		final float orthonormalBasisUX = y * orthonormalBasisWNormalizedZ - z * orthonormalBasisWNormalizedY;
+		final float orthonormalBasisUY = z * orthonormalBasisWNormalizedX - x * orthonormalBasisWNormalizedZ;
+		final float orthonormalBasisUZ = x * orthonormalBasisWNormalizedY - y * orthonormalBasisWNormalizedX;
+		final float orthonormalBasisULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisUX, orthonormalBasisUY, orthonormalBasisUZ);
+		final float orthonormalBasisUNormalizedX = orthonormalBasisUX * orthonormalBasisULengthReciprocal;
+		final float orthonormalBasisUNormalizedY = orthonormalBasisUY * orthonormalBasisULengthReciprocal;
+		final float orthonormalBasisUNormalizedZ = orthonormalBasisUZ * orthonormalBasisULengthReciprocal;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = orthonormalBasisUNormalizedX;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = orthonormalBasisUNormalizedY;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = orthonormalBasisUNormalizedZ;
+	}
+	
+//	TODO: Add Javadocs!
 	protected final void vector3FNormalize(final float oldComponent1, final float oldComponent2, final float oldComponent3) {
 		final float oldLengthReciprocal = vector3FLengthReciprocal(oldComponent1, oldComponent2, oldComponent3);
 		
@@ -460,6 +486,21 @@ public abstract class AbstractKernel extends Kernel {
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = newComponent1;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = newComponent2;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = newComponent3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FSampleHemisphereCosineDistribution2(final float u, final float v) {
+		final float sinTheta = sqrt(v);
+		final float cosTheta = sqrt(1.0F - v);
+		final float phi = PI_MULTIPLIED_BY_2 * u;
+		
+		final float component1 = sinTheta * cos(phi);
+		final float component2 = sinTheta * sin(phi);
+		final float component3 = cosTheta;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
 	}
 	
 //	TODO: Add Javadocs!

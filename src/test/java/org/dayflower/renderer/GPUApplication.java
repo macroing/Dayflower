@@ -18,14 +18,10 @@
  */
 package org.dayflower.renderer;
 
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.dayflower.geometry.AngleF;
 import org.dayflower.image.ByteImage;
 import org.dayflower.image.Image;
 import org.dayflower.javafx.canvas.ConcurrentByteArrayCanvas;
@@ -211,9 +207,7 @@ public final class GPUApplication extends Application {
 		
 		@Override
 		public void onMouseDragged(final float x, final float y) {
-			this.camera.setYaw(AngleF.add(this.camera.getYaw(), AngleF.degrees(-x * 0.5F)));
-			this.camera.setPitch(AngleF.degrees(max(min(this.camera.getPitch().getDegrees() + AngleF.degrees((y * 0.5F), -90.0F, 90.0F).getDegrees(), 89.99F), -89.99F), -89.99F, 89.99F));
-			this.camera.setOrthonormalBasis();
+			this.camera.rotate(x, y);
 			this.abstractGPURenderer.updateCamera();
 			this.abstractGPURenderer.clear();
 		}

@@ -46,9 +46,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 //	TODO: Add Javadocs!
 	@Override
 	public void run() {
-		final int index = getGlobalId() * 3;
-		
-		if(ray3FCameraGenerate()) {
+		if(ray3FCameraGenerate(random(), random())) {
 			if(intersectionComputeShape3F()) {
 				final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 				final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
@@ -65,20 +63,17 @@ public final class GPURenderer extends AbstractGPURenderer {
 				final float g = 0.5F * rayDirectionDotSurfaceNormalAbs;
 				final float b = 0.5F * rayDirectionDotSurfaceNormalAbs;
 				
-				this.radianceRGBFloatArray[index + 0] = r;
-				this.radianceRGBFloatArray[index + 1] = g;
-				this.radianceRGBFloatArray[index + 2] = b;
+//				filmSetColor(r, g, b);
+				filmAddColor(r, g, b);
 			} else {
-				this.radianceRGBFloatArray[index + 0] = 0.0F;
-				this.radianceRGBFloatArray[index + 1] = 0.0F;
-				this.radianceRGBFloatArray[index + 2] = 0.0F;
+				filmAddColor(0.0F, 0.0F, 0.0F);
 			}
 		} else {
-			this.radianceRGBFloatArray[index + 0] = 1.0F;
-			this.radianceRGBFloatArray[index + 1] = 1.0F;
-			this.radianceRGBFloatArray[index + 2] = 1.0F;
+			filmSetColor(1.0F, 1.0F, 1.0F);
 		}
 		
-		imageCopyFloatToByte();
+		imageBegin();
+		imageRedoGammaCorrectionPBRT();
+		imageEnd();
 	}
 }

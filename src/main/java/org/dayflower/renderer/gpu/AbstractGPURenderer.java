@@ -22,7 +22,6 @@ import static org.dayflower.util.Floats.PI_DIVIDED_BY_2;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.util.Floats.PI_RECIPROCAL;
-import static org.dayflower.util.Floats.pow;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -59,7 +58,7 @@ import com.amd.aparapi.Range;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractGPURenderer extends AbstractKernel implements Renderer {
+public abstract class AbstractGPURenderer extends AbstractImageKernel implements Renderer {
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U = 0;
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V = 3;
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W = 6;
@@ -78,14 +77,12 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	protected byte[] radianceRGBByteArray;
 	protected float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
 	protected float[] boundingVolume3FBoundingSphere3FArray;
 	protected float[] cameraArray;
 	protected float[] intersectionArray_$private$24;
 	protected float[] matrix44FArray;
 	protected float[] pixelArray;
-	protected float[] radianceRGBFloatArray;
 	protected float[] ray3FArray_$private$8;
 	protected float[] shape3FPlane3FArray;
 	protected float[] shape3FRectangularCuboid3FArray;
@@ -114,14 +111,12 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
 	 */
 	protected AbstractGPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
-		this.radianceRGBByteArray = new byte[0];
 		this.boundingVolume3FAxisAlignedBoundingBox3FArray = new float[0];
 		this.boundingVolume3FBoundingSphere3FArray = new float[0];
 		this.cameraArray = new float[0];
 		this.intersectionArray_$private$24 = new float[INTERSECTION_ARRAY_SIZE];
 		this.matrix44FArray = new float[0];
 		this.pixelArray = new float[0];
-		this.radianceRGBFloatArray = new float[0];
 		this.ray3FArray_$private$8 = new float[RAY_3_F_ARRAY_SIZE];
 		this.shape3FPlane3FArray = new float[0];
 		this.shape3FRectangularCuboid3FArray = new float[0];
@@ -199,6 +194,8 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 				rendererConfiguration.setRenderPass(0);
 				rendererConfiguration.setRenderTime(0L);
 				
+				filmClear();
+				
 				if(image instanceof PixelImage) {
 					final
 					PixelImage pixelImage = PixelImage.class.cast(image);
@@ -209,6 +206,8 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 				rendererObserver.onRenderDisplay(this, image);
 				
 				timer.restart();
+			} else {
+				filmClearFilmFlags();
 			}
 			
 			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 0.0D);
@@ -223,27 +222,24 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 				final ByteImage byteImage = ByteImage.class.cast(image);
 				
 				final byte[] bytes = byteImage.getBytes(true);
-				final byte[] radianceRGBByteArray = doGetRadianceRGBByteArray();
+				final byte[] imageColorByteArray = getImageColorByteArray();
 				
-				System.arraycopy(radianceRGBByteArray, 0, bytes, 0, bytes.length);
+				System.arraycopy(imageColorByteArray, 0, bytes, 0, bytes.length);
 			} else if(image instanceof PixelImage) {
 				final PixelImage pixelImage = PixelImage.class.cast(image);
 				
+				final float[] imageColorFloatArray = getImageColorFloatArray();
 				final float[] pixelArray = doGetPixelArray();
-				final float[] radianceRGBFloatArray = doGetRadianceRGBFloatArray();
 				
-//				final long time0 = System.currentTimeMillis();
-				
-//				TODO: Fix the following bottleneck using the Kernel itself in a different mode! It taks around 200 milliseconds per render pass.
 				for(int y = 0; y < resolutionY; y++) {
 					for(int x = 0; x < resolutionX; x++) {
 						final int index = y * resolutionX + x;
 						final int indexPixelArray = index * 2;
 						final int indexRadianceRGBFloatArray = index * 3;
 						
-						final float r = radianceRGBFloatArray[indexRadianceRGBFloatArray + 0];
-						final float g = radianceRGBFloatArray[indexRadianceRGBFloatArray + 1];
-						final float b = radianceRGBFloatArray[indexRadianceRGBFloatArray + 2];
+						final float r = imageColorFloatArray[indexRadianceRGBFloatArray + 0];
+						final float g = imageColorFloatArray[indexRadianceRGBFloatArray + 1];
+						final float b = imageColorFloatArray[indexRadianceRGBFloatArray + 2];
 						
 						final float imageX = x;
 						final float imageY = y;
@@ -258,11 +254,6 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 						}
 					}
 				}
-				
-//				final long time1 = System.currentTimeMillis();
-//				final long time2 = time1 - time0;
-				
-//				System.out.println("RGB -> XYZ = " + time2 + " millis.");
 			}
 			
 			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 1.0D);
@@ -349,8 +340,6 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 		super.setup();
 		
 		doSetupPixelArray();
-		doSetupRadianceRGBByteArray();
-		doSetupRadianceRGBFloatArray();
 		doSetupScene();
 	}
 	
@@ -362,14 +351,10 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	protected final boolean ray3FCameraGenerate() {
+	protected final boolean ray3FCameraGenerate(final float pixelX, final float pixelY) {
 //		Retrieve the image coordinates:
 		final float imageX = getGlobalId() % this.resolutionX;
 		final float imageY = getGlobalId() / this.resolutionX;
-		
-//		Retrieve the pixel coordinates:
-		final float pixelX = random();
-		final float pixelY = random();
 		
 //		Retrieve all values from the 'cameraArray' in the correct order:
 		final float fieldOfViewX = tan(+this.cameraArray[Camera.ARRAY_OFFSET_FIELD_OF_VIEW_X] * 0.5F);
@@ -978,40 +963,6 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void imageCopyFloatToByte() {
-		final int index = getGlobalId();
-		final int indexRadianceRGBByteArray = index * 4;
-		final int indexRadianceRGBFloatArray = index * 3;
-		
-		final float floatR = this.radianceRGBFloatArray[indexRadianceRGBFloatArray + 0];
-		final float floatG = this.radianceRGBFloatArray[indexRadianceRGBFloatArray + 1];
-		final float floatB = this.radianceRGBFloatArray[indexRadianceRGBFloatArray + 2];
-		
-		final float floatRGammaCorrected = floatR <= 0.0031308F ? 12.92F * floatR : 1.055F * pow(floatR, 1.0F / 2.4F) - 0.055F;
-		final float floatGGammaCorrected = floatG <= 0.0031308F ? 12.92F * floatG : 1.055F * pow(floatG, 1.0F / 2.4F) - 0.055F;
-		final float floatBGammaCorrected = floatB <= 0.0031308F ? 12.92F * floatB : 1.055F * pow(floatB, 1.0F / 2.4F) - 0.055F;
-		
-		final float floatRSaturated = saturate(floatRGammaCorrected, 0.0F, 1.0F);
-		final float floatGSaturated = saturate(floatGGammaCorrected, 0.0F, 1.0F);
-		final float floatBSaturated = saturate(floatBGammaCorrected, 0.0F, 1.0F);
-		
-		final int intR = (int)(floatRSaturated * 255.0F + 0.5F);
-		final int intG = (int)(floatGSaturated * 255.0F + 0.5F);
-		final int intB = (int)(floatBSaturated * 255.0F + 0.5F);
-		final int intA = 255;
-		
-		final byte byteR = (byte)(intR & 0xFF);
-		final byte byteG = (byte)(intG & 0xFF);
-		final byte byteB = (byte)(intB & 0xFF);
-		final byte byteA = (byte)(intA & 0xFF);
-		
-		this.radianceRGBByteArray[indexRadianceRGBByteArray + 0] = byteR;
-		this.radianceRGBByteArray[indexRadianceRGBByteArray + 1] = byteG;
-		this.radianceRGBByteArray[indexRadianceRGBByteArray + 2] = byteB;
-		this.radianceRGBByteArray[indexRadianceRGBByteArray + 3] = byteA;
-	}
-	
-//	TODO: Add Javadocs!
 	protected final void intersectionComputeShape3FPlane3F(final float t, final int primitiveIndex, final int shape3FPlane3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
@@ -1359,7 +1310,7 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = (asin(saturate(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
+		final float textureCoordinatesV = (asin(saturateFloat(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
 		
 //		Update the intersection array:
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = orthonormalBasisGUNormalizedX;
@@ -1756,16 +1707,8 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 		return getRendererConfiguration().getScene();
 	}
 	
-	private byte[] doGetRadianceRGBByteArray() {
-		return getAndReturn(this.radianceRGBByteArray);
-	}
-	
 	private float[] doGetPixelArray() {
 		return getAndReturn(this.pixelArray);
-	}
-	
-	private float[] doGetRadianceRGBFloatArray() {
-		return getAndReturn(this.radianceRGBFloatArray);
 	}
 	
 	private void doRay3FTransform(final int matrix44FArrayOffset) {
@@ -1878,14 +1821,6 @@ public abstract class AbstractGPURenderer extends AbstractKernel implements Rend
 	
 	private void doSetupPixelArray() {
 		put(this.pixelArray = Floats.array(getResolution() * 2, 0.0F));
-	}
-	
-	private void doSetupRadianceRGBByteArray() {
-		put(this.radianceRGBByteArray = new byte[getResolution() * 4]);
-	}
-	
-	private void doSetupRadianceRGBFloatArray() {
-		put(this.radianceRGBFloatArray = Floats.array(getResolution() * 3, 0.0F));
 	}
 	
 	private void doSetupScene() {

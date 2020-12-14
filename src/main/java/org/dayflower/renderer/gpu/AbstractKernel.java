@@ -33,13 +33,28 @@ import com.amd.aparapi.Kernel;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractKernel extends Kernel {
+//	TODO: Add Javadocs!
 	protected static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
+	
+//	TODO: Add Javadocs!
 	protected static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_2 = 1;
+	
+//	TODO: Add Javadocs!
 	protected static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
+	
+//	TODO: Add Javadocs!
 	protected static final int POINT_3_F_ARRAY_SIZE = 3;
+	
+//	TODO: Add Javadocs!
 	protected static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
+	
+//	TODO: Add Javadocs!
 	protected static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2 = 1;
+	
+//	TODO: Add Javadocs!
 	protected static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
+	
+//	TODO: Add Javadocs!
 	protected static final int VECTOR_3_F_ARRAY_SIZE = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,11 +66,22 @@ public abstract class AbstractKernel extends Kernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	protected float[] point3FArray_$private$3;
+	
+//	TODO: Add Javadocs!
 	protected float[] vector3FArray_$private$3;
+	
+//	TODO: Add Javadocs!
 	protected int resolution;
+	
+//	TODO: Add Javadocs!
 	protected int resolutionX;
+	
+//	TODO: Add Javadocs!
 	protected int resolutionY;
+	
+//	TODO: Add Javadocs!
 	protected long[] seedArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +170,7 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float saturate(final float value, final float edgeA, final float edgeB) {
+	protected final float saturateFloat(final float value, final float edgeA, final float edgeB) {
 		final float minimum = min(edgeA, edgeB);
 		final float maximum = max(edgeA, edgeB);
 		
@@ -375,6 +401,20 @@ public abstract class AbstractKernel extends Kernel {
 //	TODO: Add Javadocs!
 	protected final int getResolutionY() {
 		return this.resolutionY;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final int saturateInt(final int value, final int edgeA, final int edgeB) {
+		final int minimum = min(edgeA, edgeB);
+		final int maximum = max(edgeA, edgeB);
+		
+		if(value < minimum) {
+			return minimum;
+		} else if(value > maximum) {
+			return maximum;
+		} else {
+			return value;
+		}
 	}
 	
 //	TODO: Add Javadocs!

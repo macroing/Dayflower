@@ -113,6 +113,7 @@ public final class GPUApplication extends Application {
 					final
 					AbstractGPURenderer abstractGPURenderer = AbstractGPURenderer.class.cast(renderer);
 					abstractGPURenderer.updateCamera();
+					abstractGPURenderer.clear();
 				}
 				
 				if(concurrentByteArrayCanvas.isKeyPressed(KeyCode.D)) {
@@ -121,6 +122,7 @@ public final class GPUApplication extends Application {
 					final
 					AbstractGPURenderer abstractGPURenderer = AbstractGPURenderer.class.cast(renderer);
 					abstractGPURenderer.updateCamera();
+					abstractGPURenderer.clear();
 				}
 				
 				if(concurrentByteArrayCanvas.isKeyPressed(KeyCode.S)) {
@@ -129,6 +131,7 @@ public final class GPUApplication extends Application {
 					final
 					AbstractGPURenderer abstractGPURenderer = AbstractGPURenderer.class.cast(renderer);
 					abstractGPURenderer.updateCamera();
+					abstractGPURenderer.clear();
 				}
 				
 				if(concurrentByteArrayCanvas.isKeyPressed(KeyCode.W)) {
@@ -137,6 +140,7 @@ public final class GPUApplication extends Application {
 					final
 					AbstractGPURenderer abstractGPURenderer = AbstractGPURenderer.class.cast(renderer);
 					abstractGPURenderer.updateCamera();
+					abstractGPURenderer.clear();
 				}
 				
 				concurrentByteArrayCanvas.render();
@@ -211,6 +215,7 @@ public final class GPUApplication extends Application {
 			this.camera.setPitch(AngleF.degrees(max(min(this.camera.getPitch().getDegrees() + AngleF.degrees((y * 0.5F), -90.0F, 90.0F).getDegrees(), 89.99F), -89.99F), -89.99F, 89.99F));
 			this.camera.setOrthonormalBasis();
 			this.abstractGPURenderer.updateCamera();
+			this.abstractGPURenderer.clear();
 		}
 	}
 	

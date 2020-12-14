@@ -18,8 +18,10 @@
  */
 package org.dayflower.util;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.IntPredicate;
+import java.util.function.IntSupplier;
 
 /**
  * The class {@code Ints} contains methods for performing basic numeric operations.
@@ -214,5 +216,68 @@ public final class Ints {
 	 */
 	public static int toInt(final float value) {
 		return (int)(value);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code 0}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Ints.array(length, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param length the length of the {@code int[]}
+	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static int[] array(final int length) {
+		return array(length, 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code int} values from {@code intSupplier}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code intSupplier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param length the length of the {@code int[]}
+	 * @param intSupplier the {@code IntSupplier} to fill the {@code int[]} with
+	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code int} values from {@code intSupplier}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code intSupplier} is {@code null}
+	 */
+	public static int[] array(final int length, final IntSupplier intSupplier) {
+		final int[] array = new int[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Objects.requireNonNull(intSupplier, "intSupplier == null");
+		
+		for(int i = 0; i < array.length; i++) {
+			array[i] = intSupplier.getAsInt();
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} with a length of {@code length} and is filled with {@code value}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param length the length of the {@code int[]}
+	 * @param value the {@code int} value to fill the {@code int[]} with
+	 * @return an {@code int[]} with a length of {@code length} and is filled with {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static int[] array(final int length, final int value) {
+		final int[] array = new int[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Arrays.fill(array, value);
+		
+		return array;
 	}
 }

@@ -131,6 +131,31 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final double solveCubicForQuarticSystemDouble(final double p, final double q, final double r) {
+		final double pSquared = p * p;
+		final double q0 = (pSquared - 3.0D * q) / 9.0D;
+		final double q0Cubed = q0 * q0 * q0;
+		final double r0 = (p * (pSquared - 4.5D * q) + 13.5D * r) / 27.0D;
+		final double r0Squared = r0 * r0;
+		final double d = q0Cubed - r0Squared;
+		final double e = p / 3.0D;
+		
+		if(d >= 0.0D) {
+			final double d0 = r0 / sqrt(q0Cubed);
+			final double theta = acos(d0) / 3.0D;
+			final double q1 = -2.0D * sqrt(q0);
+			final double q2 = q1 * cos(theta) - e;
+			
+			return q2;
+		}
+		
+		final double q1 = pow(sqrt(r0Squared - q0Cubed) + abs(r0), 1.0D / 3.0D);
+		final double q2 = r0 < 0.0D ? (q1 + q0 / q1) - e : -(q1 + q0 / q1) - e;
+		
+		return q2;
+	}
+	
+//	TODO: Add Javadocs!
 	@SuppressWarnings("static-method")
 	protected final float addIfLessThanThreshold(final float value, final float threshold, final float valueAdd) {
 		return value < threshold ? value + valueAdd : value;
@@ -189,7 +214,7 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float solveCubicForQuarticSystem(final float p, final float q, final float r) {
+	protected final float solveCubicForQuarticSystemFloat(final float p, final float q, final float r) {
 		final float pSquared = p * p;
 		final float q0 = (pSquared - 3.0F * q) / 9.0F;
 		final float q0Cubed = q0 * q0 * q0;
@@ -239,7 +264,7 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float solveQuarticSystem(final float a, final float b, final float c, final float d, final float e, final float minimum, final float maximum) {
+	protected final float solveQuarticSystemFloat(final float a, final float b, final float c, final float d, final float e, final float minimum, final float maximum) {
 		final float aReciprocal = 1.0F / a;
 		final float bA = b * aReciprocal;
 		final float bASquared = bA * bA;
@@ -249,7 +274,7 @@ public abstract class AbstractKernel extends Kernel {
 		final float p = -0.375F * bASquared + cA;
 		final float q = 0.125F * bASquared * bA - 0.5F * bA * cA + dA;
 		final float r = -0.01171875F * bASquared * bASquared + 0.0625F * bASquared * cA - 0.25F * bA * dA + eA;
-		final float z = solveCubicForQuarticSystem(-0.5F * p, -r, 0.5F * r * p - 0.125F * q * q);
+		final float z = solveCubicForQuarticSystemFloat(-0.5F * p, -r, 0.5F * r * p - 0.125F * q * q);
 		
 		float d1 = 2.0F * z - p;
 		float d2 = 0.0F;
@@ -356,6 +381,130 @@ public abstract class AbstractKernel extends Kernel {
 				return result0;
 			} else if(result1 > minimum) {
 				return result1;
+			} else {
+				return 0.0F;
+			}
+		} else {
+			return 0.0F;
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float solveQuarticSystemDouble(final double a, final double b, final double c, final double d, final double e, final float minimum, final float maximum) {
+		final double aReciprocal = 1.0D / a;
+		final double bA = b * aReciprocal;
+		final double bASquared = bA * bA;
+		final double cA = c * aReciprocal;
+		final double dA = d * aReciprocal;
+		final double eA = e * aReciprocal;
+		final double p = -0.375D * bASquared + cA;
+		final double q = 0.125D * bASquared * bA - 0.5D * bA * cA + dA;
+		final double r = -0.01171875D * bASquared * bASquared + 0.0625D * bASquared * cA - 0.25D * bA * dA + eA;
+		final double z = solveCubicForQuarticSystemDouble(-0.5D * p, -r, 0.5D * r * p - 0.125D * q * q);
+		
+		double d1 = 2.0D * z - p;
+		double d2 = 0.0D;
+		
+		if(d1 < 0.0D) {
+			return 0.0F;
+		} else if(d1 < 1.0e-10D) {
+			d2 = z * z - r;
+			
+			if(d2 < 0.0D) {
+				return 0.0F;
+			}
+			
+			d2 = sqrt(d2);
+		} else {
+			d1 = sqrt(d1);
+			d2 = 0.5D * q / d1;
+		}
+		
+		final double q1 = d1 * d1;
+		final double q2 = -0.25D * bA;
+		final double pm = q1 - 4.0D * (z - d2);
+		final double pp = q1 - 4.0D * (z + d2);
+		
+		if(pm >= 0.0D && pp >= 0.0D) {
+			final double pmSqrt = sqrt(pm);
+			final double ppSqrt = sqrt(pp);
+			
+			double result0 = -0.5D * (d1 + pmSqrt) + q2;
+			double result1 = -0.5D * (d1 - pmSqrt) + q2;
+			double result2 = +0.5D * (d1 + ppSqrt) + q2;
+			double result3 = +0.5D * (d1 - ppSqrt) + q2;
+			double result4 = 0.0D;
+			
+			if(result0 > result1) {
+				result4 = result0;
+				result0 = result1;
+				result1 = result4;
+			}
+			
+			if(result2 > result3) {
+				result4 = result2;
+				result2 = result3;
+				result3 = result4;
+			}
+			
+			if(result0 > result2) {
+				result4 = result0;
+				result0 = result2;
+				result2 = result4;
+			}
+			
+			if(result1 > result3) {
+				result4 = result1;
+				result1 = result3;
+				result3 = result4;
+			}
+			
+			if(result1 > result2) {
+				result4 = result1;
+				result1 = result2;
+				result2 = result4;
+			}
+			
+			if(result0 >= maximum || result3 <= minimum) {
+				return 0.0F;
+			} else if(result0 > minimum) {
+				return (float)(result0);
+			} else if(result1 > minimum) {
+				return (float)(result1);
+			} else if(result2 > minimum) {
+				return (float)(result2);
+			} else if(result3 > minimum) {
+				return (float)(result3);
+			} else {
+				return 0.0F;
+			}
+		} else if(pm >= 0.0D) {
+			final double pmSqrt = sqrt(pm);
+			
+			final double result0 = -0.5D * (d1 + pmSqrt) + q2;
+			final double result1 = -0.5D * (d1 - pmSqrt) + q2;
+			
+			if(result0 >= maximum || result1 <= minimum) {
+				return 0.0F;
+			} else if(result0 > minimum) {
+				return (float)(result0);
+			} else if(result1 > minimum) {
+				return (float)(result1);
+			} else {
+				return 0.0F;
+			}
+		} else if(pp >= 0.0D) {
+			final double ppSqrt = sqrt(pp);
+			
+			final double result0 = +0.5D * (d1 - ppSqrt) + q2;
+			final double result1 = +0.5D * (d1 + ppSqrt) + q2;
+			
+			if(result0 >= maximum || result1 <= minimum) {
+				return 0.0F;
+			} else if(result0 > minimum) {
+				return (float)(result0);
+			} else if(result1 > minimum) {
+				return (float)(result1);
 			} else {
 				return 0.0F;
 			}

@@ -852,24 +852,50 @@ public abstract class AbstractGPURenderer extends AbstractImageKernel implements
 		final float torusRadiusOuter = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_OUTER];
 		final float torusRadiusOuterSquared = torusRadiusOuter * torusRadiusOuter;
 		
+		/*
+		 * The quartic system solvers below present with different problems.
+		 * When using double precision, the result is good but it is very slow.
+		 * When using single precision, the result is poor but it is very fast.
+		 * The one with good result will be used for now, until it can be fixed.
+		 */
+		
 //		Compute the variables used in the process of computing the variables for the quartic system:
-		final float f0 = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
-		final float f1 = (rayOriginX * rayDirectionX + rayOriginY * rayDirectionY + rayOriginZ * rayDirectionZ) * 2.0F;
-		final float f2 = torusRadiusInnerSquared;
-		final float f3 = torusRadiusOuterSquared;
-		final float f4 = (rayOriginX * rayOriginX + rayOriginY * rayOriginY + rayOriginZ * rayOriginZ) - f2 - f3;
-		final float f5 = rayDirectionZ;
-		final float f6 = rayOriginZ;
+		final double f0 = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
+		final double f1 = (rayOriginX * rayDirectionX + rayOriginY * rayDirectionY + rayOriginZ * rayDirectionZ) * 2.0D;
+		final double f2 = torusRadiusInnerSquared;
+		final double f3 = torusRadiusOuterSquared;
+		final double f4 = (rayOriginX * rayOriginX + rayOriginY * rayOriginY + rayOriginZ * rayOriginZ) - f2 - f3;
+		final double f5 = rayDirectionZ;
+		final double f6 = rayOriginZ;
 		
 //		Compute the variables for the quartic system:
-		final float a = f0 * f0;
-		final float b = f0 * 2.0F * f1;
-		final float c = f1 * f1 + 2.0F * f0 * f4 + 4.0F * f3 * f5 * f5;
-		final float d = f1 * 2.0F * f4 + 8.0F * f3 * f6 * f5;
-		final float e = f4 * f4 + 4.0F * f3 * f6 * f6 - 4.0F * f3 * f2;
+		final double a = f0 * f0;
+		final double b = f0 * 2.0D * f1;
+		final double c = f1 * f1 + 2.0D * f0 * f4 + 4.0D * f3 * f5 * f5;
+		final double d = f1 * 2.0D * f4 + 8.0D * f3 * f6 * f5;
+		final double e = f4 * f4 + 4.0D * f3 * f6 * f6 - 4.0D * f3 * f2;
 		
 //		Compute the intersection by solving the quartic system and checking the valid intersection interval:
-		final float t = solveQuarticSystem(a, b, c, d, e, rayTMinimum, rayTMaximum);
+		final float t = solveQuarticSystemDouble(a, b, c, d, e, rayTMinimum, rayTMaximum);
+		
+//		Compute the variables used in the process of computing the variables for the quartic system:
+//		final float f0 = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
+//		final float f1 = (rayOriginX * rayDirectionX + rayOriginY * rayDirectionY + rayOriginZ * rayDirectionZ) * 2.0F;
+//		final float f2 = torusRadiusInnerSquared;
+//		final float f3 = torusRadiusOuterSquared;
+//		final float f4 = (rayOriginX * rayOriginX + rayOriginY * rayOriginY + rayOriginZ * rayOriginZ) - f2 - f3;
+//		final float f5 = rayDirectionZ;
+//		final float f6 = rayOriginZ;
+		
+//		Compute the variables for the quartic system:
+//		final float a = f0 * f0;
+//		final float b = f0 * 2.0F * f1;
+//		final float c = f1 * f1 + 2.0F * f0 * f4 + 4.0F * f3 * f5 * f5;
+//		final float d = f1 * 2.0F * f4 + 8.0F * f3 * f6 * f5;
+//		final float e = f4 * f4 + 4.0F * f3 * f6 * f6 - 4.0F * f3 * f2;
+		
+//		Compute the intersection by solving the quartic system and checking the valid intersection interval:
+//		final float t = solveQuarticSystemFloat(a, b, c, d, e, rayTMinimum, rayTMaximum);
 		
 		return t;
 	}

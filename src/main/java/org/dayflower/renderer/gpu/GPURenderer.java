@@ -173,7 +173,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 					} else if(material == MATERIAL_METAL) {
 						vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 						
-						orthonormalBasis33FSetFromVector3F();
+						orthonormalBasis33FSetVector3F();
 						
 						vector3FSetSampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
 						vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();

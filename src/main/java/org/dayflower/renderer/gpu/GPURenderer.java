@@ -29,9 +29,9 @@ import org.dayflower.renderer.observer.FileRendererObserver;
 
 //TODO: Add Javadocs!
 public final class GPURenderer extends AbstractGPURenderer {
-	private static final float SKY_B = 235.0F / 255.0F;
-	private static final float SKY_G = 206.0F / 255.0F;
-	private static final float SKY_R = 135.0F / 255.0F;
+	private static final float SKY_B = 1.0F;//235.0F / 255.0F;
+	private static final float SKY_G = 1.0F;//206.0F / 255.0F;
+	private static final float SKY_R = 1.0F;//135.0F / 255.0F;
 	private static final int MATERIAL_CLEAR_COAT = 1;
 	private static final int MATERIAL_GLASS = 2;
 	private static final int MATERIAL_MATTE = 3;
@@ -86,15 +86,15 @@ public final class GPURenderer extends AbstractGPURenderer {
 	@SuppressWarnings("static-method")
 	private int doCalculateMaterialForPrimitiveIndex(final int primitiveIndex) {
 		if(primitiveIndex == 0) {
-			return MATERIAL_METAL;
+			return MATERIAL_CLEAR_COAT;
 		} else if(primitiveIndex == 1) {
 			return MATERIAL_GLASS;
 		} else if(primitiveIndex == 2) {
-			return MATERIAL_MATTE;
-		} else if(primitiveIndex == 3) {
 			return MATERIAL_MIRROR;
-		} else if(primitiveIndex == 4) {
+		} else if(primitiveIndex == 3) {
 			return MATERIAL_METAL;
+		} else if(primitiveIndex == 4) {
+			return MATERIAL_MATTE;
 		} else {
 			return MATERIAL_MATTE;
 		}
@@ -102,7 +102,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 	private int doCalculateReflectanceForPrimitiveIndex(final int primitiveIndex) {
 		if(primitiveIndex == 0) {
-			return colorRGBFloatToRGBInt(0.5F, 0.5F, 0.5F);
+			return colorRGBFloatToRGBInt(1.0F, 0.01F, 0.01F);
 		} else if(primitiveIndex == 1) {
 			return colorRGBFloatToRGBInt(1.0F, 1.0F, 1.0F);
 		} else if(primitiveIndex == 2) {
@@ -157,7 +157,12 @@ public final class GPURenderer extends AbstractGPURenderer {
 		float throughputG = 1.0F;
 		float throughputB = 1.0F;
 		
-		if(ray3FCameraGenerate(random(), random())) {
+		final float pixel0X = 2.0F * random();
+		final float pixel1X = pixel0X < 1.0F ? sqrt(pixel0X) - 1.0F : 1.0F - sqrt(2.0F - pixel0X);
+		final float pixel0Y = 2.0F * random();
+		final float pixel1Y = pixel0Y < 1.0F ? sqrt(pixel0Y) - 1.0F : 1.0F - sqrt(2.0F - pixel0Y);
+		
+		if(ray3FCameraGenerate(pixel1X, pixel1Y)) {
 			int currentBounce = 0;
 			
 			while(currentBounce < maximumBounce) {
@@ -194,7 +199,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 					radianceG += throughputG * emittanceG;
 					radianceB += throughputB * emittanceB;
 					
-					if(material == MATERIAL_GLASS) {
+					if(material == MATERIAL_CLEAR_COAT) {
 						final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
 						
 						final float etaA = 1.0F;
@@ -212,8 +217,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 						
 						if(isTotalInternalReflection) {
 							vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
-							
-							ray3FSetFromSurfaceIntersectionPointAndVector3F();
 						}
 						
 						if(!isTotalInternalReflection) {
@@ -242,39 +245,101 @@ public final class GPURenderer extends AbstractGPURenderer {
 							if(isReflection) {
 								vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 								
-								ray3FSetFromSurfaceIntersectionPointAndVector3F();
-								
 								throughputR *= probabilityRussianRouletteReflection;
 								throughputG *= probabilityRussianRouletteReflection;
 								throughputB *= probabilityRussianRouletteReflection;
 							}
 							
 							if(isTransmission) {
-								vector3FSet(transmissionDirectionNormalizedX, transmissionDirectionNormalizedY, transmissionDirectionNormalizedZ);
+								orthonormalBasis33FSetFromW(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 								
-								ray3FSetFromSurfaceIntersectionPointAndVector3F();
+								vector3FSetSampleHemisphereCosineDistribution2(random(), random());
+								vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
 								
-								throughputR *= probabilityRussianRouletteTransmission;
-								throughputG *= probabilityRussianRouletteTransmission;
-								throughputB *= probabilityRussianRouletteTransmission;
+								throughputR *= reflectanceR * probabilityRussianRouletteTransmission;
+								throughputG *= reflectanceG * probabilityRussianRouletteTransmission;
+								throughputB *= reflectanceB * probabilityRussianRouletteTransmission;
 							}
 						}
+					}
+					
+					if(material == MATERIAL_GLASS) {
+						final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
 						
-						throughputR *= reflectanceR;
-						throughputG *= reflectanceG;
-						throughputB *= reflectanceB;
-					} else if(material == MATERIAL_MATTE) {
+						final float etaA = 1.0F;
+						final float etaB = 1.5F;
+						final float etaI = isEntering ? etaA : etaB;
+						final float etaT = isEntering ? etaB : etaA;
+						final float eta = etaI / etaT;
+						
+						final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
+						final float sinThetaISquared = 1.0F - cosThetaI * cosThetaI;
+						final float sinThetaTSquared = 1.0F - eta * eta * sinThetaISquared;
+						final float cosThetaT = sqrt(sinThetaTSquared);
+						
+						final boolean isTotalInternalReflection = sinThetaTSquared < 0.0F;
+						
+						if(isTotalInternalReflection) {
+							vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+							
+							throughputR *= reflectanceR;
+							throughputG *= reflectanceG;
+							throughputB *= reflectanceB;
+						}
+						
+						if(!isTotalInternalReflection) {
+							final float transmissionDirectionSign = isEntering ? +1.0F : -1.0F;
+							final float transmissionDirectionX = directionX * eta - surfaceNormalX * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
+							final float transmissionDirectionY = directionY * eta - surfaceNormalY * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
+							final float transmissionDirectionZ = directionZ * eta - surfaceNormalZ * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
+							final float transmissionDirectionLengthReciprocal = vector3FLengthReciprocal(transmissionDirectionX, transmissionDirectionY, transmissionDirectionZ);
+							final float transmissionDirectionNormalizedX = transmissionDirectionX * transmissionDirectionLengthReciprocal;
+							final float transmissionDirectionNormalizedY = transmissionDirectionY * transmissionDirectionLengthReciprocal;
+							final float transmissionDirectionNormalizedZ = transmissionDirectionZ * transmissionDirectionLengthReciprocal;
+							
+							final float cosTheta = isEntering ? -cosThetaI : vector3FDotProduct(transmissionDirectionNormalizedX, transmissionDirectionNormalizedY, transmissionDirectionNormalizedZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+							final float f0 = ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA));
+							
+							final float reflectance = fresnelDielectricSchlick(cosTheta, f0);
+							final float transmittance = 1.0F - reflectance;
+							
+							final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+							final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+							final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+							
+							final boolean isReflection = random() < probabilityRussianRoulette;
+							final boolean isTransmission = !isReflection;
+							
+							if(isReflection) {
+								vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+								
+								throughputR *= reflectanceR * probabilityRussianRouletteReflection;
+								throughputG *= reflectanceG * probabilityRussianRouletteReflection;
+								throughputB *= reflectanceB * probabilityRussianRouletteReflection;
+							}
+							
+							if(isTransmission) {
+								vector3FSet(transmissionDirectionNormalizedX, transmissionDirectionNormalizedY, transmissionDirectionNormalizedZ);
+								
+								throughputR *= reflectanceR * probabilityRussianRouletteTransmission;
+								throughputG *= reflectanceG * probabilityRussianRouletteTransmission;
+								throughputB *= reflectanceB * probabilityRussianRouletteTransmission;
+							}
+						}
+					}
+					
+					if(material == MATERIAL_MATTE) {
 						orthonormalBasis33FSetFromW(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 						
 						vector3FSetSampleHemisphereCosineDistribution2(random(), random());
 						vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
 						
-						ray3FSetFromSurfaceIntersectionPointAndVector3F();
-						
 						throughputR *= reflectanceR;
 						throughputG *= reflectanceG;
 						throughputB *= reflectanceB;
-					} else if(material == MATERIAL_METAL) {
+					}
+					
+					if(material == MATERIAL_METAL) {
 						vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 						
 						orthonormalBasis33FSetVector3F();
@@ -282,20 +347,20 @@ public final class GPURenderer extends AbstractGPURenderer {
 						vector3FSetSampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
 						vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
 						
-						ray3FSetFromSurfaceIntersectionPointAndVector3F();
-						
 						throughputR *= reflectanceR;
 						throughputG *= reflectanceG;
 						throughputB *= reflectanceB;
-					} else if(material == MATERIAL_MIRROR) {
+					}
+					
+					if(material == MATERIAL_MIRROR) {
 						vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
-						
-						ray3FSetFromSurfaceIntersectionPointAndVector3F();
 						
 						throughputR *= reflectanceR;
 						throughputG *= reflectanceG;
 						throughputB *= reflectanceB;
 					}
+					
+					ray3FSetFromSurfaceIntersectionPointAndVector3F();
 					
 					if(currentBounce >= minimumBounceRussianRoulette) {
 						final float probability = max(throughputR, throughputG, throughputB);

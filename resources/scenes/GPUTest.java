@@ -10,11 +10,11 @@ Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F, -1.0F, -1.0F), new P
 Shape3F shape4 = new Plane3F();
 Shape3F shape5 = new Triangle3F();
 
-Transform transform1 = new Transform(new Point3F(-2.5F, 1.0F, 5.0F));
-Transform transform2 = new Transform(new Point3F(+0.0F, 1.0F, 5.0F));
-Transform transform3 = new Transform(new Point3F(+2.5F, 1.0F, 5.0F));
-Transform transform4 = new Transform(new Point3F(+0.0F, 0.0F, 0.0F));
-Transform transform5 = new Transform(new Point3F(+0.0F, 3.0F, 5.0F));
+Transform transform1 = new Transform(new Point3F(-2.5F, 1.00F, 5.0F));
+Transform transform2 = new Transform(new Point3F(+0.0F, 1.25F, 5.0F));
+Transform transform3 = new Transform(new Point3F(+2.5F, 1.00F, 5.0F));
+Transform transform4 = new Transform(new Point3F(+0.0F, 0.00F, 0.0F));
+Transform transform5 = new Transform(new Point3F(+0.0F, 3.50F, 5.0F));
 
 scene.addPrimitive(new Primitive(material1, shape1, transform1));
 scene.addPrimitive(new Primitive(material2, shape2, transform2));

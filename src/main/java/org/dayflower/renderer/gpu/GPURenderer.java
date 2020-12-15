@@ -195,9 +195,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 					
 					currentBounce++;
 				} else {
-					radianceR += throughputR * 1.0F;
-					radianceG += throughputG * 1.0F;
-					radianceB += throughputB * 1.0F;
+					radianceR += throughputR * (135.0F / 255.0F);//1.0F;
+					radianceG += throughputG * (206.0F / 255.0F);//1.0F;
+					radianceB += throughputB * (235.0F / 255.0F);//1.0F;
 					
 					currentBounce = maximumBounce;
 				}

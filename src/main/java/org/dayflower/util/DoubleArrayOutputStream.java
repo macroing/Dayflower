@@ -18,12 +18,15 @@
  */
 package org.dayflower.util;
 
-import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code DoubleArrayOutputStream} is an {@code OutputStream} implementation that writes data to a {@code double} array.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class DoubleArrayOutputStream extends OutputStream {
 	private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 	
@@ -34,46 +37,131 @@ public final class DoubleArrayOutputStream extends OutputStream {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code DoubleArrayOutputStream} instance with an initial capacity of {@code 32}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new DoubleArrayOutputStream(32);
+	 * }
+	 * </pre>
+	 */
 	public DoubleArrayOutputStream() {
 		this(32);
 	}
 	
-//	TODO: Add Javadocs!
-	public DoubleArrayOutputStream(final int size) {
-		this.buffer = new double[ParameterArguments.requireRange(size, 0, Integer.MAX_VALUE, "size")];
+	/**
+	 * Constructs a new {@code DoubleArrayOutputStream} instance with an initial capacity of {@code capacity}.
+	 * <p>
+	 * If {@code capacity} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param capacity the initial capacity
+	 * @throws IllegalArgumentException thrown if, and only if, {@code capacity} is less than {@code 0}
+	 */
+	public DoubleArrayOutputStream(final int capacity) {
+		this.buffer = new double[ParameterArguments.requireRange(capacity, 0, Integer.MAX_VALUE, "capacity")];
 		this.size = 0;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code double} array that contains the {@code double} values that have been written so far.
+	 * 
+	 * @return a {@code double} array that contains the {@code double} values that have been written so far
+	 */
 	public synchronized double[] toDoubleArray() {
 		return Arrays.copyOf(this.buffer, this.size);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the number of {@code double} values that can be written without expanding the current {@code double} array.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * int available = doubleArrayOutputStream.capacity() - doubleArrayOutputStream.size();
+	 * }
+	 * </pre>
+	 * 
+	 * @return the number of {@code double} values that can be written without expanding the current {@code double} array
+	 */
+	public synchronized int available() {
+		return capacity() - size();
+	}
+	
+	/**
+	 * Returns the capacity of this {@code DoubleArrayOutputStream} instance.
+	 * <p>
+	 * The capacity represents the length of the current {@code double} array.
+	 * 
+	 * @return the capacity of this {@code DoubleArrayOutputStream} instance
+	 */
+	public synchronized int capacity() {
+		return this.buffer.length;
+	}
+	
+	/**
+	 * Returns the size of this {@code DoubleArrayOutputStream} instance.
+	 * <p>
+	 * The size represents the number of {@code double} values that have been written so far.
+	 * 
+	 * @return the size of this {@code DoubleArrayOutputStream} instance
+	 */
 	public synchronized int size() {
 		return this.size;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Closing a {@code DoubleArrayOutputStream} instance has no effect.
+	 * <p>
+	 * The methods in this class can be called after the stream has been closed without generating an {@code IOException}.
+	 */
 	@Override
 	public void close() {
 		
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Resets this {@code DoubleArrayOutputStream} instance so that the size is {@code 0}.
+	 */
 	public synchronized void reset() {
 		this.size = 0;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Writes {@code d.length} {@code double} values, starting at offset {@code 0}, from {@code d} to this {@code DoubleArrayOutputStream} instance.
+	 * <p>
+	 * If {@code d} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * doubleArrayOutputStream.write(d, 0, d.length);
+	 * }
+	 * </pre>
+	 * 
+	 * @param d the {@code double} array to write from
+	 * @throws NullPointerException thrown if, and only if, {@code d} is {@code null}
+	 */
 	public synchronized void write(final double[] d) {
 		write(d, 0, d.length);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Writes {@code len} {@code double} values, starting at offset {@code off}, from {@code d} to this {@code DoubleArrayOutputStream} instance.
+	 * <p>
+	 * If {@code d} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code off < 0}, {@code off > d.length}, {@code len < 0} or {@code off + len - d.length > 0}, an {@code IndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param d the {@code double} array to write from
+	 * @param off the offset to start at in {@code d}
+	 * @param len the number of {@code double} values to write from {@code d}
+	 * @throws IndexOutOfBoundsException thrown if, and only if, either {@code off < 0}, {@code off > d.length}, {@code len < 0} or {@code off + len - d.length > 0}
+	 * @throws NullPointerException thrown if, and only if, {@code d} is {@code null}
+	 */
 	public synchronized void write(final double[] d, final int off, final int len) {
 //		Similar to ByteArrayOutputStream. It looks like 'off > d.length' is a bug. Should it not be 'off >= d.length'?
 		if(off < 0 || off > d.length || len < 0 || off + len - d.length > 0) {
@@ -87,7 +175,11 @@ public final class DoubleArrayOutputStream extends OutputStream {
 		this.size += len;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Writes the specified {@code double} value to this {@code DoubleArrayOutputStream} instance.
+	 * 
+	 * @param d the {@code double} value to write
+	 */
 	public synchronized void write(final double d) {
 		doEnsureCapacity(this.size + 1);
 		
@@ -95,9 +187,20 @@ public final class DoubleArrayOutputStream extends OutputStream {
 		this.size += 1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Writes the specified {@code byte} value to this {@code DoubleArrayOutputStream} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * doubleArrayOutputStream.write((double)(b));
+	 * }
+	 * </pre>
+	 * 
+	 * @param b the {@code byte} value to write
+	 */
 	@Override
-	public synchronized void write(final int b) throws IOException {
+	public synchronized void write(final int b) {
 		write((double)(b));
 	}
 	

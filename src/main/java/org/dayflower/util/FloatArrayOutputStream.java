@@ -18,12 +18,15 @@
  */
 package org.dayflower.util;
 
-import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code FloatArrayOutputStream} is an {@code OutputStream} implementation that writes data to a {@code float} array.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class FloatArrayOutputStream extends OutputStream {
 	private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 	
@@ -34,46 +37,131 @@ public final class FloatArrayOutputStream extends OutputStream {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code FloatArrayOutputStream} instance with an initial capacity of {@code 32}.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new FloatArrayOutputStream(32);
+	 * }
+	 * </pre>
+	 */
 	public FloatArrayOutputStream() {
 		this(32);
 	}
 	
-//	TODO: Add Javadocs!
-	public FloatArrayOutputStream(final int size) {
-		this.buffer = new float[ParameterArguments.requireRange(size, 0, Integer.MAX_VALUE, "size")];
+	/**
+	 * Constructs a new {@code FloatArrayOutputStream} instance with an initial capacity of {@code capacity}.
+	 * <p>
+	 * If {@code capacity} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param capacity the initial capacity
+	 * @throws IllegalArgumentException thrown if, and only if, {@code capacity} is less than {@code 0}
+	 */
+	public FloatArrayOutputStream(final int capacity) {
+		this.buffer = new float[ParameterArguments.requireRange(capacity, 0, Integer.MAX_VALUE, "capacity")];
 		this.size = 0;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code float} array that contains the {@code float} values that have been written so far.
+	 * 
+	 * @return a {@code float} array that contains the {@code float} values that have been written so far
+	 */
 	public synchronized float[] toFloatArray() {
 		return Arrays.copyOf(this.buffer, this.size);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the number of {@code float} values that can be written without expanding the current {@code float} array.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * int available = floatArrayOutputStream.capacity() - floatArrayOutputStream.size();
+	 * }
+	 * </pre>
+	 * 
+	 * @return the number of {@code float} values that can be written without expanding the current {@code float} array
+	 */
+	public synchronized int available() {
+		return capacity() - size();
+	}
+	
+	/**
+	 * Returns the capacity of this {@code FloatArrayOutputStream} instance.
+	 * <p>
+	 * The capacity represents the length of the current {@code float} array.
+	 * 
+	 * @return the capacity of this {@code FloatArrayOutputStream} instance
+	 */
+	public synchronized int capacity() {
+		return this.buffer.length;
+	}
+	
+	/**
+	 * Returns the size of this {@code FloatArrayOutputStream} instance.
+	 * <p>
+	 * The size represents the number of {@code float} values that have been written so far.
+	 * 
+	 * @return the size of this {@code FloatArrayOutputStream} instance
+	 */
 	public synchronized int size() {
 		return this.size;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Closing a {@code FloatArrayOutputStream} instance has no effect.
+	 * <p>
+	 * The methods in this class can be called after the stream has been closed without generating an {@code IOException}.
+	 */
 	@Override
 	public void close() {
 		
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Resets this {@code FloatArrayOutputStream} instance so that the size is {@code 0}.
+	 */
 	public synchronized void reset() {
 		this.size = 0;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Writes {@code f.length} {@code float} values, starting at offset {@code 0}, from {@code f} to this {@code FloatArrayOutputStream} instance.
+	 * <p>
+	 * If {@code f} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * floatArrayOutputStream.write(f, 0, f.length);
+	 * }
+	 * </pre>
+	 * 
+	 * @param f the {@code float} array to write from
+	 * @throws NullPointerException thrown if, and only if, {@code f} is {@code null}
+	 */
 	public synchronized void write(final float[] f) {
 		write(f, 0, f.length);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Writes {@code len} {@code float} values, starting at offset {@code off}, from {@code f} to this {@code FloatArrayOutputStream} instance.
+	 * <p>
+	 * If {@code f} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code off < 0}, {@code off > f.length}, {@code len < 0} or {@code off + len - f.length > 0}, an {@code IndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param f the {@code float} array to write from
+	 * @param off the offset to start at in {@code f}
+	 * @param len the number of {@code float} values to write from {@code f}
+	 * @throws IndexOutOfBoundsException thrown if, and only if, either {@code off < 0}, {@code off > f.length}, {@code len < 0} or {@code off + len - f.length > 0}
+	 * @throws NullPointerException thrown if, and only if, {@code f} is {@code null}
+	 */
 	public synchronized void write(final float[] f, final int off, final int len) {
 //		Similar to ByteArrayOutputStream. It looks like 'off > f.length' is a bug. Should it not be 'off >= f.length'?
 		if(off < 0 || off > f.length || len < 0 || off + len - f.length > 0) {
@@ -87,7 +175,11 @@ public final class FloatArrayOutputStream extends OutputStream {
 		this.size += len;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Writes the specified {@code float} value to this {@code FloatArrayOutputStream} instance.
+	 * 
+	 * @param f the {@code float} value to write
+	 */
 	public synchronized void write(final float f) {
 		doEnsureCapacity(this.size + 1);
 		
@@ -95,9 +187,20 @@ public final class FloatArrayOutputStream extends OutputStream {
 		this.size += 1;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Writes the specified {@code byte} value to this {@code FloatArrayOutputStream} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * floatArrayOutputStream.write((float)(b));
+	 * }
+	 * </pre>
+	 * 
+	 * @param b the {@code byte} value to write
+	 */
 	@Override
-	public synchronized void write(final int b) throws IOException {
+	public synchronized void write(final int b) {
 		write((float)(b));
 	}
 	

@@ -199,6 +199,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 					radianceG += throughputG * emittanceG;
 					radianceB += throughputB * emittanceB;
 					
+//					The clear coat material is almost identical to the glass material. Instead of combining perfect specular reflection with perfect specular transmission, it combines perfect specular reflection with a diffuse reflection.
 					if(material == MATERIAL_CLEAR_COAT) {
 						final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
 						
@@ -263,6 +264,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 						}
 					}
 					
+//					The glass material combines specular reflection and specular transmission using Fresnel.
 					if(material == MATERIAL_GLASS) {
 						final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
 						
@@ -328,6 +330,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 						}
 					}
 					
+//					The matte material is implemented by perturbing the correctly oriented surface normal with a direction sampled using a hemisphere cosine distribution. It is an implementation of a diffuse reflection.
 					if(material == MATERIAL_MATTE) {
 						orthonormalBasis33FSetFromW(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 						
@@ -339,6 +342,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 						throughputB *= reflectanceB;
 					}
 					
+//					The metal material is implemented by perturbing the reflection direction with a direction sampled using a hemisphere power cosine distribution. It is an implementation of a glossy reflection.
 					if(material == MATERIAL_METAL) {
 						vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 						
@@ -352,6 +356,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 						throughputB *= reflectanceB;
 					}
 					
+//					The mirror material is implemented using perfect specular reflection.
 					if(material == MATERIAL_MIRROR) {
 						vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 						

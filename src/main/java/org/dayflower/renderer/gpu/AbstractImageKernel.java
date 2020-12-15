@@ -98,7 +98,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	/**
-	 * Sets up all necessary resources for this {@code AbstractKernel} instance.
+	 * Sets up all necessary resources for this {@code AbstractImageKernel} instance.
 	 */
 	@Override
 	public void setup() {

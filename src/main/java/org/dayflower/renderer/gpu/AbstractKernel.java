@@ -260,6 +260,17 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
+	 * Returns the dielectric Fresnel reflectance based on Schlicks approximation.
+	 * 
+	 * @param cosTheta the cosine of the angle theta
+	 * @param f0 the reflectance at grazing angle
+	 * @return the dielectric Fresnel reflectance based on Schlicks approximation
+	 */
+	protected final float fresnelDielectricSchlick(final float cosTheta, final float f0) {
+		return f0 + (1.0F - f0) * pow(max(1.0F - cosTheta, 0.0F), 5.0F);
+	}
+	
+	/**
 	 * Returns the greater value of {@code a}, {@code b} and {@code c}.
 	 * 
 	 * @param a a value
@@ -1020,6 +1031,21 @@ public abstract class AbstractKernel extends Kernel {
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
+	 * The vector is constructed using the vector represented by {@code component1}, {@code component2} and {@code component3}.
+	 * 
+	 * @param component1 the value of component 1 of the vector
+	 * @param component2 the value of component 2 of the vector
+	 * @param component3 the value of component 3 of the vector
+	 */
+	protected final void vector3FSet(final float component1, final float component2, final float component3) {
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
 	 * The vector is constructed by transforming the vector represented by {@code component1}, {@code component2} and {@code component3} with the supplied matrix.
 	 * 
 	 * @param element11 the value of the element at row 1 and column 1 in the matrix
@@ -1277,6 +1303,28 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected final void vector3FSetSampleHemispherePowerCosineDistribution(final float u, final float v, final float exponent) {
 		final float cosTheta = pow(1.0F - u, 1.0F / (exponent + 1.0F));
+		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float phi = PI_MULTIPLIED_BY_2 * v;
+		
+		final float component1 = sinTheta * cos(phi);
+		final float component2 = sinTheta * sin(phi);
+		final float component3 = cosTheta;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed by sampling a direction on a hemisphere with a uniform distribution.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 */
+	protected final void vector3FSetSampleHemisphereUniformDistribution(final float u, final float v) {
+		final float cosTheta = u;
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = PI_MULTIPLIED_BY_2 * v;
 		

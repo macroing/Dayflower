@@ -18,7 +18,8 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.util.Floats.PI;
+import static org.dayflower.util.Floats.PI_RECIPROCAL;
 
 import java.lang.reflect.Field;
 
@@ -28,9 +29,14 @@ import org.dayflower.renderer.observer.FileRendererObserver;
 
 //TODO: Add Javadocs!
 public final class GPURenderer extends AbstractGPURenderer {
-	private static final int MATERIAL_MATTE = 1;
-	private static final int MATERIAL_METAL = 2;
-	private static final int MATERIAL_MIRROR = 3;
+	private static final float SKY_B = 235.0F / 255.0F;
+	private static final float SKY_G = 206.0F / 255.0F;
+	private static final float SKY_R = 135.0F / 255.0F;
+	private static final int MATERIAL_CLEAR_COAT = 1;
+	private static final int MATERIAL_GLASS = 2;
+	private static final int MATERIAL_MATTE = 3;
+	private static final int MATERIAL_METAL = 4;
+	private static final int MATERIAL_MIRROR = 5;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -54,18 +60,35 @@ public final class GPURenderer extends AbstractGPURenderer {
 //	TODO: Add Javadocs!
 	@Override
 	public void run() {
-		doRunPathTracingSmallPT();
+//		doRunAmbientOcclusion(0.0F, 1);
+		doRunPathTracingSmallPT(20, 5);
 //		doRunRayCasting();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private int doCalculateEmittanceForPrimitiveIndex(final int primitiveIndex) {
+		if(primitiveIndex == 0) {
+			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
+		} else if(primitiveIndex == 1) {
+			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
+		} else if(primitiveIndex == 2) {
+			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
+		} else if(primitiveIndex == 3) {
+			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
+		} else if(primitiveIndex == 4) {
+			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
+		} else {
+			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
+		}
+	}
 	
 	@SuppressWarnings("static-method")
 	private int doCalculateMaterialForPrimitiveIndex(final int primitiveIndex) {
 		if(primitiveIndex == 0) {
 			return MATERIAL_METAL;
 		} else if(primitiveIndex == 1) {
-			return MATERIAL_MIRROR;
+			return MATERIAL_GLASS;
 		} else if(primitiveIndex == 2) {
 			return MATERIAL_MATTE;
 		} else if(primitiveIndex == 3) {
@@ -81,7 +104,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		if(primitiveIndex == 0) {
 			return colorRGBFloatToRGBInt(0.5F, 0.5F, 0.5F);
 		} else if(primitiveIndex == 1) {
-			return colorRGBFloatToRGBInt(1.0F, 0.1F, 0.1F);
+			return colorRGBFloatToRGBInt(1.0F, 1.0F, 1.0F);
 		} else if(primitiveIndex == 2) {
 			return colorRGBFloatToRGBInt(0.1F, 1.0F, 0.1F);
 		} else if(primitiveIndex == 3) {
@@ -93,10 +116,39 @@ public final class GPURenderer extends AbstractGPURenderer {
 		}
 	}
 	
-	private void doRunPathTracingSmallPT() {
-		final int maximumBounce = 20;
-		final int minimumBounceRussianRoulette = 5;
+	private void doRunAmbientOcclusion(final float maximumDistance, final int samples) {
+		float radiance = 0.0F;
 		
+		if(ray3FCameraGenerate(random(), random()) && intersectionComputeShape3F()) {
+			orthonormalBasis33FSetIntersectionOrthonormalBasisG();
+			
+			for(int sample = 0; sample < samples; sample++) {
+				vector3FSetSampleHemisphereUniformDistribution(random(), random());
+				vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+				
+				ray3FSetFromSurfaceIntersectionPointAndVector3F();
+				
+				if(maximumDistance > 0.0F) {
+					final float t = intersectionTShape3F();
+					final float s = t > 0.0F ? normalize(saturateFloat(t, 0.0F, maximumDistance), 0.0F, maximumDistance) : 1.0F;
+					
+					radiance += s;
+				} else if(!intersectsShape3F()) {
+					radiance += 1.0F;
+				}
+			}
+			
+			radiance *= PI / samples * PI_RECIPROCAL;
+		}
+		
+		filmAddColor(radiance, radiance, radiance);
+		
+		imageBegin();
+		imageRedoGammaCorrectionPBRT();
+		imageEnd();
+	}
+	
+	private void doRunPathTracingSmallPT(final int maximumBounce, final int minimumBounceRussianRoulette) {
 		float radianceR = 0.0F;
 		float radianceG = 0.0F;
 		float radianceB = 0.0F;
@@ -116,16 +168,17 @@ public final class GPURenderer extends AbstractGPURenderer {
 					final float directionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 					final float directionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
 					
-					float emittanceR = 0.0F;
-					float emittanceG = 0.0F;
-					float emittanceB = 0.0F;
-					
+					final int emittanceRGB = doCalculateEmittanceForPrimitiveIndex(primitiveIndex);
 					final int material = doCalculateMaterialForPrimitiveIndex(primitiveIndex);
 					final int reflectanceRGB = doCalculateReflectanceForPrimitiveIndex(primitiveIndex);
 					
-					float reflectanceR = colorRGBIntToRFloat(reflectanceRGB);
-					float reflectanceG = colorRGBIntToGFloat(reflectanceRGB);
-					float reflectanceB = colorRGBIntToBFloat(reflectanceRGB);
+					float emittanceR = colorRGBIntToRFloat(emittanceRGB);
+					float emittanceG = colorRGBIntToGFloat(emittanceRGB);
+					float emittanceB = colorRGBIntToBFloat(emittanceRGB);
+					
+					final float reflectanceR = colorRGBIntToRFloat(reflectanceRGB);
+					final float reflectanceG = colorRGBIntToGFloat(reflectanceRGB);
+					final float reflectanceB = colorRGBIntToBFloat(reflectanceRGB);
 					
 					final float surfaceNormalX = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 					final float surfaceNormalY = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
@@ -137,29 +190,80 @@ public final class GPURenderer extends AbstractGPURenderer {
 					final float surfaceNormalCorrectlyOrientedY = directionDotSurfaceNormal < 0.0F ? surfaceNormalY : -surfaceNormalY;
 					final float surfaceNormalCorrectlyOrientedZ = directionDotSurfaceNormal < 0.0F ? surfaceNormalZ : -surfaceNormalZ;
 					
-					if(currentBounce >= minimumBounceRussianRoulette) {
-						final float probability = max(reflectanceR, reflectanceG, reflectanceB);
-						
-						if(random() >= probability) {
-							filmAddColor(radianceR, radianceG, radianceB);
-							
-							imageBegin();
-							imageRedoGammaCorrectionPBRT();
-							imageEnd();
-							
-							return;
-						}
-						
-						reflectanceR /= probability;
-						reflectanceG /= probability;
-						reflectanceB /= probability;
-					}
-					
 					radianceR += throughputR * emittanceR;
 					radianceG += throughputG * emittanceG;
 					radianceB += throughputB * emittanceB;
 					
-					if(material == MATERIAL_MATTE) {
+					if(material == MATERIAL_GLASS) {
+						final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
+						
+						final float etaA = 1.0F;
+						final float etaB = 1.5F;
+						final float etaI = isEntering ? etaA : etaB;
+						final float etaT = isEntering ? etaB : etaA;
+						final float eta = etaI / etaT;
+						
+						final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
+						final float sinThetaISquared = 1.0F - cosThetaI * cosThetaI;
+						final float sinThetaTSquared = 1.0F - eta * eta * sinThetaISquared;
+						final float cosThetaT = sqrt(sinThetaTSquared);
+						
+						final boolean isTotalInternalReflection = sinThetaTSquared < 0.0F;
+						
+						if(isTotalInternalReflection) {
+							vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+							
+							ray3FSetFromSurfaceIntersectionPointAndVector3F();
+						}
+						
+						if(!isTotalInternalReflection) {
+							final float transmissionDirectionSign = isEntering ? +1.0F : -1.0F;
+							final float transmissionDirectionX = directionX * eta - surfaceNormalX * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
+							final float transmissionDirectionY = directionY * eta - surfaceNormalY * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
+							final float transmissionDirectionZ = directionZ * eta - surfaceNormalZ * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
+							final float transmissionDirectionLengthReciprocal = vector3FLengthReciprocal(transmissionDirectionX, transmissionDirectionY, transmissionDirectionZ);
+							final float transmissionDirectionNormalizedX = transmissionDirectionX * transmissionDirectionLengthReciprocal;
+							final float transmissionDirectionNormalizedY = transmissionDirectionY * transmissionDirectionLengthReciprocal;
+							final float transmissionDirectionNormalizedZ = transmissionDirectionZ * transmissionDirectionLengthReciprocal;
+							
+							final float cosTheta = isEntering ? -cosThetaI : vector3FDotProduct(transmissionDirectionNormalizedX, transmissionDirectionNormalizedY, transmissionDirectionNormalizedZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+							final float f0 = ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA));
+							
+							final float reflectance = fresnelDielectricSchlick(cosTheta, f0);
+							final float transmittance = 1.0F - reflectance;
+							
+							final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+							final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+							final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+							
+							final boolean isReflection = random() < probabilityRussianRoulette;
+							final boolean isTransmission = !isReflection;
+							
+							if(isReflection) {
+								vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+								
+								ray3FSetFromSurfaceIntersectionPointAndVector3F();
+								
+								throughputR *= probabilityRussianRouletteReflection;
+								throughputG *= probabilityRussianRouletteReflection;
+								throughputB *= probabilityRussianRouletteReflection;
+							}
+							
+							if(isTransmission) {
+								vector3FSet(transmissionDirectionNormalizedX, transmissionDirectionNormalizedY, transmissionDirectionNormalizedZ);
+								
+								ray3FSetFromSurfaceIntersectionPointAndVector3F();
+								
+								throughputR *= probabilityRussianRouletteTransmission;
+								throughputG *= probabilityRussianRouletteTransmission;
+								throughputB *= probabilityRussianRouletteTransmission;
+							}
+						}
+						
+						throughputR *= reflectanceR;
+						throughputG *= reflectanceG;
+						throughputB *= reflectanceB;
+					} else if(material == MATERIAL_MATTE) {
 						orthonormalBasis33FSetFromW(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 						
 						vector3FSetSampleHemisphereCosineDistribution2(random(), random());
@@ -193,11 +297,23 @@ public final class GPURenderer extends AbstractGPURenderer {
 						throughputB *= reflectanceB;
 					}
 					
+					if(currentBounce >= minimumBounceRussianRoulette) {
+						final float probability = max(throughputR, throughputG, throughputB);
+						
+						if(random() > probability) {
+							currentBounce = maximumBounce;
+						} else {
+							throughputR /= probability;
+							throughputG /= probability;
+							throughputB /= probability;
+						}
+					}
+					
 					currentBounce++;
 				} else {
-					radianceR += throughputR * (135.0F / 255.0F);//1.0F;
-					radianceG += throughputG * (206.0F / 255.0F);//1.0F;
-					radianceB += throughputB * (235.0F / 255.0F);//1.0F;
+					radianceR += throughputR * SKY_R;
+					radianceG += throughputG * SKY_G;
+					radianceB += throughputB * SKY_B;
 					
 					currentBounce = maximumBounce;
 				}

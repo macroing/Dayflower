@@ -36,6 +36,16 @@ import com.amd.aparapi.Kernel;
  */
 public abstract class AbstractKernel extends Kernel {
 	/**
+	 * The index of refraction (IOR) for glass.
+	 */
+	protected static final float ETA_GLASS = 1.5F;
+	
+	/**
+	 * The index of refraction (IOR) for vacuum.
+	 */
+	protected static final float ETA_VACUUM = 1.0F;
+	
+	/**
 	 * The offset for the vector that points in the U-direction of the orthonormal basis represented in the array {@link #orthonormalBasis33FArray_$private$9}.
 	 */
 	protected static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U = 0;
@@ -213,6 +223,70 @@ public abstract class AbstractKernel extends Kernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * Returns {@code true} if, and only if, the vector was set, {@code false} otherwise.
+	 * <p>
+	 * The vector is constructed as the refraction vector of the direction vector represented by {@code directionX}, {@code directionY} and {@code directionZ} with regards to the normal vector represented by {@code normalX}, {@code normalY}
+	 * and {@code normalZ}.
+	 * 
+	 * @param directionX the X-component of the direction vector
+	 * @param directionY the Y-component of the direction vector
+	 * @param directionZ the Z-component of the direction vector
+	 * @param normalX the X-component of the normal vector
+	 * @param normalY the Y-component of the normal vector
+	 * @param normalZ the Z-component of the normal vector
+	 * @param eta the index of refraction (IOR)
+	 * @return {@code true} if, and only if, the vector was set, {@code false} otherwise
+	 */
+	protected final boolean vector3FSetRefraction(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final float eta) {
+//		PBRT:
+//		final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, normalX, normalY, normalZ);
+//		final float sinThetaISquared = max(0.0F, 1.0F - cosThetaI * cosThetaI);
+//		final float sinThetaTSquared = eta * eta * sinThetaISquared;
+//		final float cosThetaT = sqrt(1.0F - sinThetaTSquared);
+		
+//		final boolean isTotalInternalReflection = sinThetaTSquared >= 1.0F;
+		
+//		Small PT:
+		final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, normalX, normalY, normalZ);
+		final float sinThetaISquared = 1.0F - cosThetaI * cosThetaI;
+		final float sinThetaTSquared = 1.0F - eta * eta * sinThetaISquared;
+		final float cosThetaT = sqrt(sinThetaTSquared);
+		
+		final boolean isTotalInternalReflection = sinThetaTSquared < 0.0F;
+		
+//		PBRT and Small PT:
+		if(isTotalInternalReflection) {
+			return false;
+		}
+		
+//		PBRT:
+//		final float refractionDirectionX = -directionX * eta + normalX * (eta * cosThetaI - cosThetaT);
+//		final float refractionDirectionY = -directionY * eta + normalY * (eta * cosThetaI - cosThetaT);
+//		final float refractionDirectionZ = -directionZ * eta + normalZ * (eta * cosThetaI - cosThetaT);
+//		final float refractionDirectionLengthReciprocal = vector3FLengthReciprocal(refractionDirectionX, refractionDirectionY, refractionDirectionZ);
+//		final float refractionDirectionNormalizedX = refractionDirectionX * refractionDirectionLengthReciprocal;
+//		final float refractionDirectionNormalizedY = refractionDirectionY * refractionDirectionLengthReciprocal;
+//		final float refractionDirectionNormalizedZ = refractionDirectionZ * refractionDirectionLengthReciprocal;
+		
+//		PBRT and Small PT:
+		final float refractionDirectionX = directionX * eta - normalX * (eta * cosThetaI + cosThetaT);
+		final float refractionDirectionY = directionY * eta - normalY * (eta * cosThetaI + cosThetaT);
+		final float refractionDirectionZ = directionZ * eta - normalZ * (eta * cosThetaI + cosThetaT);
+		final float refractionDirectionLengthReciprocal = vector3FLengthReciprocal(refractionDirectionX, refractionDirectionY, refractionDirectionZ);
+		final float refractionDirectionNormalizedX = refractionDirectionX * refractionDirectionLengthReciprocal;
+		final float refractionDirectionNormalizedY = refractionDirectionY * refractionDirectionLengthReciprocal;
+		final float refractionDirectionNormalizedZ = refractionDirectionZ * refractionDirectionLengthReciprocal;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = refractionDirectionNormalizedX;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = refractionDirectionNormalizedY;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = refractionDirectionNormalizedZ;
+		
+		return true;
+	}
+	
+	/**
 	 * Solves the cubic system for the quartic system based on the values {@code p}, {@code q} and {@code r}.
 	 * <p>
 	 * Returns a {@code double} with the result of the operation.
@@ -257,6 +331,39 @@ public abstract class AbstractKernel extends Kernel {
 	@SuppressWarnings("static-method")
 	protected final float addIfLessThanThreshold(final float value, final float threshold, final float valueAdd) {
 		return value < threshold ? value + valueAdd : value;
+	}
+	
+	/**
+	 * Returns a {@code float} with the amount of light reflected by the surface.
+	 * 
+	 * @param cosThetaI the cosine of the angle made by the incoming direction and the surface normal
+	 * @param etaI the index of refraction (IOR) for the incident media
+	 * @param etaT the index of refraction (IOR) for the transmitted media
+	 * @return a {@code float} with the amount of light reflected by the surface
+	 */
+	protected final float fresnelDielectric(final float cosThetaI, final float etaI, final float etaT) {
+		final float saturateCosThetaI = saturateFloat(cosThetaI, -1.0F, 1.0F);
+		
+		final boolean isEntering = saturateCosThetaI > 0.0F;
+		
+		final float currentCosThetaI = isEntering ? saturateCosThetaI : abs(saturateCosThetaI);
+		final float currentEtaI = isEntering ? etaI : etaT;
+		final float currentEtaT = isEntering ? etaT : etaI;
+		
+		final float currentSinThetaI = sqrt(max(0.0F, 1.0F - currentCosThetaI * currentCosThetaI));
+		final float currentSinThetaT = currentEtaI / currentEtaT * currentSinThetaI;
+		
+		if(currentSinThetaT >= 1.0F) {
+			return 1.0F;
+		}
+		
+		final float currentCosThetaT = sqrt(max(0.0F, 1.0F - currentSinThetaT * currentSinThetaT));
+		
+		final float reflectancePara = ((currentEtaT * currentCosThetaI) - (currentEtaI * currentCosThetaT)) / ((currentEtaT * currentCosThetaI) + (currentEtaI * currentCosThetaT));
+		final float reflectancePerp = ((currentEtaI * currentCosThetaI) - (currentEtaT * currentCosThetaT)) / ((currentEtaI * currentCosThetaI) + (currentEtaT * currentCosThetaT));
+		final float reflectance = (reflectancePara * reflectancePara + reflectancePerp * reflectancePerp) / 2.0F;
+		
+		return reflectance;
 	}
 	
 	/**

@@ -118,7 +118,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * @return the {@code byte[]} with image colors
 	 */
 	protected final byte[] getImageColorByteArray() {
-		return getAndReturn(this.imageColorByteArray);
+		return getAndReturn(this.imageColorByteArray);//TODO: Find out why this method crashes the JVM sometimes.
 	}
 	
 	/**

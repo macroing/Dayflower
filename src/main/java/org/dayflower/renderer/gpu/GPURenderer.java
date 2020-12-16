@@ -201,129 +201,125 @@ public final class GPURenderer extends AbstractGPURenderer {
 					
 //					The clear coat material is almost identical to the glass material. Instead of combining specular reflection with specular transmission, it combines specular reflection with diffuse reflection.
 					if(material == MATERIAL_CLEAR_COAT) {
+						final float reflectanceScaleR = 1.0F;
+						final float reflectanceScaleG = 1.0F;
+						final float reflectanceScaleB = 1.0F;
+						
+						final float transmittanceScaleR = reflectanceR;
+						final float transmittanceScaleG = reflectanceG;
+						final float transmittanceScaleB = reflectanceB;
+						
 						final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
 						
-						final float etaA = 1.0F;
-						final float etaB = 1.5F;
+						final float etaA = ETA_VACUUM;
+						final float etaB = ETA_GLASS;
 						final float etaI = isEntering ? etaA : etaB;
 						final float etaT = isEntering ? etaB : etaA;
 						final float eta = etaI / etaT;
 						
-						final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
-						final float sinThetaISquared = 1.0F - cosThetaI * cosThetaI;
-						final float sinThetaTSquared = 1.0F - eta * eta * sinThetaISquared;
-						final float cosThetaT = sqrt(sinThetaTSquared);
+						final boolean isRefracting = vector3FSetRefraction(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, eta);
+						final boolean isReflecting = !isRefracting;
 						
-						final boolean isTotalInternalReflection = sinThetaTSquared < 0.0F;
-						
-						if(isTotalInternalReflection) {
-							vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
-						}
-						
-						if(!isTotalInternalReflection) {
-							final float transmissionDirectionSign = isEntering ? +1.0F : -1.0F;
-							final float transmissionDirectionX = directionX * eta - surfaceNormalX * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
-							final float transmissionDirectionY = directionY * eta - surfaceNormalY * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
-							final float transmissionDirectionZ = directionZ * eta - surfaceNormalZ * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
-							final float transmissionDirectionLengthReciprocal = vector3FLengthReciprocal(transmissionDirectionX, transmissionDirectionY, transmissionDirectionZ);
-							final float transmissionDirectionNormalizedX = transmissionDirectionX * transmissionDirectionLengthReciprocal;
-							final float transmissionDirectionNormalizedY = transmissionDirectionY * transmissionDirectionLengthReciprocal;
-							final float transmissionDirectionNormalizedZ = transmissionDirectionZ * transmissionDirectionLengthReciprocal;
+						if(isRefracting) {
+							final float refractionDirectionX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+							final float refractionDirectionY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+							final float refractionDirectionZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 							
-							final float cosTheta = isEntering ? -cosThetaI : vector3FDotProduct(transmissionDirectionNormalizedX, transmissionDirectionNormalizedY, transmissionDirectionNormalizedZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
-							final float f0 = ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA));
+							final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
+							final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 							
-							final float reflectance = fresnelDielectricSchlick(cosTheta, f0);
+//							final float reflectance = fresnelDielectricSchlick(cosThetaICorrectlyOriented, ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA)));
+							final float reflectance = fresnelDielectric(cosThetaICorrectlyOriented, etaA, etaB);
 							final float transmittance = 1.0F - reflectance;
 							
 							final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
 							final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
 							final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 							
-							final boolean isReflection = random() < probabilityRussianRoulette;
-							final boolean isTransmission = !isReflection;
+							final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 							
-							if(isReflection) {
+							if(isChoosingSpecularReflection) {
 								vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 								
-								throughputR *= probabilityRussianRouletteReflection;
-								throughputG *= probabilityRussianRouletteReflection;
-								throughputB *= probabilityRussianRouletteReflection;
-							}
-							
-							if(isTransmission) {
+								throughputR *= reflectanceScaleR * probabilityRussianRouletteReflection;
+								throughputG *= reflectanceScaleG * probabilityRussianRouletteReflection;
+								throughputB *= reflectanceScaleB * probabilityRussianRouletteReflection;
+							} else {
 								vector3FSetDiffuseReflection(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, random(), random());
 								
-								throughputR *= reflectanceR * probabilityRussianRouletteTransmission;
-								throughputG *= reflectanceG * probabilityRussianRouletteTransmission;
-								throughputB *= reflectanceB * probabilityRussianRouletteTransmission;
+								throughputR *= transmittanceScaleR * probabilityRussianRouletteTransmission;
+								throughputG *= transmittanceScaleG * probabilityRussianRouletteTransmission;
+								throughputB *= transmittanceScaleB * probabilityRussianRouletteTransmission;
 							}
+						}
+						
+						if(isReflecting) {
+							vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+							
+							throughputR *= reflectanceScaleR;
+							throughputG *= reflectanceScaleG;
+							throughputB *= reflectanceScaleB;
 						}
 					}
 					
 //					The glass material combines specular reflection and specular transmission using Fresnel.
 					if(material == MATERIAL_GLASS) {
+						final float reflectanceScaleR = reflectanceR;
+						final float reflectanceScaleG = reflectanceG;
+						final float reflectanceScaleB = reflectanceB;
+						
+						final float transmittanceScaleR = reflectanceR;
+						final float transmittanceScaleG = reflectanceG;
+						final float transmittanceScaleB = reflectanceB;
+						
 						final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
 						
-						final float etaA = 1.0F;
-						final float etaB = 1.5F;
+						final float etaA = ETA_VACUUM;
+						final float etaB = ETA_GLASS;
 						final float etaI = isEntering ? etaA : etaB;
 						final float etaT = isEntering ? etaB : etaA;
 						final float eta = etaI / etaT;
 						
-						final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
-						final float sinThetaISquared = 1.0F - cosThetaI * cosThetaI;
-						final float sinThetaTSquared = 1.0F - eta * eta * sinThetaISquared;
-						final float cosThetaT = sqrt(sinThetaTSquared);
+						final boolean isRefracting = vector3FSetRefraction(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, eta);
+						final boolean isReflecting = !isRefracting;
 						
-						final boolean isTotalInternalReflection = sinThetaTSquared < 0.0F;
-						
-						if(isTotalInternalReflection) {
-							vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+						if(isRefracting) {
+							final float refractionDirectionX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+							final float refractionDirectionY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+							final float refractionDirectionZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 							
-							throughputR *= reflectanceR;
-							throughputG *= reflectanceG;
-							throughputB *= reflectanceB;
-						}
-						
-						if(!isTotalInternalReflection) {
-							final float transmissionDirectionSign = isEntering ? +1.0F : -1.0F;
-							final float transmissionDirectionX = directionX * eta - surfaceNormalX * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
-							final float transmissionDirectionY = directionY * eta - surfaceNormalY * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
-							final float transmissionDirectionZ = directionZ * eta - surfaceNormalZ * transmissionDirectionSign * (eta * cosThetaI + cosThetaT);
-							final float transmissionDirectionLengthReciprocal = vector3FLengthReciprocal(transmissionDirectionX, transmissionDirectionY, transmissionDirectionZ);
-							final float transmissionDirectionNormalizedX = transmissionDirectionX * transmissionDirectionLengthReciprocal;
-							final float transmissionDirectionNormalizedY = transmissionDirectionY * transmissionDirectionLengthReciprocal;
-							final float transmissionDirectionNormalizedZ = transmissionDirectionZ * transmissionDirectionLengthReciprocal;
+							final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
+							final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 							
-							final float cosTheta = isEntering ? -cosThetaI : vector3FDotProduct(transmissionDirectionNormalizedX, transmissionDirectionNormalizedY, transmissionDirectionNormalizedZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
-							final float f0 = ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA));
-							
-							final float reflectance = fresnelDielectricSchlick(cosTheta, f0);
+//							final float reflectance = fresnelDielectricSchlick(cosThetaICorrectlyOriented, ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA)));
+							final float reflectance = fresnelDielectric(cosThetaICorrectlyOriented, etaA, etaB);
 							final float transmittance = 1.0F - reflectance;
 							
 							final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
 							final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
 							final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
 							
-							final boolean isReflection = random() < probabilityRussianRoulette;
-							final boolean isTransmission = !isReflection;
+							final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 							
-							if(isReflection) {
+							if(isChoosingSpecularReflection) {
 								vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 								
-								throughputR *= reflectanceR * probabilityRussianRouletteReflection;
-								throughputG *= reflectanceG * probabilityRussianRouletteReflection;
-								throughputB *= reflectanceB * probabilityRussianRouletteReflection;
+								throughputR *= reflectanceScaleR * probabilityRussianRouletteReflection;
+								throughputG *= reflectanceScaleG * probabilityRussianRouletteReflection;
+								throughputB *= reflectanceScaleB * probabilityRussianRouletteReflection;
+							} else {
+								throughputR *= transmittanceScaleR * probabilityRussianRouletteTransmission;
+								throughputG *= transmittanceScaleG * probabilityRussianRouletteTransmission;
+								throughputB *= transmittanceScaleB * probabilityRussianRouletteTransmission;
 							}
+						}
+						
+						if(isReflecting) {
+							vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 							
-							if(isTransmission) {
-								vector3FSet(transmissionDirectionNormalizedX, transmissionDirectionNormalizedY, transmissionDirectionNormalizedZ);
-								
-								throughputR *= reflectanceR * probabilityRussianRouletteTransmission;
-								throughputG *= reflectanceG * probabilityRussianRouletteTransmission;
-								throughputB *= reflectanceB * probabilityRussianRouletteTransmission;
-							}
+							throughputR *= reflectanceScaleR;
+							throughputG *= reflectanceScaleG;
+							throughputB *= reflectanceScaleB;
 						}
 					}
 					

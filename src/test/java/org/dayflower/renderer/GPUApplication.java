@@ -21,6 +21,7 @@ package org.dayflower.renderer;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.dayflower.image.ByteImage;
 import org.dayflower.image.Image;
@@ -98,7 +99,12 @@ public final class GPUApplication extends Application {
 					renderer.renderShutdown();
 					renderer.dispose();
 					
-					executorService.shutdown();
+					try {
+						executorService.shutdown();
+						executorService.awaitTermination(10000L, TimeUnit.MILLISECONDS);
+					} catch(final InterruptedException e) {
+						
+					}
 					
 					Platform.exit();
 				}

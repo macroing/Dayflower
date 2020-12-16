@@ -70,9 +70,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 	@SuppressWarnings("static-method")
 	private int doCalculateMaterialForPrimitiveIndex(final int primitiveIndex) {
 		if(primitiveIndex == 0) {
-			return MATERIAL_CLEAR_COAT;
-		} else if(primitiveIndex == 1) {
 			return MATERIAL_GLASS;
+		} else if(primitiveIndex == 1) {
+			return MATERIAL_CLEAR_COAT;
 		} else if(primitiveIndex == 2) {
 			return MATERIAL_MIRROR;
 		} else if(primitiveIndex == 3) {
@@ -106,9 +106,12 @@ public final class GPURenderer extends AbstractGPURenderer {
 //			color3FLHSSetTextureCheckerboard(1.0F, 0.1F, 0.1F, 0.5F, 0.5F, 0.5F, 90.0F, 5.0F, 5.0F);
 			
 //			Constant Texture:
-			color3FLHSSetTextureConstant(1.0F, 0.1F, 0.1F);
-		} else if(primitiveIndex == 1) {
+//			color3FLHSSetTextureConstant(1.0F, 0.1F, 0.1F);
+			
 			color3FLHSSetTextureConstant(1.0F, 1.0F, 1.0F);
+		} else if(primitiveIndex == 1) {
+//			color3FLHSSetTextureConstant(1.0F, 1.0F, 1.0F);
+			color3FLHSSetTextureConstant(1.0F, 0.1F, 0.1F);
 		} else if(primitiveIndex == 2) {
 			color3FLHSSetTextureConstant(0.1F, 1.0F, 0.1F);
 		} else if(primitiveIndex == 3) {

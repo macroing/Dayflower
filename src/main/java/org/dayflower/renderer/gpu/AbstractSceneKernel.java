@@ -1834,7 +1834,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void materialSpecularReflection(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+	protected final void materialMirror(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
 		vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 		
 		color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);

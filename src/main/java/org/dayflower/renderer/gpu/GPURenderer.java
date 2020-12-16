@@ -216,7 +216,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 					}
 					
 					if(material == MATERIAL_MIRROR) {
-						materialSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, reflectanceR, reflectanceG, reflectanceB);
+						materialMirror(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, reflectanceR, reflectanceG, reflectanceB);
 					}
 					
 					throughputR *= color3FLHSGetComponent1();

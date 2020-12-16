@@ -890,6 +890,33 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
+	 * Returns the value of component 1 in {@link #vector3FArray_$private$3}.
+	 * 
+	 * @return the value of component 1 in {@link #vector3FArray_$private$3}
+	 */
+	protected final float vector3FGetComponent1() {
+		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+	}
+	
+	/**
+	 * Returns the value of component 2 in {@link #vector3FArray_$private$3}.
+	 * 
+	 * @return the value of component 2 in {@link #vector3FArray_$private$3}
+	 */
+	protected final float vector3FGetComponent2() {
+		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+	}
+	
+	/**
+	 * Returns the value of component 3 in {@link #vector3FArray_$private$3}.
+	 * 
+	 * @return the value of component 3 in {@link #vector3FArray_$private$3}
+	 */
+	protected final float vector3FGetComponent3() {
+		return this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+	}
+	
+	/**
 	 * Returns the length of the vector represented by {@code component1}, {@code component2} and {@code component3}.
 	 * 
 	 * @param component1 the value of component 1
@@ -1211,6 +1238,48 @@ public abstract class AbstractKernel extends Kernel {
 		
 		vector3FSetSampleHemisphereCosineDistribution2(u, v);
 		vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed by negating the vector represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} if, and only if, the dot product between that vector and the vector represented by {@code component1RHS},
+	 * {@code component2RHS} and {@code component3RHS} is less than {@code 0.0F}. Otherwise, its current values will be used.
+	 * 
+	 * @param component1LHS the value of component 1 of the vector on the left-hand side
+	 * @param component2LHS the value of component 2 of the vector on the left-hand side
+	 * @param component3LHS the value of component 3 of the vector on the left-hand side
+	 * @param component1RHS the value of component 1 of the vector on the right-hand side
+	 * @param component2RHS the value of component 2 of the vector on the right-hand side
+	 * @param component3RHS the value of component 3 of the vector on the right-hand side
+	 */
+	protected final void vector3FSetFaceForward(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		if(vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) < 0.0F) {
+			vector3FSet(-component1LHS, -component2LHS, -component3LHS);
+		} else {
+			vector3FSet(+component1LHS, +component2LHS, +component3LHS);
+		}
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed by negating the vector represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} if, and only if, the dot product between that vector and the vector represented by {@code component1RHS},
+	 * {@code component2RHS} and {@code component3RHS} is greater than or equal to {@code 0.0F}. Otherwise, its current values will be used.
+	 * 
+	 * @param component1LHS the value of component 1 of the vector on the left-hand side
+	 * @param component2LHS the value of component 2 of the vector on the left-hand side
+	 * @param component3LHS the value of component 3 of the vector on the left-hand side
+	 * @param component1RHS the value of component 1 of the vector on the right-hand side
+	 * @param component2RHS the value of component 2 of the vector on the right-hand side
+	 * @param component3RHS the value of component 3 of the vector on the right-hand side
+	 */
+	protected final void vector3FSetFaceForwardNegated(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		if(vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) < 0.0F) {
+			vector3FSet(+component1LHS, +component2LHS, +component3LHS);
+		} else {
+			vector3FSet(-component1LHS, -component2LHS, -component3LHS);
+		}
 	}
 	
 	/**

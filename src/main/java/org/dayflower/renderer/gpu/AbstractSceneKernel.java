@@ -1711,6 +1711,136 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final void materialClearCoat(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB, final float transmittanceScaleR, final float transmittanceScaleG, final float transmittanceScaleB) {
+		vector3FSetFaceForwardNegated(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
+		
+		final float surfaceNormalCorrectlyOrientedX = vector3FGetComponent1();
+		final float surfaceNormalCorrectlyOrientedY = vector3FGetComponent2();
+		final float surfaceNormalCorrectlyOrientedZ = vector3FGetComponent3();
+		
+		final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
+		
+		final float etaA = ETA_VACUUM;
+		final float etaB = ETA_GLASS;
+		final float etaI = isEntering ? etaA : etaB;
+		final float etaT = isEntering ? etaB : etaA;
+		final float eta = etaI / etaT;
+		
+		final boolean isRefracting = vector3FSetRefraction(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, eta);
+		final boolean isReflecting = !isRefracting;
+		
+		if(isRefracting) {
+			final float refractionDirectionX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+			final float refractionDirectionY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+			final float refractionDirectionZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+			
+			final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
+			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+			
+//			final float reflectance = fresnelDielectricSchlick(cosThetaICorrectlyOriented, ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA)));
+			final float reflectance = fresnelDielectric(cosThetaICorrectlyOriented, etaA, etaB);
+			final float transmittance = 1.0F - reflectance;
+			
+			final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+			final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+			final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+			
+			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
+			
+			if(isChoosingSpecularReflection) {
+				vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+				
+				color3FLHSSet(reflectanceScaleR * probabilityRussianRouletteReflection, reflectanceScaleG * probabilityRussianRouletteReflection, reflectanceScaleB * probabilityRussianRouletteReflection);
+			} else {
+				vector3FSetDiffuseReflection(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, random(), random());
+				
+				color3FLHSSet(transmittanceScaleR * probabilityRussianRouletteTransmission, transmittanceScaleG * probabilityRussianRouletteTransmission, transmittanceScaleB * probabilityRussianRouletteTransmission);
+			}
+		}
+		
+		if(isReflecting) {
+			vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+			
+			color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialGlass(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB, final float transmittanceScaleR, final float transmittanceScaleG, final float transmittanceScaleB) {
+		vector3FSetFaceForwardNegated(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
+		
+		final float surfaceNormalCorrectlyOrientedX = vector3FGetComponent1();
+		final float surfaceNormalCorrectlyOrientedY = vector3FGetComponent2();
+		final float surfaceNormalCorrectlyOrientedZ = vector3FGetComponent3();
+		
+		final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
+		
+		final float etaA = ETA_VACUUM;
+		final float etaB = ETA_GLASS;
+		final float etaI = isEntering ? etaA : etaB;
+		final float etaT = isEntering ? etaB : etaA;
+		final float eta = etaI / etaT;
+		
+		final boolean isRefracting = vector3FSetRefraction(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, eta);
+		final boolean isReflecting = !isRefracting;
+		
+		if(isRefracting) {
+			final float refractionDirectionX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+			final float refractionDirectionY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+			final float refractionDirectionZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+			
+			final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
+			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+			
+//			final float reflectance = fresnelDielectricSchlick(cosThetaICorrectlyOriented, ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA)));
+			final float reflectance = fresnelDielectric(cosThetaICorrectlyOriented, etaA, etaB);
+			final float transmittance = 1.0F - reflectance;
+			
+			final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+			final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+			final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+			
+			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
+			
+			if(isChoosingSpecularReflection) {
+				vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+				
+				color3FLHSSet(reflectanceScaleR * probabilityRussianRouletteReflection, reflectanceScaleG * probabilityRussianRouletteReflection, reflectanceScaleB * probabilityRussianRouletteReflection);
+			} else {
+				color3FLHSSet(transmittanceScaleR * probabilityRussianRouletteTransmission, transmittanceScaleG * probabilityRussianRouletteTransmission, transmittanceScaleB * probabilityRussianRouletteTransmission);
+			}
+		}
+		
+		if(isReflecting) {
+			vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+			
+			color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialMatte(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+		vector3FSetFaceForwardNegated(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
+		vector3FSetDiffuseReflection(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), random(), random());
+		
+		color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialMetal(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+		vector3FSetGlossyReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true, random(), random(), 20.0F);
+		
+		color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialSpecularReflection(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+		vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+		
+		color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+	}
+	
+//	TODO: Add Javadocs!
 	protected final void orthonormalBasis33FSetIntersectionOrthonormalBasisG() {
 //		Get the orthonormal basis:
 		final float orthonormalBasisGUX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];

@@ -108,18 +108,18 @@ public final class GPURenderer extends AbstractGPURenderer {
 //			Constant Texture:
 //			color3FLHSSetTextureConstant(1.0F, 0.1F, 0.1F);
 			
-			color3FLHSSetTextureConstant(1.0F, 1.0F, 1.0F);
+			color3FLHSSetTextureConstant(1.00F, 1.00F, 1.00F);
 		} else if(primitiveIndex == 1) {
-//			color3FLHSSetTextureConstant(1.0F, 1.0F, 1.0F);
-			color3FLHSSetTextureConstant(1.0F, 0.1F, 0.1F);
+//			color3FLHSSetTextureConstant(1.00F, 1.00F, 1.00F);
+			color3FLHSSetTextureConstant(1.00F, 0.01F, 0.01F);
 		} else if(primitiveIndex == 2) {
-			color3FLHSSetTextureConstant(0.1F, 1.0F, 0.1F);
+			color3FLHSSetTextureConstant(0.01F, 1.00F, 0.01F);
 		} else if(primitiveIndex == 3) {
-			color3FLHSSetTextureConstant(0.5F, 0.5F, 0.5F);
+			color3FLHSSetTextureConstant(0.50F, 0.50F, 0.50F);
 		} else if(primitiveIndex == 4) {
-			color3FLHSSetTextureConstant(0.1F, 0.1F, 1.0F);
+			color3FLHSSetTextureConstant(0.01F, 0.01F, 1.00F);
 		} else {
-			color3FLHSSetTextureConstant(0.5F, 0.5F, 0.5F);
+			color3FLHSSetTextureConstant(0.50F, 0.50F, 0.50F);
 		}
 	}
 	

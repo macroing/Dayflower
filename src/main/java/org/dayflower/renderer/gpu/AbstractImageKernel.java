@@ -36,6 +36,48 @@ import org.dayflower.util.Ints;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractImageKernel extends AbstractKernel {
+	/**
+	 * The offset for component 1 of the color represented in the array {@link #color3FLHSArray_$private$3}.
+	 */
+	protected static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_1 = 0;
+	
+	/**
+	 * The offset for component 2 of the color represented in the array {@link #color3FLHSArray_$private$3}.
+	 */
+	protected static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_2 = 1;
+	
+	/**
+	 * The offset for component 3 of the color represented in the array {@link #color3FLHSArray_$private$3}.
+	 */
+	protected static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_3 = 2;
+	
+	/**
+	 * The size of the color represented in the array {@link #color3FLHSArray_$private$3}.
+	 */
+	protected static final int COLOR_3_F_L_H_S_ARRAY_SIZE = 3;
+	
+	/**
+	 * The offset for component 1 of the color represented in the array {@link #color3FRHSArray_$private$3}.
+	 */
+	protected static final int COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1 = 0;
+	
+	/**
+	 * The offset for component 2 of the color represented in the array {@link #color3FRHSArray_$private$3}.
+	 */
+	protected static final int COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2 = 1;
+	
+	/**
+	 * The offset for component 3 of the color represented in the array {@link #color3FRHSArray_$private$3}.
+	 */
+	protected static final int COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3 = 2;
+	
+	/**
+	 * The size of the color represented in the array {@link #color3FRHSArray_$private$3}.
+	 */
+	protected static final int COLOR_3_F_R_H_S_ARRAY_SIZE = 3;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static final int FILM_FLAG_CLEAR = 0x0001;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,6 +86,16 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * A {@code byte[]} with image colors.
 	 */
 	protected byte[] imageColorByteArray;
+	
+	/**
+	 * A {@code float[]} that contains a color that consists of three components.
+	 */
+	protected float[] color3FLHSArray_$private$3;
+	
+	/**
+	 * A {@code float[]} that contains a color that consists of three components.
+	 */
+	protected float[] color3FRHSArray_$private$3;
 	
 	/**
 	 * A {@code float[]} with film colors.
@@ -71,6 +123,10 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * Constructs a new {@code AbstractImageKernel} instance.
 	 */
 	protected AbstractImageKernel() {
+//		Initialize the color variable:
+		this.color3FLHSArray_$private$3 = new float[COLOR_3_F_L_H_S_ARRAY_SIZE];
+		this.color3FRHSArray_$private$3 = new float[COLOR_3_F_R_H_S_ARRAY_SIZE];
+		
 //		Initialize the film variables:
 		this.filmColorFloatArray = new float[0];
 		this.filmFlags = 0;
@@ -119,6 +175,60 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 */
 	protected final byte[] getImageColorByteArray() {
 		return getAndReturn(this.imageColorByteArray);//TODO: Find out why this method crashes the JVM sometimes.
+	}
+	
+	/**
+	 * Returns the value of component 1 in {@link #color3FLHSArray_$private$3}.
+	 * 
+	 * @return the value of component 1 in {@link #color3FLHSArray_$private$3}
+	 */
+	protected final float color3FLHSGetComponent1() {
+		return this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_1];
+	}
+	
+	/**
+	 * Returns the value of component 2 in {@link #color3FLHSArray_$private$3}.
+	 * 
+	 * @return the value of component 2 in {@link #color3FLHSArray_$private$3}
+	 */
+	protected final float color3FLHSGetComponent2() {
+		return this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_2];
+	}
+	
+	/**
+	 * Returns the value of component 3 in {@link #color3FLHSArray_$private$3}.
+	 * 
+	 * @return the value of component 3 in {@link #color3FLHSArray_$private$3}
+	 */
+	protected final float color3FLHSGetComponent3() {
+		return this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_3];
+	}
+	
+	/**
+	 * Returns the value of component 1 in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of component 1 in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetComponent1() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1];
+	}
+	
+	/**
+	 * Returns the value of component 2 in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of component 2 in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetComponent2() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2];
+	}
+	
+	/**
+	 * Returns the value of component 3 in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of component 3 in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetComponent3() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3];
 	}
 	
 	/**
@@ -360,6 +470,86 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 */
 	protected final int imageGetY() {
 		return getGlobalId() / super.resolutionX;
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FLHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed using the color represented by {@code component1}, {@code component2} and {@code component3}.
+	 * 
+	 * @param component1 the value of component 1 of the color
+	 * @param component2 the value of component 2 of the color
+	 * @param component3 the value of component 3 of the color
+	 */
+	protected final void color3FLHSSet(final float component1, final float component2, final float component3) {
+		this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_1] = component1;
+		this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_2] = component2;
+		this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_3] = component3;
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FLHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by blending the color in {@link #color3FLHSArray_$private$3} with the color in {@link #color3FRHSArray_$private$3} using the factors {@code tComponent1}, {@code tComponent2} and {@code tComponent3}, respectively.
+	 * 
+	 * @param tComponent1 the factor to use for component 1 in the blending process
+	 * @param tComponent2 the factor to use for component 2 in the blending process
+	 * @param tComponent3 the factor to use for component 3 in the blending process
+	 */
+	protected final void color3FLHSSetBlend(final float tComponent1, final float tComponent2, final float tComponent3) {
+		final float colorLHSComponent1 = color3FLHSGetComponent1();
+		final float colorLHSComponent2 = color3FLHSGetComponent2();
+		final float colorLHSComponent3 = color3FLHSGetComponent3();
+		
+		final float colorRHSComponent1 = color3FRHSGetComponent1();
+		final float colorRHSComponent2 = color3FRHSGetComponent2();
+		final float colorRHSComponent3 = color3FRHSGetComponent3();
+		
+		final float component1 = lerp(colorLHSComponent1, colorRHSComponent1, tComponent1);
+		final float component2 = lerp(colorLHSComponent2, colorRHSComponent2, tComponent2);
+		final float component3 = lerp(colorLHSComponent3, colorRHSComponent3, tComponent3);
+		
+		color3FLHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FRHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed using the color represented by {@code component1}, {@code component2} and {@code component3}.
+	 * 
+	 * @param component1 the value of component 1 of the color
+	 * @param component2 the value of component 2 of the color
+	 * @param component3 the value of component 3 of the color
+	 */
+	protected final void color3FRHSSet(final float component1, final float component2, final float component3) {
+		this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1] = component1;
+		this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2] = component2;
+		this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3] = component3;
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FRHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by blending the color in {@link #color3FLHSArray_$private$3} with the color in {@link #color3FRHSArray_$private$3} using the factors {@code tComponent1}, {@code tComponent2} and {@code tComponent3}, respectively.
+	 * 
+	 * @param tComponent1 the factor to use for component 1 in the blending process
+	 * @param tComponent2 the factor to use for component 2 in the blending process
+	 * @param tComponent3 the factor to use for component 3 in the blending process
+	 */
+	protected final void color3FRHSSetBlend(final float tComponent1, final float tComponent2, final float tComponent3) {
+		final float colorLHSComponent1 = color3FLHSGetComponent1();
+		final float colorLHSComponent2 = color3FLHSGetComponent2();
+		final float colorLHSComponent3 = color3FLHSGetComponent3();
+		
+		final float colorRHSComponent1 = color3FRHSGetComponent1();
+		final float colorRHSComponent2 = color3FRHSGetComponent2();
+		final float colorRHSComponent3 = color3FRHSGetComponent3();
+		
+		final float component1 = lerp(colorLHSComponent1, colorRHSComponent1, tComponent1);
+		final float component2 = lerp(colorLHSComponent2, colorRHSComponent2, tComponent2);
+		final float component3 = lerp(colorLHSComponent3, colorRHSComponent3, tComponent3);
+		
+		color3FLHSSet(component1, component2, component3);
 	}
 	
 	/**

@@ -67,22 +67,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private int doCalculateEmittanceForPrimitiveIndex(final int primitiveIndex) {
-		if(primitiveIndex == 0) {
-			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
-		} else if(primitiveIndex == 1) {
-			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
-		} else if(primitiveIndex == 2) {
-			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
-		} else if(primitiveIndex == 3) {
-			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
-		} else if(primitiveIndex == 4) {
-			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
-		} else {
-			return colorRGBFloatToRGBInt(0.0F, 0.0F, 0.0F);
-		}
-	}
-	
 	@SuppressWarnings("static-method")
 	private int doCalculateMaterialForPrimitiveIndex(final int primitiveIndex) {
 		if(primitiveIndex == 0) {
@@ -100,19 +84,36 @@ public final class GPURenderer extends AbstractGPURenderer {
 		}
 	}
 	
-	private int doCalculateReflectanceForPrimitiveIndex(final int primitiveIndex) {
-		if(primitiveIndex == 0) {
-			return colorRGBFloatToRGBInt(1.0F, 0.01F, 0.01F);
-		} else if(primitiveIndex == 1) {
-			return colorRGBFloatToRGBInt(1.0F, 1.0F, 1.0F);
-		} else if(primitiveIndex == 2) {
-			return colorRGBFloatToRGBInt(0.1F, 1.0F, 0.1F);
-		} else if(primitiveIndex == 3) {
-			return colorRGBFloatToRGBInt(0.5F, 0.5F, 0.5F);
-		} else if(primitiveIndex == 4) {
-			return colorRGBFloatToRGBInt(0.1F, 0.1F, 1.0F);
+	private void doComputeEmittanceForPrimitive(final int primitiveIndex) {
+		if(primitiveIndex == 5) {
+			color3FLHSSet(12.0F, 12.0F, 12.0F);
 		} else {
-			return colorRGBFloatToRGBInt(0.5F, 0.5F, 0.5F);
+			color3FLHSSet(0.0F, 0.0F, 0.0F);
+		}
+	}
+	
+	private void doComputeReflectanceForPrimitive(final int primitiveIndex) {
+		if(primitiveIndex == 0) {
+//			Blend Texture:
+//			color3FLHSSetTextureBullseye(1.0F, 0.1F, 0.1F, 0.5F, 0.5F, 0.5F, 0.0F, 10.0F, 0.0F, 2.0F);
+//			color3FRHSSetTextureCheckerboard(1.0F, 0.1F, 0.1F, 0.5F, 0.5F, 0.5F, 90.0F, 5.0F, 5.0F);
+//			color3FLHSSetTextureBlend(0.5F, 0.5F, 0.5F);
+			
+//			Bullseye Texture:
+//			color3FLHSSetTextureBullseye(1.0F, 0.1F, 0.1F, 0.5F, 0.5F, 0.5F, 0.0F, 10.0F, 0.0F, 2.0F);
+			
+//			Checkerboard Texture:
+			color3FLHSSetTextureCheckerboard(1.0F, 0.1F, 0.1F, 0.5F, 0.5F, 0.5F, 90.0F, 5.0F, 5.0F);
+		} else if(primitiveIndex == 1) {
+			color3FLHSSetTextureConstant(1.0F, 1.0F, 1.0F);
+		} else if(primitiveIndex == 2) {
+			color3FLHSSetTextureConstant(0.1F, 1.0F, 0.1F);
+		} else if(primitiveIndex == 3) {
+			color3FLHSSetTextureConstant(0.5F, 0.5F, 0.5F);
+		} else if(primitiveIndex == 4) {
+			color3FLHSSetTextureConstant(0.1F, 0.1F, 1.0F);
+		} else {
+			color3FLHSSetTextureConstant(0.5F, 0.5F, 0.5F);
 		}
 	}
 	
@@ -173,17 +174,19 @@ public final class GPURenderer extends AbstractGPURenderer {
 					final float directionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 					final float directionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
 					
-					final int emittanceRGB = doCalculateEmittanceForPrimitiveIndex(primitiveIndex);
 					final int material = doCalculateMaterialForPrimitiveIndex(primitiveIndex);
-					final int reflectanceRGB = doCalculateReflectanceForPrimitiveIndex(primitiveIndex);
 					
-					float emittanceR = colorRGBIntToRFloat(emittanceRGB);
-					float emittanceG = colorRGBIntToGFloat(emittanceRGB);
-					float emittanceB = colorRGBIntToBFloat(emittanceRGB);
+					doComputeEmittanceForPrimitive(primitiveIndex);
 					
-					final float reflectanceR = colorRGBIntToRFloat(reflectanceRGB);
-					final float reflectanceG = colorRGBIntToGFloat(reflectanceRGB);
-					final float reflectanceB = colorRGBIntToBFloat(reflectanceRGB);
+					final float emittanceR = color3FLHSGetComponent1();
+					final float emittanceG = color3FLHSGetComponent2();
+					final float emittanceB = color3FLHSGetComponent3();
+					
+					doComputeReflectanceForPrimitive(primitiveIndex);
+					
+					final float reflectanceR = color3FLHSGetComponent1();
+					final float reflectanceG = color3FLHSGetComponent2();
+					final float reflectanceB = color3FLHSGetComponent3();
 					
 					final float surfaceNormalX = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 					final float surfaceNormalY = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];

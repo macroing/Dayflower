@@ -334,6 +334,24 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
+	 * Returns the fractional part of {@code value}.
+	 * <p>
+	 * The fractional part of {@code value} is calculated in the following way:
+	 * <pre>
+	 * {@code
+	 * float fractionalPart = value < 0.0F && isUsingCeilOnNegativeValue ? ceil(value) - value : value - floor(value);
+	 * }
+	 * </pre>
+	 * 
+	 * @param value a value
+	 * @param isUsingCeilOnNegativeValue {@code true} if, and only if, {@code Floats.ceil(float)} should be used if {@code value} is negative, {@code false} otherwise
+	 * @return the fractional part of {@code value}
+	 */
+	protected final float fractionalPart(final float value, final boolean isUsingCeilOnNegativeValue) {
+		return value < 0.0F && isUsingCeilOnNegativeValue ? ceil(value) - value : value - floor(value);
+	}
+	
+	/**
 	 * Returns a {@code float} with the amount of light reflected by the surface.
 	 * 
 	 * @param cosThetaI the cosine of the angle made by the incoming direction and the surface normal
@@ -375,6 +393,21 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected final float fresnelDielectricSchlick(final float cosTheta, final float f0) {
 		return f0 + (1.0F - f0) * pow(max(1.0F - cosTheta, 0.0F), 5.0F);
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns the result of the linear interpolation operation.
+	 * 
+	 * @param value0 a {@code float} value
+	 * @param value1 a {@code float} value
+	 * @param t the factor
+	 * @return the result of the linear interpolation operation
+	 */
+	@SuppressWarnings("static-method")
+	protected final float lerp(final float value1, final float value2, final float t) {
+		return (1.0F - t) * value1 + t * value2;
 	}
 	
 	/**
@@ -456,6 +489,18 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected final float random() {
 		return doNext(24) * PRNG_NEXT_FLOAT_RECIPROCAL;
+	}
+	
+	/**
+	 * Returns the remainder of {@code x} and {@code y}.
+	 * 
+	 * @param x the left hand side of the remainder operation
+	 * @param y the right hand side of the remainder operation
+	 * @return the remainder of {@code x} and {@code y}
+	 */
+	@SuppressWarnings("static-method")
+	protected final float remainder(final float x, final float y) {
+		return x - (int)(x / y) * y;
 	}
 	
 	/**

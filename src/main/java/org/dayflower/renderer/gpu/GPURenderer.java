@@ -199,7 +199,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 					radianceG += throughputG * emittanceG;
 					radianceB += throughputB * emittanceB;
 					
-//					The clear coat material is almost identical to the glass material. Instead of combining perfect specular reflection with perfect specular transmission, it combines perfect specular reflection with a diffuse reflection.
+//					The clear coat material is almost identical to the glass material. Instead of combining specular reflection with specular transmission, it combines specular reflection with diffuse reflection.
 					if(material == MATERIAL_CLEAR_COAT) {
 						final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
 						
@@ -217,7 +217,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 						final boolean isTotalInternalReflection = sinThetaTSquared < 0.0F;
 						
 						if(isTotalInternalReflection) {
-							vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+							vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 						}
 						
 						if(!isTotalInternalReflection) {
@@ -244,7 +244,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 							final boolean isTransmission = !isReflection;
 							
 							if(isReflection) {
-								vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+								vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 								
 								throughputR *= probabilityRussianRouletteReflection;
 								throughputG *= probabilityRussianRouletteReflection;
@@ -252,10 +252,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 							}
 							
 							if(isTransmission) {
-								orthonormalBasis33FSetFromW(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
-								
-								vector3FSetSampleHemisphereCosineDistribution2(random(), random());
-								vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+								vector3FSetDiffuseReflection(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, random(), random());
 								
 								throughputR *= reflectanceR * probabilityRussianRouletteTransmission;
 								throughputG *= reflectanceG * probabilityRussianRouletteTransmission;
@@ -282,7 +279,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 						final boolean isTotalInternalReflection = sinThetaTSquared < 0.0F;
 						
 						if(isTotalInternalReflection) {
-							vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+							vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 							
 							throughputR *= reflectanceR;
 							throughputG *= reflectanceG;
@@ -313,7 +310,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 							final boolean isTransmission = !isReflection;
 							
 							if(isReflection) {
-								vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+								vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 								
 								throughputR *= reflectanceR * probabilityRussianRouletteReflection;
 								throughputG *= reflectanceG * probabilityRussianRouletteReflection;
@@ -330,35 +327,24 @@ public final class GPURenderer extends AbstractGPURenderer {
 						}
 					}
 					
-//					The matte material is implemented by perturbing the correctly oriented surface normal with a direction sampled using a hemisphere cosine distribution. It is an implementation of a diffuse reflection.
 					if(material == MATERIAL_MATTE) {
-						orthonormalBasis33FSetFromW(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
-						
-						vector3FSetSampleHemisphereCosineDistribution2(random(), random());
-						vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+						vector3FSetDiffuseReflection(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, random(), random());
 						
 						throughputR *= reflectanceR;
 						throughputG *= reflectanceG;
 						throughputB *= reflectanceB;
 					}
 					
-//					The metal material is implemented by perturbing the reflection direction with a direction sampled using a hemisphere power cosine distribution. It is an implementation of a glossy reflection.
 					if(material == MATERIAL_METAL) {
-						vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
-						
-						orthonormalBasis33FSetVector3F();
-						
-						vector3FSetSampleHemispherePowerCosineDistribution(random(), random(), 20.0F);
-						vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+						vector3FSetGlossyReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true, random(), random(), 20.0F);
 						
 						throughputR *= reflectanceR;
 						throughputG *= reflectanceG;
 						throughputB *= reflectanceB;
 					}
 					
-//					The mirror material is implemented using perfect specular reflection.
 					if(material == MATERIAL_MIRROR) {
-						vector3FSetReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+						vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 						
 						throughputR *= reflectanceR;
 						throughputG *= reflectanceG;

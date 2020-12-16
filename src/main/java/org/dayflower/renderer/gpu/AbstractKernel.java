@@ -1046,6 +1046,52 @@ public abstract class AbstractKernel extends Kernel {
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
+	 * The vector is constructed by perturbing the normal, which is represented by {@code normalX}, {@code normalY} and {@code normalZ}, with a direction sampled using a hemisphere cosine distribution.
+	 * 
+	 * @param normalX the X-component of the normal vector
+	 * @param normalY the Y-component of the normal vector
+	 * @param normalZ the Z-component of the normal vector
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 */
+	protected final void vector3FSetDiffuseReflection(final float normalX, final float normalY, final float normalZ, final float u, final float v) {
+		orthonormalBasis33FSetFromW(normalX, normalY, normalZ);
+		
+		vector3FSetSampleHemisphereCosineDistribution2(u, v);
+		vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed by perturbing the specular reflection direction with a direction sampled using a hemisphere power-cosine distribution.
+	 * <p>
+	 * The specular reflection direction is constructed by calling {@link #vector3FSetSpecularReflection(float, float, float, float, float, float, boolean)}, with the parameter arguments {@code directionX}, {@code directionY}, {@code directionZ},
+	 * {@code normalX}, {@code normalY}, {@code normalZ} and {@code isFacingSurface}.
+	 * 
+	 * @param directionX the X-component of the direction vector
+	 * @param directionY the Y-component of the direction vector
+	 * @param directionZ the Z-component of the direction vector
+	 * @param normalX the X-component of the normal vector
+	 * @param normalY the Y-component of the normal vector
+	 * @param normalZ the Z-component of the normal vector
+	 * @param isFacingSurface {@code true} if, and only if, the direction vector is facing the surface, {@code false} otherwise
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param exponent the exponent to use
+	 */
+	protected final void vector3FSetGlossyReflection(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final boolean isFacingSurface, final float u, final float v, final float exponent) {
+		vector3FSetSpecularReflection(directionX, directionY, directionZ, normalX, normalY, normalZ, isFacingSurface);
+		
+		orthonormalBasis33FSetVector3F();
+		
+		vector3FSetSampleHemispherePowerCosineDistribution(u, v, exponent);
+		vector3FSetOrthonormalBasis33FTransformNormalizeFromVector3F();
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
 	 * The vector is constructed by transforming the vector represented by {@code component1}, {@code component2} and {@code component3} with the supplied matrix.
 	 * 
 	 * @param element11 the value of the element at row 1 and column 1 in the matrix
@@ -1233,46 +1279,6 @@ public abstract class AbstractKernel extends Kernel {
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
-	 * The vector is constructed as the reflection vector of the direction vector represented by {@code directionX}, {@code directionY} and {@code directionZ} with regards to the normal vector represented by {@code normalX}, {@code normalY} and
-	 * {@code normalZ}.
-	 * <p>
-	 * If {@code isFacingSurface} is {@code true}, it is assumed that the direction vector is facing the surface. This is usually the case for the direction of a ray that intersects the surface. If {@code isFacingSurface} is {@code false}, it is
-	 * assumed that the direction vector is pointing in the opposite direction. That is, the ray starts at the surface intersection point and is directed away from the surface.
-	 * 
-	 * @param directionX the X-component of the direction vector
-	 * @param directionY the Y-component of the direction vector
-	 * @param directionZ the Z-component of the direction vector
-	 * @param normalX the X-component of the normal vector
-	 * @param normalY the Y-component of the normal vector
-	 * @param normalZ the Z-component of the normal vector
-	 * @param isFacingSurface {@code true} if, and only if, the direction vector is facing the surface, {@code false} otherwise
-	 */
-	protected final void vector3FSetReflection(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final boolean isFacingSurface) {
-		final float directionDotNormal = vector3FDotProduct(directionX, directionY, directionZ, normalX, normalY, normalZ);
-		final float directionDotNormalMultipliedByTwo = directionDotNormal * 2.0F;
-		
-		if(isFacingSurface) {
-			final float reflectionX = directionX - normalX * directionDotNormalMultipliedByTwo;
-			final float reflectionY = directionY - normalY * directionDotNormalMultipliedByTwo;
-			final float reflectionZ = directionZ - normalZ * directionDotNormalMultipliedByTwo;
-			
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = reflectionX;
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = reflectionY;
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = reflectionZ;
-		} else {
-			final float reflectionX = normalX * directionDotNormalMultipliedByTwo - directionX;
-			final float reflectionY = normalY * directionDotNormalMultipliedByTwo - directionY;
-			final float reflectionZ = normalZ * directionDotNormalMultipliedByTwo - directionZ;
-			
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = reflectionX;
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = reflectionY;
-			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = reflectionZ;
-		}
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
 	 * The vector is constructed by sampling a direction on a hemisphere with a cosine distribution.
 	 * 
 	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
@@ -1335,6 +1341,46 @@ public abstract class AbstractKernel extends Kernel {
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed as the specular reflection vector of the direction vector represented by {@code directionX}, {@code directionY} and {@code directionZ} with regards to the normal vector represented by {@code normalX}, {@code normalY}
+	 * and {@code normalZ}.
+	 * <p>
+	 * If {@code isFacingSurface} is {@code true}, it is assumed that the direction vector is facing the surface. This is usually the case for the direction of a ray that intersects the surface. If {@code isFacingSurface} is {@code false}, it is
+	 * assumed that the direction vector is pointing in the opposite direction. That is, the ray starts at the surface intersection point and is directed away from the surface.
+	 * 
+	 * @param directionX the X-component of the direction vector
+	 * @param directionY the Y-component of the direction vector
+	 * @param directionZ the Z-component of the direction vector
+	 * @param normalX the X-component of the normal vector
+	 * @param normalY the Y-component of the normal vector
+	 * @param normalZ the Z-component of the normal vector
+	 * @param isFacingSurface {@code true} if, and only if, the direction vector is facing the surface, {@code false} otherwise
+	 */
+	protected final void vector3FSetSpecularReflection(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final boolean isFacingSurface) {
+		final float directionDotNormal = vector3FDotProduct(directionX, directionY, directionZ, normalX, normalY, normalZ);
+		final float directionDotNormalMultipliedByTwo = directionDotNormal * 2.0F;
+		
+		if(isFacingSurface) {
+			final float reflectionX = directionX - normalX * directionDotNormalMultipliedByTwo;
+			final float reflectionY = directionY - normalY * directionDotNormalMultipliedByTwo;
+			final float reflectionZ = directionZ - normalZ * directionDotNormalMultipliedByTwo;
+			
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = reflectionX;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = reflectionY;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = reflectionZ;
+		} else {
+			final float reflectionX = normalX * directionDotNormalMultipliedByTwo - directionX;
+			final float reflectionY = normalY * directionDotNormalMultipliedByTwo - directionY;
+			final float reflectionZ = normalZ * directionDotNormalMultipliedByTwo - directionZ;
+			
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = reflectionX;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = reflectionY;
+			this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = reflectionZ;
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

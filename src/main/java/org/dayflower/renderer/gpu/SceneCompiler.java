@@ -19,8 +19,11 @@
 package org.dayflower.renderer.gpu;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Shape3F;
@@ -44,103 +47,175 @@ import org.dayflower.scene.texture.ImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
+import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.util.Floats;
 import org.dayflower.util.Lists;
 
 final class SceneCompiler {
-	private SceneCompiler() {
-		
+	private final AtomicLong timeMillis;
+	private final AtomicReference<CompiledScene> compiledScene;
+	private final List<AxisAlignedBoundingBox3F> distinctAxisAlignedBoundingBoxes;
+	private final List<BlendTexture> distinctBlendTextures;
+	private final List<BoundingSphere3F> distinctBoundingSpheres;
+	private final List<BoundingVolume3F> distinctBoundingVolumes;
+	private final List<BullseyeTexture> distinctBullseyeTextures;
+	private final List<CheckerboardTexture> distinctCheckerboardTextures;
+	private final List<ConstantTexture> distinctConstantTextures;
+	private final List<FunctionTexture> distinctFunctionTextures;
+	private final List<ImageTexture> distinctImageTextures;
+	private final List<InfiniteBoundingVolume3F> distinctInfiniteBoundingVolumes;
+	private final List<MarbleTexture> distinctMarbleTextures;
+	private final List<Plane3F> distinctPlanes;
+	private final List<Primitive> filteredPrimitives;
+	private final List<RectangularCuboid3F> distinctRectangularCuboids;
+	private final List<Shape3F> distinctShapes;
+	private final List<SimplexFractionalBrownianMotionTexture> distinctSimplexFractionalBrownianMotionTextures;
+	private final List<Sphere3F> distinctSpheres;
+	private final List<SurfaceNormalTexture> distinctSurfaceNormalTextures;
+	private final List<Torus3F> distinctToruses;
+	private final List<Triangle3F> distinctTriangles;
+	private final List<UVTexture> distinctUVTextures;
+	private final Map<AxisAlignedBoundingBox3F, Integer> distinctToOffsetsAxisAlignedBoundingBoxes;
+	private final Map<BlendTexture, Integer> distinctToOffsetsBlendTextures;
+	private final Map<BoundingSphere3F, Integer> distinctToOffsetsBoundingSpheres;
+	private final Map<BullseyeTexture, Integer> distinctToOffsetsBullseyeTextures;
+	private final Map<CheckerboardTexture, Integer> distinctToOffsetsCheckerboardTextures;
+	private final Map<ConstantTexture, Integer> distinctToOffsetsConstantTextures;
+	private final Map<ImageTexture, Integer> distinctToOffsetsImageTextures;
+	private final Map<MarbleTexture, Integer> distinctToOffsetsMarbleTextures;
+	private final Map<Plane3F, Integer> distinctToOffsetsPlanes;
+	private final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids;
+	private final Map<SimplexFractionalBrownianMotionTexture, Integer> distinctToOffsetsSimplexFractionalBrownianMotionTextures;
+	private final Map<Sphere3F, Integer> distinctToOffsetsSpheres;
+	private final Map<Torus3F, Integer> distinctToOffsetsToruses;
+	private final Map<Triangle3F, Integer> distinctToOffsetsTriangles;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public SceneCompiler() {
+		this.timeMillis = new AtomicLong();
+		this.compiledScene = new AtomicReference<>();
+		this.distinctAxisAlignedBoundingBoxes = new ArrayList<>();
+		this.distinctBlendTextures = new ArrayList<>();
+		this.distinctBoundingSpheres = new ArrayList<>();
+		this.distinctBoundingVolumes = new ArrayList<>();
+		this.distinctBullseyeTextures = new ArrayList<>();
+		this.distinctCheckerboardTextures = new ArrayList<>();
+		this.distinctConstantTextures = new ArrayList<>();
+		this.distinctFunctionTextures = new ArrayList<>();
+		this.distinctImageTextures = new ArrayList<>();
+		this.distinctInfiniteBoundingVolumes = new ArrayList<>();
+		this.distinctMarbleTextures = new ArrayList<>();
+		this.distinctPlanes = new ArrayList<>();
+		this.filteredPrimitives = new ArrayList<>();
+		this.distinctRectangularCuboids = new ArrayList<>();
+		this.distinctShapes = new ArrayList<>();
+		this.distinctSimplexFractionalBrownianMotionTextures = new ArrayList<>();
+		this.distinctSpheres = new ArrayList<>();
+		this.distinctSurfaceNormalTextures = new ArrayList<>();
+		this.distinctToruses = new ArrayList<>();
+		this.distinctTriangles = new ArrayList<>();
+		this.distinctUVTextures = new ArrayList<>();
+		this.distinctToOffsetsAxisAlignedBoundingBoxes = new LinkedHashMap<>();
+		this.distinctToOffsetsBlendTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsBoundingSpheres = new LinkedHashMap<>();
+		this.distinctToOffsetsBullseyeTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsCheckerboardTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsConstantTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsImageTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsMarbleTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsPlanes = new LinkedHashMap<>();
+		this.distinctToOffsetsRectangularCuboids = new LinkedHashMap<>();
+		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsSpheres = new LinkedHashMap<>();
+		this.distinctToOffsetsToruses = new LinkedHashMap<>();
+		this.distinctToOffsetsTriangles = new LinkedHashMap<>();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static CompiledScene compile(final Scene scene) {
-		System.out.println("Compiling...");
+	public CompiledScene compile(final Scene scene) {
+		doReportInit();
+		doSetCurrentTimeMillis();
+		doClear();
+		doFilterAllDistinctBoundingVolumes(scene);
+		doFilterAllDistinctShapes(scene);
+		doFilterAllDistinctTextures(scene);
+		doFilterPrimitives(scene);
+		doMapAllDistinctBoundingVolumes();
+		doMapAllDistinctShapes();
+		doMapAllDistinctTextures();
+		doBuildCompiledScene(scene);
+		doClear();
+		doSetElapsedTimeMillis();
+		doReportDone();
 		
-		final long currentTimeMillis = System.currentTimeMillis();
-		
-//		Retrieve Lists for all distinct BoundingVolume3F instances:
-		final List<AxisAlignedBoundingBox3F> distinctAxisAlignedBoundingBoxes = NodeFilter.filterAllDistinct(scene, AxisAlignedBoundingBox3F.class);
-		final List<BoundingSphere3F> distinctBoundingSpheres = NodeFilter.filterAllDistinct(scene, BoundingSphere3F.class);
-		final List<InfiniteBoundingVolume3F> distinctInfiniteBoundingVolumes = NodeFilter.filterAllDistinct(scene, InfiniteBoundingVolume3F.class);
-		final List<BoundingVolume3F> distinctBoundingVolumes = Lists.merge(distinctAxisAlignedBoundingBoxes, distinctBoundingSpheres, distinctInfiniteBoundingVolumes);
-		
-//		Retrieve Lists for all distinct Shape3F instances:
-		final List<Plane3F> distinctPlanes = NodeFilter.filterAllDistinct(scene, Plane3F.class);
-		final List<RectangularCuboid3F> distinctRectangularCuboids = NodeFilter.filterAllDistinct(scene, RectangularCuboid3F.class);
-		final List<Sphere3F> distinctSpheres = NodeFilter.filterAllDistinct(scene, Sphere3F.class);
-		final List<Torus3F> distinctToruses = NodeFilter.filterAllDistinct(scene, Torus3F.class);
-		final List<Triangle3F> distinctTriangles = NodeFilter.filterAllDistinct(scene, Triangle3F.class);
-		final List<Shape3F> distinctShapes = Lists.merge(distinctPlanes, distinctRectangularCuboids, distinctSpheres, distinctToruses, distinctTriangles);
-		
-//		Retrieve Lists for all distinct Texture instances:
-		final List<BlendTexture> distinctBlendTextures = NodeFilter.filterAllDistinct(scene, BlendTexture.class);
-		final List<BullseyeTexture> distinctBullseyeTextures = NodeFilter.filterAllDistinct(scene, BullseyeTexture.class);
-		final List<CheckerboardTexture> distinctCheckerboardTextures = NodeFilter.filterAllDistinct(scene, CheckerboardTexture.class);
-		final List<ConstantTexture> distinctConstantTextures = NodeFilter.filterAllDistinct(scene, ConstantTexture.class);
-		final List<FunctionTexture> distinctFunctionTextures = NodeFilter.filterAllDistinct(scene, FunctionTexture.class);
-		final List<ImageTexture> distinctImageTextures = NodeFilter.filterAllDistinct(scene, ImageTexture.class);
-		final List<MarbleTexture> distinctMarbleTextures = NodeFilter.filterAllDistinct(scene, MarbleTexture.class);
-		final List<SimplexFractionalBrownianMotionTexture> distinctSimplexFractionalBrownianMotionTextures = NodeFilter.filterAllDistinct(scene, SimplexFractionalBrownianMotionTexture.class);
-		final List<SurfaceNormalTexture> distinctSurfaceNormalTextures = NodeFilter.filterAllDistinct(scene, SurfaceNormalTexture.class);
-		final List<UVTexture> distinctUVTextures = NodeFilter.filterAllDistinct(scene, UVTexture.class);
-		
-//		Retrieve a List of filtered Primitive instances:
-		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctBoundingVolumes, distinctShapes);
-		
-//		Retrieve index mappings for all distinct BoundingVolume3F instances:
-		final Map<AxisAlignedBoundingBox3F, Integer> distinctToOffsetsAxisAlignedBoundingBoxes = NodeFilter.mapDistinctToOffsets(distinctAxisAlignedBoundingBoxes, AxisAlignedBoundingBox3F.ARRAY_SIZE);
-		final Map<BoundingSphere3F, Integer> distinctToOffsetsBoundingSpheres = NodeFilter.mapDistinctToOffsets(distinctBoundingSpheres, BoundingSphere3F.ARRAY_SIZE);
-		
-//		Retrieve index mappings for all distinct Shape3F instances:
-		final Map<Plane3F, Integer> distinctToOffsetsPlanes = NodeFilter.mapDistinctToOffsets(distinctPlanes, Plane3F.ARRAY_SIZE);
-		final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids = NodeFilter.mapDistinctToOffsets(distinctRectangularCuboids, RectangularCuboid3F.ARRAY_SIZE);
-		final Map<Sphere3F, Integer> distinctToOffsetsSpheres = NodeFilter.mapDistinctToOffsets(distinctSpheres, Sphere3F.ARRAY_SIZE);
-		final Map<Torus3F, Integer> distinctToOffsetsToruses = NodeFilter.mapDistinctToOffsets(distinctToruses, Torus3F.ARRAY_SIZE);
-		final Map<Triangle3F, Integer> distinctToOffsetsTriangles = NodeFilter.mapDistinctToOffsets(distinctTriangles, Triangle3F.ARRAY_SIZE);
-		
-//		Retrieve index mappings for all distinct Texture instances:
-		final Map<BlendTexture, Integer> distinctToOffsetsBlendTextures = NodeFilter.mapDistinctToOffsets(distinctBlendTextures, BlendTexture.ARRAY_SIZE);
-		final Map<BullseyeTexture, Integer> distinctToOffsetsBullseyeTextures = NodeFilter.mapDistinctToOffsets(distinctBullseyeTextures, BullseyeTexture.ARRAY_SIZE);
-		final Map<CheckerboardTexture, Integer> distinctToOffsetsCheckerboardTextures = NodeFilter.mapDistinctToOffsets(distinctCheckerboardTextures, CheckerboardTexture.ARRAY_SIZE);
-		final Map<ConstantTexture, Integer> distinctToOffsetsConstantTextures = NodeFilter.mapDistinctToOffsets(distinctConstantTextures, ConstantTexture.ARRAY_SIZE);
-		final Map<ImageTexture, Integer> distinctToOffsetsImageTextures = NodeFilter.mapDistinctToOffsets(distinctImageTextures, imageTexture -> imageTexture.getArraySize());
-		final Map<MarbleTexture, Integer> distinctToOffsetsMarbleTextures = NodeFilter.mapDistinctToOffsets(distinctMarbleTextures, MarbleTexture.ARRAY_SIZE);
-		final Map<SimplexFractionalBrownianMotionTexture, Integer> distinctToOffsetsSimplexFractionalBrownianMotionTextures = NodeFilter.mapDistinctToOffsets(distinctSimplexFractionalBrownianMotionTextures, SimplexFractionalBrownianMotionTexture.ARRAY_SIZE);
-		
+		return this.compiledScene.getAndSet(null);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private int doFindTextureOffset(final Texture texture) {
+		if(texture instanceof BlendTexture) {
+			return this.distinctToOffsetsBlendTextures.get(BlendTexture.class.cast(texture)).intValue();
+		} else if(texture instanceof BullseyeTexture) {
+			return this.distinctToOffsetsBullseyeTextures.get(BullseyeTexture.class.cast(texture)).intValue();
+		} else if(texture instanceof CheckerboardTexture) {
+			return this.distinctToOffsetsCheckerboardTextures.get(CheckerboardTexture.class.cast(texture)).intValue();
+		} else if(texture instanceof ConstantTexture) {
+			return this.distinctToOffsetsConstantTextures.get(ConstantTexture.class.cast(texture)).intValue();
+		} else if(texture instanceof FunctionTexture) {
+			return 0;
+		} else if(texture instanceof ImageTexture) {
+			return this.distinctToOffsetsImageTextures.get(ImageTexture.class.cast(texture)).intValue();
+		} else if(texture instanceof MarbleTexture) {
+			return this.distinctToOffsetsMarbleTextures.get(MarbleTexture.class.cast(texture)).intValue();
+		} else if(texture instanceof SimplexFractionalBrownianMotionTexture) {
+			return this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.get(SimplexFractionalBrownianMotionTexture.class.cast(texture)).intValue();
+		} else if(texture instanceof SurfaceNormalTexture) {
+			return 0;
+		} else if(texture instanceof UVTexture) {
+			return 0;
+		} else {
+			return 0;
+		}
+	}
+	
+	private void doBuildCompiledScene(final Scene scene) {
 //		Retrieve the float[] for all BoundingVolume3F instances:
-		final float[] boundingVolume3FAxisAlignedBoundingBox3FArray = Floats.toArray(distinctAxisAlignedBoundingBoxes, axisAlignedBoundingBox -> axisAlignedBoundingBox.toArray(), 1);
-		final float[] boundingVolume3FBoundingSphere3FArray = Floats.toArray(distinctBoundingSpheres, boundingSphere -> boundingSphere.toArray(), 1);
+		final float[] boundingVolume3FAxisAlignedBoundingBox3FArray = Floats.toArray(this.distinctAxisAlignedBoundingBoxes, axisAlignedBoundingBox -> axisAlignedBoundingBox.toArray(), 1);
+		final float[] boundingVolume3FBoundingSphere3FArray = Floats.toArray(this.distinctBoundingSpheres, boundingSphere -> boundingSphere.toArray(), 1);
 		
 //		Retrieve the float[] for the Camera instance:
 		final float[] cameraArray = scene.getCamera().toArray();
 		
 //		Retrieve the float[] for the Matrix44F instances:
-		final float[] matrix44FArray = doCreateMatrix44FArray(filteredPrimitives);
+		final float[] matrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> primitive.getTransform().toArray(), 1);
 		
 //		Retrieve the float[] for all Shape3F instances:
-		final float[] shape3FPlane3FArray = Floats.toArray(distinctPlanes, plane -> plane.toArray(), 1);
-		final float[] shape3FRectangularCuboid3FArray = Floats.toArray(distinctRectangularCuboids, rectangularCuboid -> rectangularCuboid.toArray(), 1);
-		final float[] shape3FSphere3FArray = Floats.toArray(distinctSpheres, sphere -> sphere.toArray(), 1);
-		final float[] shape3FTorus3FArray = Floats.toArray(distinctToruses, torus -> torus.toArray(), 1);
-		final float[] shape3FTriangle3FArray = Floats.toArray(distinctTriangles, triangle -> triangle.toArray(), 1);
+		final float[] shape3FPlane3FArray = Floats.toArray(this.distinctPlanes, plane -> plane.toArray(), 1);
+		final float[] shape3FRectangularCuboid3FArray = Floats.toArray(this.distinctRectangularCuboids, rectangularCuboid -> rectangularCuboid.toArray(), 1);
+		final float[] shape3FSphere3FArray = Floats.toArray(this.distinctSpheres, sphere -> sphere.toArray(), 1);
+		final float[] shape3FTorus3FArray = Floats.toArray(this.distinctToruses, torus -> torus.toArray(), 1);
+		final float[] shape3FTriangle3FArray = Floats.toArray(this.distinctTriangles, triangle -> triangle.toArray(), 1);
 		
 //		Retrieve the float[] for all Texture instances:
-		final float[] textureBlendTextureArray = Floats.toArray(distinctBlendTextures, blendTexture -> blendTexture.toArray(), 1);
-		final float[] textureBullseyeTextureArray = Floats.toArray(distinctBullseyeTextures, bullseyeTexture -> bullseyeTexture.toArray(), 1);
-		final float[] textureCheckerboardTextureArray = Floats.toArray(distinctCheckerboardTextures, checkerboardTexture -> checkerboardTexture.toArray(), 1);
-		final float[] textureConstantTextureArray = Floats.toArray(distinctConstantTextures, constantTexture -> constantTexture.toArray(), 1);
-		final float[] textureImageTextureArray = Floats.toArray(distinctImageTextures, imageTexture -> imageTexture.toArray(), 1);
-		final float[] textureMarbleTextureArray = Floats.toArray(distinctMarbleTextures, marbleTexture -> marbleTexture.toArray(), 1);
-		final float[] textureSimplexFractionalBrownianMotionTextureArray = Floats.toArray(distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> simplexFractionalBrownianMotionTexture.toArray(), 1);
+		final float[] textureBlendTextureArray = Floats.toArray(this.distinctBlendTextures, blendTexture -> blendTexture.toArray(), 1);
+		final float[] textureBullseyeTextureArray = Floats.toArray(this.distinctBullseyeTextures, bullseyeTexture -> bullseyeTexture.toArray(), 1);
+		final float[] textureCheckerboardTextureArray = Floats.toArray(this.distinctCheckerboardTextures, checkerboardTexture -> checkerboardTexture.toArray(), 1);
+		final float[] textureConstantTextureArray = Floats.toArray(this.distinctConstantTextures, constantTexture -> constantTexture.toArray(), 1);
+		final float[] textureImageTextureArray = Floats.toArray(this.distinctImageTextures, imageTexture -> imageTexture.toArray(), 1);
+		final float[] textureMarbleTextureArray = Floats.toArray(this.distinctMarbleTextures, marbleTexture -> marbleTexture.toArray(), 1);
+		final float[] textureSimplexFractionalBrownianMotionTextureArray = Floats.toArray(this.distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> simplexFractionalBrownianMotionTexture.toArray(), 1);
 		
 //		Retrieve the int[] for all primitives:
-		final int[] primitiveArray = Primitive.toArray(filteredPrimitives);
+		final int[] primitiveArray = Primitive.toArray(this.filteredPrimitives);
 		
 //		Populate the float[] or int[] with data:
-		doPopulatePrimitiveArrayWithBoundingVolumes(filteredPrimitives, distinctToOffsetsAxisAlignedBoundingBoxes, distinctToOffsetsBoundingSpheres, primitiveArray);
-		doPopulatePrimitiveArrayWithShapes(filteredPrimitives, distinctToOffsetsPlanes, distinctToOffsetsRectangularCuboids, distinctToOffsetsSpheres, distinctToOffsetsToruses, distinctToOffsetsTriangles, primitiveArray);
+		doPopulatePrimitiveArrayWithBoundingVolumes(primitiveArray);
+		doPopulatePrimitiveArrayWithShapes(primitiveArray);
+		doPopulateTextureBlendTextureArrayWithTextures(textureBlendTextureArray);
 		
 		final
 		CompiledScene compiledScene = new CompiledScene();
@@ -155,36 +230,116 @@ final class SceneCompiler {
 		compiledScene.setShape3FTorus3FArray(shape3FTorus3FArray);
 		compiledScene.setShape3FTriangle3FArray(shape3FTriangle3FArray);
 		
-		final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
-		
-		System.out.println("- Compilation took " + elapsedTimeMillis + " milliseconds.");
-		
-		return compiledScene;
+		this.compiledScene.set(compiledScene);
 	}
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static List<Primitive> doFilterPrimitives(final Scene scene, final List<BoundingVolume3F> distinctBoundingVolumes, final List<Shape3F> distinctShapes) {
-		return scene.getPrimitives().stream().filter(primitive -> distinctBoundingVolumes.contains(primitive.getBoundingVolume()) && distinctShapes.contains(primitive.getShape())).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+	private void doClear() {
+		this.distinctAxisAlignedBoundingBoxes.clear();
+		this.distinctBlendTextures.clear();
+		this.distinctBoundingSpheres.clear();
+		this.distinctBoundingVolumes.clear();
+		this.distinctBullseyeTextures.clear();
+		this.distinctCheckerboardTextures.clear();
+		this.distinctConstantTextures.clear();
+		this.distinctFunctionTextures.clear();
+		this.distinctImageTextures.clear();
+		this.distinctInfiniteBoundingVolumes.clear();
+		this.distinctMarbleTextures.clear();
+		this.distinctPlanes.clear();
+		this.filteredPrimitives.clear();
+		this.distinctRectangularCuboids.clear();
+		this.distinctShapes.clear();
+		this.distinctSimplexFractionalBrownianMotionTextures.clear();
+		this.distinctSpheres.clear();
+		this.distinctSurfaceNormalTextures.clear();
+		this.distinctToruses.clear();
+		this.distinctTriangles.clear();
+		this.distinctUVTextures.clear();
+		this.distinctToOffsetsAxisAlignedBoundingBoxes.clear();
+		this.distinctToOffsetsBlendTextures.clear();
+		this.distinctToOffsetsBoundingSpheres.clear();
+		this.distinctToOffsetsBullseyeTextures.clear();
+		this.distinctToOffsetsCheckerboardTextures.clear();
+		this.distinctToOffsetsConstantTextures.clear();
+		this.distinctToOffsetsImageTextures.clear();
+		this.distinctToOffsetsMarbleTextures.clear();
+		this.distinctToOffsetsPlanes.clear();
+		this.distinctToOffsetsRectangularCuboids.clear();
+		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
+		this.distinctToOffsetsSpheres.clear();
+		this.distinctToOffsetsToruses.clear();
+		this.distinctToOffsetsTriangles.clear();
 	}
 	
-	private static float[] doCreateMatrix44FArray(final List<Primitive> primitives) {
-		return Floats.toArray(primitives, primitive -> primitive.getTransform().toArray(), 1);
+	private void doFilterAllDistinctBoundingVolumes(final Scene scene) {
+		this.distinctAxisAlignedBoundingBoxes.addAll(NodeFilter.filterAllDistinct(scene, AxisAlignedBoundingBox3F.class));
+		this.distinctBoundingSpheres.addAll(NodeFilter.filterAllDistinct(scene, BoundingSphere3F.class));
+		this.distinctInfiniteBoundingVolumes.addAll(NodeFilter.filterAllDistinct(scene, InfiniteBoundingVolume3F.class));
+		this.distinctBoundingVolumes.addAll(Lists.merge(this.distinctAxisAlignedBoundingBoxes, this.distinctBoundingSpheres, this.distinctInfiniteBoundingVolumes));
 	}
 	
-	private static void doPopulatePrimitiveArrayWithBoundingVolumes(final List<Primitive> primitives, final Map<AxisAlignedBoundingBox3F, Integer> distinctToOffsetsAxisAlignedBoundingBoxes, final Map<BoundingSphere3F, Integer> distinctToOffsetsBoundingSpheres, final int[] primitiveArray) {
-		for(int i = 0; i < primitives.size(); i++) {
-			final Primitive primitive = primitives.get(i);
+	private void doFilterAllDistinctShapes(final Scene scene) {
+		this.distinctPlanes.addAll(NodeFilter.filterAllDistinct(scene, Plane3F.class));
+		this.distinctRectangularCuboids.addAll(NodeFilter.filterAllDistinct(scene, RectangularCuboid3F.class));
+		this.distinctSpheres.addAll(NodeFilter.filterAllDistinct(scene, Sphere3F.class));
+		this.distinctToruses.addAll(NodeFilter.filterAllDistinct(scene, Torus3F.class));
+		this.distinctTriangles.addAll(NodeFilter.filterAllDistinct(scene, Triangle3F.class));
+		this.distinctShapes.addAll(Lists.merge(this.distinctPlanes, this.distinctRectangularCuboids, this.distinctSpheres, this.distinctToruses, this.distinctTriangles));
+	}
+	
+	private void doFilterAllDistinctTextures(final Scene scene) {
+		this.distinctBlendTextures.addAll(NodeFilter.filterAllDistinct(scene, BlendTexture.class));
+		this.distinctBullseyeTextures.addAll(NodeFilter.filterAllDistinct(scene, BullseyeTexture.class));
+		this.distinctCheckerboardTextures.addAll(NodeFilter.filterAllDistinct(scene, CheckerboardTexture.class));
+		this.distinctConstantTextures.addAll(NodeFilter.filterAllDistinct(scene, ConstantTexture.class));
+		this.distinctFunctionTextures.addAll(NodeFilter.filterAllDistinct(scene, FunctionTexture.class));
+		this.distinctImageTextures.addAll(NodeFilter.filterAllDistinct(scene, ImageTexture.class));
+		this.distinctMarbleTextures.addAll(NodeFilter.filterAllDistinct(scene, MarbleTexture.class));
+		this.distinctSimplexFractionalBrownianMotionTextures.addAll(NodeFilter.filterAllDistinct(scene, SimplexFractionalBrownianMotionTexture.class));
+		this.distinctSurfaceNormalTextures.addAll(NodeFilter.filterAllDistinct(scene, SurfaceNormalTexture.class));
+		this.distinctUVTextures.addAll(NodeFilter.filterAllDistinct(scene, UVTexture.class));
+	}
+	
+	private void doFilterPrimitives(final Scene scene) {
+		this.filteredPrimitives.addAll(scene.getPrimitives().stream().filter(primitive -> this.distinctBoundingVolumes.contains(primitive.getBoundingVolume()) && this.distinctShapes.contains(primitive.getShape())).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+	}
+	
+	private void doMapAllDistinctBoundingVolumes() {
+		this.distinctToOffsetsAxisAlignedBoundingBoxes.putAll(NodeFilter.mapDistinctToOffsets(this.distinctAxisAlignedBoundingBoxes, AxisAlignedBoundingBox3F.ARRAY_SIZE));
+		this.distinctToOffsetsBoundingSpheres.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBoundingSpheres, BoundingSphere3F.ARRAY_SIZE));
+	}
+	
+	private void doMapAllDistinctShapes() {
+		this.distinctToOffsetsPlanes.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlanes, Plane3F.ARRAY_SIZE));
+		this.distinctToOffsetsRectangularCuboids.putAll(NodeFilter.mapDistinctToOffsets(this.distinctRectangularCuboids, RectangularCuboid3F.ARRAY_SIZE));
+		this.distinctToOffsetsSpheres.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSpheres, Sphere3F.ARRAY_SIZE));
+		this.distinctToOffsetsToruses.putAll(NodeFilter.mapDistinctToOffsets(this.distinctToruses, Torus3F.ARRAY_SIZE));
+		this.distinctToOffsetsTriangles.putAll(NodeFilter.mapDistinctToOffsets(this.distinctTriangles, Triangle3F.ARRAY_SIZE));
+	}
+	
+	private void doMapAllDistinctTextures() {
+		this.distinctToOffsetsBlendTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBlendTextures, BlendTexture.ARRAY_SIZE));
+		this.distinctToOffsetsBullseyeTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBullseyeTextures, BullseyeTexture.ARRAY_SIZE));
+		this.distinctToOffsetsCheckerboardTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCheckerboardTextures, CheckerboardTexture.ARRAY_SIZE));
+		this.distinctToOffsetsConstantTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctConstantTextures, ConstantTexture.ARRAY_SIZE));
+		this.distinctToOffsetsImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctImageTextures, imageTexture -> imageTexture.getArraySize()));
+		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures, MarbleTexture.ARRAY_SIZE));
+		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSimplexFractionalBrownianMotionTextures, SimplexFractionalBrownianMotionTexture.ARRAY_SIZE));
+	}
+	
+	private void doPopulatePrimitiveArrayWithBoundingVolumes(final int[] primitiveArray) {
+		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
+			final Primitive primitive = this.filteredPrimitives.get(i);
 			
 			final BoundingVolume3F boundingVolume = primitive.getBoundingVolume();
 			
 			if(boundingVolume instanceof AxisAlignedBoundingBox3F) {
-				final int axisAlignedBoundingBoxOffset = distinctToOffsetsAxisAlignedBoundingBoxes.get(AxisAlignedBoundingBox3F.class.cast(boundingVolume)).intValue();
+				final int axisAlignedBoundingBoxOffset = this.distinctToOffsetsAxisAlignedBoundingBoxes.get(AxisAlignedBoundingBox3F.class.cast(boundingVolume)).intValue();
 				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
 				
 				primitiveArray[primitiveArrayOffset] = axisAlignedBoundingBoxOffset;
 			} else if(boundingVolume instanceof BoundingSphere3F) {
-				final int boundingSphereOffset = distinctToOffsetsBoundingSpheres.get(BoundingSphere3F.class.cast(boundingVolume)).intValue();
+				final int boundingSphereOffset = this.distinctToOffsetsBoundingSpheres.get(BoundingSphere3F.class.cast(boundingVolume)).intValue();
 				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
 				
 				primitiveArray[primitiveArrayOffset] = boundingSphereOffset;
@@ -197,38 +352,59 @@ final class SceneCompiler {
 		}
 	}
 	
-	private static void doPopulatePrimitiveArrayWithShapes(final List<Primitive> primitives, final Map<Plane3F, Integer> distinctToOffsetsPlanes, final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids, final Map<Sphere3F, Integer> distinctToOffsetsSpheres, final Map<Torus3F, Integer> distinctToOffsetsToruses, final Map<Triangle3F, Integer> distinctToOffsetsTriangles, final int[] primitiveArray) {
-		for(int i = 0; i < primitives.size(); i++) {
-			final Primitive primitive = primitives.get(i);
+	private void doPopulatePrimitiveArrayWithShapes(final int[] primitiveArray) {
+		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
+			final Primitive primitive = this.filteredPrimitives.get(i);
 			
 			final Shape3F shape = primitive.getShape();
 			
+			final int primitiveArrayShapeOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+			
 			if(shape instanceof Plane3F) {
-				final int planeOffset = distinctToOffsetsPlanes.get(Plane3F.class.cast(shape)).intValue();
-				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
-				
-				primitiveArray[primitiveArrayOffset] = planeOffset;
+				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsPlanes.get(Plane3F.class.cast(shape)).intValue();
 			} else if(shape instanceof RectangularCuboid3F) {
-				final int rectangularCuboidOffset = distinctToOffsetsRectangularCuboids.get(RectangularCuboid3F.class.cast(shape)).intValue();
-				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
-				
-				primitiveArray[primitiveArrayOffset] = rectangularCuboidOffset;
+				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsRectangularCuboids.get(RectangularCuboid3F.class.cast(shape)).intValue();
 			} else if(shape instanceof Sphere3F) {
-				final int sphereOffset = distinctToOffsetsSpheres.get(Sphere3F.class.cast(shape)).intValue();
-				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
-				
-				primitiveArray[primitiveArrayOffset] = sphereOffset;
+				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsSpheres.get(Sphere3F.class.cast(shape)).intValue();
 			} else if(shape instanceof Torus3F) {
-				final int torusOffset = distinctToOffsetsToruses.get(Torus3F.class.cast(shape)).intValue();
-				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
-				
-				primitiveArray[primitiveArrayOffset] = torusOffset;
+				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsToruses.get(Torus3F.class.cast(shape)).intValue();
 			} else if(shape instanceof Triangle3F) {
-				final int triangleOffset = distinctToOffsetsTriangles.get(Triangle3F.class.cast(shape)).intValue();
-				final int primitiveArrayOffset = i * Primitive.ARRAY_SIZE + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
-				
-				primitiveArray[primitiveArrayOffset] = triangleOffset;
+				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsTriangles.get(Triangle3F.class.cast(shape)).intValue();
+			} else {
+				primitiveArray[primitiveArrayShapeOffset] = 0;
 			}
 		}
+	}
+	
+	private void doPopulateTextureBlendTextureArrayWithTextures(final float[] textureBlendTextureArray) {
+		for(int i = 0; i < this.distinctBlendTextures.size(); i++) {
+			final BlendTexture blendTexture = this.distinctBlendTextures.get(i);
+			
+			final Texture textureA = blendTexture.getTextureA();
+			final Texture textureB = blendTexture.getTextureB();
+			
+			final int textureBlendTextureArrayTextureAOffset = i * BlendTexture.ARRAY_SIZE + BlendTexture.ARRAY_OFFSET_TEXTURE_A_OFFSET;
+			final int textureBlendTextureArrayTextureBOffset = i * BlendTexture.ARRAY_SIZE + BlendTexture.ARRAY_OFFSET_TEXTURE_B_OFFSET;
+			
+			textureBlendTextureArray[textureBlendTextureArrayTextureAOffset] = doFindTextureOffset(textureA);
+			textureBlendTextureArray[textureBlendTextureArrayTextureBOffset] = doFindTextureOffset(textureB);
+		}
+	}
+	
+	private void doReportDone() {
+		System.out.println("- Compilation took " + this.timeMillis.get() + " milliseconds.");
+	}
+	
+	@SuppressWarnings("static-method")
+	private void doReportInit() {
+		System.out.println("Compiling...");
+	}
+	
+	private void doSetCurrentTimeMillis() {
+		this.timeMillis.set(System.currentTimeMillis());
+	}
+	
+	private void doSetElapsedTimeMillis() {
+		this.timeMillis.getAndAccumulate(System.currentTimeMillis(), (currentTimeMillisA, currentTimeMillisB) -> currentTimeMillisB - currentTimeMillisA);
 	}
 }

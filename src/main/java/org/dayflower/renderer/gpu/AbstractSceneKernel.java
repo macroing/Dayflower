@@ -2051,7 +2051,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 	private void doSetupScene() {
-		final CompiledScene compiledScene = SceneCompiler.compile(getScene());
+		final SceneCompiler sceneCompiler = new SceneCompiler();
+		
+		final CompiledScene compiledScene = sceneCompiler.compile(getScene());
 		
 		put(this.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		put(this.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());

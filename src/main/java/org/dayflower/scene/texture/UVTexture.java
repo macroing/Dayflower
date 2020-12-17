@@ -34,6 +34,11 @@ import org.dayflower.scene.Intersection;
  */
 public final class UVTexture implements Texture {
 	/**
+	 * The size of the {@code float[]}.
+	 */
+	public static final int ARRAY_SIZE = 0;
+	
+	/**
 	 * The ID of this {@code UVTexture} class.
 	 */
 	public static final int ID = 10;
@@ -105,7 +110,7 @@ public final class UVTexture implements Texture {
 	 */
 	@Override
 	public float[] toArray() {
-		return new float[0];//TODO: Implement!
+		return new float[ARRAY_SIZE];
 	}
 	
 	/**

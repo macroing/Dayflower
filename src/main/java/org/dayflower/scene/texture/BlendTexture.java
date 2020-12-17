@@ -23,6 +23,8 @@ import static org.dayflower.util.Floats.equal;
 import java.util.Objects;
 
 import org.dayflower.image.Color3F;
+import org.dayflower.node.NodeHierarchicalVisitor;
+import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
 
 /**
@@ -34,6 +36,46 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class BlendTexture implements Texture {
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_A_ID = 0;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_A_OFFSET = 1;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_B_ID = 2;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_B_OFFSET = 3;
+	
+	/**
+	 * The offset for the factor to use for component 1 in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_T_COMPONENT_1 = 4;
+	
+	/**
+	 * The offset for the factor to use for component 2 in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_T_COMPONENT_2 = 5;
+	
+	/**
+	 * The offset for the factor to use for component 3 in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_T_COMPONENT_3 = 6;
+	
+	/**
+	 * The size of the {@code float[]}.
+	 */
+	public static final int ARRAY_SIZE = 8;
+	
 	/**
 	 * The ID of this {@code BlendTexture} class.
 	 */
@@ -161,6 +203,48 @@ public final class BlendTexture implements Texture {
 	}
 	
 	/**
+	 * Accepts a {@link NodeHierarchicalVisitor}.
+	 * <p>
+	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.
+	 * <p>
+	 * If {@code nodeHierarchicalVisitor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}, a {@code NodeTraversalException} will be thrown with the {@code RuntimeException} wrapped.
+	 * <p>
+	 * This implementation will:
+	 * <ul>
+	 * <li>throw a {@code NullPointerException} if {@code nodeHierarchicalVisitor} is {@code null}.</li>
+	 * <li>throw a {@code NodeTraversalException} if {@code nodeHierarchicalVisitor} throws a {@code RuntimeException}.</li>
+	 * <li>traverse its child {@code Node} instances.</li>
+	 * </ul>
+	 * 
+	 * @param nodeHierarchicalVisitor the {@code NodeHierarchicalVisitor} to accept
+	 * @return the result of {@code nodeHierarchicalVisitor.visitLeave(this)}
+	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
+	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
+	 */
+	@Override
+	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+		
+		try {
+			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.textureA.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureB.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+			}
+			
+			return nodeHierarchicalVisitor.visitLeave(this);
+		} catch(final RuntimeException e) {
+			throw new NodeTraversalException(e);
+		}
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code BlendTexture} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BlendTexture}, and their respective values are equal, {@code false} otherwise.
@@ -223,7 +307,19 @@ public final class BlendTexture implements Texture {
 	 */
 	@Override
 	public float[] toArray() {
-		return new float[0];//TODO: Implement!
+		final float[] array = new float[ARRAY_SIZE];
+		
+//		Because the BlendTexture occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_A_ID] = this.textureA.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_A_OFFSET] = 0.0F;				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_B_ID] = this.textureB.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_B_OFFSET] = 0.0F;				//Block #1
+		array[ARRAY_OFFSET_T_COMPONENT_1] = this.tComponent1;		//Block #1
+		array[ARRAY_OFFSET_T_COMPONENT_2] = this.tComponent2;		//Block #1
+		array[ARRAY_OFFSET_T_COMPONENT_3] = this.tComponent3;		//Block #1
+		array[7] = 0.0F;											//Block #1
+		
+		return array;
 	}
 	
 	/**

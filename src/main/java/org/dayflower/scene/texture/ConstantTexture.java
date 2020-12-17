@@ -78,6 +78,16 @@ public final class ConstantTexture implements Texture {
 	public static final ConstantTexture WHITE = new ConstantTexture(Color3F.WHITE);
 	
 	/**
+	 * The offset for the {@link Color3F} instance representing the color in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_COLOR = 0;
+	
+	/**
+	 * The size of the {@code float[]}.
+	 */
+	public static final int ARRAY_SIZE = 1;
+	
+	/**
 	 * The ID of this {@code ConstantTexture} class.
 	 */
 	public static final int ID = 4;
@@ -179,7 +189,12 @@ public final class ConstantTexture implements Texture {
 	 */
 	@Override
 	public float[] toArray() {
-		return new float[0];//TODO: Implement!
+		final float[] array = new float[ARRAY_SIZE];
+		
+//		Because the ConstantTexture occupy 1/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_COLOR] = this.color.pack();
+		
+		return array;
 	}
 	
 	/**

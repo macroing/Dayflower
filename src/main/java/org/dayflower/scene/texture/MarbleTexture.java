@@ -28,6 +28,8 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.image.Color3F;
+import org.dayflower.node.NodeHierarchicalVisitor;
+import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
 
 /**
@@ -39,6 +41,61 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class MarbleTexture implements Texture {
+	/**
+	 * The offset for the frequency in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_FREQUENCY = 6;
+	
+	/**
+	 * The offset for the octaves in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_OCTAVES = 9;
+	
+	/**
+	 * The offset for the scale in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SCALE = 7;
+	
+	/**
+	 * The offset for the stripes in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_STRIPES = 8;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_A_ID = 0;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code A} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_A_OFFSET = 1;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_B_ID = 2;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_B_OFFSET = 3;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_C_ID = 4;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code B} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_C_OFFSET = 5;
+	
+	/**
+	 * The size of the {@code float[]}.
+	 */
+	public static final int ARRAY_SIZE = 16;
+	
 	/**
 	 * The ID of this {@code MarbleTexture} class.
 	 */
@@ -224,6 +281,52 @@ public final class MarbleTexture implements Texture {
 	}
 	
 	/**
+	 * Accepts a {@link NodeHierarchicalVisitor}.
+	 * <p>
+	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.
+	 * <p>
+	 * If {@code nodeHierarchicalVisitor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}, a {@code NodeTraversalException} will be thrown with the {@code RuntimeException} wrapped.
+	 * <p>
+	 * This implementation will:
+	 * <ul>
+	 * <li>throw a {@code NullPointerException} if {@code nodeHierarchicalVisitor} is {@code null}.</li>
+	 * <li>throw a {@code NodeTraversalException} if {@code nodeHierarchicalVisitor} throws a {@code RuntimeException}.</li>
+	 * <li>traverse its child {@code Node} instances.</li>
+	 * </ul>
+	 * 
+	 * @param nodeHierarchicalVisitor the {@code NodeHierarchicalVisitor} to accept
+	 * @return the result of {@code nodeHierarchicalVisitor.visitLeave(this)}
+	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
+	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
+	 */
+	@Override
+	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+		
+		try {
+			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.textureA.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureB.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureC.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+			}
+			
+			return nodeHierarchicalVisitor.visitLeave(this);
+		} catch(final RuntimeException e) {
+			throw new NodeTraversalException(e);
+		}
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code MarbleTexture} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MarbleTexture}, and their respective values are equal, {@code false} otherwise.
@@ -279,7 +382,27 @@ public final class MarbleTexture implements Texture {
 	 */
 	@Override
 	public float[] toArray() {
-		return new float[0];//TODO: Implement!
+		final float[] array = new float[ARRAY_SIZE];
+		
+//		Because the MarbleTexture occupy 16/16 positions in two blocks, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_A_ID] = this.textureA.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_A_OFFSET] = 0.0F;				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_B_ID] = this.textureB.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_B_OFFSET] = 0.0F;				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_C_ID] = this.textureC.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_C_OFFSET] = 0.0F;				//Block #1
+		array[ARRAY_OFFSET_FREQUENCY] = this.frequency;				//Block #1
+		array[ARRAY_OFFSET_SCALE] = this.scale;						//Block #1
+		array[ARRAY_OFFSET_STRIPES] = this.stripes;					//Block #2
+		array[ARRAY_OFFSET_OCTAVES] = this.octaves;					//Block #2
+		array[10] = 0.0F;											//Block #2
+		array[11] = 0.0F;											//Block #2
+		array[12] = 0.0F;											//Block #2
+		array[13] = 0.0F;											//Block #2
+		array[14] = 0.0F;											//Block #2
+		array[15] = 0.0F;											//Block #2
+		
+		return array;
 	}
 	
 	/**

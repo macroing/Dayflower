@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.ToIntFunction;
 
 import org.dayflower.util.ParameterArguments;
 
@@ -185,6 +186,43 @@ public interface NodeFilter {
 	 */
 	static <T extends Node> Map<T, Integer> mapDistinctToOffsets(final List<T> distinctNodes) {
 		return mapDistinctToOffsets(distinctNodes, 1);
+	}
+	
+	/**
+	 * Returns a {@code Map} that maps distinct {@code Node} instances to their offsets.
+	 * <p>
+	 * If either {@code distinctNodes}, at least one of its elements or {@code sizeNodeFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sizeNodeFunction} returns an {@code int} that is less than {@code 0} or at least one offset is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param <T> the generic type
+	 * @param distinctNodes a {@code List} with distinct {@code Node} instances
+	 * @param sizeNodeFunction a {@code ToIntFunction} that returns the size of a given {@code Node} instance
+	 * @return a {@code Map} that maps distinct {@code Node} instances to their offsets
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sizeNodeFunction} returns an {@code int} that is less than {@code 0} or at least one offset is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code distinctNodes}, at least one of its elements or {@code sizeNodeFunction} are {@code null}
+	 */
+	static <T extends Node> Map<T, Integer> mapDistinctToOffsets(final List<T> distinctNodes, final ToIntFunction<T> sizeNodeFunction) {
+		ParameterArguments.requireNonNullList(distinctNodes, "distinctNodes");
+		
+		Objects.requireNonNull(sizeNodeFunction, "sizeNodeFunction == null");
+		
+		final Map<T, Integer> map = new LinkedHashMap<>();
+		
+		for(int i = 0, j = 0; i < distinctNodes.size(); i++) {
+			final T distinctNode = distinctNodes.get(i);
+			
+			final int sizeDistinctNode = sizeNodeFunction.applyAsInt(distinctNode);
+			
+			ParameterArguments.requireRangef(    sizeDistinctNode, 0, Integer.MAX_VALUE,      "sizeNodeFunction.applyAsInt(distinctNodes.get(%d))",                     Integer.valueOf(i));
+			ParameterArguments.requireRangef(j + sizeDistinctNode, 0, Integer.MAX_VALUE, "%d + sizeNodeFunction.applyAsInt(distinctNodes.get(%d))", Integer.valueOf(j), Integer.valueOf(i));
+			
+			map.put(distinctNode, Integer.valueOf(j + sizeDistinctNode));
+			
+			j += sizeDistinctNode;
+		}
+		
+		return map;
 	}
 	
 	/**

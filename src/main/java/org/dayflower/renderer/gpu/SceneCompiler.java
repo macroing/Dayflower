@@ -35,6 +35,16 @@ import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.texture.BlendTexture;
+import org.dayflower.scene.texture.BullseyeTexture;
+import org.dayflower.scene.texture.CheckerboardTexture;
+import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.FunctionTexture;
+import org.dayflower.scene.texture.ImageTexture;
+import org.dayflower.scene.texture.MarbleTexture;
+import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
+import org.dayflower.scene.texture.SurfaceNormalTexture;
+import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.util.Floats;
 import org.dayflower.util.Lists;
 
@@ -50,41 +60,82 @@ final class SceneCompiler {
 		
 		final long currentTimeMillis = System.currentTimeMillis();
 		
-//		Retrieve Lists for all distinct types:
+//		Retrieve Lists for all distinct BoundingVolume3F instances:
 		final List<AxisAlignedBoundingBox3F> distinctAxisAlignedBoundingBoxes = NodeFilter.filterAllDistinct(scene, AxisAlignedBoundingBox3F.class);
 		final List<BoundingSphere3F> distinctBoundingSpheres = NodeFilter.filterAllDistinct(scene, BoundingSphere3F.class);
 		final List<InfiniteBoundingVolume3F> distinctInfiniteBoundingVolumes = NodeFilter.filterAllDistinct(scene, InfiniteBoundingVolume3F.class);
+		final List<BoundingVolume3F> distinctBoundingVolumes = Lists.merge(distinctAxisAlignedBoundingBoxes, distinctBoundingSpheres, distinctInfiniteBoundingVolumes);
+		
+//		Retrieve Lists for all distinct Shape3F instances:
 		final List<Plane3F> distinctPlanes = NodeFilter.filterAllDistinct(scene, Plane3F.class);
 		final List<RectangularCuboid3F> distinctRectangularCuboids = NodeFilter.filterAllDistinct(scene, RectangularCuboid3F.class);
 		final List<Sphere3F> distinctSpheres = NodeFilter.filterAllDistinct(scene, Sphere3F.class);
 		final List<Torus3F> distinctToruses = NodeFilter.filterAllDistinct(scene, Torus3F.class);
 		final List<Triangle3F> distinctTriangles = NodeFilter.filterAllDistinct(scene, Triangle3F.class);
-		final List<BoundingVolume3F> distinctBoundingVolumes = Lists.merge(distinctAxisAlignedBoundingBoxes, distinctBoundingSpheres, distinctInfiniteBoundingVolumes);
 		final List<Shape3F> distinctShapes = Lists.merge(distinctPlanes, distinctRectangularCuboids, distinctSpheres, distinctToruses, distinctTriangles);
 		
-//		Retrieve a List of filtered Primitives:
+//		Retrieve Lists for all distinct Texture instances:
+		final List<BlendTexture> distinctBlendTextures = NodeFilter.filterAllDistinct(scene, BlendTexture.class);
+		final List<BullseyeTexture> distinctBullseyeTextures = NodeFilter.filterAllDistinct(scene, BullseyeTexture.class);
+		final List<CheckerboardTexture> distinctCheckerboardTextures = NodeFilter.filterAllDistinct(scene, CheckerboardTexture.class);
+		final List<ConstantTexture> distinctConstantTextures = NodeFilter.filterAllDistinct(scene, ConstantTexture.class);
+		final List<FunctionTexture> distinctFunctionTextures = NodeFilter.filterAllDistinct(scene, FunctionTexture.class);
+		final List<ImageTexture> distinctImageTextures = NodeFilter.filterAllDistinct(scene, ImageTexture.class);
+		final List<MarbleTexture> distinctMarbleTextures = NodeFilter.filterAllDistinct(scene, MarbleTexture.class);
+		final List<SimplexFractionalBrownianMotionTexture> distinctSimplexFractionalBrownianMotionTextures = NodeFilter.filterAllDistinct(scene, SimplexFractionalBrownianMotionTexture.class);
+		final List<SurfaceNormalTexture> distinctSurfaceNormalTextures = NodeFilter.filterAllDistinct(scene, SurfaceNormalTexture.class);
+		final List<UVTexture> distinctUVTextures = NodeFilter.filterAllDistinct(scene, UVTexture.class);
+		
+//		Retrieve a List of filtered Primitive instances:
 		final List<Primitive> filteredPrimitives = doFilterPrimitives(scene, distinctBoundingVolumes, distinctShapes);
 		
-//		Retrieve index mappings for all distinct types:
+//		Retrieve index mappings for all distinct BoundingVolume3F instances:
 		final Map<AxisAlignedBoundingBox3F, Integer> distinctToOffsetsAxisAlignedBoundingBoxes = NodeFilter.mapDistinctToOffsets(distinctAxisAlignedBoundingBoxes, AxisAlignedBoundingBox3F.ARRAY_SIZE);
 		final Map<BoundingSphere3F, Integer> distinctToOffsetsBoundingSpheres = NodeFilter.mapDistinctToOffsets(distinctBoundingSpheres, BoundingSphere3F.ARRAY_SIZE);
+		
+//		Retrieve index mappings for all distinct Shape3F instances:
 		final Map<Plane3F, Integer> distinctToOffsetsPlanes = NodeFilter.mapDistinctToOffsets(distinctPlanes, Plane3F.ARRAY_SIZE);
 		final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids = NodeFilter.mapDistinctToOffsets(distinctRectangularCuboids, RectangularCuboid3F.ARRAY_SIZE);
 		final Map<Sphere3F, Integer> distinctToOffsetsSpheres = NodeFilter.mapDistinctToOffsets(distinctSpheres, Sphere3F.ARRAY_SIZE);
 		final Map<Torus3F, Integer> distinctToOffsetsToruses = NodeFilter.mapDistinctToOffsets(distinctToruses, Torus3F.ARRAY_SIZE);
 		final Map<Triangle3F, Integer> distinctToOffsetsTriangles = NodeFilter.mapDistinctToOffsets(distinctTriangles, Triangle3F.ARRAY_SIZE);
 		
-//		Retrieve float[] or int[] for all types:
+//		Retrieve index mappings for all distinct Texture instances:
+		final Map<BlendTexture, Integer> distinctToOffsetsBlendTextures = NodeFilter.mapDistinctToOffsets(distinctBlendTextures, BlendTexture.ARRAY_SIZE);
+		final Map<BullseyeTexture, Integer> distinctToOffsetsBullseyeTextures = NodeFilter.mapDistinctToOffsets(distinctBullseyeTextures, BullseyeTexture.ARRAY_SIZE);
+		final Map<CheckerboardTexture, Integer> distinctToOffsetsCheckerboardTextures = NodeFilter.mapDistinctToOffsets(distinctCheckerboardTextures, CheckerboardTexture.ARRAY_SIZE);
+		final Map<ConstantTexture, Integer> distinctToOffsetsConstantTextures = NodeFilter.mapDistinctToOffsets(distinctConstantTextures, ConstantTexture.ARRAY_SIZE);
+		final Map<ImageTexture, Integer> distinctToOffsetsImageTextures = NodeFilter.mapDistinctToOffsets(distinctImageTextures, imageTexture -> imageTexture.getArraySize());
+		final Map<MarbleTexture, Integer> distinctToOffsetsMarbleTextures = NodeFilter.mapDistinctToOffsets(distinctMarbleTextures, MarbleTexture.ARRAY_SIZE);
+		final Map<SimplexFractionalBrownianMotionTexture, Integer> distinctToOffsetsSimplexFractionalBrownianMotionTextures = NodeFilter.mapDistinctToOffsets(distinctSimplexFractionalBrownianMotionTextures, SimplexFractionalBrownianMotionTexture.ARRAY_SIZE);
+		
+//		Retrieve the float[] for all BoundingVolume3F instances:
 		final float[] boundingVolume3FAxisAlignedBoundingBox3FArray = Floats.toArray(distinctAxisAlignedBoundingBoxes, axisAlignedBoundingBox -> axisAlignedBoundingBox.toArray(), 1);
 		final float[] boundingVolume3FBoundingSphere3FArray = Floats.toArray(distinctBoundingSpheres, boundingSphere -> boundingSphere.toArray(), 1);
+		
+//		Retrieve the float[] for the Camera instance:
 		final float[] cameraArray = scene.getCamera().toArray();
+		
+//		Retrieve the float[] for the Matrix44F instances:
 		final float[] matrix44FArray = doCreateMatrix44FArray(filteredPrimitives);
+		
+//		Retrieve the float[] for all Shape3F instances:
 		final float[] shape3FPlane3FArray = Floats.toArray(distinctPlanes, plane -> plane.toArray(), 1);
 		final float[] shape3FRectangularCuboid3FArray = Floats.toArray(distinctRectangularCuboids, rectangularCuboid -> rectangularCuboid.toArray(), 1);
 		final float[] shape3FSphere3FArray = Floats.toArray(distinctSpheres, sphere -> sphere.toArray(), 1);
 		final float[] shape3FTorus3FArray = Floats.toArray(distinctToruses, torus -> torus.toArray(), 1);
 		final float[] shape3FTriangle3FArray = Floats.toArray(distinctTriangles, triangle -> triangle.toArray(), 1);
 		
+//		Retrieve the float[] for all Texture instances:
+		final float[] textureBlendTextureArray = Floats.toArray(distinctBlendTextures, blendTexture -> blendTexture.toArray(), 1);
+		final float[] textureBullseyeTextureArray = Floats.toArray(distinctBullseyeTextures, bullseyeTexture -> bullseyeTexture.toArray(), 1);
+		final float[] textureCheckerboardTextureArray = Floats.toArray(distinctCheckerboardTextures, checkerboardTexture -> checkerboardTexture.toArray(), 1);
+		final float[] textureConstantTextureArray = Floats.toArray(distinctConstantTextures, constantTexture -> constantTexture.toArray(), 1);
+		final float[] textureImageTextureArray = Floats.toArray(distinctImageTextures, imageTexture -> imageTexture.toArray(), 1);
+		final float[] textureMarbleTextureArray = Floats.toArray(distinctMarbleTextures, marbleTexture -> marbleTexture.toArray(), 1);
+		final float[] textureSimplexFractionalBrownianMotionTextureArray = Floats.toArray(distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> simplexFractionalBrownianMotionTexture.toArray(), 1);
+		
+//		Retrieve the int[] for all primitives:
 		final int[] primitiveArray = Primitive.toArray(filteredPrimitives);
 		
 //		Populate the float[] or int[] with data:

@@ -151,6 +151,11 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 			
 			final long elapsedTimeMillis = System.currentTimeMillis() - currentTimeMillis;
 			
+//			Test if this may prevent the JVM from crashing.
+			if(!this.isRendering.get()) {
+				return false;
+			}
+			
 			if(image instanceof ByteImage) {
 				final ByteImage byteImage = ByteImage.class.cast(image);
 				

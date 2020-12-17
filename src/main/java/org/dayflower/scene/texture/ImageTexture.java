@@ -404,6 +404,16 @@ public final class ImageTexture implements Texture {
 	}
 	
 	/**
+	 * Returns the size of the {@code float[]}.
+	 * 
+	 * @return the size of the {@code float[]}
+	 */
+	@SuppressWarnings("static-method")
+	public int getArraySize() {
+		return 0;//TODO: Implement!
+	}
+	
+	/**
 	 * Returns an {@code int} with the ID of this {@code ImageTexture} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code ImageTexture} instance

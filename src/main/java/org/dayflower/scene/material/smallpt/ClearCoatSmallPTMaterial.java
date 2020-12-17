@@ -41,6 +41,27 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	public static final String NAME = "SmallPT - Clear Coat";
 	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_DIFFUSE_REFLECTANCE_SCALE_ID = 0;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_DIFFUSE_REFLECTANCE_SCALE_OFFSET = 1;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_ID = 2;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET = 3;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_SPECULAR_REFLECTANCE_SCALE_ID = 4;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_SPECULAR_REFLECTANCE_SCALE_OFFSET = 5;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_SIZE = 8;
+	
 	/**
 	 * The ID of this {@code ClearCoatSmallPTMaterial} class.
 	 */
@@ -48,39 +69,39 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureEmittance;
 	private final Texture textureDiffuseReflectanceScale;
+	private final Texture textureEmittance;
 	private final Texture textureSpecularReflectanceScale;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 	public ClearCoatSmallPTMaterial() {
-		this(Color3F.BLACK);
+		this(Color3F.GRAY);
 	}
 	
 //	TODO: Add Javadocs!
-	public ClearCoatSmallPTMaterial(final Color3F colorEmittance) {
-		this(colorEmittance, Color3F.GRAY);
+	public ClearCoatSmallPTMaterial(final Color3F colorDiffuseReflectanceScale) {
+		this(colorDiffuseReflectanceScale, Color3F.WHITE);
 	}
 	
 //	TODO: Add Javadocs!
-	public ClearCoatSmallPTMaterial(final Color3F colorEmittance, final Color3F colorDiffuseReflectance) {
-		this(colorEmittance, colorDiffuseReflectance, Color3F.WHITE);
+	public ClearCoatSmallPTMaterial(final Color3F colorDiffuseReflectanceScale, final Color3F colorSpecularReflectanceScale) {
+		this(colorDiffuseReflectanceScale, colorSpecularReflectanceScale, Color3F.BLACK);
 	}
 	
 //	TODO: Add Javadocs!
-	public ClearCoatSmallPTMaterial(final Color3F colorEmittance, final Color3F colorDiffuseReflectance, final Color3F colorSpecularReflectance) {
+	public ClearCoatSmallPTMaterial(final Color3F colorDiffuseReflectanceScale, final Color3F colorSpecularReflectanceScale, final Color3F colorEmittance) {
+		this.textureDiffuseReflectanceScale = new ConstantTexture(Objects.requireNonNull(colorDiffuseReflectanceScale, "colorDiffuseReflectanceScale == null"));
+		this.textureSpecularReflectanceScale = new ConstantTexture(Objects.requireNonNull(colorSpecularReflectanceScale, "colorSpecularReflectanceScale == null"));
 		this.textureEmittance = new ConstantTexture(Objects.requireNonNull(colorEmittance, "colorEmittance == null"));
-		this.textureDiffuseReflectanceScale = new ConstantTexture(Objects.requireNonNull(colorDiffuseReflectance, "colorDiffuseReflectance == null"));
-		this.textureSpecularReflectanceScale = new ConstantTexture(Objects.requireNonNull(colorSpecularReflectance, "colorSpecularReflectance == null"));
 	}
 	
 //	TODO: Add Javadocs!
-	public ClearCoatSmallPTMaterial(final Texture textureEmittance, final Texture textureDiffuseReflectanceScale, final Texture textureSpecularReflectanceScale) {
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+	public ClearCoatSmallPTMaterial(final Texture textureDiffuseReflectanceScale, final Texture textureSpecularReflectanceScale, final Texture textureEmittance) {
 		this.textureDiffuseReflectanceScale = Objects.requireNonNull(textureDiffuseReflectanceScale, "textureDiffuseReflectanceScale == null");
 		this.textureSpecularReflectanceScale = Objects.requireNonNull(textureSpecularReflectanceScale, "textureSpecularReflectanceScale == null");
+		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +181,22 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	@Override
 	public String toString() {
-		return String.format("new ClearCoatSmallPTMaterial(%s, %s, %s)", this.textureEmittance, this.textureDiffuseReflectanceScale, this.textureSpecularReflectanceScale);
+		return String.format("new ClearCoatSmallPTMaterial(%s, %s, %s)", this.textureDiffuseReflectanceScale, this.textureEmittance, this.textureSpecularReflectanceScale);
+	}
+	
+//	TODO: Add Javadocs!
+	public Texture getTextureDiffuseReflectanceScale() {
+		return this.textureDiffuseReflectanceScale;
+	}
+	
+//	TODO: Add Javadocs!
+	public Texture getTextureEmittance() {
+		return this.textureEmittance;
+	}
+	
+//	TODO: Add Javadocs!
+	public Texture getTextureSpecularReflectanceScale() {
+		return this.textureSpecularReflectanceScale;
 	}
 	
 	/**
@@ -190,11 +226,11 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureDiffuseReflectanceScale.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureDiffuseReflectanceScale.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -216,9 +252,9 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 			return true;
 		} else if(!(object instanceof ClearCoatSmallPTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, ClearCoatSmallPTMaterial.class.cast(object).textureEmittance)) {
-			return false;
 		} else if(!Objects.equals(this.textureDiffuseReflectanceScale, ClearCoatSmallPTMaterial.class.cast(object).textureDiffuseReflectanceScale)) {
+			return false;
+		} else if(!Objects.equals(this.textureEmittance, ClearCoatSmallPTMaterial.class.cast(object).textureEmittance)) {
 			return false;
 		} else if(!Objects.equals(this.textureSpecularReflectanceScale, ClearCoatSmallPTMaterial.class.cast(object).textureSpecularReflectanceScale)) {
 			return false;
@@ -234,7 +270,19 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 	 */
 	@Override
 	public float[] toArray() {
-		return new float[0];//TODO: Implement!
+		final float[] array = new float[ARRAY_SIZE];
+		
+//		Because the ClearCoatSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_DIFFUSE_REFLECTANCE_SCALE_ID] = this.textureDiffuseReflectanceScale.getID();		//Block #1
+		array[ARRAY_OFFSET_TEXTURE_DIFFUSE_REFLECTANCE_SCALE_OFFSET] = 0.0F;										//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_ID] = this.textureEmittance.getID();									//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET] = 0.0F;														//Block #1
+		array[ARRAY_OFFSET_TEXTURE_SPECULAR_REFLECTANCE_SCALE_ID] = this.textureSpecularReflectanceScale.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_SPECULAR_REFLECTANCE_SCALE_OFFSET] = 0.0F;										//Block #1
+		array[6] = 0.0F;																							//Block #1
+		array[7] = 0.0F;																							//Block #1
+		
+		return array;
 	}
 	
 	/**
@@ -250,6 +298,6 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEmittance, this.textureDiffuseReflectanceScale, this.textureSpecularReflectanceScale);
+		return Objects.hash(this.textureDiffuseReflectanceScale, this.textureEmittance, this.textureSpecularReflectanceScale);
 	}
 }

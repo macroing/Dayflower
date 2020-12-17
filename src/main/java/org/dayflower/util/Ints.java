@@ -19,7 +19,9 @@
 package org.dayflower.util;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.function.IntSupplier;
 
@@ -279,5 +281,64 @@ public final class Ints {
 		Arrays.fill(array, value);
 		
 		return array;
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Ints.toArray(objects, arrayFunction, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code int[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code int[]} instances
+	 * @return an {@code int[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> int[] toArray(final List<T> objects, final Function<T, int[]> arrayFunction) {
+		return toArray(objects, arrayFunction, 0);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of {@code objects} using {@code arrayFunction}.
+	 * <p>
+	 * If either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code minimumLength} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param <T> the generic type
+	 * @param objects a {@code List} of type {@code T} with {@code Object} instances to convert into {@code int[]} instances
+	 * @param arrayFunction a {@code Function} that maps {@code Object} instances of type {@code T} into {@code int[]} instances
+	 * @param minimumLength the minimum length of the returned {@code int[]} if, and only if, either {@code objects.isEmpty()} or the array has a length of {@code 0}
+	 * @return an {@code int[]} representation of {@code objects} using {@code arrayFunction}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code minimumLength} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code objects}, at least one of its elements, {@code arrayFunction} or at least one of its results are {@code null}
+	 */
+	public static <T> int[] toArray(final List<T> objects, final Function<T, int[]> arrayFunction, final int minimumLength) {
+		ParameterArguments.requireNonNullList(objects, "objects");
+		
+		Objects.requireNonNull(arrayFunction, "arrayFunction == null");
+		
+		ParameterArguments.requireRange(minimumLength, 0, Integer.MAX_VALUE, "minimumLength");
+		
+		if(objects.isEmpty()) {
+			return array(minimumLength);
+		}
+		
+		try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
+			for(final T object : objects) {
+				intArrayOutputStream.write(arrayFunction.apply(object));
+			}
+			
+			final int[] array = intArrayOutputStream.toIntArray();
+			
+			return array.length == 0 ? array(minimumLength) : array;
+		}
 	}
 }

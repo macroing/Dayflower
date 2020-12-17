@@ -694,27 +694,6 @@ public final class Primitive implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Returns an {@code int[]} representation of {@code primitives}.
-	 * <p>
-	 * If either {@code primitives} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param primitives a {@code List} of {@code Primitive} instances
-	 * @return an {@code int[]} representation of {@code primitives}
-	 * @throws NullPointerException thrown if, and only if, either {@code primitives} or at least one of its elements are {@code null}
-	 */
-	public static int[] toArray(final List<Primitive> primitives) {
-		final int[] array = new int[primitives.size() * ARRAY_SIZE];
-		
-		for(int i = 0, j = 0; i < primitives.size(); i++, j += ARRAY_SIZE) {
-			System.arraycopy(primitives.get(i).toArray(), 0, array, j, ARRAY_SIZE);
-		}
-		
-		return array;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private boolean doSetBoundingVolume() {
 		return doSetBoundingVolume(this.shape.getBoundingVolume().transform(this.transform.getObjectToWorld()));
 	}

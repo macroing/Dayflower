@@ -26,12 +26,24 @@ final class CompiledScene {
 	private float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
 	private float[] boundingVolume3FBoundingSphere3FArray;
 	private float[] cameraArray;
+	private float[] materialClearCoatSmallPTMaterialArray;
+	private float[] materialGlassSmallPTMaterialArray;
+	private float[] materialMatteSmallPTMaterialArray;
+	private float[] materialMetalSmallPTMaterialArray;
+	private float[] materialMirrorSmallPTMaterialArray;
 	private float[] matrix44FArray;
 	private float[] shape3FPlane3FArray;
 	private float[] shape3FRectangularCuboid3FArray;
 	private float[] shape3FSphere3FArray;
 	private float[] shape3FTorus3FArray;
 	private float[] shape3FTriangle3FArray;
+	private float[] textureBlendTextureArray;
+	private float[] textureBullseyeTextureArray;
+	private float[] textureCheckerboardTextureArray;
+	private float[] textureConstantTextureArray;
+	private float[] textureImageTextureArray;
+	private float[] textureMarbleTextureArray;
+	private float[] textureSimplexFractionalBrownianMotionTextureArray;
 	private int[] primitiveArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +52,11 @@ final class CompiledScene {
 		setBoundingVolume3FAxisAlignedBoundingBox3FArray(new float[1]);
 		setBoundingVolume3FBoundingSphere3FArray(new float[1]);
 		setCameraArray(new float[1]);
+		setMaterialClearCoatSmallPTMaterialArray(new float[1]);
+		setMaterialGlassSmallPTMaterialArray(new float[1]);
+		setMaterialMatteSmallPTMaterialArray(new float[1]);
+		setMaterialMetalSmallPTMaterialArray(new float[1]);
+		setMaterialMirrorSmallPTMaterialArray(new float[1]);
 		setMatrix44FArray(new float[1]);
 		setPrimitiveArray(new int[1]);
 		setShape3FPlane3FArray(new float[1]);
@@ -47,6 +64,13 @@ final class CompiledScene {
 		setShape3FSphere3FArray(new float[1]);
 		setShape3FTorus3FArray(new float[1]);
 		setShape3FTriangle3FArray(new float[1]);
+		setTextureBlendTextureArray(new float[1]);
+		setTextureBullseyeTextureArray(new float[1]);
+		setTextureCheckerboardTextureArray(new float[1]);
+		setTextureConstantTextureArray(new float[1]);
+		setTextureImageTextureArray(new float[1]);
+		setTextureMarbleTextureArray(new float[1]);
+		setTextureSimplexFractionalBrownianMotionTextureArray(new float[1]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,6 +85,26 @@ final class CompiledScene {
 	
 	public float[] getCameraArray() {
 		return this.cameraArray;
+	}
+	
+	public float[] getMaterialClearCoatSmallPTMaterialArray() {
+		return this.materialClearCoatSmallPTMaterialArray;
+	}
+	
+	public float[] getMaterialGlassSmallPTMaterialArray() {
+		return this.materialGlassSmallPTMaterialArray;
+	}
+	
+	public float[] getMaterialMatteSmallPTMaterialArray() {
+		return this.materialMatteSmallPTMaterialArray;
+	}
+	
+	public float[] getMaterialMetalSmallPTMaterialArray() {
+		return this.materialMetalSmallPTMaterialArray;
+	}
+	
+	public float[] getMaterialMirrorSmallPTMaterialArray() {
+		return this.materialMirrorSmallPTMaterialArray;
 	}
 	
 	public float[] getMatrix44FArray() {
@@ -87,6 +131,34 @@ final class CompiledScene {
 		return this.shape3FTriangle3FArray;
 	}
 	
+	public float[] getTextureBlendTextureArray() {
+		return this.textureBlendTextureArray;
+	}
+	
+	public float[] getTextureBullseyeTextureArray() {
+		return this.textureBullseyeTextureArray;
+	}
+	
+	public float[] getTextureCheckerboardTextureArray() {
+		return this.textureCheckerboardTextureArray;
+	}
+	
+	public float[] getTextureConstantTextureArray() {
+		return this.textureConstantTextureArray;
+	}
+	
+	public float[] getTextureImageTextureArray() {
+		return this.textureImageTextureArray;
+	}
+	
+	public float[] getTextureMarbleTextureArray() {
+		return this.textureMarbleTextureArray;
+	}
+	
+	public float[] getTextureSimplexFractionalBrownianMotionTextureArray() {
+		return this.textureSimplexFractionalBrownianMotionTextureArray;
+	}
+	
 	public int getPrimitiveCount() {
 		return this.primitiveArray.length / Primitive.ARRAY_SIZE;
 	}
@@ -105,6 +177,26 @@ final class CompiledScene {
 	
 	public void setCameraArray(final float[] cameraArray) {
 		this.cameraArray = Objects.requireNonNull(cameraArray, "cameraArray == null");
+	}
+	
+	public void setMaterialClearCoatSmallPTMaterialArray(final float[] materialClearCoatSmallPTMaterialArray) {
+		this.materialClearCoatSmallPTMaterialArray = Objects.requireNonNull(materialClearCoatSmallPTMaterialArray, "materialClearCoatSmallPTMaterialArray == null");
+	}
+	
+	public void setMaterialGlassSmallPTMaterialArray(final float[] materialGlassSmallPTMaterialArray) {
+		this.materialGlassSmallPTMaterialArray = Objects.requireNonNull(materialGlassSmallPTMaterialArray, "materialGlassSmallPTMaterialArray == null");
+	}
+	
+	public void setMaterialMatteSmallPTMaterialArray(final float[] materialMatteSmallPTMaterialArray) {
+		this.materialMatteSmallPTMaterialArray = Objects.requireNonNull(materialMatteSmallPTMaterialArray, "materialMatteSmallPTMaterialArray == null");
+	}
+	
+	public void setMaterialMetalSmallPTMaterialArray(final float[] materialMetalSmallPTMaterialArray) {
+		this.materialMetalSmallPTMaterialArray = Objects.requireNonNull(materialMetalSmallPTMaterialArray, "materialMetalSmallPTMaterialArray == null");
+	}
+	
+	public void setMaterialMirrorSmallPTMaterialArray(final float[] materialMirrorSmallPTMaterialArray) {
+		this.materialMirrorSmallPTMaterialArray = Objects.requireNonNull(materialMirrorSmallPTMaterialArray, "materialMirrorSmallPTMaterialArray == null");
 	}
 	
 	public void setMatrix44FArray(final float[] matrix44FArray) {
@@ -133,5 +225,33 @@ final class CompiledScene {
 	
 	public void setShape3FTriangle3FArray(final float[] shape3FTriangle3FArray) {
 		this.shape3FTriangle3FArray = Objects.requireNonNull(shape3FTriangle3FArray, "shape3FTriangle3FArray == null");
+	}
+	
+	public void setTextureBlendTextureArray(final float[] textureBlendTextureArray) {
+		this.textureBlendTextureArray = Objects.requireNonNull(textureBlendTextureArray, "textureBlendTextureArray == null");
+	}
+	
+	public void setTextureBullseyeTextureArray(final float[] textureBullseyeTextureArray) {
+		this.textureBullseyeTextureArray = Objects.requireNonNull(textureBullseyeTextureArray, "textureBullseyeTextureArray == null");
+	}
+	
+	public void setTextureCheckerboardTextureArray(final float[] textureCheckerboardTextureArray) {
+		this.textureCheckerboardTextureArray = Objects.requireNonNull(textureCheckerboardTextureArray, "textureCheckerboardTextureArray == null");
+	}
+	
+	public void setTextureConstantTextureArray(final float[] textureConstantTextureArray) {
+		this.textureConstantTextureArray = Objects.requireNonNull(textureConstantTextureArray, "textureConstantTextureArray == null");
+	}
+	
+	public void setTextureImageTextureArray(final float[] textureImageTextureArray) {
+		this.textureImageTextureArray = Objects.requireNonNull(textureImageTextureArray, "textureImageTextureArray == null");
+	}
+	
+	public void setTextureMarbleTextureArray(final float[] textureMarbleTextureArray) {
+		this.textureMarbleTextureArray = Objects.requireNonNull(textureMarbleTextureArray, "textureMarbleTextureArray == null");
+	}
+	
+	public void setTextureSimplexFractionalBrownianMotionTextureArray(final float[] textureSimplexFractionalBrownianMotionTextureArray) {
+		this.textureSimplexFractionalBrownianMotionTextureArray = Objects.requireNonNull(textureSimplexFractionalBrownianMotionTextureArray, "textureSimplexFractionalBrownianMotionTextureArray == null");
 	}
 }

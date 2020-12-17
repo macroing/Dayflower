@@ -1,8 +1,8 @@
 Material material1 = new GlassSmallPTMaterial();
-Material material2 = new ClearCoatSmallPTMaterial(Color3F.BLACK, new Color3F(1.0F, 0.01F, 0.01F));
-Material material3 = new MirrorSmallPTMaterial(Color3F.BLACK, new Color3F(0.5F, 0.5F, 0.5F));
+Material material2 = new ClearCoatSmallPTMaterial(new Color3F(1.0F, 0.01F, 0.01F));
+Material material3 = new MirrorSmallPTMaterial(new Color3F(0.5F, 0.5F, 0.5F));
 Material material4 = new MetalSmallPTMaterial();
-Material material5 = new MatteSmallPTMaterial(Color3F.BLACK, new Color3F(0.01F, 0.01F, 1.0F));
+Material material5 = new MatteSmallPTMaterial(new Color3F(0.01F, 0.01F, 1.0F));
 Material material6 = new MatteSmallPTMaterial();
 
 Shape3F shape1 = new Sphere3F();

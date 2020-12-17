@@ -79,6 +79,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected float[] boundingVolume3FBoundingSphere3FArray;
 	protected float[] cameraArray;
 	protected float[] intersectionArray_$private$24;
+	protected float[] materialClearCoatSmallPTMaterialArray;
+	protected float[] materialGlassSmallPTMaterialArray;
+	protected float[] materialMatteSmallPTMaterialArray;
+	protected float[] materialMetalSmallPTMaterialArray;
+	protected float[] materialMirrorSmallPTMaterialArray;
 	protected float[] matrix44FArray;
 	protected float[] pixelArray;
 	protected float[] ray3FArray_$private$8;
@@ -87,6 +92,13 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected float[] shape3FSphere3FArray;
 	protected float[] shape3FTorus3FArray;
 	protected float[] shape3FTriangle3FArray;
+	protected float[] textureBlendTextureArray;
+	protected float[] textureBullseyeTextureArray;
+	protected float[] textureCheckerboardTextureArray;
+	protected float[] textureConstantTextureArray;
+	protected float[] textureImageTextureArray;
+	protected float[] textureMarbleTextureArray;
+	protected float[] textureSimplexFractionalBrownianMotionTextureArray;
 	protected int primitiveCount;
 	protected int[] primitiveArray;
 	
@@ -2058,6 +2070,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		put(this.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		put(this.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
 		put(this.cameraArray = compiledScene.getCameraArray());
+		put(this.materialClearCoatSmallPTMaterialArray = compiledScene.getMaterialClearCoatSmallPTMaterialArray());
+		put(this.materialGlassSmallPTMaterialArray = compiledScene.getMaterialGlassSmallPTMaterialArray());
+		put(this.materialMatteSmallPTMaterialArray = compiledScene.getMaterialMatteSmallPTMaterialArray());
+		put(this.materialMetalSmallPTMaterialArray = compiledScene.getMaterialMetalSmallPTMaterialArray());
+		put(this.materialMirrorSmallPTMaterialArray = compiledScene.getMaterialMirrorSmallPTMaterialArray());
 		put(this.matrix44FArray = compiledScene.getMatrix44FArray());
 		put(this.primitiveArray = compiledScene.getPrimitiveArray());
 		put(this.shape3FPlane3FArray = compiledScene.getShape3FPlane3FArray());
@@ -2065,6 +2082,13 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		put(this.shape3FSphere3FArray = compiledScene.getShape3FSphere3FArray());
 		put(this.shape3FTorus3FArray = compiledScene.getShape3FTorus3FArray());
 		put(this.shape3FTriangle3FArray = compiledScene.getShape3FTriangle3FArray());
+		put(this.textureBlendTextureArray = compiledScene.getTextureBlendTextureArray());
+		put(this.textureBullseyeTextureArray = compiledScene.getTextureBullseyeTextureArray());
+		put(this.textureCheckerboardTextureArray = compiledScene.getTextureCheckerboardTextureArray());
+		put(this.textureConstantTextureArray = compiledScene.getTextureConstantTextureArray());
+		put(this.textureImageTextureArray = compiledScene.getTextureImageTextureArray());
+		put(this.textureMarbleTextureArray = compiledScene.getTextureMarbleTextureArray());
+		put(this.textureSimplexFractionalBrownianMotionTextureArray = compiledScene.getTextureSimplexFractionalBrownianMotionTextureArray());
 		
 		this.primitiveCount = compiledScene.getPrimitiveCount();
 	}

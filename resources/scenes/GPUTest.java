@@ -1,9 +1,9 @@
-Material material1 = new MattePBRTMaterial();
-Material material2 = new MattePBRTMaterial();
-Material material3 = new MattePBRTMaterial();
-Material material4 = new MattePBRTMaterial();
-Material material5 = new MattePBRTMaterial();
-Material material6 = new MattePBRTMaterial();
+Material material1 = new GlassSmallPTMaterial();
+Material material2 = new ClearCoatSmallPTMaterial(new Color3F(1.0F, 0.01F, 0.01F));
+Material material3 = new MirrorSmallPTMaterial(new Color3F(0.01F, 1.0F, 0.01F));
+Material material4 = new MetalSmallPTMaterial();
+Material material5 = new MatteSmallPTMaterial(new Color3F(0.01F, 0.01F, 1.0F));
+Material material6 = new MatteSmallPTMaterial();
 
 Shape3F shape1 = new Sphere3F();
 Shape3F shape2 = new Torus3F();

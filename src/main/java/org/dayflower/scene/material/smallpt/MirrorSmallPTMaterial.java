@@ -35,6 +35,21 @@ public final class MirrorSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	public static final String NAME = "SmallPT - Mirror";
 	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_ID = 0;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET = 1;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_ID = 2;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET = 3;
+	
+//	TODO: Add Javadocs!
+	public static final int ARRAY_SIZE = 4;
+	
 	/**
 	 * The ID of this {@code MirrorSmallPTMaterial} class.
 	 */
@@ -49,24 +64,24 @@ public final class MirrorSmallPTMaterial extends SmallPTMaterial {
 	
 //	TODO: Add Javadocs!
 	public MirrorSmallPTMaterial() {
-		this(Color3F.BLACK);
+		this(Color3F.WHITE);
 	}
 	
 //	TODO: Add Javadocs!
-	public MirrorSmallPTMaterial(final Color3F colorEmittance) {
-		this(colorEmittance, Color3F.WHITE);
+	public MirrorSmallPTMaterial(final Color3F colorReflectanceScale) {
+		this(colorReflectanceScale, Color3F.BLACK);
 	}
 	
 //	TODO: Add Javadocs!
-	public MirrorSmallPTMaterial(final Color3F colorEmittance, final Color3F colorReflectance) {
+	public MirrorSmallPTMaterial(final Color3F colorReflectanceScale, final Color3F colorEmittance) {
+		this.textureReflectanceScale = new ConstantTexture(Objects.requireNonNull(colorReflectanceScale, "colorReflectanceScale == null"));
 		this.textureEmittance = new ConstantTexture(Objects.requireNonNull(colorEmittance, "colorEmittance == null"));
-		this.textureReflectanceScale = new ConstantTexture(Objects.requireNonNull(colorReflectance, "colorReflectance == null"));
 	}
 	
 //	TODO: Add Javadocs!
-	public MirrorSmallPTMaterial(final Texture textureEmittance, final Texture textureReflectanceScale) {
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+	public MirrorSmallPTMaterial(final Texture textureReflectanceScale, final Texture textureEmittance) {
 		this.textureReflectanceScale = Objects.requireNonNull(textureReflectanceScale, "textureReflectanceScale == null");
+		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +118,16 @@ public final class MirrorSmallPTMaterial extends SmallPTMaterial {
 	@Override
 	public String toString() {
 		return String.format("new MirrorSmallPTMaterial(%s, %s)", this.textureEmittance, this.textureReflectanceScale);
+	}
+	
+//	TODO: Add Javadocs!
+	public Texture getTextureEmittance() {
+		return this.textureEmittance;
+	}
+	
+//	TODO: Add Javadocs!
+	public Texture getTextureReflectanceScale() {
+		return this.textureReflectanceScale;
 	}
 	
 	/**
@@ -170,7 +195,15 @@ public final class MirrorSmallPTMaterial extends SmallPTMaterial {
 	 */
 	@Override
 	public float[] toArray() {
-		return new float[0];//TODO: Implement!
+		final float[] array = new float[ARRAY_SIZE];
+		
+//		Because the MirrorSmallPTMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_ID] = this.textureEmittance.getID();				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET] = 0.0F;									//Block #1
+		array[ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_ID] = this.textureReflectanceScale.getID();//Block #1
+		array[ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET] = 0.0F;							//Block #1
+		
+		return array;
 	}
 	
 	/**

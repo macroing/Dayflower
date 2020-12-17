@@ -77,6 +77,11 @@ public final class ConstantTexture implements Texture {
 	 */
 	public static final ConstantTexture WHITE = new ConstantTexture(Color3F.WHITE);
 	
+	/**
+	 * The ID of this {@code ConstantTexture} class.
+	 */
+	public static final int ID = 4;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Color3F color;
@@ -165,6 +170,26 @@ public final class ConstantTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code ConstantTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code ConstantTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code ConstantTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code ConstantTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

@@ -58,6 +58,11 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	 */
 	public static final String NAME = "PBRT - Glass";
 	
+	/**
+	 * The ID of this {@code GlassPBRTMaterial} class.
+	 */
+	public static final int ID = 100;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureEta;
@@ -248,6 +253,26 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code GlassPBRTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code GlassPBRTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code GlassPBRTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code GlassPBRTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

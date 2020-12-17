@@ -37,6 +37,13 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class BullseyeTexture implements Texture {
+	/**
+	 * The ID of this {@code BullseyeTexture} class.
+	 */
+	public static final int ID = 2;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Point3F origin;
 	private final Texture textureA;
 	private final Texture textureB;
@@ -273,6 +280,26 @@ public final class BullseyeTexture implements Texture {
 	 */
 	public float getScale() {
 		return this.scale;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code BullseyeTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code BullseyeTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code BullseyeTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code BullseyeTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

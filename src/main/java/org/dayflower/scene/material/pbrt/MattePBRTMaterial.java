@@ -50,6 +50,11 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	 */
 	public static final String NAME = "PBRT - Matte";
 	
+	/**
+	 * The ID of this {@code MattePBRTMaterial} class.
+	 */
+	public static final int ID = 102;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureAngle;
@@ -183,6 +188,26 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code MattePBRTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code MattePBRTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code MattePBRTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code MattePBRTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

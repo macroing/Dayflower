@@ -38,6 +38,11 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	public static final String NAME = "SmallPT - Metal";
 	
+	/**
+	 * The ID of this {@code MetalSmallPTMaterial} class.
+	 */
+	public static final int ID = 303;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureEmittance;
@@ -137,6 +142,26 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code MetalSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code MetalSmallPTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code MetalSmallPTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code MetalSmallPTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 //	TODO: Add Javadocs!

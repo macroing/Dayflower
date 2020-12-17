@@ -47,6 +47,11 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	 */
 	public static final String NAME = "Rayito - Glass";
 	
+	/**
+	 * The ID of this {@code GlassRayitoMaterial} class.
+	 */
+	public static final int ID = 200;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureAlbedo;
@@ -291,6 +296,26 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code GlassRayitoMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code GlassRayitoMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code GlassRayitoMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code GlassRayitoMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

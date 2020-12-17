@@ -39,6 +39,13 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class MarbleTexture implements Texture {
+	/**
+	 * The ID of this {@code MarbleTexture} class.
+	 */
+	public static final int ID = 7;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureA;
 	private final Texture textureB;
 	private final Texture textureC;
@@ -263,6 +270,26 @@ public final class MarbleTexture implements Texture {
 	 */
 	public float getStripes() {
 		return this.stripes;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code MarbleTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code MarbleTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code MarbleTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code MarbleTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

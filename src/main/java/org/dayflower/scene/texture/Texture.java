@@ -41,4 +41,18 @@ public interface Texture extends Node {
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	Color3F getColor(final Intersection intersection);
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code Texture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Texture} instance
+	 */
+	float[] toArray();
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Texture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Texture} instance
+	 */
+	int getID();
 }

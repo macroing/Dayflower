@@ -36,6 +36,13 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class SimplexFractionalBrownianMotionTexture implements Texture {
+	/**
+	 * The ID of this {@code SimplexFractionalBrownianMotionTexture} class.
+	 */
+	public static final int ID = 8;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Color3F color;
 	private final float frequency;
 	private final float gain;
@@ -153,6 +160,26 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code SimplexFractionalBrownianMotionTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code SimplexFractionalBrownianMotionTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code SimplexFractionalBrownianMotionTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code SimplexFractionalBrownianMotionTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

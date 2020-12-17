@@ -53,6 +53,11 @@ public final class UberPBRTMaterial implements PBRTMaterial {
 	 */
 	public static final String NAME = "PBRT - Uber";
 	
+	/**
+	 * The ID of this {@code UberPBRTMaterial} class.
+	 */
+	public static final int ID = 107;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureEta;
@@ -246,6 +251,26 @@ public final class UberPBRTMaterial implements PBRTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code UberPBRTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code UberPBRTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code UberPBRTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code UberPBRTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

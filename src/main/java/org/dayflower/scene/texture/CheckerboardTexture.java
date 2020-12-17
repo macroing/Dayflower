@@ -38,6 +38,13 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class CheckerboardTexture implements Texture {
+	/**
+	 * The ID of this {@code CheckerboardTexture} class.
+	 */
+	public static final int ID = 3;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AngleF angle;
 	private final Texture textureA;
 	private final Texture textureB;
@@ -277,6 +284,26 @@ public final class CheckerboardTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code CheckerboardTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code CheckerboardTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code CheckerboardTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code CheckerboardTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

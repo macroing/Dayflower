@@ -39,6 +39,11 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	public static final String NAME = "SmallPT - Clear Coat";
 	
+	/**
+	 * The ID of this {@code ClearCoatSmallPTMaterial} class.
+	 */
+	public static final int ID = 300;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureEmittance;
@@ -172,6 +177,26 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code ClearCoatSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code ClearCoatSmallPTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code ClearCoatSmallPTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code ClearCoatSmallPTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 //	TODO: Add Javadocs!

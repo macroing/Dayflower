@@ -49,6 +49,11 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 */
 	public static final String NAME = "PBRT - Metal";
 	
+	/**
+	 * The ID of this {@code MetalPBRTMaterial} class.
+	 */
+	public static final int ID = 103;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureEta;
@@ -217,6 +222,26 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code MetalPBRTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code MetalPBRTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code MetalPBRTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code MetalPBRTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

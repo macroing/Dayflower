@@ -52,6 +52,11 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 	 */
 	public static final String NAME = "PBRT - Plastic";
 	
+	/**
+	 * The ID of this {@code PlasticPBRTMaterial} class.
+	 */
+	public static final int ID = 105;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureDiffuse;
@@ -207,6 +212,26 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code PlasticPBRTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code PlasticPBRTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code PlasticPBRTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code PlasticPBRTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

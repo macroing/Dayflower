@@ -34,6 +34,13 @@ import org.dayflower.scene.Intersection;
  */
 public final class SurfaceNormalTexture implements Texture {
 	/**
+	 * The ID of this {@code SurfaceNormalTexture} class.
+	 */
+	public static final int ID = 9;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * Constructs a new {@code SurfaceNormalTexture} instance.
 	 */
 	public SurfaceNormalTexture() {
@@ -89,6 +96,26 @@ public final class SurfaceNormalTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code SurfaceNormalTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code SurfaceNormalTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code SurfaceNormalTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code SurfaceNormalTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

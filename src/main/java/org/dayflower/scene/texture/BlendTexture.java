@@ -34,6 +34,13 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class BlendTexture implements Texture {
+	/**
+	 * The ID of this {@code BlendTexture} class.
+	 */
+	public static final int ID = 1;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Texture textureA;
 	private final Texture textureB;
 	private final float tComponent1;
@@ -207,6 +214,26 @@ public final class BlendTexture implements Texture {
 	 */
 	public float getTComponent3() {
 		return this.tComponent3;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code BlendTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code BlendTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code BlendTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code BlendTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

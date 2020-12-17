@@ -67,4 +67,18 @@ public interface Material extends Node {
 	 * @return a {@code String} with the name of this {@code Material} instance
 	 */
 	String getName();
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code Material} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code Material} instance
+	 */
+	float[] toArray();
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Material} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Material} instance
+	 */
+	int getID();
 }

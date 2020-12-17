@@ -34,6 +34,13 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class FunctionTexture implements Texture {
+	/**
+	 * The ID of this {@code FunctionTexture} class.
+	 */
+	public static final int ID = 5;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Function<Intersection, Texture> function;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +102,26 @@ public final class FunctionTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code FunctionTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code FunctionTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code FunctionTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code FunctionTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

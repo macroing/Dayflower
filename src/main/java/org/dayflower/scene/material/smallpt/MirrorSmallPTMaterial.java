@@ -33,6 +33,11 @@ public final class MirrorSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	public static final String NAME = "SmallPT - Mirror";
 	
+	/**
+	 * The ID of this {@code MirrorSmallPTMaterial} class.
+	 */
+	public static final int ID = 304;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureEmittance;
@@ -112,6 +117,26 @@ public final class MirrorSmallPTMaterial extends SmallPTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code MirrorSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code MirrorSmallPTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code MirrorSmallPTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code MirrorSmallPTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 //	TODO: Add Javadocs!

@@ -36,6 +36,11 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	public static final String NAME = "SmallPT - Matte";
 	
+	/**
+	 * The ID of this {@code MatteSmallPTMaterial} class.
+	 */
+	public static final int ID = 302;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureEmittance;
@@ -119,6 +124,26 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code MatteSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code MatteSmallPTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code MatteSmallPTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code MatteSmallPTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 //	TODO: Add Javadocs!

@@ -47,6 +47,11 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 */
 	public static final String NAME = "Rayito - Metal";
 	
+	/**
+	 * The ID of this {@code MetalRayitoMaterial} class.
+	 */
+	public static final int ID = 202;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureAlbedo;
@@ -285,6 +290,26 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code MetalRayitoMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code MetalRayitoMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code MetalRayitoMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code MetalRayitoMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

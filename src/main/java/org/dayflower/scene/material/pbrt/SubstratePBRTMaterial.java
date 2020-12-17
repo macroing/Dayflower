@@ -47,6 +47,11 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 	 */
 	public static final String NAME = "PBRT - Substrate";
 	
+	/**
+	 * The ID of this {@code SubstratePBRTMaterial} class.
+	 */
+	public static final int ID = 106;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureDiffuse;
@@ -197,6 +202,26 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code SubstratePBRTMaterial} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code SubstratePBRTMaterial} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code SubstratePBRTMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code SubstratePBRTMaterial} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

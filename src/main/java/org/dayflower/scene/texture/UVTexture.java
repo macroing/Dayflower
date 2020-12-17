@@ -34,6 +34,13 @@ import org.dayflower.scene.Intersection;
  */
 public final class UVTexture implements Texture {
 	/**
+	 * The ID of this {@code UVTexture} class.
+	 */
+	public static final int ID = 10;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * Constructs a new {@code UVTexture} instance.
 	 */
 	public UVTexture() {
@@ -89,6 +96,26 @@ public final class UVTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code UVTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code UVTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code UVTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code UVTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

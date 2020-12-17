@@ -59,6 +59,13 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class ImageTexture implements Texture {
+	/**
+	 * The ID of this {@code ImageTexture} class.
+	 */
+	public static final int ID = 6;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AngleF angle;
 	private final Vector2F scale;
 	private final boolean isRepeating;
@@ -344,6 +351,26 @@ public final class ImageTexture implements Texture {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code ImageTexture} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code ImageTexture} instance
+	 */
+	@Override
+	public float[] toArray() {
+		return new float[0];//TODO: Implement!
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code ImageTexture} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code ImageTexture} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

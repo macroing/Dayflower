@@ -106,40 +106,20 @@ public final class BlendTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space.
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
-	public Color3F getColorRGB(final Intersection intersection) {
+	public Color3F getColor(final Intersection intersection) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		
-		final Color3F colorA = this.textureA.getColorRGB(intersection);
-		final Color3F colorB = this.textureB.getColorRGB(intersection);
-		final Color3F colorC = Color3F.blend(colorA, colorB, this.tComponent1, this.tComponent2, this.tComponent3);
-		
-		return colorC;
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	@Override
-	public Color3F getColorXYZ(final Intersection intersection) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		
-		final Color3F colorA = this.textureA.getColorXYZ(intersection);
-		final Color3F colorB = this.textureB.getColorXYZ(intersection);
+		final Color3F colorA = this.textureA.getColor(intersection);
+		final Color3F colorB = this.textureB.getColor(intersection);
 		final Color3F colorC = Color3F.blend(colorA, colorB, this.tComponent1, this.tComponent2, this.tComponent3);
 		
 		return colorC;

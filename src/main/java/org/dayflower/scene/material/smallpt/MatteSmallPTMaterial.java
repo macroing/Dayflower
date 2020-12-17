@@ -70,13 +70,13 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColorRGB(intersection);
+		return this.textureEmittance.getColor(intersection);
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public SmallPTSample sampleDistributionFunction(final Intersection intersection) {
-		final Color3F result = this.textureReflectanceScale.getColorRGB(intersection);
+		final Color3F result = this.textureReflectanceScale.getColor(intersection);
 		
 		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 		

@@ -32,24 +32,13 @@ import org.dayflower.scene.Intersection;
  */
 public interface Texture extends Node {
 	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space.
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
-	Color3F getColorRGB(final Intersection intersection);
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	Color3F getColorXYZ(final Intersection intersection);
+	Color3F getColor(final Intersection intersection);
 }

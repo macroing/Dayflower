@@ -183,43 +183,23 @@ public final class BullseyeTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space.
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
-	public Color3F getColorRGB(final Intersection intersection) {
+	public Color3F getColor(final Intersection intersection) {
 		final Vector3F direction = Vector3F.direction(this.origin, intersection.getSurfaceIntersectionObjectSpace().getSurfaceIntersectionPoint());
 		
 		final float directionLength = direction.length();
 		final float directionLengthScaled = directionLength * this.scale;
 		final float directionLengthScaledRemainder = remainder(directionLengthScaled, 1.0F);
 		
-		return directionLengthScaledRemainder > 0.5F ? this.textureA.getColorRGB(intersection) : this.textureB.getColorRGB(intersection);
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	@Override
-	public Color3F getColorXYZ(final Intersection intersection) {
-		final Vector3F direction = Vector3F.direction(this.origin, intersection.getSurfaceIntersectionObjectSpace().getSurfaceIntersectionPoint());
-		
-		final float directionLength = direction.length();
-		final float directionLengthScaled = directionLength * this.scale;
-		final float directionLengthScaledRemainder = remainder(directionLengthScaled, 1.0F);
-		
-		return directionLengthScaledRemainder > 0.5F ? this.textureA.getColorXYZ(intersection) : this.textureB.getColorXYZ(intersection);
+		return directionLengthScaledRemainder > 0.5F ? this.textureA.getColor(intersection) : this.textureB.getColor(intersection);
 	}
 	
 	/**

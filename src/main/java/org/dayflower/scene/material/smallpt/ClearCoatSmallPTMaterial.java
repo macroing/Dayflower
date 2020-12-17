@@ -81,7 +81,7 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColorRGB(intersection);
+		return this.textureEmittance.getColor(intersection);
 	}
 	
 //	TODO: Add Javadocs!
@@ -120,14 +120,14 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
-				final Color3F result = Color3F.multiply(this.textureSpecularReflectanceScale.getColorRGB(intersection), probabilityRussianRouletteReflection);
+				final Color3F result = Color3F.multiply(this.textureSpecularReflectanceScale.getColor(intersection), probabilityRussianRouletteReflection);
 				
 				final Vector3F newDirection = Vector3F.reflection(oldDirection, surfaceNormal, true);
 				
 				return new SmallPTSample(result, newDirection);
 			}
 			
-			final Color3F result = Color3F.multiply(this.textureDiffuseReflectanceScale.getColorRGB(intersection), probabilityRussianRouletteTransmission);
+			final Color3F result = Color3F.multiply(this.textureDiffuseReflectanceScale.getColor(intersection), probabilityRussianRouletteTransmission);
 			
 			final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(surfaceNormalCorrectlyOriented);
 			
@@ -137,7 +137,7 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 			return new SmallPTSample(result, newDirection);
 		}
 		
-		final Color3F result = this.textureSpecularReflectanceScale.getColorRGB(intersection);
+		final Color3F result = this.textureSpecularReflectanceScale.getColor(intersection);
 		
 		final Vector3F newDirection = Vector3F.reflection(oldDirection, surfaceNormal, true);
 		

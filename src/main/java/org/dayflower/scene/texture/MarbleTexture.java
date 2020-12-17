@@ -39,9 +39,9 @@ import org.dayflower.scene.Intersection;
  * @author J&#246;rgen Lundgren
  */
 public final class MarbleTexture implements Texture {
-	private final Color3F colorA;
-	private final Color3F colorB;
-	private final Color3F colorC;
+	private final Texture textureA;
+	private final Texture textureB;
+	private final Texture textureC;
 	private final float frequency;
 	private final float scale;
 	private final float stripes;
@@ -98,9 +98,53 @@ public final class MarbleTexture implements Texture {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorA}, {@code colorB} or {@code colorC} are {@code null}
 	 */
 	public MarbleTexture(final Color3F colorA, final Color3F colorB, final Color3F colorC, final float scale, final float stripes, final int octaves) {
-		this.colorA = Objects.requireNonNull(colorA, "colorA == null");
-		this.colorB = Objects.requireNonNull(colorB, "colorB == null");
-		this.colorC = Objects.requireNonNull(colorC, "colorC == null");
+		this.textureA = new ConstantTexture(Objects.requireNonNull(colorA, "colorA == null"));
+		this.textureB = new ConstantTexture(Objects.requireNonNull(colorB, "colorB == null"));
+		this.textureC = new ConstantTexture(Objects.requireNonNull(colorC, "colorC == null"));
+		this.frequency = PI * stripes;
+		this.scale = scale;
+		this.stripes = stripes;
+		this.octaves = octaves;
+	}
+	
+	/**
+	 * Constructs a new {@code MarbleTexture} instance.
+	 * <p>
+	 * If either {@code textureA}, {@code textureB} or {@code textureC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MarbleTexture(textureA, textureB, textureC, 5.0F, 0.15F, 8);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureA one of the {@link Texture} instances to use
+	 * @param textureB one of the {@code Texture} instances to use
+	 * @param textureC one of the {@code Texture} instances to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureA}, {@code textureB} or {@code textureC} are {@code null}
+	 */
+	public MarbleTexture(final Texture textureA, final Texture textureB, final Texture textureC) {
+		this(textureA, textureB, textureC, 5.0F, 0.15F, 8);
+	}
+	
+	/**
+	 * Constructs a new {@code MarbleTexture} instance.
+	 * <p>
+	 * If either {@code textureA}, {@code textureB} or {@code textureC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureA one of the {@link Texture} instances to use
+	 * @param textureB one of the {@code Texture} instances to use
+	 * @param textureC one of the {@code Texture} instances to use
+	 * @param scale the scale to use
+	 * @param stripes the stripes to use
+	 * @param octaves the octaves to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureA}, {@code textureB} or {@code textureC} are {@code null}
+	 */
+	public MarbleTexture(final Texture textureA, final Texture textureB, final Texture textureC, final float scale, final float stripes, final int octaves) {
+		this.textureA = Objects.requireNonNull(textureA, "textureA == null");
+		this.textureB = Objects.requireNonNull(textureB, "textureB == null");
+		this.textureC = Objects.requireNonNull(textureC, "textureC == null");
 		this.frequency = PI * stripes;
 		this.scale = scale;
 		this.stripes = stripes;
@@ -110,43 +154,16 @@ public final class MarbleTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns one of the three {@link Color3F} instances associated with this {@code MarbleTexture} instance.
-	 * 
-	 * @return one of the three {@code Color3F} instances associated with this {@code MarbleTexture} instance
-	 */
-	public Color3F getColorA() {
-		return this.colorA;
-	}
-	
-	/**
-	 * Returns one of the three {@link Color3F} instances associated with this {@code MarbleTexture} instance.
-	 * 
-	 * @return one of the three {@code Color3F} instances associated with this {@code MarbleTexture} instance
-	 */
-	public Color3F getColorB() {
-		return this.colorB;
-	}
-	
-	/**
-	 * Returns one of the three {@link Color3F} instances associated with this {@code MarbleTexture} instance.
-	 * 
-	 * @return one of the three {@code Color3F} instances associated with this {@code MarbleTexture} instance
-	 */
-	public Color3F getColorC() {
-		return this.colorC;
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space.
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
-	public Color3F getColorRGB(final Intersection intersection) {
+	public Color3F getColor(final Intersection intersection) {
 		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint();
 		
 		final float x = surfaceIntersectionPoint.getX() * this.frequency;
@@ -156,24 +173,10 @@ public final class MarbleTexture implements Texture {
 		final float s = 2.0F * abs(sin(x + r));
 		final float t = s < 1.0F ? s : s - 1.0F;
 		
-		final Color3F colorA = s < 1.0F ? this.colorC : this.colorB;
-		final Color3F colorB = s < 1.0F ? this.colorB : this.colorA;
+		final Color3F colorA = s < 1.0F ? this.textureC.getColor(intersection) : this.textureB.getColor(intersection);
+		final Color3F colorB = s < 1.0F ? this.textureB.getColor(intersection) : this.textureA.getColor(intersection);
 		
 		return Color3F.blend(colorA, colorB, t);
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	@Override
-	public Color3F getColorXYZ(final Intersection intersection) {
-		return Color3F.convertRGBToXYZUsingPBRT(getColorRGB(intersection));
 	}
 	
 	/**
@@ -183,7 +186,34 @@ public final class MarbleTexture implements Texture {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MarbleTexture(%s, %s, %s, %+.10f, %+.10f, %d", this.colorA, this.colorB, this.colorC, Float.valueOf(this.scale), Float.valueOf(this.stripes), Integer.valueOf(this.octaves));
+		return String.format("new MarbleTexture(%s, %s, %s, %+.10f, %+.10f, %d", this.textureA, this.textureB, this.textureC, Float.valueOf(this.scale), Float.valueOf(this.stripes), Integer.valueOf(this.octaves));
+	}
+	
+	/**
+	 * Returns one of the three {@link Texture} instances associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return one of the three {@code Texture} instances associated with this {@code MarbleTexture} instance
+	 */
+	public Texture getTextureA() {
+		return this.textureA;
+	}
+	
+	/**
+	 * Returns one of the three {@link Texture} instances associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return one of the three {@code Texture} instances associated with this {@code MarbleTexture} instance
+	 */
+	public Texture getTextureB() {
+		return this.textureB;
+	}
+	
+	/**
+	 * Returns one of the three {@link Texture} instances associated with this {@code MarbleTexture} instance.
+	 * 
+	 * @return one of the three {@code Texture} instances associated with this {@code MarbleTexture} instance
+	 */
+	public Texture getTextureC() {
+		return this.textureC;
 	}
 	
 	/**
@@ -200,11 +230,11 @@ public final class MarbleTexture implements Texture {
 			return true;
 		} else if(!(object instanceof MarbleTexture)) {
 			return false;
-		} else if(!Objects.equals(this.colorA, MarbleTexture.class.cast(object).colorA)) {
+		} else if(!Objects.equals(this.textureA, MarbleTexture.class.cast(object).textureA)) {
 			return false;
-		} else if(!Objects.equals(this.colorB, MarbleTexture.class.cast(object).colorB)) {
+		} else if(!Objects.equals(this.textureB, MarbleTexture.class.cast(object).textureB)) {
 			return false;
-		} else if(!Objects.equals(this.colorC, MarbleTexture.class.cast(object).colorC)) {
+		} else if(!Objects.equals(this.textureC, MarbleTexture.class.cast(object).textureC)) {
 			return false;
 		} else if(!equal(this.scale, MarbleTexture.class.cast(object).scale)) {
 			return false;
@@ -251,6 +281,6 @@ public final class MarbleTexture implements Texture {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.colorA, this.colorB, this.colorC, Float.valueOf(this.scale), Float.valueOf(this.stripes), Integer.valueOf(this.octaves));
+		return Objects.hash(this.textureA, this.textureB, this.textureC, Float.valueOf(this.scale), Float.valueOf(this.stripes), Integer.valueOf(this.octaves));
 	}
 }

@@ -152,10 +152,10 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final float alpha = this.textureAlpha.getColorRGB(intersection).average();
-		final float betaM = this.textureBetaM.getColorRGB(intersection).average();
-		final float betaN = this.textureBetaN.getColorRGB(intersection).average();
-		final float eta = this.textureEta.getColorRGB(intersection).average();
+		final float alpha = this.textureAlpha.getColor(intersection).average();
+		final float betaM = this.textureBetaM.getColor(intersection).average();
+		final float betaN = this.textureBetaN.getColor(intersection).average();
+		final float eta = this.textureEta.getColor(intersection).average();
 		
 		final Color3F sigmaA = doComputeSigmaA(intersection, betaN);
 		
@@ -232,20 +232,20 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F doComputeSigmaA(final Intersection intersection, final float betaN) {
-		final Color3F colorSigmaA = Color3F.saturate(this.textureSigmaA.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorSigmaA = Color3F.saturate(this.textureSigmaA.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorSigmaA.isBlack()) {
 			return colorSigmaA;
 		}
 		
-		final Color3F colorColor = Color3F.saturate(this.textureColor.getColorXYZ(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorColor.isBlack()) {
 			return HairPBRTBXDF.computeSigmaAFromReflectance(colorColor, betaN);
 		}
 		
-		final Color3F colorEumelanin = this.textureEumelanin.getColorXYZ(intersection);
-		final Color3F colorPheomelanin = this.texturePheomelanin.getColorXYZ(intersection);
+		final Color3F colorEumelanin = this.textureEumelanin.getColor(intersection);
+		final Color3F colorPheomelanin = this.texturePheomelanin.getColor(intersection);
 		
 		final float eumelanin = max(0.0F, colorEumelanin.average());
 		final float pheomelanin = max(0.0F, colorPheomelanin.average());

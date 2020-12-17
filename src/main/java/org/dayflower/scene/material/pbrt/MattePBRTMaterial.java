@@ -126,8 +126,8 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final Color3F colorAngle = this.textureAngle.getColorRGB(intersection);
-		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorAngle = this.textureAngle.getColor(intersection);
+		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		final AngleF angle = AngleF.degrees(saturate(colorAngle.average(), 0.0F, 90.0F));
 		

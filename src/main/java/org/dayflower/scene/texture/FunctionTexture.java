@@ -53,31 +53,17 @@ public final class FunctionTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space.
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
 	 * <p>
 	 * If either {@code intersection} or {@code function.apply(intersection)} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code function.apply(intersection)} are {@code null}
 	 */
 	@Override
-	public Color3F getColorRGB(final Intersection intersection) {
-		return Objects.requireNonNull(this.function.apply(intersection), "function.apply(intersection) == null").getColorRGB(Objects.requireNonNull(intersection, "intersection == null"));
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space.
-	 * <p>
-	 * If either {@code intersection} or {@code function.apply(intersection)} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code function.apply(intersection)} are {@code null}
-	 */
-	@Override
-	public Color3F getColorXYZ(final Intersection intersection) {
-		return Color3F.convertRGBToXYZUsingPBRT(getColorRGB(intersection));
+	public Color3F getColor(final Intersection intersection) {
+		return Objects.requireNonNull(this.function.apply(intersection), "function.apply(intersection) == null").getColor(Objects.requireNonNull(intersection, "intersection == null"));
 	}
 	
 	/**

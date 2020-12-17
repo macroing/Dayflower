@@ -155,10 +155,10 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		final Color3F colorEtaI = Color3F.WHITE;
-		final Color3F colorEtaT = this.textureEta.getColorRGB(intersection);
-		final Color3F colorK = this.textureK.getColorRGB(intersection);
-		final Color3F colorRoughnessU = this.textureRoughnessU.getColorRGB(intersection);
-		final Color3F colorRoughnessV = this.textureRoughnessV.getColorRGB(intersection);
+		final Color3F colorEtaT = this.textureEta.getColor(intersection);
+		final Color3F colorK = this.textureK.getColor(intersection);
+		final Color3F colorRoughnessU = this.textureRoughnessU.getColor(intersection);
+		final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
 		
 		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
 		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();

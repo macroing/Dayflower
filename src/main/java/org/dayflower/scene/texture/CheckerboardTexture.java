@@ -193,16 +193,16 @@ public final class CheckerboardTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space.
+	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an RGB-color space
+	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
-	public Color3F getColorRGB(final Intersection intersection) {
+	public Color3F getColor(final Intersection intersection) {
 		final float cosAngleRadians = cos(this.angle.getRadians());
 		final float sinAngleRadians = sin(this.angle.getRadians());
 		
@@ -212,30 +212,7 @@ public final class CheckerboardTexture implements Texture {
 		final boolean isU = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.scale.getU()) > 0.5F;
 		final boolean isV = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.scale.getV()) > 0.5F;
 		
-		return isU ^ isV ? this.textureA.getColorRGB(intersection) : this.textureB.getColorRGB(intersection);
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection} using an XYZ-color space
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	@Override
-	public Color3F getColorXYZ(final Intersection intersection) {
-		final float cosAngleRadians = cos(this.angle.getRadians());
-		final float sinAngleRadians = sin(this.angle.getRadians());
-		
-		final float u = intersection.getSurfaceIntersectionObjectSpace().getTextureCoordinates().getU();
-		final float v = intersection.getSurfaceIntersectionObjectSpace().getTextureCoordinates().getV();
-		
-		final boolean isU = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.scale.getU()) > 0.5F;
-		final boolean isV = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.scale.getV()) > 0.5F;
-		
-		return isU ^ isV ? this.textureA.getColorXYZ(intersection) : this.textureB.getColorXYZ(intersection);
+		return isU ^ isV ? this.textureA.getColor(intersection) : this.textureB.getColor(intersection);
 	}
 	
 	/**

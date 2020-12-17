@@ -197,7 +197,7 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColorRGB(intersection);
+		return this.textureEmittance.getColor(intersection);
 	}
 	
 	/**
@@ -239,7 +239,7 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new AshikhminShirleyRayitoBRDF(this.textureAlbedo.getColorRGB(intersection), this.roughness))));
+		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new AshikhminShirleyRayitoBRDF(this.textureAlbedo.getColor(intersection), this.roughness))));
 	}
 	
 	/**

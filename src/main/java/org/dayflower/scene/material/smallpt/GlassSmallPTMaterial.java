@@ -79,7 +79,7 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColorRGB(intersection);
+		return this.textureEmittance.getColor(intersection);
 	}
 	
 //	TODO: Add Javadocs!
@@ -118,21 +118,21 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
-				final Color3F result = Color3F.multiply(this.textureReflectanceScale.getColorRGB(intersection), probabilityRussianRouletteReflection);
+				final Color3F result = Color3F.multiply(this.textureReflectanceScale.getColor(intersection), probabilityRussianRouletteReflection);
 				
 				final Vector3F newDirection = Vector3F.reflection(oldDirection, surfaceNormal, true);
 				
 				return new SmallPTSample(result, newDirection);
 			}
 			
-			final Color3F result = Color3F.multiply(this.textureTransmittanceScale.getColorRGB(intersection), probabilityRussianRouletteTransmission);
+			final Color3F result = Color3F.multiply(this.textureTransmittanceScale.getColor(intersection), probabilityRussianRouletteTransmission);
 			
 			final Vector3F newDirection = refractionDirection;
 			
 			return new SmallPTSample(result, newDirection);
 		}
 		
-		final Color3F result = this.textureReflectanceScale.getColorRGB(intersection);
+		final Color3F result = this.textureReflectanceScale.getColor(intersection);
 		
 		final Vector3F newDirection = Vector3F.reflection(oldDirection, surfaceNormal, true);
 		

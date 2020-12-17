@@ -132,12 +132,12 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColorRGB(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorDiffuse.isBlack() || !colorSpecular.isBlack()) {
-			final Color3F colorRoughnessU = this.textureRoughnessU.getColorRGB(intersection);
-			final Color3F colorRoughnessV = this.textureRoughnessV.getColorRGB(intersection);
+			final Color3F colorRoughnessU = this.textureRoughnessU.getColor(intersection);
+			final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
 			
 			final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
 			final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();

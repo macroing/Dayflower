@@ -35,6 +35,7 @@ import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
 import org.dayflower.scene.material.pbrt.PBRTMaterial;
 import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.RayitoMaterial;
+import org.dayflower.scene.material.smallpt.SmallPTMaterial;
 
 /**
  * A class that consists exclusively of static methods that returns {@link Scene} instances used for previews.
@@ -65,6 +66,8 @@ public final class Previews {
 			return doCreateMaterialPreviewScenePBRTMaterial(PBRTMaterial.class.cast(material));
 		} else if(material instanceof RayitoMaterial) {
 			return doCreateMaterialPreviewSceneRayitoMaterial(RayitoMaterial.class.cast(material));
+		} else if(material instanceof SmallPTMaterial) {
+			return doCreateMaterialPreviewSceneSmallPTMaterial(SmallPTMaterial.class.cast(material));
 		} else {
 			return doCreateMaterialPreviewSceneMaterial(material);
 		}
@@ -167,6 +170,31 @@ public final class Previews {
 		scene.addPrimitive(primitive0);
 //		scene.addPrimitive(primitive1);
 		scene.addPrimitive(primitive2);
+		scene.setCamera(camera);
+		scene.setName("Preview");
+		
+		return scene;
+	}
+	
+	private static Scene doCreateMaterialPreviewSceneSmallPTMaterial(final SmallPTMaterial smallPTMaterial) {
+		final
+		Camera camera = new Camera();
+		camera.setResolution(32.0F, 32.0F);
+		camera.setFieldOfViewY();
+		camera.setOrthonormalBasis();
+		
+		final Material material0 = smallPTMaterial;
+		
+		final Shape3F shape0 = new Sphere3F();
+		
+		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(5.0F));
+		
+		final Primitive primitive0 = new Primitive(material0, shape0, transform0);
+		
+		final
+		Scene scene = new Scene();
+		scene.addLight(new PerezLight());
+		scene.addPrimitive(primitive0);
 		scene.setCamera(camera);
 		scene.setName("Preview");
 		

@@ -470,6 +470,30 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns an optional {@code Vector3D} instance that represents the refraction of {@code direction} with regards to {@code normal}.
+	 * <p>
+	 * If either {@code direction} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param direction the {@code Vector3D} instance that will be refracted with regards to {@code normal}
+	 * @param normal the {@code Vector3D} instance that represents the normal of the surface
+	 * @param eta the index of refraction
+	 * @return an optional {@code Vector3D} instance that represents the refraction of {@code direction} with regards to {@code normal}
+	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code normal} are {@code null}
+	 */
+	public static Optional<Vector3D> refraction2(final Vector3D direction, final Vector3D normal, final double eta) {
+		final double cosThetaI = dotProduct(direction, normal);
+		final double sinThetaISquared = 1.0D - cosThetaI * cosThetaI;
+		final double sinThetaTSquared = 1.0D - eta * eta * sinThetaISquared;
+		final double cosThetaT = sqrt(sinThetaTSquared);
+		
+		if(sinThetaTSquared < 0.0D) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(subtract(multiply(direction, eta), multiply(normal, eta * cosThetaI + cosThetaT)));
+	}
+	
+	/**
 	 * Returns a new {@code Vector3D} instance with the absolute component values of {@code vector}.
 	 * <p>
 	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -688,6 +712,20 @@ public final class Vector3D implements Node {
 	 */
 	public static Vector3D faceForward(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return dotProduct(vectorLHS, vectorRHS) < 0.0D ? negate(vectorLHS) : vectorLHS;
+	}
+	
+	/**
+	 * Returns {@code Vector3D.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3D.dotProduct(vectorLHS, vectorRHS)} is greater than or equal to {@code 0.0D} or less than {@code 0.0D}, respectively.
+	 * <p>
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector3D} instance on the right-hand side
+	 * @return {@code Vector3D.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3D.dotProduct(vectorLHS, vectorRHS)} is greater than or equal to {@code 0.0D} or less than {@code 0.0D}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static Vector3D faceForwardNegated(final Vector3D vectorLHS, final Vector3D vectorRHS) {
+		return dotProduct(vectorLHS, vectorRHS) < 0.0D ? vectorLHS : negate(vectorLHS);
 	}
 	
 	/**

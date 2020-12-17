@@ -73,6 +73,7 @@ import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
 import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
 import org.dayflower.scene.material.rayito.RayitoMaterial;
+import org.dayflower.scene.material.smallpt.SmallPTMaterial;
 import org.dayflower.scene.preview.Previews;
 
 import javafx.application.Platform;
@@ -412,6 +413,8 @@ final class RendererViewPane extends BorderPane {
 			return RenderingAlgorithm.PATH_TRACING;
 		} else if(material instanceof RayitoMaterial) {
 			return RenderingAlgorithm.PATH_TRACING;
+		} else if(material instanceof SmallPTMaterial) {
+			return RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE;
 		} else {
 			return RenderingAlgorithm.PATH_TRACING;
 		}

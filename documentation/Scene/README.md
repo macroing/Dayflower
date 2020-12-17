@@ -36,6 +36,13 @@ Below follows a few lists of features available in the Scene API.
 * `MetalRayitoMaterial` - A `Material` that represents metal.
 * `MirrorRayitoMaterial` - A `Material` that represents a mirror.
 
+#### The Scene Material SmallPT API
+* `ClearCoatSmallPTMaterial` - A `Material` that represents clear coat.
+* `GlassSmallPTMaterial` - A `Material` that represents glass.
+* `MatteSmallPTMaterial` - A `Material` that is used for matte surfaces.
+* `MetalSmallPTMaterial` - A `Material` that represents metal.
+* `MirrorSmallPTMaterial` - A `Material` that represents a mirror.
+
 #### The Scene Texture API
 * `BlendTexture` - Returns a `Color3F` by blending two `Texture` instances together.
 * `BullseyeTexture` - Returns a `Color3F` by alternating between two `Texture` instances in a bullseye pattern.
@@ -60,6 +67,7 @@ Packages
 * `org.dayflower.scene.loader` - The Scene Loader API.
 * `org.dayflower.scene.material.pbrt` - The Scene Material PBRT API.
 * `org.dayflower.scene.material.rayito` - The Scene Material Rayito API.
+* `org.dayflower.scene.material.smallpt` - The Scene Material SmallPT API.
 * `org.dayflower.scene.microfacet` - The Scene Microfacet API.
 * `org.dayflower.scene.texture` - The Scene Texture API.
 

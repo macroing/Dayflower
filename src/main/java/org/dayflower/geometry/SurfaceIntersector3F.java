@@ -27,14 +27,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A {@code MutableSurfaceIntersection3F} is an utility useful for performing intersection tests.
+ * A {@code SurfaceIntersector3F} is an utility useful for performing intersection tests.
  * <p>
  * This class is mutable and therefore not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MutableSurfaceIntersection3F {
+public final class SurfaceIntersector3F {
 	/**
 	 * The default minimum parametric {@code t} value.
 	 */
@@ -56,26 +56,26 @@ public final class MutableSurfaceIntersection3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code MutableSurfaceIntersection3F} instance given {@code ray}.
+	 * Constructs a new {@code SurfaceIntersector3F} instance given {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MutableSurfaceIntersection3F(ray, MutableSurfaceIntersection3F.T_MINIMUM, MutableSurfaceIntersection3F.T_MAXIMUM);
+	 * new SurfaceIntersector3F(ray, SurfaceIntersector3F.T_MINIMUM, SurfaceIntersector3F.T_MAXIMUM);
 	 * }
 	 * </pre>
 	 * 
 	 * @param ray a {@link Ray3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public MutableSurfaceIntersection3F(final Ray3F ray) {
+	public SurfaceIntersector3F(final Ray3F ray) {
 		this(ray, T_MINIMUM, T_MAXIMUM);
 	}
 	
 	/**
-	 * Constructs a new {@code MutableSurfaceIntersection3F} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
+	 * Constructs a new {@code SurfaceIntersector3F} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -84,7 +84,7 @@ public final class MutableSurfaceIntersection3F {
 	 * @param tMaximum the maximum parametric {@code t} value
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public MutableSurfaceIntersection3F(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	public SurfaceIntersector3F(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		this.ray = Objects.requireNonNull(ray, "ray == null");
 		this.shape = null;
 		this.t = Float.NaN;
@@ -115,47 +115,47 @@ public final class MutableSurfaceIntersection3F {
 	}
 	
 	/**
-	 * Returns the {@link Ray3F} instance associated with this {@code MutableSurfaceIntersection3F} instance.
+	 * Returns the {@link Ray3F} instance associated with this {@code SurfaceIntersector3F} instance.
 	 * 
-	 * @return the {@code Ray3F} instance associated with this {@code MutableSurfaceIntersection3F} instance
+	 * @return the {@code Ray3F} instance associated with this {@code SurfaceIntersector3F} instance
 	 */
 	public Ray3F getRay() {
 		return this.ray;
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code MutableSurfaceIntersection3F} instance.
+	 * Returns a {@code String} representation of this {@code SurfaceIntersector3F} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code MutableSurfaceIntersection3F} instance
+	 * @return a {@code String} representation of this {@code SurfaceIntersector3F} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MutableSurfaceIntersection3F(%s, %+.10f, %+.10f)", this.ray, Float.valueOf(this.tMinimum), Float.valueOf(this.tMaximum));
+		return String.format("new SurfaceIntersector3F(%s, %+.10f, %+.10f)", this.ray, Float.valueOf(this.tMinimum), Float.valueOf(this.tMaximum));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code MutableSurfaceIntersection3F} instance for equality.
+	 * Compares {@code object} to this {@code SurfaceIntersector3F} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MutableSurfaceIntersection3F}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SurfaceIntersector3F}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code MutableSurfaceIntersection3F} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MutableSurfaceIntersection3F}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code SurfaceIntersector3F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SurfaceIntersector3F}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof MutableSurfaceIntersection3F)) {
+		} else if(!(object instanceof SurfaceIntersector3F)) {
 			return false;
-		} else if(!Objects.equals(this.ray, MutableSurfaceIntersection3F.class.cast(object).ray)) {
+		} else if(!Objects.equals(this.ray, SurfaceIntersector3F.class.cast(object).ray)) {
 			return false;
-		} else if(!Objects.equals(this.shape, MutableSurfaceIntersection3F.class.cast(object).shape)) {
+		} else if(!Objects.equals(this.shape, SurfaceIntersector3F.class.cast(object).shape)) {
 			return false;
-		} else if(!equal(this.t, MutableSurfaceIntersection3F.class.cast(object).t)) {
+		} else if(!equal(this.t, SurfaceIntersector3F.class.cast(object).t)) {
 			return false;
-		} else if(!equal(this.tMaximum, MutableSurfaceIntersection3F.class.cast(object).tMaximum)) {
+		} else if(!equal(this.tMaximum, SurfaceIntersector3F.class.cast(object).tMaximum)) {
 			return false;
-		} else if(!equal(this.tMinimum, MutableSurfaceIntersection3F.class.cast(object).tMinimum)) {
+		} else if(!equal(this.tMinimum, SurfaceIntersector3F.class.cast(object).tMinimum)) {
 			return false;
 		} else {
 			return true;
@@ -163,16 +163,16 @@ public final class MutableSurfaceIntersection3F {
 	}
 	
 	/**
-	 * Performs an intersection test between {@code shape} and this {@code MutableSurfaceIntersection3F} instance.
+	 * Performs an intersection test between {@code shape} and this {@code SurfaceIntersector3F} instance.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code shape} intersects this {@code MutableSurfaceIntersection3F} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code shape} intersects this {@code SurfaceIntersector3F} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code shape} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code shape} intersects this {@code MutableSurfaceIntersection3F} instance, its state will get updated.
+	 * If {@code shape} intersects this {@code SurfaceIntersector3F} instance, its state will get updated.
 	 * 
 	 * @param shape a {@link Shape3F} instance
-	 * @return {@code true} if, and only if, {@code shape} intersects this {@code MutableSurfaceIntersection3F} instance, {@code false} otherwise
+	 * @return {@code true} if, and only if, {@code shape} intersects this {@code SurfaceIntersector3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code shape} is {@code null}
 	 */
 	public boolean intersection(final Shape3F shape) {
@@ -190,31 +190,24 @@ public final class MutableSurfaceIntersection3F {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code MutableSurfaceIntersection3F} has intersected with a {@link Shape3F} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code SurfaceIntersector3F} has intersected with a {@link Shape3F} instance, {@code false} otherwise.
 	 * 
-	 * @return {@code true} if, and only if, this {@code MutableSurfaceIntersection3F} has intersected with a {@code Shape3F} instance, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code SurfaceIntersector3F} has intersected with a {@code Shape3F} instance, {@code false} otherwise
 	 */
 	public boolean isIntersecting() {
 		return this.shape != null && !isNaN(this.t);
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code boundingVolume} intersects this {@code MutableSurfaceIntersection3F} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code boundingVolume} intersects this {@code SurfaceIntersector3F} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code boundingVolume} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param boundingVolume a {@link BoundingVolume3F} instance
-	 * @return {@code true} if, and only if, {@code boundingVolume} intersects this {@code MutableSurfaceIntersection3F} instance, {@code false} otherwise
+	 * @return {@code true} if, and only if, {@code boundingVolume} intersects this {@code SurfaceIntersector3F} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume} is {@code null}
 	 */
 	public boolean isIntersecting(final BoundingVolume3F boundingVolume) {
-//		The original version:
-//		return boundingVolume.intersects(this.ray, this.tMinimum, this.tMaximum);
-		
-//		The original version had a bug that missed intersections and was fixed by the following slower version:
-//		return boundingVolume.intersects(this.ray, this.tMinimum, Float.MAX_VALUE);
-		
-//		A new attempt at fixing the original version and is about as fast as that version:
 		return boundingVolume.contains(this.ray.getOrigin()) || boundingVolume.intersects(this.ray, this.tMinimum, this.tMaximum);
 	}
 	
@@ -246,9 +239,9 @@ public final class MutableSurfaceIntersection3F {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code MutableSurfaceIntersection3F} instance.
+	 * Returns a hash code for this {@code SurfaceIntersector3F} instance.
 	 * 
-	 * @return a hash code for this {@code MutableSurfaceIntersection3F} instance
+	 * @return a hash code for this {@code SurfaceIntersector3F} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -256,14 +249,14 @@ public final class MutableSurfaceIntersection3F {
 	}
 	
 	/**
-	 * Initializes this {@code MutableSurfaceIntersection3F} instance given {@code ray}.
+	 * Initializes this {@code SurfaceIntersector3F} instance given {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * mutableSurfaceIntersection.initialize(ray, MutableSurfaceIntersection3F.T_MINIMUM, MutableSurfaceIntersection3F.T_MAXIMUM);
+	 * surfaceIntersector.initialize(ray, SurfaceIntersector3F.T_MINIMUM, SurfaceIntersector3F.T_MAXIMUM);
 	 * }
 	 * </pre>
 	 * 
@@ -275,7 +268,7 @@ public final class MutableSurfaceIntersection3F {
 	}
 	
 	/**
-	 * Initializes this {@code MutableSurfaceIntersection3F} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
+	 * Initializes this {@code SurfaceIntersector3F} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -292,7 +285,7 @@ public final class MutableSurfaceIntersection3F {
 	}
 	
 	/**
-	 * Transforms this {@code MutableSurfaceIntersection3F} instance with {@code matrix}.
+	 * Transforms this {@code SurfaceIntersector3F} instance with {@code matrix}.
 	 * <p>
 	 * If {@code matrix} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 

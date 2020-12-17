@@ -28,11 +28,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.MutableSurfaceIntersection3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.SurfaceIntersector3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
@@ -130,13 +130,13 @@ public final class Curves3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final MutableSurfaceIntersection3F mutableSurfaceIntersection = new MutableSurfaceIntersection3F(ray, tMinimum, tMaximum);
+		final SurfaceIntersector3F surfaceIntersector = new SurfaceIntersector3F(ray, tMinimum, tMaximum);
 		
 		for(final Curve3F curve : this.curves) {
-			mutableSurfaceIntersection.intersection(curve);
+			surfaceIntersector.intersection(curve);
 		}
 		
-		return mutableSurfaceIntersection.computeSurfaceIntersection();
+		return surfaceIntersector.computeSurfaceIntersection();
 	}
 	
 	/**

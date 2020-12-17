@@ -23,20 +23,20 @@ import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Matrix44F;
-import org.dayflower.geometry.MutableSurfaceIntersection3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.SurfaceIntersector3F;
 
 /**
- * A {@code MutableIntersection} is an utility useful for performing intersection tests.
+ * An {@code Intersector} is an utility useful for performing intersection tests.
  * <p>
  * This class is mutable and therefore not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MutableIntersection {
+public final class Intersector {
 	/**
 	 * The default minimum parametric {@code t} value.
 	 */
@@ -49,32 +49,32 @@ public final class MutableIntersection {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private MutableSurfaceIntersection3F mutableSurfaceIntersection;
 	private Primitive primitive;
+	private SurfaceIntersector3F surfaceIntersector;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code MutableIntersection} instance given {@code ray}.
+	 * Constructs a new {@code Intersector} instance given {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MutableIntersection(ray, MutableIntersection.T_MINIMUM, MutableIntersection.T_MAXIMUM);
+	 * new Intersector(ray, Intersector.T_MINIMUM, Intersector.T_MAXIMUM);
 	 * }
 	 * </pre>
 	 * 
 	 * @param ray a {@link Ray3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public MutableIntersection(final Ray3F ray) {
+	public Intersector(final Ray3F ray) {
 		this(ray, T_MINIMUM, T_MAXIMUM);
 	}
 	
 	/**
-	 * Constructs a new {@code MutableIntersection} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
+	 * Constructs a new {@code Intersector} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -83,21 +83,12 @@ public final class MutableIntersection {
 	 * @param tMaximum the maximum parametric {@code t} value
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	public MutableIntersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		this.mutableSurfaceIntersection = new MutableSurfaceIntersection3F(Objects.requireNonNull(ray, "ray == null"), tMinimum, tMaximum);
+	public Intersector(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		this.primitive = null;
+		this.surfaceIntersector = new SurfaceIntersector3F(Objects.requireNonNull(ray, "ray == null"), tMinimum, tMaximum);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns the {@link MutableSurfaceIntersection3F} instance that is associated with this {@code MutableIntersection} instance.
-	 * 
-	 * @return the {@code MutableSurfaceIntersection3F} instance that is associated with this {@code MutableIntersection} instance
-	 */
-	public MutableSurfaceIntersection3F getMutableSurfaceIntersection() {
-		return this.mutableSurfaceIntersection;
-	}
 	
 	/**
 	 * Computes an {@link Intersection} for the current intersection.
@@ -114,10 +105,10 @@ public final class MutableIntersection {
 			
 			final Matrix44F worldToObject = transform.getWorldToObject();
 			
-			final Ray3F rayWorldSpace = this.mutableSurfaceIntersection.getRay();
+			final Ray3F rayWorldSpace = this.surfaceIntersector.getRay();
 			final Ray3F rayObjectSpace = Ray3F.transform(worldToObject, rayWorldSpace);
 			
-			final Optional<Shape3F> optionalShape = this.mutableSurfaceIntersection.getShape();
+			final Optional<Shape3F> optionalShape = this.surfaceIntersector.getShape();
 			
 			if(optionalShape.isPresent()) {
 				final Shape3F shape = optionalShape.get();
@@ -147,32 +138,41 @@ public final class MutableIntersection {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code MutableIntersection} instance.
+	 * Returns a {@code String} representation of this {@code Intersector} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code MutableIntersection} instance
+	 * @return a {@code String} representation of this {@code Intersector} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MutableIntersection(%s, %+.10f, %+.10f)", this.mutableSurfaceIntersection.getRay(), Float.valueOf(this.mutableSurfaceIntersection.getTMinimum()), Float.valueOf(this.mutableSurfaceIntersection.getTMaximum()));
+		return String.format("new Intersector(%s, %+.10f, %+.10f)", this.surfaceIntersector.getRay(), Float.valueOf(this.surfaceIntersector.getTMinimum()), Float.valueOf(this.surfaceIntersector.getTMaximum()));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code MutableIntersection} instance for equality.
-	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MutableIntersection}, and their respective values are equal, {@code false} otherwise.
+	 * Returns the {@link SurfaceIntersector3F} instance that is associated with this {@code Intersector} instance.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code MutableIntersection} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MutableIntersection}, and their respective values are equal, {@code false} otherwise
+	 * @return the {@code SurfaceIntersector3F} instance that is associated with this {@code Intersector} instance
+	 */
+	public SurfaceIntersector3F getSurfaceIntersector() {
+		return this.surfaceIntersector;
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code Intersector} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Intersector}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code Intersector} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Intersector}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof MutableIntersection)) {
+		} else if(!(object instanceof Intersector)) {
 			return false;
-		} else if(!Objects.equals(this.mutableSurfaceIntersection, MutableIntersection.class.cast(object).mutableSurfaceIntersection)) {
+		} else if(!Objects.equals(this.primitive, Intersector.class.cast(object).primitive)) {
 			return false;
-		} else if(!Objects.equals(this.primitive, MutableIntersection.class.cast(object).primitive)) {
+		} else if(!Objects.equals(this.surfaceIntersector, Intersector.class.cast(object).surfaceIntersector)) {
 			return false;
 		} else {
 			return true;
@@ -180,79 +180,79 @@ public final class MutableIntersection {
 	}
 	
 	/**
-	 * Performs an intersection test between {@code primitive} and this {@code MutableIntersection} instance.
+	 * Performs an intersection test between {@code primitive} and this {@code Intersector} instance.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code primitive} intersects this {@code MutableIntersection} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code primitive} intersects this {@code Intersector} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code primitive} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code primitive} intersects this {@code MutableIntersection} instance, its state will get updated.
+	 * If {@code primitive} intersects this {@code Intersector} instance, its state will get updated.
 	 * 
 	 * @param primitive a {@link Primitive} instance
-	 * @return {@code true} if, and only if, {@code primitive} intersects this {@code MutableIntersection} instance, {@code false} otherwise
+	 * @return {@code true} if, and only if, {@code primitive} intersects this {@code Intersector} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
 	 */
 	public boolean intersection(final Primitive primitive) {
 		boolean isIntersecting = false;
 		
-		if(this.mutableSurfaceIntersection.isIntersecting(primitive.getBoundingVolume())) {
+		if(this.surfaceIntersector.isIntersecting(primitive.getBoundingVolume())) {
 			final Transform transform = primitive.getTransform();
 			
-			this.mutableSurfaceIntersection.transform(transform.getWorldToObject());
+			this.surfaceIntersector.transform(transform.getWorldToObject());
 			
-			if(primitive.getShape().intersection(this.mutableSurfaceIntersection)) {
+			if(primitive.getShape().intersection(this.surfaceIntersector)) {
 				this.primitive = primitive;
 				
 				isIntersecting = true;
 			}
 			
-			this.mutableSurfaceIntersection.transform(transform.getObjectToWorld());
+			this.surfaceIntersector.transform(transform.getObjectToWorld());
 		}
 		
 		return isIntersecting;
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code MutableIntersection} instance contains an intersection, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code Intersector} instance contains an intersection, {@code false} otherwise.
 	 * 
-	 * @return {@code true} if, and only if, this {@code MutableIntersection} instance contains an intersection, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code Intersector} instance contains an intersection, {@code false} otherwise
 	 */
 	public boolean isIntersecting() {
 		return this.primitive != null;
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code boundingVolume} intersects this {@code MutableIntersection} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code boundingVolume} intersects this {@code Intersector} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code boundingVolume} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param boundingVolume a {@link BoundingVolume3F} instance
-	 * @return {@code true} if, and only if, {@code boundingVolume} intersects this {@code MutableIntersection} instance, {@code false} otherwise
+	 * @return {@code true} if, and only if, {@code boundingVolume} intersects this {@code Intersector} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code boundingVolume} is {@code null}
 	 */
 	public boolean isIntersecting(final BoundingVolume3F boundingVolume) {
-		return this.mutableSurfaceIntersection.isIntersecting(boundingVolume);
+		return this.surfaceIntersector.isIntersecting(boundingVolume);
 	}
 	
 	/**
-	 * Returns a hash code for this {@code MutableIntersection} instance.
+	 * Returns a hash code for this {@code Intersector} instance.
 	 * 
-	 * @return a hash code for this {@code MutableIntersection} instance
+	 * @return a hash code for this {@code Intersector} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.mutableSurfaceIntersection, this.primitive);
+		return Objects.hash(this.primitive, this.surfaceIntersector);
 	}
 	
 	/**
-	 * Initializes this {@code MutableIntersection} instance given {@code ray}.
+	 * Initializes this {@code Intersector} instance given {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * mutableIntersection.initialize(ray, MutableIntersection.T_MINIMUM, MutableIntersection.T_MAXIMUM);
+	 * intersector.initialize(ray, Intersector.T_MINIMUM, Intersector.T_MAXIMUM);
 	 * }
 	 * </pre>
 	 * 
@@ -264,7 +264,7 @@ public final class MutableIntersection {
 	}
 	
 	/**
-	 * Initializes this {@code MutableIntersection} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
+	 * Initializes this {@code Intersector} instance given {@code ray}, {@code tMinimum} and {@code tMaximum}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -274,7 +274,7 @@ public final class MutableIntersection {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public void initialize(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		this.mutableSurfaceIntersection = new MutableSurfaceIntersection3F(Objects.requireNonNull(ray, "ray == null"), tMinimum, tMaximum);
 		this.primitive = null;
+		this.surfaceIntersector = new SurfaceIntersector3F(Objects.requireNonNull(ray, "ray == null"), tMinimum, tMaximum);
 	}
 }

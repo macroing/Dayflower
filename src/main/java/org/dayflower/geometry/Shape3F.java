@@ -158,18 +158,18 @@ public interface Shape3F extends Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Performs an intersection test between {@code mutableSurfaceIntersection} and this {@code Shape3F} instance.
+	 * Performs an intersection test between {@code surfaceIntersector} and this {@code Shape3F} instance.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Shape3F} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code Shape3F} instance, {@code false} otherwise.
 	 * <p>
-	 * If {@code mutableSurfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code surfaceIntersector} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param mutableSurfaceIntersection a {@link MutableSurfaceIntersection3F} instance
-	 * @return {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code Shape3F} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code mutableSurfaceIntersection} is {@code null}
+	 * @param surfaceIntersector a {@link SurfaceIntersector3F} instance
+	 * @return {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code Shape3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersector} is {@code null}
 	 */
-	default boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-		return mutableSurfaceIntersection.intersection(this);
+	default boolean intersection(final SurfaceIntersector3F surfaceIntersector) {
+		return surfaceIntersector.intersection(this);
 	}
 	
 	/**

@@ -41,12 +41,12 @@ import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Matrix44F;
-import org.dayflower.geometry.MutableSurfaceIntersection3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.SurfaceIntersector3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
@@ -188,13 +188,13 @@ public final class TriangleMesh3F implements Shape3F {
 			return this.bVHNode.intersection(ray, new float[] {tMinimum, tMaximum});
 		}
 		
-		final MutableSurfaceIntersection3F mutableSurfaceIntersection = new MutableSurfaceIntersection3F(ray, tMinimum, tMaximum);
+		final SurfaceIntersector3F surfaceIntersector = new SurfaceIntersector3F(ray, tMinimum, tMaximum);
 		
 		for(final Triangle3F triangle : this.triangles) {
-			mutableSurfaceIntersection.intersection(triangle);
+			surfaceIntersector.intersection(triangle);
 		}
 		
-		return mutableSurfaceIntersection.computeSurfaceIntersection();
+		return surfaceIntersector.computeSurfaceIntersection();
 	}
 	
 	/**
@@ -328,19 +328,19 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Performs an intersection test between {@code mutableSurfaceIntersection} and this {@code TriangleMesh3F} instance.
+	 * Performs an intersection test between {@code surfaceIntersector} and this {@code TriangleMesh3F} instance.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code TriangleMesh3F} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TriangleMesh3F} instance, {@code false} otherwise.
 	 * <p>
-	 * If {@code mutableSurfaceIntersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code surfaceIntersector} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param mutableSurfaceIntersection a {@link MutableSurfaceIntersection3F} instance
-	 * @return {@code true} if, and only if, {@code mutableSurfaceIntersection} intersects this {@code TriangleMesh3F} instance, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code mutableSurfaceIntersection} is {@code null}
+	 * @param surfaceIntersector a {@link SurfaceIntersector3F} instance
+	 * @return {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TriangleMesh3F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersector} is {@code null}
 	 */
 	@Override
-	public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-		return this.isUsingAccelerationStructure ? this.bVHNode.intersection(mutableSurfaceIntersection) : mutableSurfaceIntersection.intersection(this);
+	public boolean intersection(final SurfaceIntersector3F surfaceIntersector) {
+		return this.isUsingAccelerationStructure ? this.bVHNode.intersection(surfaceIntersector) : surfaceIntersector.intersection(this);
 	}
 	
 	/**
@@ -1070,7 +1070,7 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		public abstract Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds);
 		
-		public abstract boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection);
+		public abstract boolean intersection(final SurfaceIntersector3F surfaceIntersector);
 		
 		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
 		
@@ -1519,12 +1519,12 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-			if(mutableSurfaceIntersection.isIntersecting(getBoundingVolume())) {
+		public boolean intersection(final SurfaceIntersector3F surfaceIntersector) {
+			if(surfaceIntersector.isIntersecting(getBoundingVolume())) {
 				boolean isIntersecting = false;
 				
 				for(final Triangle3F triangle : this.triangles) {
-					if(mutableSurfaceIntersection.intersection(triangle)) {
+					if(surfaceIntersector.intersection(triangle)) {
 						isIntersecting = true;
 					}
 				}
@@ -1649,10 +1649,10 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public boolean intersection(final MutableSurfaceIntersection3F mutableSurfaceIntersection) {
-			if(mutableSurfaceIntersection.isIntersecting(getBoundingVolume())) {
-				final boolean isIntersectingL = this.bVHNodeL.intersection(mutableSurfaceIntersection);
-				final boolean isIntersectingR = this.bVHNodeR.intersection(mutableSurfaceIntersection);
+		public boolean intersection(final SurfaceIntersector3F surfaceIntersector) {
+			if(surfaceIntersector.isIntersecting(getBoundingVolume())) {
+				final boolean isIntersectingL = this.bVHNodeL.intersection(surfaceIntersector);
+				final boolean isIntersectingR = this.bVHNodeR.intersection(surfaceIntersector);
 				
 				return isIntersectingL || isIntersectingR;
 			}

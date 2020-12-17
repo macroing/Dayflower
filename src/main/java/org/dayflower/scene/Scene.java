@@ -203,25 +203,25 @@ public final class Scene implements Node {
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	public Optional<Intersection> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final MutableIntersection mutableIntersection = new MutableIntersection(ray, tMinimum, tMaximum);
+		final Intersector intersector = new Intersector(ray, tMinimum, tMaximum);
 		
 		final BVHNode bVHNode = this.bVHNode;
 		
 		if(bVHNode != null) {
 			for(final Primitive primitive : this.primitivesExternalToBVH) {
-				mutableIntersection.intersection(primitive);
+				intersector.intersection(primitive);
 			}
 			
-			bVHNode.intersection(mutableIntersection);
+			bVHNode.intersection(intersector);
 			
-			return mutableIntersection.computeIntersection();
+			return intersector.computeIntersection();
 		}
 		
 		for(final Primitive primitive : this.primitives) {
-			mutableIntersection.intersection(primitive);
+			intersector.intersection(primitive);
 		}
 		
-		return mutableIntersection.computeIntersection();
+		return intersector.computeIntersection();
 	}
 	
 	/**
@@ -930,7 +930,7 @@ public final class Scene implements Node {
 			return this.boundingVolume;
 		}
 		
-		public abstract boolean intersection(final MutableIntersection mutableIntersection);
+		public abstract boolean intersection(final Intersector intersector);
 		
 		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
 		
@@ -1123,12 +1123,12 @@ public final class Scene implements Node {
 		}
 		
 		@Override
-		public boolean intersection(final MutableIntersection mutableIntersection) {
-			if(mutableIntersection.isIntersecting(getBoundingVolume())) {
+		public boolean intersection(final Intersector intersector) {
+			if(intersector.isIntersecting(getBoundingVolume())) {
 				boolean isIntersecting = false;
 				
 				for(final Primitive primitive : this.primitives) {
-					if(mutableIntersection.intersection(primitive)) {
+					if(intersector.intersection(primitive)) {
 						isIntersecting = true;
 					}
 				}
@@ -1306,10 +1306,10 @@ public final class Scene implements Node {
 		}
 		
 		@Override
-		public boolean intersection(final MutableIntersection mutableIntersection) {
-			if(mutableIntersection.isIntersecting(getBoundingVolume())) {
-				final boolean isIntersectingL = this.bVHNodeL.intersection(mutableIntersection);
-				final boolean isIntersectingR = this.bVHNodeR.intersection(mutableIntersection);
+		public boolean intersection(final Intersector intersector) {
+			if(intersector.isIntersecting(getBoundingVolume())) {
+				final boolean isIntersectingL = this.bVHNodeL.intersection(intersector);
+				final boolean isIntersectingR = this.bVHNodeR.intersection(intersector);
 				
 				return isIntersectingL || isIntersectingR;
 			}

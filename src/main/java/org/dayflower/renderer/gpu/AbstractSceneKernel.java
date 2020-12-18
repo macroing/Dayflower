@@ -38,6 +38,21 @@ import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.material.smallpt.ClearCoatSmallPTMaterial;
+import org.dayflower.scene.material.smallpt.GlassSmallPTMaterial;
+import org.dayflower.scene.material.smallpt.MatteSmallPTMaterial;
+import org.dayflower.scene.material.smallpt.MetalSmallPTMaterial;
+import org.dayflower.scene.material.smallpt.MirrorSmallPTMaterial;
+import org.dayflower.scene.texture.BlendTexture;
+import org.dayflower.scene.texture.BullseyeTexture;
+import org.dayflower.scene.texture.CheckerboardTexture;
+import org.dayflower.scene.texture.ConstantTexture;
+import org.dayflower.scene.texture.FunctionTexture;
+import org.dayflower.scene.texture.ImageTexture;
+import org.dayflower.scene.texture.MarbleTexture;
+import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
+import org.dayflower.scene.texture.SurfaceNormalTexture;
+import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.util.Floats;
 
 /**
@@ -1723,7 +1738,62 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void materialClearCoat(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB, final float transmittanceScaleR, final float transmittanceScaleG, final float transmittanceScaleB) {
+	protected final void materialSampleDistributionFunction() {
+		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_SIZE;
+		final int materialID = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_ID];
+		
+		if(materialID == ClearCoatSmallPTMaterial.ID) {
+			materialSampleDistributionFunctionClearCoatSmallPTMaterial();
+		}
+		
+		if(materialID == GlassSmallPTMaterial.ID) {
+			materialSampleDistributionFunctionGlassSmallPTMaterial();
+		}
+		
+		if(materialID == MatteSmallPTMaterial.ID) {
+			materialSampleDistributionFunctionMatteSmallPTMaterial();
+		}
+		
+		if(materialID == MetalSmallPTMaterial.ID) {
+			materialSampleDistributionFunctionMetalSmallPTMaterial();
+		}
+		
+		if(materialID == MirrorSmallPTMaterial.ID) {
+			materialSampleDistributionFunctionMirrorSmallPTMaterial();
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialSampleDistributionFunctionClearCoatSmallPTMaterial() {
+		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_SIZE;
+		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+		final int textureKDID = (int)(this.materialClearCoatSmallPTMaterialArray[materialOffset + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_D_ID]);
+		final int textureKDOffset = (int)(this.materialClearCoatSmallPTMaterialArray[materialOffset + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET]);
+		final int textureKSID = (int)(this.materialClearCoatSmallPTMaterialArray[materialOffset + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_S_ID]);
+		final int textureKSOffset = (int)(this.materialClearCoatSmallPTMaterialArray[materialOffset + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_S_OFFSET]);
+		
+		textureEvaluate(textureKDID, textureKDOffset);
+		
+		final float colorKDR = color3FLHSGetComponent1();
+		final float colorKDG = color3FLHSGetComponent2();
+		final float colorKDB = color3FLHSGetComponent3();
+		
+		textureEvaluate(textureKSID, textureKSOffset);
+		
+		final float colorKSR = color3FLHSGetComponent1();
+		final float colorKSG = color3FLHSGetComponent2();
+		final float colorKSB = color3FLHSGetComponent3();
+		
+		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float directionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float surfaceNormalZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
 		vector3FSetFaceForwardNegated(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
 		
 		final float surfaceNormalCorrectlyOrientedX = vector3FGetComponent1();
@@ -1762,23 +1832,51 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			if(isChoosingSpecularReflection) {
 				vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 				
-				color3FLHSSet(reflectanceScaleR * probabilityRussianRouletteReflection, reflectanceScaleG * probabilityRussianRouletteReflection, reflectanceScaleB * probabilityRussianRouletteReflection);
+				color3FLHSSet(colorKSR * probabilityRussianRouletteReflection, colorKSG * probabilityRussianRouletteReflection, colorKSB * probabilityRussianRouletteReflection);
 			} else {
 				vector3FSetDiffuseReflection(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, random(), random());
 				
-				color3FLHSSet(transmittanceScaleR * probabilityRussianRouletteTransmission, transmittanceScaleG * probabilityRussianRouletteTransmission, transmittanceScaleB * probabilityRussianRouletteTransmission);
+				color3FLHSSet(colorKDR * probabilityRussianRouletteTransmission, colorKDG * probabilityRussianRouletteTransmission, colorKDB * probabilityRussianRouletteTransmission);
 			}
 		}
 		
 		if(isReflecting) {
 			vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 			
-			color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+			color3FLHSSet(colorKSR, colorKSG, colorKSB);
 		}
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void materialGlass(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB, final float transmittanceScaleR, final float transmittanceScaleG, final float transmittanceScaleB) {
+	protected final void materialSampleDistributionFunctionGlassSmallPTMaterial() {
+		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_SIZE;
+		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+		final int textureKRID = (int)(this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_ID]);
+		final int textureKROffset = (int)(this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET]);
+		final int textureKTID = (int)(this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_T_ID]);
+		final int textureKTOffset = (int)(this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_T_OFFSET]);
+		
+		textureEvaluate(textureKRID, textureKROffset);
+		
+		final float colorKRR = color3FLHSGetComponent1();
+		final float colorKRG = color3FLHSGetComponent2();
+		final float colorKRB = color3FLHSGetComponent3();
+		
+		textureEvaluate(textureKTID, textureKTOffset);
+		
+		final float colorKTR = color3FLHSGetComponent1();
+		final float colorKTG = color3FLHSGetComponent2();
+		final float colorKTB = color3FLHSGetComponent3();
+		
+		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float directionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float surfaceNormalZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
 		vector3FSetFaceForwardNegated(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
 		
 		final float surfaceNormalCorrectlyOrientedX = vector3FGetComponent1();
@@ -1817,39 +1915,101 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			if(isChoosingSpecularReflection) {
 				vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 				
-				color3FLHSSet(reflectanceScaleR * probabilityRussianRouletteReflection, reflectanceScaleG * probabilityRussianRouletteReflection, reflectanceScaleB * probabilityRussianRouletteReflection);
+				color3FLHSSet(colorKRR * probabilityRussianRouletteReflection, colorKRG * probabilityRussianRouletteReflection, colorKRB * probabilityRussianRouletteReflection);
 			} else {
-				color3FLHSSet(transmittanceScaleR * probabilityRussianRouletteTransmission, transmittanceScaleG * probabilityRussianRouletteTransmission, transmittanceScaleB * probabilityRussianRouletteTransmission);
+				color3FLHSSet(colorKTR * probabilityRussianRouletteTransmission, colorKTG * probabilityRussianRouletteTransmission, colorKTB * probabilityRussianRouletteTransmission);
 			}
 		}
 		
 		if(isReflecting) {
 			vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 			
-			color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+			color3FLHSSet(colorKRR, colorKRG, colorKRB);
 		}
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void materialMatte(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+	protected final void materialSampleDistributionFunctionMatteSmallPTMaterial() {
+		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_SIZE;
+		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+		final int textureKDID = (int)(this.materialMatteSmallPTMaterialArray[materialOffset + MatteSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_D_ID]);
+		final int textureKDOffset = (int)(this.materialMatteSmallPTMaterialArray[materialOffset + MatteSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET]);
+		
+		textureEvaluate(textureKDID, textureKDOffset);
+		
+		final float colorKDR = color3FLHSGetComponent1();
+		final float colorKDG = color3FLHSGetComponent2();
+		final float colorKDB = color3FLHSGetComponent3();
+		
+		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float directionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float surfaceNormalZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
 		vector3FSetFaceForwardNegated(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
 		vector3FSetDiffuseReflection(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), random(), random());
 		
-		color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+		color3FLHSSet(colorKDR, colorKDG, colorKDB);
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void materialMetal(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
-		vector3FSetGlossyReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true, random(), random(), 20.0F);
+	protected final void materialSampleDistributionFunctionMetalSmallPTMaterial() {
+		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_SIZE;
+		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+		final int textureKRID = (int)(this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_ID]);
+		final int textureKROffset = (int)(this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET]);
 		
-		color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+		textureEvaluate(textureKRID, textureKROffset);
+		
+		final float colorKRR = color3FLHSGetComponent1();
+		final float colorKRG = color3FLHSGetComponent2();
+		final float colorKRB = color3FLHSGetComponent3();
+		
+		final float exponent = this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_EXPONENT];
+		
+		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float directionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float surfaceNormalZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		vector3FSetGlossyReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true, random(), random(), exponent);
+		
+		color3FLHSSet(colorKRR, colorKRG, colorKRB);
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void materialMirror(final float directionX, final float directionY, final float directionZ, final float surfaceNormalX, final float surfaceNormalY, final float surfaceNormalZ, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+	protected final void materialSampleDistributionFunctionMirrorSmallPTMaterial() {
+		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_SIZE;
+		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+		final int textureKRID = (int)(this.materialMirrorSmallPTMaterialArray[materialOffset + MirrorSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_ID]);
+		final int textureKROffset = (int)(this.materialMirrorSmallPTMaterialArray[materialOffset + MirrorSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET]);
+		
+		textureEvaluate(textureKRID, textureKROffset);
+		
+		final float colorKRR = color3FLHSGetComponent1();
+		final float colorKRG = color3FLHSGetComponent2();
+		final float colorKRB = color3FLHSGetComponent3();
+		
+		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float directionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float surfaceNormalZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
 		vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
 		
-		color3FLHSSet(reflectanceScaleR, reflectanceScaleG, reflectanceScaleB);
+		color3FLHSSet(colorKRR, colorKRG, colorKRB);
 	}
 	
 //	TODO: Add Javadocs!
@@ -1946,6 +2106,39 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final void setScene(final Scene scene) {
 		this.scene = Objects.requireNonNull(scene, "scene == null");
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void textureEvaluate(final int textureID, final int textureOffset) {
+		if(textureID == BlendTexture.ID) {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		} else if(textureID == BullseyeTexture.ID) {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		} else if(textureID == CheckerboardTexture.ID) {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		} else if(textureID == ConstantTexture.ID) {
+			final int colorRGB = (int)(this.textureConstantTextureArray[textureOffset + ConstantTexture.ARRAY_OFFSET_COLOR]);
+			
+			final float component1 = colorRGBIntToRFloat(colorRGB);
+			final float component2 = colorRGBIntToGFloat(colorRGB);
+			final float component3 = colorRGBIntToBFloat(colorRGB);
+			
+			color3FLHSSet(component1, component2, component3);
+		} else if(textureID == FunctionTexture.ID) {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		} else if(textureID == ImageTexture.ID) {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		} else if(textureID == MarbleTexture.ID) {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		} else if(textureID == SimplexFractionalBrownianMotionTexture.ID) {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		} else if(textureID == SurfaceNormalTexture.ID) {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		} else if(textureID == UVTexture.ID) {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		} else {
+			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

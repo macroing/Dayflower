@@ -1,4 +1,4 @@
-Material material1 = new GlassSmallPTMaterial();
+Material material1 = new GlassSmallPTMaterial(Color3F.WHITE, new Color3F(1.0F, 1.0F, 0.5F));
 Material material2 = new ClearCoatSmallPTMaterial(new Color3F(1.0F, 0.01F, 0.01F));
 Material material3 = new MirrorSmallPTMaterial(new Color3F(0.01F, 1.0F, 0.01F));
 Material material4 = new MetalSmallPTMaterial();

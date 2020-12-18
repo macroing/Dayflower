@@ -107,6 +107,8 @@ final class RendererTabPane extends TabPane {
 		public void onChangeCamera(final Scene scene, final Camera oldCamera) {
 			Objects.requireNonNull(scene, "scene == null");
 			Objects.requireNonNull(oldCamera, "oldCamera == null");
+			
+			this.rendererTabPane.getRendererViewPane().setCameraUpdateRequired(true);
 		}
 		
 		@Override
@@ -114,6 +116,8 @@ final class RendererTabPane extends TabPane {
 			Objects.requireNonNull(scene, "scene == null");
 			Objects.requireNonNull(oldCamera, "oldCamera == null");
 			Objects.requireNonNull(newCamera, "newCamera == null");
+			
+			this.rendererTabPane.getRendererViewPane().setCameraUpdateRequired(true);
 		}
 		
 		@Override

@@ -53,12 +53,21 @@ public final class ConcurrentImageCanvas extends Canvas {
 	
 	private final AtomicInteger keysPressed;
 	private final AtomicInteger mouseButtonsPressed;
+	private final AtomicInteger mouseDraggedDeltaX;
+	private final AtomicInteger mouseDraggedDeltaY;
+	private final AtomicInteger mouseDraggedX;
+	private final AtomicInteger mouseDraggedY;
+	private final AtomicInteger mouseMovedDeltaX;
+	private final AtomicInteger mouseMovedDeltaY;
+	private final AtomicInteger mouseMovedX;
+	private final AtomicInteger mouseMovedY;
 	private final AtomicLong mouseX;
 	private final AtomicLong mouseY;
 	private final AtomicReference<PredicateTask> predicateTask;
 	private final ByteBuffer byteBuffer;
 	private final ExecutorService executorService;
 	private final Image image;
+	private final Observer observer;
 	private final Predicate<Image> renderPredicate;
 	private final WritableImage writableImage;
 	private final boolean[] isKeyPressed;
@@ -72,6 +81,13 @@ public final class ConcurrentImageCanvas extends Canvas {
 	 * Constructs a new {@code ConcurrentImageCanvas} instance.
 	 * <p>
 	 * If either {@code executorService}, {@code image} or {@code renderPredicate} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ConcurrentImageCanvas(executorService, image, renderPredicate, (concurrentImageCanvas, x, y) -> {});
+	 * }
+	 * </pre>
 	 * 
 	 * @param executorService the {@code ExecutorService} instance to use
 	 * @param image the {@link Image} instance to use
@@ -79,14 +95,38 @@ public final class ConcurrentImageCanvas extends Canvas {
 	 * @throws NullPointerException thrown if, and only if, either {@code executorService}, {@code image} or {@code renderPredicate} are {@code null}
 	 */
 	public ConcurrentImageCanvas(final ExecutorService executorService, final Image image, final Predicate<Image> renderPredicate) {
+		this(executorService, image, renderPredicate, (concurrentImageCanvas, x, y) -> {});
+	}
+	
+	/**
+	 * Constructs a new {@code ConcurrentImageCanvas} instance.
+	 * <p>
+	 * If either {@code executorService}, {@code image}, {@code renderPredicate} or {@code observer} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param executorService the {@code ExecutorService} instance to use
+	 * @param image the {@link Image} instance to use
+	 * @param renderPredicate the {@code Predicate} of {@code Image} that performs the rendering itself
+	 * @param observer the {@link Observer} instance to use
+	 * @throws NullPointerException thrown if, and only if, either {@code executorService}, {@code image}, {@code renderPredicate} or {@code observer} are {@code null}
+	 */
+	public ConcurrentImageCanvas(final ExecutorService executorService, final Image image, final Predicate<Image> renderPredicate, final Observer observer) {
 		this.keysPressed = new AtomicInteger();
 		this.mouseButtonsPressed = new AtomicInteger();
+		this.mouseDraggedDeltaX = new AtomicInteger();
+		this.mouseDraggedDeltaY = new AtomicInteger();
+		this.mouseDraggedX = new AtomicInteger();
+		this.mouseDraggedY = new AtomicInteger();
+		this.mouseMovedDeltaX = new AtomicInteger();
+		this.mouseMovedDeltaY = new AtomicInteger();
+		this.mouseMovedX = new AtomicInteger();
+		this.mouseMovedY = new AtomicInteger();
 		this.mouseX = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.mouseY = new AtomicLong(Double.doubleToLongBits(0.0D));
 		this.predicateTask = new AtomicReference<>();
 		this.byteBuffer = ByteBuffer.allocate(image.getResolutionX() * image.getResolutionY() * 4);
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
 		this.image = image;
+		this.observer = Objects.requireNonNull(observer, "observer == null");
 		this.renderPredicate = Objects.requireNonNull(renderPredicate, "renderPredicate == null");
 		this.writableImage = new WritableImage(image.getResolutionX(), image.getResolutionY());
 		this.isKeyPressed = new boolean[KeyCode.values().length];
@@ -298,6 +338,25 @@ public final class ConcurrentImageCanvas extends Canvas {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * An {@code Observer} is an observer of a {@code ConcurrentImageCanvas} instance.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
+	public static interface Observer {
+		/**
+		 * This method is called by a {@code ConcurrentImageCanvas} instance when the mouse is dragged.
+		 * 
+		 * @param concurrentImageCanvas the {@code ConcurrentImageCanvas} instance that called this method
+		 * @param x the dragged amount on the X-axis
+		 * @param y the dragged amount on the Y-axis
+		 */
+		void onMouseDragged(final ConcurrentImageCanvas concurrentImageCanvas, final float x, final float y);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private void doOnKeyPressed(final KeyEvent keyEvent) {
 		if(!this.isKeyPressed[keyEvent.getCode().ordinal()]) {
 			this.keysPressed.incrementAndGet();
@@ -316,11 +375,22 @@ public final class ConcurrentImageCanvas extends Canvas {
 	}
 	
 	private void doOnMouseDragged(final MouseEvent mouseEvent) {
+		this.mouseDraggedX.set(this.mouseDraggedDeltaX.get() - (int)(mouseEvent.getScreenX()));
+		this.mouseDraggedY.set(this.mouseDraggedDeltaY.get() - (int)(mouseEvent.getScreenY()));
+		this.mouseDraggedDeltaX.set((int)(mouseEvent.getScreenX()));
+		this.mouseDraggedDeltaY.set((int)(mouseEvent.getScreenY()));
+		this.mouseMovedDeltaX.set(0);
+		this.mouseMovedDeltaY.set(0);
+		this.mouseMovedX.set(0);
+		this.mouseMovedY.set(0);
 		this.mouseX.set(Double.doubleToLongBits(mouseEvent.getX()));
 		this.mouseY.set(Double.doubleToLongBits(mouseEvent.getY()));
+		this.observer.onMouseDragged(this, this.mouseDraggedX.getAndSet(0), this.mouseDraggedY.getAndSet(0));
 	}
 	
 	private void doOnMouseMoved(final MouseEvent mouseEvent) {
+		this.mouseDraggedX.set(0);
+		this.mouseDraggedY.set(0);
 		this.mouseX.set(Double.doubleToLongBits(mouseEvent.getX()));
 		this.mouseY.set(Double.doubleToLongBits(mouseEvent.getY()));
 	}
@@ -331,6 +401,9 @@ public final class ConcurrentImageCanvas extends Canvas {
 		}
 		
 		this.isMouseButtonPressed[mouseEvent.getButton().ordinal()] = true;
+		
+		this.mouseDraggedDeltaX.set((int)(mouseEvent.getScreenX()));
+		this.mouseDraggedDeltaY.set((int)(mouseEvent.getScreenY()));
 	}
 	
 	private void doOnMouseReleased(final MouseEvent mouseEvent) {

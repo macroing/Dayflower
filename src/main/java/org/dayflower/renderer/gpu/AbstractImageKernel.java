@@ -671,9 +671,9 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		final int imageColorIntB = (int)(min(max(imageColorFloatB, 0.0F), 1.0F) * 255.0F + 0.5F);
 		final int imageColorIntA = 255;
 		
-		this.imageColorByteArray[imageColorByteArrayOffset + 0] = (byte)(imageColorIntB);
+		this.imageColorByteArray[imageColorByteArrayOffset + 0] = (byte)(imageColorIntR);
 		this.imageColorByteArray[imageColorByteArrayOffset + 1] = (byte)(imageColorIntG);
-		this.imageColorByteArray[imageColorByteArrayOffset + 2] = (byte)(imageColorIntR);
+		this.imageColorByteArray[imageColorByteArrayOffset + 2] = (byte)(imageColorIntB);
 		this.imageColorByteArray[imageColorByteArrayOffset + 3] = (byte)(imageColorIntA);
 	}
 	

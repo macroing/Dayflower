@@ -285,6 +285,11 @@ final class SceneCompiler {
 		compiledScene.setBoundingVolume3FAxisAlignedBoundingBox3FArray(boundingVolume3FAxisAlignedBoundingBox3FArray);
 		compiledScene.setBoundingVolume3FBoundingSphere3FArray(boundingVolume3FBoundingSphere3FArray);
 		compiledScene.setCameraArray(cameraArray);
+		compiledScene.setMaterialClearCoatSmallPTMaterialArray(materialClearCoatSmallPTMaterialArray);
+		compiledScene.setMaterialGlassSmallPTMaterialArray(materialGlassSmallPTMaterialArray);
+		compiledScene.setMaterialMatteSmallPTMaterialArray(materialMatteSmallPTMaterialArray);
+		compiledScene.setMaterialMetalSmallPTMaterialArray(materialMetalSmallPTMaterialArray);
+		compiledScene.setMaterialMirrorSmallPTMaterialArray(materialMirrorSmallPTMaterialArray);
 		compiledScene.setMatrix44FArray(matrix44FArray);
 		compiledScene.setPrimitiveArray(primitiveArray);
 		compiledScene.setShape3FPlane3FArray(shape3FPlane3FArray);

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
@@ -43,6 +44,7 @@ import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.image.PixelImage;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
+import org.dayflower.javafx.canvas.ConcurrentImageCanvas.Observer;
 import org.dayflower.javafx.scene.control.Labels;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.image.WritableImageCache;
@@ -52,6 +54,7 @@ import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.cpu.CPURenderer;
+import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.Camera;
@@ -90,6 +93,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -107,6 +111,7 @@ final class RendererViewPane extends BorderPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final AtomicBoolean isCameraUpdateRequired;
 	private final AtomicReference<File> file;
 	private final ConcurrentImageCanvas concurrentImageCanvas;
 	private final ExecutorService executorService;
@@ -134,8 +139,9 @@ final class RendererViewPane extends BorderPane {
 	 * @throws NullPointerException thrown if, and only if, either {@code renderer} or {@code executorService} are {@code null}
 	 */
 	public RendererViewPane(final Renderer renderer, final ExecutorService executorService) {
+		this.isCameraUpdateRequired = new AtomicBoolean();
 		this.file = new AtomicReference<>();
-		this.concurrentImageCanvas = new ConcurrentImageCanvas(executorService, renderer.getRendererConfiguration().getImage(), this::doRender);
+		this.concurrentImageCanvas = new ConcurrentImageCanvas(executorService, renderer.getRendererConfiguration().getImage(), this::doRender, new ObserverImpl(renderer));
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
 		this.hBox = new HBox();
 		this.labelRenderPass = new Label();
@@ -217,6 +223,15 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	/**
+	 * Sets the camera update required state to {@code isCameraUpdateRequired}.
+	 * 
+	 * @param isCameraUpdateRequired {@code true} if, and only if, camera update is required, {@code false} otherwise
+	 */
+	public void setCameraUpdateRequired(final boolean isCameraUpdateRequired) {
+		this.isCameraUpdateRequired.set(isCameraUpdateRequired);
+	}
+	
+	/**
 	 * Sets the {@code File} for saving to {@code file}.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -226,6 +241,38 @@ final class RendererViewPane extends BorderPane {
 	 */
 	public void setFile(final File file) {
 		this.file.set(Objects.requireNonNull(file, "file == null"));
+	}
+	
+	/**
+	 * This method is called when it's time to update.
+	 */
+	public void update() {
+		final Camera camera = this.renderer.getRendererConfiguration().getScene().getCamera();
+		
+		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.A)) {
+			camera.moveLeft(0.3F);
+		}
+		
+		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.D)) {
+			camera.moveRight(0.3F);
+		}
+		
+		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.S)) {
+			camera.moveBackward(0.3F);
+		}
+		
+		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.W)) {
+			camera.moveForward(0.3F);
+		}
+		
+		if(this.isCameraUpdateRequired.compareAndSet(true, false)) {
+			if(this.renderer instanceof AbstractGPURenderer) {
+				AbstractGPURenderer.class.cast(this.renderer).updateCamera();
+			}
+			
+			this.renderer.renderShutdown();
+			this.renderer.clear();
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -439,6 +486,27 @@ final class RendererViewPane extends BorderPane {
 		pixelImage.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImage.getResolutionX() - 1, pixelImage.getResolutionY() - 1)), new Color3F(181, 181, 181));
 		
 		return pixelImage.toWritableImage();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final class ObserverImpl implements Observer {
+		private final Renderer renderer;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		public ObserverImpl(final Renderer renderer) {
+			this.renderer = Objects.requireNonNull(renderer, "renderer == null");
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		@Override
+		public void onMouseDragged(final ConcurrentImageCanvas concurrentImageCanvas, final float x, final float y) {
+			final
+			Renderer renderer = this.renderer;
+			renderer.getRendererConfiguration().getScene().getCamera().rotate(x, y);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -32,11 +32,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 	private static final float SKY_B = 1.0F;//235.0F / 255.0F;
 	private static final float SKY_G = 1.0F;//206.0F / 255.0F;
 	private static final float SKY_R = 1.0F;//135.0F / 255.0F;
-	private static final int MATERIAL_CLEAR_COAT = 1;
-	private static final int MATERIAL_GLASS = 2;
-	private static final int MATERIAL_MATTE = 3;
-	private static final int MATERIAL_METAL = 4;
-	private static final int MATERIAL_MIRROR = 5;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -66,23 +61,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private int doCalculateMaterialForPrimitiveIndex(final int primitiveIndex) {
-		if(primitiveIndex == 0) {
-			return MATERIAL_GLASS;
-		} else if(primitiveIndex == 1) {
-			return MATERIAL_CLEAR_COAT;
-		} else if(primitiveIndex == 2) {
-			return MATERIAL_MIRROR;
-		} else if(primitiveIndex == 3) {
-			return MATERIAL_METAL;
-		} else if(primitiveIndex == 4) {
-			return MATERIAL_MATTE;
-		} else {
-			return MATERIAL_MATTE;
-		}
-	}
 	
 	private void doComputeEmittanceForPrimitive(final int primitiveIndex) {
 		if(primitiveIndex == 5) {
@@ -176,12 +154,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 				if(intersectionComputeShape3F()) {
 					final int primitiveIndex = (int)(super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
 					
-					final float directionX = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-					final float directionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-					final float directionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-					
-					final int material = doCalculateMaterialForPrimitiveIndex(primitiveIndex);
-					
 					doComputeEmittanceForPrimitive(primitiveIndex);
 					
 					final float emittanceR = color3FLHSGetComponent1();
@@ -190,37 +162,11 @@ public final class GPURenderer extends AbstractGPURenderer {
 					
 					doComputeReflectanceForPrimitive(primitiveIndex);
 					
-					final float reflectanceR = color3FLHSGetComponent1();
-					final float reflectanceG = color3FLHSGetComponent2();
-					final float reflectanceB = color3FLHSGetComponent3();
-					
-					final float surfaceNormalX = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
-					final float surfaceNormalY = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
-					final float surfaceNormalZ = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
-					
 					radianceR += throughputR * emittanceR;
 					radianceG += throughputG * emittanceG;
 					radianceB += throughputB * emittanceB;
 					
-					if(material == MATERIAL_CLEAR_COAT) {
-						materialClearCoat(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, 1.0F, 1.0F, 1.0F, reflectanceR, reflectanceG, reflectanceB);
-					}
-					
-					if(material == MATERIAL_GLASS) {
-						materialGlass(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, reflectanceR, reflectanceG, reflectanceB, reflectanceR, reflectanceG, reflectanceB);
-					}
-					
-					if(material == MATERIAL_MATTE) {
-						materialMatte(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, reflectanceR, reflectanceG, reflectanceB);
-					}
-					
-					if(material == MATERIAL_METAL) {
-						materialMetal(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, reflectanceR, reflectanceG, reflectanceB);
-					}
-					
-					if(material == MATERIAL_MIRROR) {
-						materialMirror(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, reflectanceR, reflectanceG, reflectanceB);
-					}
+					materialSampleDistributionFunction();
 					
 					throughputR *= color3FLHSGetComponent1();
 					throughputG *= color3FLHSGetComponent2();

@@ -139,15 +139,18 @@ public final class NodeSelectionTabPane<T extends Node, U> extends TabPane {
 	/**
 	 * Adds {@code object} of type {@code U} to this {@code NodeSelectionTabPane} instance.
 	 * <p>
+	 * Returns the {@code Tab} instance associated with {@code object}.
+	 * <p>
 	 * If {@code object} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method first attempts to find an existing {@code Tab} instance that corresponds to {@code object}. It does this using {@code mapperTToU} and {@code comparator}. If it finds it, it will be selected. Otherwise a new {@code Tab} instance will
 	 * be created. The {@code Node} of type {@code T} will be created using {@code mapperUToT} and the text for the {@code Tab} instance will be created using {@code mapperUToText}. Once the {@code Tab} has been created, it will be added and selected.
 	 * 
 	 * @param object an {@code Object} instance of type {@code U}
+	 * @return the {@code Tab} instance associated with {@code object}
 	 * @throws NullPointerException thrown if, and only if, {@code object} is {@code null}
 	 */
-	public void add(final U object) {
+	public Tab add(final U object) {
 		Objects.requireNonNull(object, "object == null");
 		
 		for(final Tab tab : getTabs()) {
@@ -162,7 +165,7 @@ public final class NodeSelectionTabPane<T extends Node, U> extends TabPane {
 				if(this.comparator.test(object0, object1)) {
 					getSelectionModel().select(tab);
 					
-					return;
+					return tab;
 				}
 			}
 		}
@@ -177,5 +180,7 @@ public final class NodeSelectionTabPane<T extends Node, U> extends TabPane {
 		getTabs().add(tab);
 		
 		getSelectionModel().select(tab);
+		
+		return tab;
 	}
 }

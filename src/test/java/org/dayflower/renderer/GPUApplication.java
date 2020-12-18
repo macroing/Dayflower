@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.dayflower.image.ByteImage;
 import org.dayflower.image.Image;
-import org.dayflower.javafx.canvas.ConcurrentByteArrayCanvas;
-import org.dayflower.javafx.canvas.ConcurrentByteArrayCanvas.Observer;
+import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
+import org.dayflower.javafx.canvas.ConcurrentImageCanvas.Observer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
@@ -71,7 +71,7 @@ public final class GPUApplication extends Application {
 		
 		final ExecutorService executorService = this.executorService;
 		
-		final ConcurrentByteArrayCanvas concurrentByteArrayCanvas = new ConcurrentByteArrayCanvas(this.executorService, new ObserverImpl(AbstractGPURenderer.class.cast(renderer), camera), this::doRender, byteImage.getResolutionX(), byteImage.getResolutionY());
+		final ConcurrentImageCanvas concurrentImageCanvas = new ConcurrentImageCanvas(this.executorService, byteImage, this::doRender, new ObserverImpl(AbstractGPURenderer.class.cast(renderer), camera));
 		
 		final
 		HBox hBox = new HBox();
@@ -81,7 +81,7 @@ public final class GPUApplication extends Application {
 		final
 		BorderPane borderPane = new BorderPane();
 		borderPane.setBottom(hBox);
-		borderPane.setCenter(concurrentByteArrayCanvas);
+		borderPane.setCenter(concurrentImageCanvas);
 		
 		final Scene scene = new Scene(borderPane);
 		
@@ -95,7 +95,7 @@ public final class GPUApplication extends Application {
 		new AnimationTimer() {
 			@Override
 			public void handle(final long now) {
-				if(concurrentByteArrayCanvas.isKeyPressed(KeyCode.ESCAPE, true)) {
+				if(concurrentImageCanvas.isKeyPressed(KeyCode.ESCAPE, true)) {
 					renderer.renderShutdown();
 					renderer.dispose();
 					
@@ -109,7 +109,7 @@ public final class GPUApplication extends Application {
 					Platform.exit();
 				}
 				
-				if(concurrentByteArrayCanvas.isKeyPressed(KeyCode.A)) {
+				if(concurrentImageCanvas.isKeyPressed(KeyCode.A)) {
 					camera.moveLeft(0.3F);
 					
 					final
@@ -118,7 +118,7 @@ public final class GPUApplication extends Application {
 					abstractGPURenderer.clear();
 				}
 				
-				if(concurrentByteArrayCanvas.isKeyPressed(KeyCode.D)) {
+				if(concurrentImageCanvas.isKeyPressed(KeyCode.D)) {
 					camera.moveRight(0.3F);
 					
 					final
@@ -127,7 +127,7 @@ public final class GPUApplication extends Application {
 					abstractGPURenderer.clear();
 				}
 				
-				if(concurrentByteArrayCanvas.isKeyPressed(KeyCode.S)) {
+				if(concurrentImageCanvas.isKeyPressed(KeyCode.S)) {
 					camera.moveBackward(0.3F);
 					
 					final
@@ -136,7 +136,7 @@ public final class GPUApplication extends Application {
 					abstractGPURenderer.clear();
 				}
 				
-				if(concurrentByteArrayCanvas.isKeyPressed(KeyCode.W)) {
+				if(concurrentImageCanvas.isKeyPressed(KeyCode.W)) {
 					camera.moveForward(0.3F);
 					
 					final
@@ -145,7 +145,7 @@ public final class GPUApplication extends Application {
 					abstractGPURenderer.clear();
 				}
 				
-				concurrentByteArrayCanvas.render();
+				concurrentImageCanvas.render();
 			}
 		}.start();
 	}
@@ -158,18 +158,9 @@ public final class GPUApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private boolean doRender(final byte[] updateBytes) {
-		if(this.renderer.render()) {
-			final ByteImage byteImage = ByteImage.class.cast(this.renderer.getRendererConfiguration().getImage());
-			
-			final byte[] renderBytes = byteImage.getBytes(true);
-			
-			System.arraycopy(renderBytes, 0, updateBytes, 0, renderBytes.length);
-			
-			return true;
-		}
-		
-		return false;
+	@SuppressWarnings("unused")
+	private boolean doRender(final Image image) {
+		return this.renderer.render();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -212,7 +203,7 @@ public final class GPUApplication extends Application {
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		@Override
-		public void onMouseDragged(final float x, final float y) {
+		public void onMouseDragged(final ConcurrentImageCanvas concurrentImageCanvas, final float x, final float y) {
 			this.camera.rotate(x, y);
 			this.abstractGPURenderer.updateCamera();
 			this.abstractGPURenderer.clear();

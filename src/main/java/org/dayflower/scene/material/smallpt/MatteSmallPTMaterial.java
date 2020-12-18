@@ -35,20 +35,22 @@ import org.dayflower.scene.texture.Texture;
 
 //TODO: Add Javadocs!
 public final class MatteSmallPTMaterial extends SmallPTMaterial {
-//	TODO: Add Javadocs!
+	/**
+	 * The name of this {@code MatteSmallPTMaterial} class.
+	 */
 	public static final String NAME = "SmallPT - Matte";
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_ID = 0;
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_ID = 0;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET = 1;
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_ID = 2;
+	public static final int ARRAY_OFFSET_TEXTURE_K_D_ID = 2;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET = 3;
+	public static final int ARRAY_OFFSET_TEXTURE_K_D_OFFSET = 3;
 	
 //	TODO: Add Javadocs!
 	public static final int ARRAY_SIZE = 4;
@@ -60,31 +62,70 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureEmittance;
-	private final Texture textureReflectanceScale;
+	private final Texture textureEmission;
+	private final Texture textureKD;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code MatteSmallPTMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MatteSmallPTMaterial(Color3F.GRAY);
+	 * }
+	 * </pre>
+	 */
 	public MatteSmallPTMaterial() {
 		this(Color3F.GRAY);
 	}
 	
-//	TODO: Add Javadocs!
-	public MatteSmallPTMaterial(final Color3F colorReflectanceScale) {
-		this(colorReflectanceScale, Color3F.BLACK);
+	/**
+	 * Constructs a new {@code MatteSmallPTMaterial} instance.
+	 * <p>
+	 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MatteSmallPTMaterial(colorKD, Color3F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
+	 */
+	public MatteSmallPTMaterial(final Color3F colorKD) {
+		this(colorKD, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
-	public MatteSmallPTMaterial(final Color3F colorReflectanceScale, final Color3F colorEmittance) {
-		this.textureReflectanceScale = new ConstantTexture(Objects.requireNonNull(colorReflectanceScale, "colorReflectanceScale == null"));
-		this.textureEmittance = new ConstantTexture(Objects.requireNonNull(colorEmittance, "colorEmittance == null"));
+	/**
+	 * Constructs a new {@code MatteSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorEmission} are {@code null}
+	 */
+	public MatteSmallPTMaterial(final Color3F colorKD, final Color3F colorEmission) {
+		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 	}
 	
-//	TODO: Add Javadocs!
-	public MatteSmallPTMaterial(final Texture textureReflectanceScale, final Texture textureEmittance) {
-		this.textureReflectanceScale = Objects.requireNonNull(textureReflectanceScale, "textureReflectanceScale == null");
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+	/**
+	 * Constructs a new {@code MatteSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureEmission} are {@code null}
+	 */
+	public MatteSmallPTMaterial(final Texture textureKD, final Texture textureEmission) {
+		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,13 +133,13 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColor(intersection);
+		return this.textureEmission.getColor(intersection);
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public SmallPTSample sampleDistributionFunction(final Intersection intersection) {
-		final Color3F result = this.textureReflectanceScale.getColor(intersection);
+		final Color3F result = this.textureKD.getColor(intersection);
 		
 		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 		
@@ -115,26 +156,42 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 		return new SmallPTSample(result, newDirection);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} with the name of this {@code MatteSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code MatteSmallPTMaterial} instance
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code MatteSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code MatteSmallPTMaterial} instance
+	 */
 	@Override
 	public String toString() {
-		return String.format("new MatteSmallPTMaterial(%s, %s)", this.textureEmittance, this.textureReflectanceScale);
+		return String.format("new MatteSmallPTMaterial(%s, %s)", this.textureKD, this.textureEmission);
 	}
 	
-//	TODO: Add Javadocs!
-	public Texture getTextureEmittance() {
-		return this.textureEmittance;
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
 	}
 	
-//	TODO: Add Javadocs!
-	public Texture getTextureReflectanceScale() {
-		return this.textureReflectanceScale;
+	/**
+	 * Returns the {@link Texture} instance for the diffuse coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the diffuse coefficient
+	 */
+	public Texture getTextureKD() {
+		return this.textureKD;
 	}
 	
 	/**
@@ -164,11 +221,11 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureReflectanceScale.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKD.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -179,16 +236,23 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code MatteSmallPTMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MatteSmallPTMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code MatteSmallPTMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MatteSmallPTMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof MatteSmallPTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, MatteSmallPTMaterial.class.cast(object).textureEmittance)) {
+		} else if(!Objects.equals(this.textureEmission, MatteSmallPTMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureReflectanceScale, MatteSmallPTMaterial.class.cast(object).textureReflectanceScale)) {
+		} else if(!Objects.equals(this.textureKD, MatteSmallPTMaterial.class.cast(object).textureKD)) {
 			return false;
 		} else {
 			return true;
@@ -205,10 +269,10 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 		final float[] array = new float[ARRAY_SIZE];
 		
 //		Because the MatteSmallPTMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_ID] = this.textureEmittance.getID();				//Block #1
-		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET] = 0.0F;									//Block #1
-		array[ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_ID] = this.textureReflectanceScale.getID();//Block #1
-		array[ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET] = 0.0F;							//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0.0F;						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D_ID] = this.textureKD.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D_OFFSET] = 0.0F;							//Block #1
 		
 		return array;
 	}
@@ -223,9 +287,13 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 		return ID;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code MatteSmallPTMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code MatteSmallPTMaterial} instance
+	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEmittance, this.textureReflectanceScale);
+		return Objects.hash(this.textureEmission, this.textureKD);
 	}
 }

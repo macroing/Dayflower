@@ -36,26 +36,28 @@ import org.dayflower.scene.texture.Texture;
 
 //TODO: Add Javadocs!
 public final class GlassSmallPTMaterial extends SmallPTMaterial {
-//	TODO: Add Javadocs!
+	/**
+	 * The name of this {@code GlassSmallPTMaterial} class.
+	 */
 	public static final String NAME = "SmallPT - Glass";
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_ID = 0;
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_ID = 0;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET = 1;
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_ID = 2;
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 2;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET = 3;
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 3;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_TRANSMITTANCE_SCALE_ID = 4;
+	public static final int ARRAY_OFFSET_TEXTURE_K_T_ID = 4;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_TRANSMITTANCE_SCALE_OFFSET = 5;
+	public static final int ARRAY_OFFSET_TEXTURE_K_T_OFFSET = 5;
 	
 //	TODO: Add Javadocs!
 	public static final int ARRAY_SIZE = 8;
@@ -67,39 +69,95 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureEmittance;
-	private final Texture textureReflectanceScale;
-	private final Texture textureTransmittanceScale;
+	private final Texture textureEmission;
+	private final Texture textureKR;
+	private final Texture textureKT;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code GlassSmallPTMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassSmallPTMaterial(Color3F.WHITE);
+	 * }
+	 * </pre>
+	 */
 	public GlassSmallPTMaterial() {
 		this(Color3F.WHITE);
 	}
 	
-//	TODO: Add Javadocs!
-	public GlassSmallPTMaterial(final Color3F colorReflectanceScale) {
-		this(colorReflectanceScale, Color3F.WHITE);
+	/**
+	 * Constructs a new {@code GlassSmallPTMaterial} instance.
+	 * <p>
+	 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassSmallPTMaterial(colorKR, Color3F.WHITE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
+	 */
+	public GlassSmallPTMaterial(final Color3F colorKR) {
+		this(colorKR, Color3F.WHITE);
 	}
 	
-//	TODO: Add Javadocs!
-	public GlassSmallPTMaterial(final Color3F colorReflectanceScale, final Color3F colorTransmittanceScale) {
-		this(colorReflectanceScale, colorTransmittanceScale, Color3F.BLACK);
+	/**
+	 * Constructs a new {@code GlassSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR} or {@code colorKT} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassSmallPTMaterial(colorKR, colorKT, Color3F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorKT} are {@code null}
+	 */
+	public GlassSmallPTMaterial(final Color3F colorKR, final Color3F colorKT) {
+		this(colorKR, colorKT, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
-	public GlassSmallPTMaterial(final Color3F colorReflectanceScale, final Color3F colorTransmittanceScale, final Color3F colorEmittance) {
-		this.textureReflectanceScale = new ConstantTexture(Objects.requireNonNull(colorReflectanceScale, "colorReflectanceScale == null"));
-		this.textureTransmittanceScale = new ConstantTexture(Objects.requireNonNull(colorTransmittanceScale, "colorTransmittanceScale == null"));
-		this.textureEmittance = new ConstantTexture(Objects.requireNonNull(colorEmittance, "colorEmittance == null"));
+	/**
+	 * Constructs a new {@code GlassSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}
+	 */
+	public GlassSmallPTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission) {
+		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
+		this.textureKT = new ConstantTexture(Objects.requireNonNull(colorKT, "colorKT == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 	}
 	
-//	TODO: Add Javadocs!
-	public GlassSmallPTMaterial(final Texture textureReflectanceScale, final Texture textureTransmittanceScale, final Texture textureEmittance) {
-		this.textureReflectanceScale = Objects.requireNonNull(textureReflectanceScale, "textureReflectanceScale == null");
-		this.textureTransmittanceScale = Objects.requireNonNull(textureTransmittanceScale, "textureTransmittanceScale == null");
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+	/**
+	 * Constructs a new {@code GlassSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureKT} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT} or {@code textureEmission} are {@code null}
+	 */
+	public GlassSmallPTMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission) {
+		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
+		this.textureKT = Objects.requireNonNull(textureKT, "textureKT == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +165,7 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColor(intersection);
+		return this.textureEmission.getColor(intersection);
 	}
 	
 //	TODO: Add Javadocs!
@@ -146,52 +204,72 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
-				final Color3F result = Color3F.multiply(this.textureReflectanceScale.getColor(intersection), probabilityRussianRouletteReflection);
+				final Color3F result = Color3F.multiply(this.textureKR.getColor(intersection), probabilityRussianRouletteReflection);
 				
 				final Vector3F newDirection = Vector3F.reflection(oldDirection, surfaceNormal, true);
 				
 				return new SmallPTSample(result, newDirection);
 			}
 			
-			final Color3F result = Color3F.multiply(this.textureTransmittanceScale.getColor(intersection), probabilityRussianRouletteTransmission);
+			final Color3F result = Color3F.multiply(this.textureKT.getColor(intersection), probabilityRussianRouletteTransmission);
 			
 			final Vector3F newDirection = refractionDirection;
 			
 			return new SmallPTSample(result, newDirection);
 		}
 		
-		final Color3F result = this.textureReflectanceScale.getColor(intersection);
+		final Color3F result = this.textureKR.getColor(intersection);
 		
 		final Vector3F newDirection = Vector3F.reflection(oldDirection, surfaceNormal, true);
 		
 		return new SmallPTSample(result, newDirection);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} with the name of this {@code GlassSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code GlassSmallPTMaterial} instance
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code GlassSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code GlassSmallPTMaterial} instance
+	 */
 	@Override
 	public String toString() {
-		return String.format("new GlassSmallPTMaterial(%s, %s, %s)", this.textureEmittance, this.textureReflectanceScale, this.textureTransmittanceScale);
+		return String.format("new GlassSmallPTMaterial(%s, %s, %s)", this.textureKR, this.textureKT, this.textureEmission);
 	}
 	
-//	TODO: Add Javadocs!
-	public Texture getTextureEmittance() {
-		return this.textureEmittance;
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
 	}
 	
-//	TODO: Add Javadocs!
-	public Texture getTextureReflectanceScale() {
-		return this.textureReflectanceScale;
+	/**
+	 * Returns the {@link Texture} instance for the reflection coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the reflection coefficient
+	 */
+	public Texture getTextureKR() {
+		return this.textureKR;
 	}
 	
-//	TODO: Add Javadocs!
-	public Texture getTextureTransmittanceScale() {
-		return this.textureTransmittanceScale;
+	/**
+	 * Returns the {@link Texture} instance for the transmission coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the transmission coefficient
+	 */
+	public Texture getTextureKT() {
+		return this.textureKT;
 	}
 	
 	/**
@@ -221,15 +299,15 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureReflectanceScale.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureTransmittanceScale.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKT.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -240,18 +318,25 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code GlassSmallPTMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code GlassSmallPTMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code GlassSmallPTMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code GlassSmallPTMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof GlassSmallPTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, GlassSmallPTMaterial.class.cast(object).textureEmittance)) {
+		} else if(!Objects.equals(this.textureEmission, GlassSmallPTMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureReflectanceScale, GlassSmallPTMaterial.class.cast(object).textureReflectanceScale)) {
+		} else if(!Objects.equals(this.textureKR, GlassSmallPTMaterial.class.cast(object).textureKR)) {
 			return false;
-		} else if(!Objects.equals(this.textureTransmittanceScale, GlassSmallPTMaterial.class.cast(object).textureTransmittanceScale)) {
+		} else if(!Objects.equals(this.textureKT, GlassSmallPTMaterial.class.cast(object).textureKT)) {
 			return false;
 		} else {
 			return true;
@@ -268,14 +353,14 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 		final float[] array = new float[ARRAY_SIZE];
 		
 //		Because the GlassSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_ID] = this.textureEmittance.getID();						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET] = 0.0F;											//Block #1
-		array[ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_ID] = this.textureReflectanceScale.getID();		//Block #1
-		array[ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET] = 0.0F;									//Block #1
-		array[ARRAY_OFFSET_TEXTURE_TRANSMITTANCE_SCALE_ID] = this.textureTransmittanceScale.getID();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_TRANSMITTANCE_SCALE_OFFSET] = 0.0F;									//Block #1
-		array[6] = 0.0F;																				//Block #1
-		array[7] = 0.0F;																				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();		//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0.0F;							//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_ID] = this.textureKR.getID();				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_OFFSET] = 0.0F;								//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_T_ID] = this.textureKT.getID();				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_T_OFFSET] = 0.0F;								//Block #1
+		array[6] = 0.0F;															//Block #1
+		array[7] = 0.0F;															//Block #1
 		
 		return array;
 	}
@@ -290,9 +375,13 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 		return ID;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code GlassSmallPTMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code GlassSmallPTMaterial} instance
+	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEmittance, this.textureReflectanceScale, this.textureTransmittanceScale);
+		return Objects.hash(this.textureEmission, this.textureKR, this.textureKT);
 	}
 }

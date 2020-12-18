@@ -429,17 +429,17 @@ final class SceneCompiler {
 		for(int i = 0; i < this.distinctClearCoatSmallPTMaterials.size(); i++) {
 			final ClearCoatSmallPTMaterial clearCoatSmallPTMaterial = this.distinctClearCoatSmallPTMaterials.get(i);
 			
-			final Texture textureDiffuseReflectanceScale = clearCoatSmallPTMaterial.getTextureDiffuseReflectanceScale();
-			final Texture textureEmittance = clearCoatSmallPTMaterial.getTextureEmittance();
-			final Texture textureSpecularReflectanceScale = clearCoatSmallPTMaterial.getTextureSpecularReflectanceScale();
+			final Texture textureEmission = clearCoatSmallPTMaterial.getTextureEmission();
+			final Texture textureKD = clearCoatSmallPTMaterial.getTextureKD();
+			final Texture textureKS = clearCoatSmallPTMaterial.getTextureKS();
 			
-			final int materialClearCoatSmallPTMaterialArrayTextureDiffuseReflectanceScaleOffset = i * ClearCoatSmallPTMaterial.ARRAY_SIZE + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_DIFFUSE_REFLECTANCE_SCALE_OFFSET;
-			final int materialClearCoatSmallPTMaterialArrayTextureEmittanceOffset = i * ClearCoatSmallPTMaterial.ARRAY_SIZE + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET;
-			final int materialClearCoatSmallPTMaterialArrayTextureSpecularReflectanceScaleOffset = i * ClearCoatSmallPTMaterial.ARRAY_SIZE + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_SPECULAR_REFLECTANCE_SCALE_OFFSET;
+			final int materialClearCoatSmallPTMaterialArrayTextureEmissionOffset = i * ClearCoatSmallPTMaterial.ARRAY_SIZE + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialClearCoatSmallPTMaterialArrayTextureKDOffset = i * ClearCoatSmallPTMaterial.ARRAY_SIZE + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET;
+			final int materialClearCoatSmallPTMaterialArrayTextureKSOffset = i * ClearCoatSmallPTMaterial.ARRAY_SIZE + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_S_OFFSET;
 			
-			materialClearCoatSmallPTMaterialArray[materialClearCoatSmallPTMaterialArrayTextureDiffuseReflectanceScaleOffset] = doFindTextureOffset(textureDiffuseReflectanceScale);
-			materialClearCoatSmallPTMaterialArray[materialClearCoatSmallPTMaterialArrayTextureEmittanceOffset] = doFindTextureOffset(textureEmittance);
-			materialClearCoatSmallPTMaterialArray[materialClearCoatSmallPTMaterialArrayTextureSpecularReflectanceScaleOffset] = doFindTextureOffset(textureSpecularReflectanceScale);
+			materialClearCoatSmallPTMaterialArray[materialClearCoatSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
+			materialClearCoatSmallPTMaterialArray[materialClearCoatSmallPTMaterialArrayTextureKDOffset] = doFindTextureOffset(textureKD);
+			materialClearCoatSmallPTMaterialArray[materialClearCoatSmallPTMaterialArrayTextureKSOffset] = doFindTextureOffset(textureKS);
 		}
 	}
 	
@@ -447,17 +447,17 @@ final class SceneCompiler {
 		for(int i = 0; i < this.distinctGlassSmallPTMaterials.size(); i++) {
 			final GlassSmallPTMaterial glassSmallPTMaterial = this.distinctGlassSmallPTMaterials.get(i);
 			
-			final Texture textureEmittance = glassSmallPTMaterial.getTextureEmittance();
-			final Texture textureReflectanceScale = glassSmallPTMaterial.getTextureReflectanceScale();
-			final Texture textureTransmittanceScale = glassSmallPTMaterial.getTextureTransmittanceScale();
+			final Texture textureEmission = glassSmallPTMaterial.getTextureEmission();
+			final Texture textureKR = glassSmallPTMaterial.getTextureKR();
+			final Texture textureKT = glassSmallPTMaterial.getTextureKT();
 			
-			final int materialGlassSmallPTMaterialArrayTextureEmittanceOffset = i * GlassSmallPTMaterial.ARRAY_SIZE + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET;
-			final int materialGlassSmallPTMaterialArrayTextureReflectanceScaleOffset = i * GlassSmallPTMaterial.ARRAY_SIZE + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET;
-			final int materialGlassSmallPTMaterialArrayTextureTransmittanceScaleOffset = i * GlassSmallPTMaterial.ARRAY_SIZE + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_TRANSMITTANCE_SCALE_OFFSET;
+			final int materialGlassSmallPTMaterialArrayTextureEmissionOffset = i * GlassSmallPTMaterial.ARRAY_SIZE + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialGlassSmallPTMaterialArrayTextureKROffset = i * GlassSmallPTMaterial.ARRAY_SIZE + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
+			final int materialGlassSmallPTMaterialArrayTextureKTOffset = i * GlassSmallPTMaterial.ARRAY_SIZE + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_T_OFFSET;
 			
-			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureEmittanceOffset] = doFindTextureOffset(textureEmittance);
-			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureReflectanceScaleOffset] = doFindTextureOffset(textureReflectanceScale);
-			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureTransmittanceScaleOffset] = doFindTextureOffset(textureTransmittanceScale);
+			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
+			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
+			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureKTOffset] = doFindTextureOffset(textureKT);
 		}
 	}
 	
@@ -465,14 +465,14 @@ final class SceneCompiler {
 		for(int i = 0; i < this.distinctMatteSmallPTMaterials.size(); i++) {
 			final MatteSmallPTMaterial matteSmallPTMaterial = this.distinctMatteSmallPTMaterials.get(i);
 			
-			final Texture textureEmittance = matteSmallPTMaterial.getTextureEmittance();
-			final Texture textureReflectanceScale = matteSmallPTMaterial.getTextureReflectanceScale();
+			final Texture textureEmission = matteSmallPTMaterial.getTextureEmission();
+			final Texture textureKD = matteSmallPTMaterial.getTextureKD();
 			
-			final int materialMatteSmallPTMaterialArrayTextureEmittanceOffset = i * MatteSmallPTMaterial.ARRAY_SIZE + MatteSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET;
-			final int materialMatteSmallPTMaterialArrayTextureReflectanceScaleOffset = i * MatteSmallPTMaterial.ARRAY_SIZE + MatteSmallPTMaterial.ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET;
+			final int materialMatteSmallPTMaterialArrayTextureEmissionOffset = i * MatteSmallPTMaterial.ARRAY_SIZE + MatteSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialMatteSmallPTMaterialArrayTextureKDOffset = i * MatteSmallPTMaterial.ARRAY_SIZE + MatteSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET;
 			
-			materialMatteSmallPTMaterialArray[materialMatteSmallPTMaterialArrayTextureEmittanceOffset] = doFindTextureOffset(textureEmittance);
-			materialMatteSmallPTMaterialArray[materialMatteSmallPTMaterialArrayTextureReflectanceScaleOffset] = doFindTextureOffset(textureReflectanceScale);
+			materialMatteSmallPTMaterialArray[materialMatteSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
+			materialMatteSmallPTMaterialArray[materialMatteSmallPTMaterialArrayTextureKDOffset] = doFindTextureOffset(textureKD);
 		}
 	}
 	
@@ -480,14 +480,14 @@ final class SceneCompiler {
 		for(int i = 0; i < this.distinctMetalSmallPTMaterials.size(); i++) {
 			final MetalSmallPTMaterial metalSmallPTMaterial = this.distinctMetalSmallPTMaterials.get(i);
 			
-			final Texture textureEmittance = metalSmallPTMaterial.getTextureEmittance();
-			final Texture textureReflectanceScale = metalSmallPTMaterial.getTextureReflectanceScale();
+			final Texture textureEmission = metalSmallPTMaterial.getTextureEmission();
+			final Texture textureKR = metalSmallPTMaterial.getTextureKR();
 			
-			final int materialMetalSmallPTMaterialArrayTextureEmittanceOffset = i * MetalSmallPTMaterial.ARRAY_SIZE + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET;
-			final int materialMetalSmallPTMaterialArrayTextureReflectanceScaleOffset = i * MetalSmallPTMaterial.ARRAY_SIZE + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET;
+			final int materialMetalSmallPTMaterialArrayTextureEmissionOffset = i * MetalSmallPTMaterial.ARRAY_SIZE + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialMetalSmallPTMaterialArrayTextureKROffset = i * MetalSmallPTMaterial.ARRAY_SIZE + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
 			
-			materialMetalSmallPTMaterialArray[materialMetalSmallPTMaterialArrayTextureEmittanceOffset] = doFindTextureOffset(textureEmittance);
-			materialMetalSmallPTMaterialArray[materialMetalSmallPTMaterialArrayTextureReflectanceScaleOffset] = doFindTextureOffset(textureReflectanceScale);
+			materialMetalSmallPTMaterialArray[materialMetalSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
+			materialMetalSmallPTMaterialArray[materialMetalSmallPTMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
 		}
 	}
 	
@@ -495,14 +495,14 @@ final class SceneCompiler {
 		for(int i = 0; i < this.distinctMirrorSmallPTMaterials.size(); i++) {
 			final MirrorSmallPTMaterial mirrorSmallPTMaterial = this.distinctMirrorSmallPTMaterials.get(i);
 			
-			final Texture textureEmittance = mirrorSmallPTMaterial.getTextureEmittance();
-			final Texture textureReflectanceScale = mirrorSmallPTMaterial.getTextureReflectanceScale();
+			final Texture textureEmission = mirrorSmallPTMaterial.getTextureEmission();
+			final Texture textureKR = mirrorSmallPTMaterial.getTextureKR();
 			
-			final int materialMirrorSmallPTMaterialArrayTextureEmittanceOffset = i * MirrorSmallPTMaterial.ARRAY_SIZE + MirrorSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET;
-			final int materialMirrorSmallPTMaterialArrayTextureReflectanceScaleOffset = i * MirrorSmallPTMaterial.ARRAY_SIZE + MirrorSmallPTMaterial.ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET;
+			final int materialMirrorSmallPTMaterialArrayTextureEmissionOffset = i * MirrorSmallPTMaterial.ARRAY_SIZE + MirrorSmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialMirrorSmallPTMaterialArrayTextureKROffset = i * MirrorSmallPTMaterial.ARRAY_SIZE + MirrorSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
 			
-			materialMirrorSmallPTMaterialArray[materialMirrorSmallPTMaterialArrayTextureEmittanceOffset] = doFindTextureOffset(textureEmittance);
-			materialMirrorSmallPTMaterialArray[materialMirrorSmallPTMaterialArrayTextureReflectanceScaleOffset] = doFindTextureOffset(textureReflectanceScale);
+			materialMirrorSmallPTMaterialArray[materialMirrorSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
+			materialMirrorSmallPTMaterialArray[materialMirrorSmallPTMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
 		}
 	}
 	

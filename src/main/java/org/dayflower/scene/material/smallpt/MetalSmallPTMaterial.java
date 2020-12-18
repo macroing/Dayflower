@@ -37,23 +37,25 @@ import org.dayflower.scene.texture.Texture;
 
 //TODO: Add Javadocs!
 public final class MetalSmallPTMaterial extends SmallPTMaterial {
-//	TODO: Add Javadocs!
+	/**
+	 * The name of this {@code MetalSmallPTMaterial} class.
+	 */
 	public static final String NAME = "SmallPT - Metal";
 	
 //	TODO: Add Javadocs!
 	public static final int ARRAY_OFFSET_EXPONENT = 4;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_ID = 0;
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_ID = 0;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET = 1;
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_ID = 2;
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 2;
 	
 //	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET = 3;
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 3;
 	
 //	TODO: Add Javadocs!
 	public static final int ARRAY_SIZE = 8;
@@ -65,43 +67,114 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureEmittance;
-	private final Texture textureReflectanceScale;
+	private final Texture textureEmission;
+	private final Texture textureKR;
 	private final float exponent;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code MetalSmallPTMaterial} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalSmallPTMaterial(Color3F.GRAY);
+	 * }
+	 * </pre>
+	 */
 	public MetalSmallPTMaterial() {
 		this(Color3F.GRAY);
 	}
 	
-//	TODO: Add Javadocs!
-	public MetalSmallPTMaterial(final Color3F colorReflectanceScale) {
-		this(colorReflectanceScale, Color3F.BLACK);
+	/**
+	 * Constructs a new {@code MetalSmallPTMaterial} instance.
+	 * <p>
+	 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalSmallPTMaterial(colorKR, Color3F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
+	 */
+	public MetalSmallPTMaterial(final Color3F colorKR) {
+		this(colorKR, Color3F.BLACK);
 	}
 	
-//	TODO: Add Javadocs!
-	public MetalSmallPTMaterial(final Color3F colorReflectanceScale, final Color3F colorEmittance) {
-		this(colorReflectanceScale, colorEmittance, 20.0F);
+	/**
+	 * Constructs a new {@code MetalSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalSmallPTMaterial(colorKR, colorEmission, 20.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
+	 */
+	public MetalSmallPTMaterial(final Color3F colorKR, final Color3F colorEmission) {
+		this(colorKR, colorEmission, 20.0F);
 	}
 	
-//	TODO: Add Javadocs!
-	public MetalSmallPTMaterial(final Color3F colorReflectanceScale, final Color3F colorEmittance, final float exponent) {
-		this.textureReflectanceScale = new ConstantTexture(Objects.requireNonNull(colorReflectanceScale, "colorReflectanceScale == null"));
-		this.textureEmittance = new ConstantTexture(Objects.requireNonNull(colorEmittance, "colorEmittance == null"));
+	/**
+	 * Constructs a new {@code MetalSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param exponent the exponent to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
+	 */
+	public MetalSmallPTMaterial(final Color3F colorKR, final Color3F colorEmission, final float exponent) {
+		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 		this.exponent = exponent;
 	}
 	
-//	TODO: Add Javadocs!
-	public MetalSmallPTMaterial(final Texture textureReflectanceScale, final Texture textureEmittance) {
-		this(textureReflectanceScale, textureEmittance, 20.0F);
+	/**
+	 * Constructs a new {@code MetalSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalSmallPTMaterial(textureKR, textureEmission, 20.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
+	 */
+	public MetalSmallPTMaterial(final Texture textureKR, final Texture textureEmission) {
+		this(textureKR, textureEmission, 20.0F);
 	}
 	
-//	TODO: Add Javadocs!
-	public MetalSmallPTMaterial(final Texture textureReflectanceScale, final Texture textureEmittance, final float exponent) {
-		this.textureReflectanceScale = Objects.requireNonNull(textureReflectanceScale, "textureReflectanceScale == null");
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+	/**
+	 * Constructs a new {@code MetalSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param exponent the exponent to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
+	 */
+	public MetalSmallPTMaterial(final Texture textureKR, final Texture textureEmission, final float exponent) {
+		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.exponent = exponent;
 	}
 	
@@ -110,13 +183,13 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 //	TODO: Add Javadocs!
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColor(intersection);
+		return this.textureEmission.getColor(intersection);
 	}
 	
 //	TODO: Add Javadocs!
 	@Override
 	public SmallPTSample sampleDistributionFunction(final Intersection intersection) {
-		final Color3F result = this.textureReflectanceScale.getColor(intersection);
+		final Color3F result = this.textureKR.getColor(intersection);
 		
 		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 		
@@ -134,26 +207,42 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 		return new SmallPTSample(result, newDirection);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} with the name of this {@code MetalSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code MetalSmallPTMaterial} instance
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code MetalSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code MetalSmallPTMaterial} instance
+	 */
 	@Override
 	public String toString() {
-		return String.format("new MetalSmallPTMaterial(%s, %s, %+.10f)", this.textureEmittance, this.textureReflectanceScale, Float.valueOf(this.exponent));
+		return String.format("new MetalSmallPTMaterial(%s, %s, %+.10f)", this.textureKR, this.textureEmission, Float.valueOf(this.exponent));
 	}
 	
-//	TODO: Add Javadocs!
-	public Texture getTextureEmittance() {
-		return this.textureEmittance;
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
 	}
 	
-//	TODO: Add Javadocs!
-	public Texture getTextureReflectanceScale() {
-		return this.textureReflectanceScale;
+	/**
+	 * Returns the {@link Texture} instance for the reflection coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the reflection coefficient
+	 */
+	public Texture getTextureKR() {
+		return this.textureKR;
 	}
 	
 	/**
@@ -183,11 +272,11 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureReflectanceScale.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -198,16 +287,23 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Compares {@code object} to this {@code MetalSmallPTMaterial} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MetalSmallPTMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code MetalSmallPTMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MetalSmallPTMaterial}, and their respective values are equal, {@code false} otherwise
+	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof MetalSmallPTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, MetalSmallPTMaterial.class.cast(object).textureEmittance)) {
+		} else if(!Objects.equals(this.textureEmission, MetalSmallPTMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureReflectanceScale, MetalSmallPTMaterial.class.cast(object).textureReflectanceScale)) {
+		} else if(!Objects.equals(this.textureKR, MetalSmallPTMaterial.class.cast(object).textureKR)) {
 			return false;
 		} else if(!equal(this.exponent, MetalSmallPTMaterial.class.cast(object).exponent)) {
 			return false;
@@ -226,14 +322,14 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 		final float[] array = new float[ARRAY_SIZE];
 		
 //		Because the MetalSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_ID] = this.textureEmittance.getID();				//Block #1
-		array[ARRAY_OFFSET_TEXTURE_EMITTANCE_OFFSET] = 0.0F;									//Block #1
-		array[ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_ID] = this.textureReflectanceScale.getID();//Block #1
-		array[ARRAY_OFFSET_TEXTURE_REFLECTANCE_SCALE_OFFSET] = 0.0F;							//Block #1
-		array[ARRAY_OFFSET_EXPONENT] = this.exponent;											//Block #1
-		array[5] = 0.0F;																		//Block #1
-		array[6] = 0.0F;																		//Block #1
-		array[7] = 0.0F;																		//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0.0F;						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_ID] = this.textureKR.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_OFFSET] = 0.0F;							//Block #1
+		array[ARRAY_OFFSET_EXPONENT] = this.exponent;							//Block #1
+		array[5] = 0.0F;														//Block #1
+		array[6] = 0.0F;														//Block #1
+		array[7] = 0.0F;														//Block #1
 		
 		return array;
 	}
@@ -248,9 +344,13 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 		return ID;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code MetalSmallPTMaterial} instance.
+	 * 
+	 * @return a hash code for this {@code MetalSmallPTMaterial} instance
+	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEmittance, this.textureReflectanceScale, Float.valueOf(this.exponent));
+		return Objects.hash(this.textureEmission, this.textureKR, Float.valueOf(this.exponent));
 	}
 }

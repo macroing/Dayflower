@@ -20,9 +20,7 @@ package org.dayflower.scene.bxdf.rayito;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.fresnelDielectricSchlick;
 import static org.dayflower.util.Floats.random;
-import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -32,6 +30,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.fresnel.DielectricFresnel;
 
 /**
  * A {@code SpecularRayitoBTDF} is an implementation of {@link RayitoBXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for specular transmission.
@@ -42,6 +41,7 @@ import org.dayflower.scene.BXDFType;
  * @author J&#246;rgen Lundgren
  */
 public final class SpecularRayitoBTDF extends RayitoBXDF {
+	private final Color3F reflectanceScale;
 	private final Color3F transmittanceScale;
 	private final float etaA;
 	private final float etaB;
@@ -51,16 +51,18 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	/**
 	 * Constructs a new {@code SpecularRayitoBTDF} instance.
 	 * <p>
-	 * If {@code transmittanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code reflectanceScale} or {@code transmittanceScale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param transmittanceScale a {@link Color3F} instance that represents the transmittance scale
+	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @param transmittanceScale a {@code Color3F} instance that represents the transmittance scale
 	 * @param etaA the index of refraction denoted by {@code A}
 	 * @param etaB the index of refraction denoted by {@code B}
-	 * @throws NullPointerException thrown if, and only if, {@code transmittanceScale} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScale} or {@code transmittanceScale} are {@code null}
 	 */
-	public SpecularRayitoBTDF(final Color3F transmittanceScale, final float etaA, final float etaB) {
+	public SpecularRayitoBTDF(final Color3F reflectanceScale, final Color3F transmittanceScale, final float etaA, final float etaB) {
 		super(BXDFType.SPECULAR_REFLECTION_AND_TRANSMISSION);
 		
+		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
 		this.etaA = etaA;
 		this.etaB = etaB;
@@ -110,61 +112,64 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		Objects.requireNonNull(sample, "sample == null");
 		
 		final Vector3F direction = Vector3F.negate(outgoing);
-		final Vector3F reflection = Vector3F.reflection(direction, normal, true);
-		final Vector3F normalCorrectlyOriented = Vector3F.dotProduct(normal, direction) < 0.0F ? normal : Vector3F.negate(normal);
+		final Vector3F normalCorrectlyOriented = Vector3F.faceForwardNegated(normal, direction);
 		
 		final boolean isEntering = Vector3F.dotProduct(normal, normalCorrectlyOriented) > 0.0F;
 		
 		final float etaA = this.etaA;
 		final float etaB = this.etaB;
-		final float eta = isEntering ? etaA / etaB : etaB / etaA;
+		final float etaI = isEntering ? etaA : etaB;
+		final float etaT = isEntering ? etaB : etaA;
+		final float eta = etaI / etaT;
 		
-		final float cosTheta = Vector3F.dotProduct(direction, normalCorrectlyOriented);
-		final float cosTheta2Squared = 1.0F - eta * eta * (1.0F - cosTheta * cosTheta);
+		final Optional<Vector3F> optionalRefractionDirection = Vector3F.refraction2(direction, normalCorrectlyOriented, eta);
+		
+		if(optionalRefractionDirection.isPresent()) {
+			final Vector3F refractionDirection = optionalRefractionDirection.get();
+			
+			final float cosThetaI = Vector3F.dotProduct(direction, normalCorrectlyOriented);
+			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : Vector3F.dotProduct(refractionDirection, normal);
+			
+			final float reflectance = DielectricFresnel.evaluate(cosThetaICorrectlyOriented, etaA, etaB);
+			final float transmittance = 1.0F - reflectance;
+			
+			final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+			final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+			final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+			
+			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
+			
+			if(isChoosingSpecularReflection) {
+				final BXDFType bXDFType = getBXDFType();
+				
+				final Color3F result = Color3F.multiply(this.reflectanceScale, probabilityRussianRouletteReflection);
+				
+				final Vector3F incoming = Vector3F.negate(Vector3F.reflection(direction, normal, true));
+				
+				final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, incoming));
+				
+				return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+			}
+			
+			final BXDFType bXDFType = getBXDFType();
+			
+			final Color3F result = Color3F.multiply(this.transmittanceScale, probabilityRussianRouletteTransmission);
+			
+			final Vector3F incoming = Vector3F.negate(optionalRefractionDirection.get());
+			
+			final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, incoming));
+			
+			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+		}
 		
 		final BXDFType bXDFType = getBXDFType();
 		
-		if(cosTheta2Squared < 0.0F) {
-			final Color3F result = Color3F.WHITE;
-			
-			final Vector3F incoming = Vector3F.negate(reflection);
-			
-			final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, reflection));
-			
-//			TODO: Find out why the PDF and Result variables seems to be swapped? Swapping them does not work.
-			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
-		}
+		final Color3F result = this.reflectanceScale;
 		
-		final Vector3F transmission = Vector3F.normalize(Vector3F.subtract(Vector3F.multiply(direction, eta), Vector3F.multiply(normal, (isEntering ? 1.0F : -1.0F) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
+		final Vector3F incoming = Vector3F.negate(Vector3F.reflection(direction, normal, true));
 		
-		final float a = etaB - etaA;
-		final float b = etaB + etaA;
+		final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, incoming));
 		
-		final float reflectance = fresnelDielectricSchlick(isEntering ? -cosTheta : Vector3F.dotProduct(transmission, normal), a * a / (b * b));
-		final float transmittance = 1.0F - reflectance;
-		
-		final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
-		final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
-		final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
-		
-		if(random() < probabilityRussianRoulette) {
-			final Color3F result = new Color3F(probabilityRussianRouletteReflection);
-			
-			final Vector3F incoming = Vector3F.negate(reflection);
-			
-			final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, reflection));
-			
-//			TODO: Find out why the PDF and Result variables seems to be swapped? Swapping them does not work.
-			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
-		}
-		
-		final Color3F result = new Color3F(probabilityRussianRouletteTransmission);
-		
-		final Vector3F incoming = Vector3F.negate(transmission);
-		
-		final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, transmission));
-		
-//		TODO: Find out why the PDF and Result variables seems to be swapped? Swapping them does not work.
 		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
@@ -175,7 +180,7 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new SpecularRayitoBTDF(%s, %+.10f, %+.10f)", this.transmittanceScale, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+		return String.format("new SpecularRayitoBTDF(%s, %s, %+.10f, %+.10f)", this.reflectanceScale, this.transmittanceScale, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 	
 	/**
@@ -191,6 +196,8 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof SpecularRayitoBTDF)) {
+			return false;
+		} else if(!Objects.equals(this.reflectanceScale, SpecularRayitoBTDF.class.cast(object).reflectanceScale)) {
 			return false;
 		} else if(!Objects.equals(this.transmittanceScale, SpecularRayitoBTDF.class.cast(object).transmittanceScale)) {
 			return false;
@@ -232,6 +239,6 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.transmittanceScale, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+		return Objects.hash(this.reflectanceScale, this.transmittanceScale, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 }

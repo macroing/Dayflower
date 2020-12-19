@@ -1,18 +1,25 @@
+PixelImage pixelImage = new PixelImage(800, 800);
+pixelImage.fillRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(800, 800)), Functions.simplexFractionalBrownianMotion(new Color3F(0.25F, 0.75F, 0.25F), new Point2F(800.0F, 800.0F)));
+
 Texture textureBullseye = new BullseyeTexture(new Color3F(1.0F, 0.01F, 0.01F), Color3F.WHITE, new Point3F(0.0F, 10.0F, 0.0F), 4.0F);
 Texture textureCheckerboard = new CheckerboardTexture(new Color3F(1.0F, 0.01F, 0.01F), Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(2.0F, 2.0F));
-Texture textureImage = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
+Texture textureImageLaminate = ImageTexture.undoGammaCorrectionSRGB(ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F)));
+Texture textureImageSimplexFractionalBrownianMotion = new ImageTexture(pixelImage, AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
+Texture textureSimplexFractionalBrownianMotion = new SimplexFractionalBrownianMotionTexture(new Color3F(0.25F, 0.75F, 0.25F));
 
 Material materialClearCoatBullseye = new ClearCoatSmallPTMaterial(textureBullseye);
 Material materialClearCoatCheckerboard = new ClearCoatSmallPTMaterial(textureCheckerboard);
-Material materialClearCoatImage = new ClearCoatSmallPTMaterial(textureImage);
+Material materialClearCoatImage = new ClearCoatSmallPTMaterial(textureImageLaminate);
 Material materialClearCoatConstantRed = new ClearCoatSmallPTMaterial(new Color3F(1.0F, 0.01F, 0.01F));
 Material materialGlassConstantYellow = new GlassSmallPTMaterial(Color3F.WHITE, new Color3F(1.0F, 1.0F, 0.5F));
-Material materialMatteImage = new MatteSmallPTMaterial(textureImage);
+Material materialMatteImageLaminate = new MatteSmallPTMaterial(textureImageLaminate);
+Material materialMatteImageSimplexFractionalBrownianMotion = new MatteSmallPTMaterial(textureImageSimplexFractionalBrownianMotion);
+Material materialMatteSimplexFractionalBrownianMotion = new MatteSmallPTMaterial(textureSimplexFractionalBrownianMotion);
 
-Material material1 = /*materialMatteImage*/materialGlassConstantYellow/*materialClearCoatBullseye*/;
+Material material1 = /*materialMatteImageLaminate*/materialGlassConstantYellow/*materialClearCoatBullseye*/;
 Material material2 = /*materialClearCoatConstantRed*/materialClearCoatCheckerboard;
-Material material3 = new MirrorSmallPTMaterial(new Color3F(0.01F, 1.0F, 0.01F));
-Material material4 = materialMatteImage/*new MetalSmallPTMaterial()*/;
+Material material3 = new MirrorSmallPTMaterial(Color3F.GRAY);
+Material material4 = /*materialMatteImageSimplexFractionalBrownianMotion*//*materialMatteSimplexFractionalBrownianMotion*/materialMatteImageLaminate/*new MetalSmallPTMaterial()*/;
 Material material5 = new MatteSmallPTMaterial(new Color3F(0.01F, 0.01F, 1.0F));
 Material material6 = new MatteSmallPTMaterial();
 

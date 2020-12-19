@@ -733,6 +733,54 @@ public final class ImageTexture implements Texture {
 		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale, isRepeating);
 	}
 	
+	/**
+	 * Redoes gamma correction on {@code imageTexture} using sRGB.
+	 * <p>
+	 * Returns a new {@code ImageTexture} instance.
+	 * <p>
+	 * If {@code imageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param imageTexture an {@code ImageTexture} instance
+	 * @return a new {@code ImageTexture} instance
+	 * @throws NullPointerException thrown if, and only if, {@code imageTexture} is {@code null}
+	 */
+	public static ImageTexture redoGammaCorrectionSRGB(final ImageTexture imageTexture) {
+		final int[] image = new int[imageTexture.image.length];
+		
+		for(int i = 0; i < imageTexture.image.length; i++) {
+			final Color3F colorA = Color3F.unpack(imageTexture.image[i]);
+			final Color3F colorB = Color3F.redoGammaCorrectionSRGB(colorA);
+			
+			image[i] = colorB.pack();
+		}
+		
+		return new ImageTexture(imageTexture.resolutionX, imageTexture.resolutionY, image, imageTexture.angle, imageTexture.scale, imageTexture.isRepeating);
+	}
+	
+	/**
+	 * Undoes gamma correction on {@code imageTexture} using sRGB.
+	 * <p>
+	 * Returns a new {@code ImageTexture} instance.
+	 * <p>
+	 * If {@code imageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param imageTexture an {@code ImageTexture} instance
+	 * @return a new {@code ImageTexture} instance
+	 * @throws NullPointerException thrown if, and only if, {@code imageTexture} is {@code null}
+	 */
+	public static ImageTexture undoGammaCorrectionSRGB(final ImageTexture imageTexture) {
+		final int[] image = new int[imageTexture.image.length];
+		
+		for(int i = 0; i < imageTexture.image.length; i++) {
+			final Color3F colorA = Color3F.unpack(imageTexture.image[i]);
+			final Color3F colorB = Color3F.undoGammaCorrectionSRGB(colorA);
+			
+			image[i] = colorB.pack();
+		}
+		
+		return new ImageTexture(imageTexture.resolutionX, imageTexture.resolutionY, image, imageTexture.angle, imageTexture.scale, imageTexture.isRepeating);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F doGetColorRGB(final float x, final float y) {

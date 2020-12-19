@@ -2254,10 +2254,42 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else if(currentTextureID == SimplexFractionalBrownianMotionTexture.ID) {
-//				TODO: Implement!
-				component1 = 0.5F;
-				component2 = 0.5F;
-				component3 = 0.5F;
+				final int colorRGB = (int)(this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffset + SimplexFractionalBrownianMotionTexture.ARRAY_OFFSET_COLOR]);
+				
+				final float frequency = this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffset + SimplexFractionalBrownianMotionTexture.ARRAY_OFFSET_FREQUENCY];
+				final float gain = this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffset + SimplexFractionalBrownianMotionTexture.ARRAY_OFFSET_GAIN];
+				
+				final int octaves = (int)(this.textureSimplexFractionalBrownianMotionTextureArray[currentTextureOffset + SimplexFractionalBrownianMotionTexture.ARRAY_OFFSET_OCTAVES]);
+				
+				final float colorR = colorRGBIntToRFloat(colorRGB);
+				final float colorG = colorRGBIntToGFloat(colorRGB);
+				final float colorB = colorRGBIntToBFloat(colorRGB);
+				
+				final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+				final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+				final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+				
+				final float noise = simplexFractionalBrownianMotionXYZ(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ, frequency, gain, 0.0F, 1.0F, octaves);
+				
+				component1 = colorR * noise;
+				component2 = colorG * noise;
+				component3 = colorB * noise;
+				
+				final float minimum = min(component1, component2, component3);
+				
+				if(minimum < 0.0F) {
+					component1 += -minimum;
+					component2 += -minimum;
+					component3 += -minimum;
+				}
+				
+				final float maximum = max(component1, component2, component3);
+				
+				if(maximum > 1.0F) {
+					component1 /= maximum;
+					component2 /= maximum;
+					component3 /= maximum;
+				}
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;

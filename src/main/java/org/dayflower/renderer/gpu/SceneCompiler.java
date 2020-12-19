@@ -278,7 +278,6 @@ final class SceneCompiler {
 		doPopulateTextureBlendTextureArrayWithTextures(textureBlendTextureArray);
 		doPopulateTextureBullseyeTextureArrayWithTextures(textureBullseyeTextureArray);
 		doPopulateTextureCheckerboardTextureArrayWithTextures(textureCheckerboardTextureArray);
-		doPopulateTextureMarbleTextureArrayWithTextures(textureMarbleTextureArray);
 		
 		final
 		CompiledScene compiledScene = new CompiledScene();
@@ -617,24 +616,6 @@ final class SceneCompiler {
 			
 			textureCheckerboardTextureArray[textureCheckerboardTextureArrayTextureAOffset] = doFindTextureOffset(textureA);
 			textureCheckerboardTextureArray[textureCheckerboardTextureArrayTextureBOffset] = doFindTextureOffset(textureB);
-		}
-	}
-	
-	private void doPopulateTextureMarbleTextureArrayWithTextures(final float[] textureMarbleTextureArray) {
-		for(int i = 0; i < this.distinctMarbleTextures.size(); i++) {
-			final MarbleTexture marbleTexture = this.distinctMarbleTextures.get(i);
-			
-			final Texture textureA = marbleTexture.getTextureA();
-			final Texture textureB = marbleTexture.getTextureB();
-			final Texture textureC = marbleTexture.getTextureC();
-			
-			final int textureMarbleTextureArrayTextureAOffset = i * MarbleTexture.ARRAY_SIZE + MarbleTexture.ARRAY_OFFSET_TEXTURE_A_OFFSET;
-			final int textureMarbleTextureArrayTextureBOffset = i * MarbleTexture.ARRAY_SIZE + MarbleTexture.ARRAY_OFFSET_TEXTURE_B_OFFSET;
-			final int textureMarbleTextureArrayTextureCOffset = i * MarbleTexture.ARRAY_SIZE + MarbleTexture.ARRAY_OFFSET_TEXTURE_C_OFFSET;
-			
-			textureMarbleTextureArray[textureMarbleTextureArrayTextureAOffset] = doFindTextureOffset(textureA);
-			textureMarbleTextureArray[textureMarbleTextureArrayTextureBOffset] = doFindTextureOffset(textureB);
-			textureMarbleTextureArray[textureMarbleTextureArrayTextureCOffset] = doFindTextureOffset(textureC);
 		}
 	}
 	

@@ -5,6 +5,7 @@ Texture textureBullseye = new BullseyeTexture(new Color3F(1.0F, 0.01F, 0.01F), C
 Texture textureCheckerboard = new CheckerboardTexture(new Color3F(1.0F, 0.01F, 0.01F), Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(2.0F, 2.0F));
 Texture textureImageLaminate = ImageTexture.undoGammaCorrectionSRGB(ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F)));
 Texture textureImageSimplexFractionalBrownianMotion = new ImageTexture(pixelImage, AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
+Texture textureMarble = new MarbleTexture();
 Texture textureSimplexFractionalBrownianMotion = new SimplexFractionalBrownianMotionTexture(new Color3F(0.25F, 0.75F, 0.25F));
 
 Material materialClearCoatBullseye = new ClearCoatSmallPTMaterial(textureBullseye);
@@ -14,13 +15,14 @@ Material materialClearCoatConstantRed = new ClearCoatSmallPTMaterial(new Color3F
 Material materialGlassConstantYellow = new GlassSmallPTMaterial(Color3F.WHITE, new Color3F(1.0F, 1.0F, 0.5F));
 Material materialMatteImageLaminate = new MatteSmallPTMaterial(textureImageLaminate);
 Material materialMatteImageSimplexFractionalBrownianMotion = new MatteSmallPTMaterial(textureImageSimplexFractionalBrownianMotion);
+Material materialMatteMarble = new MatteSmallPTMaterial(textureMarble);
 Material materialMatteSimplexFractionalBrownianMotion = new MatteSmallPTMaterial(textureSimplexFractionalBrownianMotion);
 
-Material material1 = /*materialMatteImageLaminate*/materialGlassConstantYellow/*materialClearCoatBullseye*/;
-Material material2 = /*materialClearCoatConstantRed*/materialClearCoatCheckerboard;
+Material material1 = materialGlassConstantYellow;
+Material material2 = materialClearCoatCheckerboard;
 Material material3 = new MirrorSmallPTMaterial(Color3F.GRAY);
-Material material4 = /*materialMatteImageSimplexFractionalBrownianMotion*//*materialMatteSimplexFractionalBrownianMotion*/materialMatteImageLaminate/*new MetalSmallPTMaterial()*/;
-Material material5 = new MatteSmallPTMaterial(new Color3F(0.01F, 0.01F, 1.0F));
+Material material4 = materialMatteImageLaminate;
+Material material5 = materialMatteSimplexFractionalBrownianMotion;
 Material material6 = new MatteSmallPTMaterial();
 
 Shape3F shape1 = new Sphere3F();
@@ -41,7 +43,7 @@ scene.addPrimitive(new Primitive(material1, shape1, transform1));
 scene.addPrimitive(new Primitive(material2, shape2, transform2));
 scene.addPrimitive(new Primitive(material3, shape3, transform3));
 scene.addPrimitive(new Primitive(material4, shape4, transform4));
-scene.addPrimitive(new Primitive(material5, shape5, transform5));
+//scene.addPrimitive(new Primitive(material5, shape5, transform5));
 //scene.addPrimitive(new Primitive(material6, shape6, transform6));
 scene.setCamera(new Camera(new Point3F(0.0F, 1.0F, -5.0F), AngleF.degrees(40.0F)));
 scene.setName("GPUTest");

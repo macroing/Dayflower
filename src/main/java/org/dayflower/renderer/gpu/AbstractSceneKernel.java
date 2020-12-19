@@ -2246,10 +2246,29 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else if(currentTextureID == MarbleTexture.ID) {
-//				TODO: Implement!
-				component1 = 0.5F;
-				component2 = 0.5F;
-				component3 = 0.5F;
+				final int colorARGB = (int)(this.textureMarbleTextureArray[currentTextureOffset + MarbleTexture.ARRAY_OFFSET_COLOR_A]);
+				final int colorBRGB = (int)(this.textureMarbleTextureArray[currentTextureOffset + MarbleTexture.ARRAY_OFFSET_COLOR_B]);
+				final int colorCRGB = (int)(this.textureMarbleTextureArray[currentTextureOffset + MarbleTexture.ARRAY_OFFSET_COLOR_C]);
+				
+				final float frequency = this.textureMarbleTextureArray[currentTextureOffset + MarbleTexture.ARRAY_OFFSET_FREQUENCY];
+				final float scale = this.textureMarbleTextureArray[currentTextureOffset + MarbleTexture.ARRAY_OFFSET_SCALE];
+				
+				final int octaves = (int)(this.textureMarbleTextureArray[currentTextureOffset + MarbleTexture.ARRAY_OFFSET_OCTAVES]);
+				
+				final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+				final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+				final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+				
+				final float x = surfaceIntersectionPointX * frequency;
+				final float y = surfaceIntersectionPointY * frequency;
+				final float z = surfaceIntersectionPointZ * frequency;
+				final float r = scale * perlinTurbulenceXYZ(x, y, z, octaves);
+				final float s = 2.0F * abs(sin(x + r));
+				final float t = s < 1.0F ? s : s - 1.0F;
+				
+				component1 = s < 1.0F ? lerp(colorRGBIntToRFloat(colorCRGB), colorRGBIntToRFloat(colorBRGB), t) : lerp(colorRGBIntToRFloat(colorBRGB), colorRGBIntToRFloat(colorARGB), t);
+				component2 = s < 1.0F ? lerp(colorRGBIntToGFloat(colorCRGB), colorRGBIntToGFloat(colorBRGB), t) : lerp(colorRGBIntToGFloat(colorBRGB), colorRGBIntToGFloat(colorARGB), t);
+				component3 = s < 1.0F ? lerp(colorRGBIntToBFloat(colorCRGB), colorRGBIntToBFloat(colorBRGB), t) : lerp(colorRGBIntToBFloat(colorBRGB), colorRGBIntToBFloat(colorARGB), t);
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;

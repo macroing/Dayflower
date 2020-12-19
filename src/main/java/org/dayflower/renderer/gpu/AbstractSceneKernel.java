@@ -1052,13 +1052,13 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
 		
 //		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
-		final boolean isX = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
-		final boolean isY = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
+		final boolean isXSmaller = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
+		final boolean isYSmaller = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
 		
 //		Compute the V-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGVX = isX ? +0.0F                          : isY ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
-		final float orthonormalBasisGVY = isX ? +orthonormalBasisGWNormalizedZ : isY ? +0.0F                          : -orthonormalBasisGWNormalizedX;
-		final float orthonormalBasisGVZ = isX ? -orthonormalBasisGWNormalizedY : isY ? -orthonormalBasisGWNormalizedX : +0.0F;
+		final float orthonormalBasisGVX = isXSmaller ? +0.0F                          : isYSmaller ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
+		final float orthonormalBasisGVY = isXSmaller ? +orthonormalBasisGWNormalizedZ : isYSmaller ? +0.0F                          : -orthonormalBasisGWNormalizedX;
+		final float orthonormalBasisGVZ = isXSmaller ? -orthonormalBasisGWNormalizedY : isYSmaller ? -orthonormalBasisGWNormalizedX : +0.0F;
 		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
 		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
 		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
@@ -1070,20 +1070,24 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
 		
 //		Compute variables necessary for computing the texture coordinates:
-		final float aX = isX ? planeAY      : isY ? planeAZ      : planeAX;
-		final float aY = isX ? planeAZ      : isY ? planeAX      : planeAY;
-		final float bX = isX ? planeCY - aX : isY ? planeCZ - aX : planeCX - aX;
-		final float bY = isX ? planeCZ - aY : isY ? planeCX - aY : planeCY - aY;
-		final float cX = isX ? planeBY - aX : isY ? planeBZ - aX : planeBX - aX;
-		final float cY = isX ? planeBZ - aY : isY ? planeBX - aY : planeBY - aY;
+		final boolean isXLarger = orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs > orthonormalBasisGWNormalizedZAbs;
+		final boolean isYLarger = orthonormalBasisGWNormalizedYAbs > orthonormalBasisGWNormalizedZAbs;
+		
+//		Compute variables necessary for computing the texture coordinates:
+		final float aX = isXLarger ? planeAY      : isYLarger ? planeAZ      : planeAX;
+		final float aY = isXLarger ? planeAZ      : isYLarger ? planeAX      : planeAY;
+		final float bX = isXLarger ? planeCY - aX : isYLarger ? planeCZ - aX : planeCX - aX;
+		final float bY = isXLarger ? planeCZ - aY : isYLarger ? planeCX - aY : planeCY - aY;
+		final float cX = isXLarger ? planeBY - aX : isYLarger ? planeBZ - aX : planeBX - aX;
+		final float cY = isXLarger ? planeBZ - aY : isYLarger ? planeBX - aY : planeBY - aY;
 		
 //		Compute variables necessary for computing the texture coordinates:
 		final float determinant = bX * cY - bY * cX;
 		final float determinantReciprocal = 1.0F / determinant;
 		
 //		Compute variables necessary for computing the texture coordinates:
-		final float u = isX ? surfaceIntersectionPointY : isY ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
-		final float v = isX ? surfaceIntersectionPointZ : isY ? surfaceIntersectionPointX : surfaceIntersectionPointY;
+		final float u = isXLarger ? surfaceIntersectionPointY : isYLarger ? surfaceIntersectionPointZ : surfaceIntersectionPointX;
+		final float v = isXLarger ? surfaceIntersectionPointZ : isYLarger ? surfaceIntersectionPointX : surfaceIntersectionPointY;
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = u * (-bY * determinantReciprocal) + v * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
@@ -2110,38 +2114,201 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final void textureEvaluate(final int textureID, final int textureOffset) {
-		if(textureID == BlendTexture.ID) {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
-		} else if(textureID == BullseyeTexture.ID) {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
-		} else if(textureID == CheckerboardTexture.ID) {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
-		} else if(textureID == ConstantTexture.ID) {
-			final int colorRGB = (int)(this.textureConstantTextureArray[textureOffset + ConstantTexture.ARRAY_OFFSET_COLOR]);
-			
-			final float component1 = colorRGBIntToRFloat(colorRGB);
-			final float component2 = colorRGBIntToGFloat(colorRGB);
-			final float component3 = colorRGBIntToBFloat(colorRGB);
-			
-			color3FLHSSet(component1, component2, component3);
-		} else if(textureID == FunctionTexture.ID) {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
-		} else if(textureID == ImageTexture.ID) {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
-		} else if(textureID == MarbleTexture.ID) {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
-		} else if(textureID == SimplexFractionalBrownianMotionTexture.ID) {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
-		} else if(textureID == SurfaceNormalTexture.ID) {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
-		} else if(textureID == UVTexture.ID) {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
-		} else {
-			color3FLHSSet(0.5F, 0.5F, 0.5F);
+		int currentTextureID = textureID;
+		int currentTextureOffset = textureOffset;
+		
+		float component1 = 0.0F;
+		float component2 = 0.0F;
+		float component3 = 0.0F;
+		
+		while(currentTextureID != -1 && currentTextureOffset != -1) {
+			if(currentTextureID == BlendTexture.ID) {
+//				TODO: Implement!
+				component1 = 0.5F;
+				component2 = 0.5F;
+				component3 = 0.5F;
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			} else if(currentTextureID == BullseyeTexture.ID) {
+				final float originX = this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_ORIGIN + 0];
+				final float originY = this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_ORIGIN + 1];
+				final float originZ = this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_ORIGIN + 2];
+				
+				final int textureAID = (int)(this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_TEXTURE_A_ID]);
+				final int textureAOffset = (int)(this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_TEXTURE_A_OFFSET]);
+				final int textureBID = (int)(this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_TEXTURE_B_ID]);
+				final int textureBOffset = (int)(this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_TEXTURE_B_OFFSET]);
+				
+				final float scale = this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_SCALE];
+				
+				final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+				final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+				final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+				
+				final float distance = point3FDistance(originX, originY, originZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+				final float distanceScaled = distance * scale;
+				final float distanceScaledRemainder = remainder(distanceScaled, 1.0F);
+				
+				final boolean isTextureA = distanceScaledRemainder > 0.5F;
+				
+				currentTextureID = isTextureA ? textureAID : textureBID;
+				currentTextureOffset = isTextureA ? textureAOffset : textureBOffset;
+			} else if(currentTextureID == CheckerboardTexture.ID) {
+				final float angleRadians = this.textureCheckerboardTextureArray[currentTextureOffset + CheckerboardTexture.ARRAY_OFFSET_ANGLE_RADIANS];
+				final float angleRadiansCos = cos(angleRadians);
+				final float angleRadiansSin = sin(angleRadians);
+				
+				final int textureAID = (int)(this.textureCheckerboardTextureArray[currentTextureOffset + CheckerboardTexture.ARRAY_OFFSET_TEXTURE_A_ID]);
+				final int textureAOffset = (int)(this.textureCheckerboardTextureArray[currentTextureOffset + CheckerboardTexture.ARRAY_OFFSET_TEXTURE_A_OFFSET]);
+				final int textureBID = (int)(this.textureCheckerboardTextureArray[currentTextureOffset + CheckerboardTexture.ARRAY_OFFSET_TEXTURE_B_ID]);
+				final int textureBOffset = (int)(this.textureCheckerboardTextureArray[currentTextureOffset + CheckerboardTexture.ARRAY_OFFSET_TEXTURE_B_OFFSET]);
+				
+				final float scaleU = this.textureCheckerboardTextureArray[currentTextureOffset + CheckerboardTexture.ARRAY_OFFSET_SCALE + 0];
+				final float scaleV = this.textureCheckerboardTextureArray[currentTextureOffset + CheckerboardTexture.ARRAY_OFFSET_SCALE + 1];
+				
+				final float u = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
+				final float v = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+				
+				final boolean isU = fractionalPart((u * angleRadiansCos - v * angleRadiansSin) * scaleU, false) > 0.5F;
+				final boolean isV = fractionalPart((v * angleRadiansCos + u * angleRadiansSin) * scaleV, false) > 0.5F;
+				
+				final boolean isTextureA = isU ^ isV;
+				
+				currentTextureID = isTextureA ? textureAID : textureBID;
+				currentTextureOffset = isTextureA ? textureAOffset : textureBOffset;
+			} else if(currentTextureID == ConstantTexture.ID) {
+				final int colorRGB = (int)(this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR]);
+				
+				component1 = colorRGBIntToRFloat(colorRGB);
+				component2 = colorRGBIntToGFloat(colorRGB);
+				component3 = colorRGBIntToBFloat(colorRGB);
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			} else if(currentTextureID == FunctionTexture.ID) {
+//				The FunctionTexture is not supported:
+				component1 = 0.5F;
+				component2 = 0.5F;
+				component3 = 0.5F;
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			} else if(currentTextureID == ImageTexture.ID) {
+				final float angleRadians = this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_ANGLE_RADIANS];
+				final float angleRadiansCos = cos(angleRadians);
+				final float angleRadiansSin = sin(angleRadians);
+				
+				final float scaleU = this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_SCALE + 0];
+				final float scaleV = this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_SCALE + 1];
+				
+				final boolean isRepeating = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_IS_REPEATING]) != 0;
+				
+				final int resolutionX = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
+				final int resolutionY = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
+				
+				final float u0 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
+				final float v0 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+				
+				final float u1 = remainder((u0 * angleRadiansCos - v0 * angleRadiansSin) * scaleU * resolutionX, resolutionX);
+				final float v1 = remainder((v0 * angleRadiansCos + u0 * angleRadiansSin) * scaleV * resolutionY, resolutionY);
+				
+				final float x = isRepeating ? doCalculateCoordinate(false, false, true, (int)(u1 >= 0.0F ? u1 : resolutionX - abs(u1)), resolutionX) : u1 >= 0.0F ? u1 : resolutionX - abs(u1);
+				final float y = isRepeating ? doCalculateCoordinate(false, false, true, (int)(v1 >= 0.0F ? v1 : resolutionY - abs(v1)), resolutionY) : v1 >= 0.0F ? v1 : resolutionY - abs(v1);
+				
+				final int minimumX = (int)(floor(x));
+				final int maximumX = (int)(ceil(x));
+				
+				final int minimumY = (int)(floor(y));
+				final int maximumY = (int)(ceil(y));
+				
+				final int offsetImage = currentTextureOffset + ImageTexture.ARRAY_OFFSET_IMAGE;
+				final int offsetColor00RGB = offsetImage + (modulo(minimumY, resolutionY) * resolutionX + modulo(minimumX, resolutionX));
+				final int offsetColor01RGB = offsetImage + (modulo(minimumY, resolutionY) * resolutionX + modulo(maximumX, resolutionX));
+				final int offsetColor10RGB = offsetImage + (modulo(maximumY, resolutionY) * resolutionX + modulo(minimumX, resolutionX));
+				final int offsetColor11RGB = offsetImage + (modulo(maximumY, resolutionY) * resolutionX + modulo(maximumX, resolutionX));
+				
+				final int color00RGB = (int)(this.textureImageTextureArray[offsetColor00RGB]);
+				final int color01RGB = (int)(this.textureImageTextureArray[offsetColor01RGB]);
+				final int color10RGB = (int)(this.textureImageTextureArray[offsetColor10RGB]);
+				final int color11RGB = (int)(this.textureImageTextureArray[offsetColor11RGB]);
+				
+				if(minimumX == maximumX && minimumY == maximumY) {
+					component1 = colorRGBIntToRFloat(color00RGB);
+					component2 = colorRGBIntToGFloat(color00RGB);
+					component3 = colorRGBIntToBFloat(color00RGB);
+				} else {
+					component1 = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), x - minimumX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), x - minimumX), y - minimumY);
+					component2 = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), x - minimumX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), x - minimumX), y - minimumY);
+					component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), x - minimumX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), x - minimumX), y - minimumY);
+				}
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			} else if(currentTextureID == MarbleTexture.ID) {
+//				TODO: Implement!
+				component1 = 0.5F;
+				component2 = 0.5F;
+				component3 = 0.5F;
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			} else if(currentTextureID == SimplexFractionalBrownianMotionTexture.ID) {
+//				TODO: Implement!
+				component1 = 0.5F;
+				component2 = 0.5F;
+				component3 = 0.5F;
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			} else if(currentTextureID == SurfaceNormalTexture.ID) {
+				component1 = (this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] + 1.0F) * 0.5F;
+				component2 = (this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] + 1.0F) * 0.5F;
+				component3 = (this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] + 1.0F) * 0.5F;
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			} else if(currentTextureID == UVTexture.ID) {
+				component1 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
+				component2 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+				component3 = 0.0F;
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			} else {
+//				The Texture is not supported:
+				component1 = 0.5F;
+				component2 = 0.5F;
+				component3 = 0.5F;
+				
+				currentTextureID = -1;
+				currentTextureOffset = -1;
+			}
 		}
+		
+		color3FLHSSet(component1, component2, component3);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private int doCalculateCoordinate(final boolean isCentering, final boolean isFlipping, final boolean isRepeating, final int coordinate, final int resolution) {
+		int coordinateTransformed = coordinate;
+		
+		if(isCentering) {
+			coordinateTransformed -= resolution / 2;
+		}
+		
+		if(isRepeating) {
+			coordinateTransformed = coordinateTransformed < 0 ? resolution - abs(coordinateTransformed) : coordinateTransformed;
+			coordinateTransformed = coordinateTransformed % resolution;
+		}
+		
+		if(isFlipping) {
+			coordinateTransformed = resolution - 1 - coordinateTransformed;
+		}
+		
+		return coordinateTransformed;
+	}
 	
 	private void doRay3FSetMatrix44FTransform(final int matrix44FArrayOffset) {
 //		Retrieve the matrix elements:

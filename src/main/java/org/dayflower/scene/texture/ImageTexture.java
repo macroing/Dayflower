@@ -62,6 +62,36 @@ import org.dayflower.util.ParameterArguments;
  */
 public final class ImageTexture implements Texture {
 	/**
+	 * The offset for the angle in radians in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_ANGLE_RADIANS = 0;
+	
+	/**
+	 * The offset for the image in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_IMAGE = 6;
+	
+	/**
+	 * The offset for the repetition flag in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_IS_REPEATING = 3;
+	
+	/**
+	 * The offset for the resolution of the X-axis in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RESOLUTION_X = 4;
+	
+	/**
+	 * The offset for the resolution of the Y-axis in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RESOLUTION_Y = 5;
+	
+	/**
+	 * The offset for the {@link Vector2F} instance representing the scale in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SCALE = 1;
+	
+	/**
 	 * The ID of this {@code ImageTexture} class.
 	 */
 	public static final int ID = 6;
@@ -400,7 +430,24 @@ public final class ImageTexture implements Texture {
 	 */
 	@Override
 	public float[] toArray() {
-		return new float[0];//TODO: Implement!
+		final float[] array = new float[getArraySize()];
+		
+		array[ARRAY_OFFSET_ANGLE_RADIANS] = this.angle.getRadians();
+		array[ARRAY_OFFSET_SCALE + 0] = this.scale.getU();
+		array[ARRAY_OFFSET_SCALE + 1] = this.scale.getV();
+		array[ARRAY_OFFSET_IS_REPEATING] = this.isRepeating ? 1.0F : 0.0F;
+		array[ARRAY_OFFSET_RESOLUTION_X] = this.resolutionX;
+		array[ARRAY_OFFSET_RESOLUTION_Y] = this.resolutionY;
+		
+		for(int i = 0; i < this.image.length; i++) {
+			array[ARRAY_OFFSET_IMAGE + i] = this.image[i];
+		}
+		
+		for(int i = ARRAY_OFFSET_IMAGE + this.image.length; i < array.length; i++) {
+			array[i] = 0.0F;
+		}
+		
+		return array;
 	}
 	
 	/**
@@ -408,9 +455,13 @@ public final class ImageTexture implements Texture {
 	 * 
 	 * @return the size of the {@code float[]}
 	 */
-	@SuppressWarnings("static-method")
 	public int getArraySize() {
-		return 0;//TODO: Implement!
+		final int sizeHeader = 6;
+		final int sizeImage = this.image.length;
+		final int sizePadding = (sizeHeader + sizeImage) % 8 == 0 ? 0 : 8 - ((sizeHeader + sizeImage) % 8);
+		final int size = sizeHeader + sizeImage + sizePadding;
+		
+		return size;
 	}
 	
 	/**

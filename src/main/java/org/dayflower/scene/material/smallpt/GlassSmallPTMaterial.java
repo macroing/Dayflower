@@ -147,6 +147,45 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	/**
 	 * Constructs a new {@code GlassSmallPTMaterial} instance.
 	 * <p>
+	 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassSmallPTMaterial(textureKR, ConstantTexture.WHITE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
+	 */
+	public GlassSmallPTMaterial(final Texture textureKR) {
+		this(textureKR, ConstantTexture.WHITE);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR} or {@code textureKT} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassSmallPTMaterial(textureKR, textureKT, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureKT} are {@code null}
+	 */
+	public GlassSmallPTMaterial(final Texture textureKR, final Texture textureKT) {
+		this(textureKR, textureKT, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassSmallPTMaterial} instance.
+	 * <p>
 	 * If either {@code textureKR}, {@code textureKT} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param textureKR a {@link Texture} instance for the reflection coefficient

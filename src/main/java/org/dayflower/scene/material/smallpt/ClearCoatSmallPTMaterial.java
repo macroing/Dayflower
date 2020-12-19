@@ -149,6 +149,45 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 	/**
 	 * Constructs a new {@code ClearCoatSmallPTMaterial} instance.
 	 * <p>
+	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ClearCoatSmallPTMaterial(textureKD, ConstantTexture.WHITE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
+	 */
+	public ClearCoatSmallPTMaterial(final Texture textureKD) {
+		this(textureKD, ConstantTexture.WHITE);
+	}
+	
+	/**
+	 * Constructs a new {@code ClearCoatSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD} or {@code textureKS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new ClearCoatSmallPTMaterial(textureKD, textureKS, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureKS} are {@code null}
+	 */
+	public ClearCoatSmallPTMaterial(final Texture textureKD, final Texture textureKS) {
+		this(textureKD, textureKS, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code ClearCoatSmallPTMaterial} instance.
+	 * <p>
 	 * If either {@code textureKD}, {@code textureKS} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient

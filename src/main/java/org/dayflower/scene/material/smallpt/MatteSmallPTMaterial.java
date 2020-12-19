@@ -117,6 +117,25 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 	/**
 	 * Constructs a new {@code MatteSmallPTMaterial} instance.
 	 * <p>
+	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MatteSmallPTMaterial(textureKD, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
+	 */
+	public MatteSmallPTMaterial(final Texture textureKD) {
+		this(textureKD, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code MatteSmallPTMaterial} instance.
+	 * <p>
 	 * If either {@code textureKD} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient

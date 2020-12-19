@@ -983,6 +983,35 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
+	 * Performs a modulo operation on {@code value} given {@code maximumValue}.
+	 * <p>
+	 * Returns {@code value} or a wrapped around version of it.
+	 * <p>
+	 * The modulo operation performed by this method differs slightly from the modulo operator in Java.
+	 * <p>
+	 * If {@code value} is positive, the following occurs:
+	 * <pre>
+	 * {@code
+	 * int changedValue = value % maximumValue;
+	 * }
+	 * </pre>
+	 * If {@code value} is negative, the following occurs:
+	 * <pre>
+	 * {@code
+	 * int changedValue = (value % maximumValue + maximumValue) % maximumValue;
+	 * }
+	 * </pre>
+	 * 
+	 * @param value an {@code int} value
+	 * @param maximumValue the maximum value
+	 * @return {@code value} or a wrapped around version of it
+	 */
+	@SuppressWarnings("static-method")
+	protected final int modulo(final int value, final int maximumValue) {
+		return value < 0 ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
+	}
+	
+	/**
 	 * Returns a saturated (or clamped) value based on {@code value}.
 	 * <p>
 	 * If {@code value} is less than {@code min(edgeA, edgeB)}, {@code min(edgeA, edgeB)} will be returned. If {@code value} is greater than {@code max(edgeA, edgeB)}, {@code max(edgeA, edgeB)} will be returned. Otherwise {@code value} will be

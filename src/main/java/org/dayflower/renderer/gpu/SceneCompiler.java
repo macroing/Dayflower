@@ -591,7 +591,7 @@ final class SceneCompiler {
 	}
 	
 	private void doPopulateTextureBullseyeTextureArrayWithTextures(final float[] textureBullseyeTextureArray) {
-		for(int i = 0; i < this.distinctBlendTextures.size(); i++) {
+		for(int i = 0; i < this.distinctBullseyeTextures.size(); i++) {
 			final BullseyeTexture bullseyeTexture = this.distinctBullseyeTextures.get(i);
 			
 			final Texture textureA = bullseyeTexture.getTextureA();
@@ -606,7 +606,7 @@ final class SceneCompiler {
 	}
 	
 	private void doPopulateTextureCheckerboardTextureArrayWithTextures(final float[] textureCheckerboardTextureArray) {
-		for(int i = 0; i < this.distinctBlendTextures.size(); i++) {
+		for(int i = 0; i < this.distinctCheckerboardTextures.size(); i++) {
 			final CheckerboardTexture checkerboardTexture = this.distinctCheckerboardTextures.get(i);
 			
 			final Texture textureA = checkerboardTexture.getTextureA();
@@ -621,7 +621,7 @@ final class SceneCompiler {
 	}
 	
 	private void doPopulateTextureMarbleTextureArrayWithTextures(final float[] textureMarbleTextureArray) {
-		for(int i = 0; i < this.distinctBlendTextures.size(); i++) {
+		for(int i = 0; i < this.distinctMarbleTextures.size(); i++) {
 			final MarbleTexture marbleTexture = this.distinctMarbleTextures.get(i);
 			
 			final Texture textureA = marbleTexture.getTextureA();

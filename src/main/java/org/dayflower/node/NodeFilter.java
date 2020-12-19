@@ -217,7 +217,7 @@ public interface NodeFilter {
 			ParameterArguments.requireRangef(    sizeDistinctNode, 0, Integer.MAX_VALUE,      "sizeNodeFunction.applyAsInt(distinctNodes.get(%d))",                     Integer.valueOf(i));
 			ParameterArguments.requireRangef(j + sizeDistinctNode, 0, Integer.MAX_VALUE, "%d + sizeNodeFunction.applyAsInt(distinctNodes.get(%d))", Integer.valueOf(j), Integer.valueOf(i));
 			
-			map.put(distinctNode, Integer.valueOf(j + sizeDistinctNode));
+			map.put(distinctNode, Integer.valueOf(j));
 			
 			j += sizeDistinctNode;
 		}

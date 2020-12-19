@@ -7,12 +7,14 @@ Texture textureImageLaminate = ImageTexture.undoGammaCorrectionSRGB(ImageTexture
 Texture textureImageSimplexFractionalBrownianMotion = new ImageTexture(pixelImage, AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
 Texture textureMarble = new MarbleTexture();
 Texture textureSimplexFractionalBrownianMotion = new SimplexFractionalBrownianMotionTexture(new Color3F(0.25F, 0.75F, 0.25F));
+Texture textureBlend = new BlendTexture(textureCheckerboard, textureImageLaminate);
 
 Material materialClearCoatBullseye = new ClearCoatSmallPTMaterial(textureBullseye);
 Material materialClearCoatCheckerboard = new ClearCoatSmallPTMaterial(textureCheckerboard);
 Material materialClearCoatImage = new ClearCoatSmallPTMaterial(textureImageLaminate);
 Material materialClearCoatConstantRed = new ClearCoatSmallPTMaterial(new Color3F(1.0F, 0.01F, 0.01F));
 Material materialGlassConstantYellow = new GlassSmallPTMaterial(Color3F.WHITE, new Color3F(1.0F, 1.0F, 0.5F));
+Material materialMatteBlend = new MatteSmallPTMaterial(textureBlend);
 Material materialMatteImageLaminate = new MatteSmallPTMaterial(textureImageLaminate);
 Material materialMatteImageSimplexFractionalBrownianMotion = new MatteSmallPTMaterial(textureImageSimplexFractionalBrownianMotion);
 Material materialMatteMarble = new MatteSmallPTMaterial(textureMarble);

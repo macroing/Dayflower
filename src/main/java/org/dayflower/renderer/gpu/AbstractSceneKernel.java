@@ -2114,6 +2114,40 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final void textureEvaluate(final int textureID, final int textureOffset) {
+		if(textureID == BlendTexture.ID) {
+			final int textureAID = (int)(this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_TEXTURE_A_ID]);
+			final int textureAOffset = (int)(this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_TEXTURE_A_OFFSET]);
+			final int textureBID = (int)(this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_TEXTURE_B_ID]);
+			final int textureBOffset = (int)(this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_TEXTURE_B_OFFSET]);
+			
+			final float tComponent1 = this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_T_COMPONENT_1];
+			final float tComponent2 = this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_T_COMPONENT_2];
+			final float tComponent3 = this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_T_COMPONENT_3];
+			
+			textureEvaluateExcludingBlendTexture(textureAID, textureAOffset);
+			
+			final float textureAComponent1 = color3FLHSGetComponent1();
+			final float textureAComponent2 = color3FLHSGetComponent2();
+			final float textureAComponent3 = color3FLHSGetComponent3();
+			
+			textureEvaluateExcludingBlendTexture(textureBID, textureBOffset);
+			
+			final float textureBComponent1 = color3FLHSGetComponent1();
+			final float textureBComponent2 = color3FLHSGetComponent2();
+			final float textureBComponent3 = color3FLHSGetComponent3();
+			
+			final float component1 = lerp(textureAComponent1, textureBComponent1, tComponent1);
+			final float component2 = lerp(textureAComponent2, textureBComponent2, tComponent2);
+			final float component3 = lerp(textureAComponent3, textureBComponent3, tComponent3);
+			
+			color3FLHSSet(component1, component2, component3);
+		} else {
+			textureEvaluateExcludingBlendTexture(textureID, textureOffset);
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void textureEvaluateExcludingBlendTexture(final int textureID, final int textureOffset) {
 		int currentTextureID = textureID;
 		int currentTextureOffset = textureOffset;
 		

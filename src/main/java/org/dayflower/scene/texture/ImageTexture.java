@@ -18,13 +18,11 @@
  */
 package org.dayflower.scene.texture;
 
-import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.ceil;
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.floor;
-import static org.dayflower.util.Floats.remainder;
+import static org.dayflower.util.Floats.modulo;
 import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Ints.abs;
 import static org.dayflower.util.Ints.modulo;
 import static org.dayflower.util.Ints.toInt;
 
@@ -71,22 +69,17 @@ public final class ImageTexture implements Texture {
 	/**
 	 * The offset for the image in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_IMAGE = 6;
-	
-	/**
-	 * The offset for the repetition flag in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_IS_REPEATING = 3;
+	public static final int ARRAY_OFFSET_IMAGE = 5;
 	
 	/**
 	 * The offset for the resolution of the X-axis in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_RESOLUTION_X = 4;
+	public static final int ARRAY_OFFSET_RESOLUTION_X = 3;
 	
 	/**
 	 * The offset for the resolution of the Y-axis in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_RESOLUTION_Y = 5;
+	public static final int ARRAY_OFFSET_RESOLUTION_Y = 4;
 	
 	/**
 	 * The offset for the {@link Vector2F} instance representing the scale in the {@code float[]}.
@@ -102,7 +95,6 @@ public final class ImageTexture implements Texture {
 	
 	private final AngleF angle;
 	private final Vector2F scale;
-	private final boolean isRepeating;
 	private final int resolution;
 	private final int resolutionX;
 	private final int resolutionY;
@@ -157,7 +149,7 @@ public final class ImageTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale, false);
+	 * new ImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	 * }
 	 * </pre>
 	 * 
@@ -167,29 +159,7 @@ public final class ImageTexture implements Texture {
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
 	public ImageTexture(final Image image, final AngleF angle, final Vector2F scale) {
-		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale, false);
-	}
-	
-	/**
-	 * Constructs a new {@code ImageTexture} instance.
-	 * <p>
-	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new ImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale, isRepeating);
-	 * }
-	 * </pre>
-	 * 
-	 * @param image an {@link Image} instance
-	 * @param angle the {@link AngleF} instance to use
-	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @param isRepeating {@code true} if, and only if, the coordinates should be repeated, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
-	 */
-	public ImageTexture(final Image image, final AngleF angle, final Vector2F scale, final boolean isRepeating) {
-		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale, isRepeating);
+		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	}
 	
 	/**
@@ -247,13 +217,6 @@ public final class ImageTexture implements Texture {
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new ImageTexture(resolutionX, resolutionY, image, angle, scale, false);
-	 * }
-	 * </pre>
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
@@ -264,33 +227,12 @@ public final class ImageTexture implements Texture {
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
 	public ImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
-		this(resolutionX, resolutionY, image, angle, scale, false);
-	}
-	
-	/**
-	 * Constructs a new {@code ImageTexture} instance.
-	 * <p>
-	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param resolutionX the resolution of the X-axis
-	 * @param resolutionY the resolution of the Y-axis
-	 * @param image the image to clone and use
-	 * @param angle the {@link AngleF} instance to use
-	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @param isRepeating {@code true} if, and only if, the coordinates should be repeated, {@code false} otherwise
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
-	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
-	 */
-	public ImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale, final boolean isRepeating) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		this.image = ParameterArguments.requireExactArrayLength(Objects.requireNonNull(image, "image == null"), resolutionX * resolutionY, "image").clone();
 		this.angle = Objects.requireNonNull(angle, "angle == null");
 		this.scale = Objects.requireNonNull(scale, "scale == null");
-		this.isRepeating = isRepeating;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,24 +257,33 @@ public final class ImageTexture implements Texture {
 	 */
 	@Override
 	public Color3F getColor(final Intersection intersection) {
+		final AngleF angle = this.angle;
+		
 		final Point2F textureCoordinates = intersection.getSurfaceIntersectionObjectSpace().getTextureCoordinates();
 		
-		final float cosAngleRadians = cos(this.angle.getRadians());
-		final float sinAngleRadians = sin(this.angle.getRadians());
+		final Vector2F scale = this.scale;
+		
+		final float angleRadians = angle.getRadians();
+		final float angleRadiansCos = cos(angleRadians);
+		final float angleRadiansSin = sin(angleRadians);
 		
 		final float resolutionX = this.resolutionX;
 		final float resolutionY = this.resolutionY;
 		
-		final float u = remainder((textureCoordinates.getU() * cosAngleRadians - textureCoordinates.getV() * sinAngleRadians) * this.scale.getU() * resolutionX, resolutionX);
-		final float v = remainder((textureCoordinates.getV() * cosAngleRadians + textureCoordinates.getU() * sinAngleRadians) * this.scale.getV() * resolutionY, resolutionY);
+		final float scaleU = scale.getU();
+		final float scaleV = scale.getV();
 		
-//		Old:
-//		final float x = u >= 0.0F ? u : resolutionX - abs(u);
-//		final float y = v >= 0.0F ? v : resolutionY - abs(v);
+		final float textureCoordinatesU = textureCoordinates.getU();
+		final float textureCoordinatesV = textureCoordinates.getV();
 		
-//		New:
-		final float x = this.isRepeating ? doCalculateCoordinate(false, false, true, (int)(u >= 0.0F ? u : resolutionX - abs(u)), this.resolutionX) : u >= 0.0F ? u : resolutionX - abs(u);
-		final float y = this.isRepeating ? doCalculateCoordinate(false, false, true, (int)(v >= 0.0F ? v : resolutionY - abs(v)), this.resolutionY) : v >= 0.0F ? v : resolutionY - abs(v);
+		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
+		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
+		
+		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
+		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
+		
+		final float x = modulo(textureCoordinatesScaledU, resolutionX);
+		final float y = modulo(textureCoordinatesScaledV, resolutionY);
 		
 		return doGetColorRGB(x, y);
 	}
@@ -437,7 +388,6 @@ public final class ImageTexture implements Texture {
 		array[ARRAY_OFFSET_ANGLE_RADIANS] = this.angle.getRadians();
 		array[ARRAY_OFFSET_SCALE + 0] = this.scale.getU();
 		array[ARRAY_OFFSET_SCALE + 1] = this.scale.getV();
-		array[ARRAY_OFFSET_IS_REPEATING] = this.isRepeating ? 1.0F : 0.0F;
 		array[ARRAY_OFFSET_RESOLUTION_X] = this.resolutionX;
 		array[ARRAY_OFFSET_RESOLUTION_Y] = this.resolutionY;
 		
@@ -458,7 +408,7 @@ public final class ImageTexture implements Texture {
 	 * @return the size of the {@code float[]}
 	 */
 	public int getArraySize() {
-		final int sizeHeader = 6;
+		final int sizeHeader = 5;
 		final int sizeImage = this.image.length;
 		final int sizePadding = (sizeHeader + sizeImage) % 8 == 0 ? 0 : 8 - ((sizeHeader + sizeImage) % 8);
 		final int size = sizeHeader + sizeImage + sizePadding;
@@ -585,13 +535,6 @@ public final class ImageTexture implements Texture {
 	 * If either {@code file}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * ImageTexture.load(file, angle, scale, false);
-	 * }
-	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
@@ -601,27 +544,6 @@ public final class ImageTexture implements Texture {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static ImageTexture load(final File file, final AngleF angle, final Vector2F scale) {
-		return load(file, angle, scale, false);
-	}
-	
-	/**
-	 * Loads an {@code ImageTexture} from the file represented by {@code file}.
-	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
-	 * <p>
-	 * If either {@code file}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * 
-	 * @param file a {@code File} that represents the file to load from
-	 * @param angle the {@link AngleF} instance to use
-	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @param isRepeating {@code true} if, and only if, the coordinates should be repeated, {@code false} otherwise
-	 * @return a new {@code ImageTexture} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code file}, {@code angle} or {@code scale} are {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	public static ImageTexture load(final File file, final AngleF angle, final Vector2F scale, final boolean isRepeating) {
 		try {
 			final BufferedImage bufferedImage = BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 			
@@ -630,7 +552,7 @@ public final class ImageTexture implements Texture {
 			
 			final int[] image = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
 			
-			return new ImageTexture(resolutionX, resolutionY, image, angle, scale, isRepeating);
+			return new ImageTexture(resolutionX, resolutionY, image, angle, scale);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -695,13 +617,6 @@ public final class ImageTexture implements Texture {
 	 * If either {@code pathname}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * ImageTexture.load(pathname, angle, scale, false);
-	 * }
-	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
@@ -711,28 +626,7 @@ public final class ImageTexture implements Texture {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static ImageTexture load(final String pathname, final AngleF angle, final Vector2F scale) {
-		return load(pathname, angle, scale, false);
-	}
-	
-	/**
-	 * Loads an {@code ImageTexture} from the file represented by {@code pathname}.
-	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
-	 * <p>
-	 * If either {@code pathname}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * 
-	 * @param pathname a {@code String} that represents the pathname to the file to load from
-	 * @param angle the {@link AngleF} instance to use
-	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @param isRepeating {@code true} if, and only if, the coordinates should be repeated, {@code false} otherwise
-	 * @return a new {@code ImageTexture} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code pathname}, {@code angle} or {@code scale} are {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	public static ImageTexture load(final String pathname, final AngleF angle, final Vector2F scale, final boolean isRepeating) {
-		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale, isRepeating);
+		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale);
 	}
 	
 	/**
@@ -756,7 +650,7 @@ public final class ImageTexture implements Texture {
 			image[i] = colorB.pack();
 		}
 		
-		return new ImageTexture(imageTexture.resolutionX, imageTexture.resolutionY, image, imageTexture.angle, imageTexture.scale, imageTexture.isRepeating);
+		return new ImageTexture(imageTexture.resolutionX, imageTexture.resolutionY, image, imageTexture.angle, imageTexture.scale);
 	}
 	
 	/**
@@ -780,7 +674,7 @@ public final class ImageTexture implements Texture {
 			image[i] = colorB.pack();
 		}
 		
-		return new ImageTexture(imageTexture.resolutionX, imageTexture.resolutionY, image, imageTexture.angle, imageTexture.scale, imageTexture.isRepeating);
+		return new ImageTexture(imageTexture.resolutionX, imageTexture.resolutionY, image, imageTexture.angle, imageTexture.scale);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -811,26 +705,5 @@ public final class ImageTexture implements Texture {
 	
 	private Color3F doGetColorRGB(final int x, final int y) {
 		return Color3F.unpack(this.image[modulo(y, this.resolutionY) * this.resolutionX + modulo(x, this.resolutionX)]);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static int doCalculateCoordinate(final boolean isCentering, final boolean isFlipping, final boolean isRepeating, final int coordinate, final int resolution) {
-		int coordinateTransformed = coordinate;
-		
-		if(isCentering) {
-			coordinateTransformed -= resolution / 2;
-		}
-		
-		if(isRepeating) {
-			coordinateTransformed = coordinateTransformed < 0 ? resolution - abs(coordinateTransformed) : coordinateTransformed;
-			coordinateTransformed = coordinateTransformed % resolution;
-		}
-		
-		if(isFlipping) {
-			coordinateTransformed = resolution - 1 - coordinateTransformed;
-		}
-		
-		return coordinateTransformed;
 	}
 }

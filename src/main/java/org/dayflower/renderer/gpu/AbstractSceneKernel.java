@@ -2278,16 +2278,17 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final float scaleU = this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_SCALE + 0];
 				final float scaleV = this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_SCALE + 1];
 				
-				final boolean isRepeating = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_IS_REPEATING]) != 0;
-				
 				final int resolutionX = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
 				final int resolutionY = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
 				
-				final float u = remainder((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * scaleU * resolutionX, resolutionX);
-				final float v = remainder((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * scaleV * resolutionY, resolutionY);
+				final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
+				final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
 				
-				final float x = isRepeating ? doCalculateCoordinate(false, false, true, (int)(u >= 0.0F ? u : resolutionX - abs(u)), resolutionX) : u >= 0.0F ? u : resolutionX - abs(u);
-				final float y = isRepeating ? doCalculateCoordinate(false, false, true, (int)(v >= 0.0F ? v : resolutionY - abs(v)), resolutionY) : v >= 0.0F ? v : resolutionY - abs(v);
+				final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
+				final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
+				
+				final float x = moduloFloat(textureCoordinatesScaledU, resolutionX);
+				final float y = moduloFloat(textureCoordinatesScaledV, resolutionY);
 				
 				final int minimumX = (int)(floor(x));
 				final int maximumX = (int)(ceil(x));
@@ -2296,10 +2297,10 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final int maximumY = (int)(ceil(y));
 				
 				final int offsetImage = currentTextureOffset + ImageTexture.ARRAY_OFFSET_IMAGE;
-				final int offsetColor00RGB = offsetImage + (modulo(minimumY, resolutionY) * resolutionX + modulo(minimumX, resolutionX));
-				final int offsetColor01RGB = offsetImage + (modulo(minimumY, resolutionY) * resolutionX + modulo(maximumX, resolutionX));
-				final int offsetColor10RGB = offsetImage + (modulo(maximumY, resolutionY) * resolutionX + modulo(minimumX, resolutionX));
-				final int offsetColor11RGB = offsetImage + (modulo(maximumY, resolutionY) * resolutionX + modulo(maximumX, resolutionX));
+				final int offsetColor00RGB = offsetImage + (moduloInt(minimumY, resolutionY) * resolutionX + moduloInt(minimumX, resolutionX));
+				final int offsetColor01RGB = offsetImage + (moduloInt(minimumY, resolutionY) * resolutionX + moduloInt(maximumX, resolutionX));
+				final int offsetColor10RGB = offsetImage + (moduloInt(maximumY, resolutionY) * resolutionX + moduloInt(minimumX, resolutionX));
+				final int offsetColor11RGB = offsetImage + (moduloInt(maximumY, resolutionY) * resolutionX + moduloInt(maximumX, resolutionX));
 				
 				final int color00RGB = (int)(this.textureImageTextureArray[offsetColor00RGB]);
 				final int color01RGB = (int)(this.textureImageTextureArray[offsetColor01RGB]);
@@ -2387,25 +2388,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private int doCalculateCoordinate(final boolean isCentering, final boolean isFlipping, final boolean isRepeating, final int coordinate, final int resolution) {
-		int coordinateTransformed = coordinate;
-		
-		if(isCentering) {
-			coordinateTransformed -= resolution / 2;
-		}
-		
-		if(isRepeating) {
-			coordinateTransformed = coordinateTransformed < 0 ? resolution - abs(coordinateTransformed) : coordinateTransformed;
-			coordinateTransformed = coordinateTransformed % resolution;
-		}
-		
-		if(isFlipping) {
-			coordinateTransformed = resolution - 1 - coordinateTransformed;
-		}
-		
-		return coordinateTransformed;
-	}
 	
 	private void doRay3FSetMatrix44FTransform(final int matrix44FArrayOffset) {
 //		Retrieve the matrix elements:

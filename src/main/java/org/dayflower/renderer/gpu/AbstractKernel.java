@@ -23,7 +23,6 @@ import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.dayflower.util.Ints;
 import org.dayflower.util.Longs;
 import org.dayflower.util.ParameterArguments;
 
@@ -473,6 +472,34 @@ public abstract class AbstractKernel extends Kernel {
 	 */
 	protected final float min(final float a, final float b, final float c) {
 		return min(min(a, b), c);
+	}
+	
+	/**
+	 * Performs a modulo operation on {@code value} given {@code maximumValue}.
+	 * <p>
+	 * Returns {@code value} or a wrapped around version of it.
+	 * <p>
+	 * The modulo operation performed by this method differs slightly from the modulo operator in Java.
+	 * <p>
+	 * If {@code value} is positive, the following occurs:
+	 * <pre>
+	 * {@code
+	 * float changedValue = fmod(value, maximumValue);
+	 * }
+	 * </pre>
+	 * If {@code value} is negative, the following occurs:
+	 * <pre>
+	 * {@code
+	 * float changedValue = fmod((fmod(value, maximumValue) + maximumValue), maximumValue);
+	 * }
+	 * </pre>
+	 * 
+	 * @param value a {@code float} value
+	 * @param maximumValue the maximum value
+	 * @return {@code value} or a wrapped around version of it
+	 */
+	protected final float moduloFloat(final float value, final float maximumValue) {
+		return value < 0.0F ? fmod(fmod(value, maximumValue) + maximumValue, maximumValue) : fmod(value, maximumValue);
 	}
 	
 	/**
@@ -1044,9 +1071,9 @@ public abstract class AbstractKernel extends Kernel {
 		final float t10 = 1.0F - x1 * x1;
 		final float t11 = t10 * t10;
 		
-		final int hash00 = this.permutationsBArray[Ints.abs(i0) % 512];
+		final int hash00 = this.permutationsBArray[abs(i0) % 512];
 		final int hash01 = hash00 & 0x0F;
-		final int hash10 = this.permutationsBArray[Ints.abs(i1) % 512];
+		final int hash10 = this.permutationsBArray[abs(i1) % 512];
 		final int hash11 = hash10 & 0x0F;
 		
 		final float gradient00 = 1.0F + (hash01 & 7);
@@ -1935,7 +1962,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @return {@code value} or a wrapped around version of it
 	 */
 	@SuppressWarnings("static-method")
-	protected final int modulo(final int value, final int maximumValue) {
+	protected final int moduloInt(final int value, final int maximumValue) {
 		return value < 0 ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
 	}
 	

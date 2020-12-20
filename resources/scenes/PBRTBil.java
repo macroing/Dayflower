@@ -2,7 +2,7 @@ boolean isInBox = false;
 
 List<TriangleMesh3F> triangleMeshes = TriangleMesh3F.readWavefrontObject("./resources/models/bil.obj", true, 1.0F, true);
 
-Texture textureHjul = ImageTexture.load("./resources/textures/hjul.png", AngleF.degrees(0.0F), new Vector2F(1.0F, 1.0F), true);
+Texture textureHjul = ImageTexture.load("./resources/textures/hjul.png", AngleF.degrees(0.0F), new Vector2F(1.0F, 1.0F));
 Texture textureLaminate = ImageTexture.load("./resources/textures/laminate.jpg", AngleF.degrees(0.0F), new Vector2F(0.5F, 0.5F));
 Texture textureTextur = ImageTexture.load("./resources/textures/textur.png");
 

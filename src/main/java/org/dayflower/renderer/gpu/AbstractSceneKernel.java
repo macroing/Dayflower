@@ -43,6 +43,7 @@ import org.dayflower.scene.material.smallpt.GlassSmallPTMaterial;
 import org.dayflower.scene.material.smallpt.MatteSmallPTMaterial;
 import org.dayflower.scene.material.smallpt.MetalSmallPTMaterial;
 import org.dayflower.scene.material.smallpt.MirrorSmallPTMaterial;
+import org.dayflower.scene.material.smallpt.SmallPTMaterial;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -1742,6 +1743,38 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final void materialEmittance() {
+		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_SIZE;
+		final int materialID = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_ID];
+		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+		final int materialOffsetTextureEmissionID = materialOffset + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_ID;
+		final int materialOffsetTextureEmissionOffset = materialOffset + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+		
+		int textureEmissionID = 0;
+		int textureEmissionOffset = 0;
+		
+		if(materialID == ClearCoatSmallPTMaterial.ID) {
+			textureEmissionID = (int)(this.materialClearCoatSmallPTMaterialArray[materialOffsetTextureEmissionID]);
+			textureEmissionOffset = (int)(this.materialClearCoatSmallPTMaterialArray[materialOffsetTextureEmissionOffset]);
+		} else if(materialID == GlassSmallPTMaterial.ID) {
+			textureEmissionID = (int)(this.materialGlassSmallPTMaterialArray[materialOffsetTextureEmissionID]);
+			textureEmissionOffset = (int)(this.materialGlassSmallPTMaterialArray[materialOffsetTextureEmissionOffset]);
+		} else if(materialID == MatteSmallPTMaterial.ID) {
+			textureEmissionID = (int)(this.materialMatteSmallPTMaterialArray[materialOffsetTextureEmissionID]);
+			textureEmissionOffset = (int)(this.materialMatteSmallPTMaterialArray[materialOffsetTextureEmissionOffset]);
+		} else if(materialID == MetalSmallPTMaterial.ID) {
+			textureEmissionID = (int)(this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionID]);
+			textureEmissionOffset = (int)(this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionOffset]);
+		} else if(materialID == MirrorSmallPTMaterial.ID) {
+			textureEmissionID = (int)(this.materialMirrorSmallPTMaterialArray[materialOffsetTextureEmissionID]);
+			textureEmissionOffset = (int)(this.materialMirrorSmallPTMaterialArray[materialOffsetTextureEmissionOffset]);
+		}
+		
+		textureEvaluate(textureEmissionID, textureEmissionOffset);
+	}
+	
+//	TODO: Add Javadocs!
 	protected final void materialSampleDistributionFunction() {
 		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
 		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_SIZE;
@@ -2160,6 +2193,17 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		float component2 = 0.0F;
 		float component3 = 0.0F;
 		
+		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float surfaceNormalZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
+		final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
+		final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
+		
+		final float textureCoordinatesU = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
+		final float textureCoordinatesV = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+		
 		while(currentTextureID != -1 && currentTextureOffset != -1) {
 			if(currentTextureID == BlendTexture.ID) {
 //				TODO: Implement!
@@ -2180,10 +2224,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final int textureBOffset = (int)(this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_TEXTURE_B_OFFSET]);
 				
 				final float scale = this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_SCALE];
-				
-				final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
-				final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
-				final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
 				
 				final float distance = point3FDistance(originX, originY, originZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
 				final float distanceScaled = distance * scale;
@@ -2206,11 +2246,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final float scaleU = this.textureCheckerboardTextureArray[currentTextureOffset + CheckerboardTexture.ARRAY_OFFSET_SCALE + 0];
 				final float scaleV = this.textureCheckerboardTextureArray[currentTextureOffset + CheckerboardTexture.ARRAY_OFFSET_SCALE + 1];
 				
-				final float u = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
-				final float v = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
-				
-				final boolean isU = fractionalPart((u * angleRadiansCos - v * angleRadiansSin) * scaleU, false) > 0.5F;
-				final boolean isV = fractionalPart((v * angleRadiansCos + u * angleRadiansSin) * scaleV, false) > 0.5F;
+				final boolean isU = fractionalPart((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * scaleU, false) > 0.5F;
+				final boolean isV = fractionalPart((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * scaleV, false) > 0.5F;
 				
 				final boolean isTextureA = isU ^ isV;
 				
@@ -2246,14 +2283,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final int resolutionX = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
 				final int resolutionY = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
 				
-				final float u0 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
-				final float v0 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+				final float u = remainder((textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin) * scaleU * resolutionX, resolutionX);
+				final float v = remainder((textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin) * scaleV * resolutionY, resolutionY);
 				
-				final float u1 = remainder((u0 * angleRadiansCos - v0 * angleRadiansSin) * scaleU * resolutionX, resolutionX);
-				final float v1 = remainder((v0 * angleRadiansCos + u0 * angleRadiansSin) * scaleV * resolutionY, resolutionY);
-				
-				final float x = isRepeating ? doCalculateCoordinate(false, false, true, (int)(u1 >= 0.0F ? u1 : resolutionX - abs(u1)), resolutionX) : u1 >= 0.0F ? u1 : resolutionX - abs(u1);
-				final float y = isRepeating ? doCalculateCoordinate(false, false, true, (int)(v1 >= 0.0F ? v1 : resolutionY - abs(v1)), resolutionY) : v1 >= 0.0F ? v1 : resolutionY - abs(v1);
+				final float x = isRepeating ? doCalculateCoordinate(false, false, true, (int)(u >= 0.0F ? u : resolutionX - abs(u)), resolutionX) : u >= 0.0F ? u : resolutionX - abs(u);
+				final float y = isRepeating ? doCalculateCoordinate(false, false, true, (int)(v >= 0.0F ? v : resolutionY - abs(v)), resolutionY) : v >= 0.0F ? v : resolutionY - abs(v);
 				
 				final int minimumX = (int)(floor(x));
 				final int maximumX = (int)(ceil(x));
@@ -2294,10 +2328,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				
 				final int octaves = (int)(this.textureMarbleTextureArray[currentTextureOffset + MarbleTexture.ARRAY_OFFSET_OCTAVES]);
 				
-				final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
-				final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
-				final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
-				
 				final float x = surfaceIntersectionPointX * frequency;
 				final float y = surfaceIntersectionPointY * frequency;
 				final float z = surfaceIntersectionPointZ * frequency;
@@ -2322,10 +2352,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final float colorR = colorRGBIntToRFloat(colorRGB);
 				final float colorG = colorRGBIntToGFloat(colorRGB);
 				final float colorB = colorRGBIntToBFloat(colorRGB);
-				
-				final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
-				final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
-				final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
 				
 				final float noise = simplexFractionalBrownianMotionXYZ(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ, frequency, gain, 0.0F, 1.0F, octaves);
 				
@@ -2352,15 +2378,15 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else if(currentTextureID == SurfaceNormalTexture.ID) {
-				component1 = (this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0] + 1.0F) * 0.5F;
-				component2 = (this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1] + 1.0F) * 0.5F;
-				component3 = (this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] + 1.0F) * 0.5F;
+				component1 = (surfaceNormalX + 1.0F) * 0.5F;
+				component2 = (surfaceNormalY + 1.0F) * 0.5F;
+				component3 = (surfaceNormalZ + 1.0F) * 0.5F;
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else if(currentTextureID == UVTexture.ID) {
-				component1 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
-				component2 = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
+				component1 = textureCoordinatesU;
+				component2 = textureCoordinatesV;
 				component3 = 0.0F;
 				
 				currentTextureID = -1;

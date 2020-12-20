@@ -62,16 +62,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private void doComputeEmittanceForPrimitive() {
-		final int primitiveIndex = (int)(super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
-		
-		if(primitiveIndex == 5) {
-			color3FLHSSet(12.0F, 12.0F, 12.0F);
-		} else {
-			color3FLHSSet(0.0F, 0.0F, 0.0F);
-		}
-	}
-	
 	private void doRunAmbientOcclusion(final float maximumDistance, final int samples) {
 		float radiance = 0.0F;
 		
@@ -123,7 +113,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 			
 			while(currentBounce < maximumBounce) {
 				if(intersectionComputeShape3F()) {
-					doComputeEmittanceForPrimitive();
+					materialEmittance();
 					
 					radianceR += throughputR * color3FLHSGetComponent1();
 					radianceG += throughputG * color3FLHSGetComponent2();

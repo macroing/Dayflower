@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.material.smallpt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -28,20 +27,62 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
+import org.dayflower.scene.texture.Texture;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code SmallPTMaterial} represents a material.
+ * <p>
+ * All official implementations of this class are immutable and therefore thread-safe. But this cannot be guaranteed for all implementations.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public abstract class SmallPTMaterial implements Material {
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code Emission} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_ID = 0;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code Emission} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Constructs a new {@code SmallPTMaterial} instance.
+	 */
 	protected SmallPTMaterial() {
 		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code SmallPTMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code SmallPTMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	public abstract Color3F emittance(final Intersection intersection);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	@Override
 	public final Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -50,7 +91,19 @@ public abstract class SmallPTMaterial implements Material {
 		return Optional.empty();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the {@link BSSRDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSSRDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSSRDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
 	@Override
 	public final Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -59,6 +112,16 @@ public abstract class SmallPTMaterial implements Material {
 		return Optional.empty();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples the distribution function.
+	 * <p>
+	 * Returns a {@link SmallPTSample} instance with the result of the sampling.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code SmallPTSample} instance with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	public abstract SmallPTSample sampleDistributionFunction(final Intersection intersection);
 }

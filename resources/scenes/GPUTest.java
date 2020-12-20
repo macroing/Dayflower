@@ -25,7 +25,7 @@ Material material2 = materialClearCoatCheckerboard;
 Material material3 = new MirrorSmallPTMaterial(Color3F.GRAY);
 Material material4 = materialMatteImageLaminate;
 Material material5 = materialMatteSimplexFractionalBrownianMotion;
-Material material6 = new MatteSmallPTMaterial();
+Material material6 = new MatteSmallPTMaterial(Color3F.WHITE, new Color3F(12.0F));
 
 Shape3F shape1 = new Sphere3F();
 Shape3F shape2 = new Torus3F();

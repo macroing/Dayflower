@@ -21,7 +21,6 @@ package org.dayflower.scene.material.smallpt;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.random;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.geometry.OrthonormalBasis33F;
@@ -35,29 +34,38 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code MetalSmallPTMaterial} is an implementation of {@link SmallPTMaterial} that represents metal.
+ * <p>
+ * This class is immutable and thread-safe as long as all {@link Texture} instances are.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	/**
 	 * The name of this {@code MetalSmallPTMaterial} class.
 	 */
 	public static final String NAME = "SmallPT - Metal";
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the exponent in the {@code float[]}.
+	 */
 	public static final int ARRAY_OFFSET_EXPONENT = 4;
 	
-//	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_ID = 0;
-	
-//	TODO: Add Javadocs!
-	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
-	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code KR} in the {@code float[]}.
+	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 2;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code KR} in the {@code float[]}.
+	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 3;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The size of the {@code float[]}.
+	 */
 	public static final int ARRAY_SIZE = 8;
 	
 	/**
@@ -145,6 +153,25 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	/**
 	 * Constructs a new {@code MetalSmallPTMaterial} instance.
 	 * <p>
+	 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalSmallPTMaterial(textureKR, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
+	 */
+	public MetalSmallPTMaterial(final Texture textureKR) {
+		this(textureKR, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalSmallPTMaterial} instance.
+	 * <p>
 	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
@@ -180,13 +207,31 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code MetalSmallPTMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code MetalSmallPTMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
 		return this.textureEmission.getColor(intersection);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples the distribution function.
+	 * <p>
+	 * Returns a {@link SmallPTSample} instance with the result of the sampling.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code SmallPTSample} instance with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
 	@Override
 	public SmallPTSample sampleDistributionFunction(final Intersection intersection) {
 		final Color3F result = this.textureKR.getColor(intersection);

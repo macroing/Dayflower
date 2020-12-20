@@ -76,7 +76,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 				
 				if(maximumDistance > 0.0F) {
 					final float t = intersectionTShape3F();
-					final float s = t > 0.0F ? normalize(saturateFloat(t, 0.0F, maximumDistance), 0.0F, maximumDistance) : 1.0F;
+					final float s = t > 0.0F ? normalize(saturateF(t, 0.0F, maximumDistance), 0.0F, maximumDistance) : 1.0F;
 					
 					radiance += s;
 				} else if(!intersectsShape3F()) {

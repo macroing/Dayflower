@@ -725,34 +725,6 @@ public class Doubles {
 	}
 	
 	/**
-	 * Performs a modulo operation on {@code value} given {@code maximumValue}.
-	 * <p>
-	 * Returns {@code value} or a wrapped around version of it.
-	 * <p>
-	 * The modulo operation performed by this method differs slightly from the modulo operator in Java.
-	 * <p>
-	 * If {@code value} is positive, the following occurs:
-	 * <pre>
-	 * {@code
-	 * double changedValue = value % maximumValue;
-	 * }
-	 * </pre>
-	 * If {@code value} is negative, the following occurs:
-	 * <pre>
-	 * {@code
-	 * double changedValue = (value % maximumValue + maximumValue) % maximumValue;
-	 * }
-	 * </pre>
-	 * 
-	 * @param value a {@code double} value
-	 * @param maximumValue the maximum value
-	 * @return {@code value} or a wrapped around version of it
-	 */
-	public static double modulo(final double value, final double maximumValue) {
-		return value < 0.0D ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
-	}
-	
-	/**
 	 * Returns the {@code double} value next down after {@code value}.
 	 * <p>
 	 * This method is based on the function {@code NextFloatDown(float v)} in PBRT.
@@ -1011,6 +983,34 @@ public class Doubles {
 		}
 		
 		return noise;
+	}
+	
+	/**
+	 * Performs a modulo operation on {@code x} and {@code y}.
+	 * <p>
+	 * Returns a {@code double} value.
+	 * <p>
+	 * The modulo operation performed by this method differs slightly from the modulo operator in Java.
+	 * <p>
+	 * If {@code x} is positive, the following occurs:
+	 * <pre>
+	 * {@code
+	 * double z = x % y;
+	 * }
+	 * </pre>
+	 * If {@code x} is negative, the following occurs:
+	 * <pre>
+	 * {@code
+	 * double z = (x % y + y) % y;
+	 * }
+	 * </pre>
+	 * 
+	 * @param x a {@code double} value
+	 * @param y a {@code double} value
+	 * @return a {@code double} value
+	 */
+	public static double positiveModulo(final double x, final double y) {
+		return x < 0.0D ? (x % y + y) % y : x % y;
 	}
 	
 	/**

@@ -132,31 +132,31 @@ public final class Ints {
 	}
 	
 	/**
-	 * Performs a modulo operation on {@code value} given {@code maximumValue}.
+	 * Performs a modulo operation on {@code x} and {@code y}.
 	 * <p>
-	 * Returns {@code value} or a wrapped around version of it.
+	 * Returns an {@code int} value.
 	 * <p>
 	 * The modulo operation performed by this method differs slightly from the modulo operator in Java.
 	 * <p>
-	 * If {@code value} is positive, the following occurs:
+	 * If {@code x} is positive, the following occurs:
 	 * <pre>
 	 * {@code
-	 * int changedValue = value % maximumValue;
+	 * int z = x % y;
 	 * }
 	 * </pre>
-	 * If {@code value} is negative, the following occurs:
+	 * If {@code x} is negative, the following occurs:
 	 * <pre>
 	 * {@code
-	 * int changedValue = (value % maximumValue + maximumValue) % maximumValue;
+	 * int z = (x % y + y) % y;
 	 * }
 	 * </pre>
 	 * 
-	 * @param value an {@code int} value
-	 * @param maximumValue the maximum value
-	 * @return {@code value} or a wrapped around version of it
+	 * @param x an {@code int} value
+	 * @param y an {@code int} value
+	 * @return an {@code int} value
 	 */
-	public static int modulo(final int value, final int maximumValue) {
-		return value < 0 ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
+	public static int positiveModulo(final int x, final int y) {
+		return x < 0 ? (x % y + y) % y : x % y;
 	}
 	
 	/**

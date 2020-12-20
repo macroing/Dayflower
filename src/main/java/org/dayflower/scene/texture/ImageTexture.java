@@ -21,9 +21,9 @@ package org.dayflower.scene.texture;
 import static org.dayflower.util.Floats.ceil;
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.floor;
-import static org.dayflower.util.Floats.modulo;
+import static org.dayflower.util.Floats.positiveModulo;
 import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Ints.modulo;
+import static org.dayflower.util.Ints.positiveModulo;
 import static org.dayflower.util.Ints.toInt;
 
 import java.awt.image.BufferedImage;
@@ -282,8 +282,8 @@ public final class ImageTexture implements Texture {
 		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
 		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
 		
-		final float x = modulo(textureCoordinatesScaledU, resolutionX);
-		final float y = modulo(textureCoordinatesScaledV, resolutionY);
+		final float x = positiveModulo(textureCoordinatesScaledU, resolutionX);
+		final float y = positiveModulo(textureCoordinatesScaledV, resolutionY);
 		
 		return doGetColorRGB(x, y);
 	}
@@ -704,6 +704,6 @@ public final class ImageTexture implements Texture {
 	}
 	
 	private Color3F doGetColorRGB(final int x, final int y) {
-		return Color3F.unpack(this.image[modulo(y, this.resolutionY) * this.resolutionX + modulo(x, this.resolutionX)]);
+		return Color3F.unpack(this.image[positiveModulo(y, this.resolutionY) * this.resolutionX + positiveModulo(x, this.resolutionX)]);
 	}
 }

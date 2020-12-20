@@ -306,7 +306,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * @return an {@code int} representation of {@code colorB}
 	 */
 	protected final int colorBFloatToBInt(final float colorB) {
-		return (int)(saturateFloat(colorB, 0.0F, 1.0F) * 255.0F + 0.5F);
+		return (int)(saturateF(colorB, 0.0F, 1.0F) * 255.0F + 0.5F);
 	}
 	
 	/**
@@ -318,7 +318,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * @return an {@code int} representation of {@code colorG}
 	 */
 	protected final int colorGFloatToGInt(final float colorG) {
-		return (int)(saturateFloat(colorG, 0.0F, 1.0F) * 255.0F + 0.5F);
+		return (int)(saturateF(colorG, 0.0F, 1.0F) * 255.0F + 0.5F);
 	}
 	
 	/**
@@ -330,7 +330,7 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * @return an {@code int} representation of {@code colorR}
 	 */
 	protected final int colorRFloatToRInt(final float colorR) {
-		return (int)(saturateFloat(colorR, 0.0F, 1.0F) * 255.0F + 0.5F);
+		return (int)(saturateF(colorR, 0.0F, 1.0F) * 255.0F + 0.5F);
 	}
 	
 	/**
@@ -358,9 +358,9 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	 * @return an {@code int} with the color represented by {@code colorR}, {@code colorG} and {@code colorB} in packed form using either RGB or ARGB as its order
 	 */
 	protected final int colorRGBIntToRGBInt(final int colorR, final int colorG, final int colorB) {
-		final int colorRSaturated = saturateInt(colorR, 0, 255);
-		final int colorGSaturated = saturateInt(colorG, 0, 255);
-		final int colorBSaturated = saturateInt(colorB, 0, 255);
+		final int colorRSaturated = saturateI(colorR, 0, 255);
+		final int colorGSaturated = saturateI(colorG, 0, 255);
+		final int colorBSaturated = saturateI(colorB, 0, 255);
 		
 		final int colorRGB = (colorRSaturated << 16) | (colorGSaturated << 8) | (colorBSaturated << 0);
 		

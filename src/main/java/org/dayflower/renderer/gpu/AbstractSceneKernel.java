@@ -793,7 +793,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final double e = f4 * f4 + 4.0D * f3 * f6 * f6 - 4.0D * f3 * f2;
 		
 //		Compute the intersection by solving the quartic system and checking the valid intersection interval:
-		final float t = solveQuarticSystemDouble(a, b, c, d, e, rayTMinimum, rayTMaximum);
+		final float t = solveQuarticSystemD(a, b, c, d, e, rayTMinimum, rayTMaximum);
 		
 //		Compute the variables used in the process of computing the variables for the quartic system:
 //		final float f0 = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
@@ -812,7 +812,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //		final float e = f4 * f4 + 4.0F * f3 * f6 * f6 - 4.0F * f3 * f2;
 		
 //		Compute the intersection by solving the quartic system and checking the valid intersection interval:
-//		final float t = solveQuarticSystemFloat(a, b, c, d, e, rayTMinimum, rayTMaximum);
+//		final float t = solveQuarticSystemF(a, b, c, d, e, rayTMinimum, rayTMaximum);
 		
 		return t;
 	}
@@ -1365,7 +1365,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = (asin(saturateFloat(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
+		final float textureCoordinatesV = (asin(saturateF(surfaceIntersectionPointZ / torusRadiusInner, -1.0F, 1.0F)) + PI_DIVIDED_BY_2) * PI_RECIPROCAL;
 		
 //		Update the intersection array:
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = orthonormalBasisGUNormalizedX;
@@ -2287,8 +2287,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
 				final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
 				
-				final float x = moduloFloat(textureCoordinatesScaledU, resolutionX);
-				final float y = moduloFloat(textureCoordinatesScaledV, resolutionY);
+				final float x = positiveModuloF(textureCoordinatesScaledU, resolutionX);
+				final float y = positiveModuloF(textureCoordinatesScaledV, resolutionY);
 				
 				final int minimumX = (int)(floor(x));
 				final int maximumX = (int)(ceil(x));
@@ -2297,10 +2297,10 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final int maximumY = (int)(ceil(y));
 				
 				final int offsetImage = currentTextureOffset + ImageTexture.ARRAY_OFFSET_IMAGE;
-				final int offsetColor00RGB = offsetImage + (moduloInt(minimumY, resolutionY) * resolutionX + moduloInt(minimumX, resolutionX));
-				final int offsetColor01RGB = offsetImage + (moduloInt(minimumY, resolutionY) * resolutionX + moduloInt(maximumX, resolutionX));
-				final int offsetColor10RGB = offsetImage + (moduloInt(maximumY, resolutionY) * resolutionX + moduloInt(minimumX, resolutionX));
-				final int offsetColor11RGB = offsetImage + (moduloInt(maximumY, resolutionY) * resolutionX + moduloInt(maximumX, resolutionX));
+				final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
+				final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
+				final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
+				final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
 				
 				final int color00RGB = (int)(this.textureImageTextureArray[offsetColor00RGB]);
 				final int color01RGB = (int)(this.textureImageTextureArray[offsetColor01RGB]);

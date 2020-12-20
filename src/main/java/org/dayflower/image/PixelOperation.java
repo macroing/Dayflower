@@ -18,7 +18,7 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.util.Ints.modulo;
+import static org.dayflower.util.Ints.positiveModulo;
 
 /**
  * A {@code PixelOperation} provides a set of operations to perform on a pixel when it is outside the boundaries of an {@link Image} instance.
@@ -50,10 +50,10 @@ import static org.dayflower.util.Ints.modulo;
  * <li>{@code Update} {@code Color}: The method updates the {@code Color} of the changed pixel</li>
  * </ul>
  * <p>
- * The following code snippet shows how the wrap-around operation works, given the two variables {@code value} and {@code maximumValue}:
+ * The following code snippet shows how the wrap-around operation works, given the two variables {@code x} and {@code y}:
  * <pre>
  * {@code
- * int changedValue = value < 0 ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
+ * int z = x < 0 ? (x % y + y) % y : x % y;
  * }
  * </pre>
  * 
@@ -93,7 +93,7 @@ public enum PixelOperation {
 			case NO_CHANGE:
 				return index;
 			case WRAP_AROUND:
-				return modulo(index, resolution);
+				return positiveModulo(index, resolution);
 			default:
 				return index;
 		}
@@ -113,7 +113,7 @@ public enum PixelOperation {
 			case NO_CHANGE:
 				return x;
 			case WRAP_AROUND:
-				return modulo(x, resolutionX);
+				return positiveModulo(x, resolutionX);
 			default:
 				return x;
 		}
@@ -133,7 +133,7 @@ public enum PixelOperation {
 			case NO_CHANGE:
 				return y;
 			case WRAP_AROUND:
-				return modulo(y, resolutionY);
+				return positiveModulo(y, resolutionY);
 			default:
 				return y;
 		}

@@ -9,7 +9,7 @@ import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.floor;
 import static org.dayflower.util.Floats.remainder;
 import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Ints.modulo;
+import static org.dayflower.util.Ints.positiveModulo;
 import static org.dayflower.util.Ints.toInt;
 
 import java.awt.image.BufferedImage;
@@ -390,6 +390,6 @@ public class ImageBackground implements Background {
 	}
 	
 	private Color3F doGetColorRGB(final int x, final int y) {
-		return Color3F.unpack(this.image[modulo(y, this.resolutionY) * this.resolutionX + modulo(x, this.resolutionX)]);
+		return Color3F.unpack(this.image[positiveModulo(y, this.resolutionY) * this.resolutionX + positiveModulo(x, this.resolutionX)]);
 	}
 }

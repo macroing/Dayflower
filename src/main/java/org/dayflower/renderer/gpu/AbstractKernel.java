@@ -336,7 +336,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @param r a value
 	 * @return a {@code double} with the result of the operation
 	 */
-	protected final double solveCubicForQuarticSystemDouble(final double p, final double q, final double r) {
+	protected final double solveCubicForQuarticSystemD(final double p, final double q, final double r) {
 		final double pSquared = p * p;
 		final double q0 = (pSquared - 3.0D * q) / 9.0D;
 		final double q0Cubed = q0 * q0 * q0;
@@ -400,7 +400,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @return a {@code float} with the amount of light reflected by the surface
 	 */
 	protected final float fresnelDielectric(final float cosThetaI, final float etaI, final float etaT) {
-		final float saturateCosThetaI = saturateFloat(cosThetaI, -1.0F, 1.0F);
+		final float saturateCosThetaI = saturateF(cosThetaI, -1.0F, 1.0F);
 		
 		final boolean isEntering = saturateCosThetaI > 0.0F;
 		
@@ -475,31 +475,31 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
-	 * Performs a modulo operation on {@code value} given {@code maximumValue}.
+	 * Performs a modulo operation on {@code x} and {@code y}.
 	 * <p>
-	 * Returns {@code value} or a wrapped around version of it.
+	 * Returns a {@code float} value.
 	 * <p>
 	 * The modulo operation performed by this method differs slightly from the modulo operator in Java.
 	 * <p>
-	 * If {@code value} is positive, the following occurs:
+	 * If {@code x} is positive, the following occurs:
 	 * <pre>
 	 * {@code
-	 * float changedValue = fmod(value, maximumValue);
+	 * float z = fmod(x, y);
 	 * }
 	 * </pre>
-	 * If {@code value} is negative, the following occurs:
+	 * If {@code x} is negative, the following occurs:
 	 * <pre>
 	 * {@code
-	 * float changedValue = fmod((fmod(value, maximumValue) + maximumValue), maximumValue);
+	 * float z = fmod((fmod(x, y) + y), y);
 	 * }
 	 * </pre>
 	 * 
-	 * @param value a {@code float} value
-	 * @param maximumValue the maximum value
-	 * @return {@code value} or a wrapped around version of it
+	 * @param x a {@code float} value
+	 * @param y a {@code float} value
+	 * @return a {@code float} value
 	 */
-	protected final float moduloFloat(final float value, final float maximumValue) {
-		return value < 0.0F ? fmod(fmod(value, maximumValue) + maximumValue, maximumValue) : fmod(value, maximumValue);
+	protected final float positiveModuloF(final float x, final float y) {
+		return x < 0.0F ? fmod(fmod(x, y) + y, y) : fmod(x, y);
 	}
 	
 	/**
@@ -783,7 +783,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @param edgeB the maximum or minimum value
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
-	protected final float saturateFloat(final float value, final float edgeA, final float edgeB) {
+	protected final float saturateF(final float value, final float edgeA, final float edgeB) {
 		final float minimum = min(edgeA, edgeB);
 		final float maximum = max(edgeA, edgeB);
 		
@@ -1492,7 +1492,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @param r a value
 	 * @return a {@code float} with the result of the operation
 	 */
-	protected final float solveCubicForQuarticSystemFloat(final float p, final float q, final float r) {
+	protected final float solveCubicForQuarticSystemF(final float p, final float q, final float r) {
 		final float pSquared = p * p;
 		final float q0 = (pSquared - 3.0F * q) / 9.0F;
 		final float q0Cubed = q0 * q0 * q0;
@@ -1566,7 +1566,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @param maximum the maximum boundary
 	 * @return the smallest solution that is greater than {@code minimum} and less than {@code maximum} or {@code 0.0F}
 	 */
-	protected final float solveQuarticSystemDouble(final double a, final double b, final double c, final double d, final double e, final float minimum, final float maximum) {
+	protected final float solveQuarticSystemD(final double a, final double b, final double c, final double d, final double e, final float minimum, final float maximum) {
 		final double aReciprocal = 1.0D / a;
 		final double bA = b * aReciprocal;
 		final double bASquared = bA * bA;
@@ -1576,7 +1576,7 @@ public abstract class AbstractKernel extends Kernel {
 		final double p = -0.375D * bASquared + cA;
 		final double q = 0.125D * bASquared * bA - 0.5D * bA * cA + dA;
 		final double r = -0.01171875D * bASquared * bASquared + 0.0625D * bASquared * cA - 0.25D * bA * dA + eA;
-		final double z = solveCubicForQuarticSystemDouble(-0.5D * p, -r, 0.5D * r * p - 0.125D * q * q);
+		final double z = solveCubicForQuarticSystemD(-0.5D * p, -r, 0.5D * r * p - 0.125D * q * q);
 		
 		double d1 = 2.0D * z - p;
 		double d2 = 0.0D;
@@ -1703,7 +1703,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @param maximum the maximum boundary
 	 * @return the smallest solution that is greater than {@code minimum} and less than {@code maximum} or {@code 0.0F}
 	 */
-	protected final float solveQuarticSystemFloat(final float a, final float b, final float c, final float d, final float e, final float minimum, final float maximum) {
+	protected final float solveQuarticSystemF(final float a, final float b, final float c, final float d, final float e, final float minimum, final float maximum) {
 		final float aReciprocal = 1.0F / a;
 		final float bA = b * aReciprocal;
 		final float bASquared = bA * bA;
@@ -1713,7 +1713,7 @@ public abstract class AbstractKernel extends Kernel {
 		final float p = -0.375F * bASquared + cA;
 		final float q = 0.125F * bASquared * bA - 0.5F * bA * cA + dA;
 		final float r = -0.01171875F * bASquared * bASquared + 0.0625F * bASquared * cA - 0.25F * bA * dA + eA;
-		final float z = solveCubicForQuarticSystemFloat(-0.5F * p, -r, 0.5F * r * p - 0.125F * q * q);
+		final float z = solveCubicForQuarticSystemF(-0.5F * p, -r, 0.5F * r * p - 0.125F * q * q);
 		
 		float d1 = 2.0F * z - p;
 		float d2 = 0.0F;
@@ -1938,32 +1938,32 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
-	 * Performs a modulo operation on {@code value} given {@code maximumValue}.
+	 * Performs a modulo operation on {@code x} and {@code y}.
 	 * <p>
-	 * Returns {@code value} or a wrapped around version of it.
+	 * Returns an {@code int} value.
 	 * <p>
 	 * The modulo operation performed by this method differs slightly from the modulo operator in Java.
 	 * <p>
-	 * If {@code value} is positive, the following occurs:
+	 * If {@code x} is positive, the following occurs:
 	 * <pre>
 	 * {@code
-	 * int changedValue = value % maximumValue;
+	 * int z = x % y;
 	 * }
 	 * </pre>
-	 * If {@code value} is negative, the following occurs:
+	 * If {@code x} is negative, the following occurs:
 	 * <pre>
 	 * {@code
-	 * int changedValue = (value % maximumValue + maximumValue) % maximumValue;
+	 * int z = (x % y + y) % y;
 	 * }
 	 * </pre>
 	 * 
-	 * @param value an {@code int} value
-	 * @param maximumValue the maximum value
-	 * @return {@code value} or a wrapped around version of it
+	 * @param x an {@code int} value
+	 * @param y an {@code int} value
+	 * @return an {@code int} value
 	 */
 	@SuppressWarnings("static-method")
-	protected final int moduloInt(final int value, final int maximumValue) {
-		return value < 0 ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
+	protected final int positiveModuloI(final int x, final int y) {
+		return x < 0 ? (x % y + y) % y : x % y;
 	}
 	
 	/**
@@ -1977,7 +1977,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @param edgeB the maximum or minimum value
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
-	protected final int saturateInt(final int value, final int edgeA, final int edgeB) {
+	protected final int saturateI(final int value, final int edgeA, final int edgeB) {
 		final int minimum = min(edgeA, edgeB);
 		final int maximum = max(edgeA, edgeB);
 		

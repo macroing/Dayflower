@@ -725,34 +725,6 @@ public final class Floats {
 	}
 	
 	/**
-	 * Performs a modulo operation on {@code value} given {@code maximumValue}.
-	 * <p>
-	 * Returns {@code value} or a wrapped around version of it.
-	 * <p>
-	 * The modulo operation performed by this method differs slightly from the modulo operator in Java.
-	 * <p>
-	 * If {@code value} is positive, the following occurs:
-	 * <pre>
-	 * {@code
-	 * float changedValue = value % maximumValue;
-	 * }
-	 * </pre>
-	 * If {@code value} is negative, the following occurs:
-	 * <pre>
-	 * {@code
-	 * float changedValue = (value % maximumValue + maximumValue) % maximumValue;
-	 * }
-	 * </pre>
-	 * 
-	 * @param value a {@code float} value
-	 * @param maximumValue the maximum value
-	 * @return {@code value} or a wrapped around version of it
-	 */
-	public static float modulo(final float value, final float maximumValue) {
-		return value < 0.0F ? (value % maximumValue + maximumValue) % maximumValue : value % maximumValue;
-	}
-	
-	/**
 	 * Returns the {@code float} value next down after {@code value}.
 	 * <p>
 	 * This method is based on the function {@code NextFloatDown(float v)} in PBRT.
@@ -1011,6 +983,34 @@ public final class Floats {
 		}
 		
 		return noise;
+	}
+	
+	/**
+	 * Performs a modulo operation on {@code x} and {@code y}.
+	 * <p>
+	 * Returns a {@code float} value.
+	 * <p>
+	 * The modulo operation performed by this method differs slightly from the modulo operator in Java.
+	 * <p>
+	 * If {@code x} is positive, the following occurs:
+	 * <pre>
+	 * {@code
+	 * float z = x % y;
+	 * }
+	 * </pre>
+	 * If {@code x} is negative, the following occurs:
+	 * <pre>
+	 * {@code
+	 * float z = (x % y + y) % y;
+	 * }
+	 * </pre>
+	 * 
+	 * @param x a {@code float} value
+	 * @param y a {@code float} value
+	 * @return a {@code float} value
+	 */
+	public static float positiveModulo(final float x, final float y) {
+		return x < 0.0F ? (x % y + y) % y : x % y;
 	}
 	
 	/**

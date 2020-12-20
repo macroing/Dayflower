@@ -27,6 +27,8 @@ import org.dayflower.scene.Intersection;
  * A {@code ConstantTexture} is a {@link Texture} implementation that returns a constant {@link Color3F} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@code Texture} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

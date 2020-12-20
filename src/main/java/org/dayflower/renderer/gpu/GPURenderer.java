@@ -62,42 +62,13 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private void doComputeEmittanceForPrimitive(final int primitiveIndex) {
+	private void doComputeEmittanceForPrimitive() {
+		final int primitiveIndex = (int)(super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		
 		if(primitiveIndex == 5) {
 			color3FLHSSet(12.0F, 12.0F, 12.0F);
 		} else {
 			color3FLHSSet(0.0F, 0.0F, 0.0F);
-		}
-	}
-	
-	private void doComputeReflectanceForPrimitive(final int primitiveIndex) {
-		if(primitiveIndex == 0) {
-//			Blend Texture:
-//			color3FLHSSetTextureBullseye(1.0F, 0.1F, 0.1F, 0.5F, 0.5F, 0.5F, 0.0F, 10.0F, 0.0F, 2.0F);
-//			color3FRHSSetTextureCheckerboard(1.0F, 0.1F, 0.1F, 0.5F, 0.5F, 0.5F, 90.0F, 5.0F, 5.0F);
-//			color3FLHSSetTextureBlend(0.5F, 0.5F, 0.5F);
-			
-//			Bullseye Texture:
-//			color3FLHSSetTextureBullseye(1.0F, 0.1F, 0.1F, 0.5F, 0.5F, 0.5F, 0.0F, 10.0F, 0.0F, 2.0F);
-			
-//			Checkerboard Texture:
-//			color3FLHSSetTextureCheckerboard(1.0F, 0.1F, 0.1F, 0.5F, 0.5F, 0.5F, 90.0F, 5.0F, 5.0F);
-			
-//			Constant Texture:
-//			color3FLHSSetTextureConstant(1.0F, 0.1F, 0.1F);
-			
-			color3FLHSSetTextureConstant(1.00F, 1.00F, 1.00F);
-		} else if(primitiveIndex == 1) {
-//			color3FLHSSetTextureConstant(1.00F, 1.00F, 1.00F);
-			color3FLHSSetTextureConstant(1.00F, 0.01F, 0.01F);
-		} else if(primitiveIndex == 2) {
-			color3FLHSSetTextureConstant(0.01F, 1.00F, 0.01F);
-		} else if(primitiveIndex == 3) {
-			color3FLHSSetTextureConstant(0.50F, 0.50F, 0.50F);
-		} else if(primitiveIndex == 4) {
-			color3FLHSSetTextureConstant(0.01F, 0.01F, 1.00F);
-		} else {
-			color3FLHSSetTextureConstant(0.50F, 0.50F, 0.50F);
 		}
 	}
 	
@@ -152,19 +123,11 @@ public final class GPURenderer extends AbstractGPURenderer {
 			
 			while(currentBounce < maximumBounce) {
 				if(intersectionComputeShape3F()) {
-					final int primitiveIndex = (int)(super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+					doComputeEmittanceForPrimitive();
 					
-					doComputeEmittanceForPrimitive(primitiveIndex);
-					
-					final float emittanceR = color3FLHSGetComponent1();
-					final float emittanceG = color3FLHSGetComponent2();
-					final float emittanceB = color3FLHSGetComponent3();
-					
-					doComputeReflectanceForPrimitive(primitiveIndex);
-					
-					radianceR += throughputR * emittanceR;
-					radianceG += throughputG * emittanceG;
-					radianceB += throughputB * emittanceB;
+					radianceR += throughputR * color3FLHSGetComponent1();
+					radianceG += throughputG * color3FLHSGetComponent2();
+					radianceB += throughputB * color3FLHSGetComponent3();
 					
 					materialSampleDistributionFunction();
 					

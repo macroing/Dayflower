@@ -2114,6 +2114,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final void textureEvaluate(final int textureID, final int textureOffset) {
+		/*
+//		This takes too long. From 9 - 10 ms to 13 - 14 ms.
 		if(textureID == BlendTexture.ID) {
 			final int textureAID = (int)(this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_TEXTURE_A_ID]);
 			final int textureAOffset = (int)(this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_TEXTURE_A_OFFSET]);
@@ -2144,6 +2146,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		} else {
 			textureEvaluateExcludingBlendTexture(textureID, textureOffset);
 		}
+		*/
+		
+		textureEvaluateExcludingBlendTexture(textureID, textureOffset);
 	}
 	
 //	TODO: Add Javadocs!

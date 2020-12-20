@@ -34,6 +34,8 @@ import org.dayflower.scene.Intersection;
  * A {@code BullseyeTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between two other {@code Texture} instances in a bullseye pattern.
  * <p>
  * This class is immutable and therefore thread-safe if, and only if, both {@code Texture} instances are.
+ * <p>
+ * This {@code Texture} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

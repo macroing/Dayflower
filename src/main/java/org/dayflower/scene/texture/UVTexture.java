@@ -28,6 +28,8 @@ import org.dayflower.scene.Intersection;
  * A {@code UVTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance based on the texture coordinates of a surface.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@code Texture} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

@@ -29,6 +29,8 @@ import org.dayflower.scene.Intersection;
  * A {@code FunctionTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from another {@code Texture} instance obtained by applying an {@link Intersection} instance to a {@code Function} instance.
  * <p>
  * This class is immutable and therefore thread-safe if, and only if, the {@code Function} is.
+ * <p>
+ * This {@code Texture} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

@@ -54,8 +54,10 @@ import org.dayflower.util.ParameterArguments;
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * Because the {@link Image} class requires a lot of memory, this {@code ImageTexture} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code ImageTexture} instance
- * from an {@code Image} instance. This is useful if the requirement is to generate an image procedurally.
+ * This {@code Texture} implementation is supported on the GPU.
+ * <p>
+ * This {@code ImageTexture} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code ImageTexture} instance from an {@code Image} instance. This is useful if the
+ * requirement is to generate an image procedurally.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

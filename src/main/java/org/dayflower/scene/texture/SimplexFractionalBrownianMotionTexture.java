@@ -31,6 +31,8 @@ import org.dayflower.scene.Intersection;
  * A {@code SimplexFractionalBrownianMotionTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance using a Simplex noise-based fractional Brownian motion (fBm) algorithm.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@code Texture} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

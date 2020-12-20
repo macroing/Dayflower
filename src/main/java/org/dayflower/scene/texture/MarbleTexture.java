@@ -34,6 +34,8 @@ import org.dayflower.scene.Intersection;
  * A {@code MarbleTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by alternating between three {@code Color3F} instances in a marble pattern.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@code Texture} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

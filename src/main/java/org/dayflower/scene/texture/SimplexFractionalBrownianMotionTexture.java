@@ -149,7 +149,7 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 		
 		final float noise = simplexFractionalBrownianMotionXYZ(x, y, z, this.frequency, this.gain, 0.0F, 1.0F, this.octaves);
 		
-		return Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(this.color, noise)));
+		return Color3F.multiply(this.color, noise);
 	}
 	
 	/**

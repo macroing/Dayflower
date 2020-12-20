@@ -2306,15 +2306,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final int color10RGB = (int)(this.textureImageTextureArray[offsetColor10RGB]);
 				final int color11RGB = (int)(this.textureImageTextureArray[offsetColor11RGB]);
 				
-				if(minimumX == maximumX && minimumY == maximumY) {
-					component1 = colorRGBIntToRFloat(color00RGB);
-					component2 = colorRGBIntToGFloat(color00RGB);
-					component3 = colorRGBIntToBFloat(color00RGB);
-				} else {
-					component1 = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), x - minimumX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), x - minimumX), y - minimumY);
-					component2 = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), x - minimumX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), x - minimumX), y - minimumY);
-					component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), x - minimumX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), x - minimumX), y - minimumY);
-				}
+				final float tX = x - minimumX;
+				final float tY = y - minimumY;
+				
+				component1 = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
+				component2 = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
+				component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;
@@ -2358,22 +2355,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				component1 = colorR * noise;
 				component2 = colorG * noise;
 				component3 = colorB * noise;
-				
-				final float minimum = min(component1, component2, component3);
-				
-				if(minimum < 0.0F) {
-					component1 += -minimum;
-					component2 += -minimum;
-					component3 += -minimum;
-				}
-				
-				final float maximum = max(component1, component2, component3);
-				
-				if(maximum > 1.0F) {
-					component1 /= maximum;
-					component2 /= maximum;
-					component3 /= maximum;
-				}
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;

@@ -18,6 +18,8 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.util.Ints.padding;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -596,15 +598,38 @@ final class SceneCompiler {
 	}
 	
 	private void doPopulateShape3FTriangleMesh3FArray(final int[] shape3FTriangleMesh3FArray) {
-		for(int i = 0, j = 0; i < this.distinctTriangleMeshes.size(); i++) {
+		for(int i = 0; i < this.distinctTriangleMeshes.size(); i++) {
 			final TriangleMesh3F triangleMesh = this.distinctTriangleMeshes.get(i);
 			
 			final List<BoundingVolume3F> boundingVolumes = triangleMesh.getBoundingVolumes();
 			final List<Triangle3F> triangles = triangleMesh.getTriangles();
 			
 			final int shape3FTriangleMesh3FArrayOffset = this.distinctToOffsetsTriangleMeshes.get(triangleMesh).intValue();
+			final int shape3FTriangleMesh3FArrayLength = shape3FTriangleMesh3FArrayOffset + triangleMesh.getArrayLength();
 			
-			
+			for(int j = shape3FTriangleMesh3FArrayOffset; j < shape3FTriangleMesh3FArrayLength;) {
+				final int boundingVolumeOffset = j + TriangleMesh3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
+				final int idOffset = j + TriangleMesh3F.ARRAY_OFFSET_ID;
+				final int id = shape3FTriangleMesh3FArray[idOffset];
+				
+				shape3FTriangleMesh3FArray[boundingVolumeOffset] = this.distinctToOffsetsAxisAlignedBoundingBoxes.get(boundingVolumes.get(shape3FTriangleMesh3FArray[boundingVolumeOffset])).intValue();
+				
+				if(id == TriangleMesh3F.ID_LEAF_B_V_H_NODE) {
+					final int triangleCountOffset = j + TriangleMesh3F.ARRAY_OFFSET_TRIANGLE_COUNT;
+					final int triangleCount = shape3FTriangleMesh3FArray[triangleCountOffset];
+					final int triangleStartOffset = triangleCountOffset + 1;
+					
+					for(int k = triangleStartOffset; k < triangleStartOffset + triangleCount; k++) {
+						shape3FTriangleMesh3FArray[k] = this.distinctToOffsetsTriangles.get(triangles.get(shape3FTriangleMesh3FArray[k])).intValue();
+					}
+					
+					j += 4 + triangleCount + padding(4 + triangleCount);
+				} else if(id == TriangleMesh3F.ID_TREE_B_V_H_NODE) {
+					j += 8;
+				} else {
+					break;
+				}
+			}
 		}
 	}
 	

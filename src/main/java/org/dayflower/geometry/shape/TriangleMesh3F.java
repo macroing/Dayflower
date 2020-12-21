@@ -75,6 +75,43 @@ public final class TriangleMesh3F implements Shape3F {
 	public static final String NAME = "Triangle Mesh";
 	
 	/**
+	 * The offset for the offset of the {@link BoundingVolume3F} in the {@code int[]}.
+	 * <p>
+	 * The {@code BoundingVolume3F} is always an {@link AxisAlignedBoundingBox3F}.
+	 * <p>
+	 * This offset is used for both leaf and tree nodes.
+	 */
+	public static final int ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET = 1;
+	
+	/**
+	 * The offset for the ID of the bounding volume hierarchy (BVH) node in the {@code int[]}.
+	 * <p>
+	 * This offset is used for both leaf and tree nodes.
+	 */
+	public static final int ARRAY_OFFSET_ID = 0;
+	
+	/**
+	 * The offset for the left bounding volume hierarchy node in the {@code int[]}.
+	 * <p>
+	 * This offset is used for tree nodes only.
+	 */
+	public static final int ARRAY_OFFSET_LEFT_OFFSET = 3;
+	
+	/**
+	 * The offset for the next bounding volume hierarchy node in the {@code int[]}.
+	 * <p>
+	 * This offset is used for both leaf and tree nodes.
+	 */
+	public static final int ARRAY_OFFSET_NEXT_OFFSET = 2;
+	
+	/**
+	 * The offset for the {@link Triangle3F} count in the {@code int[]}.
+	 * <p>
+	 * This offset is used for leaf nodes only.
+	 */
+	public static final int ARRAY_OFFSET_TRIANGLE_COUNT = 3;
+	
+	/**
 	 * The ID of this {@code TriangleMesh3F} class.
 	 */
 	public static final int ID = 10;

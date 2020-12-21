@@ -26,7 +26,7 @@ import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 
 /**
- * A {@code FunctionTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from another {@code Texture} instance obtained by applying an {@link Intersection} instance to a {@code Function} instance.
+ * A {@code FunctionTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance by applying an {@link Intersection} instance to a {@code Function} instance.
  * <p>
  * This class is immutable and therefore thread-safe if, and only if, the {@code Function} is.
  * <p>
@@ -43,7 +43,7 @@ public final class FunctionTexture implements Texture {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Function<Intersection, Texture> function;
+	private final Function<Intersection, Color3F> function;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -55,7 +55,7 @@ public final class FunctionTexture implements Texture {
 	 * @param function a {@code Function} instance
 	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null}
 	 */
-	public FunctionTexture(final Function<Intersection, Texture> function) {
+	public FunctionTexture(final Function<Intersection, Color3F> function) {
 		this.function = Objects.requireNonNull(function, "function == null");
 	}
 	
@@ -72,7 +72,7 @@ public final class FunctionTexture implements Texture {
 	 */
 	@Override
 	public Color3F getColor(final Intersection intersection) {
-		return Objects.requireNonNull(this.function.apply(intersection), "function.apply(intersection) == null").getColor(Objects.requireNonNull(intersection, "intersection == null"));
+		return Objects.requireNonNull(this.function.apply(Objects.requireNonNull(intersection, "intersection == null")), "function.apply(intersection) == null");
 	}
 	
 	/**
@@ -146,18 +146,16 @@ public final class FunctionTexture implements Texture {
 		Objects.requireNonNull(shapeB, "shapeB == null");
 		Objects.requireNonNull(textureB, "textureB == null");
 		
-		final Texture textureDefault = ConstantTexture.BLACK;
-		
-		final Function<Intersection, Texture> function = intersection -> {
+		final Function<Intersection, Color3F> function = intersection -> {
 			if(intersection.getSurfaceIntersectionObjectSpace().getShape() == shapeA) {
-				return textureA;
+				return textureA.getColor(intersection);
 			}
 			
 			if(intersection.getSurfaceIntersectionObjectSpace().getShape() == shapeB) {
-				return textureB;
+				return textureB.getColor(intersection);
 			}
 			
-			return textureDefault;
+			return Color3F.BLACK;
 		};
 		
 		return new FunctionTexture(function);

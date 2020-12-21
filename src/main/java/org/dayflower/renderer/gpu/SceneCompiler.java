@@ -473,14 +473,17 @@ final class SceneCompiler {
 			final GlassSmallPTMaterial glassSmallPTMaterial = this.distinctGlassSmallPTMaterials.get(i);
 			
 			final Texture textureEmission = glassSmallPTMaterial.getTextureEmission();
+			final Texture textureEta = glassSmallPTMaterial.getTextureEta();
 			final Texture textureKR = glassSmallPTMaterial.getTextureKR();
 			final Texture textureKT = glassSmallPTMaterial.getTextureKT();
 			
 			final int materialGlassSmallPTMaterialArrayTextureEmissionOffset = i * GlassSmallPTMaterial.ARRAY_LENGTH + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialGlassSmallPTMaterialArrayTextureEtaOffset = i * GlassSmallPTMaterial.ARRAY_LENGTH + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_ETA_OFFSET;
 			final int materialGlassSmallPTMaterialArrayTextureKROffset = i * GlassSmallPTMaterial.ARRAY_LENGTH + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
 			final int materialGlassSmallPTMaterialArrayTextureKTOffset = i * GlassSmallPTMaterial.ARRAY_LENGTH + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_T_OFFSET;
 			
 			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
+			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureEtaOffset] = doFindTextureOffset(textureEta);
 			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
 			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureKTOffset] = doFindTextureOffset(textureKT);
 		}

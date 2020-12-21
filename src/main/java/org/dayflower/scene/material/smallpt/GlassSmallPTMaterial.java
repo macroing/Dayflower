@@ -53,24 +53,34 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	public static final int ARRAY_LENGTH = 8;
 	
 	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ETA_ID = 2;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ETA_OFFSET = 3;
+	
+	/**
 	 * The offset for the ID of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 2;
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 4;
 	
 	/**
 	 * The offset for the offset of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 3;
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 5;
 	
 	/**
 	 * The offset for the ID of the {@link Texture} denoted by {@code KT} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_T_ID = 4;
+	public static final int ARRAY_OFFSET_TEXTURE_K_T_ID = 6;
 	
 	/**
 	 * The offset for the offset of the {@link Texture} denoted by {@code KT} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_T_OFFSET = 5;
+	public static final int ARRAY_OFFSET_TEXTURE_K_T_OFFSET = 7;
 	
 	/**
 	 * The ID of this {@code GlassSmallPTMaterial} class.
@@ -80,6 +90,7 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureEmission;
+	private final Texture textureEta;
 	private final Texture textureKR;
 	private final Texture textureKT;
 	
@@ -142,6 +153,13 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 * Constructs a new {@code GlassSmallPTMaterial} instance.
 	 * <p>
 	 * If either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassSmallPTMaterial(colorKR, colorKT, colorEmission, new Color3F(1.5F));
+	 * }
+	 * </pre>
 	 * 
 	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
 	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
@@ -149,9 +167,25 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}
 	 */
 	public GlassSmallPTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission) {
+		this(colorKR, colorKT, colorEmission, new Color3F(1.5F));
+	}
+	
+	/**
+	 * Constructs a new {@code GlassSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR}, {@code colorKT}, {@code colorEmission} or {@code colorEta} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT}, {@code colorEmission} or {@code colorEta} are {@code null}
+	 */
+	public GlassSmallPTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission, final Color3F colorEta) {
 		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
 		this.textureKT = new ConstantTexture(Objects.requireNonNull(colorKT, "colorKT == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureEta = new ConstantTexture(Objects.requireNonNull(colorEta, "colorEta == null"));
 	}
 	
 	/**
@@ -197,6 +231,13 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 * Constructs a new {@code GlassSmallPTMaterial} instance.
 	 * <p>
 	 * If either {@code textureKR}, {@code textureKT} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassSmallPTMaterial(textureKR, textureKT, textureEmission, ConstantTexture.GRAY_1_50);
+	 * }
+	 * </pre>
 	 * 
 	 * @param textureKR a {@link Texture} instance for the reflection coefficient
 	 * @param textureKT a {@code Texture} instance for the transmission coefficient
@@ -204,9 +245,25 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT} or {@code textureEmission} are {@code null}
 	 */
 	public GlassSmallPTMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission) {
+		this(textureKR, textureKT, textureEmission, ConstantTexture.GRAY_1_50);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassSmallPTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureKT}, {@code textureEmission} or {@code textureEta} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT}, {@code textureEmission} or {@code textureEta} are {@code null}
+	 */
+	public GlassSmallPTMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission, final Texture textureEta) {
 		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
 		this.textureKT = Objects.requireNonNull(textureKT, "textureKT == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,7 +366,7 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new GlassSmallPTMaterial(%s, %s, %s)", this.textureKR, this.textureKT, this.textureEmission);
+		return String.format("new GlassSmallPTMaterial(%s, %s, %s, %s)", this.textureKR, this.textureKT, this.textureEmission, this.textureEta);
 	}
 	
 	/**
@@ -319,6 +376,15 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 */
 	public Texture getTextureEmission() {
 		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the index of refraction (IOR).
+	 * 
+	 * @return the {@code Texture} instance for the index of refraction (IOR)
+	 */
+	public Texture getTextureEta() {
+		return this.textureEta;
 	}
 	
 	/**
@@ -370,6 +436,10 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
+				if(!this.textureEta.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -401,6 +471,8 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 			return false;
 		} else if(!Objects.equals(this.textureEmission, GlassSmallPTMaterial.class.cast(object).textureEmission)) {
 			return false;
+		} else if(!Objects.equals(this.textureEta, GlassSmallPTMaterial.class.cast(object).textureEta)) {
+			return false;
 		} else if(!Objects.equals(this.textureKR, GlassSmallPTMaterial.class.cast(object).textureKR)) {
 			return false;
 		} else if(!Objects.equals(this.textureKT, GlassSmallPTMaterial.class.cast(object).textureKT)) {
@@ -427,7 +499,7 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEmission, this.textureKR, this.textureKT);
+		return Objects.hash(this.textureEmission, this.textureEta, this.textureKR, this.textureKT);
 	}
 	
 	/**
@@ -441,12 +513,12 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 //		Because the GlassSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
 		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
 		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0;						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ETA_ID] = this.textureEta.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ETA_OFFSET] = 0;								//Block #1
 		array[ARRAY_OFFSET_TEXTURE_K_R_ID] = this.textureKR.getID();			//Block #1
 		array[ARRAY_OFFSET_TEXTURE_K_R_OFFSET] = 0;								//Block #1
 		array[ARRAY_OFFSET_TEXTURE_K_T_ID] = this.textureKT.getID();			//Block #1
 		array[ARRAY_OFFSET_TEXTURE_K_T_OFFSET] = 0;								//Block #1
-		array[6] = 0;															//Block #1
-		array[7] = 0;															//Block #1
 		
 		return array;
 	}

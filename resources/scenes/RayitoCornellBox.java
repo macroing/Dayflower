@@ -26,7 +26,7 @@ Transform transform05 = new Transform(new Point3F( 3.0F, 0.00F,  0.0F));
 Transform transform06 = new Transform(new Point3F(-3.0F, 0.00F,  0.0F));
 Transform transform07 = new Transform(new Point3F(-1.5F, 1.00F,  8.0F));
 Transform transform08 = new Transform(new Point3F( 1.5F, 1.00F,  7.0F));
-Transform transform09 = new Transform(new Point3F( 0.0F, 4.99F,  9.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))), new Vector3F(0.25F));
+Transform transform09 = new Transform(new Point3F( 0.0F, 4.99F,  9.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))), new Vector3F(1.0F));
 
 AreaLight areaLight09 = new DiffuseAreaLight(transform09.getObjectToWorld(), 1, new Color3F(12.0F), shape09, false);
 

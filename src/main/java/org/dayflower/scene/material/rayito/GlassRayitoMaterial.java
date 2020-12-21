@@ -18,8 +18,6 @@
  */
 package org.dayflower.scene.material.rayito;
 
-import static org.dayflower.util.Floats.equal;
-
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -56,10 +54,10 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureAlbedo;
-	private final Texture textureEmittance;
-	private final float etaA;
-	private final float etaB;
+	private final Texture textureEmission;
+	private final Texture textureEta;
+	private final Texture textureKR;
+	private final Texture textureKT;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -80,119 +78,157 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	/**
 	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
-	 * If {@code colorAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassRayitoMaterial(colorAlbedo, Color3F.BLACK);
+	 * new GlassRayitoMaterial(colorKR, Color3F.WHITE);
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @throws NullPointerException thrown if, and only if, {@code colorAlbedo} is {@code null}
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
 	 */
-	public GlassRayitoMaterial(final Color3F colorAlbedo) {
-		this(colorAlbedo, Color3F.BLACK);
+	public GlassRayitoMaterial(final Color3F colorKR) {
+		this(colorKR, Color3F.WHITE);
 	}
 	
 	/**
 	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorKR} or {@code colorKT} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassRayitoMaterial(colorAlbedo, colorEmittance, 1.0F, 1.5F);
+	 * new GlassRayitoMaterial(colorKR, colorKT, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @param colorEmittance a {@code Color3F} instance with the emittance
-	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorKT} are {@code null}
 	 */
-	public GlassRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
-		this(colorAlbedo, colorEmittance, 1.0F, 1.5F);
+	public GlassRayitoMaterial(final Color3F colorKR, final Color3F colorKT) {
+		this(colorKR, colorKT, Color3F.BLACK);
 	}
 	
 	/**
 	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassRayitoMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), etaA, etaB);
+	 * new GlassRayitoMaterial(colorKR, colorKT, colorEmission, new Color3F(1.5F));
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @param colorEmittance a {@code Color3F} instance with the emittance
-	 * @param etaA the index of refraction denoted by {@code A}
-	 * @param etaB the index of refraction denoted by {@code B}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}
 	 */
-	public GlassRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance, final float etaA, final float etaB) {
-		this(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), etaA, etaB);
+	public GlassRayitoMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission) {
+		this(colorKR, colorKT, colorEmission, new Color3F(1.5F));
 	}
 	
 	/**
 	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
-	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new GlassRayitoMaterial(textureAlbedo, ConstantTexture.BLACK);
-	 * }
-	 * </pre>
+	 * If either {@code colorKR}, {@code colorKT}, {@code colorEmission} or {@code colorEta} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT}, {@code colorEmission} or {@code colorEta} are {@code null}
 	 */
-	public GlassRayitoMaterial(final Texture textureAlbedo) {
-		this(textureAlbedo, ConstantTexture.BLACK);
+	public GlassRayitoMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission, final Color3F colorEta) {
+		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
+		this.textureKT = new ConstantTexture(Objects.requireNonNull(colorKT, "colorKT == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureEta = new ConstantTexture(Objects.requireNonNull(colorEta, "colorEta == null"));
 	}
 	
 	/**
 	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassRayitoMaterial(textureAlbedo, textureEmittance, 1.0F, 1.5F);
+	 * new GlassRayitoMaterial(textureKR, ConstantTexture.WHITE);
 	 * }
 	 * </pre>
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @param textureEmittance a {@code Texture} instance with the emittance
-	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
 	 */
-	public GlassRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
-		this(textureAlbedo, textureEmittance, 1.0F, 1.5F);
+	public GlassRayitoMaterial(final Texture textureKR) {
+		this(textureKR, ConstantTexture.WHITE);
 	}
 	
 	/**
 	 * Constructs a new {@code GlassRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKR} or {@code textureKT} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassRayitoMaterial(textureKR, textureKT, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @param textureEmittance a {@code Texture} instance with the emittance
-	 * @param etaA the index of refraction denoted by {@code A}
-	 * @param etaB the index of refraction denoted by {@code B}
-	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureKT} are {@code null}
 	 */
-	public GlassRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance, final float etaA, final float etaB) {
-		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
-		this.etaA = etaA;
-		this.etaB = etaB;
+	public GlassRayitoMaterial(final Texture textureKR, final Texture textureKT) {
+		this(textureKR, textureKT, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassRayitoMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureKT} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassRayitoMaterial(textureKR, textureKT, textureEmission, ConstantTexture.GRAY_1_50);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT} or {@code textureEmission} are {@code null}
+	 */
+	public GlassRayitoMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission) {
+		this(textureKR, textureKT, textureEmission, ConstantTexture.GRAY_1_50);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassRayitoMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureKT}, {@code textureEmission} or {@code textureEta} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT}, {@code textureEmission} or {@code textureEta} are {@code null}
+	 */
+	public GlassRayitoMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission, final Texture textureEta) {
+		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
+		this.textureKT = Objects.requireNonNull(textureKT, "textureKT == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +244,7 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColor(intersection);
+		return this.textureEmission.getColor(intersection);
 	}
 	
 	/**
@@ -250,7 +286,14 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBTDF(Color3F.WHITE, this.textureAlbedo.getColor(intersection), this.etaA, this.etaB)), this.etaB));
+		final Color3F colorEta = this.textureEta.getColor(intersection);
+		final Color3F colorKR = this.textureKR.getColor(intersection);
+		final Color3F colorKT = this.textureKT.getColor(intersection);
+		
+		final float etaA = 1.0F;
+		final float etaB = colorEta.average();
+		
+		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBTDF(colorKR, colorKT, etaA, etaB)), etaB));
 	}
 	
 	/**
@@ -270,7 +313,7 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public String toString() {
-		return "new GlassRayitoMaterial(...)";
+		return String.format("new GlassRayitoMaterial(%s, %s, %s, %s)", this.textureKR, this.textureKT, this.textureEmission, this.textureEta);
 	}
 	
 	/**
@@ -300,11 +343,19 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureAlbedo.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEta.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKT.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -329,13 +380,13 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 			return true;
 		} else if(!(object instanceof GlassRayitoMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureAlbedo, GlassRayitoMaterial.class.cast(object).textureAlbedo)) {
+		} else if(!Objects.equals(this.textureEmission, GlassRayitoMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, GlassRayitoMaterial.class.cast(object).textureEmittance)) {
+		} else if(!Objects.equals(this.textureEta, GlassRayitoMaterial.class.cast(object).textureEta)) {
 			return false;
-		} else if(!equal(this.etaA, GlassRayitoMaterial.class.cast(object).etaA)) {
+		} else if(!Objects.equals(this.textureKR, GlassRayitoMaterial.class.cast(object).textureKR)) {
 			return false;
-		} else if(!equal(this.etaB, GlassRayitoMaterial.class.cast(object).etaB)) {
+		} else if(!Objects.equals(this.textureKT, GlassRayitoMaterial.class.cast(object).textureKT)) {
 			return false;
 		} else {
 			return true;
@@ -359,6 +410,6 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureAlbedo, this.textureEmittance, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+		return Objects.hash(this.textureEmission, this.textureEta, this.textureKR, this.textureKT);
 	}
 }

@@ -98,6 +98,13 @@ public final class TriangleMesh3F implements Shape3F {
 	public static final int ARRAY_OFFSET_LEFT_OFFSET = 3;
 	
 	/**
+	 * The offset for the left bounding volume hierarchy node or the triangle count in the {@code int[]}.
+	 * <p>
+	 * This offset is used for both leaf and tree nodes.
+	 */
+	public static final int ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT = 3;
+	
+	/**
 	 * The offset for the next bounding volume hierarchy node in the {@code int[]}.
 	 * <p>
 	 * This offset is used for both leaf and tree nodes.

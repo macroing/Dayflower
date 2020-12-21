@@ -35,6 +35,7 @@ import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
+import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
@@ -117,6 +118,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected int[] materialMirrorSmallPTMaterialArray;
 	protected int[] primitiveArray;
 	protected int[] shape3FTriangleMesh3FArray;
+	protected int[] shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1;
 	protected int[] textureConstantTextureArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,6 +157,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.materialMirrorSmallPTMaterialArray = new int[1];
 		this.primitiveArray = new int[1];
 		this.shape3FTriangleMesh3FArray = new int[1];
+		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1 = new int[1];
 		this.textureConstantTextureArray = new int[1];
 		this.scene = new Scene();
 	}
@@ -188,6 +191,249 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final Scene getScene() {
 		return this.scene;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final boolean containsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float pointX, final float pointY, final float pointZ) {
+		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
+		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
+		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 2];
+		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 0];
+		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 1];
+		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 2];
+		
+		final boolean containsX = pointX >= axisAlignedBoundingBoxMinimumX && pointX <= axisAlignedBoundingBoxMaximumX;
+		final boolean containsY = pointY >= axisAlignedBoundingBoxMinimumY && pointY <= axisAlignedBoundingBoxMaximumY;
+		final boolean containsZ = pointZ >= axisAlignedBoundingBoxMinimumZ && pointZ <= axisAlignedBoundingBoxMaximumZ;
+		
+		return containsX && containsY && containsZ;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final boolean containsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float pointX, final float pointY, final float pointZ) {
+		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
+		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
+		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
+		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
+		
+		final float distanceSquared = super.point3FDistanceSquared(boundingSphereCenterX, boundingSphereCenterY, boundingSphereCenterZ, pointX, pointY, pointZ);
+		
+		return distanceSquared < boundingSphereRadius * boundingSphereRadius;
+	}
+	
+	/**
+	 * Performs an intersection test against all primitives in the scene and computes intersection information for the closest.
+	 * <p>
+	 * Returns {@code true} if, and only if, an intersection was found, {@code false} otherwise.
+	 * <p>
+	 * If an intersection was found, the computed information will be present in {@link #intersectionArray_$private$24} in world space.
+	 * 
+	 * @return {@code true} if, and only if, an intersection was found, {@code false} otherwise
+	 */
+	protected final boolean intersectionComputeShape3F() {
+		int primitiveIndex = -1;
+		
+		for(int index = 0; index < this.primitiveCount; index++) {
+			final int primitiveArrayOffset = index * Primitive.ARRAY_LENGTH;
+			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_ID;
+			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+			
+			final int boundingVolumeID = this.primitiveArray[primitiveArrayOffsetBoundingVolumeID];
+			final int boundingVolumeOffset = this.primitiveArray[primitiveArrayOffsetBoundingVolumeOffset];
+			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
+			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
+			
+			final float rayOriginWorldSpaceX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
+			final float rayOriginWorldSpaceY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
+			final float rayOriginWorldSpaceZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
+			
+			final float tMinimumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
+			final float tMaximumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+			
+			boolean isIntersectingBoundingVolume = false;
+			
+//			TODO: Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
+			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
+				isIntersectingBoundingVolume = true;
+			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
+				isIntersectingBoundingVolume = containsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, rayOriginWorldSpaceX, rayOriginWorldSpaceY, rayOriginWorldSpaceZ) || intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+			} else if(boundingVolumeID == BoundingSphere3F.ID) {
+				isIntersectingBoundingVolume = containsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, rayOriginWorldSpaceX, rayOriginWorldSpaceY, rayOriginWorldSpaceZ) || intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+			}
+			
+			if(isIntersectingBoundingVolume) {
+				ray3FSetMatrix44FTransformWorldToObject(index);
+				
+				float tObjectSpace = 0.0F;
+				
+				final float tMinimumObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
+				final float tMaximumObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+				
+				if(shapeID == Plane3F.ID) {
+					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == RectangularCuboid3F.ID) {
+					tObjectSpace = intersectionTShape3FRectangularCuboid3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Sphere3F.ID) {
+					tObjectSpace = intersectionTShape3FSphere3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Torus3F.ID) {
+					tObjectSpace = intersectionTShape3FTorus3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Triangle3F.ID) {
+					tObjectSpace = intersectionTShape3FTriangle3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == TriangleMesh3F.ID) {
+					tObjectSpace = intersectionTShape3FTriangleMesh3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				}
+				
+				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
+					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = tObjectSpace;
+					
+					primitiveIndex = index;
+				}
+				
+				ray3FSetMatrix44FTransformObjectToWorld(index);
+			}
+		}
+		
+		if(primitiveIndex != -1) {
+			final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+			
+			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
+			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
+			
+			ray3FSetMatrix44FTransformWorldToObject(primitiveIndex);
+			
+			final float tObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+			
+			if(shapeID == Plane3F.ID) {
+				intersectionComputeShape3FPlane3F(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == RectangularCuboid3F.ID) {
+				intersectionComputeShape3FRectangularCuboid3F(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Sphere3F.ID) {
+				intersectionComputeShape3FSphere3F(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Torus3F.ID) {
+				intersectionComputeShape3FTorus3F(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Triangle3F.ID) {
+				intersectionComputeShape3FTriangle3F(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == TriangleMesh3F.ID) {
+				intersectionComputeShape3FTriangleMesh3F(tObjectSpace, primitiveIndex);
+			}
+			
+			ray3FSetMatrix44FTransformObjectToWorld(primitiveIndex);
+			
+			intersectionTransformObjectToWorld(primitiveIndex);
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given axis aligned bounding box, {@code false} otherwise.
+	 * 
+	 * @param boundingVolume3FAxisAlignedBoundingBox3FArrayOffset the offset for the axis aligned bounding box in {@link #boundingVolume3FAxisAlignedBoundingBox3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given axis aligned bounding box, {@code false} otherwise
+	 */
+	protected final boolean intersectsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return intersectionTBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given bounding sphere, {@code false} otherwise.
+	 * 
+	 * @param boundingVolume3FBoundingSphere3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FBoundingSphere3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given bounding sphere, {@code false} otherwise
+	 */
+	protected final boolean intersectsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return intersectionTBoundingVolume3FBoundingSphere3F(boundingVolume3FBoundingSphere3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given shape in world space, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the current ray intersects a given shape in world space, {@code false} otherwise
+	 */
+	protected final boolean intersectsShape3F() {
+		return intersectionTShape3F() > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given plane in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FPlane3FArrayOffset the offset for the plane in {@link #shape3FPlane3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given plane in object space, {@code false} otherwise
+	 */
+	protected final boolean intersectsShape3FPlane3F(final int shape3FPlane3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return intersectionTShape3FPlane3F(shape3FPlane3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given rectangular cuboid in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FRectangularCuboid3FArrayOffset the offset for the rectangular cuboid in {@link #shape3FRectangularCuboid3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given rectangular cuboid in object space, {@code false} otherwise
+	 */
+	protected final boolean intersectsShape3FRectangularCuboid3F(final int shape3FRectangularCuboid3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return intersectionTShape3FRectangularCuboid3F(shape3FRectangularCuboid3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given sphere in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FSphere3FArrayOffset the offset for the sphere in {@link #shape3FSphere3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given sphere in object space, {@code false} otherwise
+	 */
+	protected final boolean intersectsShape3FSphere3F(final int shape3FSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return intersectionTShape3FSphere3F(shape3FSphere3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given torus in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FTorus3FArrayOffset the offset for the torus in {@link #shape3FTorus3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given torus in object space, {@code false} otherwise
+	 */
+	protected final boolean intersectsShape3FTorus3F(final int shape3FTorus3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return intersectionTShape3FTorus3F(shape3FTorus3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given triangle in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FTriangle3FArrayOffset the offset for the triangle in {@link #shape3FTriangle3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given triangle in object space, {@code false} otherwise
+	 */
+	protected final boolean intersectsShape3FTriangle3F(final int shape3FTriangle3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return intersectionTShape3FTriangle3F(shape3FTriangle3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given triangle mesh in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FTriangleMesh3FArrayOffset the offset for the triangle mesh in {@link #shape3FTriangleMesh3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given triangle mesh in object space, {@code false} otherwise
+	 */
+	protected final boolean intersectsShape3FTriangleMesh3F(final int shape3FTriangleMesh3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return intersectionTShape3FTriangleMesh3F(shape3FTriangleMesh3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
 	}
 	
 	/**
@@ -299,185 +545,14 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 	/**
-	 * Performs an intersection test against all primitives in the scene and computes intersection information for the closest.
-	 * <p>
-	 * Returns {@code true} if, and only if, an intersection was found, {@code false} otherwise.
-	 * <p>
-	 * If an intersection was found, the computed information will be present in {@link #intersectionArray_$private$24} in world space.
-	 * 
-	 * @return {@code true} if, and only if, an intersection was found, {@code false} otherwise
-	 */
-	protected final boolean intersectionComputeShape3F() {
-		int primitiveIndex = -1;
-		
-		for(int index = 0; index < this.primitiveCount; index++) {
-			final int primitiveArrayOffset = index * Primitive.ARRAY_LENGTH;
-			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_ID;
-			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
-			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
-			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
-			
-			final int boundingVolumeID = this.primitiveArray[primitiveArrayOffsetBoundingVolumeID];
-			final int boundingVolumeOffset = this.primitiveArray[primitiveArrayOffsetBoundingVolumeOffset];
-			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
-			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
-			
-			boolean isIntersectingBoundingVolume = false;
-			
-//			TODO: Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
-			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
-				isIntersectingBoundingVolume = true;
-			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
-				isIntersectingBoundingVolume = intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset);
-			} else if(boundingVolumeID == BoundingSphere3F.ID) {
-				isIntersectingBoundingVolume = intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset);
-			}
-			
-			if(isIntersectingBoundingVolume) {
-				ray3FSetMatrix44FTransformWorldToObject(index);
-				
-				float tObjectSpace = 0.0F;
-				
-				if(shapeID == Plane3F.ID) {
-					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset);
-				} else if(shapeID == RectangularCuboid3F.ID) {
-					tObjectSpace = intersectionTShape3FRectangularCuboid3F(shapeOffset);
-				} else if(shapeID == Sphere3F.ID) {
-					tObjectSpace = intersectionTShape3FSphere3F(shapeOffset);
-				} else if(shapeID == Torus3F.ID) {
-					tObjectSpace = intersectionTShape3FTorus3F(shapeOffset);
-				} else if(shapeID == Triangle3F.ID) {
-					tObjectSpace = intersectionTShape3FTriangle3F(shapeOffset);
-				}
-				
-				if(tObjectSpace > this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] && tObjectSpace < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
-					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = tObjectSpace;
-					
-					primitiveIndex = index;
-				}
-				
-				ray3FSetMatrix44FTransformObjectToWorld(index);
-			}
-		}
-		
-		if(primitiveIndex != -1) {
-			final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
-			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
-			
-			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
-			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
-			
-			ray3FSetMatrix44FTransformWorldToObject(primitiveIndex);
-			
-			if(shapeID == Plane3F.ID) {
-				intersectionComputeShape3FPlane3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
-			} else if(shapeID == RectangularCuboid3F.ID) {
-				intersectionComputeShape3FRectangularCuboid3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
-			} else if(shapeID == Sphere3F.ID) {
-				intersectionComputeShape3FSphere3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
-			} else if(shapeID == Torus3F.ID) {
-				intersectionComputeShape3FTorus3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
-			} else if(shapeID == Triangle3F.ID) {
-				intersectionComputeShape3FTriangle3F(this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM], primitiveIndex, shapeOffset);
-			}
-			
-			ray3FSetMatrix44FTransformObjectToWorld(primitiveIndex);
-			
-			intersectionTransformObjectToWorld(primitiveIndex);
-			
-			return true;
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given axis aligned bounding box in world space, {@code false} otherwise.
+	 * Returns the parametric T value for a given axis aligned bounding box, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @param boundingVolume3FAxisAlignedBoundingBox3FArrayOffset the offset for the axis aligned bounding box in {@link #boundingVolume3FAxisAlignedBoundingBox3FArray}
-	 * @return {@code true} if, and only if, the current ray intersects a given axis aligned bounding box in world space, {@code false} otherwise
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given axis aligned bounding box, or {@code 0.0F} if no intersection was found
 	 */
-	protected final boolean intersectsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset) {
-		return intersectionTBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolume3FAxisAlignedBoundingBox3FArrayOffset) > 0.0F;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given bounding sphere in world space, {@code false} otherwise.
-	 * 
-	 * @param boundingVolume3FBoundingSphere3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FBoundingSphere3FArray}
-	 * @return {@code true} if, and only if, the current ray intersects a given bounding sphere in world space, {@code false} otherwise
-	 */
-	protected final boolean intersectsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset) {
-		return intersectionTBoundingVolume3FBoundingSphere3F(boundingVolume3FBoundingSphere3FArrayOffset) > 0.0F;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given shape in world space, {@code false} otherwise.
-	 * 
-	 * @return {@code true} if, and only if, the current ray intersects a given shape in world space, {@code false} otherwise
-	 */
-	protected final boolean intersectsShape3F() {
-		return intersectionTShape3F() > 0.0F;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given plane in object space, {@code false} otherwise.
-	 * 
-	 * @param shape3FPlane3FArrayOffset the offset for the plane in {@link #shape3FPlane3FArray}
-	 * @return {@code true} if, and only if, the current ray intersects a given plane in object space, {@code false} otherwise
-	 */
-	protected final boolean intersectsShape3FPlane3F(final int shape3FPlane3FArrayOffset) {
-		return intersectionTShape3FPlane3F(shape3FPlane3FArrayOffset) > 0.0F;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given rectangular cuboid in object space, {@code false} otherwise.
-	 * 
-	 * @param shape3FRectangularCuboid3FArrayOffset the offset for the rectangular cuboid in {@link #shape3FRectangularCuboid3FArray}
-	 * @return {@code true} if, and only if, the current ray intersects a given rectangular cuboid in object space, {@code false} otherwise
-	 */
-	protected final boolean intersectsShape3FRectangularCuboid3F(final int shape3FRectangularCuboid3FArrayOffset) {
-		return intersectionTShape3FRectangularCuboid3F(shape3FRectangularCuboid3FArrayOffset) > 0.0F;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given sphere in object space, {@code false} otherwise.
-	 * 
-	 * @param shape3FSphere3FArrayOffset the offset for the sphere in {@link #shape3FSphere3FArray}
-	 * @return {@code true} if, and only if, the current ray intersects a given sphere in object space, {@code false} otherwise
-	 */
-	protected final boolean intersectsShape3FSphere3F(final int shape3FSphere3FArrayOffset) {
-		return intersectionTShape3FSphere3F(shape3FSphere3FArrayOffset) > 0.0F;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given torus in object space, {@code false} otherwise.
-	 * 
-	 * @param shape3FTorus3FArrayOffset the offset for the torus in {@link #shape3FTorus3FArray}
-	 * @return {@code true} if, and only if, the current ray intersects a given torus in object space, {@code false} otherwise
-	 */
-	protected final boolean intersectsShape3FTorus3F(final int shape3FTorus3FArrayOffset) {
-		return intersectionTShape3FTorus3F(shape3FTorus3FArrayOffset) > 0.0F;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given triangle in object space, {@code false} otherwise.
-	 * 
-	 * @param shape3FTriangle3FArrayOffset the offset for the triangle in {@link #shape3FTriangle3FArray}
-	 * @return {@code true} if, and only if, the current ray intersects a given triangle in object space, {@code false} otherwise
-	 */
-	protected final boolean intersectsShape3FTriangle3F(final int shape3FTriangle3FArrayOffset) {
-		return intersectionTShape3FTriangle3F(shape3FTriangle3FArrayOffset) > 0.0F;
-	}
-	
-	/**
-	 * Returns the parametric T value for a given axis aligned bounding box in world space, or {@code 0.0F} if no intersection was found.
-	 * 
-	 * @param boundingVolume3FAxisAlignedBoundingBox3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FAxisAlignedBoundingBox3FArray}
-	 * @return the parametric T value for a given axis aligned bounding box in world space, or {@code 0.0F} if no intersection was found
-	 */
-	protected final float intersectionTBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset) {
+	protected final float intersectionTBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
 		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
@@ -485,8 +560,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float rayDirectionReciprocalX = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 		final float rayDirectionReciprocalY = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 		final float rayDirectionReciprocalZ = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-		final float rayTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 		
 //		Retrieve the axis aligned bounding box variables:
 		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
@@ -522,12 +595,14 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 	/**
-	 * Returns the parametric T value for a given bounding sphere in world space, or {@code 0.0F} if no intersection was found.
+	 * Returns the parametric T value for a given bounding sphere, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @param boundingVolume3FBoundingSphere3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FBoundingSphere3FArray}
-	 * @return the parametric T value for a given bounding sphere in world space, or {@code 0.0F} if no intersection was found
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given bounding sphere, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float intersectionTBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset) {
+	protected final float intersectionTBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
 		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
@@ -535,8 +610,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-		final float rayTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 		
 //		Retrieve the bounding sphere variables:
 		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
@@ -581,15 +654,22 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
 			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
 			
+			final float rayOriginWorldSpaceX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
+			final float rayOriginWorldSpaceY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
+			final float rayOriginWorldSpaceZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
+			
+			final float tMinimumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
+			final float tMaximumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+			
 			boolean isIntersectingBoundingVolume = false;
 			
 //			TODO: Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
 			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
-				isIntersectingBoundingVolume = intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset);
+				isIntersectingBoundingVolume = containsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, rayOriginWorldSpaceX, rayOriginWorldSpaceY, rayOriginWorldSpaceZ) || intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			} else if(boundingVolumeID == BoundingSphere3F.ID) {
-				isIntersectingBoundingVolume = intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset);
+				isIntersectingBoundingVolume = containsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, rayOriginWorldSpaceX, rayOriginWorldSpaceY, rayOriginWorldSpaceZ) || intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			}
 			
 			if(isIntersectingBoundingVolume) {
@@ -597,19 +677,24 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				
 				float tObjectSpace = 0.0F;
 				
+				final float tMinimumObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
+				final float tMaximumObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+				
 				if(shapeID == Plane3F.ID) {
-					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == RectangularCuboid3F.ID) {
-					tObjectSpace = intersectionTShape3FRectangularCuboid3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FRectangularCuboid3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Sphere3F.ID) {
-					tObjectSpace = intersectionTShape3FSphere3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FSphere3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Torus3F.ID) {
-					tObjectSpace = intersectionTShape3FTorus3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FTorus3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Triangle3F.ID) {
-					tObjectSpace = intersectionTShape3FTriangle3F(shapeOffset);
+					tObjectSpace = intersectionTShape3FTriangle3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == TriangleMesh3F.ID) {
+					tObjectSpace = intersectionTShape3FTriangleMesh3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				}
 				
-				if(tObjectSpace > this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] && tObjectSpace < this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM]) {
+				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
 					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = tObjectSpace;
 					
 					hasFoundIntersection = true;
@@ -626,9 +711,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 * Returns the parametric T value for a given plane in object space, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @param shape3FPlane3FArrayOffset the offset for the plane in {@link #shape3FPlane3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
 	 * @return the parametric T value for a given plane in object space, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float intersectionTShape3FPlane3F(final int shape3FPlane3FArrayOffset) {
+	protected final float intersectionTShape3FPlane3F(final int shape3FPlane3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
 		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
@@ -636,8 +723,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-		final float rayTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 		
 //		Retrieve the plane variables that will be referred to by 'planeA' and 'planeSurfaceNormal' in the comments:
 		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_A + 0];
@@ -674,9 +759,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 * Returns the parametric T value for a given rectangular cuboid in object space, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @param shape3FRectangularCuboid3FArrayOffset the offset for the rectangular cuboid in {@link #shape3FRectangularCuboid3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
 	 * @return the parametric T value for a given rectangular cuboid in object space, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float intersectionTShape3FRectangularCuboid3F(final int shape3FRectangularCuboid3FArrayOffset) {
+	protected final float intersectionTShape3FRectangularCuboid3F(final int shape3FRectangularCuboid3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
 		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
@@ -684,8 +771,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float rayDirectionReciprocalX = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 		final float rayDirectionReciprocalY = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 		final float rayDirectionReciprocalZ = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-		final float rayTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 		
 //		Retrieve the rectangular cuboid variables:
 		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MAXIMUM + 0];
@@ -724,9 +809,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 * Returns the parametric T value for a given sphere in object space, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @param shape3FSphere3FArrayOffset the offset for the sphere in {@link #shape3FSphere3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
 	 * @return the parametric T value for a given sphere in object space, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float intersectionTShape3FSphere3F(final int shape3FSphere3FArrayOffset) {
+	protected final float intersectionTShape3FSphere3F(final int shape3FSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
 		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
@@ -734,8 +821,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-		final float rayTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 		
 //		Retrieve the sphere variables:
 		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 0];
@@ -764,9 +849,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 * Returns the parametric T value for a given torus in object space, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @param shape3FTorus3FArrayOffset the offset for the torus in {@link #shape3FTorus3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
 	 * @return the parametric T value for a given torus in object space, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float intersectionTShape3FTorus3F(final int shape3FTorus3FArrayOffset) {
+	protected final float intersectionTShape3FTorus3F(final int shape3FTorus3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
 		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
@@ -774,8 +861,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-		final float rayTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 		
 //		Retrieve the torus variables:
 		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_INNER];
@@ -835,9 +920,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 * Returns the parametric T value for a given triangle in object space, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @param shape3FTriangle3FArrayOffset the offset for the triangle in {@link #shape3FTriangle3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
 	 * @return the parametric T value for a given triangle in object space, or {@code 0.0F} if no intersection was found
 	 */
-	protected final float intersectionTShape3FTriangle3F(final int shape3FTriangle3FArrayOffset) {
+	protected final float intersectionTShape3FTriangle3F(final int shape3FTriangle3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
 		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
@@ -845,8 +932,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-		final float rayTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-		final float rayTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 		
 //		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
 		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 0];
@@ -924,6 +1009,59 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		}
 		
 		return 0.0F;
+	}
+	
+	/**
+	 * Returns the parametric T value for a given triangle mesh in object space, or {@code 0.0F} if no intersection was found.
+	 * 
+	 * @param shape3FTriangleMesh3FArrayOffset the offset for the triangle mesh in {@link #shape3FTriangleMesh3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given triangle mesh in object space, or {@code 0.0F} if no intersection was found
+	 */
+	protected final float intersectionTShape3FTriangleMesh3F(final int shape3FTriangleMesh3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		float t = 0.0F;
+		float tMinimum = rayTMinimum;
+		float tMaximum = rayTMaximum;
+		
+		int offset = shape3FTriangleMesh3FArrayOffset;
+		
+		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
+		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
+		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
+		
+		while(offset != -1) {
+			final int id = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_ID];
+			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
+			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_NEXT_OFFSET];
+			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT];
+			
+			final boolean isIntersectingBoundingVolume = containsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, rayOriginX, rayOriginY, rayOriginZ) || intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimum, tMaximum);
+			
+			if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_LEAF_B_V_H_NODE) {
+				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
+					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT + 1 + i];
+					
+					final float tObjectSpace = this.intersectionTShape3FTriangle3F(triangleOffset, tMinimum, tMaximum);
+					
+					if(tObjectSpace > tMinimum && tObjectSpace < tMaximum) {
+						this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0] = triangleOffset;
+						
+						tMaximum = tObjectSpace;
+						
+						t = tObjectSpace;
+					}
+				}
+				
+				offset = nextOffset;
+			} else if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_TREE_B_V_H_NODE) {
+				offset = leftOffsetOrTriangleCount;
+			} else {
+				offset = nextOffset;
+			}
+		}
+		
+		return t;
 	}
 	
 	/**
@@ -1518,6 +1656,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = surfaceIntersectionPointZ;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = textureCoordinatesU;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = textureCoordinatesV;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void intersectionComputeShape3FTriangleMesh3F(final float t, final int primitiveIndex) {
+		intersectionComputeShape3FTriangle3F(t, primitiveIndex, this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0]);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2364,6 +2507,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		float newTMinimum = oldTMinimum;
 		float newTMaximum = oldTMaximum;
 		
+		/*
 //		Check if the new minimum ray boundary should be computed:
 		if(newTMinimum > 0.0F && newTMinimum < Float.MAX_VALUE) {
 //			Compute a reference point in the old space:
@@ -2385,6 +2529,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //			Update the new minimum ray boundary:
 			newTMinimum = abs(distanceOriginToReferencePointTMinimum);
 		}
+		*/
 		
 //		Check if the new maximum ray bounday should be computed:
 		if(newTMaximum > 0.0F && newTMaximum < Float.MAX_VALUE) {

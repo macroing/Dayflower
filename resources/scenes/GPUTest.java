@@ -38,7 +38,7 @@ Transform transform1 = new Transform(new Point3F(-2.5F,  1.00F, 5.0F));
 Transform transform2 = new Transform(new Point3F(+0.0F,  1.25F, 5.0F));
 Transform transform3 = new Transform(new Point3F(+2.5F,  1.00F, 5.0F));
 Transform transform4 = new Transform(new Point3F(+0.0F,  0.00F, 0.0F));
-Transform transform5 = new Transform(new Point3F(+5.0F,  1.50F, 5.0F));
+Transform transform5 = new Transform(new Point3F(+5.0F,  1.50F, 5.0F), Quaternion4F.from(Matrix44F.rotateY(AngleF.degrees(180.0F))), new Vector3F(0.02F));
 Transform transform6 = new Transform(new Point3F(+0.0F, 20.00F, 5.0F));
 
 scene.addPrimitive(new Primitive(material1, shape1, transform1));

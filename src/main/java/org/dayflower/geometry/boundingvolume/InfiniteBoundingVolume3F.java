@@ -35,11 +35,6 @@ import org.dayflower.geometry.Ray3F;
  */
 public final class InfiniteBoundingVolume3F implements BoundingVolume3F {
 	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 0;
-	
-	/**
 	 * The ID of this {@code InfiniteBoundingVolume3F} class.
 	 */
 	public static final int ID = 3;
@@ -204,16 +199,6 @@ public final class InfiniteBoundingVolume3F implements BoundingVolume3F {
 		Objects.requireNonNull(ray, "ray == null");
 		
 		return tMinimum;
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code InfiniteBoundingVolume3F} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code InfiniteBoundingVolume3F} instance
-	 */
-	@Override
-	public float[] toArray() {
-		return new float[ARRAY_SIZE];
 	}
 	
 	/**

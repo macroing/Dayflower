@@ -42,6 +42,11 @@ import org.dayflower.scene.Intersection;
  */
 public final class BullseyeTexture implements Texture {
 	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
 	 * The offset for the {@link Point3F} instance representing the origin in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_ORIGIN = 0;
@@ -70,11 +75,6 @@ public final class BullseyeTexture implements Texture {
 	 * The offset for the offset of the {@link Texture} denoted by {@code B} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_B_OFFSET = 6;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 8;
 	
 	/**
 	 * The ID of this {@code BullseyeTexture} class.
@@ -373,7 +373,7 @@ public final class BullseyeTexture implements Texture {
 	 * @return a {@code float[]} representation of this {@code BullseyeTexture} instance
 	 */
 	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
+		final float[] array = new float[ARRAY_LENGTH];
 		
 //		Because the BullseyeTexture occupy 8/8 positions in a block, it should be aligned.
 		array[ARRAY_OFFSET_ORIGIN + 0] = this.origin.getX();		//Block #1

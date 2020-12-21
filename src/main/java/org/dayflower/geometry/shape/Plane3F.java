@@ -53,6 +53,11 @@ public final class Plane3F implements Shape3F {
 	public static final String NAME = "Plane";
 	
 	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 16;
+	
+	/**
 	 * The offset for the {@link Point3F} instance denoted by {@code A} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_A = 0;
@@ -71,11 +76,6 @@ public final class Plane3F implements Shape3F {
 	 * The offset for the {@link Vector3F} instance representing the surface normal in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_SURFACE_NORMAL = 9;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 16;
 	
 	/**
 	 * The ID of this {@code Plane3F} class.
@@ -497,7 +497,7 @@ public final class Plane3F implements Shape3F {
 	 * @return a {@code float[]} representation of this {@code Plane3F} instance
 	 */
 	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
+		final float[] array = new float[ARRAY_LENGTH];
 		
 		array[ARRAY_OFFSET_A + 0] = this.a.getX();							//Block #1
 		array[ARRAY_OFFSET_A + 1] = this.a.getY();							//Block #1

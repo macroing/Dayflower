@@ -55,6 +55,11 @@ public final class Triangle3F implements Shape3F {
 	public static final String NAME = "Triangle";
 	
 	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 40;
+	
+	/**
 	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code A} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V = 24;
@@ -113,11 +118,6 @@ public final class Triangle3F implements Shape3F {
 	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex} {@code C} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_C_TEXTURE_COORDINATES = 13;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 40;
 	
 	/**
 	 * The ID of this {@code Triangle3F} class.
@@ -597,7 +597,7 @@ public final class Triangle3F implements Shape3F {
 	 * @return a {@code float[]} representation of this {@code Triangle3F} instance
 	 */
 	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
+		final float[] array = new float[ARRAY_LENGTH];
 		
 		array[ARRAY_OFFSET_A_POSITION + 0] = this.a.getPosition().getX();								//Block #1
 		array[ARRAY_OFFSET_A_POSITION + 1] = this.a.getPosition().getY();								//Block #1

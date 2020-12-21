@@ -50,29 +50,29 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 	public static final String NAME = "SmallPT - Clear Coat";
 	
 	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code KD} in the {@code float[]}.
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code KD} in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_D_ID = 2;
 	
 	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code KD} in the {@code float[]}.
+	 * The offset for the offset of the {@link Texture} denoted by {@code KD} in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_D_OFFSET = 3;
 	
 	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code KS} in the {@code float[]}.
+	 * The offset for the ID of the {@link Texture} denoted by {@code KS} in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_S_ID = 4;
 	
 	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code KS} in the {@code float[]}.
+	 * The offset for the offset of the {@link Texture} denoted by {@code KS} in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_S_OFFSET = 5;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 8;
 	
 	/**
 	 * The ID of this {@code ClearCoatSmallPTMaterial} class.
@@ -416,27 +416,6 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code ClearCoatSmallPTMaterial} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code ClearCoatSmallPTMaterial} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
-		
-//		Because the ClearCoatSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0.0F;						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_D_ID] = this.textureKD.getID();			//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_D_OFFSET] = 0.0F;							//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_S_ID] = this.textureKS.getID();			//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_S_OFFSET] = 0.0F;							//Block #1
-		array[6] = 0.0F;														//Block #1
-		array[7] = 0.0F;														//Block #1
-		
-		return array;
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code ClearCoatSmallPTMaterial} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code ClearCoatSmallPTMaterial} instance
@@ -454,5 +433,26 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.textureEmission, this.textureKD, this.textureKS);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code ClearCoatSmallPTMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code ClearCoatSmallPTMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the ClearCoatSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0;						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D_ID] = this.textureKD.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D_OFFSET] = 0;								//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_S_ID] = this.textureKS.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_S_OFFSET] = 0;								//Block #1
+		array[6] = 0;															//Block #1
+		array[7] = 0;															//Block #1
+		
+		return array;
 	}
 }

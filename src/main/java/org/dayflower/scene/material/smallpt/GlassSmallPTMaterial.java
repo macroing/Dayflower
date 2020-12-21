@@ -48,29 +48,29 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	public static final String NAME = "SmallPT - Glass";
 	
 	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code KR} in the {@code float[]}.
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 2;
 	
 	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code KR} in the {@code float[]}.
+	 * The offset for the offset of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 3;
 	
 	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code KT} in the {@code float[]}.
+	 * The offset for the ID of the {@link Texture} denoted by {@code KT} in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_T_ID = 4;
 	
 	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code KT} in the {@code float[]}.
+	 * The offset for the offset of the {@link Texture} denoted by {@code KT} in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_T_OFFSET = 5;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 8;
 	
 	/**
 	 * The ID of this {@code GlassSmallPTMaterial} class.
@@ -411,27 +411,6 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code GlassSmallPTMaterial} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code GlassSmallPTMaterial} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
-		
-//		Because the GlassSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();		//Block #1
-		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0.0F;							//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_R_ID] = this.textureKR.getID();				//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_R_OFFSET] = 0.0F;								//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_T_ID] = this.textureKT.getID();				//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_T_OFFSET] = 0.0F;								//Block #1
-		array[6] = 0.0F;															//Block #1
-		array[7] = 0.0F;															//Block #1
-		
-		return array;
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code GlassSmallPTMaterial} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code GlassSmallPTMaterial} instance
@@ -449,5 +428,26 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.textureEmission, this.textureKR, this.textureKT);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code GlassSmallPTMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code GlassSmallPTMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the GlassSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0;						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_ID] = this.textureKR.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_OFFSET] = 0;								//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_T_ID] = this.textureKT.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_T_OFFSET] = 0;								//Block #1
+		array[6] = 0;															//Block #1
+		array[7] = 0;															//Block #1
+		
+		return array;
 	}
 }

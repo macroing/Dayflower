@@ -39,6 +39,11 @@ import org.dayflower.scene.Intersection;
  */
 public final class BlendTexture implements Texture {
 	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
 	 * The offset for the ID of the {@link Texture} denoted by {@code A} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_A_ID = 0;
@@ -72,11 +77,6 @@ public final class BlendTexture implements Texture {
 	 * The offset for the factor to use for component 3 in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_T_COMPONENT_3 = 6;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 8;
 	
 	/**
 	 * The ID of this {@code BlendTexture} class.
@@ -308,7 +308,7 @@ public final class BlendTexture implements Texture {
 	 * @return a {@code float[]} representation of this {@code BlendTexture} instance
 	 */
 	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
+		final float[] array = new float[ARRAY_LENGTH];
 		
 //		Because the BlendTexture occupy 8/8 positions in a block, it should be aligned.
 		array[ARRAY_OFFSET_TEXTURE_A_ID] = this.textureA.getID();	//Block #1

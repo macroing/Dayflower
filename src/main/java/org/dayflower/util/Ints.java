@@ -132,6 +132,34 @@ public final class Ints {
 	}
 	
 	/**
+	 * Returns the padding for {@code contentSize} given a block size of {@code 8}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Ints.padding(contentSize, 8);
+	 * }
+	 * </pre>
+	 * 
+	 * @param contentSize the size of the content
+	 * @return the padding for {@code contentSize} given a block size of {@code 8}
+	 */
+	public static int padding(final int contentSize) {
+		return padding(contentSize, 8);
+	}
+	
+	/**
+	 * Returns the padding for {@code contentSize} given a block size of {@code blockSize}.
+	 * 
+	 * @param contentSize the size of the content
+	 * @param blockSize the size of the block
+	 * @return the padding for {@code contentSize} given a block size of {@code blockSize}
+	 */
+	public static int padding(final int contentSize, final int blockSize) {
+		return contentSize % blockSize == 0 ? 0 : blockSize - (contentSize % blockSize);
+	}
+	
+	/**
 	 * Performs a modulo operation on {@code x} and {@code y}.
 	 * <p>
 	 * Returns an {@code int} value.

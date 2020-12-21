@@ -23,6 +23,7 @@ import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.floor;
 import static org.dayflower.util.Floats.positiveModulo;
 import static org.dayflower.util.Floats.sin;
+import static org.dayflower.util.Ints.padding;
 import static org.dayflower.util.Ints.positiveModulo;
 import static org.dayflower.util.Ints.toInt;
 
@@ -382,7 +383,7 @@ public final class ImageTexture implements Texture {
 	 * @return a {@code float[]} representation of this {@code ImageTexture} instance
 	 */
 	public float[] toArray() {
-		final float[] array = new float[getArraySize()];
+		final float[] array = new float[getArrayLength()];
 		
 		array[ARRAY_OFFSET_ANGLE_RADIANS] = this.angle.getRadians();
 		array[ARRAY_OFFSET_SCALE + 0] = this.scale.getU();
@@ -402,17 +403,12 @@ public final class ImageTexture implements Texture {
 	}
 	
 	/**
-	 * Returns the size of the {@code float[]}.
+	 * Returns the length of the {@code float[]}.
 	 * 
-	 * @return the size of the {@code float[]}
+	 * @return the length of the {@code float[]}
 	 */
-	public int getArraySize() {
-		final int sizeHeader = 5;
-		final int sizeImage = this.image.length;
-		final int sizePadding = (sizeHeader + sizeImage) % 8 == 0 ? 0 : 8 - ((sizeHeader + sizeImage) % 8);
-		final int size = sizeHeader + sizeImage + sizePadding;
-		
-		return size;
+	public int getArrayLength() {
+		return 5 + this.image.length + padding(5 + this.image.length);
 	}
 	
 	/**

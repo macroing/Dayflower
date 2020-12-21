@@ -41,6 +41,11 @@ import org.dayflower.node.NodeTraversalException;
  */
 public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 6;
+	
+	/**
 	 * The offset for the {@link Point3F} instance representing the maximum point in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_MAXIMUM = 0;
@@ -49,11 +54,6 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * The offset for the {@link Point3F} instance representing the minimum point in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_MINIMUM = 3;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 6;
 	
 	/**
 	 * The ID of this {@code AxisAlignedBoundingBox3F} class.
@@ -388,9 +388,8 @@ public final class AxisAlignedBoundingBox3F implements BoundingVolume3F {
 	 * 
 	 * @return a {@code float[]} representation of this {@code AxisAlignedBoundingBox3F} instance
 	 */
-	@Override
 	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
+		final float[] array = new float[ARRAY_LENGTH];
 		
 		array[ARRAY_OFFSET_MAXIMUM + 0] = this.maximum.getX();
 		array[ARRAY_OFFSET_MAXIMUM + 1] = this.maximum.getY();

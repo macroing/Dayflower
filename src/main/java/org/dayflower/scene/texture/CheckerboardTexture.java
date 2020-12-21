@@ -43,6 +43,11 @@ import org.dayflower.scene.Intersection;
  */
 public final class CheckerboardTexture implements Texture {
 	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
 	 * The offset for the angle in degrees in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_ANGLE_DEGREES = 0;
@@ -76,11 +81,6 @@ public final class CheckerboardTexture implements Texture {
 	 * The offset for the offset of the {@link Texture} denoted by {@code B} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_B_OFFSET = 5;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 8;
 	
 	/**
 	 * The ID of this {@code CheckerboardTexture} class.
@@ -382,7 +382,7 @@ public final class CheckerboardTexture implements Texture {
 	 * @return a {@code float[]} representation of this {@code CheckerboardTexture} instance
 	 */
 	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
+		final float[] array = new float[ARRAY_LENGTH];
 		
 //		Because the CheckerboardTexture occupy 8/8 positions in a block, it should be aligned.
 		array[ARRAY_OFFSET_ANGLE_DEGREES] = this.angle.getDegrees();//Block #1

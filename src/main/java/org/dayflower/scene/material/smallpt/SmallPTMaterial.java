@@ -39,12 +39,12 @@ import org.dayflower.scene.texture.Texture;
  */
 public abstract class SmallPTMaterial implements Material {
 	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code Emission} in the {@code float[]}.
+	 * The offset for the ID of the {@link Texture} denoted by {@code Emission} in the {@code float[]} or {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_ID = 0;
 	
 	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code Emission} in the {@code float[]}.
+	 * The offset for the offset of the {@link Texture} denoted by {@code Emission} in the {@code float[]} or {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
 	

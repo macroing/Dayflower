@@ -51,6 +51,11 @@ import org.dayflower.util.ParameterArguments;
  */
 public final class Primitive implements Node {
 	/**
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
 	 * The offset for the {@link AreaLight} ID in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_AREA_LIGHT_ID = 0;
@@ -89,11 +94,6 @@ public final class Primitive implements Node {
 	 * The offset for the {@link Shape3F} offset in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_SHAPE_OFFSET = 7;
-	
-	/**
-	 * The size of the {@code int[]}.
-	 */
-	public static final int ARRAY_SIZE = 8;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -560,7 +560,7 @@ public final class Primitive implements Node {
 	 * @return an {@code int[]} representation of this {@code Primitive} instance
 	 */
 	public int[] toArray() {
-		final int[] array = new int[ARRAY_SIZE];
+		final int[] array = new int[ARRAY_LENGTH];
 		
 		array[ARRAY_OFFSET_AREA_LIGHT_ID] = 0;
 		array[ARRAY_OFFSET_AREA_LIGHT_OFFSET] = 0;

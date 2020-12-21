@@ -49,6 +49,11 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	public static final String NAME = "SmallPT - Metal";
 	
 	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
 	 * The offset for the exponent in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_EXPONENT = 4;
@@ -62,11 +67,6 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 * The offset for the offset of the {@link Texture} denoted by {@code KR} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 3;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 8;
 	
 	/**
 	 * The ID of this {@code MetalSmallPTMaterial} class.
@@ -363,7 +363,7 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 * @return a {@code float[]} representation of this {@code MetalSmallPTMaterial} instance
 	 */
 	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
+		final float[] array = new float[ARRAY_LENGTH];
 		
 //		Because the MetalSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
 		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1

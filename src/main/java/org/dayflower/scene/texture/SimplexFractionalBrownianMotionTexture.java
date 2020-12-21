@@ -39,6 +39,11 @@ import org.dayflower.scene.Intersection;
  */
 public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 4;
+	
+	/**
 	 * The offset for the {@link Color3F} instance representing the color in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_COLOR = 0;
@@ -57,11 +62,6 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	 * The offset for the octaves in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_OCTAVES = 3;
-	
-	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 4;
 	
 	/**
 	 * The ID of this {@code SimplexFractionalBrownianMotionTexture} class.
@@ -195,7 +195,7 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	 * @return a {@code float[]} representation of this {@code SimplexFractionalBrownianMotionTexture} instance
 	 */
 	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
+		final float[] array = new float[ARRAY_LENGTH];
 		
 //		Because the SimplexFractionalBrownianMotionTexture occupy 4/8 positions in a block, it should be aligned.
 		array[ARRAY_OFFSET_COLOR] = this.color.pack();	//Block #1

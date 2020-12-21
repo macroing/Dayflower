@@ -57,7 +57,6 @@ import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.util.IntArrayOutputStream;
-import org.dayflower.util.Ints;
 import org.dayflower.util.ParameterArguments;
 
 /**

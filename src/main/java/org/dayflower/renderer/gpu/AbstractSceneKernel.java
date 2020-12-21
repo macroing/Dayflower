@@ -216,9 +216,99 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
 		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
 		
-		final float distanceSquared = super.point3FDistanceSquared(boundingSphereCenterX, boundingSphereCenterY, boundingSphereCenterZ, pointX, pointY, pointZ);
+		final float distanceSquared = point3FDistanceSquared(boundingSphereCenterX, boundingSphereCenterY, boundingSphereCenterZ, pointX, pointY, pointZ);
 		
 		return distanceSquared < boundingSphereRadius * boundingSphereRadius;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final boolean containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+//		Retrieve the ray variables:
+		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
+		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
+		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
+		final float rayDirectionReciprocalX = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float rayDirectionReciprocalY = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float rayDirectionReciprocalZ = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+//		Retrieve the axis aligned bounding box variables:
+		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
+		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
+		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 2];
+		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 0];
+		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 1];
+		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 2];
+		
+		final boolean containsX = rayOriginX >= axisAlignedBoundingBoxMinimumX && rayOriginX <= axisAlignedBoundingBoxMaximumX;
+		final boolean containsY = rayOriginY >= axisAlignedBoundingBoxMinimumY && rayOriginY <= axisAlignedBoundingBoxMaximumY;
+		final boolean containsZ = rayOriginZ >= axisAlignedBoundingBoxMinimumZ && rayOriginZ <= axisAlignedBoundingBoxMaximumZ;
+		
+		if(containsX && containsY && containsZ) {
+			return true;
+		}
+		
+//		Compute the intersection:
+		final float intersectionTMinimumX = (axisAlignedBoundingBoxMinimumX - rayOriginX) * rayDirectionReciprocalX;
+		final float intersectionTMinimumY = (axisAlignedBoundingBoxMinimumY - rayOriginY) * rayDirectionReciprocalY;
+		final float intersectionTMinimumZ = (axisAlignedBoundingBoxMinimumZ - rayOriginZ) * rayDirectionReciprocalZ;
+		final float intersectionTMaximumX = (axisAlignedBoundingBoxMaximumX - rayOriginX) * rayDirectionReciprocalX;
+		final float intersectionTMaximumY = (axisAlignedBoundingBoxMaximumY - rayOriginY) * rayDirectionReciprocalY;
+		final float intersectionTMaximumZ = (axisAlignedBoundingBoxMaximumZ - rayOriginZ) * rayDirectionReciprocalZ;
+		final float intersectionTMinimum = max(min(intersectionTMinimumX, intersectionTMaximumX), min(intersectionTMinimumY, intersectionTMaximumY), min(intersectionTMinimumZ, intersectionTMaximumZ));
+		final float intersectionTMaximum = min(max(intersectionTMinimumX, intersectionTMaximumX), max(intersectionTMinimumY, intersectionTMaximumY), max(intersectionTMinimumZ, intersectionTMaximumZ));
+		
+		if(intersectionTMinimum > intersectionTMaximum) {
+			return false;
+		}
+		
+		if(intersectionTMinimum > rayTMinimum && intersectionTMinimum < rayTMaximum) {
+			return true;
+		}
+		
+		if(intersectionTMaximum > rayTMinimum && intersectionTMaximum < rayTMaximum) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final boolean containsOrIntersectsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+//		Retrieve the ray variables:
+		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
+		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
+		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
+		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+//		Retrieve the bounding sphere variables:
+		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
+		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
+		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
+		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
+		final float boundingSphereRadiusSquared = boundingSphereRadius * boundingSphereRadius;
+		
+		final float distanceSquared = point3FDistanceSquared(boundingSphereCenterX, boundingSphereCenterY, boundingSphereCenterZ, rayOriginX, rayOriginY, rayOriginZ);
+		
+		if(distanceSquared < boundingSphereRadius * boundingSphereRadius) {
+			return true;
+		}
+		
+//		Compute the direction from the bounding sphere center to the ray origin:
+		final float boundingSphereCenterToRayOriginX = rayOriginX - boundingSphereCenterX;
+		final float boundingSphereCenterToRayOriginY = rayOriginY - boundingSphereCenterY;
+		final float boundingSphereCenterToRayOriginZ = rayOriginZ - boundingSphereCenterZ;
+		
+//		Compute the variables for the quadratic system:
+		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
+		final float b = 2.0F * (boundingSphereCenterToRayOriginX * rayDirectionX + boundingSphereCenterToRayOriginY * rayDirectionY + boundingSphereCenterToRayOriginZ * rayDirectionZ);
+		final float c = (boundingSphereCenterToRayOriginX * boundingSphereCenterToRayOriginX + boundingSphereCenterToRayOriginY * boundingSphereCenterToRayOriginY + boundingSphereCenterToRayOriginZ * boundingSphereCenterToRayOriginZ) - boundingSphereRadiusSquared;
+		
+//		Compute the intersection by solving the quadratic system and checking the valid intersection interval:
+		final float t = solveQuadraticSystem(a, b, c, rayTMinimum, rayTMaximum);
+		
+		return t > 0.0F;
 	}
 	
 	/**
@@ -245,10 +335,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
 			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
 			
-			final float rayOriginWorldSpaceX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-			final float rayOriginWorldSpaceY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-			final float rayOriginWorldSpaceZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-			
 			final float tMinimumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
 			final float tMaximumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 			
@@ -258,9 +344,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
 			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
-				isIntersectingBoundingVolume = containsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, rayOriginWorldSpaceX, rayOriginWorldSpaceY, rayOriginWorldSpaceZ) || intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+				isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			} else if(boundingVolumeID == BoundingSphere3F.ID) {
-				isIntersectingBoundingVolume = containsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, rayOriginWorldSpaceX, rayOriginWorldSpaceY, rayOriginWorldSpaceZ) || intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+				isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			}
 			
 			if(isIntersectingBoundingVolume) {
@@ -654,10 +740,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
 			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
 			
-			final float rayOriginWorldSpaceX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-			final float rayOriginWorldSpaceY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-			final float rayOriginWorldSpaceZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-			
 			final float tMinimumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
 			final float tMaximumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
 			
@@ -667,9 +749,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
 			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
-				isIntersectingBoundingVolume = containsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, rayOriginWorldSpaceX, rayOriginWorldSpaceY, rayOriginWorldSpaceZ) || intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+				isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			} else if(boundingVolumeID == BoundingSphere3F.ID) {
-				isIntersectingBoundingVolume = containsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, rayOriginWorldSpaceX, rayOriginWorldSpaceY, rayOriginWorldSpaceZ) || intersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+				isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			}
 			
 			if(isIntersectingBoundingVolume) {
@@ -1026,17 +1108,13 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		
 		int offset = shape3FTriangleMesh3FArrayOffset;
 		
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		
 		while(offset != -1) {
 			final int id = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_ID];
 			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
 			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_NEXT_OFFSET];
 			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT];
 			
-			final boolean isIntersectingBoundingVolume = containsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, rayOriginX, rayOriginY, rayOriginZ) || intersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimum, tMaximum);
+			final boolean isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimum, tMaximum);
 			
 			if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_LEAF_B_V_H_NODE) {
 				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
@@ -2173,17 +2251,21 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float directionX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
 		final float directionY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
 		final float directionZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
+		final float directionNormalizedX = directionX * directionLengthReciprocal;
+		final float directionNormalizedY = directionY * directionLengthReciprocal;
+		final float directionNormalizedZ = directionZ * directionLengthReciprocal;
 		
-		final float originX = surfaceIntersectionPointX + directionX * 0.001F;
-		final float originY = surfaceIntersectionPointY + directionY * 0.001F;
-		final float originZ = surfaceIntersectionPointZ + directionZ * 0.001F;
+		final float originX = surfaceIntersectionPointX + directionNormalizedX * 0.001F;
+		final float originY = surfaceIntersectionPointY + directionNormalizedY * 0.001F;
+		final float originZ = surfaceIntersectionPointZ + directionNormalizedZ * 0.001F;
 		
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0] = originX;
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1] = originY;
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2] = originZ;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0] = directionX;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1] = directionY;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2] = directionZ;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0] = directionNormalizedX;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1] = directionNormalizedY;
+		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2] = directionNormalizedZ;
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = DEFAULT_T_MINIMUM;
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = DEFAULT_T_MAXIMUM;
 	}
@@ -2491,7 +2573,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		point3FSetMatrix44FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldOriginX, oldOriginY, oldOriginZ);
 		
 //		Transform the ray direction from the old space to the new space:
-		vector3FSetMatrix44FTransform(element11, element12, element13, element21, element22, element23, element31, element32, element33, oldDirectionX, oldDirectionY, oldDirectionZ);
+		vector3FSetMatrix44FTransformNormalize(element11, element12, element13, element21, element22, element23, element31, element32, element33, oldDirectionX, oldDirectionY, oldDirectionZ);
 		
 //		Retrieve the ray origin components from the new space:
 		final float newOriginX = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];
@@ -2509,7 +2591,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		
 		/*
 //		Check if the new minimum ray boundary should be computed:
-		if(newTMinimum > 0.0F && newTMinimum < Float.MAX_VALUE) {
+		if(newTMinimum > DEFAULT_T_MINIMUM && newTMinimum < DEFAULT_T_MAXIMUM) {
 //			Compute a reference point in the old space:
 			final float oldReferencePointTMinimumX = oldOriginX + oldDirectionX * oldTMinimum;
 			final float oldReferencePointTMinimumY = oldOriginY + oldDirectionY * oldTMinimum;
@@ -2532,7 +2614,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		*/
 		
 //		Check if the new maximum ray bounday should be computed:
-		if(newTMaximum > 0.0F && newTMaximum < Float.MAX_VALUE) {
+		if(newTMaximum > DEFAULT_T_MINIMUM && newTMaximum < DEFAULT_T_MAXIMUM) {
 //			Compute a reference point in the old space:
 			final float oldReferencePointTMaximumX = oldOriginX + oldDirectionX * oldTMaximum;
 			final float oldReferencePointTMaximumY = oldOriginY + oldDirectionY * oldTMaximum;

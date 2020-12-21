@@ -52,8 +52,10 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
 import org.dayflower.node.Node;
+import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.util.IntArrayOutputStream;
 import org.dayflower.util.ParameterArguments;
 
 /**
@@ -143,6 +145,24 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		return this.boundingVolume;
+	}
+	
+	/**
+	 * Returns a {@code List} that contains all {@link BoundingVolume3F} instances used by the bounding volume hierarchy.
+	 * 
+	 * @return a {@code List} that contains all {@code BoundingVolume3F} instances used by the bounding volume hierarchy
+	 */
+	public List<BoundingVolume3F> getBoundingVolumes() {
+		return this.isUsingAccelerationStructure ? NodeFilter.filterAll(this.bVHNode, BVHNode.class).stream().map(bVHNode -> bVHNode.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll) : new ArrayList<>();
+	}
+	
+	/**
+	 * Returns a {@code List} that contains all {@link Triangle3F} instances.
+	 * 
+	 * @return a {@code List} that contains all {@code Triangle3F} instances
+	 */
+	public List<Triangle3F> getTriangles() {
+		return new ArrayList<>(this.triangles);
 	}
 	
 	/**
@@ -474,18 +494,6 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code TriangleMesh3F} instance.
-	 * <p>
-	 * Note: This method has not been implemented yet.
-	 * 
-	 * @return a {@code float[]} representation of this {@code TriangleMesh3F} instance
-	 */
-	@Override
-	public float[] toArray() {
-		return new float[0];//TODO: Implement!
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code TriangleMesh3F} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code TriangleMesh3F} instance
@@ -503,6 +511,73 @@ public final class TriangleMesh3F implements Shape3F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.bVHNode, this.boundingVolume, this.triangles, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure), Float.valueOf(this.surfaceArea));
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code TriangleMesh3F} instance.
+	 * <p>
+	 * Note: This method has not been implemented yet.
+	 * 
+	 * @return an {@code int[]} representation of this {@code TriangleMesh3F} instance
+	 */
+	public int[] toArray() {
+		if(this.isUsingAccelerationStructure) {
+			final List<BVHNode> bVHNodes = NodeFilter.filterAll(this.bVHNode, BVHNode.class);
+			final List<BoundingVolume3F> boundingVolumes = getBoundingVolumes();
+			final List<Triangle3F> triangles = getTriangles();
+			
+			try(final IntArrayOutputStream intArrayOutputStream = new IntArrayOutputStream()) {
+				for(final BVHNode bVHNode : bVHNodes) {
+					if(bVHNode instanceof LeafBVHNode) {
+						final LeafBVHNode leafBVHNode = LeafBVHNode.class.cast(bVHNode);
+						
+//						TODO: Create constants for ID and offsets, as well as find the offset for the next node.
+						final int id = 1;
+						final int boundingVolumeOffset = boundingVolumes.indexOf(leafBVHNode.getBoundingVolume());
+						final int nextOffset = -1;
+						final int triangleCount = leafBVHNode.getTriangleCount();
+						
+						intArrayOutputStream.write(id);
+						intArrayOutputStream.write(boundingVolumeOffset);
+						intArrayOutputStream.write(nextOffset);
+						intArrayOutputStream.write(triangleCount);
+						
+						for(final Triangle3F triangle : leafBVHNode.getTriangles()) {
+							intArrayOutputStream.write(triangles.indexOf(triangle));
+						}
+						
+						final int sizeHeader = 4;
+						final int sizeTriangles = triangleCount;
+						final int sizePadding = (sizeHeader + sizeTriangles) % 8 == 0 ? 0 : 8 - ((sizeHeader + sizeTriangles) % 8);
+						
+						for(int i = 0; i < sizePadding; i++) {
+							intArrayOutputStream.write(0);
+						}
+					} else if(bVHNode instanceof TreeBVHNode) {
+						final TreeBVHNode treeBVHNode = TreeBVHNode.class.cast(bVHNode);
+						
+//						TODO: Create constants for ID and offsets, as well as find the offsets for the next and left nodes.
+						final int id = 2;
+						final int boundingVolumeOffset = boundingVolumes.indexOf(treeBVHNode.getBoundingVolume());
+						final int nextOffset = -1;
+						final int leftOffset = -1;
+						
+						intArrayOutputStream.write(id);
+						intArrayOutputStream.write(boundingVolumeOffset);
+						intArrayOutputStream.write(nextOffset);
+						intArrayOutputStream.write(leftOffset);
+						intArrayOutputStream.write(0);
+						intArrayOutputStream.write(0);
+						intArrayOutputStream.write(0);
+						intArrayOutputStream.write(0);
+					}
+				}
+				
+				return intArrayOutputStream.toIntArray();
+			}
+		}
+		
+		return new int[0];//TODO: Implement!
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1574,6 +1649,10 @@ public final class TriangleMesh3F implements Shape3F {
 			}
 			
 			return t;
+		}
+		
+		public int getTriangleCount() {
+			return this.triangles.size();
 		}
 		
 		@Override

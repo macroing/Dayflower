@@ -142,13 +142,6 @@ public interface Shape3F extends Node {
 	float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum);
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code Shape3F} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code Shape3F} instance
-	 */
-	float[] toArray();
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code Shape3F} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code Shape3F} instance

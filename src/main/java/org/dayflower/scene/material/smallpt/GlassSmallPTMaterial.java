@@ -415,7 +415,6 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 * 
 	 * @return a {@code float[]} representation of this {@code GlassSmallPTMaterial} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

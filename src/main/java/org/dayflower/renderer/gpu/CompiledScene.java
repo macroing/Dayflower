@@ -40,11 +40,11 @@ final class CompiledScene {
 	private float[] textureBlendTextureArray;
 	private float[] textureBullseyeTextureArray;
 	private float[] textureCheckerboardTextureArray;
-	private float[] textureConstantTextureArray;
 	private float[] textureImageTextureArray;
 	private float[] textureMarbleTextureArray;
 	private float[] textureSimplexFractionalBrownianMotionTextureArray;
 	private int[] primitiveArray;
+	private int[] textureConstantTextureArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -67,7 +67,7 @@ final class CompiledScene {
 		setTextureBlendTextureArray(new float[1]);
 		setTextureBullseyeTextureArray(new float[1]);
 		setTextureCheckerboardTextureArray(new float[1]);
-		setTextureConstantTextureArray(new float[1]);
+		setTextureConstantTextureArray(new int[1]);
 		setTextureImageTextureArray(new float[1]);
 		setTextureMarbleTextureArray(new float[1]);
 		setTextureSimplexFractionalBrownianMotionTextureArray(new float[1]);
@@ -143,10 +143,6 @@ final class CompiledScene {
 		return this.textureCheckerboardTextureArray;
 	}
 	
-	public float[] getTextureConstantTextureArray() {
-		return this.textureConstantTextureArray;
-	}
-	
 	public float[] getTextureImageTextureArray() {
 		return this.textureImageTextureArray;
 	}
@@ -165,6 +161,10 @@ final class CompiledScene {
 	
 	public int[] getPrimitiveArray() {
 		return this.primitiveArray;
+	}
+	
+	public int[] getTextureConstantTextureArray() {
+		return this.textureConstantTextureArray;
 	}
 	
 	public void setBoundingVolume3FAxisAlignedBoundingBox3FArray(final float[] boundingVolume3FAxisAlignedBoundingBox3FArray) {
@@ -239,7 +239,7 @@ final class CompiledScene {
 		this.textureCheckerboardTextureArray = Objects.requireNonNull(textureCheckerboardTextureArray, "textureCheckerboardTextureArray == null");
 	}
 	
-	public void setTextureConstantTextureArray(final float[] textureConstantTextureArray) {
+	public void setTextureConstantTextureArray(final int[] textureConstantTextureArray) {
 		this.textureConstantTextureArray = Objects.requireNonNull(textureConstantTextureArray, "textureConstantTextureArray == null");
 	}
 	

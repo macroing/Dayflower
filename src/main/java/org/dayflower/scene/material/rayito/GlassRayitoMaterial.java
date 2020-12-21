@@ -343,16 +343,6 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code GlassRayitoMaterial} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code GlassRayitoMaterial} instance
-	 */
-	@Override
-	public float[] toArray() {
-		return new float[0];//TODO: Implement!
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code GlassRayitoMaterial} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code GlassRayitoMaterial} instance

@@ -381,7 +381,6 @@ public final class CheckerboardTexture implements Texture {
 	 * 
 	 * @return a {@code float[]} representation of this {@code CheckerboardTexture} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

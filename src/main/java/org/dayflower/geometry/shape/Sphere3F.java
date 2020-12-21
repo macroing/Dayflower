@@ -549,7 +549,6 @@ public final class Sphere3F implements Shape3F {
 	 * 
 	 * @return a {@code float[]} representation of this {@code Sphere3F} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

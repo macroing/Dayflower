@@ -427,7 +427,6 @@ public final class RectangularCuboid3F implements Shape3F {
 	 * 
 	 * @return a {@code float[]} representation of this {@code RectangularCuboid3F} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

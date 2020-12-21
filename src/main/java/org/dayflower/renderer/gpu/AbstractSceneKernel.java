@@ -111,12 +111,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected float[] textureBlendTextureArray;
 	protected float[] textureBullseyeTextureArray;
 	protected float[] textureCheckerboardTextureArray;
-	protected float[] textureConstantTextureArray;
 	protected float[] textureImageTextureArray;
 	protected float[] textureMarbleTextureArray;
 	protected float[] textureSimplexFractionalBrownianMotionTextureArray;
 	protected int primitiveCount;
 	protected int[] primitiveArray;
+	protected int[] textureConstantTextureArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -919,98 +919,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final float[] getPixelArray() {
 		return getAndReturn(this.pixelArray);
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void color3FLHSSetTextureBlend(final float tComponent1, final float tComponent2, final float tComponent3) {
-		color3FLHSSetBlend(tComponent1, tComponent2, tComponent3);
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void color3FLHSSetTextureBullseye(final float colorAComponent1, final float colorAComponent2, final float colorAComponent3, final float colorBComponent1, final float colorBComponent2, final float colorBComponent3, final float pointOriginX, final float pointOriginY, final float pointOriginZ, final float scale) {
-		final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
-		final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
-		final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
-		
-		final float distance = point3FDistance(pointOriginX, pointOriginY, pointOriginZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		final float distanceScaled = distance * scale;
-		final float distanceScaledRemainder = remainder(distanceScaled, 1.0F);
-		
-		if(distanceScaledRemainder > 0.5F) {
-			color3FLHSSet(colorAComponent1, colorAComponent2, colorAComponent3);
-		} else {
-			color3FLHSSet(colorBComponent1, colorBComponent2, colorBComponent3);
-		}
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void color3FLHSSetTextureCheckerboard(final float colorAComponent1, final float colorAComponent2, final float colorAComponent3, final float colorBComponent1, final float colorBComponent2, final float colorBComponent3, final float angleDegrees, final float scaleU, final float scaleV) {
-		final float angleRadians = toRadians(angleDegrees);
-		final float angleRadiansCos = cos(angleRadians);
-		final float angleRadiansSin = sin(angleRadians);
-		
-		final float u = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
-		final float v = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
-		
-		final boolean isU = fractionalPart((u * angleRadiansCos - v * angleRadiansSin) * scaleU, false) > 0.5F;
-		final boolean isV = fractionalPart((v * angleRadiansCos + u * angleRadiansSin) * scaleV, false) > 0.5F;
-		
-		if(isU ^ isV) {
-			color3FLHSSet(colorAComponent1, colorAComponent2, colorAComponent3);
-		} else {
-			color3FLHSSet(colorBComponent1, colorBComponent2, colorBComponent3);
-		}
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void color3FLHSSetTextureConstant(final float colorComponent1, final float colorComponent2, final float colorComponent3) {
-		color3FLHSSet(colorComponent1, colorComponent2, colorComponent3);
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void color3FRHSSetTextureBlend(final float tComponent1, final float tComponent2, final float tComponent3) {
-		color3FRHSSetBlend(tComponent1, tComponent2, tComponent3);
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void color3FRHSSetTextureBullseye(final float colorAComponent1, final float colorAComponent2, final float colorAComponent3, final float colorBComponent1, final float colorBComponent2, final float colorBComponent3, final float pointOriginX, final float pointOriginY, final float pointOriginZ, final float scale) {
-		final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
-		final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
-		final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
-		
-		final float distance = point3FDistance(pointOriginX, pointOriginY, pointOriginZ, surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
-		final float distanceScaled = distance * scale;
-		final float distanceScaledRemainder = remainder(distanceScaled, 1.0F);
-		
-		if(distanceScaledRemainder > 0.5F) {
-			color3FRHSSet(colorAComponent1, colorAComponent2, colorAComponent3);
-		} else {
-			color3FRHSSet(colorBComponent1, colorBComponent2, colorBComponent3);
-		}
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void color3FRHSSetTextureCheckerboard(final float colorAComponent1, final float colorAComponent2, final float colorAComponent3, final float colorBComponent1, final float colorBComponent2, final float colorBComponent3, final float angleDegrees, final float scaleU, final float scaleV) {
-		final float angleRadians = toRadians(angleDegrees);
-		final float angleRadiansCos = cos(angleRadians);
-		final float angleRadiansSin = sin(angleRadians);
-		
-		final float u = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
-		final float v = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
-		
-		final boolean isU = fractionalPart((u * angleRadiansCos - v * angleRadiansSin) * scaleU, false) > 0.5F;
-		final boolean isV = fractionalPart((v * angleRadiansCos + u * angleRadiansSin) * scaleV, false) > 0.5F;
-		
-		if(isU ^ isV) {
-			color3FRHSSet(colorAComponent1, colorAComponent2, colorAComponent3);
-		} else {
-			color3FRHSSet(colorBComponent1, colorBComponent2, colorBComponent3);
-		}
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void color3FRHSSetTextureConstant(final float colorComponent1, final float colorComponent2, final float colorComponent3) {
-		color3FRHSSet(colorComponent1, colorComponent2, colorComponent3);
 	}
 	
 //	TODO: Add Javadocs!
@@ -2254,7 +2162,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				currentTextureID = isTextureA ? textureAID : textureBID;
 				currentTextureOffset = isTextureA ? textureAOffset : textureBOffset;
 			} else if(currentTextureID == ConstantTexture.ID) {
-				final int colorRGB = (int)(this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR]);
+				final int colorRGB = this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR];
 				
 				component1 = colorRGBIntToRFloat(colorRGB);
 				component2 = colorRGBIntToGFloat(colorRGB);

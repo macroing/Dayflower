@@ -194,7 +194,6 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	 * 
 	 * @return a {@code float[]} representation of this {@code SimplexFractionalBrownianMotionTexture} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

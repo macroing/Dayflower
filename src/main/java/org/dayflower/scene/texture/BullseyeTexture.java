@@ -372,7 +372,6 @@ public final class BullseyeTexture implements Texture {
 	 * 
 	 * @return a {@code float[]} representation of this {@code BullseyeTexture} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

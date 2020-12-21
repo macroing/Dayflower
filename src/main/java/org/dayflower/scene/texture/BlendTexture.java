@@ -307,7 +307,6 @@ public final class BlendTexture implements Texture {
 	 * 
 	 * @return a {@code float[]} representation of this {@code BlendTexture} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

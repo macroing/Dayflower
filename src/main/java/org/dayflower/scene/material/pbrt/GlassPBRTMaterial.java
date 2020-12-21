@@ -312,16 +312,6 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code GlassPBRTMaterial} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code GlassPBRTMaterial} instance
-	 */
-	@Override
-	public float[] toArray() {
-		return new float[0];//TODO: Implement!
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code GlassPBRTMaterial} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code GlassPBRTMaterial} instance

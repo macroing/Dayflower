@@ -381,7 +381,6 @@ public final class ImageTexture implements Texture {
 	 * 
 	 * @return a {@code float[]} representation of this {@code ImageTexture} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[getArraySize()];
 		

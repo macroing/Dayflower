@@ -185,21 +185,6 @@ public final class ConstantTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code ConstantTexture} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code ConstantTexture} instance
-	 */
-	@Override
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_SIZE];
-		
-//		Because the ConstantTexture occupy 1/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_COLOR] = this.color.pack();
-		
-		return array;
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code ConstantTexture} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code ConstantTexture} instance
@@ -217,5 +202,19 @@ public final class ConstantTexture implements Texture {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.color);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code ConstantTexture} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code ConstantTexture} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_SIZE];
+		
+//		Because the ConstantTexture occupy 1/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_COLOR] = this.color.pack();
+		
+		return array;
 	}
 }

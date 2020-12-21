@@ -420,7 +420,6 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 	 * 
 	 * @return a {@code float[]} representation of this {@code ClearCoatSmallPTMaterial} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

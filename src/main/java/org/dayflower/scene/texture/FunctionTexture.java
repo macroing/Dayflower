@@ -37,11 +37,6 @@ import org.dayflower.scene.Intersection;
  */
 public final class FunctionTexture implements Texture {
 	/**
-	 * The size of the {@code float[]}.
-	 */
-	public static final int ARRAY_SIZE = 0;
-	
-	/**
 	 * The ID of this {@code FunctionTexture} class.
 	 */
 	public static final int ID = 5;
@@ -109,16 +104,6 @@ public final class FunctionTexture implements Texture {
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code FunctionTexture} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code FunctionTexture} instance
-	 */
-	@Override
-	public float[] toArray() {
-		return new float[ARRAY_SIZE];
 	}
 	
 	/**

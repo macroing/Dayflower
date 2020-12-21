@@ -289,16 +289,6 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code MatteRayitoMaterial} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code MatteRayitoMaterial} instance
-	 */
-	@Override
-	public float[] toArray() {
-		return new float[0];//TODO: Implement!
-	}
-	
-	/**
 	 * Returns an {@code int} with the ID of this {@code MatteRayitoMaterial} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code MatteRayitoMaterial} instance

@@ -300,7 +300,6 @@ public final class MirrorSmallPTMaterial extends SmallPTMaterial {
 	 * 
 	 * @return a {@code float[]} representation of this {@code MirrorSmallPTMaterial} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

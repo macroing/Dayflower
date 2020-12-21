@@ -306,7 +306,6 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 	 * 
 	 * @return a {@code float[]} representation of this {@code MatteSmallPTMaterial} instance
 	 */
-	@Override
 	public float[] toArray() {
 		final float[] array = new float[ARRAY_SIZE];
 		

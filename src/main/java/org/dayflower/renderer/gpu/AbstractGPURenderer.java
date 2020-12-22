@@ -267,7 +267,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 * Sets up all necessary resources for this {@code AbstractGPURenderer} instance.
 	 */
 	@Override
-	public final void setup() {
+	public void setup() {
 		final Image image = doGetImage();
 		
 		final Scene scene = doGetScene();

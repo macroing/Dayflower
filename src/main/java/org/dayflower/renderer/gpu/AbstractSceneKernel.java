@@ -108,6 +108,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected float[] textureBlendTextureArray;
 	protected float[] textureBullseyeTextureArray;
 	protected float[] textureCheckerboardTextureArray;
+	protected float[] textureConstantTextureArray;
 	protected float[] textureImageTextureArray;
 	protected float[] textureMarbleTextureArray;
 	protected float[] textureSimplexFractionalBrownianMotionTextureArray;
@@ -119,7 +120,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected int[] primitiveArray;
 	protected int[] shape3FTriangleMesh3FArray;
 	protected int[] shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1;
-	protected int[] textureConstantTextureArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -147,6 +147,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.textureBlendTextureArray = new float[1];
 		this.textureBullseyeTextureArray = new float[1];
 		this.textureCheckerboardTextureArray = new float[1];
+		this.textureConstantTextureArray = new float[1];
 		this.textureImageTextureArray = new float[1];
 		this.textureMarbleTextureArray = new float[1];
 		this.textureSimplexFractionalBrownianMotionTextureArray = new float[1];
@@ -158,7 +159,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.primitiveArray = new int[1];
 		this.shape3FTriangleMesh3FArray = new int[1];
 		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1 = new int[1];
-		this.textureConstantTextureArray = new int[1];
 		this.scene = new Scene();
 	}
 	
@@ -2032,10 +2032,18 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
 		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
 		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+//		final int textureEtaID = this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_ETA_ID];
+//		final int textureEtaOffset = this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_ETA_OFFSET];
 		final int textureKRID = this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_ID];
 		final int textureKROffset = this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET];
 		final int textureKTID = this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_T_ID];
 		final int textureKTOffset = this.materialGlassSmallPTMaterialArray[materialOffset + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_T_OFFSET];
+		
+//		textureEvaluate(textureEtaID, textureEtaOffset);
+		
+//		final float colorEtaR = color3FLHSGetComponent1();
+//		final float colorEtaG = color3FLHSGetComponent2();
+//		final float colorEtaB = color3FLHSGetComponent3();
 		
 		textureEvaluate(textureKRID, textureKROffset);
 		
@@ -2067,6 +2075,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		
 		final float etaA = ETA_VACUUM;
 		final float etaB = ETA_GLASS;
+//		final float etaB = (colorEtaR + colorEtaG + colorEtaB) / 3.0F;
 		final float etaI = isEntering ? etaA : etaB;
 		final float etaT = isEntering ? etaB : etaA;
 		final float eta = etaI / etaT;
@@ -2144,13 +2153,13 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final int textureKRID = (int)(this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_ID]);
 		final int textureKROffset = (int)(this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET]);
 		
+		final float exponent = 20.0F;
+		
 		textureEvaluate(textureKRID, textureKROffset);
 		
 		final float colorKRR = color3FLHSGetComponent1();
 		final float colorKRG = color3FLHSGetComponent2();
 		final float colorKRB = color3FLHSGetComponent3();
-		
-		final float exponent = this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_EXPONENT];
 		
 		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
@@ -2401,11 +2410,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				currentTextureID = isTextureA ? textureAID : textureBID;
 				currentTextureOffset = isTextureA ? textureAOffset : textureBOffset;
 			} else if(currentTextureID == ConstantTexture.ID) {
-				final int colorRGB = this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR];
-				
-				component1 = colorRGBIntToRFloat(colorRGB);
-				component2 = colorRGBIntToGFloat(colorRGB);
-				component3 = colorRGBIntToBFloat(colorRGB);
+				component1 = this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR + 0];
+				component2 = this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR + 1];
+				component3 = this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR + 2];
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;

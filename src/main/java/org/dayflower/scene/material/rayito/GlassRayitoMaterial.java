@@ -317,6 +317,42 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	}
 	
 	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the index of refraction (IOR).
+	 * 
+	 * @return the {@code Texture} instance for the index of refraction (IOR)
+	 */
+	public Texture getTextureEta() {
+		return this.textureEta;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the reflection coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the reflection coefficient
+	 */
+	public Texture getTextureKR() {
+		return this.textureKR;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the transmission coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the transmission coefficient
+	 */
+	public Texture getTextureKT() {
+		return this.textureKT;
+	}
+	
+	/**
 	 * Accepts a {@link NodeHierarchicalVisitor}.
 	 * <p>
 	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.

@@ -18,8 +18,6 @@
  */
 package org.dayflower.scene.material.rayito;
 
-import static org.dayflower.util.Floats.equal;
-
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -56,9 +54,9 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureAlbedo;
-	private final Texture textureEmittance;
-	private final float roughness;
+	private final Texture textureEmission;
+	private final Texture textureKR;
+	private final Texture textureRoughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -79,116 +77,132 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	/**
 	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
-	 * If {@code colorAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalRayitoMaterial(colorAlbedo, Color3F.BLACK);
+	 * new MetalRayitoMaterial(colorKR, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @throws NullPointerException thrown if, and only if, {@code colorAlbedo} is {@code null}
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
 	 */
-	public MetalRayitoMaterial(final Color3F colorAlbedo) {
-		this(colorAlbedo, Color3F.BLACK);
+	public MetalRayitoMaterial(final Color3F colorKR) {
+		this(colorKR, Color3F.BLACK);
 	}
 	
 	/**
 	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorKR} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalRayitoMaterial(colorAlbedo, colorEmittance, 0.2F);
+	 * new MetalRayitoMaterial(colorKR, colorEmission, 0.2F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @param colorEmittance a {@code Color3F} instance with the emittance
-	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
 	 */
-	public MetalRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
-		this(colorAlbedo, colorEmittance, 0.2F);
+	public MetalRayitoMaterial(final Color3F colorKR, final Color3F colorEmission) {
+		this(colorKR, colorEmission, 0.2F);
 	}
 	
 	/**
 	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new MetalRayitoMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), roughness);
-	 * }
-	 * </pre>
+	 * If either {@code colorKR} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @param colorEmittance a {@code Color3F} instance with the emittance
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
 	 * @param roughness the roughness to use
-	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
 	 */
-	public MetalRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance, final float roughness) {
-		this(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance), roughness);
+	public MetalRayitoMaterial(final Color3F colorKR, final Color3F colorEmission, final float roughness) {
+		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureRoughness = new ConstantTexture(new Color3F(roughness));
 	}
 	
 	/**
 	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
-	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalRayitoMaterial(textureAlbedo, ConstantTexture.BLACK);
+	 * new MetalRayitoMaterial(textureKR, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
 	 */
-	public MetalRayitoMaterial(final Texture textureAlbedo) {
-		this(textureAlbedo, ConstantTexture.BLACK);
+	public MetalRayitoMaterial(final Texture textureKR) {
+		this(textureKR, ConstantTexture.BLACK);
 	}
 	
 	/**
 	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalRayitoMaterial(textureAlbedo, textureEmittance, 0.2F);
+	 * new MetalRayitoMaterial(textureKR, textureEmission, 0.2F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @param textureEmittance a {@code Texture} instance with the emittance
-	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
 	 */
-	public MetalRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
-		this(textureAlbedo, textureEmittance, 0.2F);
+	public MetalRayitoMaterial(final Texture textureKR, final Texture textureEmission) {
+		this(textureKR, textureEmission, 0.2F);
 	}
 	
 	/**
 	 * Constructs a new {@code MetalRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKR}, {@code textureEmission} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @param textureEmittance a {@code Texture} instance with the emittance
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughness a {@code Texture} instance with the roughness to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureEmission} or {@code textureRoughness} are {@code null}
+	 */
+	public MetalRayitoMaterial(final Texture textureKR, final Texture textureEmission, final Texture textureRoughness) {
+		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+		this.textureRoughness = Objects.requireNonNull(textureRoughness, "textureRoughness == null");
+	}
+	
+	/**
+	 * Constructs a new {@code MetalRayitoMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalRayitoMaterial(textureKR, textureEmission, new ConstantTexture(new Color3F(roughness)));
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
 	 * @param roughness the roughness to use
-	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
 	 */
-	public MetalRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance, final float roughness) {
-		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
-		this.roughness = roughness;
+	public MetalRayitoMaterial(final Texture textureKR, final Texture textureEmission, final float roughness) {
+		this(textureKR, textureEmission, new ConstantTexture(new Color3F(roughness)));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,7 +218,7 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColor(intersection);
+		return this.textureEmission.getColor(intersection);
 	}
 	
 	/**
@@ -246,7 +260,12 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new AshikhminShirleyRayitoBRDF(this.textureAlbedo.getColor(intersection), this.roughness))));
+		final Color3F colorKR = this.textureKR.getColor(intersection);
+		final Color3F colorRoughness = this.textureRoughness.getColor(intersection);
+		
+		final float roughness = colorRoughness.average();
+		
+		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new AshikhminShirleyRayitoBRDF(colorKR, roughness))));
 	}
 	
 	/**
@@ -266,7 +285,34 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public String toString() {
-		return "new MetalRayitoMaterial(...)";
+		return String.format("new MetalRayitoMaterial(%s, %s, %s)", this.textureKR, this.textureEmission, this.textureRoughness);
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the reflection coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the reflection coefficient
+	 */
+	public Texture getTextureKR() {
+		return this.textureKR;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance with the roughness.
+	 * 
+	 * @return the {@code Texture} instance with the roughness
+	 */
+	public Texture getTextureRoughness() {
+		return this.textureRoughness;
 	}
 	
 	/**
@@ -296,11 +342,15 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureAlbedo.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureRoughness.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -325,11 +375,11 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 			return true;
 		} else if(!(object instanceof MetalRayitoMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureAlbedo, MetalRayitoMaterial.class.cast(object).textureAlbedo)) {
+		} else if(!Objects.equals(this.textureEmission, MetalRayitoMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, MetalRayitoMaterial.class.cast(object).textureEmittance)) {
+		} else if(!Objects.equals(this.textureKR, MetalRayitoMaterial.class.cast(object).textureKR)) {
 			return false;
-		} else if(!equal(this.roughness, MetalRayitoMaterial.class.cast(object).roughness)) {
+		} else if(!Objects.equals(this.textureRoughness, MetalRayitoMaterial.class.cast(object).textureRoughness)) {
 			return false;
 		} else {
 			return true;
@@ -353,6 +403,6 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureAlbedo, this.textureEmittance, Float.valueOf(this.roughness));
+		return Objects.hash(this.textureEmission, this.textureKR, this.textureRoughness);
 	}
 }

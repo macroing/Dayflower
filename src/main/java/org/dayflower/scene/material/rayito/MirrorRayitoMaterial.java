@@ -54,8 +54,8 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureAlbedo;
-	private final Texture textureEmittance;
+	private final Texture textureEmission;
+	private final Texture textureKR;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -76,73 +76,67 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	/**
 	 * Constructs a new {@code MirrorRayitoMaterial} instance.
 	 * <p>
-	 * If {@code colorAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorRayitoMaterial(colorAlbedo, Color3F.BLACK);
+	 * new MirrorRayitoMaterial(colorKR, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @throws NullPointerException thrown if, and only if, {@code colorAlbedo} is {@code null}
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
 	 */
-	public MirrorRayitoMaterial(final Color3F colorAlbedo) {
-		this(colorAlbedo, Color3F.BLACK);
+	public MirrorRayitoMaterial(final Color3F colorKR) {
+		this(colorKR, Color3F.BLACK);
 	}
 	
 	/**
 	 * Constructs a new {@code MirrorRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new MirrorRayitoMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance));
-	 * }
-	 * </pre>
+	 * If either {@code colorKR} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @param colorEmittance a {@code Color3F} instance with the emittance
-	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
 	 */
-	public MirrorRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
-		this(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance));
+	public MirrorRayitoMaterial(final Color3F colorKR, final Color3F colorEmission) {
+		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 	}
 	
 	/**
 	 * Constructs a new {@code MirrorRayitoMaterial} instance.
 	 * <p>
-	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorRayitoMaterial(textureAlbedo, ConstantTexture.BLACK);
+	 * new MirrorRayitoMaterial(textureKR, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
 	 */
-	public MirrorRayitoMaterial(final Texture textureAlbedo) {
-		this(textureAlbedo, ConstantTexture.BLACK);
+	public MirrorRayitoMaterial(final Texture textureKR) {
+		this(textureKR, ConstantTexture.BLACK);
 	}
 	
 	/**
 	 * Constructs a new {@code MirrorRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @param textureEmittance a {@code Texture} instance with the emittance
-	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
 	 */
-	public MirrorRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
-		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+	public MirrorRayitoMaterial(final Texture textureKR, final Texture textureEmission) {
+		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,7 +152,7 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColor(intersection);
+		return this.textureEmission.getColor(intersection);
 	}
 	
 	/**
@@ -200,7 +194,9 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBRDF(this.textureAlbedo.getColor(intersection)))));
+		final Color3F colorKR = this.textureKR.getColor(intersection);
+		
+		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBRDF(colorKR))));
 	}
 	
 	/**
@@ -220,7 +216,25 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public String toString() {
-		return "new MirrorRayitoMaterial(...)";
+		return String.format("new MirrorRayitoMaterial(%s, %s)", this.textureKR, this.textureEmission);
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the reflection coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the reflection coefficient
+	 */
+	public Texture getTextureKR() {
+		return this.textureKR;
 	}
 	
 	/**
@@ -250,11 +264,11 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureAlbedo.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -279,9 +293,9 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 			return true;
 		} else if(!(object instanceof MirrorRayitoMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureAlbedo, MirrorRayitoMaterial.class.cast(object).textureAlbedo)) {
+		} else if(!Objects.equals(this.textureEmission, MirrorRayitoMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, MirrorRayitoMaterial.class.cast(object).textureEmittance)) {
+		} else if(!Objects.equals(this.textureKR, MirrorRayitoMaterial.class.cast(object).textureKR)) {
 			return false;
 		} else {
 			return true;
@@ -305,6 +319,6 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureAlbedo, this.textureEmittance);
+		return Objects.hash(this.textureEmission, this.textureKR);
 	}
 }

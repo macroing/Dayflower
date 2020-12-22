@@ -54,8 +54,8 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureAlbedo;
-	private final Texture textureEmittance;
+	private final Texture textureEmission;
+	private final Texture textureKD;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -76,73 +76,67 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 	/**
 	 * Constructs a new {@code MatteRayitoMaterial} instance.
 	 * <p>
-	 * If {@code colorAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteRayitoMaterial(colorAlbedo, Color3F.BLACK);
+	 * new MatteRayitoMaterial(colorKD, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @throws NullPointerException thrown if, and only if, {@code colorAlbedo} is {@code null}
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
-	public MatteRayitoMaterial(final Color3F colorAlbedo) {
-		this(colorAlbedo, Color3F.BLACK);
+	public MatteRayitoMaterial(final Color3F colorKD) {
+		this(colorKD, Color3F.BLACK);
 	}
 	
 	/**
 	 * Constructs a new {@code MatteRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code colorAlbedo} or {@code colorEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new MatteRayitoMaterial(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance));
-	 * }
-	 * </pre>
+	 * If either {@code colorKD} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param colorAlbedo a {@link Color3F} instance with the albedo color
-	 * @param colorEmittance a {@code Color3F} instance with the emittance
-	 * @throws NullPointerException thrown if, and only if, either {@code colorAlbedo} or {@code colorEmittance} are {@code null}
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorEmission} are {@code null}
 	 */
-	public MatteRayitoMaterial(final Color3F colorAlbedo, final Color3F colorEmittance) {
-		this(new ConstantTexture(colorAlbedo), new ConstantTexture(colorEmittance));
+	public MatteRayitoMaterial(final Color3F colorKD, final Color3F colorEmission) {
+		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 	}
 	
 	/**
 	 * Constructs a new {@code MatteRayitoMaterial} instance.
 	 * <p>
-	 * If {@code textureAlbedo} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteRayitoMaterial(textureAlbedo, ConstantTexture.BLACK);
+	 * new MatteRayitoMaterial(textureKD, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @throws NullPointerException thrown if, and only if, {@code textureAlbedo} is {@code null}
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
 	 */
-	public MatteRayitoMaterial(final Texture textureAlbedo) {
-		this(textureAlbedo, ConstantTexture.BLACK);
+	public MatteRayitoMaterial(final Texture textureKD) {
+		this(textureKD, ConstantTexture.BLACK);
 	}
 	
 	/**
 	 * Constructs a new {@code MatteRayitoMaterial} instance.
 	 * <p>
-	 * If either {@code textureAlbedo} or {@code textureEmittance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKD} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param textureAlbedo a {@link Texture} instance with the albedo color
-	 * @param textureEmittance a {@code Texture} instance with the emittance
-	 * @throws NullPointerException thrown if, and only if, either {@code textureAlbedo} or {@code textureEmittance} are {@code null}
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureEmission} are {@code null}
 	 */
-	public MatteRayitoMaterial(final Texture textureAlbedo, final Texture textureEmittance) {
-		this.textureAlbedo = Objects.requireNonNull(textureAlbedo, "textureAlbedo == null");
-		this.textureEmittance = Objects.requireNonNull(textureEmittance, "textureEmittance == null");
+	public MatteRayitoMaterial(final Texture textureKD, final Texture textureEmission) {
+		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,7 +152,7 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		return this.textureEmittance.getColor(intersection);
+		return this.textureEmission.getColor(intersection);
 	}
 	
 	/**
@@ -200,7 +194,9 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new LambertianRayitoBRDF(this.textureAlbedo.getColor(intersection)))));
+		final Color3F colorKD = this.textureKD.getColor(intersection);
+		
+		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new LambertianRayitoBRDF(colorKD))));
 	}
 	
 	/**
@@ -220,7 +216,25 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public String toString() {
-		return "new MatteRayitoMaterial(...)";
+		return String.format("new MatteRayitoMaterial(%s, %s)", this.textureKD, this.textureEmission);
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the diffuse coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the diffuse coefficient
+	 */
+	public Texture getTextureKD() {
+		return this.textureKD;
 	}
 	
 	/**
@@ -250,11 +264,11 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureAlbedo.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureEmittance.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKD.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -279,9 +293,9 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 			return true;
 		} else if(!(object instanceof MatteRayitoMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureAlbedo, MatteRayitoMaterial.class.cast(object).textureAlbedo)) {
+		} else if(!Objects.equals(this.textureEmission, MatteRayitoMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmittance, MatteRayitoMaterial.class.cast(object).textureEmittance)) {
+		} else if(!Objects.equals(this.textureKD, MatteRayitoMaterial.class.cast(object).textureKD)) {
 			return false;
 		} else {
 			return true;
@@ -305,6 +319,6 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureAlbedo, this.textureEmittance);
+		return Objects.hash(this.textureEmission, this.textureKD);
 	}
 }

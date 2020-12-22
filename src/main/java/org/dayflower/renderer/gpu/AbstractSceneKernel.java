@@ -323,6 +323,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected final boolean intersectionComputeShape3F() {
 		int primitiveIndex = -1;
 		
+		this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0] = -1;
+		
 		for(int index = 0; index < this.primitiveCount; index++) {
 			final int primitiveArrayOffset = index * Primitive.ARRAY_LENGTH;
 			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_ID;
@@ -1103,39 +1105,41 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final float intersectionTShape3FTriangleMesh3F(final int shape3FTriangleMesh3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 		float t = 0.0F;
-		float tMinimum = rayTMinimum;
-		float tMaximum = rayTMaximum;
+		float tMinimumObjectSpace = rayTMinimum;
+		float tMaximumObjectSpace = rayTMaximum;
 		
-		int offset = shape3FTriangleMesh3FArrayOffset;
+		int absoluteOffset = shape3FTriangleMesh3FArrayOffset;
+		int relativeOffset = 0;
 		
-		while(offset != -1) {
+		while(relativeOffset != -1) {
+			final int offset = absoluteOffset + relativeOffset;
 			final int id = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_ID];
 			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
 			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_NEXT_OFFSET];
 			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT];
 			
-			final boolean isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimum, tMaximum);
+			final boolean isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 			
 			if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_LEAF_B_V_H_NODE) {
 				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
 					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT + 1 + i];
 					
-					final float tObjectSpace = this.intersectionTShape3FTriangle3F(triangleOffset, tMinimum, tMaximum);
+					final float tObjectSpace = this.intersectionTShape3FTriangle3F(triangleOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 					
-					if(tObjectSpace > tMinimum && tObjectSpace < tMaximum) {
+					if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
 						this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0] = triangleOffset;
 						
-						tMaximum = tObjectSpace;
+						tMaximumObjectSpace = tObjectSpace;
 						
 						t = tObjectSpace;
 					}
 				}
 				
-				offset = nextOffset;
+				relativeOffset = nextOffset;
 			} else if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_TREE_B_V_H_NODE) {
-				offset = leftOffsetOrTriangleCount;
+				relativeOffset = leftOffsetOrTriangleCount;
 			} else {
-				offset = nextOffset;
+				relativeOffset = nextOffset;
 			}
 		}
 		
@@ -1738,7 +1742,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final void intersectionComputeShape3FTriangleMesh3F(final float t, final int primitiveIndex) {
-		intersectionComputeShape3FTriangle3F(t, primitiveIndex, this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0]);
+		final int shape3FTriangle3FArrayOffset = this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0];
+		
+		if(shape3FTriangle3FArrayOffset != -1) {
+			intersectionComputeShape3FTriangle3F(t, primitiveIndex, shape3FTriangle3FArrayOffset);
+		}
 	}
 	
 //	TODO: Add Javadocs!
@@ -2596,7 +2604,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		float newTMinimum = oldTMinimum;
 		float newTMaximum = oldTMaximum;
 		
-		/*
 //		Check if the new minimum ray boundary should be computed:
 		if(newTMinimum > DEFAULT_T_MINIMUM && newTMinimum < DEFAULT_T_MAXIMUM) {
 //			Compute a reference point in the old space:
@@ -2618,7 +2625,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //			Update the new minimum ray boundary:
 			newTMinimum = abs(distanceOriginToReferencePointTMinimum);
 		}
-		*/
 		
 //		Check if the new maximum ray bounday should be computed:
 		if(newTMaximum > DEFAULT_T_MINIMUM && newTMaximum < DEFAULT_T_MAXIMUM) {

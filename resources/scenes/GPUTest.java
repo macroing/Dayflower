@@ -24,22 +24,22 @@ Material material1 = materialGlassConstantYellow;
 Material material2 = materialClearCoatCheckerboard;
 Material material3 = new MirrorSmallPTMaterial(Color3F.GRAY);
 Material material4 = materialMatteImageLaminate;
-Material material5 = materialClearCoatImage;
-Material material6 = new MatteSmallPTMaterial(Color3F.WHITE, new Color3F(12.0F));
+//Material material5 = new MetalSmallPTMaterial(ImageTexture.load("./resources/textures/Zealot_albedo.png"), ImageTexture.load("./resources/textures/Zealot_emissive.png"));
+//Material material6 = new MatteSmallPTMaterial(Color3F.WHITE, new Color3F(12.0F));
 
 Shape3F shape1 = new Sphere3F();
 Shape3F shape2 = new Torus3F();
 Shape3F shape3 = new RectangularCuboid3F(new Point3F(-1.0F, -1.0F, -1.0F), new Point3F(+1.0F, +1.0F, +1.0F));
 Shape3F shape4 = new Plane3F();
-Shape3F shape5 = TriangleMesh3F.readWavefrontObject("./resources/models/smoothMonkey2.obj", true, 100.0F).get(0);
-Shape3F shape6 = new Sphere3F(10.0F);
+//Shape3F shape5 = TriangleMesh3F.readWavefrontObject("./resources/models/Zealot.obj", true).get(0);
+//Shape3F shape6 = new Sphere3F(10.0F);
 
-Transform transform1 = new Transform(new Point3F(- 2.5F,  1.00F, 5.0F));
-Transform transform2 = new Transform(new Point3F(+ 0.0F,  1.25F, 5.0F));
-Transform transform3 = new Transform(new Point3F(+ 2.5F,  1.00F, 5.0F));
-Transform transform4 = new Transform(new Point3F(+ 0.0F,  0.00F, 0.0F));
-Transform transform5 = new Transform(new Point3F(+10.0F,  2.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateY(AngleF.degrees(180.0F))), new Vector3F(0.02F));
-Transform transform6 = new Transform(new Point3F(+ 0.0F, 20.00F, 5.0F));
+Transform transform1 = new Transform(new Point3F(-2.5F,  1.00F, 5.0F));
+Transform transform2 = new Transform(new Point3F(+0.0F,  1.25F, 5.0F));
+Transform transform3 = new Transform(new Point3F(+2.5F,  1.00F, 5.0F));
+Transform transform4 = new Transform(new Point3F(+0.0F,  0.00F, 0.0F));
+//Transform transform5 = new Transform(new Point3F(+0.0F,  0.00F, 4.0F), Quaternion4F.from(Matrix44F.rotateY(AngleF.degrees(180.0F))), new Vector3F(0.05F));
+//Transform transform6 = new Transform(new Point3F(+0.0F, 20.00F, 5.0F));
 
 scene.addLight(new PerezLight());
 scene.addPrimitive(new Primitive(material1, shape1, transform1));

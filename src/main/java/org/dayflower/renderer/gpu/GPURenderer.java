@@ -55,7 +55,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 	public GPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
 		super(rendererConfiguration, rendererObserver);
 		
-		this.textureBackground = ImageTexture.load("./resources/textures/Image.jpg").toArray();
+		this.textureBackground = ImageTexture.undoGammaCorrectionSRGB(ImageTexture.load("./resources/textures/pond-at-evening.jpg")).toArray();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

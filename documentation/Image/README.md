@@ -30,7 +30,7 @@ public class BlendExample {
 }
 ```
 
-#### Convolution Kernel Example
+#### Convolution Kernel 3x3 Example
 The following example loads an image from your hard drive, multiplies it with a convolution kernel and saves the result to your hard drive.
 ```java
 import org.dayflower.image.ConvolutionKernel33F;
@@ -45,7 +45,7 @@ public class ConvolutionKernel33FExample {
 }
 ```
 
-#### Fill And Draw Examples
+#### Fill Example
 The following example creates two images, one empty and one random. Then it fills the empty image with a circle and the random image and saves the result to your hard drive.
 ```java
 import org.dayflower.geometry.Point2I;

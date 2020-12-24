@@ -23,6 +23,7 @@ This library consists of several projects. They are presented below.
  - [The Renderer API](https://github.com/macroing/Dayflower/tree/master/documentation/Renderer) provides the rendering algorithms for Dayflower.
  - [The Sampler API](https://github.com/macroing/Dayflower/tree/master/documentation/Sampler) provides sampling functionality for Dayflower.
  - [The Scene API](https://github.com/macroing/Dayflower/tree/master/documentation/Scene) provides the scene types and operations for Dayflower.
+ - [The Sound API](https://github.com/macroing/Dayflower/tree/master/documentation/Sound) provides the sound player, sounds and filters for Dayflower.
  - [The Utility API](https://github.com/macroing/Dayflower/tree/master/documentation/Utility) provides unrelated functionality used by Dayflower.
  - [The Wavefront API](https://github.com/macroing/Dayflower/tree/master/documentation/Wavefront) provides functionality to read Wavefront files for Dayflower.
 

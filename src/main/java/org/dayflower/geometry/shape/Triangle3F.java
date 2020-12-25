@@ -504,6 +504,15 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
+		return getSurfaceAreaSquared() * 0.5F;
+	}
+	
+	/**
+	 * Returns the squared surface area of this {@code Triangle3F} instance.
+	 * 
+	 * @return the squared surface area of this {@code Triangle3F} instance
+	 */
+	public float getSurfaceAreaSquared() {
 		final Point4F a = this.a.getPosition();
 		final Point4F b = this.b.getPosition();
 		final Point4F c = this.c.getPosition();
@@ -512,7 +521,7 @@ public final class Triangle3F implements Shape3F {
 		final Vector3F edgeAC = Vector3F.direction(a, c);
 		final Vector3F edgeABCrossEdgeAC = Vector3F.crossProduct(edgeAB, edgeAC);
 		
-		return edgeABCrossEdgeAC.length() * 0.5F;
+		return edgeABCrossEdgeAC.length();
 	}
 	
 	/**
@@ -692,6 +701,22 @@ public final class Triangle3F implements Shape3F {
 		/**
 		 * Constructs a new {@code Vertex3F} instance.
 		 * <p>
+		 * If either {@code textureCoordinates}, {@code position} or {@code orthonormalBasis} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3F} instance
+		 * @param position the position associated with this {@code Vertex3F} instance
+		 * @param orthonormalBasis the orthonormal basis associated with this {@code Vertex3F} instance
+		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code orthonormalBasis} are {@code null}
+		 */
+		public Vertex3F(final Point2F textureCoordinates, final Point4F position, final OrthonormalBasis33F orthonormalBasis) {
+			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
+			this.position = Objects.requireNonNull(position, "position == null");
+			this.orthonormalBasis = Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
+		}
+		
+		/**
+		 * Constructs a new {@code Vertex3F} instance.
+		 * <p>
 		 * If either {@code textureCoordinates}, {@code position} or {@code w} are {@code null}, a {@code NullPointerException} will be thrown.
 		 * 
 		 * @param textureCoordinates the texture coordinates associated with this {@code Vertex3F} instance
@@ -840,6 +865,31 @@ public final class Triangle3F implements Shape3F {
 		@Override
 		public int hashCode() {
 			return Objects.hash(this.orthonormalBasis, this.textureCoordinates, this.position);
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Performs a linear interpolation operation on the supplied values.
+		 * <p>
+		 * Returns a {@code Vertex3F} instance with the result of the linear interpolation operation.
+		 * <p>
+		 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param a a {@code Vertex3F} instance
+		 * @param b a {@code Vertex3F} instance
+		 * @param t the factor
+		 * @return a {@code Vertex3F} instance with the result of the linear interpolation operation
+		 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+		 */
+		public static Vertex3F lerp(final Vertex3F a, final Vertex3F b, final float t) {
+			final Point2F textureCoordinates = Point2F.lerp(a.textureCoordinates, b.textureCoordinates, t);
+			
+			final Point4F position = Point4F.lerp(a.position, b.position, t);
+			
+			final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.lerp(a.orthonormalBasis, b.orthonormalBasis, t);
+			
+			return new Vertex3F(textureCoordinates, position, orthonormalBasis);
 		}
 	}
 }

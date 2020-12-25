@@ -25,6 +25,7 @@ import static org.dayflower.util.Floats.min;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.util.Floats;
 
 /**
  * A {@code Point2F} denotes a 2-dimensional point with two coordinates, of type {@code float}.
@@ -216,6 +217,26 @@ public final class Point2F implements Node {
 		final float v = textureCoordinatesA.getV() * barycentricCoordinates.getU() + textureCoordinatesB.getV() * barycentricCoordinates.getV() + textureCoordinatesC.getV() * barycentricCoordinates.getW();
 		
 		return new Point2F(u, v);
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns a {@code Point2F} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2F} instance
+	 * @param b a {@code Point2F} instance
+	 * @param t the factor
+	 * @return a {@code Point2F} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point2F lerp(final Point2F a, final Point2F b, final float t) {
+		final float component1 = Floats.lerp(a.component1, b.component1, t);
+		final float component2 = Floats.lerp(a.component2, b.component2, t);
+		
+		return new Point2F(component1, component2);
 	}
 	
 	/**

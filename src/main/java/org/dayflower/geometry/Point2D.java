@@ -25,6 +25,7 @@ import static org.dayflower.util.Doubles.min;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.util.Doubles;
 
 /**
  * A {@code Point2D} denotes a 2-dimensional point with two coordinates, of type {@code double}.
@@ -216,6 +217,26 @@ public final class Point2D implements Node {
 		final double v = textureCoordinatesA.getV() * barycentricCoordinates.getU() + textureCoordinatesB.getV() * barycentricCoordinates.getV() + textureCoordinatesC.getV() * barycentricCoordinates.getW();
 		
 		return new Point2D(u, v);
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns a {@code Point2D} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2D} instance
+	 * @param b a {@code Point2D} instance
+	 * @param t the factor
+	 * @return a {@code Point2D} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point2D lerp(final Point2D a, final Point2D b, final double t) {
+		final double component1 = Doubles.lerp(a.component1, b.component1, t);
+		final double component2 = Doubles.lerp(a.component2, b.component2, t);
+		
+		return new Point2D(component1, component2);
 	}
 	
 	/**

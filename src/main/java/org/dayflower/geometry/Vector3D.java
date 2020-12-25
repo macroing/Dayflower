@@ -39,6 +39,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
+import org.dayflower.util.Doubles;
 
 /**
  * A {@code Vector3D} denotes a 3-dimensional vector with three components, of type {@code double}.
@@ -786,6 +787,27 @@ public final class Vector3D implements Node {
 	 */
 	public static Vector3D half(final Vector3D o, final Vector3D n, final Vector3D i) {
 		return dotProduct(o, i) > 0.999D ? n : normalize(subtract(o, i));
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns a {@code Vector3D} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Vector3D} instance
+	 * @param b a {@code Vector3D} instance
+	 * @param t the factor
+	 * @return a {@code Vector3D} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Vector3D lerp(final Vector3D a, final Vector3D b, final double t) {
+		final double component1 = Doubles.lerp(a.component1, b.component1, t);
+		final double component2 = Doubles.lerp(a.component2, b.component2, t);
+		final double component3 = Doubles.lerp(a.component3, b.component3, t);
+		
+		return new Vector3D(component1, component2, component3);
 	}
 	
 	/**

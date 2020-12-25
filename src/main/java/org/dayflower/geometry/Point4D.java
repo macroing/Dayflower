@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.util.Doubles;
 
 /**
  * A {@code Point4D} denotes a 4-dimensional point with four coordinates, of type {@code double}.
@@ -320,6 +321,28 @@ public final class Point4D implements Node {
 	 */
 	public static Point4D getCached(final Point4D point) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns a {@code Point4D} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point4D} instance
+	 * @param b a {@code Point4D} instance
+	 * @param t the factor
+	 * @return a {@code Point4D} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point4D lerp(final Point4D a, final Point4D b, final double t) {
+		final double component1 = Doubles.lerp(a.component1, b.component1, t);
+		final double component2 = Doubles.lerp(a.component2, b.component2, t);
+		final double component3 = Doubles.lerp(a.component3, b.component3, t);
+		final double component4 = Doubles.lerp(a.component4, b.component4, t);
+		
+		return new Point4D(component1, component2, component3, component4);
 	}
 	
 	/**

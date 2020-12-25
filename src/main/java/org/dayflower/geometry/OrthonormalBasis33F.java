@@ -308,6 +308,27 @@ public final class OrthonormalBasis33F implements Node {
 	}
 	
 	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns an {@code OrthonormalBasis33F} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a an {@code OrthonormalBasis33F} instance
+	 * @param b an {@code OrthonormalBasis33F} instance
+	 * @param t the factor
+	 * @return an {@code OrthonormalBasis33F} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static OrthonormalBasis33F lerp(final OrthonormalBasis33F a, final OrthonormalBasis33F b, final float t) {
+		final Vector3F u = Vector3F.lerp(a.u, b.u, t);
+		final Vector3F v = Vector3F.lerp(a.v, b.v, t);
+		final Vector3F w = Vector3F.lerp(a.w, b.w, t);
+		
+		return new OrthonormalBasis33F(w, v, u);
+	}
+	
+	/**
 	 * Performs a transformation.
 	 * <p>
 	 * Returns a new {@code OrthonormalBasis33F} instance with the result of the transformation.

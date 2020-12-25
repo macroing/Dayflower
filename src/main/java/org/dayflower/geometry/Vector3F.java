@@ -39,6 +39,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
+import org.dayflower.util.Floats;
 
 /**
  * A {@code Vector3F} denotes a 3-dimensional vector with three components, of type {@code float}.
@@ -786,6 +787,27 @@ public final class Vector3F implements Node {
 	 */
 	public static Vector3F half(final Vector3F o, final Vector3F n, final Vector3F i) {
 		return dotProduct(o, i) > 0.999F ? n : normalize(subtract(o, i));
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns a {@code Vector3F} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Vector3F} instance
+	 * @param b a {@code Vector3F} instance
+	 * @param t the factor
+	 * @return a {@code Vector3F} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Vector3F lerp(final Vector3F a, final Vector3F b, final float t) {
+		final float component1 = Floats.lerp(a.component1, b.component1, t);
+		final float component2 = Floats.lerp(a.component2, b.component2, t);
+		final float component3 = Floats.lerp(a.component3, b.component3, t);
+		
+		return new Vector3F(component1, component2, component3);
 	}
 	
 	/**

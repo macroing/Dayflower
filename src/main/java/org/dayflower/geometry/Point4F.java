@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
+import org.dayflower.util.Floats;
 
 /**
  * A {@code Point4F} denotes a 4-dimensional point with four coordinates, of type {@code float}.
@@ -320,6 +321,28 @@ public final class Point4F implements Node {
 	 */
 	public static Point4F getCached(final Point4F point) {
 		return CACHE.computeIfAbsent(Objects.requireNonNull(point, "point == null"), key -> point);
+	}
+	
+	/**
+	 * Performs a linear interpolation operation on the supplied values.
+	 * <p>
+	 * Returns a {@code Point4F} instance with the result of the linear interpolation operation.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point4F} instance
+	 * @param b a {@code Point4F} instance
+	 * @param t the factor
+	 * @return a {@code Point4F} instance with the result of the linear interpolation operation
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point4F lerp(final Point4F a, final Point4F b, final float t) {
+		final float component1 = Floats.lerp(a.component1, b.component1, t);
+		final float component2 = Floats.lerp(a.component2, b.component2, t);
+		final float component3 = Floats.lerp(a.component3, b.component3, t);
+		final float component4 = Floats.lerp(a.component4, b.component4, t);
+		
+		return new Point4F(component1, component2, component3, component4);
 	}
 	
 	/**

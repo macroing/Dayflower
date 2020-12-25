@@ -621,6 +621,24 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Vector3D} instance that is pointing in the direction of {@code eye} to {@code lookAt}.
+	 * <p>
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye a {@link Point4D} instance denoting the eye to look from
+	 * @param lookAt a {@code Point4D} instance denoting the target to look at
+	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code eye} to {@code lookAt}
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
+	 */
+	public static Vector3D direction(final Point4D eye, final Point4D lookAt) {
+		final double component1 = lookAt.getComponent1() - eye.getComponent1();
+		final double component2 = lookAt.getComponent2() - eye.getComponent2();
+		final double component3 = lookAt.getComponent3() - eye.getComponent3();
+		
+		return new Vector3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Returns a new {@code Vector3D} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized.
 	 * <p>
 	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -631,6 +649,20 @@ public final class Vector3D implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
 	 */
 	public static Vector3D directionNormalized(final Point3D eye, final Point3D lookAt) {
+		return normalize(direction(eye, lookAt));
+	}
+	
+	/**
+	 * Returns a new {@code Vector3D} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized.
+	 * <p>
+	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param eye a {@link Point4D} instance denoting the eye to look from
+	 * @param lookAt a {@code Point4D} instance denoting the target to look at
+	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code eye} to {@code lookAt} and is normalized
+	 * @throws NullPointerException thrown if, and only if, either {@code eye} or {@code lookAt} are {@code null}
+	 */
+	public static Vector3D directionNormalized(final Point4D eye, final Point4D lookAt) {
 		return normalize(direction(eye, lookAt));
 	}
 	

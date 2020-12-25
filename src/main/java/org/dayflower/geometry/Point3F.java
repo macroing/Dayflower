@@ -78,6 +78,25 @@ public final class Point3F implements Node {
 	}
 	
 	/**
+	 * Constructs a new {@code Point3F} instance given the component values {@code point.getComponent1()}, {@code point.getComponent2()} and {@code point.getComponent3()}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point3F(point.getComponent1(), point.getComponent2(), point.getComponent3());
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point4F} instance
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Point3F(final Point4F point) {
+		this(point.getComponent1(), point.getComponent2(), point.getComponent3());
+	}
+	
+	/**
 	 * Constructs a new {@code Point3F} instance given the component values {@code vector.getComponent1()}, {@code vector.getComponent2()} and {@code vector.getComponent3()}.
 	 * <p>
 	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.

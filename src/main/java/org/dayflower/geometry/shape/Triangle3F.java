@@ -29,6 +29,7 @@ import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Point4F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Shape3F;
@@ -137,10 +138,10 @@ public final class Triangle3F implements Shape3F {
 	 * Constructs a new {@code Triangle3F} instance.
 	 */
 	public Triangle3F() {
-		this.a = new Vertex3F(new Point2F(0.5F, 0.0F), new Point3F(+0.0F, +1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
-		this.b = new Vertex3F(new Point2F(1.0F, 1.0F), new Point3F(+1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
-		this.c = new Vertex3F(new Point2F(0.0F, 1.0F), new Point3F(-1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
-		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()));
+		this.a = new Vertex3F(new Point2F(0.5F, 0.0F), new Point4F(+0.0F, +1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
+		this.b = new Vertex3F(new Point2F(1.0F, 1.0F), new Point4F(+1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
+		this.c = new Vertex3F(new Point2F(0.0F, 1.0F), new Point4F(-1.0F, -1.0F, 0.0F), Vector3F.normalNormalized(new Point3F(0.0F, 1.0F, 0.0F), new Point3F(1.0F, -1.0F, 0.0F), new Point3F(-1.0F, -1.0F, 0.0F)));
+		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(new Point3F(this.a.getPosition()), new Point3F(this.b.getPosition()), new Point3F(this.c.getPosition())));
 	}
 	
 	/**
@@ -157,7 +158,7 @@ public final class Triangle3F implements Shape3F {
 		this.a = Objects.requireNonNull(a, "a == null");
 		this.b = Objects.requireNonNull(b, "b == null");
 		this.c = Objects.requireNonNull(c, "c == null");
-		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(a.getPosition(), b.getPosition(), c.getPosition()));
+		this.surfaceNormal = Vector3F.getCached(Vector3F.normalNormalized(new Point3F(a.getPosition()), new Point3F(b.getPosition()), new Point3F(c.getPosition())));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +170,10 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return new AxisAlignedBoundingBox3F(Point3F.minimum(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()), Point3F.maximum(this.a.getPosition(), this.b.getPosition(), this.c.getPosition()));
+		final Point3F a = Point3F.minimum(new Point3F(this.a.getPosition()), new Point3F(this.b.getPosition()), new Point3F(this.c.getPosition()));
+		final Point3F b = Point3F.maximum(new Point3F(this.a.getPosition()), new Point3F(this.b.getPosition()), new Point3F(this.c.getPosition()));
+		
+		return new AxisAlignedBoundingBox3F(a, b);
 	}
 	
 	/**
@@ -192,9 +196,9 @@ public final class Triangle3F implements Shape3F {
 		
 		final Point3F barycentricCoordinates = SampleGeneratorF.sampleTriangleUniformDistribution(u, v);
 		
-		final Point3F positionA = this.a.getPosition();
-		final Point3F positionB = this.b.getPosition();
-		final Point3F positionC = this.c.getPosition();
+		final Point4F positionA = this.a.getPosition();
+		final Point4F positionB = this.b.getPosition();
+		final Point4F positionC = this.c.getPosition();
 		
 		final Vector3F normalA = this.a.getOrthonormalBasis().getW();
 		final Vector3F normalB = this.b.getOrthonormalBasis().getW();
@@ -231,9 +235,9 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F a = this.a.getPosition();
-		final Point3F b = this.b.getPosition();
-		final Point3F c = this.c.getPosition();
+		final Point4F a = this.a.getPosition();
+		final Point4F b = this.b.getPosition();
+		final Point4F c = this.c.getPosition();
 		
 		final Vector3F edgeAB = Vector3F.direction(a, b);
 		final Vector3F edgeAC = Vector3F.direction(a, c);
@@ -248,7 +252,7 @@ public final class Triangle3F implements Shape3F {
 		
 		final Point3F origin = ray.getOrigin();
 		
-		final Vector3F direction2 = Vector3F.direction(a, origin);
+		final Vector3F direction2 = Vector3F.direction(new Point3F(a), origin);
 		
 		final float determinantReciprocal = 1.0F / determinant;
 		final float u = Vector3F.dotProduct(direction2, direction1) * determinantReciprocal;
@@ -500,9 +504,9 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		final Point3F a = this.a.getPosition();
-		final Point3F b = this.b.getPosition();
-		final Point3F c = this.c.getPosition();
+		final Point4F a = this.a.getPosition();
+		final Point4F b = this.b.getPosition();
+		final Point4F c = this.c.getPosition();
 		
 		final Vector3F edgeAB = Vector3F.direction(a, b);
 		final Vector3F edgeAC = Vector3F.direction(a, c);
@@ -548,9 +552,9 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
-		final Point3F a = this.a.getPosition();
-		final Point3F b = this.b.getPosition();
-		final Point3F c = this.c.getPosition();
+		final Point4F a = this.a.getPosition();
+		final Point4F b = this.b.getPosition();
+		final Point4F c = this.c.getPosition();
 		
 		final Vector3F edgeAB = Vector3F.direction(a, b);
 		final Vector3F edgeAC = Vector3F.direction(a, c);
@@ -565,7 +569,7 @@ public final class Triangle3F implements Shape3F {
 		
 		final Point3F origin = ray.getOrigin();
 		
-		final Vector3F direction2 = Vector3F.direction(a, origin);
+		final Vector3F direction2 = Vector3F.direction(new Point3F(a), origin);
 		
 		final float determinantReciprocal = 1.0F / determinant;
 		final float u = Vector3F.dotProduct(direction2, direction1) * determinantReciprocal;
@@ -681,7 +685,7 @@ public final class Triangle3F implements Shape3F {
 	public static final class Vertex3F implements Node {
 		private final OrthonormalBasis33F orthonormalBasis;
 		private final Point2F textureCoordinates;
-		private final Point3F position;
+		private final Point4F position;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -695,9 +699,9 @@ public final class Triangle3F implements Shape3F {
 		 * @param w the W-direction associated with this {@code Vertex3F} instance
 		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position} or {@code w} are {@code null}
 		 */
-		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F w) {
+		public Vertex3F(final Point2F textureCoordinates, final Point4F position, final Vector3F w) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
-			this.position = Point3F.getCached(Objects.requireNonNull(position, "position == null"));
+			this.position = Point4F.getCached(Objects.requireNonNull(position, "position == null"));
 			this.orthonormalBasis = OrthonormalBasis33F.getCached(new OrthonormalBasis33F(Objects.requireNonNull(w, "w == null")));
 		}
 		
@@ -712,9 +716,9 @@ public final class Triangle3F implements Shape3F {
 		 * @param v the V-direction associated with this {@code Vertex3F} instance
 		 * @throws NullPointerException thrown if, and only if, either {@code textureCoordinates}, {@code position}, {@code w} or {@code v} are {@code null}
 		 */
-		public Vertex3F(final Point2F textureCoordinates, final Point3F position, final Vector3F w, final Vector3F v) {
+		public Vertex3F(final Point2F textureCoordinates, final Point4F position, final Vector3F w, final Vector3F v) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
-			this.position = Point3F.getCached(Objects.requireNonNull(position, "position == null"));
+			this.position = Point4F.getCached(Objects.requireNonNull(position, "position == null"));
 			this.orthonormalBasis = OrthonormalBasis33F.getCached(new OrthonormalBasis33F(Objects.requireNonNull(w, "w == null"), Objects.requireNonNull(v, "v == null")));
 		}
 		
@@ -743,7 +747,7 @@ public final class Triangle3F implements Shape3F {
 		 * 
 		 * @return the position associated with this {@code Vertex3F} instance
 		 */
-		public Point3F getPosition() {
+		public Point4F getPosition() {
 			return this.position;
 		}
 		

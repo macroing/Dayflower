@@ -44,6 +44,7 @@ import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Point4F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
@@ -753,7 +754,7 @@ public final class TriangleMesh3F implements Shape3F {
 			
 			final List<Integer> indices = indexedObjectModel.getIndices();
 			final List<Point2F> textureCoordinates = indexedObjectModel.getTextureCoordinates();
-			final List<Point3F> positions = indexedObjectModel.getPositions();
+			final List<Point4F> positions = indexedObjectModel.getPositions();
 			final List<String> groupNames = indexedObjectModel.getGroupNames();
 			final List<String> materialNames = indexedObjectModel.getMaterialNames();
 			final List<String> objectNames = indexedObjectModel.getObjectNames();
@@ -816,9 +817,9 @@ public final class TriangleMesh3F implements Shape3F {
 				final Point2F textureCoordinatesB = textureCoordinates.get(indexB);
 				final Point2F textureCoordinatesC = textureCoordinates.get(indexC);
 				
-				final Point3F positionA = isScaling ? Point3F.transformAndDivide(matrix, positions.get(indexA)) : positions.get(indexA);
-				final Point3F positionB = isScaling ? Point3F.transformAndDivide(matrix, positions.get(indexB)) : positions.get(indexB);
-				final Point3F positionC = isScaling ? Point3F.transformAndDivide(matrix, positions.get(indexC)) : positions.get(indexC);
+				final Point4F positionA = isScaling ? Point4F.transformAndDivide(matrix, positions.get(indexA)) : positions.get(indexA);
+				final Point4F positionB = isScaling ? Point4F.transformAndDivide(matrix, positions.get(indexB)) : positions.get(indexB);
+				final Point4F positionC = isScaling ? Point4F.transformAndDivide(matrix, positions.get(indexC)) : positions.get(indexC);
 				
 				final Vector3F normalA = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexA)) : normals.get(indexA);
 				final Vector3F normalB = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexB)) : normals.get(indexB);
@@ -1144,9 +1145,9 @@ public final class TriangleMesh3F implements Shape3F {
 		float minimumZ = Float.MAX_VALUE;
 		
 		for(final Triangle3F triangle : triangles) {
-			final Point3F a = triangle.getA().getPosition();
-			final Point3F b = triangle.getB().getPosition();
-			final Point3F c = triangle.getC().getPosition();
+			final Point3F a = new Point3F(triangle.getA().getPosition());
+			final Point3F b = new Point3F(triangle.getB().getPosition());
+			final Point3F c = new Point3F(triangle.getC().getPosition());
 			
 			final Point3F maximum = Point3F.maximum(a, b, c);
 			final Point3F minimum = Point3F.minimum(a, b, c);
@@ -1169,9 +1170,9 @@ public final class TriangleMesh3F implements Shape3F {
 		Point3F minimum = Point3F.MAXIMUM;
 		
 		for(final Triangle3F triangle : triangles) {
-			final Point3F a = triangle.getA().getPosition();
-			final Point3F b = triangle.getB().getPosition();
-			final Point3F c = triangle.getC().getPosition();
+			final Point3F a = new Point3F(triangle.getA().getPosition());
+			final Point3F b = new Point3F(triangle.getB().getPosition());
+			final Point3F c = new Point3F(triangle.getC().getPosition());
 			
 			maximum = Point3F.maximum(maximum, Point3F.maximum(a, b, c));
 			minimum = Point3F.minimum(minimum, Point3F.minimum(a, b, c));
@@ -1250,7 +1251,7 @@ public final class TriangleMesh3F implements Shape3F {
 	
 	private static final class DefaultObjectModel {
 		private final List<Point2F> textureCoordinates;
-		private final List<Point3F> positions;
+		private final List<Point4F> positions;
 		private final List<String> groupNames;
 		private final List<String> materialNames;
 		private final List<String> objectNames;
@@ -1286,7 +1287,7 @@ public final class TriangleMesh3F implements Shape3F {
 				
 				final Point2F textureCoordinates = vertex.hasTextureVertexIndex() ? this.textureCoordinates.get(vertex.getTextureVertexIndex()) : new Point2F();
 				
-				final Point3F position = vertex.hasGeometricVertexIndex() ? this.positions.get(vertex.getGeometricVertexIndex()) : new Point3F();
+				final Point4F position = vertex.hasGeometricVertexIndex() ? this.positions.get(vertex.getGeometricVertexIndex()) : new Point4F();
 				
 				final Vector3F normal = vertex.hasVertexNormalIndex() ? this.normals.get(vertex.getVertexNormalIndex()) : new Vector3F();
 				
@@ -1363,7 +1364,7 @@ public final class TriangleMesh3F implements Shape3F {
 			this.objectNames.add(Objects.requireNonNull(objectName, "objectName == null"));
 		}
 		
-		public void addPosition(final Point3F position) {
+		public void addPosition(final Point4F position) {
 			this.positions.add(Objects.requireNonNull(position, "position == null"));
 		}
 		
@@ -1422,7 +1423,7 @@ public final class TriangleMesh3F implements Shape3F {
 								
 								break;
 							case "v":
-								defaultObjectModel.addPosition(new Point3F(Float.parseFloat(elements[1]), Float.parseFloat(elements[2]), Float.parseFloat(elements[3])));
+								defaultObjectModel.addPosition(new Point4F(Float.parseFloat(elements[1]), Float.parseFloat(elements[2]), Float.parseFloat(elements[3])));
 								
 								break;
 							case "vn":
@@ -1449,7 +1450,7 @@ public final class TriangleMesh3F implements Shape3F {
 	private static final class IndexedObjectModel {
 		private final List<Integer> indices;
 		private final List<Point2F> textureCoordinates;
-		private final List<Point3F> positions;
+		private final List<Point4F> positions;
 		private final List<String> groupNames;
 		private final List<String> materialNames;
 		private final List<String> objectNames;
@@ -1479,7 +1480,7 @@ public final class TriangleMesh3F implements Shape3F {
 			return this.textureCoordinates;
 		}
 		
-		public List<Point3F> getPositions() {
+		public List<Point4F> getPositions() {
 			return this.positions;
 		}
 		
@@ -1535,7 +1536,7 @@ public final class TriangleMesh3F implements Shape3F {
 			this.objectNames.add(Objects.requireNonNull(objectName, "objectName == null"));
 		}
 		
-		public void addPosition(final Point3F position) {
+		public void addPosition(final Point4F position) {
 			this.positions.add(Objects.requireNonNull(position, "position == null"));
 		}
 		

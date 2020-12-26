@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
+import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
@@ -888,6 +889,52 @@ public final class Triangle3F implements Shape3F {
 			final Point4F position = Point4F.lerp(a.position, b.position, t);
 			
 			final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.lerp(a.orthonormalBasis, b.orthonormalBasis, t);
+			
+			return new Vertex3F(textureCoordinates, position, orthonormalBasis);
+		}
+		
+		/**
+		 * Performs a transformation.
+		 * <p>
+		 * Returns a new {@code Vertex3F} instance with the result of the transformation.
+		 * <p>
+		 * If either {@code vertex}, {@code matrix} or {@code matrixInverse} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param vertex the {@code Vertex3F} instance to transform
+		 * @param matrix the {@link Matrix44F} instance to perform the transformation with
+		 * @param matrixInverse the {@code Matrix44F} instance to perform the inverse transformation with
+		 * @return a new {@code Vertex3F} instance with the result of the transformation
+		 * @throws NullPointerException thrown if, and only if, either {@code vertex}, {@code matrix} or {@code matrixInverse} are {@code null}
+		 */
+		public static Vertex3F transform(final Vertex3F vertex, final Matrix44F matrix, final Matrix44F matrixInverse) {
+			final Point2F textureCoordinates = vertex.textureCoordinates;
+			
+			final Point4F position = Point4F.transform(matrix, vertex.position);
+			
+			final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.transform(matrixInverse, vertex.orthonormalBasis);
+			
+			return new Vertex3F(textureCoordinates, position, orthonormalBasis);
+		}
+		
+		/**
+		 * Performs a transformation.
+		 * <p>
+		 * Returns a new {@code Vertex3F} instance with the result of the transformation.
+		 * <p>
+		 * If either {@code vertex}, {@code matrix} or {@code matrixInverse} are {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param vertex the {@code Vertex3F} instance to transform
+		 * @param matrix the {@link Matrix44F} instance to perform the transformation with
+		 * @param matrixInverse the {@code Matrix44F} instance to perform the inverse transformation with
+		 * @return a new {@code Vertex3F} instance with the result of the transformation
+		 * @throws NullPointerException thrown if, and only if, either {@code vertex}, {@code matrix} or {@code matrixInverse} are {@code null}
+		 */
+		public static Vertex3F transformAndDivide(final Vertex3F vertex, final Matrix44F matrix, final Matrix44F matrixInverse) {
+			final Point2F textureCoordinates = vertex.textureCoordinates;
+			
+			final Point4F position = Point4F.transformAndDivide(matrix, vertex.position);
+			
+			final OrthonormalBasis33F orthonormalBasis = OrthonormalBasis33F.transform(matrixInverse, vertex.orthonormalBasis);
 			
 			return new Vertex3F(textureCoordinates, position, orthonormalBasis);
 		}

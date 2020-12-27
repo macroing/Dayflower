@@ -96,10 +96,10 @@ final class RendererViewPane extends BorderPane {
 	private final ObjectTreeView<String, Object> objectTreeView;
 	private final ProgressBar progressBar;
 	private final Renderer renderer;
-	private final RendererVBox rendererVBox;
-	private final SceneVBox sceneVBox;
 	private final VBox vBoxL;
 	private final VBox vBoxR;
+	private final VBox vBoxRenderer;
+	private final VBox vBoxScene;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -124,10 +124,10 @@ final class RendererViewPane extends BorderPane {
 		this.objectTreeView = doCreateObjectTreeView(renderer.getRendererConfiguration().getScene());
 		this.progressBar = new ProgressBar();
 		this.renderer = renderer;
-		this.rendererVBox = new RendererVBox(renderer);
-		this.sceneVBox = new SceneVBox(renderer);
 		this.vBoxL = new VBox();
 		this.vBoxR = new VBox();
+		this.vBoxRenderer = CenteredVBoxes.createCenteredVBoxForRenderer(renderer);
+		this.vBoxScene = CenteredVBoxes.createCenteredVBoxForScene(renderer);
 		
 		doConfigure();
 	}
@@ -311,8 +311,8 @@ final class RendererViewPane extends BorderPane {
 		this.renderer.setRendererObserver(new RendererObserverImpl(this.labelRenderPass, this.labelRenderTime, this.labelRenderTimePerPass, this.progressBar));
 		
 //		Configure the VBox for L:
-		this.vBoxL.getChildren().add(this.rendererVBox);
-		this.vBoxL.getChildren().add(this.sceneVBox);
+		this.vBoxL.getChildren().add(this.vBoxRenderer);
+		this.vBoxL.getChildren().add(this.vBoxScene);
 		this.vBoxL.setBorder(new Border(new BorderStroke(Color.rgb(181, 181, 181), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0.0D, 1.0D, 0.0D, 0.0D))));
 		this.vBoxL.setFillWidth(true);
 		this.vBoxL.setPadding(new Insets(10.0D, 10.0D, 10.0D, 10.0D));

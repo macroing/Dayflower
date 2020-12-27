@@ -46,6 +46,11 @@ import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
 import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
 import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
+import org.dayflower.scene.material.smallpt.ClearCoatSmallPTMaterial;
+import org.dayflower.scene.material.smallpt.GlassSmallPTMaterial;
+import org.dayflower.scene.material.smallpt.MatteSmallPTMaterial;
+import org.dayflower.scene.material.smallpt.MetalSmallPTMaterial;
+import org.dayflower.scene.material.smallpt.MirrorSmallPTMaterial;
 
 import javafx.scene.control.ComboBox;
 
@@ -81,7 +86,7 @@ final class CenteredVBoxes {
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Scene Configuration", 16.0D);
 		
-		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(GlassPBRTMaterial.NAME, HairPBRTMaterial.NAME, MattePBRTMaterial.NAME, MetalPBRTMaterial.NAME, MirrorPBRTMaterial.NAME, PlasticPBRTMaterial.NAME, SubstratePBRTMaterial.NAME, UberPBRTMaterial.NAME, GlassRayitoMaterial.NAME, MatteRayitoMaterial.NAME, MetalRayitoMaterial.NAME, MirrorRayitoMaterial.NAME), MattePBRTMaterial.NAME);
+		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(GlassPBRTMaterial.NAME, HairPBRTMaterial.NAME, MattePBRTMaterial.NAME, MetalPBRTMaterial.NAME, MirrorPBRTMaterial.NAME, PlasticPBRTMaterial.NAME, SubstratePBRTMaterial.NAME, UberPBRTMaterial.NAME, GlassRayitoMaterial.NAME, MatteRayitoMaterial.NAME, MetalRayitoMaterial.NAME, MirrorRayitoMaterial.NAME, ClearCoatSmallPTMaterial.NAME, GlassSmallPTMaterial.NAME, MatteSmallPTMaterial.NAME, MetalSmallPTMaterial.NAME, MirrorSmallPTMaterial.NAME), MattePBRTMaterial.NAME);
 		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Plane3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
 		
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
@@ -141,6 +146,16 @@ final class CenteredVBoxes {
 					return new MetalRayitoMaterial();
 				case MirrorRayitoMaterial.NAME:
 					return new MirrorRayitoMaterial();
+				case ClearCoatSmallPTMaterial.NAME:
+					return new ClearCoatSmallPTMaterial();
+				case GlassSmallPTMaterial.NAME:
+					return new GlassSmallPTMaterial();
+				case MatteSmallPTMaterial.NAME:
+					return new MatteSmallPTMaterial();
+				case MetalSmallPTMaterial.NAME:
+					return new MetalSmallPTMaterial();
+				case MirrorSmallPTMaterial.NAME:
+					return new MirrorSmallPTMaterial();
 				default:
 					return null;
 			}

@@ -219,7 +219,7 @@ public final class DayflowerApplication extends Application {
 	
 	private void doCreateAndStartAnimationTimer() {
 		final
-		AnimationTimer animationTimer = new RendererAnimationTimer(this.nodeSelectionTabPane);
+		AnimationTimer animationTimer = new AnimationTimerImpl(this.nodeSelectionTabPane);
 		animationTimer.start();
 	}
 	
@@ -346,31 +346,5 @@ public final class DayflowerApplication extends Application {
 	
 	private void doSetStage(final Stage stage) {
 		this.stage.set(Objects.requireNonNull(stage, "stage == null"));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class RendererAnimationTimer extends AnimationTimer {
-		private final NodeSelectionTabPane<RendererTabPane, Renderer> nodeSelectionTabPane;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public RendererAnimationTimer(final NodeSelectionTabPane<RendererTabPane, Renderer> nodeSelectionTabPane) {
-			this.nodeSelectionTabPane = Objects.requireNonNull(nodeSelectionTabPane, "nodeSelectionTabPane == null");
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		@Override
-		public void handle(final long now) {
-			final Optional<RendererTabPane> optionalRendererTabPane = this.nodeSelectionTabPane.getSelectedNode();
-			
-			if(optionalRendererTabPane.isPresent()) {
-				final
-				RendererViewPane rendererViewPane = optionalRendererTabPane.get().getRendererViewPane();
-				rendererViewPane.update();
-				rendererViewPane.render();
-			}
-		}
 	}
 }

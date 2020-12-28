@@ -72,53 +72,141 @@ import org.dayflower.util.Floats;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractSceneKernel extends AbstractImageKernel {
+//	TODO: Add Javadocs!
 	protected static final float DEFAULT_T_MAXIMUM = Float.MAX_VALUE;
+	
+//	TODO: Add Javadocs!
 	protected static final float DEFAULT_T_MINIMUM = 0.001F;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U = 0;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V = 3;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W = 6;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U = 9;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V = 12;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W = 15;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX = 18;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT = 19;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES = 22;
+	
+//	TODO: Add Javadocs!
 	protected static final int INTERSECTION_ARRAY_SIZE = 24;
+	
+//	TODO: Add Javadocs!
 	protected static final int RAY_3_F_ARRAY_OFFSET_DIRECTION = 3;
+	
+//	TODO: Add Javadocs!
 	protected static final int RAY_3_F_ARRAY_OFFSET_ORIGIN = 0;
+	
+//	TODO: Add Javadocs!
 	protected static final int RAY_3_F_ARRAY_OFFSET_T_MAXIMUM = 7;
+	
+//	TODO: Add Javadocs!
 	protected static final int RAY_3_F_ARRAY_OFFSET_T_MINIMUM = 6;
+	
+//	TODO: Add Javadocs!
 	protected static final int RAY_3_F_ARRAY_SIZE = 8;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	protected float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] boundingVolume3FBoundingSphere3FArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] cameraArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] intersectionArray_$private$24;
+	
+//	TODO: Add Javadocs!
 	protected float[] materialMetalSmallPTMaterialArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] matrix44FArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] pixelArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] ray3FArray_$private$8;
+	
+//	TODO: Add Javadocs!
 	protected float[] shape3FPlane3FArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] shape3FRectangularCuboid3FArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] shape3FSphere3FArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] shape3FTorus3FArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] shape3FTriangle3FArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] textureBlendTextureArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] textureBullseyeTextureArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] textureCheckerboardTextureArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] textureConstantTextureArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] textureImageTextureArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] textureMarbleTextureArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] textureSimplexFractionalBrownianMotionTextureArray;
+	
+//	TODO: Add Javadocs!
 	protected int primitiveCount;
+	
+//	TODO: Add Javadocs!
 	protected int[] materialClearCoatSmallPTMaterialArray;
+	
+//	TODO: Add Javadocs!
 	protected int[] materialGlassSmallPTMaterialArray;
+	
+//	TODO: Add Javadocs!
 	protected int[] materialMatteSmallPTMaterialArray;
+	
+//	TODO: Add Javadocs!
 	protected int[] materialMirrorSmallPTMaterialArray;
+	
+//	TODO: Add Javadocs!
 	protected int[] primitiveArray;
+	
+//	TODO: Add Javadocs!
 	protected int[] shape3FTriangleMesh3FArray;
+	
+//	TODO: Add Javadocs!
 	protected int[] shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +281,15 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		return this.scene;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, a point is contained by a given axis aligned bounding box, {@code false} otherwise.
+	 * 
+	 * @param boundingVolume3FAxisAlignedBoundingBox3FArrayOffset the offset for the axis aligned bounding box in {@link #boundingVolume3FAxisAlignedBoundingBox3FArray}
+	 * @param pointX the X-component of the point
+	 * @param pointY the Y-component of the point
+	 * @param pointZ the Z-component of the point
+	 * @return {@code true} if, and only if, a point is contained by a given axis aligned bounding box, {@code false} otherwise
+	 */
 	protected final boolean containsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float pointX, final float pointY, final float pointZ) {
 		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
 		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
@@ -209,7 +305,15 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		return containsX && containsY && containsZ;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, a point is contained by a given bounding sphere, {@code false} otherwise.
+	 * 
+	 * @param boundingVolume3FBoundingSphere3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FBoundingSphere3FArray}
+	 * @param pointX the X-component of the point
+	 * @param pointY the Y-component of the point
+	 * @param pointZ the Z-component of the point
+	 * @return {@code true} if, and only if, a point is contained by a given bounding sphere, {@code false} otherwise
+	 */
 	protected final boolean containsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float pointX, final float pointY, final float pointZ) {
 		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
 		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
@@ -221,7 +325,14 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		return distanceSquared < boundingSphereRadius * boundingSphereRadius;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the current ray is contained by or intersects a given axis aligned bounding box, {@code false} otherwise.
+	 * 
+	 * @param boundingVolume3FAxisAlignedBoundingBox3FArrayOffset the offset for the axis aligned bounding box in {@link #boundingVolume3FAxisAlignedBoundingBox3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray is contained by or intersects a given axis aligned bounding box, {@code false} otherwise
+	 */
 	protected final boolean containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
@@ -272,7 +383,14 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		return false;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the current ray is contained by or intersects a given bounding sphere, {@code false} otherwise.
+	 * 
+	 * @param boundingVolume3FBoundingSphere3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FBoundingSphere3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray is contained by or intersects a given bounding sphere, {@code false} otherwise
+	 */
 	protected final boolean containsOrIntersectsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
 		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];

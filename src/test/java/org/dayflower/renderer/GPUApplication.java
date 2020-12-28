@@ -169,16 +169,16 @@ public final class GPUApplication extends Application {
 		final org.dayflower.scene.Scene scene = new JavaSceneLoader().load(pathname);
 		
 		final
-		Renderer renderer = new GPURenderer();
-		renderer.setImage(new ByteImage((int)(scene.getCamera().getResolutionX()), (int)(scene.getCamera().getResolutionY())));
-		renderer.setRenderPasses(1);
-		renderer.setRendererObserver(new NoOpRendererObserver());
-		renderer.setRenderingAlgorithm(renderingAlgorithm);
-		renderer.setSampler(new RandomSampler());
-		renderer.setScene(scene);
-		renderer.setup();
+		ImageOrderRenderer imageOrderRenderer = new GPURenderer();
+		imageOrderRenderer.setImage(new ByteImage((int)(scene.getCamera().getResolutionX()), (int)(scene.getCamera().getResolutionY())));
+		imageOrderRenderer.setRenderPasses(1);
+		imageOrderRenderer.setRendererObserver(new NoOpRendererObserver());
+		imageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);
+		imageOrderRenderer.setSampler(new RandomSampler());
+		imageOrderRenderer.setScene(scene);
+		imageOrderRenderer.setup();
 		
-		return renderer;
+		return imageOrderRenderer;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,7 +224,7 @@ public final class GPUApplication extends Application {
 		
 		@Override
 		public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
-			Platform.runLater(() -> this.label.setText("Millis: " + Long.toString(elapsedTimeMillis) + " Render Pass: " + renderer.getRenderPass()));
+			Platform.runLater(() -> this.label.setText("Millis: " + Long.toString(elapsedTimeMillis) + " Render Pass: " + (renderer instanceof ImageOrderRenderer ? ImageOrderRenderer.class.cast(renderer).getRenderPass() : 0)));
 		}
 		
 		@Override

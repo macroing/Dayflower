@@ -21,7 +21,7 @@ package org.dayflower.javafx.application;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
-import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.ImageOrderRenderer;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -31,22 +31,22 @@ final class RendererTabPane extends TabPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Renderer renderer;
+	private final ImageOrderRenderer imageOrderRenderer;
 	private final RendererViewPane rendererViewPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public RendererTabPane(final Renderer renderer, final ExecutorService executorService) {
-		this.renderer = Objects.requireNonNull(renderer, "renderer == null");
-		this.rendererViewPane = new RendererViewPane(renderer, Objects.requireNonNull(executorService, "executorService == null"));
+	public RendererTabPane(final ImageOrderRenderer imageOrderRenderer, final ExecutorService executorService) {
+		this.imageOrderRenderer = Objects.requireNonNull(imageOrderRenderer, "imageOrderRenderer == null");
+		this.rendererViewPane = new RendererViewPane(imageOrderRenderer, Objects.requireNonNull(executorService, "executorService == null"));
 		
 		doConfigure();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public Renderer getRenderer() {
-		return this.renderer;
+	public ImageOrderRenderer getImageOrderRenderer() {
+		return this.imageOrderRenderer;
 	}
 	
 	public RendererViewPane getRendererViewPane() {
@@ -57,7 +57,7 @@ final class RendererTabPane extends TabPane {
 	
 	private void doConfigure() {
 //		Configure the Scene:
-		this.renderer.getScene().addSceneObserver(new SceneObserverImpl(this.renderer, this));
+		this.imageOrderRenderer.getScene().addSceneObserver(new SceneObserverImpl(this.imageOrderRenderer, this));
 		
 //		Configure the RendererTabPane:
 		getTabs().add(new Tab(TEXT_VIEW, this.rendererViewPane));

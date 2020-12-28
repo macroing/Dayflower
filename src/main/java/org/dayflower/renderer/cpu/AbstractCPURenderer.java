@@ -27,7 +27,7 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.image.PixelImage;
-import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.ImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.sampler.NRooksSampler;
@@ -38,12 +38,12 @@ import org.dayflower.scene.Scene;
 import org.dayflower.util.Timer;
 
 /**
- * An {@code AbstractCPURenderer} is an abstract implementation of {@link Renderer} that takes care of most aspects.
+ * An {@code AbstractCPURenderer} is an abstract implementation of {@link ImageOrderRenderer} that takes care of most aspects.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractCPURenderer implements Renderer {
+public abstract class AbstractCPURenderer implements ImageOrderRenderer {
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
 	private final AtomicReference<RendererObserver> rendererObserver;
@@ -60,7 +60,6 @@ public abstract class AbstractCPURenderer implements Renderer {
 	private int renderPasses;
 	private int renderPassesPerDisplayUpdate;
 	private int samples;
-	private long renderTime;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -89,7 +88,6 @@ public abstract class AbstractCPURenderer implements Renderer {
 		this.renderPasses = 1000;
 		this.renderPassesPerDisplayUpdate = 10;
 		this.samples = 10;
-		this.renderTime = 0L;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,7 +209,6 @@ public abstract class AbstractCPURenderer implements Renderer {
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
 			if(this.isClearing.compareAndSet(true, false)) {
 				setRenderPass(0);
-				setRenderTime(0L);
 				
 				pixelImage.filmClear();
 				pixelImage.filmRender();
@@ -266,7 +263,6 @@ public abstract class AbstractCPURenderer implements Renderer {
 			}
 			
 			setRenderPass(getRenderPass() + 1);
-			setRenderTime(elapsedTimeMillis);
 			
 			rendererObserver.onRenderPassComplete(this, renderPass, renderPasses, elapsedTimeMillis);
 		}
@@ -356,16 +352,6 @@ public abstract class AbstractCPURenderer implements Renderer {
 	@Override
 	public final int getSamples() {
 		return this.samples;
-	}
-	
-	/**
-	 * Returns the current render time in milliseconds.
-	 * 
-	 * @return the current render time in milliseconds
-	 */
-	@Override
-	public final long getRenderTime() {
-		return this.renderTime;
 	}
 	
 	/**
@@ -465,16 +451,6 @@ public abstract class AbstractCPURenderer implements Renderer {
 	@Override
 	public final void setRenderPassesPerDisplayUpdate(final int renderPassesPerDisplayUpdate) {
 		this.renderPassesPerDisplayUpdate = renderPassesPerDisplayUpdate;
-	}
-	
-	/**
-	 * Sets the current render time in milliseconds to {@code renderTime}.
-	 * 
-	 * @param renderTime the current render time in milliseconds
-	 */
-	@Override
-	public final void setRenderTime(final long renderTime) {
-		this.renderTime = renderTime;
 	}
 	
 	/**

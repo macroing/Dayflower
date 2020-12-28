@@ -22,16 +22,16 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
-import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.ImageOrderRenderer;
 
 import javafx.animation.AnimationTimer;
 
 final class AnimationTimerImpl extends AnimationTimer {
-	private final NodeSelectionTabPane<RendererTabPane, Renderer> nodeSelectionTabPane;
+	private final NodeSelectionTabPane<RendererTabPane, ImageOrderRenderer> nodeSelectionTabPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public AnimationTimerImpl(final NodeSelectionTabPane<RendererTabPane, Renderer> nodeSelectionTabPane) {
+	public AnimationTimerImpl(final NodeSelectionTabPane<RendererTabPane, ImageOrderRenderer> nodeSelectionTabPane) {
 		this.nodeSelectionTabPane = Objects.requireNonNull(nodeSelectionTabPane, "nodeSelectionTabPane == null");
 	}
 	

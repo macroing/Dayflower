@@ -30,7 +30,7 @@ import org.dayflower.image.ByteImage;
 import org.dayflower.image.PixelImage;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
-import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.ImageOrderRenderer;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
@@ -85,7 +85,7 @@ public final class DayflowerApplication extends Application {
 	private final AtomicReference<Stage> stage;
 	private final BorderPane borderPane;
 	private final ExecutorService executorService;
-	private final NodeSelectionTabPane<RendererTabPane, Renderer> nodeSelectionTabPane;
+	private final NodeSelectionTabPane<RendererTabPane, ImageOrderRenderer> nodeSelectionTabPane;
 	private final PathMenuBar pathMenuBar;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ public final class DayflowerApplication extends Application {
 		this.stage = new AtomicReference<>();
 		this.borderPane = new BorderPane();
 		this.executorService = Executors.newFixedThreadPool(4);
-		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererPane -> rendererPane.getRenderer(), renderer -> new RendererTabPane(renderer, this.executorService), (a, b) -> a.equals(b), renderer -> renderer.getScene().getName());
+		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererPane -> rendererPane.getImageOrderRenderer(), renderer -> new RendererTabPane(renderer, this.executorService), (a, b) -> a.equals(b), renderer -> renderer.getScene().getName());
 		this.pathMenuBar = new PathMenuBar();
 	}
 	
@@ -156,26 +156,26 @@ public final class DayflowerApplication extends Application {
 			final int resolutionY = (int)(camera.getResolutionY());
 			
 			final
-			Renderer renderer = new CPURenderer(new NoOpRendererObserver());
-//			Renderer renderer = new GPURenderer(new NoOpRendererObserver());
-			renderer.setImage(new PixelImage(resolutionX, resolutionY));
-//			renderer.setImage(new ByteImage(resolutionX, resolutionY));
-			renderer.setRenderPasses(1);
-			renderer.setRenderPassesPerDisplayUpdate(1);
-			renderer.setSamples(1);
-			renderer.setSampler(new RandomSampler());
-			renderer.setScene(scene);
-			renderer.setup();
+			ImageOrderRenderer imageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
+//			ImageOrderRenderer imageOrderRenderer = new GPURenderer(new NoOpRendererObserver());
+			imageOrderRenderer.setImage(new PixelImage(resolutionX, resolutionY));
+//			imageOrderRenderer.setImage(new ByteImage(resolutionX, resolutionY));
+			imageOrderRenderer.setRenderPasses(1);
+			imageOrderRenderer.setRenderPassesPerDisplayUpdate(1);
+			imageOrderRenderer.setSamples(1);
+			imageOrderRenderer.setSampler(new RandomSampler());
+			imageOrderRenderer.setScene(scene);
+			imageOrderRenderer.setup();
 			
 			Platform.runLater(() -> {
 				final
-				Tab tab = this.nodeSelectionTabPane.add(renderer);
+				Tab tab = this.nodeSelectionTabPane.add(imageOrderRenderer);
 				tab.setOnClosed(event -> {
 					final Object source = event.getSource();
 					
 					if(source == tab) {
-						renderer.renderShutdown();
-						renderer.dispose();
+						imageOrderRenderer.renderShutdown();
+						imageOrderRenderer.dispose();
 					}
 				});
 			});
@@ -228,9 +228,9 @@ public final class DayflowerApplication extends Application {
 				final RendererTabPane rendererTabPane = RendererTabPane.class.cast(content);
 				
 				final
-				Renderer renderer = rendererTabPane.getRenderer();
-				renderer.renderShutdown();
-				renderer.dispose();
+				ImageOrderRenderer imageOrderRenderer = rendererTabPane.getImageOrderRenderer();
+				imageOrderRenderer.renderShutdown();
+				imageOrderRenderer.dispose();
 			}
 		}
 		

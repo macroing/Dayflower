@@ -26,7 +26,7 @@ import org.dayflower.image.ByteImage;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.image.PixelImage;
-import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.ImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.sampler.NRooksSampler;
@@ -37,12 +37,12 @@ import org.dayflower.util.Timer;
 import com.amd.aparapi.Range;
 
 /**
- * An {@code AbstractGPURenderer} is an abstract implementation of {@link Renderer} that takes care of most aspects.
+ * An {@code AbstractGPURenderer} is an abstract implementation of {@link ImageOrderRenderer} that takes care of most aspects.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractGPURenderer extends AbstractSceneKernel implements Renderer {
+public abstract class AbstractGPURenderer extends AbstractSceneKernel implements ImageOrderRenderer {
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
 	private final AtomicReference<RendererObserver> rendererObserver;
@@ -58,7 +58,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	private int renderPasses;
 	private int renderPassesPerDisplayUpdate;
 	private int samples;
-	private long renderTime;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -86,7 +85,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		this.renderPasses = 1000;
 		this.renderPassesPerDisplayUpdate = 10;
 		this.samples = 10;
-		this.renderTime = 0L;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +186,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		for(int renderPass = 1; renderPass <= renderPasses; renderPass++) {
 			if(this.isClearing.compareAndSet(true, false)) {
 				setRenderPass(0);
-				setRenderTime(0L);
 				
 				filmClear();
 				
@@ -270,7 +267,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 			}
 			
 			setRenderPass(getRenderPass() + 1);
-			setRenderTime(elapsedTimeMillis);
 			
 			rendererObserver.onRenderPassComplete(this, renderPass, renderPasses, elapsedTimeMillis);
 		}
@@ -363,16 +359,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	}
 	
 	/**
-	 * Returns the current render time in milliseconds.
-	 * 
-	 * @return the current render time in milliseconds
-	 */
-	@Override
-	public final long getRenderTime() {
-		return this.renderTime;
-	}
-	
-	/**
 	 * Call this method to clear the {@link Image} in the next {@link #render()} call.
 	 */
 	@Override
@@ -461,16 +447,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	@Override
 	public final void setRenderPassesPerDisplayUpdate(final int renderPassesPerDisplayUpdate) {
 		this.renderPassesPerDisplayUpdate = renderPassesPerDisplayUpdate;
-	}
-	
-	/**
-	 * Sets the current render time in milliseconds to {@code renderTime}.
-	 * 
-	 * @param renderTime the current render time in milliseconds
-	 */
-	@Override
-	public final void setRenderTime(final long renderTime) {
-		this.renderTime = renderTime;
 	}
 	
 	/**

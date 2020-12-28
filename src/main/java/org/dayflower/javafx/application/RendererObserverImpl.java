@@ -21,6 +21,7 @@ package org.dayflower.javafx.application;
 import java.util.Objects;
 
 import org.dayflower.image.Image;
+import org.dayflower.renderer.ImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererObserver;
 
@@ -53,7 +54,7 @@ final class RendererObserverImpl implements RendererObserver {
 	@Override
 	public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
 		Platform.runLater(() -> {
-			this.labelRenderPass.setText("Render Pass: " + renderer.getRenderPass());
+			this.labelRenderPass.setText("Render Pass: " + (renderer instanceof ImageOrderRenderer ? ImageOrderRenderer.class.cast(renderer).getRenderPass() : 0));
 			this.labelRenderTime.setText("Render Time: " + renderer.getTimer().getTime());
 			this.labelRenderTimePerPass.setText("Render Time Per Pass: " + elapsedTimeMillis);
 			
@@ -64,7 +65,7 @@ final class RendererObserverImpl implements RendererObserver {
 	@Override
 	public void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent) {
 		Platform.runLater(() -> {
-			this.labelRenderPass.setText("Render Pass: " + renderer.getRenderPass());
+			this.labelRenderPass.setText("Render Pass: " + (renderer instanceof ImageOrderRenderer ? ImageOrderRenderer.class.cast(renderer).getRenderPass() : 0));
 			this.labelRenderTime.setText("Render Time: " + renderer.getTimer().getTime());
 			
 			this.progressBar.setProgress(percent);

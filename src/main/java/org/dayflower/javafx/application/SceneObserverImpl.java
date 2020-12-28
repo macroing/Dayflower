@@ -20,7 +20,7 @@ package org.dayflower.javafx.application;
 
 import java.util.Objects;
 
-import org.dayflower.renderer.Renderer;
+import org.dayflower.renderer.ImageOrderRenderer;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Primitive;
@@ -30,13 +30,13 @@ import org.dayflower.scene.SceneObserver;
 import javafx.application.Platform;
 
 final class SceneObserverImpl implements SceneObserver {
-	private final Renderer renderer;
+	private final ImageOrderRenderer imageOrderRenderer;
 	private final RendererTabPane rendererTabPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public SceneObserverImpl(final Renderer renderer, final RendererTabPane rendererTabPane) {
-		this.renderer = Objects.requireNonNull(renderer, "renderer == null");
+	public SceneObserverImpl(final ImageOrderRenderer imageOrderRenderer, final RendererTabPane rendererTabPane) {
+		this.imageOrderRenderer = Objects.requireNonNull(imageOrderRenderer, "imageOrderRenderer == null");
 		this.rendererTabPane = Objects.requireNonNull(rendererTabPane, "rendererTabPane == null");
 	}
 	
@@ -55,8 +55,8 @@ final class SceneObserverImpl implements SceneObserver {
 		
 		Platform.runLater(() -> this.rendererTabPane.getRendererViewPane().getObjectTreeView().add(newPrimitive));
 		
-		this.renderer.renderShutdown();
-		this.renderer.clear();
+		this.imageOrderRenderer.renderShutdown();
+		this.imageOrderRenderer.clear();
 	}
 	
 	@Override
@@ -102,7 +102,7 @@ final class SceneObserverImpl implements SceneObserver {
 		
 		Platform.runLater(() -> this.rendererTabPane.getRendererViewPane().getObjectTreeView().remove(oldPrimitive));
 		
-		this.renderer.renderShutdown();
-		this.renderer.clear();
+		this.imageOrderRenderer.renderShutdown();
+		this.imageOrderRenderer.clear();
 	}
 }

@@ -21,7 +21,6 @@ package org.dayflower.renderer;
 import org.dayflower.image.ByteImage;
 import org.dayflower.image.PixelImage;
 import org.dayflower.renderer.Renderer;
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.gpu.GPURenderer;
@@ -97,8 +96,11 @@ public final class RendererTest {
 	private static CPURenderer doCreateCPURenderer(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
 		final
 		CPURenderer cPURenderer = new CPURenderer();
-		cPURenderer.setRendererConfiguration(doCreateRendererConfigurationCPU(renderingAlgorithm, pathname));
-		cPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), cPURenderer.getRendererConfiguration().getScene().getName()));
+		cPURenderer.setScene(new JavaSceneLoader().load(pathname));
+		cPURenderer.setImage(new PixelImage((int)(cPURenderer.getScene().getCamera().getResolutionX()), (int)(cPURenderer.getScene().getCamera().getResolutionY())));
+		cPURenderer.setRenderingAlgorithm(renderingAlgorithm);
+		cPURenderer.setSampler(new RandomSampler());
+		cPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), cPURenderer.getScene().getName()));
 		
 		return cPURenderer;
 	}
@@ -106,33 +108,14 @@ public final class RendererTest {
 	private static GPURenderer doCreateGPURenderer(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
 		final
 		GPURenderer gPURenderer = new GPURenderer();
-		gPURenderer.setRendererConfiguration(doCreateRendererConfigurationGPU(renderingAlgorithm, pathname));
-		gPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), gPURenderer.getRendererConfiguration().getScene().getName()));
+		gPURenderer.setScene(new JavaSceneLoader().load(pathname));
+		gPURenderer.setImage(new ByteImage((int)(gPURenderer.getScene().getCamera().getResolutionX()), (int)(gPURenderer.getScene().getCamera().getResolutionY())));
+		gPURenderer.setRenderPasses(10);
+		gPURenderer.setRenderingAlgorithm(renderingAlgorithm);
+		gPURenderer.setSampler(new RandomSampler());
+		gPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), gPURenderer.getScene().getName()));
 		
 		return gPURenderer;
-	}
-	
-	private static RendererConfiguration doCreateRendererConfigurationCPU(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
-		final
-		RendererConfiguration rendererConfiguration = new RendererConfiguration();
-		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
-		rendererConfiguration.setImage(new PixelImage((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
-		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
-		rendererConfiguration.setSampler(new RandomSampler());
-		
-		return rendererConfiguration;
-	}
-	
-	private static RendererConfiguration doCreateRendererConfigurationGPU(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
-		final
-		RendererConfiguration rendererConfiguration = new RendererConfiguration();
-		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
-		rendererConfiguration.setImage(new ByteImage((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
-		rendererConfiguration.setRenderPasses(10);
-		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
-		rendererConfiguration.setSampler(new RandomSampler());
-		
-		return rendererConfiguration;
 	}
 	
 	private static RendererObserver doCreateRendererObserver(final String renderingAlgorithmName, final String sceneName) {

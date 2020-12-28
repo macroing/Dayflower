@@ -24,7 +24,6 @@ import static org.dayflower.util.Floats.PI_RECIPROCAL;
 
 import java.lang.reflect.Field;
 
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;
 import org.dayflower.scene.texture.ImageTexture;
@@ -43,17 +42,12 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 //	TODO: Add Javadocs!
 	public GPURenderer() {
-		this(new RendererConfiguration());
+		this(new FileRendererObserver());
 	}
 	
 //	TODO: Add Javadocs!
-	public GPURenderer(final RendererConfiguration rendererConfiguration) {
-		this(rendererConfiguration, new FileRendererObserver());
-	}
-	
-//	TODO: Add Javadocs!
-	public GPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
-		super(rendererConfiguration, rendererObserver);
+	public GPURenderer(final RendererObserver rendererObserver) {
+		super(rendererObserver);
 		
 		this.textureBackground = ImageTexture.undoGammaCorrectionSRGB(ImageTexture.load("./resources/textures/pond-at-evening.jpg")).toArray();
 	}

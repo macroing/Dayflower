@@ -33,7 +33,6 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
@@ -58,13 +57,8 @@ final class PathTracingRayito {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Color3F radiance(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
-		final Scene scene = rendererConfiguration.getScene();
-		
+	public static Color3F radiance(final Ray3F ray, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int minimumBounceRussianRoulette) {
 		final List<Light> lights = scene.getLights();
-		
-		final int maximumBounce = rendererConfiguration.getMaximumBounce();
-		final int minimumBounceRussianRoulette = rendererConfiguration.getMinimumBounceRussianRoulette();
 		
 		Color3F radiance = Color3F.BLACK;
 		Color3F throughput = Color3F.WHITE;
@@ -150,7 +144,7 @@ final class PathTracingRayito {
 				}
 				
 				currentBounce++;
-			} else if(currentBounce == 0 && rendererConfiguration.isPreviewMode()) {
+			} else if(currentBounce == 0 && isPreviewMode) {
 				return Color3F.WHITE;
 			} else {
 				for(final Light light : lights) {

@@ -253,6 +253,27 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns the {@link Scene} instance that is associated with this {@code AbstractSceneKernel} instance.
+	 * 
+	 * @return the {@code Scene} instance that is associated with this {@code AbstractSceneKernel} instance
+	 */
+	public final Scene getScene() {
+		return this.scene;
+	}
+	
+	/**
+	 * Sets the {@link Scene} instance that is associated with this {@code AbstractSceneKernel} instance to {@code scene}.
+	 * <p>
+	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param scene a {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
+	 */
+	public final void setScene(final Scene scene) {
+		this.scene = Objects.requireNonNull(scene, "scene == null");
+	}
+	
+	/**
 	 * Sets up all necessary resources for this {@code AbstractSceneKernel} instance.
 	 */
 	@Override
@@ -271,15 +292,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns the {@link Scene} instance that is associated with this {@code AbstractSceneKernel} instance.
-	 * 
-	 * @return the {@code Scene} instance that is associated with this {@code AbstractSceneKernel} instance
-	 */
-	protected final Scene getScene() {
-		return this.scene;
-	}
 	
 	/**
 	 * Returns {@code true} if, and only if, a point is contained by a given axis aligned bounding box, {@code false} otherwise.
@@ -2413,18 +2425,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //	TODO: Add Javadocs!
 	protected final void ray3FSetMatrix44FTransformWorldToObject(final int primitiveIndex) {
 		doRay3FSetMatrix44FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
-	}
-	
-	/**
-	 * Sets the {@link Scene} instance that is associated with this {@code AbstractSceneKernel} instance to {@code scene}.
-	 * <p>
-	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param scene a {@code Scene} instance
-	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
-	 */
-	protected final void setScene(final Scene scene) {
-		this.scene = Objects.requireNonNull(scene, "scene == null");
 	}
 	
 //	TODO: Add Javadocs!

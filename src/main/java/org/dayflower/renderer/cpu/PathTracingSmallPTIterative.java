@@ -25,7 +25,6 @@ import java.util.Optional;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
@@ -46,12 +45,7 @@ final class PathTracingSmallPTIterative {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Color3F radiance(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
-		final Scene scene = rendererConfiguration.getScene();
-		
-		final int maximumBounce = rendererConfiguration.getMaximumBounce();
-		final int minimumBounceRussianRoulette = rendererConfiguration.getMinimumBounceRussianRoulette();
-		
+	public static Color3F radiance(final Ray3F ray, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int minimumBounceRussianRoulette) {
 		Color3F radiance = Color3F.BLACK;
 		Color3F throughput = Color3F.WHITE;
 		
@@ -98,7 +92,7 @@ final class PathTracingSmallPTIterative {
 				}
 				
 				currentBounce++;
-			} else if(currentBounce == 0 && rendererConfiguration.isPreviewMode()) {
+			} else if(currentBounce == 0 && isPreviewMode) {
 					return Color3F.WHITE;
 			} else {
 				for(final Light light : scene.getLights()) {

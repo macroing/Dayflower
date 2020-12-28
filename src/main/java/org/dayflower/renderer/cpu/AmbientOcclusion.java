@@ -30,7 +30,6 @@ import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Scene;
 
@@ -46,9 +45,7 @@ final class AmbientOcclusion {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Color3F radiance(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
-		final Scene scene = rendererConfiguration.getScene();
-		
+	public static Color3F radiance(final Ray3F ray, final Scene scene, final boolean isPreviewMode, final float maximumDistance, final int samples) {
 		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 		
 		if(optionalIntersection.isPresent()) {
@@ -59,10 +56,6 @@ final class AmbientOcclusion {
 			final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
 			
 			final OrthonormalBasis33F orthonormalBasisGWorldSpace = surfaceIntersectionWorldSpace.getOrthonormalBasisG();
-			
-			final float maximumDistance = rendererConfiguration.getMaximumDistance();
-			
-			final int samples = rendererConfiguration.getSamples();
 			
 			for(int sample = 0; sample < samples; sample++) {
 				final Vector3F directionWorldSpace = Vector3F.normalize(Vector3F.transform(SampleGeneratorF.sampleHemisphereUniformDistribution(), orthonormalBasisGWorldSpace));
@@ -90,7 +83,7 @@ final class AmbientOcclusion {
 			radiance = Color3F.divide(radiance, PI);
 			
 			return radiance;
-		} else if(rendererConfiguration.isPreviewMode()) {
+		} else if(isPreviewMode) {
 			return Color3F.WHITE;
 		} else {
 			return Color3F.BLACK;

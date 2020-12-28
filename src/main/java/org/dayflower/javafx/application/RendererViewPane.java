@@ -43,7 +43,6 @@ import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.image.WritableImageCache;
 import org.dayflower.javafx.scene.layout.Regions;
 import org.dayflower.renderer.Renderer;
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
@@ -115,13 +114,13 @@ final class RendererViewPane extends BorderPane {
 	public RendererViewPane(final Renderer renderer, final ExecutorService executorService) {
 		this.isCameraUpdateRequired = new AtomicBoolean();
 		this.file = new AtomicReference<>();
-		this.concurrentImageCanvas = new ConcurrentImageCanvas(executorService, renderer.getRendererConfiguration().getImage(), this::doRender, new ObserverImpl(renderer));
+		this.concurrentImageCanvas = new ConcurrentImageCanvas(executorService, renderer.getImage(), this::doRender, new ObserverImpl(renderer));
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
 		this.hBox = new HBox();
 		this.labelRenderPass = new Label();
 		this.labelRenderTime = new Label();
 		this.labelRenderTimePerPass = new Label();
-		this.objectTreeView = doCreateObjectTreeView(renderer.getRendererConfiguration().getScene());
+		this.objectTreeView = doCreateObjectTreeView(renderer.getScene());
 		this.progressBar = new ProgressBar();
 		this.renderer = renderer;
 		this.vBoxL = new VBox();
@@ -188,10 +187,8 @@ final class RendererViewPane extends BorderPane {
 			
 			final Renderer renderer = this.renderer;
 			
-			final RendererConfiguration rendererConfiguration = renderer.getRendererConfiguration();
-			
 			final
-			Image image = rendererConfiguration.getImage();
+			Image image = renderer.getImage();
 			image.save(file);
 		}
 	}
@@ -221,7 +218,7 @@ final class RendererViewPane extends BorderPane {
 	 * This method is called when it's time to update.
 	 */
 	public void update() {
-		final Camera camera = this.renderer.getRendererConfiguration().getScene().getCamera();
+		final Camera camera = this.renderer.getScene().getCamera();
 		
 		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.A)) {
 			camera.moveLeft(0.3F);
@@ -300,7 +297,7 @@ final class RendererViewPane extends BorderPane {
 		this.labelRenderTimePerPass.setText("Render Time Per Pass: 0");
 		
 //		Configure the ObjectTreeView:
-		for(final Primitive primitive : this.renderer.getRendererConfiguration().getScene().getPrimitives()) {
+		for(final Primitive primitive : this.renderer.getScene().getPrimitives()) {
 			this.objectTreeView.add(primitive);
 		}
 		
@@ -335,7 +332,7 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	private void doOnActionDelete(final Primitive primitive) {
-		this.renderer.getRendererConfiguration().getScene().removePrimitive(primitive);
+		this.renderer.getScene().removePrimitive(primitive);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -416,19 +413,6 @@ final class RendererViewPane extends BorderPane {
 		};
 	}
 	
-	private static RendererConfiguration doCreateRendererConfiguration(final RenderingAlgorithm renderingAlgorithm, final Scene scene) {
-		final
-		RendererConfiguration rendererConfiguration = new RendererConfiguration();
-		rendererConfiguration.setImage(new PixelImage(32, 32, Color3F.BLACK, new BoxFilter()));
-		rendererConfiguration.setPreviewMode(true);
-		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
-		rendererConfiguration.setRenderPasses(10);
-		rendererConfiguration.setSampler(new RandomSampler());
-		rendererConfiguration.setScene(scene);
-		
-		return rendererConfiguration;
-	}
-	
 	private static RenderingAlgorithm doCreateRenderingAlgorithm(final Material material) {
 		if(material instanceof PBRTMaterial) {
 			return RenderingAlgorithm.PATH_TRACING;
@@ -443,11 +427,17 @@ final class RendererViewPane extends BorderPane {
 	
 	private static WritableImage doCreateWritableImageMaterial(final Material material) {
 		final
-		Renderer renderer = new CPURenderer(doCreateRendererConfiguration(doCreateRenderingAlgorithm(material), Previews.createMaterialPreviewScene(material)), new NoOpRendererObserver());
+		Renderer renderer = new CPURenderer(new NoOpRendererObserver());
+		renderer.setImage(new PixelImage(32, 32, Color3F.BLACK, new BoxFilter()));
+		renderer.setPreviewMode(true);
+		renderer.setRenderingAlgorithm(doCreateRenderingAlgorithm(material));
+		renderer.setRenderPasses(10);
+		renderer.setSampler(new RandomSampler());
+		renderer.setScene(Previews.createMaterialPreviewScene(material));
 		renderer.render();
 		
 		final
-		PixelImage pixelImage = PixelImage.class.cast(renderer.getRendererConfiguration().getImage());
+		PixelImage pixelImage = PixelImage.class.cast(renderer.getImage());
 		pixelImage.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImage.getResolutionX() - 1, pixelImage.getResolutionY() - 1)), new Color3F(181, 181, 181));
 		
 		return pixelImage.toWritableImage();

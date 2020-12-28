@@ -25,7 +25,6 @@ import java.util.Optional;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
@@ -46,16 +45,14 @@ final class PathTracingSmallPTRecursive {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Color3F radiance(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
-		return radiance(ray, rendererConfiguration, 1);
+	public static Color3F radiance(final Ray3F ray, final Scene scene, final int maximumBounce, final int minimumBounceRussianRoulette) {
+		return radiance(ray, scene, maximumBounce, minimumBounceRussianRoulette, 1);
 	}
 	
-	public static Color3F radiance(final Ray3F ray, final RendererConfiguration rendererConfiguration, final int bounce) {
-		final Scene scene = rendererConfiguration.getScene();
-		
+	public static Color3F radiance(final Ray3F ray, final Scene scene, final int maximumBounce, final int minimumBounceRussianRoulette, final int bounce) {
 		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 		
-		if(bounce >= rendererConfiguration.getMaximumBounce()) {
+		if(bounce >= maximumBounce) {
 			return Color3F.BLACK;
 		} else if(optionalIntersection.isPresent()) {
 			final Intersection intersection = optionalIntersection.get();
@@ -79,7 +76,7 @@ final class PathTracingSmallPTRecursive {
 			
 			final int currentBounce = bounce + 1;
 			
-			if(currentBounce >= rendererConfiguration.getMinimumBounceRussianRoulette()) {
+			if(currentBounce >= minimumBounceRussianRoulette) {
 				final float probability = reflectance.maximum();
 				
 				if(random() >= probability) {
@@ -89,7 +86,7 @@ final class PathTracingSmallPTRecursive {
 				reflectance = Color3F.divide(reflectance, probability);
 			}
 			
-			return Color3F.add(emittance, Color3F.multiply(reflectance, radiance(surfaceIntersection.createRay(smallPTSample.getDirection()), rendererConfiguration, currentBounce)));
+			return Color3F.add(emittance, Color3F.multiply(reflectance, radiance(surfaceIntersection.createRay(smallPTSample.getDirection()), scene, maximumBounce, minimumBounceRussianRoulette, currentBounce)));
 		}
 		
 		Color3F radiance = Color3F.BLACK;

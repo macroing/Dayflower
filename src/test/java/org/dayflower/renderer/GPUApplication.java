@@ -65,9 +65,9 @@ public final class GPUApplication extends Application {
 	public void start(final Stage stage) {
 		final Renderer renderer = this.renderer;
 		
-		final ByteImage byteImage = ByteImage.class.cast(renderer.getRendererConfiguration().getImage());
+		final ByteImage byteImage = ByteImage.class.cast(renderer.getImage());
 		
-		final Camera camera = renderer.getRendererConfiguration().getScene().getCamera();
+		final Camera camera = renderer.getScene().getCamera();
 		
 		final ExecutorService executorService = this.executorService;
 		
@@ -166,25 +166,19 @@ public final class GPUApplication extends Application {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Renderer doCreateRenderer(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
+		final org.dayflower.scene.Scene scene = new JavaSceneLoader().load(pathname);
+		
 		final
 		Renderer renderer = new GPURenderer();
-		renderer.setRendererConfiguration(doCreateRendererConfiguration(renderingAlgorithm, pathname));
+		renderer.setImage(new ByteImage((int)(scene.getCamera().getResolutionX()), (int)(scene.getCamera().getResolutionY())));
+		renderer.setRenderPasses(1);
 		renderer.setRendererObserver(new NoOpRendererObserver());
+		renderer.setRenderingAlgorithm(renderingAlgorithm);
+		renderer.setSampler(new RandomSampler());
+		renderer.setScene(scene);
 		renderer.setup();
 		
 		return renderer;
-	}
-	
-	private static RendererConfiguration doCreateRendererConfiguration(final RenderingAlgorithm renderingAlgorithm, final String pathname) {
-		final
-		RendererConfiguration rendererConfiguration = new RendererConfiguration();
-		rendererConfiguration.setScene(new JavaSceneLoader().load(pathname));
-		rendererConfiguration.setImage(new ByteImage((int)(rendererConfiguration.getScene().getCamera().getResolutionX()), (int)(rendererConfiguration.getScene().getCamera().getResolutionY())));
-		rendererConfiguration.setRenderPasses(1);
-		rendererConfiguration.setRenderingAlgorithm(renderingAlgorithm);
-		rendererConfiguration.setSampler(new RandomSampler());
-		
-		return rendererConfiguration;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,7 +224,7 @@ public final class GPUApplication extends Application {
 		
 		@Override
 		public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
-			Platform.runLater(() -> this.label.setText("Millis: " + Long.toString(elapsedTimeMillis) + " Render Pass: " + renderer.getRendererConfiguration().getRenderPass()));
+			Platform.runLater(() -> this.label.setText("Millis: " + Long.toString(elapsedTimeMillis) + " Render Pass: " + renderer.getRenderPass()));
 		}
 		
 		@Override

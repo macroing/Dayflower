@@ -53,8 +53,8 @@ final class RendererObserverImpl implements RendererObserver {
 	@Override
 	public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
 		Platform.runLater(() -> {
-			this.labelRenderPass.setText("Render Pass: " + renderer.getRendererConfiguration().getRenderPass());
-			this.labelRenderTime.setText("Render Time: " + renderer.getRendererConfiguration().getTimer().getTime());
+			this.labelRenderPass.setText("Render Pass: " + renderer.getRenderPass());
+			this.labelRenderTime.setText("Render Time: " + renderer.getTimer().getTime());
 			this.labelRenderTimePerPass.setText("Render Time Per Pass: " + elapsedTimeMillis);
 			
 			this.progressBar.setProgress(1.0D);
@@ -64,8 +64,8 @@ final class RendererObserverImpl implements RendererObserver {
 	@Override
 	public void onRenderPassProgress(final Renderer renderer, final int renderPass, final int renderPasses, final double percent) {
 		Platform.runLater(() -> {
-			this.labelRenderPass.setText("Render Pass: " + renderer.getRendererConfiguration().getRenderPass());
-			this.labelRenderTime.setText("Render Time: " + renderer.getRendererConfiguration().getTimer().getTime());
+			this.labelRenderPass.setText("Render Pass: " + renderer.getRenderPass());
+			this.labelRenderTime.setText("Render Time: " + renderer.getTimer().getTime());
 			
 			this.progressBar.setProgress(percent);
 		});

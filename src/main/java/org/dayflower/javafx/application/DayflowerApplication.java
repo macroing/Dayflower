@@ -31,7 +31,6 @@ import org.dayflower.image.PixelImage;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
 import org.dayflower.renderer.Renderer;
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
@@ -98,7 +97,7 @@ public final class DayflowerApplication extends Application {
 		this.stage = new AtomicReference<>();
 		this.borderPane = new BorderPane();
 		this.executorService = Executors.newFixedThreadPool(4);
-		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererPane -> rendererPane.getRenderer(), renderer -> new RendererTabPane(renderer, this.executorService), (a, b) -> a.equals(b), renderer -> renderer.getRendererConfiguration().getScene().getName());
+		this.nodeSelectionTabPane = new NodeSelectionTabPane<>(RendererTabPane.class, rendererPane -> rendererPane.getRenderer(), renderer -> new RendererTabPane(renderer, this.executorService), (a, b) -> a.equals(b), renderer -> renderer.getScene().getName());
 		this.pathMenuBar = new PathMenuBar();
 	}
 	
@@ -157,18 +156,15 @@ public final class DayflowerApplication extends Application {
 			final int resolutionY = (int)(camera.getResolutionY());
 			
 			final
-			RendererConfiguration rendererConfiguration = new RendererConfiguration();
-			rendererConfiguration.setImage(new PixelImage(resolutionX, resolutionY));
-//			rendererConfiguration.setImage(new ByteImage(resolutionX, resolutionY));
-			rendererConfiguration.setRenderPasses(1);
-			rendererConfiguration.setRenderPassesPerDisplayUpdate(1);
-			rendererConfiguration.setSamples(1);
-			rendererConfiguration.setSampler(new RandomSampler());
-			rendererConfiguration.setScene(scene);
-			
-			final
-			Renderer renderer = new CPURenderer(rendererConfiguration, new NoOpRendererObserver());
-//			Renderer renderer = new GPURenderer(rendererConfiguration, new NoOpRendererObserver());
+			Renderer renderer = new CPURenderer(new NoOpRendererObserver());
+//			Renderer renderer = new GPURenderer(new NoOpRendererObserver());
+			renderer.setImage(new PixelImage(resolutionX, resolutionY));
+//			renderer.setImage(new ByteImage(resolutionX, resolutionY));
+			renderer.setRenderPasses(1);
+			renderer.setRenderPassesPerDisplayUpdate(1);
+			renderer.setSamples(1);
+			renderer.setSampler(new RandomSampler());
+			renderer.setScene(scene);
 			renderer.setup();
 			
 			Platform.runLater(() -> {

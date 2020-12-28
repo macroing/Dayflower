@@ -34,7 +34,6 @@ import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.AreaLight;
@@ -62,15 +61,8 @@ final class PathTracingPBRT {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Color3F radiance(final Ray3F ray, final RendererConfiguration rendererConfiguration) {
-		final Sampler sampler = rendererConfiguration.getSampler();
-		
-		final Scene scene = rendererConfiguration.getScene();
-		
+	public static Color3F radiance(final Ray3F ray, final Sampler sampler, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int minimumBounceRussianRoulette) {
 		final List<Light> lights = scene.getLights();
-		
-		final int maximumBounce = rendererConfiguration.getMaximumBounce();
-		final int minimumBounceRussianRoulette = rendererConfiguration.getMinimumBounceRussianRoulette();
 		
 		Color3F radiance = Color3F.BLACK;
 		Color3F throughput = Color3F.WHITE;
@@ -86,7 +78,7 @@ final class PathTracingPBRT {
 			
 			final boolean hasFoundIntersection = optionalIntersection.isPresent();
 			
-			if(currentBounce == 0 && !hasFoundIntersection && rendererConfiguration.isPreviewMode()) {
+			if(currentBounce == 0 && !hasFoundIntersection && isPreviewMode) {
 				return Color3F.WHITE;
 			}
 			

@@ -57,7 +57,7 @@ final class RendererTabPane extends TabPane {
 	
 	private void doConfigure() {
 //		Configure the Scene:
-		this.renderer.getRendererConfiguration().getScene().addSceneObserver(new SceneObserverImpl(this.renderer, this));
+		this.renderer.getScene().addSceneObserver(new SceneObserverImpl(this.renderer, this));
 		
 //		Configure the RendererTabPane:
 		getTabs().add(new Tab(TEXT_VIEW, this.rendererViewPane));

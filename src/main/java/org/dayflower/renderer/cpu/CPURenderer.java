@@ -22,7 +22,6 @@ import java.util.Objects;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.renderer.RendererConfiguration;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;
 
@@ -39,44 +38,24 @@ public final class CPURenderer extends AbstractCPURenderer {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CPURenderer(new RendererConfiguration());
+	 * new CPURenderer(new FileRendererObserver());
 	 * }
 	 * </pre>
 	 */
 	public CPURenderer() {
-		this(new RendererConfiguration());
+		this(new FileRendererObserver());
 	}
 	
 	/**
 	 * Constructs a new {@code CPURenderer} instance.
 	 * <p>
-	 * If {@code rendererConfiguration} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new CPURenderer(rendererConfiguration, new FileRendererObserver());
-	 * }
-	 * </pre>
+	 * If {@code rendererObserver} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code CPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code rendererConfiguration} is {@code null}
-	 */
-	public CPURenderer(final RendererConfiguration rendererConfiguration) {
-		this(rendererConfiguration, new FileRendererObserver());
-	}
-	
-	/**
-	 * Constructs a new {@code CPURenderer} instance.
-	 * <p>
-	 * If either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param rendererConfiguration the {@link RendererConfiguration} instance associated with this {@code CPURenderer} instance
 	 * @param rendererObserver the {@link RendererObserver} instance associated with this {@code CPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code rendererConfiguration} or {@code rendererObserver} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code rendererObserver} is {@code null}
 	 */
-	public CPURenderer(final RendererConfiguration rendererConfiguration, final RendererObserver rendererObserver) {
-		super(rendererConfiguration, rendererObserver);
+	public CPURenderer(final RendererObserver rendererObserver) {
+		super(rendererObserver);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,21 +73,21 @@ public final class CPURenderer extends AbstractCPURenderer {
 	protected Color3F radiance(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
 		
-		switch(getRendererConfiguration().getRenderingAlgorithm()) {
+		switch(getRenderingAlgorithm()) {
 			case AMBIENT_OCCLUSION:
-				return AmbientOcclusion.radiance(ray, getRendererConfiguration());
+				return AmbientOcclusion.radiance(ray, getScene(), isPreviewMode(), getMaximumDistance(), getSamples());
 			case PATH_TRACING:
-				return PathTracing.radiance(ray, getRendererConfiguration());
+				return PathTracing.radiance(ray, getSampler(), getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
 			case PATH_TRACING_P_B_R_T:
-				return PathTracingPBRT.radiance(ray, getRendererConfiguration());
+				return PathTracingPBRT.radiance(ray, getSampler(), getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
 			case PATH_TRACING_RAYITO:
-				return PathTracingRayito.radiance(ray, getRendererConfiguration());
+				return PathTracingRayito.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
 			case PATH_TRACING_SMALL_P_T_ITERATIVE:
-				return PathTracingSmallPTIterative.radiance(ray, getRendererConfiguration());
+				return PathTracingSmallPTIterative.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
 			case PATH_TRACING_SMALL_P_T_RECURSIVE:
-				return PathTracingSmallPTRecursive.radiance(ray, getRendererConfiguration());
+				return PathTracingSmallPTRecursive.radiance(ray, getScene(), getMaximumBounce(), getMinimumBounceRussianRoulette());
 			case RAY_CASTING:
-				return RayCasting.radiance(ray, getRendererConfiguration());
+				return RayCasting.radiance(ray, getScene(), isPreviewMode());
 			default:
 				return Color3F.BLACK;
 		}

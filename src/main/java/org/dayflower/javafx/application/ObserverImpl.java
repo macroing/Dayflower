@@ -39,6 +39,6 @@ final class ObserverImpl implements Observer {
 	public void onMouseDragged(final ConcurrentImageCanvas concurrentImageCanvas, final float x, final float y) {
 		final
 		Renderer renderer = this.renderer;
-		renderer.getRendererConfiguration().getScene().getCamera().rotate(x, y);
+		renderer.getScene().getCamera().rotate(x, y);
 	}
 }

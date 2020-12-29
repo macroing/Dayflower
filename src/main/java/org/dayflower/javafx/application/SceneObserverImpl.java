@@ -20,7 +20,7 @@ package org.dayflower.javafx.application;
 
 import java.util.Objects;
 
-import org.dayflower.renderer.ImageOrderRenderer;
+import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Primitive;
@@ -30,13 +30,13 @@ import org.dayflower.scene.SceneObserver;
 import javafx.application.Platform;
 
 final class SceneObserverImpl implements SceneObserver {
-	private final ImageOrderRenderer imageOrderRenderer;
+	private final ProgressiveImageOrderRenderer progressiveImageOrderRenderer;
 	private final RendererTabPane rendererTabPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public SceneObserverImpl(final ImageOrderRenderer imageOrderRenderer, final RendererTabPane rendererTabPane) {
-		this.imageOrderRenderer = Objects.requireNonNull(imageOrderRenderer, "imageOrderRenderer == null");
+	public SceneObserverImpl(final ProgressiveImageOrderRenderer progressiveImageOrderRenderer, final RendererTabPane rendererTabPane) {
+		this.progressiveImageOrderRenderer = Objects.requireNonNull(progressiveImageOrderRenderer, "progressiveImageOrderRenderer == null");
 		this.rendererTabPane = Objects.requireNonNull(rendererTabPane, "rendererTabPane == null");
 	}
 	
@@ -55,8 +55,8 @@ final class SceneObserverImpl implements SceneObserver {
 		
 		Platform.runLater(() -> this.rendererTabPane.getRendererViewPane().getObjectTreeView().add(newPrimitive));
 		
-		this.imageOrderRenderer.renderShutdown();
-		this.imageOrderRenderer.clear();
+		this.progressiveImageOrderRenderer.renderShutdown();
+		this.progressiveImageOrderRenderer.clear();
 	}
 	
 	@Override
@@ -102,7 +102,7 @@ final class SceneObserverImpl implements SceneObserver {
 		
 		Platform.runLater(() -> this.rendererTabPane.getRendererViewPane().getObjectTreeView().remove(oldPrimitive));
 		
-		this.imageOrderRenderer.renderShutdown();
-		this.imageOrderRenderer.clear();
+		this.progressiveImageOrderRenderer.renderShutdown();
+		this.progressiveImageOrderRenderer.clear();
 	}
 }

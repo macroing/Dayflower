@@ -26,7 +26,7 @@ import org.dayflower.image.ByteImage;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.image.PixelImage;
-import org.dayflower.renderer.ImageOrderRenderer;
+import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.sampler.NRooksSampler;
@@ -37,12 +37,12 @@ import org.dayflower.util.Timer;
 import com.amd.aparapi.Range;
 
 /**
- * An {@code AbstractGPURenderer} is an abstract implementation of {@link ImageOrderRenderer} that takes care of most aspects.
+ * An {@code AbstractGPURenderer} is an abstract implementation of {@link CombinedProgressiveImageOrderRenderer} that takes care of most aspects.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractGPURenderer extends AbstractSceneKernel implements ImageOrderRenderer {
+public abstract class AbstractGPURenderer extends AbstractSceneKernel implements CombinedProgressiveImageOrderRenderer {
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
 	private final AtomicReference<RendererObserver> rendererObserver;

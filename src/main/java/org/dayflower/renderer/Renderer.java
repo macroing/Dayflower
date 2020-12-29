@@ -20,7 +20,6 @@ package org.dayflower.renderer;
 
 import org.dayflower.image.Image;
 import org.dayflower.scene.Scene;
-import org.dayflower.util.Timer;
 
 /**
  * A {@code Renderer} is a renderer that can render a {@link Scene} instance to an {@link Image} instance and display the result with a {@link RendererObserver} instance.
@@ -49,13 +48,6 @@ public interface Renderer {
 	 * @return the {@code Scene} instance associated with this {@code Renderer} instance
 	 */
 	Scene getScene();
-	
-	/**
-	 * Returns the {@link Timer} instance associated with this {@code Renderer} instance.
-	 * 
-	 * @return the {@code Timer} instance associated with this {@code Renderer} instance
-	 */
-	Timer getTimer();
 	
 	/**
 	 * Returns the preview mode state associated with this {@code Renderer} instance.
@@ -123,16 +115,6 @@ public interface Renderer {
 	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
 	 */
 	void setScene(final Scene scene);
-	
-	/**
-	 * Sets the {@link Timer} instance associated with this {@code Renderer} instance to {@code timer}.
-	 * <p>
-	 * If {@code timer} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param timer the {@code Timer} instance associated with this {@code Renderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code timer} is {@code null}
-	 */
-	void setTimer(final Timer timer);
 	
 	/**
 	 * Sets up all necessary resources for this {@code Renderer} instance.

@@ -28,7 +28,8 @@ import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.javafx.scene.layout.CenteredVBox;
-import org.dayflower.renderer.ImageOrderRenderer;
+import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
+import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.scene.Material;
@@ -62,27 +63,27 @@ final class CenteredVBoxes {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static CenteredVBox createCenteredVBoxForRenderer(final ImageOrderRenderer imageOrderRenderer) {
+	public static CenteredVBox createCenteredVBoxForCombinedProgressiveImageOrderRenderer(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer) {
 		final
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Renderer Configuration", 16.0D);
 		
-		final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.PATH_TRACING_P_B_R_T, RenderingAlgorithm.PATH_TRACING_RAYITO, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_RECURSIVE, RenderingAlgorithm.RAY_CASTING), imageOrderRenderer.getRenderingAlgorithm());
+		final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.PATH_TRACING_P_B_R_T, RenderingAlgorithm.PATH_TRACING_RAYITO, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_RECURSIVE, RenderingAlgorithm.RAY_CASTING), combinedProgressiveImageOrderRenderer.getRenderingAlgorithm());
 		
 		centeredVBox.addButton("Update Renderer", actionEvent -> {
 			final RenderingAlgorithm renderingAlgorithm = comboBox.getValue();
 			
 			if(renderingAlgorithm != null) {
-				imageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);
-				imageOrderRenderer.renderShutdown();
-				imageOrderRenderer.clear();
+				combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);
+				combinedProgressiveImageOrderRenderer.renderShutdown();
+				combinedProgressiveImageOrderRenderer.clear();
 			}
 		});
 		
 		return centeredVBox;
 	}
 	
-	public static CenteredVBox createCenteredVBoxForScene(final ImageOrderRenderer imageOrderRenderer) {
+	public static CenteredVBox createCenteredVBoxForScene(final ProgressiveImageOrderRenderer progressiveImageOrderRenderer) {
 		final
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Scene Configuration", 16.0D);
@@ -97,20 +98,20 @@ final class CenteredVBoxes {
 			
 			if(material != null && shape != null) {
 				final
-				Scene scene = imageOrderRenderer.getScene();
-				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(imageOrderRenderer, shape))));
+				Scene scene = progressiveImageOrderRenderer.getScene();
+				scene.addPrimitive(new Primitive(material, shape, new Transform(doGetPointByShape(progressiveImageOrderRenderer, shape))));
 			}
 		});
 		centeredVBox.addSeparator();
 		centeredVBox.addButton("Build Acceleration Structure", actionEvent -> {
-			imageOrderRenderer.getScene().buildAccelerationStructure();
-			imageOrderRenderer.renderShutdown();
-			imageOrderRenderer.clear();
+			progressiveImageOrderRenderer.getScene().buildAccelerationStructure();
+			progressiveImageOrderRenderer.renderShutdown();
+			progressiveImageOrderRenderer.clear();
 		});
 		centeredVBox.addButton("Clear Acceleration Structure", actionEvent -> {
-			imageOrderRenderer.getScene().clearAccelerationStructure();
-			imageOrderRenderer.renderShutdown();
-			imageOrderRenderer.clear();
+			progressiveImageOrderRenderer.getScene().clearAccelerationStructure();
+			progressiveImageOrderRenderer.renderShutdown();
+			progressiveImageOrderRenderer.clear();
 		});
 		
 		return centeredVBox;

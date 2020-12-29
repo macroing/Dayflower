@@ -27,7 +27,7 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
 import org.dayflower.image.PixelImage;
-import org.dayflower.renderer.ImageOrderRenderer;
+import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.sampler.NRooksSampler;
@@ -38,12 +38,12 @@ import org.dayflower.scene.Scene;
 import org.dayflower.util.Timer;
 
 /**
- * An {@code AbstractCPURenderer} is an abstract implementation of {@link ImageOrderRenderer} that takes care of most aspects.
+ * An {@code AbstractCPURenderer} is an abstract implementation of {@link CombinedProgressiveImageOrderRenderer} that takes care of most aspects.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractCPURenderer implements ImageOrderRenderer {
+public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrderRenderer {
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
 	private final AtomicReference<RendererObserver> rendererObserver;

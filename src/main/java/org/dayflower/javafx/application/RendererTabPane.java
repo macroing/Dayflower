@@ -21,7 +21,7 @@ package org.dayflower.javafx.application;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
-import org.dayflower.renderer.ImageOrderRenderer;
+import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -31,22 +31,22 @@ final class RendererTabPane extends TabPane {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final ImageOrderRenderer imageOrderRenderer;
+	private final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer;
 	private final RendererViewPane rendererViewPane;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public RendererTabPane(final ImageOrderRenderer imageOrderRenderer, final ExecutorService executorService) {
-		this.imageOrderRenderer = Objects.requireNonNull(imageOrderRenderer, "imageOrderRenderer == null");
-		this.rendererViewPane = new RendererViewPane(imageOrderRenderer, Objects.requireNonNull(executorService, "executorService == null"));
+	public RendererTabPane(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService) {
+		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
+		this.rendererViewPane = new RendererViewPane(combinedProgressiveImageOrderRenderer, Objects.requireNonNull(executorService, "executorService == null"));
 		
 		doConfigure();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public ImageOrderRenderer getImageOrderRenderer() {
-		return this.imageOrderRenderer;
+	public CombinedProgressiveImageOrderRenderer getCombinedProgressiveImageOrderRenderer() {
+		return this.combinedProgressiveImageOrderRenderer;
 	}
 	
 	public RendererViewPane getRendererViewPane() {
@@ -57,7 +57,7 @@ final class RendererTabPane extends TabPane {
 	
 	private void doConfigure() {
 //		Configure the Scene:
-		this.imageOrderRenderer.getScene().addSceneObserver(new SceneObserverImpl(this.imageOrderRenderer, this));
+		this.combinedProgressiveImageOrderRenderer.getScene().addSceneObserver(new SceneObserverImpl(this.combinedProgressiveImageOrderRenderer, this));
 		
 //		Configure the RendererTabPane:
 		getTabs().add(new Tab(TEXT_VIEW, this.rendererViewPane));

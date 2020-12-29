@@ -42,7 +42,7 @@ import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.image.WritableImageCache;
 import org.dayflower.javafx.scene.layout.Regions;
-import org.dayflower.renderer.ImageOrderRenderer;
+import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
@@ -86,10 +86,10 @@ final class RendererViewPane extends BorderPane {
 	
 	private final AtomicBoolean isCameraUpdateRequired;
 	private final AtomicReference<File> file;
+	private final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer;
 	private final ConcurrentImageCanvas concurrentImageCanvas;
 	private final ExecutorService executorService;
 	private final HBox hBox;
-	private final ImageOrderRenderer imageOrderRenderer;
 	private final Label labelRenderPass;
 	private final Label labelRenderTime;
 	private final Label labelRenderTimePerPass;
@@ -105,33 +105,42 @@ final class RendererViewPane extends BorderPane {
 	/**
 	 * Constructs a new {@code RendererViewPane} instance.
 	 * <p>
-	 * If either {@code imageOrderRenderer} or {@code executorService} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code combinedProgressiveImageOrderRenderer} or {@code executorService} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param imageOrderRenderer the {@link ImageOrderRenderer} instance associated with this {@code RendererViewPane} instance
+	 * @param combinedProgressiveImageOrderRenderer the {@link CombinedProgressiveImageOrderRenderer} instance associated with this {@code RendererViewPane} instance
 	 * @param executorService the {@code ExecutorService} associated with this {@code RendererViewPane} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code imageOrderRenderer} or {@code executorService} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code combinedProgressiveImageOrderRenderer} or {@code executorService} are {@code null}
 	 */
-	public RendererViewPane(final ImageOrderRenderer imageOrderRenderer, final ExecutorService executorService) {
+	public RendererViewPane(final CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer, final ExecutorService executorService) {
 		this.isCameraUpdateRequired = new AtomicBoolean();
 		this.file = new AtomicReference<>();
-		this.concurrentImageCanvas = new ConcurrentImageCanvas(executorService, imageOrderRenderer.getImage(), this::doRender, new ObserverImpl(imageOrderRenderer));
+		this.combinedProgressiveImageOrderRenderer = Objects.requireNonNull(combinedProgressiveImageOrderRenderer, "combinedProgressiveImageOrderRenderer == null");
+		this.concurrentImageCanvas = new ConcurrentImageCanvas(executorService, combinedProgressiveImageOrderRenderer.getImage(), this::doRender, new ObserverImpl(combinedProgressiveImageOrderRenderer));
 		this.executorService = Objects.requireNonNull(executorService, "executorService == null");
 		this.hBox = new HBox();
-		this.imageOrderRenderer = imageOrderRenderer;
 		this.labelRenderPass = new Label();
 		this.labelRenderTime = new Label();
 		this.labelRenderTimePerPass = new Label();
-		this.objectTreeView = doCreateObjectTreeView(imageOrderRenderer.getScene());
+		this.objectTreeView = doCreateObjectTreeView(combinedProgressiveImageOrderRenderer.getScene());
 		this.progressBar = new ProgressBar();
 		this.vBoxL = new VBox();
 		this.vBoxR = new VBox();
-		this.vBoxRenderer = CenteredVBoxes.createCenteredVBoxForRenderer(imageOrderRenderer);
-		this.vBoxScene = CenteredVBoxes.createCenteredVBoxForScene(imageOrderRenderer);
+		this.vBoxRenderer = CenteredVBoxes.createCenteredVBoxForCombinedProgressiveImageOrderRenderer(combinedProgressiveImageOrderRenderer);
+		this.vBoxScene = CenteredVBoxes.createCenteredVBoxForScene(combinedProgressiveImageOrderRenderer);
 		
 		doConfigure();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the {@link CombinedProgressiveImageOrderRenderer} instance associated with this {@code RendererViewPane} instance.
+	 * 
+	 * @return the {@code CombinedProgressiveImageOrderRenderer} instance associated with this {@code RendererViewPane} instance
+	 */
+	public CombinedProgressiveImageOrderRenderer getCombinedProgressiveImageOrderRenderer() {
+		return this.combinedProgressiveImageOrderRenderer;
+	}
 	
 	/**
 	 * Returns the {@code ExecutorService} instance associated with this {@code RendererViewPane} instance.
@@ -140,15 +149,6 @@ final class RendererViewPane extends BorderPane {
 	 */
 	public ExecutorService getExecutorService() {
 		return this.executorService;
-	}
-	
-	/**
-	 * Returns the {@link ImageOrderRenderer} instance associated with this {@code RendererViewPane} instance.
-	 * 
-	 * @return the {@code ImageOrderRenderer} instance associated with this {@code RendererViewPane} instance
-	 */
-	public ImageOrderRenderer getRenderer() {
-		return this.imageOrderRenderer;
 	}
 	
 	/**
@@ -184,7 +184,7 @@ final class RendererViewPane extends BorderPane {
 		
 		if(optionalFile.isPresent()) {
 			final
-			Image image = this.imageOrderRenderer.getImage();
+			Image image = this.combinedProgressiveImageOrderRenderer.getImage();
 			image.save(optionalFile.get());
 		}
 	}
@@ -214,7 +214,7 @@ final class RendererViewPane extends BorderPane {
 	 * This method is called when it's time to update.
 	 */
 	public void update() {
-		final Camera camera = this.imageOrderRenderer.getScene().getCamera();
+		final Camera camera = this.combinedProgressiveImageOrderRenderer.getScene().getCamera();
 		
 		if(this.concurrentImageCanvas.isKeyPressed(KeyCode.A)) {
 			camera.moveLeft(0.3F);
@@ -233,12 +233,12 @@ final class RendererViewPane extends BorderPane {
 		}
 		
 		if(this.isCameraUpdateRequired.compareAndSet(true, false)) {
-			if(this.imageOrderRenderer instanceof AbstractGPURenderer) {
-				AbstractGPURenderer.class.cast(this.imageOrderRenderer).updateCamera();
+			if(this.combinedProgressiveImageOrderRenderer instanceof AbstractGPURenderer) {
+				AbstractGPURenderer.class.cast(this.combinedProgressiveImageOrderRenderer).updateCamera();
 			}
 			
-			this.imageOrderRenderer.renderShutdown();
-			this.imageOrderRenderer.clear();
+			this.combinedProgressiveImageOrderRenderer.renderShutdown();
+			this.combinedProgressiveImageOrderRenderer.clear();
 		}
 	}
 	
@@ -269,7 +269,7 @@ final class RendererViewPane extends BorderPane {
 	
 	@SuppressWarnings("unused")
 	private boolean doRender(final Image image) {
-		return this.imageOrderRenderer.render();
+		return this.combinedProgressiveImageOrderRenderer.render();
 	}
 	
 	private void doConfigure() {
@@ -293,15 +293,15 @@ final class RendererViewPane extends BorderPane {
 		this.labelRenderTimePerPass.setText("Render Time Per Pass: 0");
 		
 //		Configure the ObjectTreeView:
-		for(final Primitive primitive : this.imageOrderRenderer.getScene().getPrimitives()) {
+		for(final Primitive primitive : this.combinedProgressiveImageOrderRenderer.getScene().getPrimitives()) {
 			this.objectTreeView.add(primitive);
 		}
 		
 //		Configure the ProgressBar:
 		this.progressBar.setProgress(0.0D);
 		
-//		Configure the ImageOrderRenderer:
-		this.imageOrderRenderer.setRendererObserver(new RendererObserverImpl(this.labelRenderPass, this.labelRenderTime, this.labelRenderTimePerPass, this.progressBar));
+//		Configure the CombinedProgressiveImageOrderRenderer:
+		this.combinedProgressiveImageOrderRenderer.setRendererObserver(new RendererObserverImpl(this.labelRenderPass, this.labelRenderTime, this.labelRenderTimePerPass, this.progressBar));
 		
 //		Configure the VBox for L:
 		this.vBoxL.getChildren().add(this.vBoxRenderer);
@@ -328,7 +328,7 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	private void doOnActionDelete(final Primitive primitive) {
-		this.imageOrderRenderer.getScene().removePrimitive(primitive);
+		this.combinedProgressiveImageOrderRenderer.getScene().removePrimitive(primitive);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,17 +423,17 @@ final class RendererViewPane extends BorderPane {
 	
 	private static WritableImage doCreateWritableImageMaterial(final Material material) {
 		final
-		ImageOrderRenderer imageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
-		imageOrderRenderer.setImage(new PixelImage(32, 32, Color3F.BLACK, new BoxFilter()));
-		imageOrderRenderer.setPreviewMode(true);
-		imageOrderRenderer.setRenderingAlgorithm(doCreateRenderingAlgorithm(material));
-		imageOrderRenderer.setRenderPasses(10);
-		imageOrderRenderer.setSampler(new RandomSampler());
-		imageOrderRenderer.setScene(Previews.createMaterialPreviewScene(material));
-		imageOrderRenderer.render();
+		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
+		combinedProgressiveImageOrderRenderer.setImage(new PixelImage(32, 32, Color3F.BLACK, new BoxFilter()));
+		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
+		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(doCreateRenderingAlgorithm(material));
+		combinedProgressiveImageOrderRenderer.setRenderPasses(10);
+		combinedProgressiveImageOrderRenderer.setSampler(new RandomSampler());
+		combinedProgressiveImageOrderRenderer.setScene(Previews.createMaterialPreviewScene(material));
+		combinedProgressiveImageOrderRenderer.render();
 		
 		final
-		PixelImage pixelImage = PixelImage.class.cast(imageOrderRenderer.getImage());
+		PixelImage pixelImage = PixelImage.class.cast(combinedProgressiveImageOrderRenderer.getImage());
 		pixelImage.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImage.getResolutionX() - 1, pixelImage.getResolutionY() - 1)), new Color3F(181, 181, 181));
 		
 		return pixelImage.toWritableImage();

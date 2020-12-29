@@ -169,16 +169,16 @@ public final class GPUApplication extends Application {
 		final org.dayflower.scene.Scene scene = new JavaSceneLoader().load(pathname);
 		
 		final
-		ImageOrderRenderer imageOrderRenderer = new GPURenderer();
-		imageOrderRenderer.setImage(new ByteImage((int)(scene.getCamera().getResolutionX()), (int)(scene.getCamera().getResolutionY())));
-		imageOrderRenderer.setRenderPasses(1);
-		imageOrderRenderer.setRendererObserver(new NoOpRendererObserver());
-		imageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);
-		imageOrderRenderer.setSampler(new RandomSampler());
-		imageOrderRenderer.setScene(scene);
-		imageOrderRenderer.setup();
+		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new GPURenderer();
+		combinedProgressiveImageOrderRenderer.setImage(new ByteImage((int)(scene.getCamera().getResolutionX()), (int)(scene.getCamera().getResolutionY())));
+		combinedProgressiveImageOrderRenderer.setRenderPasses(1);
+		combinedProgressiveImageOrderRenderer.setRendererObserver(new NoOpRendererObserver());
+		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);
+		combinedProgressiveImageOrderRenderer.setSampler(new RandomSampler());
+		combinedProgressiveImageOrderRenderer.setScene(scene);
+		combinedProgressiveImageOrderRenderer.setup();
 		
-		return imageOrderRenderer;
+		return combinedProgressiveImageOrderRenderer;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,7 +224,11 @@ public final class GPUApplication extends Application {
 		
 		@Override
 		public void onRenderPassComplete(final Renderer renderer, final int renderPass, final int renderPasses, final long elapsedTimeMillis) {
-			Platform.runLater(() -> this.label.setText("Millis: " + Long.toString(elapsedTimeMillis) + " Render Pass: " + (renderer instanceof ImageOrderRenderer ? ImageOrderRenderer.class.cast(renderer).getRenderPass() : 0)));
+			if(renderer instanceof ProgressiveImageOrderRenderer) {
+				final ProgressiveImageOrderRenderer progressiveImageOrderRenderer = ProgressiveImageOrderRenderer.class.cast(renderer);
+				
+				Platform.runLater(() -> this.label.setText("Millis: " + Long.toString(elapsedTimeMillis) + " Render Pass: " + progressiveImageOrderRenderer.getRenderPass()));
+			}
 		}
 		
 		@Override

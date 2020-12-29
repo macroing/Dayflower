@@ -18,29 +18,38 @@
  */
 package org.dayflower.renderer;
 
-import org.dayflower.sampler.Sampler;
-
 /**
- * An {@code ImageOrderRenderer} is a {@link Renderer} that performs image order rendering.
+ * An {@code AmbientOcclusion} is an {@link ImageOrderRenderer} for the Ambient Occlusion algorithm.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface ImageOrderRenderer extends Renderer {
+public interface AmbientOcclusion extends ImageOrderRenderer {
 	/**
-	 * Returns the {@link Sampler} instance associated with this {@code ImageOrderRenderer} instance.
+	 * Returns the maximum distance.
 	 * 
-	 * @return the {@code Sampler} instance associated with this {@code ImageOrderRenderer} instance
+	 * @return the maximum distance
 	 */
-	Sampler getSampler();
+	float getMaximumDistance();
 	
 	/**
-	 * Sets the {@link Sampler} instance associated with this {@code Renderer} instance to {@code sampler}.
-	 * <p>
-	 * If {@code sampler} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns the samples to use per render pass.
 	 * 
-	 * @param sampler the {@code Sampler} instance associated with this {@code Renderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code sampler} is {@code null}
+	 * @return the samples to use per render pass
 	 */
-	void setSampler(final Sampler sampler);
+	int getSamples();
+	
+	/**
+	 * Sets the maximum distance to {@code maximumDistance}.
+	 * 
+	 * @param maximumDistance the maximum distance
+	 */
+	void setMaximumDistance(final float maximumDistance);
+	
+	/**
+	 * Sets the samples to use per render pass to {@code samples}.
+	 * 
+	 * @param samples the samples to use per render pass
+	 */
+	void setSamples(final int samples);
 }

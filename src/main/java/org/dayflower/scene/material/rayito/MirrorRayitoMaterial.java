@@ -48,6 +48,21 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	public static final String NAME = "Rayito - Mirror";
 	
 	/**
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 4;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 2;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 3;
+	
+	/**
 	 * The ID of this {@code MirrorRayitoMaterial} class.
 	 */
 	public static final int ID = 203;
@@ -320,5 +335,22 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.textureEmission, this.textureKR);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code MirrorRayitoMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code MirrorRayitoMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the MirrorRayitoMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0;						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_ID] = this.textureKR.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_OFFSET] = 0;								//Block #1
+		
+		return array;
 	}
 }

@@ -30,12 +30,6 @@ import org.dayflower.scene.texture.ImageTexture;
 
 //TODO: Add Javadocs!
 public final class GPURenderer extends AbstractGPURenderer {
-	private static final float SKY_B = 1.0F;//235.0F / 255.0F;
-	private static final float SKY_G = 1.0F;//206.0F / 255.0F;
-	private static final float SKY_R = 1.0F;//135.0F / 255.0F;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	private final float[] textureBackground;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

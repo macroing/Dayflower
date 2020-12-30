@@ -48,6 +48,21 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 	public static final String NAME = "Rayito - Matte";
 	
 	/**
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 4;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code KD} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_D_ID = 2;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code KD} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_D_OFFSET = 3;
+	
+	/**
 	 * The ID of this {@code MatteRayitoMaterial} class.
 	 */
 	public static final int ID = 201;
@@ -320,5 +335,22 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.textureEmission, this.textureKD);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code MatteRayitoMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code MatteRayitoMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the MatteRayitoMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0;						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D_ID] = this.textureKD.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D_OFFSET] = 0;								//Block #1
+		
+		return array;
 	}
 }

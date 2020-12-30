@@ -48,29 +48,29 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	public static final String NAME = "SmallPT - Metal";
 	
 	/**
-	 * The length of the {@code float[]}.
+	 * The length of the {@code int[]}.
 	 */
 	public static final int ARRAY_LENGTH = 8;
 	
 	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code Exponent} in the {@code float[]}.
+	 * The offset for the ID of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_EXPONENT_ID = 2;
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 2;
 	
 	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code Exponent} in the {@code float[]}.
+	 * The offset for the offset of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_EXPONENT_OFFSET = 3;
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 3;
 	
 	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code KR} in the {@code float[]}.
+	 * The offset for the ID of the {@link Texture} denoted by {@code Roughness} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 4;
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_ID = 4;
 	
 	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code KR} in the {@code float[]}.
+	 * The offset for the offset of the {@link Texture} denoted by {@code Roughness} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 5;
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_OFFSET = 5;
 	
 	/**
 	 * The ID of this {@code MetalSmallPTMaterial} class.
@@ -80,8 +80,8 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureEmission;
-	private final Texture textureExponent;
 	private final Texture textureKR;
+	private final Texture textureRoughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -126,7 +126,7 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalSmallPTMaterial(colorKR, colorEmission, 20.0F);
+	 * new MetalSmallPTMaterial(colorKR, colorEmission, 0.2F);
 	 * }
 	 * </pre>
 	 * 
@@ -135,7 +135,7 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
 	 */
 	public MetalSmallPTMaterial(final Color3F colorKR, final Color3F colorEmission) {
-		this(colorKR, colorEmission, 20.0F);
+		this(colorKR, colorEmission, 0.2F);
 	}
 	
 	/**
@@ -145,13 +145,13 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 * 
 	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
 	 * @param colorEmission a {@code Color3F} instance for emission
-	 * @param exponent the exponent to use
+	 * @param roughness the roughness to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
 	 */
-	public MetalSmallPTMaterial(final Color3F colorKR, final Color3F colorEmission, final float exponent) {
+	public MetalSmallPTMaterial(final Color3F colorKR, final Color3F colorEmission, final float roughness) {
 		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
-		this.textureExponent = new ConstantTexture(new Color3F(exponent));
+		this.textureRoughness = new ConstantTexture(new Color3F(roughness));
 	}
 	
 	/**
@@ -181,7 +181,7 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalSmallPTMaterial(textureKR, textureEmission, 20.0F);
+	 * new MetalSmallPTMaterial(textureKR, textureEmission, 0.2F);
 	 * }
 	 * </pre>
 	 * 
@@ -190,23 +190,23 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
 	 */
 	public MetalSmallPTMaterial(final Texture textureKR, final Texture textureEmission) {
-		this(textureKR, textureEmission, 20.0F);
+		this(textureKR, textureEmission, 0.2F);
 	}
 	
 	/**
 	 * Constructs a new {@code MetalSmallPTMaterial} instance.
 	 * <p>
-	 * If either {@code textureKR}, {@code textureEmission} or {@code textureExponent} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKR}, {@code textureEmission} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param textureKR a {@link Texture} instance for the reflection coefficient
 	 * @param textureEmission a {@code Texture} instance for emission
-	 * @param textureExponent a {@code Texture} instance with the exponent to use
-	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureEmission} or {@code textureExponent} are {@code null}
+	 * @param textureRoughness a {@code Texture} instance with the roughness to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureEmission} or {@code textureRoughness} are {@code null}
 	 */
-	public MetalSmallPTMaterial(final Texture textureKR, final Texture textureEmission, final Texture textureExponent) {
+	public MetalSmallPTMaterial(final Texture textureKR, final Texture textureEmission, final Texture textureRoughness) {
 		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
-		this.textureExponent = Objects.requireNonNull(textureExponent, "textureExponent == null");
+		this.textureRoughness = Objects.requireNonNull(textureRoughness, "textureRoughness == null");
 	}
 	
 	/**
@@ -217,17 +217,17 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalSmallPTMaterial(textureKR, textureEmission, new ConstantTexture(new Color3F(exponent)));
+	 * new MetalSmallPTMaterial(textureKR, textureEmission, new ConstantTexture(new Color3F(roughness)));
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureKR a {@link Texture} instance for the reflection coefficient
 	 * @param textureEmission a {@code Texture} instance for emission
-	 * @param exponent the exponent to use
+	 * @param roughness the roughness to use
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
 	 */
-	public MetalSmallPTMaterial(final Texture textureKR, final Texture textureEmission, final float exponent) {
-		this(textureKR, textureEmission, new ConstantTexture(new Color3F(exponent)));
+	public MetalSmallPTMaterial(final Texture textureKR, final Texture textureEmission, final float roughness) {
+		this(textureKR, textureEmission, new ConstantTexture(new Color3F(roughness)));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,7 +261,8 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	public SmallPTSample sampleDistributionFunction(final Intersection intersection) {
 		final Color3F result = this.textureKR.getColor(intersection);
 		
-		final float exponent = this.textureExponent.getColor(intersection).average();
+		final float roughness = this.textureRoughness.getColor(intersection).average();
+		final float exponent = 1.0F / (roughness * roughness);
 		
 		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 		
@@ -296,7 +297,7 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MetalSmallPTMaterial(%s, %s, %s)", this.textureKR, this.textureEmission, this.textureExponent);
+		return String.format("new MetalSmallPTMaterial(%s, %s, %s)", this.textureKR, this.textureEmission, this.textureRoughness);
 	}
 	
 	/**
@@ -309,21 +310,21 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	}
 	
 	/**
-	 * Returns the {@link Texture} instance with the exponent.
-	 * 
-	 * @return the {@code Texture} instance with the exponent
-	 */
-	public Texture getTextureExponent() {
-		return this.textureExponent;
-	}
-	
-	/**
 	 * Returns the {@link Texture} instance for the reflection coefficient.
 	 * 
 	 * @return the {@code Texture} instance for the reflection coefficient
 	 */
 	public Texture getTextureKR() {
 		return this.textureKR;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance with the roughness.
+	 * 
+	 * @return the {@code Texture} instance with the roughness
+	 */
+	public Texture getTextureRoughness() {
+		return this.textureRoughness;
 	}
 	
 	/**
@@ -357,11 +358,11 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureExponent.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureRoughness.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -388,34 +389,13 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 			return false;
 		} else if(!Objects.equals(this.textureEmission, MetalSmallPTMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureExponent, MetalSmallPTMaterial.class.cast(object).textureExponent)) {
-			return false;
 		} else if(!Objects.equals(this.textureKR, MetalSmallPTMaterial.class.cast(object).textureKR)) {
+			return false;
+		} else if(!Objects.equals(this.textureRoughness, MetalSmallPTMaterial.class.cast(object).textureRoughness)) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code MetalSmallPTMaterial} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code MetalSmallPTMaterial} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[ARRAY_LENGTH];
-		
-//		Because the MetalSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0.0F;						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_EXPONENT_ID] = this.textureExponent.getID();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_EXPONENT_OFFSET] = 0.0F;						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_R_ID] = this.textureKR.getID();			//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_R_OFFSET] = 0.0F;							//Block #1
-		array[6] = 0.0F;														//Block #1
-		array[7] = 0.0F;														//Block #1
-		
-		return array;
 	}
 	
 	/**
@@ -435,6 +415,27 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEmission, this.textureExponent, this.textureKR);
+		return Objects.hash(this.textureEmission, this.textureKR, this.textureRoughness);
+	}
+	
+	/**
+	 * Returns a {@code int[]} representation of this {@code MetalSmallPTMaterial} instance.
+	 * 
+	 * @return a {@code int[]} representation of this {@code MetalSmallPTMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the MetalSmallPTMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();		//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0;							//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_ID] = this.textureKR.getID();				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_OFFSET] = 0;									//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_ID] = this.textureRoughness.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_OFFSET] = 0;							//Block #1
+		array[6] = 0;																//Block #1
+		array[7] = 0;																//Block #1
+		
+		return array;
 	}
 }

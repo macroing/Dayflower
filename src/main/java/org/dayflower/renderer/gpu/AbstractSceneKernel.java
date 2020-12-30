@@ -138,9 +138,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected float[] intersectionArray_$private$24;
 	
 //	TODO: Add Javadocs!
-	protected float[] materialMetalSmallPTMaterialArray;
-	
-//	TODO: Add Javadocs!
 	protected float[] matrix44FArray;
 	
 //	TODO: Add Javadocs!
@@ -192,10 +189,25 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected int[] materialClearCoatSmallPTMaterialArray;
 	
 //	TODO: Add Javadocs!
+	protected int[] materialGlassRayitoMaterialArray;
+	
+//	TODO: Add Javadocs!
 	protected int[] materialGlassSmallPTMaterialArray;
 	
 //	TODO: Add Javadocs!
+	protected int[] materialMatteRayitoMaterialArray;
+	
+//	TODO: Add Javadocs!
 	protected int[] materialMatteSmallPTMaterialArray;
+	
+//	TODO: Add Javadocs!
+	protected int[] materialMetalRayitoMaterialArray;
+	
+//	TODO: Add Javadocs!
+	protected int[] materialMetalSmallPTMaterialArray;
+	
+//	TODO: Add Javadocs!
+	protected int[] materialMirrorRayitoMaterialArray;
 	
 //	TODO: Add Javadocs!
 	protected int[] materialMirrorSmallPTMaterialArray;
@@ -223,7 +235,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.boundingVolume3FBoundingSphere3FArray = new float[1];
 		this.cameraArray = new float[1];
 		this.intersectionArray_$private$24 = new float[INTERSECTION_ARRAY_SIZE];
-		this.materialMetalSmallPTMaterialArray = new float[1];
 		this.matrix44FArray = new float[1];
 		this.pixelArray = new float[1];
 		this.ray3FArray_$private$8 = new float[RAY_3_F_ARRAY_SIZE];
@@ -241,8 +252,13 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.textureSimplexFractionalBrownianMotionTextureArray = new float[1];
 		this.primitiveCount = 0;
 		this.materialClearCoatSmallPTMaterialArray = new int[1];
+		this.materialGlassRayitoMaterialArray = new int[1];
 		this.materialGlassSmallPTMaterialArray = new int[1];
+		this.materialMatteRayitoMaterialArray = new int[1];
 		this.materialMatteSmallPTMaterialArray = new int[1];
+		this.materialMetalRayitoMaterialArray = new int[1];
+		this.materialMetalSmallPTMaterialArray = new int[1];
+		this.materialMirrorRayitoMaterialArray = new int[1];
 		this.materialMirrorSmallPTMaterialArray = new int[1];
 		this.primitiveArray = new int[1];
 		this.shape3FTriangleMesh3FArray = new int[1];
@@ -2045,8 +2061,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			textureEmissionID = this.materialMatteSmallPTMaterialArray[materialOffsetTextureEmissionID];
 			textureEmissionOffset = this.materialMatteSmallPTMaterialArray[materialOffsetTextureEmissionOffset];
 		} else if(materialID == MetalSmallPTMaterial.ID) {
-			textureEmissionID = (int)(this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionID]);
-			textureEmissionOffset = (int)(this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionOffset]);
+			textureEmissionID = this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionID];
+			textureEmissionOffset = this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionOffset];
 		} else if(materialID == MirrorSmallPTMaterial.ID) {
 			textureEmissionID = this.materialMirrorSmallPTMaterialArray[materialOffsetTextureEmissionID];
 			textureEmissionOffset = this.materialMirrorSmallPTMaterialArray[materialOffsetTextureEmissionOffset];
@@ -2288,16 +2304,25 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
 		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
 		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int textureKRID = (int)(this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_ID]);
-		final int textureKROffset = (int)(this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET]);
-		
-		final float exponent = 20.0F;
+		final int textureKRID = this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_ID];
+		final int textureKROffset = this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET];
+		final int textureRoughnessID = this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_ID];
+		final int textureRoughnessOffset = this.materialMetalSmallPTMaterialArray[materialOffset + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_OFFSET];
 		
 		textureEvaluate(textureKRID, textureKROffset);
 		
 		final float colorKRR = color3FLHSGetComponent1();
 		final float colorKRG = color3FLHSGetComponent2();
 		final float colorKRB = color3FLHSGetComponent3();
+		
+		textureEvaluate(textureRoughnessID, textureRoughnessOffset);
+		
+		final float colorRoughnessR = color3FLHSGetComponent1();
+		final float colorRoughnessG = color3FLHSGetComponent2();
+		final float colorRoughnessB = color3FLHSGetComponent3();
+		
+		final float roughness = (colorRoughnessR + colorRoughnessG + colorRoughnessB) / 3.0F;
+		final float exponent = 1.0F / (roughness * roughness);
 		
 		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
@@ -2790,9 +2815,13 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		put(this.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
 		put(this.cameraArray = compiledScene.getCameraArray());
 		put(this.materialClearCoatSmallPTMaterialArray = compiledScene.getMaterialClearCoatSmallPTMaterialArray());
+		put(this.materialGlassRayitoMaterialArray = compiledScene.getMaterialGlassRayitoMaterialArray());
 		put(this.materialGlassSmallPTMaterialArray = compiledScene.getMaterialGlassSmallPTMaterialArray());
+		put(this.materialMatteRayitoMaterialArray = compiledScene.getMaterialMatteRayitoMaterialArray());
 		put(this.materialMatteSmallPTMaterialArray = compiledScene.getMaterialMatteSmallPTMaterialArray());
+		put(this.materialMetalRayitoMaterialArray = compiledScene.getMaterialMetalRayitoMaterialArray());
 		put(this.materialMetalSmallPTMaterialArray = compiledScene.getMaterialMetalSmallPTMaterialArray());
+		put(this.materialMirrorRayitoMaterialArray = compiledScene.getMaterialMirrorRayitoMaterialArray());
 		put(this.materialMirrorSmallPTMaterialArray = compiledScene.getMaterialMirrorSmallPTMaterialArray());
 		put(this.matrix44FArray = compiledScene.getMatrix44FArray());
 		put(this.primitiveArray = compiledScene.getPrimitiveArray());

@@ -25,6 +25,7 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
+import org.dayflower.scene.texture.Texture;
 
 /**
  * A {@code RayitoMaterial} represents a material.
@@ -35,6 +36,18 @@ import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
  * @author J&#246;rgen Lundgren
  */
 public interface RayitoMaterial extends Material {
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code Emission} in the {@code float[]} or {@code int[]}.
+	 */
+	int ARRAY_OFFSET_TEXTURE_EMISSION_ID = 0;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code Emission} in the {@code float[]} or {@code int[]}.
+	 */
+	int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Returns a {@link Color3F} instance with the emittance of this {@code RayitoMaterial} instance at {@code intersection}.
 	 * <p>

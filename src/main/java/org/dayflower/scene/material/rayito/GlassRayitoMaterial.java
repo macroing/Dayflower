@@ -48,6 +48,41 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	public static final String NAME = "Rayito - Glass";
 	
 	/**
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ETA_ID = 2;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ETA_OFFSET = 3;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_ID = 4;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code KR} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_OFFSET = 5;
+	
+	/**
+	 * The offset for the ID of the {@link Texture} denoted by {@code KT} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_T_ID = 6;
+	
+	/**
+	 * The offset for the offset of the {@link Texture} denoted by {@code KT} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_T_OFFSET = 7;
+	
+	/**
 	 * The ID of this {@code GlassRayitoMaterial} class.
 	 */
 	public static final int ID = 200;
@@ -447,5 +482,26 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.textureEmission, this.textureEta, this.textureKR, this.textureKT);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code GlassRayitoMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code GlassRayitoMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the GlassRayitoMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_ID] = this.textureEmission.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET] = 0;						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ETA_ID] = this.textureEta.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ETA_OFFSET] = 0;								//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_ID] = this.textureKR.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_OFFSET] = 0;								//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_T_ID] = this.textureKT.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_T_OFFSET] = 0;								//Block #1
+		
+		return array;
 	}
 }

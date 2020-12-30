@@ -32,7 +32,6 @@ import static org.dayflower.util.Floats.simplexFractionalBrownianMotionXY;
 import static org.dayflower.util.Floats.toFloat;
 import static org.dayflower.util.Ints.toInt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -849,7 +848,29 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds the result of three multiplications followed by one division to the component values of {@code colorAdd}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result.
+	 * <p>
+	 * If either {@code colorAdd}, {@code colorMultiplyA}, {@code colorMultiplyB} or {@code colorMultiplyC} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following (although faster, because of optimizations):
+	 * <pre>
+	 * {@code
+	 * Color3F.add(colorAdd, Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(colorMultiplyA, colorMultiplyB), colorMultiplyC), scalarMultiply), scalarDivide));
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorAdd the {@code Color3F} instance to add
+	 * @param colorMultiplyA the {@code Color3F} instance used on the left-hand side of the first multiplication
+	 * @param colorMultiplyB the {@code Color3F} instance used on the right-hand side of the first multiplication
+	 * @param colorMultiplyC the {@code Color3F} instance used on the right-hand side of the second multiplication
+	 * @param scalarMultiply the scalar value used on the right-hand side of the third multiplication
+	 * @param scalarDivide the scalar value used on the right-hand side of the division
+	 * @return a new {@code Color3F} instance with the result
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA}, {@code colorMultiplyB} or {@code colorMultiplyC} are {@code null}
+	 */
 	public static Color3F addMultiplyAndDivide(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final Color3F colorMultiplyC, final float scalarMultiply, final float scalarDivide) {
 		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * colorMultiplyC.component1 * scalarMultiply / scalarDivide;
 		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * colorMultiplyC.component2 * scalarMultiply / scalarDivide;
@@ -858,7 +879,27 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds the result of one multiplication followed by one division to the component values of {@code colorAdd}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result.
+	 * <p>
+	 * If either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following (although faster, because of optimizations):
+	 * <pre>
+	 * {@code
+	 * Color3F.add(colorAdd, Color3F.divide(Color3F.multiply(colorMultiplyA, colorMultiplyB), scalarDivide));
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorAdd the {@code Color3F} instance to add
+	 * @param colorMultiplyA the {@code Color3F} instance used on the left-hand side of the multiplication
+	 * @param colorMultiplyB the {@code Color3F} instance used on the right-hand side of the multiplication
+	 * @param scalarDivide the scalar value used on the right-hand side of the division
+	 * @return a new {@code Color3F} instance with the result
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
+	 */
 	public static Color3F addMultiplyAndDivide(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final float scalarDivide) {
 		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 / scalarDivide;
 		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 / scalarDivide;
@@ -867,7 +908,28 @@ public final class Color3F {
 		return new Color3F(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds the result of two multiplications followed by one division to the component values of {@code colorAdd}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result.
+	 * <p>
+	 * If either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following (although faster, because of optimizations):
+	 * <pre>
+	 * {@code
+	 * Color3F.add(colorAdd, Color3F.divide(Color3F.multiply(Color3F.multiply(colorMultiplyA, colorMultiplyB), scalarMultiply), scalarDivide));
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorAdd the {@code Color3F} instance to add
+	 * @param colorMultiplyA the {@code Color3F} instance used on the left-hand side of the first multiplication
+	 * @param colorMultiplyB the {@code Color3F} instance used on the right-hand side of the first multiplication
+	 * @param scalarMultiply the scalar value used on the right-hand side of the second multiplication
+	 * @param scalarDivide the scalar value used on the right-hand side of the division
+	 * @return a new {@code Color3F} instance with the result
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
+	 */
 	public static Color3F addMultiplyAndDivide(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final float scalarMultiply, final float scalarDivide) {
 		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * scalarMultiply / scalarDivide;
 		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * scalarMultiply / scalarDivide;

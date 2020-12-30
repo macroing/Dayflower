@@ -217,18 +217,11 @@ public final class Plane3F implements Shape3F {
 		final float determinant = bX * cY - bY * cX;
 		final float determinantReciprocal = 1.0F / determinant;
 		
-		final float bNU = -bY * determinantReciprocal;
-		final float bNV = +bX * determinantReciprocal;
-		final float bND = (bY * aX - bX * aY) * determinantReciprocal;
-		final float cNU = +cY * determinantReciprocal;
-		final float cNV = -cX * determinantReciprocal;
-		final float cND = (cX * aY - cY * aX) * determinantReciprocal;
-		
 		final float hU = isX ? surfaceIntersectionPoint.getY() : isY ? surfaceIntersectionPoint.getZ() : surfaceIntersectionPoint.getX();
 		final float hV = isX ? surfaceIntersectionPoint.getZ() : isY ? surfaceIntersectionPoint.getX() : surfaceIntersectionPoint.getY();
 		
-		final float u = hU * bNU + hV * bNV + bND;
-		final float v = hU * cNU + hV * cNV + cND;
+		final float u = hU * (-bY * determinantReciprocal) + hV * (+bX * determinantReciprocal) + (bY * aX - bX * aY) * determinantReciprocal;
+		final float v = hU * (+cY * determinantReciprocal) + hV * (-cX * determinantReciprocal) + (cX * aY - cY * aX) * determinantReciprocal;
 		
 		final Point2F textureCoordinates = new Point2F(u, v);
 		

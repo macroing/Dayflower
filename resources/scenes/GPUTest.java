@@ -20,10 +20,10 @@ Material materialMatteImageSimplexFractionalBrownianMotion = new MatteSmallPTMat
 Material materialMatteMarble = new MatteSmallPTMaterial(textureMarble);
 Material materialMatteSimplexFractionalBrownianMotion = new MatteSmallPTMaterial(textureSimplexFractionalBrownianMotion);
 
-Material material1 = materialGlassConstantYellow;
-Material material2 = materialClearCoatCheckerboard;
-Material material3 = new MirrorSmallPTMaterial(Color3F.GRAY);
-Material material4 = materialMatteImageLaminate;
+Material material1 = new GlassRayitoMaterial(Color3F.WHITE, new Color3F(1.0F, 1.0F, 0.5F));//materialGlassConstantYellow;
+Material material2 = new MatteRayitoMaterial(textureCheckerboard);//materialClearCoatCheckerboard;
+Material material3 = new MirrorRayitoMaterial(Color3F.GRAY);//new MirrorSmallPTMaterial(Color3F.GRAY);
+Material material4 = new MatteRayitoMaterial(textureImageLaminate);//materialMatteImageLaminate;
 //Material material5 = new MetalSmallPTMaterial(ImageTexture.load("./resources/textures/Zealot_albedo.png"), ImageTexture.load("./resources/textures/Zealot_emissive.png"));
 //Material material6 = new MatteSmallPTMaterial(Color3F.WHITE, new Color3F(12.0F));
 

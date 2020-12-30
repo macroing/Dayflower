@@ -679,12 +679,20 @@ final class SceneCompiler {
 			
 			if(material instanceof ClearCoatSmallPTMaterial) {
 				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsClearCoatSmallPTMaterials.get(material).intValue();
+			} else if(material instanceof GlassRayitoMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsGlassRayitoMaterials.get(material).intValue();
 			} else if(material instanceof GlassSmallPTMaterial) {
 				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsGlassSmallPTMaterials.get(material).intValue();
+			} else if(material instanceof MatteRayitoMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMatteRayitoMaterials.get(material).intValue();
 			} else if(material instanceof MatteSmallPTMaterial) {
 				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMatteSmallPTMaterials.get(material).intValue();
+			} else if(material instanceof MetalRayitoMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMetalRayitoMaterials.get(material).intValue();
 			} else if(material instanceof MetalSmallPTMaterial) {
 				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMetalSmallPTMaterials.get(material).intValue();
+			} else if(material instanceof MirrorRayitoMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMirrorRayitoMaterials.get(material).intValue();
 			} else if(material instanceof MirrorSmallPTMaterial) {
 				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMirrorSmallPTMaterials.get(material).intValue();
 			}

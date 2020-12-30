@@ -2506,39 +2506,41 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
 		final int materialID = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_ID];
 		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int materialOffsetTextureEmissionID = materialOffset + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_ID;
-		final int materialOffsetTextureEmissionOffset = materialOffset + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+		final int materialOffsetTextureEmissionIDRayitoMaterial = materialOffset + RayitoMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_ID;
+		final int materialOffsetTextureEmissionOffsetRayitoMaterial = materialOffset + RayitoMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+		final int materialOffsetTextureEmissionIDSmallPTMaterial = materialOffset + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_ID;
+		final int materialOffsetTextureEmissionOffsetSmallPTMaterial = materialOffset + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
 		
 		int textureEmissionID = 0;
 		int textureEmissionOffset = 0;
 		
 		if(materialID == ClearCoatSmallPTMaterial.ID) {
-			textureEmissionID = this.materialClearCoatSmallPTMaterialArray[materialOffsetTextureEmissionID];
-			textureEmissionOffset = this.materialClearCoatSmallPTMaterialArray[materialOffsetTextureEmissionOffset];
+			textureEmissionID = this.materialClearCoatSmallPTMaterialArray[materialOffsetTextureEmissionIDSmallPTMaterial];
+			textureEmissionOffset = this.materialClearCoatSmallPTMaterialArray[materialOffsetTextureEmissionOffsetSmallPTMaterial];
 		} else if(materialID == GlassRayitoMaterial.ID) {
-			textureEmissionID = this.materialGlassRayitoMaterialArray[materialOffsetTextureEmissionID];
-			textureEmissionOffset = this.materialGlassRayitoMaterialArray[materialOffsetTextureEmissionOffset];
+			textureEmissionID = this.materialGlassRayitoMaterialArray[materialOffsetTextureEmissionIDRayitoMaterial];
+			textureEmissionOffset = this.materialGlassRayitoMaterialArray[materialOffsetTextureEmissionOffsetRayitoMaterial];
 		} else if(materialID == GlassSmallPTMaterial.ID) {
-			textureEmissionID = this.materialGlassSmallPTMaterialArray[materialOffsetTextureEmissionID];
-			textureEmissionOffset = this.materialGlassSmallPTMaterialArray[materialOffsetTextureEmissionOffset];
+			textureEmissionID = this.materialGlassSmallPTMaterialArray[materialOffsetTextureEmissionIDSmallPTMaterial];
+			textureEmissionOffset = this.materialGlassSmallPTMaterialArray[materialOffsetTextureEmissionOffsetSmallPTMaterial];
 		} else if(materialID == MatteRayitoMaterial.ID) {
-			textureEmissionID = this.materialMatteRayitoMaterialArray[materialOffsetTextureEmissionID];
-			textureEmissionOffset = this.materialMatteRayitoMaterialArray[materialOffsetTextureEmissionOffset];
+			textureEmissionID = this.materialMatteRayitoMaterialArray[materialOffsetTextureEmissionIDRayitoMaterial];
+			textureEmissionOffset = this.materialMatteRayitoMaterialArray[materialOffsetTextureEmissionOffsetRayitoMaterial];
 		} else if(materialID == MatteSmallPTMaterial.ID) {
-			textureEmissionID = this.materialMatteSmallPTMaterialArray[materialOffsetTextureEmissionID];
-			textureEmissionOffset = this.materialMatteSmallPTMaterialArray[materialOffsetTextureEmissionOffset];
+			textureEmissionID = this.materialMatteSmallPTMaterialArray[materialOffsetTextureEmissionIDSmallPTMaterial];
+			textureEmissionOffset = this.materialMatteSmallPTMaterialArray[materialOffsetTextureEmissionOffsetSmallPTMaterial];
 		} else if(materialID == MetalRayitoMaterial.ID) {
-			textureEmissionID = this.materialMetalRayitoMaterialArray[materialOffsetTextureEmissionID];
-			textureEmissionOffset = this.materialMetalRayitoMaterialArray[materialOffsetTextureEmissionOffset];
+			textureEmissionID = this.materialMetalRayitoMaterialArray[materialOffsetTextureEmissionIDRayitoMaterial];
+			textureEmissionOffset = this.materialMetalRayitoMaterialArray[materialOffsetTextureEmissionOffsetRayitoMaterial];
 		} else if(materialID == MetalSmallPTMaterial.ID) {
-			textureEmissionID = this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionID];
-			textureEmissionOffset = this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionOffset];
+			textureEmissionID = this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionIDSmallPTMaterial];
+			textureEmissionOffset = this.materialMetalSmallPTMaterialArray[materialOffsetTextureEmissionOffsetSmallPTMaterial];
 		} else if(materialID == MirrorRayitoMaterial.ID) {
-			textureEmissionID = this.materialMirrorRayitoMaterialArray[materialOffsetTextureEmissionID];
-			textureEmissionOffset = this.materialMirrorRayitoMaterialArray[materialOffsetTextureEmissionOffset];
+			textureEmissionID = this.materialMirrorRayitoMaterialArray[materialOffsetTextureEmissionIDRayitoMaterial];
+			textureEmissionOffset = this.materialMirrorRayitoMaterialArray[materialOffsetTextureEmissionOffsetRayitoMaterial];
 		} else if(materialID == MirrorSmallPTMaterial.ID) {
-			textureEmissionID = this.materialMirrorSmallPTMaterialArray[materialOffsetTextureEmissionID];
-			textureEmissionOffset = this.materialMirrorSmallPTMaterialArray[materialOffsetTextureEmissionOffset];
+			textureEmissionID = this.materialMirrorSmallPTMaterialArray[materialOffsetTextureEmissionIDSmallPTMaterial];
+			textureEmissionOffset = this.materialMirrorSmallPTMaterialArray[materialOffsetTextureEmissionOffsetSmallPTMaterial];
 		}
 		
 		textureEvaluate(textureEmissionID, textureEmissionOffset);

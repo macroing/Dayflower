@@ -18,6 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_DIVIDED_BY_2;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
@@ -114,6 +115,18 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected static final int INTERSECTION_ARRAY_SIZE = 24;
 	
 //	TODO: Add Javadocs!
+	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
+	
+//	TODO: Add Javadocs!
+	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL = 3;
+	
+//	TODO: Add Javadocs!
+	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING = 6;
+	
+//	TODO: Add Javadocs!
+	protected static final int MATERIAL_B_X_D_F_ARRAY_SIZE = 16;
+	
+//	TODO: Add Javadocs!
 	protected static final int RAY_3_F_ARRAY_OFFSET_DIRECTION = 3;
 	
 //	TODO: Add Javadocs!
@@ -141,6 +154,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected float[] intersectionArray_$private$24;
+	
+//	TODO: Add Javadocs!
+	protected float[] materialBXDFResultArray_$private$16;
 	
 //	TODO: Add Javadocs!
 	protected float[] matrix44FArray;
@@ -240,6 +256,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.boundingVolume3FBoundingSphere3FArray = new float[1];
 		this.cameraArray = new float[1];
 		this.intersectionArray_$private$24 = new float[INTERSECTION_ARRAY_SIZE];
+		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
 		this.matrix44FArray = new float[1];
 		this.pixelArray = new float[1];
 		this.ray3FArray_$private$8 = new float[RAY_3_F_ARRAY_SIZE];
@@ -929,39 +946,49 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final boolean materialSampleDistributionFunctionMatteRayitoMaterial() {
-//		Initialize the orthonormal basis:
-		orthonormalBasis33FSetIntersectionOrthonormalBasisS();
+		/*
+		 * Material:
+		 */
 		
-//		Retrieve the ray direction in world space:
-		final float rayDirectionWorldSpaceX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionWorldSpaceY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionWorldSpaceZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+//		Retrieve indices and offsets:
+		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
+		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+		final int textureKDID = this.materialMatteRayitoMaterialArray[materialOffset + MatteRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_D_ID];
+		final int textureKDOffset = this.materialMatteRayitoMaterialArray[materialOffset + MatteRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET];
 		
-//		Compute the outgoing direction in world space as the negated ray direction in world space:
-		final float outgoingWorldSpaceX = -rayDirectionWorldSpaceX;
-		final float outgoingWorldSpaceY = -rayDirectionWorldSpaceY;
-		final float outgoingWorldSpaceZ = -rayDirectionWorldSpaceZ;
+//		Evaluate the KD texture:
+		textureEvaluate(textureKDID, textureKDOffset);
 		
-//		Transform the outgoing direction in world space to the outgoing direction in shade space:
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(outgoingWorldSpaceX, outgoingWorldSpaceY, outgoingWorldSpaceZ);
+//		Retrieve the color from the KD texture:
+		final float colorKDR = color3FLHSGetComponent1();
+		final float colorKDG = color3FLHSGetComponent2();
+		final float colorKDB = color3FLHSGetComponent3();
 		
-//		Retrieve the outgoing direction in shade space:
-		final float outgoingShadeSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float outgoingShadeSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float outgoingShadeSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 		
-//		Retrieve the normal in world space:
-		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
-		final float normalWorldSpaceY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
-		final float normalWorldSpaceZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
 		
-//		Transform the normal in world space to the normal in shade space:
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
+		/*
+		 * BSDF:
+		 */
+		
+//		Perform world space to shade space transformations:
+		materialBXDFBegin();
+		
+		
+		
+		/*
+		 * BXDF:
+		 */
 		
 //		Retrieve the normal in shade space:
-		final float normalShadeSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float normalShadeSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float normalShadeSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float normalShadeSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 0];
+		final float normalShadeSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 1];
+		final float normalShadeSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 2];
+		
+//		Retrieve the outgoing direction in shade space:
+		final float outgoingShadeSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 0];
+		final float outgoingShadeSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 1];
+		final float outgoingShadeSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 2];
 		
 //		Compute the dot product between the normal in shade space and the outgoing direction in shade space:
 		final float normalShadeSpaceDotOutgoingShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ);
@@ -977,47 +1004,37 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float incomingShadeSpaceY = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -incomingLocalSpaceY : incomingLocalSpaceY;
 		final float incomingShadeSpaceZ = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -incomingLocalSpaceZ : incomingLocalSpaceZ;
 		
-//		Compute the dot product between the normal in shade space and the incoming direction in shade space:
+//		Compute the dot product between the normal in shade space and the incoming direction in shade space and its absolute representation:
 		final float normalShadeSpaceDotIncomingShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
+		final float normalShadeSpaceDotIncomingShadeSpaceAbs = abs(normalShadeSpaceDotIncomingShadeSpace);
 		
 //		Check that the dot products are opposite:
 		if(normalShadeSpaceDotIncomingShadeSpace > 0.0F && normalShadeSpaceDotOutgoingShadeSpace > 0.0F || normalShadeSpaceDotIncomingShadeSpace < 0.0F && normalShadeSpaceDotOutgoingShadeSpace < 0.0F) {
 			return false;
 		}
 		
-//		Transform the incoming direction in shade space to the incoming direction in world space:
-		vector3FSetOrthonormalBasis33FTransformNormalize(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
-		
-//		Retrieve the incoming direction in world space:
-		final float incomingWorldSpaceX = -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float incomingWorldSpaceY = -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float incomingWorldSpaceZ = -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
-		
-//		Compute the dot product between the normal in world space and the incoming direction in world space and its absolute representation:
-		final float normalWorldSpaceDotIncomingWorldSpace = vector3FDotProduct(normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ, incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
-		final float normalWorldSpaceDotIncomingWorldSpaceAbs = abs(normalWorldSpaceDotIncomingWorldSpace);
-		
-		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
-		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int textureKDID = this.materialMatteRayitoMaterialArray[materialOffset + MatteRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_D_ID];
-		final int textureKDOffset = this.materialMatteRayitoMaterialArray[materialOffset + MatteRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET];
-		
-		textureEvaluate(textureKDID, textureKDOffset);
-		
-		final float colorKDR = color3FLHSGetComponent1();
-		final float colorKDG = color3FLHSGetComponent2();
-		final float colorKDB = color3FLHSGetComponent3();
-		
+//		Compute the probability density function (PDF) value:
 		final float probabilityDensityFunctionValue = PI_RECIPROCAL * abs(normalShadeSpaceDotIncomingShadeSpace);
 		
-		final float resultR = (colorKDR * PI_RECIPROCAL) * (normalWorldSpaceDotIncomingWorldSpaceAbs / probabilityDensityFunctionValue);
-		final float resultG = (colorKDG * PI_RECIPROCAL) * (normalWorldSpaceDotIncomingWorldSpaceAbs / probabilityDensityFunctionValue);
-		final float resultB = (colorKDB * PI_RECIPROCAL) * (normalWorldSpaceDotIncomingWorldSpaceAbs / probabilityDensityFunctionValue);
+//		Compute the result:
+		final float resultR = (colorKDR * PI_RECIPROCAL) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float resultG = (colorKDG * PI_RECIPROCAL) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float resultB = (colorKDB * PI_RECIPROCAL) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
 		
-		vector3FSet(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
-		
+//		Set the result:
 		color3FLHSSet(resultR, resultG, resultB);
+		
+		
+		
+		/*
+		 * BSDF:
+		 */
+		
+//		Set the incoming direction in shade space and perform shade space to world space transformations:
+		materialBXDFSetIncoming(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
+		materialBXDFEnd();
+		
+		
 		
 		return true;
 	}
@@ -1054,7 +1071,126 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final boolean materialSampleDistributionFunctionMetalRayitoMaterial() {
-		return false;
+		/*
+		 * Material:
+		 */
+		
+//		Retrieve indices and offsets:
+		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
+		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
+		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+		final int textureKRID = this.materialMetalRayitoMaterialArray[materialOffset + MetalRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_R_ID];
+		final int textureKROffset = this.materialMetalRayitoMaterialArray[materialOffset + MetalRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET];
+		final int textureRoughnessID = this.materialMetalRayitoMaterialArray[materialOffset + MetalRayitoMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_ID];
+		final int textureRoughnessOffset = this.materialMetalRayitoMaterialArray[materialOffset + MetalRayitoMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_OFFSET];
+		
+//		Evaluate the KR texture:
+		textureEvaluate(textureKRID, textureKROffset);
+		
+//		Retrieve the color from the KR texture:
+		final float colorKRR = color3FLHSGetComponent1();
+		final float colorKRG = color3FLHSGetComponent2();
+		final float colorKRB = color3FLHSGetComponent3();
+		
+//		Evaluate the Roughness texture:
+		textureEvaluate(textureRoughnessID, textureRoughnessOffset);
+		
+//		Retrieve the color from the Roughness texture:
+		final float colorRoughnessR = color3FLHSGetComponent1();
+		final float colorRoughnessG = color3FLHSGetComponent2();
+		final float colorRoughnessB = color3FLHSGetComponent3();
+		
+//		Compute the roughness and exponent:
+		final float roughness = (colorRoughnessR + colorRoughnessG + colorRoughnessB) / 3.0F;
+		final float exponent = 1.0F / (roughness * roughness);
+		
+		
+		
+		/*
+		 * BSDF:
+		 */
+		
+//		Perform world space to shade space transformations:
+		materialBXDFBegin();
+		
+		
+		
+		/*
+		 * BXDF:
+		 */
+		
+//		Retrieve the normal in shade space:
+		final float normalShadeSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 0];
+		final float normalShadeSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 1];
+		final float normalShadeSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 2];
+		
+//		Retrieve the outgoing direction in shade space:
+		final float outgoingShadeSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 0];
+		final float outgoingShadeSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 1];
+		final float outgoingShadeSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 2];
+		
+//		Compute the dot product between the normal in shade space and the outgoing direction in shade space:
+		final float normalShadeSpaceDotOutgoingShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ);
+		
+//		Sample the hemisphere in local space using a power-cosine distribution:
+		vector3FSetSampleHemispherePowerCosineDistribution(random(), random(), exponent);
+		
+//		Retrieve the half vector in local space and transform it into shade space:
+		final float halfLocalSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float halfLocalSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float halfLocalSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float halfShadeSpaceX = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -halfLocalSpaceX : halfLocalSpaceX;
+		final float halfShadeSpaceY = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -halfLocalSpaceY : halfLocalSpaceY;
+		final float halfShadeSpaceZ = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -halfLocalSpaceZ : halfLocalSpaceZ;
+		
+//		Compute the dot product between the normal in shade space and the half vector in shade space:
+		final float normalShadeSpaceDotHalfShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, halfShadeSpaceX, halfShadeSpaceY, halfShadeSpaceZ);
+		
+//		Compute the dot product between the outgoing direction in shade space and the half vector in shade space:
+		final float outgoingShadeSpaceDotHalfShadeSpace = vector3FDotProduct(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, halfShadeSpaceX, halfShadeSpaceY, halfShadeSpaceZ);
+		
+//		Compute the incoming direction in shade space:
+		final float incomingShadeSpaceX = outgoingShadeSpaceX - halfShadeSpaceX * 2.0F * outgoingShadeSpaceDotHalfShadeSpace;
+		final float incomingShadeSpaceY = outgoingShadeSpaceY - halfShadeSpaceY * 2.0F * outgoingShadeSpaceDotHalfShadeSpace;
+		final float incomingShadeSpaceZ = outgoingShadeSpaceZ - halfShadeSpaceZ * 2.0F * outgoingShadeSpaceDotHalfShadeSpace;
+		
+//		Compute the dot product between the normal in shade space and the incoming direction in shade space and its absolute representation:
+		final float normalShadeSpaceDotIncomingShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
+		final float normalShadeSpaceDotIncomingShadeSpaceAbs = abs(normalShadeSpaceDotIncomingShadeSpace);
+		
+//		Check that the dot products are opposite:
+		if(normalShadeSpaceDotIncomingShadeSpace > 0.0F && normalShadeSpaceDotOutgoingShadeSpace > 0.0F || normalShadeSpaceDotIncomingShadeSpace < 0.0F && normalShadeSpaceDotOutgoingShadeSpace < 0.0F) {
+			return false;
+		}
+		
+//		Compute the probability density function (PDF) value:
+		final float probabilityDensityFunctionValue = (exponent + 1.0F) * pow(abs(normalShadeSpaceDotHalfShadeSpace), exponent) / (PI * 8.0F * abs(outgoingShadeSpaceDotHalfShadeSpace));
+		
+		final float d = (exponent + 1.0F) * pow(abs(normalShadeSpaceDotHalfShadeSpace), exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float f = 1.0F;//fresnelDielectricSchlick(outgoingShadeSpaceDotHalfShadeSpace, 1.0F);
+		final float g = 4.0F * abs(normalShadeSpaceDotOutgoingShadeSpace + -normalShadeSpaceDotIncomingShadeSpace - normalShadeSpaceDotOutgoingShadeSpace * -normalShadeSpaceDotIncomingShadeSpace);
+		
+//		Compute the result:
+		final float resultR = (colorKRR * d * f / g) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float resultG = (colorKRG * d * f / g) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float resultB = (colorKRB * d * f / g) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		
+//		Set the result:
+		color3FLHSSet(resultR, resultG, resultB);
+		
+		
+		
+		/*
+		 * BSDF:
+		 */
+		
+//		Set the incoming direction in shade space and perform shade space to world space transformations:
+		materialBXDFSetIncoming(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
+		materialBXDFEnd();
+		
+		
+		
+		return true;
 	}
 	
 //	TODO: Add Javadocs!
@@ -2498,6 +2634,87 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //	TODO: Add Javadocs!
 	protected final void intersectionTransformWorldToObject(final int primitiveIndex) {
 		intersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialBXDFBegin() {
+//		Initialize the orthonormal basis:
+		orthonormalBasis33FSetIntersectionOrthonormalBasisS();
+		
+//		Retrieve the ray direction in world space:
+		final float rayDirectionWorldSpaceX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float rayDirectionWorldSpaceY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float rayDirectionWorldSpaceZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+//		Compute the outgoing direction in world space as the negated ray direction in world space:
+		final float outgoingWorldSpaceX = -rayDirectionWorldSpaceX;
+		final float outgoingWorldSpaceY = -rayDirectionWorldSpaceY;
+		final float outgoingWorldSpaceZ = -rayDirectionWorldSpaceZ;
+		
+//		Transform the outgoing direction in world space to the outgoing direction in shade space:
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(outgoingWorldSpaceX, outgoingWorldSpaceY, outgoingWorldSpaceZ);
+		
+//		Retrieve the outgoing direction in shade space:
+		final float outgoingShadeSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float outgoingShadeSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float outgoingShadeSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		
+//		Retrieve the normal in world space:
+		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float normalWorldSpaceY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float normalWorldSpaceZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+//		Transform the normal in world space to the normal in shade space:
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
+		
+//		Retrieve the normal in shade space:
+		final float normalShadeSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float normalShadeSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float normalShadeSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		
+//		Set the values:
+		materialBXDFSetNormal(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ);
+		materialBXDFSetOutgoing(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialBXDFEnd() {
+//		Retrieve the incoming direction in shade space:
+		final float incomingShadeSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0];
+		final float incomingShadeSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1];
+		final float incomingShadeSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 2];
+		
+//		Transform the incoming direction in shade space to the incoming direction in world space:
+		vector3FSetOrthonormalBasis33FTransformNormalize(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
+		
+//		Retrieve the incoming direction in world space:
+		final float incomingWorldSpaceX = -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float incomingWorldSpaceY = -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float incomingWorldSpaceZ = -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		
+//		Set the values:
+		vector3FSet(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialBXDFSetIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0] = incomingX;
+		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1] = incomingY;
+		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 2] = incomingZ;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialBXDFSetNormal(final float normalX, final float normalY, final float normalZ) {
+		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 0] = normalX;
+		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 1] = normalY;
+		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 2] = normalZ;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialBXDFSetOutgoing(final float outgoingX, final float outgoingY, final float outgoingZ) {
+		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 0] = outgoingX;
+		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 1] = outgoingY;
+		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 2] = outgoingZ;
 	}
 	
 //	TODO: Add Javadocs!

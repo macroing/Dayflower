@@ -21,9 +21,9 @@ Material materialMatteMarble = new MatteSmallPTMaterial(textureMarble);
 Material materialMatteSimplexFractionalBrownianMotion = new MatteSmallPTMaterial(textureSimplexFractionalBrownianMotion);
 
 Material material1 = new GlassRayitoMaterial(Color3F.WHITE, new Color3F(1.0F, 1.0F, 0.5F));//materialGlassConstantYellow;
-Material material2 = new MetalRayitoMaterial(textureCheckerboard, ConstantTexture.BLACK, 0.02F);//materialClearCoatCheckerboard;
+Material material2 = new MetalRayitoMaterial(textureCheckerboard, ConstantTexture.BLACK, 0.05F);//materialClearCoatCheckerboard;
 Material material3 = new MirrorRayitoMaterial(Color3F.GRAY);//new MirrorSmallPTMaterial(Color3F.GRAY);
-Material material4 = new MetalRayitoMaterial(textureImageLaminate, ConstantTexture.BLACK, 0.02F);//materialMatteImageLaminate;
+Material material4 = new MatteRayitoMaterial(textureImageLaminate);//materialMatteImageLaminate;
 //Material material5 = new MetalSmallPTMaterial(ImageTexture.load("./resources/textures/Zealot_albedo.png"), ImageTexture.load("./resources/textures/Zealot_emissive.png"));
 //Material material6 = new MatteSmallPTMaterial(Color3F.WHITE, new Color3F(12.0F));
 
@@ -42,9 +42,9 @@ Transform transform4 = new Transform(new Point3F(+0.0F,  0.00F, 0.0F));
 //Transform transform6 = new Transform(new Point3F(+0.0F, 20.00F, 5.0F));
 
 scene.addLight(new PerezLight());
-scene.addPrimitive(new Primitive(material1, shape1, transform1));
+//scene.addPrimitive(new Primitive(material1, shape1, transform1));
 scene.addPrimitive(new Primitive(material2, shape2, transform2));
-scene.addPrimitive(new Primitive(material3, shape3, transform3));
+//scene.addPrimitive(new Primitive(material3, shape3, transform3));
 scene.addPrimitive(new Primitive(material4, shape4, transform4));
 //scene.addPrimitive(new Primitive(material5, shape5, transform5));
 //scene.addPrimitive(new Primitive(material6, shape6, transform6));

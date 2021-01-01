@@ -849,9 +849,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final boolean materialSampleDistributionFunctionGlassRayitoMaterial() {
-		color3FLHSSet(1.0F, 1.0F, 1.0F);
-		
-		return true;
+		return false;
 	}
 	
 //	TODO: Add Javadocs!
@@ -1018,6 +1016,10 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //		Compute the probability density function (PDF) value:
 		final float probabilityDensityFunctionValue = PI_RECIPROCAL * normalShadeSpaceDotIncomingShadeSpaceAbs;
 		
+		if(probabilityDensityFunctionValue <= 0.0F) {
+			return false;
+		}
+		
 //		Compute the result:
 		final float resultR = colorKDR * PI_RECIPROCAL;
 		final float resultG = colorKDG * PI_RECIPROCAL;
@@ -1039,20 +1041,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		 * Material:
 		 */
 		
-		final float incomingWorldSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0];
-		final float incomingWorldSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1];
-		final float incomingWorldSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 2];
-		
-		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
-		final float normalWorldSpaceY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
-		final float normalWorldSpaceZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
-		
-		final float incomingWorldSpaceDotNormalWorldSpace = vector3FDotProduct(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ, normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
-		final float incomingWorldSpaceDotNormalWorldSpaceAbs = abs(incomingWorldSpaceDotNormalWorldSpace);
-		
-		final float colorR = resultR * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
-		final float colorG = resultG * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
-		final float colorB = resultB * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorR = resultR * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float colorG = resultG * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float colorB = resultB * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
 		
 		color3FLHSSet(colorR, colorG, colorB);
 		
@@ -1157,27 +1148,36 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //		Sample the hemisphere in local space using a power-cosine distribution:
 		vector3FSetSampleHemispherePowerCosineDistribution(random(), random(), exponent);
 		
-//		Retrieve the half vector in local space and transform it into shade space:
-		final float halfLocalSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float halfLocalSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float halfLocalSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
-		final float halfShadeSpaceX = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -halfLocalSpaceX : halfLocalSpaceX;
-		final float halfShadeSpaceY = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -halfLocalSpaceY : halfLocalSpaceY;
-		final float halfShadeSpaceZ = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -halfLocalSpaceZ : halfLocalSpaceZ;
+//		Retrieve the half vector in local space:
+		final float halfLocalSpaceX = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] : super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float halfLocalSpaceY = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] : super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float halfLocalSpaceZ = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] : super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		
+//		Compute the dot product between the outgoing direction in shade space and the half vector in local space:
+		final float outgoingShadeSpaceDotHalfLocalSpace = vector3FDotProduct(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, halfLocalSpaceX, halfLocalSpaceY, halfLocalSpaceZ);
+		
+//		Compute the incoming direction in shade space:
+		final float incomingShadeSpaceX = outgoingShadeSpaceX - halfLocalSpaceX * 2.0F * outgoingShadeSpaceDotHalfLocalSpace;
+		final float incomingShadeSpaceY = outgoingShadeSpaceY - halfLocalSpaceY * 2.0F * outgoingShadeSpaceDotHalfLocalSpace;
+		final float incomingShadeSpaceZ = outgoingShadeSpaceZ - halfLocalSpaceZ * 2.0F * outgoingShadeSpaceDotHalfLocalSpace;
+		
+//		Compute the half vector in shade space:
+		vector3FSetHalf(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
+		
+//		Retrieve the half vector in shade space:
+		final float halfShadeSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float halfShadeSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float halfShadeSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 		
 //		Compute the dot product between the normal in shade space and the half vector in shade space:
 		final float normalShadeSpaceDotHalfShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, halfShadeSpaceX, halfShadeSpaceY, halfShadeSpaceZ);
 		
-//		Compute the dot product between the outgoing direction in shade space and the half vector in shade space:
-		final float outgoingShadeSpaceDotHalfShadeSpace = vector3FDotProduct(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, halfShadeSpaceX, halfShadeSpaceY, halfShadeSpaceZ);
-		
-//		Compute the incoming direction in shade space:
-		final float incomingShadeSpaceX = outgoingShadeSpaceX - halfShadeSpaceX * 2.0F * outgoingShadeSpaceDotHalfShadeSpace;
-		final float incomingShadeSpaceY = outgoingShadeSpaceY - halfShadeSpaceY * 2.0F * outgoingShadeSpaceDotHalfShadeSpace;
-		final float incomingShadeSpaceZ = outgoingShadeSpaceZ - halfShadeSpaceZ * 2.0F * outgoingShadeSpaceDotHalfShadeSpace;
-		
 //		Compute the dot product between the normal in shade space and the incoming direction in shade space and its absolute representation:
 		final float normalShadeSpaceDotIncomingShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
+		final float normalShadeSpaceDotIncomingShadeSpaceAbs = abs(normalShadeSpaceDotIncomingShadeSpace);
+		
+//		Compute the dot product between the outgoing direction in shade space and the half vector in shade space:
+		final float outgoingShadeSpaceDotHalfShadeSpace = vector3FDotProduct(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, halfShadeSpaceX, halfShadeSpaceY, halfShadeSpaceZ);
 		
 //		Check that the dot products are opposite:
 		if(normalShadeSpaceDotIncomingShadeSpace > 0.0F && normalShadeSpaceDotOutgoingShadeSpace > 0.0F || normalShadeSpaceDotIncomingShadeSpace < 0.0F && normalShadeSpaceDotOutgoingShadeSpace < 0.0F) {
@@ -1187,8 +1187,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //		Compute the probability density function (PDF) value:
 		final float probabilityDensityFunctionValue = (exponent + 1.0F) * pow(abs(normalShadeSpaceDotHalfShadeSpace), exponent) / (PI * 8.0F * abs(outgoingShadeSpaceDotHalfShadeSpace));
 		
+		if(probabilityDensityFunctionValue <= 0.0F) {
+			return false;
+		}
+		
 		final float d = (exponent + 1.0F) * pow(abs(normalShadeSpaceDotHalfShadeSpace), exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float f = 1.0F;//fresnelDielectricSchlick(outgoingShadeSpaceDotHalfShadeSpace, 1.0F);
+		final float f = fresnelDielectricSchlick(outgoingShadeSpaceDotHalfShadeSpace, 1.0F);
 		final float g = 4.0F * abs(normalShadeSpaceDotOutgoingShadeSpace + -normalShadeSpaceDotIncomingShadeSpace - normalShadeSpaceDotOutgoingShadeSpace * -normalShadeSpaceDotIncomingShadeSpace);
 		
 //		Compute the result:
@@ -1212,20 +1216,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		 * Material:
 		 */
 		
-		final float incomingWorldSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0];
-		final float incomingWorldSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1];
-		final float incomingWorldSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 2];
-		
-		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
-		final float normalWorldSpaceY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
-		final float normalWorldSpaceZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
-		
-		final float incomingWorldSpaceDotNormalWorldSpace = vector3FDotProduct(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ, normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
-		final float incomingWorldSpaceDotNormalWorldSpaceAbs = abs(incomingWorldSpaceDotNormalWorldSpace);
-		
-		final float colorR = resultR * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
-		final float colorG = resultG * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
-		final float colorB = resultB * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorR = resultR * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float colorG = resultG * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float colorB = resultB * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
 		
 		color3FLHSSet(colorR, colorG, colorB);
 		
@@ -1276,9 +1269,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final boolean materialSampleDistributionFunctionMirrorRayitoMaterial() {
-		color3FLHSSet(1.0F, 1.0F, 1.0F);
-		
-		return true;
+		return false;
 	}
 	
 //	TODO: Add Javadocs!

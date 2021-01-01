@@ -2297,6 +2297,30 @@ public abstract class AbstractKernel extends Kernel {
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
+	 * The vector is constructed using {@code vector3FSet(normalX, normalY, normalZ)} or {@code vector3FSetNormalize(outgoingX - incomingX, outgoingY - incomingY, outgoingZ - incomingZ)}, as
+	 * {@code vector3FDotProduct(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)} is greater than {@code 0.999F} or less than or equal to {@code 0.999F}, respectively.
+	 * 
+	 * @param outgoingX the X-component of the vector that points in the opposite direction of the ray
+	 * @param outgoingY the Y-component of the vector that points in the opposite direction of the ray
+	 * @param outgoingZ the Z-component of the vector that points in the opposite direction of the ray
+	 * @param normalX the X-component of the vector that points in the direction of the surface normal
+	 * @param normalY the Y-component of the vector that points in the direction of the surface normal
+	 * @param normalZ the Z-component of the vector that points in the direction of the surface normal
+	 * @param incomingX the X-component of the vector that points in the direction of the light source to the surface intersection point
+	 * @param incomingY the Y-component of the vector that points in the direction of the light source to the surface intersection point
+	 * @param incomingZ the Z-component of the vector that points in the direction of the light source to the surface intersection point
+	 */
+	protected final void vector3FSetHalf(final float outgoingX, final float outgoingY, final float outgoingZ, final float normalX, final float normalY, final float normalZ, final float incomingX, final float incomingY, final float incomingZ) {
+		if(vector3FDotProduct(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ) > 0.999F) {
+			vector3FSet(normalX, normalY, normalZ);
+		} else {
+			vector3FSetNormalize(outgoingX - incomingX, outgoingY - incomingY, outgoingZ - incomingZ);
+		}
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
 	 * The vector is constructed by transforming the vector represented by {@code component1}, {@code component2} and {@code component3} with the supplied matrix.
 	 * 
 	 * @param element11 the value of the element at row 1 and column 1 in the matrix

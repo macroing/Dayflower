@@ -52,8 +52,8 @@ public final class GPURenderer extends AbstractGPURenderer {
 	@Override
 	public void run() {
 //		doRunAmbientOcclusion(0.0F, 1);
-		doRunPathTracingRayito(20, 5);
-//		doRunPathTracingSmallPT(20, 5);
+//		doRunPathTracingRayito(20, 5);
+		doRunPathTracingSmallPT(20, 5);
 //		doRunRayCasting();
 	}
 	
@@ -263,27 +263,29 @@ public final class GPURenderer extends AbstractGPURenderer {
 					radianceG += throughputG * color3FLHSGetComponent2();
 					radianceB += throughputB * color3FLHSGetComponent3();
 					
-					materialSampleDistributionFunction();
-					
-					throughputR *= color3FLHSGetComponent1();
-					throughputG *= color3FLHSGetComponent2();
-					throughputB *= color3FLHSGetComponent3();
-					
-					ray3FSetFromSurfaceIntersectionPointAndVector3F();
-					
-					if(currentBounce >= minimumBounceRussianRoulette) {
-						final float probability = max(throughputR, throughputG, throughputB);
+					if(materialSampleDistributionFunction()) {
+						throughputR *= color3FLHSGetComponent1();
+						throughputG *= color3FLHSGetComponent2();
+						throughputB *= color3FLHSGetComponent3();
 						
-						if(random() > probability) {
-							currentBounce = maximumBounce;
-						} else {
-							throughputR /= probability;
-							throughputG /= probability;
-							throughputB /= probability;
+						ray3FSetFromSurfaceIntersectionPointAndVector3F();
+						
+						if(currentBounce >= minimumBounceRussianRoulette) {
+							final float probability = max(throughputR, throughputG, throughputB);
+							
+							if(random() > probability) {
+								currentBounce = maximumBounce;
+							} else {
+								throughputR /= probability;
+								throughputG /= probability;
+								throughputB /= probability;
+							}
 						}
+						
+						currentBounce++;
+					} else {
+						currentBounce = maximumBounce;
 					}
-					
-					currentBounce++;
 				} else {
 					doEvaluateTextureBackground();
 					

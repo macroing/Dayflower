@@ -849,7 +849,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final boolean materialSampleDistributionFunctionGlassRayitoMaterial() {
-		return false;
+		color3FLHSSet(1.0F, 1.0F, 1.0F);
+		
+		return true;
 	}
 	
 //	TODO: Add Javadocs!
@@ -1014,15 +1016,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		}
 		
 //		Compute the probability density function (PDF) value:
-		final float probabilityDensityFunctionValue = PI_RECIPROCAL * abs(normalShadeSpaceDotIncomingShadeSpace);
+		final float probabilityDensityFunctionValue = PI_RECIPROCAL * normalShadeSpaceDotIncomingShadeSpaceAbs;
 		
 //		Compute the result:
-		final float resultR = (colorKDR * PI_RECIPROCAL) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		final float resultG = (colorKDG * PI_RECIPROCAL) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		final float resultB = (colorKDB * PI_RECIPROCAL) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		
-//		Set the result:
-		color3FLHSSet(resultR, resultG, resultB);
+		final float resultR = colorKDR * PI_RECIPROCAL;
+		final float resultG = colorKDG * PI_RECIPROCAL;
+		final float resultB = colorKDB * PI_RECIPROCAL;
 		
 		
 		
@@ -1033,6 +1032,29 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //		Set the incoming direction in shade space and perform shade space to world space transformations:
 		materialBXDFSetIncoming(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
 		materialBXDFEnd();
+		
+		
+		
+		/*
+		 * Material:
+		 */
+		
+		final float incomingWorldSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0];
+		final float incomingWorldSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1];
+		final float incomingWorldSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 2];
+		
+		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float normalWorldSpaceY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float normalWorldSpaceZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		final float incomingWorldSpaceDotNormalWorldSpace = vector3FDotProduct(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ, normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
+		final float incomingWorldSpaceDotNormalWorldSpaceAbs = abs(incomingWorldSpaceDotNormalWorldSpace);
+		
+		final float colorR = resultR * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorG = resultG * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorB = resultB * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		
+		color3FLHSSet(colorR, colorG, colorB);
 		
 		
 		
@@ -1156,7 +1178,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		
 //		Compute the dot product between the normal in shade space and the incoming direction in shade space and its absolute representation:
 		final float normalShadeSpaceDotIncomingShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
-		final float normalShadeSpaceDotIncomingShadeSpaceAbs = abs(normalShadeSpaceDotIncomingShadeSpace);
 		
 //		Check that the dot products are opposite:
 		if(normalShadeSpaceDotIncomingShadeSpace > 0.0F && normalShadeSpaceDotOutgoingShadeSpace > 0.0F || normalShadeSpaceDotIncomingShadeSpace < 0.0F && normalShadeSpaceDotOutgoingShadeSpace < 0.0F) {
@@ -1171,12 +1192,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float g = 4.0F * abs(normalShadeSpaceDotOutgoingShadeSpace + -normalShadeSpaceDotIncomingShadeSpace - normalShadeSpaceDotOutgoingShadeSpace * -normalShadeSpaceDotIncomingShadeSpace);
 		
 //		Compute the result:
-		final float resultR = (colorKRR * d * f / g) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		final float resultG = (colorKRG * d * f / g) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		final float resultB = (colorKRB * d * f / g) * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		
-//		Set the result:
-		color3FLHSSet(resultR, resultG, resultB);
+		final float resultR = colorKRR * d * f / g;
+		final float resultG = colorKRG * d * f / g;
+		final float resultB = colorKRB * d * f / g;
 		
 		
 		
@@ -1187,6 +1205,29 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //		Set the incoming direction in shade space and perform shade space to world space transformations:
 		materialBXDFSetIncoming(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
 		materialBXDFEnd();
+		
+		
+		
+		/*
+		 * Material:
+		 */
+		
+		final float incomingWorldSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0];
+		final float incomingWorldSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1];
+		final float incomingWorldSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 2];
+		
+		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float normalWorldSpaceY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float normalWorldSpaceZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		final float incomingWorldSpaceDotNormalWorldSpace = vector3FDotProduct(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ, normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
+		final float incomingWorldSpaceDotNormalWorldSpaceAbs = abs(incomingWorldSpaceDotNormalWorldSpace);
+		
+		final float colorR = resultR * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorG = resultG * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorB = resultB * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		
+		color3FLHSSet(colorR, colorG, colorB);
 		
 		
 		
@@ -1235,7 +1276,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final boolean materialSampleDistributionFunctionMirrorRayitoMaterial() {
-		return false;
+		color3FLHSSet(1.0F, 1.0F, 1.0F);
+		
+		return true;
 	}
 	
 //	TODO: Add Javadocs!

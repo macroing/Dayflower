@@ -26,13 +26,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.dayflower.image.ByteImage;
 import org.dayflower.image.PixelImage;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.cpu.CPURenderer;
-import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.Camera;

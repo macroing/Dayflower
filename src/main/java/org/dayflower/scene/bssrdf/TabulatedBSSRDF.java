@@ -18,9 +18,12 @@
  */
 package org.dayflower.scene.bssrdf;
 
-import java.lang.reflect.Field;
-
-//TODO: Add Javadocs!
+/**
+ * A {@code TabulatedBSSRDF} represents a tabulated BSSRDF (Bidirectional Surface Scattering Reflectance Distribution Function).
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class TabulatedBSSRDF extends SeparableBSSRDF {
 	
 }

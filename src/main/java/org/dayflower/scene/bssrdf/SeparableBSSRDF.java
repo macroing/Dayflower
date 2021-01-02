@@ -18,13 +18,18 @@
  */
 package org.dayflower.scene.bssrdf;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.scene.BSSRDF;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code SeparableBSSRDF} represents a separable BSSRDF (Bidirectional Surface Scattering Reflectance Distribution Function).
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public abstract class SeparableBSSRDF implements BSSRDF {
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code SeparableBSSRDF} instance.
+	 */
 	protected SeparableBSSRDF() {
 		
 	}

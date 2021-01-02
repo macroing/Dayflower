@@ -1041,9 +1041,20 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		 * Material:
 		 */
 		
-		final float colorR = resultR * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		final float colorG = resultG * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		final float colorB = resultB * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float incomingWorldSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float incomingWorldSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float incomingWorldSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		
+		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float normalWorldSpaceY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float normalWorldSpaceZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		final float incomingWorldSpaceDotNormalWorldSpace = vector3FDotProduct(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ, normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
+		final float incomingWorldSpaceDotNormalWorldSpaceAbs = abs(incomingWorldSpaceDotNormalWorldSpace);
+		
+		final float colorR = resultR * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorG = resultG * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorB = resultB * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
 		
 		color3FLHSSet(colorR, colorG, colorB);
 		
@@ -1174,7 +1185,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		
 //		Compute the dot product between the normal in shade space and the incoming direction in shade space and its absolute representation:
 		final float normalShadeSpaceDotIncomingShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
-		final float normalShadeSpaceDotIncomingShadeSpaceAbs = abs(normalShadeSpaceDotIncomingShadeSpace);
 		
 //		Compute the dot product between the outgoing direction in shade space and the half vector in shade space:
 		final float outgoingShadeSpaceDotHalfShadeSpace = vector3FDotProduct(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, halfShadeSpaceX, halfShadeSpaceY, halfShadeSpaceZ);
@@ -1216,9 +1226,20 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		 * Material:
 		 */
 		
-		final float colorR = resultR * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		final float colorG = resultG * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
-		final float colorB = resultB * (normalShadeSpaceDotIncomingShadeSpaceAbs / probabilityDensityFunctionValue);
+		final float incomingWorldSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
+		final float incomingWorldSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
+		final float incomingWorldSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		
+		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
+		final float normalWorldSpaceY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
+		final float normalWorldSpaceZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+		
+		final float incomingWorldSpaceDotNormalWorldSpace = vector3FDotProduct(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ, normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
+		final float incomingWorldSpaceDotNormalWorldSpaceAbs = abs(incomingWorldSpaceDotNormalWorldSpace);
+		
+		final float colorR = resultR * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorG = resultG * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
+		final float colorB = resultB * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
 		
 		color3FLHSSet(colorR, colorG, colorB);
 		

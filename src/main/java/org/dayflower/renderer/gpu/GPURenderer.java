@@ -22,24 +22,43 @@ import static org.dayflower.util.Floats.PI;
 import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.util.Floats.PI_RECIPROCAL;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;
 import org.dayflower.scene.texture.ImageTexture;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code GPURenderer} is an implementation of {@link AbstractGPURenderer} that supports various rendering algorithms.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class GPURenderer extends AbstractGPURenderer {
 	private final float[] textureBackground;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code GPURenderer} instance.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GPURenderer(new FileRendererObserver());
+	 * }
+	 * </pre>
+	 */
 	public GPURenderer() {
 		this(new FileRendererObserver());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code GPURenderer} instance.
+	 * <p>
+	 * If {@code rendererObserver} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rendererObserver the {@link RendererObserver} instance associated with this {@code GPURenderer} instance
+	 * @throws NullPointerException thrown if, and only if, {@code rendererObserver} is {@code null}
+	 */
 	public GPURenderer(final RendererObserver rendererObserver) {
 		super(rendererObserver);
 		
@@ -48,7 +67,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Runs the rendering on the GPU or CPU.
+	 */
 	@Override
 	public void run() {
 //		doRunAmbientOcclusion(0.0F, 1);
@@ -69,61 +90,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private void doEvaluateTextureBackground() {
-		final float rayDirectionX = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-		
-		final float textureCoordinatesU = 0.5F + atan2(rayDirectionZ, rayDirectionX) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = 0.5F - asinpi(rayDirectionY);
-		
-		final float angleRadians = this.textureBackground[ImageTexture.ARRAY_OFFSET_ANGLE_RADIANS];
-		final float angleRadiansCos = cos(angleRadians);
-		final float angleRadiansSin = sin(angleRadians);
-		
-		final float scaleU = this.textureBackground[ImageTexture.ARRAY_OFFSET_SCALE + 0];
-		final float scaleV = this.textureBackground[ImageTexture.ARRAY_OFFSET_SCALE + 1];
-		
-		final int resolutionX = (int)(this.textureBackground[ImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
-		final int resolutionY = (int)(this.textureBackground[ImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
-		
-		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
-		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
-		
-		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
-		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
-		
-		final float x = positiveModuloF(textureCoordinatesScaledU, resolutionX);
-		final float y = positiveModuloF(textureCoordinatesScaledV, resolutionY);
-		
-		final int minimumX = (int)(floor(x));
-		final int maximumX = (int)(ceil(x));
-		
-		final int minimumY = (int)(floor(y));
-		final int maximumY = (int)(ceil(y));
-		
-		final int offsetImage = ImageTexture.ARRAY_OFFSET_IMAGE;
-		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-		
-		final int color00RGB = (int)(this.textureBackground[offsetColor00RGB]);
-		final int color01RGB = (int)(this.textureBackground[offsetColor01RGB]);
-		final int color10RGB = (int)(this.textureBackground[offsetColor10RGB]);
-		final int color11RGB = (int)(this.textureBackground[offsetColor11RGB]);
-		
-		final float tX = x - minimumX;
-		final float tY = y - minimumY;
-		
-		final float component1 = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
-		final float component2 = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
-		final float component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
-		
-		color3FLHSSet(component1, component2, component3);
-	}
-	
-	private void doRunAmbientOcclusion(final float maximumDistance, final int samples) {
+	void doRunAmbientOcclusion(final float maximumDistance, final int samples) {
 		float radiance = 0.0F;
 		
 		if(ray3FCameraGenerate(random(), random()) && intersectionComputeShape3F()) {
@@ -155,7 +122,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		imageEnd();
 	}
 	
-	private void doRunPathTracingRayito(final int maximumBounce, final int minimumBounceRussianRoulette) {
+	void doRunPathTracingRayito(final int maximumBounce, final int minimumBounceRussianRoulette) {
 		float radianceR = 0.0F;
 		float radianceG = 0.0F;
 		float radianceB = 0.0F;
@@ -238,7 +205,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		imageEnd();
 	}
 	
-	private void doRunPathTracingSmallPT(final int maximumBounce, final int minimumBounceRussianRoulette) {
+	void doRunPathTracingSmallPT(final int maximumBounce, final int minimumBounceRussianRoulette) {
 		float radianceR = 0.0F;
 		float radianceG = 0.0F;
 		float radianceB = 0.0F;
@@ -309,7 +276,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		imageEnd();
 	}
 	
-	private void doRunRayCasting() {
+	void doRunRayCasting() {
 		if(ray3FCameraGenerate(random(), random())) {
 			if(intersectionComputeShape3F()) {
 				final float rayDirectionX = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
@@ -338,5 +305,61 @@ public final class GPURenderer extends AbstractGPURenderer {
 		imageBegin();
 		imageRedoGammaCorrectionPBRT();
 		imageEnd();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doEvaluateTextureBackground() {
+		final float rayDirectionX = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float rayDirectionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float rayDirectionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+		final float textureCoordinatesU = 0.5F + atan2(rayDirectionZ, rayDirectionX) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = 0.5F - asinpi(rayDirectionY);
+		
+		final float angleRadians = this.textureBackground[ImageTexture.ARRAY_OFFSET_ANGLE_RADIANS];
+		final float angleRadiansCos = cos(angleRadians);
+		final float angleRadiansSin = sin(angleRadians);
+		
+		final float scaleU = this.textureBackground[ImageTexture.ARRAY_OFFSET_SCALE + 0];
+		final float scaleV = this.textureBackground[ImageTexture.ARRAY_OFFSET_SCALE + 1];
+		
+		final int resolutionX = (int)(this.textureBackground[ImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
+		final int resolutionY = (int)(this.textureBackground[ImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
+		
+		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
+		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
+		
+		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
+		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
+		
+		final float x = positiveModuloF(textureCoordinatesScaledU, resolutionX);
+		final float y = positiveModuloF(textureCoordinatesScaledV, resolutionY);
+		
+		final int minimumX = (int)(floor(x));
+		final int maximumX = (int)(ceil(x));
+		
+		final int minimumY = (int)(floor(y));
+		final int maximumY = (int)(ceil(y));
+		
+		final int offsetImage = ImageTexture.ARRAY_OFFSET_IMAGE;
+		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
+		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
+		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
+		final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
+		
+		final int color00RGB = (int)(this.textureBackground[offsetColor00RGB]);
+		final int color01RGB = (int)(this.textureBackground[offsetColor01RGB]);
+		final int color10RGB = (int)(this.textureBackground[offsetColor10RGB]);
+		final int color11RGB = (int)(this.textureBackground[offsetColor11RGB]);
+		
+		final float tX = x - minimumX;
+		final float tY = y - minimumY;
+		
+		final float component1 = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
+		final float component2 = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
+		final float component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
+		
+		color3FLHSSet(component1, component2, component3);
 	}
 }

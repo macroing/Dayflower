@@ -22,6 +22,7 @@ Transform transform6 = new Transform(new Point3F( 0.0F, 10.00F, 0.0F));
 AreaLight areaLight6 = new DiffuseAreaLight(transform6.getObjectToWorld(), 1, new Color3F(50.0F), shape6, false);
 
 //scene.addLight(areaLight6);
+//scene.addLight(ImageLight.undoGammaCorrectionSRGB(ImageLight.load("./resources/textures/pond-at-evening.jpg")));
 scene.addLight(new PerezLight());
 //scene.addLight(new PointLight(new Point3F(0.0F, 2.0F, 0.0F), new Color3F(50.0F)));
 scene.addPrimitive(new Primitive(material1, shape1, transform1));

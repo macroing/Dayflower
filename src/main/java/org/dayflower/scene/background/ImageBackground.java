@@ -49,10 +49,20 @@ import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Image;
+import org.dayflower.node.NodeHierarchicalVisitor;
+import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
 import org.dayflower.util.BufferedImages;
 import org.dayflower.util.ParameterArguments;
 
+/**
+ * An {@code ImageBackground} is a {@link Background} implementation that returns {@link Color3F} instances from an image as radiance.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public class ImageBackground implements Background {
 	private final AngleF angle;
 	private final Vector2F scale;
@@ -199,6 +209,15 @@ public class ImageBackground implements Background {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns the {@link AngleF} instance to use.
+	 * 
+	 * @return the {@code AngleF} instance to use
+	 */
+	public AngleF getAngle() {
+		return this.angle;
+	}
+	
+	/**
 	 * Returns a {@link Color3F} instance with the radiance along {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -254,6 +273,44 @@ public class ImageBackground implements Background {
 	@Override
 	public String toString() {
 		return String.format("new ImageBackground(%d, %d, %s, %s, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), "new int[] {...}", this.angle, this.scale);
+	}
+	
+	/**
+	 * Accepts a {@link NodeHierarchicalVisitor}.
+	 * <p>
+	 * Returns the result of {@code nodeHierarchicalVisitor.visitLeave(this)}.
+	 * <p>
+	 * If {@code nodeHierarchicalVisitor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}, a {@code NodeTraversalException} will be thrown with the {@code RuntimeException} wrapped.
+	 * <p>
+	 * This implementation will:
+	 * <ul>
+	 * <li>throw a {@code NullPointerException} if {@code nodeHierarchicalVisitor} is {@code null}.</li>
+	 * <li>throw a {@code NodeTraversalException} if {@code nodeHierarchicalVisitor} throws a {@code RuntimeException}.</li>
+	 * <li>traverse its child {@code Node} instances.</li>
+	 * </ul>
+	 * 
+	 * @param nodeHierarchicalVisitor the {@code NodeHierarchicalVisitor} to accept
+	 * @return the result of {@code nodeHierarchicalVisitor.visitLeave(this)}
+	 * @throws NodeTraversalException thrown if, and only if, a {@code RuntimeException} is thrown by the current {@code NodeHierarchicalVisitor}
+	 * @throws NullPointerException thrown if, and only if, {@code nodeHierarchicalVisitor} is {@code null}
+	 */
+	@Override
+	public boolean accept(final NodeHierarchicalVisitor nodeHierarchicalVisitor) {
+		Objects.requireNonNull(nodeHierarchicalVisitor, "nodeHierarchicalVisitor == null");
+		
+		try {
+			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.scale.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+			}
+			
+			return nodeHierarchicalVisitor.visitLeave(this);
+		} catch(final RuntimeException e) {
+			throw new NodeTraversalException(e);
+		}
 	}
 	
 	/**

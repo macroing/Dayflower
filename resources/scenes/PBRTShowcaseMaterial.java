@@ -69,6 +69,7 @@ if(isInBox) {
 	scene.setCamera(new Camera(new Point3F(0.0F, 4.0F, -10.0F), AngleF.degrees(40.0F)));
 	scene.setName("PBRTShowcaseMaterial");
 } else {
+//	scene.addLight(ImageLight.undoGammaCorrectionSRGB(ImageLight.load("./resources/textures/pond-at-evening.jpg")));
 	scene.addLight(new PerezLight());
 	scene.addPrimitive(new Primitive(material11, shape11, transform11));
 	scene.addPrimitive(new Primitive(material21, shape21, transform21));

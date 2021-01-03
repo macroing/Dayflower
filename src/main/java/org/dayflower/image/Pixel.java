@@ -19,14 +19,11 @@
 package org.dayflower.image;
 
 import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.saturate;
-import static org.dayflower.util.Ints.toInt;
 
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 import org.dayflower.util.BufferedImages;
-import org.dayflower.util.Floats;
 import org.dayflower.util.ParameterArguments;
 
 /**
@@ -36,10 +33,9 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class Pixel {
-	private Color3F colorRGB;
 	private Color3F colorXYZ;
 	private Color3F splatXYZ;
-	private float alpha;
+	private Color4F colorRGBA;
 	private float filterWeightSum;
 	private int index;
 	private int x;
@@ -50,11 +46,11 @@ public final class Pixel {
 	/**
 	 * Constructs a new {@code Pixel} instance.
 	 * <p>
-	 * If either {@code colorRGB}, {@code colorXYZ} or {@code splatXYZ} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBA}, {@code colorXYZ} or {@code splatXYZ} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If either {@code index}, {@code x} or {@code y} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param colorRGB the current color of this {@code Pixel} instance
+	 * @param colorRGBA the current color of this {@code Pixel} instance
 	 * @param colorXYZ the current color of this {@code Pixel} instance that is used by the film
 	 * @param splatXYZ the current splat of this {@code Pixel} instance that is used by the film
 	 * @param filterWeightSum the filter weight sum of this {@code Pixel} instance that is used by the film
@@ -62,13 +58,12 @@ public final class Pixel {
 	 * @param x the X-coordinate of this {@code Pixel} instance
 	 * @param y the Y-coordinate of this {@code Pixel} instance
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code index}, {@code x} or {@code y} are less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB}, {@code colorXYZ} or {@code splatXYZ} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA}, {@code colorXYZ} or {@code splatXYZ} are {@code null}
 	 */
-	public Pixel(final Color3F colorRGB, final Color3F colorXYZ, final Color3F splatXYZ, final float filterWeightSum, final int index, final int x, final int y) {
-		this.colorRGB = Objects.requireNonNull(colorRGB, "colorRGB == null");
+	public Pixel(final Color4F colorRGBA, final Color3F colorXYZ, final Color3F splatXYZ, final float filterWeightSum, final int index, final int x, final int y) {
+		this.colorRGBA = Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
 		this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
-		this.alpha = 1.0F;
 		this.filterWeightSum = filterWeightSum;
 		this.index = ParameterArguments.requireRange(index, 0, Integer.MAX_VALUE, "index");
 		this.x = ParameterArguments.requireRange(x, 0, Integer.MAX_VALUE, "x");
@@ -83,7 +78,7 @@ public final class Pixel {
 	 * @return the current color of this {@code Pixel} instance
 	 */
 	public Color3F getColorRGB() {
-		return this.colorRGB;
+		return new Color3F(this.colorRGBA);
 	}
 	
 	/**
@@ -105,12 +100,21 @@ public final class Pixel {
 	}
 	
 	/**
+	 * Returns the current color of this {@code Pixel} instance.
+	 * 
+	 * @return the current color of this {@code Pixel} instance
+	 */
+	public Color4F getColorRGBA() {
+		return this.colorRGBA;
+	}
+	
+	/**
 	 * Returns a copy of this {@code Pixel} instance.
 	 * 
 	 * @return a copy of this {@code Pixel} instance
 	 */
 	public Pixel copy() {
-		return new Pixel(this.colorRGB, this.colorXYZ, this.splatXYZ, this.filterWeightSum, this.index, this.x, this.y);
+		return new Pixel(this.colorRGBA, this.colorXYZ, this.splatXYZ, this.filterWeightSum, this.index, this.x, this.y);
 	}
 	
 	/**
@@ -120,7 +124,7 @@ public final class Pixel {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Pixel(%s, %s, %s, %+.10f, %d, %d, %d)", this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
+		return String.format("new Pixel(%s, %s, %s, %+.10f, %d, %d, %d)", this.colorRGBA, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
 	}
 	
 	/**
@@ -137,11 +141,11 @@ public final class Pixel {
 			return true;
 		} else if(!(object instanceof Pixel)) {
 			return false;
-		} else if(!Objects.equals(this.colorRGB, Pixel.class.cast(object).colorRGB)) {
-			return false;
 		} else if(!Objects.equals(this.colorXYZ, Pixel.class.cast(object).colorXYZ)) {
 			return false;
 		} else if(!Objects.equals(this.splatXYZ, Pixel.class.cast(object).splatXYZ)) {
+			return false;
+		} else if(!Objects.equals(this.colorRGBA, Pixel.class.cast(object).colorRGBA)) {
 			return false;
 		} else if(!equal(this.filterWeightSum, Pixel.class.cast(object).filterWeightSum)) {
 			return false;
@@ -157,43 +161,12 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Returns the value of the Alpha component as a {@code byte}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Alpha component as a {@code byte}
-	 */
-	public byte getAsByteAlpha() {
-		return (byte)(getAsIntAlpha() & 0xFF);
-	}
-	
-	/**
-	 * Returns the alpha component of this {@code Pixel} instance.
-	 * 
-	 * @return the alpha component of this {@code Pixel} instance
-	 */
-	public float getAlpha() {
-		return this.alpha;
-	}
-	
-	/**
 	 * Returns the filter weight sum of this {@code Pixel} instance that is used by the film.
 	 * 
 	 * @return the filter weight sum of this {@code Pixel} instance that is used by the film
 	 */
 	public float getFilterWeightSum() {
 		return this.filterWeightSum;
-	}
-	
-	/**
-	 * Returns the value of the Alpha component as an {@code int}.
-	 * <p>
-	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
-	 * 
-	 * @return the value of the Alpha component as an {@code int}
-	 */
-	public int getAsIntAlpha() {
-		return toInt(Floats.saturate(getAlpha()) * 255.0F + 0.5F);
 	}
 	
 	/**
@@ -253,12 +226,12 @@ public final class Pixel {
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
 	public int pack(final PackedIntComponentOrder packedIntComponentOrder) {
-		final Color3F colorRGB = getColorRGB();
+		final Color4F colorRGBA = getColorRGBA();
 		
-		final int r = colorRGB.getAsIntR();
-		final int g = colorRGB.getAsIntG();
-		final int b = colorRGB.getAsIntB();
-		final int a = toInt(saturate(getAlpha()) * 255.0F + 0.5F);
+		final int r = colorRGBA.getAsIntR();
+		final int g = colorRGBA.getAsIntG();
+		final int b = colorRGBA.getAsIntB();
+		final int a = colorRGBA.getAsIntA();
 		
 		return packedIntComponentOrder.pack(r, g, b, a);
 	}
@@ -270,7 +243,7 @@ public final class Pixel {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.colorRGB, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
+		return Objects.hash(this.colorXYZ, this.splatXYZ, this.colorRGBA, Float.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
 	}
 	
 	/**
@@ -301,15 +274,6 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Sets the alpha component of this {@code Pixel} instance to {@code alpha}.
-	 * 
-	 * @param alpha the alpha component of this {@code Pixel} instance
-	 */
-	public void setAlpha(final float alpha) {
-		this.alpha = alpha;
-	}
-	
-	/**
 	 * Sets {@code colorRGB} as the color of this {@code Pixel} instance.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -318,7 +282,19 @@ public final class Pixel {
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
 	public void setColorRGB(final Color3F colorRGB) {
-		this.colorRGB = Objects.requireNonNull(colorRGB, "colorRGB == null");
+		this.colorRGBA = new Color4F(colorRGB);
+	}
+	
+	/**
+	 * Sets {@code colorRGBA} as the color of this {@code Pixel} instance.
+	 * <p>
+	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorRGBA the color of this {@code Pixel} instance
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
+	 */
+	public void setColorRGBA(final Color4F colorRGBA) {
+		this.colorRGBA = Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 	}
 	
 	/**
@@ -393,12 +369,12 @@ public final class Pixel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns an array with {@code Pixel} instances filled with the {@code Color3F} instances in {@code bufferedImage}.
+	 * Returns an array with {@code Pixel} instances filled with the {@code Color4F} instances in {@code bufferedImage}.
 	 * <p>
 	 * If {@code bufferedImage} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bufferedImage a {@code BufferedImage} instance
-	 * @return an array with {@code Pixel} instances filled with the {@code Color3F} instances in {@code bufferedImage}
+	 * @return an array with {@code Pixel} instances filled with the {@code Color4F} instances in {@code bufferedImage}
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
 	public static Pixel[] createPixels(final BufferedImage bufferedImage) {
@@ -414,34 +390,34 @@ public final class Pixel {
 			final int x = index % resolutionX;
 			final int y = index / resolutionX;
 			
-			final Color3F colorRGB = Color3F.unpack(compatibleBufferedImage.getRGB(x, y));
+			final Color4F colorRGBA = Color4F.unpack(compatibleBufferedImage.getRGB(x, y));
 			
-			pixels[i] = new Pixel(colorRGB, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
+			pixels[i] = new Pixel(colorRGBA, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
 		}
 		
 		return pixels;
 	}
 	
 	/**
-	 * Returns an array with {@code Pixel} instances filled with {@code colorRGB}.
+	 * Returns an array with {@code Pixel} instances filled with {@code colorRGBA}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGB the {@link Color3F} to fill the {@code Pixel} instances with
-	 * @return an array with {@code Pixel} instances filled with {@code colorRGB}
+	 * @param colorRGBA the {@link Color4F} to fill the {@code Pixel} instances with
+	 * @return an array with {@code Pixel} instances filled with {@code colorRGBA}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
-	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color3F colorRGB) {
+	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color4F colorRGBA) {
 		ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		
-		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
 		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
 		
@@ -450,34 +426,34 @@ public final class Pixel {
 			final int x = index % resolutionX;
 			final int y = index / resolutionX;
 			
-			pixels[i] = new Pixel(colorRGB, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
+			pixels[i] = new Pixel(colorRGBA, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
 		}
 		
 		return pixels;
 	}
 	
 	/**
-	 * Returns an array with {@code Pixel} instances filled with the {@code Color3F} instances in the array {@code colorRGBs}.
+	 * Returns an array with {@code Pixel} instances filled with the {@code Color4F} instances in the array {@code colorRGBAs}.
 	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If either {@code colorRGBs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBAs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the {@link Color3F} instances to fill the {@code Pixel} instances with
-	 * @return an array with {@code Pixel} instances filled with the {@code Color3F} instances in the array {@code colorRGBs}
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or at least one of its elements are {@code null}
+	 * @param colorRGBAs the {@link Color4F} instances to fill the {@code Pixel} instances with
+	 * @return an array with {@code Pixel} instances filled with the {@code Color4F} instances in the array {@code colorRGBAs}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or at least one of its elements are {@code null}
 	 */
-	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs) {
+	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs) {
 		ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		
-		Objects.requireNonNull(colorRGBs, "colorRGBs == null");
+		Objects.requireNonNull(colorRGBAs, "colorRGBAs == null");
 		
-		ParameterArguments.requireExact(colorRGBs.length, resolutionX * resolutionY, "colorRGBs.length");
+		ParameterArguments.requireExact(colorRGBAs.length, resolutionX * resolutionY, "colorRGBAs.length");
 		
 		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
 		
@@ -486,7 +462,7 @@ public final class Pixel {
 			final int x = index % resolutionX;
 			final int y = index / resolutionX;
 			
-			pixels[i] = new Pixel(Objects.requireNonNull(colorRGBs[i], String.format("colorRGBs[%d] == null", Integer.valueOf(i))), Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
+			pixels[i] = new Pixel(Objects.requireNonNull(colorRGBAs[i], String.format("colorRGBAs[%d] == null", Integer.valueOf(i))), Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
 		}
 		
 		return pixels;
@@ -502,12 +478,13 @@ public final class Pixel {
 	 * @throws NullPointerException thrown if, and only if, either {@code pixelA} or {@code pixelB} are {@code null}
 	 */
 	public static void swap(final Pixel pixelA, final Pixel pixelB) {
-		final Color3F colorRGBA = pixelA.getColorRGB();
-		final Color3F colorRGBB = pixelB.getColorRGB();
 		final Color3F colorXYZA = pixelA.getColorXYZ();
 		final Color3F colorXYZB = pixelB.getColorXYZ();
 		final Color3F splatXYZA = pixelA.getSplatXYZ();
 		final Color3F splatXYZB = pixelB.getSplatXYZ();
+		
+		final Color4F colorRGBAA = pixelA.getColorRGBA();
+		final Color4F colorRGBAB = pixelB.getColorRGBA();
 		
 		final float filterWeightSumA = pixelA.getFilterWeightSum();
 		final float filterWeightSumB = pixelB.getFilterWeightSum();
@@ -519,7 +496,7 @@ public final class Pixel {
 		final int yA = pixelA.getY();
 		final int yB = pixelB.getY();
 		
-		pixelA.setColorRGB(colorRGBB);
+		pixelA.setColorRGBA(colorRGBAB);
 		pixelA.setColorXYZ(colorXYZB);
 		pixelA.setSplatXYZ(splatXYZB);
 		pixelA.setFilterWeightSum(filterWeightSumB);
@@ -527,7 +504,7 @@ public final class Pixel {
 		pixelA.setX(xB);
 		pixelA.setY(yB);
 		
-		pixelB.setColorRGB(colorRGBA);
+		pixelB.setColorRGBA(colorRGBAA);
 		pixelB.setColorXYZ(colorXYZA);
 		pixelB.setSplatXYZ(splatXYZA);
 		pixelB.setFilterWeightSum(filterWeightSumA);

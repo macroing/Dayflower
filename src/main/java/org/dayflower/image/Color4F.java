@@ -28,9 +28,11 @@ import static org.dayflower.util.Floats.toFloat;
 import static org.dayflower.util.Ints.toInt;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import org.dayflower.util.Floats;
 import org.dayflower.util.Ints;
+import org.dayflower.util.ParameterArguments;
 
 /**
  * A {@code Color4F} encapsulates a color using the data type {@code float}.
@@ -41,6 +43,18 @@ import org.dayflower.util.Ints;
  * @author J&#246;rgen Lundgren
  */
 public final class Color4F {
+	/**
+	 * A {@code Color4F} denoting the color black.
+	 */
+	public static final Color4F BLACK = new Color4F();
+	
+	/**
+	 * A {@code Color4F} denoting the color white.
+	 */
+	public static final Color4F WHITE = new Color4F(1.0F, 1.0F, 1.0F);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final float component1;
 	private final float component2;
 	private final float component3;
@@ -863,5 +877,279 @@ public final class Color4F {
 		final int a = getAsIntA();
 		
 		return packedIntComponentOrder.pack(r, g, b, a);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code Color4F} instance with random component values.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color4F(Floats.random(), Floats.random(), Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color4F} instance with random component values
+	 */
+	public static Color4F random() {
+		final float component1 = Floats.random();
+		final float component2 = Floats.random();
+		final float component3 = Floats.random();
+		
+		return new Color4F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Color4F} instance by unpacking {@code color} using {@code PackedIntComponentOrder.ARGB}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4F.unpack(color, PackedIntComponentOrder.ARGB);
+	 * }
+	 * </pre>
+	 * 
+	 * @param color an {@code int} with the color in packed form
+	 * @return a {@code Color4F} instance by unpacking {@code color} using {@code PackedIntComponentOrder.ARGB}
+	 */
+	public static Color4F unpack(final int color) {
+		return unpack(color, PackedIntComponentOrder.ARGB);
+	}
+	
+	/**
+	 * Returns a {@code Color4F} instance by unpacking {@code color} using {@code packedIntComponentOrder}.
+	 * <p>
+	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color an {@code int} with the color in packed form
+	 * @param packedIntComponentOrder the {@link PackedIntComponentOrder} to unpack the component values with
+	 * @return a {@code Color4F} instance by unpacking {@code color} using {@code packedIntComponentOrder}
+	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
+	 */
+	public static Color4F unpack(final int color, final PackedIntComponentOrder packedIntComponentOrder) {
+		final int r = packedIntComponentOrder.unpackR(color);
+		final int g = packedIntComponentOrder.unpackG(color);
+		final int b = packedIntComponentOrder.unpackB(color);
+		final int a = packedIntComponentOrder.unpackA(color);
+		
+		return new Color4F(r, g, b, a);
+	}
+	
+	/**
+	 * Returns a {@code Color4F[]} with a length of {@code length} and contains {@code Color4F.BLACK}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4F.array(length, () -> Color4F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param length the length of the array
+	 * @return a {@code Color4F[]} with a length of {@code length} and contains {@code Color4F.BLACK}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static Color4F[] array(final int length) {
+		return array(length, () -> BLACK);
+	}
+	
+	/**
+	 * Returns a {@code Color4F[]} with a length of {@code length} and contains {@code Color4F} instances supplied by {@code supplier}.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If {@code supplier} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param length the length of the array
+	 * @param supplier a {@code Supplier}
+	 * @return a {@code Color4F[]} with a length of {@code length} and contains {@code Color4F} instances supplied by {@code supplier}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code supplier} is {@code null}
+	 */
+	public static Color4F[] array(final int length, final Supplier<Color4F> supplier) {
+		final Color4F[] colors = new Color4F[ParameterArguments.requireRange(length, 0, Integer.MAX_VALUE, "length")];
+		
+		Objects.requireNonNull(supplier, "supplier == null");
+		
+		for(int i = 0; i < colors.length; i++) {
+			colors[i] = Objects.requireNonNull(supplier.get());
+		}
+		
+		return colors;
+	}
+	
+	/**
+	 * Returns a {@code Color4F[]} with a length of {@code length} and contains random {@code Color4F} instances.
+	 * <p>
+	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4F.array(length, () -> Color4F.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @param length the length of the array
+	 * @return a {@code Color4F[]} with a length of {@code length} and contains random {@code Color4F} instances
+	 * @throws IllegalArgumentException thrown if, and only if, {@code length} is less than {@code 0}
+	 */
+	public static Color4F[] arrayRandom(final int length) {
+		return array(length, () -> random());
+	}
+	
+	/**
+	 * Returns a {@code Color4F[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color4F} instances read from {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4F.arrayRead(array, ArrayComponentOrder.BGRA);
+	 * }
+	 * </pre>
+	 * 
+	 * @param array the array to read from
+	 * @return a {@code Color4F[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color4F} instances read from {@code array}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public static Color4F[] arrayRead(final byte[] array) {
+		return arrayRead(array, ArrayComponentOrder.BGRA);
+	}
+	
+	/**
+	 * Returns a {@code Color4F[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color4F} instances read from {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @return a {@code Color4F[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color4F} instances read from {@code array}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
+	 */
+	public static Color4F[] arrayRead(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		final Color4F[] colors = new Color4F[array.length / arrayComponentOrder.getComponentCount()];
+		
+		for(int i = 0; i < colors.length; i++) {
+			final int r = arrayComponentOrder.readR(array, i * arrayComponentOrder.getComponentCount());
+			final int g = arrayComponentOrder.readG(array, i * arrayComponentOrder.getComponentCount());
+			final int b = arrayComponentOrder.readB(array, i * arrayComponentOrder.getComponentCount());
+			final int a = arrayComponentOrder.readA(array, i * arrayComponentOrder.getComponentCount());
+			
+			colors[i] = new Color4F(r, g, b, a);
+		}
+		
+		return colors;
+	}
+	
+	/**
+	 * Returns a {@code Color4F[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color4F} instances read from {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4F.arrayRead(array, ArrayComponentOrder.BGRA);
+	 * }
+	 * </pre>
+	 * 
+	 * @param array the array to read from
+	 * @return a {@code Color4F[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color4F} instances read from {@code array}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public static Color4F[] arrayRead(final int[] array) {
+		return arrayRead(array, ArrayComponentOrder.BGRA);
+	}
+	
+	/**
+	 * Returns a {@code Color4F[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color4F} instances read from {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * 
+	 * @param array the array to read from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @return a {@code Color4F[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color4F} instances read from {@code array}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
+	 */
+	public static Color4F[] arrayRead(final int[] array, final ArrayComponentOrder arrayComponentOrder) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		final Color4F[] colors = new Color4F[array.length / arrayComponentOrder.getComponentCount()];
+		
+		for(int i = 0; i < colors.length; i++) {
+			final int r = arrayComponentOrder.readR(array, i * arrayComponentOrder.getComponentCount());
+			final int g = arrayComponentOrder.readG(array, i * arrayComponentOrder.getComponentCount());
+			final int b = arrayComponentOrder.readB(array, i * arrayComponentOrder.getComponentCount());
+			final int a = arrayComponentOrder.readA(array, i * arrayComponentOrder.getComponentCount());
+			
+			colors[i] = new Color4F(r, g, b, a);
+		}
+		
+		return colors;
+	}
+	
+	/**
+	 * Returns a {@code Color4F[]} with a length of {@code array.length} and contains {@code Color4F} instances unpacked from {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4F.arrayUnpack(array, PackedIntComponentOrder.ARGB);
+	 * }
+	 * </pre>
+	 * 
+	 * @param array the array to unpack from
+	 * @return a {@code Color4F[]} with a length of {@code array.length} and contains {@code Color4F} instances unpacked from {@code array}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
+	public static Color4F[] arrayUnpack(final int[] array) {
+		return arrayUnpack(array, PackedIntComponentOrder.ARGB);
+	}
+	
+	/**
+	 * Returns a {@code Color4F[]} with a length of {@code array.length} and contains {@code Color4F} instances unpacked from {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code packedIntComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param array the array to unpack from
+	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder} instance
+	 * @return a {@code Color4F[]} with a length of {@code array.length} and contains {@code Color4F} instances unpacked from {@code array}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code packedIntComponentOrder} are {@code null}
+	 */
+	public static Color4F[] arrayUnpack(final int[] array, final PackedIntComponentOrder packedIntComponentOrder) {
+		Objects.requireNonNull(array, "array == null");
+		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");
+		
+		final Color4F[] colors = new Color4F[array.length];
+		
+		for(int i = 0; i < colors.length; i++) {
+			colors[i] = unpack(array[i], packedIntComponentOrder);
+		}
+		
+		return colors;
 	}
 }

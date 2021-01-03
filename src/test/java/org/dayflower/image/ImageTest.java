@@ -36,7 +36,6 @@ public final class ImageTest {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(final String[] args) {
-		doTestPixelImageCopper();
 		doTestPixelImageDrawCircle();
 		doTestPixelImageDrawLine();
 		doTestPixelImageDrawRectangle();
@@ -55,64 +54,58 @@ public final class ImageTest {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	static void doTestPixelImageCopper() {
-		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color3F.maximumTo1(Color3F.convertXYZToRGBUsingSRGB(IrregularSpectralCurve.COPPER_K.toColorXYZ())));
-		pixelImage.save("./generated/doTestImageCopper.png");
-	}
-	
 	static void doTestPixelImageDrawCircle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		pixelImage.drawCircle(new Circle2I(new Point2I(60, 60), 40));
 		pixelImage.save("./generated/doTestImageDrawCircle.png");
 	}
 	
 	static void doTestPixelImageDrawLine() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		pixelImage.drawLine(new Line2I(new Point2I(20, 20), new Point2I(100, 100)));
 		pixelImage.save("./generated/doTestImageDrawLine.png");
 	}
 	
 	static void doTestPixelImageDrawRectangle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		pixelImage.drawRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
 		pixelImage.save("./generated/doTestImageDrawRectangle.png");
 	}
 	
 	static void doTestPixelImageDrawTriangle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		pixelImage.drawTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
 		pixelImage.save("./generated/doTestImageDrawTriangle.png");
 	}
 	
 	static void doTestPixelImageFillCircle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		pixelImage.fillCircle(new Circle2I(new Point2I(60, 60), 40));
 		pixelImage.save("./generated/doTestImageFillCircle.png");
 	}
 	
 	static void doTestPixelImageFillPixelImage() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		pixelImage.fillPixelImage(PixelImage.random(100, 100), new Rectangle2I(new Point2I(), new Point2I(100, 100)), new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
 		pixelImage.save("./generated/doTestImageFillImage.png");
 	}
 	
 	static void doTestPixelImageFillRectangle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		pixelImage.fillRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
 		pixelImage.save("./generated/doTestImageFillRectangle.png");
 	}
 	
 	static void doTestPixelImageFillTriangle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		pixelImage.fillTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
 		pixelImage.save("./generated/doTestImageFillTriangle.png");
 	}
@@ -132,7 +125,7 @@ public final class ImageTest {
 	}
 	
 	static void doTestPixelImageSamplerNRooksSampler() {
-		final PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		final PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		
 		final Sampler sampler = new NRooksSampler();
 		
@@ -150,7 +143,7 @@ public final class ImageTest {
 	}
 	
 	static void doTestPixelImageSamplerRandomSampler() {
-		final PixelImage pixelImage = new PixelImage(800, 800, Color3F.WHITE);
+		final PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
 		
 		final Sampler sampler = new RandomSampler();
 		

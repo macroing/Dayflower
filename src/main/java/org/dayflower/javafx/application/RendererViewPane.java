@@ -36,6 +36,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.BoxFilter;
 import org.dayflower.image.Color3F;
+import org.dayflower.image.Color4F;
 import org.dayflower.image.Image;
 import org.dayflower.image.PixelImage;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
@@ -424,7 +425,7 @@ final class RendererViewPane extends BorderPane {
 	private static WritableImage doCreateWritableImageMaterial(final Material material) {
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
-		combinedProgressiveImageOrderRenderer.setImage(new PixelImage(32, 32, Color3F.BLACK, new BoxFilter()));
+		combinedProgressiveImageOrderRenderer.setImage(new PixelImage(32, 32, Color4F.BLACK, new BoxFilter()));
 		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(doCreateRenderingAlgorithm(material));
 		combinedProgressiveImageOrderRenderer.setRenderPasses(10);
@@ -442,7 +443,7 @@ final class RendererViewPane extends BorderPane {
 	@SuppressWarnings("unused")
 	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
 		final
-		PixelImage pixelImage = new PixelImage(32, 32, Color3F.WHITE);
+		PixelImage pixelImage = new PixelImage(32, 32, Color4F.WHITE);
 		pixelImage.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImage.getResolutionX() - 1, pixelImage.getResolutionY() - 1)), new Color3F(181, 181, 181));
 		
 		return pixelImage.toWritableImage();

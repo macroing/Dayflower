@@ -155,14 +155,14 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@code Color3F.BLACK}.
+	 * Constructs a new {@code PixelImage} instance filled with {@code Color4F.BLACK}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, Color3F.BLACK);
+	 * new PixelImage(resolutionX, resolutionY, Color4F.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -171,266 +171,266 @@ public final class PixelImage implements Image {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
 	public PixelImage(final int resolutionX, final int resolutionY) {
-		this(resolutionX, resolutionY, Color3F.BLACK);
+		this(resolutionX, resolutionY, Color4F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@code colorRGB}.
+	 * Constructs a new {@code PixelImage} instance filled with {@code colorRGBA}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGB, new MitchellFilter());
+	 * new PixelImage(resolutionX, resolutionY, colorRGBA, new MitchellFilter());
 	 * }
 	 * </pre>
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGB the {@link Color3F} to fill the {@code PixelImage} with
+	 * @param colorRGBA the {@link Color4F} to fill the {@code PixelImage} with
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color3F colorRGB) {
-		this(resolutionX, resolutionY, colorRGB, new MitchellFilter());
+	public PixelImage(final int resolutionX, final int resolutionY, final Color4F colorRGBA) {
+		this(resolutionX, resolutionY, colorRGBA, new MitchellFilter());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@code colorRGB}.
+	 * Constructs a new {@code PixelImage} instance filled with {@code colorRGBA}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If either {@code colorRGB} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBA} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGB the {@link Color3F} to fill the {@code PixelImage} with
+	 * @param colorRGBA the {@link Color4F} to fill the {@code PixelImage} with
 	 * @param filter the {@link Filter} to use
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code filter} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color3F colorRGB, final Filter filter) {
+	public PixelImage(final int resolutionX, final int resolutionY, final Color4F colorRGBA, final Filter filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGB);
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGBA);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with the {@link Color3F} instances in the array {@code colorRGBs}.
+	 * Constructs a new {@code PixelImage} instance filled with the {@link Color4F} instances in the array {@code colorRGBAs}.
 	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If either {@code colorRGBs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBAs} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBs, new MitchellFilter());
+	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, new MitchellFilter());
 	 * }
 	 * </pre>
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the {@code Color3F} instances to fill the {@code PixelImage} with
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or at least one of its elements are {@code null}
+	 * @param colorRGBAs the {@code Color4F} instances to fill the {@code PixelImage} with
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or at least one of its elements are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs) {
-		this(resolutionX, resolutionY, colorRGBs, new MitchellFilter());
+	public PixelImage(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs) {
+		this(resolutionX, resolutionY, colorRGBAs, new MitchellFilter());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with the {@link Color3F} instances in the array {@code colorRGBs}.
+	 * Constructs a new {@code PixelImage} instance filled with the {@link Color4F} instances in the array {@code colorRGBAs}.
 	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If either {@code colorRGBs}, at least one of its elements or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBAs}, at least one of its elements or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the {@code Color3F} instances to fill the {@code PixelImage} with
+	 * @param colorRGBAs the {@code Color4F} instances to fill the {@code PixelImage} with
 	 * @param filter the {@link Filter} to use
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, at least one of its elements or {@code filter} are {@code null}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, at least one of its elements or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color3F[] colorRGBs, final Filter filter) {
+	public PixelImage(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs, final Filter filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGBs);
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGBAs);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color3F} instances read from {@code colorRGBs}.
+	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
 	 * <p>
-	 * If {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}, an
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}, an
 	 * {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If either {@code colorRGBs} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBAs} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBs, arrayComponentOrder, new MitchellFilter());
+	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter());
 	 * }
 	 * </pre>
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the array to read {@code Color3F} instances from
+	 * @param colorRGBAs the array to read {@code Color4F} instances from
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
-	 *                                  {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or {@code arrayComponentOrder} are {@code null}
+	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or {@code arrayComponentOrder} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final byte[] colorRGBs, final ArrayComponentOrder arrayComponentOrder) {
-		this(resolutionX, resolutionY, colorRGBs, arrayComponentOrder, new MitchellFilter());
+	public PixelImage(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder) {
+		this(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color3F} instances read from {@code colorRGBs}.
+	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
 	 * <p>
-	 * If {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}, an
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}, an
 	 * {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the array to read {@code Color3F} instances from
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
-	 * @param filter the {@link Filter} to use
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
-	 *                                  {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
-	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final byte[] colorRGBs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
-		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color3F.arrayRead(colorRGBs, arrayComponentOrder));
-		this.filter = Objects.requireNonNull(filter, "filter == null");
-		this.filterTable = filter.createFilterTable();
-	}
-	
-	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color3F} instances read from {@code colorRGBs}.
-	 * <p>
-	 * If {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
-	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}, an
-	 * {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * If either {@code colorRGBs} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBs, arrayComponentOrder, new MitchellFilter());
-	 * }
-	 * </pre>
-	 * 
-	 * @param resolutionX the resolution of the X-axis
-	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the array to read {@code Color3F} instances from
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
-	 *                                  {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or {@code arrayComponentOrder} are {@code null}
-	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBs, final ArrayComponentOrder arrayComponentOrder) {
-		this(resolutionX, resolutionY, colorRGBs, arrayComponentOrder, new MitchellFilter());
-	}
-	
-	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color3F} instances read from {@code colorRGBs}.
-	 * <p>
-	 * If {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
-	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}, an
-	 * {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * If either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param resolutionX the resolution of the X-axis
-	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the array to read {@code Color3F} instances from
+	 * @param colorRGBAs the array to read {@code Color4F} instances from
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
 	 * @param filter the {@link Filter} to use
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
-	 *                                  {@code resolutionX * resolutionY != Color3F.arrayRead(colorRGBs, arrayComponentOrder).length}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
+	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
+	public PixelImage(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color3F.arrayRead(colorRGBs, arrayComponentOrder));
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color4F.arrayRead(colorRGBAs, arrayComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color3F} instances unpacked from {@code colorRGBs}.
+	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
 	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
-	 * If either {@code colorRGBs} or {@code packedIntComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}, an
+	 * {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBAs} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBs, packedIntComponentOrder, new MitchellFilter());
+	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter());
 	 * }
 	 * </pre>
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the array to unpack {@code Color3F} instances from
+	 * @param colorRGBAs the array to read {@code Color4F} instances from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
+	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or {@code arrayComponentOrder} are {@code null}
+	 */
+	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder) {
+		this(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter());
+	}
+	
+	/**
+	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
+	 * <p>
+	 * If {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}, an
+	 * {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBAs the array to read {@code Color4F} instances from
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
+	 * @param filter the {@link Filter} to use
+	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
+	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
+	 */
+	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
+		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
+		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
+		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color4F.arrayRead(colorRGBAs, arrayComponentOrder));
+		this.filter = Objects.requireNonNull(filter, "filter == null");
+		this.filterTable = filter.createFilterTable();
+	}
+	
+	/**
+	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances unpacked from {@code colorRGBAs}.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * If either {@code colorRGBAs} or {@code packedIntComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, packedIntComponentOrder, new MitchellFilter());
+	 * }
+	 * </pre>
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @param colorRGBAs the array to unpack {@code Color4F} instances from
 	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder} instance
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs} or {@code packedIntComponentOrder} are {@code null}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or {@code packedIntComponentOrder} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBs, final PackedIntComponentOrder packedIntComponentOrder) {
-		this(resolutionX, resolutionY, colorRGBs, packedIntComponentOrder, new MitchellFilter());
+	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder) {
+		this(resolutionX, resolutionY, colorRGBAs, packedIntComponentOrder, new MitchellFilter());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color3F} instances unpacked from {@code colorRGBs}.
+	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances unpacked from {@code colorRGBAs}.
 	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}, an {@code IllegalArgumentException} will be thrown.
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * If either {@code colorRGBs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBAs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBs the array to unpack {@code Color3F} instances from
+	 * @param colorRGBAs the array to unpack {@code Color4F} instances from
 	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder} instance
 	 * @param filter the {@link Filter} to use
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBs.length}
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBs, final PackedIntComponentOrder packedIntComponentOrder, final Filter filter) {
+	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder, final Filter filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color3F.arrayUnpack(colorRGBs, packedIntComponentOrder));
+		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color4F.arrayUnpack(colorRGBAs, packedIntComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
@@ -547,7 +547,7 @@ public final class PixelImage implements Image {
 	 */
 	@Override
 	public Color3F getColorRGB(final int index, final PixelOperation pixelOperation) {
-		return getPixel(index, pixelOperation).map(pixel -> pixel.getColorRGB()).orElse(Color3F.BLACK);
+		return new Color3F(getPixel(index, pixelOperation).map(pixel -> pixel.getColorRGBA()).orElse(Color4F.BLACK));
 	}
 	
 	/**
@@ -584,7 +584,7 @@ public final class PixelImage implements Image {
 	 */
 	@Override
 	public Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
-		return getPixel(x, y, pixelOperation).map(pixel -> pixel.getColorRGB()).orElse(Color3F.BLACK);
+		return new Color3F(getPixel(x, y, pixelOperation).map(pixel -> pixel.getColorRGBA()).orElse(Color4F.BLACK));
 	}
 	
 	/**
@@ -880,7 +880,7 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code Color3F.BLACK} and an alpha component of {@code 1.0F}.
+	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code Color3F.BLACK}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -894,38 +894,17 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code colorRGB} and an alpha component of {@code 1.0F}.
+	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code colorRGB}.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.clear(colorRGB, 1.0F);
-	 * }
-	 * </pre>
 	 * 
 	 * @param colorRGB the {@code Color3F} to clear with
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
 	public void clear(final Color3F colorRGB) {
-		clear(colorRGB, 1.0F);
-	}
-	
-	/**
-	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code colorRGB} and an alpha component of {@code alpha}.
-	 * <p>
-	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param colorRGB the {@code Color3F} to clear with
-	 * @param alpha the alpha component to clear with
-	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
-	 */
-	public void clear(final Color3F colorRGB, final float alpha) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		
 		for(final Pixel pixel : this.pixels) {
-			pixel.setAlpha(alpha);
 			pixel.setColorRGB(colorRGB);
 		}
 	}
@@ -973,24 +952,22 @@ public final class PixelImage implements Image {
 		ParameterArguments.requireExact(array.length, this.pixels.length * arrayComponentOrder.getComponentCount(), "array");
 		
 		for(int i = 0, j = 0; i < this.pixels.length; i++, j += arrayComponentOrder.getComponentCount()) {
-			final Color3F colorRGB = this.pixels[i].getColorRGB();
-			
-			final byte alpha = this.pixels[i].getAsByteAlpha();
+			final Color4F colorRGBA = this.pixels[i].getColorRGBA();
 			
 			if(arrayComponentOrder.hasOffsetR()) {
-				array[j + arrayComponentOrder.getOffsetR()] = colorRGB.getAsByteR();
+				array[j + arrayComponentOrder.getOffsetR()] = colorRGBA.getAsByteR();
 			}
 			
 			if(arrayComponentOrder.hasOffsetG()) {
-				array[j + arrayComponentOrder.getOffsetG()] = colorRGB.getAsByteG();
+				array[j + arrayComponentOrder.getOffsetG()] = colorRGBA.getAsByteG();
 			}
 			
 			if(arrayComponentOrder.hasOffsetB()) {
-				array[j + arrayComponentOrder.getOffsetB()] = colorRGB.getAsByteB();
+				array[j + arrayComponentOrder.getOffsetB()] = colorRGBA.getAsByteB();
 			}
 			
 			if(arrayComponentOrder.hasOffsetA()) {
-				array[j + arrayComponentOrder.getOffsetA()] = alpha;
+				array[j + arrayComponentOrder.getOffsetA()] = colorRGBA.getAsByteA();
 			}
 		}
 	}
@@ -2299,12 +2276,7 @@ public final class PixelImage implements Image {
 	 */
 	public static PixelImage load(final File file, final Filter filter) {
 		try {
-			final BufferedImage bufferedImage = BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
-			
-			final int resolutionX = bufferedImage.getWidth();
-			final int resolutionY = bufferedImage.getHeight();
-			
-			return unpackFromARGB(resolutionX, resolutionY, DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData(), Objects.requireNonNull(filter, "filter == null"));
+			return new PixelImage(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))), filter);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -2378,72 +2350,16 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Returns a new {@code PixelImage} instance filled with random {@link Color3F} instances.
+	 * Returns a new {@code PixelImage} instance filled with random {@link Color4F} instances.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @return a new {@code PixelImage} instance filled with random {@code Color3F} instances
+	 * @return a new {@code PixelImage} instance filled with random {@code Color4F} instances
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
 	public static PixelImage random(final int resolutionX, final int resolutionY) {
-		return new PixelImage(resolutionX, resolutionY, Color3F.arrayRandom(resolutionX * resolutionY));
-	}
-	
-	/**
-	 * Unpacks {@code imageARGB} into a {@code PixelImage} instance using {@code PackedIntComponentOrder.ARGB}.
-	 * <p>
-	 * Returns a {@code PixelImage} instance.
-	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code imageARGB.length != resolutionX * resolutionY}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * If {@code imageARGB} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * PixelImage.unpackFromARGB(resolutionX, resolutionY, imageARGB, new MitchellFilter());
-	 * }
-	 * </pre>
-	 * 
-	 * @param resolutionX the resolution of the X-axis
-	 * @param resolutionY the resolution of the Y-axis
-	 * @param imageARGB an {@code int[]} with {@code int} values representing colors in packed form as ARGB
-	 * @return a {@code PixelImage} instance
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code imageARGB.length != resolutionX * resolutionY}
-	 * @throws NullPointerException thrown if, and only if, {@code imageARGB} is {@code null}
-	 */
-	public static PixelImage unpackFromARGB(final int resolutionX, final int resolutionY, final int[] imageARGB) {
-		return unpackFromARGB(resolutionX, resolutionY, imageARGB, new MitchellFilter());
-	}
-	
-	/**
-	 * Unpacks {@code imageARGB} into a {@code PixelImage} instance using {@code PackedIntComponentOrder.ARGB}.
-	 * <p>
-	 * Returns a {@code PixelImage} instance.
-	 * <p>
-	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code imageARGB.length != resolutionX * resolutionY}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * If either {@code imageARGB} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param resolutionX the resolution of the X-axis
-	 * @param resolutionY the resolution of the Y-axis
-	 * @param imageARGB an {@code int[]} with {@code int} values representing colors in packed form as ARGB
-	 * @param filter the {@link Filter} to use
-	 * @return a {@code PixelImage} instance
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code imageARGB.length != resolutionX * resolutionY}
-	 * @throws NullPointerException thrown if, and only if, either {@code imageARGB} or {@code filter} are {@code null}
-	 */
-	public static PixelImage unpackFromARGB(final int resolutionX, final int resolutionY, final int[] imageARGB, final Filter filter) {
-		final PixelImage pixelImage = new PixelImage(resolutionX, resolutionY, new Color3F(), filter);
-		
-		ParameterArguments.requireExact(imageARGB.length, resolutionX * resolutionY, "imageARGB.length");
-		
-		for(int i = 0; i < pixelImage.resolution; i++) {
-			pixelImage.setColorRGB(Color3F.unpack(imageARGB[i], PackedIntComponentOrder.ARGB), i);
-		}
-		
-		return pixelImage;
+		return new PixelImage(resolutionX, resolutionY, Color4F.arrayRandom(resolutionX * resolutionY));
 	}
 }

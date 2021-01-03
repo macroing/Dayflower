@@ -2032,6 +2032,27 @@ public final class PixelImage implements Image {
 	/**
 	 * Updates this {@code PixelImage} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
 	 * <p>
+	 * If either {@code function}, {@code a} or {@code b} are {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * pixelImage.update(function, a.getX(), a.getY(), b.getX(), b.getY());
+	 * }
+	 * </pre>
+	 * 
+	 * @param function a {@code Function} that updates the old {@code Color3F} instances with new {@code Color3F} instances
+	 * @param a a {@link Point2I} instance with the minimum (inclusive) or maximum (exclusive) X-coordinate and the minimum (inclusive) or maximum (exclusive) Y-coordinate of the region to be updated
+	 * @param b a {@code Point2I} instance with the maximum (exclusive) or minimum (inclusive) X-coordinate and the maximum (exclusive) or minimum (inclusive) Y-coordinate of the region to be updated
+	 * @throws NullPointerException thrown if, and only if, either {@code function}, {@code a} or {@code b} are {@code null} or {@code function.apply(oldColor)} returns {@code null}
+	 */
+	public void update(final Function<Color3F, Color3F> function, final Point2I a, final Point2I b) {
+		update(function, a.getX(), a.getY(), b.getX(), b.getY());
+	}
+	
+	/**
+	 * Updates this {@code PixelImage} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
+	 * <p>
 	 * If {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param function a {@code Function} that updates the old {@code Color3F} instances with new {@code Color3F} instances

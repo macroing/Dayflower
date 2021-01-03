@@ -21,6 +21,9 @@ package org.dayflower.image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.UncheckedIOException;
+import java.util.List;
+
+import org.dayflower.geometry.shape.Rectangle2I;
 
 import javafx.scene.image.WritableImage;
 
@@ -39,11 +42,126 @@ public interface Image {
 	BufferedImage toBufferedImage();
 	
 	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 */
+	Color3F getColorRGB(final float x, final float y);
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
+	Color3F getColorRGB(final float x, final float y, final PixelOperation pixelOperation);
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(index, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param index the index of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code index}
+	 */
+	Color3F getColorRGB(final int index);
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param index the index of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code index}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
+	Color3F getColorRGB(final int index, final PixelOperation pixelOperation);
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 */
+	Color3F getColorRGB(final int x, final int y);
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
+	Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation);
+	
+	/**
 	 * Returns a copy of this {@code Image} instance.
 	 * 
 	 * @return a copy of this {@code Image} instance
 	 */
 	Image copy();
+	
+	/**
+	 * Finds the bounds for {@code image} in this {@code Image} instance.
+	 * <p>
+	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code Image} instance.
+	 * <p>
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image an {@code Image} instance
+	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code Image} instance
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 */
+	List<Rectangle2I> findBoundsFor(final Image image);
+	
+	/**
+	 * Returns a {@link Rectangle2I} with the bounds of this {@code Image} instance.
+	 * 
+	 * @return a {@code Rectangle2I} with the bounds of this {@code Image} instance
+	 */
+	Rectangle2I getBounds();
 	
 	/**
 	 * Returns a {@code WritableImage} representation of this {@code Image} instance.
@@ -175,4 +293,70 @@ public interface Image {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	void save(final String pathname);
+	
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
+	 * <p>
+	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param index the index of the pixel
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 */
+	void setColorRGB(final Color3F colorRGB, final int index);
+	
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
+	 * <p>
+	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param index the index of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
+	 */
+	void setColorRGB(final Color3F colorRGB, final int index, final PixelOperation pixelOperation);
+	
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
+	 * <p>
+	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.setColor(colorRGB, x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 */
+	void setColorRGB(final Color3F colorRGB, final int x, final int y);
+	
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
+	 * <p>
+	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
+	 */
+	void setColorRGB(final Color3F colorRGB, final int x, final int y, final PixelOperation pixelOperation);
 }

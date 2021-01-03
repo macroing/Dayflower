@@ -26,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 import org.dayflower.util.BufferedImages;
+import org.dayflower.util.Floats;
 import org.dayflower.util.ParameterArguments;
 
 /**
@@ -156,6 +157,17 @@ public final class Pixel {
 	}
 	
 	/**
+	 * Returns the value of the Alpha component as a {@code byte}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the Alpha component as a {@code byte}
+	 */
+	public byte getAsByteAlpha() {
+		return (byte)(getAsIntAlpha() & 0xFF);
+	}
+	
+	/**
 	 * Returns the alpha component of this {@code Pixel} instance.
 	 * 
 	 * @return the alpha component of this {@code Pixel} instance
@@ -171,6 +183,17 @@ public final class Pixel {
 	 */
 	public float getFilterWeightSum() {
 		return this.filterWeightSum;
+	}
+	
+	/**
+	 * Returns the value of the Alpha component as an {@code int}.
+	 * <p>
+	 * This method assumes that the component value is within the range [0.0, 1.0]. A component value outside of this range will be saturated or clamped.
+	 * 
+	 * @return the value of the Alpha component as an {@code int}
+	 */
+	public int getAsIntAlpha() {
+		return toInt(Floats.saturate(getAlpha()) * 255.0F + 0.5F);
 	}
 	
 	/**

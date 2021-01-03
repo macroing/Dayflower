@@ -470,6 +470,7 @@ public final class PixelImage implements Image {
 	 * @param y the Y-coordinate of the pixel
 	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
 	 */
+	@Override
 	public Color3F getColorRGB(final float x, final float y) {
 		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
 	}
@@ -489,6 +490,7 @@ public final class PixelImage implements Image {
 	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+	@Override
 	public Color3F getColorRGB(final float x, final float y, final PixelOperation pixelOperation) {
 		final int minimumX = toInt(floor(x));
 		final int maximumX = toInt(ceil(x));
@@ -526,6 +528,7 @@ public final class PixelImage implements Image {
 	 * @param index the index of the pixel
 	 * @return the {@code Color3F} of the pixel represented by {@code index}
 	 */
+	@Override
 	public Color3F getColorRGB(final int index) {
 		return getColorRGB(index, PixelOperation.NO_CHANGE);
 	}
@@ -542,6 +545,7 @@ public final class PixelImage implements Image {
 	 * @return the {@code Color3F} of the pixel represented by {@code index}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+	@Override
 	public Color3F getColorRGB(final int index, final PixelOperation pixelOperation) {
 		return getPixel(index, pixelOperation).map(pixel -> pixel.getColorRGB()).orElse(Color3F.BLACK);
 	}
@@ -560,6 +564,7 @@ public final class PixelImage implements Image {
 	 * @param y the Y-coordinate of the pixel
 	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
 	 */
+	@Override
 	public Color3F getColorRGB(final int x, final int y) {
 		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
 	}
@@ -577,35 +582,37 @@ public final class PixelImage implements Image {
 	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
+	@Override
 	public Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
 		return getPixel(x, y, pixelOperation).map(pixel -> pixel.getColorRGB()).orElse(Color3F.BLACK);
 	}
 	
 	/**
-	 * Finds the bounds for {@code pixelImage} in this {@code PixelImage} instance.
+	 * Finds the bounds for {@code image} in this {@code PixelImage} instance.
 	 * <p>
-	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code pixelImage} in this {@code PixelImage} instance.
+	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code PixelImage} instance.
 	 * <p>
-	 * If {@code pixelImage} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pixelImage a {@code PixelImage} instance
-	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code pixelImage} in this {@code PixelImage} instance
-	 * @throws NullPointerException thrown if, and only if, {@code pixelImage} is {@code null}
+	 * @param image an {@code Image} instance
+	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code PixelImage} instance
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public List<Rectangle2I> findBoundsFor(final PixelImage pixelImage) {
-		Objects.requireNonNull(pixelImage, "pixelImage == null");
+	@Override
+	public List<Rectangle2I> findBoundsFor(final Image image) {
+		Objects.requireNonNull(image, "image == null");
 		
 		final List<Rectangle2I> rectangles = new ArrayList<>();
 		
-		for(int y = 0; y < getResolutionY() - pixelImage.getResolutionY(); y++) {
-			for(int x = 0; x < getResolutionX() - pixelImage.getResolutionX(); x++) {
+		for(int y = 0; y < getResolutionY() - image.getResolutionY(); y++) {
+			for(int x = 0; x < getResolutionX() - image.getResolutionX(); x++) {
 				Rectangle2I rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x, y));
 				
 				labelImage:
-				if(getColorRGB(x, y).equals(pixelImage.getColorRGB(0, 0))) {
-					for(int imageY = 0; imageY < pixelImage.getResolutionY(); imageY++) {
-						for(int imageX = 0; imageX < pixelImage.getResolutionX(); imageX++) {
-							if(!getColorRGB(x + imageX, y + imageY).equals(pixelImage.getColorRGB(imageX, imageY))) {
+				if(getColorRGB(x, y).equals(image.getColorRGB(0, 0))) {
+					for(int imageY = 0; imageY < image.getResolutionY(); imageY++) {
+						for(int imageX = 0; imageX < image.getResolutionX(); imageX++) {
+							if(!getColorRGB(x + imageX, y + imageY).equals(image.getColorRGB(imageX, imageY))) {
 								break labelImage;
 							}
 							
@@ -652,6 +659,7 @@ public final class PixelImage implements Image {
 	 */
 	public Optional<Pixel> getPixel(final int index, final PixelOperation pixelOperation) {
 		final int resolution = this.resolution;
+		
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
 		
 		if(indexTransformed >= 0 && indexTransformed < resolution) {
@@ -695,6 +703,7 @@ public final class PixelImage implements Image {
 	public Optional<Pixel> getPixel(final int x, final int y, final PixelOperation pixelOperation) {
 		final int resolutionX = this.resolutionX;
 		final int resolutionY = this.resolutionY;
+		
 		final int xTransformed = pixelOperation.getX(x, resolutionX);
 		final int yTransformed = pixelOperation.getY(y, resolutionY);
 		
@@ -720,6 +729,7 @@ public final class PixelImage implements Image {
 	 * 
 	 * @return a {@code Rectangle2I} with the bounds of this {@code PixelImage} instance
 	 */
+	@Override
 	public Rectangle2I getBounds() {
 		return new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
 	}
@@ -870,7 +880,7 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code Color3F.BLACK}.
+	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code Color3F.BLACK} and an alpha component of {@code 1.0F}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -884,17 +894,38 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code colorRGB}.
+	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code colorRGB} and an alpha component of {@code 1.0F}.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * pixelImage.clear(colorRGB, 1.0F);
+	 * }
+	 * </pre>
 	 * 
 	 * @param colorRGB the {@code Color3F} to clear with
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
 	public void clear(final Color3F colorRGB) {
+		clear(colorRGB, 1.0F);
+	}
+	
+	/**
+	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code colorRGB} and an alpha component of {@code alpha}.
+	 * <p>
+	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorRGB the {@code Color3F} to clear with
+	 * @param alpha the alpha component to clear with
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 */
+	public void clear(final Color3F colorRGB, final float alpha) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		
 		for(final Pixel pixel : this.pixels) {
+			pixel.setAlpha(alpha);
 			pixel.setColorRGB(colorRGB);
 		}
 	}
@@ -944,6 +975,8 @@ public final class PixelImage implements Image {
 		for(int i = 0, j = 0; i < this.pixels.length; i++, j += arrayComponentOrder.getComponentCount()) {
 			final Color3F colorRGB = this.pixels[i].getColorRGB();
 			
+			final byte alpha = this.pixels[i].getAsByteAlpha();
+			
 			if(arrayComponentOrder.hasOffsetR()) {
 				array[j + arrayComponentOrder.getOffsetR()] = colorRGB.getAsByteR();
 			}
@@ -957,7 +990,7 @@ public final class PixelImage implements Image {
 			}
 			
 			if(arrayComponentOrder.hasOffsetA()) {
-				array[j + arrayComponentOrder.getOffsetA()] = (byte)(255);
+				array[j + arrayComponentOrder.getOffsetA()] = alpha;
 			}
 		}
 	}
@@ -1917,6 +1950,7 @@ public final class PixelImage implements Image {
 	 * @param index the index of the pixel
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
+	@Override
 	public void setColorRGB(final Color3F colorRGB, final int index) {
 		setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
 	}
@@ -1933,6 +1967,7 @@ public final class PixelImage implements Image {
 	 * @param pixelOperation the {@code PixelOperation} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
 	 */
+	@Override
 	public void setColorRGB(final Color3F colorRGB, final int index, final PixelOperation pixelOperation) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
@@ -1961,6 +1996,7 @@ public final class PixelImage implements Image {
 	 * @param y the Y-coordinate of the pixel
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
+	@Override
 	public void setColorRGB(final Color3F colorRGB, final int x, final int y) {
 		setColorRGB(colorRGB, x, y, PixelOperation.NO_CHANGE);
 	}
@@ -1978,6 +2014,7 @@ public final class PixelImage implements Image {
 	 * @param pixelOperation the {@code PixelOperation} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
 	 */
+	@Override
 	public void setColorRGB(final Color3F colorRGB, final int x, final int y, final PixelOperation pixelOperation) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");

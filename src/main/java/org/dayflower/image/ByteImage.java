@@ -18,16 +18,24 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.util.Floats.ceil;
+import static org.dayflower.util.Floats.floor;
+import static org.dayflower.util.Ints.toInt;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.util.ParameterArguments;
 
 import javafx.scene.image.PixelFormat;
@@ -36,7 +44,7 @@ import javafx.scene.image.WritableImage;
 /**
  * A {@code ByteImage} is an {@link Image} implementation that stores individual pixels as four {@code byte} values in a {@code byte[]}.
  * <p>
- * The {@code byte} values for a single pixel are ordered as {@link ArrayComponentOrder#BGRA}.
+ * The {@code byte} values for a single pixel are ordered as {@link ArrayComponentOrder#RGBA}.
  * <p>
  * Because each pixel is represented by four {@code byte} values, its associated {@code byte[]} has a length of {@code byteImage.getResolution() * 4}.
  * 
@@ -171,6 +179,218 @@ public final class ByteImage implements Image {
 	@Override
 	public ByteImage copy() {
 		return new ByteImage(this);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * byteImage.getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 */
+	@Override
+	public Color3F getColorRGB(final float x, final float y) {
+		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
+	@Override
+	public Color3F getColorRGB(final float x, final float y, final PixelOperation pixelOperation) {
+		final int minimumX = toInt(floor(x));
+		final int maximumX = toInt(ceil(x));
+		
+		final int minimumY = toInt(floor(y));
+		final int maximumY = toInt(ceil(y));
+		
+		if(minimumX == maximumX && minimumY == maximumY) {
+			return getColorRGB(minimumX, minimumY, pixelOperation);
+		}
+		
+		final Color3F color00 = getColorRGB(minimumX, minimumY, pixelOperation);
+		final Color3F color01 = getColorRGB(maximumX, minimumY, pixelOperation);
+		final Color3F color10 = getColorRGB(minimumX, maximumY, pixelOperation);
+		final Color3F color11 = getColorRGB(maximumX, maximumY, pixelOperation);
+		
+		final float xFactor = x - minimumX;
+		final float yFactor = y - minimumY;
+		
+		final Color3F color = Color3F.blend(Color3F.blend(color00, color01, xFactor), Color3F.blend(color10, color11, xFactor), yFactor);
+		
+		return color;
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * byteImage.getColorRGB(index, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param index the index of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code index}
+	 */
+	@Override
+	public Color3F getColorRGB(final int index) {
+		return getColorRGB(index, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param index the index of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code index}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
+	@Override
+	public Color3F getColorRGB(final int index, final PixelOperation pixelOperation) {
+		final int resolution = this.resolution;
+		
+		final int indexTransformed = pixelOperation.getIndex(index, resolution);
+		
+		if(indexTransformed >= 0 && indexTransformed < resolution) {
+			final int r = this.bytes[indexTransformed * 4 + 0] & 0xFF;
+			final int g = this.bytes[indexTransformed * 4 + 1] & 0xFF;
+			final int b = this.bytes[indexTransformed * 4 + 2] & 0xFF;
+			
+			return new Color3F(r, g, b);
+		}
+		
+		return Color3F.BLACK;
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * byteImage.getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 */
+	@Override
+	public Color3F getColorRGB(final int x, final int y) {
+		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
+	 */
+	@Override
+	public Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
+		final int resolutionX = this.resolutionX;
+		final int resolutionY = this.resolutionY;
+		
+		final int xTransformed = pixelOperation.getX(x, resolutionX);
+		final int yTransformed = pixelOperation.getY(y, resolutionY);
+		
+		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
+			final int index = yTransformed * resolutionX + xTransformed;
+			
+			final int r = this.bytes[index * 4 + 0] & 0xFF;
+			final int g = this.bytes[index * 4 + 1] & 0xFF;
+			final int b = this.bytes[index * 4 + 2] & 0xFF;
+			
+			return new Color3F(r, g, b);
+		}
+		
+		return Color3F.BLACK;
+	}
+	
+	/**
+	 * Finds the bounds for {@code image} in this {@code ByteImage} instance.
+	 * <p>
+	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code ByteImage} instance.
+	 * <p>
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image an {@code Image} instance
+	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code ByteImage} instance
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 */
+	@Override
+	public List<Rectangle2I> findBoundsFor(final Image image) {
+		Objects.requireNonNull(image, "image == null");
+		
+		final List<Rectangle2I> rectangles = new ArrayList<>();
+		
+		for(int y = 0; y < getResolutionY() - image.getResolutionY(); y++) {
+			for(int x = 0; x < getResolutionX() - image.getResolutionX(); x++) {
+				Rectangle2I rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x, y));
+				
+				labelImage:
+				if(getColorRGB(x, y).equals(image.getColorRGB(0, 0))) {
+					for(int imageY = 0; imageY < image.getResolutionY(); imageY++) {
+						for(int imageX = 0; imageX < image.getResolutionX(); imageX++) {
+							if(!getColorRGB(x + imageX, y + imageY).equals(image.getColorRGB(imageX, imageY))) {
+								break labelImage;
+							}
+							
+							rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x + imageX + 1, y + imageY + 1));
+						}
+					}
+					
+					rectangles.add(rectangle);
+				}
+			}
+		}
+		
+		return rectangles;
+	}
+	
+	/**
+	 * Returns a {@link Rectangle2I} with the bounds of this {@code ByteImage} instance.
+	 * 
+	 * @return a {@code Rectangle2I} with the bounds of this {@code ByteImage} instance
+	 */
+	@Override
+	public Rectangle2I getBounds() {
+		return new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
 	}
 	
 	/**
@@ -458,5 +678,104 @@ public final class ByteImage implements Image {
 	@Override
 	public void save(final String pathname) {
 		save(new File(pathname));
+	}
+	
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
+	 * <p>
+	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * byteImage.setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param index the index of the pixel
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 */
+	@Override
+	public void setColorRGB(final Color3F colorRGB, final int index) {
+		setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
+	 * <p>
+	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param index the index of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
+	 */
+	@Override
+	public void setColorRGB(final Color3F colorRGB, final int index, final PixelOperation pixelOperation) {
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
+		
+		final int indexTransformed = pixelOperation.getIndex(index, this.resolution);
+		
+		if(indexTransformed >= 0 && indexTransformed < this.resolution) {
+			this.bytes[indexTransformed * 4 + 0] = colorRGB.getAsByteR();
+			this.bytes[indexTransformed * 4 + 1] = colorRGB.getAsByteG();
+			this.bytes[indexTransformed * 4 + 2] = colorRGB.getAsByteB();
+		}
+	}
+	
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
+	 * <p>
+	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * byteImage.setColor(colorRGB, x, y, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
+	 */
+	@Override
+	public void setColorRGB(final Color3F colorRGB, final int x, final int y) {
+		setColorRGB(colorRGB, x, y, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
+	 * <p>
+	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * 
+	 * @param colorRGB the {@code Color3F} to set
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
+	 */
+	@Override
+	public void setColorRGB(final Color3F colorRGB, final int x, final int y, final PixelOperation pixelOperation) {
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
+		
+		final int xTransformed = pixelOperation.getX(x, this.resolutionX);
+		final int yTransformed = pixelOperation.getY(y, this.resolutionY);
+		
+		if(xTransformed >= 0 && xTransformed < this.resolutionX && yTransformed >= 0 && yTransformed < this.resolutionY) {
+			final int index = yTransformed * this.resolutionX + xTransformed;
+			
+			this.bytes[index * 4 + 0] = colorRGB.getAsByteR();
+			this.bytes[index * 4 + 1] = colorRGB.getAsByteG();
+			this.bytes[index * 4 + 2] = colorRGB.getAsByteB();
+		}
 	}
 }

@@ -57,14 +57,14 @@ import org.dayflower.util.BufferedImages;
 import org.dayflower.util.ParameterArguments;
 
 /**
- * An {@code ImageLight} is a {@link Light} implementation backed by an image.
+ * An {@code LDRImageLight} is a {@link Light} implementation backed by a low-dynamic-range (LDR) image.
  * <p>
  * This class is mutable and therefore not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ImageLight implements Light {
+public final class LDRImageLight implements Light {
 	private final AngleF angle;
 	private final Vector2F scale;
 	private final int resolution;
@@ -75,33 +75,33 @@ public final class ImageLight implements Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code ImageLight} instance.
+	 * Constructs a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageLight(image, AngleF.degrees(0.0F));
+	 * new LDRImageLight(image, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param image an {@link Image} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public ImageLight(final Image image) {
+	public LDRImageLight(final Image image) {
 		this(image, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code ImageLight} instance.
+	 * Constructs a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If either {@code image} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageLight(image, angle, new Vector2F(1.0F, 1.0F));
+	 * new LDRImageLight(image, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -109,19 +109,19 @@ public final class ImageLight implements Light {
 	 * @param angle the {@link AngleF} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public ImageLight(final Image image, final AngleF angle) {
+	public LDRImageLight(final Image image, final AngleF angle) {
 		this(image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code ImageLight} instance.
+	 * Constructs a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageLight(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
+	 * new LDRImageLight(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	 * }
 	 * </pre>
 	 * 
@@ -130,12 +130,12 @@ public final class ImageLight implements Light {
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public ImageLight(final Image image, final AngleF angle, final Vector2F scale) {
+	public LDRImageLight(final Image image, final AngleF angle, final Vector2F scale) {
 		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	}
 	
 	/**
-	 * Constructs a new {@code ImageLight} instance.
+	 * Constructs a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -144,7 +144,7 @@ public final class ImageLight implements Light {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageLight(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
+	 * new LDRImageLight(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -154,12 +154,12 @@ public final class ImageLight implements Light {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public ImageLight(final int resolutionX, final int resolutionY, final int[] image) {
+	public LDRImageLight(final int resolutionX, final int resolutionY, final int[] image) {
 		this(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code ImageLight} instance.
+	 * Constructs a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If either {@code image} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -168,7 +168,7 @@ public final class ImageLight implements Light {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageLight(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
+	 * new LDRImageLight(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -179,12 +179,12 @@ public final class ImageLight implements Light {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public ImageLight(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle) {
+	public LDRImageLight(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle) {
 		this(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code ImageLight} instance.
+	 * Constructs a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -198,7 +198,7 @@ public final class ImageLight implements Light {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public ImageLight(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
+	public LDRImageLight(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -263,11 +263,11 @@ public final class ImageLight implements Light {
 	}
 	
 	/**
-	 * Returns a {@link Color3F} instance with the power of this {@code ImageLight} instance.
+	 * Returns a {@link Color3F} instance with the power of this {@code LDRImageLight} instance.
 	 * <p>
 	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
 	 * 
-	 * @return a {@code Color3F} instance with the power of this {@code ImageLight} instance
+	 * @return a {@code Color3F} instance with the power of this {@code LDRImageLight} instance
 	 */
 	@Override
 	public Color3F power() {
@@ -341,13 +341,13 @@ public final class ImageLight implements Light {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code ImageLight} instance.
+	 * Returns a {@code String} representation of this {@code LDRImageLight} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code ImageLight} instance
+	 * @return a {@code String} representation of this {@code LDRImageLight} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ImageLight(%d, %d, %s, %s, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), "new int[] {...}", this.angle, this.scale);
+		return String.format("new LDRImageLight(%d, %d, %s, %s, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), "new int[] {...}", this.angle, this.scale);
 	}
 	
 	/**
@@ -398,30 +398,30 @@ public final class ImageLight implements Light {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code ImageLight} instance for equality.
+	 * Compares {@code object} to this {@code LDRImageLight} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ImageLight}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LDRImageLight}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code ImageLight} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ImageLight}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LDRImageLight} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LDRImageLight}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof ImageLight)) {
+		} else if(!(object instanceof LDRImageLight)) {
 			return false;
-		} else if(!Objects.equals(this.angle, ImageLight.class.cast(object).angle)) {
+		} else if(!Objects.equals(this.angle, LDRImageLight.class.cast(object).angle)) {
 			return false;
-		} else if(!Objects.equals(this.scale, ImageLight.class.cast(object).scale)) {
+		} else if(!Objects.equals(this.scale, LDRImageLight.class.cast(object).scale)) {
 			return false;
-		} else if(this.resolution != ImageLight.class.cast(object).resolution) {
+		} else if(this.resolution != LDRImageLight.class.cast(object).resolution) {
 			return false;
-		} else if(this.resolutionX != ImageLight.class.cast(object).resolutionX) {
+		} else if(this.resolutionX != LDRImageLight.class.cast(object).resolutionX) {
 			return false;
-		} else if(this.resolutionY != ImageLight.class.cast(object).resolutionY) {
+		} else if(this.resolutionY != LDRImageLight.class.cast(object).resolutionY) {
 			return false;
-		} else if(!Arrays.equals(this.image, ImageLight.class.cast(object).image)) {
+		} else if(!Arrays.equals(this.image, LDRImageLight.class.cast(object).image)) {
 			return false;
 		} else {
 			return true;
@@ -429,9 +429,9 @@ public final class ImageLight implements Light {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code ImageLight} instance uses a delta distribution, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code LDRImageLight} instance uses a delta distribution, {@code false} otherwise.
 	 * 
-	 * @return {@code true} if, and only if, this {@code ImageLight} instance uses a delta distribution, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code LDRImageLight} instance uses a delta distribution, {@code false} otherwise
 	 */
 	@Override
 	public boolean isDeltaDistribution() {
@@ -488,9 +488,9 @@ public final class ImageLight implements Light {
 	}
 	
 	/**
-	 * Returns the sample count associated with this {@code ImageLight} instance.
+	 * Returns the sample count associated with this {@code LDRImageLight} instance.
 	 * 
-	 * @return the sample count associated with this {@code ImageLight} instance
+	 * @return the sample count associated with this {@code LDRImageLight} instance
 	 */
 	@Override
 	public int getSampleCount() {
@@ -498,9 +498,9 @@ public final class ImageLight implements Light {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code ImageLight} instance.
+	 * Returns a hash code for this {@code LDRImageLight} instance.
 	 * 
-	 * @return a hash code for this {@code ImageLight} instance
+	 * @return a hash code for this {@code LDRImageLight} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -510,7 +510,7 @@ public final class ImageLight implements Light {
 	/**
 	 * Returns an {@code int[]} containing the image with its colors in packed form using the order ARGB.
 	 * <p>
-	 * Modifying the returned {@code int[]} will not affect this {@code ImageLight} instance.
+	 * Modifying the returned {@code int[]} will not affect this {@code LDRImageLight} instance.
 	 * 
 	 * @return an {@code int[]} containing the image with its colors in packed form using the order ARGB
 	 */
@@ -521,9 +521,9 @@ public final class ImageLight implements Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Loads an {@code ImageLight} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageLight} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code ImageLight} instance.
+	 * Returns a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -532,23 +532,23 @@ public final class ImageLight implements Light {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ImageLight.load(file, AngleF.degrees(0.0F));
+	 * LDRImageLight.load(file, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
-	 * @return a new {@code ImageLight} instance
+	 * @return a new {@code LDRImageLight} instance
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageLight load(final File file) {
+	public static LDRImageLight load(final File file) {
 		return load(file, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Loads an {@code ImageLight} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageLight} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code ImageLight} instance.
+	 * Returns a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If either {@code file} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -557,24 +557,24 @@ public final class ImageLight implements Light {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ImageLight.load(file, angle, new Vector2F(1.0F, 1.0F));
+	 * LDRImageLight.load(file, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
-	 * @return a new {@code ImageLight} instance
+	 * @return a new {@code LDRImageLight} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code angle} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageLight load(final File file, final AngleF angle) {
+	public static LDRImageLight load(final File file, final AngleF angle) {
 		return load(file, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Loads an {@code ImageLight} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageLight} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code ImageLight} instance.
+	 * Returns a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If either {@code file}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -583,11 +583,11 @@ public final class ImageLight implements Light {
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @return a new {@code ImageLight} instance
+	 * @return a new {@code LDRImageLight} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file}, {@code angle} or {@code scale} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageLight load(final File file, final AngleF angle, final Vector2F scale) {
+	public static LDRImageLight load(final File file, final AngleF angle, final Vector2F scale) {
 		try {
 			final BufferedImage bufferedImage = BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 			
@@ -596,16 +596,16 @@ public final class ImageLight implements Light {
 			
 			final int[] image = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
 			
-			return new ImageLight(resolutionX, resolutionY, image, angle, scale);
+			return new LDRImageLight(resolutionX, resolutionY, image, angle, scale);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Loads an {@code ImageLight} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageLight} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code ImageLight} instance.
+	 * Returns a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -614,23 +614,23 @@ public final class ImageLight implements Light {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ImageLight.load(pathname, AngleF.degrees(0.0F));
+	 * LDRImageLight.load(pathname, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
-	 * @return a new {@code ImageLight} instance
+	 * @return a new {@code LDRImageLight} instance
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageLight load(final String pathname) {
+	public static LDRImageLight load(final String pathname) {
 		return load(pathname, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Loads an {@code ImageLight} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageLight} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code ImageLight} instance.
+	 * Returns a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If either {@code pathname} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -639,24 +639,24 @@ public final class ImageLight implements Light {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ImageLight.load(pathname, angle, new Vector2F(1.0F, 1.0F));
+	 * LDRImageLight.load(pathname, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
-	 * @return a new {@code ImageLight} instance
+	 * @return a new {@code LDRImageLight} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code angle} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageLight load(final String pathname, final AngleF angle) {
+	public static LDRImageLight load(final String pathname, final AngleF angle) {
 		return load(pathname, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Loads an {@code ImageLight} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageLight} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code ImageLight} instance.
+	 * Returns a new {@code LDRImageLight} instance.
 	 * <p>
 	 * If either {@code pathname}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -665,60 +665,60 @@ public final class ImageLight implements Light {
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @return a new {@code ImageLight} instance
+	 * @return a new {@code LDRImageLight} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname}, {@code angle} or {@code scale} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageLight load(final String pathname, final AngleF angle, final Vector2F scale) {
+	public static LDRImageLight load(final String pathname, final AngleF angle, final Vector2F scale) {
 		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale);
 	}
 	
 	/**
-	 * Redoes gamma correction on {@code imageLight} using sRGB.
+	 * Redoes gamma correction on {@code lDRImageLight} using sRGB.
 	 * <p>
-	 * Returns a new {@code ImageLight} instance.
+	 * Returns a new {@code LDRImageLight} instance.
 	 * <p>
-	 * If {@code imageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param imageLight an {@code ImageLight} instance
-	 * @return a new {@code ImageLight} instance
-	 * @throws NullPointerException thrown if, and only if, {@code imageLight} is {@code null}
+	 * @param lDRImageLight an {@code LDRImageLight} instance
+	 * @return a new {@code LDRImageLight} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
 	 */
-	public static ImageLight redoGammaCorrectionSRGB(final ImageLight imageLight) {
-		final int[] image = new int[imageLight.image.length];
+	public static LDRImageLight redoGammaCorrectionSRGB(final LDRImageLight lDRImageLight) {
+		final int[] image = new int[lDRImageLight.image.length];
 		
-		for(int i = 0; i < imageLight.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(imageLight.image[i]);
+		for(int i = 0; i < lDRImageLight.image.length; i++) {
+			final Color3F colorA = Color3F.unpack(lDRImageLight.image[i]);
 			final Color3F colorB = Color3F.redoGammaCorrectionSRGB(colorA);
 			
 			image[i] = colorB.pack();
 		}
 		
-		return new ImageLight(imageLight.resolutionX, imageLight.resolutionY, image, imageLight.angle, imageLight.scale);
+		return new LDRImageLight(lDRImageLight.resolutionX, lDRImageLight.resolutionY, image, lDRImageLight.angle, lDRImageLight.scale);
 	}
 	
 	/**
-	 * Undoes gamma correction on {@code imageLight} using sRGB.
+	 * Undoes gamma correction on {@code lDRImageLight} using sRGB.
 	 * <p>
-	 * Returns a new {@code ImageLight} instance.
+	 * Returns a new {@code LDRImageLight} instance.
 	 * <p>
-	 * If {@code imageLight} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageLight} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param imageLight an {@code ImageLight} instance
-	 * @return a new {@code ImageLight} instance
-	 * @throws NullPointerException thrown if, and only if, {@code imageLight} is {@code null}
+	 * @param lDRImageLight an {@code LDRImageLight} instance
+	 * @return a new {@code LDRImageLight} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageLight} is {@code null}
 	 */
-	public static ImageLight undoGammaCorrectionSRGB(final ImageLight imageLight) {
-		final int[] image = new int[imageLight.image.length];
+	public static LDRImageLight undoGammaCorrectionSRGB(final LDRImageLight lDRImageLight) {
+		final int[] image = new int[lDRImageLight.image.length];
 		
-		for(int i = 0; i < imageLight.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(imageLight.image[i]);
+		for(int i = 0; i < lDRImageLight.image.length; i++) {
+			final Color3F colorA = Color3F.unpack(lDRImageLight.image[i]);
 			final Color3F colorB = Color3F.undoGammaCorrectionSRGB(colorA);
 			
 			image[i] = colorB.pack();
 		}
 		
-		return new ImageLight(imageLight.resolutionX, imageLight.resolutionY, image, imageLight.angle, imageLight.scale);
+		return new LDRImageLight(lDRImageLight.resolutionX, lDRImageLight.resolutionY, image, lDRImageLight.angle, lDRImageLight.scale);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

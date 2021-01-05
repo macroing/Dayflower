@@ -49,7 +49,7 @@ Below follows a few lists of features available in the Scene API.
 * `CheckerboardTexture` - Returns a `Color3F` by alternating between two `Texture` instances in a checkerboard pattern.
 * `ConstantTexture` - Returns a `Color3F` that is stored as a constant.
 * `FunctionTexture` - Returns a `Color3F` by applying an `Intersection` to a `Function`.
-* `ImageTexture` - Returns a `Color3F` by retrieving it from an image.
+* `LDRImageTexture` - Returns a `Color3F` by retrieving it from a low-dynamic-range (LDR) image.
 * `MarbleTexture` - Returns a `Color3F` by alternating between three `Color3F` instances in a marble pattern.
 * `SimplexFractionalBrownianMotionTexture` - Returns a `Color3F` using a Simplex noise-based fractional Brownian motion (fBm) algorithm.
 * `SurfaceNormalTexture` - Returns a `Color3F` using the surface normal.
@@ -58,7 +58,6 @@ Below follows a few lists of features available in the Scene API.
 Packages
 --------
 * `org.dayflower.scene` - The Scene API.
-* `org.dayflower.scene.background` - The Scene Background API.
 * `org.dayflower.scene.bssrdf` - The Scene BSSRDF API.
 * `org.dayflower.scene.bxdf.pbrt` - The Scene BXDF PBRT API.
 * `org.dayflower.scene.bxdf.rayito` - The Scene BXDF Rayito API.

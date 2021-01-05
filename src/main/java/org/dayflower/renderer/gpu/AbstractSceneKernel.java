@@ -56,7 +56,7 @@ import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.FunctionTexture;
-import org.dayflower.scene.texture.ImageTexture;
+import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
@@ -195,7 +195,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected float[] textureConstantTextureArray;
 	
 //	TODO: Add Javadocs!
-	protected float[] textureImageTextureArray;
+	protected float[] textureLDRImageTextureArray;
 	
 //	TODO: Add Javadocs!
 	protected float[] textureMarbleTextureArray;
@@ -269,7 +269,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.textureBullseyeTextureArray = new float[1];
 		this.textureCheckerboardTextureArray = new float[1];
 		this.textureConstantTextureArray = new float[1];
-		this.textureImageTextureArray = new float[1];
+		this.textureLDRImageTextureArray = new float[1];
 		this.textureMarbleTextureArray = new float[1];
 		this.textureSimplexFractionalBrownianMotionTextureArray = new float[1];
 		this.primitiveCount = 0;
@@ -3029,16 +3029,16 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;
-			} else if(currentTextureID == ImageTexture.ID) {
-				final float angleRadians = this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_ANGLE_RADIANS];
+			} else if(currentTextureID == LDRImageTexture.ID) {
+				final float angleRadians = this.textureLDRImageTextureArray[currentTextureOffset + LDRImageTexture.ARRAY_OFFSET_ANGLE_RADIANS];
 				final float angleRadiansCos = cos(angleRadians);
 				final float angleRadiansSin = sin(angleRadians);
 				
-				final float scaleU = this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_SCALE + 0];
-				final float scaleV = this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_SCALE + 1];
+				final float scaleU = this.textureLDRImageTextureArray[currentTextureOffset + LDRImageTexture.ARRAY_OFFSET_SCALE + 0];
+				final float scaleV = this.textureLDRImageTextureArray[currentTextureOffset + LDRImageTexture.ARRAY_OFFSET_SCALE + 1];
 				
-				final int resolutionX = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
-				final int resolutionY = (int)(this.textureImageTextureArray[currentTextureOffset + ImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
+				final int resolutionX = (int)(this.textureLDRImageTextureArray[currentTextureOffset + LDRImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
+				final int resolutionY = (int)(this.textureLDRImageTextureArray[currentTextureOffset + LDRImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
 				
 				final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
 				final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
@@ -3055,16 +3055,16 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				final int minimumY = (int)(floor(y));
 				final int maximumY = (int)(ceil(y));
 				
-				final int offsetImage = currentTextureOffset + ImageTexture.ARRAY_OFFSET_IMAGE;
+				final int offsetImage = currentTextureOffset + LDRImageTexture.ARRAY_OFFSET_IMAGE;
 				final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
 				final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
 				final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
 				final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
 				
-				final int color00RGB = (int)(this.textureImageTextureArray[offsetColor00RGB]);
-				final int color01RGB = (int)(this.textureImageTextureArray[offsetColor01RGB]);
-				final int color10RGB = (int)(this.textureImageTextureArray[offsetColor10RGB]);
-				final int color11RGB = (int)(this.textureImageTextureArray[offsetColor11RGB]);
+				final int color00RGB = (int)(this.textureLDRImageTextureArray[offsetColor00RGB]);
+				final int color01RGB = (int)(this.textureLDRImageTextureArray[offsetColor01RGB]);
+				final int color10RGB = (int)(this.textureLDRImageTextureArray[offsetColor10RGB]);
+				final int color11RGB = (int)(this.textureLDRImageTextureArray[offsetColor11RGB]);
 				
 				final float tX = x - minimumX;
 				final float tY = y - minimumY;
@@ -3289,7 +3289,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		put(this.textureBullseyeTextureArray = compiledScene.getTextureBullseyeTextureArray());
 		put(this.textureCheckerboardTextureArray = compiledScene.getTextureCheckerboardTextureArray());
 		put(this.textureConstantTextureArray = compiledScene.getTextureConstantTextureArray());
-		put(this.textureImageTextureArray = compiledScene.getTextureImageTextureArray());
+		put(this.textureLDRImageTextureArray = compiledScene.getTextureLDRImageTextureArray());
 		put(this.textureMarbleTextureArray = compiledScene.getTextureMarbleTextureArray());
 		put(this.textureSimplexFractionalBrownianMotionTextureArray = compiledScene.getTextureSimplexFractionalBrownianMotionTextureArray());
 		

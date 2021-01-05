@@ -49,19 +49,19 @@ import org.dayflower.util.BufferedImages;
 import org.dayflower.util.ParameterArguments;
 
 /**
- * An {@code ImageTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from an image.
+ * An {@code LDRImageTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from a low-dynamic-range (LDR) image.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
  * This {@code Texture} implementation is supported on the GPU.
  * <p>
- * This {@code ImageTexture} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code ImageTexture} instance from an {@code Image} instance. This is useful if the
- * requirement is to generate an image procedurally.
+ * This {@code LDRImageTexture} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code LDRImageTexture} instance from an {@code Image} instance. This is useful if
+ * the requirement is to generate an image procedurally.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ImageTexture implements Texture {
+public final class LDRImageTexture implements Texture {
 	/**
 	 * The offset for the angle in radians in the {@code float[]}.
 	 */
@@ -88,7 +88,7 @@ public final class ImageTexture implements Texture {
 	public static final int ARRAY_OFFSET_SCALE = 1;
 	
 	/**
-	 * The ID of this {@code ImageTexture} class.
+	 * The ID of this {@code LDRImageTexture} class.
 	 */
 	public static final int ID = 6;
 	
@@ -104,33 +104,33 @@ public final class ImageTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code ImageTexture} instance.
+	 * Constructs a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageTexture(image, AngleF.degrees(0.0F));
+	 * new LDRImageTexture(image, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param image an {@link Image} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public ImageTexture(final Image image) {
+	public LDRImageTexture(final Image image) {
 		this(image, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code ImageTexture} instance.
+	 * Constructs a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If either {@code image} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageTexture(image, angle, new Vector2F(1.0F, 1.0F));
+	 * new LDRImageTexture(image, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -138,19 +138,19 @@ public final class ImageTexture implements Texture {
 	 * @param angle the {@link AngleF} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public ImageTexture(final Image image, final AngleF angle) {
+	public LDRImageTexture(final Image image, final AngleF angle) {
 		this(image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code ImageTexture} instance.
+	 * Constructs a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
+	 * new LDRImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	 * }
 	 * </pre>
 	 * 
@@ -159,12 +159,12 @@ public final class ImageTexture implements Texture {
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public ImageTexture(final Image image, final AngleF angle, final Vector2F scale) {
+	public LDRImageTexture(final Image image, final AngleF angle, final Vector2F scale) {
 		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	}
 	
 	/**
-	 * Constructs a new {@code ImageTexture} instance.
+	 * Constructs a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -173,7 +173,7 @@ public final class ImageTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageTexture(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
+	 * new LDRImageTexture(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -183,12 +183,12 @@ public final class ImageTexture implements Texture {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public ImageTexture(final int resolutionX, final int resolutionY, final int[] image) {
+	public LDRImageTexture(final int resolutionX, final int resolutionY, final int[] image) {
 		this(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code ImageTexture} instance.
+	 * Constructs a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If either {@code image} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -197,7 +197,7 @@ public final class ImageTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ImageTexture(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
+	 * new LDRImageTexture(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -208,12 +208,12 @@ public final class ImageTexture implements Texture {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public ImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle) {
+	public LDRImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle) {
 		this(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code ImageTexture} instance.
+	 * Constructs a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -227,7 +227,7 @@ public final class ImageTexture implements Texture {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public ImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
+	public LDRImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -290,13 +290,13 @@ public final class ImageTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code ImageTexture} instance.
+	 * Returns a {@code String} representation of this {@code LDRImageTexture} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code ImageTexture} instance
+	 * @return a {@code String} representation of this {@code LDRImageTexture} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ImageTexture(%d, %d, %s, %s, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), "new int[] {...}", this.angle, this.scale);
+		return String.format("new LDRImageTexture(%d, %d, %s, %s, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), "new int[] {...}", this.angle, this.scale);
 	}
 	
 	/**
@@ -347,30 +347,30 @@ public final class ImageTexture implements Texture {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code ImageTexture} instance for equality.
+	 * Compares {@code object} to this {@code LDRImageTexture} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ImageTexture}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LDRImageTexture}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code ImageTexture} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ImageTexture}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LDRImageTexture} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LDRImageTexture}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof ImageTexture)) {
+		} else if(!(object instanceof LDRImageTexture)) {
 			return false;
-		} else if(!Objects.equals(this.angle, ImageTexture.class.cast(object).angle)) {
+		} else if(!Objects.equals(this.angle, LDRImageTexture.class.cast(object).angle)) {
 			return false;
-		} else if(!Objects.equals(this.scale, ImageTexture.class.cast(object).scale)) {
+		} else if(!Objects.equals(this.scale, LDRImageTexture.class.cast(object).scale)) {
 			return false;
-		} else if(this.resolution != ImageTexture.class.cast(object).resolution) {
+		} else if(this.resolution != LDRImageTexture.class.cast(object).resolution) {
 			return false;
-		} else if(this.resolutionX != ImageTexture.class.cast(object).resolutionX) {
+		} else if(this.resolutionX != LDRImageTexture.class.cast(object).resolutionX) {
 			return false;
-		} else if(this.resolutionY != ImageTexture.class.cast(object).resolutionY) {
+		} else if(this.resolutionY != LDRImageTexture.class.cast(object).resolutionY) {
 			return false;
-		} else if(!Arrays.equals(this.image, ImageTexture.class.cast(object).image)) {
+		} else if(!Arrays.equals(this.image, LDRImageTexture.class.cast(object).image)) {
 			return false;
 		} else {
 			return true;
@@ -378,9 +378,9 @@ public final class ImageTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a {@code float[]} representation of this {@code ImageTexture} instance.
+	 * Returns a {@code float[]} representation of this {@code LDRImageTexture} instance.
 	 * 
-	 * @return a {@code float[]} representation of this {@code ImageTexture} instance
+	 * @return a {@code float[]} representation of this {@code LDRImageTexture} instance
 	 */
 	public float[] toArray() {
 		final float[] array = new float[getArrayLength()];
@@ -412,9 +412,9 @@ public final class ImageTexture implements Texture {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code ImageTexture} instance.
+	 * Returns an {@code int} with the ID of this {@code LDRImageTexture} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code ImageTexture} instance
+	 * @return an {@code int} with the ID of this {@code LDRImageTexture} instance
 	 */
 	@Override
 	public int getID() {
@@ -449,9 +449,9 @@ public final class ImageTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code ImageTexture} instance.
+	 * Returns a hash code for this {@code LDRImageTexture} instance.
 	 * 
-	 * @return a hash code for this {@code ImageTexture} instance
+	 * @return a hash code for this {@code LDRImageTexture} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -461,7 +461,7 @@ public final class ImageTexture implements Texture {
 	/**
 	 * Returns an {@code int[]} containing the image with its colors in packed form using the order ARGB.
 	 * <p>
-	 * Modifying the returned {@code int[]} will not affect this {@code ImageTexture} instance.
+	 * Modifying the returned {@code int[]} will not affect this {@code LDRImageTexture} instance.
 	 * 
 	 * @return an {@code int[]} containing the image with its colors in packed form using the order ARGB
 	 */
@@ -472,9 +472,9 @@ public final class ImageTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Loads an {@code ImageTexture} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageTexture} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
+	 * Returns a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -483,23 +483,23 @@ public final class ImageTexture implements Texture {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ImageTexture.load(file, AngleF.degrees(0.0F));
+	 * LDRImageTexture.load(file, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
-	 * @return a new {@code ImageTexture} instance
+	 * @return a new {@code LDRImageTexture} instance
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageTexture load(final File file) {
+	public static LDRImageTexture load(final File file) {
 		return load(file, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Loads an {@code ImageTexture} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageTexture} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
+	 * Returns a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If either {@code file} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -508,24 +508,24 @@ public final class ImageTexture implements Texture {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ImageTexture.load(file, angle, new Vector2F(1.0F, 1.0F));
+	 * LDRImageTexture.load(file, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
-	 * @return a new {@code ImageTexture} instance
+	 * @return a new {@code LDRImageTexture} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code angle} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageTexture load(final File file, final AngleF angle) {
+	public static LDRImageTexture load(final File file, final AngleF angle) {
 		return load(file, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Loads an {@code ImageTexture} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageTexture} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
+	 * Returns a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If either {@code file}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -534,11 +534,11 @@ public final class ImageTexture implements Texture {
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @return a new {@code ImageTexture} instance
+	 * @return a new {@code LDRImageTexture} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file}, {@code angle} or {@code scale} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageTexture load(final File file, final AngleF angle, final Vector2F scale) {
+	public static LDRImageTexture load(final File file, final AngleF angle, final Vector2F scale) {
 		try {
 			final BufferedImage bufferedImage = BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 			
@@ -547,16 +547,16 @@ public final class ImageTexture implements Texture {
 			
 			final int[] image = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
 			
-			return new ImageTexture(resolutionX, resolutionY, image, angle, scale);
+			return new LDRImageTexture(resolutionX, resolutionY, image, angle, scale);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Loads an {@code ImageTexture} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageTexture} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
+	 * Returns a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -565,23 +565,23 @@ public final class ImageTexture implements Texture {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ImageTexture.load(pathname, AngleF.degrees(0.0F));
+	 * LDRImageTexture.load(pathname, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
-	 * @return a new {@code ImageTexture} instance
+	 * @return a new {@code LDRImageTexture} instance
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageTexture load(final String pathname) {
+	public static LDRImageTexture load(final String pathname) {
 		return load(pathname, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Loads an {@code ImageTexture} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageTexture} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
+	 * Returns a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If either {@code pathname} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -590,24 +590,24 @@ public final class ImageTexture implements Texture {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * ImageTexture.load(pathname, angle, new Vector2F(1.0F, 1.0F));
+	 * LDRImageTexture.load(pathname, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
-	 * @return a new {@code ImageTexture} instance
+	 * @return a new {@code LDRImageTexture} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code angle} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageTexture load(final String pathname, final AngleF angle) {
+	public static LDRImageTexture load(final String pathname, final AngleF angle) {
 		return load(pathname, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Loads an {@code ImageTexture} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageTexture} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
+	 * Returns a new {@code LDRImageTexture} instance.
 	 * <p>
 	 * If either {@code pathname}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -616,60 +616,60 @@ public final class ImageTexture implements Texture {
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @return a new {@code ImageTexture} instance
+	 * @return a new {@code LDRImageTexture} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname}, {@code angle} or {@code scale} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static ImageTexture load(final String pathname, final AngleF angle, final Vector2F scale) {
+	public static LDRImageTexture load(final String pathname, final AngleF angle, final Vector2F scale) {
 		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale);
 	}
 	
 	/**
-	 * Redoes gamma correction on {@code imageTexture} using sRGB.
+	 * Redoes gamma correction on {@code lDRImageTexture} using sRGB.
 	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
+	 * Returns a new {@code LDRImageTexture} instance.
 	 * <p>
-	 * If {@code imageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param imageTexture an {@code ImageTexture} instance
-	 * @return a new {@code ImageTexture} instance
-	 * @throws NullPointerException thrown if, and only if, {@code imageTexture} is {@code null}
+	 * @param lDRImageTexture an {@code LDRImageTexture} instance
+	 * @return a new {@code LDRImageTexture} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
 	 */
-	public static ImageTexture redoGammaCorrectionSRGB(final ImageTexture imageTexture) {
-		final int[] image = new int[imageTexture.image.length];
+	public static LDRImageTexture redoGammaCorrectionSRGB(final LDRImageTexture lDRImageTexture) {
+		final int[] image = new int[lDRImageTexture.image.length];
 		
-		for(int i = 0; i < imageTexture.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(imageTexture.image[i]);
+		for(int i = 0; i < lDRImageTexture.image.length; i++) {
+			final Color3F colorA = Color3F.unpack(lDRImageTexture.image[i]);
 			final Color3F colorB = Color3F.redoGammaCorrectionSRGB(colorA);
 			
 			image[i] = colorB.pack();
 		}
 		
-		return new ImageTexture(imageTexture.resolutionX, imageTexture.resolutionY, image, imageTexture.angle, imageTexture.scale);
+		return new LDRImageTexture(lDRImageTexture.resolutionX, lDRImageTexture.resolutionY, image, lDRImageTexture.angle, lDRImageTexture.scale);
 	}
 	
 	/**
-	 * Undoes gamma correction on {@code imageTexture} using sRGB.
+	 * Undoes gamma correction on {@code lDRImageTexture} using sRGB.
 	 * <p>
-	 * Returns a new {@code ImageTexture} instance.
+	 * Returns a new {@code LDRImageTexture} instance.
 	 * <p>
-	 * If {@code imageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param imageTexture an {@code ImageTexture} instance
-	 * @return a new {@code ImageTexture} instance
-	 * @throws NullPointerException thrown if, and only if, {@code imageTexture} is {@code null}
+	 * @param lDRImageTexture an {@code LDRImageTexture} instance
+	 * @return a new {@code LDRImageTexture} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
 	 */
-	public static ImageTexture undoGammaCorrectionSRGB(final ImageTexture imageTexture) {
-		final int[] image = new int[imageTexture.image.length];
+	public static LDRImageTexture undoGammaCorrectionSRGB(final LDRImageTexture lDRImageTexture) {
+		final int[] image = new int[lDRImageTexture.image.length];
 		
-		for(int i = 0; i < imageTexture.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(imageTexture.image[i]);
+		for(int i = 0; i < lDRImageTexture.image.length; i++) {
+			final Color3F colorA = Color3F.unpack(lDRImageTexture.image[i]);
 			final Color3F colorB = Color3F.undoGammaCorrectionSRGB(colorA);
 			
 			image[i] = colorB.pack();
 		}
 		
-		return new ImageTexture(imageTexture.resolutionX, imageTexture.resolutionY, image, imageTexture.angle, imageTexture.scale);
+		return new LDRImageTexture(lDRImageTexture.resolutionX, lDRImageTexture.resolutionY, image, lDRImageTexture.angle, lDRImageTexture.scale);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

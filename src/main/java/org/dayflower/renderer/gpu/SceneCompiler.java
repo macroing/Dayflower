@@ -58,7 +58,7 @@ import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.FunctionTexture;
-import org.dayflower.scene.texture.ImageTexture;
+import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
@@ -82,8 +82,8 @@ final class SceneCompiler {
 	private final List<FunctionTexture> distinctFunctionTextures;
 	private final List<GlassRayitoMaterial> distinctGlassRayitoMaterials;
 	private final List<GlassSmallPTMaterial> distinctGlassSmallPTMaterials;
-	private final List<ImageTexture> distinctImageTextures;
 	private final List<InfiniteBoundingVolume3F> distinctInfiniteBoundingVolumes;
+	private final List<LDRImageTexture> distinctLDRImageTextures;
 	private final List<MarbleTexture> distinctMarbleTextures;
 	private final List<Material> distinctMaterials;
 	private final List<MatteRayitoMaterial> distinctMatteRayitoMaterials;
@@ -112,7 +112,7 @@ final class SceneCompiler {
 	private final Map<ConstantTexture, Integer> distinctToOffsetsConstantTextures;
 	private final Map<GlassRayitoMaterial, Integer> distinctToOffsetsGlassRayitoMaterials;
 	private final Map<GlassSmallPTMaterial, Integer> distinctToOffsetsGlassSmallPTMaterials;
-	private final Map<ImageTexture, Integer> distinctToOffsetsImageTextures;
+	private final Map<LDRImageTexture, Integer> distinctToOffsetsLDRImageTextures;
 	private final Map<MarbleTexture, Integer> distinctToOffsetsMarbleTextures;
 	private final Map<MatteRayitoMaterial, Integer> distinctToOffsetsMatteRayitoMaterials;
 	private final Map<MatteSmallPTMaterial, Integer> distinctToOffsetsMatteSmallPTMaterials;
@@ -144,8 +144,8 @@ final class SceneCompiler {
 		this.distinctFunctionTextures = new ArrayList<>();
 		this.distinctGlassRayitoMaterials = new ArrayList<>();
 		this.distinctGlassSmallPTMaterials = new ArrayList<>();
-		this.distinctImageTextures = new ArrayList<>();
 		this.distinctInfiniteBoundingVolumes = new ArrayList<>();
+		this.distinctLDRImageTextures = new ArrayList<>();
 		this.distinctMarbleTextures = new ArrayList<>();
 		this.distinctMaterials = new ArrayList<>();
 		this.distinctMatteRayitoMaterials = new ArrayList<>();
@@ -174,7 +174,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsConstantTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsGlassRayitoMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsGlassSmallPTMaterials = new LinkedHashMap<>();
-		this.distinctToOffsetsImageTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsLDRImageTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsMarbleTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsMatteRayitoMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsMatteSmallPTMaterials = new LinkedHashMap<>();
@@ -243,8 +243,8 @@ final class SceneCompiler {
 			return this.distinctToOffsetsConstantTextures.get(texture).intValue();
 		} else if(texture instanceof FunctionTexture) {
 			return 0;
-		} else if(texture instanceof ImageTexture) {
-			return this.distinctToOffsetsImageTextures.get(texture).intValue();
+		} else if(texture instanceof LDRImageTexture) {
+			return this.distinctToOffsetsLDRImageTextures.get(texture).intValue();
 		} else if(texture instanceof MarbleTexture) {
 			return this.distinctToOffsetsMarbleTextures.get(texture).intValue();
 		} else if(texture instanceof SimplexFractionalBrownianMotionTexture) {
@@ -295,7 +295,7 @@ final class SceneCompiler {
 		final float[] textureBullseyeTextureArray = Floats.toArray(this.distinctBullseyeTextures, bullseyeTexture -> bullseyeTexture.toArray(), 1);
 		final float[] textureCheckerboardTextureArray = Floats.toArray(this.distinctCheckerboardTextures, checkerboardTexture -> checkerboardTexture.toArray(), 1);
 		final float[] textureConstantTextureArray = Floats.toArray(this.distinctConstantTextures, constantTexture -> constantTexture.toArray(), 1);
-		final float[] textureImageTextureArray = Floats.toArray(this.distinctImageTextures, imageTexture -> imageTexture.toArray(), 1);
+		final float[] textureLDRImageTextureArray = Floats.toArray(this.distinctLDRImageTextures, lDRImageTexture -> lDRImageTexture.toArray(), 1);
 		final float[] textureMarbleTextureArray = Floats.toArray(this.distinctMarbleTextures, marbleTexture -> marbleTexture.toArray(), 1);
 		final float[] textureSimplexFractionalBrownianMotionTextureArray = Floats.toArray(this.distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> simplexFractionalBrownianMotionTexture.toArray(), 1);
 		
@@ -346,7 +346,7 @@ final class SceneCompiler {
 		compiledScene.setTextureBullseyeTextureArray(textureBullseyeTextureArray);
 		compiledScene.setTextureCheckerboardTextureArray(textureCheckerboardTextureArray);
 		compiledScene.setTextureConstantTextureArray(textureConstantTextureArray);
-		compiledScene.setTextureImageTextureArray(textureImageTextureArray);
+		compiledScene.setTextureLDRImageTextureArray(textureLDRImageTextureArray);
 		compiledScene.setTextureMarbleTextureArray(textureMarbleTextureArray);
 		compiledScene.setTextureSimplexFractionalBrownianMotionTextureArray(textureSimplexFractionalBrownianMotionTextureArray);
 		
@@ -365,8 +365,8 @@ final class SceneCompiler {
 		this.distinctFunctionTextures.clear();
 		this.distinctGlassRayitoMaterials.clear();
 		this.distinctGlassSmallPTMaterials.clear();
-		this.distinctImageTextures.clear();
 		this.distinctInfiniteBoundingVolumes.clear();
+		this.distinctLDRImageTextures.clear();
 		this.distinctMarbleTextures.clear();
 		this.distinctMaterials.clear();
 		this.distinctMatteRayitoMaterials.clear();
@@ -395,7 +395,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsConstantTextures.clear();
 		this.distinctToOffsetsGlassRayitoMaterials.clear();
 		this.distinctToOffsetsGlassSmallPTMaterials.clear();
-		this.distinctToOffsetsImageTextures.clear();
+		this.distinctToOffsetsLDRImageTextures.clear();
 		this.distinctToOffsetsMarbleTextures.clear();
 		this.distinctToOffsetsMatteRayitoMaterials.clear();
 		this.distinctToOffsetsMatteSmallPTMaterials.clear();
@@ -448,7 +448,7 @@ final class SceneCompiler {
 		this.distinctCheckerboardTextures.addAll(NodeFilter.filterAllDistinct(scene, CheckerboardTexture.class));
 		this.distinctConstantTextures.addAll(NodeFilter.filterAllDistinct(scene, ConstantTexture.class));
 		this.distinctFunctionTextures.addAll(NodeFilter.filterAllDistinct(scene, FunctionTexture.class));
-		this.distinctImageTextures.addAll(NodeFilter.filterAllDistinct(scene, ImageTexture.class));
+		this.distinctLDRImageTextures.addAll(NodeFilter.filterAllDistinct(scene, LDRImageTexture.class));
 		this.distinctMarbleTextures.addAll(NodeFilter.filterAllDistinct(scene, MarbleTexture.class));
 		this.distinctSimplexFractionalBrownianMotionTextures.addAll(NodeFilter.filterAllDistinct(scene, SimplexFractionalBrownianMotionTexture.class));
 		this.distinctSurfaceNormalTextures.addAll(NodeFilter.filterAllDistinct(scene, SurfaceNormalTexture.class));
@@ -490,7 +490,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsBullseyeTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBullseyeTextures, BullseyeTexture.ARRAY_LENGTH));
 		this.distinctToOffsetsCheckerboardTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCheckerboardTextures, CheckerboardTexture.ARRAY_LENGTH));
 		this.distinctToOffsetsConstantTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctConstantTextures, ConstantTexture.ARRAY_LENGTH));
-		this.distinctToOffsetsImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctImageTextures, imageTexture -> imageTexture.getArrayLength()));
+		this.distinctToOffsetsLDRImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageTextures, lDRImageTexture -> lDRImageTexture.getArrayLength()));
 		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures, MarbleTexture.ARRAY_LENGTH));
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSimplexFractionalBrownianMotionTextures, SimplexFractionalBrownianMotionTexture.ARRAY_LENGTH));
 	}

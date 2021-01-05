@@ -24,7 +24,7 @@ import static org.dayflower.util.Floats.PI_RECIPROCAL;
 
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;
-import org.dayflower.scene.texture.ImageTexture;
+import org.dayflower.scene.texture.LDRImageTexture;
 
 /**
  * A {@code GPURenderer} is an implementation of {@link AbstractGPURenderer} that supports various rendering algorithms.
@@ -62,7 +62,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 	public GPURenderer(final RendererObserver rendererObserver) {
 		super(rendererObserver);
 		
-		this.textureBackground = ImageTexture.undoGammaCorrectionSRGB(ImageTexture.load("./resources/textures/pond-at-evening.jpg")).toArray();
+		this.textureBackground = LDRImageTexture.undoGammaCorrectionSRGB(LDRImageTexture.load("./resources/textures/pond-at-evening.jpg")).toArray();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -317,15 +317,15 @@ public final class GPURenderer extends AbstractGPURenderer {
 		final float textureCoordinatesU = 0.5F + atan2(rayDirectionZ, rayDirectionX) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float textureCoordinatesV = 0.5F - asinpi(rayDirectionY);
 		
-		final float angleRadians = this.textureBackground[ImageTexture.ARRAY_OFFSET_ANGLE_RADIANS];
+		final float angleRadians = this.textureBackground[LDRImageTexture.ARRAY_OFFSET_ANGLE_RADIANS];
 		final float angleRadiansCos = cos(angleRadians);
 		final float angleRadiansSin = sin(angleRadians);
 		
-		final float scaleU = this.textureBackground[ImageTexture.ARRAY_OFFSET_SCALE + 0];
-		final float scaleV = this.textureBackground[ImageTexture.ARRAY_OFFSET_SCALE + 1];
+		final float scaleU = this.textureBackground[LDRImageTexture.ARRAY_OFFSET_SCALE + 0];
+		final float scaleV = this.textureBackground[LDRImageTexture.ARRAY_OFFSET_SCALE + 1];
 		
-		final int resolutionX = (int)(this.textureBackground[ImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
-		final int resolutionY = (int)(this.textureBackground[ImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
+		final int resolutionX = (int)(this.textureBackground[LDRImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
+		final int resolutionY = (int)(this.textureBackground[LDRImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
 		
 		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
 		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
@@ -342,7 +342,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 		final int minimumY = (int)(floor(y));
 		final int maximumY = (int)(ceil(y));
 		
-		final int offsetImage = ImageTexture.ARRAY_OFFSET_IMAGE;
+		final int offsetImage = LDRImageTexture.ARRAY_OFFSET_IMAGE;
 		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
 		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
 		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));

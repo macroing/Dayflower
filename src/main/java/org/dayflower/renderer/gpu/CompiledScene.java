@@ -36,7 +36,7 @@ final class CompiledScene {
 	private float[] textureBullseyeTextureArray;
 	private float[] textureCheckerboardTextureArray;
 	private float[] textureConstantTextureArray;
-	private float[] textureImageTextureArray;
+	private float[] textureLDRImageTextureArray;
 	private float[] textureMarbleTextureArray;
 	private float[] textureSimplexFractionalBrownianMotionTextureArray;
 	private int[] materialClearCoatSmallPTMaterialArray;
@@ -78,7 +78,7 @@ final class CompiledScene {
 		setTextureBullseyeTextureArray(new float[1]);
 		setTextureCheckerboardTextureArray(new float[1]);
 		setTextureConstantTextureArray(new float[1]);
-		setTextureImageTextureArray(new float[1]);
+		setTextureLDRImageTextureArray(new float[1]);
 		setTextureMarbleTextureArray(new float[1]);
 		setTextureSimplexFractionalBrownianMotionTextureArray(new float[1]);
 	}
@@ -137,8 +137,8 @@ final class CompiledScene {
 		return this.textureConstantTextureArray;
 	}
 	
-	public float[] getTextureImageTextureArray() {
-		return this.textureImageTextureArray;
+	public float[] getTextureLDRImageTextureArray() {
+		return this.textureLDRImageTextureArray;
 	}
 	
 	public float[] getTextureMarbleTextureArray() {
@@ -293,8 +293,8 @@ final class CompiledScene {
 		this.textureConstantTextureArray = Objects.requireNonNull(textureConstantTextureArray, "textureConstantTextureArray == null");
 	}
 	
-	public void setTextureImageTextureArray(final float[] textureImageTextureArray) {
-		this.textureImageTextureArray = Objects.requireNonNull(textureImageTextureArray, "textureImageTextureArray == null");
+	public void setTextureLDRImageTextureArray(final float[] textureLDRImageTextureArray) {
+		this.textureLDRImageTextureArray = Objects.requireNonNull(textureLDRImageTextureArray, "textureLDRImageTextureArray == null");
 	}
 	
 	public void setTextureMarbleTextureArray(final float[] textureMarbleTextureArray) {

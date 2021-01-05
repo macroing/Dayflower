@@ -18,8 +18,6 @@
  */
 package org.dayflower.renderer.cpu;
 
-import static org.dayflower.util.Floats.sqrt;
-
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -230,8 +228,8 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 					
 					final float imageX = x;
 					final float imageY = y;
-					final float pixelX = sample.getX() * 2.0F < 1.0F ? sqrt(sample.getX() * 2.0F) - 1.0F : 1.0F - sqrt(2.0F - sample.getX() * 2.0F);//sample.getX();
-					final float pixelY = sample.getY() * 2.0F < 1.0F ? sqrt(sample.getY() * 2.0F) - 1.0F : 1.0F - sqrt(2.0F - sample.getY() * 2.0F);//sample.getY();
+					final float pixelX = sample.getX();// * 2.0F < 1.0F ? sqrt(sample.getX() * 2.0F) - 1.0F : 1.0F - sqrt(2.0F - sample.getX() * 2.0F);//sample.getX();
+					final float pixelY = sample.getY();// * 2.0F < 1.0F ? sqrt(sample.getY() * 2.0F) - 1.0F : 1.0F - sqrt(2.0F - sample.getY() * 2.0F);//sample.getY();
 					
 					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(imageX, imageY, pixelX, pixelY);
 					

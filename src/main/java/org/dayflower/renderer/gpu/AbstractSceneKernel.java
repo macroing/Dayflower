@@ -692,7 +692,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		return intersectionTShape3FTriangleMesh3F(shape3FTriangleMesh3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the material of the currently intersected primitive is specular, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the material of the currently intersected primitive is specular, {@code false} otherwise
+	 */
 	protected final boolean materialIsSpecular() {
 		final int primitiveIndex = (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
 		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;

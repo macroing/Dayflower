@@ -42,6 +42,7 @@ import org.dayflower.node.NodeFilter;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
 import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
@@ -83,6 +84,7 @@ final class SceneCompiler {
 	private final List<GlassRayitoMaterial> distinctGlassRayitoMaterials;
 	private final List<GlassSmallPTMaterial> distinctGlassSmallPTMaterials;
 	private final List<InfiniteBoundingVolume3F> distinctInfiniteBoundingVolumes;
+	private final List<LDRImageLight> distinctLDRImageLights;
 	private final List<LDRImageTexture> distinctLDRImageTextures;
 	private final List<MarbleTexture> distinctMarbleTextures;
 	private final List<Material> distinctMaterials;
@@ -112,6 +114,7 @@ final class SceneCompiler {
 	private final Map<ConstantTexture, Integer> distinctToOffsetsConstantTextures;
 	private final Map<GlassRayitoMaterial, Integer> distinctToOffsetsGlassRayitoMaterials;
 	private final Map<GlassSmallPTMaterial, Integer> distinctToOffsetsGlassSmallPTMaterials;
+	private final Map<LDRImageLight, Integer> distinctToOffsetsLDRImageLights;
 	private final Map<LDRImageTexture, Integer> distinctToOffsetsLDRImageTextures;
 	private final Map<MarbleTexture, Integer> distinctToOffsetsMarbleTextures;
 	private final Map<MatteRayitoMaterial, Integer> distinctToOffsetsMatteRayitoMaterials;
@@ -145,6 +148,7 @@ final class SceneCompiler {
 		this.distinctGlassRayitoMaterials = new ArrayList<>();
 		this.distinctGlassSmallPTMaterials = new ArrayList<>();
 		this.distinctInfiniteBoundingVolumes = new ArrayList<>();
+		this.distinctLDRImageLights = new ArrayList<>();
 		this.distinctLDRImageTextures = new ArrayList<>();
 		this.distinctMarbleTextures = new ArrayList<>();
 		this.distinctMaterials = new ArrayList<>();
@@ -174,6 +178,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsConstantTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsGlassRayitoMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsGlassSmallPTMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsLDRImageLights = new LinkedHashMap<>();
 		this.distinctToOffsetsLDRImageTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsMarbleTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsMatteRayitoMaterials = new LinkedHashMap<>();
@@ -198,11 +203,13 @@ final class SceneCompiler {
 		doSetCurrentTimeMillis();
 		doClear();
 		doFilterAllDistinctBoundingVolumes(scene);
+		doFilterAllDistinctLights(scene);
 		doFilterAllDistinctMaterials(scene);
 		doFilterAllDistinctShapes(scene);
 		doFilterAllDistinctTextures(scene);
 		doFilterPrimitives(scene);
 		doMapAllDistinctBoundingVolumes();
+		doMapAllDistinctLights();
 		doMapAllDistinctMaterials();
 		doMapAllDistinctShapes();
 		doMapAllDistinctTextures();
@@ -266,6 +273,12 @@ final class SceneCompiler {
 //		Retrieve the float[] for the Camera instance:
 		final float[] cameraArray = scene.getCamera().toArray();
 		
+//		Retrieve the float[] for all Light instances:
+		final float[] lightLDRImageLightArray = Floats.toArray(this.distinctLDRImageLights, lDRImageLight -> lDRImageLight.toArray(), 1);
+		
+//		Retrieve the int[] for all Light instances:
+		final int[] lightLDRImageLightOffsetArray = new int[this.distinctLDRImageLights.size()];
+		
 //		Retrieve the int[] for all Material instances:
 		final int[] materialClearCoatSmallPTMaterialArray = Ints.toArray(this.distinctClearCoatSmallPTMaterials, clearCoatSmallPTMaterial -> clearCoatSmallPTMaterial.toArray(), 1);
 		final int[] materialGlassRayitoMaterialArray = Ints.toArray(this.distinctGlassRayitoMaterials, glassRayitoMaterial -> glassRayitoMaterial.toArray(), 1);
@@ -303,6 +316,7 @@ final class SceneCompiler {
 		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> primitive.toArray(), 1);
 		
 //		Populate the float[] or int[] with data:
+		doPopulateLightLDRImageLightOffsetArray(lightLDRImageLightOffsetArray);
 		doPopulateMaterialClearCoatSmallPTMaterialArrayWithTextures(materialClearCoatSmallPTMaterialArray);
 		doPopulateMaterialGlassRayitoMaterialArrayWithTextures(materialGlassRayitoMaterialArray);
 		doPopulateMaterialGlassSmallPTMaterialArrayWithTextures(materialGlassSmallPTMaterialArray);
@@ -325,6 +339,8 @@ final class SceneCompiler {
 		compiledScene.setBoundingVolume3FAxisAlignedBoundingBox3FArray(boundingVolume3FAxisAlignedBoundingBox3FArray);
 		compiledScene.setBoundingVolume3FBoundingSphere3FArray(boundingVolume3FBoundingSphere3FArray);
 		compiledScene.setCameraArray(cameraArray);
+		compiledScene.setLightLDRImageLightArray(lightLDRImageLightArray);
+		compiledScene.setLightLDRImageLightOffsetArray(lightLDRImageLightOffsetArray);
 		compiledScene.setMaterialClearCoatSmallPTMaterialArray(materialClearCoatSmallPTMaterialArray);
 		compiledScene.setMaterialGlassRayitoMaterialArray(materialGlassRayitoMaterialArray);
 		compiledScene.setMaterialGlassSmallPTMaterialArray(materialGlassSmallPTMaterialArray);
@@ -366,6 +382,7 @@ final class SceneCompiler {
 		this.distinctGlassRayitoMaterials.clear();
 		this.distinctGlassSmallPTMaterials.clear();
 		this.distinctInfiniteBoundingVolumes.clear();
+		this.distinctLDRImageLights.clear();
 		this.distinctLDRImageTextures.clear();
 		this.distinctMarbleTextures.clear();
 		this.distinctMaterials.clear();
@@ -395,6 +412,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsConstantTextures.clear();
 		this.distinctToOffsetsGlassRayitoMaterials.clear();
 		this.distinctToOffsetsGlassSmallPTMaterials.clear();
+		this.distinctToOffsetsLDRImageLights.clear();
 		this.distinctToOffsetsLDRImageTextures.clear();
 		this.distinctToOffsetsMarbleTextures.clear();
 		this.distinctToOffsetsMatteRayitoMaterials.clear();
@@ -417,6 +435,10 @@ final class SceneCompiler {
 		this.distinctBoundingSpheres.addAll(NodeFilter.filterAllDistinct(scene, BoundingSphere3F.class));
 		this.distinctInfiniteBoundingVolumes.addAll(NodeFilter.filterAllDistinct(scene, InfiniteBoundingVolume3F.class));
 		this.distinctBoundingVolumes.addAll(Lists.merge(this.distinctAxisAlignedBoundingBoxes, this.distinctBoundingSpheres, this.distinctInfiniteBoundingVolumes));
+	}
+	
+	private void doFilterAllDistinctLights(final Scene scene) {
+		this.distinctLDRImageLights.addAll(NodeFilter.filterAllDistinct(scene, LDRImageLight.class));
 	}
 	
 	private void doFilterAllDistinctMaterials(final Scene scene) {
@@ -464,6 +486,10 @@ final class SceneCompiler {
 		this.distinctToOffsetsBoundingSpheres.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBoundingSpheres, BoundingSphere3F.ARRAY_LENGTH));
 	}
 	
+	private void doMapAllDistinctLights() {
+		this.distinctToOffsetsLDRImageLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageLights, lDRImageLight -> lDRImageLight.getArrayLength()));
+	}
+	
 	private void doMapAllDistinctMaterials() {
 		this.distinctToOffsetsClearCoatSmallPTMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctClearCoatSmallPTMaterials, ClearCoatSmallPTMaterial.ARRAY_LENGTH));
 		this.distinctToOffsetsGlassRayitoMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlassRayitoMaterials, GlassRayitoMaterial.ARRAY_LENGTH));
@@ -493,6 +519,16 @@ final class SceneCompiler {
 		this.distinctToOffsetsLDRImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageTextures, lDRImageTexture -> lDRImageTexture.getArrayLength()));
 		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures, MarbleTexture.ARRAY_LENGTH));
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSimplexFractionalBrownianMotionTextures, SimplexFractionalBrownianMotionTexture.ARRAY_LENGTH));
+	}
+	
+	private void doPopulateLightLDRImageLightOffsetArray(final int[] lightLDRImageLightOffsetArray) {
+		for(int i = 0; i < this.distinctLDRImageLights.size(); i++) {
+			final LDRImageLight lDRImageLight = this.distinctLDRImageLights.get(i);
+			
+			final int offset = this.distinctToOffsetsLDRImageLights.get(lDRImageLight).intValue();
+			
+			lightLDRImageLightOffsetArray[i] = offset;
+		}
 	}
 	
 	private void doPopulateMaterialClearCoatSmallPTMaterialArrayWithTextures(final int[] materialClearCoatSmallPTMaterialArray) {

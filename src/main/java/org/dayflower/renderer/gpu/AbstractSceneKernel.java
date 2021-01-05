@@ -40,6 +40,7 @@ import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
 import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
@@ -156,6 +157,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected float[] intersectionArray_$private$24;
 	
 //	TODO: Add Javadocs!
+	protected float[] lightLDRImageLightArray;
+	
+//	TODO: Add Javadocs!
 	protected float[] materialBXDFResultArray_$private$16;
 	
 //	TODO: Add Javadocs!
@@ -204,7 +208,13 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	protected float[] textureSimplexFractionalBrownianMotionTextureArray;
 	
 //	TODO: Add Javadocs!
+	protected int lightLDRImageLightCount;
+	
+//	TODO: Add Javadocs!
 	protected int primitiveCount;
+	
+//	TODO: Add Javadocs!
+	protected int[] lightLDRImageLightOffsetArray;
 	
 //	TODO: Add Javadocs!
 	protected int[] materialClearCoatSmallPTMaterialArray;
@@ -256,6 +266,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.boundingVolume3FBoundingSphere3FArray = new float[1];
 		this.cameraArray = new float[1];
 		this.intersectionArray_$private$24 = new float[INTERSECTION_ARRAY_SIZE];
+		this.lightLDRImageLightArray = new float[1];
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
 		this.matrix44FArray = new float[1];
 		this.pixelArray = new float[1];
@@ -272,7 +283,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.textureLDRImageTextureArray = new float[1];
 		this.textureMarbleTextureArray = new float[1];
 		this.textureSimplexFractionalBrownianMotionTextureArray = new float[1];
+		this.lightLDRImageLightCount = 0;
 		this.primitiveCount = 0;
+		this.lightLDRImageLightOffsetArray = new int[1];
 		this.materialClearCoatSmallPTMaterialArray = new int[1];
 		this.materialGlassRayitoMaterialArray = new int[1];
 		this.materialGlassSmallPTMaterialArray = new int[1];
@@ -2696,6 +2709,85 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final void lightEvaluateRadianceEmittedAny() {
+		lightEvaluateRadianceEmittedClear();
+		lightEvaluateRadianceEmittedAnyLDRImageLight();
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void lightEvaluateRadianceEmittedAnyLDRImageLight() {
+		final int lightLDRImageLightCount = this.lightLDRImageLightCount;
+		
+		if(lightLDRImageLightCount > 0) {
+			final int offset = min((int)(random() * lightLDRImageLightCount), lightLDRImageLightCount - 1);
+			
+			final float probabilityDensityFunctionValue = 1.0F / lightLDRImageLightCount;
+			
+			lightEvaluateRadianceEmittedOneLDRImageLight(offset, probabilityDensityFunctionValue);
+		}
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void lightEvaluateRadianceEmittedClear() {
+		color3FLHSSet(0.0F, 0.0F, 0.0F);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void lightEvaluateRadianceEmittedOneLDRImageLight(final int offset, final float probabilityDensityFunctionValue) {
+		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
+		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
+		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		
+		final float textureCoordinatesU = 0.5F + atan2(rayDirectionZ, rayDirectionX) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float textureCoordinatesV = 0.5F - asinpi(rayDirectionY);
+		
+		final float angleRadians = this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_ANGLE_RADIANS];
+		final float angleRadiansCos = cos(angleRadians);
+		final float angleRadiansSin = sin(angleRadians);
+		
+		final float scaleU = this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 0];
+		final float scaleV = this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 1];
+		
+		final int resolutionX = (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_X]);
+		final int resolutionY = (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_Y]);
+		
+		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
+		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
+		
+		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
+		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
+		
+		final float x = positiveModuloF(textureCoordinatesScaledU, resolutionX);
+		final float y = positiveModuloF(textureCoordinatesScaledV, resolutionY);
+		
+		final int minimumX = (int)(floor(x));
+		final int maximumX = (int)(ceil(x));
+		
+		final int minimumY = (int)(floor(y));
+		final int maximumY = (int)(ceil(y));
+		
+		final int offsetImage = offset + LDRImageLight.ARRAY_OFFSET_IMAGE;
+		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
+		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
+		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
+		final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
+		
+		final int color00RGB = (int)(this.lightLDRImageLightArray[offsetColor00RGB]);
+		final int color01RGB = (int)(this.lightLDRImageLightArray[offsetColor01RGB]);
+		final int color10RGB = (int)(this.lightLDRImageLightArray[offsetColor10RGB]);
+		final int color11RGB = (int)(this.lightLDRImageLightArray[offsetColor11RGB]);
+		
+		final float tX = x - minimumX;
+		final float tY = y - minimumY;
+		
+		final float component1 = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
+		final float component2 = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
+		final float component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
+		
+		color3FLHSSet(component1 / probabilityDensityFunctionValue, component2 / probabilityDensityFunctionValue, component3 / probabilityDensityFunctionValue);
+	}
+	
+//	TODO: Add Javadocs!
 	protected final void materialBXDFBegin() {
 //		Initialize the orthonormal basis:
 		orthonormalBasis33FSetIntersectionOrthonormalBasisS();
@@ -3272,6 +3364,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		put(this.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		put(this.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
 		put(this.cameraArray = compiledScene.getCameraArray());
+		put(this.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
+		put(this.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());
 		put(this.materialClearCoatSmallPTMaterialArray = compiledScene.getMaterialClearCoatSmallPTMaterialArray());
 		put(this.materialGlassRayitoMaterialArray = compiledScene.getMaterialGlassRayitoMaterialArray());
 		put(this.materialGlassSmallPTMaterialArray = compiledScene.getMaterialGlassSmallPTMaterialArray());
@@ -3297,6 +3391,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		put(this.textureMarbleTextureArray = compiledScene.getTextureMarbleTextureArray());
 		put(this.textureSimplexFractionalBrownianMotionTextureArray = compiledScene.getTextureSimplexFractionalBrownianMotionTextureArray());
 		
+		this.lightLDRImageLightCount = compiledScene.getLightLDRImageLightCount();
 		this.primitiveCount = compiledScene.getPrimitiveCount();
 	}
 }

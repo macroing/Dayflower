@@ -26,6 +26,7 @@ import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.floor;
 import static org.dayflower.util.Floats.positiveModulo;
 import static org.dayflower.util.Floats.sin;
+import static org.dayflower.util.Ints.padding;
 import static org.dayflower.util.Ints.positiveModulo;
 import static org.dayflower.util.Ints.toInt;
 
@@ -65,6 +66,43 @@ import org.dayflower.util.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class LDRImageLight implements Light {
+	/**
+	 * The name of this {@code LDRImageLight} class.
+	 */
+	public static final String NAME = "LDR Image Light";
+	
+	/**
+	 * The offset for the angle in radians in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_ANGLE_RADIANS = 0;
+	
+	/**
+	 * The offset for the image in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_IMAGE = 5;
+	
+	/**
+	 * The offset for the resolution of the X-axis in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RESOLUTION_X = 3;
+	
+	/**
+	 * The offset for the resolution of the Y-axis in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RESOLUTION_Y = 4;
+	
+	/**
+	 * The offset for the {@link Vector2F} instance representing the scale in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SCALE = 1;
+	
+	/**
+	 * The ID of this {@code LDRImageLight} class.
+	 */
+	public static final int ID = 4;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AngleF angle;
 	private final Vector2F scale;
 	private final int resolution;
@@ -341,6 +379,16 @@ public final class LDRImageLight implements Light {
 	}
 	
 	/**
+	 * Returns a {@code String} with the name of this {@code LDRImageLight} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code LDRImageLight} instance
+	 */
+	@SuppressWarnings("static-method")
+	public String getName() {
+		return NAME;
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code LDRImageLight} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code LDRImageLight} instance
@@ -458,6 +506,40 @@ public final class LDRImageLight implements Light {
 		Objects.requireNonNull(incoming, "incoming == null");
 		
 		return 0.0F;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code LDRImageLight} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code LDRImageLight} instance
+	 */
+	public float[] toArray() {
+		final float[] array = new float[getArrayLength()];
+		
+		array[ARRAY_OFFSET_ANGLE_RADIANS] = this.angle.getRadians();
+		array[ARRAY_OFFSET_SCALE + 0] = this.scale.getU();
+		array[ARRAY_OFFSET_SCALE + 1] = this.scale.getV();
+		array[ARRAY_OFFSET_RESOLUTION_X] = this.resolutionX;
+		array[ARRAY_OFFSET_RESOLUTION_Y] = this.resolutionY;
+		
+		for(int i = 0; i < this.image.length; i++) {
+			array[ARRAY_OFFSET_IMAGE + i] = this.image[i];
+		}
+		
+		for(int i = ARRAY_OFFSET_IMAGE + this.image.length; i < array.length; i++) {
+			array[i] = 0.0F;
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns the length of the {@code float[]}.
+	 * 
+	 * @return the length of the {@code float[]}
+	 */
+	public int getArrayLength() {
+		return 5 + this.image.length + padding(5 + this.image.length);
 	}
 	
 	/**

@@ -19,12 +19,10 @@
 package org.dayflower.renderer.gpu;
 
 import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.util.Floats.PI_RECIPROCAL;
 
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;
-import org.dayflower.scene.texture.LDRImageTexture;
 
 /**
  * A {@code GPURenderer} is an implementation of {@link AbstractGPURenderer} that supports various rendering algorithms.
@@ -33,10 +31,6 @@ import org.dayflower.scene.texture.LDRImageTexture;
  * @author J&#246;rgen Lundgren
  */
 public final class GPURenderer extends AbstractGPURenderer {
-	private final float[] textureBackground;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	/**
 	 * Constructs a new {@code GPURenderer} instance.
 	 * <p>
@@ -61,8 +55,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 	 */
 	public GPURenderer(final RendererObserver rendererObserver) {
 		super(rendererObserver);
-		
-		this.textureBackground = LDRImageTexture.undoGammaCorrectionSRGB(LDRImageTexture.load("./resources/textures/pond-at-evening.jpg")).toArray();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,16 +68,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 //		doRunPathTracingRayito(20, 5);
 		doRunPathTracingSmallPT(20, 5);
 //		doRunRayCasting();
-	}
-	
-	/**
-	 * Sets up all necessary resources for this {@code GPURenderer} instance.
-	 */
-	@Override
-	public void setup() {
-		super.setup();
-		
-		put(this.textureBackground);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +165,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 						currentBounce = maximumBounce;
 					}
 				} else {
-					doEvaluateTextureBackground();
+					lightEvaluateRadianceEmittedAny();
 					
 					radianceR += throughputR * color3FLHSGetComponent1();
 					radianceG += throughputG * color3FLHSGetComponent2();
@@ -254,7 +236,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 						currentBounce = maximumBounce;
 					}
 				} else {
-					doEvaluateTextureBackground();
+					lightEvaluateRadianceEmittedAny();
 					
 					radianceR += throughputR * color3FLHSGetComponent1();
 					radianceG += throughputG * color3FLHSGetComponent2();
@@ -305,61 +287,5 @@ public final class GPURenderer extends AbstractGPURenderer {
 		imageBegin();
 		imageRedoGammaCorrectionPBRT();
 		imageEnd();
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private void doEvaluateTextureBackground() {
-		final float rayDirectionX = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
-		
-		final float textureCoordinatesU = 0.5F + atan2(rayDirectionZ, rayDirectionX) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = 0.5F - asinpi(rayDirectionY);
-		
-		final float angleRadians = this.textureBackground[LDRImageTexture.ARRAY_OFFSET_ANGLE_RADIANS];
-		final float angleRadiansCos = cos(angleRadians);
-		final float angleRadiansSin = sin(angleRadians);
-		
-		final float scaleU = this.textureBackground[LDRImageTexture.ARRAY_OFFSET_SCALE + 0];
-		final float scaleV = this.textureBackground[LDRImageTexture.ARRAY_OFFSET_SCALE + 1];
-		
-		final int resolutionX = (int)(this.textureBackground[LDRImageTexture.ARRAY_OFFSET_RESOLUTION_X]);
-		final int resolutionY = (int)(this.textureBackground[LDRImageTexture.ARRAY_OFFSET_RESOLUTION_Y]);
-		
-		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
-		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
-		
-		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
-		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
-		
-		final float x = positiveModuloF(textureCoordinatesScaledU, resolutionX);
-		final float y = positiveModuloF(textureCoordinatesScaledV, resolutionY);
-		
-		final int minimumX = (int)(floor(x));
-		final int maximumX = (int)(ceil(x));
-		
-		final int minimumY = (int)(floor(y));
-		final int maximumY = (int)(ceil(y));
-		
-		final int offsetImage = LDRImageTexture.ARRAY_OFFSET_IMAGE;
-		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-		
-		final int color00RGB = (int)(this.textureBackground[offsetColor00RGB]);
-		final int color01RGB = (int)(this.textureBackground[offsetColor01RGB]);
-		final int color10RGB = (int)(this.textureBackground[offsetColor10RGB]);
-		final int color11RGB = (int)(this.textureBackground[offsetColor11RGB]);
-		
-		final float tX = x - minimumX;
-		final float tY = y - minimumY;
-		
-		final float component1 = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
-		final float component2 = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
-		final float component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
-		
-		color3FLHSSet(component1, component2, component3);
 	}
 }

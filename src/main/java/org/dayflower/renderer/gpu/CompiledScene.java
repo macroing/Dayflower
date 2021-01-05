@@ -26,6 +26,7 @@ final class CompiledScene {
 	private float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
 	private float[] boundingVolume3FBoundingSphere3FArray;
 	private float[] cameraArray;
+	private float[] lightLDRImageLightArray;
 	private float[] matrix44FArray;
 	private float[] shape3FPlane3FArray;
 	private float[] shape3FRectangularCuboid3FArray;
@@ -39,6 +40,7 @@ final class CompiledScene {
 	private float[] textureLDRImageTextureArray;
 	private float[] textureMarbleTextureArray;
 	private float[] textureSimplexFractionalBrownianMotionTextureArray;
+	private int[] lightLDRImageLightOffsetArray;
 	private int[] materialClearCoatSmallPTMaterialArray;
 	private int[] materialGlassRayitoMaterialArray;
 	private int[] materialGlassSmallPTMaterialArray;
@@ -57,6 +59,8 @@ final class CompiledScene {
 		setBoundingVolume3FAxisAlignedBoundingBox3FArray(new float[1]);
 		setBoundingVolume3FBoundingSphere3FArray(new float[1]);
 		setCameraArray(new float[1]);
+		setLightLDRImageLightArray(new float[1]);
+		setLightLDRImageLightOffsetArray(new int[1]);
 		setMaterialClearCoatSmallPTMaterialArray(new int[1]);
 		setMaterialGlassRayitoMaterialArray(new int[1]);
 		setMaterialGlassSmallPTMaterialArray(new int[1]);
@@ -95,6 +99,10 @@ final class CompiledScene {
 	
 	public float[] getCameraArray() {
 		return this.cameraArray;
+	}
+	
+	public float[] getLightLDRImageLightArray() {
+		return this.lightLDRImageLightArray;
 	}
 	
 	public float[] getMatrix44FArray() {
@@ -149,8 +157,16 @@ final class CompiledScene {
 		return this.textureSimplexFractionalBrownianMotionTextureArray;
 	}
 	
+	public int getLightLDRImageLightCount() {
+		return this.lightLDRImageLightArray.length % 8 == 0 ? this.lightLDRImageLightOffsetArray.length : 0;
+	}
+	
 	public int getPrimitiveCount() {
 		return this.primitiveArray.length / Primitive.ARRAY_LENGTH;
+	}
+	
+	public int[] getLightLDRImageLightOffsetArray() {
+		return this.lightLDRImageLightOffsetArray;
 	}
 	
 	public int[] getMaterialClearCoatSmallPTMaterialArray() {
@@ -207,6 +223,14 @@ final class CompiledScene {
 	
 	public void setCameraArray(final float[] cameraArray) {
 		this.cameraArray = Objects.requireNonNull(cameraArray, "cameraArray == null");
+	}
+	
+	public void setLightLDRImageLightArray(final float[] lightLDRImageLightArray) {
+		this.lightLDRImageLightArray = Objects.requireNonNull(lightLDRImageLightArray, "lightLDRImageLightArray == null");
+	}
+	
+	public void setLightLDRImageLightOffsetArray(final int[] lightLDRImageLightOffsetArray) {
+		this.lightLDRImageLightOffsetArray = Objects.requireNonNull(lightLDRImageLightOffsetArray, "lightLDRImageLightOffsetArray == null");
 	}
 	
 	public void setMaterialClearCoatSmallPTMaterialArray(final int[] materialClearCoatSmallPTMaterialArray) {

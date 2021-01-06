@@ -35,6 +35,7 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -309,7 +310,7 @@ public final class LDRImageLight implements Light {
 	 */
 	@Override
 	public Color3F power() {
-		return Color3F.BLACK;
+		return Color3F.BLACK;//TODO: Implement!
 	}
 	
 	/**
@@ -331,7 +332,7 @@ public final class LDRImageLight implements Light {
 		Objects.requireNonNull(ray, "ray == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
-		return Optional.empty();
+		return Optional.empty();//TODO: Implement!
 	}
 	
 	/**
@@ -353,7 +354,7 @@ public final class LDRImageLight implements Light {
 		Objects.requireNonNull(sampleA, "sampleA == null");
 		Objects.requireNonNull(sampleB, "sampleB == null");
 		
-		return Optional.empty();
+		return Optional.empty();//TODO: Implement!
 	}
 	
 	/**
@@ -375,7 +376,7 @@ public final class LDRImageLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		return Optional.empty();
+		return Optional.empty();//TODO: Implement!
 	}
 	
 	/**
@@ -505,7 +506,7 @@ public final class LDRImageLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return 0.0F;
+		return 0.0F;//TODO: Implement!
 	}
 	
 	/**

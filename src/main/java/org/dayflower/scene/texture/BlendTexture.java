@@ -276,6 +276,20 @@ public final class BlendTexture implements Texture {
 	}
 	
 	/**
+	 * Returns a {@code float} representing the value of the surface at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code float} representing the value of the surface at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	@Override
+	public float getFloat(final Intersection intersection) {
+		return getColor(intersection).average();
+	}
+	
+	/**
 	 * Returns the factor to use for component 1 in the blending process.
 	 * 
 	 * @return the factor to use for component 1 in the blending process

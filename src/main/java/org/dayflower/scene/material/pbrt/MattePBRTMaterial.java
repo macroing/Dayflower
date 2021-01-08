@@ -60,7 +60,8 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Texture textureAngle;
-	private final Texture textureDiffuse;
+	private final Texture textureEmission;
+	private final Texture textureKD;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -70,26 +71,122 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MattePBRTMaterial(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY_0_50));
+	 * new MattePBRTMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
 	public MattePBRTMaterial() {
-		this(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY_0_50));
+		this(Color3F.GRAY_0_50);
 	}
 	
 	/**
 	 * Constructs a new {@code MattePBRTMaterial} instance.
 	 * <p>
-	 * If either {@code textureAngle} or {@code textureDiffuse} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MattePBRTMaterial(colorKD, Color3F.BLACK);
+	 * }
+	 * </pre>
 	 * 
-	 * @param textureAngle a {@link Texture} instance used for the angle
-	 * @param textureDiffuse a {@code Texture} instance used for the diffuse component
-	 * @throws NullPointerException thrown if, and only if, either {@code textureAngle} or {@code textureDiffuse} are {@code null}
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
-	public MattePBRTMaterial(final Texture textureAngle, final Texture textureDiffuse) {
+	public MattePBRTMaterial(final Color3F colorKD) {
+		this(colorKD, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MattePBRTMaterial(colorKD, colorEmission, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorEmission} are {@code null}
+	 */
+	public MattePBRTMaterial(final Color3F colorKD, final Color3F colorEmission) {
+		this(colorKD, colorEmission, 0.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatAngle a {@code float} for the angle
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorEmission} are {@code null}
+	 */
+	public MattePBRTMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle) {
+		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureAngle = new ConstantTexture(new Color3F(floatAngle));
+	}
+	
+	/**
+	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * <p>
+	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MattePBRTMaterial(textureKD, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
+	 */
+	public MattePBRTMaterial(final Texture textureKD) {
+		this(textureKD, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MattePBRTMaterial(textureKD, textureEmission, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureEmission} are {@code null}
+	 */
+	public MattePBRTMaterial(final Texture textureKD, final Texture textureEmission) {
+		this(textureKD, textureEmission, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureEmission} or {@code textureAngle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureAngle a {@code Texture} instance for the angle
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureEmission} or {@code textureAngle} are {@code null}
+	 */
+	public MattePBRTMaterial(final Texture textureKD, final Texture textureEmission, final Texture textureAngle) {
+		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureAngle = Objects.requireNonNull(textureAngle, "textureAngle == null");
-		this.textureDiffuse = Objects.requireNonNull(textureDiffuse, "textureDiffuse == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,9 +202,7 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		
-		return Color3F.BLACK;
+		return this.textureEmission.getColor(intersection);
 	}
 	
 	/**
@@ -149,20 +244,21 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final Color3F colorAngle = this.textureAngle.getColor(intersection);
-		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
-		final AngleF angle = AngleF.degrees(saturate(colorAngle.average(), 0.0F, 90.0F));
+		final float floatAngle = this.textureAngle.getFloat(intersection);
 		
-		if(colorDiffuse.isBlack()) {
+		final AngleF angle = AngleF.degrees(saturate(floatAngle, 0.0F, 90.0F));
+		
+		if(colorKD.isBlack()) {
 			return Optional.empty();
 		}
 		
 		if(isZero(angle.getDegrees())) {
-			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new LambertianPBRTBRDF(colorDiffuse))));
+			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new LambertianPBRTBRDF(colorKD))));
 		}
 		
-		return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new OrenNayarPBRTBRDF(angle, colorDiffuse))));
+		return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new OrenNayarPBRTBRDF(angle, colorKD))));
 	}
 	
 	/**
@@ -182,7 +278,34 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MattePBRTMaterial(%s, %s)", this.textureAngle, this.textureDiffuse);
+		return String.format("new MattePBRTMaterial(%s, %s)", this.textureKD, this.textureEmission, this.textureAngle);
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the angle.
+	 * 
+	 * @return the {@code Texture} instance for the angle
+	 */
+	public Texture getTextureAngle() {
+		return this.textureAngle;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the diffuse coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the diffuse coefficient
+	 */
+	public Texture getTextureKD() {
+		return this.textureKD;
 	}
 	
 	/**
@@ -216,7 +339,11 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureDiffuse.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKD.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -243,7 +370,9 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 			return false;
 		} else if(!Objects.equals(this.textureAngle, MattePBRTMaterial.class.cast(object).textureAngle)) {
 			return false;
-		} else if(!Objects.equals(this.textureDiffuse, MattePBRTMaterial.class.cast(object).textureDiffuse)) {
+		} else if(!Objects.equals(this.textureEmission, MattePBRTMaterial.class.cast(object).textureEmission)) {
+			return false;
+		} else if(!Objects.equals(this.textureKD, MattePBRTMaterial.class.cast(object).textureKD)) {
 			return false;
 		} else {
 			return true;
@@ -267,6 +396,6 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureAngle, this.textureDiffuse);
+		return Objects.hash(this.textureAngle, this.textureEmission, this.textureKD);
 	}
 }

@@ -107,6 +107,20 @@ public final class FunctionTexture implements Texture {
 	}
 	
 	/**
+	 * Returns a {@code float} representing the value of the surface at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code float} representing the value of the surface at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	@Override
+	public float getFloat(final Intersection intersection) {
+		return getColor(intersection).average();
+	}
+	
+	/**
 	 * Returns an {@code int} with the ID of this {@code FunctionTexture} instance.
 	 * 
 	 * @return an {@code int} with the ID of this {@code FunctionTexture} instance

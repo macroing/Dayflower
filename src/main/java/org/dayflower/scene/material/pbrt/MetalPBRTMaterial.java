@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.material.pbrt;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -190,7 +189,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 		
 		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
 		
-		return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new TorranceSparrowPBRTBRDF(Color3F.WHITE, fresnel, microfacetDistribution))));
+		return Optional.of(new PBRTBSDF(intersection, new TorranceSparrowPBRTBRDF(Color3F.WHITE, fresnel, microfacetDistribution)));
 	}
 	
 	/**

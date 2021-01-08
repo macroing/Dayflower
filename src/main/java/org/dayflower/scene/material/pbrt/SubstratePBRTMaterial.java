@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.material.pbrt;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -167,7 +166,7 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 			
 			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
 			
-			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new FresnelBlendPBRTBRDF(colorDiffuse, colorSpecular, microfacetDistribution))));
+			return Optional.of(new PBRTBSDF(intersection, new FresnelBlendPBRTBRDF(colorDiffuse, colorSpecular, microfacetDistribution)));
 		}
 		
 		return Optional.empty();

@@ -20,7 +20,6 @@ package org.dayflower.scene.material.pbrt;
 
 import static org.dayflower.util.Floats.max;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -566,7 +565,7 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 		
 		final float h = -1.0F + 2.0F * intersection.getSurfaceIntersectionWorldSpace().getTextureCoordinates().getV();
 		
-		return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new HairPBRTBXDF(sigmaA, alpha, betaM, betaN, eta, h)), eta));
+		return Optional.of(new PBRTBSDF(intersection, new HairPBRTBXDF(sigmaA, alpha, betaM, betaN, eta, h), eta));
 	}
 	
 	/**

@@ -21,7 +21,6 @@ package org.dayflower.scene.material.pbrt;
 import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.saturate;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -255,10 +254,10 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 		}
 		
 		if(isZero(angle.getDegrees())) {
-			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new LambertianPBRTBRDF(colorKD))));
+			return Optional.of(new PBRTBSDF(intersection, new LambertianPBRTBRDF(colorKD)));
 		}
 		
-		return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new OrenNayarPBRTBRDF(angle, colorKD))));
+		return Optional.of(new PBRTBSDF(intersection, new OrenNayarPBRTBRDF(angle, colorKD)));
 	}
 	
 	/**

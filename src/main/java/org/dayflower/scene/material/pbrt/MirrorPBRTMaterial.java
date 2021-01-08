@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.material.pbrt;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -145,7 +144,7 @@ public final class MirrorPBRTMaterial implements PBRTMaterial {
 		final Color3F colorReflectanceScale = Color3F.saturate(this.textureReflectanceScale.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorReflectanceScale.isBlack()) {
-			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new SpecularPBRTBRDF(colorReflectanceScale, new ConstantFresnel()))));
+			return Optional.of(new PBRTBSDF(intersection, new SpecularPBRTBRDF(colorReflectanceScale, new ConstantFresnel())));
 		}
 		
 		return Optional.empty();

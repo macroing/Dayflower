@@ -25,6 +25,7 @@ import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Ints.min;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -86,6 +87,37 @@ public final class PBRTBSDF implements BSDF {
 	public PBRTBSDF(final Intersection intersection, final List<PBRTBXDF> pBRTBXDFs, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.pBRTBXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(pBRTBXDFs, "pBRTBXDFs"));
+		this.eta = eta;
+	}
+	
+	/**
+	 * Constructs a new {@code PBRTBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code pBRTBXDF} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param pBRTBXDF a {@link PBRTBXDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code pBRTBXDF} are {@code null}
+	 */
+	public PBRTBSDF(final Intersection intersection, final PBRTBXDF pBRTBXDF) {
+		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
+		this.pBRTBXDFs = Arrays.asList(Objects.requireNonNull(pBRTBXDF, "pBRTBXDF == null"));
+		this.eta = 1.0F;
+	}
+	
+	/**
+	 * Constructs a new {@code PBRTBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code pBRTBXDF} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param pBRTBXDF a {@link PBRTBXDF} instance
+	 * @param eta the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code pBRTBXDF} are {@code null}
+	 */
+	public PBRTBSDF(final Intersection intersection, final PBRTBXDF pBRTBXDF, final float eta) {
+		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
+		this.pBRTBXDFs = Arrays.asList(Objects.requireNonNull(pBRTBXDF, "pBRTBXDF == null"));
 		this.eta = eta;
 	}
 	

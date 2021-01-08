@@ -20,7 +20,6 @@ package org.dayflower.scene.material.pbrt;
 
 import java.util.Optional;
 
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
@@ -35,17 +34,6 @@ import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
  * @author J&#246;rgen Lundgren
  */
 public interface PBRTMaterial extends Material {
-	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code PBRTMaterial} instance at {@code intersection}.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code PBRTMaterial} instance at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	Color3F emittance(final Intersection intersection);
-	
 	/**
 	 * Computes the {@link PBRTBSDF} at {@code intersection}.
 	 * <p>

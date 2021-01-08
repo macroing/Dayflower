@@ -20,7 +20,6 @@ package org.dayflower.scene.material.rayito;
 
 import java.util.Optional;
 
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
@@ -47,17 +46,6 @@ public interface RayitoMaterial extends Material {
 	int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code RayitoMaterial} instance at {@code intersection}.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code RayitoMaterial} instance at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	Color3F emittance(final Intersection intersection);
 	
 	/**
 	 * Computes the {@link RayitoBSDF} at {@code intersection}.

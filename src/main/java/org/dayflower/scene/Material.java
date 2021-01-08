@@ -20,6 +20,7 @@ package org.dayflower.scene;
 
 import java.util.Optional;
 
+import org.dayflower.image.Color3F;
 import org.dayflower.node.Node;
 
 /**
@@ -31,6 +32,17 @@ import org.dayflower.node.Node;
  * @author J&#246;rgen Lundgren
  */
 public interface Material extends Node {
+	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code Material} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code Material} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	Color3F emittance(final Intersection intersection);
+	
 	/**
 	 * Computes the {@link BSDF} at {@code intersection}.
 	 * <p>

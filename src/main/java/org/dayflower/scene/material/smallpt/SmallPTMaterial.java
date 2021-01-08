@@ -21,7 +21,6 @@ package org.dayflower.scene.material.smallpt;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
@@ -58,17 +57,6 @@ public abstract class SmallPTMaterial implements Material {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code SmallPTMaterial} instance at {@code intersection}.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code SmallPTMaterial} instance at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	public abstract Color3F emittance(final Intersection intersection);
 	
 	/**
 	 * Computes the {@link BSDF} at {@code intersection}.

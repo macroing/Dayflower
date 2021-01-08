@@ -80,9 +80,39 @@ public final class Color3D {
 	public static final Color3D GOLD_METALLIC = new Color3D(0.83D, 0.69D, 0.22D);
 	
 	/**
-	 * A {@code Color3D} denoting the color gray.
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.1D}.
 	 */
-	public static final Color3D GRAY = new Color3D(0.5D, 0.5D, 0.5D);
+	public static final Color3D GRAY_0_10 = new Color3D(0.1D, 0.1D, 0.1D);
+	
+	/**
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.25D}.
+	 */
+	public static final Color3D GRAY_0_25 = new Color3D(0.25D, 0.25D, 0.25D);
+	
+	/**
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.30D}.
+	 */
+	public static final Color3D GRAY_0_30 = new Color3D(0.30D, 0.30D, 0.30D);
+	
+	/**
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.5D}.
+	 */
+	public static final Color3D GRAY_0_50 = new Color3D(0.5D, 0.5D, 0.5D);
+	
+	/**
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 1.5D}.
+	 */
+	public static final Color3D GRAY_1_50 = new Color3D(1.5D, 1.5D, 1.5D);
+	
+	/**
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 1.55D}.
+	 */
+	public static final Color3D GRAY_1_55 = new Color3D(1.55D, 1.55D, 1.55D);
+	
+	/**
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 2.0D}.
+	 */
+	public static final Color3D GRAY_2_00 = new Color3D(2.0D, 2.0D, 2.0D);
 	
 	/**
 	 * A {@code Color3D} denoting the color green.

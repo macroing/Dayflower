@@ -67,9 +67,10 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final Texture textureEmission;
 	private final Texture textureEta;
-	private final Texture textureKReflection;
-	private final Texture textureKTransmission;
+	private final Texture textureKR;
+	private final Texture textureKT;
 	private final Texture textureRoughnessU;
 	private final Texture textureRoughnessV;
 	private final boolean isRemappingRoughness;
@@ -82,37 +83,289 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassPBRTMaterial(ConstantTexture.GRAY_1_50, ConstantTexture.WHITE, ConstantTexture.WHITE, ConstantTexture.BLACK, ConstantTexture.BLACK, false);
+	 * new GlassPBRTMaterial(Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
 	public GlassPBRTMaterial() {
-		this(ConstantTexture.GRAY_1_50, ConstantTexture.WHITE, ConstantTexture.WHITE, ConstantTexture.BLACK, ConstantTexture.BLACK, false);
+		this(Color3F.WHITE);
 	}
 	
 	/**
 	 * Constructs a new {@code GlassPBRTMaterial} instance.
 	 * <p>
-	 * If either {@code textureEta}, {@code textureKReflection}, {@code textureKTransmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(colorKR, Color3F.WHITE);
+	 * }
+	 * </pre>
 	 * 
-	 * @param textureEta a {@link Texture} instance used for eta, also called index of refraction (IOR)
-	 * @param textureKReflection a {@code Texture} instance used for the reflection coefficient
-	 * @param textureKTransmission a {@code Texture} instance used for the transmission coefficient
-	 * @param textureRoughnessU a {@code Texture} instance used for the roughness along the U-axis
-	 * @param textureRoughnessV a {@code Texture} instance used for the roughness along the V-axis
-	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, either {@code textureEta}, {@code textureKReflection}, {@code textureKTransmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
 	 */
-	public GlassPBRTMaterial(final Texture textureEta, final Texture textureKReflection, final Texture textureKTransmission, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
+	public GlassPBRTMaterial(final Color3F colorKR) {
+		this(colorKR, Color3F.WHITE);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR} or {@code colorKT} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(colorKR, colorKT, Color3F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorKT} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Color3F colorKR, final Color3F colorKT) {
+		this(colorKR, colorKT, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(colorKR, colorKT, colorEmission, Color3F.GRAY_1_50);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission) {
+		this(colorKR, colorKT, colorEmission, Color3F.GRAY_1_50);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR}, {@code colorKT}, {@code colorEmission} or {@code colorEta} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(colorKR, colorKT, colorEmission, colorEta, Color3F.BLACK, Color3F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT}, {@code colorEmission} or {@code colorEta} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission, final Color3F colorEta) {
+		this(colorKR, colorKT, colorEmission, colorEta, Color3F.BLACK, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR}, {@code colorKT}, {@code colorEmission}, {@code colorEta}, {@code colorRoughnessU} or {@code colorRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(colorKR, colorKT, colorEmission, colorEta, colorRoughnessU, colorRoughnessV, true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @param colorRoughnessU a {@code Color3F} instance for the roughness along the U-axis
+	 * @param colorRoughnessV a {@code Color3F} instance for the roughness along the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT}, {@code colorEmission}, {@code colorEta}, {@code colorRoughnessU} or {@code colorRoughnessV} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission, final Color3F colorEta, final Color3F colorRoughnessU, final Color3F colorRoughnessV) {
+		this(colorKR, colorKT, colorEmission, colorEta, colorRoughnessU, colorRoughnessV, true);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR}, {@code colorKT}, {@code colorEmission}, {@code colorEta}, {@code colorRoughnessU} or {@code colorRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @param colorRoughnessU a {@code Color3F} instance for the roughness along the U-axis
+	 * @param colorRoughnessV a {@code Color3F} instance for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT}, {@code colorEmission}, {@code colorEta}, {@code colorRoughnessU} or {@code colorRoughnessV} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission, final Color3F colorEta, final Color3F colorRoughnessU, final Color3F colorRoughnessV, final boolean isRemappingRoughness) {
+		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
+		this.textureKT = new ConstantTexture(Objects.requireNonNull(colorKT, "colorKT == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureEta = new ConstantTexture(Objects.requireNonNull(colorEta, "colorEta == null"));
+		this.textureRoughnessU = new ConstantTexture(Objects.requireNonNull(colorRoughnessU, "colorRoughnessU == null"));
+		this.textureRoughnessV = new ConstantTexture(Objects.requireNonNull(colorRoughnessV, "colorRoughnessV == null"));
+		this.isRemappingRoughness = isRemappingRoughness;
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(textureKR, ConstantTexture.WHITE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
+	 */
+	public GlassPBRTMaterial(final Texture textureKR) {
+		this(textureKR, ConstantTexture.WHITE);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR} or {@code textureKT} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(textureKR, textureKT, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureKT} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Texture textureKR, final Texture textureKT) {
+		this(textureKR, textureKT, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureKT} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(textureKR, textureKT, textureEmission, ConstantTexture.GRAY_1_50);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT} or {@code textureEmission} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission) {
+		this(textureKR, textureKT, textureEmission, ConstantTexture.GRAY_1_50);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureKT}, {@code textureEmission} or {@code textureEta} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(textureKR, textureKT, textureEmission, textureEta, ConstantTexture.BLACK, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT}, {@code textureEmission} or {@code textureEta} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission, final Texture textureEta) {
+		this(textureKR, textureKT, textureEmission, textureEta, ConstantTexture.BLACK, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureKT}, {@code textureEmission}, {@code textureEta}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(textureKR, textureKT, textureEmission, textureEta, textureRoughnessU, textureRoughnessV, true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureRoughnessU a {@code Texture} instance for the roughness along the U-axis
+	 * @param textureRoughnessV a {@code Texture} instance for the roughness along the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT}, {@code textureEmission}, {@code textureEta}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV) {
+		this(textureKR, textureKT, textureEmission, textureEta, textureRoughnessU, textureRoughnessV, true);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureKT}, {@code textureEmission}, {@code textureEta}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureRoughnessU a {@code Texture} instance for the roughness along the U-axis
+	 * @param textureRoughnessV a {@code Texture} instance for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT}, {@code textureEmission}, {@code textureEta}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
+		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
+		this.textureKT = Objects.requireNonNull(textureKT, "textureKT == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
-		this.textureKReflection = Objects.requireNonNull(textureKReflection, "textureKReflection == null");
-		this.textureKTransmission = Objects.requireNonNull(textureKTransmission, "textureKTransmission == null");
 		this.textureRoughnessU = Objects.requireNonNull(textureRoughnessU, "textureRoughnessU == null");
 		this.textureRoughnessV = Objects.requireNonNull(textureRoughnessV, "textureRoughnessV == null");
 		this.isRemappingRoughness = isRemappingRoughness;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code GlassPBRTMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code GlassPBRTMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	@Override
+	public Color3F emittance(final Intersection intersection) {
+		return this.textureEmission.getColor(intersection);
+	}
 	
 	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
@@ -154,8 +407,8 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		final Color3F colorEta = this.textureEta.getColor(intersection);
-		final Color3F colorKReflection = Color3F.saturate(this.textureKReflection.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKTransmission = Color3F.saturate(this.textureKTransmission.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKT = Color3F.saturate(this.textureKT.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		final Color3F colorRoughnessU = this.textureRoughnessU.getColor(intersection);
 		final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
 		
@@ -163,27 +416,27 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
 		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
 		
-		if(colorKReflection.isBlack() && colorKTransmission.isBlack()) {
+		if(colorKR.isBlack() && colorKT.isBlack()) {
 			return Optional.empty();
 		}
 		
 		final boolean isSpecular = isZero(roughnessU) && isZero(roughnessV);
 		
 		if(isSpecular && isAllowingMultipleLobes) {
-			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new FresnelSpecularPBRTBXDF(colorKReflection, colorKTransmission, transportMode, 1.0F, eta)), eta));
+			return Optional.of(new PBRTBSDF(intersection, Arrays.asList(new FresnelSpecularPBRTBXDF(colorKR, colorKT, transportMode, 1.0F, eta)), eta));
 		}
 		
 		if(isSpecular) {
 			final List<PBRTBXDF> pBRTBXDFs = new ArrayList<>();
 			
-			if(!colorKReflection.isBlack()) {
+			if(!colorKR.isBlack()) {
 				final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 				
-				pBRTBXDFs.add(new SpecularPBRTBRDF(colorKReflection, fresnel));
+				pBRTBXDFs.add(new SpecularPBRTBRDF(colorKR, fresnel));
 			}
 			
-			if(!colorKTransmission.isBlack()) {
-				pBRTBXDFs.add(new SpecularPBRTBTDF(colorKTransmission, transportMode, 1.0F, eta));
+			if(!colorKT.isBlack()) {
+				pBRTBXDFs.add(new SpecularPBRTBTDF(colorKT, transportMode, 1.0F, eta));
 			}
 			
 			return Optional.of(new PBRTBSDF(intersection, pBRTBXDFs, eta));
@@ -193,14 +446,14 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		
 		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
 		
-		if(!colorKReflection.isBlack()) {
+		if(!colorKR.isBlack()) {
 			final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 			
-			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorKReflection, fresnel, microfacetDistribution));
+			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorKR, fresnel, microfacetDistribution));
 		}
 		
-		if(!colorKTransmission.isBlack()) {
-			pBRTBXDFs.add(new TorranceSparrowPBRTBTDF(colorKTransmission, microfacetDistribution, transportMode, 1.0F, eta));
+		if(!colorKT.isBlack()) {
+			pBRTBXDFs.add(new TorranceSparrowPBRTBTDF(colorKT, microfacetDistribution, transportMode, 1.0F, eta));
 		}
 		
 		return Optional.of(new PBRTBSDF(intersection, pBRTBXDFs, eta));
@@ -223,7 +476,61 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new GlassPBRTMaterial(%s, %s, %s, %s, %s, %s)", this.textureEta, this.textureKReflection, this.textureKTransmission, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+		return String.format("new GlassPBRTMaterial(%s, %s, %s, %s, %s, %s)", this.textureKR, this.textureKT, this.textureEmission, this.textureEta, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the index of refraction (IOR).
+	 * 
+	 * @return the {@code Texture} instance for the index of refraction (IOR)
+	 */
+	public Texture getTextureEta() {
+		return this.textureEta;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the reflection coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the reflection coefficient
+	 */
+	public Texture getTextureKR() {
+		return this.textureKR;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the transmission coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the transmission coefficient
+	 */
+	public Texture getTextureKT() {
+		return this.textureKT;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the roughness along the U-axis.
+	 * 
+	 * @return the {@code Texture} instance for the roughness along the U-axis
+	 */
+	public Texture getTextureRoughnessU() {
+		return this.textureRoughnessU;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the roughness along the V-axis.
+	 * 
+	 * @return the {@code Texture} instance for the roughness along the V-axis
+	 */
+	public Texture getTextureRoughnessV() {
+		return this.textureRoughnessV;
 	}
 	
 	/**
@@ -253,15 +560,19 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.textureEta.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureKReflection.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureKTransmission.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureKT.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -294,11 +605,13 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 			return true;
 		} else if(!(object instanceof GlassPBRTMaterial)) {
 			return false;
+		} else if(!Objects.equals(this.textureEmission, GlassPBRTMaterial.class.cast(object).textureEmission)) {
+			return false;
 		} else if(!Objects.equals(this.textureEta, GlassPBRTMaterial.class.cast(object).textureEta)) {
 			return false;
-		} else if(!Objects.equals(this.textureKReflection, GlassPBRTMaterial.class.cast(object).textureKReflection)) {
+		} else if(!Objects.equals(this.textureKR, GlassPBRTMaterial.class.cast(object).textureKR)) {
 			return false;
-		} else if(!Objects.equals(this.textureKTransmission, GlassPBRTMaterial.class.cast(object).textureKTransmission)) {
+		} else if(!Objects.equals(this.textureKT, GlassPBRTMaterial.class.cast(object).textureKT)) {
 			return false;
 		} else if(!Objects.equals(this.textureRoughnessU, GlassPBRTMaterial.class.cast(object).textureRoughnessU)) {
 			return false;
@@ -309,6 +622,15 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 */
+	public boolean isRemappingRoughness() {
+		return this.isRemappingRoughness;
 	}
 	
 	/**
@@ -328,6 +650,6 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEta, this.textureKReflection, this.textureKTransmission, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
+		return Objects.hash(this.textureEmission, this.textureEta, this.textureKR, this.textureKT, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
 	}
 }

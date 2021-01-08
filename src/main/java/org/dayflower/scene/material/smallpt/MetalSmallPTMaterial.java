@@ -91,12 +91,12 @@ public final class MetalSmallPTMaterial extends SmallPTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalSmallPTMaterial(Color3F.GRAY);
+	 * new MetalSmallPTMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
 	public MetalSmallPTMaterial() {
-		this(Color3F.GRAY);
+		this(Color3F.GRAY_0_50);
 	}
 	
 	/**

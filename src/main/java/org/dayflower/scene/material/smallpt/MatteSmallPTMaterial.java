@@ -78,12 +78,12 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteSmallPTMaterial(Color3F.GRAY);
+	 * new MatteSmallPTMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
 	public MatteSmallPTMaterial() {
-		this(Color3F.GRAY);
+		this(Color3F.GRAY_0_50);
 	}
 	
 	/**

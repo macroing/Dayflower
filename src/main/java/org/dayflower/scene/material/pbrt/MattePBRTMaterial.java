@@ -70,12 +70,12 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MattePBRTMaterial(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY));
+	 * new MattePBRTMaterial(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY_0_50));
 	 * }
 	 * </pre>
 	 */
 	public MattePBRTMaterial() {
-		this(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY));
+		this(new ConstantTexture(Color3F.BLACK), new ConstantTexture(Color3F.GRAY_0_50));
 	}
 	
 	/**
@@ -93,6 +93,22 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code MattePBRTMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code MattePBRTMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	@Override
+	public Color3F emittance(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
+		return Color3F.BLACK;
+	}
 	
 	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.

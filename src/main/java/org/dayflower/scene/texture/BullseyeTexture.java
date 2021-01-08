@@ -96,12 +96,12 @@ public final class BullseyeTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new BullseyeTexture(Color3F.GRAY, Color3F.WHITE);
+	 * new BullseyeTexture(Color3F.GRAY_0_50, Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
 	public BullseyeTexture() {
-		this(Color3F.GRAY, Color3F.WHITE);
+		this(Color3F.GRAY_0_50, Color3F.WHITE);
 	}
 	
 	/**

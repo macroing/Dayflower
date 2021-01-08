@@ -80,12 +80,12 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteRayitoMaterial(Color3F.GRAY);
+	 * new MatteRayitoMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
 	public MatteRayitoMaterial() {
-		this(Color3F.GRAY);
+		this(Color3F.GRAY_0_50);
 	}
 	
 	/**

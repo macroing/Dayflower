@@ -100,9 +100,39 @@ public final class Color3F {
 	public static final Color3F GOLD_METALLIC = new Color3F(0.83F, 0.69F, 0.22F);
 	
 	/**
-	 * A {@code Color3F} denoting the color gray.
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.1F}.
 	 */
-	public static final Color3F GRAY = new Color3F(0.5F, 0.5F, 0.5F);
+	public static final Color3F GRAY_0_10 = new Color3F(0.1F, 0.1F, 0.1F);
+	
+	/**
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.25F}.
+	 */
+	public static final Color3F GRAY_0_25 = new Color3F(0.25F, 0.25F, 0.25F);
+	
+	/**
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.30F}.
+	 */
+	public static final Color3F GRAY_0_30 = new Color3F(0.30F, 0.30F, 0.30F);
+	
+	/**
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.5F}.
+	 */
+	public static final Color3F GRAY_0_50 = new Color3F(0.5F, 0.5F, 0.5F);
+	
+	/**
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 1.5F}.
+	 */
+	public static final Color3F GRAY_1_50 = new Color3F(1.5F, 1.5F, 1.5F);
+	
+	/**
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 1.55F}.
+	 */
+	public static final Color3F GRAY_1_55 = new Color3F(1.55F, 1.55F, 1.55F);
+	
+	/**
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 2.0F}.
+	 */
+	public static final Color3F GRAY_2_00 = new Color3F(2.0F, 2.0F, 2.0F);
 	
 	/**
 	 * A {@code Color3F} denoting the color green.

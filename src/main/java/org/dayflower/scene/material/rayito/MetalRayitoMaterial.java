@@ -91,12 +91,12 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalRayitoMaterial(Color3F.GRAY);
+	 * new MetalRayitoMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
 	public MetalRayitoMaterial() {
-		this(Color3F.GRAY);
+		this(Color3F.GRAY_0_50);
 	}
 	
 	/**

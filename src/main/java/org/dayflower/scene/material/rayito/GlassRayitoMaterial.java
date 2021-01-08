@@ -157,7 +157,7 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassRayitoMaterial(colorKR, colorKT, colorEmission, new Color3F(1.5F));
+	 * new GlassRayitoMaterial(colorKR, colorKT, colorEmission, Color3F.GRAY_1_50);
 	 * }
 	 * </pre>
 	 * 
@@ -167,7 +167,7 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}
 	 */
 	public GlassRayitoMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission) {
-		this(colorKR, colorKT, colorEmission, new Color3F(1.5F));
+		this(colorKR, colorKT, colorEmission, Color3F.GRAY_1_50);
 	}
 	
 	/**

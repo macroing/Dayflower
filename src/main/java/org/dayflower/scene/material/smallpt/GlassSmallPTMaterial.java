@@ -157,7 +157,7 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassSmallPTMaterial(colorKR, colorKT, colorEmission, new Color3F(1.5F));
+	 * new GlassSmallPTMaterial(colorKR, colorKT, colorEmission, Color3F.GRAY_1_50);
 	 * }
 	 * </pre>
 	 * 
@@ -167,7 +167,7 @@ public final class GlassSmallPTMaterial extends SmallPTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}
 	 */
 	public GlassSmallPTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission) {
-		this(colorKR, colorKT, colorEmission, new Color3F(1.5F));
+		this(colorKR, colorKT, colorEmission, Color3F.GRAY_1_50);
 	}
 	
 	/**

@@ -54,7 +54,7 @@ final class RayCasting {
 			
 			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
 			
-			radiance = Color3F.multiply(Color3F.GRAY, abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));
+			radiance = Color3F.multiply(Color3F.GRAY_0_50, abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));
 		} else if(isPreviewMode) {
 			return Color3F.WHITE;
 		} else {

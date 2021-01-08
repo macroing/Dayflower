@@ -102,12 +102,12 @@ public final class CheckerboardTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardTexture(Color3F.GRAY, Color3F.WHITE);
+	 * new CheckerboardTexture(Color3F.GRAY_0_50, Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
 	public CheckerboardTexture() {
-		this(Color3F.GRAY, Color3F.WHITE);
+		this(Color3F.GRAY_0_50, Color3F.WHITE);
 	}
 	
 	/**

@@ -40,39 +40,39 @@ public final class ConstantTexture implements Texture {
 	public static final ConstantTexture BLACK = new ConstantTexture(Color3F.BLACK);
 	
 	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(0.10F))}.
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_0_10)}.
 	 */
-	public static final ConstantTexture GRAY_0_10 = new ConstantTexture(new Color3F(0.10F));
+	public static final ConstantTexture GRAY_0_10 = new ConstantTexture(Color3F.GRAY_0_10);
 	
 	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(0.25F))}.
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_0_25)}.
 	 */
-	public static final ConstantTexture GRAY_0_25 = new ConstantTexture(new Color3F(0.25F));
+	public static final ConstantTexture GRAY_0_25 = new ConstantTexture(Color3F.GRAY_0_25);
 	
 	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(0.30F))}.
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_0_30)}.
 	 */
-	public static final ConstantTexture GRAY_0_30 = new ConstantTexture(new Color3F(0.30F));
+	public static final ConstantTexture GRAY_0_30 = new ConstantTexture(Color3F.GRAY_0_30);
 	
 	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(0.50F))}.
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_0_50)}.
 	 */
-	public static final ConstantTexture GRAY_0_50 = new ConstantTexture(new Color3F(0.50F));
+	public static final ConstantTexture GRAY_0_50 = new ConstantTexture(Color3F.GRAY_0_50);
 	
 	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(1.50F))}.
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_1_50)}.
 	 */
-	public static final ConstantTexture GRAY_1_50 = new ConstantTexture(new Color3F(1.50F));
+	public static final ConstantTexture GRAY_1_50 = new ConstantTexture(Color3F.GRAY_1_50);
 	
 	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(1.55F))}.
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_1_55)}.
 	 */
-	public static final ConstantTexture GRAY_1_55 = new ConstantTexture(new Color3F(1.55F));
+	public static final ConstantTexture GRAY_1_55 = new ConstantTexture(Color3F.GRAY_1_55);
 	
 	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(new Color3F(2.00F))}.
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_2_00)}.
 	 */
-	public static final ConstantTexture GRAY_2_00 = new ConstantTexture(new Color3F(2.00F));
+	public static final ConstantTexture GRAY_2_00 = new ConstantTexture(Color3F.GRAY_2_00);
 	
 	/**
 	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.WHITE)}.

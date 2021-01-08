@@ -121,6 +121,22 @@ public final class UberPBRTMaterial implements PBRTMaterial {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@link Color3F} instance with the emittance of this {@code UberPBRTMaterial} instance at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the emittance of this {@code UberPBRTMaterial} instance at {@code intersection}
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	@Override
+	public Color3F emittance(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
+		return Color3F.BLACK;
+	}
+	
+	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSSRDF} instance.

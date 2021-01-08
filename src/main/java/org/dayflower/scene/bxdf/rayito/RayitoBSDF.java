@@ -25,6 +25,7 @@ import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Ints.min;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -86,6 +87,37 @@ public final class RayitoBSDF implements BSDF {
 	public RayitoBSDF(final Intersection intersection, final List<RayitoBXDF> rayitoBXDFs, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.rayitoBXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(rayitoBXDFs, "rayitoBXDFs"));
+		this.eta = eta;
+	}
+	
+	/**
+	 * Constructs a new {@code RayitoBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code rayitoBXDF} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param rayitoBXDF a {@link RayitoBXDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code rayitoBXDF} are {@code null}
+	 */
+	public RayitoBSDF(final Intersection intersection, final RayitoBXDF rayitoBXDF) {
+		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
+		this.rayitoBXDFs = Arrays.asList(Objects.requireNonNull(rayitoBXDF, "rayitoBXDF == null"));
+		this.eta = 1.0F;
+	}
+	
+	/**
+	 * Constructs a new {@code RayitoBSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code rayitoBXDF} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param rayitoBXDF a {@link RayitoBXDF} instance
+	 * @param eta the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code rayitoBXDF} are {@code null}
+	 */
+	public RayitoBSDF(final Intersection intersection, final RayitoBXDF rayitoBXDF, final float eta) {
+		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
+		this.rayitoBXDFs = Arrays.asList(Objects.requireNonNull(rayitoBXDF, "rayitoBXDF == null"));
 		this.eta = eta;
 	}
 	

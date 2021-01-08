@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.material.rayito;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -328,7 +327,7 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 		final float etaA = 1.0F;
 		final float etaB = colorEta.average();
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBTDF(colorKR, colorKT, etaA, etaB)), etaB));
+		return Optional.of(new RayitoBSDF(intersection, new SpecularRayitoBTDF(colorKR, colorKT, etaA, etaB), etaB));
 	}
 	
 	/**

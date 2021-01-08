@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.material.rayito;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -290,7 +289,7 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 		
 		final float roughness = colorRoughness.average();
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new AshikhminShirleyRayitoBRDF(colorKR, roughness))));
+		return Optional.of(new RayitoBSDF(intersection, new AshikhminShirleyRayitoBRDF(colorKR, roughness)));
 	}
 	
 	/**

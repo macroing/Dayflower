@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.material.rayito;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -211,7 +210,7 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 		
 		final Color3F colorKD = this.textureKD.getColor(intersection);
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new LambertianRayitoBRDF(colorKD))));
+		return Optional.of(new RayitoBSDF(intersection, new LambertianRayitoBRDF(colorKD)));
 	}
 	
 	/**

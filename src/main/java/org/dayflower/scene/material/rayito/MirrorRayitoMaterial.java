@@ -18,7 +18,6 @@
  */
 package org.dayflower.scene.material.rayito;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -211,7 +210,7 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 		
 		final Color3F colorKR = this.textureKR.getColor(intersection);
 		
-		return Optional.of(new RayitoBSDF(intersection, Arrays.asList(new SpecularRayitoBRDF(colorKR))));
+		return Optional.of(new RayitoBSDF(intersection, new SpecularRayitoBRDF(colorKR)));
 	}
 	
 	/**

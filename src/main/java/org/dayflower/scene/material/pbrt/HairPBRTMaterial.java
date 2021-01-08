@@ -515,9 +515,7 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		
-		return Color3F.BLACK;
+		return this.textureEmission.getColor(intersection);
 	}
 	
 	/**

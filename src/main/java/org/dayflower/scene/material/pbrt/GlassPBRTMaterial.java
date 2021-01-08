@@ -413,8 +413,8 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
 		
 		final float eta = colorEta.average();
-		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
-		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
+		final float roughnessU = colorRoughnessU.average();
+		final float roughnessV = colorRoughnessV.average();
 		
 		if(colorKR.isBlack() && colorKT.isBlack()) {
 			return Optional.empty();
@@ -444,7 +444,10 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		
 		final List<PBRTBXDF> pBRTBXDFs = new ArrayList<>();
 		
-		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
+		final float roughnessURemapped = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(roughnessU) : roughnessU;
+		final float roughnessVRemapped = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(roughnessV) : roughnessV;
+		
+		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessURemapped, roughnessVRemapped);
 		
 		if(!colorKR.isBlack()) {
 			final Fresnel fresnel = new DielectricFresnel(1.0F, eta);

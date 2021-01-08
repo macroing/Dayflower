@@ -278,7 +278,7 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MattePBRTMaterial(%s, %s)", this.textureKD, this.textureEmission, this.textureAngle);
+		return String.format("new MattePBRTMaterial(%s, %s, %s)", this.textureKD, this.textureEmission, this.textureAngle);
 	}
 	
 	/**

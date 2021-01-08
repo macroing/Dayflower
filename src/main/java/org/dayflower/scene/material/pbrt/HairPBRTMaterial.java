@@ -60,6 +60,7 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 	private final Texture textureBetaM;
 	private final Texture textureBetaN;
 	private final Texture textureColor;
+	private final Texture textureEmission;
 	private final Texture textureEta;
 	private final Texture textureEumelanin;
 	private final Texture texturePheomelanin;
@@ -73,49 +74,432 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Texture textureAlpha = ConstantTexture.GRAY_2_00;
-	 * Texture textureBetaM = ConstantTexture.GRAY_0_30;
-	 * Texture textureBetaN = ConstantTexture.GRAY_0_30;
-	 * Texture textureColor = ConstantTexture.BLACK;
-	 * Texture textureEta = ConstantTexture.GRAY_1_55;
-	 * Texture textureEumelanin = ConstantTexture.BLACK;
-	 * Texture texturePheomelanin = ConstantTexture.BLACK;
-	 * Texture textureSigmaA = new ConstantTexture(HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F));
-	 * 
-	 * new HairPBRTMaterial(textureAlpha, textureBetaM, textureBetaN, textureColor, textureEta, textureEumelanin, texturePheomelanin, textureSigmaA);
+	 * new HairPBRTMaterial(Color3F.BLACK);
 	 * }
 	 * </pre>
 	 */
 	public HairPBRTMaterial() {
-		this(ConstantTexture.GRAY_2_00, ConstantTexture.GRAY_0_30, ConstantTexture.GRAY_0_30, ConstantTexture.BLACK, ConstantTexture.GRAY_1_55, ConstantTexture.BLACK, ConstantTexture.BLACK, new ConstantTexture(HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F)));
+		this(Color3F.BLACK);
 	}
 	
 	/**
 	 * Constructs a new {@code HairPBRTMaterial} instance.
 	 * <p>
-	 * If either {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureColor}, {@code textureEta}, {@code textureEumelanin}, {@code texturePheomelanin} or {@code textureSigmaA} are {@code null}, a {@code NullPointerException}
-	 * will be thrown.
+	 * If {@code colorColor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(colorColor, Color3F.BLACK);
+	 * }
+	 * </pre>
 	 * 
-	 * @param textureAlpha a {@link Texture} instance
-	 * @param textureBetaM a {@code Texture} instance
-	 * @param textureBetaN a {@code Texture} instance
-	 * @param textureColor a {@code Texture} instance
-	 * @param textureEta a {@code Texture} instance with the index of refraction (IOR)
-	 * @param textureEumelanin a {@code Texture} instance
-	 * @param texturePheomelanin a {@code Texture} instance
-	 * @param textureSigmaA a {@code Texture} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureColor}, {@code textureEta}, {@code textureEumelanin}, {@code texturePheomelanin} or {@code textureSigmaA}
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @throws NullPointerException thrown if, and only if, {@code colorColor} is {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor) {
+		this(colorColor, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(colorColor, colorEmission, HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F));
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor} or {@code colorEmission} are {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission) {
+		this(colorColor, colorEmission, HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F));
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(colorColor, colorEmission, colorSigmaA, 2.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorSigmaA a {@code Color3F} instance for the Sigma A value
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorSigmaA) {
+		this(colorColor, colorEmission, colorSigmaA, 2.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(colorColor, colorEmission, colorSigmaA, floatAlpha, 0.3F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorSigmaA a {@code Color3F} instance for the Sigma A value
+	 * @param floatAlpha a {@code float} for the Alpha value
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorSigmaA, final float floatAlpha) {
+		this(colorColor, colorEmission, colorSigmaA, floatAlpha, 0.3F);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, 0.3F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorSigmaA a {@code Color3F} instance for the Sigma A value
+	 * @param floatAlpha a {@code float} for the Alpha value
+	 * @param floatBetaM a {@code float} for the Beta M value
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorSigmaA, final float floatAlpha, final float floatBetaM) {
+		this(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, 0.3F);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, floatBetaN, 1.55F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorSigmaA a {@code Color3F} instance for the Sigma A value
+	 * @param floatAlpha a {@code float} for the Alpha value
+	 * @param floatBetaM a {@code float} for the Beta M value
+	 * @param floatBetaN a {@code float} for the Beta N value
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorSigmaA, final float floatAlpha, final float floatBetaM, final float floatBetaN) {
+		this(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, floatBetaN, 1.55F);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, floatBetaN, floatEta, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorSigmaA a {@code Color3F} instance for the Sigma A value
+	 * @param floatAlpha a {@code float} for the Alpha value
+	 * @param floatBetaM a {@code float} for the Beta M value
+	 * @param floatBetaN a {@code float} for the Beta N value
+	 * @param floatEta a {@code float} for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorSigmaA, final float floatAlpha, final float floatBetaM, final float floatBetaN, final float floatEta) {
+		this(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, floatBetaN, floatEta, 0.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, floatBetaN, floatEta, floatEumelanin, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorSigmaA a {@code Color3F} instance for the Sigma A value
+	 * @param floatAlpha a {@code float} for the Alpha value
+	 * @param floatBetaM a {@code float} for the Beta M value
+	 * @param floatBetaN a {@code float} for the Beta N value
+	 * @param floatEta a {@code float} for the index of refraction (IOR)
+	 * @param floatEumelanin a {@code float} for the Eumelanin value
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorSigmaA, final float floatAlpha, final float floatBetaM, final float floatBetaN, final float floatEta, final float floatEumelanin) {
+		this(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, floatBetaN, floatEta, floatEumelanin, 0.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorSigmaA a {@code Color3F} instance for the Sigma A value
+	 * @param floatAlpha a {@code float} for the Alpha value
+	 * @param floatBetaM a {@code float} for the Beta M value
+	 * @param floatBetaN a {@code float} for the Beta N value
+	 * @param floatEta a {@code float} for the index of refraction (IOR)
+	 * @param floatEumelanin a {@code float} for the Eumelanin value
+	 * @param floatPheomelanin a {@code float} for the Pheomelanin value
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorSigmaA, final float floatAlpha, final float floatBetaM, final float floatBetaN, final float floatEta, final float floatEumelanin, final float floatPheomelanin) {
+		this.textureColor = new ConstantTexture(Objects.requireNonNull(colorColor, "colorColor == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureSigmaA = new ConstantTexture(Objects.requireNonNull(colorSigmaA, "colorSigmaA == null"));
+		this.textureAlpha = new ConstantTexture(new Color3F(floatAlpha));
+		this.textureBetaM = new ConstantTexture(new Color3F(floatBetaM));
+		this.textureBetaN = new ConstantTexture(new Color3F(floatBetaN));
+		this.textureEta = new ConstantTexture(new Color3F(floatEta));
+		this.textureEumelanin = new ConstantTexture(new Color3F(floatEumelanin));
+		this.texturePheomelanin = new ConstantTexture(new Color3F(floatPheomelanin));
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If {@code textureColor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(textureColor, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @throws NullPointerException thrown if, and only if, {@code textureColor} is {@code null}
+	 */
+	public HairPBRTMaterial(final Texture textureColor) {
+		this(textureColor, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(textureColor, textureEmission, new ConstantTexture(HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F)));
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor} or {@code textureEmission} are {@code null}
+	 */
+	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission) {
+		this(textureColor, textureEmission, new ConstantTexture(HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F)));
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor}, {@code textureEmission} or {@code textureSigmaA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(textureColor, textureEmission, textureSigmaA, ConstantTexture.GRAY_2_00);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureSigmaA a {@code Texture} instance for the Sigma A value
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission} or {@code textureSigmaA} are {@code null}
+	 */
+	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureSigmaA) {
+		this(textureColor, textureEmission, textureSigmaA, ConstantTexture.GRAY_2_00);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA} or {@code textureAlpha} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(textureColor, textureEmission, textureSigmaA, textureAlpha, ConstantTexture.GRAY_0_30);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureSigmaA a {@code Texture} instance for the Sigma A value
+	 * @param textureAlpha a {@code Texture} instance for the Alpha value
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA} or {@code textureAlpha} are {@code null}
+	 */
+	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureSigmaA, final Texture textureAlpha) {
+		this(textureColor, textureEmission, textureSigmaA, textureAlpha, ConstantTexture.GRAY_0_30);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha} or {@code textureBetaM} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, ConstantTexture.GRAY_0_30);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureSigmaA a {@code Texture} instance for the Sigma A value
+	 * @param textureAlpha a {@code Texture} instance for the Alpha value
+	 * @param textureBetaM a {@code Texture} instance for the Beta M value
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha} or {@code textureBetaM} are {@code null}
+	 */
+	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureSigmaA, final Texture textureAlpha, final Texture textureBetaM) {
+		this(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, ConstantTexture.GRAY_0_30);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM} or {@code textureBetaN} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, textureBetaN, ConstantTexture.GRAY_1_55);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureSigmaA a {@code Texture} instance for the Sigma A value
+	 * @param textureAlpha a {@code Texture} instance for the Alpha value
+	 * @param textureBetaM a {@code Texture} instance for the Beta M value
+	 * @param textureBetaN a {@code Texture} instance for the Beta N value
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM} or {@code textureBetaN} are {@code null}
+	 */
+	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureSigmaA, final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN) {
+		this(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, textureBetaN, ConstantTexture.GRAY_1_55);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN} or {@code textureEta} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, textureBetaN, textureEta, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureSigmaA a {@code Texture} instance for the Sigma A value
+	 * @param textureAlpha a {@code Texture} instance for the Alpha value
+	 * @param textureBetaM a {@code Texture} instance for the Beta M value
+	 * @param textureBetaN a {@code Texture} instance for the Beta N value
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN} or {@code textureEta} are {@code null}
+	 */
+	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureSigmaA, final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN, final Texture textureEta) {
+		this(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, textureBetaN, textureEta, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureEta} or {@code textureEumelanin} are {@code null}, a {@code NullPointerException}
+	 * will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, textureBetaN, textureEta, textureEumelanin, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureSigmaA a {@code Texture} instance for the Sigma A value
+	 * @param textureAlpha a {@code Texture} instance for the Alpha value
+	 * @param textureBetaM a {@code Texture} instance for the Beta M value
+	 * @param textureBetaN a {@code Texture} instance for the Beta N value
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureEumelanin a {@code Texture} instance for the Eumelanin value
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureEta} or {@code textureEumelanin}
 	 *                              are {@code null}
 	 */
-	public HairPBRTMaterial(final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN, final Texture textureColor, final Texture textureEta, final Texture textureEumelanin, final Texture texturePheomelanin, final Texture textureSigmaA) {
+	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureSigmaA, final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN, final Texture textureEta, final Texture textureEumelanin) {
+		this(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, textureBetaN, textureEta, textureEumelanin, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureEta}, {@code textureEumelanin} or {@code texturePheomelanin} are {@code null}, a
+	 * {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureSigmaA a {@code Texture} instance for the Sigma A value
+	 * @param textureAlpha a {@code Texture} instance for the Alpha value
+	 * @param textureBetaM a {@code Texture} instance for the Beta M value
+	 * @param textureBetaN a {@code Texture} instance for the Beta N value
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureEumelanin a {@code Texture} instance for the Eumelanin value
+	 * @param texturePheomelanin a {@code Texture} instance for the Pheomelanin value
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureEta}, {@code textureEumelanin} or
+	 *                              {@code texturePheomelanin} are {@code null}
+	 */
+	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureSigmaA, final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN, final Texture textureEta, final Texture textureEumelanin, final Texture texturePheomelanin) {
+		this.textureColor = Objects.requireNonNull(textureColor, "textureColor == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+		this.textureSigmaA = Objects.requireNonNull(textureSigmaA, "textureSigmaA == null");
 		this.textureAlpha = Objects.requireNonNull(textureAlpha, "textureAlpha == null");
 		this.textureBetaM = Objects.requireNonNull(textureBetaM, "textureBetaM == null");
 		this.textureBetaN = Objects.requireNonNull(textureBetaN, "textureBetaN == null");
-		this.textureColor = Objects.requireNonNull(textureColor, "textureColor == null");
 		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
 		this.textureEumelanin = Objects.requireNonNull(textureEumelanin, "textureEumelanin == null");
 		this.texturePheomelanin = Objects.requireNonNull(texturePheomelanin, "texturePheomelanin == null");
-		this.textureSigmaA = Objects.requireNonNull(textureSigmaA, "textureSigmaA == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,10 +559,10 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final float alpha = this.textureAlpha.getColor(intersection).average();
-		final float betaM = this.textureBetaM.getColor(intersection).average();
-		final float betaN = this.textureBetaN.getColor(intersection).average();
-		final float eta = this.textureEta.getColor(intersection).average();
+		final float alpha = this.textureAlpha.getFloat(intersection);
+		final float betaM = this.textureBetaM.getFloat(intersection);
+		final float betaN = this.textureBetaN.getFloat(intersection);
+		final float eta = this.textureEta.getFloat(intersection);
 		
 		final Color3F sigmaA = doComputeSigmaA(intersection, betaN);
 		
@@ -204,7 +588,88 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new HairPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s)", this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureColor, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.textureSigmaA);
+		return String.format("new HairPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureColor, this.textureEmission, this.textureSigmaA, this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureEta, this.textureEumelanin, this.texturePheomelanin);
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the Alpha value.
+	 * 
+	 * @return the {@code Texture} instance for the Alpha value
+	 */
+	public Texture getTextureAlpha() {
+		return this.textureAlpha;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the Beta M value.
+	 * 
+	 * @return the {@code Texture} instance for the Beta M value
+	 */
+	public Texture getTextureBetaM() {
+		return this.textureBetaM;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the Beta N value.
+	 * 
+	 * @return the {@code Texture} instance for the Beta N value
+	 */
+	public Texture getTextureBetaN() {
+		return this.textureBetaN;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the color.
+	 * 
+	 * @return the {@code Texture} instance for the color
+	 */
+	public Texture getTextureColor() {
+		return this.textureColor;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the index of refraction (IOR).
+	 * 
+	 * @return the {@code Texture} instance for the index of refraction (IOR)
+	 */
+	public Texture getTextureEta() {
+		return this.textureEta;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the Eumelanin value.
+	 * 
+	 * @return the {@code Texture} instance for the Eumelanin value
+	 */
+	public Texture getTextureEumelanin() {
+		return this.textureEumelanin;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the Pheomelanin value.
+	 * 
+	 * @return the {@code Texture} instance for the Pheomelanin value
+	 */
+	public Texture getTexturePheomelanin() {
+		return this.texturePheomelanin;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the Sigma A value.
+	 * 
+	 * @return the {@code Texture} instance for the Sigma A value
+	 */
+	public Texture getTextureSigmaA() {
+		return this.textureSigmaA;
 	}
 	
 	/**
@@ -247,6 +712,10 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 				}
 				
 				if(!this.textureColor.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -295,6 +764,8 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 			return false;
 		} else if(!Objects.equals(this.textureColor, HairPBRTMaterial.class.cast(object).textureColor)) {
 			return false;
+		} else if(!Objects.equals(this.textureEmission, HairPBRTMaterial.class.cast(object).textureEmission)) {
+			return false;
 		} else if(!Objects.equals(this.textureEta, HairPBRTMaterial.class.cast(object).textureEta)) {
 			return false;
 		} else if(!Objects.equals(this.textureEumelanin, HairPBRTMaterial.class.cast(object).textureEumelanin)) {
@@ -325,7 +796,7 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureColor, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.textureSigmaA);
+		return Objects.hash(this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureColor, this.textureEmission, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.textureSigmaA);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -337,17 +808,14 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 			return colorSigmaA;
 		}
 		
-		final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F color = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
-		if(!colorColor.isBlack()) {
-			return HairPBRTBXDF.computeSigmaAFromReflectance(colorColor, betaN);
+		if(!color.isBlack()) {
+			return HairPBRTBXDF.computeSigmaAFromReflectance(color, betaN);
 		}
 		
-		final Color3F colorEumelanin = this.textureEumelanin.getColor(intersection);
-		final Color3F colorPheomelanin = this.texturePheomelanin.getColor(intersection);
-		
-		final float eumelanin = max(0.0F, colorEumelanin.average());
-		final float pheomelanin = max(0.0F, colorPheomelanin.average());
+		final float eumelanin = max(0.0F, this.textureEumelanin.getFloat(intersection));
+		final float pheomelanin = max(0.0F, this.texturePheomelanin.getFloat(intersection));
 		
 		return HairPBRTBXDF.computeSigmaAFromConcentration(eumelanin, pheomelanin);
 	}

@@ -476,7 +476,7 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new GlassPBRTMaterial(%s, %s, %s, %s, %s, %s)", this.textureKR, this.textureKT, this.textureEmission, this.textureEta, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+		return String.format("new GlassPBRTMaterial(%s, %s, %s, %s, %s, %s, %s)", this.textureKR, this.textureKT, this.textureEmission, this.textureEta, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
 	}
 	
 	/**

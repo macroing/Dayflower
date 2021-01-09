@@ -237,9 +237,9 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
 		this.textureKT = new ConstantTexture(Objects.requireNonNull(colorKT, "colorKT == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
-		this.textureEta = new ConstantTexture(new Color3F(floatEta));
-		this.textureRoughnessU = new ConstantTexture(new Color3F(floatRoughnessU));
-		this.textureRoughnessV = new ConstantTexture(new Color3F(floatRoughnessV));
+		this.textureEta = new ConstantTexture(floatEta);
+		this.textureRoughnessU = new ConstantTexture(floatRoughnessU);
+		this.textureRoughnessV = new ConstantTexture(floatRoughnessV);
 		this.isRemappingRoughness = isRemappingRoughness;
 	}
 	

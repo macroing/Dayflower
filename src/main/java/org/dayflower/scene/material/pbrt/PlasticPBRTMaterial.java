@@ -61,9 +61,10 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureDiffuse;
+	private final Texture textureEmission;
+	private final Texture textureKD;
+	private final Texture textureKS;
 	private final Texture textureRoughness;
-	private final Texture textureSpecular;
 	private final boolean isRemappingRoughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,29 +75,215 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PlasticPBRTMaterial(ConstantTexture.GRAY_0_25, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_25, true);
+	 * new PlasticPBRTMaterial(Color3F.GRAY_0_25);
 	 * }
 	 * </pre>
 	 */
 	public PlasticPBRTMaterial() {
-		this(ConstantTexture.GRAY_0_25, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_25, true);
+		this(Color3F.GRAY_0_25);
 	}
 	
 	/**
 	 * Constructs a new {@code PlasticPBRTMaterial} instance.
 	 * <p>
-	 * If either {@code textureDiffuse}, {@code textureRoughness} or {@code textureSpecular} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PlasticPBRTMaterial(colorKD, Color3F.GRAY_0_25);
+	 * }
+	 * </pre>
 	 * 
-	 * @param textureDiffuse a {@link Texture} instance used for the diffuse component
-	 * @param textureRoughness a {@code Texture} instance used for the roughness
-	 * @param textureSpecular a {@code Texture} instance used for the specular component
-	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, either {@code textureDiffuse}, {@code textureRoughness} or {@code textureSpecular} are {@code null}
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
-	public PlasticPBRTMaterial(final Texture textureDiffuse, final Texture textureRoughness, final Texture textureSpecular, final boolean isRemappingRoughness) {
-		this.textureDiffuse = Objects.requireNonNull(textureDiffuse, "textureDiffuse == null");
+	public PlasticPBRTMaterial(final Color3F colorKD) {
+		this(colorKD, Color3F.GRAY_0_25);
+	}
+	
+	/**
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD} or {@code colorKS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PlasticPBRTMaterial(colorKD, colorKS, Color3F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorKS} are {@code null}
+	 */
+	public PlasticPBRTMaterial(final Color3F colorKD, final Color3F colorKS) {
+		this(colorKD, colorKS, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PlasticPBRTMaterial(colorKD, colorKS, colorEmission, 0.1F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}
+	 */
+	public PlasticPBRTMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission) {
+		this(colorKD, colorKS, colorEmission, 0.1F);
+	}
+	
+	/**
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PlasticPBRTMaterial(colorKD, colorKS, colorEmission, floatRoughness, true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatRoughness a {@code float} for the roughness
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}
+	 */
+	public PlasticPBRTMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission, final float floatRoughness) {
+		this(colorKD, colorKS, colorEmission, floatRoughness, true);
+	}
+	
+	/**
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatRoughness a {@code float} for the roughness
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}
+	 */
+	public PlasticPBRTMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission, final float floatRoughness, final boolean isRemappingRoughness) {
+		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
+		this.textureKS = new ConstantTexture(Objects.requireNonNull(colorKS, "colorKS == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureRoughness = new ConstantTexture(floatRoughness);
+		this.isRemappingRoughness = isRemappingRoughness;
+	}
+	
+	/**
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
+	 * <p>
+	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PlasticPBRTMaterial(textureKD, ConstantTexture.GRAY_0_25);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
+	 */
+	public PlasticPBRTMaterial(final Texture textureKD) {
+		this(textureKD, ConstantTexture.GRAY_0_25);
+	}
+	
+	/**
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD} or {@code textureKS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PlasticPBRTMaterial(textureKD, textureKS, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureKS} are {@code null}
+	 */
+	public PlasticPBRTMaterial(final Texture textureKD, final Texture textureKS) {
+		this(textureKD, textureKS, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureKS} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PlasticPBRTMaterial(textureKD, textureKS, textureEmission, ConstantTexture.GRAY_0_10);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS} or {@code textureEmission} are {@code null}
+	 */
+	public PlasticPBRTMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission) {
+		this(textureKD, textureKS, textureEmission, ConstantTexture.GRAY_0_10);
+	}
+	
+	/**
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureKS}, {@code textureEmission} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new PlasticPBRTMaterial(textureKD, textureKS, textureEmission, textureRoughness, true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughness a {@code Texture} instance for the roughness
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS}, {@code textureEmission} or {@code textureRoughness} are {@code null}
+	 */
+	public PlasticPBRTMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission, final Texture textureRoughness) {
+		this(textureKD, textureKS, textureEmission, textureRoughness, true);
+	}
+	
+	/**
+	 * Constructs a new {@code PlasticPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureKS}, {@code textureEmission} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughness a {@code Texture} instance for the roughness
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS}, {@code textureEmission} or {@code textureRoughness} are {@code null}
+	 */
+	public PlasticPBRTMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission, final Texture textureRoughness, final boolean isRemappingRoughness) {
+		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
+		this.textureKS = Objects.requireNonNull(textureKS, "textureKS == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureRoughness = Objects.requireNonNull(textureRoughness, "textureRoughness == null");
-		this.textureSpecular = Objects.requireNonNull(textureSpecular, "textureSpecular == null");
 		this.isRemappingRoughness = isRemappingRoughness;
 	}
 	
@@ -113,9 +300,7 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		
-		return Color3F.BLACK;
+		return this.textureEmission.getColor(intersection);
 	}
 	
 	/**
@@ -159,23 +344,21 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 		
 		final List<PBRTBXDF> pBRTBXDFs = new ArrayList<>();
 		
-		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
-		if(!colorDiffuse.isBlack()) {
-			pBRTBXDFs.add(new LambertianPBRTBRDF(colorDiffuse));
+		if(!colorKD.isBlack()) {
+			pBRTBXDFs.add(new LambertianPBRTBRDF(colorKD));
 		}
 		
-		if(!colorSpecular.isBlack()) {
+		if(!colorKS.isBlack()) {
 			final Fresnel fresnel = new DielectricFresnel(1.5F, 1.0F);
 			
-			final Color3F colorRoughness = this.textureRoughness.getColor(intersection);
-			
-			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughness.average()) : colorRoughness.average();
+			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughness.getFloat(intersection)) : this.textureRoughness.getFloat(intersection);
 			
 			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughness, roughness);
 			
-			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorSpecular, fresnel, microfacetDistribution));
+			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, fresnel, microfacetDistribution));
 		}
 		
 		if(pBRTBXDFs.size() > 0) {
@@ -202,7 +385,43 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PlasticPBRTMaterial(%s, %s, %s, %s)", this.textureDiffuse, this.textureRoughness, this.textureSpecular, Boolean.toString(this.isRemappingRoughness));
+		return String.format("new PlasticPBRTMaterial(%s, %s, %s, %s, %s)", this.textureKD, this.textureKS, this.textureEmission, this.textureRoughness, Boolean.toString(this.isRemappingRoughness));
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the diffuse coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the diffuse coefficient
+	 */
+	public Texture getTextureKD() {
+		return this.textureKD;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the specular coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the specular coefficient
+	 */
+	public Texture getTextureKS() {
+		return this.textureKS;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the roughness.
+	 * 
+	 * @return the {@code Texture} instance for the roughness
+	 */
+	public Texture getTextureRoughness() {
+		return this.textureRoughness;
 	}
 	
 	/**
@@ -232,15 +451,19 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureDiffuse.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKD.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKS.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
 				if(!this.textureRoughness.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.textureSpecular.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -265,17 +488,28 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 			return true;
 		} else if(!(object instanceof PlasticPBRTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureDiffuse, PlasticPBRTMaterial.class.cast(object).textureDiffuse)) {
+		} else if(!Objects.equals(this.textureEmission, PlasticPBRTMaterial.class.cast(object).textureEmission)) {
+			return false;
+		} else if(!Objects.equals(this.textureKD, PlasticPBRTMaterial.class.cast(object).textureKD)) {
+			return false;
+		} else if(!Objects.equals(this.textureKS, PlasticPBRTMaterial.class.cast(object).textureKS)) {
 			return false;
 		} else if(!Objects.equals(this.textureRoughness, PlasticPBRTMaterial.class.cast(object).textureRoughness)) {
-			return false;
-		} else if(!Objects.equals(this.textureSpecular, PlasticPBRTMaterial.class.cast(object).textureSpecular)) {
 			return false;
 		} else if(this.isRemappingRoughness != PlasticPBRTMaterial.class.cast(object).isRemappingRoughness) {
 			return false;
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 */
+	public boolean isRemappingRoughness() {
+		return this.isRemappingRoughness;
 	}
 	
 	/**
@@ -295,6 +529,6 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureDiffuse, this.textureRoughness, this.textureSpecular, Boolean.valueOf(this.isRemappingRoughness));
+		return Objects.hash(this.textureEmission, this.textureKD, this.textureKS, this.textureRoughness, Boolean.valueOf(this.isRemappingRoughness));
 	}
 }

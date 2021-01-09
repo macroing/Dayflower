@@ -202,8 +202,8 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 		this.textureK = new ConstantTexture(Objects.requireNonNull(colorK, "colorK == null"));
 		this.textureEta = new ConstantTexture(Objects.requireNonNull(colorEta, "colorEta == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
-		this.textureRoughnessU = new ConstantTexture(new Color3F(floatRoughnessU));
-		this.textureRoughnessV = new ConstantTexture(new Color3F(floatRoughnessV));
+		this.textureRoughnessU = new ConstantTexture(floatRoughnessU);
+		this.textureRoughnessV = new ConstantTexture(floatRoughnessV);
 		this.isRemappingRoughness = isRemappingRoughness;
 	}
 	

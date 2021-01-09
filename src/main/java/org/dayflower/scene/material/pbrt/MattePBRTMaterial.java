@@ -130,7 +130,7 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	public MattePBRTMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle) {
 		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
-		this.textureAngle = new ConstantTexture(new Color3F(floatAngle));
+		this.textureAngle = new ConstantTexture(floatAngle);
 	}
 	
 	/**

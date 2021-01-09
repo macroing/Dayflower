@@ -281,12 +281,12 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 		this.textureColor = new ConstantTexture(Objects.requireNonNull(colorColor, "colorColor == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 		this.textureSigmaA = new ConstantTexture(Objects.requireNonNull(colorSigmaA, "colorSigmaA == null"));
-		this.textureAlpha = new ConstantTexture(new Color3F(floatAlpha));
-		this.textureBetaM = new ConstantTexture(new Color3F(floatBetaM));
-		this.textureBetaN = new ConstantTexture(new Color3F(floatBetaN));
-		this.textureEta = new ConstantTexture(new Color3F(floatEta));
-		this.textureEumelanin = new ConstantTexture(new Color3F(floatEumelanin));
-		this.texturePheomelanin = new ConstantTexture(new Color3F(floatPheomelanin));
+		this.textureAlpha = new ConstantTexture(floatAlpha);
+		this.textureBetaM = new ConstantTexture(floatBetaM);
+		this.textureBetaN = new ConstantTexture(floatBetaN);
+		this.textureEta = new ConstantTexture(floatEta);
+		this.textureEumelanin = new ConstantTexture(floatEumelanin);
+		this.texturePheomelanin = new ConstantTexture(floatPheomelanin);
 	}
 	
 	/**

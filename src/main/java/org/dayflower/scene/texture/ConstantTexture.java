@@ -126,6 +126,15 @@ public final class ConstantTexture implements Texture {
 		this.color = Objects.requireNonNull(color, "color == null");
 	}
 	
+	/**
+	 * Constructs a new {@code ConstantTexture} instance with {@code new Color3F(component)} as its constant {@link Color3F} instance.
+	 * 
+	 * @param component the value of all components for the {@code Color3F} instance
+	 */
+	public ConstantTexture(final float component) {
+		this.color = new Color3F(component);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

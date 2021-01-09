@@ -93,20 +93,20 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	/**
 	 * Constructs a new {@code GlassPBRTMaterial} instance.
 	 * <p>
-	 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorK} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassPBRTMaterial(colorKR, Color3F.WHITE);
+	 * new GlassPBRTMaterial(colorK, colorK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
-	 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
+	 * @param colorK a {@link Color3F} instance for the reflection and transmission coefficients
+	 * @throws NullPointerException thrown if, and only if, {@code colorK} is {@code null}
 	 */
-	public GlassPBRTMaterial(final Color3F colorKR) {
-		this(colorKR, Color3F.WHITE);
+	public GlassPBRTMaterial(final Color3F colorK) {
+		this(colorK, colorK);
 	}
 	
 	/**
@@ -246,20 +246,20 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	/**
 	 * Constructs a new {@code GlassPBRTMaterial} instance.
 	 * <p>
-	 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code textureK} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassPBRTMaterial(textureKR, ConstantTexture.WHITE);
+	 * new GlassPBRTMaterial(textureK, textureK);
 	 * }
 	 * </pre>
 	 * 
-	 * @param textureKR a {@link Texture} instance for the reflection coefficient
-	 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
+	 * @param textureK a {@link Texture} instance for the reflection and transmission coefficients
+	 * @throws NullPointerException thrown if, and only if, {@code textureK} is {@code null}
 	 */
-	public GlassPBRTMaterial(final Texture textureKR) {
-		this(textureKR, ConstantTexture.WHITE);
+	public GlassPBRTMaterial(final Texture textureK) {
+		this(textureK, textureK);
 	}
 	
 	/**

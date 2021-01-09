@@ -158,7 +158,7 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassPBRTMaterial(colorKR, colorKT, colorEmission, floatEta, 0.0F, 0.0F);
+	 * new GlassPBRTMaterial(colorKR, colorKT, colorEmission, floatEta, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -169,7 +169,30 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}
 	 */
 	public GlassPBRTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission, final float floatEta) {
-		this(colorKR, colorKT, colorEmission, floatEta, 0.0F, 0.0F);
+		this(colorKR, colorKT, colorEmission, floatEta, 0.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(colorKR, colorKT, colorEmission, floatEta, floatRoughness, floatRoughness);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatEta a {@code float} for the index of refraction (IOR)
+	 * @param floatRoughness a {@code float} for the roughness along the U-axis and the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorKT} or {@code colorEmission} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Color3F colorKR, final Color3F colorKT, final Color3F colorEmission, final float floatEta, final float floatRoughness) {
+		this(colorKR, colorKT, colorEmission, floatEta, floatRoughness, floatRoughness);
 	}
 	
 	/**
@@ -288,7 +311,7 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new GlassPBRTMaterial(textureKR, textureKT, textureEmission, textureEta, ConstantTexture.BLACK, ConstantTexture.BLACK);
+	 * new GlassPBRTMaterial(textureKR, textureKT, textureEmission, textureEta, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -299,7 +322,30 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT}, {@code textureEmission} or {@code textureEta} are {@code null}
 	 */
 	public GlassPBRTMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission, final Texture textureEta) {
-		this(textureKR, textureKT, textureEmission, textureEta, ConstantTexture.BLACK, ConstantTexture.BLACK);
+		this(textureKR, textureKT, textureEmission, textureEta, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code GlassPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureKT}, {@code textureEmission}, {@code textureEta} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlassPBRTMaterial(textureKR, textureKT, textureEmission, textureEta, textureRoughness, textureRoughness);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureRoughness a {@code Texture} instance for the roughness along the U-axis and the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureKT}, {@code textureEmission}, {@code textureEta} or {@code textureRoughness} are {@code null}
+	 */
+	public GlassPBRTMaterial(final Texture textureKR, final Texture textureKT, final Texture textureEmission, final Texture textureEta, final Texture textureRoughness) {
+		this(textureKR, textureKT, textureEmission, textureEta, textureRoughness, textureRoughness);
 	}
 	
 	/**

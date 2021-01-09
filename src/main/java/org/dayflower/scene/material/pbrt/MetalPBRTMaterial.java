@@ -57,6 +57,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final Texture textureEmission;
 	private final Texture textureEta;
 	private final Texture textureK;
 	private final Texture textureRoughnessU;
@@ -71,49 +72,263 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalPBRTMaterial(new ConstantTexture(Color3F.GOLD_ETA_MAXIMUM_TO_1), new ConstantTexture(Color3F.GOLD_K_MAXIMUM_TO_1));
+	 * new MetalPBRTMaterial(Color3F.GOLD_K_MAXIMUM_TO_1);
 	 * }
 	 * </pre>
 	 */
 	public MetalPBRTMaterial() {
-		this(new ConstantTexture(Color3F.GOLD_ETA_MAXIMUM_TO_1), new ConstantTexture(Color3F.GOLD_K_MAXIMUM_TO_1));
+		this(Color3F.GOLD_K_MAXIMUM_TO_1);
 	}
 	
 	/**
 	 * Constructs a new {@code MetalPBRTMaterial} instance.
 	 * <p>
-	 * If either {@code textureEta} or {@code textureK} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorK} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalPBRTMaterial(textureEta, textureK, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
+	 * new MetalPBRTMaterial(colorK, Color3F.GOLD_ETA_MAXIMUM_TO_1);
 	 * }
 	 * </pre>
 	 * 
-	 * @param textureEta a {@link Texture} instance used for eta, also called index of refraction (IOR)
-	 * @param textureK a {@code Texture} instance used for the absorption coefficient
-	 * @throws NullPointerException thrown if, and only if, either {@code textureEta} or {@code textureK} are {@code null}
+	 * @param colorK a {@link Color3F} instance for the absorption coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorK} is {@code null}
 	 */
-	public MetalPBRTMaterial(final Texture textureEta, final Texture textureK) {
-		this(textureEta, textureK, new ConstantTexture(new Color3F(0.01F)), new ConstantTexture(new Color3F(0.01F)), true);
+	public MetalPBRTMaterial(final Color3F colorK) {
+		this(colorK, Color3F.GOLD_ETA_MAXIMUM_TO_1);
 	}
 	
 	/**
 	 * Constructs a new {@code MetalPBRTMaterial} instance.
 	 * <p>
-	 * If either {@code textureEta}, {@code textureK}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorK} or {@code colorEta} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalPBRTMaterial(colorK, colorEta, Color3F.BLACK);
+	 * }
+	 * </pre>
 	 * 
-	 * @param textureEta a {@link Texture} instance used for eta, also called index of refraction (IOR)
-	 * @param textureK a {@code Texture} instance used for the absorption coefficient
-	 * @param textureRoughnessU a {@code Texture} instance used for the roughness along the U-axis
-	 * @param textureRoughnessV a {@code Texture} instance used for the roughness along the V-axis
-	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, either {@code textureEta}, {@code textureK}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 * @param colorK a {@link Color3F} instance for the absorption coefficient
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code colorK} or {@code colorEta} are {@code null}
 	 */
-	public MetalPBRTMaterial(final Texture textureEta, final Texture textureK, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
-		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
+	public MetalPBRTMaterial(final Color3F colorK, final Color3F colorEta) {
+		this(colorK, colorEta, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorK}, {@code colorEta} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalPBRTMaterial(colorK, colorEta, colorEmission, 0.01F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorK a {@link Color3F} instance for the absorption coefficient
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorK}, {@code colorEta} or {@code colorEmission} are {@code null}
+	 */
+	public MetalPBRTMaterial(final Color3F colorK, final Color3F colorEta, final Color3F colorEmission) {
+		this(colorK, colorEta, colorEmission, 0.01F);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorK}, {@code colorEta} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalPBRTMaterial(colorK, colorEta, colorEmission, floatRoughness, floatRoughness);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorK a {@link Color3F} instance for the absorption coefficient
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatRoughness a {@code float} for the roughness along the U-axis and the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code colorK}, {@code colorEta} or {@code colorEmission} are {@code null}
+	 */
+	public MetalPBRTMaterial(final Color3F colorK, final Color3F colorEta, final Color3F colorEmission, final float floatRoughness) {
+		this(colorK, colorEta, colorEmission, floatRoughness, floatRoughness);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorK}, {@code colorEta} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalPBRTMaterial(colorK, colorEta, colorEmission, floatRoughnessU, floatRoughnessV, true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorK a {@link Color3F} instance for the absorption coefficient
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatRoughnessU a {@code float} for the roughness along the U-axis
+	 * @param floatRoughnessV a {@code float} for the roughness along the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code colorK}, {@code colorEta} or {@code colorEmission} are {@code null}
+	 */
+	public MetalPBRTMaterial(final Color3F colorK, final Color3F colorEta, final Color3F colorEmission, final float floatRoughnessU, final float floatRoughnessV) {
+		this(colorK, colorEta, colorEmission, floatRoughnessU, floatRoughnessV, true);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorK}, {@code colorEta} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorK a {@link Color3F} instance for the absorption coefficient
+	 * @param colorEta a {@code Color3F} instance for the index of refraction (IOR)
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatRoughnessU a {@code float} for the roughness along the U-axis
+	 * @param floatRoughnessV a {@code float} for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code colorK}, {@code colorEta} or {@code colorEmission} are {@code null}
+	 */
+	public MetalPBRTMaterial(final Color3F colorK, final Color3F colorEta, final Color3F colorEmission, final float floatRoughnessU, final float floatRoughnessV, final boolean isRemappingRoughness) {
+		this.textureK = new ConstantTexture(Objects.requireNonNull(colorK, "colorK == null"));
+		this.textureEta = new ConstantTexture(Objects.requireNonNull(colorEta, "colorEta == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureRoughnessU = new ConstantTexture(new Color3F(floatRoughnessU));
+		this.textureRoughnessV = new ConstantTexture(new Color3F(floatRoughnessV));
+		this.isRemappingRoughness = isRemappingRoughness;
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If {@code textureK} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalPBRTMaterial(textureK, ConstantTexture.GOLD_ETA_MAXIMUM_TO_1);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureK a {@link Texture} instance for the absorption coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureK} is {@code null}
+	 */
+	public MetalPBRTMaterial(final Texture textureK) {
+		this(textureK, ConstantTexture.GOLD_ETA_MAXIMUM_TO_1);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureK} or {@code textureEta} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalPBRTMaterial(textureK, textureEta, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureK a {@link Texture} instance for the absorption coefficient
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code textureK} or {@code textureEta} are {@code null}
+	 */
+	public MetalPBRTMaterial(final Texture textureK, final Texture textureEta) {
+		this(textureK, textureEta, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureK}, {@code textureEta} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalPBRTMaterial(textureK, textureEta, textureEmission, ConstantTexture.GRAY_0_01);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureK a {@link Texture} instance for the absorption coefficient
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureK}, {@code textureEta} or {@code textureEmission} are {@code null}
+	 */
+	public MetalPBRTMaterial(final Texture textureK, final Texture textureEta, final Texture textureEmission) {
+		this(textureK, textureEta, textureEmission, ConstantTexture.GRAY_0_01);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureK}, {@code textureEta}, {@code textureEmission} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalPBRTMaterial(textureK, textureEta, textureEmission, textureRoughness, textureRoughness);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureK a {@link Texture} instance for the absorption coefficient
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughness a {@code Texture} instance for the roughness along the U-axis and the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code textureK}, {@code textureEta}, {@code textureEmission} or {@code textureRoughness} are {@code null}
+	 */
+	public MetalPBRTMaterial(final Texture textureK, final Texture textureEta, final Texture textureEmission, final Texture textureRoughness) {
+		this(textureK, textureEta, textureEmission, textureRoughness, textureRoughness);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureK}, {@code textureEta}, {@code textureEmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MetalPBRTMaterial(textureK, textureEta, textureEmission, textureRoughnessU, textureRoughnessV, true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureK a {@link Texture} instance for the absorption coefficient
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughnessU a {@code Texture} instance for the roughness along the U-axis
+	 * @param textureRoughnessV a {@code Texture} instance for the roughness along the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code textureK}, {@code textureEta}, {@code textureEmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 */
+	public MetalPBRTMaterial(final Texture textureK, final Texture textureEta, final Texture textureEmission, final Texture textureRoughnessU, final Texture textureRoughnessV) {
+		this(textureK, textureEta, textureEmission, textureRoughnessU, textureRoughnessV, true);
+	}
+	
+	/**
+	 * Constructs a new {@code MetalPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureK}, {@code textureEta}, {@code textureEmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureK a {@link Texture} instance for the absorption coefficient
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughnessU a {@code Texture} instance for the roughness along the U-axis
+	 * @param textureRoughnessV a {@code Texture} instance for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code textureK}, {@code textureEta}, {@code textureEmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 */
+	public MetalPBRTMaterial(final Texture textureK, final Texture textureEta, final Texture textureEmission, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
 		this.textureK = Objects.requireNonNull(textureK, "textureK == null");
+		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureRoughnessU = Objects.requireNonNull(textureRoughnessU, "textureRoughnessU == null");
 		this.textureRoughnessV = Objects.requireNonNull(textureRoughnessV, "textureRoughnessV == null");
 		this.isRemappingRoughness = isRemappingRoughness;
@@ -132,9 +347,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		
-		return Color3F.BLACK;
+		return this.textureEmission.getColor(intersection);
 	}
 	
 	/**
@@ -179,11 +392,9 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 		final Color3F colorEtaI = Color3F.WHITE;
 		final Color3F colorEtaT = this.textureEta.getColor(intersection);
 		final Color3F colorK = this.textureK.getColor(intersection);
-		final Color3F colorRoughnessU = this.textureRoughnessU.getColor(intersection);
-		final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
 		
-		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
-		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
+		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessU.getFloat(intersection)) : this.textureRoughnessU.getFloat(intersection);
+		final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessV.getFloat(intersection)) : this.textureRoughnessV.getFloat(intersection);
 		
 		final Fresnel fresnel = new ConductorFresnel(colorEtaI, colorEtaT, colorK);
 		
@@ -209,7 +420,52 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MetalPBRTMaterial(%s, %s, %s, %s, %s)", this.textureEta, this.textureK, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+		return String.format("new MetalPBRTMaterial(%s, %s, %s, %s, %s, %s)", this.textureK, this.textureEta, this.textureEmission, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the index of refraction (IOR).
+	 * 
+	 * @return the {@code Texture} instance for the index of refraction (IOR)
+	 */
+	public Texture getTextureEta() {
+		return this.textureEta;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the absorption coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the absorption coefficient
+	 */
+	public Texture getTextureK() {
+		return this.textureK;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the roughness along the U-axis.
+	 * 
+	 * @return the {@code Texture} instance for the roughness along the U-axis
+	 */
+	public Texture getTextureRoughnessU() {
+		return this.textureRoughnessU;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the roughness along the V-axis.
+	 * 
+	 * @return the {@code Texture} instance for the roughness along the V-axis
+	 */
+	public Texture getTextureRoughnessV() {
+		return this.textureRoughnessV;
 	}
 	
 	/**
@@ -239,6 +495,10 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.textureEta.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -276,6 +536,8 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 			return true;
 		} else if(!(object instanceof MetalPBRTMaterial)) {
 			return false;
+		} else if(!Objects.equals(this.textureEmission, MetalPBRTMaterial.class.cast(object).textureEmission)) {
+			return false;
 		} else if(!Objects.equals(this.textureEta, MetalPBRTMaterial.class.cast(object).textureEta)) {
 			return false;
 		} else if(!Objects.equals(this.textureK, MetalPBRTMaterial.class.cast(object).textureK)) {
@@ -289,6 +551,15 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 */
+	public boolean isRemappingRoughness() {
+		return this.isRemappingRoughness;
 	}
 	
 	/**
@@ -308,6 +579,6 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEta, this.textureK, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
+		return Objects.hash(this.textureEmission, this.textureEta, this.textureK, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
 	}
 }

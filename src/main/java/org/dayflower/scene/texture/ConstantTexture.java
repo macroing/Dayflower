@@ -40,6 +40,31 @@ public final class ConstantTexture implements Texture {
 	public static final ConstantTexture BLACK = new ConstantTexture(Color3F.BLACK);
 	
 	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GOLD_ETA)}.
+	 */
+	public static final ConstantTexture GOLD_ETA = new ConstantTexture(Color3F.GOLD_ETA);
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GOLD_ETA_MAXIMUM_TO_1)}.
+	 */
+	public static final ConstantTexture GOLD_ETA_MAXIMUM_TO_1 = new ConstantTexture(Color3F.GOLD_ETA_MAXIMUM_TO_1);
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GOLD_K)}.
+	 */
+	public static final ConstantTexture GOLD_K = new ConstantTexture(Color3F.GOLD_K);
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GOLD_K_MAXIMUM_TO_1)}.
+	 */
+	public static final ConstantTexture GOLD_K_MAXIMUM_TO_1 = new ConstantTexture(Color3F.GOLD_K_MAXIMUM_TO_1);
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_0_01)}.
+	 */
+	public static final ConstantTexture GRAY_0_01 = new ConstantTexture(Color3F.GRAY_0_01);
+	
+	/**
 	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_0_10)}.
 	 */
 	public static final ConstantTexture GRAY_0_10 = new ConstantTexture(Color3F.GRAY_0_10);

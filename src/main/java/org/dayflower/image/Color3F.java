@@ -100,6 +100,11 @@ public final class Color3F {
 	public static final Color3F GOLD_METALLIC = new Color3F(0.83F, 0.69F, 0.22F);
 	
 	/**
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.01F}.
+	 */
+	public static final Color3F GRAY_0_01 = new Color3F(0.01F, 0.01F, 0.01F);
+	
+	/**
 	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.1F}.
 	 */
 	public static final Color3F GRAY_0_10 = new Color3F(0.1F, 0.1F, 0.1F);

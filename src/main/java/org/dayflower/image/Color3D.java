@@ -80,6 +80,11 @@ public final class Color3D {
 	public static final Color3D GOLD_METALLIC = new Color3D(0.83D, 0.69D, 0.22D);
 	
 	/**
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.01D}.
+	 */
+	public static final Color3D GRAY_0_01 = new Color3D(0.01D, 0.01D, 0.01D);
+	
+	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.1D}.
 	 */
 	public static final Color3D GRAY_0_10 = new Color3D(0.1D, 0.1D, 0.1D);

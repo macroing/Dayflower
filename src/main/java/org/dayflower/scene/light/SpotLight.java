@@ -177,7 +177,8 @@ public final class SpotLight implements Light {
 		this.coneAngleDelta = Objects.requireNonNull(coneAngleDelta, "coneAngleDelta == null");
 		this.intensity = Objects.requireNonNull(intensity, "intensity == null");
 		this.lightToWorld = Objects.requireNonNull(lightToWorld, "lightToWorld == null");
-		this.lightToWorldInternal = Matrix44F.multiply(Matrix44F.multiply(lightToWorld, Matrix44F.translate(eye)), Matrix44F.inverse(Matrix44F.transpose(Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.directionNormalized(eye, lookAt))))));
+//		this.lightToWorldInternal = Matrix44F.multiply(Matrix44F.multiply(lightToWorld, Matrix44F.translate(eye)), Matrix44F.inverse(Matrix44F.transpose(Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.directionNormalized(eye, lookAt))))));
+		this.lightToWorldInternal = Matrix44F.multiply(Matrix44F.multiply(lightToWorld, Matrix44F.translate(eye)), Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.directionNormalized(eye, lookAt))));
 		this.worldToLightInternal = Matrix44F.inverse(this.lightToWorldInternal);
 		this.eye = Objects.requireNonNull(eye, "eye == null");
 		this.lookAt = Objects.requireNonNull(lookAt, "lookAt == null");
@@ -215,7 +216,7 @@ public final class SpotLight implements Light {
 	 */
 	@Override
 	public Color3F power() {
-		return Color3F.multiply(Color3F.multiply(this.intensity, PI_MULTIPLIED_BY_2), 1.0F - 0.5F * (this.cosConeAngleMinusConeAngleDelta + this.cosConeAngle));
+		return Color3F.multiply(this.intensity, PI_MULTIPLIED_BY_2 * (1.0F - 0.5F * (this.cosConeAngleMinusConeAngleDelta + this.cosConeAngle)));
 	}
 	
 	/**

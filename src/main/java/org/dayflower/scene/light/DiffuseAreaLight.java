@@ -131,7 +131,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 */
 	@Override
 	public Color3F power() {
-		return Color3F.multiply(Color3F.multiply(Color3F.multiply(this.radianceEmitted, this.isTwoSided ? 2.0F : 1.0F), this.surfaceArea), PI);
+		return Color3F.multiply(this.radianceEmitted, (this.isTwoSided ? 2.0F : 1.0F) * this.surfaceArea * PI);
 	}
 	
 	/**
@@ -299,20 +299,14 @@ public final class DiffuseAreaLight extends AreaLight {
 			final SurfaceSample3F surfaceSampleLightSpace = optionalSurfaceSampleLightSpace.get();
 			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleLightSpace, lightToWorld, worldToLight);
 			
+			final float probabilityDensityFunctionValue = surfaceSampleWorldSpace.getProbabilityDensityFunctionValue();
+			
 			final Point3F pointWorldSpace = surfaceSampleWorldSpace.getPoint();
 			
-			final Vector3F surfaceNormalWorldSpace = surfaceSampleWorldSpace.getSurfaceNormal();
+			final Vector3F incomingWorldSpace = Vector3F.directionNormalized(referencePointWorldSpace, pointWorldSpace);
 			
-			if(this.isTwoSided || Vector3F.dotProduct(surfaceNormalWorldSpace, Vector3F.directionNormalized(pointWorldSpace, referencePointWorldSpace)) > 0.0F) {
-				final Color3F result = this.radianceEmitted;
-				
-				final Point3F point = pointWorldSpace;
-				
-				final Vector3F incoming = Vector3F.directionNormalized(referencePointWorldSpace, pointWorldSpace);
-				
-				final float probabilityDensityFunctionValue = surfaceSampleWorldSpace.getProbabilityDensityFunctionValue();
-				
-				return Optional.of(new LightRadianceIncomingResult(result, point, incoming, probabilityDensityFunctionValue));
+			if(probabilityDensityFunctionValue > 0.0F && (this.isTwoSided || Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.negate(incomingWorldSpace)) > 0.0F)) {
+				return Optional.of(new LightRadianceIncomingResult(this.radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
 			}
 		}
 		

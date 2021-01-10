@@ -90,14 +90,19 @@ public final class Color3D {
 	public static final Color3D GRAY_0_10 = new Color3D(0.1D, 0.1D, 0.1D);
 	
 	/**
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.2D}.
+	 */
+	public static final Color3D GRAY_0_20 = new Color3D(0.2D, 0.2D, 0.2D);
+	
+	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.25D}.
 	 */
 	public static final Color3D GRAY_0_25 = new Color3D(0.25D, 0.25D, 0.25D);
 	
 	/**
-	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.30D}.
+	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.3D}.
 	 */
-	public static final Color3D GRAY_0_30 = new Color3D(0.30D, 0.30D, 0.30D);
+	public static final Color3D GRAY_0_30 = new Color3D(0.3D, 0.3D, 0.3D);
 	
 	/**
 	 * A {@code Color3D} denoting the color gray, with component values of {@code 0.5D}.

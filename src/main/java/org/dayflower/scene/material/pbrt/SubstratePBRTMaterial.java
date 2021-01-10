@@ -55,10 +55,11 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final Texture textureDiffuse;
+	private final Texture textureEmission;
+	private final Texture textureKD;
+	private final Texture textureKS;
 	private final Texture textureRoughnessU;
 	private final Texture textureRoughnessV;
-	private final Texture textureSpecular;
 	private final boolean isRemappingRoughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,31 +70,265 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new SubstratePBRTMaterial(ConstantTexture.GRAY_0_50, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_50, true);
+	 * new SubstratePBRTMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
 	public SubstratePBRTMaterial() {
-		this(ConstantTexture.GRAY_0_50, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_10, ConstantTexture.GRAY_0_50, true);
+		this(Color3F.GRAY_0_50);
 	}
 	
 	/**
 	 * Constructs a new {@code SubstratePBRTMaterial} instance.
 	 * <p>
-	 * If either {@code textureDiffuse}, {@code textureRoughnessU}, {@code textureRoughnessV} or {@code textureSpecular} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(colorKD, Color3F.GRAY_0_50);
+	 * }
+	 * </pre>
 	 * 
-	 * @param textureDiffuse a {@link Texture} instance used for the diffuse component
-	 * @param textureRoughnessU a {@code Texture} instance used for the roughness along the U-direction
-	 * @param textureRoughnessV a {@code Texture} instance used for the roughness along the V-direction
-	 * @param textureSpecular a {@code Texture} instance used for the specular component
-	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, either {@code textureDiffuse}, {@code textureRoughnessU}, {@code textureRoughnessV} or {@code textureSpecular} are {@code null}
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
-	public SubstratePBRTMaterial(final Texture textureDiffuse, final Texture textureRoughnessU, final Texture textureRoughnessV, final Texture textureSpecular, final boolean isRemappingRoughness) {
-		this.textureDiffuse = Objects.requireNonNull(textureDiffuse, "textureDiffuse == null");
+	public SubstratePBRTMaterial(final Color3F colorKD) {
+		this(colorKD, Color3F.GRAY_0_50);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD} or {@code colorKS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(colorKD, colorKS, Color3F.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorKS} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Color3F colorKD, final Color3F colorKS) {
+		this(colorKD, colorKS, Color3F.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(colorKD, colorKS, colorEmission, 0.1F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission) {
+		this(colorKD, colorKS, colorEmission, 0.1F);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(colorKD, colorKS, colorEmission, floatRoughness, floatRoughness);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatRoughness a {@code float} for the roughness along the U-axis and the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission, final float floatRoughness) {
+		this(colorKD, colorKS, colorEmission, floatRoughness, floatRoughness);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(colorKD, colorKS, colorEmission, floatRoughnessU, floatRoughnessV, true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatRoughnessU a {@code float} for the roughness along the U-axis
+	 * @param floatRoughnessV a {@code float} for the roughness along the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission, final float floatRoughnessU, final float floatRoughnessV) {
+		this(colorKD, colorKS, colorEmission, floatRoughnessU, floatRoughnessV, true);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatRoughnessU a {@code float} for the roughness along the U-axis
+	 * @param floatRoughnessV a {@code float} for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission, final float floatRoughnessU, final float floatRoughnessV, final boolean isRemappingRoughness) {
+		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
+		this.textureKS = new ConstantTexture(Objects.requireNonNull(colorKS, "colorKS == null"));
+		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureRoughnessU = new ConstantTexture(floatRoughnessU);
+		this.textureRoughnessV = new ConstantTexture(floatRoughnessV);
+		this.isRemappingRoughness = isRemappingRoughness;
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(textureKD, ConstantTexture.GRAY_0_50);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
+	 */
+	public SubstratePBRTMaterial(final Texture textureKD) {
+		this(textureKD, ConstantTexture.GRAY_0_50);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD} or {@code textureKS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(textureKD, textureKS, ConstantTexture.BLACK);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureKS} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Texture textureKD, final Texture textureKS) {
+		this(textureKD, textureKS, ConstantTexture.BLACK);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureKS} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(textureKD, textureKS, textureEmission, ConstantTexture.GRAY_0_10);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS} or {@code textureEmission} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission) {
+		this(textureKD, textureKS, textureEmission, ConstantTexture.GRAY_0_10);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureKS}, {@code textureEmission} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(textureKD, textureKS, textureEmission, textureRoughness, textureRoughness);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughness a {@code Texture} instance for the roughness along the U-axis and the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS}, {@code textureEmission} or {@code textureRoughness} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission, final Texture textureRoughness) {
+		this(textureKD, textureKS, textureEmission, textureRoughness, textureRoughness);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureKS}, {@code textureEmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SubstratePBRTMaterial(textureKD, textureKS, textureEmission, textureRoughnessU, textureRoughnessV, true);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughnessU a {@code Texture} instance for the roughness along the U-axis
+	 * @param textureRoughnessV a {@code Texture} instance for the roughness along the V-axis
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS}, {@code textureEmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission, final Texture textureRoughnessU, final Texture textureRoughnessV) {
+		this(textureKD, textureKS, textureEmission, textureRoughnessU, textureRoughnessV, true);
+	}
+	
+	/**
+	 * Constructs a new {@code SubstratePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureKS}, {@code textureEmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughnessU a {@code Texture} instance for the roughness along the U-axis
+	 * @param textureRoughnessV a {@code Texture} instance for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS}, {@code textureEmission}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}
+	 */
+	public SubstratePBRTMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
+		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
+		this.textureKS = Objects.requireNonNull(textureKS, "textureKS == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureRoughnessU = Objects.requireNonNull(textureRoughnessU, "textureRoughnessU == null");
 		this.textureRoughnessV = Objects.requireNonNull(textureRoughnessV, "textureRoughnessV == null");
-		this.textureSpecular = Objects.requireNonNull(textureSpecular, "textureSpecular == null");
 		this.isRemappingRoughness = isRemappingRoughness;
 	}
 	
@@ -110,9 +345,7 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		
-		return Color3F.BLACK;
+		return this.textureEmission.getColor(intersection);
 	}
 	
 	/**
@@ -154,19 +387,16 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final Color3F colorDiffuse = Color3F.saturate(this.textureDiffuse.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorSpecular = Color3F.saturate(this.textureSpecular.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
-		if(!colorDiffuse.isBlack() || !colorSpecular.isBlack()) {
-			final Color3F colorRoughnessU = this.textureRoughnessU.getColor(intersection);
-			final Color3F colorRoughnessV = this.textureRoughnessV.getColor(intersection);
-			
-			final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessU.average()) : colorRoughnessU.average();
-			final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(colorRoughnessV.average()) : colorRoughnessV.average();
+		if(!colorKD.isBlack() || !colorKS.isBlack()) {
+			final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessU.getFloat(intersection)) : this.textureRoughnessU.getFloat(intersection);
+			final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessV.getFloat(intersection)) : this.textureRoughnessV.getFloat(intersection);
 			
 			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
 			
-			return Optional.of(new PBRTBSDF(intersection, new FresnelBlendPBRTBRDF(colorDiffuse, colorSpecular, microfacetDistribution)));
+			return Optional.of(new PBRTBSDF(intersection, new FresnelBlendPBRTBRDF(colorKD, colorKS, microfacetDistribution)));
 		}
 		
 		return Optional.empty();
@@ -189,7 +419,52 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new SubstratePBRTMaterial(%s, %s, %s, %s, %s)", this.textureDiffuse, this.textureRoughnessU, this.textureRoughnessV, this.textureSpecular, Boolean.toString(this.isRemappingRoughness));
+		return String.format("new SubstratePBRTMaterial(%s, %s, %s, %s, %s, %s)", this.textureKD, this.textureKS, this.textureEmission, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for emission.
+	 * 
+	 * @return the {@code Texture} instance for emission
+	 */
+	public Texture getTextureEmission() {
+		return this.textureEmission;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the diffuse coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the diffuse coefficient
+	 */
+	public Texture getTextureKD() {
+		return this.textureKD;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the specular coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the specular coefficient
+	 */
+	public Texture getTextureKS() {
+		return this.textureKS;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the roughness along the U-axis.
+	 * 
+	 * @return the {@code Texture} instance for the roughness along the U-axis
+	 */
+	public Texture getTextureRoughnessU() {
+		return this.textureRoughnessU;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the roughness along the V-axis.
+	 * 
+	 * @return the {@code Texture} instance for the roughness along the V-axis
+	 */
+	public Texture getTextureRoughnessV() {
+		return this.textureRoughnessV;
 	}
 	
 	/**
@@ -219,7 +494,15 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.textureDiffuse.accept(nodeHierarchicalVisitor)) {
+				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKD.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKS.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -228,10 +511,6 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 				}
 				
 				if(!this.textureRoughnessV.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
-				if(!this.textureSpecular.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -256,19 +535,30 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 			return true;
 		} else if(!(object instanceof SubstratePBRTMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.textureDiffuse, SubstratePBRTMaterial.class.cast(object).textureDiffuse)) {
+		} else if(!Objects.equals(this.textureEmission, SubstratePBRTMaterial.class.cast(object).textureEmission)) {
+			return false;
+		} else if(!Objects.equals(this.textureKD, SubstratePBRTMaterial.class.cast(object).textureKD)) {
+			return false;
+		} else if(!Objects.equals(this.textureKS, SubstratePBRTMaterial.class.cast(object).textureKS)) {
 			return false;
 		} else if(!Objects.equals(this.textureRoughnessU, SubstratePBRTMaterial.class.cast(object).textureRoughnessU)) {
 			return false;
 		} else if(!Objects.equals(this.textureRoughnessV, SubstratePBRTMaterial.class.cast(object).textureRoughnessV)) {
-			return false;
-		} else if(!Objects.equals(this.textureSpecular, SubstratePBRTMaterial.class.cast(object).textureSpecular)) {
 			return false;
 		} else if(this.isRemappingRoughness != SubstratePBRTMaterial.class.cast(object).isRemappingRoughness) {
 			return false;
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 */
+	public boolean isRemappingRoughness() {
+		return this.isRemappingRoughness;
 	}
 	
 	/**
@@ -288,6 +578,6 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureDiffuse, this.textureRoughnessU, this.textureRoughnessV, this.textureSpecular, Boolean.valueOf(this.isRemappingRoughness));
+		return Objects.hash(this.textureEmission, this.textureKD, this.textureKS, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
 	}
 }

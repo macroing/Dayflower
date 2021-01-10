@@ -110,14 +110,19 @@ public final class Color3F {
 	public static final Color3F GRAY_0_10 = new Color3F(0.1F, 0.1F, 0.1F);
 	
 	/**
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.2F}.
+	 */
+	public static final Color3F GRAY_0_20 = new Color3F(0.2F, 0.2F, 0.2F);
+	
+	/**
 	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.25F}.
 	 */
 	public static final Color3F GRAY_0_25 = new Color3F(0.25F, 0.25F, 0.25F);
 	
 	/**
-	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.30F}.
+	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.3F}.
 	 */
-	public static final Color3F GRAY_0_30 = new Color3F(0.30F, 0.30F, 0.30F);
+	public static final Color3F GRAY_0_30 = new Color3F(0.3F, 0.3F, 0.3F);
 	
 	/**
 	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.5F}.

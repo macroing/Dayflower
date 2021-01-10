@@ -70,6 +70,11 @@ public final class ConstantTexture implements Texture {
 	public static final ConstantTexture GRAY_0_10 = new ConstantTexture(Color3F.GRAY_0_10);
 	
 	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_0_20)}.
+	 */
+	public static final ConstantTexture GRAY_0_20 = new ConstantTexture(Color3F.GRAY_0_20);
+	
+	/**
 	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_0_25)}.
 	 */
 	public static final ConstantTexture GRAY_0_25 = new ConstantTexture(Color3F.GRAY_0_25);

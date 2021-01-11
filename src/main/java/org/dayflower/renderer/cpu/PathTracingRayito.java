@@ -30,7 +30,6 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
-import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSDFResult;
@@ -39,6 +38,7 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
+import org.dayflower.scene.Sample;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
@@ -189,15 +189,15 @@ final class PathTracingRayito {
 				
 				final int samples = 1;
 				
-				for(int sample = 0; sample < samples; sample++) {
-					final Optional<SurfaceSample3F> optionalSurfaceSample = primitive.sample(surfaceIntersectionPoint, surfaceNormal, random(), random());
+				for(int currentSample = 0; currentSample < samples; currentSample++) {
+					final Optional<Sample> optionalSample = primitive.sample(surfaceIntersectionPoint, surfaceNormal, random(), random());
 					
-					if(optionalSurfaceSample.isPresent()) {
-						final SurfaceSample3F surfaceSample = optionalSurfaceSample.get();
+					if(optionalSample.isPresent()) {
+						final Sample sample = optionalSample.get();
 						
-						final Point3F point = surfaceSample.getPoint();
+						final Point3F point = sample.getSurfaceSampleWorldSpace().getPoint();
 						
-						final float probabilityDensityFunctionValueA1 = surfaceSample.getProbabilityDensityFunctionValue();
+						final float probabilityDensityFunctionValueA1 = sample.getSurfaceSampleWorldSpace().getProbabilityDensityFunctionValue();
 						
 						if(probabilityDensityFunctionValueA1 > 0.0F) {
 							final Vector3F selectedDirectionI = Vector3F.normalize(Vector3F.direction(point, surfaceIntersectionPoint));

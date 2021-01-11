@@ -261,7 +261,7 @@ public final class Primitive implements Node {
 	/**
 	 * Samples this {@code Primitive} instance.
 	 * <p>
-	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
+	 * Returns an optional {@link Sample} with the sample.
 	 * <p>
 	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -269,10 +269,10 @@ public final class Primitive implements Node {
 	 * @param referenceSurfaceNormal the reference surface normal on this {@code Primitive} instance
 	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @return an optional {@code SurfaceSample3F} with the surface sample
+	 * @return an optional {@code Sample} with the sample
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
 	 */
-	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
+	public Optional<Sample> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
 		final Transform transform = getTransform();
 		
 		final Matrix44F objectToWorld = transform.getObjectToWorld();
@@ -280,18 +280,21 @@ public final class Primitive implements Node {
 		
 		final Shape3F shape = getShape();
 		
-		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = shape.sample(Point3F.transformAndDivide(worldToObject, referencePoint), Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal), u, v);
+		final Point3F referencePointObjectSpace = Point3F.transformAndDivide(worldToObject, referencePoint);
+		
+		final Vector3F referenceSurfaceNormalObjectSpace = Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal);
+		
+		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = shape.sample(referencePointObjectSpace, referenceSurfaceNormalObjectSpace, u, v);
 		
 		if(optionalSurfaceSampleObjectSpace.isPresent()) {
 			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSampleObjectSpace.get();
-			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleObjectSpace, objectToWorld, worldToObject);
 			
-			if(Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.direction(surfaceSampleWorldSpace.getPoint(), referencePoint)) >= 0.0F) {
-				return Optional.of(surfaceSampleWorldSpace);
+			if(Vector3F.dotProduct(surfaceSampleObjectSpace.getSurfaceNormal(), Vector3F.direction(surfaceSampleObjectSpace.getPoint(), referencePointObjectSpace)) >= 0.0F) {
+				return Optional.of(new Sample(this, surfaceSampleObjectSpace));
 			}
 		}
 		
-		return Optional.empty();
+		return Sample.EMPTY;
 	}
 	
 	/**

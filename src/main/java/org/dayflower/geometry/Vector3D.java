@@ -693,11 +693,16 @@ public final class Vector3D implements Node {
 	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code u} and {@code v}
 	 */
 	public static Vector3D directionSpherical(final double u, final double v) {
-		final double cosTheta = 1.0D - 2.0D * u;
-		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
-		final double phi = v * PI_MULTIPLIED_BY_2;
+		final double phi = u * PI_MULTIPLIED_BY_2;
+		final double theta = v * PI;
 		
-		return directionSpherical(sinTheta, cosTheta, phi);
+		return directionSpherical(sin(theta), cos(theta), phi);
+		
+//		final double cosTheta = 1.0D - 2.0D * u;
+//		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
+//		final double phi = v * PI_MULTIPLIED_BY_2;
+		
+//		return directionSpherical(sinTheta, cosTheta, phi);
 	}
 	
 	/**

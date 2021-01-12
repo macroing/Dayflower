@@ -693,11 +693,16 @@ public final class Vector3F implements Node {
 	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v}
 	 */
 	public static Vector3F directionSpherical(final float u, final float v) {
-		final float cosTheta = 1.0F - 2.0F * u;
-		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-		final float phi = v * PI_MULTIPLIED_BY_2;
+		final float phi = u * PI_MULTIPLIED_BY_2;
+		final float theta = v * PI;
 		
-		return directionSpherical(sinTheta, cosTheta, phi);
+		return directionSpherical(sin(theta), cos(theta), phi);
+		
+//		final float cosTheta = 1.0F - 2.0F * u;
+//		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+//		final float phi = v * PI_MULTIPLIED_BY_2;
+		
+//		return directionSpherical(sinTheta, cosTheta, phi);
 	}
 	
 	/**

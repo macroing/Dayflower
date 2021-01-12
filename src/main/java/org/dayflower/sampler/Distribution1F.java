@@ -65,10 +65,10 @@ public final class Distribution1F {
 //	TODO: Add Javadocs!
 	public float continuousRemap(final float value, final int index) {
 		if(cumulativeDistributionFunction(index + 1) - cumulativeDistributionFunction(index) > 0.0F) {
-			return (index + ((value - cumulativeDistributionFunction(index)) / (cumulativeDistributionFunction(index + 1) - cumulativeDistributionFunction(index)))) / size();
+			return (index + ((value - cumulativeDistributionFunction(index)) / (cumulativeDistributionFunction(index + 1) - cumulativeDistributionFunction(index)))) / count();
 		}
 		
-		return (index + (value - cumulativeDistributionFunction(index))) / size();
+		return (index + (value - cumulativeDistributionFunction(index))) / count();
 	}
 	
 //	TODO: Add Javadocs!
@@ -78,7 +78,7 @@ public final class Distribution1F {
 	
 //	TODO: Add Javadocs!
 	public float discreteProbabilityDensityFunction(final int index) {
-		return functionIntegral() > 0.0F ? function(index) / (functionIntegral() * size()) : 0.0F;
+		return functionIntegral() > 0.0F ? function(index) / (functionIntegral() * count()) : 0.0F;
 	}
 	
 //	TODO: Add Javadocs!
@@ -97,12 +97,12 @@ public final class Distribution1F {
 	}
 	
 //	TODO: Add Javadocs!
-	public int index(final float value) {
-		return findInterval(this.cumulativeDistributionFunction.length, currentIndex -> cumulativeDistributionFunction(currentIndex) <= value);
+	public int count() {
+		return this.function.length;
 	}
 	
 //	TODO: Add Javadocs!
-	public int size() {
-		return this.function.length;
+	public int index(final float value) {
+		return findInterval(this.cumulativeDistributionFunction.length, currentIndex -> cumulativeDistributionFunction(currentIndex) <= value);
 	}
 }

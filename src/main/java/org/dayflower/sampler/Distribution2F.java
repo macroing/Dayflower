@@ -27,12 +27,19 @@ import java.lang.reflect.Field;
 public final class Distribution2F {
 	private final Distribution1F marginal;
 	private final Distribution1F[] conditional;
+	private final boolean isUV;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 	public Distribution2F(final float[][] functions) {
+		this(functions, false);
+	}
+	
+//	TODO: Add Javadocs!
+	public Distribution2F(final float[][] functions, final boolean isUV) {
 		this.conditional = new Distribution1F[functions.length];
+		this.isUV = isUV;
 		
 		final float[] function = new float[functions.length];
 		
@@ -50,40 +57,82 @@ public final class Distribution2F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
+	public Distribution1F getConditional(final int index) {
+		return this.conditional[index];
+	}
+	
+//	TODO: Add Javadocs!
+	public Distribution1F getMarginal() {
+		return this.marginal;
+	}
+	
+//	TODO: Add Javadocs!
 	public Sample2F continuousRemap(final Sample2F sample) {
-		final float u = sample.getU();
-		final float v = sample.getV();
+		final float m = this.isUV ? sample.getU() : sample.getV();
+		final float c = this.isUV ? sample.getV() : sample.getU();
 		
-		final int indexV = this.marginal.index(v);
-		final int indexU = this.conditional[indexV].index(u);
+		final int indexM = this.marginal.index(m);
+		final int indexC = this.conditional[indexM].index(c);
 		
-		final float uRemapped = this.conditional[indexV].continuousRemap(u, indexU);
-		final float vRemapped = this.marginal.continuousRemap(v, indexV);
+		final float mRemapped = this.marginal.continuousRemap(m, indexM);
+		final float cRemapped = this.conditional[indexM].continuousRemap(c, indexC);
 		
-		return new Sample2F(uRemapped, vRemapped);
+		return new Sample2F(this.isUV ? mRemapped : cRemapped, this.isUV ? cRemapped : mRemapped);
+	}
+	
+//	TODO: Add Javadocs!
+	public Sample2F discreteRemap(final Sample2F sample) {
+		final float m = this.isUV ? sample.getU() : sample.getV();
+		final float c = this.isUV ? sample.getV() : sample.getU();
+		
+		final int indexM = this.marginal.index(m);
+		final int indexC = this.conditional[indexM].index(c);
+		
+		final float mRemapped = this.marginal.discreteRemap(m, indexM);
+		final float cRemapped = this.conditional[indexM].discreteRemap(c, indexC);
+		
+		return new Sample2F(this.isUV ? mRemapped : cRemapped, this.isUV ? cRemapped : mRemapped);
 	}
 	
 //	TODO: Add Javadocs!
 	public float continuousProbabilityDensityFunction(final Sample2F sample) {
-		final float u = sample.getU();
-		final float v = sample.getV();
+		final float m = this.isUV ? sample.getU() : sample.getV();
+		final float c = this.isUV ? sample.getV() : sample.getU();
 		
-		final int indexV = this.marginal.index(v);
-		final int indexU = this.conditional[indexV].index(u);
+		final int indexM = this.marginal.index(m);
+		final int indexC = this.conditional[indexM].index(c);
 		
-		final float probabilityDensityFunctionValueU = this.conditional[indexV].continuousProbabilityDensityFunction(indexU);
-		final float probabilityDensityFunctionValueV = this.marginal.continuousProbabilityDensityFunction(indexV);
-		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueU * probabilityDensityFunctionValueV;
+		final float probabilityDensityFunctionValueM = this.marginal.continuousProbabilityDensityFunction(indexM);
+		final float probabilityDensityFunctionValueC = this.conditional[indexM].continuousProbabilityDensityFunction(indexC);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueM * probabilityDensityFunctionValueC;
+		
+		return probabilityDensityFunctionValue;
+	}
+	
+//	TODO: Add Javadocs!
+	public float discreteProbabilityDensityFunction(final Sample2F sample) {
+		final float m = this.isUV ? sample.getU() : sample.getV();
+		final float c = this.isUV ? sample.getV() : sample.getU();
+		
+		final int indexM = this.marginal.index(m);
+		final int indexC = this.conditional[indexM].index(c);
+		
+		final float probabilityDensityFunctionValueM = this.marginal.discreteProbabilityDensityFunction(indexM);
+		final float probabilityDensityFunctionValueC = this.conditional[indexM].discreteProbabilityDensityFunction(indexC);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueM * probabilityDensityFunctionValueC;
 		
 		return probabilityDensityFunctionValue;
 	}
 	
 //	TODO: Add Javadocs!
 	public float probabilityDensityFunction(final Sample2F sample) {
-		final int indexU = saturate(toInt(sample.getU() * this.conditional[0].size()), 0, this.conditional[0].size() - 1);
-		final int indexV = saturate(toInt(sample.getV() * this.marginal.size()), 0, this.marginal.size() - 1);
+		final float m = this.isUV ? sample.getU() : sample.getV();
+		final float c = this.isUV ? sample.getV() : sample.getU();
 		
-		final float probabilityDensityFunctionValue = this.conditional[indexV].function(indexU) / this.marginal.functionIntegral();
+		final int indexM = saturate(toInt(m * this.marginal.count()), 0, this.marginal.count() - 1);
+		final int indexC = saturate(toInt(c * this.conditional[0].count()), 0, this.conditional[0].count() - 1);
+		
+		final float probabilityDensityFunctionValue = this.conditional[indexM].function(indexC) / this.marginal.functionIntegral();
 		
 		return probabilityDensityFunctionValue;
 	}

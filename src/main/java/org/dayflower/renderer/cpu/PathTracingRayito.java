@@ -203,11 +203,9 @@ final class PathTracingRayito {
 							final Vector3F selectedDirectionI = Vector3F.normalize(Vector3F.direction(point, surfaceIntersectionPoint));
 							final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
 							
-//							final float probabilityDensityFunctionValueB1 = rayitoBSDF.evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionI);//Old.
-							final float probabilityDensityFunctionValueB1 = rayitoBSDF.evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);//New.
+							final float probabilityDensityFunctionValueB1 = rayitoBSDF.evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);
 							
-//							final Color3F result = rayitoBSDF.evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionI);//Old.
-							final Color3F result = rayitoBSDF.evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);//New.
+							final Color3F result = rayitoBSDF.evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);
 							
 							if(probabilityDensityFunctionValueB1 > 0.0F && !result.isBlack()) {
 								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
@@ -249,8 +247,6 @@ final class PathTracingRayito {
 							final float probabilityDensityFunctionValueA2 = bSDFResult.getProbabilityDensityFunctionValue();
 							
 							if(probabilityDensityFunctionValueA2 > 0.0F && !result.isBlack()) {
-//								final Vector3F selectedDirectionI = bSDFResult.getIncoming();
-//								final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
 								final Vector3F selectedDirectionO = bSDFResult.getIncoming();
 								
 								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);

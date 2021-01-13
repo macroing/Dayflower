@@ -64,7 +64,7 @@ public final class DistributionTest {
 		final Sample2F sampleRemapped = distribution.continuousRemap(sample);
 		
 		final float probabilityDensityFunctionValue0 = distribution.continuousProbabilityDensityFunction(sample);
-		final float probabilityDensityFunctionValue1 = distribution.probabilityDensityFunction(sampleRemapped);
+		final float probabilityDensityFunctionValue1 = distribution.continuousProbabilityDensityFunction(sampleRemapped, true);
 		
 		System.out.println("SampleRemapped=" + sampleRemapped + ", PDF #0=" + probabilityDensityFunctionValue0 + ", PDF #1=" + probabilityDensityFunctionValue1);
 	}

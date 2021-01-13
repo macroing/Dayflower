@@ -254,7 +254,7 @@ public final class PerezLight implements Light {
 		
 		final Color3F result = doRadianceSky(incomingLocal);
 		
-		final float probabilityDensityFunctionValue = this.distribution.probabilityDensityFunction(sample);
+		final float probabilityDensityFunctionValue = this.distribution.discreteProbabilityDensityFunction(sample, true);
 		final float probabilityDensityFunctionValueDirection = sin(theta) * this.jacobian / probabilityDensityFunctionValue;
 		final float probabilityDensityFunctionValuePosition = 1.0F / (PI * radius * radius);
 		
@@ -533,7 +533,7 @@ public final class PerezLight implements Light {
 		
 		final Sample2F sample = new Sample2F(u, v);
 		
-		final float probabilityDensityFunctionValue0 = this.distribution.probabilityDensityFunction(sample);
+		final float probabilityDensityFunctionValue0 = this.distribution.discreteProbabilityDensityFunction(sample, true);
 		final float probabilityDensityFunctionValue1 = sinTheta * this.jacobian / probabilityDensityFunctionValue0;
 		
 		return probabilityDensityFunctionValue1;

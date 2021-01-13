@@ -55,7 +55,7 @@ public final class GPUApplication extends Application {
 	public GPUApplication() {
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.label = new Label();
-		this.renderer = doCreateRenderer(RenderingAlgorithm.PATH_TRACING, "./resources/scenes/GPUTest.java");
+		this.renderer = doCreateRenderer(RenderingAlgorithm.PATH_TRACING, "./resources/scenes/GPUTest2.java");
 		this.renderer.setRendererObserver(new RendererObserverImpl(this.label));
 	}
 	

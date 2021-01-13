@@ -22,10 +22,35 @@ import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.toFloat;
 import static org.dayflower.util.Ints.findInterval;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+import org.dayflower.util.ParameterArguments;
+
+/**
+ * A {@code Distribution1F} represents a 1-dimensional distribution and contains methods to sample it in a continuous or discrete way.
+ * <p>
+ * To use this class consider the following example:
+ * <pre>
+ * {@code
+ * float[] function = ...;
+ * 
+ * Distribution1F distribution1F = new Distribution1F(function);
+ * 
+ * float value = 0.5F;
+ * 
+ * int index = distribution1F.index(value);
+ * 
+ * float valueContinuous = distribution1F.continuousRemap(value, index);
+ * float valueDiscrete = distribution1F.discreteRemap(value, index);
+ * 
+ * float probabilityDensityFunctionContinuous = distribution1F.continuousProbabilityDensityFunction(index);
+ * float probabilityDensityFunctionDiscrete = distribution1F.discreteProbabilityDensityFunction(index);
+ * }
+ * </pre>
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class Distribution1F {
 	private final float[] cumulativeDistributionFunction;
 	private final float[] function;
@@ -33,7 +58,16 @@ public final class Distribution1F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Distribution1F} instance.
+	 * <p>
+	 * If {@code function} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Modifications to the {@code float[]} {@code function} will not affect this {@code Distribution1F} instance.
+	 * 
+	 * @param function a {@code float[]} with the values of the function
+	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null}
+	 */
 	public Distribution1F(final float[] function) {
 		this.cumulativeDistributionFunction = new float[Objects.requireNonNull(function, "function == null").length + 1];
 		this.function = function.clone();
@@ -57,13 +91,36 @@ public final class Distribution1F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the continuous probability density function (PDF) value at index {@code index}.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than {@code count() - 1}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index
+	 * @return the continuous probability density function (PDF) value at index {@code index}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code count() - 1}
+	 */
 	public float continuousProbabilityDensityFunction(final int index) {
+		ParameterArguments.requireRange(index, 0, count() - 1, "index");
+		
 		return functionIntegral() > 0.0F ? function(index) / functionIntegral() : 0.0F;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a continuous remapping of {@code value} at index {@code index} using the cumulative distribution function (CDF).
+	 * <p>
+	 * Returns the remapped value.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than {@code count() - 1}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param value the value
+	 * @param index the index
+	 * @return the remapped value
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code count() - 1}
+	 */
 	public float continuousRemap(final float value, final int index) {
+		ParameterArguments.requireRange(index, 0, count() - 1, "index");
+		
 		if(cumulativeDistributionFunction(index + 1) - cumulativeDistributionFunction(index) > 0.0F) {
 			return (index + ((value - cumulativeDistributionFunction(index)) / (cumulativeDistributionFunction(index + 1) - cumulativeDistributionFunction(index)))) / count();
 		}
@@ -71,37 +128,89 @@ public final class Distribution1F {
 		return (index + (value - cumulativeDistributionFunction(index))) / count();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the cumulative distribution function (CDF) at index {@code index}.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than {@code count()}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index
+	 * @return the value of the cumulative distribution function (CDF) at index {@code index}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code count()}
+	 */
 	public float cumulativeDistributionFunction(final int index) {
-		return this.cumulativeDistributionFunction[index];
+		return this.cumulativeDistributionFunction[ParameterArguments.requireRange(index, 0, count(), "index")];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the discrete probability density function (PDF) value at index {@code index}.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than {@code count() - 1}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index
+	 * @return the discrete probability density function (PDF) value at index {@code index}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code count() - 1}
+	 */
 	public float discreteProbabilityDensityFunction(final int index) {
+		ParameterArguments.requireRange(index, 0, count() - 1, "index");
+		
 		return functionIntegral() > 0.0F ? function(index) / (functionIntegral() * count()) : 0.0F;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a discrete remapping of {@code value} at index {@code index} using the cumulative distribution function (CDF).
+	 * <p>
+	 * Returns the remapped value.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than {@code count() - 1}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param value the value
+	 * @param index the index
+	 * @return the remapped value
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code count() - 1}
+	 */
 	public float discreteRemap(final float value, final int index) {
+		ParameterArguments.requireRange(index, 0, count() - 1, "index");
+		
 		return (value - cumulativeDistributionFunction(index)) / (cumulativeDistributionFunction(index + 1) - cumulativeDistributionFunction(index));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the function at index {@code index}.
+	 * <p>
+	 * If {@code index} is less than {@code 0} or greater than {@code count() - 1}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param index the index
+	 * @return the value of the function at index {@code index}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0} or greater than {@code count() - 1}
+	 */
 	public float function(final int index) {
-		return this.function[index];
+		return this.function[ParameterArguments.requireRange(index, 0, count() - 1, "index")];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the function integral.
+	 * 
+	 * @return the function integral
+	 */
 	public float functionIntegral() {
 		return this.functionIntegral;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value count of the function.
+	 * 
+	 * @return the value count of the function
+	 */
 	public int count() {
 		return this.function.length;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the index of the closest value to {@code value} in the cumulative distribution function (CDF).
+	 * 
+	 * @param value a {@code float} value
+	 * @return the index of the closest value to {@code value} in the cumulative distribution function (CDF)
+	 */
 	public int index(final float value) {
 		return findInterval(this.cumulativeDistributionFunction.length, currentIndex -> cumulativeDistributionFunction(currentIndex) <= value);
 	}

@@ -60,7 +60,12 @@ public enum RenderingAlgorithm {
 	/**
 	 * A {@code RenderingAlgorithm} that represents Ray Casting.
 	 */
-	RAY_CASTING("RayCasting", "Ray Casting");
+	RAY_CASTING("RayCasting", "Ray Casting"),
+	
+	/**
+	 * A {@code RenderingAlgorithm} that represents Ray Tracing with an implementation similar to PBRT.
+	 */
+	RAY_TRACING_P_B_R_T("RayTracing-PBRT", "Ray Tracing - PBRT");
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

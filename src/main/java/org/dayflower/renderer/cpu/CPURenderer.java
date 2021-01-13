@@ -88,6 +88,8 @@ public final class CPURenderer extends AbstractCPURenderer {
 				return PathTracingSmallPTRecursive.radiance(ray, getScene(), getMaximumBounce(), getMinimumBounceRussianRoulette());
 			case RAY_CASTING:
 				return RayCasting.radiance(ray, getScene(), isPreviewMode());
+			case RAY_TRACING_P_B_R_T:
+				return RayTracingPBRT.radiance(ray, getSampler(), getScene(), isPreviewMode(), getMaximumBounce(), 0);
 			default:
 				return Color3F.BLACK;
 		}

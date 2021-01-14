@@ -79,4 +79,4 @@ The following example demonstrates how the `PlasticPBRTMaterial` can be created 
 ```java
 new PlasticPBRTMaterial(new Color3F(0.2F, 0.2F, 1.0F), Color3F.GRAY_0_50, Color3F.BLACK, 0.01F);
 ```
-![alt text](https://github.com/macroing/Dayflower/tree/master/documentation/Scene/PlasticPBRTMaterial.png "PlasticPBRTMaterial")
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/PlasticPBRTMaterial.png "PlasticPBRTMaterial")

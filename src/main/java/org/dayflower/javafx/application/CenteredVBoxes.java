@@ -68,7 +68,7 @@ final class CenteredVBoxes {
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Renderer Configuration", 16.0D);
 		
-		final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.PATH_TRACING_P_B_R_T, RenderingAlgorithm.PATH_TRACING_RAYITO, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_RECURSIVE, RenderingAlgorithm.RAY_CASTING), combinedProgressiveImageOrderRenderer.getRenderingAlgorithm());
+		final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.PATH_TRACING_P_B_R_T, RenderingAlgorithm.PATH_TRACING_RAYITO, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_RECURSIVE, RenderingAlgorithm.RAY_CASTING, RenderingAlgorithm.RAY_TRACING_P_B_R_T), combinedProgressiveImageOrderRenderer.getRenderingAlgorithm());
 		
 		centeredVBox.addButton("Update Renderer", actionEvent -> {
 			final RenderingAlgorithm renderingAlgorithm = comboBox.getValue();

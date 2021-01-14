@@ -255,7 +255,9 @@ public final class PerezLight implements Light {
 		final Color3F result = doRadianceSky(incomingLocal);
 		
 		final float probabilityDensityFunctionValue = this.distribution.discreteProbabilityDensityFunction(sample, true);
+//		final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample, true);
 		final float probabilityDensityFunctionValueDirection = sin(theta) * this.jacobian / probabilityDensityFunctionValue;
+//		final float probabilityDensityFunctionValueDirection = probabilityDensityFunctionValue / (2.0F * PI * PI * sin(theta));
 		final float probabilityDensityFunctionValuePosition = 1.0F / (PI * radius * radius);
 		
 		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
@@ -381,8 +383,10 @@ public final class PerezLight implements Light {
 		
 		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());
 		final Sample2F sample1 = this.distribution.discreteRemap(sample0);
+//		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
 		
 		final float probabilityDensityFunctionValue0 = this.distribution.discreteProbabilityDensityFunction(sample0);
+//		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample0);
 		
 		if(isZero(probabilityDensityFunctionValue0)) {
 			return Optional.empty();
@@ -397,6 +401,7 @@ public final class PerezLight implements Light {
 		final float su = (indexM + u) / 32.0F;
 		final float sv = (indexC + v) / 32.0F;
 		
+//		final Vector3F incomingLocal = Vector3F.directionSpherical(u, v);
 		final Vector3F incomingLocal = Vector3F.directionSpherical(su, sv);
 		final Vector3F incoming = doTransformToWorldSpace(incomingLocal);
 		
@@ -406,7 +411,14 @@ public final class PerezLight implements Light {
 		final Point3F point = Point3F.add(surfaceIntersectionPoint, incoming, 2.0F * this.radius);
 		
 		final float sinTheta = sin(PI * sv);
+//		final float sinTheta = incomingLocal.sinTheta();
+		
+		if(isZero(sinTheta)) {
+			return Optional.empty();
+		}
+		
 		final float probabilityDensityFunctionValue1 = sinTheta * this.jacobian / probabilityDensityFunctionValue0;
+//		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
 		
 		return Optional.of(new LightRadianceIncomingResult(result, point, incoming, probabilityDensityFunctionValue1));
 	}
@@ -534,7 +546,9 @@ public final class PerezLight implements Light {
 		final Sample2F sample = new Sample2F(u, v);
 		
 		final float probabilityDensityFunctionValue0 = this.distribution.discreteProbabilityDensityFunction(sample, true);
+//		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample, true);
 		final float probabilityDensityFunctionValue1 = sinTheta * this.jacobian / probabilityDensityFunctionValue0;
+//		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
 		
 		return probabilityDensityFunctionValue1;
 	}

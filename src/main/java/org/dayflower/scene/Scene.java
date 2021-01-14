@@ -21,9 +21,13 @@ package org.dayflower.scene;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.util.Floats.isZero;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
 import static org.dayflower.util.Floats.minOrNaN;
+import static org.dayflower.util.Floats.random;
+import static org.dayflower.util.Ints.min;
+import static org.dayflower.util.Ints.toInt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,14 +39,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
+import org.dayflower.image.Color3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.sampler.RandomSampler;
+import org.dayflower.sampler.Sample2F;
+import org.dayflower.sampler.Sampler;
 import org.dayflower.util.ParameterArguments;
 
 /**
@@ -62,6 +74,7 @@ public final class Scene implements Node {
 	private final List<Primitive> primitivesExternalToBVH;
 	private final List<SceneObserver> sceneObservers;
 	private final PrimitiveObserver primitiveObserver;
+	private Sampler sampler;
 	private String name;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,14 +123,15 @@ public final class Scene implements Node {
 	 */
 	public Scene(final Camera camera, final String name) {
 		this.bVHNode = null;
-		this.lights = new ArrayList<>();
-		this.primitives = new CopyOnWriteArrayList<>();
-		this.primitivesExternalToBVH = new CopyOnWriteArrayList<>();
-		this.sceneObservers = new ArrayList<>();
+		this.sceneObservers = new CopyOnWriteArrayList<>();
 		this.cameraObserver = new CameraObserverImpl(this, this.sceneObservers);
 		this.camera = Objects.requireNonNull(camera, "camera == null");
 		this.camera.addCameraObserver(this.cameraObserver);
+		this.lights = new CopyOnWriteArrayList<>();
+		this.primitives = new CopyOnWriteArrayList<>();
+		this.primitivesExternalToBVH = new CopyOnWriteArrayList<>();
 		this.primitiveObserver = new PrimitiveObserverImpl(this, this.sceneObservers);
+		this.sampler = new RandomSampler();
 		this.name = Objects.requireNonNull(name, "name == null");
 	}
 	
@@ -141,6 +155,36 @@ public final class Scene implements Node {
 		synchronized(this.camera) {
 			return this.camera.copy();
 		}
+	}
+	
+	/**
+	 * Samples one {@link Light} instance using a uniform distribution.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the radiance of the sampled {@code Light} instance.
+	 * <p>
+	 * If either {@code bSDF} or {@code intersection} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bSDF a {@link BSDF} instance
+	 * @param intersection an {@link Intersection} instance
+	 * @return a {@code Color3F} instance with the radiance of the sampled {@code Light} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code bSDF} or {@code intersection} are {@code null}
+	 */
+	public Color3F sampleOneLightUniformDistribution(final BSDF bSDF, final Intersection intersection) {
+		final int lightCount = getLightCount();
+		
+		if(lightCount == 0) {
+			return Color3F.BLACK;
+		}
+		
+		final Light light = getLight(min(toInt(random() * lightCount), lightCount - 1));
+		
+		final Sample2F sampleA = this.sampler.sample2();
+		final Sample2F sampleB = this.sampler.sample2();
+		
+		final Point2F pointA = new Point2F(sampleA.getU(), sampleA.getV());
+		final Point2F pointB = new Point2F(sampleB.getU(), sampleB.getV());
+		
+		return Color3F.divide(doEstimateDirectLight(bSDF, intersection, light, pointA, pointB, false), 1.0F / lightCount);
 	}
 	
 	/**
@@ -222,6 +266,15 @@ public final class Scene implements Node {
 		}
 		
 		return intersector.computeIntersection();
+	}
+	
+	/**
+	 * Returns the {@link Sampler} instance associated with this {@code Scene} instance.
+	 * 
+	 * @return the {@code Sampler} instance associated with this {@code Scene} instance
+	 */
+	public Sampler getSampler() {
+		return this.sampler;
 	}
 	
 	/**
@@ -676,6 +729,18 @@ public final class Scene implements Node {
 	}
 	
 	/**
+	 * Sets the {@link Sampler} instance associated with this {@code Scene} instance to {@code sampler}.
+	 * <p>
+	 * If {@code sampler} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sampler the {@code Sampler} instance associated with this {@code Scene} instance
+	 * @throws NullPointerException thrown if, and only if, {@code sampler} is {@code null}
+	 */
+	public void setSampler(final Sampler sampler) {
+		this.sampler = Objects.requireNonNull(sampler, "sampler == null");
+	}
+	
+	/**
 	 * Sets the {@code List} with all {@link SceneObserver} instances associated with this {@code Scene} instance to a copy of {@code sceneObservers}.
 	 * <p>
 	 * If either {@code sceneObservers} or at least one of its elements are {@code null}, a {@code NullPointerException} will be thrown.
@@ -686,6 +751,148 @@ public final class Scene implements Node {
 	public void setSceneObservers(final List<SceneObserver> sceneObservers) {
 		this.sceneObservers.clear();
 		this.sceneObservers.addAll(ParameterArguments.requireNonNullList(sceneObservers, "sceneObservers"));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Color3F doEstimateDirectLight(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final boolean isSpecular) {
+		Color3F lightDirect = Color3F.BLACK;
+		
+		if(light.isDeltaDistribution()) {
+			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
+			
+			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
+			
+			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+			
+			final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
+			final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
+			
+			if(optionalLightRadianceIncomingResult.isPresent()) {
+				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
+				
+				final Color3F lightIncoming = lightRadianceIncomingResult.getResult();
+				
+				final Vector3F incoming = lightRadianceIncomingResult.getIncoming();
+				
+				final float lightPDFValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
+				
+				if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
+					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), abs(Vector3F.dotProduct(incoming, normal)));
+					
+					if(!scatteringResult.isBlack() && doCheckLightVisibility(light, lightRadianceIncomingResult, surfaceIntersection)) {
+						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, lightPDFValue);
+					}
+				}
+			}
+		} else {
+			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
+			
+			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
+			
+			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+			
+			final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
+			final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
+			
+			if(optionalLightRadianceIncomingResult.isPresent()) {
+				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
+				
+				final Color3F lightIncoming = lightRadianceIncomingResult.getResult();
+				
+				final Vector3F incoming = lightRadianceIncomingResult.getIncoming();
+				
+				final float lightPDFValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
+				
+				if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
+					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), abs(Vector3F.dotProduct(incoming, normal)));
+					
+					final float scatteringPDFValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, normal, incoming);
+					
+					if(!scatteringResult.isBlack() && doCheckLightVisibility(light, lightRadianceIncomingResult, surfaceIntersection)) {
+						final float weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightPDFValue, scatteringPDFValue, 1, 1);
+						
+						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, weight, lightPDFValue);
+					}
+				}
+			}
+			
+			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(bXDFType, outgoing, normal, sampleB);
+			
+			if(optionalBSDFResult.isPresent()) {
+				final BSDFResult bSDFResult = optionalBSDFResult.get();
+				
+				final Vector3F incoming = bSDFResult.getIncoming();
+				
+				final Color3F scatteringResult = Color3F.multiply(bSDFResult.getResult(), abs(Vector3F.dotProduct(incoming, normal)));
+				
+				final boolean hasSampledSpecular = bSDFResult.getBXDFType().isSpecular();
+				
+				final float scatteringPDFValue = bSDFResult.getProbabilityDensityFunctionValue();
+				
+				if(!scatteringResult.isBlack() && scatteringPDFValue > 0.0F) {
+					float weight = 1.0F;
+					
+					if(!hasSampledSpecular) {
+						final float lightPDFValue = light.evaluateProbabilityDensityFunctionRadianceIncoming(intersection, incoming);
+						
+						if(isZero(lightPDFValue)) {
+							return lightDirect;
+						}
+						
+						weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(scatteringPDFValue, lightPDFValue, 1, 1);
+					}
+					
+					final Ray3F ray = surfaceIntersection.createRay(incoming);
+					
+					final Color3F transmittance = Color3F.WHITE;
+					
+					final Optional<Intersection> optionalIntersectionLight = intersection(ray, 0.001F, Float.MAX_VALUE);
+					
+					if(optionalIntersectionLight.isPresent()) {
+						final Intersection intersectionLight = optionalIntersectionLight.get();
+						
+						if(intersectionLight.getPrimitive().getAreaLight().orElse(null) == light) {
+							final Color3F lightIncoming = intersectionLight.evaluateRadianceEmitted(Vector3F.negate(incoming));
+							
+							if(!lightIncoming.isBlack()) {
+								lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, transmittance, weight, scatteringPDFValue);
+							}
+						}
+					} else {
+						final Color3F lightIncoming = light.evaluateRadianceEmitted(ray);
+						
+						if(!lightIncoming.isBlack()) {
+							lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, transmittance, weight, scatteringPDFValue);
+						}
+					}
+				}
+			}
+		}
+		
+		return lightDirect;
+	}
+	
+	private boolean doCheckLightVisibility(final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult, final SurfaceIntersection3F surfaceIntersection) {
+		final Point3F point = lightIncomingRadianceResult.getPoint();
+		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+		
+		final Ray3F ray = surfaceIntersection.createRay(point);
+		
+		final float tMinimum = 0.001F;
+		final float tMaximum = abs(Point3F.distance(surfaceIntersectionPoint, point)) + 0.001F;
+		
+		if(light instanceof AreaLight) {
+			final Optional<Intersection> optionalIntersection = intersection(ray, tMinimum, tMaximum);
+			
+			if(optionalIntersection.isPresent()) {
+				return optionalIntersection.get().getPrimitive().getAreaLight().orElse(null) == light;
+			}
+			
+			return true;
+		}
+		
+		return !intersects(ray, tMinimum, tMaximum);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

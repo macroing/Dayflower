@@ -81,6 +81,13 @@ Examples
 --------
 Below follows a few examples that demonstrates various features.
 
+#### Metal PBRT Material Example
+The following example demonstrates how the `MetalPBRTMaterial` can be created and looks visually.
+```java
+new MetalPBRTMaterial();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MetalPBRTMaterial.png "MetalPBRTMaterial")
+
 #### Plastic PBRT Material Example
 The following example demonstrates how the `PlasticPBRTMaterial` can be created and looks visually.
 ```java

@@ -8,13 +8,18 @@ Below follows a few lists of features available in the Scene API.
 
 #### The Scene API
 * `AreaLight` - A `Light` that represents an area light.
+* `BSDF` - A Bidirectional Scattering Distribution Function (BSDF) created by `Material` instances.
+* `BSDFResult` - An instance of this class is created as a result by a `BSDF` instance.
+* `BSSRDF` - A Bidirectional Surface Scattering Reflectance Distribution Function (BSSRDF) created by `Material` instances.
+* `BXDF` - A Bidirectional Reflectance Distribution Function (BRDF) or a Bidirectional Transmittance Distribution Function (BTDF).
+* `BXDFResult` - An instance of this class is created as a result by a `BXDF` instance.
 * `Camera` - A camera from which an image can be formed. It is associated with a `Scene` instance.
+* `Intersection` - A class that contains information about an intersection with a `Primitive` instance.
 * `Light` - A light source that emits light. It is associated with a `Scene` instance.
 * `Material` - A material assigned to a specific `Primitive` instance.
 * `Primitive` - A primitive (or object) that can be rendered. It is associated with a `Scene` instance.
 * `Scene` - Contains a `Camera`, a list of `Light` instances and a list of `Primitive` instances.
 * `SceneLoader` - Loads a `Scene` instance.
-* `Texture` - A texture assigned to a specific `Material` instance.
 * `Transform` - A transform assigned to a specific `Primitive` instance.
 
 #### The Scene Loader API
@@ -53,6 +58,7 @@ Below follows a few lists of features available in the Scene API.
 * `MarbleTexture` - Returns a `Color3F` by alternating between three `Color3F` instances in a marble pattern.
 * `SimplexFractionalBrownianMotionTexture` - Returns a `Color3F` using a Simplex noise-based fractional Brownian motion (fBm) algorithm.
 * `SurfaceNormalTexture` - Returns a `Color3F` using the surface normal.
+* `Texture` - A texture assigned to a specific `Material` instance.
 * `UVTexture` - Returns a `Color3F` using the texture coordinates (UV-coordinates).
 
 Packages
@@ -68,6 +74,7 @@ Packages
 * `org.dayflower.scene.material.rayito` - The Scene Material Rayito API.
 * `org.dayflower.scene.material.smallpt` - The Scene Material SmallPT API.
 * `org.dayflower.scene.microfacet` - The Scene Microfacet API.
+* `org.dayflower.scene.preview` - The Scene Preview API.
 * `org.dayflower.scene.texture` - The Scene Texture API.
 
 Examples

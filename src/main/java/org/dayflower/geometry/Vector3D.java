@@ -1372,6 +1372,22 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code vLHS} and {@code vRHS} are in the same hemisphere, {@code false} otherwise.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method only operates on the Z-component (component 3), just like PBRT.
+	 * 
+	 * @param vLHS the {@code Vector3D} instance on the left-hand side
+	 * @param vRHS the {@code Vector3D} instance on the right-hand side
+	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are in the same hemisphere, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
+	public static boolean sameHemisphereZ(final Vector3D vLHS, final Vector3D vRHS) {
+		return vLHS.component3 * vRHS.component3 > 0.0D;
+	}
+	
+	/**
 	 * Returns the dot product of {@code vectorLHS} and {@code vectorRHS}.
 	 * <p>
 	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.

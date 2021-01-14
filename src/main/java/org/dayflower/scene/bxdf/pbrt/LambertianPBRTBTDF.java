@@ -219,7 +219,7 @@ public final class LambertianPBRTBTDF extends PBRTBXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Vector3F.sameHemisphere(outgoing, incoming) ? 0.0F : incoming.cosThetaAbs() * PI_RECIPROCAL;
+		return Vector3F.sameHemisphereZ(outgoing, incoming) ? 0.0F : incoming.cosThetaAbs() * PI_RECIPROCAL;
 	}
 	
 	/**

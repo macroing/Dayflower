@@ -117,7 +117,7 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
 			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphere(outgoing, normal) ? normal : Vector3F.negate(normal);
+			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, normal) ? normal : Vector3F.negate(normal);
 			
 			return normalCorrectlyOriented;
 		} else {
@@ -132,7 +132,7 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
 			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphere(outgoing, normal) ? normal : Vector3F.negate(normal);
+			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, normal) ? normal : Vector3F.negate(normal);
 			
 			return normalCorrectlyOriented;
 		}

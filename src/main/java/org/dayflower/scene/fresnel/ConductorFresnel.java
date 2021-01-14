@@ -18,6 +18,11 @@
  */
 package org.dayflower.scene.fresnel;
 
+import static org.dayflower.image.Color3F.add;
+import static org.dayflower.image.Color3F.divide;
+import static org.dayflower.image.Color3F.multiply;
+import static org.dayflower.image.Color3F.sqrt;
+import static org.dayflower.image.Color3F.subtract;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.saturate;
 
@@ -158,27 +163,28 @@ public final class ConductorFresnel implements Fresnel {
 	public static Color3F evaluate(final float cosThetaI, final Color3F etaI, final Color3F etaT, final Color3F k) {
 		final float saturateCosThetaI = saturate(cosThetaI, -1.0F, 1.0F);
 		
-		final Color3F eta = Color3F.divide(etaT, etaI);
-		final Color3F etaK = Color3F.divide(k, etaI);
+		final Color3F eta = divide(etaT, etaI);
+		final Color3F etaK = divide(k, etaI);
 		
 		final float cosThetaISquared = saturateCosThetaI * saturateCosThetaI;
 		final float sinThetaISquared = 1.0F - cosThetaISquared;
 		
-		final Color3F etaSquared = Color3F.multiply(eta, eta);
-		final Color3F etaKSquared = Color3F.multiply(etaK, etaK);
+		final Color3F etaSquared = multiply(eta, eta);
+		final Color3F etaKSquared = multiply(etaK, etaK);
 		
-		final Color3F t0 = Color3F.subtract(Color3F.subtract(etaSquared, etaKSquared), sinThetaISquared);
+		final Color3F t0 = subtract(etaSquared, etaKSquared, sinThetaISquared);
+		final Color3F t0Squared = multiply(t0, t0);
 		
-		final Color3F aSquaredPlusBSquared = Color3F.sqrt(Color3F.add(Color3F.multiply(t0, t0), Color3F.multiply(Color3F.multiply(etaSquared, 4.0F), etaKSquared)));
+		final Color3F aSquaredPlusBSquared = sqrt(add(t0Squared, multiply(etaSquared, etaKSquared, 4.0F)));
 		
-		final Color3F t1 = Color3F.add(aSquaredPlusBSquared, cosThetaISquared);
-		final Color3F t2 = Color3F.multiply(Color3F.sqrt(Color3F.multiply(Color3F.add(aSquaredPlusBSquared, t0), 0.5F)), 2.0F * saturateCosThetaI);
-		final Color3F t3 = Color3F.add(Color3F.multiply(aSquaredPlusBSquared, cosThetaISquared), sinThetaISquared * sinThetaISquared);
-		final Color3F t4 = Color3F.multiply(t2, sinThetaISquared);
+		final Color3F t1 = add(aSquaredPlusBSquared, cosThetaISquared);
+		final Color3F t2 = multiply(sqrt(multiply(add(aSquaredPlusBSquared, t0), 0.5F)), 2.0F * saturateCosThetaI);
+		final Color3F t3 = add(multiply(aSquaredPlusBSquared, cosThetaISquared), sinThetaISquared * sinThetaISquared);
+		final Color3F t4 = multiply(t2, sinThetaISquared);
 		
-		final Color3F reflectanceS = Color3F.divide(Color3F.subtract(t1, t2), Color3F.add(t1, t2));
-		final Color3F reflectanceP = Color3F.divide(Color3F.multiply(reflectanceS, Color3F.subtract(t3, t4)), Color3F.add(t3, t4));
-		final Color3F reflectance = Color3F.multiply(Color3F.add(reflectanceP, reflectanceS), 0.5F);
+		final Color3F reflectanceS = divide(subtract(t1, t2), add(t1, t2));
+		final Color3F reflectanceP = divide(multiply(reflectanceS, subtract(t3, t4)), add(t3, t4));
+		final Color3F reflectance = multiply(add(reflectanceP, reflectanceS), 0.5F);
 		
 		return reflectance;
 	}

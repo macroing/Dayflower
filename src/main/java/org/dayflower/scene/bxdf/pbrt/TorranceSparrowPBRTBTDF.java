@@ -201,7 +201,7 @@ public final class TorranceSparrowPBRTBTDF extends PBRTBXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		if(Vector3F.sameHemisphere(outgoing, incoming)) {
+		if(Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return Color3F.BLACK;
 		}
 		
@@ -352,7 +352,7 @@ public final class TorranceSparrowPBRTBTDF extends PBRTBXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		if(Vector3F.sameHemisphere(outgoing, incoming)) {
+		if(Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return 0.0F;
 		}
 		

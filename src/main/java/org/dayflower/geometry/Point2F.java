@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.util.Floats.PI_RECIPROCAL;
 import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.max;
 import static org.dayflower.util.Floats.min;
@@ -331,6 +333,19 @@ public final class Point2F implements Node {
 		final float component2 = min(a.component2, b.component2, c.component2);
 		
 		return new Point2F(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance with the spherical coordinates of {@code direction} as its component values.
+	 * <p>
+	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param direction a {@link Vector3F} instance
+	 * @return a new {@code Point2F} instance with the spherical coordinates of {@code direction} as its component values
+	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
+	 */
+	public static Point2F sphericalCoordinates(final Vector3F direction) {
+		return new Point2F(direction.sphericalPhi() * PI_MULTIPLIED_BY_2_RECIPROCAL, direction.sphericalTheta() * PI_RECIPROCAL);
 	}
 	
 	/**

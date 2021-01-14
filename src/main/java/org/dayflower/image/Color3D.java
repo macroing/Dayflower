@@ -1876,6 +1876,48 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Subtracts the component values of {@code b} from the component values of {@code a} and the component values of {@code c} from the previous result.
+	 * <p>
+	 * Returns a new {@code Color3D} instance with the result of the subtraction.
+	 * <p>
+	 * If either {@code a}, {@code b} or {@code c} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Color3D} instance
+	 * @param b a {@code Color3D} instance
+	 * @param c a {@code Color3D} instance
+	 * @return a new {@code Color3D} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b} or {@code c} are {@code null}
+	 */
+	public static Color3D subtract(final Color3D a, final Color3D b, final Color3D c) {
+		final double component1 = a.component1 - b.component1 - c.component1;
+		final double component2 = a.component2 - b.component2 - c.component2;
+		final double component3 = a.component3 - b.component3 - c.component3;
+		
+		return new Color3D(component1, component2, component3);
+	}
+	
+	/**
+	 * Subtracts the component values of {@code b} from the component values of {@code a} and {@code c} from the previous result.
+	 * <p>
+	 * Returns a new {@code Color3D} instance with the result of the subtraction.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Color3D} instance
+	 * @param b a {@code Color3D} instance
+	 * @param c a {@code double} value
+	 * @return a new {@code Color3D} instance with the result of the subtraction
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Color3D subtract(final Color3D a, final Color3D b, final double c) {
+		final double component1 = a.component1 - b.component1 - c;
+		final double component2 = a.component2 - b.component2 - c;
+		final double component3 = a.component3 - b.component3 - c;
+		
+		return new Color3D(component1, component2, component3);
+	}
+	
+	/**
 	 * Subtracts {@code scalarRHS} from the component values of {@code colorLHS}.
 	 * <p>
 	 * Returns a new {@code Color3D} instance with the result of the subtraction.

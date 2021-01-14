@@ -89,7 +89,9 @@ final class RayTracingPBRT {
 			radiance = Color3F.add(radiance, intersection.evaluateRadianceEmitted(outgoing));
 			
 			for(final Light light : scene.getLights()) {
-				final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, new Point2F(0.5F, 0.5F));
+				final Sample2F sample = sampler.sample2();
+				
+				final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, new Point2F(sample.getU(), sample.getV()));
 				
 				if(optionalLightRadianceIncomingResult.isPresent()) {
 					final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();

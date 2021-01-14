@@ -264,7 +264,7 @@ public final class FresnelBlendPBRTBRDF extends PBRTBXDF {
 		
 		final Vector3F incoming = Vector3F.reflection(outgoing, normal);
 		
-		if(!Vector3F.sameHemisphere(outgoing, incoming)) {
+		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return Optional.empty();
 		}
 		
@@ -333,7 +333,7 @@ public final class FresnelBlendPBRTBRDF extends PBRTBXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		if(!Vector3F.sameHemisphere(outgoing, incoming)) {
+		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return 0.0F;
 		}
 		

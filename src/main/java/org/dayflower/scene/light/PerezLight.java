@@ -25,8 +25,6 @@ import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Doubles.saturate;
 import static org.dayflower.util.Doubles.tan;
 import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Floats.PI_RECIPROCAL;
 import static org.dayflower.util.Floats.acos;
 import static org.dayflower.util.Floats.cos;
 import static org.dayflower.util.Floats.equal;
@@ -110,7 +108,6 @@ public final class PerezLight implements Light {
 	private double[] perezX;
 	private double[] perezY;
 	private double[] zenith;
-	private float jacobian;
 	private float radius;
 	private float theta;
 	private float turbidity;
@@ -241,6 +238,9 @@ public final class PerezLight implements Light {
 		Objects.requireNonNull(ray, "ray == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
+		return Optional.empty();
+		
+		/*
 		final Vector3F incoming = ray.getDirection();
 		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
 		final Vector3F direction = Vector3F.negate(incomingLocal);
@@ -261,6 +261,7 @@ public final class PerezLight implements Light {
 		final float probabilityDensityFunctionValuePosition = 1.0F / (PI * radius * radius);
 		
 		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
+		*/
 		
 //		TODO: Verify!
 //		void InfiniteAreaLight::Pdf_Le(const Ray &ray, const Normal3f &, Float *pdfPos, Float *pdfDir) const {
@@ -382,43 +383,28 @@ public final class PerezLight implements Light {
 //		}
 		
 		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());
-		final Sample2F sample1 = this.distribution.discreteRemap(sample0);
-//		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
+		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
 		
-		final float probabilityDensityFunctionValue0 = this.distribution.discreteProbabilityDensityFunction(sample0);
-//		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample0);
+		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample1, true);
 		
 		if(isZero(probabilityDensityFunctionValue0)) {
 			return Optional.empty();
 		}
 		
-		final float u = sample1.getU();
-		final float v = sample1.getV();
-		
-		final int indexM = this.distribution.getMarginal().index(sample.getU());
-		final int indexC = this.distribution.getConditional(indexM).index(sample.getV());
-		
-		final float su = (indexM + u) / 32.0F;
-		final float sv = (indexC + v) / 32.0F;
-		
-//		final Vector3F incomingLocal = Vector3F.directionSpherical(u, v);
-		final Vector3F incomingLocal = Vector3F.directionSpherical(su, sv);
+		final Vector3F incomingLocal = Vector3F.directionSpherical(sample1.getU(), sample1.getV());
 		final Vector3F incoming = doTransformToWorldSpace(incomingLocal);
 		
-		final Color3F result = doRadianceSky(incomingLocal);
-		
-		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint();
-		final Point3F point = Point3F.add(surfaceIntersectionPoint, incoming, 2.0F * this.radius);
-		
-		final float sinTheta = sin(PI * sv);
-//		final float sinTheta = incomingLocal.sinTheta();
+		final float sinTheta = incomingLocal.sinTheta();
 		
 		if(isZero(sinTheta)) {
 			return Optional.empty();
 		}
 		
-		final float probabilityDensityFunctionValue1 = sinTheta * this.jacobian / probabilityDensityFunctionValue0;
-//		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
+		final Color3F result = doRadianceSky(incomingLocal);
+		
+		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), incoming, 2.0F * this.radius);
+		
+		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
 		
 		return Optional.of(new LightRadianceIncomingResult(result, point, incoming, probabilityDensityFunctionValue1));
 	}
@@ -532,25 +518,19 @@ public final class PerezLight implements Light {
 		
 		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
 		
-		final float phi = incomingLocal.sphericalPhi();
-		final float theta = incomingLocal.sphericalTheta();
-		final float sinTheta = sin(theta);
+		final float sinTheta = sin(incomingLocal.sphericalTheta());
 		
 		if(isZero(sinTheta)) {
 			return 0.0F;
 		}
 		
-		final float u = phi * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float v = theta * PI_RECIPROCAL;
+		final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingLocal);
 		
-		final Sample2F sample = new Sample2F(u, v);
+		final Sample2F sample = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
 		
-		final float probabilityDensityFunctionValue0 = this.distribution.discreteProbabilityDensityFunction(sample, true);
-//		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample, true);
-		final float probabilityDensityFunctionValue1 = sinTheta * this.jacobian / probabilityDensityFunctionValue0;
-//		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample, true) / (2.0F * PI * PI * sinTheta);
 		
-		return probabilityDensityFunctionValue1;
+		return probabilityDensityFunctionValue;
 	}
 	
 	/**
@@ -621,7 +601,6 @@ public final class PerezLight implements Light {
 		doSetTheta();
 		doSetSunColorAndSunSpectralRadiance();
 		doSetZenith();
-		doInitializeJacobian();
 		doInitializePerezRelativeLuminance();
 		doInitializePerezX();
 		doInitializePerezY();
@@ -690,10 +669,6 @@ public final class PerezLight implements Light {
 		}
 		
 		this.distribution = new Distribution2F(functions, true);
-	}
-	
-	private void doInitializeJacobian() {
-		this.jacobian = (2.0F * PI * PI) / (32.0F * 32.0F);
 	}
 	
 	private void doInitializePerezRelativeLuminance() {

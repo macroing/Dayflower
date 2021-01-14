@@ -98,11 +98,7 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 		final float v = sample.getV();
 		
 		if(isSamplingVisibleArea()) {
-			if(outgoing.getZ() >= 0.0F) {
-				return doSample(outgoing, alphaX, alphaY, u, v);
-			}
-			
-			return Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
+			return outgoing.getZ() >= 0.0F ? doSample(outgoing, alphaX, alphaY, u, v) : Vector3F.negate(doSample(Vector3F.negate(outgoing), alphaX, alphaY, u, v));
 		} else if(equal(alphaX, alphaY)) {
 			final float phi = v * 2.0F * PI;
 			final float tanThetaSquared = alphaX * alphaX * u / (1.0F - u);
@@ -110,7 +106,7 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
 			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphere(outgoing, normal) ? normal : Vector3F.negate(normal);
+			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, normal) ? normal : Vector3F.negate(normal);
 			
 			return normalCorrectlyOriented;
 		} else {
@@ -125,7 +121,7 @@ public final class TrowbridgeReitzMicrofacetDistribution extends MicrofacetDistr
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
 			final Vector3F normal = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphere(outgoing, normal) ? normal : Vector3F.negate(normal);
+			final Vector3F normalCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, normal) ? normal : Vector3F.negate(normal);
 			
 			return normalCorrectlyOriented;
 		}

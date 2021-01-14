@@ -94,3 +94,10 @@ The following example demonstrates how the `PlasticPBRTMaterial` can be created 
 new PlasticPBRTMaterial(new Color3F(0.2F, 0.2F, 1.0F), Color3F.GRAY_0_50, Color3F.BLACK, 0.01F);
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/PlasticPBRTMaterial.png "PlasticPBRTMaterial")
+
+#### Substrate PBRT Material Example
+The following example demonstrates how the `SubstratePBRTMaterial` can be created and looks visually.
+```java
+new SubstratePBRTMaterial(new Color3F(1.0F, 0.2F, 0.2F));
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SubstratePBRTMaterial.png "SubstratePBRTMaterial")

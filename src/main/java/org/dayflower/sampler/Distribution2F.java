@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 - 2021 J&#246;rgen Lundgren
+ * Copyright 2014 - 2021 J&#246;rgen Lundgren
  * 
  * This file is part of Dayflower.
  * 
@@ -39,8 +39,7 @@ import org.dayflower.util.ParameterArguments;
  * 
  * float probabilityDensityFunctionContinuous0 = distribution2F.continuousProbabilityDensityFunction(sample2F);
  * float probabilityDensityFunctionContinuous1 = distribution2F.continuousProbabilityDensityFunction(sample2FContinuous, true);
- * float probabilityDensityFunctionDiscrete0 = distribution2F.discreteProbabilityDensityFunction(sample2F);
- * float probabilityDensityFunctionDiscrete1 = distribution2F.discreteProbabilityDensityFunction(sample2FDiscrete, true);
+ * float probabilityDensityFunctionDiscrete = distribution2F.discreteProbabilityDensityFunction(sample2F);
  * }
  * </pre>
  * 
@@ -231,45 +230,14 @@ public final class Distribution2F {
 	 * Returns the discrete probability density function (PDF) value for {@code sample}.
 	 * <p>
 	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * distribution2F.discreteProbabilityDensityFunction(sample, false);
-	 * }
-	 * </pre>
 	 * 
 	 * @param sample the {@code Sample2F} instance
 	 * @return the continuous probability density function (PDF) value for {@code sample}
 	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
 	 */
 	public float discreteProbabilityDensityFunction(final Sample2F sample) {
-		return discreteProbabilityDensityFunction(sample, false);
-	}
-	
-	/**
-	 * Returns the discrete probability density function (PDF) value for {@code sample}.
-	 * <p>
-	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param sample the {@code Sample2F} instance
-	 * @param isRemapped {@code true} if, and only if, {@code sample} is remapped, {@code false} otherwise
-	 * @return the continuous probability density function (PDF) value for {@code sample}
-	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
-	 */
-	public float discreteProbabilityDensityFunction(final Sample2F sample, final boolean isRemapped) {
 		final float m = this.isUV ? sample.getU() : sample.getV();
 		final float c = this.isUV ? sample.getV() : sample.getU();
-		
-		if(isRemapped) {
-//			TODO: The current implementation is based on the continuous version. This needs to be fixed somehow.
-			final int indexM = saturate(toInt(m * this.marginal.count()), 0, this.marginal.count() - 1);
-			final int indexC = saturate(toInt(c * this.conditional[indexM].count()), 0, this.conditional[indexM].count() - 1);
-			
-			final float probabilityDensityFunctionValue = this.conditional[indexM].function(indexC) / this.marginal.functionIntegral();
-			
-			return probabilityDensityFunctionValue;
-		}
 		
 		final int indexM = this.marginal.index(m);
 		final int indexC = this.conditional[indexM].index(c);

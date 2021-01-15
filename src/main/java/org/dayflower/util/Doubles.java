@@ -538,6 +538,18 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns the weight for the Fresnel reflectance based on Schlicks approximation.
+	 * 
+	 * @param cosTheta the cosine of the angle theta
+	 * @return the weight for the Fresnel reflectance based on Schlicks approximation
+	 */
+	public static double fresnelWeightSchlick(final double cosTheta) {
+		final double m = saturate(1.0D - cosTheta);
+		
+		return (m * m) * (m * m) * m;
+	}
+	
+	/**
 	 * Returns the gamma of {@code value}.
 	 * 
 	 * @param value an {@code int} value

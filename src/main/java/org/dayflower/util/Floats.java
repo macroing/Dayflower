@@ -530,11 +530,11 @@ public final class Floats {
 	 * Returns the dielectric Fresnel reflectance based on Schlicks approximation.
 	 * 
 	 * @param cosTheta the cosine of the angle theta
-	 * @param f0 the reflectance at grazing angle
+	 * @param r0 the reflectance at grazing angle
 	 * @return the dielectric Fresnel reflectance based on Schlicks approximation
 	 */
-	public static float fresnelDielectricSchlick(final float cosTheta, final float f0) {
-		return f0 + (1.0F - f0) * pow(max(1.0F - cosTheta, 0.0F), 5.0F);
+	public static float fresnelDielectricSchlick(final float cosTheta, final float r0) {
+		return r0 + (1.0F - r0) * pow(max(1.0F - cosTheta, 0.0F), 5.0F);
 	}
 	
 	/**
@@ -553,11 +553,11 @@ public final class Floats {
 	 * Returns the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight.
 	 * 
 	 * @param cosTheta the cosine of the angle theta
-	 * @param f0 the reflectance at grazing angle
+	 * @param r0 the reflectance at grazing angle
 	 * @return the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight
 	 */
-	public static float fresnelSchlickWeightLerp(final float cosTheta, final float f0) {
-		return lerp(f0, 1.0F, fresnelSchlickWeight(cosTheta));
+	public static float fresnelSchlickWeightLerp(final float cosTheta, final float r0) {
+		return lerp(r0, 1.0F, fresnelSchlickWeight(cosTheta));
 	}
 	
 	/**

@@ -530,11 +530,11 @@ public class Doubles {
 	 * Returns the dielectric Fresnel reflectance based on Schlicks approximation.
 	 * 
 	 * @param cosTheta the cosine of the angle theta
-	 * @param f0 the reflectance at grazing angle
+	 * @param r0 the reflectance at grazing angle
 	 * @return the dielectric Fresnel reflectance based on Schlicks approximation
 	 */
-	public static double fresnelDielectricSchlick(final double cosTheta, final double f0) {
-		return f0 + (1.0D - f0) * pow(max(1.0D - cosTheta, 0.0D), 5.0D);
+	public static double fresnelDielectricSchlick(final double cosTheta, final double r0) {
+		return r0 + (1.0D - r0) * pow(max(1.0D - cosTheta, 0.0D), 5.0D);
 	}
 	
 	/**
@@ -553,11 +553,11 @@ public class Doubles {
 	 * Returns the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight.
 	 * 
 	 * @param cosTheta the cosine of the angle theta
-	 * @param f0 the reflectance at grazing angle
+	 * @param r0 the reflectance at grazing angle
 	 * @return the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight
 	 */
-	public static double fresnelSchlickWeightLerp(final double cosTheta, final double f0) {
-		return lerp(f0, 1.0D, fresnelSchlickWeight(cosTheta));
+	public static double fresnelSchlickWeightLerp(final double cosTheta, final double r0) {
+		return lerp(r0, 1.0D, fresnelSchlickWeight(cosTheta));
 	}
 	
 	/**

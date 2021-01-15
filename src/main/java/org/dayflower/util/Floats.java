@@ -543,10 +543,21 @@ public final class Floats {
 	 * @param cosTheta the cosine of the angle theta
 	 * @return the weight for the Fresnel reflectance based on Schlicks approximation
 	 */
-	public static float fresnelWeightSchlick(final float cosTheta) {
+	public static float fresnelSchlickWeight(final float cosTheta) {
 		final float m = saturate(1.0F - cosTheta);
 		
 		return (m * m) * (m * m) * m;
+	}
+	
+	/**
+	 * Returns the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight.
+	 * 
+	 * @param cosTheta the cosine of the angle theta
+	 * @param f0 the reflectance at grazing angle
+	 * @return the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight
+	 */
+	public static float fresnelSchlickWeightLerp(final float cosTheta, final float f0) {
+		return lerp(f0, 1.0F, fresnelSchlickWeight(cosTheta));
 	}
 	
 	/**

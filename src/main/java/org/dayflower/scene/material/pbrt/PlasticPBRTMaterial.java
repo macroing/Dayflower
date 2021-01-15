@@ -356,7 +356,7 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 			
 			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughness.getFloat(intersection)) : this.textureRoughness.getFloat(intersection);
 			
-			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughness, roughness);
+			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughness, roughness);
 			
 			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, fresnel, microfacetDistribution));
 		}

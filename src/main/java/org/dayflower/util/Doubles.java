@@ -543,10 +543,21 @@ public class Doubles {
 	 * @param cosTheta the cosine of the angle theta
 	 * @return the weight for the Fresnel reflectance based on Schlicks approximation
 	 */
-	public static double fresnelWeightSchlick(final double cosTheta) {
+	public static double fresnelSchlickWeight(final double cosTheta) {
 		final double m = saturate(1.0D - cosTheta);
 		
 		return (m * m) * (m * m) * m;
+	}
+	
+	/**
+	 * Returns the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight.
+	 * 
+	 * @param cosTheta the cosine of the angle theta
+	 * @param f0 the reflectance at grazing angle
+	 * @return the Fresnel reflectance based on Schlicks approximation using linear interpolation and the Fresnel reflectance weight
+	 */
+	public static double fresnelSchlickWeightLerp(final double cosTheta, final double f0) {
+		return lerp(f0, 1.0D, fresnelSchlickWeight(cosTheta));
 	}
 	
 	/**

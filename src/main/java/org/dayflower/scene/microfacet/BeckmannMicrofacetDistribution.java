@@ -59,11 +59,12 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	 * Constructs a new {@code BeckmannMicrofacetDistribution} instance.
 	 * 
 	 * @param isSamplingVisibleArea {@code true} if, and only if, the visible area should be sampled, {@code false} otherwise
+	 * @param isSeparableModel {@code true} if, and only if, the separable shadowing and masking model should be used, {@code false} otherwise
 	 * @param alphaX the alpha value on the X-axis
 	 * @param alphaY the alpha value on the Y-axis
 	 */
-	public BeckmannMicrofacetDistribution(final boolean isSamplingVisibleArea, final float alphaX, final float alphaY) {
-		super(isSamplingVisibleArea);
+	public BeckmannMicrofacetDistribution(final boolean isSamplingVisibleArea, final boolean isSeparableModel, final float alphaX, final float alphaY) {
+		super(isSamplingVisibleArea, isSeparableModel);
 		
 		this.alphaX = max(alphaX, 0.001F);
 		this.alphaY = max(alphaY, 0.001F);
@@ -78,7 +79,7 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	 */
 	@Override
 	public String toString() {
-		return String.format("new BeckmannMicrofacetDistribution(%s, %+.10f, %+.10f)", Boolean.toString(isSamplingVisibleArea()), Float.valueOf(this.alphaX), Float.valueOf(this.alphaY));
+		return String.format("new BeckmannMicrofacetDistribution(%s, %s, %+.10f, %+.10f)", Boolean.toString(isSamplingVisibleArea()), Boolean.toString(isSeparableModel()), Float.valueOf(this.alphaX), Float.valueOf(this.alphaY));
 	}
 	
 	/**
@@ -153,6 +154,8 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 		} else if(!(object instanceof BeckmannMicrofacetDistribution)) {
 			return false;
 		} else if(isSamplingVisibleArea() != BeckmannMicrofacetDistribution.class.cast(object).isSamplingVisibleArea()) {
+			return false;
+		} else if(isSeparableModel() != BeckmannMicrofacetDistribution.class.cast(object).isSeparableModel()) {
 			return false;
 		} else if(!equal(this.alphaX, BeckmannMicrofacetDistribution.class.cast(object).alphaX)) {
 			return false;
@@ -247,7 +250,7 @@ public final class BeckmannMicrofacetDistribution extends MicrofacetDistribution
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Boolean.valueOf(isSamplingVisibleArea()), Float.valueOf(this.alphaX), Float.valueOf(this.alphaY));
+		return Objects.hash(Boolean.valueOf(isSamplingVisibleArea()), Boolean.valueOf(isSeparableModel()), Float.valueOf(this.alphaX), Float.valueOf(this.alphaY));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

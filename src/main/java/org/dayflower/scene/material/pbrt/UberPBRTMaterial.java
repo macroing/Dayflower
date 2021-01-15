@@ -646,7 +646,7 @@ public final class UberPBRTMaterial implements PBRTMaterial {
 		}
 		
 		if(!colorKS.isBlack()) {
-			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV)));
+			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV)));
 		}
 		
 		if(!colorKR.isBlack()) {

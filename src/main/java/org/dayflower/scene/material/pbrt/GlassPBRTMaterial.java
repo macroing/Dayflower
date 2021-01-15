@@ -489,7 +489,7 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		final float roughnessURemapped = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(roughnessU) : roughnessU;
 		final float roughnessVRemapped = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(roughnessV) : roughnessV;
 		
-		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessURemapped, roughnessVRemapped);
+		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessURemapped, roughnessVRemapped);
 		
 		if(!colorKR.isBlack()) {
 			final Fresnel fresnel = new DielectricFresnel(1.0F, eta);

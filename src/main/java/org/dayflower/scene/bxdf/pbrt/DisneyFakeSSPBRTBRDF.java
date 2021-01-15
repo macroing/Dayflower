@@ -19,7 +19,10 @@
 package org.dayflower.scene.bxdf.pbrt;
 
 import static org.dayflower.util.Floats.PI_RECIPROCAL;
+import static org.dayflower.util.Floats.equal;
 import static org.dayflower.util.Floats.fresnelSchlickWeight;
+import static org.dayflower.util.Floats.isZero;
+import static org.dayflower.util.Floats.lerp;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,30 +37,33 @@ import org.dayflower.scene.BXDFType;
 import org.dayflower.util.ParameterArguments;
 
 /**
- * A {@code DisneyDiffusePBRTBRDF} is an implementation of {@link PBRTBXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney diffuse reflection.
+ * A {@code DisneyFakeSSPBRTBRDF} is an implementation of {@link PBRTBXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney Fake Subsurface Scattering (SS) reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DisneyDiffusePBRTBRDF extends PBRTBXDF {
+public final class DisneyFakeSSPBRTBRDF extends PBRTBXDF {
 	private final Color3F reflectanceScale;
+	private final float roughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code DisneyDiffusePBRTBRDF} instance.
+	 * Constructs a new {@code DisneyFakeSSPBRTBRDF} instance.
 	 * <p>
 	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @param roughness a {@code float} that represents the roughness
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public DisneyDiffusePBRTBRDF(final Color3F reflectanceScale) {
+	public DisneyFakeSSPBRTBRDF(final Color3F reflectanceScale, final float roughness) {
 		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
+		this.roughness = roughness;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +84,7 @@ public final class DisneyDiffusePBRTBRDF extends PBRTBXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
-//		PBRT: Implementation of DisneyDiffuse.
+//		PBRT: Implementation of DisneyFakeSS.
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
@@ -102,7 +108,7 @@ public final class DisneyDiffusePBRTBRDF extends PBRTBXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
-//		PBRT: Implementation of DisneyDiffuse.
+//		PBRT: Implementation of DisneyFakeSS.
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
@@ -127,20 +133,33 @@ public final class DisneyDiffusePBRTBRDF extends PBRTBXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
-//		PBRT: Implementation of DisneyDiffuse.
+//		PBRT: Implementation of DisneyFakeSS.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final float fresnelOutgoing = fresnelSchlickWeight(outgoing.cosThetaAbs());
-		final float fresnelIncoming = fresnelSchlickWeight(incoming.cosThetaAbs());
+		final Vector3F normal = Vector3F.add(incoming, outgoing);
 		
-		final float a = 1.0F - fresnelOutgoing / 2.0F;
-		final float b = 1.0F - fresnelIncoming / 2.0F;
+		if(isZero(normal.getX()) && isZero(normal.getY()) && isZero(normal.getZ())) {
+			return Color3F.BLACK;
+		}
 		
-		final float component1 = this.reflectanceScale.getComponent1() * PI_RECIPROCAL * a * b;
-		final float component2 = this.reflectanceScale.getComponent2() * PI_RECIPROCAL * a * b;
-		final float component3 = this.reflectanceScale.getComponent3() * PI_RECIPROCAL * a * b;
+		final Vector3F normalNormalized = Vector3F.normalize(normal);
+		
+		final float cosThetaD = Vector3F.dotProduct(incoming, normalNormalized);
+		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
+		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
+		
+		final float fresnelSS90 = cosThetaD * cosThetaD * this.roughness;
+		final float fresnelOutgoing = fresnelSchlickWeight(cosThetaAbsOutgoing);
+		final float fresnelIncoming = fresnelSchlickWeight(cosThetaAbsIncoming);
+		final float fresnelSS = lerp(1.0F, fresnelSS90, fresnelOutgoing) * lerp(1.0F, fresnelSS90, fresnelIncoming);
+		
+		final float scaleSS = 1.25F * (fresnelSS * (1.0F / (cosThetaAbsOutgoing + cosThetaAbsIncoming) - 0.5F) + 0.5F);
+		
+		final float component1 = this.reflectanceScale.getComponent1() * PI_RECIPROCAL * scaleSS;
+		final float component2 = this.reflectanceScale.getComponent2() * PI_RECIPROCAL * scaleSS;
+		final float component3 = this.reflectanceScale.getComponent3() * PI_RECIPROCAL * scaleSS;
 		
 		return new Color3F(component1, component2, component3);
 	}
@@ -179,30 +198,32 @@ public final class DisneyDiffusePBRTBRDF extends PBRTBXDF {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code DisneyDiffusePBRTBRDF} instance.
+	 * Returns a {@code String} representation of this {@code DisneyFakeSSPBRTBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code DisneyDiffusePBRTBRDF} instance
+	 * @return a {@code String} representation of this {@code DisneyFakeSSPBRTBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new DisneyDiffusePBRTBRDF(%s)", this.reflectanceScale);
+		return String.format("new DisneyFakeSSPBRTBRDF(%s, %+.10f)", this.reflectanceScale, Float.valueOf(this.roughness));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code DisneyDiffusePBRTBRDF} instance for equality.
+	 * Compares {@code object} to this {@code DisneyFakeSSPBRTBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyDiffusePBRTBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyFakeSSPBRTBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code DisneyDiffusePBRTBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyDiffusePBRTBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code DisneyFakeSSPBRTBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyFakeSSPBRTBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof DisneyDiffusePBRTBRDF)) {
+		} else if(!(object instanceof DisneyFakeSSPBRTBRDF)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, DisneyDiffusePBRTBRDF.class.cast(object).reflectanceScale)) {
+		} else if(!Objects.equals(this.reflectanceScale, DisneyFakeSSPBRTBRDF.class.cast(object).reflectanceScale)) {
+			return false;
+		} else if(!equal(this.roughness, DisneyFakeSSPBRTBRDF.class.cast(object).roughness)) {
 			return false;
 		} else {
 			return true;
@@ -234,12 +255,12 @@ public final class DisneyDiffusePBRTBRDF extends PBRTBXDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code DisneyDiffusePBRTBRDF} instance.
+	 * Returns a hash code for this {@code DisneyFakeSSPBRTBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code DisneyDiffusePBRTBRDF} instance
+	 * @return a hash code for this {@code DisneyFakeSSPBRTBRDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.reflectanceScale);
+		return Objects.hash(this.reflectanceScale, Float.valueOf(this.roughness));
 	}
 }

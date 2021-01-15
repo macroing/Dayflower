@@ -398,7 +398,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 		
 		final Fresnel fresnel = new ConductorFresnel(colorEtaI, colorEtaT, colorK);
 		
-		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, roughnessU, roughnessV);
+		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV);
 		
 		return Optional.of(new PBRTBSDF(intersection, new TorranceSparrowPBRTBRDF(colorEtaI, fresnel, microfacetDistribution)));
 	}

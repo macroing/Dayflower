@@ -35,6 +35,7 @@ import org.dayflower.geometry.Vector3F;
  */
 public abstract class MicrofacetDistribution {
 	private final boolean isSamplingVisibleArea;
+	private final boolean isSeparableModel;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -42,9 +43,11 @@ public abstract class MicrofacetDistribution {
 	 * Constructs a new {@code MicrofacetDistribution} instance.
 	 * 
 	 * @param isSamplingVisibleArea {@code true} if, and only if, the visible area should be sampled, {@code false} otherwise
+	 * @param isSeparableModel {@code true} if, and only if, the separable shadowing and masking model should be used, {@code false} otherwise
 	 */
-	protected MicrofacetDistribution(final boolean isSamplingVisibleArea) {
+	protected MicrofacetDistribution(final boolean isSamplingVisibleArea, final boolean isSeparableModel) {
 		this.isSamplingVisibleArea = isSamplingVisibleArea;
+		this.isSeparableModel = isSeparableModel;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +75,15 @@ public abstract class MicrofacetDistribution {
 	 */
 	public final boolean isSamplingVisibleArea() {
 		return this.isSamplingVisibleArea;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, this {@code MicrofacetDistribution} instance is using the separable shadowing and masking model, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code MicrofacetDistribution} instance is using the separable shadowing and masking model, {@code false} otherwise
+	 */
+	public final boolean isSeparableModel() {
+		return this.isSeparableModel;
 	}
 	
 	/**
@@ -154,7 +166,7 @@ public abstract class MicrofacetDistribution {
 	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
 	 */
 	public final float computeShadowingAndMasking(final Vector3F outgoing, final Vector3F incoming) {
-		return 1.0F / (1.0F + computeLambda(outgoing) + computeLambda(incoming));
+		return this.isSeparableModel ? computeShadowingAndMasking(outgoing) * computeShadowingAndMasking(incoming) : 1.0F / (1.0F + computeLambda(outgoing) + computeLambda(incoming));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

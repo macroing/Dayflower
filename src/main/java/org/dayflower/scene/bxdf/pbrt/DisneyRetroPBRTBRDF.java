@@ -20,7 +20,7 @@ package org.dayflower.scene.bxdf.pbrt;
 
 import static org.dayflower.util.Floats.PI_RECIPROCAL;
 import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.fresnelWeightSchlick;
+import static org.dayflower.util.Floats.fresnelSchlickWeight;
 import static org.dayflower.util.Floats.isZero;
 
 import java.util.List;
@@ -147,8 +147,8 @@ public final class DisneyRetroPBRTBRDF extends PBRTBXDF {
 		
 		final float cosThetaD = Vector3F.dotProduct(incoming, normalNormalized);
 		
-		final float fresnelOutgoing = fresnelWeightSchlick(outgoing.cosThetaAbs());
-		final float fresnelIncoming = fresnelWeightSchlick(incoming.cosThetaAbs());
+		final float fresnelOutgoing = fresnelSchlickWeight(outgoing.cosThetaAbs());
+		final float fresnelIncoming = fresnelSchlickWeight(incoming.cosThetaAbs());
 		
 		final float a = 2.0F * this.roughness * cosThetaD * cosThetaD;
 		final float b = fresnelOutgoing + fresnelIncoming + fresnelOutgoing * fresnelIncoming * (a - 1.0F);

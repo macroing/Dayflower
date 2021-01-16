@@ -1028,6 +1028,23 @@ public final class DisneyPBRTMaterial implements PBRTMaterial {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
+		final float floatMetallic = this.textureMetallic.getFloat(intersection);
+		final float floatSpecularTransmission = this.textureSpecularTransmission.getFloat(intersection);
+		
+		final float diffuseWeight = (1.0F - floatMetallic) * (1.0F - floatSpecularTransmission);
+		
+		if(diffuseWeight > 0.0F && !this.isThin) {
+			final Color3F colorScatterDistance = this.textureScatterDistance.getColor(intersection);
+			
+			if(!colorScatterDistance.isBlack()) {
+//				final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
+				
+//				final float floatEta = this.textureEta.getFloat(intersection);
+				
+//				TODO: Add support for BSSRDF.
+			}
+		}
+		
 		return Optional.empty();
 	}
 	

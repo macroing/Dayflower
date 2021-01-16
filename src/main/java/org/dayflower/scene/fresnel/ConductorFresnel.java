@@ -18,13 +18,9 @@
  */
 package org.dayflower.scene.fresnel;
 
-import static org.dayflower.image.Color3F.add;
-import static org.dayflower.image.Color3F.divide;
-import static org.dayflower.image.Color3F.multiply;
-import static org.dayflower.image.Color3F.sqrt;
-import static org.dayflower.image.Color3F.subtract;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.saturate;
+import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
 
@@ -162,30 +158,68 @@ public final class ConductorFresnel implements Fresnel {
 	 */
 	public static Color3F evaluate(final float cosThetaI, final Color3F etaI, final Color3F etaT, final Color3F k) {
 		final float saturateCosThetaI = saturate(cosThetaI, -1.0F, 1.0F);
+		final float saturateCosThetaIMultipliedBy2 = saturateCosThetaI * 2.0F;
 		
-		final Color3F eta = divide(etaT, etaI);
-		final Color3F etaK = divide(k, etaI);
+		final float etaR = etaT.getR() / etaI.getR();
+		final float etaG = etaT.getG() / etaI.getG();
+		final float etaB = etaT.getB() / etaI.getB();
+		
+		final float etaKR = k.getR() / etaI.getR();
+		final float etaKG = k.getG() / etaI.getG();
+		final float etaKB = k.getB() / etaI.getB();
 		
 		final float cosThetaISquared = saturateCosThetaI * saturateCosThetaI;
 		final float sinThetaISquared = 1.0F - cosThetaISquared;
+		final float sinThetaISquaredSquared = sinThetaISquared * sinThetaISquared;
 		
-		final Color3F etaSquared = multiply(eta, eta);
-		final Color3F etaKSquared = multiply(etaK, etaK);
+		final float etaSquaredR = etaR * etaR;
+		final float etaSquaredG = etaG * etaG;
+		final float etaSquaredB = etaB * etaB;
 		
-		final Color3F t0 = subtract(etaSquared, etaKSquared, sinThetaISquared);
-		final Color3F t0Squared = multiply(t0, t0);
+		final float etaKSquaredR = etaKR * etaKR;
+		final float etaKSquaredG = etaKG * etaKG;
+		final float etaKSquaredB = etaKB * etaKB;
 		
-		final Color3F aSquaredPlusBSquared = sqrt(add(t0Squared, multiply(etaSquared, etaKSquared, 4.0F)));
+		final float t0R = etaSquaredR - etaKSquaredR - sinThetaISquared;
+		final float t0G = etaSquaredG - etaKSquaredG - sinThetaISquared;
+		final float t0B = etaSquaredB - etaKSquaredB - sinThetaISquared;
 		
-		final Color3F t1 = add(aSquaredPlusBSquared, cosThetaISquared);
-		final Color3F t2 = multiply(sqrt(multiply(add(aSquaredPlusBSquared, t0), 0.5F)), 2.0F * saturateCosThetaI);
-		final Color3F t3 = add(multiply(aSquaredPlusBSquared, cosThetaISquared), sinThetaISquared * sinThetaISquared);
-		final Color3F t4 = multiply(t2, sinThetaISquared);
+		final float t0SquaredR = t0R * t0R;
+		final float t0SquaredG = t0G * t0G;
+		final float t0SquaredB = t0B * t0B;
 		
-		final Color3F reflectanceS = divide(subtract(t1, t2), add(t1, t2));
-		final Color3F reflectanceP = divide(multiply(reflectanceS, subtract(t3, t4)), add(t3, t4));
-		final Color3F reflectance = multiply(add(reflectanceP, reflectanceS), 0.5F);
+		final float aSquaredPlusBSquaredR = sqrt(t0SquaredR + etaSquaredR * etaKSquaredR * 4.0F);
+		final float aSquaredPlusBSquaredG = sqrt(t0SquaredG + etaSquaredG * etaKSquaredG * 4.0F);
+		final float aSquaredPlusBSquaredB = sqrt(t0SquaredB + etaSquaredB * etaKSquaredB * 4.0F);
 		
-		return reflectance;
+		final float t1R = aSquaredPlusBSquaredR + cosThetaISquared;
+		final float t1G = aSquaredPlusBSquaredG + cosThetaISquared;
+		final float t1B = aSquaredPlusBSquaredB + cosThetaISquared;
+		
+		final float t2R = sqrt((aSquaredPlusBSquaredR + t0R) * 0.5F) * saturateCosThetaIMultipliedBy2;
+		final float t2G = sqrt((aSquaredPlusBSquaredG + t0G) * 0.5F) * saturateCosThetaIMultipliedBy2;
+		final float t2B = sqrt((aSquaredPlusBSquaredB + t0B) * 0.5F) * saturateCosThetaIMultipliedBy2;
+		
+		final float t3R = aSquaredPlusBSquaredR * cosThetaISquared + sinThetaISquaredSquared;
+		final float t3G = aSquaredPlusBSquaredG * cosThetaISquared + sinThetaISquaredSquared;
+		final float t3B = aSquaredPlusBSquaredB * cosThetaISquared + sinThetaISquaredSquared;
+		
+		final float t4R = t2R * sinThetaISquared;
+		final float t4G = t2G * sinThetaISquared;
+		final float t4B = t2B * sinThetaISquared;
+		
+		final float reflectanceSR = (t1R - t2R) / (t1R + t2R);
+		final float reflectanceSG = (t1G - t2G) / (t1G + t2G);
+		final float reflectanceSB = (t1B - t2B) / (t1B + t2B);
+		
+		final float reflectancePR = reflectanceSR * (t3R - t4R) / (t3R + t4R);
+		final float reflectancePG = reflectanceSG * (t3G - t4G) / (t3G + t4G);
+		final float reflectancePB = reflectanceSB * (t3B - t4B) / (t3B + t4B);
+		
+		final float reflectanceR = (reflectancePR + reflectanceSR) * 0.5F;
+		final float reflectanceG = (reflectancePG + reflectanceSG) * 0.5F;
+		final float reflectanceB = (reflectancePB + reflectanceSB) * 0.5F;
+		
+		return new Color3F(reflectanceR, reflectanceG, reflectanceB);
 	}
 }

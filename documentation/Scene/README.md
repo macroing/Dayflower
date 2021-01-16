@@ -26,6 +26,7 @@ Below follows a few lists of features available in the Scene API.
 * `JavaSceneLoader` - A `SceneLoader` that produces `Scene` instances by loading, compiling and executing snippets of Java source code.
 
 #### The Scene Material PBRT API
+* `DisneyPBRTMaterial` - A `Material` that represents a Disney material.
 * `GlassPBRTMaterial` - A `Material` that represents glass.
 * `HairPBRTMaterial` - A `Material` that represents hair.
 * `MattePBRTMaterial` - A `Material` that is used for matte surfaces.

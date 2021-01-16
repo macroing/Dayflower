@@ -81,6 +81,13 @@ Examples
 --------
 Below follows a few examples that demonstrates various features.
 
+#### Disney PBRT Material Example
+The following example demonstrates how the `DisneyPBRTMaterial` can be created and looks visually.
+```java
+new DisneyPBRTMaterial(new Color3F(255, 127, 80), Color3F.BLACK, Color3F.BLACK, 0.4F, 1.75F, 1.0F, 1.0F, 1.2F, 0.0F, 0.39F, 0.475F, 0.1F, 0.5F, 0.5F, 0.0F);
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/DisneyPBRTMaterial.png "DisneyPBRTMaterial")
+
 #### Metal PBRT Material Example
 The following example demonstrates how the `MetalPBRTMaterial` can be created and looks visually.
 ```java

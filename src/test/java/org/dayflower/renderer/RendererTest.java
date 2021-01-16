@@ -37,12 +37,12 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestCPURendererAmbientOcclusion();
-//		doTestCPURendererPathTracingPBRT();
+		doTestCPURendererPathTracingPBRT();
 //		doTestCPURendererPathTracingRayito();
 //		doTestCPURendererPathTracingSmallPTIterative();
 //		doTestCPURendererPathTracingSmallPTRecursive();
 //		doTestCPURendererRayCasting();
-		doTestGPURenderer();
+//		doTestGPURenderer();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ public final class RendererTest {
 	
 	static void doTestCPURendererPathTracingPBRT() {
 		final
-		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_P_B_R_T, "./resources/scenes/PBRTShowcaseShape3FConstructiveSolidGeometry3F.java");
+		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_P_B_R_T, "./resources/scenes/PBRTShowcaseMaterial.java");
 		renderer.render();
 	}
 	

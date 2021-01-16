@@ -54,7 +54,7 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	/**
 	 * The ID of this {@code MattePBRTMaterial} class.
 	 */
-	public static final int ID = 102;
+	public static final int ID = 103;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

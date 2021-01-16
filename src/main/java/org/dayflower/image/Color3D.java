@@ -1570,6 +1570,27 @@ public final class Color3D {
 	}
 	
 	/**
+	 * Normalizes the component values of {@code color} based on its luminance.
+	 * <p>
+	 * Returns a new {@code Color3D} instance with the result of the normalization.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3D} instance
+	 * @return a new {@code Color3D} instance with the result of the normalization
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3D normalizeLuminance(final Color3D color) {
+		final double luminance = color.luminance();
+		
+		if(luminance > 0.0D) {
+			return divide(color, luminance);
+		}
+		
+		return WHITE;
+	}
+	
+	/**
 	 * Returns a {@code Color3D} instance with random component values.
 	 * <p>
 	 * Calling this method is equivalent to the following:

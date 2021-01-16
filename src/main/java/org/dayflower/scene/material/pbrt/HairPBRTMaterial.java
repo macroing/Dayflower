@@ -51,7 +51,7 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 	/**
 	 * The ID of this {@code HairPBRTMaterial} class.
 	 */
-	public static final int ID = 101;
+	public static final int ID = 102;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

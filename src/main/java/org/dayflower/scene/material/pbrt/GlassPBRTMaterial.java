@@ -62,7 +62,7 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 	/**
 	 * The ID of this {@code GlassPBRTMaterial} class.
 	 */
-	public static final int ID = 100;
+	public static final int ID = 101;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

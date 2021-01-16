@@ -53,7 +53,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	/**
 	 * The ID of this {@code MetalPBRTMaterial} class.
 	 */
-	public static final int ID = 103;
+	public static final int ID = 104;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

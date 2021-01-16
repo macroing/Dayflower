@@ -57,7 +57,7 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 	/**
 	 * The ID of this {@code PlasticPBRTMaterial} class.
 	 */
-	public static final int ID = 105;
+	public static final int ID = 106;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

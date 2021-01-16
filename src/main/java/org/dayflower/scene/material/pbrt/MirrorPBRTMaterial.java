@@ -50,7 +50,7 @@ public final class MirrorPBRTMaterial implements PBRTMaterial {
 	/**
 	 * The ID of this {@code MirrorPBRTMaterial} class.
 	 */
-	public static final int ID = 104;
+	public static final int ID = 105;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

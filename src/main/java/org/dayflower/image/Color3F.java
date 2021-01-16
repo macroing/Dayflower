@@ -1602,6 +1602,27 @@ public final class Color3F {
 	}
 	
 	/**
+	 * Normalizes the component values of {@code color} based on its luminance.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result of the normalization.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color3F} instance
+	 * @return a new {@code Color3F} instance with the result of the normalization
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color3F normalizeLuminance(final Color3F color) {
+		final float luminance = color.luminance();
+		
+		if(luminance > 0.0F) {
+			return divide(color, luminance);
+		}
+		
+		return WHITE;
+	}
+	
+	/**
 	 * Returns a {@code Color3F} instance with random component values.
 	 * <p>
 	 * Calling this method is equivalent to the following:

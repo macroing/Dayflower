@@ -58,7 +58,7 @@ public final class UberPBRTMaterial implements PBRTMaterial {
 	/**
 	 * The ID of this {@code UberPBRTMaterial} class.
 	 */
-	public static final int ID = 107;
+	public static final int ID = 108;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

@@ -20,7 +20,7 @@ package org.dayflower.javafx.application;
 
 import java.util.Objects;
 
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.renderer.ProgressiveImageOrderRenderer;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererObserver;
@@ -47,7 +47,7 @@ final class RendererObserverImpl implements RendererObserver {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
-	public void onRenderDisplay(final Renderer renderer, final Image image) {
+	public void onRenderDisplay(final Renderer renderer, final ImageF image) {
 //		Do nothing.
 	}
 	

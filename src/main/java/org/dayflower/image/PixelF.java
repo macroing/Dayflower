@@ -27,12 +27,12 @@ import org.dayflower.util.BufferedImages;
 import org.dayflower.util.ParameterArguments;
 
 /**
- * A {@code Pixel} is a pixel of an {@link Image} instance.
+ * A {@code PixelF} is a pixel of a {@link PixelImage} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class Pixel {
+public final class PixelF {
 	private Color3F colorXYZ;
 	private Color3F splatXYZ;
 	private Color4F colorRGBA;
@@ -44,23 +44,23 @@ public final class Pixel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code Pixel} instance.
+	 * Constructs a new {@code PixelF} instance.
 	 * <p>
 	 * If either {@code colorRGBA}, {@code colorXYZ} or {@code splatXYZ} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If either {@code index}, {@code x} or {@code y} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param colorRGBA the current color of this {@code Pixel} instance
-	 * @param colorXYZ the current color of this {@code Pixel} instance that is used by the film
-	 * @param splatXYZ the current splat of this {@code Pixel} instance that is used by the film
-	 * @param filterWeightSum the filter weight sum of this {@code Pixel} instance that is used by the film
-	 * @param index the index of this {@code Pixel} instance
-	 * @param x the X-coordinate of this {@code Pixel} instance
-	 * @param y the Y-coordinate of this {@code Pixel} instance
+	 * @param colorRGBA the current color of this {@code PixelF} instance
+	 * @param colorXYZ the current color of this {@code PixelF} instance that is used by the film
+	 * @param splatXYZ the current splat of this {@code PixelF} instance that is used by the film
+	 * @param filterWeightSum the filter weight sum of this {@code PixelF} instance that is used by the film
+	 * @param index the index of this {@code PixelF} instance
+	 * @param x the X-coordinate of this {@code PixelF} instance
+	 * @param y the Y-coordinate of this {@code PixelF} instance
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code index}, {@code x} or {@code y} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA}, {@code colorXYZ} or {@code splatXYZ} are {@code null}
 	 */
-	public Pixel(final Color4F colorRGBA, final Color3F colorXYZ, final Color3F splatXYZ, final float filterWeightSum, final int index, final int x, final int y) {
+	public PixelF(final Color4F colorRGBA, final Color3F colorXYZ, final Color3F splatXYZ, final float filterWeightSum, final int index, final int x, final int y) {
 		this.colorRGBA = Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		this.colorXYZ = Objects.requireNonNull(colorXYZ, "colorXYZ == null");
 		this.splatXYZ = Objects.requireNonNull(splatXYZ, "splatXYZ == null");
@@ -73,87 +73,87 @@ public final class Pixel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the current color of this {@code Pixel} instance.
+	 * Returns the current color of this {@code PixelF} instance.
 	 * 
-	 * @return the current color of this {@code Pixel} instance
+	 * @return the current color of this {@code PixelF} instance
 	 */
 	public Color3F getColorRGB() {
 		return new Color3F(this.colorRGBA);
 	}
 	
 	/**
-	 * Returns the current color of this {@code Pixel} instance that is used by the film.
+	 * Returns the current color of this {@code PixelF} instance that is used by the film.
 	 * 
-	 * @return the current color of this {@code Pixel} instance that is used by the film
+	 * @return the current color of this {@code PixelF} instance that is used by the film
 	 */
 	public Color3F getColorXYZ() {
 		return this.colorXYZ;
 	}
 	
 	/**
-	 * Returns the current splat of this {@code Pixel} instance that is used by the film.
+	 * Returns the current splat of this {@code PixelF} instance that is used by the film.
 	 * 
-	 * @return the current splat of this {@code Pixel} instance that is used by the film
+	 * @return the current splat of this {@code PixelF} instance that is used by the film
 	 */
 	public Color3F getSplatXYZ() {
 		return this.splatXYZ;
 	}
 	
 	/**
-	 * Returns the current color of this {@code Pixel} instance.
+	 * Returns the current color of this {@code PixelF} instance.
 	 * 
-	 * @return the current color of this {@code Pixel} instance
+	 * @return the current color of this {@code PixelF} instance
 	 */
 	public Color4F getColorRGBA() {
 		return this.colorRGBA;
 	}
 	
 	/**
-	 * Returns a copy of this {@code Pixel} instance.
+	 * Returns a copy of this {@code PixelF} instance.
 	 * 
-	 * @return a copy of this {@code Pixel} instance
+	 * @return a copy of this {@code PixelF} instance
 	 */
-	public Pixel copy() {
-		return new Pixel(this.colorRGBA, this.colorXYZ, this.splatXYZ, this.filterWeightSum, this.index, this.x, this.y);
+	public PixelF copy() {
+		return new PixelF(this.colorRGBA, this.colorXYZ, this.splatXYZ, this.filterWeightSum, this.index, this.x, this.y);
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code Pixel} instance.
+	 * Returns a {@code String} representation of this {@code PixelF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code Pixel} instance
+	 * @return a {@code String} representation of this {@code PixelF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Pixel(%s, %s, %s, %+.10f, %d, %d, %d)", this.colorRGBA, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
+		return String.format("new PixelF(%s, %s, %s, %+.10f, %d, %d, %d)", this.colorRGBA, this.colorXYZ, this.splatXYZ, Float.valueOf(this.filterWeightSum), Integer.valueOf(this.index), Integer.valueOf(this.x), Integer.valueOf(this.y));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code Pixel} instance for equality.
+	 * Compares {@code object} to this {@code PixelF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Pixel}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PixelF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code Pixel} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code Pixel}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code PixelF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PixelF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof Pixel)) {
+		} else if(!(object instanceof PixelF)) {
 			return false;
-		} else if(!Objects.equals(this.colorXYZ, Pixel.class.cast(object).colorXYZ)) {
+		} else if(!Objects.equals(this.colorXYZ, PixelF.class.cast(object).colorXYZ)) {
 			return false;
-		} else if(!Objects.equals(this.splatXYZ, Pixel.class.cast(object).splatXYZ)) {
+		} else if(!Objects.equals(this.splatXYZ, PixelF.class.cast(object).splatXYZ)) {
 			return false;
-		} else if(!Objects.equals(this.colorRGBA, Pixel.class.cast(object).colorRGBA)) {
+		} else if(!Objects.equals(this.colorRGBA, PixelF.class.cast(object).colorRGBA)) {
 			return false;
-		} else if(!equal(this.filterWeightSum, Pixel.class.cast(object).filterWeightSum)) {
+		} else if(!equal(this.filterWeightSum, PixelF.class.cast(object).filterWeightSum)) {
 			return false;
-		} else if(this.index != Pixel.class.cast(object).index) {
+		} else if(this.index != PixelF.class.cast(object).index) {
 			return false;
-		} else if(this.x != Pixel.class.cast(object).x) {
+		} else if(this.x != PixelF.class.cast(object).x) {
 			return false;
-		} else if(this.y != Pixel.class.cast(object).y) {
+		} else if(this.y != PixelF.class.cast(object).y) {
 			return false;
 		} else {
 			return true;
@@ -161,36 +161,36 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Returns the filter weight sum of this {@code Pixel} instance that is used by the film.
+	 * Returns the filter weight sum of this {@code PixelF} instance that is used by the film.
 	 * 
-	 * @return the filter weight sum of this {@code Pixel} instance that is used by the film
+	 * @return the filter weight sum of this {@code PixelF} instance that is used by the film
 	 */
 	public float getFilterWeightSum() {
 		return this.filterWeightSum;
 	}
 	
 	/**
-	 * Returns the index of this {@code Pixel} instance.
+	 * Returns the index of this {@code PixelF} instance.
 	 * 
-	 * @return the index of this {@code Pixel} instance
+	 * @return the index of this {@code PixelF} instance
 	 */
 	public int getIndex() {
 		return this.index;
 	}
 	
 	/**
-	 * Returns the X-coordinate of this {@code Pixel} instance.
+	 * Returns the X-coordinate of this {@code PixelF} instance.
 	 * 
-	 * @return the X-coordinate of this {@code Pixel} instance
+	 * @return the X-coordinate of this {@code PixelF} instance
 	 */
 	public int getX() {
 		return this.x;
 	}
 	
 	/**
-	 * Returns the Y-coordinate of this {@code Pixel} instance.
+	 * Returns the Y-coordinate of this {@code PixelF} instance.
 	 * 
-	 * @return the Y-coordinate of this {@code Pixel} instance
+	 * @return the Y-coordinate of this {@code PixelF} instance
 	 */
 	public int getY() {
 		return this.y;
@@ -237,9 +237,9 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code Pixel} instance.
+	 * Returns a hash code for this {@code PixelF} instance.
 	 * 
-	 * @return a hash code for this {@code Pixel} instance
+	 * @return a hash code for this {@code PixelF} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -247,11 +247,11 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Adds {@code colorXYZ} to the color of this {@code Pixel} instance that is used by the film.
+	 * Adds {@code colorXYZ} to the color of this {@code PixelF} instance that is used by the film.
 	 * <p>
 	 * If {@code colorXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param colorXYZ the color to add to this {@code Pixel} instance
+	 * @param colorXYZ the color to add to this {@code PixelF} instance
 	 * @param sampleWeight the sample weight to use
 	 * @param filterWeight the filter weight to use
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
@@ -262,11 +262,11 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Adds {@code splatXYZ} to the splat of this {@code Pixel} instance that is used by the film.
+	 * Adds {@code splatXYZ} to the splat of this {@code PixelF} instance that is used by the film.
 	 * <p>
 	 * If {@code splatXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param splatXYZ the splat to add to this {@code Pixel} instance
+	 * @param splatXYZ the splat to add to this {@code PixelF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
 	 */
 	public void addSplatXYZ(final Color3F splatXYZ) {
@@ -274,11 +274,11 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Sets {@code colorRGB} as the color of this {@code Pixel} instance.
+	 * Sets {@code colorRGB} as the color of this {@code PixelF} instance.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param colorRGB the color of this {@code Pixel} instance
+	 * @param colorRGB the color of this {@code PixelF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
 	public void setColorRGB(final Color3F colorRGB) {
@@ -286,11 +286,11 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Sets {@code colorRGBA} as the color of this {@code Pixel} instance.
+	 * Sets {@code colorRGBA} as the color of this {@code PixelF} instance.
 	 * <p>
 	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param colorRGBA the color of this {@code Pixel} instance
+	 * @param colorRGBA the color of this {@code PixelF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
 	public void setColorRGBA(final Color4F colorRGBA) {
@@ -298,11 +298,11 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Sets {@code colorXYZ} as the color of this {@code Pixel} instance that is used by the film.
+	 * Sets {@code colorXYZ} as the color of this {@code PixelF} instance that is used by the film.
 	 * <p>
 	 * If {@code colorXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param colorXYZ the color of this {@code Pixel} instance that is used by the film
+	 * @param colorXYZ the color of this {@code PixelF} instance that is used by the film
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
 	 */
 	public void setColorXYZ(final Color3F colorXYZ) {
@@ -310,20 +310,20 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Sets {@code filterWeightSum} as the filter weight sum of this {@code Pixel} instance that is used by the film.
+	 * Sets {@code filterWeightSum} as the filter weight sum of this {@code PixelF} instance that is used by the film.
 	 * 
-	 * @param filterWeightSum the filter weight sum of this {@code Pixel} instance that is used by the film
+	 * @param filterWeightSum the filter weight sum of this {@code PixelF} instance that is used by the film
 	 */
 	public void setFilterWeightSum(final float filterWeightSum) {
 		this.filterWeightSum = filterWeightSum;
 	}
 	
 	/**
-	 * Sets {@code index} as the index of this {@code Pixel} instance.
+	 * Sets {@code index} as the index of this {@code PixelF} instance.
 	 * <p>
 	 * If {@code index} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param index the index of this {@code Pixel} instance
+	 * @param index the index of this {@code PixelF} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code index} is less than {@code 0}
 	 */
 	public void setIndex(final int index) {
@@ -331,11 +331,11 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Sets {@code splatXYZ} as the splat of this {@code Pixel} instance that is used by the film.
+	 * Sets {@code splatXYZ} as the splat of this {@code PixelF} instance that is used by the film.
 	 * <p>
 	 * If {@code splatXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param splatXYZ the splat of this {@code Pixel} instance that is used by the film
+	 * @param splatXYZ the splat of this {@code PixelF} instance that is used by the film
 	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
 	 */
 	public void setSplatXYZ(final Color3F splatXYZ) {
@@ -343,11 +343,11 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Sets {@code x} as the X-coordinate of this {@code Pixel} instance.
+	 * Sets {@code x} as the X-coordinate of this {@code PixelF} instance.
 	 * <p>
 	 * If {@code x} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param x the X-coordinate of this {@code Pixel} instance
+	 * @param x the X-coordinate of this {@code PixelF} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code x} is less than {@code 0}
 	 */
 	public void setX(final int x) {
@@ -355,11 +355,11 @@ public final class Pixel {
 	}
 	
 	/**
-	 * Sets {@code y} as the Y-coordinate of this {@code Pixel} instance.
+	 * Sets {@code y} as the Y-coordinate of this {@code PixelF} instance.
 	 * <p>
 	 * If {@code y} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param y the Y-coordinate of this {@code Pixel} instance
+	 * @param y the Y-coordinate of this {@code PixelF} instance
 	 * @throws IllegalArgumentException thrown if, and only if, {@code y} is less than {@code 0}
 	 */
 	public void setY(final int y) {
@@ -369,21 +369,21 @@ public final class Pixel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns an array with {@code Pixel} instances filled with the {@code Color4F} instances in {@code bufferedImage}.
+	 * Returns an array with {@code PixelF} instances filled with the {@code Color4F} instances in {@code bufferedImage}.
 	 * <p>
 	 * If {@code bufferedImage} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bufferedImage a {@code BufferedImage} instance
-	 * @return an array with {@code Pixel} instances filled with the {@code Color4F} instances in {@code bufferedImage}
+	 * @return an array with {@code PixelF} instances filled with the {@code Color4F} instances in {@code bufferedImage}
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
-	public static Pixel[] createPixels(final BufferedImage bufferedImage) {
+	public static PixelF[] createPixels(final BufferedImage bufferedImage) {
 		final BufferedImage compatibleBufferedImage = BufferedImages.getCompatibleBufferedImage(bufferedImage);
 		
 		final int resolutionX = compatibleBufferedImage.getWidth();
 		final int resolutionY = compatibleBufferedImage.getHeight();
 		
-		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
+		final PixelF[] pixels = new PixelF[resolutionX * resolutionY];
 		
 		for(int i = 0; i < pixels.length; i++) {
 			final int index = i;
@@ -392,14 +392,14 @@ public final class Pixel {
 			
 			final Color4F colorRGBA = Color4F.unpack(compatibleBufferedImage.getRGB(x, y));
 			
-			pixels[i] = new Pixel(colorRGBA, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
+			pixels[i] = new PixelF(colorRGBA, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
 		}
 		
 		return pixels;
 	}
 	
 	/**
-	 * Returns an array with {@code Pixel} instances filled with {@code colorRGBA}.
+	 * Returns an array with {@code PixelF} instances filled with {@code colorRGBA}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -407,33 +407,33 @@ public final class Pixel {
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBA the {@link Color4F} to fill the {@code Pixel} instances with
-	 * @return an array with {@code Pixel} instances filled with {@code colorRGBA}
+	 * @param colorRGBA the {@link Color4F} to fill the {@code PixelF} instances with
+	 * @return an array with {@code PixelF} instances filled with {@code colorRGBA}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
-	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color4F colorRGBA) {
+	public static PixelF[] createPixels(final int resolutionX, final int resolutionY, final Color4F colorRGBA) {
 		ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
 		
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
-		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
+		final PixelF[] pixels = new PixelF[resolutionX * resolutionY];
 		
 		for(int i = 0; i < pixels.length; i++) {
 			final int index = i;
 			final int x = index % resolutionX;
 			final int y = index / resolutionX;
 			
-			pixels[i] = new Pixel(colorRGBA, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
+			pixels[i] = new PixelF(colorRGBA, Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
 		}
 		
 		return pixels;
 	}
 	
 	/**
-	 * Returns an array with {@code Pixel} instances filled with the {@code Color4F} instances in the array {@code colorRGBAs}.
+	 * Returns an array with {@code PixelF} instances filled with the {@code Color4F} instances in the array {@code colorRGBAs}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -441,12 +441,12 @@ public final class Pixel {
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBAs the {@link Color4F} instances to fill the {@code Pixel} instances with
-	 * @return an array with {@code Pixel} instances filled with the {@code Color4F} instances in the array {@code colorRGBAs}
+	 * @param colorRGBAs the {@link Color4F} instances to fill the {@code PixelF} instances with
+	 * @return an array with {@code PixelF} instances filled with the {@code Color4F} instances in the array {@code colorRGBAs}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or at least one of its elements are {@code null}
 	 */
-	public static Pixel[] createPixels(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs) {
+	public static PixelF[] createPixels(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs) {
 		ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -455,29 +455,29 @@ public final class Pixel {
 		
 		ParameterArguments.requireExact(colorRGBAs.length, resolutionX * resolutionY, "colorRGBAs.length");
 		
-		final Pixel[] pixels = new Pixel[resolutionX * resolutionY];
+		final PixelF[] pixels = new PixelF[resolutionX * resolutionY];
 		
 		for(int i = 0; i < pixels.length; i++) {
 			final int index = i;
 			final int x = index % resolutionX;
 			final int y = index / resolutionX;
 			
-			pixels[i] = new Pixel(Objects.requireNonNull(colorRGBAs[i], String.format("colorRGBAs[%d] == null", Integer.valueOf(i))), Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
+			pixels[i] = new PixelF(Objects.requireNonNull(colorRGBAs[i], String.format("colorRGBAs[%d] == null", Integer.valueOf(i))), Color3F.BLACK, Color3F.BLACK, 0.0F, index, x, y);
 		}
 		
 		return pixels;
 	}
 	
 	/**
-	 * Swaps the data contained in the two {@code Pixel} instances.
+	 * Swaps the data contained in the two {@code PixelF} instances.
 	 * <p>
 	 * If either {@code pixelA} or {@code pixelB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pixelA one of the {@code Pixel} instances to swap
-	 * @param pixelB one of the {@code Pixel} instances to swap
+	 * @param pixelA one of the {@code PixelF} instances to swap
+	 * @param pixelB one of the {@code PixelF} instances to swap
 	 * @throws NullPointerException thrown if, and only if, either {@code pixelA} or {@code pixelB} are {@code null}
 	 */
-	public static void swap(final Pixel pixelA, final Pixel pixelB) {
+	public static void swap(final PixelF pixelA, final PixelF pixelB) {
 		final Color3F colorXYZA = pixelA.getColorXYZ();
 		final Color3F colorXYZB = pixelB.getColorXYZ();
 		final Color3F splatXYZA = pixelA.getSplatXYZ();

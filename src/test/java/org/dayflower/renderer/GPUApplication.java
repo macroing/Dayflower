@@ -23,8 +23,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.dayflower.image.ByteImage;
-import org.dayflower.image.Image;
+import org.dayflower.image.ByteImageF;
+import org.dayflower.image.ImageF;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas.Observer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
@@ -65,7 +65,7 @@ public final class GPUApplication extends Application {
 	public void start(final Stage stage) {
 		final Renderer renderer = this.renderer;
 		
-		final ByteImage byteImage = ByteImage.class.cast(renderer.getImage());
+		final ByteImageF byteImage = ByteImageF.class.cast(renderer.getImage());
 		
 		final Camera camera = renderer.getScene().getCamera();
 		
@@ -159,7 +159,7 @@ public final class GPUApplication extends Application {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("unused")
-	private boolean doRender(final Image image) {
+	private boolean doRender(final ImageF image) {
 		return this.renderer.render();
 	}
 	
@@ -170,7 +170,7 @@ public final class GPUApplication extends Application {
 		
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new GPURenderer();
-		combinedProgressiveImageOrderRenderer.setImage(new ByteImage((int)(scene.getCamera().getResolutionX()), (int)(scene.getCamera().getResolutionY())));
+		combinedProgressiveImageOrderRenderer.setImage(new ByteImageF((int)(scene.getCamera().getResolutionX()), (int)(scene.getCamera().getResolutionY())));
 		combinedProgressiveImageOrderRenderer.setRenderPasses(1);
 		combinedProgressiveImageOrderRenderer.setRendererObserver(new NoOpRendererObserver());
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);
@@ -218,7 +218,7 @@ public final class GPUApplication extends Application {
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		@Override
-		public void onRenderDisplay(final Renderer renderer, final Image image) {
+		public void onRenderDisplay(final Renderer renderer, final ImageF image) {
 			
 		}
 		

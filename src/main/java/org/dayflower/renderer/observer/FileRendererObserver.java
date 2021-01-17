@@ -21,12 +21,12 @@ package org.dayflower.renderer.observer;
 import java.io.File;
 import java.util.Objects;
 
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererObserver;
 
 /**
- * A {@code FileRendererObserver} is a {@link RendererObserver} implementation that writes the {@link Image} to a file.
+ * A {@code FileRendererObserver} is a {@link RendererObserver} implementation that writes the {@link ImageF} to a file.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -175,11 +175,11 @@ public final class FileRendererObserver implements RendererObserver {
 	 * If either {@code renderer} or {@code image} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param renderer the {@link Renderer} instance that called this method
-	 * @param image the {@link Image} instance that is rendered to
+	 * @param image the {@link ImageF} instance that is rendered to
 	 * @throws NullPointerException thrown if, and only if, either {@code renderer} or {@code image} are {@code null}
 	 */
 	@Override
-	public void onRenderDisplay(final Renderer renderer, final Image image) {
+	public void onRenderDisplay(final Renderer renderer, final ImageF image) {
 		Objects.requireNonNull(renderer, "renderer == null");
 		Objects.requireNonNull(image, "image == null");
 		

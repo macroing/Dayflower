@@ -28,16 +28,16 @@ import org.dayflower.geometry.shape.Rectangle2I;
 import javafx.scene.image.WritableImage;
 
 /**
- * An {@code Image} is an image that can be drawn to.
+ * An {@code ImageF} is an image that can be drawn to.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Image {
+public interface ImageF {
 	/**
-	 * Returns a {@code BufferedImage} representation of this {@code Image} instance.
+	 * Returns a {@code BufferedImage} representation of this {@code ImageF} instance.
 	 * 
-	 * @return a {@code BufferedImage} representation of this {@code Image} instance
+	 * @return a {@code BufferedImage} representation of this {@code ImageF} instance
 	 */
 	BufferedImage toBufferedImage();
 	
@@ -137,41 +137,41 @@ public interface Image {
 	Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation);
 	
 	/**
-	 * Returns a copy of this {@code Image} instance.
+	 * Returns a copy of this {@code ImageF} instance.
 	 * 
-	 * @return a copy of this {@code Image} instance
+	 * @return a copy of this {@code ImageF} instance
 	 */
-	Image copy();
+	ImageF copy();
 	
 	/**
-	 * Finds the bounds for {@code image} in this {@code Image} instance.
+	 * Finds the bounds for {@code image} in this {@code ImageF} instance.
 	 * <p>
-	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code Image} instance.
+	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code ImageF} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image an {@code Image} instance
-	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code Image} instance
+	 * @param image an {@code ImageF} instance
+	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	List<Rectangle2I> findBoundsFor(final Image image);
+	List<Rectangle2I> findBoundsFor(final ImageF image);
 	
 	/**
-	 * Returns a {@link Rectangle2I} with the bounds of this {@code Image} instance.
+	 * Returns a {@link Rectangle2I} with the bounds of this {@code ImageF} instance.
 	 * 
-	 * @return a {@code Rectangle2I} with the bounds of this {@code Image} instance
+	 * @return a {@code Rectangle2I} with the bounds of this {@code ImageF} instance
 	 */
 	Rectangle2I getBounds();
 	
 	/**
-	 * Returns a {@code WritableImage} representation of this {@code Image} instance.
+	 * Returns a {@code WritableImage} representation of this {@code ImageF} instance.
 	 * 
-	 * @return a {@code WritableImage} representation of this {@code Image} instance
+	 * @return a {@code WritableImage} representation of this {@code ImageF} instance
 	 */
 	WritableImage toWritableImage();
 	
 	/**
-	 * Returns the resolution of this {@code Image} instance.
+	 * Returns the resolution of this {@code ImageF} instance.
 	 * <p>
 	 * The resolution of {@code image} can be computed by:
 	 * <pre>
@@ -180,30 +180,30 @@ public interface Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @return the resolution of this {@code Image} instance
+	 * @return the resolution of this {@code ImageF} instance
 	 */
 	int getResolution();
 	
 	/**
-	 * Returns the resolution of the X-axis of this {@code Image} instance.
+	 * Returns the resolution of the X-axis of this {@code ImageF} instance.
 	 * <p>
 	 * The resolution of the X-axis is also known as the width.
 	 * 
-	 * @return the resolution of the X-axis of this {@code Image} instance
+	 * @return the resolution of the X-axis of this {@code ImageF} instance
 	 */
 	int getResolutionX();
 	
 	/**
-	 * Returns the resolution of the Y-axis of this {@code Image} instance.
+	 * Returns the resolution of the Y-axis of this {@code ImageF} instance.
 	 * <p>
 	 * The resolution of the Y-axis is also known as the height.
 	 * 
-	 * @return the resolution of the Y-axis of this {@code Image} instance
+	 * @return the resolution of the Y-axis of this {@code ImageF} instance
 	 */
 	int getResolutionY();
 	
 	/**
-	 * Returns an {@code int[]} representation of this {@code Image} instance in a packed form.
+	 * Returns an {@code int[]} representation of this {@code ImageF} instance in a packed form.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -212,23 +212,23 @@ public interface Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @return an {@code int[]} representation of this {@code Image} instance in a packed form
+	 * @return an {@code int[]} representation of this {@code ImageF} instance in a packed form
 	 */
 	int[] toIntArrayPackedForm();
 	
 	/**
-	 * Returns an {@code int[]} representation of this {@code Image} instance in a packed form.
+	 * Returns an {@code int[]} representation of this {@code ImageF} instance in a packed form.
 	 * <p>
 	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder}
-	 * @return an {@code int[]} representation of this {@code Image} instance in a packed form
+	 * @return an {@code int[]} representation of this {@code ImageF} instance in a packed form
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
 	int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder);
 	
 	/**
-	 * Copies the individual component values of the colors in this {@code Image} instance to the {@code byte[]} {@code array}.
+	 * Copies the individual component values of the colors in this {@code ImageF} instance to the {@code byte[]} {@code array}.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -241,20 +241,20 @@ public interface Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code Image} instance to
+	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ImageF} instance to
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != image.getResolution() * ArrayComponentOrder.BGRA.getComponentCount()}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	void copyTo(final byte[] array);
 	
 	/**
-	 * Copies the individual component values of the colors in this {@code Image} instance to the {@code byte[]} {@code array}.
+	 * Copies the individual component values of the colors in this {@code ImageF} instance to the {@code byte[]} {@code array}.
 	 * <p>
 	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code array.length != image.getResolution() * arrayComponentOrder.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code Image} instance to
+	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ImageF} instance to
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder} to copy the components to {@code array} in the correct order
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != image.getResolution() * arrayComponentOrder.getComponentCount()}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
@@ -262,7 +262,7 @@ public interface Image {
 	void copyTo(final byte[] array, final ArrayComponentOrder arrayComponentOrder);
 	
 	/**
-	 * Saves this {@code Image} as a .PNG image to the file represented by {@code file}.
+	 * Saves this {@code ImageF} as a .PNG image to the file represented by {@code file}.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -275,7 +275,7 @@ public interface Image {
 	void save(final File file);
 	
 	/**
-	 * Saves this {@code Image} as a .PNG image to the file represented by the pathname {@code pathname}.
+	 * Saves this {@code ImageF} as a .PNG image to the file represented by the pathname {@code pathname}.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>

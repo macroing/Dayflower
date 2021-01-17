@@ -21,7 +21,7 @@ package org.dayflower.image;
 import static org.dayflower.util.Ints.positiveModulo;
 
 /**
- * A {@code PixelOperation} provides a set of operations to perform on a pixel when it is outside the boundaries of an {@link Image} instance.
+ * A {@code PixelOperation} provides a set of operations to perform on a pixel when it is outside the boundaries of an image.
  * <p>
  * A pixel can be defined by, or represented as, a pair of X- and Y-coordinates or an index.
  * <p>
@@ -29,25 +29,25 @@ import static org.dayflower.util.Ints.positiveModulo;
  * <p>
  * <strong>No-Change Operation</strong>
  * <p>
- * The no-change operation, {@link PixelOperation#NO_CHANGE}, does not change the pixel if it is outside the boundaries of the {@code Image} instance.
+ * The no-change operation, {@link PixelOperation#NO_CHANGE}, does not change the pixel if it is outside the boundaries of the image.
  * <p>
- * The following list shows what will happen with different methods if the pixel is outside the boundaries of the {@code Image} instance:
+ * The following list shows what will happen with different methods if the pixel is outside the boundaries of the image:
  * <ul>
- * <li>{@code Return} {@code Color}: The method returns {@code Color.BLACK}</li>
- * <li>{@code Update} {@code Color}: The method updates nothing</li>
+ * <li>{@code Return color}: The method returns black</li>
+ * <li>{@code Update color}: The method updates nothing</li>
  * </ul>
  * <p>
  * <strong>Wrap-Around Operation</strong>
  * <p>
- * The wrap-around operation, {@link PixelOperation#WRAP_AROUND}, will change the pixel if it is outside the boundaries of the {@code Image} instance by wrapping its X- and Y-coordinates or index around.
+ * The wrap-around operation, {@link PixelOperation#WRAP_AROUND}, will change the pixel if it is outside the boundaries of the image by wrapping its X- and Y-coordinates or index around.
  * <p>
- * The wrap-around operation is performed on the X- and Y-coordinates individually or on the index. The X-coordinate is wrapped around {@link Image#getResolutionX()}, the Y-coordinate is wrapped around {@link Image#getResolutionY()} and the index is
- * wrapped around {@link Image#getResolution()}.
+ * The wrap-around operation is performed on the X- and Y-coordinates individually or on the index. The X-coordinate is wrapped around the resolution of the X-axis, the Y-coordinate is wrapped around the resolution of the Y-axis and the index is
+ * wrapped around the resolution.
  * <p>
- * The following list shows what will happen with different methods if the pixel is outside the boundaries of the {@code Image} instance:
+ * The following list shows what will happen with different methods if the pixel is outside the boundaries of the image:
  * <ul>
- * <li>{@code Return} {@code Color}: The method returns the {@code Color} of the changed pixel</li>
- * <li>{@code Update} {@code Color}: The method updates the {@code Color} of the changed pixel</li>
+ * <li>{@code Return color}: The method returns the color of the changed pixel</li>
+ * <li>{@code Update color}: The method updates the color of the changed pixel</li>
  * </ul>
  * <p>
  * The following code snippet shows how the wrap-around operation works, given the two variables {@code x} and {@code y}:

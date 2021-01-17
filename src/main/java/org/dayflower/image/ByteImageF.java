@@ -42,7 +42,7 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
 
 /**
- * A {@code ByteImage} is an {@link Image} implementation that stores individual pixels as four {@code byte} values in a {@code byte[]}.
+ * A {@code ByteImageF} is an {@link ImageF} implementation that stores individual pixels as four {@code byte} values in a {@code byte[]}.
  * <p>
  * The {@code byte} values for a single pixel are ordered as {@link ArrayComponentOrder#RGBA}.
  * <p>
@@ -51,7 +51,7 @@ import javafx.scene.image.WritableImage;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ByteImage implements Image {
+public final class ByteImageF implements ImageF {
 	private final byte[] bytes;
 	private final int resolution;
 	private final int resolutionX;
@@ -60,28 +60,28 @@ public final class ByteImage implements Image {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code ByteImage} instance.
+	 * Constructs a new {@code ByteImageF} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ByteImage(800, 800);
+	 * new ByteImageF(800, 800);
 	 * }
 	 * </pre>
 	 */
-	public ByteImage() {
+	public ByteImageF() {
 		this(800, 800);
 	}
 	
 	/**
-	 * Constructs a new {@code ByteImage} instance from {@code byteImage}.
+	 * Constructs a new {@code ByteImageF} instance from {@code byteImage}.
 	 * <p>
 	 * If {@code byteImage} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param byteImage a {@code ByteImage} instance
+	 * @param byteImage a {@code ByteImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code byteImage} is {@code null}
 	 */
-	public ByteImage(final ByteImage byteImage) {
+	public ByteImageF(final ByteImageF byteImage) {
 		this.bytes = byteImage.bytes.clone();
 		this.resolution = byteImage.resolution;
 		this.resolutionX = byteImage.resolutionX;
@@ -89,7 +89,7 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Constructs a new {@code ByteImage} instance.
+	 * Constructs a new {@code ByteImageF} instance.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
@@ -97,7 +97,7 @@ public final class ByteImage implements Image {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
-	public ByteImage(final int resolutionX, final int resolutionY) {
+	public ByteImageF(final int resolutionX, final int resolutionY) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -105,7 +105,7 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Constructs a new {@code ByteImage} instance for {@code bytes}.
+	 * Constructs a new {@code ByteImageF} instance for {@code bytes}.
 	 * <p>
 	 * If {@code bytes} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -114,7 +114,7 @@ public final class ByteImage implements Image {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ByteImage(resolutionX, resolutionY, bytes, false);
+	 * new ByteImageF(resolutionX, resolutionY, bytes, false);
 	 * }
 	 * </pre>
 	 * 
@@ -124,28 +124,28 @@ public final class ByteImage implements Image {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0} or {@code bytes.length != resolutionX * resolutionY * 4}
 	 * @throws NullPointerException thrown if, and only if, {@code bytes} is {@code null}
 	 */
-	public ByteImage(final int resolutionX, final int resolutionY, final byte[] bytes) {
+	public ByteImageF(final int resolutionX, final int resolutionY, final byte[] bytes) {
 		this(resolutionX, resolutionY, bytes, false);
 	}
 	
 	/**
-	 * Constructs a new {@code ByteImage} instance for {@code bytes}.
+	 * Constructs a new {@code ByteImageF} instance for {@code bytes}.
 	 * <p>
 	 * If {@code bytes} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0} or {@code bytes.length != resolutionX * resolutionY * 4}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * This constructor will either copy or wrap {@code bytes}, depending on the value of {@code isWrapping}. If {@code isWrapping} is {@code true}, {@code bytes} will be wrapped, which means it will be associated with this {@code ByteImage} instance.
-	 * If {@code isWrapping} is {@code false}, a copy of {@code bytes} will be associated with this {@code ByteImage} instance.
+	 * This constructor will either copy or wrap {@code bytes}, depending on the value of {@code isWrapping}. If {@code isWrapping} is {@code true}, {@code bytes} will be wrapped, which means it will be associated with this {@code ByteImageF} instance.
+	 * If {@code isWrapping} is {@code false}, a copy of {@code bytes} will be associated with this {@code ByteImageF} instance.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param bytes the {@code byte[]} to copy or wrap
-	 * @param isWrapping {@code true} if, and only if, this {@code ByteImage} instance should wrap {@code bytes}, {@code false} otherwise
+	 * @param isWrapping {@code true} if, and only if, this {@code ByteImageF} instance should wrap {@code bytes}, {@code false} otherwise
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0} or {@code bytes.length != resolutionX * resolutionY * 4}
 	 * @throws NullPointerException thrown if, and only if, {@code bytes} is {@code null}
 	 */
-	public ByteImage(final int resolutionX, final int resolutionY, final byte[] bytes, final boolean isWrapping) {
+	public ByteImageF(final int resolutionX, final int resolutionY, final byte[] bytes, final boolean isWrapping) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -155,9 +155,9 @@ public final class ByteImage implements Image {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@code BufferedImage} representation of this {@code ByteImage} instance.
+	 * Returns a {@code BufferedImage} representation of this {@code ByteImageF} instance.
 	 * 
-	 * @return a {@code BufferedImage} representation of this {@code ByteImage} instance
+	 * @return a {@code BufferedImage} representation of this {@code ByteImageF} instance
 	 */
 	@Override
 	public BufferedImage toBufferedImage() {
@@ -172,13 +172,13 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Returns a copy of this {@code ByteImage} instance.
+	 * Returns a copy of this {@code ByteImageF} instance.
 	 * 
-	 * @return a copy of this {@code ByteImage} instance
+	 * @return a copy of this {@code ByteImageF} instance
 	 */
 	@Override
-	public ByteImage copy() {
-		return new ByteImage(this);
+	public ByteImageF copy() {
+		return new ByteImageF(this);
 	}
 	
 	/**
@@ -343,18 +343,18 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Finds the bounds for {@code image} in this {@code ByteImage} instance.
+	 * Finds the bounds for {@code image} in this {@code ByteImageF} instance.
 	 * <p>
-	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code ByteImage} instance.
+	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code ByteImageF} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image an {@code Image} instance
-	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code ByteImage} instance
+	 * @param image an {@code ImageF} instance
+	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code ByteImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
 	@Override
-	public List<Rectangle2I> findBoundsFor(final Image image) {
+	public List<Rectangle2I> findBoundsFor(final ImageF image) {
 		Objects.requireNonNull(image, "image == null");
 		
 		final List<Rectangle2I> rectangles = new ArrayList<>();
@@ -384,9 +384,9 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Returns a {@link Rectangle2I} with the bounds of this {@code ByteImage} instance.
+	 * Returns a {@link Rectangle2I} with the bounds of this {@code ByteImageF} instance.
 	 * 
-	 * @return a {@code Rectangle2I} with the bounds of this {@code ByteImage} instance
+	 * @return a {@code Rectangle2I} with the bounds of this {@code ByteImageF} instance
 	 */
 	@Override
 	public Rectangle2I getBounds() {
@@ -394,19 +394,19 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code ByteImage} instance.
+	 * Returns a {@code String} representation of this {@code ByteImageF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code ByteImage} instance
+	 * @return a {@code String} representation of this {@code ByteImageF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ByteImage(%d, %d)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY));
+		return String.format("new ByteImageF(%d, %d)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY));
 	}
 	
 	/**
-	 * Returns a {@code WritableImage} representation of this {@code ByteImage} instance.
+	 * Returns a {@code WritableImage} representation of this {@code ByteImageF} instance.
 	 * 
-	 * @return a {@code WritableImage} representation of this {@code ByteImage} instance
+	 * @return a {@code WritableImage} representation of this {@code ByteImageF} instance
 	 */
 	@Override
 	public WritableImage toWritableImage() {
@@ -418,26 +418,26 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code ByteImage} instance for equality.
+	 * Compares {@code object} to this {@code ByteImageF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ByteImage}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ByteImageF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code ByteImage} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ByteImage}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code ByteImageF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ByteImageF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof ByteImage)) {
+		} else if(!(object instanceof ByteImageF)) {
 			return false;
-		} else if(!Arrays.equals(this.bytes, ByteImage.class.cast(object).bytes)) {
+		} else if(!Arrays.equals(this.bytes, ByteImageF.class.cast(object).bytes)) {
 			return false;
-		} else if(this.resolution != ByteImage.class.cast(object).resolution) {
+		} else if(this.resolution != ByteImageF.class.cast(object).resolution) {
 			return false;
-		} else if(this.resolutionX != ByteImage.class.cast(object).resolutionX) {
+		} else if(this.resolutionX != ByteImageF.class.cast(object).resolutionX) {
 			return false;
-		} else if(this.resolutionY != ByteImage.class.cast(object).resolutionY) {
+		} else if(this.resolutionY != ByteImageF.class.cast(object).resolutionY) {
 			return false;
 		} else {
 			return true;
@@ -471,7 +471,7 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Returns the resolution of this {@code ByteImage} instance.
+	 * Returns the resolution of this {@code ByteImageF} instance.
 	 * <p>
 	 * The resolution of {@code byteImage} can be computed by:
 	 * <pre>
@@ -480,7 +480,7 @@ public final class ByteImage implements Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @return the resolution of this {@code ByteImage} instance
+	 * @return the resolution of this {@code ByteImageF} instance
 	 */
 	@Override
 	public int getResolution() {
@@ -488,11 +488,11 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Returns the resolution of the X-axis of this {@code ByteImage} instance.
+	 * Returns the resolution of the X-axis of this {@code ByteImageF} instance.
 	 * <p>
 	 * The resolution of the X-axis is also known as the width.
 	 * 
-	 * @return the resolution of the X-axis of this {@code ByteImage} instance
+	 * @return the resolution of the X-axis of this {@code ByteImageF} instance
 	 */
 	@Override
 	public int getResolutionX() {
@@ -500,11 +500,11 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Returns the resolution of the Y-axis of this {@code ByteImage} instance.
+	 * Returns the resolution of the Y-axis of this {@code ByteImageF} instance.
 	 * <p>
 	 * The resolution of the Y-axis is also known as the height.
 	 * 
-	 * @return the resolution of the Y-axis of this {@code ByteImage} instance
+	 * @return the resolution of the Y-axis of this {@code ByteImageF} instance
 	 */
 	@Override
 	public int getResolutionY() {
@@ -512,9 +512,9 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code ByteImage} instance.
+	 * Returns a hash code for this {@code ByteImageF} instance.
 	 * 
-	 * @return a hash code for this {@code ByteImage} instance
+	 * @return a hash code for this {@code ByteImageF} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -522,7 +522,7 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of this {@code ByteImage} instance in a packed form.
+	 * Returns an {@code int[]} representation of this {@code ByteImageF} instance in a packed form.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -531,7 +531,7 @@ public final class ByteImage implements Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @return an {@code int[]} representation of this {@code ByteImage} instance in a packed form
+	 * @return an {@code int[]} representation of this {@code ByteImageF} instance in a packed form
 	 */
 	@Override
 	public int[] toIntArrayPackedForm() {
@@ -539,12 +539,12 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of this {@code ByteImage} instance in a packed form.
+	 * Returns an {@code int[]} representation of this {@code ByteImageF} instance in a packed form.
 	 * <p>
 	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder}
-	 * @return an {@code int[]} representation of this {@code ByteImage} instance in a packed form
+	 * @return an {@code int[]} representation of this {@code ByteImageF} instance in a packed form
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
 	@Override
@@ -566,7 +566,7 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Copies the individual component values of the colors in this {@code ByteImage} instance to the {@code byte[]} {@code array}.
+	 * Copies the individual component values of the colors in this {@code ByteImageF} instance to the {@code byte[]} {@code array}.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -579,7 +579,7 @@ public final class ByteImage implements Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ByteImage} instance to
+	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ByteImageF} instance to
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != byteImage.getResolution() * ArrayComponentOrder.BGRA.getComponentCount()}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
@@ -589,13 +589,13 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Copies the individual component values of the colors in this {@code ByteImage} instance to the {@code byte[]} {@code array}.
+	 * Copies the individual component values of the colors in this {@code ByteImageF} instance to the {@code byte[]} {@code array}.
 	 * <p>
 	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code array.length != byteImage.getResolution() * arrayComponentOrder.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ByteImage} instance to
+	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ByteImageF} instance to
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder} to copy the components to {@code array} in the correct order
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != byteImage.getResolution() * arrayComponentOrder.getComponentCount()}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
@@ -632,7 +632,7 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Saves this {@code ByteImage} as a .PNG image to the file represented by {@code file}.
+	 * Saves this {@code ByteImageF} as a .PNG image to the file represented by {@code file}.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -658,7 +658,7 @@ public final class ByteImage implements Image {
 	}
 	
 	/**
-	 * Saves this {@code ByteImage} as a .PNG image to the file represented by the pathname {@code pathname}.
+	 * Saves this {@code ByteImageF} as a .PNG image to the file represented by the pathname {@code pathname}.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>

@@ -18,7 +18,7 @@
  */
 package org.dayflower.renderer;
 
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 
 /**
  * A {@code RendererObserver} is used to observe the rendering process of a {@link Renderer} instance.
@@ -33,10 +33,10 @@ public interface RendererObserver {
 	 * If either {@code renderer} or {@code image} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param renderer the {@link Renderer} instance that called this method
-	 * @param image the {@link Image} instance that is rendered to
+	 * @param image the {@link ImageF} instance that is rendered to
 	 * @throws NullPointerException thrown if, and only if, either {@code renderer} or {@code image} are {@code null}
 	 */
-	void onRenderDisplay(final Renderer renderer, final Image image);
+	void onRenderDisplay(final Renderer renderer, final ImageF image);
 	
 	/**
 	 * This method is called by {@code renderer} when {@code renderPass} is complete.

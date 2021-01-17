@@ -18,7 +18,7 @@
  */
 package org.dayflower.renderer;
 
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.util.Timer;
 
 /**
@@ -36,9 +36,9 @@ public interface ProgressiveImageOrderRenderer extends ImageOrderRenderer {
 	Timer getTimer();
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code ProgressiveImageOrderRenderer} instance is clearing the {@link Image} instance in the next {@link #render()} call, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code ProgressiveImageOrderRenderer} instance is clearing the {@link ImageF} instance in the next {@link #render()} call, {@code false} otherwise.
 	 * 
-	 * @return {@code true} if, and only if, this {@code ProgressiveImageOrderRenderer} instance is clearing the {@code Image} instance in the next {@code  render()} call, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code ProgressiveImageOrderRenderer} instance is clearing the {@code ImageF} instance in the next {@code  render()} call, {@code false} otherwise
 	 */
 	boolean isClearing();
 	
@@ -64,7 +64,7 @@ public interface ProgressiveImageOrderRenderer extends ImageOrderRenderer {
 	int getRenderPassesPerDisplayUpdate();
 	
 	/**
-	 * Call this method to clear the {@link Image} in the next {@link #render()} call.
+	 * Call this method to clear the {@link ImageF} in the next {@link #render()} call.
 	 */
 	void clear();
 	

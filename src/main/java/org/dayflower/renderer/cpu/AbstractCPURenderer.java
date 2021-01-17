@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImage;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
@@ -47,7 +47,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
 	private final AtomicReference<RendererObserver> rendererObserver;
-	private Image image;
+	private ImageF image;
 	private RenderingAlgorithm renderingAlgorithm;
 	private Sampler sampler;
 	private Scene scene;
@@ -93,12 +93,12 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link Image} instance associated with this {@code AbstractCPURenderer} instance.
+	 * Returns the {@link ImageF} instance associated with this {@code AbstractCPURenderer} instance.
 	 * 
-	 * @return the {@code Image} instance associated with this {@code AbstractCPURenderer} instance
+	 * @return the {@code ImageF} instance associated with this {@code AbstractCPURenderer} instance
 	 */
 	@Override
-	public final Image getImage() {
+	public final ImageF getImage() {
 		return this.image;
 	}
 	
@@ -153,9 +153,9 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code AbstractCPURenderer} instance is clearing the {@link Image} instance in the next {@link #render()} call, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code AbstractCPURenderer} instance is clearing the {@link ImageF} instance in the next {@link #render()} call, {@code false} otherwise.
 	 * 
-	 * @return {@code true} if, and only if, this {@code AbstractCPURenderer} instance is clearing the {@code Image} instance in the next {@code  render()} call, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code AbstractCPURenderer} instance is clearing the {@code ImageF} instance in the next {@code  render()} call, {@code false} otherwise
 	 */
 	@Override
 	public final boolean isClearing() {
@@ -173,7 +173,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	}
 	
 	/**
-	 * Renders the associated {@link Scene} instance to the associated {@link Image} instance and, optionally, updates the associated {@link Display} instance.
+	 * Renders the associated {@link Scene} instance to the associated {@link ImageF} instance and, optionally, updates the associated {@link Display} instance.
 	 * <p>
 	 * Returns {@code true} if, and only if, rendering was performed, {@code false} otherwise.
 	 * 
@@ -185,7 +185,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 		
 		final RendererObserver rendererObserver = getRendererObserver();
 		
-		final Image image = getImage();
+		final ImageF image = getImage();
 		
 		if(!(image instanceof PixelImage)) {
 			return false;
@@ -355,7 +355,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	}
 	
 	/**
-	 * Call this method to clear the {@link Image} in the next {@link #render()} call.
+	 * Call this method to clear the {@link ImageF} in the next {@link #render()} call.
 	 */
 	@Override
 	public final void clear() {
@@ -371,15 +371,15 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	}
 	
 	/**
-	 * Sets the {@link Image} instance associated with this {@code AbstractCPURenderer} instance to {@code image}.
+	 * Sets the {@link ImageF} instance associated with this {@code AbstractCPURenderer} instance to {@code image}.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image the {@code Image} instance associated with this {@code AbstractCPURenderer} instance
+	 * @param image the {@code ImageF} instance associated with this {@code AbstractCPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
 	@Override
-	public final void setImage(final Image image) {
+	public final void setImage(final ImageF image) {
 		this.image = Objects.requireNonNull(image, "image == null");
 	}
 	

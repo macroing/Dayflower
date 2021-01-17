@@ -57,7 +57,7 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
 
 /**
- * A {@code PixelImage} is an {@link Image} implementation that stores individual pixels as {@link Pixel} instances.
+ * A {@code PixelImage} is an {@link ImageF} implementation that stores individual pixels as {@link PixelF} instances.
  * <p>
  * An instance of this class requires a lot of memory. It is therefore not advised to keep multiple instances of it in memory at once, only to retrieve the pixel colors.
  * <p>
@@ -70,9 +70,9 @@ import javafx.scene.image.WritableImage;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PixelImage implements Image {
+public final class PixelImage implements ImageF {
 	private final Filter2F filter;
-	private final Pixel[] pixels;
+	private final PixelF[] pixels;
 	private final float[] filterTable;
 	private final int resolution;
 	private final int resolutionX;
@@ -81,7 +81,7 @@ public final class PixelImage implements Image {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@code Color3F.BLACK}.
+	 * Constructs a new {@code PixelImage} instance filled with {@code Color4F.BLACK}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
@@ -130,7 +130,7 @@ public final class PixelImage implements Image {
 	 */
 	public PixelImage(final BufferedImage bufferedImage, final Filter2F filter) {
 		this.filter = Objects.requireNonNull(filter, "filter == null");
-		this.pixels = Pixel.createPixels(bufferedImage);
+		this.pixels = PixelF.createPixels(bufferedImage);
 		this.filterTable = filter.createFilterTable();
 		this.resolution = ParameterArguments.requireRange(bufferedImage.getWidth() * bufferedImage.getHeight(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth() * bufferedImage.getHeight()");
 		this.resolutionX = ParameterArguments.requireRange(bufferedImage.getWidth(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth()");
@@ -147,7 +147,7 @@ public final class PixelImage implements Image {
 	 */
 	public PixelImage(final PixelImage pixelImage) {
 		this.filter = pixelImage.filter;
-		this.pixels = Arrays.stream(pixelImage.pixels).map(pixel -> pixel.copy()).toArray(Pixel[]::new);
+		this.pixels = Arrays.stream(pixelImage.pixels).map(pixel -> pixel.copy()).toArray(PixelF[]::new);
 		this.filterTable = pixelImage.filterTable.clone();
 		this.resolution = pixelImage.resolution;
 		this.resolutionX = pixelImage.resolutionX;
@@ -216,7 +216,7 @@ public final class PixelImage implements Image {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGBA);
+		this.pixels = PixelF.createPixels(resolutionX, resolutionY, colorRGBA);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
@@ -263,7 +263,7 @@ public final class PixelImage implements Image {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, colorRGBAs);
+		this.pixels = PixelF.createPixels(resolutionX, resolutionY, colorRGBAs);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
@@ -322,7 +322,7 @@ public final class PixelImage implements Image {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color4F.arrayRead(colorRGBAs, arrayComponentOrder));
+		this.pixels = PixelF.createPixels(resolutionX, resolutionY, Color4F.arrayRead(colorRGBAs, arrayComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
@@ -381,7 +381,7 @@ public final class PixelImage implements Image {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color4F.arrayRead(colorRGBAs, arrayComponentOrder));
+		this.pixels = PixelF.createPixels(resolutionX, resolutionY, Color4F.arrayRead(colorRGBAs, arrayComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
@@ -430,7 +430,7 @@ public final class PixelImage implements Image {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.pixels = Pixel.createPixels(resolutionX, resolutionY, Color4F.arrayUnpack(colorRGBAs, packedIntComponentOrder));
+		this.pixels = PixelF.createPixels(resolutionX, resolutionY, Color4F.arrayUnpack(colorRGBAs, packedIntComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
@@ -599,7 +599,7 @@ public final class PixelImage implements Image {
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
 	@Override
-	public List<Rectangle2I> findBoundsFor(final Image image) {
+	public List<Rectangle2I> findBoundsFor(final ImageF image) {
 		Objects.requireNonNull(image, "image == null");
 		
 		final List<Rectangle2I> rectangles = new ArrayList<>();
@@ -629,7 +629,7 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Returns the optional {@link Pixel} located at {@code index}.
+	 * Returns the optional {@link PixelF} located at {@code index}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -638,26 +638,26 @@ public final class PixelImage implements Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param index the index of the {@code Pixel}
-	 * @return the optional {@code Pixel} located at {@code index}
+	 * @param index the index of the {@code PixelF}
+	 * @return the optional {@code PixelF} located at {@code index}
 	 */
-	public Optional<Pixel> getPixel(final int index) {
+	public Optional<PixelF> getPixel(final int index) {
 		return getPixel(index, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Returns the optional {@link Pixel} located at {@code index}.
+	 * Returns the optional {@link PixelF} located at {@code index}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param index the index of the {@code Pixel}
+	 * @param index the index of the {@code PixelF}
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the optional {@code Pixel} located at {@code index}
+	 * @return the optional {@code PixelF} located at {@code index}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
-	public Optional<Pixel> getPixel(final int index, final PixelOperation pixelOperation) {
+	public Optional<PixelF> getPixel(final int index, final PixelOperation pixelOperation) {
 		final int resolution = this.resolution;
 		
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
@@ -670,7 +670,7 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Returns the optional {@link Pixel} located at {@code x} and {@code y}.
+	 * Returns the optional {@link PixelF} located at {@code x} and {@code y}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -679,28 +679,28 @@ public final class PixelImage implements Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param x the X-coordinate of the {@code Pixel}
-	 * @param y the Y-coordinate of the {@code Pixel}
-	 * @return the optional {@code Pixel} located at {@code x} and {@code y}
+	 * @param x the X-coordinate of the {@code PixelF}
+	 * @param y the Y-coordinate of the {@code PixelF}
+	 * @return the optional {@code PixelF} located at {@code x} and {@code y}
 	 */
-	public Optional<Pixel> getPixel(final int x, final int y) {
+	public Optional<PixelF> getPixel(final int x, final int y) {
 		return getPixel(x, y, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Returns the optional {@link Pixel} located at {@code x} and {@code y}.
+	 * Returns the optional {@link PixelF} located at {@code x} and {@code y}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param x the X-coordinate of the {@code Pixel}
-	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param x the X-coordinate of the {@code PixelF}
+	 * @param y the Y-coordinate of the {@code PixelF}
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the optional {@code Pixel} located at {@code x} and {@code y}
+	 * @return the optional {@code PixelF} located at {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
-	public Optional<Pixel> getPixel(final int x, final int y, final PixelOperation pixelOperation) {
+	public Optional<PixelF> getPixel(final int x, final int y, final PixelOperation pixelOperation) {
 		final int resolutionX = this.resolutionX;
 		final int resolutionY = this.resolutionY;
 		
@@ -904,7 +904,7 @@ public final class PixelImage implements Image {
 	public void clear(final Color3F colorRGB) {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		
-		for(final Pixel pixel : this.pixels) {
+		for(final PixelF pixel : this.pixels) {
 			pixel.setColorRGB(colorRGB);
 		}
 	}
@@ -1019,19 +1019,19 @@ public final class PixelImage implements Image {
 	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code function} are {@code null} or {@code function} returns {@code null}
 	 */
-	public void drawCircle(final Circle2I circle, final Function<Pixel, Color3F> function) {
+	public void drawCircle(final Circle2I circle, final Function<PixelF, Color3F> function) {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(function, "function == null");
 		
 		for(int y = -circle.getRadius(); y <= circle.getRadius(); y++) {
 			for(int x = -circle.getRadius(); x <= circle.getRadius(); x++) {
 				if(x * x + y * y <= circle.getRadius() * circle.getRadius() && x * x + y * y > (circle.getRadius() - 1) * (circle.getRadius() - 1)) {
-					final Optional<Pixel> optionalPixel = getPixel(x + circle.getCenter().getX(), y + circle.getCenter().getY());
+					final Optional<PixelF> optionalPixel = getPixel(x + circle.getCenter().getX(), y + circle.getCenter().getY());
 					
 					if(optionalPixel.isPresent()) {
 						final
-						Pixel pixel = optionalPixel.get();
-						pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+						PixelF pixelF = optionalPixel.get();
+						pixelF.setColorRGB(Objects.requireNonNull(function.apply(pixelF)));
 					}
 				}
 			}
@@ -1085,7 +1085,7 @@ public final class PixelImage implements Image {
 	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code line} or {@code function} are {@code null} or {@code function} returns {@code null}
 	 */
-	public void drawLine(final Line2I line, final Function<Pixel, Color3F> function) {
+	public void drawLine(final Line2I line, final Function<PixelF, Color3F> function) {
 		Objects.requireNonNull(line, "line == null");
 		Objects.requireNonNull(function, "function == null");
 		
@@ -1094,12 +1094,12 @@ public final class PixelImage implements Image {
 		final Point2I[] scanline = Rasterizer2I.rasterize(line, rectangle);
 		
 		for(final Point2I point : scanline) {
-			final Optional<Pixel> optionalPixel = getPixel(point.getX(), point.getY());
+			final Optional<PixelF> optionalPixel = getPixel(point.getX(), point.getY());
 			
 			if(optionalPixel.isPresent()) {
 				final
-				Pixel pixel = optionalPixel.get();
-				pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+				PixelF pixelF = optionalPixel.get();
+				pixelF.setColorRGB(Objects.requireNonNull(function.apply(pixelF)));
 			}
 		}
 	}
@@ -1151,7 +1151,7 @@ public final class PixelImage implements Image {
 	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code function} are {@code null} or {@code function} returns {@code null}
 	 */
-	public void drawRectangle(final Rectangle2I rectangle, final Function<Pixel, Color3F> function) {
+	public void drawRectangle(final Rectangle2I rectangle, final Function<PixelF, Color3F> function) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(function, "function == null");
 		
@@ -1163,12 +1163,12 @@ public final class PixelImage implements Image {
 		for(int y = minimumY; y <= maximumY; y++) {
 			for(int x = minimumX; x <= maximumX; x++) {
 				if(x == minimumX || x == maximumX || y == minimumY || y == maximumY) {
-					final Optional<Pixel> optionalPixel = getPixel(x, y);
+					final Optional<PixelF> optionalPixel = getPixel(x, y);
 					
 					if(optionalPixel.isPresent()) {
 						final
-						Pixel pixel = optionalPixel.get();
-						pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+						PixelF pixelF = optionalPixel.get();
+						pixelF.setColorRGB(Objects.requireNonNull(function.apply(pixelF)));
 					}
 				}
 			}
@@ -1222,7 +1222,7 @@ public final class PixelImage implements Image {
 	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code function} are {@code null} or {@code function} returns {@code null}
 	 */
-	public void drawTriangle(final Triangle2I triangle, final Function<Pixel, Color3F> function) {
+	public void drawTriangle(final Triangle2I triangle, final Function<PixelF, Color3F> function) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(function, "function == null");
 		
@@ -1278,19 +1278,19 @@ public final class PixelImage implements Image {
 	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code function} are {@code null} or {@code function} returns {@code null}
 	 */
-	public void fillCircle(final Circle2I circle, final Function<Pixel, Color3F> function) {
+	public void fillCircle(final Circle2I circle, final Function<PixelF, Color3F> function) {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(function, "function == null");
 		
 		for(int y = -circle.getRadius(); y <= circle.getRadius(); y++) {
 			for(int x = -circle.getRadius(); x <= circle.getRadius(); x++) {
 				if(x * x + y * y <= circle.getRadius() * circle.getRadius()) {
-					final Optional<Pixel> optionalPixel = getPixel(x + circle.getCenter().getX(), y + circle.getCenter().getY());
+					final Optional<PixelF> optionalPixel = getPixel(x + circle.getCenter().getX(), y + circle.getCenter().getY());
 					
 					if(optionalPixel.isPresent()) {
 						final
-						Pixel pixel = optionalPixel.get();
-						pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+						PixelF pixelF = optionalPixel.get();
+						pixelF.setColorRGB(Objects.requireNonNull(function.apply(pixelF)));
 					}
 				}
 			}
@@ -1368,7 +1368,7 @@ public final class PixelImage implements Image {
 	 * @param biFunction a {@code BiFunction} that returns {@code Color3F} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code sourcePixelImage}, {@code sourceRectangle}, {@code targetRectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public void fillPixelImage(final PixelImage sourcePixelImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds, final BiFunction<Pixel, Pixel, Color3F> biFunction) {
+	public void fillPixelImage(final PixelImage sourcePixelImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds, final BiFunction<PixelF, PixelF, Color3F> biFunction) {
 		Objects.requireNonNull(sourcePixelImage, "sourcePixelImage == null");
 		Objects.requireNonNull(sourceBounds, "sourceBounds == null");
 		Objects.requireNonNull(targetBounds, "targetBounds == null");
@@ -1387,12 +1387,12 @@ public final class PixelImage implements Image {
 		
 		for(int sourceY = sourceMinimumY, targetY = targetMinimumY; sourceY <= sourceMaximumY && targetY <= targetMaximumY; sourceY++, targetY++) {
 			for(int sourceX = sourceMinimumX, targetX = targetMinimumX; sourceX <= sourceMaximumX && targetX <= targetMaximumX; sourceX++, targetX++) {
-				final Optional<Pixel> sourceOptionalPixel = sourcePixelImage.getPixel(sourceX, sourceY);
-				final Optional<Pixel> targetOptionalPixel = targetPixelImage.getPixel(targetX, targetY);
+				final Optional<PixelF> sourceOptionalPixel = sourcePixelImage.getPixel(sourceX, sourceY);
+				final Optional<PixelF> targetOptionalPixel = targetPixelImage.getPixel(targetX, targetY);
 				
 				if(sourceOptionalPixel.isPresent() && targetOptionalPixel.isPresent()) {
-					final Pixel sourcePixel = sourceOptionalPixel.get();
-					final Pixel targetPixel = targetOptionalPixel.get();
+					final PixelF sourcePixel = sourceOptionalPixel.get();
+					final PixelF targetPixel = targetOptionalPixel.get();
 					
 					final Color3F colorRGB = biFunction.apply(sourcePixel, targetPixel);
 					
@@ -1449,7 +1449,7 @@ public final class PixelImage implements Image {
 	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code function} are {@code null} or {@code function} returns {@code null}
 	 */
-	public void fillRectangle(final Rectangle2I rectangle, final Function<Pixel, Color3F> function) {
+	public void fillRectangle(final Rectangle2I rectangle, final Function<PixelF, Color3F> function) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(function, "function == null");
 		
@@ -1460,12 +1460,12 @@ public final class PixelImage implements Image {
 		
 		for(int y = minimumY; y <= maximumY; y++) {
 			for(int x = minimumX; x <= maximumX; x++) {
-				final Optional<Pixel> optionalPixel = getPixel(x, y);
+				final Optional<PixelF> optionalPixel = getPixel(x, y);
 				
 				if(optionalPixel.isPresent()) {
 					final
-					Pixel pixel = optionalPixel.get();
-					pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+					PixelF pixelF = optionalPixel.get();
+					pixelF.setColorRGB(Objects.requireNonNull(function.apply(pixelF)));
 				}
 			}
 		}
@@ -1518,7 +1518,7 @@ public final class PixelImage implements Image {
 	 * @param function a {@code Function} that returns {@code Color3F} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code function} are {@code null} or {@code function} returns {@code null}
 	 */
-	public void fillTriangle(final Triangle2I triangle, final Function<Pixel, Color3F> function) {
+	public void fillTriangle(final Triangle2I triangle, final Function<PixelF, Color3F> function) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(function, "function == null");
 		
@@ -1528,19 +1528,19 @@ public final class PixelImage implements Image {
 		
 		for(final Point2I[] scanline : scanlines) {
 			for(final Point2I point : scanline) {
-				final Optional<Pixel> optionalPixel = getPixel(point.getX(), point.getY());
+				final Optional<PixelF> optionalPixel = getPixel(point.getX(), point.getY());
 				
 				if(optionalPixel.isPresent()) {
 					final
-					Pixel pixel = optionalPixel.get();
-					pixel.setColorRGB(Objects.requireNonNull(function.apply(pixel)));
+					PixelF pixelF = optionalPixel.get();
+					pixelF.setColorRGB(Objects.requireNonNull(function.apply(pixelF)));
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Adds {@code colorXYZ} to the {@link Pixel} instances located around {@code x} and {@code y}.
+	 * Adds {@code colorXYZ} to the {@link PixelF} instances located around {@code x} and {@code y}.
 	 * <p>
 	 * If {@code colorXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1551,8 +1551,8 @@ public final class PixelImage implements Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param x the X-coordinate of the {@code Pixel}
-	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param x the X-coordinate of the {@code PixelF}
+	 * @param y the Y-coordinate of the {@code PixelF}
 	 * @param colorXYZ the color to add
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
 	 */
@@ -1561,12 +1561,12 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Adds {@code colorXYZ} to the {@link Pixel} instances located around {@code x} and {@code y}.
+	 * Adds {@code colorXYZ} to the {@link PixelF} instances located around {@code x} and {@code y}.
 	 * <p>
 	 * If {@code colorXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param x the X-coordinate of the {@code Pixel}
-	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param x the X-coordinate of the {@code PixelF}
+	 * @param y the Y-coordinate of the {@code PixelF}
 	 * @param colorXYZ the color to add
 	 * @param sampleWeight the sample weight to use
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
@@ -1574,7 +1574,7 @@ public final class PixelImage implements Image {
 	public void filmAddColorXYZ(final float x, final float y, final Color3F colorXYZ, final float sampleWeight) {
 		final Filter2F filter = this.filter;
 		
-		final Pixel[] pixels = this.pixels;
+		final PixelF[] pixels = this.pixels;
 		
 		final float[] filterTable = this.filterTable;
 		
@@ -1614,7 +1614,7 @@ public final class PixelImage implements Image {
 				
 				for(int filterX = minimumFilterX; filterX <= maximumFilterX; filterX++) {
 					final
-					Pixel pixel = pixels[filterYResolutionX + filterX];
+					PixelF pixel = pixels[filterYResolutionX + filterX];
 					pixel.addColorXYZ(colorXYZ, sampleWeight, filterTable[filterOffsetYOffsetFilterTableSize + filterOffsetX[filterX - minimumFilterX]]);
 				}
 			}
@@ -1622,7 +1622,7 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Adds {@code splatXYZ} to the {@link Pixel} instance located at {@code x} and {@code y}.
+	 * Adds {@code splatXYZ} to the {@link PixelF} instance located at {@code x} and {@code y}.
 	 * <p>
 	 * If {@code splatXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1633,8 +1633,8 @@ public final class PixelImage implements Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param x the X-coordinate of the {@code Pixel}
-	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param x the X-coordinate of the {@code PixelF}
+	 * @param y the Y-coordinate of the {@code PixelF}
 	 * @param splatXYZ the splat to add
 	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
 	 */
@@ -1643,12 +1643,12 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Adds {@code splatXYZ} to the {@link Pixel} instance located at {@code x} and {@code y}.
+	 * Adds {@code splatXYZ} to the {@link PixelF} instance located at {@code x} and {@code y}.
 	 * <p>
 	 * If {@code splatXYZ} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param x the X-coordinate of the {@code Pixel}
-	 * @param y the Y-coordinate of the {@code Pixel}
+	 * @param x the X-coordinate of the {@code PixelF}
+	 * @param y the Y-coordinate of the {@code PixelF}
 	 * @param splatXYZ the splat to add
 	 * @throws NullPointerException thrown if, and only if, {@code splatXYZ} is {@code null}
 	 */
@@ -1662,7 +1662,7 @@ public final class PixelImage implements Image {
 	 * Clears the film.
 	 */
 	public void filmClear() {
-		for(final Pixel pixel : this.pixels) {
+		for(final PixelF pixel : this.pixels) {
 			pixel.setColorXYZ(new Color3F());
 			pixel.setSplatXYZ(new Color3F());
 			pixel.setFilterWeightSum(0.0F);
@@ -1689,7 +1689,7 @@ public final class PixelImage implements Image {
 	 * @param splatScale the splat scale to use
 	 */
 	public void filmRender(final float splatScale) {
-		for(final Pixel pixel : this.pixels) {
+		for(final PixelF pixel : this.pixels) {
 			Color3F colorRGB = Color3F.convertXYZToRGBUsingPBRT(pixel.getColorXYZ());
 			Color3F splatRGB = Color3F.convertXYZToRGBUsingPBRT(pixel.getSplatXYZ());
 			
@@ -1711,7 +1711,7 @@ public final class PixelImage implements Image {
 	public void flipX() {
 		for(int xL = 0, xR = this.resolutionX - 1; xL < xR; xL++, xR--) {
 			for(int y = 0; y < this.resolutionY; y++) {
-				Pixel.swap(this.pixels[y * this.resolutionX + xL], this.pixels[y * this.resolutionX + xR]);
+				PixelF.swap(this.pixels[y * this.resolutionX + xL], this.pixels[y * this.resolutionX + xR]);
 			}
 		}
 	}
@@ -1722,7 +1722,7 @@ public final class PixelImage implements Image {
 	public void flipY() {
 		for(int yT = 0, yB = this.resolutionY - 1; yT < yB; yT++, yB--) {
 			for(int x = 0; x < this.resolutionX; x++) {
-				Pixel.swap(this.pixels[yT * this.resolutionX + x], this.pixels[yB * this.resolutionX + x]);
+				PixelF.swap(this.pixels[yT * this.resolutionX + x], this.pixels[yB * this.resolutionX + x]);
 			}
 		}
 	}
@@ -1731,7 +1731,7 @@ public final class PixelImage implements Image {
 	 * Inverts this {@code PixelImage} instance.
 	 */
 	public void invert() {
-		for(final Pixel pixel : this.pixels) {
+		for(final PixelF pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.invert(pixel.getColorRGB()));
 		}
 	}
@@ -1848,7 +1848,7 @@ public final class PixelImage implements Image {
 	 * Redoes gamma correction on this {@code PixelImage} instance using PBRT.
 	 */
 	public void redoGammaCorrectionPBRT() {
-		for(final Pixel pixel : this.pixels) {
+		for(final PixelF pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.redoGammaCorrectionPBRT(pixel.getColorRGB()));
 		}
 	}
@@ -1857,7 +1857,7 @@ public final class PixelImage implements Image {
 	 * Redoes gamma correction on this {@code PixelImage} instance using SRGB.
 	 */
 	public void redoGammaCorrectionSRGB() {
-		for(final Pixel pixel : this.pixels) {
+		for(final PixelF pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.redoGammaCorrectionSRGB(pixel.getColorRGB()));
 		}
 	}
@@ -2010,7 +2010,7 @@ public final class PixelImage implements Image {
 	 * Undoes gamma correction on this {@code PixelImage} instance using PBRT.
 	 */
 	public void undoGammaCorrectionPBRT() {
-		for(final Pixel pixel : this.pixels) {
+		for(final PixelF pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.undoGammaCorrectionPBRT(pixel.getColorRGB()));
 		}
 	}
@@ -2019,7 +2019,7 @@ public final class PixelImage implements Image {
 	 * Undoes gamma correction on this {@code PixelImage} instance using SRGB.
 	 */
 	public void undoGammaCorrectionSRGB() {
-		for(final Pixel pixel : this.pixels) {
+		for(final PixelF pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.undoGammaCorrectionSRGB(pixel.getColorRGB()));
 		}
 	}
@@ -2334,7 +2334,7 @@ public final class PixelImage implements Image {
 	}
 	
 	/**
-	 * Returns a new {@code PixelImage} instance filled with random {@link Color3F} instances.
+	 * Returns a new {@code PixelImage} instance filled with random {@link Color4F} instances.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -2343,7 +2343,7 @@ public final class PixelImage implements Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @return a new {@code PixelImage} instance filled with random {@code Color3F} instances
+	 * @return a new {@code PixelImage} instance filled with random {@code Color4F} instances
 	 */
 	public static PixelImage random() {
 		return random(800, 800);

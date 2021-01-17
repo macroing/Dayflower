@@ -37,7 +37,7 @@ import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.BoxFilter2F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Color4F;
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImage;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
@@ -178,15 +178,15 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	/**
-	 * This method is called when it's time to save the {@link Image}.
+	 * This method is called when it's time to save the {@link ImageF}.
 	 */
 	public void save() {
 		final Optional<File> optionalFile = getFile();
 		
 		if(optionalFile.isPresent()) {
 			final
-			Image image = this.combinedProgressiveImageOrderRenderer.getImage();
-			image.save(optionalFile.get());
+			ImageF imageF = this.combinedProgressiveImageOrderRenderer.getImage();
+			imageF.save(optionalFile.get());
 		}
 	}
 	
@@ -269,7 +269,7 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	@SuppressWarnings("unused")
-	private boolean doRender(final Image image) {
+	private boolean doRender(final ImageF image) {
 		return this.combinedProgressiveImageOrderRenderer.render();
 	}
 	

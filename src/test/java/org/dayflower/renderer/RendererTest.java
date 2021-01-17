@@ -18,7 +18,7 @@
  */
 package org.dayflower.renderer;
 
-import org.dayflower.image.ByteImage;
+import org.dayflower.image.ByteImageF;
 import org.dayflower.image.PixelImage;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererObserver;
@@ -109,7 +109,7 @@ public final class RendererTest {
 		final
 		GPURenderer gPURenderer = new GPURenderer();
 		gPURenderer.setScene(new JavaSceneLoader().load(pathname));
-		gPURenderer.setImage(new ByteImage((int)(gPURenderer.getScene().getCamera().getResolutionX()), (int)(gPURenderer.getScene().getCamera().getResolutionY())));
+		gPURenderer.setImage(new ByteImageF((int)(gPURenderer.getScene().getCamera().getResolutionX()), (int)(gPURenderer.getScene().getCamera().getResolutionY())));
 		gPURenderer.setRenderPasses(10);
 		gPURenderer.setRenderingAlgorithm(renderingAlgorithm);
 		gPURenderer.setSampler(new RandomSampler());

@@ -48,7 +48,7 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
@@ -125,10 +125,10 @@ public final class LDRImageLight implements Light {
 	 * }
 	 * </pre>
 	 * 
-	 * @param image an {@link Image} instance
+	 * @param image an {@link ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public LDRImageLight(final Image image) {
+	public LDRImageLight(final ImageF image) {
 		this(image, AngleF.degrees(0.0F));
 	}
 	
@@ -144,11 +144,11 @@ public final class LDRImageLight implements Light {
 	 * }
 	 * </pre>
 	 * 
-	 * @param image an {@link Image} instance
+	 * @param image an {@link ImageF} instance
 	 * @param angle the {@link AngleF} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public LDRImageLight(final Image image, final AngleF angle) {
+	public LDRImageLight(final ImageF image, final AngleF angle) {
 		this(image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
@@ -164,12 +164,12 @@ public final class LDRImageLight implements Light {
 	 * }
 	 * </pre>
 	 * 
-	 * @param image an {@link Image} instance
+	 * @param image an {@link ImageF} instance
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public LDRImageLight(final Image image, final AngleF angle, final Vector2F scale) {
+	public LDRImageLight(final ImageF image, final AngleF angle, final Vector2F scale) {
 		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	}
 	

@@ -41,7 +41,7 @@ import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
@@ -55,7 +55,7 @@ import org.dayflower.util.ParameterArguments;
  * <p>
  * This {@code Texture} implementation is supported on the GPU.
  * <p>
- * This {@code LDRImageTexture} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code LDRImageTexture} instance from an {@code Image} instance. This is useful if
+ * This {@code LDRImageTexture} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code LDRImageTexture} instance from an {@link ImageF} instance. This is useful if
  * the requirement is to generate an image procedurally.
  * 
  * @since 1.0.0
@@ -115,10 +115,10 @@ public final class LDRImageTexture implements Texture {
 	 * }
 	 * </pre>
 	 * 
-	 * @param image an {@link Image} instance
+	 * @param image an {@link ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public LDRImageTexture(final Image image) {
+	public LDRImageTexture(final ImageF image) {
 		this(image, AngleF.degrees(0.0F));
 	}
 	
@@ -134,11 +134,11 @@ public final class LDRImageTexture implements Texture {
 	 * }
 	 * </pre>
 	 * 
-	 * @param image an {@link Image} instance
+	 * @param image an {@link ImageF} instance
 	 * @param angle the {@link AngleF} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public LDRImageTexture(final Image image, final AngleF angle) {
+	public LDRImageTexture(final ImageF image, final AngleF angle) {
 		this(image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
@@ -154,12 +154,12 @@ public final class LDRImageTexture implements Texture {
 	 * }
 	 * </pre>
 	 * 
-	 * @param image an {@link Image} instance
+	 * @param image an {@link ImageF} instance
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public LDRImageTexture(final Image image, final AngleF angle, final Vector2F scale) {
+	public LDRImageTexture(final ImageF image, final AngleF angle, final Vector2F scale) {
 		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	}
 	

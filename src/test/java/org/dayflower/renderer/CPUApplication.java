@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImage;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas.Observer;
@@ -155,7 +155,7 @@ public final class CPUApplication extends Application {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("unused")
-	private boolean doRender(final Image image) {
+	private boolean doRender(final ImageF image) {
 		return this.renderer.render();
 	}
 	
@@ -213,7 +213,7 @@ public final class CPUApplication extends Application {
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		@Override
-		public void onRenderDisplay(final Renderer renderer, final Image image) {
+		public void onRenderDisplay(final Renderer renderer, final ImageF image) {
 			
 		}
 		

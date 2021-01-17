@@ -18,22 +18,22 @@
  */
 package org.dayflower.renderer;
 
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.scene.Scene;
 
 /**
- * A {@code Renderer} is a renderer that can render a {@link Scene} instance to an {@link Image} instance and display the result with a {@link RendererObserver} instance.
+ * A {@code Renderer} is a renderer that can render a {@link Scene} instance to an {@link ImageF} instance and display the result with a {@link RendererObserver} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
 public interface Renderer {
 	/**
-	 * Returns the {@link Image} instance associated with this {@code Renderer} instance.
+	 * Returns the {@link ImageF} instance associated with this {@code Renderer} instance.
 	 * 
-	 * @return the {@code Image} instance associated with this {@code Renderer} instance
+	 * @return the {@code ImageF} instance associated with this {@code Renderer} instance
 	 */
-	Image getImage();
+	ImageF getImage();
 	
 	/**
 	 * Returns the {@link RendererObserver} instance associated with this {@code Renderer} instance.
@@ -57,7 +57,7 @@ public interface Renderer {
 	boolean isPreviewMode();
 	
 	/**
-	 * Renders the associated {@link Scene} instance to the associated {@link Image} instance and, optionally, updates the associated {@link Display} instance.
+	 * Renders the associated {@link Scene} instance to the associated {@link ImageF} instance and, optionally, updates the associated {@link Display} instance.
 	 * <p>
 	 * Returns {@code true} if, and only if, rendering was performed, {@code false} otherwise.
 	 * 
@@ -80,14 +80,14 @@ public interface Renderer {
 	void dispose();
 	
 	/**
-	 * Sets the {@link Image} instance associated with this {@code Renderer} instance to {@code image}.
+	 * Sets the {@link ImageF} instance associated with this {@code Renderer} instance to {@code image}.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image the {@code Image} instance associated with this {@code Renderer} instance
+	 * @param image the {@code ImageF} instance associated with this {@code Renderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	void setImage(final Image image);
+	void setImage(final ImageF image);
 	
 	/**
 	 * Sets the preview mode state associated with this {@code Renderer} instance to {@code isPreviewMode}.

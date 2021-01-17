@@ -49,7 +49,7 @@ public final class Functions {
 	 * @return a new {@code Function} instance that returns a constant {@code Color3F} instance
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-	public static Function<Pixel, Color3F> constant(final Color3F color) {
+	public static Function<PixelF, Color3F> constant(final Color3F color) {
 		Objects.requireNonNull(color, "color == null");
 		
 		return pixel -> color;
@@ -71,7 +71,7 @@ public final class Functions {
 	 * @return a new {@code Function} instance that returns {@code color} multiplied by Simplex fractional Brownian motion (fBm) noise
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
-	public static Function<Pixel, Color3F> simplexFractionalBrownianMotion(final Color3F color) {
+	public static Function<PixelF, Color3F> simplexFractionalBrownianMotion(final Color3F color) {
 		return simplexFractionalBrownianMotion(color, new Point2F(800.0F, 800.0F));
 	}
 	
@@ -92,7 +92,7 @@ public final class Functions {
 	 * @return a new {@code Function} instance that returns {@code color} multiplied by Simplex fractional Brownian motion (fBm) noise
 	 * @throws NullPointerException thrown if, and only if, either {@code color} or {@code boundaryA} are {@code null}
 	 */
-	public static Function<Pixel, Color3F> simplexFractionalBrownianMotion(final Color3F color, final Point2F boundaryA) {
+	public static Function<PixelF, Color3F> simplexFractionalBrownianMotion(final Color3F color, final Point2F boundaryA) {
 		return simplexFractionalBrownianMotion(color, boundaryA, new Point2F());
 	}
 	
@@ -114,7 +114,7 @@ public final class Functions {
 	 * @return a new {@code Function} instance that returns {@code color} multiplied by Simplex fractional Brownian motion (fBm) noise
 	 * @throws NullPointerException thrown if, and only if, either {@code color}, {@code boundaryA} or {@code boundaryB} are {@code null}
 	 */
-	public static Function<Pixel, Color3F> simplexFractionalBrownianMotion(final Color3F color, final Point2F boundaryA, final Point2F boundaryB) {
+	public static Function<PixelF, Color3F> simplexFractionalBrownianMotion(final Color3F color, final Point2F boundaryA, final Point2F boundaryB) {
 		return simplexFractionalBrownianMotion(color, boundaryA, boundaryB, 5.0F, 0.5F, 16);
 	}
 	
@@ -132,7 +132,7 @@ public final class Functions {
 	 * @return a new {@code Function} instance that returns {@code color} multiplied by Simplex fractional Brownian motion (fBm) noise
 	 * @throws NullPointerException thrown if, and only if, either {@code color}, {@code boundaryA} or {@code boundaryB} are {@code null}
 	 */
-	public static Function<Pixel, Color3F> simplexFractionalBrownianMotion(final Color3F color, final Point2F boundaryA, final Point2F boundaryB, final float frequency, final float gain, final int octaves) {
+	public static Function<PixelF, Color3F> simplexFractionalBrownianMotion(final Color3F color, final Point2F boundaryA, final Point2F boundaryB, final float frequency, final float gain, final int octaves) {
 		Objects.requireNonNull(color, "color == null");
 		Objects.requireNonNull(boundaryA, "boundaryA == null");
 		Objects.requireNonNull(boundaryB, "boundaryB == null");

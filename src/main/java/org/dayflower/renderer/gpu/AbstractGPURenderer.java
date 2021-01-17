@@ -22,9 +22,9 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.dayflower.image.ByteImage;
+import org.dayflower.image.ByteImageF;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.Image;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImage;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
@@ -46,7 +46,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
 	private final AtomicReference<RendererObserver> rendererObserver;
-	private Image image;
+	private ImageF image;
 	private RenderingAlgorithm renderingAlgorithm;
 	private Sampler sampler;
 	private Timer timer;
@@ -90,12 +90,12 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link Image} instance associated with this {@code AbstractGPURenderer} instance.
+	 * Returns the {@link ImageF} instance associated with this {@code AbstractGPURenderer} instance.
 	 * 
-	 * @return the {@code Image} instance associated with this {@code AbstractGPURenderer} instance
+	 * @return the {@code ImageF} instance associated with this {@code AbstractGPURenderer} instance
 	 */
 	@Override
-	public final Image getImage() {
+	public final ImageF getImage() {
 		return this.image;
 	}
 	
@@ -140,9 +140,9 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code AbstractGPURenderer} instance is clearing the {@link Image} instance in the next {@link #render()} call, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code AbstractGPURenderer} instance is clearing the {@link ImageF} instance in the next {@link #render()} call, {@code false} otherwise.
 	 * 
-	 * @return {@code true} if, and only if, this {@code AbstractGPURenderer} instance is clearing the {@code Image} instance in the next {@code  render()} call, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code AbstractGPURenderer} instance is clearing the {@code ImageF} instance in the next {@code  render()} call, {@code false} otherwise
 	 */
 	@Override
 	public final boolean isClearing() {
@@ -160,7 +160,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	}
 	
 	/**
-	 * Renders the associated {@link Scene} instance to the associated {@link Image} instance and, optionally, updates the associated {@link Display} instance.
+	 * Renders the associated {@link Scene} instance to the associated {@link ImageF} instance and, optionally, updates the associated {@link Display} instance.
 	 * <p>
 	 * Returns {@code true} if, and only if, rendering was performed, {@code false} otherwise.
 	 * 
@@ -172,7 +172,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		
 		final RendererObserver rendererObserver = getRendererObserver();
 		
-		final Image image = getImage();
+		final ImageF image = getImage();
 		
 		final Timer timer = getTimer();
 		
@@ -216,8 +216,8 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 				return false;
 			}
 			
-			if(image instanceof ByteImage) {
-				final ByteImage byteImage = ByteImage.class.cast(image);
+			if(image instanceof ByteImageF) {
+				final ByteImageF byteImage = ByteImageF.class.cast(image);
 				
 				final byte[] bytes = byteImage.getBytes(true);
 				final byte[] imageColorByteArray = getImageColorByteArray();
@@ -359,7 +359,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	}
 	
 	/**
-	 * Call this method to clear the {@link Image} in the next {@link #render()} call.
+	 * Call this method to clear the {@link ImageF} in the next {@link #render()} call.
 	 */
 	@Override
 	public final void clear() {
@@ -367,15 +367,15 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	}
 	
 	/**
-	 * Sets the {@link Image} instance associated with this {@code AbstractGPURenderer} instance to {@code image}.
+	 * Sets the {@link ImageF} instance associated with this {@code AbstractGPURenderer} instance to {@code image}.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image the {@code Image} instance associated with this {@code AbstractGPURenderer} instance
+	 * @param image the {@code ImageF} instance associated with this {@code AbstractGPURenderer} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
 	@Override
-	public final void setImage(final Image image) {
+	public final void setImage(final ImageF image) {
 		this.image = Objects.requireNonNull(image, "image == null");
 	}
 	
@@ -516,7 +516,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 */
 	@Override
 	public void setup() {
-		final Image image = getImage();
+		final ImageF image = getImage();
 		
 		final Scene scene = getScene();
 		

@@ -21,14 +21,14 @@ package org.dayflower.image;
 import static org.dayflower.util.Ints.min;
 
 /**
- * A {@code RegularSpectralCurve} is an implementation of {@link SpectralCurve} that contains regular spectral data.
+ * A {@code RegularSpectralCurveF} is an implementation of {@link SpectralCurveF} that contains regular spectral data.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class RegularSpectralCurve extends SpectralCurve {
+public final class RegularSpectralCurveF extends SpectralCurveF {
 	private final float delta;
 	private final float deltaReciprocal;
 	private final float lambdaMax;
@@ -38,7 +38,7 @@ public final class RegularSpectralCurve extends SpectralCurve {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code RegularSpectralCurve} instance.
+	 * Constructs a new {@code RegularSpectralCurveF} instance.
 	 * <p>
 	 * If {@code spectrum} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -49,7 +49,7 @@ public final class RegularSpectralCurve extends SpectralCurve {
 	 * @param spectrum an array with spectral data
 	 * @throws NullPointerException thrown if, and only if, {@code spectrum} is {@code null}
 	 */
-	public RegularSpectralCurve(final float lambdaMin, final float lambdaMax, final float[] spectrum) {
+	public RegularSpectralCurveF(final float lambdaMin, final float lambdaMax, final float[] spectrum) {
 		this.lambdaMin = lambdaMin;
 		this.lambdaMax = lambdaMax;
 		this.spectrum = spectrum.clone();

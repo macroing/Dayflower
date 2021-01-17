@@ -43,12 +43,12 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.ChromaticSpectralCurve;
+import org.dayflower.image.ChromaticSpectralCurveF;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.ConstantSpectralCurve;
-import org.dayflower.image.IrregularSpectralCurve;
-import org.dayflower.image.RegularSpectralCurve;
-import org.dayflower.image.SpectralCurve;
+import org.dayflower.image.ConstantSpectralCurveF;
+import org.dayflower.image.IrregularSpectralCurveF;
+import org.dayflower.image.RegularSpectralCurveF;
+import org.dayflower.image.SpectralCurveF;
 import org.dayflower.sampler.Distribution2F;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.scene.Intersection;
@@ -65,10 +65,10 @@ import org.dayflower.scene.LightRadianceIncomingResult;
  * @author J&#246;rgen Lundgren
  */
 public final class PerezLight implements Light {
-	private static final SpectralCurve K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
-	private static final SpectralCurve K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
-	private static final SpectralCurve K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
-	private static final SpectralCurve SOL_SPECTRAL_CURVE;
+	private static final SpectralCurveF K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
+	private static final SpectralCurveF K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
+	private static final SpectralCurveF K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
+	private static final SpectralCurveF SOL_SPECTRAL_CURVE;
 	private static final float[] K_GAS_ABSORPTION_ATTENUATION_AMPLITUDES;
 	private static final float[] K_GAS_ABSORPTION_ATTENUATION_WAVELENGTHS;
 	private static final float[] K_OZONE_ABSORPTION_ATTENUATION_AMPLITUDES;
@@ -89,11 +89,11 @@ public final class PerezLight implements Light {
 		
 		SOL_AMPLITUDES = new float[] {165.5F, 162.3F, 211.2F, 258.8F, 258.2F, 242.3F, 267.6F, 296.6F, 305.4F, 300.6F, 306.6F, 288.3F, 287.1F, 278.2F, 271.0F, 272.3F, 263.6F, 255.0F, 250.6F, 253.1F, 253.5F, 251.3F, 246.3F, 241.7F, 236.8F, 232.1F, 228.2F, 223.4F, 219.7F, 215.3F, 211.0F, 207.3F, 202.4F, 198.7F, 194.3F, 190.7F, 186.3F, 182.6F};
 		
-		K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurve(K_GAS_ABSORPTION_ATTENUATION_AMPLITUDES, K_GAS_ABSORPTION_ATTENUATION_WAVELENGTHS);
-		K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurve(K_OZONE_ABSORPTION_ATTENUATION_AMPLITUDES, K_OZONE_ABSORPTION_ATTENUATION_WAVELENGTHS);
-		K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurve(K_WATER_VAPOR_ABSORPTION_ATTENUATION_AMPLITUDES, K_WATER_VAPOR_ABSORPTION_ATTENUATION_WAVELENGTHS);
+		K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurveF(K_GAS_ABSORPTION_ATTENUATION_AMPLITUDES, K_GAS_ABSORPTION_ATTENUATION_WAVELENGTHS);
+		K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurveF(K_OZONE_ABSORPTION_ATTENUATION_AMPLITUDES, K_OZONE_ABSORPTION_ATTENUATION_WAVELENGTHS);
+		K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE = new IrregularSpectralCurveF(K_WATER_VAPOR_ABSORPTION_ATTENUATION_AMPLITUDES, K_WATER_VAPOR_ABSORPTION_ATTENUATION_WAVELENGTHS);
 		
-		SOL_SPECTRAL_CURVE = new RegularSpectralCurve(380.0F, 750.0F, SOL_AMPLITUDES);
+		SOL_SPECTRAL_CURVE = new RegularSpectralCurveF(380.0F, 750.0F, SOL_AMPLITUDES);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ public final class PerezLight implements Light {
 	private Color3F sunColor;
 	private Distribution2F distribution;
 	private OrthonormalBasis33F orthonormalBasis;
-	private SpectralCurve sunSpectralRadiance;
+	private SpectralCurveF sunSpectralRadiance;
 	private Vector3F sunDirection;
 	private Vector3F sunDirectionWorldSpace;
 	private double[] perezRelativeLuminance;
@@ -622,7 +622,7 @@ public final class PerezLight implements Light {
 		final double x = doCalculatePerezFunction(this.perezX, theta, gamma, this.zenith[1]);
 		final double y = doCalculatePerezFunction(this.perezY, theta, gamma, this.zenith[2]);
 		
-		final Color3F colorXYZ = ChromaticSpectralCurve.getColorXYZ((float)(x), (float)(y));
+		final Color3F colorXYZ = ChromaticSpectralCurveF.getColorXYZ((float)(x), (float)(y));
 		
 		final float x0 = (float)(colorXYZ.getX() * relativeLuminance / colorXYZ.getY());
 		final float y0 = (float)(relativeLuminance);
@@ -711,7 +711,7 @@ public final class PerezLight implements Light {
 			this.sunSpectralRadiance = doCalculateAttenuatedSunlight(this.theta, this.turbidity);
 			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingSRGB(Color3F.multiply(this.sunSpectralRadiance.toColorXYZ(), 1.0e-4F)));
 		} else {
-			this.sunSpectralRadiance = new ConstantSpectralCurve(0.0F);
+			this.sunSpectralRadiance = new ConstantSpectralCurveF(0.0F);
 			this.sunColor = Color3F.BLACK;
 		}
 	}
@@ -741,7 +741,7 @@ public final class PerezLight implements Light {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static SpectralCurve doCalculateAttenuatedSunlight(final float theta, final float turbidity) {
+	private static SpectralCurveF doCalculateAttenuatedSunlight(final float theta, final float turbidity) {
 		final float[] spectrum = new float[91];
 		
 		final double alpha = 1.3D;
@@ -761,6 +761,6 @@ public final class PerezLight implements Light {
 			spectrum[i] = (float)(amplitude);
 		}
 		
-		return new RegularSpectralCurve(350.0F, 800.0F, spectrum);
+		return new RegularSpectralCurveF(350.0F, 800.0F, spectrum);
 	}
 }

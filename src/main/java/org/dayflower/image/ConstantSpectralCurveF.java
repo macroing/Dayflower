@@ -19,24 +19,24 @@
 package org.dayflower.image;
 
 /**
- * A {@code ConstantSpectralCurve} is an implementation of {@link SpectralCurve} that returns a constant value.
+ * A {@code ConstantSpectralCurveF} is an implementation of {@link SpectralCurveF} that returns a constant value.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ConstantSpectralCurve extends SpectralCurve {
+public final class ConstantSpectralCurveF extends SpectralCurveF {
 	private final float amplitude;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code ConstantSpectralCurve} instance.
+	 * Constructs a new {@code ConstantSpectralCurveF} instance.
 	 * 
 	 * @param amplitude the constant value to use
 	 */
-	public ConstantSpectralCurve(final float amplitude) {
+	public ConstantSpectralCurveF(final float amplitude) {
 		this.amplitude = amplitude;
 	}
 	

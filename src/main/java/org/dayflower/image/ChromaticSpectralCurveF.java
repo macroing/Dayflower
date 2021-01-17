@@ -19,20 +19,20 @@
 package org.dayflower.image;
 
 /**
- * A {@code ChromaticSpectralCurve} is an implementation of {@link SpectralCurve} that contains chromaticity pairs.
+ * A {@code ChromaticSpectralCurveF} is an implementation of {@link SpectralCurveF} that contains chromaticity pairs.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ChromaticSpectralCurve extends SpectralCurve {
+public final class ChromaticSpectralCurveF extends SpectralCurveF {
 	private static final Color3F S0_XYZ;
 	private static final Color3F S1_XYZ;
 	private static final Color3F S2_XYZ;
-	private static final SpectralCurve K_S0_SPECTRAL_CURVE;
-	private static final SpectralCurve K_S1_SPECTRAL_CURVE;
-	private static final SpectralCurve K_S2_SPECTRAL_CURVE;
+	private static final SpectralCurveF K_S0_SPECTRAL_CURVE;
+	private static final SpectralCurveF K_S1_SPECTRAL_CURVE;
+	private static final SpectralCurveF K_S2_SPECTRAL_CURVE;
 	private static final float[] S0_AMPLITUDES;
 	private static final float[] S1_AMPLITUDES;
 	private static final float[] S2_AMPLITUDES;
@@ -49,9 +49,9 @@ public final class ChromaticSpectralCurve extends SpectralCurve {
 		S1_AMPLITUDES = new float[] {0.02F, 4.5F, 22.4F, 42.0F, 40.6F, 41.6F, 38.0F, 42.4F, 38.5F, 35.0F, 43.4F, 46.3F, 43.9F, 37.1F, 36.7F, 35.9F, 32.6F, 27.9F, 24.3F, 20.1F, 16.2F, 13.2F, 8.6F, 6.1F, 4.2F, 1.9F, 0.0F, -1.6F, -3.5F, -3.5F, -5.8F, -7.2F, -8.6F, -9.5F, -10.9F, -10.7F, -12.0F, -14.0F, -13.6F, -12.0F, -13.3F, -12.9F, -10.6F, -11.6F, -12.2F, -10.2F, -7.8F, -11.2F, -10.4F, -10.6F, -9.7F, -8.3F, -9.3F, -9.8F};
 		S2_AMPLITUDES = new float[] {0.0F, 2.0F, 4.0F, 8.5F, 7.8F, 6.7F, 5.3F, 6.1F, 3.0F, 1.2F, -1.1F, -0.5F, -0.7F, -1.2F, -2.6F, -2.9F, -2.8F, -2.6F, -2.6F, -1.8F, -1.5F, -1.3F, -1.2F, -1.0F, -0.5F, -0.3F, 0.0F, 0.2F, 0.5F, 2.1F, 3.2F, 4.1F, 4.7F, 5.1F, 6.7F, 7.3F, 8.6F, 9.8F, 10.2F, 8.3F, 9.6F, 8.5F, 7.0F, 7.6F, 8.0F, 6.7F, 5.2F, 7.4F, 6.8F, 7.0F, 6.4F, 5.5F, 6.1F, 6.5F};
 		
-		K_S0_SPECTRAL_CURVE = new RegularSpectralCurve(300.0F, 830.0F, S0_AMPLITUDES);
-		K_S1_SPECTRAL_CURVE = new RegularSpectralCurve(300.0F, 830.0F, S1_AMPLITUDES);
-		K_S2_SPECTRAL_CURVE = new RegularSpectralCurve(300.0F, 830.0F, S2_AMPLITUDES);
+		K_S0_SPECTRAL_CURVE = new RegularSpectralCurveF(300.0F, 830.0F, S0_AMPLITUDES);
+		K_S1_SPECTRAL_CURVE = new RegularSpectralCurveF(300.0F, 830.0F, S1_AMPLITUDES);
+		K_S2_SPECTRAL_CURVE = new RegularSpectralCurveF(300.0F, 830.0F, S2_AMPLITUDES);
 		
 		S0_XYZ = K_S0_SPECTRAL_CURVE.toColorXYZ();
 		S1_XYZ = K_S1_SPECTRAL_CURVE.toColorXYZ();
@@ -61,12 +61,12 @@ public final class ChromaticSpectralCurve extends SpectralCurve {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code ChromaticSpectralCurve} instance given the chromaticity pair of {@code x} and {@code y}.
+	 * Constructs a new {@code ChromaticSpectralCurveF} instance given the chromaticity pair of {@code x} and {@code y}.
 	 * 
 	 * @param x the X of the chromaticity pair
 	 * @param y the Y of the chromaticity pair
 	 */
-	public ChromaticSpectralCurve(final float x, final float y) {
+	public ChromaticSpectralCurveF(final float x, final float y) {
 		this.m1 = (-1.3515F -  1.7703F * x +  5.9114F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
 		this.m2 = (+0.03F   - 31.4424F * x + 30.0717F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
 	}

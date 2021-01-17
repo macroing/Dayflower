@@ -77,7 +77,7 @@ public final class Color3F {
 	/**
 	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for gold.
 	 */
-	public static final Color3F GOLD_ETA = convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_ETA.toColorXYZ());
+	public static final Color3F GOLD_ETA = convertXYZToRGBUsingPBRT(IrregularSpectralCurveF.GOLD_ETA.toColorXYZ());
 	
 	/**
 	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for gold, but has a restricted range.
@@ -87,7 +87,7 @@ public final class Color3F {
 	/**
 	 * A {@code Color3F} that contains the absorption coefficient for gold.
 	 */
-	public static final Color3F GOLD_K = convertXYZToRGBUsingPBRT(IrregularSpectralCurve.GOLD_K.toColorXYZ());
+	public static final Color3F GOLD_K = convertXYZToRGBUsingPBRT(IrregularSpectralCurveF.GOLD_K.toColorXYZ());
 	
 	/**
 	 * A {@code Color3F} that contains the absorption coefficient for gold, but has a restricted range.

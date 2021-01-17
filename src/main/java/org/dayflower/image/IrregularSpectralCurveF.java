@@ -19,33 +19,33 @@
 package org.dayflower.image;
 
 /**
- * An {@code IrregularSpectralCurve} is an implementation of {@link SpectralCurve} that contains irregular spectral data.
+ * An {@code IrregularSpectralCurveF} is an implementation of {@link SpectralCurveF} that contains irregular spectral data.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class IrregularSpectralCurve extends SpectralCurve {
+public final class IrregularSpectralCurveF extends SpectralCurveF {
 	/**
-	 * An {@code IrregularSpectralCurve} instance for copper.
+	 * An {@code IrregularSpectralCurveF} instance for copper.
 	 */
-	public static final IrregularSpectralCurve COPPER_ETA = new IrregularSpectralCurve(doCreateCopperAmplitudesEta(), doCreateCopperWavelengths());
+	public static final IrregularSpectralCurveF COPPER_ETA = new IrregularSpectralCurveF(doCreateCopperAmplitudesEta(), doCreateCopperWavelengths());
 	
 	/**
-	 * An {@code IrregularSpectralCurve} instance for copper.
+	 * An {@code IrregularSpectralCurveF} instance for copper.
 	 */
-	public static final IrregularSpectralCurve COPPER_K = new IrregularSpectralCurve(doCreateCopperAmplitudesK(), doCreateCopperWavelengths());
+	public static final IrregularSpectralCurveF COPPER_K = new IrregularSpectralCurveF(doCreateCopperAmplitudesK(), doCreateCopperWavelengths());
 	
 	/**
-	 * An {@code IrregularSpectralCurve} instance for gold.
+	 * An {@code IrregularSpectralCurveF} instance for gold.
 	 */
-	public static final IrregularSpectralCurve GOLD_ETA = new IrregularSpectralCurve(doCreateGoldAmplitudesEta(), doCreateGoldWavelengths());
+	public static final IrregularSpectralCurveF GOLD_ETA = new IrregularSpectralCurveF(doCreateGoldAmplitudesEta(), doCreateGoldWavelengths());
 	
 	/**
-	 * An {@code IrregularSpectralCurve} instance for gold.
+	 * An {@code IrregularSpectralCurveF} instance for gold.
 	 */
-	public static final IrregularSpectralCurve GOLD_K = new IrregularSpectralCurve(doCreateGoldAmplitudesK(), doCreateGoldWavelengths());
+	public static final IrregularSpectralCurveF GOLD_K = new IrregularSpectralCurveF(doCreateGoldAmplitudesK(), doCreateGoldWavelengths());
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -55,7 +55,7 @@ public final class IrregularSpectralCurve extends SpectralCurve {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code IrregularSpectralCurve} instance.
+	 * Constructs a new {@code IrregularSpectralCurveF} instance.
 	 * <p>
 	 * If either {@code amplitudes} or {@code wavelengths} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -65,7 +65,7 @@ public final class IrregularSpectralCurve extends SpectralCurve {
 	 * @param wavelengths an array with wavelengths in nanometers
 	 * @throws NullPointerException thrown if, and only if, either {@code amplitudes} or {@code wavelengths} are {@code null}
 	 */
-	public IrregularSpectralCurve(final float[] amplitudes, final float[] wavelengths) {
+	public IrregularSpectralCurveF(final float[] amplitudes, final float[] wavelengths) {
 		this.amplitudes = amplitudes.clone();
 		this.wavelengths = wavelengths.clone();
 	}

@@ -40,7 +40,7 @@ import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
 /**
- * A {@code Sphere3F} denotes a 3-dimensional rectangular cuboid that uses the data type {@code float}.
+ * A {@code RectangularCuboid3F} denotes a 3-dimensional rectangular cuboid that uses the data type {@code float}.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 

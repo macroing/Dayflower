@@ -807,9 +807,9 @@ public final class Curve3F implements Shape3F {
 		 * If either {@code pointA}, {@code pointB}, {@code pointC}, {@code pointD}, {@code type}, {@code normalA} or {@code normalB} are {@code null}, a {@code NullPointerException} will be thrown.
 		 * 
 		 * @param pointA a {@link Point3F} instance with the control point denoted by A
-		 * @param pointB a {@link Point3F} instance with the control point denoted by B
-		 * @param pointC a {@link Point3F} instance with the control point denoted by C
-		 * @param pointD a {@link Point3F} instance with the control point denoted by D
+		 * @param pointB a {@code Point3F} instance with the control point denoted by B
+		 * @param pointC a {@code Point3F} instance with the control point denoted by C
+		 * @param pointD a {@code Point3F} instance with the control point denoted by D
 		 * @param type the {@link Type} instance associated with this {@code Data} instance
 		 * @param normalA a {@link Vector3F} instance with the normal denoted by A
 		 * @param normalB a {@code Vector3F} instance with the normal denoted by B

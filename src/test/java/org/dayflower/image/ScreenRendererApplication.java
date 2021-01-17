@@ -40,7 +40,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public final class ScreenRendererApplication extends Application {
-	private final AtomicReference<Function<PixelImage, PixelImage>> function;
+	private final AtomicReference<Function<PixelImageF, PixelImageF>> function;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -52,7 +52,7 @@ public final class ScreenRendererApplication extends Application {
 	
 	@Override
 	public void start(final Stage stage) {
-		final AtomicReference<Function<PixelImage, PixelImage>> function = this.function;
+		final AtomicReference<Function<PixelImageF, PixelImageF>> function = this.function;
 		
 		final
 		ComboBox<String> comboBox = new ComboBox<>();
@@ -237,7 +237,7 @@ public final class ScreenRendererApplication extends Application {
 				final int width = (int)(boundsInScreen.getWidth());
 				final int height = (int)(boundsInScreen.getHeight());
 				
-				final PixelImage pixelImage = function.get().apply(PixelImage.createScreenCapture(new Rectangle2I(new Point2I(x - width, y), new Point2I(x, y + height))));
+				final PixelImageF pixelImage = function.get().apply(PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(x - width, y), new Point2I(x, y + height))));
 				
 				final WritableImage writableImage = pixelImage.toWritableImage();
 				

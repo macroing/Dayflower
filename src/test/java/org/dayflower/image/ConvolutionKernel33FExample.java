@@ -19,12 +19,12 @@
 package org.dayflower.image;
 
 import org.dayflower.image.ConvolutionKernel33F;
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 
 public class ConvolutionKernel33FExample {
 	public static void main(String[] args) {
-		PixelImage pixelImage = PixelImage.load("Image.png");
-		pixelImage.multiply(ConvolutionKernel33F.SHARPEN);
-		pixelImage.save("Convolution-Kernel-Example.png");
+		PixelImageF pixelImageF = PixelImageF.load("Image.png");
+		pixelImageF.multiply(ConvolutionKernel33F.SHARPEN);
+		pixelImageF.save("Convolution-Kernel-Example.png");
 	}
 }

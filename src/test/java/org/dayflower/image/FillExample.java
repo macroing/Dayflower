@@ -22,15 +22,15 @@ import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 
 public class FillExample {
 	public static void main(String[] args) {
-		PixelImage pixelImage0 = PixelImage.random(50, 50);
+		PixelImageF pixelImageF0 = PixelImageF.random(50, 50);
 		
-		PixelImage pixelImage = new PixelImage(150, 150);
-		pixelImage.fillCircle(new Circle2I(new Point2I(75, 75), 50), Color3F.RED);
-		pixelImage.fillPixelImage(pixelImage0, pixelImage0.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
-		pixelImage.save("Fill-Example.png");
+		PixelImageF pixelImageF = new PixelImageF(150, 150);
+		pixelImageF.fillCircle(new Circle2I(new Point2I(75, 75), 50), Color3F.RED);
+		pixelImageF.fillPixelImage(pixelImageF0, pixelImageF0.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
+		pixelImageF.save("Fill-Example.png");
 	}
 }

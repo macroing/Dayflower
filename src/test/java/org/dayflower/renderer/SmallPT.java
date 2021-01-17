@@ -28,7 +28,7 @@ import static org.dayflower.util.Doubles.sin;
 import static org.dayflower.util.Doubles.sqrt;
 
 import org.dayflower.image.Color3F;
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 
 public final class SmallPT {
 	private static final Sphere[] SPHERES = {
@@ -194,7 +194,7 @@ public final class SmallPT {
 			}
 		}
 		
-		final PixelImage pixelImage = new PixelImage(w, h);
+		final PixelImageF pixelImage = new PixelImageF(w, h);
 		
 		for(int i = 0; i < c.length; i++) {
 			pixelImage.setColorRGB(new Color3F(toInt(c[i].x), toInt(c[i].y), toInt(c[i].z)), i);

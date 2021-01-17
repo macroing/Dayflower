@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.dayflower.image.ImageF;
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas.Observer;
 import org.dayflower.renderer.cpu.AbstractCPURenderer;
@@ -65,7 +65,7 @@ public final class CPUApplication extends Application {
 	public void start(final Stage stage) {
 		final Renderer renderer = this.renderer;
 		
-		final PixelImage pixelImage = PixelImage.class.cast(renderer.getImage());
+		final PixelImageF pixelImage = PixelImageF.class.cast(renderer.getImage());
 		
 		final Camera camera = renderer.getScene().getCamera();
 		
@@ -166,7 +166,7 @@ public final class CPUApplication extends Application {
 		
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer();
-		combinedProgressiveImageOrderRenderer.setImage(new PixelImage((int)(scene.getCamera().getResolutionX()), (int)(scene.getCamera().getResolutionY())));
+		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF((int)(scene.getCamera().getResolutionX()), (int)(scene.getCamera().getResolutionY())));
 		combinedProgressiveImageOrderRenderer.setRenderPasses(1);
 		combinedProgressiveImageOrderRenderer.setRendererObserver(new NoOpRendererObserver());
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);

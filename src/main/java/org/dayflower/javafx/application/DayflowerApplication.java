@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
@@ -156,8 +156,8 @@ public final class DayflowerApplication extends Application {
 			final
 			CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
 //			CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new GPURenderer(new NoOpRendererObserver());
-			combinedProgressiveImageOrderRenderer.setImage(new PixelImage(resolutionX, resolutionY));
-//			combinedProgressiveImageOrderRenderer.setImage(new ByteImage(resolutionX, resolutionY));
+			combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(resolutionX, resolutionY));
+//			combinedProgressiveImageOrderRenderer.setImage(new ByteImageF(resolutionX, resolutionY));
 			combinedProgressiveImageOrderRenderer.setRenderPasses(1);
 			combinedProgressiveImageOrderRenderer.setRenderPassesPerDisplayUpdate(1);
 			combinedProgressiveImageOrderRenderer.setSamples(1);

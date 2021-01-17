@@ -34,7 +34,7 @@ import org.dayflower.geometry.SampleGeneratorD;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.image.Color3D;
 import org.dayflower.image.Color3F;
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 
 public final class SmallPTD {
 	private SmallPTD() {
@@ -184,7 +184,7 @@ public final class SmallPTD {
 			}
 		}
 		
-		final PixelImage pixelImage = new PixelImage(resolutionX, resolutionY);
+		final PixelImageF pixelImage = new PixelImageF(resolutionX, resolutionY);
 		
 		for(int i = 0; i < colors.length; i++) {
 			pixelImage.setColorRGB(new Color3F(colors[i]), i);

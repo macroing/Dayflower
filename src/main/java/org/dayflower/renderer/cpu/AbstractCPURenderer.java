@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.ImageF;
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
@@ -75,7 +75,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 		this.isClearing = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
 		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
-		this.image = new PixelImage(800, 800);
+		this.image = new PixelImageF(800, 800);
 		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
 		this.sampler = new NRooksSampler();
 		this.scene = new Scene();
@@ -187,11 +187,11 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 		
 		final ImageF image = getImage();
 		
-		if(!(image instanceof PixelImage)) {
+		if(!(image instanceof PixelImageF)) {
 			return false;
 		}
 		
-		final PixelImage pixelImage = PixelImage.class.cast(image);
+		final PixelImageF pixelImage = PixelImageF.class.cast(image);
 		
 		final Sampler sampler = getSampler();
 		

@@ -56,76 +56,76 @@ public final class ImageTest {
 	
 	static void doTestPixelImageDrawCircle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
-		pixelImage.drawCircle(new Circle2I(new Point2I(60, 60), 40));
-		pixelImage.save("./generated/doTestImageDrawCircle.png");
+		PixelImageF pixelImageF = new PixelImageF(800, 800, Color4F.WHITE);
+		pixelImageF.drawCircle(new Circle2I(new Point2I(60, 60), 40));
+		pixelImageF.save("./generated/doTestImageDrawCircle.png");
 	}
 	
 	static void doTestPixelImageDrawLine() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
-		pixelImage.drawLine(new Line2I(new Point2I(20, 20), new Point2I(100, 100)));
-		pixelImage.save("./generated/doTestImageDrawLine.png");
+		PixelImageF pixelImageF = new PixelImageF(800, 800, Color4F.WHITE);
+		pixelImageF.drawLine(new Line2I(new Point2I(20, 20), new Point2I(100, 100)));
+		pixelImageF.save("./generated/doTestImageDrawLine.png");
 	}
 	
 	static void doTestPixelImageDrawRectangle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
-		pixelImage.drawRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
-		pixelImage.save("./generated/doTestImageDrawRectangle.png");
+		PixelImageF pixelImageF = new PixelImageF(800, 800, Color4F.WHITE);
+		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
+		pixelImageF.save("./generated/doTestImageDrawRectangle.png");
 	}
 	
 	static void doTestPixelImageDrawTriangle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
-		pixelImage.drawTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
-		pixelImage.save("./generated/doTestImageDrawTriangle.png");
+		PixelImageF pixelImageF = new PixelImageF(800, 800, Color4F.WHITE);
+		pixelImageF.drawTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
+		pixelImageF.save("./generated/doTestImageDrawTriangle.png");
 	}
 	
 	static void doTestPixelImageFillCircle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
-		pixelImage.fillCircle(new Circle2I(new Point2I(60, 60), 40));
-		pixelImage.save("./generated/doTestImageFillCircle.png");
+		PixelImageF pixelImageF = new PixelImageF(800, 800, Color4F.WHITE);
+		pixelImageF.fillCircle(new Circle2I(new Point2I(60, 60), 40));
+		pixelImageF.save("./generated/doTestImageFillCircle.png");
 	}
 	
 	static void doTestPixelImageFillPixelImage() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
-		pixelImage.fillPixelImage(PixelImage.random(100, 100), new Rectangle2I(new Point2I(), new Point2I(100, 100)), new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-		pixelImage.save("./generated/doTestImageFillImage.png");
+		PixelImageF pixelImageF = new PixelImageF(800, 800, Color4F.WHITE);
+		pixelImageF.fillPixelImage(PixelImageF.random(100, 100), new Rectangle2I(new Point2I(), new Point2I(100, 100)), new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		pixelImageF.save("./generated/doTestImageFillImage.png");
 	}
 	
 	static void doTestPixelImageFillRectangle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
-		pixelImage.fillRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
-		pixelImage.save("./generated/doTestImageFillRectangle.png");
+		PixelImageF pixelImageF = new PixelImageF(800, 800, Color4F.WHITE);
+		pixelImageF.fillRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)));
+		pixelImageF.save("./generated/doTestImageFillRectangle.png");
 	}
 	
 	static void doTestPixelImageFillTriangle() {
 		final
-		PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
-		pixelImage.fillTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
-		pixelImage.save("./generated/doTestImageFillTriangle.png");
+		PixelImageF pixelImageF = new PixelImageF(800, 800, Color4F.WHITE);
+		pixelImageF.fillTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)));
+		pixelImageF.save("./generated/doTestImageFillTriangle.png");
 	}
 	
 	static void doTestPixelImageMultiplyConvolutionKernel33F() {
 		final
-		PixelImage pixelImage = PixelImage.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-		pixelImage.multiply(ConvolutionKernel33F.GAUSSIAN_BLUR);
-		pixelImage.save("./generated/doTestImageMultiplyConvolutionKernel33F.png");
+		PixelImageF pixelImageF = PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		pixelImageF.multiply(ConvolutionKernel33F.GAUSSIAN_BLUR);
+		pixelImageF.save("./generated/doTestImageMultiplyConvolutionKernel33F.png");
 	}
 	
 	static void doTestPixelImageMultiplyConvolutionKernel55F() {
 		final
-		PixelImage pixelImage = PixelImage.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-		pixelImage.multiply(ConvolutionKernel55F.GAUSSIAN_BLUR);
-		pixelImage.save("./generated/doTestImageMultiplyConvolutionKernel55F.png");
+		PixelImageF pixelImageF = PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		pixelImageF.multiply(ConvolutionKernel55F.GAUSSIAN_BLUR);
+		pixelImageF.save("./generated/doTestImageMultiplyConvolutionKernel55F.png");
 	}
 	
 	static void doTestPixelImageSamplerNRooksSampler() {
-		final PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
+		final PixelImageF pixelImage = new PixelImageF(800, 800, Color4F.WHITE);
 		
 		final Sampler sampler = new NRooksSampler();
 		
@@ -143,7 +143,7 @@ public final class ImageTest {
 	}
 	
 	static void doTestPixelImageSamplerRandomSampler() {
-		final PixelImage pixelImage = new PixelImage(800, 800, Color4F.WHITE);
+		final PixelImageF pixelImage = new PixelImageF(800, 800, Color4F.WHITE);
 		
 		final Sampler sampler = new RandomSampler();
 		
@@ -162,13 +162,13 @@ public final class ImageTest {
 	
 	static void doTestPixelImageScreenCapture() {
 		final
-		PixelImage pixelImage = PixelImage.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-		pixelImage.save("./generated/doTestImageScreenCapture.png");
+		PixelImageF pixelImageF = PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		pixelImageF.save("./generated/doTestImageScreenCapture.png");
 	}
 	
 	static void doTestPixelImageSave() {
 		final
-		PixelImage pixelImage = PixelImage.random();
-		pixelImage.save("./generated/doTestImageSave.png");
+		PixelImageF pixelImageF = PixelImageF.random();
+		pixelImageF.save("./generated/doTestImageSave.png");
 	}
 }

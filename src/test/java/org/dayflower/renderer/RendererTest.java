@@ -19,7 +19,7 @@
 package org.dayflower.renderer;
 
 import org.dayflower.image.ByteImageF;
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 import org.dayflower.renderer.Renderer;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.cpu.CPURenderer;
@@ -97,7 +97,7 @@ public final class RendererTest {
 		final
 		CPURenderer cPURenderer = new CPURenderer();
 		cPURenderer.setScene(new JavaSceneLoader().load(pathname));
-		cPURenderer.setImage(new PixelImage((int)(cPURenderer.getScene().getCamera().getResolutionX()), (int)(cPURenderer.getScene().getCamera().getResolutionY())));
+		cPURenderer.setImage(new PixelImageF((int)(cPURenderer.getScene().getCamera().getResolutionX()), (int)(cPURenderer.getScene().getCamera().getResolutionY())));
 		cPURenderer.setRenderingAlgorithm(renderingAlgorithm);
 		cPURenderer.setSampler(new RandomSampler());
 		cPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), cPURenderer.getScene().getName()));

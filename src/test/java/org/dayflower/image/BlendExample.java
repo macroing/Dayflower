@@ -18,14 +18,14 @@
  */
 package org.dayflower.image;
 
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 
 public class BlendExample {
 	public static void main(String[] args) {
-		PixelImage pixelImage0 = PixelImage.load("Image-0.png");
-		PixelImage pixelImage1 = PixelImage.load("Image-1.png");
+		PixelImageF pixelImageF0 = PixelImageF.load("Image-0.png");
+		PixelImageF pixelImageF1 = PixelImageF.load("Image-1.png");
 		
-		PixelImage pixelImage = PixelImage.blend(pixelImage0, pixelImage1, 0.5F);
-		pixelImage.save("Blend-Example.png");
+		PixelImageF pixelImageF = PixelImageF.blend(pixelImageF0, pixelImageF1, 0.5F);
+		pixelImageF.save("Blend-Example.png");
 	}
 }

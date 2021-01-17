@@ -27,7 +27,7 @@ import org.dayflower.util.BufferedImages;
 import org.dayflower.util.ParameterArguments;
 
 /**
- * A {@code PixelF} is a pixel of a {@link PixelImage} instance.
+ * A {@code PixelF} is a pixel of a {@link PixelImageF} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

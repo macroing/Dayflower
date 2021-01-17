@@ -28,7 +28,7 @@ import java.util.function.Function;
 import org.dayflower.geometry.Point2F;
 
 /**
- * A class that consists exclusively of static methods that returns {@code Function} instances to be used with a {@link PixelImage} instance.
+ * A class that consists exclusively of static methods that returns {@code Function} instances to be used with a {@link PixelImageF} instance.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

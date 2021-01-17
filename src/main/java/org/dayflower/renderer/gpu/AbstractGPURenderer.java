@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.dayflower.image.ByteImageF;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.ImageF;
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
@@ -73,7 +73,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		this.isClearing = new AtomicBoolean();
 		this.isRendering = new AtomicBoolean();
 		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
-		this.image = new PixelImage(800, 800);
+		this.image = new PixelImageF(800, 800);
 		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
 		this.sampler = new NRooksSampler();
 		this.timer = new Timer();
@@ -189,11 +189,11 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 				
 				filmClear();
 				
-				if(image instanceof PixelImage) {
+				if(image instanceof PixelImageF) {
 					final
-					PixelImage pixelImage = PixelImage.class.cast(image);
-					pixelImage.filmClear();
-					pixelImage.filmRender();
+					PixelImageF pixelImageF = PixelImageF.class.cast(image);
+					pixelImageF.filmClear();
+					pixelImageF.filmRender();
 				}
 				
 				rendererObserver.onRenderDisplay(this, image);
@@ -223,8 +223,8 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 				final byte[] imageColorByteArray = getImageColorByteArray();
 				
 				System.arraycopy(imageColorByteArray, 0, bytes, 0, bytes.length);
-			} else if(image instanceof PixelImage) {
-				final PixelImage pixelImage = PixelImage.class.cast(image);
+			} else if(image instanceof PixelImageF) {
+				final PixelImageF pixelImage = PixelImageF.class.cast(image);
 				
 				final float[] imageColorFloatArray = getImageColorFloatArray();
 				final float[] pixelArray = getPixelArray();
@@ -257,10 +257,10 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 			rendererObserver.onRenderPassProgress(this, renderPass, renderPasses, 1.0D);
 			
 			if(renderPass == 1 || renderPass % renderPassesPerDisplayUpdate == 0 || renderPass == renderPasses) {
-				if(image instanceof PixelImage) {
+				if(image instanceof PixelImageF) {
 					final
-					PixelImage pixelImage = PixelImage.class.cast(image);
-					pixelImage.filmRender();
+					PixelImageF pixelImageF = PixelImageF.class.cast(image);
+					pixelImageF.filmRender();
 				}
 				
 				rendererObserver.onRenderDisplay(this, image);

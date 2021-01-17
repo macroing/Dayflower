@@ -38,7 +38,7 @@ import org.dayflower.image.BoxFilter2F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Color4F;
 import org.dayflower.image.ImageF;
-import org.dayflower.image.PixelImage;
+import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
 import org.dayflower.javafx.scene.control.ObjectTreeView;
 import org.dayflower.javafx.scene.image.WritableImageCache;
@@ -425,7 +425,7 @@ final class RendererViewPane extends BorderPane {
 	private static WritableImage doCreateWritableImageMaterial(final Material material) {
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
-		combinedProgressiveImageOrderRenderer.setImage(new PixelImage(32, 32, Color4F.BLACK, new BoxFilter2F()));
+		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(32, 32, Color4F.BLACK, new BoxFilter2F()));
 		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(doCreateRenderingAlgorithm(material));
 		combinedProgressiveImageOrderRenderer.setRenderPasses(10);
@@ -434,18 +434,18 @@ final class RendererViewPane extends BorderPane {
 		combinedProgressiveImageOrderRenderer.render();
 		
 		final
-		PixelImage pixelImage = PixelImage.class.cast(combinedProgressiveImageOrderRenderer.getImage());
-		pixelImage.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImage.getResolutionX() - 1, pixelImage.getResolutionY() - 1)), new Color3F(181, 181, 181));
+		PixelImageF pixelImageF = PixelImageF.class.cast(combinedProgressiveImageOrderRenderer.getImage());
+		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color3F(181, 181, 181));
 		
-		return pixelImage.toWritableImage();
+		return pixelImageF.toWritableImage();
 	}
 	
 	@SuppressWarnings("unused")
 	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
 		final
-		PixelImage pixelImage = new PixelImage(32, 32, Color4F.WHITE);
-		pixelImage.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImage.getResolutionX() - 1, pixelImage.getResolutionY() - 1)), new Color3F(181, 181, 181));
+		PixelImageF pixelImageF = new PixelImageF(32, 32, Color4F.WHITE);
+		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color3F(181, 181, 181));
 		
-		return pixelImage.toWritableImage();
+		return pixelImageF.toWritableImage();
 	}
 }

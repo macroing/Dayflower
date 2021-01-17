@@ -349,7 +349,7 @@ public final class ByteImageF implements ImageF {
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image an {@code ImageF} instance
+	 * @param image an {@link ImageF} instance
 	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code ByteImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */

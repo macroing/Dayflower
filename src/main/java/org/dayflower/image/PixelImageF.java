@@ -57,7 +57,7 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
 
 /**
- * A {@code PixelImage} is an {@link ImageF} implementation that stores individual pixels as {@link PixelF} instances.
+ * A {@code PixelImageF} is an {@link ImageF} implementation that stores individual pixels as {@link PixelF} instances.
  * <p>
  * An instance of this class requires a lot of memory. It is therefore not advised to keep multiple instances of it in memory at once, only to retrieve the pixel colors.
  * <p>
@@ -70,7 +70,7 @@ import javafx.scene.image.WritableImage;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PixelImage implements ImageF {
+public final class PixelImageF implements ImageF {
 	private final Filter2F filter;
 	private final PixelF[] pixels;
 	private final float[] filterTable;
@@ -81,21 +81,21 @@ public final class PixelImage implements ImageF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@code Color4F.BLACK}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@code Color4F.BLACK}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(800, 800);
+	 * new PixelImageF(800, 800);
 	 * }
 	 * </pre>
 	 */
-	public PixelImage() {
+	public PixelImageF() {
 		this(800, 800);
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance from {@code bufferedImage}.
+	 * Constructs a new {@code PixelImageF} instance from {@code bufferedImage}.
 	 * <p>
 	 * If either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -104,7 +104,7 @@ public final class PixelImage implements ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(bufferedImage, new MitchellFilter2F());
+	 * new PixelImageF(bufferedImage, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -112,12 +112,12 @@ public final class PixelImage implements ImageF {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
-	public PixelImage(final BufferedImage bufferedImage) {
+	public PixelImageF(final BufferedImage bufferedImage) {
 		this(bufferedImage, new MitchellFilter2F());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance from {@code bufferedImage}.
+	 * Constructs a new {@code PixelImageF} instance from {@code bufferedImage}.
 	 * <p>
 	 * If either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -128,7 +128,7 @@ public final class PixelImage implements ImageF {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code bufferedImage} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final BufferedImage bufferedImage, final Filter2F filter) {
+	public PixelImageF(final BufferedImage bufferedImage, final Filter2F filter) {
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.pixels = PixelF.createPixels(bufferedImage);
 		this.filterTable = filter.createFilterTable();
@@ -138,14 +138,14 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance from {@code pixelImage}.
+	 * Constructs a new {@code PixelImageF} instance from {@code pixelImage}.
 	 * <p>
 	 * If {@code pixelImage} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pixelImage a {@code PixelImage} instance
+	 * @param pixelImage a {@code PixelImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code pixelImage} is {@code null}
 	 */
-	public PixelImage(final PixelImage pixelImage) {
+	public PixelImageF(final PixelImageF pixelImage) {
 		this.filter = pixelImage.filter;
 		this.pixels = Arrays.stream(pixelImage.pixels).map(pixel -> pixel.copy()).toArray(PixelF[]::new);
 		this.filterTable = pixelImage.filterTable.clone();
@@ -155,14 +155,14 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@code Color4F.BLACK}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@code Color4F.BLACK}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, Color4F.BLACK);
+	 * new PixelImageF(resolutionX, resolutionY, Color4F.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -170,12 +170,12 @@ public final class PixelImage implements ImageF {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY) {
+	public PixelImageF(final int resolutionX, final int resolutionY) {
 		this(resolutionX, resolutionY, Color4F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@code colorRGBA}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@code colorRGBA}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -184,22 +184,22 @@ public final class PixelImage implements ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBA, new MitchellFilter2F());
+	 * new PixelImageF(resolutionX, resolutionY, colorRGBA, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBA the {@link Color4F} to fill the {@code PixelImage} with
+	 * @param colorRGBA the {@link Color4F} to fill the {@code PixelImageF} with
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color4F colorRGBA) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final Color4F colorRGBA) {
 		this(resolutionX, resolutionY, colorRGBA, new MitchellFilter2F());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@code colorRGBA}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@code colorRGBA}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -207,12 +207,12 @@ public final class PixelImage implements ImageF {
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBA the {@link Color4F} to fill the {@code PixelImage} with
+	 * @param colorRGBA the {@link Color4F} to fill the {@code PixelImageF} with
 	 * @param filter the {@link Filter2F} to use
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color4F colorRGBA, final Filter2F filter) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final Color4F colorRGBA, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -222,7 +222,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with the {@link Color4F} instances in the array {@code colorRGBAs}.
+	 * Constructs a new {@code PixelImageF} instance filled with the {@link Color4F} instances in the array {@code colorRGBAs}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -231,22 +231,22 @@ public final class PixelImage implements ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, new MitchellFilter2F());
+	 * new PixelImageF(resolutionX, resolutionY, colorRGBAs, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBAs the {@code Color4F} instances to fill the {@code PixelImage} with
+	 * @param colorRGBAs the {@code Color4F} instances to fill the {@code PixelImageF} with
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or at least one of its elements are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs) {
 		this(resolutionX, resolutionY, colorRGBAs, new MitchellFilter2F());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with the {@link Color4F} instances in the array {@code colorRGBAs}.
+	 * Constructs a new {@code PixelImageF} instance filled with the {@link Color4F} instances in the array {@code colorRGBAs}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -254,12 +254,12 @@ public final class PixelImage implements ImageF {
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @param colorRGBAs the {@code Color4F} instances to fill the {@code PixelImage} with
+	 * @param colorRGBAs the {@code Color4F} instances to fill the {@code PixelImageF} with
 	 * @param filter the {@link Filter2F} to use
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, at least one of its elements or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs, final Filter2F filter) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -269,7 +269,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
 	 * <p>
 	 * If {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
@@ -281,7 +281,7 @@ public final class PixelImage implements ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
+	 * new PixelImageF(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -294,12 +294,12 @@ public final class PixelImage implements ImageF {
 	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or {@code arrayComponentOrder} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder) {
 		this(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
 	 * <p>
 	 * If {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
@@ -318,7 +318,7 @@ public final class PixelImage implements ImageF {
 	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter2F filter) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -328,7 +328,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
 	 * <p>
 	 * If {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
@@ -340,7 +340,7 @@ public final class PixelImage implements ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
+	 * new PixelImageF(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -353,12 +353,12 @@ public final class PixelImage implements ImageF {
 	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or {@code arrayComponentOrder} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder) {
 		this(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@link Color4F} instances read from {@code colorRGBAs}.
 	 * <p>
 	 * If {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
 	 * <p>
@@ -377,7 +377,7 @@ public final class PixelImage implements ImageF {
 	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter2F filter) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -387,7 +387,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances unpacked from {@code colorRGBAs}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@link Color4F} instances unpacked from {@code colorRGBAs}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -396,7 +396,7 @@ public final class PixelImage implements ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, packedIntComponentOrder, new MitchellFilter2F());
+	 * new PixelImageF(resolutionX, resolutionY, colorRGBAs, packedIntComponentOrder, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -407,12 +407,12 @@ public final class PixelImage implements ImageF {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or {@code packedIntComponentOrder} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder) {
 		this(resolutionX, resolutionY, colorRGBAs, packedIntComponentOrder, new MitchellFilter2F());
 	}
 	
 	/**
-	 * Constructs a new {@code PixelImage} instance filled with {@link Color4F} instances unpacked from {@code colorRGBAs}.
+	 * Constructs a new {@code PixelImageF} instance filled with {@link Color4F} instances unpacked from {@code colorRGBAs}.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
@@ -426,7 +426,7 @@ public final class PixelImage implements ImageF {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder, final Filter2F filter) {
+	public PixelImageF(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -438,9 +438,9 @@ public final class PixelImage implements ImageF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@code BufferedImage} representation of this {@code PixelImage} instance.
+	 * Returns a {@code BufferedImage} representation of this {@code PixelImageF} instance.
 	 * 
-	 * @return a {@code BufferedImage} representation of this {@code PixelImage} instance
+	 * @return a {@code BufferedImage} representation of this {@code PixelImageF} instance
 	 */
 	@Override
 	public BufferedImage toBufferedImage() {
@@ -588,14 +588,14 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Finds the bounds for {@code image} in this {@code PixelImage} instance.
+	 * Finds the bounds for {@code image} in this {@code PixelImageF} instance.
 	 * <p>
-	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code PixelImage} instance.
+	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code PixelImageF} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image an {@code Image} instance
-	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code PixelImage} instance
+	 * @param image an {@link ImageF} instance
+	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code PixelImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
 	@Override
@@ -715,19 +715,19 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Returns a copy of this {@code PixelImage} instance.
+	 * Returns a copy of this {@code PixelImageF} instance.
 	 * 
-	 * @return a copy of this {@code PixelImage} instance
+	 * @return a copy of this {@code PixelImageF} instance
 	 */
 	@Override
-	public PixelImage copy() {
-		return new PixelImage(this);
+	public PixelImageF copy() {
+		return new PixelImageF(this);
 	}
 	
 	/**
-	 * Returns a {@link Rectangle2I} with the bounds of this {@code PixelImage} instance.
+	 * Returns a {@link Rectangle2I} with the bounds of this {@code PixelImageF} instance.
 	 * 
-	 * @return a {@code Rectangle2I} with the bounds of this {@code PixelImage} instance
+	 * @return a {@code Rectangle2I} with the bounds of this {@code PixelImageF} instance
 	 */
 	@Override
 	public Rectangle2I getBounds() {
@@ -735,19 +735,19 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code PixelImage} instance.
+	 * Returns a {@code String} representation of this {@code PixelImageF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code PixelImage} instance
+	 * @return a {@code String} representation of this {@code PixelImageF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PixelImage(%d, %d, new Color3F[] {...}, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), this.filter);
+		return String.format("new PixelImageF(%d, %d, new Color3F[] {...}, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), this.filter);
 	}
 	
 	/**
-	 * Returns a {@code WritableImage} representation of this {@code PixelImage} instance.
+	 * Returns a {@code WritableImage} representation of this {@code PixelImageF} instance.
 	 * 
-	 * @return a {@code WritableImage} representation of this {@code PixelImage} instance
+	 * @return a {@code WritableImage} representation of this {@code PixelImageF} instance
 	 */
 	@Override
 	public WritableImage toWritableImage() {
@@ -759,30 +759,30 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code PixelImage} instance for equality.
+	 * Compares {@code object} to this {@code PixelImageF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PixelImage}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PixelImageF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code PixelImage} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PixelImage}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code PixelImageF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PixelImageF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof PixelImage)) {
+		} else if(!(object instanceof PixelImageF)) {
 			return false;
-		} else if(!Objects.equals(this.filter, PixelImage.class.cast(object).filter)) {
+		} else if(!Objects.equals(this.filter, PixelImageF.class.cast(object).filter)) {
 			return false;
-		} else if(!Arrays.equals(this.pixels, PixelImage.class.cast(object).pixels)) {
+		} else if(!Arrays.equals(this.pixels, PixelImageF.class.cast(object).pixels)) {
 			return false;
-		} else if(!Arrays.equals(this.filterTable, PixelImage.class.cast(object).filterTable)) {
+		} else if(!Arrays.equals(this.filterTable, PixelImageF.class.cast(object).filterTable)) {
 			return false;
-		} else if(this.resolution != PixelImage.class.cast(object).resolution) {
+		} else if(this.resolution != PixelImageF.class.cast(object).resolution) {
 			return false;
-		} else if(this.resolutionX != PixelImage.class.cast(object).resolutionX) {
+		} else if(this.resolutionX != PixelImageF.class.cast(object).resolutionX) {
 			return false;
-		} else if(this.resolutionY != PixelImage.class.cast(object).resolutionY) {
+		} else if(this.resolutionY != PixelImageF.class.cast(object).resolutionY) {
 			return false;
 		} else {
 			return true;
@@ -790,7 +790,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Returns the resolution of this {@code PixelImage} instance.
+	 * Returns the resolution of this {@code PixelImageF} instance.
 	 * <p>
 	 * The resolution of {@code pixelImage} can be computed by:
 	 * <pre>
@@ -799,7 +799,7 @@ public final class PixelImage implements ImageF {
 	 * }
 	 * </pre>
 	 * 
-	 * @return the resolution of this {@code PixelImage} instance
+	 * @return the resolution of this {@code PixelImageF} instance
 	 */
 	@Override
 	public int getResolution() {
@@ -807,11 +807,11 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Returns the resolution of the X-axis of this {@code PixelImage} instance.
+	 * Returns the resolution of the X-axis of this {@code PixelImageF} instance.
 	 * <p>
 	 * The resolution of the X-axis is also known as the width.
 	 * 
-	 * @return the resolution of the X-axis of this {@code PixelImage} instance
+	 * @return the resolution of the X-axis of this {@code PixelImageF} instance
 	 */
 	@Override
 	public int getResolutionX() {
@@ -819,11 +819,11 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Returns the resolution of the Y-axis of this {@code PixelImage} instance.
+	 * Returns the resolution of the Y-axis of this {@code PixelImageF} instance.
 	 * <p>
 	 * The resolution of the Y-axis is also known as the height.
 	 * 
-	 * @return the resolution of the Y-axis of this {@code PixelImage} instance
+	 * @return the resolution of the Y-axis of this {@code PixelImageF} instance
 	 */
 	@Override
 	public int getResolutionY() {
@@ -831,9 +831,9 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code PixelImage} instance.
+	 * Returns a hash code for this {@code PixelImageF} instance.
 	 * 
-	 * @return a hash code for this {@code PixelImage} instance
+	 * @return a hash code for this {@code PixelImageF} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -841,7 +841,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of this {@code PixelImage} instance in a packed form.
+	 * Returns an {@code int[]} representation of this {@code PixelImageF} instance in a packed form.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -850,7 +850,7 @@ public final class PixelImage implements ImageF {
 	 * }
 	 * </pre>
 	 * 
-	 * @return an {@code int[]} representation of this {@code PixelImage} instance in a packed form
+	 * @return an {@code int[]} representation of this {@code PixelImageF} instance in a packed form
 	 */
 	@Override
 	public int[] toIntArrayPackedForm() {
@@ -858,12 +858,12 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of this {@code PixelImage} instance in a packed form.
+	 * Returns an {@code int[]} representation of this {@code PixelImageF} instance in a packed form.
 	 * <p>
 	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder}
-	 * @return an {@code int[]} representation of this {@code PixelImage} instance in a packed form
+	 * @return an {@code int[]} representation of this {@code PixelImageF} instance in a packed form
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
 	@Override
@@ -880,7 +880,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code Color3F.BLACK}.
+	 * Clears this {@code PixelImageF} instance with a {@link Color3F} of {@code Color3F.BLACK}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -894,7 +894,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Clears this {@code PixelImage} instance with a {@link Color3F} of {@code colorRGB}.
+	 * Clears this {@code PixelImageF} instance with a {@link Color3F} of {@code colorRGB}.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -910,7 +910,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Copies the individual component values of the {@link Color3F} instances in this {@code PixelImage} instance to the {@code byte[]} {@code array}.
+	 * Copies the individual component values of the {@link Color3F} instances in this {@code PixelImageF} instance to the {@code byte[]} {@code array}.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -923,7 +923,7 @@ public final class PixelImage implements ImageF {
 	 * }
 	 * </pre>
 	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the {@code Color3F} instances in this {@code PixelImage} instance to
+	 * @param array the {@code byte[]} to copy the individual component values of the {@code Color3F} instances in this {@code PixelImageF} instance to
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != pixelImage.getResolution() * ArrayComponentOrder.BGRA.getComponentCount()}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
@@ -933,13 +933,13 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Copies the individual component values of the {@link Color3F} instances in this {@code PixelImage} instance to the {@code byte[]} {@code array}.
+	 * Copies the individual component values of the {@link Color3F} instances in this {@code PixelImageF} instance to the {@code byte[]} {@code array}.
 	 * <p>
 	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code array.length != pixelImage.getResolution() * arrayComponentOrder.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the {@code Color3F} instances in this {@code PixelImage} instance to
+	 * @param array the {@code byte[]} to copy the individual component values of the {@code Color3F} instances in this {@code PixelImageF} instance to
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder} to copy the components to {@code array} in the correct order
 	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != pixelImage.getResolution() * arrayComponentOrder.getComponentCount()}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
@@ -973,7 +973,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code circle} to this {@code PixelImage} instance with {@code Color3F.BLACK} as its color.
+	 * Draws {@code circle} to this {@code PixelImageF} instance with {@code Color3F.BLACK} as its color.
 	 * <p>
 	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -990,7 +990,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code circle} to this {@code PixelImage} instance with {@code colorRGB} as its color.
+	 * Draws {@code circle} to this {@code PixelImageF} instance with {@code colorRGB} as its color.
 	 * <p>
 	 * If either {@code circle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1011,7 +1011,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code circle} to this {@code PixelImage} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * Draws {@code circle} to this {@code PixelImageF} instance with {@link Color3F} instances returned by {@code function} as its color.
 	 * <p>
 	 * If either {@code circle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -1039,7 +1039,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code line} to this {@code PixelImage} instance with {@code Color3F.BLACK} as its color.
+	 * Draws {@code line} to this {@code PixelImageF} instance with {@code Color3F.BLACK} as its color.
 	 * <p>
 	 * If {@code line} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1056,7 +1056,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code line} to this {@code PixelImage} instance with {@code colorRGB} as its color.
+	 * Draws {@code line} to this {@code PixelImageF} instance with {@code colorRGB} as its color.
 	 * <p>
 	 * If either {@code line} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1077,7 +1077,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code line} to this {@code PixelImage} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * Draws {@code line} to this {@code PixelImageF} instance with {@link Color3F} instances returned by {@code function} as its color.
 	 * <p>
 	 * If either {@code line} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -1105,7 +1105,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code rectangle} to this {@code PixelImage} instance with {@code Color3F.BLACK} as its color.
+	 * Draws {@code rectangle} to this {@code PixelImageF} instance with {@code Color3F.BLACK} as its color.
 	 * <p>
 	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1122,7 +1122,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code rectangle} to this {@code PixelImage} instance with {@code colorRGB} as its color.
+	 * Draws {@code rectangle} to this {@code PixelImageF} instance with {@code colorRGB} as its color.
 	 * <p>
 	 * If either {@code rectangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1143,7 +1143,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code rectangle} to this {@code PixelImage} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * Draws {@code rectangle} to this {@code PixelImageF} instance with {@link Color3F} instances returned by {@code function} as its color.
 	 * <p>
 	 * If either {@code rectangle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -1176,7 +1176,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code triangle} to this {@code PixelImage} instance with {@code Color3F.BLACK} as its color.
+	 * Draws {@code triangle} to this {@code PixelImageF} instance with {@code Color3F.BLACK} as its color.
 	 * <p>
 	 * If {@code triangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1193,7 +1193,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code triangle} to this {@code PixelImage} instance with {@code colorRGB} as its color.
+	 * Draws {@code triangle} to this {@code PixelImageF} instance with {@code colorRGB} as its color.
 	 * <p>
 	 * If either {@code triangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1214,7 +1214,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Draws {@code triangle} to this {@code PixelImage} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * Draws {@code triangle} to this {@code PixelImageF} instance with {@link Color3F} instances returned by {@code function} as its color.
 	 * <p>
 	 * If either {@code triangle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -1232,7 +1232,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code circle} in this {@code PixelImage} instance with {@code Color3F.BLACK} as its color.
+	 * Fills {@code circle} in this {@code PixelImageF} instance with {@code Color3F.BLACK} as its color.
 	 * <p>
 	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1249,7 +1249,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code circle} in this {@code PixelImage} instance with {@code colorRGB} as its color.
+	 * Fills {@code circle} in this {@code PixelImageF} instance with {@code colorRGB} as its color.
 	 * <p>
 	 * If either {@code circle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1270,7 +1270,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code circle} in this {@code PixelImage} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * Fills {@code circle} in this {@code PixelImageF} instance with {@link Color3F} instances returned by {@code function} as its color.
 	 * <p>
 	 * If either {@code circle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -1298,7 +1298,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code sourcePixelImage} in this {@code PixelImage} instance.
+	 * Fills {@code sourcePixelImage} in this {@code PixelImageF} instance.
 	 * <p>
 	 * If {@code sourcePixelImage} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1309,15 +1309,15 @@ public final class PixelImage implements ImageF {
 	 * }
 	 * </pre>
 	 * 
-	 * @param sourcePixelImage the {@code PixelImage} to fill
+	 * @param sourcePixelImage the {@code PixelImageF} to fill
 	 * @throws NullPointerException thrown if, and only if, {@code sourcePixelImage} is {@code null}
 	 */
-	public void fillPixelImage(final PixelImage sourcePixelImage) {
+	public void fillPixelImage(final PixelImageF sourcePixelImage) {
 		fillPixelImage(sourcePixelImage, sourcePixelImage.getBounds());
 	}
 	
 	/**
-	 * Fills {@code sourcePixelImage} in this {@code PixelImage} instance.
+	 * Fills {@code sourcePixelImage} in this {@code PixelImageF} instance.
 	 * <p>
 	 * If either {@code sourcePixelImage} or {@code sourceRectangle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1328,16 +1328,16 @@ public final class PixelImage implements ImageF {
 	 * }
 	 * </pre>
 	 * 
-	 * @param sourcePixelImage the {@code PixelImage} to fill
+	 * @param sourcePixelImage the {@code PixelImageF} to fill
 	 * @param sourceBounds a {@link Rectangle2I} that represents the bounds of the region in {@code sourcePixelImage} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code sourcePixelImage} or {@code sourceRectangle} are {@code null}
 	 */
-	public void fillPixelImage(final PixelImage sourcePixelImage, final Rectangle2I sourceBounds) {
+	public void fillPixelImage(final PixelImageF sourcePixelImage, final Rectangle2I sourceBounds) {
 		fillPixelImage(sourcePixelImage, sourceBounds, getBounds());
 	}
 	
 	/**
-	 * Fills {@code sourcePixelImage} in this {@code PixelImage} instance.
+	 * Fills {@code sourcePixelImage} in this {@code PixelImageF} instance.
 	 * <p>
 	 * If either {@code sourcePixelImage}, {@code sourceRectangle} or {@code targetRectangle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1348,33 +1348,33 @@ public final class PixelImage implements ImageF {
 	 * }
 	 * </pre>
 	 * 
-	 * @param sourcePixelImage the {@code PixelImage} to fill
+	 * @param sourcePixelImage the {@code PixelImageF} to fill
 	 * @param sourceBounds a {@link Rectangle2I} that represents the bounds of the region in {@code sourcePixelImage} to use
-	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code PixelImage} instance to use
+	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code PixelImageF} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code sourcePixelImage}, {@code sourceRectangle} or {@code targetRectangle} are {@code null}
 	 */
-	public void fillPixelImage(final PixelImage sourcePixelImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds) {
+	public void fillPixelImage(final PixelImageF sourcePixelImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds) {
 		fillPixelImage(sourcePixelImage, sourceBounds, targetBounds, (sourcePixel, targetPixel) -> sourcePixel.getColorRGB());
 	}
 	
 	/**
-	 * Fills {@code sourcePixelImage} in this {@code PixelImage} instance with {@link Color3F} instances returned by {@code biFunction} as its color.
+	 * Fills {@code sourcePixelImage} in this {@code PixelImageF} instance with {@link Color3F} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * If either {@code sourcePixelImage}, {@code sourceRectangle}, {@code targetRectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param sourcePixelImage the {@code PixelImage} to fill
+	 * @param sourcePixelImage the {@code PixelImageF} to fill
 	 * @param sourceBounds a {@link Rectangle2I} that represents the bounds of the region in {@code sourcePixelImage} to use
-	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code PixelImage} instance to use
+	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code PixelImageF} instance to use
 	 * @param biFunction a {@code BiFunction} that returns {@code Color3F} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code sourcePixelImage}, {@code sourceRectangle}, {@code targetRectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public void fillPixelImage(final PixelImage sourcePixelImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds, final BiFunction<PixelF, PixelF, Color3F> biFunction) {
+	public void fillPixelImage(final PixelImageF sourcePixelImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds, final BiFunction<PixelF, PixelF, Color3F> biFunction) {
 		Objects.requireNonNull(sourcePixelImage, "sourcePixelImage == null");
 		Objects.requireNonNull(sourceBounds, "sourceBounds == null");
 		Objects.requireNonNull(targetBounds, "targetBounds == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
-		final PixelImage targetPixelImage = this;
+		final PixelImageF targetPixelImage = this;
 		
 		final int sourceMinimumX = sourceBounds.getA().getX();
 		final int sourceMinimumY = sourceBounds.getA().getY();
@@ -1403,7 +1403,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code PixelImage} instance with {@code Color3F.BLACK} as its color.
+	 * Fills {@code rectangle} in this {@code PixelImageF} instance with {@code Color3F.BLACK} as its color.
 	 * <p>
 	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1420,7 +1420,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code PixelImage} instance with {@code colorRGB} as its color.
+	 * Fills {@code rectangle} in this {@code PixelImageF} instance with {@code colorRGB} as its color.
 	 * <p>
 	 * If either {@code rectangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1441,7 +1441,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code PixelImage} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * Fills {@code rectangle} in this {@code PixelImageF} instance with {@link Color3F} instances returned by {@code function} as its color.
 	 * <p>
 	 * If either {@code rectangle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -1472,7 +1472,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code triangle} in this {@code PixelImage} instance with {@code Color3F.BLACK} as its color.
+	 * Fills {@code triangle} in this {@code PixelImageF} instance with {@code Color3F.BLACK} as its color.
 	 * <p>
 	 * If {@code triangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1489,7 +1489,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code triangle} in this {@code PixelImage} instance with {@code colorRGB} as its color.
+	 * Fills {@code triangle} in this {@code PixelImageF} instance with {@code colorRGB} as its color.
 	 * <p>
 	 * If either {@code triangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1510,7 +1510,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Fills {@code triangle} in this {@code PixelImage} instance with {@link Color3F} instances returned by {@code function} as its color.
+	 * Fills {@code triangle} in this {@code PixelImageF} instance with {@link Color3F} instances returned by {@code function} as its color.
 	 * <p>
 	 * If either {@code triangle} or {@code function} are {@code null} or {@code function} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -1706,7 +1706,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Flips this {@code PixelImage} instance along the X-axis.
+	 * Flips this {@code PixelImageF} instance along the X-axis.
 	 */
 	public void flipX() {
 		for(int xL = 0, xR = this.resolutionX - 1; xL < xR; xL++, xR--) {
@@ -1717,7 +1717,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Flips this {@code PixelImage} instance along the Y-axis.
+	 * Flips this {@code PixelImageF} instance along the Y-axis.
 	 */
 	public void flipY() {
 		for(int yT = 0, yB = this.resolutionY - 1; yT < yB; yT++, yB--) {
@@ -1728,7 +1728,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Inverts this {@code PixelImage} instance.
+	 * Inverts this {@code PixelImageF} instance.
 	 */
 	public void invert() {
 		for(final PixelF pixel : this.pixels) {
@@ -1737,7 +1737,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Multiplies this {@code PixelImage} instance with {@code convolutionKernel}.
+	 * Multiplies this {@code PixelImageF} instance with {@code convolutionKernel}.
 	 * <p>
 	 * If {@code convolutionKernel} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -1748,7 +1748,7 @@ public final class PixelImage implements ImageF {
 		final Color3F factor = new Color3F(convolutionKernel.getFactor());
 		final Color3F bias = new Color3F(convolutionKernel.getBias());
 		
-		final PixelImage pixelImage = copy();
+		final PixelImageF pixelImage = copy();
 		
 		for(int y = 0; y < this.resolutionY; y++) {
 			for(int x = 0; x < this.resolutionX; x++) {
@@ -1781,7 +1781,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Multiplies this {@code PixelImage} instance with {@code convolutionKernel}.
+	 * Multiplies this {@code PixelImageF} instance with {@code convolutionKernel}.
 	 * <p>
 	 * If {@code convolutionKernel} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -1792,7 +1792,7 @@ public final class PixelImage implements ImageF {
 		final Color3F factor = new Color3F(convolutionKernel.getFactor());
 		final Color3F bias = new Color3F(convolutionKernel.getBias());
 		
-		final PixelImage pixelImage = copy();
+		final PixelImageF pixelImage = copy();
 		
 		for(int y = 0; y < this.resolutionY; y++) {
 			for(int x = 0; x < this.resolutionX; x++) {
@@ -1845,7 +1845,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Redoes gamma correction on this {@code PixelImage} instance using PBRT.
+	 * Redoes gamma correction on this {@code PixelImageF} instance using PBRT.
 	 */
 	public void redoGammaCorrectionPBRT() {
 		for(final PixelF pixel : this.pixels) {
@@ -1854,7 +1854,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Redoes gamma correction on this {@code PixelImage} instance using SRGB.
+	 * Redoes gamma correction on this {@code PixelImageF} instance using SRGB.
 	 */
 	public void redoGammaCorrectionSRGB() {
 		for(final PixelF pixel : this.pixels) {
@@ -1863,7 +1863,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Saves this {@code PixelImage} as a .PNG image to the file represented by {@code file}.
+	 * Saves this {@code PixelImageF} as a .PNG image to the file represented by {@code file}.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1889,7 +1889,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Saves this {@code PixelImage} as a .PNG image to the file represented by the pathname {@code pathname}.
+	 * Saves this {@code PixelImageF} as a .PNG image to the file represented by the pathname {@code pathname}.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -2007,7 +2007,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Undoes gamma correction on this {@code PixelImage} instance using PBRT.
+	 * Undoes gamma correction on this {@code PixelImageF} instance using PBRT.
 	 */
 	public void undoGammaCorrectionPBRT() {
 		for(final PixelF pixel : this.pixels) {
@@ -2016,7 +2016,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Undoes gamma correction on this {@code PixelImage} instance using SRGB.
+	 * Undoes gamma correction on this {@code PixelImageF} instance using SRGB.
 	 */
 	public void undoGammaCorrectionSRGB() {
 		for(final PixelF pixel : this.pixels) {
@@ -2025,7 +2025,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Updates this {@code PixelImage} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
+	 * Updates this {@code PixelImageF} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
 	 * <p>
 	 * If {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -2044,7 +2044,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Updates this {@code PixelImage} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
+	 * Updates this {@code PixelImageF} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
 	 * <p>
 	 * If either {@code function}, {@code a} or {@code b} are {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -2065,7 +2065,7 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Updates this {@code PixelImage} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
+	 * Updates this {@code PixelImageF} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
 	 * <p>
 	 * If {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -2103,66 +2103,66 @@ public final class PixelImage implements ImageF {
 	/**
 	 * Blends {@code pixelImageA} and {@code pixelImageB} using the factor {@code 0.5F}.
 	 * <p>
-	 * Returns a new {@code PixelImage} instance with the result of the blend operation.
+	 * Returns a new {@code PixelImageF} instance with the result of the blend operation.
 	 * <p>
 	 * If either {@code pixelImageA} or {@code pixelImageB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImage.blend(pixelImageA, pixelImageB, 0.5F);
+	 * PixelImageF.blend(pixelImageA, pixelImageB, 0.5F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param pixelImageA one of the {@code PixelImage} instances to blend
-	 * @param pixelImageB one of the {@code PixelImage} instances to blend
-	 * @return a new {@code PixelImage} instance with the result of the blend operation
+	 * @param pixelImageA one of the {@code PixelImageF} instances to blend
+	 * @param pixelImageB one of the {@code PixelImageF} instances to blend
+	 * @return a new {@code PixelImageF} instance with the result of the blend operation
 	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
 	 */
-	public static PixelImage blend(final PixelImage pixelImageA, final PixelImage pixelImageB) {
+	public static PixelImageF blend(final PixelImageF pixelImageA, final PixelImageF pixelImageB) {
 		return blend(pixelImageA, pixelImageB, 0.5F);
 	}
 	
 	/**
 	 * Blends {@code pixelImageA} and {@code pixelImageB} using the factor {@code t}.
 	 * <p>
-	 * Returns a new {@code PixelImage} instance with the result of the blend operation.
+	 * Returns a new {@code PixelImageF} instance with the result of the blend operation.
 	 * <p>
 	 * If either {@code pixelImageA} or {@code pixelImageB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImage.blend(pixelImageA, pixelImageB, t, t, t);
+	 * PixelImageF.blend(pixelImageA, pixelImageB, t, t, t);
 	 * }
 	 * </pre>
 	 * 
-	 * @param pixelImageA one of the {@code PixelImage} instances to blend
-	 * @param pixelImageB one of the {@code PixelImage} instances to blend
+	 * @param pixelImageA one of the {@code PixelImageF} instances to blend
+	 * @param pixelImageB one of the {@code PixelImageF} instances to blend
 	 * @param t the factor to use for all components in the blending process
-	 * @return a new {@code PixelImage} instance with the result of the blend operation
+	 * @return a new {@code PixelImageF} instance with the result of the blend operation
 	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
 	 */
-	public static PixelImage blend(final PixelImage pixelImageA, final PixelImage pixelImageB, final float t) {
+	public static PixelImageF blend(final PixelImageF pixelImageA, final PixelImageF pixelImageB, final float t) {
 		return blend(pixelImageA, pixelImageB, t, t, t);
 	}
 	
 	/**
 	 * Blends {@code pixelImageA} and {@code pixelImageB} using the factors {@code tComponent1}, {@code tComponent2} and {@code tComponent3}.
 	 * <p>
-	 * Returns a new {@code PixelImage} instance with the result of the blend operation.
+	 * Returns a new {@code PixelImageF} instance with the result of the blend operation.
 	 * <p>
 	 * If either {@code pixelImageA} or {@code pixelImageB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pixelImageA one of the {@code PixelImage} instances to blend
-	 * @param pixelImageB one of the {@code PixelImage} instances to blend
+	 * @param pixelImageA one of the {@code PixelImageF} instances to blend
+	 * @param pixelImageB one of the {@code PixelImageF} instances to blend
 	 * @param tComponent1 the factor to use for component 1 in the blending process
 	 * @param tComponent2 the factor to use for component 1 in the blending process
 	 * @param tComponent3 the factor to use for component 1 in the blending process
-	 * @return a new {@code PixelImage} instance with the result of the blend operation
+	 * @return a new {@code PixelImageF} instance with the result of the blend operation
 	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
 	 */
-	public static PixelImage blend(final PixelImage pixelImageA, final PixelImage pixelImageB, final float tComponent1, final float tComponent2, final float tComponent3) {
+	public static PixelImageF blend(final PixelImageF pixelImageA, final PixelImageF pixelImageB, final float tComponent1, final float tComponent2, final float tComponent3) {
 		final int pixelImageAResolutionX = pixelImageA.resolutionX;
 		final int pixelImageAResolutionY = pixelImageA.resolutionY;
 		
@@ -2172,7 +2172,7 @@ public final class PixelImage implements ImageF {
 		final int pixelImageCResolutionX = max(pixelImageAResolutionX, pixelImageBResolutionX);
 		final int pixelImageCResolutionY = max(pixelImageAResolutionY, pixelImageBResolutionY);
 		
-		final PixelImage pixelImageC = new PixelImage(pixelImageCResolutionX, pixelImageCResolutionY);
+		final PixelImageF pixelImageC = new PixelImageF(pixelImageCResolutionX, pixelImageCResolutionY);
 		
 		for(int y = 0; y < pixelImageCResolutionY; y++) {
 			for(int x = 0; x < pixelImageCResolutionX; x++) {
@@ -2188,9 +2188,9 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Creates a {@code PixelImage} by capturing the contents of the screen, without the mouse cursor.
+	 * Creates a {@code PixelImageF} by capturing the contents of the screen, without the mouse cursor.
 	 * <p>
-	 * Returns a new {@code PixelImage} instance.
+	 * Returns a new {@code PixelImageF} instance.
 	 * <p>
 	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -2199,27 +2199,27 @@ public final class PixelImage implements ImageF {
 	 * If the permission {@code readDisplayPixels} is not granted, a {@code SecurityException} will be thrown.
 	 * 
 	 * @param rectangle a {@link Rectangle2I} that contains the bounds
-	 * @return a new {@code PixelImage} instance
+	 * @return a new {@code PixelImageF} instance
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code rectangle.getC().getX() - rectangle.getA().getX()} or {@code rectangle.getC().getY() - rectangle.getA().getY()} are less than or equal to {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 * @throws SecurityException thrown if, and only if, the permission {@code readDisplayPixels} is not granted
 	 */
-	public static PixelImage createScreenCapture(final Rectangle2I rectangle) {
-		return new PixelImage(BufferedImages.createScreenCapture(rectangle.getA().getX(), rectangle.getA().getY(), rectangle.getC().getX() - rectangle.getA().getX(), rectangle.getC().getY() - rectangle.getA().getY()));
+	public static PixelImageF createScreenCapture(final Rectangle2I rectangle) {
+		return new PixelImageF(BufferedImages.createScreenCapture(rectangle.getA().getX(), rectangle.getA().getY(), rectangle.getC().getX() - rectangle.getA().getX(), rectangle.getC().getY() - rectangle.getA().getY()));
 	}
 	
 	/**
-	 * Returns a {@code PixelImage} that shows the difference between {@code pixelImageA} and {@code pixelImageB} with {@code Color3F.BLACK}.
+	 * Returns a {@code PixelImageF} that shows the difference between {@code pixelImageA} and {@code pixelImageB} with {@code Color3F.BLACK}.
 	 * <p>
 	 * If either {@code pixelImageA} or {@code pixelImageB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pixelImageA an {@code PixelImage} instance
-	 * @param pixelImageB an {@code PixelImage} instance
+	 * @param pixelImageA an {@code PixelImageF} instance
+	 * @param pixelImageB an {@code PixelImageF} instance
 	 * @return a {@code PixelImage} that shows the difference between {@code pixelImageA} and {@code pixelImageB} with {@code Color3F.BLACK}
 	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
 	 */
-	public static PixelImage difference(final PixelImage pixelImageA, final PixelImage pixelImageB) {
-		final PixelImage pixelImageC = new PixelImage(max(pixelImageA.resolutionX, pixelImageB.resolutionX), max(pixelImageA.resolutionY, pixelImageB.resolutionY));
+	public static PixelImageF difference(final PixelImageF pixelImageA, final PixelImageF pixelImageB) {
+		final PixelImageF pixelImageC = new PixelImageF(max(pixelImageA.resolutionX, pixelImageB.resolutionX), max(pixelImageA.resolutionY, pixelImageB.resolutionY));
 		
 		for(int y = 0; y < pixelImageC.resolutionY; y++) {
 			for(int x = 0; x < pixelImageC.resolutionX; x++) {
@@ -2235,9 +2235,9 @@ public final class PixelImage implements ImageF {
 	}
 	
 	/**
-	 * Loads a {@code PixelImage} from the file represented by {@code file}.
+	 * Loads a {@code PixelImageF} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code PixelImage} instance.
+	 * Returns a new {@code PixelImageF} instance.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -2246,23 +2246,23 @@ public final class PixelImage implements ImageF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImage.load(file, new MitchellFilter2F());
+	 * PixelImageF.load(file, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
-	 * @return a new {@code PixelImage} instance
+	 * @return a new {@code PixelImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static PixelImage load(final File file) {
+	public static PixelImageF load(final File file) {
 		return load(file, new MitchellFilter2F());
 	}
 	
 	/**
-	 * Loads a {@code PixelImage} from the file represented by {@code file}.
+	 * Loads a {@code PixelImageF} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code PixelImage} instance.
+	 * Returns a new {@code PixelImageF} instance.
 	 * <p>
 	 * If either {@code file} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -2270,22 +2270,22 @@ public final class PixelImage implements ImageF {
 	 * 
 	 * @param file a {@code File} that represents the file to load from
 	 * @param filter the {@link Filter2F} to use
-	 * @return a new {@code PixelImage} instance
+	 * @return a new {@code PixelImageF} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code filter} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static PixelImage load(final File file, final Filter2F filter) {
+	public static PixelImageF load(final File file, final Filter2F filter) {
 		try {
-			return new PixelImage(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))), filter);
+			return new PixelImageF(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))), filter);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Loads a {@code PixelImage} from the file represented by the pathname {@code pathname}.
+	 * Loads a {@code PixelImageF} from the file represented by the pathname {@code pathname}.
 	 * <p>
-	 * Returns a new {@code PixelImage} instance.
+	 * Returns a new {@code PixelImageF} instance.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -2294,23 +2294,23 @@ public final class PixelImage implements ImageF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImage.load(pathname, new MitchellFilter2F());
+	 * PixelImageF.load(pathname, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname of the file to load from
-	 * @return a new {@code PixelImage} instance
+	 * @return a new {@code PixelImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static PixelImage load(final String pathname) {
+	public static PixelImageF load(final String pathname) {
 		return load(pathname, new MitchellFilter2F());
 	}
 	
 	/**
-	 * Loads a {@code PixelImage} from the file represented by the pathname {@code pathname}.
+	 * Loads a {@code PixelImageF} from the file represented by the pathname {@code pathname}.
 	 * <p>
-	 * Returns a new {@code PixelImage} instance.
+	 * Returns a new {@code PixelImageF} instance.
 	 * <p>
 	 * If either {@code pathname} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -2319,47 +2319,47 @@ public final class PixelImage implements ImageF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImage.load(new File(pathname), filter);
+	 * PixelImageF.load(new File(pathname), filter);
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname of the file to load from
 	 * @param filter the {@link Filter2F} to use
-	 * @return a new {@code PixelImage} instance
+	 * @return a new {@code PixelImageF} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code filter} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static PixelImage load(final String pathname, final Filter2F filter) {
+	public static PixelImageF load(final String pathname, final Filter2F filter) {
 		return load(new File(pathname), filter);
 	}
 	
 	/**
-	 * Returns a new {@code PixelImage} instance filled with random {@link Color4F} instances.
+	 * Returns a new {@code PixelImageF} instance filled with random {@link Color4F} instances.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImage.random(800, 800);
+	 * PixelImageF.random(800, 800);
 	 * }
 	 * </pre>
 	 * 
-	 * @return a new {@code PixelImage} instance filled with random {@code Color4F} instances
+	 * @return a new {@code PixelImageF} instance filled with random {@code Color4F} instances
 	 */
-	public static PixelImage random() {
+	public static PixelImageF random() {
 		return random(800, 800);
 	}
 	
 	/**
-	 * Returns a new {@code PixelImage} instance filled with random {@link Color4F} instances.
+	 * Returns a new {@code PixelImageF} instance filled with random {@link Color4F} instances.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
-	 * @return a new {@code PixelImage} instance filled with random {@code Color4F} instances
+	 * @return a new {@code PixelImageF} instance filled with random {@code Color4F} instances
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
-	public static PixelImage random(final int resolutionX, final int resolutionY) {
-		return new PixelImage(resolutionX, resolutionY, Color4F.arrayRandom(resolutionX * resolutionY));
+	public static PixelImageF random(final int resolutionX, final int resolutionY) {
+		return new PixelImageF(resolutionX, resolutionY, Color4F.arrayRandom(resolutionX * resolutionY));
 	}
 }

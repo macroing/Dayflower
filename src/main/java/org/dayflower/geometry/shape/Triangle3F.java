@@ -62,62 +62,62 @@ public final class Triangle3F implements Shape3F {
 	public static final int ARRAY_LENGTH = 40;
 	
 	/**
-	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code A} in the {@code float[]}.
+	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex3F} {@code A} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V = 24;
 	
 	/**
-	 * The offset for the {@link Vector3F} instance representing the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code A} in the {@code float[]}.
+	 * The offset for the {@link Vector3F} instance representing the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex3F} {@code A} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_A_ORTHONORMAL_BASIS_W = 15;
 	
 	/**
-	 * The offset for the {@link Point3F} instance representing the position of {@link Vertex} {@code A} in the {@code float[]}.
+	 * The offset for the {@link Point3F} instance representing the position of {@link Vertex3F} {@code A} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_A_POSITION = 0;
 	
 	/**
-	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex} {@code A} in the {@code float[]}.
+	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex3F} {@code A} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_A_TEXTURE_COORDINATES = 9;
 	
 	/**
-	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code B} in the {@code float[]}.
+	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex3F} {@code B} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V = 27;
 	
 	/**
-	 * The offset for the {@link Vector3F} instance representing the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code B} in the {@code float[]}.
+	 * The offset for the {@link Vector3F} instance representing the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex3F} {@code B} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W = 18;
 	
 	/**
-	 * The offset for the {@link Point3F} instance representing the position of {@link Vertex} {@code B} in the {@code float[]}.
+	 * The offset for the {@link Point3F} instance representing the position of {@link Vertex3F} {@code B} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_B_POSITION = 3;
 	
 	/**
-	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex} {@code B} in the {@code float[]}.
+	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex3F} {@code B} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_B_TEXTURE_COORDINATES = 11;
 	
 	/**
-	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code C} in the {@code float[]}.
+	 * The offset for the {@link Vector3F} instance representing the V-direction of the {@link OrthonormalBasis33F} of {@link Vertex3F} {@code C} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V = 30;
 	
 	/**
-	 * The offset for the {@link Vector3F} instance representing the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex} {@code C} in the {@code float[]}.
+	 * The offset for the {@link Vector3F} instance representing the W-direction of the {@link OrthonormalBasis33F} of {@link Vertex3F} {@code C} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W = 21;
 	
 	/**
-	 * The offset for the {@link Point3F} instance representing the position of {@link Vertex} {@code C} in the {@code float[]}.
+	 * The offset for the {@link Point3F} instance representing the position of {@link Vertex3F} {@code C} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_C_POSITION = 6;
 	
 	/**
-	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex} {@code C} in the {@code float[]}.
+	 * The offset for the {@link Point2F} instance representing the texture coordinates of {@link Vertex3F} {@code C} in the {@code float[]}.
 	 */
 	public static final int ARRAY_OFFSET_C_TEXTURE_COORDINATES = 13;
 	
@@ -689,8 +689,8 @@ public final class Triangle3F implements Shape3F {
 		 */
 		public Vertex3F(final Point2F textureCoordinates, final Point4F position, final OrthonormalBasis33F orthonormalBasis) {
 			this.textureCoordinates = Objects.requireNonNull(textureCoordinates, "textureCoordinates == null");
-			this.position = Objects.requireNonNull(position, "position == null");
-			this.orthonormalBasis = Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null");
+			this.position = Point4F.getCached(Objects.requireNonNull(position, "position == null"));
+			this.orthonormalBasis = OrthonormalBasis33F.getCached(Objects.requireNonNull(orthonormalBasis, "orthonormalBasis == null"));
 		}
 		
 		/**
@@ -762,7 +762,7 @@ public final class Triangle3F implements Shape3F {
 		 */
 		@Override
 		public String toString() {
-			return String.format("new Vertex3F(%s, %s, %s)", this.orthonormalBasis, this.textureCoordinates, this.position);
+			return String.format("new Vertex3F(%s, %s, %s)", this.textureCoordinates, this.position, this.orthonormalBasis);
 		}
 		
 		/**

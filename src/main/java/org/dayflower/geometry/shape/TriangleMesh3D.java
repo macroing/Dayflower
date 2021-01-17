@@ -18,12 +18,12 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.minOrNaN;
+import static org.dayflower.util.Doubles.abs;
+import static org.dayflower.util.Doubles.equal;
+import static org.dayflower.util.Doubles.isNaN;
+import static org.dayflower.util.Doubles.max;
+import static org.dayflower.util.Doubles.min;
+import static org.dayflower.util.Doubles.minOrNaN;
 import static org.dayflower.util.Ints.padding;
 
 import java.io.BufferedReader;
@@ -39,18 +39,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.Matrix44F;
-import org.dayflower.geometry.Point2F;
-import org.dayflower.geometry.Point3F;
-import org.dayflower.geometry.Point4F;
-import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.Shape3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
-import org.dayflower.geometry.SurfaceIntersector3F;
-import org.dayflower.geometry.Vector3F;
-import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.geometry.shape.Triangle3F.Vertex3F;
+import org.dayflower.geometry.BoundingVolume3D;
+import org.dayflower.geometry.Matrix44D;
+import org.dayflower.geometry.Point2D;
+import org.dayflower.geometry.Point3D;
+import org.dayflower.geometry.Point4D;
+import org.dayflower.geometry.Ray3D;
+import org.dayflower.geometry.Shape3D;
+import org.dayflower.geometry.SurfaceIntersection3D;
+import org.dayflower.geometry.SurfaceIntersector3D;
+import org.dayflower.geometry.Vector3D;
+import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
+import org.dayflower.geometry.shape.Triangle3D.Vertex3D;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
@@ -59,23 +59,23 @@ import org.dayflower.util.IntArrayOutputStream;
 import org.dayflower.util.ParameterArguments;
 
 /**
- * A {@code TriangleMesh3F} denotes a 3-dimensional triangle mesh that uses the data type {@code float}.
+ * A {@code TriangleMesh3D} denotes a 3-dimensional triangle mesh that uses the data type {@code double}.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class TriangleMesh3F implements Shape3F {
+public final class TriangleMesh3D implements Shape3D {
 	/**
-	 * The name of this {@code TriangleMesh3F} class.
+	 * The name of this {@code TriangleMesh3D} class.
 	 */
 	public static final String NAME = "Triangle Mesh";
 	
 	/**
-	 * The offset for the offset of the {@link BoundingVolume3F} in the {@code int[]}.
+	 * The offset for the offset of the {@link BoundingVolume3D} in the {@code int[]}.
 	 * <p>
-	 * The {@code BoundingVolume3F} is always an {@link AxisAlignedBoundingBox3F}.
+	 * The {@code BoundingVolume3D} is always an {@link AxisAlignedBoundingBox3D}.
 	 * <p>
 	 * This offset is used for both leaf and tree nodes.
 	 */
@@ -110,14 +110,14 @@ public final class TriangleMesh3F implements Shape3F {
 	public static final int ARRAY_OFFSET_NEXT_OFFSET = 2;
 	
 	/**
-	 * The offset for the {@link Triangle3F} count in the {@code int[]}.
+	 * The offset for the {@link Triangle3D} count in the {@code int[]}.
 	 * <p>
 	 * This offset is used for leaf nodes only.
 	 */
 	public static final int ARRAY_OFFSET_TRIANGLE_COUNT = 3;
 	
 	/**
-	 * The ID of this {@code TriangleMesh3F} class.
+	 * The ID of this {@code TriangleMesh3D} class.
 	 */
 	public static final int ID = 10;
 	
@@ -134,51 +134,51 @@ public final class TriangleMesh3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final BVHNode bVHNode;
-	private final BoundingVolume3F boundingVolume;
-	private final List<Triangle3F> triangles;
+	private final BoundingVolume3D boundingVolume;
+	private final List<Triangle3D> triangles;
 	private final String groupName;
 	private final String materialName;
 	private final String objectName;
 	private final boolean isUsingAccelerationStructure;
-	private final float surfaceArea;
+	private final double surfaceArea;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code TriangleMesh3F} instance.
+	 * Constructs a new {@code TriangleMesh3D} instance.
 	 * <p>
 	 * If either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new TriangleMesh3F(triangles, groupName, materialName, objectName, true);
+	 * new TriangleMesh3D(triangles, groupName, materialName, objectName, true);
 	 * }
 	 * </pre>
 	 * 
-	 * @param triangles a {@code List} of {@link Triangle3F} instances
-	 * @param groupName the group name of this {@code TriangleMesh3F} instance
-	 * @param materialName the material name of this {@code TriangleMesh3F} instance
-	 * @param objectName the object name of this {@code TriangleMesh3F} instance
+	 * @param triangles a {@code List} of {@link Triangle3D} instances
+	 * @param groupName the group name of this {@code TriangleMesh3D} instance
+	 * @param materialName the material name of this {@code TriangleMesh3D} instance
+	 * @param objectName the object name of this {@code TriangleMesh3D} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}
 	 */
-	public TriangleMesh3F(final List<Triangle3F> triangles, final String groupName, final String materialName, final String objectName) {
+	public TriangleMesh3D(final List<Triangle3D> triangles, final String groupName, final String materialName, final String objectName) {
 		this(triangles, groupName, materialName, objectName, true);
 	}
 	
 	/**
-	 * Constructs a new {@code TriangleMesh3F} instance.
+	 * Constructs a new {@code TriangleMesh3D} instance.
 	 * <p>
 	 * If either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param triangles a {@code List} of {@link Triangle3F} instances
-	 * @param groupName the group name of this {@code TriangleMesh3F} instance
-	 * @param materialName the material name of this {@code TriangleMesh3F} instance
-	 * @param objectName the object name of this {@code TriangleMesh3F} instance
+	 * @param triangles a {@code List} of {@link Triangle3D} instances
+	 * @param groupName the group name of this {@code TriangleMesh3D} instance
+	 * @param materialName the material name of this {@code TriangleMesh3D} instance
+	 * @param objectName the object name of this {@code TriangleMesh3D} instance
 	 * @param isUsingAccelerationStructure {@code true} if, and only if, an acceleration structure should be used, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code triangles}, at least one of its elements, {@code groupName}, {@code materialName} or {@code objectName} are {@code null}
 	 */
-	public TriangleMesh3F(final List<Triangle3F> triangles, final String groupName, final String materialName, final String objectName, final boolean isUsingAccelerationStructure) {
+	public TriangleMesh3D(final List<Triangle3D> triangles, final String groupName, final String materialName, final String objectName, final boolean isUsingAccelerationStructure) {
 		this.triangles = new ArrayList<>(ParameterArguments.requireNonNullList(triangles, "triangles"));
 		this.bVHNode = isUsingAccelerationStructure ? doCreateBVHNode(this.triangles) : null;
 		this.boundingVolume = isUsingAccelerationStructure ? this.bVHNode.getBoundingVolume() : doCreateBoundingVolume(this.triangles);
@@ -192,55 +192,55 @@ public final class TriangleMesh3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link BoundingVolume3F} instance that contains this {@code TriangleMesh3F} instance.
+	 * Returns a {@link BoundingVolume3D} instance that contains this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return a {@code BoundingVolume3F} instance that contains this {@code TriangleMesh3F} instance
+	 * @return a {@code BoundingVolume3D} instance that contains this {@code TriangleMesh3D} instance
 	 */
 	@Override
-	public BoundingVolume3F getBoundingVolume() {
+	public BoundingVolume3D getBoundingVolume() {
 		return this.boundingVolume;
 	}
 	
 	/**
-	 * Returns a {@code List} that contains all {@link BoundingVolume3F} instances used by the bounding volume hierarchy.
+	 * Returns a {@code List} that contains all {@link BoundingVolume3D} instances used by the bounding volume hierarchy.
 	 * 
-	 * @return a {@code List} that contains all {@code BoundingVolume3F} instances used by the bounding volume hierarchy
+	 * @return a {@code List} that contains all {@code BoundingVolume3D} instances used by the bounding volume hierarchy
 	 */
-	public List<BoundingVolume3F> getBoundingVolumes() {
+	public List<BoundingVolume3D> getBoundingVolumes() {
 		return this.isUsingAccelerationStructure ? NodeFilter.filterAll(this.bVHNode, BVHNode.class).stream().map(bVHNode -> bVHNode.getBoundingVolume()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll) : new ArrayList<>();
 	}
 	
 	/**
-	 * Returns a {@code List} that contains all {@link Triangle3F} instances.
+	 * Returns a {@code List} that contains all {@link Triangle3D} instances.
 	 * 
-	 * @return a {@code List} that contains all {@code Triangle3F} instances
+	 * @return a {@code List} that contains all {@code Triangle3D} instances
 	 */
-	public List<Triangle3F> getTriangles() {
+	public List<Triangle3D> getTriangles() {
 		return new ArrayList<>(this.triangles);
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code TriangleMesh3F} instance.
+	 * Performs an intersection test between {@code ray} and this {@code TriangleMesh3D} instance.
 	 * <p>
-	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3F} instance that contains information about the intersection, if it was found.
+	 * Returns an {@code Optional} with an optional {@link SurfaceIntersection3D} instance that contains information about the intersection, if it was found.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code TriangleMesh3F} instance
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code TriangleMesh3D} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
-	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3F} instance that contains information about the intersection, if it was found
+	 * @return an {@code Optional} with an optional {@code SurfaceIntersection3D} instance that contains information about the intersection, if it was found
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		if(this.isUsingAccelerationStructure) {
-			return this.bVHNode.intersection(ray, new float[] {tMinimum, tMaximum});
+			return this.bVHNode.intersection(ray, new double[] {tMinimum, tMaximum});
 		}
 		
-		final SurfaceIntersector3F surfaceIntersector = new SurfaceIntersector3F(ray, tMinimum, tMaximum);
+		final SurfaceIntersector3D surfaceIntersector = new SurfaceIntersector3D(ray, tMinimum, tMaximum);
 		
-		for(final Triangle3F triangle : this.triangles) {
+		for(final Triangle3D triangle : this.triangles) {
 			surfaceIntersector.intersection(triangle);
 		}
 		
@@ -248,27 +248,27 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the group name of this {@code TriangleMesh3F} instance.
+	 * Returns the group name of this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return the group name of this {@code TriangleMesh3F} instance
+	 * @return the group name of this {@code TriangleMesh3D} instance
 	 */
 	public String getGroupName() {
 		return this.groupName;
 	}
 	
 	/**
-	 * Returns the material name of this {@code TriangleMesh3F} instance.
+	 * Returns the material name of this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return the material name of this {@code TriangleMesh3F} instance
+	 * @return the material name of this {@code TriangleMesh3D} instance
 	 */
 	public String getMaterialName() {
 		return this.materialName;
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code TriangleMesh3F} instance.
+	 * Returns a {@code String} with the name of this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code TriangleMesh3F} instance
+	 * @return a {@code String} with the name of this {@code TriangleMesh3D} instance
 	 */
 	@Override
 	public String getName() {
@@ -276,22 +276,22 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the object name of this {@code TriangleMesh3F} instance.
+	 * Returns the object name of this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return the object name of this {@code TriangleMesh3F} instance
+	 * @return the object name of this {@code TriangleMesh3D} instance
 	 */
 	public String getObjectName() {
 		return this.objectName;
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code TriangleMesh3F} instance.
+	 * Returns a {@code String} representation of this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code TriangleMesh3F} instance
+	 * @return a {@code String} representation of this {@code TriangleMesh3D} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new TriangleMesh3F(..., \"%s\", \"%s\", \"%s\", %s)", this.groupName, this.materialName, this.objectName, Boolean.toString(this.isUsingAccelerationStructure));
+		return String.format("new TriangleMesh3D(..., \"%s\", \"%s\", \"%s\", %s)", this.groupName, this.materialName, this.objectName, Boolean.toString(this.isUsingAccelerationStructure));
 	}
 	
 	/**
@@ -325,7 +325,7 @@ public final class TriangleMesh3F implements Shape3F {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				for(final Triangle3F triangle : this.triangles) {
+				for(final Triangle3D triangle : this.triangles) {
 					if(!triangle.accept(nodeHierarchicalVisitor)) {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
@@ -343,34 +343,34 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code TriangleMesh3F} instance for equality.
+	 * Compares {@code object} to this {@code TriangleMesh3D} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code TriangleMesh3F}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code TriangleMesh3D}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code TriangleMesh3F} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TriangleMesh3F}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code TriangleMesh3D} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TriangleMesh3D}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof TriangleMesh3F)) {
+		} else if(!(object instanceof TriangleMesh3D)) {
 			return false;
-		} else if(!Objects.equals(this.bVHNode, TriangleMesh3F.class.cast(object).bVHNode)) {
+		} else if(!Objects.equals(this.bVHNode, TriangleMesh3D.class.cast(object).bVHNode)) {
 			return false;
-		} else if(!Objects.equals(this.boundingVolume, TriangleMesh3F.class.cast(object).boundingVolume)) {
+		} else if(!Objects.equals(this.boundingVolume, TriangleMesh3D.class.cast(object).boundingVolume)) {
 			return false;
-		} else if(!Objects.equals(this.triangles, TriangleMesh3F.class.cast(object).triangles)) {
+		} else if(!Objects.equals(this.triangles, TriangleMesh3D.class.cast(object).triangles)) {
 			return false;
-		} else if(!Objects.equals(this.groupName, TriangleMesh3F.class.cast(object).groupName)) {
+		} else if(!Objects.equals(this.groupName, TriangleMesh3D.class.cast(object).groupName)) {
 			return false;
-		} else if(!Objects.equals(this.materialName, TriangleMesh3F.class.cast(object).materialName)) {
+		} else if(!Objects.equals(this.materialName, TriangleMesh3D.class.cast(object).materialName)) {
 			return false;
-		} else if(!Objects.equals(this.objectName, TriangleMesh3F.class.cast(object).objectName)) {
+		} else if(!Objects.equals(this.objectName, TriangleMesh3D.class.cast(object).objectName)) {
 			return false;
-		} else if(this.isUsingAccelerationStructure != TriangleMesh3F.class.cast(object).isUsingAccelerationStructure) {
+		} else if(this.isUsingAccelerationStructure != TriangleMesh3D.class.cast(object).isUsingAccelerationStructure) {
 			return false;
-		} else if(!equal(this.surfaceArea, TriangleMesh3F.class.cast(object).surfaceArea)) {
+		} else if(!equal(this.surfaceArea, TriangleMesh3D.class.cast(object).surfaceArea)) {
 			return false;
 		} else {
 			return true;
@@ -378,71 +378,71 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Performs an intersection test between {@code surfaceIntersector} and this {@code TriangleMesh3F} instance.
+	 * Performs an intersection test between {@code surfaceIntersector} and this {@code TriangleMesh3D} instance.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TriangleMesh3F} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TriangleMesh3D} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code surfaceIntersector} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param surfaceIntersector a {@link SurfaceIntersector3F} instance
-	 * @return {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TriangleMesh3F} instance, {@code false} otherwise
+	 * @param surfaceIntersector a {@link SurfaceIntersector3D} instance
+	 * @return {@code true} if, and only if, {@code surfaceIntersector} intersects this {@code TriangleMesh3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code surfaceIntersector} is {@code null}
 	 */
 	@Override
-	public boolean intersection(final SurfaceIntersector3F surfaceIntersector) {
+	public boolean intersection(final SurfaceIntersector3D surfaceIntersector) {
 		return this.isUsingAccelerationStructure ? this.bVHNode.intersection(surfaceIntersector) : surfaceIntersector.intersection(this);
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code TriangleMesh3F} instance, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code ray} intersects this {@code TriangleMesh3D} instance, {@code false} otherwise.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code TriangleMesh3F} instance
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code TriangleMesh3D} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
-	 * @return {@code true} if, and only if, {@code ray} intersects this {@code TriangleMesh3F} instance, {@code false} otherwise
+	 * @return {@code true} if, and only if, {@code ray} intersects this {@code TriangleMesh3D} instance, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	public boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		return this.isUsingAccelerationStructure ? this.bVHNode.intersects(ray, tMinimum, tMaximum) : !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
 	/**
-	 * Returns the surface area of this {@code TriangleMesh3F} instance.
+	 * Returns the surface area of this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return the surface area of this {@code TriangleMesh3F} instance
+	 * @return the surface area of this {@code TriangleMesh3D} instance
 	 */
 	@Override
-	public float getSurfaceArea() {
+	public double getSurfaceArea() {
 		return this.surfaceArea;
 	}
 	
 	/**
-	 * Performs an intersection test between {@code ray} and this {@code TriangleMesh3F} instance.
+	 * Performs an intersection test between {@code ray} and this {@code TriangleMesh3D} instance.
 	 * <p>
-	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists.
+	 * Returns {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param ray the {@link Ray3F} to perform an intersection test against this {@code TriangleMesh3F} instance
+	 * @param ray the {@link Ray3D} to perform an intersection test against this {@code TriangleMesh3D} instance
 	 * @param tMinimum the minimum parametric distance
 	 * @param tMaximum the maximum parametric distance
-	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Float.NaN} if no intersection exists
+	 * @return {@code t}, the parametric distance to the surface intersection point, or {@code Double.NaN} if no intersection exists
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
-	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+	public double intersectionT(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		if(this.isUsingAccelerationStructure) {
-			return this.bVHNode.intersectionT(ray, new float[] {tMinimum, tMaximum});
+			return this.bVHNode.intersectionT(ray, new double[] {tMinimum, tMaximum});
 		}
 		
-		float t = Float.NaN;
-		float tMax = tMaximum;
-		float tMin = tMinimum;
+		double t = Double.NaN;
+		double tMax = tMaximum;
+		double tMin = tMinimum;
 		
-		for(final Triangle3F triangle : this.triangles) {
+		for(final Triangle3D triangle : this.triangles) {
 			t = minOrNaN(t, triangle.intersectionT(ray, tMin, tMax));
 			
 			if(!isNaN(t)) {
@@ -463,9 +463,9 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code TriangleMesh3F} instance.
+	 * Returns an {@code int} with the ID of this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code TriangleMesh3F} instance
+	 * @return an {@code int} with the ID of this {@code TriangleMesh3D} instance
 	 */
 	@Override
 	public int getID() {
@@ -473,25 +473,25 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code TriangleMesh3F} instance.
+	 * Returns a hash code for this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return a hash code for this {@code TriangleMesh3F} instance
+	 * @return a hash code for this {@code TriangleMesh3D} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.bVHNode, this.boundingVolume, this.triangles, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure), Float.valueOf(this.surfaceArea));
+		return Objects.hash(this.bVHNode, this.boundingVolume, this.triangles, this.groupName, this.materialName, this.objectName, Boolean.valueOf(this.isUsingAccelerationStructure), Double.valueOf(this.surfaceArea));
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of this {@code TriangleMesh3F} instance.
+	 * Returns an {@code int[]} representation of this {@code TriangleMesh3D} instance.
 	 * 
-	 * @return an {@code int[]} representation of this {@code TriangleMesh3F} instance
+	 * @return an {@code int[]} representation of this {@code TriangleMesh3D} instance
 	 */
 	public int[] toArray() {
 		if(this.isUsingAccelerationStructure) {
 			final List<BVHNode> bVHNodes = NodeFilter.filterAll(this.bVHNode, BVHNode.class);
-			final List<BoundingVolume3F> boundingVolumes = getBoundingVolumes();
-			final List<Triangle3F> triangles = getTriangles();
+			final List<BoundingVolume3D> boundingVolumes = getBoundingVolumes();
+			final List<Triangle3D> triangles = getTriangles();
 			
 			final int[] offsets = new int[bVHNodes.size()];
 			
@@ -516,7 +516,7 @@ public final class TriangleMesh3F implements Shape3F {
 						intArrayOutputStream.write(nextOffset);
 						intArrayOutputStream.write(triangleCount);
 						
-						for(final Triangle3F triangle : leafBVHNode.getTriangles()) {
+						for(final Triangle3D triangle : leafBVHNode.getTriangles()) {
 							intArrayOutputStream.write(triangles.indexOf(triangle));
 						}
 						
@@ -554,9 +554,9 @@ public final class TriangleMesh3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
-	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * Returns a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -565,23 +565,23 @@ public final class TriangleMesh3F implements Shape3F {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * TriangleMesh3F.readWavefrontObject(file, false);
+	 * TriangleMesh3D.readWavefrontObject(file, false);
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} instance
-	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @return a {@code List} of {@code TriangleMesh3D} instances
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
-	public static List<TriangleMesh3F> readWavefrontObject(final File file) {
+	public static List<TriangleMesh3D> readWavefrontObject(final File file) {
 		return readWavefrontObject(file, false);
 	}
 	
 	/**
-	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
-	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * Returns a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -590,24 +590,24 @@ public final class TriangleMesh3F implements Shape3F {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * TriangleMesh3F.readWavefrontObject(file, isFlippingTextureCoordinateY, 1.0F);
+	 * TriangleMesh3D.readWavefrontObject(file, isFlippingTextureCoordinateY, 1.0D);
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} instance
 	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
-	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @return a {@code List} of {@code TriangleMesh3D} instances
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
-	public static List<TriangleMesh3F> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY) {
-		return readWavefrontObject(file, isFlippingTextureCoordinateY, 1.0F);
+	public static List<TriangleMesh3D> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY) {
+		return readWavefrontObject(file, isFlippingTextureCoordinateY, 1.0D);
 	}
 	
 	/**
-	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
-	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * Returns a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -616,25 +616,25 @@ public final class TriangleMesh3F implements Shape3F {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * TriangleMesh3F.readWavefrontObject(file, isFlippingTextureCoordinateY, scale, true);
+	 * TriangleMesh3D.readWavefrontObject(file, isFlippingTextureCoordinateY, scale, true);
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} instance
 	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
-	 * @param scale the scale to apply to all {@link Triangle3F} instances
-	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @param scale the scale to apply to all {@link Triangle3D} instances
+	 * @return a {@code List} of {@code TriangleMesh3D} instances
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
-	public static List<TriangleMesh3F> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY, final float scale) {
+	public static List<TriangleMesh3D> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY, final double scale) {
 		return readWavefrontObject(file, isFlippingTextureCoordinateY, scale, true);
 	}
 	
 	/**
-	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
-	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * Returns a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -642,13 +642,13 @@ public final class TriangleMesh3F implements Shape3F {
 	 * 
 	 * @param file a {@code File} instance
 	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
-	 * @param scale the scale to apply to all {@link Triangle3F} instances
+	 * @param scale the scale to apply to all {@link Triangle3D} instances
 	 * @param isUsingAccelerationStructure {@code true} if, and only if, an acceleration structure should be used, {@code false} otherwise
-	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @return a {@code List} of {@code TriangleMesh3D} instances
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
-	public static List<TriangleMesh3F> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY, final float scale, final boolean isUsingAccelerationStructure) {
+	public static List<TriangleMesh3D> readWavefrontObject(final File file, final boolean isFlippingTextureCoordinateY, final double scale, final boolean isUsingAccelerationStructure) {
 		try {
 			System.out.printf("Loading triangle meshes from file '%s'...%n", file.getName());
 			
@@ -657,31 +657,31 @@ public final class TriangleMesh3F implements Shape3F {
 			final IndexedObjectModel indexedObjectModel = defaultObjectModel.toIndexedObjectModel();
 			
 			final List<Integer> indices = indexedObjectModel.getIndices();
-			final List<Point2F> textureCoordinates = indexedObjectModel.getTextureCoordinates();
-			final List<Point4F> positions = indexedObjectModel.getPositions();
+			final List<Point2D> textureCoordinates = indexedObjectModel.getTextureCoordinates();
+			final List<Point4D> positions = indexedObjectModel.getPositions();
 			final List<String> groupNames = indexedObjectModel.getGroupNames();
 			final List<String> materialNames = indexedObjectModel.getMaterialNames();
 			final List<String> objectNames = indexedObjectModel.getObjectNames();
-			final List<Vector3F> normals = indexedObjectModel.getNormals();
-			final List<Vector3F> tangents = indexedObjectModel.getTangents();
-			final List<Triangle3F> triangles = new ArrayList<>();
-			final List<TriangleMesh3F> triangleMeshes = new ArrayList<>();
+			final List<Vector3D> normals = indexedObjectModel.getNormals();
+			final List<Vector3D> tangents = indexedObjectModel.getTangents();
+			final List<Triangle3D> triangles = new ArrayList<>();
+			final List<TriangleMesh3D> triangleMeshes = new ArrayList<>();
 			
 			String previousGroupName = "";
 			String previousMaterialName = "";
 			String previousObjectName = "";
 			
-			final boolean isScaling = !equal(scale, 1.0F);
+			final boolean isScaling = !equal(scale, 1.0D);
 			
 			final int maximumCount = Integer.MAX_VALUE;
 			
-			final Matrix44F matrix = isScaling ? Matrix44F.scale(scale) : null;
+			final Matrix44D matrix = isScaling ? Matrix44D.scale(scale) : null;
 			
 			if(matrix != null && !matrix.isInvertible()) {
 				return new ArrayList<>();
 			}
 			
-			final Matrix44F matrixInverse = isScaling ? Matrix44F.inverse(matrix) : null;
+			final Matrix44D matrixInverse = isScaling ? Matrix44D.inverse(matrix) : null;
 			
 			for(int i = 0, j = 0; i < indices.size(); i += 3) {
 				final int indexA = indices.get(i + 0).intValue();
@@ -696,7 +696,7 @@ public final class TriangleMesh3F implements Shape3F {
 					if(triangles.size() > 0) {
 						System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
 						
-						triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
+						triangleMeshes.add(new TriangleMesh3D(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
 						triangles.clear();
 						
 						if(++j >= maximumCount) {
@@ -717,27 +717,27 @@ public final class TriangleMesh3F implements Shape3F {
 					previousObjectName = currentObjectName;
 				}
 				
-				final Point2F textureCoordinatesA = textureCoordinates.get(indexA);
-				final Point2F textureCoordinatesB = textureCoordinates.get(indexB);
-				final Point2F textureCoordinatesC = textureCoordinates.get(indexC);
+				final Point2D textureCoordinatesA = textureCoordinates.get(indexA);
+				final Point2D textureCoordinatesB = textureCoordinates.get(indexB);
+				final Point2D textureCoordinatesC = textureCoordinates.get(indexC);
 				
-				final Point4F positionA = isScaling ? Point4F.transformAndDivide(matrix, positions.get(indexA)) : positions.get(indexA);
-				final Point4F positionB = isScaling ? Point4F.transformAndDivide(matrix, positions.get(indexB)) : positions.get(indexB);
-				final Point4F positionC = isScaling ? Point4F.transformAndDivide(matrix, positions.get(indexC)) : positions.get(indexC);
+				final Point4D positionA = isScaling ? Point4D.transformAndDivide(matrix, positions.get(indexA)) : positions.get(indexA);
+				final Point4D positionB = isScaling ? Point4D.transformAndDivide(matrix, positions.get(indexB)) : positions.get(indexB);
+				final Point4D positionC = isScaling ? Point4D.transformAndDivide(matrix, positions.get(indexC)) : positions.get(indexC);
 				
-				final Vector3F normalA = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexA)) : normals.get(indexA);
-				final Vector3F normalB = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexB)) : normals.get(indexB);
-				final Vector3F normalC = isScaling ? Vector3F.transformTranspose(matrixInverse, normals.get(indexC)) : normals.get(indexC);
+				final Vector3D normalA = isScaling ? Vector3D.transformTranspose(matrixInverse, normals.get(indexA)) : normals.get(indexA);
+				final Vector3D normalB = isScaling ? Vector3D.transformTranspose(matrixInverse, normals.get(indexB)) : normals.get(indexB);
+				final Vector3D normalC = isScaling ? Vector3D.transformTranspose(matrixInverse, normals.get(indexC)) : normals.get(indexC);
 				
-				final Vector3F tangentA = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexA)) : tangents.get(indexA);
-				final Vector3F tangentB = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexB)) : tangents.get(indexB);
-				final Vector3F tangentC = isScaling ? Vector3F.transformTranspose(matrixInverse, tangents.get(indexC)) : tangents.get(indexC);
+				final Vector3D tangentA = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexA)) : tangents.get(indexA);
+				final Vector3D tangentB = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexB)) : tangents.get(indexB);
+				final Vector3D tangentC = isScaling ? Vector3D.transformTranspose(matrixInverse, tangents.get(indexC)) : tangents.get(indexC);
 				
-				final Vertex3F a = new Vertex3F(textureCoordinatesA, positionA, normalA, tangentA);
-				final Vertex3F b = new Vertex3F(textureCoordinatesB, positionB, normalB, tangentB);
-				final Vertex3F c = new Vertex3F(textureCoordinatesC, positionC, normalC, tangentC);
+				final Vertex3D a = new Vertex3D(textureCoordinatesA, positionA, normalA, tangentA);
+				final Vertex3D b = new Vertex3D(textureCoordinatesB, positionB, normalB, tangentB);
+				final Vertex3D c = new Vertex3D(textureCoordinatesC, positionC, normalC, tangentC);
 				
-				final Triangle3F triangle = new Triangle3F(a, b, c);
+				final Triangle3D triangle = new Triangle3D(a, b, c);
 				
 				triangles.add(triangle);
 			}
@@ -745,7 +745,7 @@ public final class TriangleMesh3F implements Shape3F {
 			if(triangles.size() > 0) {
 				System.out.printf(" - Creating triangle mesh with group name '%s', material name '%s' and object name '%s'.%n", previousGroupName, previousMaterialName, previousObjectName);
 				
-				triangleMeshes.add(new TriangleMesh3F(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
+				triangleMeshes.add(new TriangleMesh3D(triangles, previousGroupName, previousMaterialName, previousObjectName, isUsingAccelerationStructure));
 				triangles.clear();
 			}
 			
@@ -758,9 +758,9 @@ public final class TriangleMesh3F implements Shape3F {
 	}
 	
 	/**
-	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
-	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * Returns a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -769,23 +769,23 @@ public final class TriangleMesh3F implements Shape3F {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * TriangleMesh3F.readWavefrontObject(pathname, false);
+	 * TriangleMesh3D.readWavefrontObject(pathname, false);
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} instance with the pathname to a file
-	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @return a {@code List} of {@code TriangleMesh3D} instances
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
-	public static List<TriangleMesh3F> readWavefrontObject(final String pathname) {
+	public static List<TriangleMesh3D> readWavefrontObject(final String pathname) {
 		return readWavefrontObject(pathname, false);
 	}
 	
 	/**
-	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
-	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * Returns a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -794,24 +794,24 @@ public final class TriangleMesh3F implements Shape3F {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * TriangleMesh3F.readWavefrontObject(pathname, isFlippingTextureCoordinateY, 1.0F);
+	 * TriangleMesh3D.readWavefrontObject(pathname, isFlippingTextureCoordinateY, 1.0D);
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} instance with the pathname to a file
 	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
-	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @return a {@code List} of {@code TriangleMesh3D} instances
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
-	public static List<TriangleMesh3F> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY) {
-		return readWavefrontObject(pathname, isFlippingTextureCoordinateY, 1.0F);
+	public static List<TriangleMesh3D> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY) {
+		return readWavefrontObject(pathname, isFlippingTextureCoordinateY, 1.0D);
 	}
 	
 	/**
-	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
-	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * Returns a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -820,25 +820,25 @@ public final class TriangleMesh3F implements Shape3F {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * TriangleMesh3F.readWavefrontObject(pathname, isFlippingTextureCoordinateY, scale, true);
+	 * TriangleMesh3D.readWavefrontObject(pathname, isFlippingTextureCoordinateY, scale, true);
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} instance with the pathname to a file
 	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
-	 * @param scale the scale to apply to all {@link Triangle3F} instances
-	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @param scale the scale to apply to all {@link Triangle3D} instances
+	 * @return a {@code List} of {@code TriangleMesh3D} instances
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
-	public static List<TriangleMesh3F> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final float scale) {
+	public static List<TriangleMesh3D> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final double scale) {
 		return readWavefrontObject(pathname, isFlippingTextureCoordinateY, scale, true);
 	}
 	
 	/**
-	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3F} instances.
+	 * Reads a Wavefront Object file into a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
-	 * Returns a {@code List} of {@code TriangleMesh3F} instances.
+	 * Returns a {@code List} of {@code TriangleMesh3D} instances.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -846,27 +846,27 @@ public final class TriangleMesh3F implements Shape3F {
 	 * 
 	 * @param pathname a {@code String} instance with the pathname to a file
 	 * @param isFlippingTextureCoordinateY {@code true} if, and only if, the Y-coordinate of the texture coordinates should be flipped, {@code false} otherwise
-	 * @param scale the scale to apply to all {@link Triangle3F} instances
+	 * @param scale the scale to apply to all {@link Triangle3D} instances
 	 * @param isUsingAccelerationStructure {@code true} if, and only if, an acceleration structure should be used, {@code false} otherwise
-	 * @return a {@code List} of {@code TriangleMesh3F} instances
+	 * @return a {@code List} of {@code TriangleMesh3D} instances
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O-error occurs
 	 */
-	public static List<TriangleMesh3F> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final float scale, final boolean isUsingAccelerationStructure) {
+	public static List<TriangleMesh3D> readWavefrontObject(final String pathname, final boolean isFlippingTextureCoordinateY, final double scale, final boolean isUsingAccelerationStructure) {
 		return readWavefrontObject(new File(Objects.requireNonNull(pathname, "pathname == null")), isFlippingTextureCoordinateY, scale, isUsingAccelerationStructure);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static BVHNode doCreateBVHNode(final List<LeafBVHNode> processableLeafBVHNodes, final Point3F maximum, final Point3F minimum, final int depth) {
+	private static BVHNode doCreateBVHNode(final List<LeafBVHNode> processableLeafBVHNodes, final Point3D maximum, final Point3D minimum, final int depth) {
 		final int size = processableLeafBVHNodes.size();
 		final int sizeHalf = size / 2;
 		
 		if(size < 4) {
-			final List<Triangle3F> triangles = new ArrayList<>();
+			final List<Triangle3D> triangles = new ArrayList<>();
 			
 			for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
-				for(final Triangle3F triangle : processableLeafBVHNode.getTriangles()) {
+				for(final Triangle3D triangle : processableLeafBVHNode.getTriangles()) {
 					triangles.add(triangle);
 				}
 			}
@@ -874,55 +874,55 @@ public final class TriangleMesh3F implements Shape3F {
 			return new LeafBVHNode(maximum, minimum, depth, triangles);
 		}
 		
-		final float sideX = maximum.getX() - minimum.getX();
-		final float sideY = maximum.getY() - minimum.getY();
-		final float sideZ = maximum.getZ() - minimum.getZ();
+		final double sideX = maximum.getX() - minimum.getX();
+		final double sideY = maximum.getY() - minimum.getY();
+		final double sideZ = maximum.getZ() - minimum.getZ();
 		
-		float minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
-		float bestSplit = Float.MAX_VALUE;
+		double minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
+		double bestSplit = Double.MAX_VALUE;
 		
 		int bestAxis = -1;
 		
 		for(int axis = 0; axis < 3; axis++) {
-			final float start = minimum.getComponent(axis);
-			final float stop  = maximum.getComponent(axis);
+			final double start = minimum.getComponent(axis);
+			final double stop  = maximum.getComponent(axis);
 			
-			if(abs(stop - start) < 1.0e-4F) {
+			if(abs(stop - start) < 1.0e-4D) {
 				continue;
 			}
 			
-			final float step = (stop - start) / (1024.0F / (depth + 1.0F));
+			final double step = (stop - start) / (1024.0D / (depth + 1.0D));
 			
-			for(float oldSplit = 0.0F, newSplit = start + step; newSplit < stop - step; oldSplit = newSplit, newSplit += step) {
+			for(double oldSplit = 0.0D, newSplit = start + step; newSplit < stop - step; oldSplit = newSplit, newSplit += step) {
 //				The following test prevents an infinite loop from occurring:
 				if(equal(oldSplit, newSplit)) {
 					break;
 				}
 				
-				float maximumLX = Float.MIN_VALUE;
-				float maximumLY = Float.MIN_VALUE;
-				float maximumLZ = Float.MIN_VALUE;
-				float minimumLX = Float.MAX_VALUE;
-				float minimumLY = Float.MAX_VALUE;
-				float minimumLZ = Float.MAX_VALUE;
-				float maximumRX = Float.MIN_VALUE;
-				float maximumRY = Float.MIN_VALUE;
-				float maximumRZ = Float.MIN_VALUE;
-				float minimumRX = Float.MAX_VALUE;
-				float minimumRY = Float.MAX_VALUE;
-				float minimumRZ = Float.MAX_VALUE;
+				double maximumLX = Double.MIN_VALUE;
+				double maximumLY = Double.MIN_VALUE;
+				double maximumLZ = Double.MIN_VALUE;
+				double minimumLX = Double.MAX_VALUE;
+				double minimumLY = Double.MAX_VALUE;
+				double minimumLZ = Double.MAX_VALUE;
+				double maximumRX = Double.MIN_VALUE;
+				double maximumRY = Double.MIN_VALUE;
+				double maximumRZ = Double.MIN_VALUE;
+				double minimumRX = Double.MAX_VALUE;
+				double minimumRY = Double.MAX_VALUE;
+				double minimumRZ = Double.MAX_VALUE;
 				
 				int countL = 0;
 				int countR = 0;
 				
 				for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
-					final BoundingVolume3F boundingVolume = processableLeafBVHNode.getBoundingVolume();
+					final BoundingVolume3D boundingVolume = processableLeafBVHNode.getBoundingVolume();
 					
-					final Point3F max = boundingVolume.getMaximum();
-					final Point3F mid = boundingVolume.getMidpoint();
-					final Point3F min = boundingVolume.getMinimum();
+					final Point3D max = boundingVolume.getMaximum();
+					final Point3D mid = boundingVolume.getMidpoint();
+					final Point3D min = boundingVolume.getMinimum();
 					
-					final float value = mid.getComponent(axis);
+					final double value = mid.getComponent(axis);
 					
 					if(value < newSplit) {
 						maximumLX = max(maximumLX, max.getX());
@@ -949,17 +949,17 @@ public final class TriangleMesh3F implements Shape3F {
 					continue;
 				}
 				
-				final float sideLX = maximumLX - minimumLX;
-				final float sideLY = maximumLY - minimumLY;
-				final float sideLZ = maximumLZ - minimumLZ;
-				final float sideRX = maximumRX - minimumRX;
-				final float sideRY = maximumRY - minimumRY;
-				final float sideRZ = maximumRZ - minimumRZ;
+				final double sideLX = maximumLX - minimumLX;
+				final double sideLY = maximumLY - minimumLY;
+				final double sideLZ = maximumLZ - minimumLZ;
+				final double sideRX = maximumRX - minimumRX;
+				final double sideRY = maximumRY - minimumRY;
+				final double sideRZ = maximumRZ - minimumRZ;
 				
-				final float surfaceL = sideLX * sideLY + sideLY * sideLZ + sideLZ * sideLX;
-				final float surfaceR = sideRX * sideRY + sideRY * sideRZ + sideRZ * sideRX;
+				final double surfaceL = sideLX * sideLY + sideLY * sideLZ + sideLZ * sideLX;
+				final double surfaceR = sideRX * sideRY + sideRY * sideRZ + sideRZ * sideRX;
 				
-				final float cost = surfaceL * countL + surfaceR * countR;
+				final double cost = surfaceL * countL + surfaceR * countR;
 				
 				if(cost < minimumCost) {
 					minimumCost = cost;
@@ -970,10 +970,10 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		if(bestAxis == -1) {
-			final List<Triangle3F> triangles = new ArrayList<>();
+			final List<Triangle3D> triangles = new ArrayList<>();
 			
 			for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
-				for(final Triangle3F triangle : processableLeafBVHNode.getTriangles()) {
+				for(final Triangle3D triangle : processableLeafBVHNode.getTriangles()) {
 					triangles.add(triangle);
 				}
 			}
@@ -984,27 +984,27 @@ public final class TriangleMesh3F implements Shape3F {
 		final List<LeafBVHNode> leafBVHNodesL = new ArrayList<>(sizeHalf);
 		final List<LeafBVHNode> leafBVHNodesR = new ArrayList<>(sizeHalf);
 		
-		float maximumLX = Float.MIN_VALUE;
-		float maximumLY = Float.MIN_VALUE;
-		float maximumLZ = Float.MIN_VALUE;
-		float minimumLX = Float.MAX_VALUE;
-		float minimumLY = Float.MAX_VALUE;
-		float minimumLZ = Float.MAX_VALUE;
-		float maximumRX = Float.MIN_VALUE;
-		float maximumRY = Float.MIN_VALUE;
-		float maximumRZ = Float.MIN_VALUE;
-		float minimumRX = Float.MAX_VALUE;
-		float minimumRY = Float.MAX_VALUE;
-		float minimumRZ = Float.MAX_VALUE;
+		double maximumLX = Double.MIN_VALUE;
+		double maximumLY = Double.MIN_VALUE;
+		double maximumLZ = Double.MIN_VALUE;
+		double minimumLX = Double.MAX_VALUE;
+		double minimumLY = Double.MAX_VALUE;
+		double minimumLZ = Double.MAX_VALUE;
+		double maximumRX = Double.MIN_VALUE;
+		double maximumRY = Double.MIN_VALUE;
+		double maximumRZ = Double.MIN_VALUE;
+		double minimumRX = Double.MAX_VALUE;
+		double minimumRY = Double.MAX_VALUE;
+		double minimumRZ = Double.MAX_VALUE;
 		
 		for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
-			final BoundingVolume3F boundingVolume = processableLeafBVHNode.getBoundingVolume();
+			final BoundingVolume3D boundingVolume = processableLeafBVHNode.getBoundingVolume();
 			
-			final Point3F max = boundingVolume.getMaximum();
-			final Point3F mid = boundingVolume.getMidpoint();
-			final Point3F min = boundingVolume.getMinimum();
+			final Point3D max = boundingVolume.getMaximum();
+			final Point3D mid = boundingVolume.getMidpoint();
+			final Point3D min = boundingVolume.getMinimum();
 			
-			final float value = mid.getComponent(bestAxis);
+			final double value = mid.getComponent(bestAxis);
 			
 			if(value < bestSplit) {
 				leafBVHNodesL.add(processableLeafBVHNode);
@@ -1027,10 +1027,10 @@ public final class TriangleMesh3F implements Shape3F {
 			}
 		}
 		
-		final Point3F maximumL = new Point3F(maximumLX, maximumLY, maximumLZ);
-		final Point3F minimumL = new Point3F(minimumLX, minimumLY, minimumLZ);
-		final Point3F maximumR = new Point3F(maximumRX, maximumRY, maximumRZ);
-		final Point3F minimumR = new Point3F(minimumRX, minimumRY, minimumRZ);
+		final Point3D maximumL = new Point3D(maximumLX, maximumLY, maximumLZ);
+		final Point3D minimumL = new Point3D(minimumLX, minimumLY, minimumLZ);
+		final Point3D maximumR = new Point3D(maximumRX, maximumRY, maximumRZ);
+		final Point3D minimumR = new Point3D(minimumRX, minimumRY, minimumRZ);
 		
 		final BVHNode bVHNodeL = doCreateBVHNode(leafBVHNodesL, maximumL, minimumL, depth + 1);
 		final BVHNode bVHNodeR = doCreateBVHNode(leafBVHNodesR, maximumR, minimumR, depth + 1);
@@ -1038,23 +1038,23 @@ public final class TriangleMesh3F implements Shape3F {
 		return new TreeBVHNode(maximum, minimum, depth, bVHNodeL, bVHNodeR);
 	}
 	
-	private static BVHNode doCreateBVHNode(final List<Triangle3F> triangles) {
+	private static BVHNode doCreateBVHNode(final List<Triangle3D> triangles) {
 		final List<LeafBVHNode> processableLeafBVHNodes = new ArrayList<>(triangles.size());
 		
-		float maximumX = Float.MIN_VALUE;
-		float maximumY = Float.MIN_VALUE;
-		float maximumZ = Float.MIN_VALUE;
-		float minimumX = Float.MAX_VALUE;
-		float minimumY = Float.MAX_VALUE;
-		float minimumZ = Float.MAX_VALUE;
+		double maximumX = Double.MIN_VALUE;
+		double maximumY = Double.MIN_VALUE;
+		double maximumZ = Double.MIN_VALUE;
+		double minimumX = Double.MAX_VALUE;
+		double minimumY = Double.MAX_VALUE;
+		double minimumZ = Double.MAX_VALUE;
 		
-		for(final Triangle3F triangle : triangles) {
-			final Point3F a = new Point3F(triangle.getA().getPosition());
-			final Point3F b = new Point3F(triangle.getB().getPosition());
-			final Point3F c = new Point3F(triangle.getC().getPosition());
+		for(final Triangle3D triangle : triangles) {
+			final Point3D a = new Point3D(triangle.getA().getPosition());
+			final Point3D b = new Point3D(triangle.getB().getPosition());
+			final Point3D c = new Point3D(triangle.getC().getPosition());
 			
-			final Point3F maximum = Point3F.maximum(a, b, c);
-			final Point3F minimum = Point3F.minimum(a, b, c);
+			final Point3D maximum = Point3D.maximum(a, b, c);
+			final Point3D minimum = Point3D.minimum(a, b, c);
 			
 			maximumX = max(maximumX, maximum.getX());
 			maximumY = max(maximumY, maximum.getY());
@@ -1066,29 +1066,29 @@ public final class TriangleMesh3F implements Shape3F {
 			processableLeafBVHNodes.add(new LeafBVHNode(maximum, minimum, 0, Arrays.asList(triangle)));
 		}
 		
-		return doCreateBVHNode(processableLeafBVHNodes, new Point3F(maximumX, maximumY, maximumZ), new Point3F(minimumX, minimumY, minimumZ), 0);
+		return doCreateBVHNode(processableLeafBVHNodes, new Point3D(maximumX, maximumY, maximumZ), new Point3D(minimumX, minimumY, minimumZ), 0);
 	}
 	
-	private static BoundingVolume3F doCreateBoundingVolume(final List<Triangle3F> triangles) {
-		Point3F maximum = Point3F.MINIMUM;
-		Point3F minimum = Point3F.MAXIMUM;
+	private static BoundingVolume3D doCreateBoundingVolume(final List<Triangle3D> triangles) {
+		Point3D maximum = Point3D.MINIMUM;
+		Point3D minimum = Point3D.MAXIMUM;
 		
-		for(final Triangle3F triangle : triangles) {
-			final Point3F a = new Point3F(triangle.getA().getPosition());
-			final Point3F b = new Point3F(triangle.getB().getPosition());
-			final Point3F c = new Point3F(triangle.getC().getPosition());
+		for(final Triangle3D triangle : triangles) {
+			final Point3D a = new Point3D(triangle.getA().getPosition());
+			final Point3D b = new Point3D(triangle.getB().getPosition());
+			final Point3D c = new Point3D(triangle.getC().getPosition());
 			
-			maximum = Point3F.maximum(maximum, Point3F.maximum(a, b, c));
-			minimum = Point3F.minimum(minimum, Point3F.minimum(a, b, c));
+			maximum = Point3D.maximum(maximum, Point3D.maximum(a, b, c));
+			minimum = Point3D.minimum(minimum, Point3D.minimum(a, b, c));
 		}
 		
-		return new AxisAlignedBoundingBox3F(maximum, minimum);
+		return new AxisAlignedBoundingBox3D(maximum, minimum);
 	}
 	
-	private static float doCalculateSurfaceArea(final List<Triangle3F> triangles) {
-		float surfaceArea = 0.0F;
+	private static double doCalculateSurfaceArea(final List<Triangle3D> triangles) {
+		double surfaceArea = 0.0D;
 		
-		for(final Triangle3F triangle : triangles) {
+		for(final Triangle3D triangle : triangles) {
 			surfaceArea += triangle.getSurfaceArea();
 		}
 		
@@ -1118,31 +1118,31 @@ public final class TriangleMesh3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static abstract class BVHNode implements Node {
-		private final BoundingVolume3F boundingVolume;
+		private final BoundingVolume3D boundingVolume;
 		private final int depth;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		protected BVHNode(final Point3F maximum, final Point3F minimum, final int depth) {
-			this.boundingVolume = new AxisAlignedBoundingBox3F(maximum, minimum);
+		protected BVHNode(final Point3D maximum, final Point3D minimum, final int depth) {
+			this.boundingVolume = new AxisAlignedBoundingBox3D(maximum, minimum);
 			this.depth = depth;
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public final BoundingVolume3F getBoundingVolume() {
+		public final BoundingVolume3D getBoundingVolume() {
 			return this.boundingVolume;
 		}
 		
-		public abstract Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds);
+		public abstract Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double[] tBounds);
 		
-		public abstract boolean intersection(final SurfaceIntersector3F surfaceIntersector);
+		public abstract boolean intersection(final SurfaceIntersector3D surfaceIntersector);
 		
-		public abstract boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum);
+		public abstract boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum);
 		
-		public abstract float getSurfaceArea();
+		public abstract double getSurfaceArea();
 		
-		public abstract float intersectionT(final Ray3F ray, final float[] tBounds);
+		public abstract double intersectionT(final Ray3D ray, final double[] tBounds);
 		
 		public abstract int getArrayLength();
 		
@@ -1154,12 +1154,12 @@ public final class TriangleMesh3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class DefaultObjectModel {
-		private final List<Point2F> textureCoordinates;
-		private final List<Point4F> positions;
+		private final List<Point2D> textureCoordinates;
+		private final List<Point4D> positions;
 		private final List<String> groupNames;
 		private final List<String> materialNames;
 		private final List<String> objectNames;
-		private final List<Vector3F> normals;
+		private final List<Vector3D> normals;
 		private final List<Vertex> vertices;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1189,11 +1189,11 @@ public final class TriangleMesh3F implements Shape3F {
 			for(int i = 0; i < this.vertices.size(); i++) {
 				final Vertex vertex = this.vertices.get(i);
 				
-				final Point2F textureCoordinates = vertex.hasTextureVertexIndex() ? this.textureCoordinates.get(vertex.getTextureVertexIndex()) : new Point2F();
+				final Point2D textureCoordinates = vertex.hasTextureVertexIndex() ? this.textureCoordinates.get(vertex.getTextureVertexIndex()) : new Point2D();
 				
-				final Point4F position = vertex.hasGeometricVertexIndex() ? this.positions.get(vertex.getGeometricVertexIndex()) : new Point4F();
+				final Point4D position = vertex.hasGeometricVertexIndex() ? this.positions.get(vertex.getGeometricVertexIndex()) : new Point4D();
 				
-				final Vector3F normal = vertex.hasVertexNormalIndex() ? this.normals.get(vertex.getVertexNormalIndex()) : new Vector3F();
+				final Vector3D normal = vertex.hasVertexNormalIndex() ? this.normals.get(vertex.getVertexNormalIndex()) : new Vector3D();
 				
 				if(vertex.hasVertexNormalIndex()) {
 					hasNormals = true;
@@ -1223,7 +1223,7 @@ public final class TriangleMesh3F implements Shape3F {
 					indexedObjectModel1.addNormal(normal);
 					indexedObjectModel1.addObjectName(objectName);
 					indexedObjectModel1.addPosition(position);
-					indexedObjectModel1.addTangent(new Vector3F());
+					indexedObjectModel1.addTangent(new Vector3D());
 					indexedObjectModel1.addTextureCoordinates(textureCoordinates);
 					
 					return Integer.valueOf(indexedObjectModel1.getPositionCount() - 1);
@@ -1260,7 +1260,7 @@ public final class TriangleMesh3F implements Shape3F {
 			this.materialNames.add(Objects.requireNonNull(materialName, "materialName == null"));
 		}
 		
-		public void addNormal(final Vector3F normal) {
+		public void addNormal(final Vector3D normal) {
 			this.normals.add(Objects.requireNonNull(normal, "normal == null"));
 		}
 		
@@ -1268,11 +1268,11 @@ public final class TriangleMesh3F implements Shape3F {
 			this.objectNames.add(Objects.requireNonNull(objectName, "objectName == null"));
 		}
 		
-		public void addPosition(final Point4F position) {
+		public void addPosition(final Point4D position) {
 			this.positions.add(Objects.requireNonNull(position, "position == null"));
 		}
 		
-		public void addTextureCoordinates(final Point2F textureCoordinates) {
+		public void addTextureCoordinates(final Point2D textureCoordinates) {
 			this.textureCoordinates.add(Objects.requireNonNull(textureCoordinates, "textureCoordinates == null"));
 		}
 		
@@ -1327,15 +1327,15 @@ public final class TriangleMesh3F implements Shape3F {
 								
 								break;
 							case "v":
-								defaultObjectModel.addPosition(new Point4F(Float.parseFloat(elements[1]), Float.parseFloat(elements[2]), Float.parseFloat(elements[3])));
+								defaultObjectModel.addPosition(new Point4D(Double.parseDouble(elements[1]), Double.parseDouble(elements[2]), Double.parseDouble(elements[3])));
 								
 								break;
 							case "vn":
-								defaultObjectModel.addNormal(new Vector3F(Float.parseFloat(elements[1]), Float.parseFloat(elements[2]), Float.parseFloat(elements[3])));
+								defaultObjectModel.addNormal(new Vector3D(Double.parseDouble(elements[1]), Double.parseDouble(elements[2]), Double.parseDouble(elements[3])));
 								
 								break;
 							case "vt":
-								defaultObjectModel.addTextureCoordinates(new Point2F(Float.parseFloat(elements[1]), isFlippingTextureCoordinateY ? 1.0F - Float.parseFloat(elements[2]) : Float.parseFloat(elements[2])));
+								defaultObjectModel.addTextureCoordinates(new Point2D(Double.parseDouble(elements[1]), isFlippingTextureCoordinateY ? 1.0D - Double.parseDouble(elements[2]) : Double.parseDouble(elements[2])));
 								
 								break;
 							default:
@@ -1353,13 +1353,13 @@ public final class TriangleMesh3F implements Shape3F {
 	
 	private static final class IndexedObjectModel {
 		private final List<Integer> indices;
-		private final List<Point2F> textureCoordinates;
-		private final List<Point4F> positions;
+		private final List<Point2D> textureCoordinates;
+		private final List<Point4D> positions;
 		private final List<String> groupNames;
 		private final List<String> materialNames;
 		private final List<String> objectNames;
-		private final List<Vector3F> normals;
-		private final List<Vector3F> tangents;
+		private final List<Vector3D> normals;
+		private final List<Vector3D> tangents;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -1380,11 +1380,11 @@ public final class TriangleMesh3F implements Shape3F {
 			return this.indices;
 		}
 		
-		public List<Point2F> getTextureCoordinates() {
+		public List<Point2D> getTextureCoordinates() {
 			return this.textureCoordinates;
 		}
 		
-		public List<Point4F> getPositions() {
+		public List<Point4D> getPositions() {
 			return this.positions;
 		}
 		
@@ -1400,19 +1400,19 @@ public final class TriangleMesh3F implements Shape3F {
 			return this.objectNames;
 		}
 		
-		public List<Vector3F> getNormals() {
+		public List<Vector3D> getNormals() {
 			return this.normals;
 		}
 		
-		public List<Vector3F> getTangents() {
+		public List<Vector3D> getTangents() {
 			return this.tangents;
 		}
 		
-		public Vector3F getNormal(final int index) {
+		public Vector3D getNormal(final int index) {
 			return this.normals.get(index);
 		}
 		
-		public Vector3F getTangent(final int index) {
+		public Vector3D getTangent(final int index) {
 			return this.tangents.get(index);
 		}
 		
@@ -1432,7 +1432,7 @@ public final class TriangleMesh3F implements Shape3F {
 			this.materialNames.add(Objects.requireNonNull(materialName, "materialName == null"));
 		}
 		
-		public void addNormal(final Vector3F normal) {
+		public void addNormal(final Vector3D normal) {
 			this.normals.add(Objects.requireNonNull(normal, "normal == null"));
 		}
 		
@@ -1440,15 +1440,15 @@ public final class TriangleMesh3F implements Shape3F {
 			this.objectNames.add(Objects.requireNonNull(objectName, "objectName == null"));
 		}
 		
-		public void addPosition(final Point4F position) {
+		public void addPosition(final Point4D position) {
 			this.positions.add(Objects.requireNonNull(position, "position == null"));
 		}
 		
-		public void addTangent(final Vector3F tangent) {
+		public void addTangent(final Vector3D tangent) {
 			this.tangents.add(Objects.requireNonNull(tangent, "tangent == null"));
 		}
 		
-		public void addTextureCoordinates(final Point2F textureCoordinates) {
+		public void addTextureCoordinates(final Point2D textureCoordinates) {
 			this.textureCoordinates.add(Objects.requireNonNull(textureCoordinates, "textureCoordinates == null"));
 		}
 		
@@ -1458,17 +1458,17 @@ public final class TriangleMesh3F implements Shape3F {
 				final int indexB = this.indices.get(i + 1).intValue();
 				final int indexC = this.indices.get(i + 2).intValue();
 				
-				final Vector3F edgeAB = Vector3F.direction(this.positions.get(indexA), this.positions.get(indexB));
-				final Vector3F edgeAC = Vector3F.direction(this.positions.get(indexA), this.positions.get(indexC));
-				final Vector3F normal = Vector3F.normalize(Vector3F.crossProduct(edgeAB, edgeAC));
+				final Vector3D edgeAB = Vector3D.direction(this.positions.get(indexA), this.positions.get(indexB));
+				final Vector3D edgeAC = Vector3D.direction(this.positions.get(indexA), this.positions.get(indexC));
+				final Vector3D normal = Vector3D.normalize(Vector3D.crossProduct(edgeAB, edgeAC));
 				
-				this.normals.set(indexA, Vector3F.add(this.normals.get(indexA), normal));
-				this.normals.set(indexB, Vector3F.add(this.normals.get(indexB), normal));
-				this.normals.set(indexC, Vector3F.add(this.normals.get(indexC), normal));
+				this.normals.set(indexA, Vector3D.add(this.normals.get(indexA), normal));
+				this.normals.set(indexB, Vector3D.add(this.normals.get(indexB), normal));
+				this.normals.set(indexC, Vector3D.add(this.normals.get(indexC), normal));
 			}
 			
 			for(int i = 0; i < this.normals.size(); i++) {
-				this.normals.set(i, Vector3F.normalize(this.normals.get(i)));
+				this.normals.set(i, Vector3D.normalize(this.normals.get(i)));
 			}
 		}
 		
@@ -1478,30 +1478,30 @@ public final class TriangleMesh3F implements Shape3F {
 				final int indexB = this.indices.get(i + 1).intValue();
 				final int indexC = this.indices.get(i + 2).intValue();
 				
-				final Vector3F edgeAB = Vector3F.direction(this.positions.get(indexA), this.positions.get(indexB));
-				final Vector3F edgeAC = Vector3F.direction(this.positions.get(indexA), this.positions.get(indexC));
+				final Vector3D edgeAB = Vector3D.direction(this.positions.get(indexA), this.positions.get(indexB));
+				final Vector3D edgeAC = Vector3D.direction(this.positions.get(indexA), this.positions.get(indexC));
 				
-				final float deltaABU = this.textureCoordinates.get(indexB).getX() - this.textureCoordinates.get(indexA).getX();
-				final float deltaABV = this.textureCoordinates.get(indexB).getY() - this.textureCoordinates.get(indexA).getY();
-				final float deltaACU = this.textureCoordinates.get(indexC).getX() - this.textureCoordinates.get(indexA).getX();
-				final float deltaACV = this.textureCoordinates.get(indexC).getY() - this.textureCoordinates.get(indexA).getY();
+				final double deltaABU = this.textureCoordinates.get(indexB).getX() - this.textureCoordinates.get(indexA).getX();
+				final double deltaABV = this.textureCoordinates.get(indexB).getY() - this.textureCoordinates.get(indexA).getY();
+				final double deltaACU = this.textureCoordinates.get(indexC).getX() - this.textureCoordinates.get(indexA).getX();
+				final double deltaACV = this.textureCoordinates.get(indexC).getY() - this.textureCoordinates.get(indexA).getY();
 				
-				final float dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
-				final float fraction = dividend < -0.0F || dividend > +0.0F ? 1.0F / dividend : 0.0F;
+				final double dividend = (deltaABU * deltaACV - deltaACU * deltaABV);
+				final double fraction = dividend < -0.0D || dividend > +0.0D ? 1.0D / dividend : 0.0D;
 				
-				final float x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
-				final float y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
-				final float z = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
+				final double x = fraction * (deltaACV * edgeAB.getX() - deltaABV * edgeAC.getX());
+				final double y = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
+				final double z = fraction * (deltaACV * edgeAB.getY() - deltaABV * edgeAC.getY());
 				
-				final Vector3F tangent = new Vector3F(x, y, z);
+				final Vector3D tangent = new Vector3D(x, y, z);
 				
-				this.tangents.set(indexA, Vector3F.add(this.tangents.get(indexA), tangent));
-				this.tangents.set(indexB, Vector3F.add(this.tangents.get(indexB), tangent));
-				this.tangents.set(indexC, Vector3F.add(this.tangents.get(indexC), tangent));
+				this.tangents.set(indexA, Vector3D.add(this.tangents.get(indexA), tangent));
+				this.tangents.set(indexB, Vector3D.add(this.tangents.get(indexB), tangent));
+				this.tangents.set(indexC, Vector3D.add(this.tangents.get(indexC), tangent));
 			}
 			
 			for(int i = 0; i < this.tangents.size(); i++) {
-				this.tangents.set(i, Vector3F.normalize(this.tangents.get(i)));
+				this.tangents.set(i, Vector3D.normalize(this.tangents.get(i)));
 			}
 		}
 	}
@@ -1509,11 +1509,11 @@ public final class TriangleMesh3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final class LeafBVHNode extends BVHNode {
-		private final List<Triangle3F> triangles;
+		private final List<Triangle3D> triangles;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public LeafBVHNode(final Point3F maximum, final Point3F minimum, final int depth, final List<Triangle3F> triangles) {
+		public LeafBVHNode(final Point3D maximum, final Point3D minimum, final int depth, final List<Triangle3D> triangles) {
 			super(maximum, minimum, depth);
 			
 			this.triangles = Objects.requireNonNull(triangles, "triangles == null");
@@ -1521,17 +1521,17 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public List<Triangle3F> getTriangles() {
+		public List<Triangle3D> getTriangles() {
 			return this.triangles;
 		}
 		
 		@Override
-		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds) {
-			Optional<SurfaceIntersection3F> optionalSurfaceIntersection = SurfaceIntersection3F.EMPTY;
+		public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double[] tBounds) {
+			Optional<SurfaceIntersection3D> optionalSurfaceIntersection = SurfaceIntersection3D.EMPTY;
 			
 			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
-				for(final Triangle3F triangle : this.triangles) {
-					optionalSurfaceIntersection = SurfaceIntersection3F.closest(optionalSurfaceIntersection, triangle.intersection(ray, tBounds[0], tBounds[1]));
+				for(final Triangle3D triangle : this.triangles) {
+					optionalSurfaceIntersection = SurfaceIntersection3D.closest(optionalSurfaceIntersection, triangle.intersection(ray, tBounds[0], tBounds[1]));
 					
 					if(optionalSurfaceIntersection.isPresent()) {
 						tBounds[1] = optionalSurfaceIntersection.get().getT();
@@ -1552,7 +1552,7 @@ public final class TriangleMesh3F implements Shape3F {
 						return nodeHierarchicalVisitor.visitLeave(this);
 					}
 					
-					for(final Triangle3F triangle : this.triangles) {
+					for(final Triangle3D triangle : this.triangles) {
 						if(!triangle.accept(nodeHierarchicalVisitor)) {
 							return nodeHierarchicalVisitor.visitLeave(this);
 						}
@@ -1583,11 +1583,11 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public boolean intersection(final SurfaceIntersector3F surfaceIntersector) {
+		public boolean intersection(final SurfaceIntersector3D surfaceIntersector) {
 			if(surfaceIntersector.isIntersecting(getBoundingVolume())) {
 				boolean isIntersecting = false;
 				
-				for(final Triangle3F triangle : this.triangles) {
+				for(final Triangle3D triangle : this.triangles) {
 					if(surfaceIntersector.intersection(triangle)) {
 						isIntersecting = true;
 					}
@@ -1600,9 +1600,9 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		public boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
 			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) {
-				for(final Triangle3F triangle : this.triangles) {
+				for(final Triangle3D triangle : this.triangles) {
 					if(triangle.intersects(ray, tMinimum, tMaximum)) {
 						return true;
 					}
@@ -1613,10 +1613,10 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public float getSurfaceArea() {
-			float surfaceArea = 0.0F;
+		public double getSurfaceArea() {
+			double surfaceArea = 0.0D;
 			
-			for(final Triangle3F triangle : this.triangles) {
+			for(final Triangle3D triangle : this.triangles) {
 				surfaceArea += triangle.getSurfaceArea();
 			}
 			
@@ -1624,11 +1624,11 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public float intersectionT(final Ray3F ray, final float[] tBounds) {
-			float t = Float.NaN;
+		public double intersectionT(final Ray3D ray, final double[] tBounds) {
+			double t = Double.NaN;
 			
 			if(getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1])) {
-				for(final Triangle3F triangle : this.triangles) {
+				for(final Triangle3D triangle : this.triangles) {
 					t = minOrNaN(t, triangle.intersectionT(ray, tBounds[0], tBounds[1]));
 					
 					if(!isNaN(t)) {
@@ -1663,7 +1663,7 @@ public final class TriangleMesh3F implements Shape3F {
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public TreeBVHNode(final Point3F maximum, final Point3F minimum, final int depth, final BVHNode bVHNodeL, final BVHNode bVHNodeR) {
+		public TreeBVHNode(final Point3D maximum, final Point3D minimum, final int depth, final BVHNode bVHNodeL, final BVHNode bVHNodeR) {
 			super(maximum, minimum, depth);
 			
 			this.bVHNodeL = Objects.requireNonNull(bVHNodeL, "bVHNodeL == null");
@@ -1673,8 +1673,8 @@ public final class TriangleMesh3F implements Shape3F {
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		@Override
-		public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float[] tBounds) {
-			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3F.closest(this.bVHNodeL.intersection(ray, tBounds), this.bVHNodeR.intersection(ray, tBounds)) : Optional.empty();
+		public Optional<SurfaceIntersection3D> intersection(final Ray3D ray, final double[] tBounds) {
+			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? SurfaceIntersection3D.closest(this.bVHNodeL.intersection(ray, tBounds), this.bVHNodeR.intersection(ray, tBounds)) : SurfaceIntersection3D.EMPTY;
 		}
 		
 		@Override
@@ -1722,7 +1722,7 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public boolean intersection(final SurfaceIntersector3F surfaceIntersector) {
+		public boolean intersection(final SurfaceIntersector3D surfaceIntersector) {
 			if(surfaceIntersector.isIntersecting(getBoundingVolume())) {
 				final boolean isIntersectingL = this.bVHNodeL.intersection(surfaceIntersector);
 				final boolean isIntersectingR = this.bVHNodeR.intersection(surfaceIntersector);
@@ -1734,18 +1734,18 @@ public final class TriangleMesh3F implements Shape3F {
 		}
 		
 		@Override
-		public boolean intersects(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		public boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
 			return (getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tMinimum, tMaximum)) && (this.bVHNodeL.intersects(ray, tMinimum, tMaximum) || this.bVHNodeR.intersects(ray, tMinimum, tMaximum));
 		}
 		
 		@Override
-		public float getSurfaceArea() {
+		public double getSurfaceArea() {
 			return this.bVHNodeL.getSurfaceArea() + this.bVHNodeR.getSurfaceArea();
 		}
 		
 		@Override
-		public float intersectionT(final Ray3F ray, final float[] tBounds) {
-			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.bVHNodeL.intersectionT(ray, tBounds), this.bVHNodeR.intersectionT(ray, tBounds)) : Float.NaN;
+		public double intersectionT(final Ray3D ray, final double[] tBounds) {
+			return getBoundingVolume().contains(ray.getOrigin()) || getBoundingVolume().intersects(ray, tBounds[0], tBounds[1]) ? minOrNaN(this.bVHNodeL.intersectionT(ray, tBounds), this.bVHNodeR.intersectionT(ray, tBounds)) : Double.NaN;
 		}
 		
 		@Override

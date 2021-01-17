@@ -20,6 +20,7 @@ package org.dayflower.geometry;
 
 import static org.dayflower.util.Doubles.isNaN;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
@@ -39,22 +40,6 @@ public interface Shape3D extends Node {
 	 * @return a {@code BoundingVolume3D} instance that contains this {@code Shape3D} instance
 	 */
 	BoundingVolume3D getBoundingVolume();
-	
-	/**
-	 * Samples this {@code Shape3D} instance.
-	 * <p>
-	 * Returns an optional {@link SurfaceSample3D} with the surface sample.
-	 * <p>
-	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Shape3D} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3D} instance
-	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
-	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
-	 * @return an optional {@code SurfaceSample3D} with the surface sample
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
-	 */
-	Optional<SurfaceSample3D> sample(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final double u, final double v);
 	
 	/**
 	 * Performs an intersection test between {@code ray} and this {@code Shape3D} instance.
@@ -79,52 +64,11 @@ public interface Shape3D extends Node {
 	String getName();
 	
 	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Shape3D} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3D} instance
-	 * @param point the point on this {@code Shape3D} instance
-	 * @param surfaceNormal the surface normal on this {@code Shape3D} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
-	 */
-	double calculateProbabilityDensityFunctionValueForSolidAngle(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Point3D point, final Vector3D surfaceNormal);
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Shape3D} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3D} instance
-	 * @param direction the direction to this {@code Shape3D} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
-	 */
-	double calculateProbabilityDensityFunctionValueForSolidAngle(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Vector3D direction);
-	
-	/**
 	 * Returns the surface area of this {@code Shape3D} instance.
 	 * 
 	 * @return the surface area of this {@code Shape3D} instance
 	 */
 	double getSurfaceArea();
-	
-	/**
-	 * Returns the surface area probability density function (PDF) value of this {@code Shape3D} instance.
-	 * 
-	 * @return the surface area probability density function (PDF) value of this {@code Shape3D} instance
-	 */
-	double getSurfaceAreaProbabilityDensityFunctionValue();
-	
-	/**
-	 * Returns the volume of this {@code Shape3D} instance.
-	 * 
-	 * @return the volume of this {@code Shape3D} instance
-	 */
-	double getVolume();
 	
 	/**
 	 * Performs an intersection test between {@code ray} and this {@code Shape3D} instance.
@@ -149,6 +93,27 @@ public interface Shape3D extends Node {
 	int getID();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Samples this {@code Shape3D} instance.
+	 * <p>
+	 * Returns an optional {@link SurfaceSample3D} with the surface sample.
+	 * <p>
+	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param referencePoint the reference point on this {@code Shape3D} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3D} instance
+	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @return an optional {@code SurfaceSample3D} with the surface sample
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
+	 */
+	default Optional<SurfaceSample3D> sample(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final double u, final double v) {
+		Objects.requireNonNull(referencePoint, "referencePoint == null");
+		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+		
+		return SurfaceSample3D.EMPTY;
+	}
 	
 	/**
 	 * Performs an intersection test between {@code surfaceIntersector} and this {@code Shape3D} instance.
@@ -178,5 +143,45 @@ public interface Shape3D extends Node {
 	 */
 	default boolean intersects(final Ray3D ray, final double tMinimum, final double tMaximum) {
 		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
+	}
+	
+	/**
+	 * Returns the probability density function (PDF) value for solid angle.
+	 * <p>
+	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param referencePoint the reference point on this {@code Shape3D} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3D} instance
+	 * @param point the point on this {@code Shape3D} instance
+	 * @param surfaceNormal the surface normal on this {@code Shape3D} instance
+	 * @return the probability density function (PDF) value for solid angle
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
+	 */
+	default double evaluateProbabilityDensityFunction(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Point3D point, final Vector3D surfaceNormal) {
+		Objects.requireNonNull(referencePoint, "referencePoint == null");
+		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+		Objects.requireNonNull(point, "point == null");
+		Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
+		
+		return 0.0D;
+	}
+	
+	/**
+	 * Returns the probability density function (PDF) value for solid angle.
+	 * <p>
+	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param referencePoint the reference point on this {@code Shape3D} instance
+	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3D} instance
+	 * @param direction the direction to this {@code Shape3D} instance
+	 * @return the probability density function (PDF) value for solid angle
+	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
+	 */
+	default double evaluateProbabilityDensityFunction(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Vector3D direction) {
+		Objects.requireNonNull(referencePoint, "referencePoint == null");
+		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+		Objects.requireNonNull(direction, "direction == null");
+		
+		return 0.0D;
 	}
 }

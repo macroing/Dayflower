@@ -27,12 +27,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
-import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
-import org.dayflower.geometry.SurfaceSample3F;
-import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
@@ -76,30 +73,6 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
 		return this.boundingVolume;
-	}
-	
-	/**
-	 * Samples this {@code ConstructiveSolidGeometry3F} instance.
-	 * <p>
-	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
-	 * <p>
-	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Note: This method has not been implemented yet.
-	 * 
-	 * @param referencePoint the reference point on this {@code ConstructiveSolidGeometry3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code ConstructiveSolidGeometry3F} instance
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @return an optional {@code SurfaceSample3F} with the surface sample
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
-	 */
-	@Override
-	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		
-		return SurfaceSample3F.EMPTY;//TODO: Implement!
 	}
 	
 	/**
@@ -287,52 +260,6 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Note: This method has not been implemented yet.
-	 * 
-	 * @param referencePoint the reference point on this {@code ConstructiveSolidGeometry3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code ConstructiveSolidGeometry3F} instance
-	 * @param point the point on this {@code ConstructiveSolidGeometry3F} instance
-	 * @param surfaceNormal the surface normal on this {@code ConstructiveSolidGeometry3F} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
-	 */
-	@Override
-	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		Objects.requireNonNull(point, "point == null");
-		Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
-		
-		return 0.0F;//TODO: Implement!
-	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Note: This method has not been implemented yet.
-	 * 
-	 * @param referencePoint the reference point on this {@code ConstructiveSolidGeometry3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code ConstructiveSolidGeometry3F} instance
-	 * @param direction the direction to this {@code ConstructiveSolidGeometry3F} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
-	 */
-	@Override
-	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		Objects.requireNonNull(direction, "direction == null");
-		
-		return 0.0F;//TODO: Implement!
-	}
-	
-	/**
 	 * Returns the surface area of this {@code ConstructiveSolidGeometry3F} instance.
 	 * <p>
 	 * Note: This method has not been implemented yet.
@@ -341,30 +268,6 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		return 0.0F;//TODO: Implement!
-	}
-	
-	/**
-	 * Returns the surface area probability density function (PDF) value of this {@code ConstructiveSolidGeometry3F} instance.
-	 * <p>
-	 * Note: This method has not been implemented yet.
-	 * 
-	 * @return the surface area probability density function (PDF) value of this {@code ConstructiveSolidGeometry3F} instance
-	 */
-	@Override
-	public float getSurfaceAreaProbabilityDensityFunctionValue() {
-		return 0.0F;//TODO: Implement!
-	}
-	
-	/**
-	 * Returns the volume of this {@code ConstructiveSolidGeometry3F} instance.
-	 * <p>
-	 * Note: This method has not been implemented yet.
-	 * 
-	 * @return the volume of this {@code ConstructiveSolidGeometry3F} instance
-	 */
-	@Override
-	public float getVolume() {
 		return 0.0F;//TODO: Implement!
 	}
 	

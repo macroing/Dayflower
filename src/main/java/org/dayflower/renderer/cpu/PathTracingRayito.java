@@ -262,7 +262,7 @@ final class PathTracingRayito {
 										if(material instanceof RayitoMaterial) {
 											final RayitoMaterial rayitoMaterial = RayitoMaterial.class.cast(material);
 											
-											final float probabilityDensityFunctionValueB2 = primitive.calculateProbabilityDensityFunctionValueForSolidAngle(ray, intersection);
+											final float probabilityDensityFunctionValueB2 = primitive.evaluateProbabilityDensityFunction(ray, intersection);
 											
 											if(probabilityDensityFunctionValueB2 > 0.0F) {
 												final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA2, probabilityDensityFunctionValueB2, 1, 1);

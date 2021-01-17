@@ -32,6 +32,7 @@ import static org.dayflower.util.Doubles.pow;
 import static org.dayflower.util.Doubles.solveQuadraticSystem;
 import static org.dayflower.util.Doubles.sqrt;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -182,7 +183,7 @@ public final class Sphere3D implements Shape3D {
 			final Vector3D directionToSurfaceNormalized = Vector3D.normalize(directionToSurface);
 			
 //			final double probabilityDensityFunctionValue = (1.0D / getSurfaceArea()) * (directionToSurface.lengthSquared() / abs(Vector3D.dotProduct(Vector3D.negate(directionToSurfaceNormalized), surfaceNormal)));
-			final double probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3D.dotProduct(directionToSurfaceNormalized, surfaceNormal));
+			final double probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (3.0D / getSurfaceArea()) / abs(Vector3D.dotProduct(directionToSurfaceNormalized, surfaceNormal));
 			
 			return Optional.of(new SurfaceSample3D(point, surfaceNormal, probabilityDensityFunctionValue));
 		}
@@ -368,7 +369,7 @@ public final class Sphere3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
 	 */
 	@Override
-	public double calculateProbabilityDensityFunctionValueForSolidAngle(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Point3D point, final Vector3D surfaceNormal) {
+	public double evaluateProbabilityDensityFunction(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Point3D point, final Vector3D surfaceNormal) {
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
 		final Point3D center = this.center;
@@ -383,7 +384,7 @@ public final class Sphere3D implements Shape3D {
 			final Vector3D directionToSurface = Vector3D.direction(point, referencePoint);
 			final Vector3D directionToSurfaceNormalized = Vector3D.normalize(directionToSurface);
 			
-			final double probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3D.dotProduct(directionToSurfaceNormalized, surfaceNormal));
+			final double probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (3.0D / getSurfaceArea()) / abs(Vector3D.dotProduct(directionToSurfaceNormalized, surfaceNormal));
 			
 			return probabilityDensityFunctionValue;
 		}
@@ -407,7 +408,7 @@ public final class Sphere3D implements Shape3D {
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
 	 */
 	@Override
-	public double calculateProbabilityDensityFunctionValueForSolidAngle(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Vector3D direction) {
+	public double evaluateProbabilityDensityFunction(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Vector3D direction) {
 		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		Objects.requireNonNull(direction, "direction == null");
@@ -425,7 +426,7 @@ public final class Sphere3D implements Shape3D {
 			
 			final Vector3D surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
 			
-			return calculateProbabilityDensityFunctionValueForSolidAngle(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
+			return evaluateProbabilityDensityFunction(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
 		}
 		
 		return 0.0D;
@@ -460,21 +461,10 @@ public final class Sphere3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns the surface area probability density function (PDF) value of this {@code Sphere3D} instance.
-	 * 
-	 * @return the surface area probability density function (PDF) value of this {@code Sphere3D} instance
-	 */
-	@Override
-	public double getSurfaceAreaProbabilityDensityFunctionValue() {
-		return 3.0D / getSurfaceArea();
-	}
-	
-	/**
 	 * Returns the volume of this {@code Sphere3D} instance.
 	 * 
 	 * @return the volume of this {@code Sphere3D} instance
 	 */
-	@Override
 	public double getVolume() {
 		return 4.0D / 3.0D * PI * pow(this.radius, 3.0D);
 	}

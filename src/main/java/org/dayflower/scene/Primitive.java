@@ -467,7 +467,7 @@ public final class Primitive implements Node {
 	 * @return the probability density function (PDF) value for solid angle
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
 	 */
-	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
+	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
 		final Transform transform = getTransform();
 		
 		final Matrix44F objectToWorld = transform.getObjectToWorld();
@@ -475,7 +475,7 @@ public final class Primitive implements Node {
 		
 		final Shape3F shape = getShape();
 		
-		return shape.calculateProbabilityDensityFunctionValueForSolidAngle(Point3F.transformAndDivide(worldToObject, referencePoint), Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal), Point3F.transformAndDivide(worldToObject, point), Vector3F.transformTranspose(objectToWorld, surfaceNormal));
+		return shape.evaluateProbabilityDensityFunction(Point3F.transformAndDivide(worldToObject, referencePoint), Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal), Point3F.transformAndDivide(worldToObject, point), Vector3F.transformTranspose(objectToWorld, surfaceNormal));
 	}
 	
 	/**
@@ -486,7 +486,7 @@ public final class Primitive implements Node {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * primitive.calculateProbabilityDensityFunctionValueForSolidAngle(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalS());
+	 * primitive.evaluateProbabilityDensityFunction(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalS());
 	 * }
 	 * </pre>
 	 * 
@@ -495,8 +495,8 @@ public final class Primitive implements Node {
 	 * @return the probability density function (PDF) value for solid angle
 	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code intersection} are {@code null}
 	 */
-	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Ray3F ray, final Intersection intersection) {
-		return calculateProbabilityDensityFunctionValueForSolidAngle(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS().getW());
+	public float evaluateProbabilityDensityFunction(final Ray3F ray, final Intersection intersection) {
+		return evaluateProbabilityDensityFunction(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS().getW());
 	}
 	
 	/**

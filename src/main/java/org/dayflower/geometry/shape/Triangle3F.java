@@ -216,7 +216,7 @@ public final class Triangle3F implements Shape3F {
 		final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
 		final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
 		
-		final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
+		final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (1.0F / getSurfaceArea()) / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
 		
 		return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
 	}
@@ -451,13 +451,13 @@ public final class Triangle3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
 	 */
 	@Override
-	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
+	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		
 		final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
 		final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
 		
-		final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * getSurfaceAreaProbabilityDensityFunctionValue() / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
+		final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (1.0F / getSurfaceArea()) / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
 		
 		return probabilityDensityFunctionValue;
 	}
@@ -474,7 +474,7 @@ public final class Triangle3F implements Shape3F {
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
 	 */
 	@Override
-	public float calculateProbabilityDensityFunctionValueForSolidAngle(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
+	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
 		Objects.requireNonNull(referencePoint, "referencePoint == null");
 		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
 		Objects.requireNonNull(direction, "direction == null");
@@ -490,9 +490,9 @@ public final class Triangle3F implements Shape3F {
 			
 			final Point3F point = surfaceIntersection.getSurfaceIntersectionPoint();
 			
-			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();//.getSurfaceNormalS();
+			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
 			
-			return calculateProbabilityDensityFunctionValueForSolidAngle(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
+			return evaluateProbabilityDensityFunction(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
 		}
 		
 		return 0.0F;
@@ -523,28 +523,6 @@ public final class Triangle3F implements Shape3F {
 		final Vector3F edgeABCrossEdgeAC = Vector3F.crossProduct(edgeAB, edgeAC);
 		
 		return edgeABCrossEdgeAC.length();
-	}
-	
-	/**
-	 * Returns the surface area probability density function (PDF) value of this {@code Triangle3F} instance.
-	 * 
-	 * @return the surface area probability density function (PDF) value of this {@code Triangle3F} instance
-	 */
-	@Override
-	public float getSurfaceAreaProbabilityDensityFunctionValue() {
-		return 1.0F / getSurfaceArea();
-	}
-	
-	/**
-	 * Returns the volume of this {@code Triangle3F} instance.
-	 * <p>
-	 * This method returns {@code 0.0F}.
-	 * 
-	 * @return the volume of this {@code Triangle3F} instance
-	 */
-	@Override
-	public float getVolume() {
-		return 0.0F;
 	}
 	
 	/**

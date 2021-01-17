@@ -19,12 +19,12 @@
 package org.dayflower.image;
 
 /**
- * A {@code Filter} represents a filter.
+ * A {@code Filter2F} represents a 2-dimensional filter of type {@code float}.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class Filter {
+public abstract class Filter2F {
 	/**
 	 * The size of the table created by {@link #createFilterTable()}.
 	 */
@@ -40,12 +40,12 @@ public abstract class Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code Filter} instance given {@code resolutionX} and {@code resolutionY}.
+	 * Constructs a new {@code Filter2F} instance given {@code resolutionX} and {@code resolutionY}.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 */
-	protected Filter(final float resolutionX, final float resolutionY) {
+	protected Filter2F(final float resolutionX, final float resolutionY) {
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
 		this.resolutionXReciprocal = 1.0F / this.resolutionX;
@@ -55,7 +55,7 @@ public abstract class Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Evaluates this {@code Filter} instance given {@code x} and {@code y}.
+	 * Evaluates this {@code Filter2F} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
 	 * 

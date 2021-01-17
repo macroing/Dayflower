@@ -18,7 +18,7 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.image.Filter.FILTER_TABLE_SIZE;
+import static org.dayflower.image.Filter2F.FILTER_TABLE_SIZE;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.ceil;
 import static org.dayflower.util.Floats.floor;
@@ -71,7 +71,7 @@ import javafx.scene.image.WritableImage;
  * @author J&#246;rgen Lundgren
  */
 public final class PixelImage implements Image {
-	private final Filter filter;
+	private final Filter2F filter;
 	private final Pixel[] pixels;
 	private final float[] filterTable;
 	private final int resolution;
@@ -104,7 +104,7 @@ public final class PixelImage implements Image {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(bufferedImage, new MitchellFilter());
+	 * new PixelImage(bufferedImage, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -113,7 +113,7 @@ public final class PixelImage implements Image {
 	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
 	 */
 	public PixelImage(final BufferedImage bufferedImage) {
-		this(bufferedImage, new MitchellFilter());
+		this(bufferedImage, new MitchellFilter2F());
 	}
 	
 	/**
@@ -124,11 +124,11 @@ public final class PixelImage implements Image {
 	 * If either {@code bufferedImage} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bufferedImage a {@code BufferedImage} instance
-	 * @param filter the {@link Filter} to use
+	 * @param filter the {@link Filter2F} to use
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code bufferedImage.getWidth()}, {@code bufferedImage.getHeight()} or {@code bufferedImage.getWidth() * bufferedImage.getHeight()} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code bufferedImage} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final BufferedImage bufferedImage, final Filter filter) {
+	public PixelImage(final BufferedImage bufferedImage, final Filter2F filter) {
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.pixels = Pixel.createPixels(bufferedImage);
 		this.filterTable = filter.createFilterTable();
@@ -184,7 +184,7 @@ public final class PixelImage implements Image {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBA, new MitchellFilter());
+	 * new PixelImage(resolutionX, resolutionY, colorRGBA, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -195,7 +195,7 @@ public final class PixelImage implements Image {
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
 	public PixelImage(final int resolutionX, final int resolutionY, final Color4F colorRGBA) {
-		this(resolutionX, resolutionY, colorRGBA, new MitchellFilter());
+		this(resolutionX, resolutionY, colorRGBA, new MitchellFilter2F());
 	}
 	
 	/**
@@ -208,11 +208,11 @@ public final class PixelImage implements Image {
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param colorRGBA the {@link Color4F} to fill the {@code PixelImage} with
-	 * @param filter the {@link Filter} to use
+	 * @param filter the {@link Filter2F} to use
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color4F colorRGBA, final Filter filter) {
+	public PixelImage(final int resolutionX, final int resolutionY, final Color4F colorRGBA, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -231,7 +231,7 @@ public final class PixelImage implements Image {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, new MitchellFilter());
+	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -242,7 +242,7 @@ public final class PixelImage implements Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or at least one of its elements are {@code null}
 	 */
 	public PixelImage(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs) {
-		this(resolutionX, resolutionY, colorRGBAs, new MitchellFilter());
+		this(resolutionX, resolutionY, colorRGBAs, new MitchellFilter2F());
 	}
 	
 	/**
@@ -255,11 +255,11 @@ public final class PixelImage implements Image {
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param colorRGBAs the {@code Color4F} instances to fill the {@code PixelImage} with
-	 * @param filter the {@link Filter} to use
+	 * @param filter the {@link Filter2F} to use
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, at least one of its elements or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs, final Filter filter) {
+	public PixelImage(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -281,7 +281,7 @@ public final class PixelImage implements Image {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter());
+	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -295,7 +295,7 @@ public final class PixelImage implements Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or {@code arrayComponentOrder} are {@code null}
 	 */
 	public PixelImage(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder) {
-		this(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter());
+		this(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
 	}
 	
 	/**
@@ -312,13 +312,13 @@ public final class PixelImage implements Image {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param colorRGBAs the array to read {@code Color4F} instances from
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
-	 * @param filter the {@link Filter} to use
+	 * @param filter the {@link Filter2F} to use
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
 	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
+	public PixelImage(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -340,7 +340,7 @@ public final class PixelImage implements Image {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter());
+	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -354,7 +354,7 @@ public final class PixelImage implements Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or {@code arrayComponentOrder} are {@code null}
 	 */
 	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder) {
-		this(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter());
+		this(resolutionX, resolutionY, colorRGBAs, arrayComponentOrder, new MitchellFilter2F());
 	}
 	
 	/**
@@ -371,13 +371,13 @@ public final class PixelImage implements Image {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param colorRGBAs the array to read {@code Color4F} instances from
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
-	 * @param filter the {@link Filter} to use
+	 * @param filter the {@link Filter2F} to use
 	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code colorRGBAs.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or
 	 *                                  {@code resolutionX * resolutionY != Color4F.arrayRead(colorRGBAs, arrayComponentOrder).length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter filter) {
+	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -396,7 +396,7 @@ public final class PixelImage implements Image {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, packedIntComponentOrder, new MitchellFilter());
+	 * new PixelImage(resolutionX, resolutionY, colorRGBAs, packedIntComponentOrder, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -408,7 +408,7 @@ public final class PixelImage implements Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs} or {@code packedIntComponentOrder} are {@code null}
 	 */
 	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder) {
-		this(resolutionX, resolutionY, colorRGBAs, packedIntComponentOrder, new MitchellFilter());
+		this(resolutionX, resolutionY, colorRGBAs, packedIntComponentOrder, new MitchellFilter2F());
 	}
 	
 	/**
@@ -422,11 +422,11 @@ public final class PixelImage implements Image {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param colorRGBAs the array to unpack {@code Color4F} instances from
 	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder} instance
-	 * @param filter the {@link Filter} to use
+	 * @param filter the {@link Filter2F} to use
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != colorRGBAs.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}
 	 */
-	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder, final Filter filter) {
+	public PixelImage(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder, final Filter2F filter) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -1572,7 +1572,7 @@ public final class PixelImage implements Image {
 	 * @throws NullPointerException thrown if, and only if, {@code colorXYZ} is {@code null}
 	 */
 	public void filmAddColorXYZ(final float x, final float y, final Color3F colorXYZ, final float sampleWeight) {
-		final Filter filter = this.filter;
+		final Filter2F filter = this.filter;
 		
 		final Pixel[] pixels = this.pixels;
 		
@@ -2246,7 +2246,7 @@ public final class PixelImage implements Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImage.load(file, new MitchellFilter());
+	 * PixelImage.load(file, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -2256,7 +2256,7 @@ public final class PixelImage implements Image {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static PixelImage load(final File file) {
-		return load(file, new MitchellFilter());
+		return load(file, new MitchellFilter2F());
 	}
 	
 	/**
@@ -2269,12 +2269,12 @@ public final class PixelImage implements Image {
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
 	 * 
 	 * @param file a {@code File} that represents the file to load from
-	 * @param filter the {@link Filter} to use
+	 * @param filter the {@link Filter2F} to use
 	 * @return a new {@code PixelImage} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code filter} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static PixelImage load(final File file, final Filter filter) {
+	public static PixelImage load(final File file, final Filter2F filter) {
 		try {
 			return new PixelImage(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))), filter);
 		} catch(final IOException e) {
@@ -2294,7 +2294,7 @@ public final class PixelImage implements Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImage.load(pathname, new MitchellFilter());
+	 * PixelImage.load(pathname, new MitchellFilter2F());
 	 * }
 	 * </pre>
 	 * 
@@ -2304,7 +2304,7 @@ public final class PixelImage implements Image {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public static PixelImage load(final String pathname) {
-		return load(pathname, new MitchellFilter());
+		return load(pathname, new MitchellFilter2F());
 	}
 	
 	/**
@@ -2324,12 +2324,12 @@ public final class PixelImage implements Image {
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname of the file to load from
-	 * @param filter the {@link Filter} to use
+	 * @param filter the {@link Filter2F} to use
 	 * @return a new {@code PixelImage} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code filter} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static PixelImage load(final String pathname, final Filter filter) {
+	public static PixelImage load(final String pathname, final Filter2F filter) {
 		return load(new File(pathname), filter);
 	}
 	

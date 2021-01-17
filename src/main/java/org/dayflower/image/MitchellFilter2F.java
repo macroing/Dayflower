@@ -24,42 +24,42 @@ import static org.dayflower.util.Floats.equal;
 import java.util.Objects;
 
 /**
- * A {@code MitchellFilter} is an implementation of {@link Filter} that represents a Mitchell filter.
+ * A {@code MitchellFilter2F} is an implementation of {@link Filter2F} that represents a Mitchell filter.
  * <p>
  * This class is immutable and therefore also suitable for concurrent use without external synchronization.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MitchellFilter extends Filter {
+public final class MitchellFilter2F extends Filter2F {
 	private final float b;
 	private final float c;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code MitchellFilter} given {@code 2.0F}, {@code 2.0F}, {@code 1.0F / 3.0F} and {@code 1.0F / 3.0F}.
+	 * Constructs a new {@code MitchellFilter2F} given {@code 2.0F}, {@code 2.0F}, {@code 1.0F / 3.0F} and {@code 1.0F / 3.0F}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MitchellFilter(2.0F, 2.0F, 1.0F / 3.0F, 1.0F / 3.0F);
+	 * new MitchellFilter2F(2.0F, 2.0F, 1.0F / 3.0F, 1.0F / 3.0F);
 	 * }
 	 * </pre>
 	 */
-	public MitchellFilter() {
+	public MitchellFilter2F() {
 		this(2.0F, 2.0F, 1.0F / 3.0F, 1.0F / 3.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code MitchellFilter} given {@code resolutionX}, {@code resolutionY}, {@code b} and {@code c}.
+	 * Constructs a new {@code MitchellFilter2F} given {@code resolutionX}, {@code resolutionY}, {@code b} and {@code c}.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param b the B-coefficient to use
 	 * @param c the C-coefficient to use
 	 */
-	public MitchellFilter(final float resolutionX, final float resolutionY, final float b, final float c) {
+	public MitchellFilter2F(final float resolutionX, final float resolutionY, final float b, final float c) {
 		super(resolutionX, resolutionY);
 		
 		this.b = b;
@@ -69,40 +69,40 @@ public final class MitchellFilter extends Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@code String} representation of this {@code MitchellFilter} instance.
+	 * Returns a {@code String} representation of this {@code MitchellFilter2F} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code MitchellFilter} instance
+	 * @return a {@code String} representation of this {@code MitchellFilter2F} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MitchellFilter(%+.10f, %+.10f, %+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.b), Float.valueOf(this.c));
+		return String.format("new MitchellFilter2F(%+.10f, %+.10f, %+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()), Float.valueOf(this.b), Float.valueOf(this.c));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code MitchellFilter} instance for equality.
+	 * Compares {@code object} to this {@code MitchellFilter2F} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MitchellFilter}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MitchellFilter2F}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code MitchellFilter} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MitchellFilter}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code MitchellFilter2F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MitchellFilter2F}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof MitchellFilter)) {
+		} else if(!(object instanceof MitchellFilter2F)) {
 			return false;
-		} else if(!equal(getResolutionX(), MitchellFilter.class.cast(object).getResolutionX())) {
+		} else if(!equal(getResolutionX(), MitchellFilter2F.class.cast(object).getResolutionX())) {
 			return false;
-		} else if(!equal(getResolutionXReciprocal(), MitchellFilter.class.cast(object).getResolutionXReciprocal())) {
+		} else if(!equal(getResolutionXReciprocal(), MitchellFilter2F.class.cast(object).getResolutionXReciprocal())) {
 			return false;
-		} else if(!equal(getResolutionY(), MitchellFilter.class.cast(object).getResolutionY())) {
+		} else if(!equal(getResolutionY(), MitchellFilter2F.class.cast(object).getResolutionY())) {
 			return false;
-		} else if(!equal(getResolutionYReciprocal(), MitchellFilter.class.cast(object).getResolutionYReciprocal())) {
+		} else if(!equal(getResolutionYReciprocal(), MitchellFilter2F.class.cast(object).getResolutionYReciprocal())) {
 			return false;
-		} else if(!equal(this.b, MitchellFilter.class.cast(object).b)) {
+		} else if(!equal(this.b, MitchellFilter2F.class.cast(object).b)) {
 			return false;
-		} else if(!equal(this.c, MitchellFilter.class.cast(object).c)) {
+		} else if(!equal(this.c, MitchellFilter2F.class.cast(object).c)) {
 			return false;
 		} else {
 			return true;
@@ -110,7 +110,7 @@ public final class MitchellFilter extends Filter {
 	}
 	
 	/**
-	 * Evaluates this {@code MitchellFilter} instance given {@code x} and {@code y}.
+	 * Evaluates this {@code MitchellFilter2F} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
 	 * 
@@ -142,9 +142,9 @@ public final class MitchellFilter extends Filter {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code MitchellFilter} instance.
+	 * Returns a hash code for this {@code MitchellFilter2F} instance.
 	 * 
-	 * @return a hash code for this {@code MitchellFilter} instance
+	 * @return a hash code for this {@code MitchellFilter2F} instance
 	 */
 	@Override
 	public int hashCode() {

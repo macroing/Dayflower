@@ -34,7 +34,7 @@ import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.image.BoxFilter;
+import org.dayflower.image.BoxFilter2F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Color4F;
 import org.dayflower.image.Image;
@@ -425,7 +425,7 @@ final class RendererViewPane extends BorderPane {
 	private static WritableImage doCreateWritableImageMaterial(final Material material) {
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
-		combinedProgressiveImageOrderRenderer.setImage(new PixelImage(32, 32, Color4F.BLACK, new BoxFilter()));
+		combinedProgressiveImageOrderRenderer.setImage(new PixelImage(32, 32, Color4F.BLACK, new BoxFilter2F()));
 		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(doCreateRenderingAlgorithm(material));
 		combinedProgressiveImageOrderRenderer.setRenderPasses(10);

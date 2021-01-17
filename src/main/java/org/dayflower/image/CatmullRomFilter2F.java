@@ -24,57 +24,57 @@ import static org.dayflower.util.Floats.sqrt;
 import java.util.Objects;
 
 /**
- * A {@code CatmullRomFilter} is an implementation of {@link Filter} that represents a Catmull-Rom filter.
+ * A {@code CatmullRomFilter2F} is an implementation of {@link Filter2F} that represents a Catmull-Rom filter.
  * <p>
  * This class is immutable and therefore also suitable for concurrent use without external synchronization.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class CatmullRomFilter extends Filter {
+public final class CatmullRomFilter2F extends Filter2F {
 	/**
-	 * Constructs a new {@code CatmullRomFilter} instance given {@code resolutionX} and {@code resolutionY}.
+	 * Constructs a new {@code CatmullRomFilter2F} instance given {@code resolutionX} and {@code resolutionY}.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 */
-	public CatmullRomFilter(final float resolutionX, final float resolutionY) {
+	public CatmullRomFilter2F(final float resolutionX, final float resolutionY) {
 		super(resolutionX, resolutionY);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@code String} representation of this {@code CatmullRomFilter} instance.
+	 * Returns a {@code String} representation of this {@code CatmullRomFilter2F} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code CatmullRomFilter} instance
+	 * @return a {@code String} representation of this {@code CatmullRomFilter2F} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new CatmullRomFilter(%+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()));
+		return String.format("new CatmullRomFilter2F(%+.10f, %+.10f)", Float.valueOf(getResolutionX()), Float.valueOf(getResolutionY()));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code CatmullRomFilter} instance for equality.
+	 * Compares {@code object} to this {@code CatmullRomFilter2F} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code CatmullRomFilter}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code CatmullRomFilter2F}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code CatmullRomFilter} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CatmullRomFilter}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code CatmullRomFilter2F} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CatmullRomFilter2F}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof CatmullRomFilter)) {
+		} else if(!(object instanceof CatmullRomFilter2F)) {
 			return false;
-		} else if(!equal(getResolutionX(), CatmullRomFilter.class.cast(object).getResolutionX())) {
+		} else if(!equal(getResolutionX(), CatmullRomFilter2F.class.cast(object).getResolutionX())) {
 			return false;
-		} else if(!equal(getResolutionXReciprocal(), CatmullRomFilter.class.cast(object).getResolutionXReciprocal())) {
+		} else if(!equal(getResolutionXReciprocal(), CatmullRomFilter2F.class.cast(object).getResolutionXReciprocal())) {
 			return false;
-		} else if(!equal(getResolutionY(), CatmullRomFilter.class.cast(object).getResolutionY())) {
+		} else if(!equal(getResolutionY(), CatmullRomFilter2F.class.cast(object).getResolutionY())) {
 			return false;
-		} else if(!equal(getResolutionYReciprocal(), CatmullRomFilter.class.cast(object).getResolutionYReciprocal())) {
+		} else if(!equal(getResolutionYReciprocal(), CatmullRomFilter2F.class.cast(object).getResolutionYReciprocal())) {
 			return false;
 		} else {
 			return true;
@@ -82,7 +82,7 @@ public final class CatmullRomFilter extends Filter {
 	}
 	
 	/**
-	 * Evaluates this {@code CatmullRomFilter} instance given {@code x} and {@code y}.
+	 * Evaluates this {@code CatmullRomFilter2F} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
 	 * 
@@ -100,9 +100,9 @@ public final class CatmullRomFilter extends Filter {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code CatmullRomFilter} instance.
+	 * Returns a hash code for this {@code CatmullRomFilter2F} instance.
 	 * 
-	 * @return a hash code for this {@code CatmullRomFilter} instance
+	 * @return a hash code for this {@code CatmullRomFilter2F} instance
 	 */
 	@Override
 	public int hashCode() {

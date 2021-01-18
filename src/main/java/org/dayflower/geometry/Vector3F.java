@@ -172,6 +172,20 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, this {@code Vector3F} instance is a unit vector, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, this {@code Vector3F} instance is a unit vector, {@code false} otherwise
+	 */
+	public boolean isUnitVector() {
+		final float length = length();
+		
+		final boolean isLengthGTEThreshold = length >= 1.0F - 0.000001F;
+		final boolean isLengthLTEThreshold = length <= 1.0F + 0.000001F;
+		
+		return isLengthGTEThreshold && isLengthLTEThreshold;
+	}
+	
+	/**
 	 * Returns the cosine of the angle phi.
 	 * 
 	 * @return the cosine of the angle phi
@@ -1006,6 +1020,28 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
+	 * Returns a random {@code Vector3F} instance.
+	 * 
+	 * @return a random {@code Vector3F} instance
+	 */
+	public static Vector3F random() {
+		final float component1 = Floats.random();
+		final float component2 = Floats.random();
+		final float component3 = Floats.random();
+		
+		return new Vector3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a random and normalized {@code Vector3F} instance.
+	 * 
+	 * @return a random and normalized {@code Vector3F} instance
+	 */
+	public static Vector3F randomNormalized() {
+		return normalize(random());
+	}
+	
+	/**
 	 * Returns a new {@code Vector3F} instance with the reciprocal (or inverse) component values of {@code vector}.
 	 * <p>
 	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1355,6 +1391,25 @@ public final class Vector3F implements Node {
 	 */
 	public static Vector3F z(final float z) {
 		return new Vector3F(0.0F, 0.0F, z);
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code vLHS} and {@code vRHS} are orthogonal, {@code false} otherwise.
+	 * <p>
+	 * If either {@code vLHS} or {@code vRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vRHS the {@code Vector3F} instance on the right-hand side
+	 * @return {@code true} if, and only if, {@code vLHS} and {@code vRHS} are orthogonal, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code vLHS} or {@code vRHS} are {@code null}
+	 */
+	public static boolean orthogonal(final Vector3F vLHS, final Vector3F vRHS) {
+		final float dotProduct = dotProduct(vLHS, vRHS);
+		
+		final boolean isDotProductGTEThreshold = dotProduct >= 0.0F - 0.000001F;
+		final boolean isDotProductLTEThreshold = dotProduct <= 0.0F + 0.000001F;
+		
+		return isDotProductGTEThreshold && isDotProductLTEThreshold;
 	}
 	
 	/**

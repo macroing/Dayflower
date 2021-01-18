@@ -223,6 +223,41 @@ public final class OrthonormalBasis33F implements Node {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, all {@link Vector3F} instances in this {@code OrthonormalBasis33F} instance are orthogonal, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, all {@code Vector3F} instances in this {@code OrthonormalBasis33F} instance are orthogonal, {@code false} otherwise
+	 */
+	public boolean hasOrthogonalVectors() {
+		final boolean orthogonalUV = Vector3F.orthogonal(this.u, this.v);
+		final boolean orthogonalVW = Vector3F.orthogonal(this.v, this.w);
+		final boolean orthogonalWU = Vector3F.orthogonal(this.w, this.u);
+		
+		return orthogonalUV && orthogonalVW && orthogonalWU;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, all {@link Vector3F} instances in this {@code OrthonormalBasis33F} instance are unit vectors, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, all {@code Vector3F} instances in this {@code OrthonormalBasis33F} instance are unit vectors, {@code false} otherwise
+	 */
+	public boolean hasUnitVectors() {
+		final boolean isUnitVectorU = this.u.isUnitVector();
+		final boolean isUnitVectorV = this.v.isUnitVector();
+		final boolean isUnitVectorW = this.w.isUnitVector();
+		
+		return isUnitVectorU && isUnitVectorV && isUnitVectorW;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, all {@link Vector3F} instances in this {@code OrthonormalBasis33F} instance are unit vectors and are orthogonal, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, all {@code Vector3F} instances in this {@code OrthonormalBasis33F} instance are unit vectors and are orthogonal, {@code false} otherwise
+	 */
+	public boolean isOrthonormal() {
+		return hasUnitVectors() && hasOrthogonalVectors();
+	}
+	
+	/**
 	 * Returns a hash code for this {@code OrthonormalBasis33F} instance.
 	 * 
 	 * @return a hash code for this {@code OrthonormalBasis33F} instance

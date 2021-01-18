@@ -293,8 +293,13 @@ public final class Triangle3D implements Shape3D {
 		final Vector3D gV = Vector3D.directionNormalized(a, b);
 		final Vector3D sV = Vector3D.normalNormalized(aOrthonormalBasis.getV(), bOrthonormalBasis.getV(), cOrthonormalBasis.getV(), barycentricCoordinates);
 		
+//		final Vector3D gU = Vector3D.directionNormalized(a, c);
+//		final Vector3D sU = Vector3D.normalNormalized(aOrthonormalBasis.getU(), bOrthonormalBasis.getU(), cOrthonormalBasis.getU(), barycentricCoordinates);
+		
 		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(gW, gV);
 		final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(sW, sV);
+//		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(gW, gV, gU);
+//		final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(sW, sV, sU);
 		
 		final double xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
 		final double yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());

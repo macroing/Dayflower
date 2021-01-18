@@ -293,8 +293,13 @@ public final class Triangle3F implements Shape3F {
 		final Vector3F gV = Vector3F.directionNormalized(a, b);
 		final Vector3F sV = Vector3F.normalNormalized(aOrthonormalBasis.getV(), bOrthonormalBasis.getV(), cOrthonormalBasis.getV(), barycentricCoordinates);
 		
+//		final Vector3F gU = Vector3F.directionNormalized(a, c);
+//		final Vector3F sU = Vector3F.normalNormalized(aOrthonormalBasis.getU(), bOrthonormalBasis.getU(), cOrthonormalBasis.getU(), barycentricCoordinates);
+		
 		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW, gV);
 		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW, sV);
+//		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW, gV, gU);
+//		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW, sV, sU);
 		
 		final float xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
 		final float yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());

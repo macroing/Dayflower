@@ -35,29 +35,39 @@ import org.dayflower.scene.Intersection;
  */
 public final class ConstantTexture implements Texture {
 	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.AG_ETA)}.
+	 */
+	public static final ConstantTexture AG_ETA = new ConstantTexture(Color3F.AG_ETA);
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.AG_K)}.
+	 */
+	public static final ConstantTexture AG_K = new ConstantTexture(Color3F.AG_K);
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.AU_ETA)}.
+	 */
+	public static final ConstantTexture AU_ETA = new ConstantTexture(Color3F.AU_ETA);
+	
+	/**
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.AU_K)}.
+	 */
+	public static final ConstantTexture AU_K = new ConstantTexture(Color3F.AU_K);
+	
+	/**
 	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.BLACK)}.
 	 */
 	public static final ConstantTexture BLACK = new ConstantTexture(Color3F.BLACK);
 	
 	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GOLD_ETA)}.
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.CU_ETA)}.
 	 */
-	public static final ConstantTexture GOLD_ETA = new ConstantTexture(Color3F.GOLD_ETA);
+	public static final ConstantTexture CU_ETA = new ConstantTexture(Color3F.CU_ETA);
 	
 	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GOLD_ETA_MAXIMUM_TO_1)}.
+	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.CU_K)}.
 	 */
-	public static final ConstantTexture GOLD_ETA_MAXIMUM_TO_1 = new ConstantTexture(Color3F.GOLD_ETA_MAXIMUM_TO_1);
-	
-	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GOLD_K)}.
-	 */
-	public static final ConstantTexture GOLD_K = new ConstantTexture(Color3F.GOLD_K);
-	
-	/**
-	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GOLD_K_MAXIMUM_TO_1)}.
-	 */
-	public static final ConstantTexture GOLD_K_MAXIMUM_TO_1 = new ConstantTexture(Color3F.GOLD_K_MAXIMUM_TO_1);
+	public static final ConstantTexture CU_K = new ConstantTexture(Color3F.CU_K);
 	
 	/**
 	 * A {@code ConstantTexture} of {@code new ConstantTexture(Color3F.GRAY_0_01)}.

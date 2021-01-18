@@ -72,12 +72,12 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalPBRTMaterial(Color3F.GOLD_K_MAXIMUM_TO_1);
+	 * new MetalPBRTMaterial(Color3F.AU_K);
 	 * }
 	 * </pre>
 	 */
 	public MetalPBRTMaterial() {
-		this(Color3F.GOLD_K_MAXIMUM_TO_1);
+		this(Color3F.AU_K);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalPBRTMaterial(colorK, Color3F.GOLD_ETA_MAXIMUM_TO_1);
+	 * new MetalPBRTMaterial(colorK, Color3F.AU_ETA);
 	 * }
 	 * </pre>
 	 * 
@@ -96,7 +96,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, {@code colorK} is {@code null}
 	 */
 	public MetalPBRTMaterial(final Color3F colorK) {
-		this(colorK, Color3F.GOLD_ETA_MAXIMUM_TO_1);
+		this(colorK, Color3F.AU_ETA);
 	}
 	
 	/**
@@ -215,7 +215,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MetalPBRTMaterial(textureK, ConstantTexture.GOLD_ETA_MAXIMUM_TO_1);
+	 * new MetalPBRTMaterial(textureK, ConstantTexture.AU_ETA);
 	 * }
 	 * </pre>
 	 * 
@@ -223,7 +223,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 	 * @throws NullPointerException thrown if, and only if, {@code textureK} is {@code null}
 	 */
 	public MetalPBRTMaterial(final Texture textureK) {
-		this(textureK, ConstantTexture.GOLD_ETA_MAXIMUM_TO_1);
+		this(textureK, ConstantTexture.AU_ETA);
 	}
 	
 	/**

@@ -50,6 +50,36 @@ import org.dayflower.util.ParameterArguments;
  */
 public final class Color3F {
 	/**
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for silver (AG).
+	 */
+	public static final Color3F AG_ETA = IrregularSpectralCurveF.AG_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} that contains the absorption coefficient for silver (AG).
+	 */
+	public static final Color3F AG_K = IrregularSpectralCurveF.AG_K.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} denoting the color Aztek gold (AU).
+	 */
+	public static final Color3F AU_AZTEK = new Color3F(0.76F, 0.6F, 0.33F);
+	
+	/**
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for gold (AU).
+	 */
+	public static final Color3F AU_ETA = IrregularSpectralCurveF.AU_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} that contains the absorption coefficient for gold (AU).
+	 */
+	public static final Color3F AU_K = IrregularSpectralCurveF.AU_K.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} denoting the color metallic gold (AU).
+	 */
+	public static final Color3F AU_METALLIC = new Color3F(0.83F, 0.69F, 0.22F);
+	
+	/**
 	 * A {@code Color3F} denoting the color black.
 	 */
 	public static final Color3F BLACK = new Color3F();
@@ -60,44 +90,24 @@ public final class Color3F {
 	public static final Color3F BLUE = new Color3F(0.0F, 0.0F, 1.0F);
 	
 	/**
-	 * A {@code Color3F} denoting the color copper.
+	 * A {@code Color3F} denoting the color copper (CU).
 	 */
-	public static final Color3F COPPER = new Color3F(0.72F, 0.45F, 0.2F);
+	public static final Color3F CU = new Color3F(0.72F, 0.45F, 0.2F);
+	
+	/**
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for copper (CU).
+	 */
+	public static final Color3F CU_ETA = IrregularSpectralCurveF.CU_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} that contains the absorption coefficient for copper (CU).
+	 */
+	public static final Color3F CU_K = IrregularSpectralCurveF.CU_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3F} denoting the color cyan.
 	 */
 	public static final Color3F CYAN = new Color3F(0.0F, 1.0F, 1.0F);
-	
-	/**
-	 * A {@code Color3F} denoting the color Aztek gold.
-	 */
-	public static final Color3F GOLD_AZTEK = new Color3F(0.76F, 0.6F, 0.33F);
-	
-	/**
-	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for gold.
-	 */
-	public static final Color3F GOLD_ETA = convertXYZToRGBUsingPBRT(IrregularSpectralCurveF.GOLD_ETA.toColorXYZ());
-	
-	/**
-	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for gold, but has a restricted range.
-	 */
-	public static final Color3F GOLD_ETA_MAXIMUM_TO_1 = maximumTo1(GOLD_ETA);
-	
-	/**
-	 * A {@code Color3F} that contains the absorption coefficient for gold.
-	 */
-	public static final Color3F GOLD_K = convertXYZToRGBUsingPBRT(IrregularSpectralCurveF.GOLD_K.toColorXYZ());
-	
-	/**
-	 * A {@code Color3F} that contains the absorption coefficient for gold, but has a restricted range.
-	 */
-	public static final Color3F GOLD_K_MAXIMUM_TO_1 = maximumTo1(GOLD_K);
-	
-	/**
-	 * A {@code Color3F} denoting the color metallic gold.
-	 */
-	public static final Color3F GOLD_METALLIC = new Color3F(0.83F, 0.69F, 0.22F);
 	
 	/**
 	 * A {@code Color3F} denoting the color gray, with component values of {@code 0.01F}.

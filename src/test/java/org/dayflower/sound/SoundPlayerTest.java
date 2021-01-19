@@ -18,6 +18,9 @@
  */
 package org.dayflower.sound;
 
+import org.dayflower.filter.EchoFilterNB;
+import org.dayflower.filter.FilterNB;
+
 public final class SoundPlayerTest {
 	private SoundPlayerTest() {
 		
@@ -30,7 +33,7 @@ public final class SoundPlayerTest {
 		GuitarSound guitarSound = new GuitarSound();
 		guitarSound.pluckGuitarStringA2();
 		
-		final Filter filter = new EchoFilter(0.6D, 11025);
+		final FilterNB filter = new EchoFilterNB(0.6D, 11025);
 		
 		final
 		SoundPlayer soundPlayer = new SoundPlayer();

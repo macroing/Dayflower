@@ -17,6 +17,7 @@ Supported Features
 ------------------
 This library consists of several APIs. They are presented below.
 
+ - [The Filter API](https://github.com/macroing/Dayflower/tree/master/documentation/Filter) provides all filter types and operations.
  - [The Geometry API](https://github.com/macroing/Dayflower/tree/master/documentation/Geometry) provides all geometric types and operations.
  - [The Image API](https://github.com/macroing/Dayflower/tree/master/documentation/Image) provides image processing functionality.
  - [The JavaFX API](https://github.com/macroing/Dayflower/tree/master/documentation/JavaFX) provides the GUI components.

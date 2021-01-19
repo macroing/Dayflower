@@ -16,15 +16,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.image;
+package org.dayflower.filter;
 
 /**
- * A {@code Filter2F} represents a 2-dimensional filter of type {@code float}.
+ * A {@code Filter2D} represents a 2-dimensional filter of type {@code double}.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class Filter2F {
+public abstract class Filter2D {
 	/**
 	 * The size of the table created by {@link #createFilterTable()}.
 	 */
@@ -32,30 +32,30 @@ public abstract class Filter2F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final float resolutionX;
-	private final float resolutionXReciprocal;
-	private final float resolutionY;
-	private final float resolutionYReciprocal;
+	private final double resolutionX;
+	private final double resolutionXReciprocal;
+	private final double resolutionY;
+	private final double resolutionYReciprocal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code Filter2F} instance given {@code resolutionX} and {@code resolutionY}.
+	 * Constructs a new {@code Filter2D} instance given {@code resolutionX} and {@code resolutionY}.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 */
-	protected Filter2F(final float resolutionX, final float resolutionY) {
+	protected Filter2D(final double resolutionX, final double resolutionY) {
 		this.resolutionX = resolutionX;
 		this.resolutionY = resolutionY;
-		this.resolutionXReciprocal = 1.0F / this.resolutionX;
-		this.resolutionYReciprocal = 1.0F / this.resolutionY;
+		this.resolutionXReciprocal = 1.0D / this.resolutionX;
+		this.resolutionYReciprocal = 1.0D / this.resolutionY;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Evaluates this {@code Filter2F} instance given {@code x} and {@code y}.
+	 * Evaluates this {@code Filter2D} instance given {@code x} and {@code y}.
 	 * <p>
 	 * Returns the evaluated value.
 	 * 
@@ -63,14 +63,14 @@ public abstract class Filter2F {
 	 * @param y the Y-coordinate
 	 * @return the evaluated value
 	 */
-	public abstract float evaluate(final float x, final float y);
+	public abstract double evaluate(final double x, final double y);
 	
 	/**
 	 * Returns the resolution of the X-axis.
 	 * 
 	 * @return the resolution of the X-axis
 	 */
-	public final float getResolutionX() {
+	public final double getResolutionX() {
 		return this.resolutionX;
 	}
 	
@@ -79,7 +79,7 @@ public abstract class Filter2F {
 	 * 
 	 * @return the reciprocal (or inverse) value of the resolution of the X-axis
 	 */
-	public final float getResolutionXReciprocal() {
+	public final double getResolutionXReciprocal() {
 		return this.resolutionXReciprocal;
 	}
 	
@@ -88,7 +88,7 @@ public abstract class Filter2F {
 	 * 
 	 * @return the resolution of the Y-axis
 	 */
-	public final float getResolutionY() {
+	public final double getResolutionY() {
 		return this.resolutionY;
 	}
 	
@@ -97,7 +97,7 @@ public abstract class Filter2F {
 	 * 
 	 * @return the reciprocal (or inverse) value of the resolution of the Y-axis
 	 */
-	public final float getResolutionYReciprocal() {
+	public final double getResolutionYReciprocal() {
 		return this.resolutionYReciprocal;
 	}
 	
@@ -106,17 +106,17 @@ public abstract class Filter2F {
 	 * 
 	 * @return a table with cached values
 	 */
-	public final float[] createFilterTable() {
-		final float[] filterTable = new float[FILTER_TABLE_SIZE * FILTER_TABLE_SIZE];
+	public final double[] createFilterTable() {
+		final double[] filterTable = new double[FILTER_TABLE_SIZE * FILTER_TABLE_SIZE];
 		
-		final float filterResolutionX = getResolutionX();
-		final float filterResolutionY = getResolutionY();
-		final float filterTableSizeReciprocal = 1.0F / FILTER_TABLE_SIZE;
+		final double filterResolutionX = getResolutionX();
+		final double filterResolutionY = getResolutionY();
+		final double filterTableSizeReciprocal = 1.0D / FILTER_TABLE_SIZE;
 		
 		for(int i = 0, y = 0; y < FILTER_TABLE_SIZE; y++) {
 			for(int x = 0; x < FILTER_TABLE_SIZE; x++) {
-				final float filterX = (x + 0.5F) * filterResolutionX * filterTableSizeReciprocal;
-				final float filterY = (y + 0.5F) * filterResolutionY * filterTableSizeReciprocal;
+				final double filterX = (x + 0.5D) * filterResolutionX * filterTableSizeReciprocal;
+				final double filterY = (y + 0.5D) * filterResolutionY * filterTableSizeReciprocal;
 				
 				filterTable[i++] = evaluate(filterX, filterY);
 			}

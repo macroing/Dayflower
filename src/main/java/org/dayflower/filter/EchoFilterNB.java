@@ -16,36 +16,41 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.sound;
+package org.dayflower.filter;
 
 /**
- * An {@code EchoFilter} is an implementation of {@link Filter} that performs an echo effect.
+ * An {@code EchoFilterNB} is an implementation of {@link FilterNB} that performs an echo effect.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class EchoFilter implements Filter {
+public final class EchoFilterNB implements FilterNB {
 	private final double decay;
 	private final int delaySamples;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code EchoFilter} instance.
+	 * Constructs a new {@code EchoFilterNB} instance.
 	 * <p>
-	 * Calling this constructor is equivalent to calling {@code new EchoFilter(0.6D, 11025)}.
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new EchoFilter(0.6D, 11025);
+	 * }
+	 * </pre>
 	 */
-	public EchoFilter() {
+	public EchoFilterNB() {
 		this(0.6D, 11025);
 	}
 	
 	/**
-	 * Constructs a new {@code EchoFilter} instance given its decay and delay samples.
+	 * Constructs a new {@code EchoFilterNB} instance given its decay and delay samples.
 	 * 
 	 * @param decay the decay to use
 	 * @param delaySamples the delay samples to use
 	 */
-	public EchoFilter(final double decay, final int delaySamples) {
+	public EchoFilterNB(final double decay, final int delaySamples) {
 		this.decay = decay;
 		this.delaySamples = delaySamples;
 	}
@@ -53,18 +58,18 @@ public final class EchoFilter implements Filter {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Performs filtering on the samples in {@code bytes}.
+	 * Evaluates this {@code EchoFilterNB} instance given {@code bytes}.
 	 * <p>
-	 * Returns a {@code byte} array with the filtered samples.
+	 * Returns the evaluated value.
 	 * <p>
 	 * If {@code bytes} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param bytes the {@code byte} array with samples to filter
-	 * @return a {@code byte} array with the filtered samples
+	 * @param bytes the {@code byte[]}
+	 * @return the evaluated value
 	 * @throws NullPointerException thrown if, and only if, {@code bytes} are {@code null}
 	 */
 	@Override
-	public byte[] filter(final byte[] bytes) {
+	public byte[] evaluate(final byte[] bytes) {
 		final byte[] bytes0 = bytes.clone();
 		
 		final short[] delayBuffer = new short[this.delaySamples];

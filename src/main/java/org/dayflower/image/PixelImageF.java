@@ -18,7 +18,7 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.image.Filter2F.FILTER_TABLE_SIZE;
+import static org.dayflower.filter.Filter2F.FILTER_TABLE_SIZE;
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.ceil;
 import static org.dayflower.util.Floats.floor;
@@ -44,6 +44,8 @@ import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.filter.Filter2F;
+import org.dayflower.filter.MitchellFilter2F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.rasterizer.Rasterizer2I;
 import org.dayflower.geometry.shape.Circle2I;

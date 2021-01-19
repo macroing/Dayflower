@@ -16,25 +16,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.sound;
+package org.dayflower.filter;
 
 /**
- * A {@code Filter} represents a filter.
+ * A {@code FilterNB} represents an N-dimensional filter of type {@code byte}.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface Filter {
+public interface FilterNB {
 	/**
-	 * Performs filtering on the samples in {@code bytes}.
+	 * Evaluates this {@code FilterNB} instance given {@code bytes}.
 	 * <p>
-	 * Returns a {@code byte} array with the filtered samples.
+	 * Returns the evaluated value.
 	 * <p>
 	 * If {@code bytes} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param bytes the {@code byte} array with samples to filter
-	 * @return a {@code byte} array with the filtered samples
+	 * @param bytes the {@code byte[]}
+	 * @return the evaluated value
 	 * @throws NullPointerException thrown if, and only if, {@code bytes} are {@code null}
 	 */
-	byte[] filter(final byte[] bytes);
+	byte[] evaluate(final byte[] bytes);
 }

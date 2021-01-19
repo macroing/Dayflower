@@ -29,6 +29,8 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.Line;
 import javax.sound.sampled.SourceDataLine;
 
+import org.dayflower.filter.FilterNB;
+
 /**
  * A {@code SoundPlayer} is used to play sound by giving it an instance of {@link Sound}.
  * <p>
@@ -94,10 +96,10 @@ public final class SoundPlayer {
 	 * If either {@code sound} or {@code filter} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param sound a {@link Sound} with the sound to play
-	 * @param filter a {@link Filter} to filter {@code sound}
+	 * @param filter a {@link FilterNB} to filter {@code sound}
 	 * @throws NullPointerException thrown if, and only if, either {@code sound} or {@code filter} are {@code null}
 	 */
-	public void play(final Sound sound, final Filter filter) {
+	public void play(final Sound sound, final FilterNB filter) {
 		Objects.requireNonNull(sound, "sound == null");
 		Objects.requireNonNull(filter, "filter == null");
 		
@@ -118,13 +120,13 @@ public final class SoundPlayer {
 	private static final class RunnableImpl implements Runnable {
 		private final AtomicBoolean isPlaying;
 		private final AudioFormat audioFormat;
-		private final Filter filter;
+		private final FilterNB filter;
 		private final Sound sound;
 		private SourceDataLine sourceDataLine;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		public RunnableImpl(final AtomicBoolean isPlaying, final AudioFormat audioFormat, final Filter filter, final Sound sound) {
+		public RunnableImpl(final AtomicBoolean isPlaying, final AudioFormat audioFormat, final FilterNB filter, final Sound sound) {
 			this.isPlaying = isPlaying;
 			this.audioFormat = audioFormat;
 			this.filter = filter;
@@ -145,7 +147,7 @@ public final class SoundPlayer {
 					this.sourceDataLine.open(this.audioFormat, bufferSize);
 					this.sourceDataLine.start();
 					
-					final byte[] bytes = this.filter != null ? this.filter.filter(this.sound.toBytes()) : this.sound.toBytes();
+					final byte[] bytes = this.filter != null ? this.filter.evaluate(this.sound.toBytes()) : this.sound.toBytes();
 					
 					final int offset = 0;
 					final int length = bytes.length;

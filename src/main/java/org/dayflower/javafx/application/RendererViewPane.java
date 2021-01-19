@@ -28,13 +28,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+import org.dayflower.filter.BoxFilter2F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.image.BoxFilter2F;
 import org.dayflower.image.Color3F;
 import org.dayflower.image.Color4F;
 import org.dayflower.image.ImageF;

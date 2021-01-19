@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.image;
+package org.dayflower.filter;
 
 import static org.dayflower.util.Floats.abs;
 import static org.dayflower.util.Floats.equal;

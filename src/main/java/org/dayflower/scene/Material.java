@@ -33,6 +33,18 @@ import org.dayflower.node.Node;
  */
 public interface Material extends Node {
 	/**
+	 * The offset for the ID of the {@code Texture} denoted by {@code Emission} in the {@code float[]} or {@code int[]}.
+	 */
+	int ARRAY_OFFSET_TEXTURE_EMISSION_ID = 0;
+	
+	/**
+	 * The offset for the offset of the {@code Texture} denoted by {@code Emission} in the {@code float[]} or {@code int[]}.
+	 */
+	int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * Returns a {@link Color3F} instance with the emittance of this {@code Material} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.

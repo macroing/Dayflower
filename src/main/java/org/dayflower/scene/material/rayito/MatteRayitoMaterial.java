@@ -27,21 +27,21 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.rayito.LambertianRayitoBRDF;
-import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MatteRayitoMaterial} is an implementation of {@link RayitoMaterial} and is used for matte surfaces.
+ * A {@code MatteRayitoMaterial} is an implementation of {@link Material} and is used for matte surfaces.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MatteRayitoMaterial implements RayitoMaterial {
+public final class MatteRayitoMaterial implements Material {
 	/**
 	 * The name of this {@code MatteRayitoMaterial} class.
 	 */
@@ -190,7 +190,7 @@ public final class MatteRayitoMaterial implements RayitoMaterial {
 		
 		final Color3F colorKD = this.textureKD.getColor(intersection);
 		
-		return Optional.of(new RayitoBSDF(intersection, new LambertianRayitoBRDF(colorKD)));
+		return Optional.of(new BSDF(intersection, new LambertianRayitoBRDF(colorKD), true));
 	}
 	
 	/**

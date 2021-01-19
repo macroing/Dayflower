@@ -30,8 +30,8 @@ import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
@@ -42,14 +42,14 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code PlasticPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents plastic.
+ * A {@code PlasticPBRTMaterial} is an implementation of {@link Material} that represents plastic.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PlasticPBRTMaterial implements PBRTMaterial {
+public final class PlasticPBRTMaterial implements Material {
 	/**
 	 * The name of this {@code PlasticPBRTMaterial} class.
 	 */
@@ -342,7 +342,7 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 		}
 		
 		if(bXDFs.size() > 0) {
-			return Optional.of(new PBRTBSDF(intersection, bXDFs));
+			return Optional.of(new BSDF(intersection, bXDFs, false));
 		}
 		
 		return Optional.empty();

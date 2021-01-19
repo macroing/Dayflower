@@ -47,7 +47,6 @@ import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
 import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
 import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
-import org.dayflower.scene.material.rayito.RayitoMaterial;
 import org.dayflower.scene.material.smallpt.ClearCoatSmallPTMaterial;
 import org.dayflower.scene.material.smallpt.GlassSmallPTMaterial;
 import org.dayflower.scene.material.smallpt.MatteSmallPTMaterial;
@@ -558,7 +557,7 @@ final class SceneCompiler {
 			final Texture textureKR = glassRayitoMaterial.getTextureKR();
 			final Texture textureKT = glassRayitoMaterial.getTextureKT();
 			
-			final int materialGlassRayitoMaterialArrayTextureEmissionOffset = i * GlassRayitoMaterial.ARRAY_LENGTH + RayitoMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialGlassRayitoMaterialArrayTextureEmissionOffset = i * GlassRayitoMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
 			final int materialGlassRayitoMaterialArrayTextureEtaOffset = i * GlassRayitoMaterial.ARRAY_LENGTH + GlassRayitoMaterial.ARRAY_OFFSET_TEXTURE_ETA_OFFSET;
 			final int materialGlassRayitoMaterialArrayTextureKROffset = i * GlassRayitoMaterial.ARRAY_LENGTH + GlassRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
 			final int materialGlassRayitoMaterialArrayTextureKTOffset = i * GlassRayitoMaterial.ARRAY_LENGTH + GlassRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_T_OFFSET;
@@ -598,7 +597,7 @@ final class SceneCompiler {
 			final Texture textureEmission = matteRayitoMaterial.getTextureEmission();
 			final Texture textureKD = matteRayitoMaterial.getTextureKD();
 			
-			final int materialMatteRayitoMaterialArrayTextureEmissionOffset = i * MatteRayitoMaterial.ARRAY_LENGTH + RayitoMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialMatteRayitoMaterialArrayTextureEmissionOffset = i * MatteRayitoMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
 			final int materialMatteRayitoMaterialArrayTextureKDOffset = i * MatteRayitoMaterial.ARRAY_LENGTH + MatteRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET;
 			
 			materialMatteRayitoMaterialArray[materialMatteRayitoMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
@@ -629,7 +628,7 @@ final class SceneCompiler {
 			final Texture textureKR = metalRayitoMaterial.getTextureKR();
 			final Texture textureRoughness = metalRayitoMaterial.getTextureRoughness();
 			
-			final int materialMetalRayitoMaterialArrayTextureEmissionOffset = i * MetalRayitoMaterial.ARRAY_LENGTH + RayitoMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialMetalRayitoMaterialArrayTextureEmissionOffset = i * MetalRayitoMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
 			final int materialMetalRayitoMaterialArrayTextureKROffset = i * MetalRayitoMaterial.ARRAY_LENGTH + MetalRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
 			final int materialMetalRayitoMaterialArrayTextureRoughnessOffset = i * MetalRayitoMaterial.ARRAY_LENGTH + MetalRayitoMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_OFFSET;
 			
@@ -664,7 +663,7 @@ final class SceneCompiler {
 			final Texture textureEmission = mirrorRayitoMaterial.getTextureEmission();
 			final Texture textureKR = mirrorRayitoMaterial.getTextureKR();
 			
-			final int materialMirrorRayitoMaterialArrayTextureEmissionOffset = i * MirrorRayitoMaterial.ARRAY_LENGTH + RayitoMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+			final int materialMirrorRayitoMaterialArrayTextureEmissionOffset = i * MirrorRayitoMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
 			final int materialMirrorRayitoMaterialArrayTextureKROffset = i * MirrorRayitoMaterial.ARRAY_LENGTH + MirrorRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
 			
 			materialMirrorRayitoMaterialArray[materialMirrorRayitoMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);

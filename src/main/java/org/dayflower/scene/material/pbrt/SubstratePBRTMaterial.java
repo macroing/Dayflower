@@ -27,8 +27,8 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.FresnelBlendPBRTBRDF;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
@@ -36,14 +36,14 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code SubstratePBRTMaterial} is an implementation of {@link PBRTMaterial} that represents a substrate material.
+ * A {@code SubstratePBRTMaterial} is an implementation of {@link Material} that represents a substrate material.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class SubstratePBRTMaterial implements PBRTMaterial {
+public final class SubstratePBRTMaterial implements Material {
 	/**
 	 * The name of this {@code SubstratePBRTMaterial} class.
 	 */
@@ -376,7 +376,7 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 			
 			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV);
 			
-			return Optional.of(new PBRTBSDF(intersection, new FresnelBlendPBRTBRDF(colorKD, colorKS, microfacetDistribution)));
+			return Optional.of(new BSDF(intersection, new FresnelBlendPBRTBRDF(colorKD, colorKS, microfacetDistribution), false));
 		}
 		
 		return Optional.empty();

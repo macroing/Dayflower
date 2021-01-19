@@ -30,8 +30,8 @@ import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
@@ -43,14 +43,14 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * An {@code UberPBRTMaterial} is an implementation of {@link PBRTMaterial} that can represent a wide variety of materials.
+ * An {@code UberPBRTMaterial} is an implementation of {@link Material} that can represent a wide variety of materials.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class UberPBRTMaterial implements PBRTMaterial {
+public final class UberPBRTMaterial implements Material {
 	/**
 	 * The name of this {@code UberPBRTMaterial} class.
 	 */
@@ -637,7 +637,7 @@ public final class UberPBRTMaterial implements PBRTMaterial {
 			bXDFs.add(new SpecularPBRTBTDF(colorKT, transportMode, 1.0F, eta));
 		}
 		
-		return Optional.of(new PBRTBSDF(intersection, bXDFs, colorTransmittanceScale.isBlack() ? eta : 1.0F));
+		return Optional.of(new BSDF(intersection, bXDFs, false, colorTransmittanceScale.isBlack() ? eta : 1.0F));
 	}
 	
 	/**

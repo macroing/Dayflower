@@ -27,8 +27,8 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.fresnel.ConductorFresnel;
 import org.dayflower.scene.fresnel.Fresnel;
@@ -38,14 +38,14 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MetalPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents metal.
+ * A {@code MetalPBRTMaterial} is an implementation of {@link Material} that represents metal.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MetalPBRTMaterial implements PBRTMaterial {
+public final class MetalPBRTMaterial implements Material {
 	/**
 	 * The name of this {@code MetalPBRTMaterial} class.
 	 */
@@ -380,7 +380,7 @@ public final class MetalPBRTMaterial implements PBRTMaterial {
 		
 		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV);
 		
-		return Optional.of(new PBRTBSDF(intersection, new TorranceSparrowPBRTBRDF(colorEtaI, fresnel, microfacetDistribution)));
+		return Optional.of(new BSDF(intersection, new TorranceSparrowPBRTBRDF(colorEtaI, fresnel, microfacetDistribution), false));
 	}
 	
 	/**

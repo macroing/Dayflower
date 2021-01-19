@@ -34,6 +34,7 @@ import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.DisneyClearCoatPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.DisneyDiffusePBRTBRDF;
@@ -41,7 +42,6 @@ import org.dayflower.scene.bxdf.pbrt.DisneyFakeSSPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.DisneyRetroPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.DisneySheenPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBTDF;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBTDF;
@@ -53,14 +53,14 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code DisneyPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents a Disney material.
+ * A {@code DisneyPBRTMaterial} is an implementation of {@link Material} that represents a Disney material.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DisneyPBRTMaterial implements PBRTMaterial {
+public final class DisneyPBRTMaterial implements Material {
 	/**
 	 * The name of this {@code DisneyPBRTMaterial} class.
 	 */
@@ -1113,7 +1113,7 @@ public final class DisneyPBRTMaterial implements PBRTMaterial {
 			bXDFs.add(new LambertianPBRTBTDF(Color3F.multiply(colorColor, floatDiffuseTransmission)));
 		}
 		
-		return Optional.of(new PBRTBSDF(intersection, bXDFs));
+		return Optional.of(new BSDF(intersection, bXDFs, false));
 	}
 	
 	/**

@@ -27,22 +27,22 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
 import org.dayflower.scene.fresnel.ConstantFresnel;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MirrorPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents a mirror.
+ * A {@code MirrorPBRTMaterial} is an implementation of {@link Material} that represents a mirror.
  * <p>
  * This class is immutable and thread-safe as long as its {@link Texture} instance is.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MirrorPBRTMaterial implements PBRTMaterial {
+public final class MirrorPBRTMaterial implements Material {
 	/**
 	 * The name of this {@code MirrorPBRTMaterial} class.
 	 */
@@ -177,7 +177,7 @@ public final class MirrorPBRTMaterial implements PBRTMaterial {
 		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorKR.isBlack()) {
-			return Optional.of(new PBRTBSDF(intersection, new SpecularPBRTBRDF(colorKR, new ConstantFresnel())));
+			return Optional.of(new BSDF(intersection, new SpecularPBRTBRDF(colorKR, new ConstantFresnel()), false));
 		}
 		
 		return Optional.empty();

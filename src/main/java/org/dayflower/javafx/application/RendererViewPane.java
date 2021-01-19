@@ -54,8 +54,6 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
-import org.dayflower.scene.material.pbrt.PBRTMaterial;
-import org.dayflower.scene.material.rayito.RayitoMaterial;
 import org.dayflower.scene.material.smallpt.SmallPTMaterial;
 import org.dayflower.scene.preview.Previews;
 
@@ -411,15 +409,7 @@ final class RendererViewPane extends BorderPane {
 	}
 	
 	private static RenderingAlgorithm doCreateRenderingAlgorithm(final Material material) {
-		if(material instanceof PBRTMaterial) {
-			return RenderingAlgorithm.PATH_TRACING;
-		} else if(material instanceof RayitoMaterial) {
-			return RenderingAlgorithm.PATH_TRACING;
-		} else if(material instanceof SmallPTMaterial) {
-			return RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE;
-		} else {
-			return RenderingAlgorithm.PATH_TRACING;
-		}
+		return material instanceof SmallPTMaterial ? RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE : RenderingAlgorithm.PATH_TRACING;
 	}
 	
 	private static WritableImage doCreateWritableImageMaterial(final Material material) {

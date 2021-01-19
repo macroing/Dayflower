@@ -32,8 +32,8 @@ import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.FresnelSpecularPBRTBXDF;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
@@ -47,14 +47,14 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code GlassPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents glass.
+ * A {@code GlassPBRTMaterial} is an implementation of {@link Material} that represents glass.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class GlassPBRTMaterial implements PBRTMaterial {
+public final class GlassPBRTMaterial implements Material {
 	/**
 	 * The name of this {@code GlassPBRTMaterial} class.
 	 */
@@ -445,7 +445,7 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 		final boolean isSpecular = isZero(roughnessU) && isZero(roughnessV);
 		
 		if(isSpecular && isAllowingMultipleLobes) {
-			return Optional.of(new PBRTBSDF(intersection, new FresnelSpecularPBRTBXDF(colorKR, colorKT, transportMode, 1.0F, eta), eta));
+			return Optional.of(new BSDF(intersection, new FresnelSpecularPBRTBXDF(colorKR, colorKT, transportMode, 1.0F, eta), false, eta));
 		}
 		
 		if(isSpecular) {
@@ -461,7 +461,7 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 				bXDFs.add(new SpecularPBRTBTDF(colorKT, transportMode, 1.0F, eta));
 			}
 			
-			return Optional.of(new PBRTBSDF(intersection, bXDFs, eta));
+			return Optional.of(new BSDF(intersection, bXDFs, false, eta));
 		}
 		
 		final List<BXDF> bXDFs = new ArrayList<>();
@@ -481,7 +481,7 @@ public final class GlassPBRTMaterial implements PBRTMaterial {
 			bXDFs.add(new TorranceSparrowPBRTBTDF(colorKT, microfacetDistribution, transportMode, 1.0F, eta));
 		}
 		
-		return Optional.of(new PBRTBSDF(intersection, bXDFs, eta));
+		return Optional.of(new BSDF(intersection, bXDFs, false, eta));
 	}
 	
 	/**

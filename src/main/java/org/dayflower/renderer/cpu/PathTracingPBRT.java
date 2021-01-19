@@ -42,7 +42,6 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.material.pbrt.PBRTMaterial;
 
 final class PathTracingPBRT {
 	private static final float T_MAXIMUM = Float.MAX_VALUE;
@@ -102,13 +101,7 @@ final class PathTracingPBRT {
 			final Vector3F surfaceNormalG = surfaceIntersection.getOrthonormalBasisG().getW();
 			final Vector3F surfaceNormalS = surfaceIntersection.getOrthonormalBasisS().getW();
 			
-			if(!(material instanceof PBRTMaterial)) {
-				break;
-			}
-			
-			final PBRTMaterial pBRTMaterial = PBRTMaterial.class.cast(material);
-			
-			final Optional<BSDF> optionalBSDF = pBRTMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
+			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
 			
 			if(!optionalBSDF.isPresent()) {
 				currentRay = surfaceIntersection.createRay(currentRay.getDirection());

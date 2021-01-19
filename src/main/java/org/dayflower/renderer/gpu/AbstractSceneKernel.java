@@ -38,6 +38,7 @@ import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.Camera;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.LDRImageLight;
@@ -45,7 +46,6 @@ import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
 import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
 import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
-import org.dayflower.scene.material.rayito.RayitoMaterial;
 import org.dayflower.scene.material.smallpt.ClearCoatSmallPTMaterial;
 import org.dayflower.scene.material.smallpt.GlassSmallPTMaterial;
 import org.dayflower.scene.material.smallpt.MatteSmallPTMaterial;
@@ -2874,8 +2874,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
 		final int materialID = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_ID];
 		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int materialOffsetTextureEmissionIDRayitoMaterial = materialOffset + RayitoMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_ID;
-		final int materialOffsetTextureEmissionOffsetRayitoMaterial = materialOffset + RayitoMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
+		final int materialOffsetTextureEmissionIDRayitoMaterial = materialOffset + Material.ARRAY_OFFSET_TEXTURE_EMISSION_ID;
+		final int materialOffsetTextureEmissionOffsetRayitoMaterial = materialOffset + Material.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
 		final int materialOffsetTextureEmissionIDSmallPTMaterial = materialOffset + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_ID;
 		final int materialOffsetTextureEmissionOffsetSmallPTMaterial = materialOffset + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
 		

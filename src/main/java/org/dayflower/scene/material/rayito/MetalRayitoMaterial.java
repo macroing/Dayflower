@@ -27,21 +27,21 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.rayito.AshikhminShirleyRayitoBRDF;
-import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MetalRayitoMaterial} is an implementation of {@link RayitoMaterial} that represents metal.
+ * A {@code MetalRayitoMaterial} is an implementation of {@link Material} that represents metal.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MetalRayitoMaterial implements RayitoMaterial {
+public final class MetalRayitoMaterial implements Material {
 	/**
 	 * The name of this {@code MetalRayitoMaterial} class.
 	 */
@@ -269,7 +269,7 @@ public final class MetalRayitoMaterial implements RayitoMaterial {
 		
 		final float roughness = colorRoughness.average();
 		
-		return Optional.of(new RayitoBSDF(intersection, new AshikhminShirleyRayitoBRDF(colorKR, roughness)));
+		return Optional.of(new BSDF(intersection, new AshikhminShirleyRayitoBRDF(colorKR, roughness), true));
 	}
 	
 	/**

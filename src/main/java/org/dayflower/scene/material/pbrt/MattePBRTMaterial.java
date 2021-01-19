@@ -31,22 +31,22 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.OrenNayarPBRTBRDF;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MattePBRTMaterial} is an implementation of {@link PBRTMaterial} and is used for matte surfaces.
+ * A {@code MattePBRTMaterial} is an implementation of {@link Material} and is used for matte surfaces.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MattePBRTMaterial implements PBRTMaterial {
+public final class MattePBRTMaterial implements Material {
 	/**
 	 * The name of this {@code MattePBRTMaterial} class.
 	 */
@@ -234,10 +234,10 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 		}
 		
 		if(isZero(angle.getDegrees())) {
-			return Optional.of(new PBRTBSDF(intersection, new LambertianPBRTBRDF(colorKD)));
+			return Optional.of(new BSDF(intersection, new LambertianPBRTBRDF(colorKD), false));
 		}
 		
-		return Optional.of(new PBRTBSDF(intersection, new OrenNayarPBRTBRDF(angle, colorKD)));
+		return Optional.of(new BSDF(intersection, new OrenNayarPBRTBRDF(angle, colorKD), false));
 	}
 	
 	/**

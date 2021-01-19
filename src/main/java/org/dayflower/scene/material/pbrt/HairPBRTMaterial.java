@@ -29,21 +29,21 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.bxdf.pbrt.HairPBRTBXDF;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code HairPBRTMaterial} is an implementation of {@link PBRTMaterial} that represents hair.
+ * A {@code HairPBRTMaterial} is an implementation of {@link Material} that represents hair.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class HairPBRTMaterial implements PBRTMaterial {
+public final class HairPBRTMaterial implements Material {
 	/**
 	 * The name of this {@code HairPBRTMaterial} class.
 	 */
@@ -545,7 +545,7 @@ public final class HairPBRTMaterial implements PBRTMaterial {
 		
 		final float h = -1.0F + 2.0F * intersection.getSurfaceIntersectionWorldSpace().getTextureCoordinates().getV();
 		
-		return Optional.of(new PBRTBSDF(intersection, new HairPBRTBXDF(sigmaA, alpha, betaM, betaN, eta, h), eta));
+		return Optional.of(new BSDF(intersection, new HairPBRTBXDF(sigmaA, alpha, betaM, betaN, eta, h), false, eta));
 	}
 	
 	/**

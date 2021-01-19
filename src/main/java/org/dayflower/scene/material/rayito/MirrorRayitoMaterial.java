@@ -27,21 +27,21 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.bxdf.rayito.SpecularRayitoBRDF;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MirrorRayitoMaterial} is an implementation of {@link RayitoMaterial} that represents a mirror.
+ * A {@code MirrorRayitoMaterial} is an implementation of {@link Material} that represents a mirror.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MirrorRayitoMaterial implements RayitoMaterial {
+public final class MirrorRayitoMaterial implements Material {
 	/**
 	 * The name of this {@code MirrorRayitoMaterial} class.
 	 */
@@ -190,7 +190,7 @@ public final class MirrorRayitoMaterial implements RayitoMaterial {
 		
 		final Color3F colorKR = this.textureKR.getColor(intersection);
 		
-		return Optional.of(new RayitoBSDF(intersection, new SpecularRayitoBRDF(colorKR)));
+		return Optional.of(new BSDF(intersection, new SpecularRayitoBRDF(colorKR), true));
 	}
 	
 	/**

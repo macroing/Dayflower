@@ -27,21 +27,21 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
+import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.bxdf.rayito.SpecularRayitoBTDF;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code GlassRayitoMaterial} is an implementation of {@link RayitoMaterial} that represents glass.
+ * A {@code GlassRayitoMaterial} is an implementation of {@link Material} that represents glass.
  * <p>
  * This class is immutable and thread-safe as long as all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class GlassRayitoMaterial implements RayitoMaterial {
+public final class GlassRayitoMaterial implements Material {
 	/**
 	 * The name of this {@code GlassRayitoMaterial} class.
 	 */
@@ -307,7 +307,7 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 		final float etaA = 1.0F;
 		final float etaB = colorEta.average();
 		
-		return Optional.of(new RayitoBSDF(intersection, new SpecularRayitoBTDF(colorKR, colorKT, etaA, etaB), etaB));
+		return Optional.of(new BSDF(intersection, new SpecularRayitoBTDF(colorKR, colorKT, etaA, etaB), true, etaB));
 	}
 	
 	/**

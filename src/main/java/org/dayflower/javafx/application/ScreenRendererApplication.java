@@ -18,7 +18,6 @@
  */
 package org.dayflower.javafx.application;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
@@ -43,7 +42,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-//TODO: Add Javadocs!
+/**
+ * This {@code ScreenRendererApplication} class displays the contents of the screen to the left of the window in a {@code Canvas} instance.
+ * <p>
+ * The contents shown in the {@code Canvas} instance can be processed using various image processing algorithms.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class ScreenRendererApplication extends Application {
 	private static final String OPERATION_BLEND_BLUE = "Blend Blue";
 	private static final String OPERATION_BLEND_GREEN = "Blend Green";
@@ -63,162 +69,30 @@ public final class ScreenRendererApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code ScreenRendererApplication} instance.
+	 */
 	public ScreenRendererApplication() {
 		this.function = new AtomicReference<>(pixelImage -> pixelImage);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Starts this {@code ScreenRendererApplication} instance.
+	 * <p>
+	 * If {@code stage} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param stage the main {@code Stage}
+	 * @throws NullPointerException thrown if, and only if, {@code stage} is {@code null}
+	 */
 	@Override
 	public void start(final Stage stage) {
 		final AtomicReference<Function<PixelImageF, PixelImageF>> function = this.function;
 		
-		final
-		ComboBox<String> comboBox = new ComboBox<>();
-		comboBox.getItems().add(OPERATION_BLEND_BLUE);
-		comboBox.getItems().add(OPERATION_BLEND_GREEN);
-		comboBox.getItems().add(OPERATION_BLEND_RED);
-		comboBox.getItems().add(OPERATION_BOX_BLUR);
-		comboBox.getItems().add(OPERATION_EDGE_DETECTION);
-		comboBox.getItems().add(OPERATION_EMBOSS);
-		comboBox.getItems().add(OPERATION_FRACTIONAL_BROWNIAN_MOTION);
-		comboBox.getItems().add(OPERATION_NONE);
-		comboBox.getItems().add(OPERATION_RANDOM);
-		comboBox.getItems().add(OPERATION_SHARPEN);
-		comboBox.getItems().add(OPERATION_THRESHOLD);
-		comboBox.getSelectionModel().select(OPERATION_NONE);
+		final ComboBox<String> comboBox = doCreateComboBox();
 		
-		final Button button = doCreateButton("Apply", () -> {
-			final String selectedItem = comboBox.getSelectionModel().getSelectedItem();
-			
-			if(selectedItem != null) {
-				switch(selectedItem) {
-					case OPERATION_BLEND_BLUE:
-						final Color3F colorBlue = Color3F.randomComponent3();
-						
-						function.set(pixelImage -> {
-							pixelImage.update(color -> Color3F.blend(color, colorBlue, 0.5F));
-							
-							return pixelImage;
-						});
-						
-						break;
-					case OPERATION_BLEND_GREEN:
-						final Color3F colorGreen = Color3F.randomComponent2();
-						
-						function.set(pixelImage -> {
-							pixelImage.update(color -> Color3F.blend(color, colorGreen, 0.5F));
-							
-							return pixelImage;
-						});
-						
-						break;
-					case OPERATION_BLEND_RED:
-						final Color3F colorRed = Color3F.randomComponent1();
-						
-						function.set(pixelImage -> {
-							pixelImage.update(color -> Color3F.blend(color, colorRed, 0.5F));
-							
-							return pixelImage;
-						});
-						
-						break;
-					case OPERATION_BOX_BLUR:
-						function.set(pixelImage -> {
-							pixelImage.multiply(ConvolutionKernel33F.BOX_BLUR);
-							
-							return pixelImage;
-						});
-						
-						break;
-					case OPERATION_EDGE_DETECTION:
-						function.set(pixelImage -> {
-							pixelImage.multiply(ConvolutionKernel33F.EDGE_DETECTION);
-							
-							return pixelImage;
-						});
-						
-						break;
-					case OPERATION_EMBOSS:
-						function.set(pixelImage -> {
-							pixelImage.multiply(ConvolutionKernel33F.EMBOSS);
-							
-							return pixelImage;
-						});
-						
-						break;
-					case OPERATION_FRACTIONAL_BROWNIAN_MOTION:
-						Color3F base = Color3F.random();
-				        
-						function.set(pixelImage -> {
-							for(int index = 0; index < pixelImage.getResolution(); index++) {
-								final float x = (index % pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionX());
-								final float y = (index / pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionY());
-								
-								final float noise = Floats.simplexFractionalBrownianMotionXY(x, y, 5.0F, 0.5F, 0.0F, 1.0F, 8);
-								
-								final Color3F color = Color3F.redoGammaCorrectionSRGB(Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(base, noise))));
-								
-								pixelImage.setColorRGB(Color3F.blend(pixelImage.getColorRGB(index), color, 0.5F), index);
-							}
-							
-							return pixelImage;
-						});
-						
-						break;
-					case OPERATION_NONE:
-						function.set(pixelImage -> pixelImage);
-						
-						break;
-					case OPERATION_RANDOM:
-						final ConvolutionKernel33F random = ConvolutionKernel33F.random();
-						
-						function.set(pixelImage -> {
-							pixelImage.multiply(random);
-							
-							return pixelImage;
-						});
-						
-						break;
-					case OPERATION_SHARPEN:
-						function.set(pixelImage -> {
-							pixelImage.multiply(ConvolutionKernel33F.SHARPEN);
-							
-							return pixelImage;
-						});
-						
-						break;
-					case OPERATION_THRESHOLD:
-						function.set(pixelImage -> {
-							pixelImage.update(color -> {
-								if(color.isCyan()) {
-									return Color3F.CYAN;
-								} else if(color.isMagenta()) {
-									return Color3F.MAGENTA;
-								} else if(color.isYellow()) {
-									return Color3F.YELLOW;
-								} else if(color.isRed(0.2F, 0.2F)) {
-									return Color3F.RED;
-								} else if(color.isGreen(0.2F, 0.2F)) {
-									return Color3F.GREEN;
-								} else if(color.isBlue(0.2F, 0.2F)) {
-									return Color3F.BLUE;
-								} else {
-									return Color3F.BLACK;
-								}
-							});
-							
-							return pixelImage;
-						});
-						
-						break;
-					default:
-						break;
-				}
-			}
-		});
+		final Button button = doCreateButton("Apply", doCreateRunnable(function, comboBox));
 		
 		final
 		HBox hBox = new HBox();
@@ -271,7 +145,11 @@ public final class ScreenRendererApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Starts this {@code ScreenRendererApplication} instance.
+	 * 
+	 * @param args the parameter arguments supplied
+	 */
 	public static void main(final String[] args) {
 		launch(args);
 	}
@@ -285,5 +163,132 @@ public final class ScreenRendererApplication extends Application {
 		button.setText(text);
 		
 		return button;
+	}
+	
+	private static ComboBox<String> doCreateComboBox() {
+		final
+		ComboBox<String> comboBox = new ComboBox<>();
+		comboBox.getItems().add(OPERATION_BLEND_BLUE);
+		comboBox.getItems().add(OPERATION_BLEND_GREEN);
+		comboBox.getItems().add(OPERATION_BLEND_RED);
+		comboBox.getItems().add(OPERATION_BOX_BLUR);
+		comboBox.getItems().add(OPERATION_EDGE_DETECTION);
+		comboBox.getItems().add(OPERATION_EMBOSS);
+		comboBox.getItems().add(OPERATION_FRACTIONAL_BROWNIAN_MOTION);
+		comboBox.getItems().add(OPERATION_NONE);
+		comboBox.getItems().add(OPERATION_RANDOM);
+		comboBox.getItems().add(OPERATION_SHARPEN);
+		comboBox.getItems().add(OPERATION_THRESHOLD);
+		comboBox.getSelectionModel().select(OPERATION_NONE);
+		
+		return comboBox;
+	}
+	
+	private static Runnable doCreateRunnable(final AtomicReference<Function<PixelImageF, PixelImageF>> function, final ComboBox<String> comboBox) {
+		return () -> {
+			final String selectedItem = comboBox.getSelectionModel().getSelectedItem();
+			
+			if(selectedItem != null) {
+				switch(selectedItem) {
+					case OPERATION_BLEND_BLUE:
+						doSetOperationBlend(function, Color3F.randomComponent3());
+						
+						break;
+					case OPERATION_BLEND_GREEN:
+						doSetOperationBlend(function, Color3F.randomComponent2());
+						
+						break;
+					case OPERATION_BLEND_RED:
+						doSetOperationBlend(function, Color3F.randomComponent1());
+						
+						break;
+					case OPERATION_BOX_BLUR:
+						doSetOperationConvolutionKernel(function, ConvolutionKernel33F.BOX_BLUR);
+						
+						break;
+					case OPERATION_EDGE_DETECTION:
+						doSetOperationConvolutionKernel(function, ConvolutionKernel33F.EDGE_DETECTION);
+						
+						break;
+					case OPERATION_EMBOSS:
+						doSetOperationConvolutionKernel(function, ConvolutionKernel33F.EMBOSS);
+						
+						break;
+					case OPERATION_FRACTIONAL_BROWNIAN_MOTION:
+						Color3F base = Color3F.random();
+				        
+						function.set(pixelImage -> {
+							for(int index = 0; index < pixelImage.getResolution(); index++) {
+								final float x = (index % pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionX());
+								final float y = (index / pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionY());
+								
+								final float noise = Floats.simplexFractionalBrownianMotionXY(x, y, 5.0F, 0.5F, 0.0F, 1.0F, 8);
+								
+								final Color3F color = Color3F.redoGammaCorrectionSRGB(Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(base, noise))));
+								
+								pixelImage.setColorRGB(Color3F.blend(pixelImage.getColorRGB(index), color, 0.5F), index);
+							}
+							
+							return pixelImage;
+						});
+						
+						break;
+					case OPERATION_NONE:
+						function.set(pixelImage -> pixelImage);
+						
+						break;
+					case OPERATION_RANDOM:
+						doSetOperationConvolutionKernel(function, ConvolutionKernel33F.random());
+						
+						break;
+					case OPERATION_SHARPEN:
+						doSetOperationConvolutionKernel(function, ConvolutionKernel33F.SHARPEN);
+						
+						break;
+					case OPERATION_THRESHOLD:
+						function.set(pixelImage -> {
+							pixelImage.update(color -> {
+								if(color.isCyan()) {
+									return Color3F.CYAN;
+								} else if(color.isMagenta()) {
+									return Color3F.MAGENTA;
+								} else if(color.isYellow()) {
+									return Color3F.YELLOW;
+								} else if(color.isRed(0.2F, 0.2F)) {
+									return Color3F.RED;
+								} else if(color.isGreen(0.2F, 0.2F)) {
+									return Color3F.GREEN;
+								} else if(color.isBlue(0.2F, 0.2F)) {
+									return Color3F.BLUE;
+								} else {
+									return Color3F.BLACK;
+								}
+							});
+							
+							return pixelImage;
+						});
+						
+						break;
+					default:
+						break;
+				}
+			}
+		};
+	}
+	
+	private static void doSetOperationBlend(final AtomicReference<Function<PixelImageF, PixelImageF>> function, final Color3F colorNew) {
+		function.set(pixelImage -> {
+			pixelImage.update(colorOld -> Color3F.blend(colorOld, colorNew, 0.5F));
+			
+			return pixelImage;
+		});
+	}
+	
+	private static void doSetOperationConvolutionKernel(final AtomicReference<Function<PixelImageF, PixelImageF>> function, final ConvolutionKernel33F convolutionKernel) {
+		function.set(pixelImage -> {
+			pixelImage.multiply(convolutionKernel);
+			
+			return pixelImage;
+		});
 	}
 }

@@ -25,36 +25,37 @@ import java.util.Optional;
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code ScaledPBRTBXDF} is an implementation of {@link PBRTBXDF} that scales the result of another {@code BXDF} instance.
+ * A {@code ScaledPBRTBXDF} is an implementation of {@link BXDF} that scales the result of another {@code BXDF} instance.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ScaledPBRTBXDF extends PBRTBXDF {
+public final class ScaledPBRTBXDF extends BXDF {
+	private final BXDF bXDF;
 	private final Color3F scale;
-	private final PBRTBXDF pBRTBXDF;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code ScaledPBRTBXDF} instance.
 	 * <p>
-	 * If either {@code pBRTBXDF} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDF} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pBRTBXDF the {@link PBRTBXDF} instance to scale
+	 * @param bXDF the {@link BXDF} instance to scale
 	 * @param scale the {@link Color3F} instance to use as the scale
-	 * @throws NullPointerException thrown if, and only if, either {@code pBRTBXDF} or {@code scale} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDF} or {@code scale} are {@code null}
 	 */
-	public ScaledPBRTBXDF(final PBRTBXDF pBRTBXDF, final Color3F scale) {
-		super(Objects.requireNonNull(pBRTBXDF, "pBRTBXDF == null").getBXDFType());
+	public ScaledPBRTBXDF(final BXDF bXDF, final Color3F scale) {
+		super(Objects.requireNonNull(bXDF, "bXDF == null").getBXDFType());
 		
-		this.pBRTBXDF = pBRTBXDF;
+		this.bXDF = bXDF;
 		this.scale = Objects.requireNonNull(scale, "scale == null");
 	}
 	
@@ -65,21 +66,22 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples2} in PBRT
-	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples, called {@code samples1} in PBRT
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples
+	 * @param normal the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
 	@Override
-	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
-		return Color3F.multiply(this.pBRTBXDF.computeReflectanceFunction(samplesA, samplesB), this.scale);
+		Objects.requireNonNull(normal, "normal == null");
+		
+		return Color3F.multiply(this.bXDF.computeReflectanceFunction(samplesA, samplesB, normal), this.scale);
 	}
 	
 	/**
@@ -87,22 +89,22 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(const Vector3f &wo, int nSamples, const Point2f *samples)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples} in PBRT
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}
 	 */
 	@Override
-	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		
-		return Color3F.multiply(this.pBRTBXDF.computeReflectanceFunction(samplesA, outgoing), this.scale);
+		return Color3F.multiply(this.bXDF.computeReflectanceFunction(samplesA, outgoing, normal), this.scale);
 	}
 	
 	/**
@@ -110,21 +112,21 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
-	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code f(const Vector3f &wo, const Vector3f &wi)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
 	 * @return a {@code Color3F} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Color3F.multiply(this.pBRTBXDF.evaluateDistributionFunction(outgoing, incoming), this.scale);
+		return Color3F.multiply(this.bXDF.evaluateDistributionFunction(outgoing, normal, incoming), this.scale);
 	}
 	
 	/**
@@ -132,21 +134,21 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 	 * <p>
 	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code outgoing}, {@code normal} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
 	 * @param sample the sample point
 	 * @return an optional {@code BXDFResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Optional<BXDFResult> optionalBXDFResult = this.pBRTBXDF.sampleDistributionFunction(outgoing, sample);
+		final Optional<BXDFResult> optionalBXDFResult = this.bXDF.sampleDistributionFunction(outgoing, normal, sample);
 		
 		if(optionalBXDFResult.isPresent()) {
 			return Optional.of(BXDFResult.scale(optionalBXDFResult.get(), this.scale));
@@ -162,7 +164,7 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ScaledPBRTBXDF(%s, %s)", this.pBRTBXDF, this.scale);
+		return String.format("new ScaledPBRTBXDF(%s, %s)", this.bXDF, this.scale);
 	}
 	
 	/**
@@ -179,9 +181,9 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 			return true;
 		} else if(!(object instanceof ScaledPBRTBXDF)) {
 			return false;
-		} else if(!Objects.equals(this.scale, ScaledPBRTBXDF.class.cast(object).scale)) {
+		} else if(!Objects.equals(this.bXDF, ScaledPBRTBXDF.class.cast(object).bXDF)) {
 			return false;
-		} else if(!Objects.equals(this.pBRTBXDF, ScaledPBRTBXDF.class.cast(object).pBRTBXDF)) {
+		} else if(!Objects.equals(this.scale, ScaledPBRTBXDF.class.cast(object).scale)) {
 			return false;
 		} else {
 			return true;
@@ -193,21 +195,21 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code Pdf(const Vector3f &wo, const Vector3f &wi)} that returns a {@code Float} in PBRT.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return this.pBRTBXDF.evaluateProbabilityDensityFunction(outgoing, incoming);
+		return this.bXDF.evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 	}
 	
 	/**
@@ -217,6 +219,6 @@ public final class ScaledPBRTBXDF extends PBRTBXDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.scale, this.pBRTBXDF);
+		return Objects.hash(this.bXDF, this.scale);
 	}
 }

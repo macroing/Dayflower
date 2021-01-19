@@ -31,6 +31,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.AreaLight;
+import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
@@ -40,7 +41,6 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.material.pbrt.PBRTMaterial;
 
 final class RayTracingPBRT {
@@ -75,13 +75,13 @@ final class RayTracingPBRT {
 			
 			final PBRTMaterial pBRTMaterial = PBRTMaterial.class.cast(material);
 			
-			final Optional<PBRTBSDF> optionalPBRTBSDF = pBRTMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
+			final Optional<BSDF> optionalBSDF = pBRTMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
 			
-			if(!optionalPBRTBSDF.isPresent()) {
+			if(!optionalBSDF.isPresent()) {
 				return radiance(surfaceIntersection.createRay(ray.getDirection()), sampler, scene, isPreviewMode, maximumBounce, currentBounce);
 			}
 			
-			final PBRTBSDF pBRTBSDF = optionalPBRTBSDF.get();
+			final BSDF bSDF = optionalBSDF.get();
 			
 			final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
 			final Vector3F outgoing = Vector3F.negate(ray.getDirection());
@@ -103,7 +103,7 @@ final class RayTracingPBRT {
 					final float probabilityDensityFunctionValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
 					
 					if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F) {
-						final Color3F scatteringResult = pBRTBSDF.evaluateDistributionFunction(BXDFType.ALL, outgoing, normal, incoming);
+						final Color3F scatteringResult = bSDF.evaluateDistributionFunction(BXDFType.ALL, outgoing, normal, incoming);
 						
 						if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
 							radiance = Color3F.addMultiplyAndDivide(radiance, scatteringResult, result, abs(Vector3F.dotProduct(incoming, normal)), probabilityDensityFunctionValue);
@@ -113,8 +113,8 @@ final class RayTracingPBRT {
 			}
 			
 			if(currentBounce + 1 < maximumBounce) {
-				radiance = Color3F.add(radiance, doComputeSpecularReflection(ray, sampler, scene, isPreviewMode, maximumBounce, currentBounce, intersection, pBRTBSDF));
-				radiance = Color3F.add(radiance, doComputeSpecularTransmission(ray, sampler, scene, isPreviewMode, maximumBounce, currentBounce, intersection, pBRTBSDF));
+				radiance = Color3F.add(radiance, doComputeSpecularReflection(ray, sampler, scene, isPreviewMode, maximumBounce, currentBounce, bSDF, intersection));
+				radiance = Color3F.add(radiance, doComputeSpecularTransmission(ray, sampler, scene, isPreviewMode, maximumBounce, currentBounce, bSDF, intersection));
 			}
 		} else {
 			for(final Light light : scene.getLights()) {
@@ -127,7 +127,7 @@ final class RayTracingPBRT {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Color3F doComputeSpecularReflection(final Ray3F ray, final Sampler sampler, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final Intersection intersection, final PBRTBSDF pBRTBSDF) {
+	private static Color3F doComputeSpecularReflection(final Ray3F ray, final Sampler sampler, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
 		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 		
 		final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
@@ -135,7 +135,7 @@ final class RayTracingPBRT {
 		
 		final Sample2F sample = sampler.sample2();
 		
-		final Optional<BSDFResult> optionalBSDFResult = pBRTBSDF.sampleDistributionFunction(BXDFType.SPECULAR_REFLECTION, outgoing, normal, new Point2F(sample.getU(), sample.getV()));
+		final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.SPECULAR_REFLECTION, outgoing, normal, new Point2F(sample.getU(), sample.getV()));
 		
 		if(optionalBSDFResult.isPresent()) {
 			final BSDFResult bSDFResult = optionalBSDFResult.get();
@@ -157,7 +157,7 @@ final class RayTracingPBRT {
 		return Color3F.BLACK;
 	}
 	
-	private static Color3F doComputeSpecularTransmission(final Ray3F ray, final Sampler sampler, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final Intersection intersection, final PBRTBSDF pBRTBSDF) {
+	private static Color3F doComputeSpecularTransmission(final Ray3F ray, final Sampler sampler, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
 		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 		
 		final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
@@ -165,7 +165,7 @@ final class RayTracingPBRT {
 		
 		final Sample2F sample = sampler.sample2();
 		
-		final Optional<BSDFResult> optionalBSDFResult = pBRTBSDF.sampleDistributionFunction(BXDFType.SPECULAR_TRANSMISSION, outgoing, normal, new Point2F(sample.getU(), sample.getV()));
+		final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.SPECULAR_TRANSMISSION, outgoing, normal, new Point2F(sample.getU(), sample.getV()));
 		
 		if(optionalBSDFResult.isPresent()) {
 			final BSDFResult bSDFResult = optionalBSDFResult.get();

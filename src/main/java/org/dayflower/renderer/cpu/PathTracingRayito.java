@@ -32,6 +32,7 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
@@ -41,7 +42,6 @@ import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Sample;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.light.PrimitiveLight;
 import org.dayflower.scene.material.rayito.RayitoMaterial;
 
@@ -87,13 +87,13 @@ final class PathTracingRayito {
 				
 				final RayitoMaterial rayitoMaterial = RayitoMaterial.class.cast(material);
 				
-				final Optional<RayitoBSDF> optionalRayitoBSDF = rayitoMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
+				final Optional<BSDF> optionalBSDF = rayitoMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
 				
-				if(!optionalRayitoBSDF.isPresent()) {
+				if(!optionalBSDF.isPresent()) {
 					break;
 				}
 				
-				final RayitoBSDF rayitoBSDF = optionalRayitoBSDF.get();
+				final BSDF bSDF = optionalBSDF.get();
 				
 				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
 				
@@ -105,13 +105,13 @@ final class PathTracingRayito {
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, rayitoMaterial.emittance(intersection)));
 				}
 				
-				if(rayitoBSDF.countBXDFsBySpecularType(true) > 0) {
+				if(bSDF.countBXDFsBySpecularType(true) > 0) {
 					currentBounceSpecular++;
 				} else {
-					radiance = Color3F.add(radiance, doLightEstimateAllPrimitiveLights(throughput, rayitoBSDF, scene, surfaceIntersection, currentRayDirectionO, lights, primitive));
+					radiance = Color3F.add(radiance, doLightEstimateAllPrimitiveLights(bSDF, throughput, scene, surfaceIntersection, currentRayDirectionO, lights, primitive));
 				}
 				
-				final Optional<BSDFResult> optionalBSDFResult = rayitoBSDF.sampleDistributionFunction(BXDFType.ALL, currentRayDirectionO, surfaceNormalS, new Point2F(random(), random()));
+				final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, currentRayDirectionO, surfaceNormalS, new Point2F(random(), random()));
 				
 				if(!optionalBSDFResult.isPresent()) {
 					break;
@@ -160,7 +160,7 @@ final class PathTracingRayito {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Color3F doLightEstimateAllPrimitiveLights(final Color3F throughput, final RayitoBSDF rayitoBSDF, final Scene scene, final SurfaceIntersection3F surfaceIntersection, final Vector3F directionO, final List<Light> lights, final Primitive primitiveToSkip) {
+	private static Color3F doLightEstimateAllPrimitiveLights(final BSDF bSDF, final Color3F throughput, final Scene scene, final SurfaceIntersection3F surfaceIntersection, final Vector3F directionO, final List<Light> lights, final Primitive primitiveToSkip) {
 		float radianceR = 0.0F;
 		float radianceG = 0.0F;
 		float radianceB = 0.0F;
@@ -203,9 +203,9 @@ final class PathTracingRayito {
 							final Vector3F selectedDirectionI = Vector3F.normalize(Vector3F.direction(point, surfaceIntersectionPoint));
 							final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
 							
-							final float probabilityDensityFunctionValueB1 = rayitoBSDF.evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);
+							final float probabilityDensityFunctionValueB1 = bSDF.evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);
 							
-							final Color3F result = rayitoBSDF.evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);
+							final Color3F result = bSDF.evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);
 							
 							if(probabilityDensityFunctionValueB1 > 0.0F && !result.isBlack()) {
 								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
@@ -237,7 +237,7 @@ final class PathTracingRayito {
 							}
 						}
 						
-						final Optional<BSDFResult> optionalBSDFResult = rayitoBSDF.sampleDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, new Point2F(random(), random()));
+						final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, new Point2F(random(), random()));
 						
 						if(optionalBSDFResult.isPresent()) {
 							final BSDFResult bSDFResult = optionalBSDFResult.get();

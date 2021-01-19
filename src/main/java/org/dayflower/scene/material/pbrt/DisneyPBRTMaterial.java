@@ -30,7 +30,9 @@ import java.util.Optional;
 import org.dayflower.color.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.DisneyClearCoatPBRTBRDF;
@@ -40,7 +42,6 @@ import org.dayflower.scene.bxdf.pbrt.DisneyRetroPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.DisneySheenPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBTDF;
 import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
-import org.dayflower.scene.bxdf.pbrt.PBRTBXDF;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBTDF;
@@ -1011,6 +1012,111 @@ public final class DisneyPBRTMaterial implements PBRTMaterial {
 	}
 	
 	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		final List<BXDF> bXDFs = new ArrayList<>();
+		
+		final float floatAnisotropic = this.textureAnisotropic.getFloat(intersection);
+		final float floatClearCoat = this.textureClearCoat.getFloat(intersection);
+		final float floatDiffuseTransmission = this.textureDiffuseTransmission.getFloat(intersection) / 2.0F;
+		final float floatEta = this.textureEta.getFloat(intersection);
+		final float floatMetallic = this.textureMetallic.getFloat(intersection);
+		final float floatRoughness = this.textureRoughness.getFloat(intersection);
+		final float floatSheen = this.textureSheen.getFloat(intersection);
+		final float floatSpecularTint = this.textureSpecularTint.getFloat(intersection);
+		final float floatSpecularTransmission = this.textureSpecularTransmission.getFloat(intersection);
+		
+		final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorTint = Color3F.normalizeLuminance(colorColor);
+		final Color3F colorSheen = floatSheen > 0.0F ? Color3F.blend(Color3F.WHITE, colorTint, this.textureSheenTint.getFloat(intersection)) : Color3F.BLACK;
+		
+		final float diffuseWeight = (1.0F - floatMetallic) * (1.0F - floatSpecularTransmission);
+		
+		if(diffuseWeight > 0.0F) {
+			if(this.isThin) {
+				final float floatFlatness = this.textureFlatness.getFloat(intersection);
+				
+				final Color3F colorReflectanceScale0 = Color3F.multiply(colorColor, diffuseWeight * (1.0F - floatFlatness) * (1.0F - floatDiffuseTransmission));
+				final Color3F colorReflectanceScale1 = Color3F.multiply(colorColor, diffuseWeight * (0.0F + floatFlatness) * (1.0F - floatDiffuseTransmission));
+				
+				bXDFs.add(new DisneyDiffusePBRTBRDF(colorReflectanceScale0));
+				bXDFs.add(new DisneyFakeSSPBRTBRDF(colorReflectanceScale1, floatRoughness));
+			} else {
+				final Color3F colorScatterDistance = this.textureScatterDistance.getColor(intersection);
+				
+				if(colorScatterDistance.isBlack()) {
+					bXDFs.add(new DisneyDiffusePBRTBRDF(Color3F.multiply(colorColor, diffuseWeight)));
+				} else {
+					bXDFs.add(new SpecularPBRTBTDF(Color3F.WHITE, transportMode, 1.0F, floatEta));
+				}
+			}
+			
+			bXDFs.add(new DisneyRetroPBRTBRDF(Color3F.multiply(colorColor, diffuseWeight), floatRoughness));
+			
+			if(floatSheen > 0.0F) {
+				bXDFs.add(new DisneySheenPBRTBRDF(Color3F.multiply(colorSheen, diffuseWeight * floatSheen)));
+			}
+		}
+		
+		final float aspect = sqrt(1.0F - floatAnisotropic * 0.9F);
+		
+		final float alphaX = max(0.001F, floatRoughness * floatRoughness / aspect);
+		final float alphaY = max(0.001F, floatRoughness * floatRoughness * aspect);
+		
+		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, true, alphaX, alphaY);
+		
+		final float floatR0 = ((floatEta - 1.0F) * (floatEta - 1.0F)) / ((floatEta + 1.0F) * (floatEta + 1.0F));
+		
+		final Color3F colorSpecularR0 = Color3F.blend(Color3F.multiply(Color3F.blend(Color3F.WHITE, colorTint, floatSpecularTint), floatR0), colorColor, floatMetallic);
+		
+		final Fresnel fresnel = new DisneyFresnel(colorSpecularR0, floatEta, floatMetallic);
+		
+		bXDFs.add(new TorranceSparrowPBRTBRDF(Color3F.WHITE, fresnel, microfacetDistribution));
+		
+		if(floatClearCoat > 0.0F) {
+			bXDFs.add(new DisneyClearCoatPBRTBRDF(lerp(0.1F, 0.001F, this.textureClearCoatGloss.getFloat(intersection)), floatClearCoat));
+		}
+		
+		if(floatSpecularTransmission > 0.0F) {
+			final Color3F transmittanceScale = Color3F.multiply(Color3F.sqrt(colorColor), floatSpecularTransmission);
+			
+			if(this.isThin) {
+				final float floatRoughnessScaled = (0.65F * floatEta - 0.35F) * floatRoughness;
+				
+				final float alphaXScaled = max(0.001F, floatRoughnessScaled * floatRoughnessScaled / aspect);
+				final float alphaYScaled = max(0.001F, floatRoughnessScaled * floatRoughnessScaled * aspect);
+				
+				final MicrofacetDistribution microfacetDistributionScaled = new TrowbridgeReitzMicrofacetDistribution(true, false, alphaXScaled, alphaYScaled);
+				
+				bXDFs.add(new TorranceSparrowPBRTBTDF(transmittanceScale, microfacetDistributionScaled, transportMode, 1.0F, floatEta));
+			} else {
+				bXDFs.add(new TorranceSparrowPBRTBTDF(transmittanceScale, microfacetDistribution, transportMode, 1.0F, floatEta));
+			}
+		}
+		
+		if(this.isThin) {
+			bXDFs.add(new LambertianPBRTBTDF(Color3F.multiply(colorColor, floatDiffuseTransmission)));
+		}
+		
+		return Optional.of(new PBRTBSDF(intersection, bXDFs));
+	}
+	
+	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSSRDF} instance.
@@ -1046,111 +1152,6 @@ public final class DisneyPBRTMaterial implements PBRTMaterial {
 		}
 		
 		return Optional.empty();
-	}
-	
-	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code PBRTBSDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code PBRTBSDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		final List<PBRTBXDF> pBRTBXDFs = new ArrayList<>();
-		
-		final float floatAnisotropic = this.textureAnisotropic.getFloat(intersection);
-		final float floatClearCoat = this.textureClearCoat.getFloat(intersection);
-		final float floatDiffuseTransmission = this.textureDiffuseTransmission.getFloat(intersection) / 2.0F;
-		final float floatEta = this.textureEta.getFloat(intersection);
-		final float floatMetallic = this.textureMetallic.getFloat(intersection);
-		final float floatRoughness = this.textureRoughness.getFloat(intersection);
-		final float floatSheen = this.textureSheen.getFloat(intersection);
-		final float floatSpecularTint = this.textureSpecularTint.getFloat(intersection);
-		final float floatSpecularTransmission = this.textureSpecularTransmission.getFloat(intersection);
-		
-		final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorTint = Color3F.normalizeLuminance(colorColor);
-		final Color3F colorSheen = floatSheen > 0.0F ? Color3F.blend(Color3F.WHITE, colorTint, this.textureSheenTint.getFloat(intersection)) : Color3F.BLACK;
-		
-		final float diffuseWeight = (1.0F - floatMetallic) * (1.0F - floatSpecularTransmission);
-		
-		if(diffuseWeight > 0.0F) {
-			if(this.isThin) {
-				final float floatFlatness = this.textureFlatness.getFloat(intersection);
-				
-				final Color3F colorReflectanceScale0 = Color3F.multiply(colorColor, diffuseWeight * (1.0F - floatFlatness) * (1.0F - floatDiffuseTransmission));
-				final Color3F colorReflectanceScale1 = Color3F.multiply(colorColor, diffuseWeight * (0.0F + floatFlatness) * (1.0F - floatDiffuseTransmission));
-				
-				pBRTBXDFs.add(new DisneyDiffusePBRTBRDF(colorReflectanceScale0));
-				pBRTBXDFs.add(new DisneyFakeSSPBRTBRDF(colorReflectanceScale1, floatRoughness));
-			} else {
-				final Color3F colorScatterDistance = this.textureScatterDistance.getColor(intersection);
-				
-				if(colorScatterDistance.isBlack()) {
-					pBRTBXDFs.add(new DisneyDiffusePBRTBRDF(Color3F.multiply(colorColor, diffuseWeight)));
-				} else {
-					pBRTBXDFs.add(new SpecularPBRTBTDF(Color3F.WHITE, transportMode, 1.0F, floatEta));
-				}
-			}
-			
-			pBRTBXDFs.add(new DisneyRetroPBRTBRDF(Color3F.multiply(colorColor, diffuseWeight), floatRoughness));
-			
-			if(floatSheen > 0.0F) {
-				pBRTBXDFs.add(new DisneySheenPBRTBRDF(Color3F.multiply(colorSheen, diffuseWeight * floatSheen)));
-			}
-		}
-		
-		final float aspect = sqrt(1.0F - floatAnisotropic * 0.9F);
-		
-		final float alphaX = max(0.001F, floatRoughness * floatRoughness / aspect);
-		final float alphaY = max(0.001F, floatRoughness * floatRoughness * aspect);
-		
-		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, true, alphaX, alphaY);
-		
-		final float floatR0 = ((floatEta - 1.0F) * (floatEta - 1.0F)) / ((floatEta + 1.0F) * (floatEta + 1.0F));
-		
-		final Color3F colorSpecularR0 = Color3F.blend(Color3F.multiply(Color3F.blend(Color3F.WHITE, colorTint, floatSpecularTint), floatR0), colorColor, floatMetallic);
-		
-		final Fresnel fresnel = new DisneyFresnel(colorSpecularR0, floatEta, floatMetallic);
-		
-		pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(Color3F.WHITE, fresnel, microfacetDistribution));
-		
-		if(floatClearCoat > 0.0F) {
-			pBRTBXDFs.add(new DisneyClearCoatPBRTBRDF(lerp(0.1F, 0.001F, this.textureClearCoatGloss.getFloat(intersection)), floatClearCoat));
-		}
-		
-		if(floatSpecularTransmission > 0.0F) {
-			final Color3F transmittanceScale = Color3F.multiply(Color3F.sqrt(colorColor), floatSpecularTransmission);
-			
-			if(this.isThin) {
-				final float floatRoughnessScaled = (0.65F * floatEta - 0.35F) * floatRoughness;
-				
-				final float alphaXScaled = max(0.001F, floatRoughnessScaled * floatRoughnessScaled / aspect);
-				final float alphaYScaled = max(0.001F, floatRoughnessScaled * floatRoughnessScaled * aspect);
-				
-				final MicrofacetDistribution microfacetDistributionScaled = new TrowbridgeReitzMicrofacetDistribution(true, false, alphaXScaled, alphaYScaled);
-				
-				pBRTBXDFs.add(new TorranceSparrowPBRTBTDF(transmittanceScale, microfacetDistributionScaled, transportMode, 1.0F, floatEta));
-			} else {
-				pBRTBXDFs.add(new TorranceSparrowPBRTBTDF(transmittanceScale, microfacetDistribution, transportMode, 1.0F, floatEta));
-			}
-		}
-		
-		if(this.isThin) {
-			pBRTBXDFs.add(new LambertianPBRTBTDF(Color3F.multiply(colorColor, floatDiffuseTransmission)));
-		}
-		
-		return Optional.of(new PBRTBSDF(intersection, pBRTBXDFs));
 	}
 	
 	/**

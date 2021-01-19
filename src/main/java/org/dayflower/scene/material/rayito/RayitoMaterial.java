@@ -18,12 +18,7 @@
  */
 package org.dayflower.scene.material.rayito;
 
-import java.util.Optional;
-
-import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
-import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.RayitoBSDF;
 import org.dayflower.scene.texture.Texture;
 
 /**
@@ -44,22 +39,4 @@ public interface RayitoMaterial extends Material {
 	 * The offset for the offset of the {@link Texture} denoted by {@code Emission} in the {@code float[]} or {@code int[]}.
 	 */
 	int ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET = 1;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Computes the {@link RayitoBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code RayitoBSDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code RayitoBSDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code RayitoBSDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	Optional<RayitoBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes);
 }

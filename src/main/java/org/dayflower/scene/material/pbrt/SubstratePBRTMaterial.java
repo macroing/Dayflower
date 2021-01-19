@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.dayflower.color.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.TransportMode;
@@ -349,6 +350,39 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 	}
 	
 	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		
+		if(!colorKD.isBlack() || !colorKS.isBlack()) {
+			final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessU.getFloat(intersection)) : this.textureRoughnessU.getFloat(intersection);
+			final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessV.getFloat(intersection)) : this.textureRoughnessV.getFloat(intersection);
+			
+			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV);
+			
+			return Optional.of(new PBRTBSDF(intersection, new FresnelBlendPBRTBRDF(colorKD, colorKS, microfacetDistribution)));
+		}
+		
+		return Optional.empty();
+	}
+	
+	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSSRDF} instance.
@@ -365,39 +399,6 @@ public final class SubstratePBRTMaterial implements PBRTMaterial {
 	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		return Optional.empty();
-	}
-	
-	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code PBRTBSDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code PBRTBSDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		
-		if(!colorKD.isBlack() || !colorKS.isBlack()) {
-			final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessU.getFloat(intersection)) : this.textureRoughnessU.getFloat(intersection);
-			final float roughnessV = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessV.getFloat(intersection)) : this.textureRoughnessV.getFloat(intersection);
-			
-			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV);
-			
-			return Optional.of(new PBRTBSDF(intersection, new FresnelBlendPBRTBRDF(colorKD, colorKS, microfacetDistribution)));
-		}
 		
 		return Optional.empty();
 	}

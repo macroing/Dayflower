@@ -22,25 +22,28 @@ import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.random;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.fresnel.DielectricFresnel;
+import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code SpecularRayitoBTDF} is an implementation of {@link RayitoBXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for specular transmission.
+ * A {@code SpecularRayitoBTDF} is an implementation of {@link BXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for specular transmission.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class SpecularRayitoBTDF extends RayitoBXDF {
+public final class SpecularRayitoBTDF extends BXDF {
 	private final Color3F reflectanceScale;
 	private final Color3F transmittanceScale;
 	private final float etaA;
@@ -69,6 +72,52 @@ public final class SpecularRayitoBTDF extends RayitoBXDF {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples
+	 * @param normal the normal
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 */
+	@Override
+	public final Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
+		ParameterArguments.requireNonNullList(samplesB, "samplesB");
+		
+		Objects.requireNonNull(normal, "normal == null");
+		
+		return Color3F.BLACK;
+	}
+	
+	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}
+	 */
+	@Override
+	public final Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
+		ParameterArguments.requireNonNullList(samplesA, "samplesA");
+		
+		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
+		
+		return Color3F.BLACK;
+	}
 	
 	/**
 	 * Evaluates the distribution function.

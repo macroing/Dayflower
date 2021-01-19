@@ -56,7 +56,7 @@ public interface Material extends Node {
 	 * @return an optional {@code BSDF} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
-	Optional<? extends BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes);
+	Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes);
 	
 	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.

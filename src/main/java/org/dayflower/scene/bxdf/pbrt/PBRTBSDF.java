@@ -35,6 +35,7 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSDFResult;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
@@ -50,7 +51,7 @@ import org.dayflower.utility.ParameterArguments;
  */
 public final class PBRTBSDF implements BSDF {
 	private final Intersection intersection;
-	private final List<PBRTBXDF> pBRTBXDFs;
+	private final List<BXDF> bXDFs;
 	private final float eta;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,66 +59,66 @@ public final class PBRTBSDF implements BSDF {
 	/**
 	 * Constructs a new {@code PBRTBSDF} instance.
 	 * <p>
-	 * If either {@code intersection}, {@code pBRTBXDFs} or at least one element in {@code pBRTBXDFs} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * The {@code List} {@code pBRTBXDFs} will be copied.
+	 * If either {@code intersection} or {@code bXDF} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @param pBRTBXDFs a {@code List} of {@link PBRTBXDF} instances
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code pBRTBXDFs} or at least one element in {@code pBRTBXDFs} are {@code null}
+	 * @param bXDF a {@link BXDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code bXDF} are {@code null}
 	 */
-	public PBRTBSDF(final Intersection intersection, final List<PBRTBXDF> pBRTBXDFs) {
+	public PBRTBSDF(final Intersection intersection, final BXDF bXDF) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
-		this.pBRTBXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(pBRTBXDFs, "pBRTBXDFs"));
+		this.bXDFs = Arrays.asList(Objects.requireNonNull(bXDF, "bXDF == null"));
 		this.eta = 1.0F;
 	}
 	
 	/**
 	 * Constructs a new {@code PBRTBSDF} instance.
 	 * <p>
-	 * If either {@code intersection}, {@code pBRTBXDFs} or at least one element in {@code pBRTBXDFs} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * The {@code List} {@code pBRTBXDFs} will be copied.
+	 * If either {@code intersection} or {@code bXDF} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @param pBRTBXDFs a {@code List} of {@link PBRTBXDF} instances
+	 * @param bXDF a {@link BXDF} instance
 	 * @param eta the index of refraction (IOR)
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code pBRTBXDFs} or at least one element in {@code pBRTBXDFs} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code bXDF} are {@code null}
 	 */
-	public PBRTBSDF(final Intersection intersection, final List<PBRTBXDF> pBRTBXDFs, final float eta) {
+	public PBRTBSDF(final Intersection intersection, final BXDF bXDF, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
-		this.pBRTBXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(pBRTBXDFs, "pBRTBXDFs"));
+		this.bXDFs = Arrays.asList(Objects.requireNonNull(bXDF, "bXDF == null"));
 		this.eta = eta;
 	}
 	
 	/**
 	 * Constructs a new {@code PBRTBSDF} instance.
 	 * <p>
-	 * If either {@code intersection} or {@code pBRTBXDF} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The {@code List} {@code bXDFs} will be copied.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @param pBRTBXDF a {@link PBRTBXDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code pBRTBXDF} are {@code null}
+	 * @param bXDFs a {@code List} of {@link BXDF} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}
 	 */
-	public PBRTBSDF(final Intersection intersection, final PBRTBXDF pBRTBXDF) {
+	public PBRTBSDF(final Intersection intersection, final List<BXDF> bXDFs) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
-		this.pBRTBXDFs = Arrays.asList(Objects.requireNonNull(pBRTBXDF, "pBRTBXDF == null"));
+		this.bXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(bXDFs, "bXDFs"));
 		this.eta = 1.0F;
 	}
 	
 	/**
 	 * Constructs a new {@code PBRTBSDF} instance.
 	 * <p>
-	 * If either {@code intersection} or {@code pBRTBXDF} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The {@code List} {@code bXDFs} will be copied.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @param pBRTBXDF a {@link PBRTBXDF} instance
+	 * @param bXDFs a {@code List} of {@link BXDF} instances
 	 * @param eta the index of refraction (IOR)
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code pBRTBXDF} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}
 	 */
-	public PBRTBSDF(final Intersection intersection, final PBRTBXDF pBRTBXDF, final float eta) {
+	public PBRTBSDF(final Intersection intersection, final List<BXDF> bXDFs, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
-		this.pBRTBXDFs = Arrays.asList(Objects.requireNonNull(pBRTBXDF, "pBRTBXDF == null"));
+		this.bXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(bXDFs, "bXDFs"));
 		this.eta = eta;
 	}
 	
@@ -128,27 +129,32 @@ public final class PBRTBSDF implements BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code bXDFType}, {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code samplesA}, {@code samplesB}, {@code normalWorldSpace} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code BSDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2, BxDFType flags)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples2} in PBRT
 	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples, called {@code samples1} in PBRT
+	 * @param normalWorldSpace the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA}, {@code samplesB}, {@code normalWorldSpace} or an element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
-	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final List<Point2F> samplesB) {
+	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normalWorldSpace) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
+		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
+		
 		Color3F reflectance = Color3F.BLACK;
 		
-		for(final PBRTBXDF pBRTBXDF : this.pBRTBXDFs) {
-			if(pBRTBXDF.getBXDFType().matches(bXDFType)) {
-				reflectance = Color3F.add(reflectance, pBRTBXDF.computeReflectanceFunction(samplesA, samplesB));
+		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+		
+		for(final BXDF bXDF : this.bXDFs) {
+			if(bXDF.getBXDFType().matches(bXDFType)) {
+				reflectance = Color3F.add(reflectance, bXDF.computeReflectanceFunction(samplesA, samplesB, normal));
 			}
 		}
 		
@@ -160,30 +166,33 @@ public final class PBRTBSDF implements BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code bXDFType}, {@code samplesA}, {@code outgoingWorldSpace} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code samplesA}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code BSDF} method {@code rho(const Vector3f &woWorld, int nSamples, const Point2f *samples, BxDFType flags)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples} in PBRT
 	 * @param outgoingWorldSpace the outgoing direction, called {@code woWorld} in PBRT
+	 * @param normalWorldSpace the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA}, {@code outgoingWorldSpace} or an element in {@code samplesA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or an element in {@code samplesA} are {@code null}
 	 */
-	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final Vector3F outgoingWorldSpace) {
+	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
+		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
 		
 		Color3F reflectance = Color3F.BLACK;
 		
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
+		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
 		
-		for(final PBRTBXDF pBRTBXDF : this.pBRTBXDFs) {
-			if(pBRTBXDF.getBXDFType().matches(bXDFType)) {
-				reflectance = Color3F.add(reflectance, pBRTBXDF.computeReflectanceFunction(samplesA, outgoing));
+		for(final BXDF bXDF : this.bXDFs) {
+			if(bXDF.getBXDFType().matches(bXDFType)) {
+				reflectance = Color3F.add(reflectance, bXDF.computeReflectanceFunction(samplesA, outgoing, normal));
 			}
 		}
 		
@@ -212,6 +221,8 @@ public final class PBRTBSDF implements BSDF {
 		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
+		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+//		final Vector3F incoming = doTransformToLocalSpace(Vector3F.negate(incomingWorldSpace));
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
 		
 		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
@@ -220,9 +231,9 @@ public final class PBRTBSDF implements BSDF {
 		
 		Color3F result = Color3F.BLACK;
 		
-		for(final PBRTBXDF pBRTBXDF : this.pBRTBXDFs) {
-			if(pBRTBXDF.getBXDFType().matches(bXDFType) && (isReflecting && pBRTBXDF.getBXDFType().hasReflection() || !isReflecting && pBRTBXDF.getBXDFType().hasTransmission())) {
-				result = Color3F.add(result, pBRTBXDF.evaluateDistributionFunction(outgoing, incoming));
+		for(final BXDF bXDF : this.bXDFs) {
+			if(bXDF.getBXDFType().matches(bXDFType) && (isReflecting && bXDF.getBXDFType().hasReflection() || !isReflecting && bXDF.getBXDFType().hasTransmission())) {
+				result = Color3F.add(result, bXDF.evaluateDistributionFunction(outgoing, normal, incoming));
 			}
 		}
 		
@@ -258,21 +269,22 @@ public final class PBRTBSDF implements BSDF {
 		
 		final int match = min((int)(floor(sample.getU() * matches)), matches - 1);
 		
-		final PBRTBXDF matchingPBRTBXDF = doGetMatchingPBRTBXDF(bXDFType, match);
+		final BXDF matchingBXDF = doGetMatchingBXDF(bXDFType, match);
 		
-		if(matchingPBRTBXDF == null) {
+		if(matchingBXDF == null) {
 			return Optional.empty();
 		}
 		
 		final Point2F sampleRemapped = new Point2F(min(sample.getU() * matches - match, 0.99999994F), sample.getV());
 		
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
+		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
 		
 		if(isZero(outgoing.getZ())) {
 			return Optional.empty();
 		}
 		
-		final Optional<BXDFResult> optionalBXDFResult = matchingPBRTBXDF.sampleDistributionFunction(outgoing, sampleRemapped);
+		final Optional<BXDFResult> optionalBXDFResult = matchingBXDF.sampleDistributionFunction(outgoing, normal, sampleRemapped);
 		
 		if(!optionalBXDFResult.isPresent()) {
 			return Optional.empty();
@@ -288,10 +300,10 @@ public final class PBRTBSDF implements BSDF {
 		
 		float probabilityDensityFunctionValue = bXDFResult.getProbabilityDensityFunctionValue();
 		
-		if(matches > 1 && !matchingPBRTBXDF.getBXDFType().isSpecular()) {
-			for(final PBRTBXDF pBRTBXDF : this.pBRTBXDFs) {
-				if(matchingPBRTBXDF != pBRTBXDF && pBRTBXDF.getBXDFType().matches(bXDFType)) {
-					probabilityDensityFunctionValue += pBRTBXDF.evaluateProbabilityDensityFunction(outgoing, incoming);
+		if(matches > 1 && !matchingBXDF.getBXDFType().isSpecular()) {
+			for(final BXDF bXDF : this.bXDFs) {
+				if(matchingBXDF != bXDF && bXDF.getBXDFType().matches(bXDFType)) {
+					probabilityDensityFunctionValue += bXDF.evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 				}
 			}
 		}
@@ -300,18 +312,19 @@ public final class PBRTBSDF implements BSDF {
 			probabilityDensityFunctionValue /= matches;
 		}
 		
-		if(!matchingPBRTBXDF.getBXDFType().isSpecular()) {
+		if(!matchingBXDF.getBXDFType().isSpecular()) {
 			final boolean isReflecting = Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) > 0.0F;
 			
 			result = Color3F.BLACK;
 			
-			for(final PBRTBXDF pBRTBXDF : this.pBRTBXDFs) {
-				if(pBRTBXDF.getBXDFType().matches(bXDFType) && (isReflecting && pBRTBXDF.getBXDFType().hasReflection() || !isReflecting && pBRTBXDF.getBXDFType().hasTransmission())) {
-					result = Color3F.add(result, pBRTBXDF.evaluateDistributionFunction(outgoing, incoming));
+			for(final BXDF bXDF : this.bXDFs) {
+				if(bXDF.getBXDFType().matches(bXDFType) && (isReflecting && bXDF.getBXDFType().hasReflection() || !isReflecting && bXDF.getBXDFType().hasTransmission())) {
+					result = Color3F.add(result, bXDF.evaluateDistributionFunction(outgoing, normal, incoming));
 				}
 			}
 		}
 		
+//		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, Vector3F.negate(incomingWorldSpace), outgoingWorldSpace, probabilityDensityFunctionValue));
 		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
@@ -341,7 +354,7 @@ public final class PBRTBSDF implements BSDF {
 			return false;
 		} else if(!Objects.equals(this.intersection, PBRTBSDF.class.cast(object).intersection)) {
 			return false;
-		} else if(!Objects.equals(this.pBRTBXDFs, PBRTBSDF.class.cast(object).pBRTBXDFs)) {
+		} else if(!Objects.equals(this.bXDFs, PBRTBSDF.class.cast(object).bXDFs)) {
 			return false;
 		} else if(!equal(this.eta, PBRTBSDF.class.cast(object).eta)) {
 			return false;
@@ -371,11 +384,13 @@ public final class PBRTBSDF implements BSDF {
 		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
 		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
-		if(this.pBRTBXDFs.size() == 0) {
+		if(this.bXDFs.size() == 0) {
 			return 0.0F;
 		}
 		
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
+		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+//		final Vector3F incoming = doTransformToLocalSpace(Vector3F.negate(incomingWorldSpace));
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpace);
 		
 		if(isZero(outgoing.getZ())) {
@@ -386,11 +401,11 @@ public final class PBRTBSDF implements BSDF {
 		
 		int matches = 0;
 		
-		for(final PBRTBXDF pBRTBXDF : this.pBRTBXDFs) {
-			if(pBRTBXDF.getBXDFType().matches(bXDFType)) {
+		for(final BXDF bXDF : this.bXDFs) {
+			if(bXDF.getBXDFType().matches(bXDFType)) {
 				matches++;
 				
-				probabilityDensityFunctionValue += pBRTBXDF.evaluateProbabilityDensityFunction(outgoing, incoming);
+				probabilityDensityFunctionValue += bXDF.evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 			}
 		}
 		
@@ -421,8 +436,8 @@ public final class PBRTBSDF implements BSDF {
 	public int countBXDFsBySpecularType(final boolean isSpecular) {
 		int count = 0;
 		
-		for(final PBRTBXDF pBRTBXDF : this.pBRTBXDFs) {
-			if(pBRTBXDF.getBXDFType().isSpecular() == isSpecular) {
+		for(final BXDF bXDF : this.bXDFs) {
+			if(bXDF.getBXDFType().isSpecular() == isSpecular) {
 				count++;
 			}
 		}
@@ -437,17 +452,17 @@ public final class PBRTBSDF implements BSDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.intersection, this.pBRTBXDFs, Float.valueOf(this.eta));
+		return Objects.hash(this.intersection, this.bXDFs, Float.valueOf(this.eta));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private PBRTBXDF doGetMatchingPBRTBXDF(final BXDFType bXDFType, final int match) {
-		for(int i = 0, j = match; i < this.pBRTBXDFs.size(); i++) {
-			final PBRTBXDF pBRTBXDF = this.pBRTBXDFs.get(i);
+	private BXDF doGetMatchingBXDF(final BXDFType bXDFType, final int match) {
+		for(int i = 0, j = match; i < this.bXDFs.size(); i++) {
+			final BXDF bXDF = this.bXDFs.get(i);
 			
-			if(pBRTBXDF.getBXDFType().matches(bXDFType) && j-- == 0) {
-				return pBRTBXDF;
+			if(bXDF.getBXDFType().matches(bXDFType) && j-- == 0) {
+				return bXDF;
 			}
 		}
 		
@@ -465,8 +480,8 @@ public final class PBRTBSDF implements BSDF {
 	private int doComputeMatches(final BXDFType bXDFType) {
 		int matches = 0;
 		
-		for(final PBRTBXDF pBRTBXDF : this.pBRTBXDFs) {
-			if(pBRTBXDF.getBXDFType().matches(bXDFType)) {
+		for(final BXDF bXDF : this.bXDFs) {
+			if(bXDF.getBXDFType().matches(bXDFType)) {
 				matches++;
 			}
 		}

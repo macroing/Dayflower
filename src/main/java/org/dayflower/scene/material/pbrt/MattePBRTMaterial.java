@@ -28,6 +28,7 @@ import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.TransportMode;
@@ -205,41 +206,20 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 	}
 	
 	/**
-	 * Computes the {@link BSSRDF} at {@code intersection}.
+	 * Computes the {@link BSDF} at {@code intersection}.
 	 * <p>
-	 * Returns an optional {@code BSSRDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code BSSRDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		return Optional.empty();
-	}
-	
-	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code PBRTBSDF} instance.
+	 * Returns an optional {@code BSDF} instance.
 	 * <p>
 	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
 	 * @param transportMode the {@link TransportMode} to use
 	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code PBRTBSDF} instance
+	 * @return an optional {@code BSDF} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
 	 */
 	@Override
-	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
@@ -258,6 +238,27 @@ public final class MattePBRTMaterial implements PBRTMaterial {
 		}
 		
 		return Optional.of(new PBRTBSDF(intersection, new OrenNayarPBRTBRDF(angle, colorKD)));
+	}
+	
+	/**
+	 * Computes the {@link BSSRDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSSRDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSSRDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSSRDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		return Optional.empty();
 	}
 	
 	/**

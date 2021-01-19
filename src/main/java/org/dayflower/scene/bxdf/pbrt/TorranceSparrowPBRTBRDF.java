@@ -30,6 +30,7 @@ import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.fresnel.Fresnel;
@@ -37,14 +38,14 @@ import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code TorranceSparrowPBRTBRDF} is an implementation of {@link PBRTBXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Torrance-Sparrow reflection using a microfacet distribution.
+ * A {@code TorranceSparrowPBRTBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Torrance-Sparrow reflection using a microfacet distribution.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class TorranceSparrowPBRTBRDF extends PBRTBXDF {
+public final class TorranceSparrowPBRTBRDF extends BXDF {
 	private final Color3F reflectanceScale;
 	private final Fresnel fresnel;
 	private final MicrofacetDistribution microfacetDistribution;
@@ -76,21 +77,22 @@ public final class TorranceSparrowPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples2} in PBRT
-	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples, called {@code samples1} in PBRT
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples
+	 * @param normal the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
 	@Override
-	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
 //		PBRT: Implementation of BxDF.
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
+		
+		Objects.requireNonNull(normal, "normal == null");
 		
 		Color3F reflectance = Color3F.BLACK;
 		
@@ -100,7 +102,7 @@ public final class TorranceSparrowPBRTBRDF extends PBRTBXDF {
 			
 			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
 			
-			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			
 			if(optionalBXDFResult.isPresent()) {
 				final BXDFResult bXDFResult = optionalBXDFResult.get();
@@ -126,29 +128,29 @@ public final class TorranceSparrowPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(const Vector3f &wo, int nSamples, const Point2f *samples)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples} in PBRT
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}
 	 */
 	@Override
-	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
 //		PBRT: Implementation of BxDF.
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		
 		Color3F reflectance = Color3F.BLACK;
 		
 		for(int i = 0; i < samplesA.size(); i++) {
 			final Point2F sampleA = samplesA.get(i);
 			
-			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			
 			if(optionalBXDFResult.isPresent()) {
 				final BXDFResult bXDFResult = optionalBXDFResult.get();
@@ -173,20 +175,20 @@ public final class TorranceSparrowPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
-	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code f(const Vector3f &wo, const Vector3f &wi)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
 	 * @return a {@code Color3F} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
 //		PBRT: Implementation of MicrofacetReflection.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
 		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
@@ -196,19 +198,19 @@ public final class TorranceSparrowPBRTBRDF extends PBRTBXDF {
 			return Color3F.BLACK;
 		}
 		
-		final Vector3F normal = Vector3F.add(incoming, outgoing);
+		final Vector3F n = Vector3F.add(incoming, outgoing);
 		
-		if(isZero(normal.getX()) && isZero(normal.getY()) && isZero(normal.getZ())) {
+		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
 			return Color3F.BLACK;
 		}
 		
-		final Vector3F normalNormalized = Vector3F.normalize(normal);
+		final Vector3F nNormalized = Vector3F.normalize(n);
 		
-		final float d = this.microfacetDistribution.computeDifferentialArea(normalNormalized);
+		final float d = this.microfacetDistribution.computeDifferentialArea(nNormalized);
 		final float g = this.microfacetDistribution.computeShadowingAndMasking(outgoing, incoming);
 		
 		final Color3F r = this.reflectanceScale;
-		final Color3F f = this.fresnel.evaluate(Vector3F.dotProduct(incoming, Vector3F.faceForward(normalNormalized, Vector3F.z())));
+		final Color3F f = this.fresnel.evaluate(Vector3F.dotProduct(incoming, Vector3F.faceForward(nNormalized, Vector3F.z())));
 		
 		return Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(r, d), g), f), 4.0F * cosThetaAbsIncoming * cosThetaAbsOutgoing);
 	}
@@ -218,33 +220,33 @@ public final class TorranceSparrowPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code outgoing}, {@code normal} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
 	 * @param sample the sample point
 	 * @return an optional {@code BXDFResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
 //		PBRT: Implementation of MicrofacetReflection.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
 		if(isZero(outgoing.getZ())) {
 			return Optional.empty();
 		}
 		
-		final Vector3F normal = this.microfacetDistribution.sampleNormal(outgoing, sample);
+		final Vector3F n = this.microfacetDistribution.sampleNormal(outgoing, sample);
 		
-		if(Vector3F.dotProduct(outgoing, normal) < 0.0F) {
+		if(Vector3F.dotProduct(outgoing, n) < 0.0F) {
 			return Optional.empty();
 		}
 		
-		final Vector3F incoming = Vector3F.reflection(outgoing, normal);
+		final Vector3F incoming = Vector3F.reflection(outgoing, n);
 		
 		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return Optional.empty();
@@ -252,9 +254,9 @@ public final class TorranceSparrowPBRTBRDF extends PBRTBXDF {
 		
 		final BXDFType bXDFType = getBXDFType();
 		
-		final Color3F result = evaluateDistributionFunction(outgoing, incoming);
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 		
-		final float probabilityDensityFunctionValue = this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, normal) / (4.0F * Vector3F.dotProduct(outgoing, normal));
+		final float probabilityDensityFunctionValue = this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n));
 		
 		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
@@ -299,29 +301,29 @@ public final class TorranceSparrowPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code Pdf(const Vector3f &wo, const Vector3f &wi)} that returns a {@code Float} in PBRT.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
 //		PBRT: Implementation of MicrofacetReflection.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
 		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return 0.0F;
 		}
 		
-		final Vector3F normal = Vector3F.normalize(Vector3F.add(outgoing, incoming));
+		final Vector3F n = Vector3F.normalize(Vector3F.add(outgoing, incoming));
 		
-		return this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, normal) / (4.0F * Vector3F.dotProduct(outgoing, normal));
+		return this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n));
 	}
 	
 	/**

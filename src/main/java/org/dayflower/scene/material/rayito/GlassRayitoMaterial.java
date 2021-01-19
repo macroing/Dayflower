@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.dayflower.color.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.TransportMode;
@@ -282,6 +283,34 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 	}
 	
 	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		final Color3F colorEta = this.textureEta.getColor(intersection);
+		final Color3F colorKR = this.textureKR.getColor(intersection);
+		final Color3F colorKT = this.textureKT.getColor(intersection);
+		
+		final float etaA = 1.0F;
+		final float etaB = colorEta.average();
+		
+		return Optional.of(new RayitoBSDF(intersection, new SpecularRayitoBTDF(colorKR, colorKT, etaA, etaB), etaB));
+	}
+	
+	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSSRDF} instance.
@@ -300,34 +329,6 @@ public final class GlassRayitoMaterial implements RayitoMaterial {
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
 		return Optional.empty();
-	}
-	
-	/**
-	 * Computes the {@link RayitoBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code RayitoBSDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code RayitoBSDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code RayitoBSDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<RayitoBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		final Color3F colorEta = this.textureEta.getColor(intersection);
-		final Color3F colorKR = this.textureKR.getColor(intersection);
-		final Color3F colorKT = this.textureKT.getColor(intersection);
-		
-		final float etaA = 1.0F;
-		final float etaB = colorEta.average();
-		
-		return Optional.of(new RayitoBSDF(intersection, new SpecularRayitoBTDF(colorKR, colorKT, etaA, etaB), etaB));
 	}
 	
 	/**

@@ -33,6 +33,7 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
+import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
@@ -41,7 +42,6 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
 import org.dayflower.scene.material.pbrt.PBRTMaterial;
 
 final class PathTracingPBRT {
@@ -108,9 +108,9 @@ final class PathTracingPBRT {
 			
 			final PBRTMaterial pBRTMaterial = PBRTMaterial.class.cast(material);
 			
-			final Optional<PBRTBSDF> optionalPBRTBSDF = pBRTMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
+			final Optional<BSDF> optionalBSDF = pBRTMaterial.computeBSDF(intersection, TransportMode.RADIANCE, true);
 			
-			if(!optionalPBRTBSDF.isPresent()) {
+			if(!optionalBSDF.isPresent()) {
 				currentRay = surfaceIntersection.createRay(currentRay.getDirection());
 				
 				currentBounce--;
@@ -118,17 +118,17 @@ final class PathTracingPBRT {
 				continue;
 			}
 			
-			final PBRTBSDF pBRTBSDF = optionalPBRTBSDF.get();
+			final BSDF bSDF = optionalBSDF.get();
 			
-			if(pBRTBSDF.countBXDFsBySpecularType(false) > 0) {
-				radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.sampleOneLightUniformDistribution(pBRTBSDF, intersection)));
+			if(bSDF.countBXDFsBySpecularType(false) > 0) {
+				radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.sampleOneLightUniformDistribution(bSDF, intersection)));
 			}
 			
 			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
 			
 			final Sample2F sample = sampler.sample2();
 			
-			final Optional<BSDFResult> optionalBSDFResult = pBRTBSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, surfaceNormalS, new Point2F(sample.getU(), sample.getV()));
+			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, surfaceNormalS, new Point2F(sample.getU(), sample.getV()));
 			
 			if(!optionalBSDFResult.isPresent()) {
 				break;
@@ -153,7 +153,7 @@ final class PathTracingPBRT {
 			isSpecularBounce = bXDFType.isSpecular();
 			
 			if(bXDFType.hasTransmission() && bXDFType.isSpecular()) {
-				final float eta = pBRTBSDF.getEta();
+				final float eta = bSDF.getEta();
 				
 				etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalG) > 0.0F ? eta * eta : 1.0F / (eta * eta);
 			}

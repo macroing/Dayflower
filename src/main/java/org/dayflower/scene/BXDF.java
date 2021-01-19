@@ -18,7 +18,13 @@
  */
 package org.dayflower.scene;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
+import org.dayflower.color.Color3F;
+import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Vector3F;
 
 /**
  * A {@code BXDF} represents a BRDF (Bidirectional Reflectance Distribution Function) or a BTDF (Bidirectional Transmittance Distribution Function).
@@ -55,4 +61,79 @@ public abstract class BXDF {
 	public final BXDFType getBXDFType() {
 		return this.bXDFType;
 	}
+	
+	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples
+	 * @param normal the normal
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 */
+	public abstract Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal);
+	
+	/**
+	 * Computes the reflectance function.
+	 * <p>
+	 * Returns a {@link Color3F} instance with the result of the computation.
+	 * <p>
+	 * If either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @return a {@code Color3F} instance with the result of the computation
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}
+	 */
+	public abstract Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal);
+	
+	/**
+	 * Evaluates the distribution function.
+	 * <p>
+	 * Returns a {@link Color3F} with the result of the evaluation.
+	 * <p>
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
+	 * @return a {@code Color3F} with the result of the evaluation
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
+	 */
+	public abstract Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming);
+	
+	/**
+	 * Samples the distribution function.
+	 * <p>
+	 * Returns an optional {@link BXDFResult} with the result of the sampling.
+	 * <p>
+	 * If either {@code outgoing}, {@code normal} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param sample the sample point
+	 * @return an optional {@code BXDFResult} with the result of the sampling
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code sample} are {@code null}
+	 */
+	public abstract Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample);
+	
+	/**
+	 * Evaluates the probability density function (PDF).
+	 * <p>
+	 * Returns a {@code float} with the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
+	 * @return a {@code float} with the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
+	 */
+	public abstract float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming);
 }

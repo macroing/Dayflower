@@ -29,20 +29,21 @@ import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.fresnel.Fresnel;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code SpecularPBRTBRDF} is an implementation of {@link PBRTBXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for specular reflection.
+ * A {@code SpecularPBRTBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for specular reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class SpecularPBRTBRDF extends PBRTBXDF {
+public final class SpecularPBRTBRDF extends BXDF {
 	private final Color3F reflectanceScale;
 	private final Fresnel fresnel;
 	
@@ -71,21 +72,22 @@ public final class SpecularPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(int nSamples, const Point2f *samples1, const Point2f *samples2)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples2} in PBRT
-	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples, called {@code samples1} in PBRT
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples
+	 * @param normal the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
 	@Override
-	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
 //		PBRT: Implementation of BxDF.
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
+		
+		Objects.requireNonNull(normal, "normal == null");
 		
 		Color3F reflectance = Color3F.BLACK;
 		
@@ -95,7 +97,7 @@ public final class SpecularPBRTBRDF extends PBRTBXDF {
 			
 			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
 			
-			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			
 			if(optionalBXDFResult.isPresent()) {
 				final BXDFResult bXDFResult = optionalBXDFResult.get();
@@ -121,29 +123,29 @@ public final class SpecularPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code rho(const Vector3f &wo, int nSamples, const Point2f *samples)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples, called {@code samples} in PBRT
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing} or an element in {@code samplesA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}
 	 */
 	@Override
-	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
 //		PBRT: Implementation of BxDF.
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		
 		Color3F reflectance = Color3F.BLACK;
 		
 		for(int i = 0; i < samplesA.size(); i++) {
 			final Point2F sampleA = samplesA.get(i);
 			
-			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, sampleA);
+			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
 			
 			if(optionalBXDFResult.isPresent()) {
 				final BXDFResult bXDFResult = optionalBXDFResult.get();
@@ -168,20 +170,20 @@ public final class SpecularPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
-	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code f(const Vector3f &wo, const Vector3f &wi)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
 	 * @return a {@code Color3F} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
 //		PBRT: Implementation of SpecularReflection.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
 		return Color3F.BLACK;
@@ -192,20 +194,20 @@ public final class SpecularPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns an optional {@link BXDFResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code outgoing} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample, Float *pdf, BxDFType *sampledType = nullptr)} that returns a {@code Spectrum} in PBRT.
+	 * If either {@code outgoing}, {@code normal} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
 	 * @param sample the sample point
 	 * @return an optional {@code BXDFResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code sample} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Point2F sample) {
+	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
 //		PBRT: Implementation of SpecularReflection.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
 		final Vector3F incoming = new Vector3F(-outgoing.getX(), -outgoing.getY(), outgoing.getZ());
@@ -257,20 +259,20 @@ public final class SpecularPBRTBRDF extends PBRTBXDF {
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code outgoing} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code BxDF} method {@code Pdf(const Vector3f &wo, const Vector3f &wi)} that returns a {@code Float} in PBRT.
+	 * If either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param outgoing the outgoing direction, called {@code wo} in PBRT
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @param outgoing the outgoing direction
+	 * @param normal the normal
+	 * @param incoming the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code outgoing} or {@code incoming} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code outgoing}, {@code normal} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F incoming) {
+	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
 //		PBRT: Implementation of SpecularReflection.
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
 		return 0.0F;

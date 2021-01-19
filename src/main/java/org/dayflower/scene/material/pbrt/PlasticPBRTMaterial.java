@@ -26,11 +26,12 @@ import java.util.Optional;
 import org.dayflower.color.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSSRDF;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.PBRTBSDF;
-import org.dayflower.scene.bxdf.pbrt.PBRTBXDF;
 import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
@@ -304,6 +305,50 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 	}
 	
 	/**
+	 * Computes the {@link BSDF} at {@code intersection}.
+	 * <p>
+	 * Returns an optional {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection the {@link Intersection} to compute the {@code BSDF} for
+	 * @param transportMode the {@link TransportMode} to use
+	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
+	 * @return an optional {@code BSDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
+	 */
+	@Override
+	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		final List<BXDF> bXDFs = new ArrayList<>();
+		
+		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		
+		if(!colorKD.isBlack()) {
+			bXDFs.add(new LambertianPBRTBRDF(colorKD));
+		}
+		
+		if(!colorKS.isBlack()) {
+			final Fresnel fresnel = new DielectricFresnel(1.5F, 1.0F);
+			
+			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughness.getFloat(intersection)) : this.textureRoughness.getFloat(intersection);
+			
+			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughness, roughness);
+			
+			bXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, fresnel, microfacetDistribution));
+		}
+		
+		if(bXDFs.size() > 0) {
+			return Optional.of(new PBRTBSDF(intersection, bXDFs));
+		}
+		
+		return Optional.empty();
+	}
+	
+	/**
 	 * Computes the {@link BSSRDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSSRDF} instance.
@@ -320,50 +365,6 @@ public final class PlasticPBRTMaterial implements PBRTMaterial {
 	public Optional<BSSRDF> computeBSSRDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		return Optional.empty();
-	}
-	
-	/**
-	 * Computes the {@link PBRTBSDF} at {@code intersection}.
-	 * <p>
-	 * Returns an optional {@code PBRTBSDF} instance.
-	 * <p>
-	 * If either {@code intersection} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection the {@link Intersection} to compute the {@code PBRTBSDF} for
-	 * @param transportMode the {@link TransportMode} to use
-	 * @param isAllowingMultipleLobes {@code true} if, and only if, multiple lobes are allowed, {@code false} otherwise
-	 * @return an optional {@code PBRTBSDF} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code transportMode} are {@code null}
-	 */
-	@Override
-	public Optional<PBRTBSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(transportMode, "transportMode == null");
-		
-		final List<PBRTBXDF> pBRTBXDFs = new ArrayList<>();
-		
-		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		
-		if(!colorKD.isBlack()) {
-			pBRTBXDFs.add(new LambertianPBRTBRDF(colorKD));
-		}
-		
-		if(!colorKS.isBlack()) {
-			final Fresnel fresnel = new DielectricFresnel(1.5F, 1.0F);
-			
-			final float roughness = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughness.getFloat(intersection)) : this.textureRoughness.getFloat(intersection);
-			
-			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughness, roughness);
-			
-			pBRTBXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, fresnel, microfacetDistribution));
-		}
-		
-		if(pBRTBXDFs.size() > 0) {
-			return Optional.of(new PBRTBSDF(intersection, pBRTBXDFs));
-		}
 		
 		return Optional.empty();
 	}

@@ -8,7 +8,7 @@ Coming soon...
 
 Packages
 --------
-* `org.dayflower.util` - The Utility API.
+* `org.dayflower.utility` - The Utility API.
 
 Examples
 --------

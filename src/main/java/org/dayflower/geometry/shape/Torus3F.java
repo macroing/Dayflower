@@ -18,18 +18,18 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Doubles.solveQuartic;
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_DIVIDED_BY_2;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Floats.PI_RECIPROCAL;
-import static org.dayflower.util.Floats.getOrAdd;
-import static org.dayflower.util.Floats.asin;
-import static org.dayflower.util.Floats.atan2;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.saturate;
-import static org.dayflower.util.Floats.toFloat;
+import static org.dayflower.utility.Doubles.solveQuartic;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.asin;
+import static org.dayflower.utility.Floats.atan2;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.getOrAdd;
+import static org.dayflower.utility.Floats.saturate;
+import static org.dayflower.utility.Floats.toFloat;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

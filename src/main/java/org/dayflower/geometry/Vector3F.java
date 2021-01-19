@@ -18,20 +18,20 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.acos;
-import static org.dayflower.util.Floats.atan2;
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.finiteOrDefault;
-import static org.dayflower.util.Floats.gamma;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.saturate;
-import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Floats.sqrt;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.acos;
+import static org.dayflower.utility.Floats.atan2;
+import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.finiteOrDefault;
+import static org.dayflower.utility.Floats.gamma;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.saturate;
+import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.sqrt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
-import org.dayflower.util.Floats;
+import org.dayflower.utility.Floats;
 
 /**
  * A {@code Vector3F} denotes a 3-dimensional vector with three components, of type {@code float}.

@@ -18,7 +18,7 @@
  */
 package org.dayflower.scene.material.smallpt;
 
-import static org.dayflower.util.Floats.random;
+import static org.dayflower.utility.Floats.random;
 
 import java.util.Objects;
 import java.util.Optional;

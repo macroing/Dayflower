@@ -18,15 +18,15 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isZero;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isZero;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.util.Floats;
+import org.dayflower.utility.Floats;
 
 /**
  * A {@code Point4F} denotes a 4-dimensional point with four coordinates, of type {@code float}.

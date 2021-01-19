@@ -18,7 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.util.Ints.padding;
+import static org.dayflower.utility.Ints.padding;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -65,9 +65,9 @@ import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
-import org.dayflower.util.Floats;
-import org.dayflower.util.Ints;
-import org.dayflower.util.Lists;
+import org.dayflower.utility.Floats;
+import org.dayflower.utility.Ints;
+import org.dayflower.utility.Lists;
 
 final class SceneCompiler {
 	private final AtomicLong timeMillis;

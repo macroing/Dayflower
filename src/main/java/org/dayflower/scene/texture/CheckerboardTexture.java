@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene.texture;
 
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.fractionalPart;
-import static org.dayflower.util.Floats.sin;
+import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.fractionalPart;
+import static org.dayflower.utility.Floats.sin;
 
 import java.util.Objects;
 

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.dayflower.util.TextLine;
+import org.dayflower.utility.TextLine;
 
 /**
  * A {@code MaterialFileParser} is used for parsing Wavefront Material files.

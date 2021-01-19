@@ -18,10 +18,10 @@
  */
 package org.dayflower.sampler;
 
-import static org.dayflower.util.Ints.saturate;
-import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.utility.Ints.saturate;
+import static org.dayflower.utility.Ints.toInt;
 
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Distribution2F} represents a 2-dimensional distribution and contains methods to sample it in a continuous or discrete way.

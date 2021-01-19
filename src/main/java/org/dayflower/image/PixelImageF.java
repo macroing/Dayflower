@@ -19,15 +19,15 @@
 package org.dayflower.image;
 
 import static org.dayflower.filter.Filter2F.FILTER_TABLE_SIZE;
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.ceil;
-import static org.dayflower.util.Floats.floor;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Ints.max;
-import static org.dayflower.util.Ints.min;
-import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.ceil;
+import static org.dayflower.utility.Floats.floor;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Ints.max;
+import static org.dayflower.utility.Ints.min;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -56,8 +56,8 @@ import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
-import org.dayflower.util.BufferedImages;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.BufferedImages;
+import org.dayflower.utility.ParameterArguments;
 
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;

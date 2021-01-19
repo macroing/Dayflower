@@ -18,10 +18,10 @@
  */
 package org.dayflower.scene.bxdf.rayito;
 
-import static org.dayflower.util.Floats.PI_RECIPROCAL;
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.max;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.max;
 
 import java.util.Objects;
 import java.util.Optional;

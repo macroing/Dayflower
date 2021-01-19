@@ -18,9 +18,9 @@
  */
 package org.dayflower.renderer.gpu;
 
-import org.dayflower.util.Bytes;
-import org.dayflower.util.Floats;
-import org.dayflower.util.Ints;
+import org.dayflower.utility.Bytes;
+import org.dayflower.utility.Floats;
+import org.dayflower.utility.Ints;
 
 /**
  * An {@code AbstractImageKernel} is an abstract extension of the {@code AbstractKernel} class that adds additional features.

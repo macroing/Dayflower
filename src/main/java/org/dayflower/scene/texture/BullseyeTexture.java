@@ -18,8 +18,8 @@
  */
 package org.dayflower.scene.texture;
 
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.remainder;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.remainder;
 
 import java.util.Objects;
 

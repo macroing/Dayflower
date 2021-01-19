@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.equal;
 
 import java.util.Objects;
 import java.util.Optional;

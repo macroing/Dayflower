@@ -18,7 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.isNaN;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -34,7 +34,7 @@ import org.dayflower.geometry.Shape3D;
 import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
-import org.dayflower.util.Doubles;
+import org.dayflower.utility.Doubles;
 
 /**
  * A {@code ProceduralTerrain3D} denotes a 3-dimensional procedural terrain that uses the data type {@code double}.

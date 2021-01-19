@@ -18,19 +18,19 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.acos;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.lerp;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.saturate;
-import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Floats.sqrt;
-import static org.dayflower.util.Floats.toFloat;
-import static org.dayflower.util.Ints.saturate;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.acos;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.lerp;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.saturate;
+import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.sqrt;
+import static org.dayflower.utility.Floats.toFloat;
+import static org.dayflower.utility.Ints.saturate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Curve3F} denotes a 3-dimensional curve that uses the data type {@code float}.

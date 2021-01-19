@@ -18,7 +18,7 @@
  */
 package org.dayflower.sampler;
 
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.utility.Floats.equal;
 
 import java.util.Objects;
 

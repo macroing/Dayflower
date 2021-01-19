@@ -20,7 +20,7 @@ package org.dayflower.wavefront.object;
 
 import java.util.Objects;
 
-import org.dayflower.util.Strings;
+import org.dayflower.utility.Strings;
 
 /**
  * A {@code TextureVertexStatement} represents a texture vertex statement ({@code "vt"}) of a Wavefront Object file.

@@ -18,9 +18,9 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.minOrNaN;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.minOrNaN;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

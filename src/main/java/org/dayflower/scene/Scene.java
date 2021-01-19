@@ -18,16 +18,16 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.minOrNaN;
-import static org.dayflower.util.Floats.random;
-import static org.dayflower.util.Ints.min;
-import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.minOrNaN;
+import static org.dayflower.utility.Floats.random;
+import static org.dayflower.utility.Ints.min;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ import org.dayflower.node.NodeTraversalException;
 import org.dayflower.sampler.RandomSampler;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Scene} represents a scene and is associated with a {@link Camera} instance, a {@code List} of {@link Light} instances and a {@code List} of {@link Primitive} instances.

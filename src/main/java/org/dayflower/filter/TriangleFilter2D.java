@@ -18,9 +18,9 @@
  */
 package org.dayflower.filter;
 
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.max;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.max;
 
 import java.util.Objects;
 

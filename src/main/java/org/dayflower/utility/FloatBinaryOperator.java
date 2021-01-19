@@ -16,25 +16,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.util;
+package org.dayflower.utility;
 
 /**
- * Represents a supplier of {@code float}-valued results.
+ * Represents an operation upon two {@code float}-valued operands and producing a {@code float}-valued result.
  * <p>
- * This is the {@code float}-producing primitive specialization of {@code Supplier}.
- * <p>
- * There is no requirement that a distinct result be returned each time the supplier is invoked.
- * <p>
- * This is a functional interface whose functional method is {@link #getAsFloat()}.
+ * This is a functional interface whose functional method is {@link #applyAsFloat(float, float)}.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public interface FloatSupplier {
+public interface FloatBinaryOperator {
 	/**
-	 * Returns a result.
+	 * Applies this operator to the given operands.
+	 * <p>
+	 * Returns the operator result.
 	 * 
-	 * @return a result
+	 * @param left the first operand
+	 * @param right the second operand
+	 * @return the operator result
 	 */
-	float getAsFloat();
+	float applyAsFloat(final float left, final float right);
 }

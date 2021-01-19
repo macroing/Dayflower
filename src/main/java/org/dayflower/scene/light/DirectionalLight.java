@@ -18,8 +18,8 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.equal;
 
 import java.util.Objects;
 import java.util.Optional;

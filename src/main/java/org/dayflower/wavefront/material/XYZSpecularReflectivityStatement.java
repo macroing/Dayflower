@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.util.Strings;
+import org.dayflower.utility.Strings;
 
 /**
  * An {@code XYZSpecularReflectivityStatement} represents a specular reflectivity statement using XYZ ({@code "Ks xyz"}) of a Wavefront Material file.

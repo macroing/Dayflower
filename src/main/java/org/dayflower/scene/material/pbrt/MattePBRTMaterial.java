@@ -18,8 +18,8 @@
  */
 package org.dayflower.scene.material.pbrt;
 
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.saturate;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.saturate;
 
 import java.util.Objects;
 import java.util.Optional;

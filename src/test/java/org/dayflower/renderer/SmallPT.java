@@ -18,14 +18,14 @@
  */
 package org.dayflower.renderer;
 
-import static org.dayflower.util.Doubles.PI;
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.cos;
-import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.pow;
-import static org.dayflower.util.Doubles.random;
-import static org.dayflower.util.Doubles.sin;
-import static org.dayflower.util.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.PI;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.cos;
+import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.pow;
+import static org.dayflower.utility.Doubles.random;
+import static org.dayflower.utility.Doubles.sin;
+import static org.dayflower.utility.Doubles.sqrt;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.image.PixelImageF;

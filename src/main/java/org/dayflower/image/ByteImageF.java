@@ -18,9 +18,9 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.util.Floats.ceil;
-import static org.dayflower.util.Floats.floor;
-import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.utility.Floats.ceil;
+import static org.dayflower.utility.Floats.floor;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -39,7 +39,7 @@ import org.dayflower.color.Color3F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;

@@ -18,19 +18,19 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Doubles.PI;
-import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_4;
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.asinpi;
-import static org.dayflower.util.Doubles.atan2;
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.gamma;
-import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.pow;
-import static org.dayflower.util.Doubles.solveQuadraticSystem;
-import static org.dayflower.util.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.PI;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.asinpi;
+import static org.dayflower.utility.Doubles.atan2;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.gamma;
+import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.pow;
+import static org.dayflower.utility.Doubles.solveQuadraticSystem;
+import static org.dayflower.utility.Doubles.sqrt;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

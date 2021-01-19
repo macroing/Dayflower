@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry.boundingvolume;
 
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
 
 import java.util.Objects;
 

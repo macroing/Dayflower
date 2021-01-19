@@ -18,15 +18,15 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.isZero;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.isZero;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.util.Doubles;
+import org.dayflower.utility.Doubles;
 
 /**
  * A {@code Point4D} denotes a 4-dimensional point with four coordinates, of type {@code double}.

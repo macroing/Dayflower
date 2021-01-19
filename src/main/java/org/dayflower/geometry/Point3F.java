@@ -18,19 +18,19 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.nextDownPBRT;
-import static org.dayflower.util.Floats.nextUpPBRT;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.nextDownPBRT;
+import static org.dayflower.utility.Floats.nextUpPBRT;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.util.Floats;
+import org.dayflower.utility.Floats;
 
 /**
  * A {@code Point3F} denotes a 3-dimensional point with three coordinates, of type {@code float}.

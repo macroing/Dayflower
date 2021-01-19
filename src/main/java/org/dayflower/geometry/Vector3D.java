@@ -18,20 +18,20 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Doubles.PI;
-import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.acos;
-import static org.dayflower.util.Doubles.atan2;
-import static org.dayflower.util.Doubles.cos;
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.finiteOrDefault;
-import static org.dayflower.util.Doubles.gamma;
-import static org.dayflower.util.Doubles.isZero;
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.saturate;
-import static org.dayflower.util.Doubles.sin;
-import static org.dayflower.util.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.PI;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.acos;
+import static org.dayflower.utility.Doubles.atan2;
+import static org.dayflower.utility.Doubles.cos;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.finiteOrDefault;
+import static org.dayflower.utility.Doubles.gamma;
+import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.saturate;
+import static org.dayflower.utility.Doubles.sin;
+import static org.dayflower.utility.Doubles.sqrt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.node.Node;
-import org.dayflower.util.Doubles;
+import org.dayflower.utility.Doubles;
 
 /**
  * A {@code Vector3D} denotes a 3-dimensional vector with three components, of type {@code double}.

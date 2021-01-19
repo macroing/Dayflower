@@ -18,9 +18,9 @@
  */
 package org.dayflower.geometry.rasterizer;
 
-import static org.dayflower.util.Floats.toFloat;
-import static org.dayflower.util.Ints.abs;
-import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.utility.Floats.toFloat;
+import static org.dayflower.utility.Ints.abs;
+import static org.dayflower.utility.Ints.toInt;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Line2I;

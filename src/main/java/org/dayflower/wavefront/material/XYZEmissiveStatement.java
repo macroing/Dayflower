@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.util.Strings;
+import org.dayflower.utility.Strings;
 
 /**
  * An {@code XYZEmissiveStatement} represents a non-official emissive statement using XYZ ({@code "Ke xyz"}) of a Wavefront Material file.

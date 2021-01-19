@@ -20,7 +20,7 @@ package org.dayflower.wavefront.object;
 
 import java.util.Optional;
 
-import org.dayflower.util.TextLine;
+import org.dayflower.utility.TextLine;
 
 /**
  * An {@code ObjectFileStatementParser} can be added to an {@link ObjectFileParser} in order to parse unsupported Wavefront Object statements.

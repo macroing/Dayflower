@@ -18,10 +18,10 @@
  */
 package org.dayflower.renderer.cpu;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.random;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.random;
 
 import java.util.List;
 import java.util.Optional;

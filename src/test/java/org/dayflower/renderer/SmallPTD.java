@@ -18,12 +18,12 @@
  */
 package org.dayflower.renderer;
 
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.fresnelDielectricSchlick;
-import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.random;
-import static org.dayflower.util.Doubles.solveQuadraticSystem;
-import static org.dayflower.util.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.fresnelDielectricSchlick;
+import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.random;
+import static org.dayflower.utility.Doubles.solveQuadraticSystem;
+import static org.dayflower.utility.Doubles.sqrt;
 
 import java.util.Objects;
 

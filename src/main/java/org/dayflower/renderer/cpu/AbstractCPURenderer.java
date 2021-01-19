@@ -35,7 +35,7 @@ import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
-import org.dayflower.util.Timer;
+import org.dayflower.utility.Timer;
 
 /**
  * An {@code AbstractCPURenderer} is an abstract implementation of {@link CombinedProgressiveImageOrderRenderer} that takes care of most aspects.

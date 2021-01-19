@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene.microfacet;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.log;
-import static org.dayflower.util.Floats.max;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.log;
+import static org.dayflower.utility.Floats.max;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;

@@ -23,7 +23,7 @@ import java.util.Objects;
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * An {@code AreaLight} is an implementation of {@link Light} that represents an area light.

@@ -18,12 +18,12 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.atan2;
-import static org.dayflower.util.Doubles.cos;
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.sin;
-import static org.dayflower.util.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.atan2;
+import static org.dayflower.utility.Doubles.cos;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.sin;
+import static org.dayflower.utility.Doubles.sqrt;
 
 import java.util.Objects;
 

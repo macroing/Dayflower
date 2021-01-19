@@ -24,7 +24,7 @@ import java.util.function.Function;
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.util.Floats;
+import org.dayflower.utility.Floats;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;

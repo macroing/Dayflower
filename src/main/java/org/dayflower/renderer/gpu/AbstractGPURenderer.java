@@ -32,7 +32,7 @@ import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.sampler.NRooksSampler;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Scene;
-import org.dayflower.util.Timer;
+import org.dayflower.utility.Timer;
 
 import com.amd.aparapi.Range;
 

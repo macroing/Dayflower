@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry.boundingvolume;
 
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.min;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.min;
 
 import java.util.Objects;
 

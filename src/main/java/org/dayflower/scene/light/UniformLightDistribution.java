@@ -18,7 +18,7 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.util.Floats.array;
+import static org.dayflower.utility.Floats.array;
 
 import java.lang.reflect.Field;
 

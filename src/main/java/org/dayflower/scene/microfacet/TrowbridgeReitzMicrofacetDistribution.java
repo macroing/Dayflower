@@ -18,16 +18,16 @@
  */
 package org.dayflower.scene.microfacet;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.atan;
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isInfinite;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Floats.sqrt;
-import static org.dayflower.util.Floats.tan;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.atan;
+import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isInfinite;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.sqrt;
+import static org.dayflower.utility.Floats.tan;
 
 import java.util.Objects;
 

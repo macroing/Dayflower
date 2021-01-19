@@ -18,10 +18,10 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.isZero;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.isZero;
 
 import java.util.Objects;
 import java.util.Optional;

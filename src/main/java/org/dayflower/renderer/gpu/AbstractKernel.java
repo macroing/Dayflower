@@ -18,13 +18,13 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.dayflower.util.Longs;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.Longs;
+import org.dayflower.utility.ParameterArguments;
 
 import com.amd.aparapi.Kernel;
 

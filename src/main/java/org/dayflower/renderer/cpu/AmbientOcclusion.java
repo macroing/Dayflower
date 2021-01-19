@@ -18,9 +18,9 @@
  */
 package org.dayflower.renderer.cpu;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.normalize;
-import static org.dayflower.util.Floats.saturate;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.normalize;
+import static org.dayflower.utility.Floats.saturate;
 
 import java.util.Optional;
 

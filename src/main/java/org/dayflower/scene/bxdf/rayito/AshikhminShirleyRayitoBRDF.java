@@ -18,12 +18,12 @@
  */
 package org.dayflower.scene.bxdf.rayito;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.fresnelDielectricSchlick;
-import static org.dayflower.util.Floats.pow;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.fresnelDielectricSchlick;
+import static org.dayflower.utility.Floats.pow;
 
 import java.util.Objects;
 import java.util.Optional;

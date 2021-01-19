@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.minOrNaN;
+import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.minOrNaN;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ import org.dayflower.geometry.SurfaceIntersector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Curves3D} is a container of {@link Curve3D} instances.

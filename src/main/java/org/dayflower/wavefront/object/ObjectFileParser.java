@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import org.dayflower.util.TextLine;
+import org.dayflower.utility.TextLine;
 import org.dayflower.wavefront.object.FaceStatement.FaceElement;
 
 /**

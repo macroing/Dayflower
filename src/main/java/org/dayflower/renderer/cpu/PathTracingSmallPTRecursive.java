@@ -18,7 +18,7 @@
  */
 package org.dayflower.renderer.cpu;
 
-import static org.dayflower.util.Floats.random;
+import static org.dayflower.utility.Floats.random;
 
 import java.util.Optional;
 

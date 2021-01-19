@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.util.Strings;
+import org.dayflower.utility.Strings;
 
 /**
  * A {@code SpectralTransmissionFilterStatement} represents a transmission filter statement using spectral data ({@code "Tf spectral"}) of a Wavefront Material file.

@@ -18,13 +18,13 @@
  */
 package org.dayflower.sampler;
 
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.toFloat;
-import static org.dayflower.util.Ints.findInterval;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.toFloat;
+import static org.dayflower.utility.Ints.findInterval;
 
 import java.util.Objects;
 
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Distribution1F} represents a 1-dimensional distribution and contains methods to sample it in a continuous or discrete way.

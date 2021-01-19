@@ -18,7 +18,7 @@
  */
 package org.dayflower.scene.material.pbrt;
 
-import static org.dayflower.util.Floats.isZero;
+import static org.dayflower.utility.Floats.isZero;
 
 import java.util.ArrayList;
 import java.util.List;

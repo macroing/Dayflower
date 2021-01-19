@@ -18,11 +18,11 @@
  */
 package org.dayflower.scene.bxdf.pbrt;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_RECIPROCAL;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.random;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.random;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +35,7 @@ import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * An {@code OrenNayarPBRTBRDF} is an implementation of {@link PBRTBXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Oren-Nayar.

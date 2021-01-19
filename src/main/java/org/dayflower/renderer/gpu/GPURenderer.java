@@ -18,8 +18,8 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;

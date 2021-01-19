@@ -18,20 +18,20 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Doubles.PI;
-import static org.dayflower.util.Doubles.PI_DIVIDED_BY_2;
-import static org.dayflower.util.Doubles.PI_DIVIDED_BY_4;
-import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_4_RECIPROCAL;
-import static org.dayflower.util.Doubles.PI_RECIPROCAL;
-import static org.dayflower.util.Doubles.cos;
-import static org.dayflower.util.Doubles.isZero;
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.pow;
-import static org.dayflower.util.Doubles.random;
-import static org.dayflower.util.Doubles.sin;
-import static org.dayflower.util.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.PI;
+import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_2;
+import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_4;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4_RECIPROCAL;
+import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
+import static org.dayflower.utility.Doubles.cos;
+import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.pow;
+import static org.dayflower.utility.Doubles.random;
+import static org.dayflower.utility.Doubles.sin;
+import static org.dayflower.utility.Doubles.sqrt;
 
 /**
  * The class {@code SampleGeneratorD} contains methods for generating samples of type {@code double}.

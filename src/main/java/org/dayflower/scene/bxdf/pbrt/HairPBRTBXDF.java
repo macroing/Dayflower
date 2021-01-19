@@ -18,21 +18,21 @@
  */
 package org.dayflower.scene.bxdf.pbrt;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.asin;
-import static org.dayflower.util.Floats.atan2;
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.exp;
-import static org.dayflower.util.Floats.log;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.random;
-import static org.dayflower.util.Floats.saturate;
-import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Floats.sinh;
-import static org.dayflower.util.Floats.sqrt;
-import static org.dayflower.util.Floats.toRadians;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.asin;
+import static org.dayflower.utility.Floats.atan2;
+import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.exp;
+import static org.dayflower.utility.Floats.log;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.random;
+import static org.dayflower.utility.Floats.saturate;
+import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.sinh;
+import static org.dayflower.utility.Floats.sqrt;
+import static org.dayflower.utility.Floats.toRadians;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +46,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.fresnel.DielectricFresnel;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code HairPBRTBXDF} is an implementation of {@link PBRTBXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for hair.

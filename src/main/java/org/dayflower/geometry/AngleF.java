@@ -18,17 +18,17 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Floats.asin;
-import static org.dayflower.util.Floats.atan;
-import static org.dayflower.util.Floats.atan2;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.tan;
-import static org.dayflower.util.Floats.toDegrees;
-import static org.dayflower.util.Floats.toRadians;
-import static org.dayflower.util.Floats.wrapAround;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Floats.asin;
+import static org.dayflower.utility.Floats.atan;
+import static org.dayflower.utility.Floats.atan2;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.tan;
+import static org.dayflower.utility.Floats.toDegrees;
+import static org.dayflower.utility.Floats.toRadians;
+import static org.dayflower.utility.Floats.wrapAround;
 
 import java.util.Objects;
 

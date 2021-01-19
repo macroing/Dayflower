@@ -18,10 +18,10 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.min;
-import static org.dayflower.util.Doubles.normalize;
+import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.normalize;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

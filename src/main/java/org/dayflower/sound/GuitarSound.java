@@ -20,7 +20,7 @@ package org.dayflower.sound;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.dayflower.util.CircularBuffer;
+import org.dayflower.utility.CircularBuffer;
 
 /**
  * A {@code GuitarSound} is an implementation of {@link Sound} that simulates the sound from a guitar.

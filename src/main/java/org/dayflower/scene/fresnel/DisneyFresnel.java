@@ -18,8 +18,8 @@
  */
 package org.dayflower.scene.fresnel;
 
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.fresnelSchlickWeight;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.fresnelSchlickWeight;
 
 import java.util.Objects;
 

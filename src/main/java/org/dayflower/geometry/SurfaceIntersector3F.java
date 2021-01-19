@@ -18,10 +18,10 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.isZero;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.isZero;
 
 import java.util.Objects;
 import java.util.Optional;

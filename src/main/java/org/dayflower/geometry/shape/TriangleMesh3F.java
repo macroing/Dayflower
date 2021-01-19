@@ -18,13 +18,13 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.minOrNaN;
-import static org.dayflower.util.Ints.padding;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.minOrNaN;
+import static org.dayflower.utility.Ints.padding;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -55,8 +55,8 @@ import org.dayflower.node.Node;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-import org.dayflower.util.IntArrayOutputStream;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.IntArrayOutputStream;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code TriangleMesh3F} denotes a 3-dimensional triangle mesh that uses the data type {@code float}.

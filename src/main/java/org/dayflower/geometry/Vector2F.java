@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.sqrt;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.sqrt;
 
 import java.util.Objects;
 

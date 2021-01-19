@@ -18,15 +18,15 @@
  */
 package org.dayflower.scene.bxdf.pbrt;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.fresnelSchlickWeightLerp;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.log;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.pow;
-import static org.dayflower.util.Floats.random;
-import static org.dayflower.util.Floats.sqrt;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.fresnelSchlickWeightLerp;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.log;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.pow;
+import static org.dayflower.utility.Floats.random;
+import static org.dayflower.utility.Floats.sqrt;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +38,7 @@ import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code DisneyClearCoatPBRTBRDF} is an implementation of {@link PBRTBXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney Clear Coat reflection.

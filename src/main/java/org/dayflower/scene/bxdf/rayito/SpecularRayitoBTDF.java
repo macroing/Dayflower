@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene.bxdf.rayito;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.random;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.random;
 
 import java.util.Objects;
 import java.util.Optional;

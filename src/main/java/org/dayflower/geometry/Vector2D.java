@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.sqrt;
 
 import java.util.Objects;
 

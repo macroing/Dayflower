@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * An {@code NRooksSampler} is a {@link Sampler} implementation that produces samples based on the N-Rooks algorithm.

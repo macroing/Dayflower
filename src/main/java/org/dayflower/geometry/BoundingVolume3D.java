@@ -18,7 +18,7 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.isNaN;
 
 import org.dayflower.node.Node;
 

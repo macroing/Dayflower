@@ -18,7 +18,7 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.utility.Floats.equal;
 
 import java.awt.image.BufferedImage;
 import java.util.Objects;
@@ -26,8 +26,8 @@ import java.util.Objects;
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
-import org.dayflower.util.BufferedImages;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.BufferedImages;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code PixelF} is a pixel of a {@link PixelImageF} instance.

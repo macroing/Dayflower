@@ -18,25 +18,25 @@
  */
 package org.dayflower.color;
 
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.exp;
-import static org.dayflower.util.Doubles.finiteOrDefault;
-import static org.dayflower.util.Doubles.isInfinite;
-import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.isZero;
-import static org.dayflower.util.Doubles.lerp;
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.min;
-import static org.dayflower.util.Doubles.pow;
-import static org.dayflower.util.Doubles.toDouble;
-import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.exp;
+import static org.dayflower.utility.Doubles.finiteOrDefault;
+import static org.dayflower.utility.Doubles.isInfinite;
+import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.lerp;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.pow;
+import static org.dayflower.utility.Doubles.toDouble;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import org.dayflower.util.Doubles;
-import org.dayflower.util.Ints;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.Doubles;
+import org.dayflower.utility.Ints;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Color3D} encapsulates a color using the data type {@code double}.

@@ -18,19 +18,19 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.acos;
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.isZero;
-import static org.dayflower.util.Doubles.lerp;
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.min;
-import static org.dayflower.util.Doubles.saturate;
-import static org.dayflower.util.Doubles.sin;
-import static org.dayflower.util.Doubles.sqrt;
-import static org.dayflower.util.Doubles.toDouble;
-import static org.dayflower.util.Ints.saturate;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.acos;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.lerp;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.saturate;
+import static org.dayflower.utility.Doubles.sin;
+import static org.dayflower.utility.Doubles.sqrt;
+import static org.dayflower.utility.Doubles.toDouble;
+import static org.dayflower.utility.Ints.saturate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Curve3D} denotes a 3-dimensional curve that uses the data type {@code double}.

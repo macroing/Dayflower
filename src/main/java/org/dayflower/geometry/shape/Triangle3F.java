@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.gamma;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.gamma;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

@@ -18,7 +18,7 @@
  */
 package org.dayflower.color;
 
-import static org.dayflower.util.Ints.min;
+import static org.dayflower.utility.Ints.min;
 
 /**
  * A {@code RegularSpectralCurveF} is an implementation of {@link SpectralCurveF} that contains regular spectral data.

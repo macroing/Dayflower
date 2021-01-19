@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.util;
+package org.dayflower.utility;
 
-import static org.dayflower.util.Ints.max;
-import static org.dayflower.util.Ints.min;
+import static org.dayflower.utility.Ints.max;
+import static org.dayflower.utility.Ints.min;
 
 import java.util.List;
 import java.util.Objects;

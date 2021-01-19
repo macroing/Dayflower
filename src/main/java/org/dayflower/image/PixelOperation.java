@@ -18,7 +18,7 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.util.Ints.positiveModulo;
+import static org.dayflower.utility.Ints.positiveModulo;
 
 /**
  * A {@code PixelOperation} provides a set of operations to perform on a pixel when it is outside the boundaries of an image.

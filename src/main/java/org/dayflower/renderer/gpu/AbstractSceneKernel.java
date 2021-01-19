@@ -18,11 +18,11 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_DIVIDED_BY_2;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -62,7 +62,7 @@ import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
 import org.dayflower.scene.texture.UVTexture;
-import org.dayflower.util.Floats;
+import org.dayflower.utility.Floats;
 
 /**
  * An {@code AbstractSceneKernel} is an abstract extension of the {@code AbstractImageKernel} class that adds additional features.

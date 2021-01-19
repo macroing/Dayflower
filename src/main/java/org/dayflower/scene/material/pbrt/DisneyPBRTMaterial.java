@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene.material.pbrt;
 
-import static org.dayflower.util.Floats.lerp;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.sqrt;
+import static org.dayflower.utility.Floats.lerp;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.sqrt;
 
 import java.util.ArrayList;
 import java.util.List;

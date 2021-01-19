@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Ints.max;
-import static org.dayflower.util.Ints.min;
+import static org.dayflower.utility.Ints.max;
+import static org.dayflower.utility.Ints.min;
 
 import java.util.Objects;
 

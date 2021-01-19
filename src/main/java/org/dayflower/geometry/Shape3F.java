@@ -18,7 +18,7 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.utility.Floats.isNaN;
 
 import java.util.Objects;
 import java.util.Optional;

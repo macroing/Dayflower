@@ -18,16 +18,16 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Floats.PI_RECIPROCAL;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
 
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.util.Floats;
+import org.dayflower.utility.Floats;
 
 /**
  * A {@code Point2F} denotes a 2-dimensional point with two coordinates, of type {@code float}.

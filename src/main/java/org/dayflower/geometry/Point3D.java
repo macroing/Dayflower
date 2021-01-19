@@ -18,19 +18,19 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.isZero;
-import static org.dayflower.util.Doubles.max;
-import static org.dayflower.util.Doubles.min;
-import static org.dayflower.util.Doubles.nextDownPBRT;
-import static org.dayflower.util.Doubles.nextUpPBRT;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.nextDownPBRT;
+import static org.dayflower.utility.Doubles.nextUpPBRT;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import org.dayflower.node.Node;
-import org.dayflower.util.Doubles;
+import org.dayflower.utility.Doubles;
 
 /**
  * A {@code Point3D} denotes a 3-dimensional point with three coordinates, of type {@code double}.

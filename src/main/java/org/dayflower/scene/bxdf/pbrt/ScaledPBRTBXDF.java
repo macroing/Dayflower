@@ -26,7 +26,7 @@ import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDFResult;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code ScaledPBRTBXDF} is an implementation of {@link PBRTBXDF} that scales the result of another {@code BXDF} instance.

@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A filter that accepts or rejects a {@link Node}, based on some criterion.

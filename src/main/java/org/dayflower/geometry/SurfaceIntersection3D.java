@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.equal;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.equal;
 
 import java.util.Objects;
 import java.util.Optional;

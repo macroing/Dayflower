@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.util.Strings;
+import org.dayflower.utility.Strings;
 
 /**
  * An {@code XYZAmbientReflectivityStatement} represents an ambient reflectivity statement using XYZ ({@code "Ka xyz"}) of a Wavefront Material file.

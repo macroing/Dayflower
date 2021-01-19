@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.equal;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

@@ -18,14 +18,14 @@
  */
 package org.dayflower.geometry.boundingvolume;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.pow;
-import static org.dayflower.util.Floats.solveQuadraticSystem;
-import static org.dayflower.util.Floats.sqrt;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.pow;
+import static org.dayflower.utility.Floats.solveQuadraticSystem;
+import static org.dayflower.utility.Floats.sqrt;
 
 import java.util.Objects;
 

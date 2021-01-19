@@ -18,7 +18,7 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
 
 import java.util.Objects;
 import java.util.Optional;

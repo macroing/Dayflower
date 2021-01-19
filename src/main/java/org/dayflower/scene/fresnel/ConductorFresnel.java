@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene.fresnel;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.saturate;
-import static org.dayflower.util.Floats.sqrt;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.saturate;
+import static org.dayflower.utility.Floats.sqrt;
 
 import java.util.Objects;
 

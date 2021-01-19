@@ -18,11 +18,11 @@
  */
 package org.dayflower.scene.texture;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.perlinTurbulenceXYZ;
-import static org.dayflower.util.Floats.sin;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.perlinTurbulenceXYZ;
+import static org.dayflower.utility.Floats.sin;
 
 import java.util.Objects;
 

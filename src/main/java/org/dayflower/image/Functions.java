@@ -18,9 +18,9 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.simplexFractionalBrownianMotionXY;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.simplexFractionalBrownianMotionXY;
 
 import java.util.Objects;
 import java.util.function.Function;

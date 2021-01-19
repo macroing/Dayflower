@@ -18,13 +18,13 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Floats.sqrt;
-import static org.dayflower.util.Floats.tan;
+import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.sqrt;
+import static org.dayflower.utility.Floats.tan;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.Node;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Camera} represents a camera.

@@ -18,17 +18,17 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Floats.asinpi;
-import static org.dayflower.util.Floats.atan2;
-import static org.dayflower.util.Floats.ceil;
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.floor;
-import static org.dayflower.util.Floats.positiveModulo;
-import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Ints.padding;
-import static org.dayflower.util.Ints.positiveModulo;
-import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Floats.asinpi;
+import static org.dayflower.utility.Floats.atan2;
+import static org.dayflower.utility.Floats.ceil;
+import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.floor;
+import static org.dayflower.utility.Floats.positiveModulo;
+import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Ints.padding;
+import static org.dayflower.utility.Ints.positiveModulo;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -55,8 +55,8 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceEmittedResult;
 import org.dayflower.scene.LightRadianceIncomingResult;
-import org.dayflower.util.BufferedImages;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.BufferedImages;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * An {@code LDRImageLight} is a {@link Light} implementation backed by a low-dynamic-range (LDR) image.

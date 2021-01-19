@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Optional;
 
-import org.dayflower.util.TextLine;
+import org.dayflower.utility.TextLine;
 
 /**
  * A {@code MaterialFileStatementParser} can be added to a {@link MaterialFileParser} in order to parse unsupported Wavefront Material statements.

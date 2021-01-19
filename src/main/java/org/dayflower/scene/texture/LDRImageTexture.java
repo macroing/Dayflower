@@ -18,14 +18,14 @@
  */
 package org.dayflower.scene.texture;
 
-import static org.dayflower.util.Floats.ceil;
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.floor;
-import static org.dayflower.util.Floats.positiveModulo;
-import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Ints.padding;
-import static org.dayflower.util.Ints.positiveModulo;
-import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.utility.Floats.ceil;
+import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.floor;
+import static org.dayflower.utility.Floats.positiveModulo;
+import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Ints.padding;
+import static org.dayflower.utility.Ints.positiveModulo;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -45,8 +45,8 @@ import org.dayflower.image.ImageF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;
-import org.dayflower.util.BufferedImages;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.BufferedImages;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * An {@code LDRImageTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from a low-dynamic-range (LDR) image.

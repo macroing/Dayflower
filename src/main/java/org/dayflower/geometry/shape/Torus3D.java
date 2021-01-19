@@ -18,17 +18,17 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Doubles.PI;
-import static org.dayflower.util.Doubles.PI_DIVIDED_BY_2;
-import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Doubles.PI_RECIPROCAL;
-import static org.dayflower.util.Doubles.getOrAdd;
-import static org.dayflower.util.Doubles.asin;
-import static org.dayflower.util.Doubles.atan2;
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.saturate;
-import static org.dayflower.util.Doubles.solveQuartic;
+import static org.dayflower.utility.Doubles.PI;
+import static org.dayflower.utility.Doubles.PI_DIVIDED_BY_2;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
+import static org.dayflower.utility.Doubles.asin;
+import static org.dayflower.utility.Doubles.atan2;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.getOrAdd;
+import static org.dayflower.utility.Doubles.saturate;
+import static org.dayflower.utility.Doubles.solveQuartic;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

@@ -18,11 +18,11 @@
  */
 package org.dayflower.scene.bxdf.rayito;
 
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.floor;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Ints.min;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.floor;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Ints.min;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +38,7 @@ import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code RayitoBSDF} represents a BSDF (Bidirectional Scattering Distribution Function).

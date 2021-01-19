@@ -18,7 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Floats.isNaN;
+import static org.dayflower.utility.Floats.isNaN;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -33,8 +33,8 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.util.FloatBinaryOperator;
-import org.dayflower.util.Floats;
+import org.dayflower.utility.FloatBinaryOperator;
+import org.dayflower.utility.Floats;
 
 /**
  * A {@code ProceduralTerrain3F} denotes a 3-dimensional procedural terrain that uses the data type {@code float}.

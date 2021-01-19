@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene;
 
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.isZero;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.isZero;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Primitive} represents a primitive and is associated with a {@link Material} instance, a {@link Shape3F} instance and some other properties.

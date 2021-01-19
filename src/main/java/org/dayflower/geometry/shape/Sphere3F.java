@@ -18,21 +18,19 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Doubles.isNaN;
-import static org.dayflower.util.Doubles.solveQuadraticSystem;
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
-import static org.dayflower.util.Floats.abs;
-import static org.dayflower.util.Floats.asinpi;
-import static org.dayflower.util.Floats.atan2;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.gamma;
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.pow;
-import static org.dayflower.util.Floats.solveQuadraticSystem;
-import static org.dayflower.util.Floats.sqrt;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.asinpi;
+import static org.dayflower.utility.Floats.atan2;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.gamma;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.pow;
+import static org.dayflower.utility.Floats.solveQuadraticSystem;
+import static org.dayflower.utility.Floats.sqrt;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

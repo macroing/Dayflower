@@ -18,9 +18,9 @@
  */
 package org.dayflower.scene.bxdf.pbrt;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.random;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.random;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +35,7 @@ import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.fresnel.Fresnel;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code SpecularPBRTBTDF} is an implementation of {@link PBRTBXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for specular transmission.

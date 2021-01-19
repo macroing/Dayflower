@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.isZero;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.isZero;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

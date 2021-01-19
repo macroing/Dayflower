@@ -18,10 +18,10 @@
  */
 package org.dayflower.filter;
 
-import static org.dayflower.util.Doubles.PI;
-import static org.dayflower.util.Doubles.abs;
-import static org.dayflower.util.Doubles.equal;
-import static org.dayflower.util.Doubles.sin;
+import static org.dayflower.utility.Doubles.PI;
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.sin;
 
 import java.util.Objects;
 

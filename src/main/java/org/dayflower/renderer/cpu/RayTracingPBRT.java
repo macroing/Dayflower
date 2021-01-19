@@ -18,7 +18,7 @@
  */
 package org.dayflower.renderer.cpu;
 
-import static org.dayflower.util.Floats.abs;
+import static org.dayflower.utility.Floats.abs;
 
 import java.util.Optional;
 

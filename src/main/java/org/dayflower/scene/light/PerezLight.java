@@ -18,20 +18,19 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.util.Doubles.acos;
-import static org.dayflower.util.Doubles.cos;
-import static org.dayflower.util.Doubles.exp;
-import static org.dayflower.util.Doubles.pow;
-import static org.dayflower.util.Doubles.saturate;
-import static org.dayflower.util.Doubles.tan;
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.acos;
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.saturate;
-import static org.dayflower.util.Floats.sin;
+import static org.dayflower.utility.Doubles.acos;
+import static org.dayflower.utility.Doubles.cos;
+import static org.dayflower.utility.Doubles.exp;
+import static org.dayflower.utility.Doubles.pow;
+import static org.dayflower.utility.Doubles.saturate;
+import static org.dayflower.utility.Doubles.tan;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.acos;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.saturate;
+import static org.dayflower.utility.Floats.sin;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

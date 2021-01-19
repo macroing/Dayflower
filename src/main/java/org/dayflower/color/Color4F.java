@@ -18,21 +18,21 @@
  */
 package org.dayflower.color;
 
-import static org.dayflower.util.Floats.equal;
-import static org.dayflower.util.Floats.isInfinite;
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.min;
-import static org.dayflower.util.Floats.toFloat;
-import static org.dayflower.util.Ints.toInt;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isInfinite;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.toFloat;
+import static org.dayflower.utility.Ints.toInt;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import org.dayflower.util.Floats;
-import org.dayflower.util.Ints;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.Floats;
+import org.dayflower.utility.Ints;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Color4F} encapsulates a color using the data type {@code float}.

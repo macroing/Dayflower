@@ -20,7 +20,7 @@ package org.dayflower.wavefront.material;
 
 import java.util.Objects;
 
-import org.dayflower.util.Strings;
+import org.dayflower.utility.Strings;
 
 /**
  * An {@code XYZTransmissionFilterStatement} represents a transmission filter statement using XYZ ({@code "Tf xyz"}) of a Wavefront Material file.

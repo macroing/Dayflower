@@ -18,20 +18,20 @@
  */
 package org.dayflower.geometry;
 
-import static org.dayflower.util.Floats.PI;
-import static org.dayflower.util.Floats.PI_DIVIDED_BY_2;
-import static org.dayflower.util.Floats.PI_DIVIDED_BY_4;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4_RECIPROCAL;
-import static org.dayflower.util.Floats.PI_RECIPROCAL;
-import static org.dayflower.util.Floats.cos;
-import static org.dayflower.util.Floats.isZero;
-import static org.dayflower.util.Floats.max;
-import static org.dayflower.util.Floats.pow;
-import static org.dayflower.util.Floats.random;
-import static org.dayflower.util.Floats.sin;
-import static org.dayflower.util.Floats.sqrt;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
+import static org.dayflower.utility.Floats.PI_DIVIDED_BY_4;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.cos;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.pow;
+import static org.dayflower.utility.Floats.random;
+import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.sqrt;
 
 /**
  * The class {@code SampleGeneratorF} contains methods for generating samples of type {@code float}.

@@ -18,8 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
-import static org.dayflower.util.Floats.isNaN;
-import static org.dayflower.util.Floats.minOrNaN;
+import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.minOrNaN;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ import org.dayflower.geometry.SurfaceIntersector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-import org.dayflower.util.ParameterArguments;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code Curves3F} is a container of {@link Curve3F} instances.

@@ -23,6 +23,9 @@ import static org.dayflower.util.Floats.equal;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
+import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.util.BufferedImages;
 import org.dayflower.util.ParameterArguments;
 

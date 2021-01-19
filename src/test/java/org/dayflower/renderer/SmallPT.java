@@ -27,7 +27,7 @@ import static org.dayflower.util.Doubles.random;
 import static org.dayflower.util.Doubles.sin;
 import static org.dayflower.util.Doubles.sqrt;
 
-import org.dayflower.image.Color3F;
+import org.dayflower.color.Color3F;
 import org.dayflower.image.PixelImageF;
 
 public final class SmallPT {

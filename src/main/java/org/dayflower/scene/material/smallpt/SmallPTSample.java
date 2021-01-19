@@ -20,8 +20,8 @@ package org.dayflower.scene.material.smallpt;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 
 /**
  * A {@code SmallPTSample} represents a sample produced by a {@link SmallPTMaterial} instance.

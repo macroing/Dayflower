@@ -18,6 +18,8 @@
  */
 package org.dayflower.image;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Line2I;

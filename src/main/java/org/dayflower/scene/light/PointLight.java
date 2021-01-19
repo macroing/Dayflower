@@ -23,13 +23,13 @@ import static org.dayflower.util.Floats.PI_MULTIPLIED_BY_4;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceEmittedResult;

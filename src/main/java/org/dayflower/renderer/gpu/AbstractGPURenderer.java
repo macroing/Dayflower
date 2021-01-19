@@ -22,8 +22,8 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.image.ByteImageF;
-import org.dayflower.image.Color3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;

@@ -26,12 +26,12 @@ import static org.dayflower.util.Floats.max;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 

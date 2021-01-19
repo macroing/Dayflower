@@ -20,10 +20,10 @@ package org.dayflower.scene;
 
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.node.Node;
 
 /**

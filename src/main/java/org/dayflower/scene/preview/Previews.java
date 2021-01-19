@@ -20,9 +20,9 @@ package org.dayflower.scene.preview;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Sphere3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;

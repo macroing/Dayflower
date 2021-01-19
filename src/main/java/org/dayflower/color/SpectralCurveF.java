@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.image;
+package org.dayflower.color;
 
 /**
  * A {@code SpectralCurveF} is used for sampled or analytic spectral data.

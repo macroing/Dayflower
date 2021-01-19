@@ -21,8 +21,8 @@ package org.dayflower.scene.texture;
 import java.util.Objects;
 import java.util.function.Function;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Shape3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 
 /**

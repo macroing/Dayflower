@@ -20,8 +20,8 @@ package org.dayflower.scene.texture;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 
 /**

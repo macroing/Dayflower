@@ -44,6 +44,10 @@ import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.color.ArrayComponentOrder;
+import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
+import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.filter.Filter2F;
 import org.dayflower.filter.MitchellFilter2F;
 import org.dayflower.geometry.Point2I;

@@ -20,8 +20,8 @@ package org.dayflower.renderer.cpu;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Ray3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;
 

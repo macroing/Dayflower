@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
@@ -48,7 +49,6 @@ import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;

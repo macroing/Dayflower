@@ -24,6 +24,7 @@ import static org.dayflower.util.Floats.random;
 import java.util.List;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
@@ -31,7 +32,6 @@ import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Intersection;

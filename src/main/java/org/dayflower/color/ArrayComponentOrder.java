@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.image;
+package org.dayflower.color;
 
 /**
  * An {@code ArrayComponentOrder} is used to tell us what order the R-, G-, B- and A-components are stored in arrays.

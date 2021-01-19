@@ -20,11 +20,11 @@ package org.dayflower.scene.material.smallpt;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.Intersection;

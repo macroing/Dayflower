@@ -23,6 +23,9 @@ import java.io.File;
 import java.io.UncheckedIOException;
 import java.util.List;
 
+import org.dayflower.color.ArrayComponentOrder;
+import org.dayflower.color.Color3F;
+import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.shape.Rectangle2I;
 
 import javafx.scene.image.WritableImage;

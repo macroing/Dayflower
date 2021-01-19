@@ -37,10 +37,10 @@ import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
-import org.dayflower.image.Color3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;

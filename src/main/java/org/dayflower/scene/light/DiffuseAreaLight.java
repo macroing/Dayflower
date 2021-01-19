@@ -26,6 +26,7 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
@@ -35,7 +36,6 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;

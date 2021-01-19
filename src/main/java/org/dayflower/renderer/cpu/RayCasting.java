@@ -22,10 +22,10 @@ import static org.dayflower.util.Floats.abs;
 
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Scene;

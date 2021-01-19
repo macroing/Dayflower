@@ -18,10 +18,10 @@
  */
 package org.dayflower.image;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.image.Color3F;
 import org.dayflower.image.PixelImageF;
 
 public class FillExample {

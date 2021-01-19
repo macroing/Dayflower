@@ -22,9 +22,9 @@ import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 
 /**
  * A {@code LightRadianceIncomingResult} is returned by a {@link Light} instance and contains the computed properties.

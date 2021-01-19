@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.image;
+package org.dayflower.color;
 
 /**
  * An {@code IrregularSpectralCurveF} is an implementation of {@link SpectralCurveF} that contains irregular spectral data.
@@ -30,32 +30,32 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for copper (CU).
 	 */
-	public static final IrregularSpectralCurveF CU_ETA = new IrregularSpectralCurveF(SPD.CU_ETA, SPD.CU_WAVELENGTH);
+	public static final IrregularSpectralCurveF CU_ETA = new IrregularSpectralCurveF(SPDF.CU_ETA, SPDF.CU_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for copper (CU).
 	 */
-	public static final IrregularSpectralCurveF CU_K = new IrregularSpectralCurveF(SPD.CU_K, SPD.CU_WAVELENGTH);
+	public static final IrregularSpectralCurveF CU_K = new IrregularSpectralCurveF(SPDF.CU_K, SPDF.CU_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for gold (AU).
 	 */
-	public static final IrregularSpectralCurveF AU_ETA = new IrregularSpectralCurveF(SPD.AU_ETA, SPD.AU_WAVELENGTH);
+	public static final IrregularSpectralCurveF AU_ETA = new IrregularSpectralCurveF(SPDF.AU_ETA, SPDF.AU_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for gold (AU).
 	 */
-	public static final IrregularSpectralCurveF AU_K = new IrregularSpectralCurveF(SPD.AU_K, SPD.AU_WAVELENGTH);
+	public static final IrregularSpectralCurveF AU_K = new IrregularSpectralCurveF(SPDF.AU_K, SPDF.AU_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for silver (AG).
 	 */
-	public static final IrregularSpectralCurveF AG_ETA = new IrregularSpectralCurveF(SPD.AG_ETA, SPD.AG_WAVELENGTH);
+	public static final IrregularSpectralCurveF AG_ETA = new IrregularSpectralCurveF(SPDF.AG_ETA, SPDF.AG_WAVELENGTH);
 	
 	/**
 	 * An {@code IrregularSpectralCurveF} instance for silver (AG).
 	 */
-	public static final IrregularSpectralCurveF AG_K = new IrregularSpectralCurveF(SPD.AG_K, SPD.AG_WAVELENGTH);
+	public static final IrregularSpectralCurveF AG_K = new IrregularSpectralCurveF(SPDF.AG_K, SPDF.AG_WAVELENGTH);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

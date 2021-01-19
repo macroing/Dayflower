@@ -18,7 +18,7 @@
  */
 package org.dayflower.scene.fresnel;
 
-import org.dayflower.image.Color3F;
+import org.dayflower.color.Color3F;
 
 /**
  * A {@code Fresnel} is used to compute the Fresnel equations.

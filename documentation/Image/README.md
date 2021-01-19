@@ -48,10 +48,10 @@ public class ConvolutionKernel33FExample {
 #### Fill Example
 The following example creates two images, one empty and one random. Then it fills the empty image with a circle and the random image and saves the result to your hard drive.
 ```java
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Rectangle2I;
-import org.dayflower.image.Color3F;
 import org.dayflower.image.PixelImageF;
 
 public class FillExample {

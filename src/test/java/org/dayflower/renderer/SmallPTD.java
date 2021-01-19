@@ -27,13 +27,13 @@ import static org.dayflower.util.Doubles.sqrt;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3D;
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Point3D;
 import org.dayflower.geometry.Ray3D;
 import org.dayflower.geometry.SampleGeneratorD;
 import org.dayflower.geometry.Vector3D;
-import org.dayflower.image.Color3D;
-import org.dayflower.image.Color3F;
 import org.dayflower.image.PixelImageF;
 
 public final class SmallPTD {

@@ -25,6 +25,7 @@ import static org.dayflower.util.Floats.simplexFractionalBrownianMotionXY;
 import java.util.Objects;
 import java.util.function.Function;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 
 /**

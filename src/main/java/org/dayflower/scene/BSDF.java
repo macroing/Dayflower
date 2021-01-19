@@ -20,9 +20,9 @@ package org.dayflower.scene;
 
 import java.util.Optional;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 
 /**
  * A {@code BSDF} represents a BSDF (Bidirectional Scattering Distribution Function).

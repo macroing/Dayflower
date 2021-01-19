@@ -34,6 +34,9 @@ import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
+import org.dayflower.color.ArrayComponentOrder;
+import org.dayflower.color.Color3F;
+import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.util.ParameterArguments;

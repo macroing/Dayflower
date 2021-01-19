@@ -23,8 +23,8 @@ import static org.dayflower.util.Floats.simplexFractionalBrownianMotionXYZ;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point3F;
-import org.dayflower.image.Color3F;
 import org.dayflower.scene.Intersection;
 
 /**

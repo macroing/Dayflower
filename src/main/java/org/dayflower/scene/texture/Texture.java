@@ -18,7 +18,7 @@
  */
 package org.dayflower.scene.texture;
 
-import org.dayflower.image.Color3F;
+import org.dayflower.color.Color3F;
 import org.dayflower.node.Node;
 import org.dayflower.scene.Intersection;
 

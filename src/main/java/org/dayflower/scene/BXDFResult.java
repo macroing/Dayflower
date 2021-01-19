@@ -22,8 +22,8 @@ import static org.dayflower.util.Floats.equal;
 
 import java.util.Objects;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.image.Color3F;
 
 /**
  * A {@code BXDFResult} contains the result produced by sampling the distribution function by a {@link BXDF} instance.

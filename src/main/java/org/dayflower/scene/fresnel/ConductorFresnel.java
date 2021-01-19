@@ -24,7 +24,7 @@ import static org.dayflower.util.Floats.sqrt;
 
 import java.util.Objects;
 
-import org.dayflower.image.Color3F;
+import org.dayflower.color.Color3F;
 
 /**
  * A {@code ConductorFresnel} is used to compute the Fresnel equation for materials that are conductors.

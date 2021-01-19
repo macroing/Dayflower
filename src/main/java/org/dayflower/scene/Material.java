@@ -20,7 +20,7 @@ package org.dayflower.scene;
 
 import java.util.Optional;
 
-import org.dayflower.image.Color3F;
+import org.dayflower.color.Color3F;
 import org.dayflower.node.Node;
 
 /**

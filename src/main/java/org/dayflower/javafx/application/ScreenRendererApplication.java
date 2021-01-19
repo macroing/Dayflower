@@ -16,14 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.image;
+package org.dayflower.javafx.application;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.image.ConvolutionKernel33F;
+import org.dayflower.image.PixelImageF;
 import org.dayflower.utility.Floats;
 
 import javafx.animation.AnimationTimer;
@@ -40,42 +43,59 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+//TODO: Add Javadocs!
 public final class ScreenRendererApplication extends Application {
+	private static final String OPERATION_BLEND_BLUE = "Blend Blue";
+	private static final String OPERATION_BLEND_GREEN = "Blend Green";
+	private static final String OPERATION_BLEND_RED = "Blend Red";
+	private static final String OPERATION_BOX_BLUR = "Box Blur";
+	private static final String OPERATION_EDGE_DETECTION = "Edge Detection";
+	private static final String OPERATION_EMBOSS = "Emboss";
+	private static final String OPERATION_FRACTIONAL_BROWNIAN_MOTION = "Fractional Brownian Motion";
+	private static final String OPERATION_NONE = "None";
+	private static final String OPERATION_RANDOM = "Random";
+	private static final String OPERATION_SHARPEN = "Sharpen";
+	private static final String OPERATION_THRESHOLD = "Threshold";
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AtomicReference<Function<PixelImageF, PixelImageF>> function;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public ScreenRendererApplication() {
 		this.function = new AtomicReference<>(pixelImage -> pixelImage);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	@Override
 	public void start(final Stage stage) {
 		final AtomicReference<Function<PixelImageF, PixelImageF>> function = this.function;
 		
 		final
 		ComboBox<String> comboBox = new ComboBox<>();
-		comboBox.getItems().add("Blend Blue");
-		comboBox.getItems().add("Blend Green");
-		comboBox.getItems().add("Blend Red");
-		comboBox.getItems().add("Box Blur");
-		comboBox.getItems().add("Edge Detection");
-		comboBox.getItems().add("Emboss");
-		comboBox.getItems().add("Fractional Brownian Motion");
-		comboBox.getItems().add("None");
-		comboBox.getItems().add("Random");
-		comboBox.getItems().add("Sharpen");
-		comboBox.getItems().add("Threshold");
-		comboBox.getSelectionModel().select("None");
+		comboBox.getItems().add(OPERATION_BLEND_BLUE);
+		comboBox.getItems().add(OPERATION_BLEND_GREEN);
+		comboBox.getItems().add(OPERATION_BLEND_RED);
+		comboBox.getItems().add(OPERATION_BOX_BLUR);
+		comboBox.getItems().add(OPERATION_EDGE_DETECTION);
+		comboBox.getItems().add(OPERATION_EMBOSS);
+		comboBox.getItems().add(OPERATION_FRACTIONAL_BROWNIAN_MOTION);
+		comboBox.getItems().add(OPERATION_NONE);
+		comboBox.getItems().add(OPERATION_RANDOM);
+		comboBox.getItems().add(OPERATION_SHARPEN);
+		comboBox.getItems().add(OPERATION_THRESHOLD);
+		comboBox.getSelectionModel().select(OPERATION_NONE);
 		
 		final Button button = doCreateButton("Apply", () -> {
 			final String selectedItem = comboBox.getSelectionModel().getSelectedItem();
 			
 			if(selectedItem != null) {
 				switch(selectedItem) {
-					case "Blend Blue":
+					case OPERATION_BLEND_BLUE:
 						final Color3F colorBlue = Color3F.randomComponent3();
 						
 						function.set(pixelImage -> {
@@ -85,7 +105,7 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
-					case "Blend Green":
+					case OPERATION_BLEND_GREEN:
 						final Color3F colorGreen = Color3F.randomComponent2();
 						
 						function.set(pixelImage -> {
@@ -95,7 +115,7 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
-					case "Blend Red":
+					case OPERATION_BLEND_RED:
 						final Color3F colorRed = Color3F.randomComponent1();
 						
 						function.set(pixelImage -> {
@@ -105,7 +125,7 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
-					case "Box Blur":
+					case OPERATION_BOX_BLUR:
 						function.set(pixelImage -> {
 							pixelImage.multiply(ConvolutionKernel33F.BOX_BLUR);
 							
@@ -113,7 +133,7 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
-					case "Edge Detection":
+					case OPERATION_EDGE_DETECTION:
 						function.set(pixelImage -> {
 							pixelImage.multiply(ConvolutionKernel33F.EDGE_DETECTION);
 							
@@ -121,7 +141,7 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
-					case "Emboss":
+					case OPERATION_EMBOSS:
 						function.set(pixelImage -> {
 							pixelImage.multiply(ConvolutionKernel33F.EMBOSS);
 							
@@ -129,7 +149,7 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
-					case "Fractional Brownian Motion":
+					case OPERATION_FRACTIONAL_BROWNIAN_MOTION:
 						Color3F base = Color3F.random();
 				        
 						function.set(pixelImage -> {
@@ -148,11 +168,11 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
-					case "None":
+					case OPERATION_NONE:
 						function.set(pixelImage -> pixelImage);
 						
 						break;
-					case "Random":
+					case OPERATION_RANDOM:
 						final ConvolutionKernel33F random = ConvolutionKernel33F.random();
 						
 						function.set(pixelImage -> {
@@ -162,7 +182,7 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
-					case "Sharpen":
+					case OPERATION_SHARPEN:
 						function.set(pixelImage -> {
 							pixelImage.multiply(ConvolutionKernel33F.SHARPEN);
 							
@@ -170,7 +190,7 @@ public final class ScreenRendererApplication extends Application {
 						});
 						
 						break;
-					case "Threshold":
+					case OPERATION_THRESHOLD:
 						function.set(pixelImage -> {
 							pixelImage.update(color -> {
 								if(color.isCyan()) {
@@ -251,6 +271,7 @@ public final class ScreenRendererApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	public static void main(final String[] args) {
 		launch(args);
 	}

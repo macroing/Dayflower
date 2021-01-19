@@ -16,15 +16,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.image;
+package org.dayflower.example;
 
-import org.dayflower.image.ConvolutionKernel33F;
+import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.PixelImageF;
 
-public class ConvolutionKernel33FExample {
+public class PixelImageFScreenCaptureExample {
 	public static void main(String[] args) {
-		PixelImageF pixelImageF = PixelImageF.load("Image.png");
-		pixelImageF.multiply(ConvolutionKernel33F.SHARPEN);
-		pixelImageF.save("Convolution-Kernel-Example.png");
+		PixelImageF pixelImageF = PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		pixelImageF.save("PixelImageF-Screen-Capture-Example.png");
 	}
 }

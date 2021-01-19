@@ -16,21 +16,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.image;
+package org.dayflower.example;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2I;
-import org.dayflower.geometry.shape.Circle2I;
+import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.image.PixelImageF;
 
-public class FillExample {
+public class PixelImageFDrawExample {
 	public static void main(String[] args) {
-		PixelImageF pixelImageF0 = PixelImageF.random(50, 50);
-		
 		PixelImageF pixelImageF = new PixelImageF(150, 150);
-		pixelImageF.fillCircle(new Circle2I(new Point2I(75, 75), 50), Color3F.RED);
-		pixelImageF.fillPixelImage(pixelImageF0, pixelImageF0.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
-		pixelImageF.save("Fill-Example.png");
+		pixelImageF.drawLine(new Line2I(new Point2I(20, 20), new Point2I(100, 100)), Color3F.RED);
+		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)), Color3F.RED);
+		pixelImageF.drawTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)), Color3F.RED);
+		pixelImageF.save("PixelImageF-Draw-Example.png");
 	}
 }

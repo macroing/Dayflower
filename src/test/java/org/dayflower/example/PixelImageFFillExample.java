@@ -16,16 +16,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.image;
+package org.dayflower.example;
 
+import org.dayflower.color.Color3F;
+import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.shape.Circle2I;
+import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.PixelImageF;
 
-public class BlendExample {
+public class PixelImageFFillExample {
 	public static void main(String[] args) {
-		PixelImageF pixelImageF0 = PixelImageF.load("Image-0.png");
-		PixelImageF pixelImageF1 = PixelImageF.load("Image-1.png");
+		PixelImageF pixelImageF0 = PixelImageF.random(50, 50);
 		
-		PixelImageF pixelImageF = PixelImageF.blend(pixelImageF0, pixelImageF1, 0.5F);
-		pixelImageF.save("Blend-Example.png");
+		PixelImageF pixelImageF = new PixelImageF(150, 150);
+		pixelImageF.fillCircle(new Circle2I(new Point2I(75, 75), 50), Color3F.RED);
+		pixelImageF.fillPixelImage(pixelImageF0, pixelImageF0.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
+		pixelImageF.save("PixelImageF-Fill-Example.png");
 	}
 }

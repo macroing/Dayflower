@@ -29,7 +29,7 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.SpecularRayitoBTDF;
+import org.dayflower.scene.bxdf.rayito.SpecularRayitoBXDF;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
@@ -307,7 +307,7 @@ public final class GlassRayitoMaterial implements Material {
 		final float etaA = 1.0F;
 		final float etaB = colorEta.average();
 		
-		return Optional.of(new BSDF(intersection, new SpecularRayitoBTDF(colorKR, colorKT, etaA, etaB), true, etaB));
+		return Optional.of(new BSDF(intersection, new SpecularRayitoBXDF(colorKR, colorKT, etaA, etaB), true, etaB));
 	}
 	
 	/**

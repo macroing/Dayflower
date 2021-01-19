@@ -63,7 +63,7 @@ public final class AshikhminShirleyRayitoBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
 	public AshikhminShirleyRayitoBRDF(final Color3F reflectanceScale, final float roughness) {
-		super(BXDFType.GLOSSY_REFLECTION_AND_TRANSMISSION);
+		super(BXDFType.GLOSSY_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 		this.exponent = 1.0F / (roughness * roughness);

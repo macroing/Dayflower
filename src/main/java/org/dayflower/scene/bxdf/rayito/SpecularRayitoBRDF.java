@@ -54,7 +54,7 @@ public final class SpecularRayitoBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
 	public SpecularRayitoBRDF(final Color3F reflectanceScale) {
-		super(BXDFType.SPECULAR_REFLECTION_AND_TRANSMISSION);
+		super(BXDFType.SPECULAR_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 	}

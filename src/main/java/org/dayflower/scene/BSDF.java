@@ -224,13 +224,14 @@ public final class BSDF {
 		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
 		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
+		final Vector3F incomingWorldSpaceCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace;
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
 		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
-		final Vector3F incoming = doTransformToLocalSpace(this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace);
+		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpaceCorrectlyOriented);
 		
 		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
 		
-		final boolean isReflecting = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG) > 0.0F;
+		final boolean isReflecting = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(incomingWorldSpaceCorrectlyOriented, surfaceNormalG) > 0.0F;
 		
 		Color3F result = Color3F.BLACK;
 		
@@ -296,6 +297,7 @@ public final class BSDF {
 		
 		final Vector3F incoming = bXDFResult.getIncoming();
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
+		final Vector3F incomingWorldSpaceCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace;
 		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
 		
 		Color3F result = bXDFResult.getResult();
@@ -315,7 +317,7 @@ public final class BSDF {
 		}
 		
 		if(!matchingBXDF.getBXDFType().isSpecular()) {
-			final boolean isReflecting = Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) > 0.0F;
+			final boolean isReflecting = Vector3F.dotProduct(incomingWorldSpaceCorrectlyOriented, surfaceNormalG) * Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) > 0.0F;
 			
 			result = Color3F.BLACK;
 			
@@ -326,7 +328,7 @@ public final class BSDF {
 			}
 		}
 		
-		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace, outgoingWorldSpace, probabilityDensityFunctionValue));
+		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpaceCorrectlyOriented, outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -390,9 +392,10 @@ public final class BSDF {
 			return 0.0F;
 		}
 		
+		final Vector3F incomingWorldSpaceCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace;
 		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
 		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
-		final Vector3F incoming = doTransformToLocalSpace(this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace);
+		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpaceCorrectlyOriented);
 		
 		if(isZero(outgoing.getZ())) {
 			return 0.0F;

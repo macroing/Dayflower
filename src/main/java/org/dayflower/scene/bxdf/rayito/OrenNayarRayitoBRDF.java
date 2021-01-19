@@ -64,7 +64,7 @@ public final class OrenNayarRayitoBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code reflectanceScale} are {@code null}
 	 */
 	public OrenNayarRayitoBRDF(final AngleF angle, final Color3F reflectanceScale) {
-		super(BXDFType.DIFFUSE_REFLECTION_AND_TRANSMISSION);
+		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.angle = Objects.requireNonNull(angle, "angle == null");
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");

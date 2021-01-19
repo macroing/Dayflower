@@ -56,7 +56,7 @@ public final class LambertianRayitoBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
 	public LambertianRayitoBRDF(final Color3F reflectanceScale) {
-		super(BXDFType.DIFFUSE_REFLECTION_AND_TRANSMISSION);
+		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
 	}

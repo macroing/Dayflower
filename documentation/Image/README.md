@@ -4,7 +4,14 @@ The Image API provides image processing functionality for Dayflower.
 
 Supported Features
 ------------------
-Coming soon...
+* `ByteImageF` - An implementation of `ImageF` that stores individual pixels as four `byte` values in a `byte[]`.
+* `ConvolutionKernel33F` - A convolution kernel with three rows and three columns of data type `float`.
+* `ConvolutionKernel55F` - A convolution kernel with five rows and five columns of data type `float`.
+* `Functions` - A class that contains implementations of `Function` and can be used with a `PixelImageF` instance.
+* `ImageF` - An image that can be drawn to and uses the data type `float`.
+* `PixelF` - A pixel representation that is used by the `PixelImageF` class.
+* `PixelImageF` - An implementation of `ImageF` that stores individual pixels as `PixelF` instances.
+* `PixelOperation` - An enumeration that can perform operations on pixel coordinates or indices.
 
 Packages
 --------

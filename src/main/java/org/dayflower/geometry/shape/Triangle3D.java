@@ -20,6 +20,7 @@ package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.gamma;
+import static org.dayflower.utility.Doubles.isZero;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -287,19 +288,41 @@ public final class Triangle3D implements Shape3D {
 		final OrthonormalBasis33D bOrthonormalBasis = this.b.getOrthonormalBasis();
 		final OrthonormalBasis33D cOrthonormalBasis = this.c.getOrthonormalBasis();
 		
+		final double dU1 = this.a.getTextureCoordinates().getU() - this.c.getTextureCoordinates().getU();
+		final double dU2 = this.b.getTextureCoordinates().getU() - this.c.getTextureCoordinates().getU();
+		final double dV1 = this.a.getTextureCoordinates().getV() - this.c.getTextureCoordinates().getV();
+		final double dV2 = this.b.getTextureCoordinates().getV() - this.c.getTextureCoordinates().getV();
+		
+		final double determinantUV = dU1 * dV2 - dV1 * dU2;
+		
+		if(isZero(determinantUV)) {
+			final Vector3D gW = this.surfaceNormal;
+			final Vector3D sW = Vector3D.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
+			
+			final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(gW);
+			final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(sW);
+			
+			final double xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
+			final double yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
+			final double zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
+			
+			final Vector3D surfaceIntersectionPointError = Vector3D.multiply(new Vector3D(xAbsSum, yAbsSum, zAbsSum), gamma(7));
+			
+			return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		}
+		
+		final double determinantUVReciprocal = 1.0D / determinantUV;
+		
 		final Vector3D gW = this.surfaceNormal;
 		final Vector3D sW = Vector3D.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
 		
-		final Vector3D gV = Vector3D.directionNormalized(a, b);
-		final Vector3D sV = Vector3D.normalNormalized(aOrthonormalBasis.getV(), bOrthonormalBasis.getV(), cOrthonormalBasis.getV(), barycentricCoordinates);
+		final Vector3D dPU = Vector3D.direction(c, a);
+		final Vector3D dPV = Vector3D.direction(c, b);
 		
-//		final Vector3D gU = Vector3D.directionNormalized(a, c);
-//		final Vector3D sU = Vector3D.normalNormalized(aOrthonormalBasis.getU(), bOrthonormalBasis.getU(), cOrthonormalBasis.getU(), barycentricCoordinates);
+		final Vector3D sV = new Vector3D((-dU2 * dPU.getX() + dU1 * dPV.getX()) * determinantUVReciprocal, (-dU2 * dPU.getY() + dU1 * dPV.getY()) * determinantUVReciprocal, (-dU2 * dPU.getZ() + dU1 * dPV.getZ()) * determinantUVReciprocal);
 		
-		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(gW, gV);
+		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(gW);
 		final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(sW, sV);
-//		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(gW, gV, gU);
-//		final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(sW, sV, sU);
 		
 		final double xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
 		final double yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());

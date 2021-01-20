@@ -20,6 +20,7 @@ package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.gamma;
+import static org.dayflower.utility.Floats.isZero;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -287,19 +288,41 @@ public final class Triangle3F implements Shape3F {
 		final OrthonormalBasis33F bOrthonormalBasis = this.b.getOrthonormalBasis();
 		final OrthonormalBasis33F cOrthonormalBasis = this.c.getOrthonormalBasis();
 		
+		final float dU1 = this.a.getTextureCoordinates().getU() - this.c.getTextureCoordinates().getU();
+		final float dU2 = this.b.getTextureCoordinates().getU() - this.c.getTextureCoordinates().getU();
+		final float dV1 = this.a.getTextureCoordinates().getV() - this.c.getTextureCoordinates().getV();
+		final float dV2 = this.b.getTextureCoordinates().getV() - this.c.getTextureCoordinates().getV();
+		
+		final float determinantUV = dU1 * dV2 - dV1 * dU2;
+		
+		if(isZero(determinantUV)) {
+			final Vector3F gW = this.surfaceNormal;
+			final Vector3F sW = Vector3F.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
+			
+			final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW);
+			final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW);
+			
+			final float xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
+			final float yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
+			final float zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
+			
+			final Vector3F surfaceIntersectionPointError = Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
+			
+			return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+		}
+		
+		final float determinantUVReciprocal = 1.0F / determinantUV;
+		
 		final Vector3F gW = this.surfaceNormal;
 		final Vector3F sW = Vector3F.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
 		
-		final Vector3F gV = Vector3F.directionNormalized(a, b);
-		final Vector3F sV = Vector3F.normalNormalized(aOrthonormalBasis.getV(), bOrthonormalBasis.getV(), cOrthonormalBasis.getV(), barycentricCoordinates);
+		final Vector3F dPU = Vector3F.direction(c, a);
+		final Vector3F dPV = Vector3F.direction(c, b);
 		
-//		final Vector3F gU = Vector3F.directionNormalized(a, c);
-//		final Vector3F sU = Vector3F.normalNormalized(aOrthonormalBasis.getU(), bOrthonormalBasis.getU(), cOrthonormalBasis.getU(), barycentricCoordinates);
+		final Vector3F sV = new Vector3F((-dU2 * dPU.getX() + dU1 * dPV.getX()) * determinantUVReciprocal, (-dU2 * dPU.getY() + dU1 * dPV.getY()) * determinantUVReciprocal, (-dU2 * dPU.getZ() + dU1 * dPV.getZ()) * determinantUVReciprocal);
 		
-		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW, gV);
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW);
 		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW, sV);
-//		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW, gV, gU);
-//		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW, sV, sU);
 		
 		final float xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
 		final float yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());

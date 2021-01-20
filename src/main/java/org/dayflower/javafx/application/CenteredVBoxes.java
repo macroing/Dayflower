@@ -36,6 +36,7 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
+import org.dayflower.scene.material.pbrt.DisneyPBRTMaterial;
 import org.dayflower.scene.material.pbrt.GlassPBRTMaterial;
 import org.dayflower.scene.material.pbrt.HairPBRTMaterial;
 import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
@@ -88,7 +89,7 @@ final class CenteredVBoxes {
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Scene Configuration", 16.0D);
 		
-		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(GlassPBRTMaterial.NAME, HairPBRTMaterial.NAME, MattePBRTMaterial.NAME, MetalPBRTMaterial.NAME, MirrorPBRTMaterial.NAME, PlasticPBRTMaterial.NAME, SubstratePBRTMaterial.NAME, UberPBRTMaterial.NAME, GlassRayitoMaterial.NAME, MatteRayitoMaterial.NAME, MetalRayitoMaterial.NAME, MirrorRayitoMaterial.NAME, ClearCoatSmallPTMaterial.NAME, GlassSmallPTMaterial.NAME, MatteSmallPTMaterial.NAME, MetalSmallPTMaterial.NAME, MirrorSmallPTMaterial.NAME), MattePBRTMaterial.NAME);
+		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(DisneyPBRTMaterial.NAME, GlassPBRTMaterial.NAME, HairPBRTMaterial.NAME, MattePBRTMaterial.NAME, MetalPBRTMaterial.NAME, MirrorPBRTMaterial.NAME, PlasticPBRTMaterial.NAME, SubstratePBRTMaterial.NAME, UberPBRTMaterial.NAME, GlassRayitoMaterial.NAME, MatteRayitoMaterial.NAME, MetalRayitoMaterial.NAME, MirrorRayitoMaterial.NAME, ClearCoatSmallPTMaterial.NAME, GlassSmallPTMaterial.NAME, MatteSmallPTMaterial.NAME, MetalSmallPTMaterial.NAME, MirrorSmallPTMaterial.NAME), MattePBRTMaterial.NAME);
 		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Plane3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
 		
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
@@ -124,6 +125,8 @@ final class CenteredVBoxes {
 		
 		if(selectedItem != null) {
 			switch(selectedItem) {
+				case DisneyPBRTMaterial.NAME:
+					return new DisneyPBRTMaterial();
 				case GlassPBRTMaterial.NAME:
 					return new GlassPBRTMaterial();
 				case HairPBRTMaterial.NAME:

@@ -169,7 +169,7 @@ public final class MarbleTexture implements Texture {
 	 */
 	@Override
 	public Color3F getColor(final Intersection intersection) {
-		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint();
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
 		final float x = surfaceIntersectionPoint.getX() * this.frequency;
 		final float y = surfaceIntersectionPoint.getY() * this.frequency;

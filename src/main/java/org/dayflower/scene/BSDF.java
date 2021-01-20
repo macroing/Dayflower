@@ -229,7 +229,7 @@ public final class BSDF {
 		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpaceCorrectlyOriented);
 		
-		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalG();
 		
 		final boolean isReflecting = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(incomingWorldSpaceCorrectlyOriented, surfaceNormalG) > 0.0F;
 		
@@ -298,7 +298,7 @@ public final class BSDF {
 		final Vector3F incoming = bXDFResult.getIncoming();
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incoming);
 		final Vector3F incomingWorldSpaceCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace;
-		final Vector3F surfaceNormalG = this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisG().getW();
+		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalG();
 		
 		Color3F result = bXDFResult.getResult();
 		
@@ -472,11 +472,11 @@ public final class BSDF {
 	}
 	
 	private Vector3F doTransformToLocalSpace(final Vector3F vector) {
-		return Vector3F.normalize(Vector3F.transformReverse(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS()));
+		return Vector3F.normalize(Vector3F.transformReverse(vector, this.intersection.getOrthonormalBasisS()));
 	}
 	
 	private Vector3F doTransformToWorldSpace(final Vector3F vector) {
-		return Vector3F.normalize(Vector3F.transform(vector, this.intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS()));
+		return Vector3F.normalize(Vector3F.transform(vector, this.intersection.getOrthonormalBasisS()));
 	}
 	
 	private int doComputeMatches(final BXDFType bXDFType) {

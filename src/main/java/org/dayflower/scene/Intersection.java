@@ -22,6 +22,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.geometry.OrthonormalBasis33F;
+import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
@@ -91,12 +94,83 @@ public final class Intersection {
 	}
 	
 	/**
+	 * Returns the {@link OrthonormalBasis33F} instance that is used as the orthonormal basis for the geometry in world space.
+	 * 
+	 * @return the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for the geometry in world space
+	 */
+	public OrthonormalBasis33F getOrthonormalBasisG() {
+		return this.surfaceIntersectionWorldSpace.getOrthonormalBasisG();
+	}
+	
+	/**
+	 * Returns the {@link OrthonormalBasis33F} instance that is used as the orthonormal basis for shading in world space.
+	 * 
+	 * @return the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for shading in world space
+	 */
+	public OrthonormalBasis33F getOrthonormalBasisS() {
+		return this.surfaceIntersectionWorldSpace.getOrthonormalBasisS();
+	}
+	
+	/**
+	 * Returns the {@link Point2F} instance that is used as the texture coordinates in world space.
+	 * 
+	 * @return the {@code Point2F} instance that is used as the texture coordinates in world space
+	 */
+	public Point2F getTextureCoordinates() {
+		return this.surfaceIntersectionWorldSpace.getTextureCoordinates();
+	}
+	
+	/**
+	 * Returns the {@link Point3F} instance that is used as the surface intersection point in world space.
+	 * 
+	 * @return the {@code Point3F} instance that is used as the surface intersection point in world space
+	 */
+	public Point3F getSurfaceIntersectionPoint() {
+		return this.surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint();
+	}
+	
+	/**
 	 * Returns the {@link Primitive} instance associated with this {@code Intersection} instance.
 	 * 
 	 * @return the {@code Primitive} instance associated with this {@code Intersection} instance
 	 */
 	public Primitive getPrimitive() {
 		return this.primitive;
+	}
+	
+	/**
+	 * Returns a new {@link Ray3F} in the direction towards {@code point}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return a new {@code Ray3F} in the direction towards {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public Ray3F createRay(final Point3F point) {
+		return this.surfaceIntersectionWorldSpace.createRay(point, getSurfaceNormalS());
+	}
+	
+	/**
+	 * Returns a new {@link Ray3F} in the direction {@code direction}.
+	 * <p>
+	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param direction a {@link Vector3F} instance with the direction
+	 * @return a new {@code Ray3F} in the direction {@code direction}
+	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
+	 */
+	public Ray3F createRay(final Vector3F direction) {
+		return this.surfaceIntersectionWorldSpace.createRay(direction, getSurfaceNormalS());
+	}
+	
+	/**
+	 * Returns the {@link Ray3F} instance that was used in the intersection operation in world space.
+	 * 
+	 * @return the {@code Ray3F} instance that was used in the intersection operation in world space
+	 */
+	public Ray3F getRay() {
+		return this.surfaceIntersectionWorldSpace.getRay();
 	}
 	
 	/**
@@ -123,8 +197,26 @@ public final class Intersection {
 	 * 
 	 * @return the {@code SurfaceIntersection3F} instance associated with this {@code Intersection} instance in world space
 	 */
-	public SurfaceIntersection3F getSurfaceIntersectionWorldSpace() {
+	private SurfaceIntersection3F getSurfaceIntersectionWorldSpace() {
 		return this.surfaceIntersectionWorldSpace;
+	}
+	
+	/**
+	 * Returns the {@link Vector3F} instance that represents the surface normal for the geometry in world space.
+	 * 
+	 * @return the {@code Vector3F} instance that represents the surface normal for the geometry in world space
+	 */
+	public Vector3F getSurfaceNormalG() {
+		return this.surfaceIntersectionWorldSpace.getSurfaceNormalG();
+	}
+	
+	/**
+	 * Returns the {@link Vector3F} instance that represents the surface normal for shading in world space.
+	 * 
+	 * @return the {@code Vector3F} instance that represents the surface normal for shading in world space
+	 */
+	public Vector3F getSurfaceNormalS() {
+		return this.surfaceIntersectionWorldSpace.getSurfaceNormalS();
 	}
 	
 	/**
@@ -150,6 +242,15 @@ public final class Intersection {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns the parametric {@code t} value that represents the distance to the intersection in world space.
+	 * 
+	 * @return the parametric {@code t} value that represents the distance to the intersection in world space
+	 */
+	public float getT() {
+		return this.surfaceIntersectionWorldSpace.getT();
 	}
 	
 	/**

@@ -27,12 +27,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.dayflower.color.Color3F;
-import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
@@ -106,15 +104,13 @@ final class PathTracing {
 			
 			final Material material = primitive.getMaterial();
 			
-			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-			
-			final Vector3F surfaceNormalG = surfaceIntersection.getOrthonormalBasisG().getW();
-			final Vector3F surfaceNormalS = surfaceIntersection.getOrthonormalBasisS().getW();
+			final Vector3F surfaceNormalG = intersection.getSurfaceNormalG();
+			final Vector3F surfaceNormalS = intersection.getSurfaceNormalS();
 			
 			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
 			
 			if(!optionalBSDF.isPresent()) {
-				currentRay = surfaceIntersection.createRay(currentRay.getDirection());
+				currentRay = intersection.createRay(currentRay.getDirection());
 				
 				currentBounce--;
 				
@@ -126,7 +122,7 @@ final class PathTracing {
 			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
 			
 			if(bSDF.countBXDFsBySpecularType(false) > 0) {
-				radiance = Color3F.add(radiance, doLightEstimateAllPrimitiveLights(throughput, bSDF, scene, surfaceIntersection, outgoing, lights, primitive));
+				radiance = Color3F.add(radiance, doLightEstimateAllPrimitiveLights(throughput, bSDF, intersection, scene, outgoing, lights, primitive));
 				radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.sampleOneLightUniformDistribution(bSDF, intersection)));
 			}
 			
@@ -156,7 +152,7 @@ final class PathTracing {
 			
 			isSpecularBounce = bXDFType.isSpecular();
 			/*
-			currentRay = surfaceIntersection.createRay(incoming);
+			currentRay = intersection.createRay(incoming);
 			
 			if(currentBounce >= minimumBounceRussianRoulette) {
 				final float probability = throughput.maximum();
@@ -174,7 +170,7 @@ final class PathTracing {
 				etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalG) > 0.0F ? eta * eta : 1.0F / (eta * eta);
 			}
 			
-			currentRay = surfaceIntersection.createRay(incoming);
+			currentRay = intersection.createRay(incoming);
 			
 			final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
 			
@@ -194,7 +190,7 @@ final class PathTracing {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Color3F doLightEstimateAllPrimitiveLights(final Color3F throughput, final BSDF bSDF, final Scene scene, final SurfaceIntersection3F surfaceIntersection, final Vector3F directionO, final List<Light> lights, final Primitive primitiveToSkip) {
+	private static Color3F doLightEstimateAllPrimitiveLights(final Color3F throughput, final BSDF bSDF, final Intersection intersection, final Scene scene, final Vector3F directionO, final List<Light> lights, final Primitive primitiveToSkip) {
 		float radianceR = 0.0F;
 		float radianceG = 0.0F;
 		float radianceB = 0.0F;
@@ -203,11 +199,9 @@ final class PathTracing {
 		final float throughputG = throughput.getG();
 		final float throughputB = throughput.getB();
 		
-		final OrthonormalBasis33F orthonormalBasis = surfaceIntersection.getOrthonormalBasisS();
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
-		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
-		
-		final Vector3F surfaceNormal = orthonormalBasis.getW();
+		final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
 		
 		for(final Light light : lights) {
 			if(light instanceof PrimitiveLight) {
@@ -242,19 +236,19 @@ final class PathTracing {
 							final Color3F result = bSDF.evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);
 							
 							if(probabilityDensityFunctionValueB1 > 0.0F && !result.isBlack()) {
-								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
+								final Ray3F ray = intersection.createRay(selectedDirectionO);
 								
-								final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
+								final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 								
-								if(optionalIntersection.isPresent()) {
-									final Intersection intersection = optionalIntersection.get();
+								if(optionalIntersectionLight.isPresent()) {
+									final Intersection intersectionLight = optionalIntersectionLight.get();
 									
-									if(primitive == intersection.getPrimitive()) {
+									if(primitive == intersectionLight.getPrimitive()) {
 										final Material material = primitive.getMaterial();
 										
 										final float multipleImportanceSampleWeightLight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA1, probabilityDensityFunctionValueB1, 1, 1);
 										
-										final Color3F emittance = material.emittance(intersection);
+										final Color3F emittance = material.emittance(intersectionLight);
 										
 										final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
 										final float probabilityDensityFunctionValueReciprocal = 1.0F / probabilityDensityFunctionValueA1;
@@ -280,22 +274,22 @@ final class PathTracing {
 								final Vector3F selectedDirectionI = bSDFResult.getIncoming();
 								final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
 								
-								final Ray3F ray = surfaceIntersection.createRay(selectedDirectionO);
+								final Ray3F ray = intersection.createRay(selectedDirectionO);
 								
-								final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
+								final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 								
-								if(optionalIntersection.isPresent()) {
-									final Intersection intersection = optionalIntersection.get();
+								if(optionalIntersectionLight.isPresent()) {
+									final Intersection intersectionLight = optionalIntersectionLight.get();
 									
-									if(primitive == intersection.getPrimitive()) {
+									if(primitive == intersectionLight.getPrimitive()) {
 										final Material material = primitive.getMaterial();
 										
-										final float probabilityDensityFunctionValueB2 = primitive.evaluateProbabilityDensityFunction(ray, intersection);
+										final float probabilityDensityFunctionValueB2 = primitive.evaluateProbabilityDensityFunction(ray, intersectionLight);
 										
 										if(probabilityDensityFunctionValueB2 > 0.0F) {
 											final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA2, probabilityDensityFunctionValueB2, 1, 1);
 											
-											final Color3F emittance = material.emittance(intersection);
+											final Color3F emittance = material.emittance(intersectionLight);
 											
 											final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
 											final float probabilityDensityFunctionValueReciprocal = 1.0F / probabilityDensityFunctionValueA2;

@@ -18,6 +18,8 @@
  */
 package org.dayflower.renderer.cpu;
 
+import static org.dayflower.utility.Floats.sqrt;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -228,8 +230,8 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 					
 					final float imageX = x;
 					final float imageY = y;
-					final float pixelX = sample.getX();// * 2.0F < 1.0F ? sqrt(sample.getX() * 2.0F) - 1.0F : 1.0F - sqrt(2.0F - sample.getX() * 2.0F);//sample.getX();
-					final float pixelY = sample.getY();// * 2.0F < 1.0F ? sqrt(sample.getY() * 2.0F) - 1.0F : 1.0F - sqrt(2.0F - sample.getY() * 2.0F);//sample.getY();
+					final float pixelX = sample.getX() * 2.0F < 1.0F ? sqrt(sample.getX() * 2.0F) - 1.0F : 1.0F - sqrt(2.0F - sample.getX() * 2.0F);//sample.getX();
+					final float pixelY = sample.getY() * 2.0F < 1.0F ? sqrt(sample.getY() * 2.0F) - 1.0F : 1.0F - sqrt(2.0F - sample.getY() * 2.0F);//sample.getY();
 					
 					final Optional<Ray3F> optionalRay = camera.createPrimaryRay(imageX, imageY, pixelX, pixelY);
 					
@@ -237,9 +239,10 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 						final Ray3F ray = optionalRay.get();
 						
 						final Color3F colorRGB = radiance(ray);
-						final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
 						
-						if(!colorXYZ.hasInfinites() && !colorXYZ.hasNaNs()) {
+						if(!colorRGB.hasInfinites() && !colorRGB.hasNaNs() && colorRGB.luminance() >= -1.0e-5F) {
+							final Color3F colorXYZ = Color3F.convertRGBToXYZUsingPBRT(colorRGB);
+							
 							pixelImage.filmAddColorXYZ(imageX + pixelX, imageY + pixelY, colorXYZ);
 						}
 					}

@@ -24,7 +24,6 @@ import java.util.Optional;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
@@ -50,9 +49,7 @@ final class RayCasting {
 		if(optionalIntersection.isPresent()) {
 			final Intersection intersection = optionalIntersection.get();
 			
-			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-			
-			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
+			final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
 			
 			radiance = Color3F.multiply(Color3F.GRAY_0_50, abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));
 		} else if(isPreviewMode) {

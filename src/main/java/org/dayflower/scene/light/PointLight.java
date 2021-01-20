@@ -28,7 +28,6 @@ import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
@@ -223,10 +222,8 @@ public final class PointLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-		
 		final Point3F position = this.position;
-		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
 		final Color3F intensity = this.intensity;
 		final Color3F result = Color3F.divide(intensity, Point3F.distanceSquared(surfaceIntersectionPoint, position));

@@ -26,7 +26,6 @@ import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
@@ -66,17 +65,15 @@ final class RayTracingPBRT {
 			
 			final Material material = primitive.getMaterial();
 			
-			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-			
 			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
 			
 			if(!optionalBSDF.isPresent()) {
-				return radiance(surfaceIntersection.createRay(ray.getDirection()), sampler, scene, isPreviewMode, maximumBounce, currentBounce);
+				return radiance(intersection.createRay(ray.getDirection()), sampler, scene, isPreviewMode, maximumBounce, currentBounce);
 			}
 			
 			final BSDF bSDF = optionalBSDF.get();
 			
-			final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
+			final Vector3F normal = intersection.getSurfaceNormalS();
 			final Vector3F outgoing = Vector3F.negate(ray.getDirection());
 			
 			radiance = Color3F.add(radiance, intersection.evaluateRadianceEmitted(outgoing));
@@ -98,7 +95,7 @@ final class RayTracingPBRT {
 					if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F) {
 						final Color3F scatteringResult = bSDF.evaluateDistributionFunction(BXDFType.ALL, outgoing, normal, incoming);
 						
-						if(!scatteringResult.isBlack() && doIsLightVisible(light, lightRadianceIncomingResult, scene, surfaceIntersection)) {
+						if(!scatteringResult.isBlack() && doIsLightVisible(intersection, light, lightRadianceIncomingResult, scene)) {
 							radiance = Color3F.addMultiplyAndDivide(radiance, scatteringResult, result, abs(Vector3F.dotProduct(incoming, normal)), probabilityDensityFunctionValue);
 						}
 					}
@@ -121,9 +118,7 @@ final class RayTracingPBRT {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static Color3F doComputeSpecularReflection(final Ray3F ray, final Sampler sampler, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
-		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-		
-		final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
+		final Vector3F normal = intersection.getSurfaceNormalS();
 		final Vector3F outgoing = Vector3F.negate(ray.getDirection());
 		
 		final Sample2F sample = sampler.sample2();
@@ -143,7 +138,7 @@ final class RayTracingPBRT {
 			final float incomingDotNormalAbs = abs(incomingDotNormal);
 			
 			if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F && incomingDotNormalAbs > 0.0F) {
-				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, radiance(surfaceIntersection.createRay(incoming), sampler, scene, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
+				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, radiance(intersection.createRay(incoming), sampler, scene, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
 			}
 		}
 		
@@ -151,9 +146,7 @@ final class RayTracingPBRT {
 	}
 	
 	private static Color3F doComputeSpecularTransmission(final Ray3F ray, final Sampler sampler, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
-		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-		
-		final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
+		final Vector3F normal = intersection.getSurfaceNormalS();
 		final Vector3F outgoing = Vector3F.negate(ray.getDirection());
 		
 		final Sample2F sample = sampler.sample2();
@@ -173,29 +166,29 @@ final class RayTracingPBRT {
 			final float incomingDotNormalAbs = abs(incomingDotNormal);
 			
 			if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F && incomingDotNormalAbs > 0.0F) {
-				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, radiance(surfaceIntersection.createRay(incoming), sampler, scene, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
+				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, radiance(intersection.createRay(incoming), sampler, scene, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
 			}
 		}
 		
 		return Color3F.BLACK;
 	}
 	
-	private static boolean doIsLightVisible(final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult, final Scene scene, final SurfaceIntersection3F surfaceIntersection) {
+	private static boolean doIsLightVisible(final Intersection intersection, final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult, final Scene scene) {
 		final Point3F point = lightIncomingRadianceResult.getPoint();
-		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
-		final Ray3F ray = surfaceIntersection.createRay(point);
+		final Ray3F ray = intersection.createRay(point);
 		
 		final float tMinimum = T_MINIMUM;
 		final float tMaximum = abs(Point3F.distance(surfaceIntersectionPoint, point)) + T_MINIMUM;
 		
 		if(light instanceof AreaLight) {
-			final Optional<Intersection> optionalIntersection = scene.intersection(ray, tMinimum, tMaximum);
+			final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray, tMinimum, tMaximum);
 			
-			if(optionalIntersection.isPresent()) {
-				final Intersection intersection = optionalIntersection.get();
+			if(optionalIntersectionLight.isPresent()) {
+				final Intersection intersectionLight = optionalIntersectionLight.get();
 				
-				final Primitive primitive = intersection.getPrimitive();
+				final Primitive primitive = intersectionLight.getPrimitive();
 				
 				final Optional<AreaLight> optionalAreaLight = primitive.getAreaLight();
 				

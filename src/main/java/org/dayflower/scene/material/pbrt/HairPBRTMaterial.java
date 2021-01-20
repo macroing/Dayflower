@@ -543,7 +543,7 @@ public final class HairPBRTMaterial implements Material {
 		
 		final Color3F sigmaA = doComputeSigmaA(intersection, betaN);
 		
-		final float h = -1.0F + 2.0F * intersection.getSurfaceIntersectionWorldSpace().getTextureCoordinates().getV();
+		final float h = -1.0F + 2.0F * intersection.getTextureCoordinates().getV();
 		
 		return Optional.of(new BSDF(intersection, new HairPBRTBXDF(sigmaA, alpha, betaM, betaN, eta, h), false, eta));
 	}

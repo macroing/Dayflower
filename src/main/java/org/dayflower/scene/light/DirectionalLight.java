@@ -190,7 +190,7 @@ public final class DirectionalLight implements Light {
 		
 		final Color3F result = this.radiance;
 		
-		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint();
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		final Point3F point = Point3F.add(surfaceIntersectionPoint, this.direction, 2.0F * this.radius);
 		
 		final Vector3F incoming = this.direction;

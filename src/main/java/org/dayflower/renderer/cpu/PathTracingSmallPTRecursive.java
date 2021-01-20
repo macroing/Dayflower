@@ -24,7 +24,6 @@ import java.util.Optional;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
@@ -61,8 +60,6 @@ final class PathTracingSmallPTRecursive {
 			
 			final Material material = primitive.getMaterial();
 			
-			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-			
 			if(!(material instanceof SmallPTMaterial)) {
 				return Color3F.BLACK;
 			}
@@ -86,7 +83,7 @@ final class PathTracingSmallPTRecursive {
 				reflectance = Color3F.divide(reflectance, probability);
 			}
 			
-			return Color3F.add(emittance, Color3F.multiply(reflectance, radiance(surfaceIntersection.createRay(smallPTSample.getDirection()), scene, maximumBounce, minimumBounceRussianRoulette, currentBounce)));
+			return Color3F.add(emittance, Color3F.multiply(reflectance, radiance(intersection.createRay(smallPTSample.getDirection()), scene, maximumBounce, minimumBounceRussianRoulette, currentBounce)));
 		}
 		
 		Color3F radiance = Color3F.BLACK;

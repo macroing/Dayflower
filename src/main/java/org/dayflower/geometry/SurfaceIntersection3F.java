@@ -127,7 +127,21 @@ public final class SurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
 	 */
 	public Ray3F createRay(final Point3F point) {
-		return new Ray3F(Point3F.offset(this.surfaceIntersectionPoint, Vector3F.direction(this.surfaceIntersectionPoint, point), this.orthonormalBasisS.getW(), this.surfaceIntersectionPointError), Vector3F.direction(this.surfaceIntersectionPoint, point));
+		return createRay(point, getSurfaceNormalS());
+	}
+	
+	/**
+	 * Returns a new {@link Ray3F} in the direction towards {@code point} using the surface normal {@code surfaceNormal}.
+	 * <p>
+	 * If either {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @param surfaceNormal a {@code Vector3F} instance with the surface normal
+	 * @return a new {@code Ray3F} in the direction towards {@code point} using the surface normal {@code surfaceNormal}
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code surfaceNormal} are {@code null}
+	 */
+	public Ray3F createRay(final Point3F point, final Vector3F surfaceNormal) {
+		return createRay(Vector3F.direction(this.surfaceIntersectionPoint, point), surfaceNormal);
 	}
 	
 	/**
@@ -140,7 +154,21 @@ public final class SurfaceIntersection3F {
 	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
 	 */
 	public Ray3F createRay(final Vector3F direction) {
-		return new Ray3F(Point3F.offset(this.surfaceIntersectionPoint, direction, this.orthonormalBasisS.getW(), this.surfaceIntersectionPointError), direction);
+		return createRay(direction, getSurfaceNormalS());
+	}
+	
+	/**
+	 * Returns a new {@link Ray3F} in the direction {@code direction} using the surface normal {@code surfaceNormal}.
+	 * <p>
+	 * If either {@code direction} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param direction a {@link Vector3F} instance with the direction
+	 * @param surfaceNormal a {@code Vector3F} instance with the surface normal
+	 * @return a new {@code Ray3F} in the direction {@code direction} using the surface normal {@code surfaceNormal}
+	 * @throws NullPointerException thrown if, and only if, either {@code direction} or {@code surfaceNormal} are {@code null}
+	 */
+	public Ray3F createRay(final Vector3F direction, final Vector3F surfaceNormal) {
+		return new Ray3F(Point3F.offset(this.surfaceIntersectionPoint, direction, surfaceNormal, this.surfaceIntersectionPointError), direction);
 	}
 	
 	/**
@@ -178,6 +206,38 @@ public final class SurfaceIntersection3F {
 	 */
 	public Vector3F getSurfaceIntersectionPointError() {
 		return this.surfaceIntersectionPointError;
+	}
+	
+	/**
+	 * Returns the {@link Vector3F} instance that represents the surface normal for the geometry.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * surfaceIntersection.getOrthonormalBasisG().getW();
+	 * }
+	 * </pre>
+	 * 
+	 * @return the {@code Vector3F} instance that represents the surface normal for the geometry
+	 */
+	public Vector3F getSurfaceNormalG() {
+		return this.orthonormalBasisG.getW();
+	}
+	
+	/**
+	 * Returns the {@link Vector3F} instance that represents the surface normal for shading.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * surfaceIntersection.getOrthonormalBasisS().getW();
+	 * }
+	 * </pre>
+	 * 
+	 * @return the {@code Vector3F} instance that represents the surface normal for shading
+	 */
+	public Vector3F getSurfaceNormalS() {
+		return this.orthonormalBasisS.getW();
 	}
 	
 	/**

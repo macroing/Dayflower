@@ -24,7 +24,6 @@ import java.util.Optional;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.Material;
@@ -63,8 +62,6 @@ final class PathTracingSmallPTIterative {
 				
 				final Material material = primitive.getMaterial();
 				
-				final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-				
 				if(!(material instanceof SmallPTMaterial)) {
 					break;
 				}
@@ -79,7 +76,7 @@ final class PathTracingSmallPTIterative {
 				
 				throughput = Color3F.multiply(throughput, smallPTSample.getResult());
 				
-				currentRay = surfaceIntersection.createRay(smallPTSample.getDirection());
+				currentRay = intersection.createRay(smallPTSample.getDirection());
 				
 				if(currentBounce >= minimumBounceRussianRoulette) {
 					final float probability = throughput.maximum();

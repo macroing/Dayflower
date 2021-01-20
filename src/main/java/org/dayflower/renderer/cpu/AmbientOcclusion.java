@@ -28,7 +28,6 @@ import org.dayflower.color.Color3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Scene;
@@ -53,14 +52,12 @@ final class AmbientOcclusion {
 			
 			final Intersection intersection = optionalIntersection.get();
 			
-			final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
-			
-			final OrthonormalBasis33F orthonormalBasisGWorldSpace = surfaceIntersectionWorldSpace.getOrthonormalBasisG();
+			final OrthonormalBasis33F orthonormalBasisGWorldSpace = intersection.getOrthonormalBasisG();
 			
 			for(int sample = 0; sample < samples; sample++) {
 				final Vector3F directionWorldSpace = Vector3F.normalize(Vector3F.transform(SampleGeneratorF.sampleHemisphereUniformDistribution(), orthonormalBasisGWorldSpace));
 				
-				final Ray3F rayWorldSpaceShadow = surfaceIntersectionWorldSpace.createRay(directionWorldSpace);
+				final Ray3F rayWorldSpaceShadow = intersection.createRay(directionWorldSpace);
 				
 				if(maximumDistance > 0.0F) {
 					final Optional<Intersection> optionalIntersectionShadow = scene.intersection(rayWorldSpaceShadow, T_MINIMUM, T_MAXIMUM);
@@ -68,7 +65,7 @@ final class AmbientOcclusion {
 					if(optionalIntersectionShadow.isPresent()) {
 						final Intersection intersectionShadow = optionalIntersectionShadow.get();
 						
-						final float t = intersectionShadow.getSurfaceIntersectionWorldSpace().getT();
+						final float t = intersectionShadow.getT();
 						
 						radiance = Color3F.add(radiance, new Color3F(normalize(saturate(t, 0.0F, maximumDistance), 0.0F, maximumDistance)));
 					} else {

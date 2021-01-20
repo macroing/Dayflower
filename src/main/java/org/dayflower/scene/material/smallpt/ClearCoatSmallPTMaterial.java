@@ -26,7 +26,6 @@ import java.util.Optional;
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.SampleGeneratorF;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
@@ -240,11 +239,9 @@ public final class ClearCoatSmallPTMaterial extends SmallPTMaterial {
 	 */
 	@Override
 	public SmallPTSample sampleDistributionFunction(final Intersection intersection) {
-		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+		final Vector3F oldDirection = intersection.getRay().getDirection();
 		
-		final Vector3F oldDirection = surfaceIntersection.getRay().getDirection();
-		
-		final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
+		final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
 		final Vector3F surfaceNormalCorrectlyOriented = Vector3F.faceForwardNegated(surfaceNormal, oldDirection);
 		
 		final boolean isEntering = Vector3F.dotProduct(surfaceNormal, surfaceNormalCorrectlyOriented) > 0.0F;

@@ -23,7 +23,6 @@ import java.util.Objects;
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.SampleGeneratorF;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
@@ -183,11 +182,9 @@ public final class MatteSmallPTMaterial extends SmallPTMaterial {
 	public SmallPTSample sampleDistributionFunction(final Intersection intersection) {
 		final Color3F result = this.textureKD.getColor(intersection);
 		
-		final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
+		final Vector3F oldDirection = intersection.getRay().getDirection();
 		
-		final Vector3F oldDirection = surfaceIntersection.getRay().getDirection();
-		
-		final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
+		final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
 		final Vector3F surfaceNormalCorrectlyOriented = Vector3F.faceForwardNegated(surfaceNormal, oldDirection);
 		
 		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(surfaceNormalCorrectlyOriented);

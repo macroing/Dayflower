@@ -29,7 +29,6 @@ import java.util.Optional;
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
@@ -96,15 +95,13 @@ final class PathTracingPBRT {
 			
 			final Material material = primitive.getMaterial();
 			
-			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-			
-			final Vector3F surfaceNormalG = surfaceIntersection.getOrthonormalBasisG().getW();
-			final Vector3F surfaceNormalS = surfaceIntersection.getOrthonormalBasisS().getW();
+			final Vector3F surfaceNormalG = intersection.getSurfaceNormalG();
+			final Vector3F surfaceNormalS = intersection.getSurfaceNormalS();
 			
 			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
 			
 			if(!optionalBSDF.isPresent()) {
-				currentRay = surfaceIntersection.createRay(currentRay.getDirection());
+				currentRay = intersection.createRay(currentRay.getDirection());
 				
 				currentBounce--;
 				
@@ -151,7 +148,7 @@ final class PathTracingPBRT {
 				etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalG) > 0.0F ? eta * eta : 1.0F / (eta * eta);
 			}
 			
-			currentRay = surfaceIntersection.createRay(incoming);
+			currentRay = intersection.createRay(incoming);
 			
 			final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
 			

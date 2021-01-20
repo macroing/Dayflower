@@ -401,7 +401,7 @@ public final class PerezLight implements Light {
 		
 		final Color3F result = doRadianceSky(incomingLocal);
 		
-		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), incoming, 2.0F * this.radius);
+		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incoming, 2.0F * this.radius);
 		
 		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
 		

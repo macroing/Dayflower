@@ -245,9 +245,7 @@ public final class Primitive implements Node {
 				
 				final Intersection intersection = new Intersection(this, surfaceIntersectionObjectSpace);
 				
-				final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
-				
-				final float t = surfaceIntersectionWorldSpace.getT();
+				final float t = intersection.getT();
 				
 				if(t > tMinimum && t < tMaximum) {
 					return Optional.of(intersection);
@@ -496,7 +494,7 @@ public final class Primitive implements Node {
 	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code intersection} are {@code null}
 	 */
 	public float evaluateProbabilityDensityFunction(final Ray3F ray, final Intersection intersection) {
-		return evaluateProbabilityDensityFunction(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS().getW());
+		return evaluateProbabilityDensityFunction(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionPoint(), intersection.getSurfaceNormalS());
 	}
 	
 	/**

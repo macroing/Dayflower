@@ -45,7 +45,6 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Shape3F;
-import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
@@ -763,10 +762,8 @@ public final class Scene implements Node {
 			
 			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
 			
-			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-			
-			final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
-			final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
+			final Vector3F normal = intersection.getSurfaceNormalS();
+			final Vector3F outgoing = Vector3F.negate(intersection.getRay().getDirection());
 			
 			if(optionalLightRadianceIncomingResult.isPresent()) {
 				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
@@ -780,7 +777,7 @@ public final class Scene implements Node {
 				if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
 					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), abs(Vector3F.dotProduct(incoming, normal)));
 					
-					if(!scatteringResult.isBlack() && doCheckLightVisibility(light, lightRadianceIncomingResult, surfaceIntersection)) {
+					if(!scatteringResult.isBlack() && doCheckLightVisibility(intersection, light, lightRadianceIncomingResult)) {
 						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, lightPDFValue);
 					}
 				}
@@ -790,10 +787,8 @@ public final class Scene implements Node {
 			
 			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
 			
-			final SurfaceIntersection3F surfaceIntersection = intersection.getSurfaceIntersectionWorldSpace();
-			
-			final Vector3F normal = surfaceIntersection.getOrthonormalBasisS().getW();
-			final Vector3F outgoing = Vector3F.negate(surfaceIntersection.getRay().getDirection());
+			final Vector3F normal = intersection.getSurfaceNormalS();
+			final Vector3F outgoing = Vector3F.negate(intersection.getRay().getDirection());
 			
 			if(optionalLightRadianceIncomingResult.isPresent()) {
 				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
@@ -809,7 +804,7 @@ public final class Scene implements Node {
 					
 					final float scatteringPDFValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, normal, incoming);
 					
-					if(!scatteringResult.isBlack() && doCheckLightVisibility(light, lightRadianceIncomingResult, surfaceIntersection)) {
+					if(!scatteringResult.isBlack() && doCheckLightVisibility(intersection, light, lightRadianceIncomingResult)) {
 						final float weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightPDFValue, scatteringPDFValue, 1, 1);
 						
 						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, weight, lightPDFValue);
@@ -843,7 +838,7 @@ public final class Scene implements Node {
 						weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(scatteringPDFValue, lightPDFValue, 1, 1);
 					}
 					
-					final Ray3F ray = surfaceIntersection.createRay(incoming);
+					final Ray3F ray = intersection.createRay(incoming);
 					
 					final Color3F transmittance = Color3F.WHITE;
 					
@@ -873,11 +868,11 @@ public final class Scene implements Node {
 		return lightDirect;
 	}
 	
-	private boolean doCheckLightVisibility(final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult, final SurfaceIntersection3F surfaceIntersection) {
+	private boolean doCheckLightVisibility(final Intersection intersection, final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult) {
 		final Point3F point = lightIncomingRadianceResult.getPoint();
-		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
-		final Ray3F ray = surfaceIntersection.createRay(point);
+		final Ray3F ray = intersection.createRay(point);
 		
 		final float tMinimum = 0.001F;
 		final float tMaximum = abs(Point3F.distance(surfaceIntersectionPoint, point)) + 0.001F;

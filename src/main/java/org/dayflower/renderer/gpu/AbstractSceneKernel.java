@@ -2390,24 +2390,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float triangleCOrthonormalBasisWX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 0];
 		final float triangleCOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 1];
 		final float triangleCOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 2];
-		final float triangleAOrthonormalBasisVX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 0];
-		final float triangleAOrthonormalBasisVY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 1];
-		final float triangleAOrthonormalBasisVZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 2];
-		final float triangleBOrthonormalBasisVX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 0];
-		final float triangleBOrthonormalBasisVY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 1];
-		final float triangleBOrthonormalBasisVZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 2];
-		final float triangleCOrthonormalBasisVX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 0];
-		final float triangleCOrthonormalBasisVY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 1];
-		final float triangleCOrthonormalBasisVZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 2];
 		
 //		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'direction0' in the comments:
 		final float direction0X = triangleBPositionX - triangleAPositionX;
 		final float direction0Y = triangleBPositionY - triangleAPositionY;
 		final float direction0Z = triangleBPositionZ - triangleAPositionZ;
-		final float direction0LengthReciprocal = vector3FLengthReciprocal(direction0X, direction0Y, direction0Z);
-		final float direction0NormalizedX = direction0X * direction0LengthReciprocal;
-		final float direction0NormalizedY = direction0Y * direction0LengthReciprocal;
-		final float direction0NormalizedZ = direction0Z * direction0LengthReciprocal;
 		
 //		Compute the direction from 'triangleAPosition' to 'triangleCPosition', denoted by 'direction1' in the comments:
 		final float direction1X = triangleCPositionX - triangleAPositionX;
@@ -2469,60 +2456,71 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-//		Compute the W-direction (surface normal) of the geometric orthonormal basis:
-		final float orthonormalBasisGWX = direction0Y * direction1Z - direction0Z * direction1Y;
-		final float orthonormalBasisGWY = direction0Z * direction1X - direction0X * direction1Z;
-		final float orthonormalBasisGWZ = direction0X * direction1Y - direction0Y * direction1X;
-		final float orthonormalBasisGWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGWX, orthonormalBasisGWY, orthonormalBasisGWZ);
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGWX * orthonormalBasisGWLengthReciprocal;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGWY * orthonormalBasisGWLengthReciprocal;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGWZ * orthonormalBasisGWLengthReciprocal;
+//		Compute the surface normal for the geometry:
+		final float surfaceNormalGX = direction0Y * direction1Z - direction0Z * direction1Y;
+		final float surfaceNormalGY = direction0Z * direction1X - direction0X * direction1Z;
+		final float surfaceNormalGZ = direction0X * direction1Y - direction0Y * direction1X;
 		
-//		Compute the U-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGUX = direction0NormalizedY * orthonormalBasisGWNormalizedZ - direction0NormalizedZ * orthonormalBasisGWNormalizedY;
-		final float orthonormalBasisGUY = direction0NormalizedZ * orthonormalBasisGWNormalizedX - direction0NormalizedX * orthonormalBasisGWNormalizedZ;
-		final float orthonormalBasisGUZ = direction0NormalizedX * orthonormalBasisGWNormalizedY - direction0NormalizedY * orthonormalBasisGWNormalizedX;
-		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+//		Compute the surface normal for shading:
+		final float surfaceNormalSX = triangleAOrthonormalBasisWX * barycentricW + triangleBOrthonormalBasisWX * barycentricU + triangleCOrthonormalBasisWX * barycentricV;
+		final float surfaceNormalSY = triangleAOrthonormalBasisWY * barycentricW + triangleBOrthonormalBasisWY * barycentricU + triangleCOrthonormalBasisWY * barycentricV;
+		final float surfaceNormalSZ = triangleAOrthonormalBasisWZ * barycentricW + triangleBOrthonormalBasisWZ * barycentricU + triangleCOrthonormalBasisWZ * barycentricV;
 		
-//		Compute the V-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGWNormalizedY * orthonormalBasisGUNormalizedZ - orthonormalBasisGWNormalizedZ * orthonormalBasisGUNormalizedY;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGWNormalizedZ * orthonormalBasisGUNormalizedX - orthonormalBasisGWNormalizedX * orthonormalBasisGUNormalizedZ;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGWNormalizedX * orthonormalBasisGUNormalizedY - orthonormalBasisGWNormalizedY * orthonormalBasisGUNormalizedX;
+		final float dU1 = triangleATextureCoordinatesU - triangleCTextureCoordinatesU;
+		final float dU2 = triangleBTextureCoordinatesU - triangleCTextureCoordinatesU;
+		final float dV1 = triangleATextureCoordinatesV - triangleCTextureCoordinatesV;
+		final float dV2 = triangleBTextureCoordinatesV - triangleCTextureCoordinatesV;
 		
-//		Compute the W-direction of the shading orthonormal basis:
-		final float orthonormalBasisSWX = triangleAOrthonormalBasisWX * barycentricW + triangleBOrthonormalBasisWX * barycentricU + triangleCOrthonormalBasisWX * barycentricV;
-		final float orthonormalBasisSWY = triangleAOrthonormalBasisWY * barycentricW + triangleBOrthonormalBasisWY * barycentricU + triangleCOrthonormalBasisWY * barycentricV;
-		final float orthonormalBasisSWZ = triangleAOrthonormalBasisWZ * barycentricW + triangleBOrthonormalBasisWZ * barycentricU + triangleCOrthonormalBasisWZ * barycentricV;
-		final float orthonormalBasisSWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisSWX, orthonormalBasisSWY, orthonormalBasisSWZ);
-		final float orthonormalBasisSWNormalizedX = orthonormalBasisSWX * orthonormalBasisSWLengthReciprocal;
-		final float orthonormalBasisSWNormalizedY = orthonormalBasisSWY * orthonormalBasisSWLengthReciprocal;
-		final float orthonormalBasisSWNormalizedZ = orthonormalBasisSWZ * orthonormalBasisSWLengthReciprocal;
+		final float determinantUV = dU1 * dV2 - dV1 * dU2;
 		
-//		Compute a vector that will be used when constructing the U-direction of the shading orthonormal basis:
-		final float vX = triangleAOrthonormalBasisVX * barycentricW + triangleBOrthonormalBasisVX * barycentricU + triangleCOrthonormalBasisVX * barycentricV;
-		final float vY = triangleAOrthonormalBasisVY * barycentricW + triangleBOrthonormalBasisVY * barycentricU + triangleCOrthonormalBasisVY * barycentricV;
-		final float vZ = triangleAOrthonormalBasisVZ * barycentricW + triangleBOrthonormalBasisVZ * barycentricU + triangleCOrthonormalBasisVZ * barycentricV;
-		final float vLengthReciprocal = vector3FLengthReciprocal(vX, vY, vZ);
-		final float vNormalizedX = vX * vLengthReciprocal;
-		final float vNormalizedY = vY * vLengthReciprocal;
-		final float vNormalizedZ = vZ * vLengthReciprocal;
+//		Compute the orthonormal basis for the geometry:
+		if(determinantUV != 0.0F) {
+			orthonormalBasis33FSetFromWV(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, direction0X, direction0Y, direction0Z);
+		} else {
+			orthonormalBasis33FSetFromW(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
+		}
 		
-//		Compute the U-direction of the shading orthonormal basis:
-		final float orthonormalBasisSUX = vNormalizedY * orthonormalBasisSWNormalizedZ - vNormalizedZ * orthonormalBasisSWNormalizedY;
-		final float orthonormalBasisSUY = vNormalizedZ * orthonormalBasisSWNormalizedX - vNormalizedX * orthonormalBasisSWNormalizedZ;
-		final float orthonormalBasisSUZ = vNormalizedX * orthonormalBasisSWNormalizedY - vNormalizedY * orthonormalBasisSWNormalizedX;
-		final float orthonormalBasisSULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisSUX, orthonormalBasisSUY, orthonormalBasisSUZ);
-		final float orthonormalBasisSUNormalizedX = orthonormalBasisSUX * orthonormalBasisSULengthReciprocal;
-		final float orthonormalBasisSUNormalizedY = orthonormalBasisSUY * orthonormalBasisSULengthReciprocal;
-		final float orthonormalBasisSUNormalizedZ = orthonormalBasisSUZ * orthonormalBasisSULengthReciprocal;
+//		Retrieve the orthonormal basis for the geometry:
+		final float orthonormalBasisGUNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0];
+		final float orthonormalBasisGUNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1];
+		final float orthonormalBasisGUNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2];
+		final float orthonormalBasisGVNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0];
+		final float orthonormalBasisGVNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1];
+		final float orthonormalBasisGVNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2];
+		final float orthonormalBasisGWNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0];
+		final float orthonormalBasisGWNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1];
+		final float orthonormalBasisGWNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2];
 		
-//		Compute the V-direction of the shading orthonormal basis:
-		final float orthonormalBasisSVNormalizedX = orthonormalBasisSWNormalizedY * orthonormalBasisSUNormalizedZ - orthonormalBasisSWNormalizedZ * orthonormalBasisSUNormalizedY;
-		final float orthonormalBasisSVNormalizedY = orthonormalBasisSWNormalizedZ * orthonormalBasisSUNormalizedX - orthonormalBasisSWNormalizedX * orthonormalBasisSUNormalizedZ;
-		final float orthonormalBasisSVNormalizedZ = orthonormalBasisSWNormalizedX * orthonormalBasisSUNormalizedY - orthonormalBasisSWNormalizedY * orthonormalBasisSUNormalizedX;
+		final float dPUX = triangleAPositionX - triangleCPositionX;
+		final float dPUY = triangleAPositionY - triangleCPositionY;
+		final float dPUZ = triangleAPositionZ - triangleCPositionZ;
+		final float dPVX = triangleBPositionX - triangleCPositionX;
+		final float dPVY = triangleBPositionY - triangleCPositionY;
+		final float dPVZ = triangleBPositionZ - triangleCPositionZ;
+		
+//		Compute the orthonormal basis for shading:
+		if(determinantUV != 0.0F) {
+			final float determinantUVReciprocal = 1.0F / determinantUV;
+			
+			final float vSX = (-dU2 * dPUX + dU1 * dPVX) * determinantUVReciprocal;
+			final float vSY = (-dU2 * dPUY + dU1 * dPVY) * determinantUVReciprocal;
+			final float vSZ = (-dU2 * dPUZ + dU1 * dPVZ) * determinantUVReciprocal;
+			
+			orthonormalBasis33FSetFromWV(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ, vSX, vSY, vSZ);
+		} else {
+			orthonormalBasis33FSetFromW(surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
+		}
+		
+//		Retrieve the orthonormal basis for shading:
+		final float orthonormalBasisSUNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0];
+		final float orthonormalBasisSUNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1];
+		final float orthonormalBasisSUNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2];
+		final float orthonormalBasisSVNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0];
+		final float orthonormalBasisSVNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1];
+		final float orthonormalBasisSVNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2];
+		final float orthonormalBasisSWNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0];
+		final float orthonormalBasisSWNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1];
+		final float orthonormalBasisSWNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2];
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = triangleATextureCoordinatesU * barycentricW + triangleBTextureCoordinatesU * barycentricU + triangleCTextureCoordinatesU * barycentricV;

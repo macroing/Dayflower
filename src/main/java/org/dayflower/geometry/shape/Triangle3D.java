@@ -60,12 +60,7 @@ public final class Triangle3D implements Shape3D {
 	/**
 	 * The length of the {@code double[]}.
 	 */
-	public static final int ARRAY_LENGTH = 40;
-	
-	/**
-	 * The offset for the {@link Vector3D} instance representing the V-direction of the {@link OrthonormalBasis33D} of {@link Vertex3D} {@code A} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V = 24;
+	public static final int ARRAY_LENGTH = 24;
 	
 	/**
 	 * The offset for the {@link Vector3D} instance representing the W-direction of the {@link OrthonormalBasis33D} of {@link Vertex3D} {@code A} in the {@code double[]}.
@@ -83,11 +78,6 @@ public final class Triangle3D implements Shape3D {
 	public static final int ARRAY_OFFSET_A_TEXTURE_COORDINATES = 9;
 	
 	/**
-	 * The offset for the {@link Vector3D} instance representing the V-direction of the {@link OrthonormalBasis33D} of {@link Vertex3D} {@code B} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V = 27;
-	
-	/**
 	 * The offset for the {@link Vector3D} instance representing the W-direction of the {@link OrthonormalBasis33D} of {@link Vertex3D} {@code B} in the {@code double[]}.
 	 */
 	public static final int ARRAY_OFFSET_B_ORTHONORMAL_BASIS_W = 18;
@@ -101,11 +91,6 @@ public final class Triangle3D implements Shape3D {
 	 * The offset for the {@link Point2D} instance representing the texture coordinates of {@link Vertex3D} {@code B} in the {@code double[]}.
 	 */
 	public static final int ARRAY_OFFSET_B_TEXTURE_COORDINATES = 11;
-	
-	/**
-	 * The offset for the {@link Vector3D} instance representing the V-direction of the {@link OrthonormalBasis33D} of {@link Vertex3D} {@code C} in the {@code double[]}.
-	 */
-	public static final int ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V = 30;
 	
 	/**
 	 * The offset for the {@link Vector3D} instance representing the W-direction of the {@link OrthonormalBasis33D} of {@link Vertex3D} {@code C} in the {@code double[]}.
@@ -288,6 +273,9 @@ public final class Triangle3D implements Shape3D {
 		final OrthonormalBasis33D bOrthonormalBasis = this.b.getOrthonormalBasis();
 		final OrthonormalBasis33D cOrthonormalBasis = this.c.getOrthonormalBasis();
 		
+		final Vector3D surfaceNormalG = this.surfaceNormal;
+		final Vector3D surfaceNormalS = Vector3D.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
+		
 		final double dU1 = this.a.getTextureCoordinates().getU() - this.c.getTextureCoordinates().getU();
 		final double dU2 = this.b.getTextureCoordinates().getU() - this.c.getTextureCoordinates().getU();
 		final double dV1 = this.a.getTextureCoordinates().getV() - this.c.getTextureCoordinates().getV();
@@ -296,11 +284,8 @@ public final class Triangle3D implements Shape3D {
 		final double determinantUV = dU1 * dV2 - dV1 * dU2;
 		
 		if(isZero(determinantUV)) {
-			final Vector3D gW = this.surfaceNormal;
-			final Vector3D sW = Vector3D.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
-			
-			final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(gW);
-			final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(sW);
+			final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormalG);
+			final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(surfaceNormalS);
 			
 			final double xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
 			final double yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
@@ -313,16 +298,13 @@ public final class Triangle3D implements Shape3D {
 		
 		final double determinantUVReciprocal = 1.0D / determinantUV;
 		
-		final Vector3D gW = this.surfaceNormal;
-		final Vector3D sW = Vector3D.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
-		
 		final Vector3D dPU = Vector3D.direction(c, a);
 		final Vector3D dPV = Vector3D.direction(c, b);
 		
-		final Vector3D sV = new Vector3D((-dU2 * dPU.getX() + dU1 * dPV.getX()) * determinantUVReciprocal, (-dU2 * dPU.getY() + dU1 * dPV.getY()) * determinantUVReciprocal, (-dU2 * dPU.getZ() + dU1 * dPV.getZ()) * determinantUVReciprocal);
+		final Vector3D vS = new Vector3D((-dU2 * dPU.getX() + dU1 * dPV.getX()) * determinantUVReciprocal, (-dU2 * dPU.getY() + dU1 * dPV.getY()) * determinantUVReciprocal, (-dU2 * dPU.getZ() + dU1 * dPV.getZ()) * determinantUVReciprocal);
 		
-		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(gW);
-		final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(sW, sV);
+		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormalG);
+		final OrthonormalBasis33D orthonormalBasisS = new OrthonormalBasis33D(surfaceNormalS, vS);
 		
 		final double xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
 		final double yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
@@ -645,25 +627,6 @@ public final class Triangle3D implements Shape3D {
 		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 0] = this.c.getOrthonormalBasis().getW().getX();		//Block #3
 		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 1] = this.c.getOrthonormalBasis().getW().getY();		//Block #3
 		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 2] = this.c.getOrthonormalBasis().getW().getZ();		//Block #3
-		
-		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 0] = this.a.getOrthonormalBasis().getV().getX();		//Block #4
-		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 1] = this.a.getOrthonormalBasis().getV().getY();		//Block #4
-		array[ARRAY_OFFSET_A_ORTHONORMAL_BASIS_V + 2] = this.a.getOrthonormalBasis().getV().getZ();		//Block #4
-		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 0] = this.b.getOrthonormalBasis().getV().getX();		//Block #4
-		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 1] = this.b.getOrthonormalBasis().getV().getY();		//Block #4
-		array[ARRAY_OFFSET_B_ORTHONORMAL_BASIS_V + 2] = this.b.getOrthonormalBasis().getV().getZ();		//Block #4
-		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 0] = this.c.getOrthonormalBasis().getV().getX();		//Block #4
-		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 1] = this.c.getOrthonormalBasis().getV().getY();		//Block #4
-		array[ARRAY_OFFSET_C_ORTHONORMAL_BASIS_V + 2] = this.c.getOrthonormalBasis().getV().getZ();		//Block #5
-		
-//		Add padding:
-		array[33] = 0.0D;																				//Block #5
-		array[34] = 0.0D;																				//Block #5
-		array[35] = 0.0D;																				//Block #5
-		array[36] = 0.0D;																				//Block #5
-		array[37] = 0.0D;																				//Block #5
-		array[38] = 0.0D;																				//Block #5
-		array[39] = 0.0D;																				//Block #5
 		
 		return array;
 	}

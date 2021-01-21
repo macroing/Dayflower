@@ -19,13 +19,16 @@
 package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Doubles.PI;
+import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
+import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
 import static org.dayflower.utility.Doubles.abs;
-import static org.dayflower.utility.Doubles.asinpi;
+import static org.dayflower.utility.Doubles.acos;
 import static org.dayflower.utility.Doubles.atan2;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.gamma;
+import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.pow;
@@ -256,10 +259,16 @@ public final class Sphere3D implements Shape3D {
 		
 		final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction, t);
 		
-		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(Vector3D.directionNormalized(center, surfaceIntersectionPoint));
+		final Vector3D surfaceNormalG = Vector3D.directionNormalized(center, surfaceIntersectionPoint);
+		final Vector3D vG = new Vector3D(-PI_MULTIPLIED_BY_2 * surfaceNormalG.getY(), PI_MULTIPLIED_BY_2 * surfaceNormalG.getX(), 0.0D);
+		
+		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormalG, vG);
 		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 		
-		final Point2D textureCoordinates = new Point2D(0.5D + atan2(orthonormalBasisG.getW().getZ(), orthonormalBasisG.getW().getX()) * PI_MULTIPLIED_BY_2_RECIPROCAL, 0.5D - asinpi(orthonormalBasisG.getW().getY()));
+		final double phi = getOrAdd(atan2(surfaceNormalG.getY(), surfaceNormalG.getX()), 0.0D, PI_MULTIPLIED_BY_2);
+		final double theta = acos(surfaceNormalG.getZ());
+		
+		final Point2D textureCoordinates = new Point2D(theta * PI_RECIPROCAL, phi * PI_MULTIPLIED_BY_2_RECIPROCAL);
 		
 		final Vector3D surfaceIntersectionPointError = Vector3D.multiply(Vector3D.absolute(new Vector3D(surfaceIntersectionPoint)), gamma(5));
 		

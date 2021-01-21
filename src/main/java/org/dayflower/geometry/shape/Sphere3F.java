@@ -20,15 +20,10 @@ package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.acos;
-import static org.dayflower.utility.Floats.atan2;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.gamma;
-import static org.dayflower.utility.Floats.getOrAdd;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.pow;
@@ -265,10 +260,7 @@ public final class Sphere3F implements Shape3F {
 		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG, vG);
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
-		final float phi = getOrAdd(atan2(surfaceNormalG.getY(), surfaceNormalG.getX()), 0.0F, PI_MULTIPLIED_BY_2);
-		final float theta = acos(surfaceNormalG.getZ());
-		
-		final Point2F textureCoordinates = new Point2F(theta * PI_RECIPROCAL, phi * PI_MULTIPLIED_BY_2_RECIPROCAL);
+		final Point2F textureCoordinates = Point2F.sphericalCoordinates(surfaceNormalG);
 		
 		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(Vector3F.absolute(new Vector3F(surfaceIntersectionPoint)), gamma(5));
 		

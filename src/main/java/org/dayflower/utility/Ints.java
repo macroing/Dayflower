@@ -132,6 +132,25 @@ public final class Ints {
 	}
 	
 	/**
+	 * Packs the {@code int} values {@code a} and {@code b} into a single {@code int} value.
+	 * <p>
+	 * Returns the packed {@code int} value.
+	 * <p>
+	 * If either {@code a} or {@code b} are less than {@code 0} or greater than {@code 65535}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param a an {@code int} in the interval {@code [0, 65535]}
+	 * @param b an {@code int} in the interval {@code [0, 65535]}
+	 * @return the packed {@code int} value
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code a} or {@code b} are less than {@code 0} or greater than {@code 65535}
+	 */
+	public static int pack(final int a, final int b) {
+		ParameterArguments.requireRange(a, 0, 65535, "a");
+		ParameterArguments.requireRange(b, 0, 65535, "b");
+		
+		return (a << 16) | (b & 0xFFFF);
+	}
+	
+	/**
 	 * Returns the padding for {@code contentSize} given a block size of {@code 8}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
@@ -368,5 +387,20 @@ public final class Ints {
 			
 			return array.length == 0 ? array(minimumLength) : array;
 		}
+	}
+	
+	/**
+	 * Unpacks the {@code int} value {@code packedValue} into two {@code int} values in an {@code int[]}.
+	 * <p>
+	 * Returns an {@code int[]} with the unpacked {@code int} values.
+	 * 
+	 * @param packedValue a packed {@code int} value
+	 * @return an {@code int[]} with the unpacked {@code int} values
+	 */
+	public static int[] unpack(final int packedValue) {
+		final int a = (packedValue >> 16) & 0xFFFF;
+		final int b = (packedValue >>  0) & 0xFFFF;
+		
+		return new int[] {a, b};
 	}
 }

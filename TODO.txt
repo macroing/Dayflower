@@ -1,0 +1,19 @@
+GPU Memory Optimization:
+
+	Description:
+
+		In order to add more properties to Material instances, such as Modifiers, it is necessary to optimize the memory requirement for Material instances.
+		The int[] of the GlassSmallPTMaterial already occupies 8 int values, which represents 1 block of memory.
+		If one single element was added, it would have to occupy 16 int values and 2 blocks of memory in order to be aligned, which would decrease performance.
+		The optimizations presented below will probably also increase performance for PBRT-based Material instances, when they are added. They may also be added to other structures.
+
+	Material Structure Change:
+
+		Change the int[] structure of Material instances by combining the Texture ID and Texture offset elements into one using a packed int.
+		This change will affect how many Texture instances can be referenced because of the 16 bit limitations for both Texture IDs and Texture offsets.
+
+	Texture Structure Change:
+
+		Change the meaning of the Texture offset, such that 0 refers to the first Texture, 1 to the second and so forth. Currently it refers to the offset in the array.
+		For Texture instances with a variable length, a lookup table has to be created. LDRImageTexture is currently the only variable length Texture.
+		This change will allow more Texture instances to be referenced using the 16 bit limitations for Texture offsets, as presented in Material Structure Change.

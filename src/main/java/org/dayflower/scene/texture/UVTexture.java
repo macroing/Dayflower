@@ -62,7 +62,7 @@ public final class UVTexture implements Texture {
 	 */
 	@Override
 	public Color3F getColor(final Intersection intersection) {
-		final Point2F textureCoordinates = intersection.getSurfaceIntersectionObjectSpace().getTextureCoordinates();
+		final Point2F textureCoordinates = intersection.getTextureCoordinates();
 		
 		final float r = textureCoordinates.getU();
 		final float g = textureCoordinates.getV();

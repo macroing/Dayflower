@@ -257,8 +257,8 @@ public final class CheckerboardTexture implements Texture {
 		final float cosAngleRadians = cos(this.angle.getRadians());
 		final float sinAngleRadians = sin(this.angle.getRadians());
 		
-		final float u = intersection.getSurfaceIntersectionObjectSpace().getTextureCoordinates().getU();
-		final float v = intersection.getSurfaceIntersectionObjectSpace().getTextureCoordinates().getV();
+		final float u = intersection.getTextureCoordinates().getU();
+		final float v = intersection.getTextureCoordinates().getV();
 		
 		final boolean isU = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.scale.getU()) > 0.5F;
 		final boolean isV = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.scale.getV()) > 0.5F;

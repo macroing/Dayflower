@@ -141,7 +141,7 @@ public final class SimplexFractionalBrownianMotionTexture implements Texture {
 	 */
 	@Override
 	public Color3F getColor(final Intersection intersection) {
-		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionObjectSpace().getSurfaceIntersectionPoint();
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
 		final float x = surfaceIntersectionPoint.getX();
 		final float y = surfaceIntersectionPoint.getY();

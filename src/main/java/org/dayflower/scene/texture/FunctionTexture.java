@@ -161,11 +161,11 @@ public final class FunctionTexture implements Texture {
 		Objects.requireNonNull(textureB, "textureB == null");
 		
 		final Function<Intersection, Color3F> function = intersection -> {
-			if(intersection.getSurfaceIntersectionObjectSpace().getShape() == shapeA) {
+			if(intersection.getShape() == shapeA) {
 				return textureA.getColor(intersection);
 			}
 			
-			if(intersection.getSurfaceIntersectionObjectSpace().getShape() == shapeB) {
+			if(intersection.getShape() == shapeB) {
 				return textureB.getColor(intersection);
 			}
 			

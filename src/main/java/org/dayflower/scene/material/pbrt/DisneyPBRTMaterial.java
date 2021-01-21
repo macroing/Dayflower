@@ -49,6 +49,8 @@ import org.dayflower.scene.fresnel.DisneyFresnel;
 import org.dayflower.scene.fresnel.Fresnel;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
+import org.dayflower.scene.modifier.Modifier;
+import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
@@ -73,6 +75,7 @@ public final class DisneyPBRTMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final Modifier modifier;
 	private final Texture textureAnisotropic;
 	private final Texture textureClearCoat;
 	private final Texture textureClearCoatGloss;
@@ -500,6 +503,13 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Constructs a new {@code DisneyPBRTMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, floatSpecularTransmission, isThin, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param colorColor a {@link Color3F} instance for the color
 	 * @param colorEmission a {@code Color3F} instance for emission
@@ -520,6 +530,34 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
 	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint, final float floatSpecularTransmission, final boolean isThin) {
+		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, floatSpecularTransmission, isThin, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor}, {@code colorEmission}, {@code colorScatterDistance} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorScatterDistance a {@code Color3F} instance for the scatter distance
+	 * @param floatAnisotropic a {@code float} for the anisotropic value
+	 * @param floatClearCoat a {@code float} for the clear coat value
+	 * @param floatClearCoatGloss a {@code float} for the clear coat gloss value
+	 * @param floatDiffuseTransmission a {@code float} for the diffuse transmission
+	 * @param floatEta a {@code float} for the index of refraction (IOR)
+	 * @param floatFlatness a {@code float} for the flatness
+	 * @param floatMetallic a {@code float} for the metallic value
+	 * @param floatRoughness a {@code float} for the roughness
+	 * @param floatSheen a {@code float} for the sheen value
+	 * @param floatSheenTint a {@code float} for the sheen tint value
+	 * @param floatSpecularTint a {@code float} for the specular tint
+	 * @param floatSpecularTransmission a {@code float} for the specular transmission
+	 * @param isThin {@code true} if, and only if, this {@code DisneyPBRTMaterial} instance is thin, {@code false} otherwise
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission}, {@code colorScatterDistance} or {@code modifier} are {@code null}
+	 */
+	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint, final float floatSpecularTransmission, final boolean isThin, final Modifier modifier) {
 		this.textureColor = new ConstantTexture(Objects.requireNonNull(colorColor, "colorColor == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 		this.textureScatterDistance = new ConstantTexture(Objects.requireNonNull(colorScatterDistance, "colorScatterDistance == null"));
@@ -536,6 +574,7 @@ public final class DisneyPBRTMaterial implements Material {
 		this.textureSpecularTint = new ConstantTexture(floatSpecularTint);
 		this.textureSpecularTransmission = new ConstantTexture(floatSpecularTransmission);
 		this.isThin = isThin;
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	/**
@@ -955,6 +994,13 @@ public final class DisneyPBRTMaterial implements Material {
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
 	 * {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint} or {@code textureSpecularTransmission} are {@code null}, a {@code NullPointerException} will
 	 * be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, textureSpecularTransmission, isThin, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param textureColor a {@link Texture} instance for the color
 	 * @param textureEmission a {@code Texture} instance for emission
@@ -977,6 +1023,38 @@ public final class DisneyPBRTMaterial implements Material {
 	 *                              {@code textureSpecularTransmission} are {@code null}
 	 */
 	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint, final Texture textureSpecularTransmission, final boolean isThin) {
+		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, textureSpecularTransmission, isThin, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
+	 * {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint}, {@code textureSpecularTransmission} or {@code modifier} are {@code null}, a
+	 * {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureScatterDistance a {@code Texture} instance for the scatter distance
+	 * @param textureAnisotropic a {@code Texture} instance for the anisotropic value
+	 * @param textureClearCoat a {@code Texture} instance for the clear coat value
+	 * @param textureClearCoatGloss a {@code Texture} instance for the clear coat gloss value
+	 * @param textureDiffuseTransmission a {@code Texture} instance for the diffuse transmission
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureFlatness a {@code Texture} instance for the flatness
+	 * @param textureMetallic a {@code Texture} instance for the metallic value
+	 * @param textureRoughness a {@code Texture} instance for the roughness
+	 * @param textureSheen a {@code Texture} instance for the sheen value
+	 * @param textureSheenTint a {@code Texture} instance for the sheen tint value
+	 * @param textureSpecularTint a {@code Texture} instance for the specular tint
+	 * @param textureSpecularTransmission a {@code Texture} instance for the specular transmission
+	 * @param isThin {@code true} if, and only if, this {@code DisneyPBRTMaterial} instance is thin, {@code false} otherwise
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss},
+	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint},
+	 *                              {@code textureSpecularTransmission} or {@code modifier} are {@code null}
+	 */
+	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint, final Texture textureSpecularTransmission, final boolean isThin, final Modifier modifier) {
 		this.textureColor = Objects.requireNonNull(textureColor, "textureColor == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureScatterDistance = Objects.requireNonNull(textureScatterDistance, "textureScatterDistance == null");
@@ -993,6 +1071,7 @@ public final class DisneyPBRTMaterial implements Material {
 		this.textureSpecularTint = Objects.requireNonNull(textureSpecularTint, "textureSpecularTint == null");
 		this.textureSpecularTransmission = Objects.requireNonNull(textureSpecularTransmission, "textureSpecularTransmission == null");
 		this.isThin = isThin;
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1012,6 +1091,15 @@ public final class DisneyPBRTMaterial implements Material {
 	}
 	
 	/**
+	 * Returns the {@link Modifier} instance.
+	 * 
+	 * @return the {@code Modifier} instance
+	 */
+	public Modifier getModifier() {
+		return this.modifier;
+	}
+	
+	/**
 	 * Computes the {@link BSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
@@ -1028,6 +1116,8 @@ public final class DisneyPBRTMaterial implements Material {
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		this.modifier.modify(intersection);
 		
 		final List<BXDF> bXDFs = new ArrayList<>();
 		
@@ -1171,7 +1261,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new DisneyPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureColor, this.textureEmission, this.textureScatterDistance, this.textureAnisotropic, this.textureClearCoat, this.textureClearCoatGloss, this.textureDiffuseTransmission, this.textureEta, this.textureFlatness, this.textureMetallic, this.textureRoughness, this.textureSheen, this.textureSheenTint, this.textureSpecularTint, this.textureSpecularTransmission, Boolean.toString(this.isThin));
+		return String.format("new DisneyPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureColor, this.textureEmission, this.textureScatterDistance, this.textureAnisotropic, this.textureClearCoat, this.textureClearCoatGloss, this.textureDiffuseTransmission, this.textureEta, this.textureFlatness, this.textureMetallic, this.textureRoughness, this.textureSheen, this.textureSheenTint, this.textureSpecularTint, this.textureSpecularTransmission, Boolean.toString(this.isThin), this.modifier);
 	}
 	
 	/**
@@ -1336,6 +1426,10 @@ public final class DisneyPBRTMaterial implements Material {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.modifier.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.textureAnisotropic.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -1417,6 +1511,8 @@ public final class DisneyPBRTMaterial implements Material {
 			return true;
 		} else if(!(object instanceof DisneyPBRTMaterial)) {
 			return false;
+		} else if(!Objects.equals(this.modifier, DisneyPBRTMaterial.class.cast(object).modifier)) {
+			return false;
 		} else if(!Objects.equals(this.textureAnisotropic, DisneyPBRTMaterial.class.cast(object).textureAnisotropic)) {
 			return false;
 		} else if(!Objects.equals(this.textureClearCoat, DisneyPBRTMaterial.class.cast(object).textureClearCoat)) {
@@ -1480,6 +1576,6 @@ public final class DisneyPBRTMaterial implements Material {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureAnisotropic, this.textureClearCoat, this.textureClearCoatGloss, this.textureColor, this.textureDiffuseTransmission, this.textureEmission, this.textureEta, this.textureFlatness, this.textureMetallic, this.textureRoughness, this.textureScatterDistance, this.textureSheen, this.textureSheenTint, this.textureSpecularTint, this.textureSpecularTransmission, Boolean.valueOf(this.isThin));
+		return Objects.hash(this.modifier, this.textureAnisotropic, this.textureClearCoat, this.textureClearCoatGloss, this.textureColor, this.textureDiffuseTransmission, this.textureEmission, this.textureEta, this.textureFlatness, this.textureMetallic, this.textureRoughness, this.textureScatterDistance, this.textureSheen, this.textureSheenTint, this.textureSpecularTint, this.textureSpecularTransmission, Boolean.valueOf(this.isThin));
 	}
 }

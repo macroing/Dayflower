@@ -32,6 +32,8 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.HairPBRTBXDF;
+import org.dayflower.scene.modifier.Modifier;
+import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
@@ -56,6 +58,7 @@ public final class HairPBRTMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final Modifier modifier;
 	private final Texture textureAlpha;
 	private final Texture textureBetaM;
 	private final Texture textureBetaN;
@@ -266,6 +269,13 @@ public final class HairPBRTMaterial implements Material {
 	 * Constructs a new {@code HairPBRTMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, floatBetaN, floatEta, floatEumelanin, floatPheomelanin, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param colorColor a {@link Color3F} instance for the color
 	 * @param colorEmission a {@code Color3F} instance for emission
@@ -279,6 +289,27 @@ public final class HairPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorSigmaA} are {@code null}
 	 */
 	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorSigmaA, final float floatAlpha, final float floatBetaM, final float floatBetaN, final float floatEta, final float floatEumelanin, final float floatPheomelanin) {
+		this(colorColor, colorEmission, colorSigmaA, floatAlpha, floatBetaM, floatBetaN, floatEta, floatEumelanin, floatPheomelanin, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorColor}, {@code colorEmission}, {@code colorSigmaA} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorColor a {@link Color3F} instance for the color
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorSigmaA a {@code Color3F} instance for the Sigma A value
+	 * @param floatAlpha a {@code float} for the Alpha value
+	 * @param floatBetaM a {@code float} for the Beta M value
+	 * @param floatBetaN a {@code float} for the Beta N value
+	 * @param floatEta a {@code float} for the index of refraction (IOR)
+	 * @param floatEumelanin a {@code float} for the Eumelanin value
+	 * @param floatPheomelanin a {@code float} for the Pheomelanin value
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission}, {@code colorSigmaA} or {@code modifier} are {@code null}
+	 */
+	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorSigmaA, final float floatAlpha, final float floatBetaM, final float floatBetaN, final float floatEta, final float floatEumelanin, final float floatPheomelanin, final Modifier modifier) {
 		this.textureColor = new ConstantTexture(Objects.requireNonNull(colorColor, "colorColor == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 		this.textureSigmaA = new ConstantTexture(Objects.requireNonNull(colorSigmaA, "colorSigmaA == null"));
@@ -288,6 +319,7 @@ public final class HairPBRTMaterial implements Material {
 		this.textureEta = new ConstantTexture(floatEta);
 		this.textureEumelanin = new ConstantTexture(floatEumelanin);
 		this.texturePheomelanin = new ConstantTexture(floatPheomelanin);
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	/**
@@ -477,6 +509,13 @@ public final class HairPBRTMaterial implements Material {
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureEta}, {@code textureEumelanin} or {@code texturePheomelanin} are {@code null}, a
 	 * {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new HairPBRTMaterial(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, textureBetaN, textureEta, textureEumelanin, texturePheomelanin, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param textureColor a {@link Texture} instance for the color
 	 * @param textureEmission a {@code Texture} instance for emission
@@ -491,6 +530,29 @@ public final class HairPBRTMaterial implements Material {
 	 *                              {@code texturePheomelanin} are {@code null}
 	 */
 	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureSigmaA, final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN, final Texture textureEta, final Texture textureEumelanin, final Texture texturePheomelanin) {
+		this(textureColor, textureEmission, textureSigmaA, textureAlpha, textureBetaM, textureBetaN, textureEta, textureEumelanin, texturePheomelanin, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code HairPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureEta}, {@code textureEumelanin}, {@code texturePheomelanin} or {@code modifier}
+	 * are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureColor a {@link Texture} instance for the color
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureSigmaA a {@code Texture} instance for the Sigma A value
+	 * @param textureAlpha a {@code Texture} instance for the Alpha value
+	 * @param textureBetaM a {@code Texture} instance for the Beta M value
+	 * @param textureBetaN a {@code Texture} instance for the Beta N value
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureEumelanin a {@code Texture} instance for the Eumelanin value
+	 * @param texturePheomelanin a {@code Texture} instance for the Pheomelanin value
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureSigmaA}, {@code textureAlpha}, {@code textureBetaM}, {@code textureBetaN}, {@code textureEta}, {@code textureEumelanin},
+	 *                              {@code texturePheomelanin} or {@code modifier} are {@code null}
+	 */
+	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureSigmaA, final Texture textureAlpha, final Texture textureBetaM, final Texture textureBetaN, final Texture textureEta, final Texture textureEumelanin, final Texture texturePheomelanin, final Modifier modifier) {
 		this.textureColor = Objects.requireNonNull(textureColor, "textureColor == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureSigmaA = Objects.requireNonNull(textureSigmaA, "textureSigmaA == null");
@@ -500,6 +562,7 @@ public final class HairPBRTMaterial implements Material {
 		this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
 		this.textureEumelanin = Objects.requireNonNull(textureEumelanin, "textureEumelanin == null");
 		this.texturePheomelanin = Objects.requireNonNull(texturePheomelanin, "texturePheomelanin == null");
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -519,6 +582,15 @@ public final class HairPBRTMaterial implements Material {
 	}
 	
 	/**
+	 * Returns the {@link Modifier} instance.
+	 * 
+	 * @return the {@code Modifier} instance
+	 */
+	public Modifier getModifier() {
+		return this.modifier;
+	}
+	
+	/**
 	 * Computes the {@link BSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
@@ -535,6 +607,8 @@ public final class HairPBRTMaterial implements Material {
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		this.modifier.modify(intersection);
 		
 		final float alpha = this.textureAlpha.getFloat(intersection);
 		final float betaM = this.textureBetaM.getFloat(intersection);
@@ -586,7 +660,7 @@ public final class HairPBRTMaterial implements Material {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new HairPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureColor, this.textureEmission, this.textureSigmaA, this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureEta, this.textureEumelanin, this.texturePheomelanin);
+		return String.format("new HairPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureColor, this.textureEmission, this.textureSigmaA, this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.modifier);
 	}
 	
 	/**
@@ -697,6 +771,10 @@ public final class HairPBRTMaterial implements Material {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.modifier.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.textureAlpha.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -754,6 +832,8 @@ public final class HairPBRTMaterial implements Material {
 			return true;
 		} else if(!(object instanceof HairPBRTMaterial)) {
 			return false;
+		} else if(!Objects.equals(this.modifier, HairPBRTMaterial.class.cast(object).modifier)) {
+			return false;
 		} else if(!Objects.equals(this.textureAlpha, HairPBRTMaterial.class.cast(object).textureAlpha)) {
 			return false;
 		} else if(!Objects.equals(this.textureBetaM, HairPBRTMaterial.class.cast(object).textureBetaM)) {
@@ -794,7 +874,7 @@ public final class HairPBRTMaterial implements Material {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureColor, this.textureEmission, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.textureSigmaA);
+		return Objects.hash(this.modifier, this.textureAlpha, this.textureBetaM, this.textureBetaN, this.textureColor, this.textureEmission, this.textureEta, this.textureEumelanin, this.texturePheomelanin, this.textureSigmaA);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

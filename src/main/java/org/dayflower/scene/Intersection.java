@@ -26,13 +26,14 @@ import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 
 /**
  * An {@code Intersection} denotes an intersection between a {@link Ray3F} instance and a {@link Primitive} instance.
  * <p>
- * This class is indirectly mutable and therefore not thread-safe.
+ * This class is mutable and therefore not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -45,6 +46,8 @@ public final class Intersection {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private OrthonormalBasis33F orthonormalBasisG;
+	private OrthonormalBasis33F orthonormalBasisS;
 	private final Primitive primitive;
 	private final SurfaceIntersection3F surfaceIntersectionObjectSpace;
 	private final SurfaceIntersection3F surfaceIntersectionWorldSpace;
@@ -64,6 +67,8 @@ public final class Intersection {
 		this.primitive = Objects.requireNonNull(primitive, "primitive == null");
 		this.surfaceIntersectionObjectSpace = Objects.requireNonNull(surfaceIntersectionObjectSpace, "surfaceIntersectionObjectSpace == null");
 		this.surfaceIntersectionWorldSpace = SurfaceIntersection3F.transform(surfaceIntersectionObjectSpace, primitive.getTransform().getObjectToWorld(), primitive.getTransform().getWorldToObject());
+		this.orthonormalBasisG = this.surfaceIntersectionWorldSpace.getOrthonormalBasisG();
+		this.orthonormalBasisS = this.surfaceIntersectionWorldSpace.getOrthonormalBasisS();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +104,7 @@ public final class Intersection {
 	 * @return the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for the geometry in world space
 	 */
 	public OrthonormalBasis33F getOrthonormalBasisG() {
-		return this.surfaceIntersectionWorldSpace.getOrthonormalBasisG();
+		return this.orthonormalBasisG;
 	}
 	
 	/**
@@ -108,7 +113,7 @@ public final class Intersection {
 	 * @return the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for shading in world space
 	 */
 	public OrthonormalBasis33F getOrthonormalBasisS() {
-		return this.surfaceIntersectionWorldSpace.getOrthonormalBasisS();
+		return this.orthonormalBasisS;
 	}
 	
 	/**
@@ -174,6 +179,15 @@ public final class Intersection {
 	}
 	
 	/**
+	 * Returns the {@link Shape3F} instance that was intersected.
+	 * 
+	 * @return the {@code Shape3F} instance that was intersected
+	 */
+	public Shape3F getShape() {
+		return this.surfaceIntersectionWorldSpace.getShape();
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code Intersection} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code Intersection} instance
@@ -197,7 +211,7 @@ public final class Intersection {
 	 * 
 	 * @return the {@code SurfaceIntersection3F} instance associated with this {@code Intersection} instance in world space
 	 */
-	private SurfaceIntersection3F getSurfaceIntersectionWorldSpace() {
+	public SurfaceIntersection3F getSurfaceIntersectionWorldSpace() {
 		return this.surfaceIntersectionWorldSpace;
 	}
 	
@@ -207,7 +221,7 @@ public final class Intersection {
 	 * @return the {@code Vector3F} instance that represents the surface normal for the geometry in world space
 	 */
 	public Vector3F getSurfaceNormalG() {
-		return this.surfaceIntersectionWorldSpace.getSurfaceNormalG();
+		return this.orthonormalBasisG.getW();
 	}
 	
 	/**
@@ -216,7 +230,7 @@ public final class Intersection {
 	 * @return the {@code Vector3F} instance that represents the surface normal for shading in world space
 	 */
 	public Vector3F getSurfaceNormalS() {
-		return this.surfaceIntersectionWorldSpace.getSurfaceNormalS();
+		return this.orthonormalBasisS.getW();
 	}
 	
 	/**
@@ -232,6 +246,10 @@ public final class Intersection {
 		if(object == this) {
 			return true;
 		} else if(!(object instanceof Intersection)) {
+			return false;
+		} else if(!Objects.equals(this.orthonormalBasisG, Intersection.class.cast(object).orthonormalBasisG)) {
+			return false;
+		} else if(!Objects.equals(this.orthonormalBasisS, Intersection.class.cast(object).orthonormalBasisS)) {
 			return false;
 		} else if(!Objects.equals(this.primitive, Intersection.class.cast(object).primitive)) {
 			return false;
@@ -260,7 +278,55 @@ public final class Intersection {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.primitive, this.surfaceIntersectionObjectSpace, this.surfaceIntersectionWorldSpace);
+		return Objects.hash(this.orthonormalBasisG, this.orthonormalBasisS, this.primitive, this.surfaceIntersectionObjectSpace, this.surfaceIntersectionWorldSpace);
+	}
+	
+	/**
+	 * Sets the {@link OrthonormalBasis33F} instance that is used as the orthonormal basis for the geometry in world space to {@code orthonormalBasisG}.
+	 * <p>
+	 * If {@code orthonormalBasisG} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param orthonormalBasisG the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for the geometry in world space
+	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasisG} is {@code null}
+	 */
+	public void setOrthonormalBasisG(final OrthonormalBasis33F orthonormalBasisG) {
+		this.orthonormalBasisG = Objects.requireNonNull(orthonormalBasisG, "orthonormalBasisG == null");
+	}
+	
+	/**
+	 * Sets the {@link OrthonormalBasis33F} instance that is used as the orthonormal basis for shading in world space to {@code orthonormalBasisS}.
+	 * <p>
+	 * If {@code orthonormalBasisS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param orthonormalBasisS the {@code OrthonormalBasis33F} instance that is used as the orthonormal basis for shading in world space
+	 * @throws NullPointerException thrown if, and only if, {@code orthonormalBasisS} is {@code null}
+	 */
+	public void setOrthonormalBasisS(final OrthonormalBasis33F orthonormalBasisS) {
+		this.orthonormalBasisS = Objects.requireNonNull(orthonormalBasisS, "orthonormalBasisS == null");
+	}
+	
+	/**
+	 * Sets the {@link Vector3F} instance that represents the surface normal for the geometry in world space to {@code surfaceNormalG}.
+	 * <p>
+	 * If {@code surfaceNormalG} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceNormalG the {@code Vector3F} instance that represents the surface normal for the geometry in world space
+	 * @throws NullPointerException thrown if, and only if, {@code surfaceNormalG} is {@code null}
+	 */
+	public void setSurfaceNormalG(final Vector3F surfaceNormalG) {
+		this.orthonormalBasisG = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalG, "surfaceNormalG == null"));
+	}
+	
+	/**
+	 * Sets the {@link Vector3F} instance that represents the surface normal for shading in world space to {@code surfaceNormalS}.
+	 * <p>
+	 * If {@code surfaceNormalS} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceNormalS the {@code Vector3F} instance that represents the surface normal for shading in world space
+	 * @throws NullPointerException thrown if, and only if, {@code surfaceNormalS} is {@code null}
+	 */
+	public void setSurfaceNormalS(final Vector3F surfaceNormalS) {
+		this.orthonormalBasisS = new OrthonormalBasis33F(Objects.requireNonNull(surfaceNormalS, "surfaceNormalS == null"));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

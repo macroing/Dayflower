@@ -16,14 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.texture;
+package org.dayflower.scene.modifier;
 
 import static org.dayflower.utility.Floats.ceil;
 import static org.dayflower.utility.Floats.cos;
 import static org.dayflower.utility.Floats.floor;
 import static org.dayflower.utility.Floats.positiveModulo;
 import static org.dayflower.utility.Floats.sin;
-import static org.dayflower.utility.Ints.padding;
 import static org.dayflower.utility.Ints.positiveModulo;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -41,6 +40,7 @@ import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Vector2F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
@@ -49,51 +49,17 @@ import org.dayflower.utility.BufferedImages;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * An {@code LDRImageTexture} is a {@link Texture} implementation that returns a {@link Color3F} instance from a low-dynamic-range (LDR) image.
+ * An {@code LDRImageNormalMapModifier} is a {@link Modifier} implementation that modifies the surface normal using a {@link Color3F} instance from a low-dynamic-range (LDR) image.
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
- * This {@code Texture} implementation is supported on the GPU.
- * <p>
- * This {@code LDRImageTexture} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code LDRImageTexture} instance from an {@link ImageF} instance. This is useful if
- * the requirement is to generate an image procedurally.
+ * This {@code LDRImageNormalMapModifier} class stores the image as an {@code int[]} with the colors in packed form and in the order ARGB. It is, however, possible to create an {@code LDRImageNormalMapModifier} instance from an {@link ImageF} instance.
+ * This is useful if the requirement is to generate an image procedurally.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LDRImageTexture implements Texture {
-	/**
-	 * The offset for the angle in radians in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_ANGLE_RADIANS = 0;
-	
-	/**
-	 * The offset for the image in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_IMAGE = 5;
-	
-	/**
-	 * The offset for the resolution of the X-axis in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RESOLUTION_X = 3;
-	
-	/**
-	 * The offset for the resolution of the Y-axis in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_RESOLUTION_Y = 4;
-	
-	/**
-	 * The offset for the {@link Vector2F} instance representing the scale in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_SCALE = 1;
-	
-	/**
-	 * The ID of this {@code LDRImageTexture} class.
-	 */
-	public static final int ID = 6;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+public final class LDRImageNormalMapModifier implements Modifier {
 	private final AngleF angle;
 	private final Vector2F scale;
 	private final int resolution;
@@ -104,33 +70,33 @@ public final class LDRImageTexture implements Texture {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code LDRImageTexture} instance.
+	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageTexture(image, AngleF.degrees(0.0F));
+	 * new LDRImageNormalMapModifier(image, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param image an {@link ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public LDRImageTexture(final ImageF image) {
+	public LDRImageNormalMapModifier(final ImageF image) {
 		this(image, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageTexture} instance.
+	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If either {@code image} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageTexture(image, angle, new Vector2F(1.0F, 1.0F));
+	 * new LDRImageNormalMapModifier(image, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -138,19 +104,19 @@ public final class LDRImageTexture implements Texture {
 	 * @param angle the {@link AngleF} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public LDRImageTexture(final ImageF image, final AngleF angle) {
+	public LDRImageNormalMapModifier(final ImageF image, final AngleF angle) {
 		this(image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageTexture} instance.
+	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageTexture(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
+	 * new LDRImageNormalMapModifier(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	 * }
 	 * </pre>
 	 * 
@@ -159,12 +125,12 @@ public final class LDRImageTexture implements Texture {
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public LDRImageTexture(final ImageF image, final AngleF angle, final Vector2F scale) {
+	public LDRImageNormalMapModifier(final ImageF image, final AngleF angle, final Vector2F scale) {
 		this(image.getResolutionX(), image.getResolutionY(), image.toIntArrayPackedForm(), angle, scale);
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageTexture} instance.
+	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -173,7 +139,7 @@ public final class LDRImageTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageTexture(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
+	 * new LDRImageNormalMapModifier(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -183,12 +149,12 @@ public final class LDRImageTexture implements Texture {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public LDRImageTexture(final int resolutionX, final int resolutionY, final int[] image) {
+	public LDRImageNormalMapModifier(final int resolutionX, final int resolutionY, final int[] image) {
 		this(resolutionX, resolutionY, image, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageTexture} instance.
+	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If either {@code image} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -197,7 +163,7 @@ public final class LDRImageTexture implements Texture {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LDRImageTexture(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
+	 * new LDRImageNormalMapModifier(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
@@ -208,12 +174,12 @@ public final class LDRImageTexture implements Texture {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code image} or {@code angle} are {@code null}
 	 */
-	public LDRImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle) {
+	public LDRImageNormalMapModifier(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle) {
 		this(resolutionX, resolutionY, image, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Constructs a new {@code LDRImageTexture} instance.
+	 * Constructs a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If either {@code image}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -227,7 +193,7 @@ public final class LDRImageTexture implements Texture {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, or {@code resolutionX * resolutionY != image.length}
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
-	public LDRImageTexture(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
+	public LDRImageNormalMapModifier(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -248,55 +214,13 @@ public final class LDRImageTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a {@link Color3F} instance representing the color of the surface at {@code intersection}.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns a {@code String} representation of this {@code LDRImageNormalMapModifier} instance.
 	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance representing the color of the surface at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	@Override
-	public Color3F getColor(final Intersection intersection) {
-		final AngleF angle = this.angle;
-		
-		final Point2F textureCoordinates = intersection.getTextureCoordinates();
-		
-		final Vector2F scale = this.scale;
-		
-		final float angleRadians = angle.getRadians();
-		final float angleRadiansCos = cos(angleRadians);
-		final float angleRadiansSin = sin(angleRadians);
-		
-		final float resolutionX = this.resolutionX;
-		final float resolutionY = this.resolutionY;
-		
-		final float scaleU = scale.getU();
-		final float scaleV = scale.getV();
-		
-		final float textureCoordinatesU = textureCoordinates.getU();
-		final float textureCoordinatesV = textureCoordinates.getV();
-		
-		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
-		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
-		
-		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
-		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
-		
-		final float x = positiveModulo(textureCoordinatesScaledU, resolutionX);
-		final float y = positiveModulo(textureCoordinatesScaledV, resolutionY);
-		
-		return doGetColorRGB(x, y);
-	}
-	
-	/**
-	 * Returns a {@code String} representation of this {@code LDRImageTexture} instance.
-	 * 
-	 * @return a {@code String} representation of this {@code LDRImageTexture} instance
+	 * @return a {@code String} representation of this {@code LDRImageNormalMapModifier} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LDRImageTexture(%d, %d, %s, %s, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), "new int[] {...}", this.angle, this.scale);
+		return String.format("new LDRImageNormalMapModifier(%d, %d, %s, %s, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), "new int[] {...}", this.angle, this.scale);
 	}
 	
 	/**
@@ -347,92 +271,34 @@ public final class LDRImageTexture implements Texture {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LDRImageTexture} instance for equality.
+	 * Compares {@code object} to this {@code LDRImageNormalMapModifier} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LDRImageTexture}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LDRImageNormalMapModifier}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LDRImageTexture} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LDRImageTexture}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LDRImageNormalMapModifier} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LDRImageNormalMapModifier}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LDRImageTexture)) {
+		} else if(!(object instanceof LDRImageNormalMapModifier)) {
 			return false;
-		} else if(!Objects.equals(this.angle, LDRImageTexture.class.cast(object).angle)) {
+		} else if(!Objects.equals(this.angle, LDRImageNormalMapModifier.class.cast(object).angle)) {
 			return false;
-		} else if(!Objects.equals(this.scale, LDRImageTexture.class.cast(object).scale)) {
+		} else if(!Objects.equals(this.scale, LDRImageNormalMapModifier.class.cast(object).scale)) {
 			return false;
-		} else if(this.resolution != LDRImageTexture.class.cast(object).resolution) {
+		} else if(this.resolution != LDRImageNormalMapModifier.class.cast(object).resolution) {
 			return false;
-		} else if(this.resolutionX != LDRImageTexture.class.cast(object).resolutionX) {
+		} else if(this.resolutionX != LDRImageNormalMapModifier.class.cast(object).resolutionX) {
 			return false;
-		} else if(this.resolutionY != LDRImageTexture.class.cast(object).resolutionY) {
+		} else if(this.resolutionY != LDRImageNormalMapModifier.class.cast(object).resolutionY) {
 			return false;
-		} else if(!Arrays.equals(this.image, LDRImageTexture.class.cast(object).image)) {
+		} else if(!Arrays.equals(this.image, LDRImageNormalMapModifier.class.cast(object).image)) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns a {@code float} representing the value of the surface at {@code intersection}.
-	 * <p>
-	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code float} representing the value of the surface at {@code intersection}
-	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
-	 */
-	@Override
-	public float getFloat(final Intersection intersection) {
-		return getColor(intersection).average();
-	}
-	
-	/**
-	 * Returns a {@code float[]} representation of this {@code LDRImageTexture} instance.
-	 * 
-	 * @return a {@code float[]} representation of this {@code LDRImageTexture} instance
-	 */
-	public float[] toArray() {
-		final float[] array = new float[getArrayLength()];
-		
-		array[ARRAY_OFFSET_ANGLE_RADIANS] = this.angle.getRadians();
-		array[ARRAY_OFFSET_SCALE + 0] = this.scale.getU();
-		array[ARRAY_OFFSET_SCALE + 1] = this.scale.getV();
-		array[ARRAY_OFFSET_RESOLUTION_X] = this.resolutionX;
-		array[ARRAY_OFFSET_RESOLUTION_Y] = this.resolutionY;
-		
-		for(int i = 0; i < this.image.length; i++) {
-			array[ARRAY_OFFSET_IMAGE + i] = this.image[i];
-		}
-		
-		for(int i = ARRAY_OFFSET_IMAGE + this.image.length; i < array.length; i++) {
-			array[i] = 0.0F;
-		}
-		
-		return array;
-	}
-	
-	/**
-	 * Returns the length of the {@code float[]}.
-	 * 
-	 * @return the length of the {@code float[]}
-	 */
-	public int getArrayLength() {
-		return 5 + this.image.length + padding(5 + this.image.length);
-	}
-	
-	/**
-	 * Returns an {@code int} with the ID of this {@code LDRImageTexture} instance.
-	 * 
-	 * @return an {@code int} with the ID of this {@code LDRImageTexture} instance
-	 */
-	@Override
-	public int getID() {
-		return ID;
 	}
 	
 	/**
@@ -463,9 +329,9 @@ public final class LDRImageTexture implements Texture {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LDRImageTexture} instance.
+	 * Returns a hash code for this {@code LDRImageNormalMapModifier} instance.
 	 * 
-	 * @return a hash code for this {@code LDRImageTexture} instance
+	 * @return a hash code for this {@code LDRImageNormalMapModifier} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -475,7 +341,7 @@ public final class LDRImageTexture implements Texture {
 	/**
 	 * Returns an {@code int[]} containing the image with its colors in packed form using the order ARGB.
 	 * <p>
-	 * Modifying the returned {@code int[]} will not affect this {@code LDRImageTexture} instance.
+	 * Modifying the returned {@code int[]} will not affect this {@code LDRImageNormalMapModifier} instance.
 	 * 
 	 * @return an {@code int[]} containing the image with its colors in packed form using the order ARGB
 	 */
@@ -483,12 +349,38 @@ public final class LDRImageTexture implements Texture {
 		return this.image.clone();
 	}
 	
+	/**
+	 * Modifies the surface at {@code intersection}.
+	 * <p>
+	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
+	 */
+	@Override
+	public void modify(final Intersection intersection) {
+		final Color3F colorRGB = doGetColorRGB(intersection);
+		
+		final float r = colorRGB.getR();
+		final float g = colorRGB.getG();
+		final float b = colorRGB.getB();
+		
+		final float x = r * 2.0F - 1.0F;
+		final float y = g * 2.0F - 1.0F;
+		final float z = b * 2.0F - 1.0F;
+		
+		final Vector3F surfaceNormalSLocalSpace = new Vector3F(x, y, z);
+		final Vector3F surfaceNormalSWorldSpace = Vector3F.transform(surfaceNormalSLocalSpace, intersection.getSurfaceIntersectionWorldSpace().getOrthonormalBasisS());
+		
+		intersection.setSurfaceNormalS(surfaceNormalSWorldSpace);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Loads an {@code LDRImageTexture} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code LDRImageTexture} instance.
+	 * Returns a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -497,23 +389,23 @@ public final class LDRImageTexture implements Texture {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * LDRImageTexture.load(file, AngleF.degrees(0.0F));
+	 * LDRImageNormalMapModifier.load(file, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
-	 * @return a new {@code LDRImageTexture} instance
+	 * @return a new {@code LDRImageNormalMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageTexture load(final File file) {
+	public static LDRImageNormalMapModifier load(final File file) {
 		return load(file, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Loads an {@code LDRImageTexture} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code LDRImageTexture} instance.
+	 * Returns a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If either {@code file} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -522,24 +414,24 @@ public final class LDRImageTexture implements Texture {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * LDRImageTexture.load(file, angle, new Vector2F(1.0F, 1.0F));
+	 * LDRImageNormalMapModifier.load(file, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
-	 * @return a new {@code LDRImageTexture} instance
+	 * @return a new {@code LDRImageNormalMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code angle} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageTexture load(final File file, final AngleF angle) {
+	public static LDRImageNormalMapModifier load(final File file, final AngleF angle) {
 		return load(file, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Loads an {@code LDRImageTexture} from the file represented by {@code file}.
+	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code file}.
 	 * <p>
-	 * Returns a new {@code LDRImageTexture} instance.
+	 * Returns a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If either {@code file}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -548,11 +440,11 @@ public final class LDRImageTexture implements Texture {
 	 * @param file a {@code File} that represents the file to load from
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @return a new {@code LDRImageTexture} instance
+	 * @return a new {@code LDRImageNormalMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code file}, {@code angle} or {@code scale} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageTexture load(final File file, final AngleF angle, final Vector2F scale) {
+	public static LDRImageNormalMapModifier load(final File file, final AngleF angle, final Vector2F scale) {
 		try {
 			final BufferedImage bufferedImage = BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null")));
 			
@@ -561,16 +453,16 @@ public final class LDRImageTexture implements Texture {
 			
 			final int[] image = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
 			
-			return new LDRImageTexture(resolutionX, resolutionY, image, angle, scale);
+			return new LDRImageNormalMapModifier(resolutionX, resolutionY, image, angle, scale);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Loads an {@code LDRImageTexture} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code LDRImageTexture} instance.
+	 * Returns a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -579,23 +471,23 @@ public final class LDRImageTexture implements Texture {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * LDRImageTexture.load(pathname, AngleF.degrees(0.0F));
+	 * LDRImageNormalMapModifier.load(pathname, AngleF.degrees(0.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
-	 * @return a new {@code LDRImageTexture} instance
+	 * @return a new {@code LDRImageNormalMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageTexture load(final String pathname) {
+	public static LDRImageNormalMapModifier load(final String pathname) {
 		return load(pathname, AngleF.degrees(0.0F));
 	}
 	
 	/**
-	 * Loads an {@code LDRImageTexture} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code LDRImageTexture} instance.
+	 * Returns a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If either {@code pathname} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -604,24 +496,24 @@ public final class LDRImageTexture implements Texture {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * LDRImageTexture.load(pathname, angle, new Vector2F(1.0F, 1.0F));
+	 * LDRImageNormalMapModifier.load(pathname, angle, new Vector2F(1.0F, 1.0F));
 	 * }
 	 * </pre>
 	 * 
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
-	 * @return a new {@code LDRImageTexture} instance
+	 * @return a new {@code LDRImageNormalMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code angle} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageTexture load(final String pathname, final AngleF angle) {
+	public static LDRImageNormalMapModifier load(final String pathname, final AngleF angle) {
 		return load(pathname, angle, new Vector2F(1.0F, 1.0F));
 	}
 	
 	/**
-	 * Loads an {@code LDRImageTexture} from the file represented by {@code pathname}.
+	 * Loads an {@code LDRImageNormalMapModifier} from the file represented by {@code pathname}.
 	 * <p>
-	 * Returns a new {@code LDRImageTexture} instance.
+	 * Returns a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
 	 * If either {@code pathname}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -630,63 +522,95 @@ public final class LDRImageTexture implements Texture {
 	 * @param pathname a {@code String} that represents the pathname to the file to load from
 	 * @param angle the {@link AngleF} instance to use
 	 * @param scale the {@link Vector2F} instance to use as the scale factor
-	 * @return a new {@code LDRImageTexture} instance
+	 * @return a new {@code LDRImageNormalMapModifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code pathname}, {@code angle} or {@code scale} are {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
-	public static LDRImageTexture load(final String pathname, final AngleF angle, final Vector2F scale) {
+	public static LDRImageNormalMapModifier load(final String pathname, final AngleF angle, final Vector2F scale) {
 		return load(new File(Objects.requireNonNull(pathname, "pathname == null")), angle, scale);
 	}
 	
 	/**
-	 * Redoes gamma correction on {@code lDRImageTexture} using sRGB.
+	 * Redoes gamma correction on {@code lDRImageNormalMapModifier} using sRGB.
 	 * <p>
-	 * Returns a new {@code LDRImageTexture} instance.
+	 * Returns a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
-	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageTexture an {@code LDRImageTexture} instance
-	 * @return a new {@code LDRImageTexture} instance
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
+	 * @param lDRImageNormalMapModifier an {@code LDRImageNormalMapModifier} instance
+	 * @return a new {@code LDRImageNormalMapModifier} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
 	 */
-	public static LDRImageTexture redoGammaCorrectionSRGB(final LDRImageTexture lDRImageTexture) {
-		final int[] image = new int[lDRImageTexture.image.length];
+	public static LDRImageNormalMapModifier redoGammaCorrectionSRGB(final LDRImageNormalMapModifier lDRImageNormalMapModifier) {
+		final int[] image = new int[lDRImageNormalMapModifier.image.length];
 		
-		for(int i = 0; i < lDRImageTexture.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(lDRImageTexture.image[i]);
+		for(int i = 0; i < lDRImageNormalMapModifier.image.length; i++) {
+			final Color3F colorA = Color3F.unpack(lDRImageNormalMapModifier.image[i]);
 			final Color3F colorB = Color3F.redoGammaCorrectionSRGB(colorA);
 			
 			image[i] = colorB.pack();
 		}
 		
-		return new LDRImageTexture(lDRImageTexture.resolutionX, lDRImageTexture.resolutionY, image, lDRImageTexture.angle, lDRImageTexture.scale);
+		return new LDRImageNormalMapModifier(lDRImageNormalMapModifier.resolutionX, lDRImageNormalMapModifier.resolutionY, image, lDRImageNormalMapModifier.angle, lDRImageNormalMapModifier.scale);
 	}
 	
 	/**
-	 * Undoes gamma correction on {@code lDRImageTexture} using sRGB.
+	 * Undoes gamma correction on {@code lDRImageNormalMapModifier} using sRGB.
 	 * <p>
-	 * Returns a new {@code LDRImageTexture} instance.
+	 * Returns a new {@code LDRImageNormalMapModifier} instance.
 	 * <p>
-	 * If {@code lDRImageTexture} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code lDRImageNormalMapModifier} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param lDRImageTexture an {@code LDRImageTexture} instance
-	 * @return a new {@code LDRImageTexture} instance
-	 * @throws NullPointerException thrown if, and only if, {@code lDRImageTexture} is {@code null}
+	 * @param lDRImageNormalMapModifier an {@code LDRImageNormalMapModifier} instance
+	 * @return a new {@code LDRImageNormalMapModifier} instance
+	 * @throws NullPointerException thrown if, and only if, {@code lDRImageNormalMapModifier} is {@code null}
 	 */
-	public static LDRImageTexture undoGammaCorrectionSRGB(final LDRImageTexture lDRImageTexture) {
-		final int[] image = new int[lDRImageTexture.image.length];
+	public static LDRImageNormalMapModifier undoGammaCorrectionSRGB(final LDRImageNormalMapModifier lDRImageNormalMapModifier) {
+		final int[] image = new int[lDRImageNormalMapModifier.image.length];
 		
-		for(int i = 0; i < lDRImageTexture.image.length; i++) {
-			final Color3F colorA = Color3F.unpack(lDRImageTexture.image[i]);
+		for(int i = 0; i < lDRImageNormalMapModifier.image.length; i++) {
+			final Color3F colorA = Color3F.unpack(lDRImageNormalMapModifier.image[i]);
 			final Color3F colorB = Color3F.undoGammaCorrectionSRGB(colorA);
 			
 			image[i] = colorB.pack();
 		}
 		
-		return new LDRImageTexture(lDRImageTexture.resolutionX, lDRImageTexture.resolutionY, image, lDRImageTexture.angle, lDRImageTexture.scale);
+		return new LDRImageNormalMapModifier(lDRImageNormalMapModifier.resolutionX, lDRImageNormalMapModifier.resolutionY, image, lDRImageNormalMapModifier.angle, lDRImageNormalMapModifier.scale);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Color3F doGetColorRGB(final Intersection intersection) {
+		final AngleF angle = this.angle;
+		
+		final Point2F textureCoordinates = intersection.getTextureCoordinates();
+		
+		final Vector2F scale = this.scale;
+		
+		final float angleRadians = angle.getRadians();
+		final float angleRadiansCos = cos(angleRadians);
+		final float angleRadiansSin = sin(angleRadians);
+		
+		final float resolutionX = this.resolutionX;
+		final float resolutionY = this.resolutionY;
+		
+		final float scaleU = scale.getU();
+		final float scaleV = scale.getV();
+		
+		final float textureCoordinatesU = textureCoordinates.getU();
+		final float textureCoordinatesV = textureCoordinates.getV();
+		
+		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
+		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
+		
+		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
+		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
+		
+		final float x = positiveModulo(textureCoordinatesScaledU, resolutionX);
+		final float y = positiveModulo(textureCoordinatesScaledV, resolutionY);
+		
+		return doGetColorRGB(x, y);
+	}
 	
 	private Color3F doGetColorRGB(final float x, final float y) {
 		final int minimumX = toInt(floor(x));

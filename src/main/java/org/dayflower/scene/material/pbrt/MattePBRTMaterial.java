@@ -43,7 +43,7 @@ import org.dayflower.scene.texture.Texture;
 /**
  * A {@code MattePBRTMaterial} is an implementation of {@link Material} and is used for matte surfaces.
  * <p>
- * This class is immutable and thread-safe as long as all {@link Texture} instances are.
+ * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

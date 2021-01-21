@@ -39,13 +39,15 @@ import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
+import org.dayflower.scene.modifier.Modifier;
+import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
  * An {@code UberPBRTMaterial} is an implementation of {@link Material} that can represent a wide variety of materials.
  * <p>
- * This class is immutable and thread-safe as long as all {@link Texture} instances are.
+ * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -63,6 +65,7 @@ public final class UberPBRTMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final Modifier modifier;
 	private final Texture textureEmission;
 	private final Texture textureEta;
 	private final Texture textureKD;
@@ -301,6 +304,13 @@ public final class UberPBRTMaterial implements Material {
 	 * Constructs a new {@code UberPBRTMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new UberPBRTMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughnessU, floatRoughnessV, isRemappingRoughness, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
 	 * @param colorKR a {@code Color3F} instance for the reflection coefficient
@@ -315,6 +325,28 @@ public final class UberPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}
 	 */
 	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughnessU, final float floatRoughnessV, final boolean isRemappingRoughness) {
+		this(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughnessU, floatRoughnessV, isRemappingRoughness, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission}, {@code colorOpacity} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKR a {@code Color3F} instance for the reflection coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param colorOpacity a {@code Color3F} instance for the opacity
+	 * @param floatEta a {@code float} for the index of refraction (IOR)
+	 * @param floatRoughnessU a {@code float} for the roughness along the U-axis
+	 * @param floatRoughnessV a {@code float} for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission}, {@code colorOpacity} or {@code modifier} are {@code null}
+	 */
+	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughnessU, final float floatRoughnessV, final boolean isRemappingRoughness, final Modifier modifier) {
 		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
 		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
 		this.textureKS = new ConstantTexture(Objects.requireNonNull(colorKS, "colorKS == null"));
@@ -325,6 +357,7 @@ public final class UberPBRTMaterial implements Material {
 		this.textureRoughnessU = new ConstantTexture(floatRoughnessU);
 		this.textureRoughnessV = new ConstantTexture(floatRoughnessV);
 		this.isRemappingRoughness = isRemappingRoughness;
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	/**
@@ -543,6 +576,13 @@ public final class UberPBRTMaterial implements Material {
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a
 	 * {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new UberPBRTMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughnessU, textureRoughnessV, isRemappingRoughness, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
 	 * @param textureKR a {@code Texture} instance for the reflection coefficient
@@ -558,6 +598,30 @@ public final class UberPBRTMaterial implements Material {
 	 *                              {@code textureRoughnessV} are {@code null}
 	 */
 	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
+		this(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughnessU, textureRoughnessV, isRemappingRoughness, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta}, {@code textureRoughnessU}, {@code textureRoughnessV} or {@code modifier} are {@code null},
+	 * a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKR a {@code Texture} instance for the reflection coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @param textureKT a {@code Texture} instance for the transmission coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureOpacity a {@code Texture} instance for the opacity
+	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
+	 * @param textureRoughnessU a {@code Texture} instance for the roughness along the U-axis
+	 * @param textureRoughnessV a {@code Texture} instance for the roughness along the V-axis
+	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta}, {@code textureRoughnessU},
+	 *                              {@code textureRoughnessV} or {@code modifier} are {@code null}
+	 */
+	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness, final Modifier modifier) {
 		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
 		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
 		this.textureKS = Objects.requireNonNull(textureKS, "textureKS == null");
@@ -568,6 +632,7 @@ public final class UberPBRTMaterial implements Material {
 		this.textureRoughnessU = Objects.requireNonNull(textureRoughnessU, "textureRoughnessU == null");
 		this.textureRoughnessV = Objects.requireNonNull(textureRoughnessV, "textureRoughnessV == null");
 		this.isRemappingRoughness = isRemappingRoughness;
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -587,6 +652,15 @@ public final class UberPBRTMaterial implements Material {
 	}
 	
 	/**
+	 * Returns the {@link Modifier} instance.
+	 * 
+	 * @return the {@code Modifier} instance
+	 */
+	public Modifier getModifier() {
+		return this.modifier;
+	}
+	
+	/**
 	 * Computes the {@link BSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
@@ -603,6 +677,8 @@ public final class UberPBRTMaterial implements Material {
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		this.modifier.modify(intersection);
 		
 		final Color3F colorOpacity = Color3F.saturate(this.textureOpacity.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		final Color3F colorKD = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE));
@@ -678,7 +754,7 @@ public final class UberPBRTMaterial implements Material {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new UberPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureKD, this.textureKR, this.textureKS, this.textureKT, this.textureEmission, this.textureOpacity, this.textureEta, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness));
+		return String.format("new UberPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureKD, this.textureKR, this.textureKS, this.textureKT, this.textureEmission, this.textureOpacity, this.textureEta, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness), this.modifier);
 	}
 	
 	/**
@@ -789,6 +865,10 @@ public final class UberPBRTMaterial implements Material {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.modifier.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -846,6 +926,8 @@ public final class UberPBRTMaterial implements Material {
 			return true;
 		} else if(!(object instanceof UberPBRTMaterial)) {
 			return false;
+		} else if(!Objects.equals(this.modifier, UberPBRTMaterial.class.cast(object).modifier)) {
+			return false;
 		} else if(!Objects.equals(this.textureEmission, UberPBRTMaterial.class.cast(object).textureEmission)) {
 			return false;
 		} else if(!Objects.equals(this.textureEta, UberPBRTMaterial.class.cast(object).textureEta)) {
@@ -897,6 +979,6 @@ public final class UberPBRTMaterial implements Material {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEmission, this.textureEta, this.textureKD, this.textureKR, this.textureKS, this.textureKT, this.textureOpacity, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
+		return Objects.hash(this.modifier, this.textureEmission, this.textureEta, this.textureKD, this.textureKR, this.textureKS, this.textureKT, this.textureOpacity, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
 	}
 }

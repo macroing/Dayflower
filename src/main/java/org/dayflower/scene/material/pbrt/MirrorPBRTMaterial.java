@@ -31,13 +31,15 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
 import org.dayflower.scene.fresnel.ConstantFresnel;
+import org.dayflower.scene.modifier.Modifier;
+import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
  * A {@code MirrorPBRTMaterial} is an implementation of {@link Material} that represents a mirror.
  * <p>
- * This class is immutable and thread-safe as long as its {@link Texture} instance is.
+ * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -55,6 +57,7 @@ public final class MirrorPBRTMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final Modifier modifier;
 	private final Texture textureEmission;
 	private final Texture textureKR;
 	
@@ -97,14 +100,36 @@ public final class MirrorPBRTMaterial implements Material {
 	 * Constructs a new {@code MirrorPBRTMaterial} instance.
 	 * <p>
 	 * If either {@code colorKR} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MirrorPBRTMaterial(colorKR, colorEmission, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
 	 * @param colorEmission a {@code Color3F} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
 	 */
 	public MirrorPBRTMaterial(final Color3F colorKR, final Color3F colorEmission) {
+		this(colorKR, colorEmission, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code MirrorPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR}, {@code colorEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorEmission} or {@code modifier} are {@code null}
+	 */
+	public MirrorPBRTMaterial(final Color3F colorKR, final Color3F colorEmission, final Modifier modifier) {
 		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	/**
@@ -130,14 +155,36 @@ public final class MirrorPBRTMaterial implements Material {
 	 * Constructs a new {@code MirrorPBRTMaterial} instance.
 	 * <p>
 	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MirrorPBRTMaterial(textureKR, textureEmission, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param textureKR a {@link Texture} instance for the reflection coefficient
 	 * @param textureEmission a {@code Texture} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
 	 */
 	public MirrorPBRTMaterial(final Texture textureKR, final Texture textureEmission) {
+		this(textureKR, textureEmission, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code MirrorPBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureEmission} or {@code modifier} are {@code null}
+	 */
+	public MirrorPBRTMaterial(final Texture textureKR, final Texture textureEmission, final Modifier modifier) {
 		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,6 +204,15 @@ public final class MirrorPBRTMaterial implements Material {
 	}
 	
 	/**
+	 * Returns the {@link Modifier} instance.
+	 * 
+	 * @return the {@code Modifier} instance
+	 */
+	public Modifier getModifier() {
+		return this.modifier;
+	}
+	
+	/**
 	 * Computes the {@link BSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
@@ -173,6 +229,8 @@ public final class MirrorPBRTMaterial implements Material {
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		this.modifier.modify(intersection);
 		
 		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
@@ -221,7 +279,7 @@ public final class MirrorPBRTMaterial implements Material {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MirrorPBRTMaterial(%s, %s)", this.textureKR, this.textureEmission);
+		return String.format("new MirrorPBRTMaterial(%s, %s, %s)", this.textureKR, this.textureEmission, this.modifier);
 	}
 	
 	/**
@@ -269,6 +327,10 @@ public final class MirrorPBRTMaterial implements Material {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.modifier.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -298,6 +360,8 @@ public final class MirrorPBRTMaterial implements Material {
 			return true;
 		} else if(!(object instanceof MirrorPBRTMaterial)) {
 			return false;
+		} else if(!Objects.equals(this.modifier, MirrorPBRTMaterial.class.cast(object).modifier)) {
+			return false;
 		} else if(!Objects.equals(this.textureEmission, MirrorPBRTMaterial.class.cast(object).textureEmission)) {
 			return false;
 		} else if(!Objects.equals(this.textureKR, MirrorPBRTMaterial.class.cast(object).textureKR)) {
@@ -324,6 +388,6 @@ public final class MirrorPBRTMaterial implements Material {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureEmission, this.textureKR);
+		return Objects.hash(this.modifier, this.textureEmission, this.textureKR);
 	}
 }

@@ -2201,41 +2201,33 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
-//		Compute the W-direction (surface normal) of the geometric orthonormal basis:
-		final float orthonormalBasisGWX = surfaceIntersectionPointX - sphereCenterX;
-		final float orthonormalBasisGWY = surfaceIntersectionPointY - sphereCenterY;
-		final float orthonormalBasisGWZ = surfaceIntersectionPointZ - sphereCenterZ;
-		final float orthonormalBasisGWLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGWX, orthonormalBasisGWY, orthonormalBasisGWZ);
-		final float orthonormalBasisGWNormalizedX = orthonormalBasisGWX * orthonormalBasisGWLengthReciprocal;
-		final float orthonormalBasisGWNormalizedY = orthonormalBasisGWY * orthonormalBasisGWLengthReciprocal;
-		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGWZ * orthonormalBasisGWLengthReciprocal;
-		
-//		Compute the absolute component values of the W-direction, which are used to determine the orientation of the V-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGWNormalizedXAbs = abs(orthonormalBasisGWNormalizedX);
-		final float orthonormalBasisGWNormalizedYAbs = abs(orthonormalBasisGWNormalizedY);
-		final float orthonormalBasisGWNormalizedZAbs = abs(orthonormalBasisGWNormalizedZ);
-		
-//		Compute variables used to determine the orientation of the V-direction of the geometric orthonormal basis:
-		final boolean isX = orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedYAbs && orthonormalBasisGWNormalizedXAbs < orthonormalBasisGWNormalizedZAbs;
-		final boolean isY = orthonormalBasisGWNormalizedYAbs < orthonormalBasisGWNormalizedZAbs;
+//		Compute the geometric surface normal:
+		final float surfaceNormalGX = surfaceIntersectionPointX - sphereCenterX;
+		final float surfaceNormalGY = surfaceIntersectionPointY - sphereCenterY;
+		final float surfaceNormalGZ = surfaceIntersectionPointZ - sphereCenterZ;
 		
 //		Compute the V-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGVX = isX ? +0.0F                          : isY ? +orthonormalBasisGWNormalizedZ : +orthonormalBasisGWNormalizedY;
-		final float orthonormalBasisGVY = isX ? +orthonormalBasisGWNormalizedZ : isY ? +0.0F                          : -orthonormalBasisGWNormalizedX;
-		final float orthonormalBasisGVZ = isX ? -orthonormalBasisGWNormalizedY : isY ? -orthonormalBasisGWNormalizedX : +0.0F;
-		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
-		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
-		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		final float vGX = -PI_MULTIPLIED_BY_2 * surfaceNormalGY;
+		final float vGY = +PI_MULTIPLIED_BY_2 * surfaceNormalGX;
+		final float vGZ = 0.0F;
 		
-//		Compute the U-direction of the geometric orthonormal basis:
-		final float orthonormalBasisGUNormalizedX = orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedZ - orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedY;
-		final float orthonormalBasisGUNormalizedY = orthonormalBasisGVNormalizedZ * orthonormalBasisGWNormalizedX - orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedZ;
-		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGVNormalizedX * orthonormalBasisGWNormalizedY - orthonormalBasisGVNormalizedY * orthonormalBasisGWNormalizedX;
+//		Compute the geometric orthonormal basis:
+		orthonormalBasis33FSetFromWV(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, vGX, vGY, vGZ);
+		
+//		Retrieve the geometric orthonormal basis:
+		final float orthonormalBasisGUNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0];
+		final float orthonormalBasisGUNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1];
+		final float orthonormalBasisGUNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2];
+		final float orthonormalBasisGVNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0];
+		final float orthonormalBasisGVNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1];
+		final float orthonormalBasisGVNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2];
+		final float orthonormalBasisGWNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0];
+		final float orthonormalBasisGWNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1];
+		final float orthonormalBasisGWNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2];
 		
 //		Compute the texture coordinates:
-		final float textureCoordinatesU = 0.5F + atan2(orthonormalBasisGWNormalizedZ, orthonormalBasisGWNormalizedX) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = 0.5F - asinpi(orthonormalBasisGWNormalizedY);
+		final float textureCoordinatesU = acos(surfaceNormalGZ) * PI_RECIPROCAL;
+		final float textureCoordinatesV = addIfLessThanThreshold(atan2(surfaceNormalGY, surfaceNormalGX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		
 //		Update the intersection array:
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = orthonormalBasisGUNormalizedX;

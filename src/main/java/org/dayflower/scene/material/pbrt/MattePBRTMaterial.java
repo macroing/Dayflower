@@ -35,6 +35,8 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.OrenNayarPBRTBRDF;
+import org.dayflower.scene.modifier.Modifier;
+import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
@@ -59,6 +61,7 @@ public final class MattePBRTMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final Modifier modifier;
 	private final Texture textureAngle;
 	private final Texture textureEmission;
 	private final Texture textureKD;
@@ -122,6 +125,13 @@ public final class MattePBRTMaterial implements Material {
 	 * Constructs a new {@code MattePBRTMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MattePBRTMaterial(colorKD, colorEmission, floatAngle, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
 	 * @param colorEmission a {@code Color3F} instance for emission
@@ -129,9 +139,25 @@ public final class MattePBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorEmission} are {@code null}
 	 */
 	public MattePBRTMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle) {
+		this(colorKD, colorEmission, floatAngle, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code colorKD}, {@code colorEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param floatAngle a {@code float} for the angle
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorEmission} or {@code modifier} are {@code null}
+	 */
+	public MattePBRTMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle, final Modifier modifier) {
 		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 		this.textureAngle = new ConstantTexture(floatAngle);
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	/**
@@ -177,6 +203,13 @@ public final class MattePBRTMaterial implements Material {
 	 * Constructs a new {@code MattePBRTMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureEmission} or {@code textureAngle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new MattePBRTMaterial(textureKD, textureEmission, textureAngle, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
 	 * @param textureEmission a {@code Texture} instance for emission
@@ -184,9 +217,25 @@ public final class MattePBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureEmission} or {@code textureAngle} are {@code null}
 	 */
 	public MattePBRTMaterial(final Texture textureKD, final Texture textureEmission, final Texture textureAngle) {
+		this(textureKD, textureEmission, textureAngle, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * <p>
+	 * If either {@code textureKD}, {@code textureEmission}, {@code textureAngle} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureAngle a {@code Texture} instance for the angle
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureEmission}, {@code textureAngle} or {@code modifier} are {@code null}
+	 */
+	public MattePBRTMaterial(final Texture textureKD, final Texture textureEmission, final Texture textureAngle, final Modifier modifier) {
 		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureAngle = Objects.requireNonNull(textureAngle, "textureAngle == null");
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,6 +255,15 @@ public final class MattePBRTMaterial implements Material {
 	}
 	
 	/**
+	 * Returns the {@link Modifier} instance.
+	 * 
+	 * @return the {@code Modifier} instance
+	 */
+	public Modifier getModifier() {
+		return this.modifier;
+	}
+	
+	/**
 	 * Computes the {@link BSDF} at {@code intersection}.
 	 * <p>
 	 * Returns an optional {@code BSDF} instance.
@@ -222,6 +280,8 @@ public final class MattePBRTMaterial implements Material {
 	public Optional<BSDF> computeBSDF(final Intersection intersection, final TransportMode transportMode, final boolean isAllowingMultipleLobes) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
+		
+		this.modifier.modify(intersection);
 		
 		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
@@ -278,7 +338,7 @@ public final class MattePBRTMaterial implements Material {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MattePBRTMaterial(%s, %s, %s)", this.textureKD, this.textureEmission, this.textureAngle);
+		return String.format("new MattePBRTMaterial(%s, %s, %s, %s)", this.textureKD, this.textureEmission, this.textureAngle, this.modifier);
 	}
 	
 	/**
@@ -335,6 +395,10 @@ public final class MattePBRTMaterial implements Material {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
+				if(!this.modifier.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
 				if(!this.textureAngle.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
@@ -368,6 +432,8 @@ public final class MattePBRTMaterial implements Material {
 			return true;
 		} else if(!(object instanceof MattePBRTMaterial)) {
 			return false;
+		} else if(!Objects.equals(this.modifier, MattePBRTMaterial.class.cast(object).modifier)) {
+			return false;
 		} else if(!Objects.equals(this.textureAngle, MattePBRTMaterial.class.cast(object).textureAngle)) {
 			return false;
 		} else if(!Objects.equals(this.textureEmission, MattePBRTMaterial.class.cast(object).textureEmission)) {
@@ -396,6 +462,6 @@ public final class MattePBRTMaterial implements Material {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.textureAngle, this.textureEmission, this.textureKD);
+		return Objects.hash(this.modifier, this.textureAngle, this.textureEmission, this.textureKD);
 	}
 }

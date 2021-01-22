@@ -1979,17 +1979,19 @@ public final class Floats {
 		final float minimumValue = min(a, b);
 		final float maximumValue = max(a, b);
 		
-		float currentValue = value;
+		return positiveModulo(value - minimumValue, maximumValue - minimumValue + 1) + minimumValue;
 		
-		while(currentValue < minimumValue || currentValue > maximumValue) {
-			if(currentValue < minimumValue) {
-				currentValue = maximumValue - (minimumValue - currentValue);
-			} else if(currentValue > maximumValue) {
-				currentValue = minimumValue + (currentValue - maximumValue);
-			}
-		}
+//		float currentValue = value;
 		
-		return currentValue;
+//		while(currentValue < minimumValue || currentValue > maximumValue) {
+//			if(currentValue < minimumValue) {
+//				currentValue = maximumValue - (minimumValue - currentValue);
+//			} else if(currentValue > maximumValue) {
+//				currentValue = minimumValue + (currentValue - maximumValue);
+//			}
+//		}
+		
+//		return currentValue;
 	}
 	
 	/**

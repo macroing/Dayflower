@@ -1979,17 +1979,19 @@ public class Doubles {
 		final double minimumValue = min(a, b);
 		final double maximumValue = max(a, b);
 		
-		double currentValue = value;
+		return positiveModulo(value - minimumValue, maximumValue - minimumValue + 1) + minimumValue;
 		
-		while(currentValue < minimumValue || currentValue > maximumValue) {
-			if(currentValue < minimumValue) {
-				currentValue = maximumValue - (minimumValue - currentValue);
-			} else if(currentValue > maximumValue) {
-				currentValue = minimumValue + (currentValue - maximumValue);
-			}
-		}
+//		double currentValue = value;
 		
-		return currentValue;
+//		while(currentValue < minimumValue || currentValue > maximumValue) {
+//			if(currentValue < minimumValue) {
+//				currentValue = maximumValue - (minimumValue - currentValue);
+//			} else if(currentValue > maximumValue) {
+//				currentValue = minimumValue + (currentValue - maximumValue);
+//			}
+//		}
+		
+//		return currentValue;
 	}
 	
 	/**

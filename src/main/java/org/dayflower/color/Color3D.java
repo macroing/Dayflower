@@ -48,12 +48,12 @@ import org.dayflower.utility.ParameterArguments;
  */
 public final class Color3D {
 	/**
-	 * A {@code Color3D} denoting the color Aztek gold (AU).
+	 * A {@code Color3D} denoting the color Aztek gold (Au).
 	 */
 	public static final Color3D AU_AZTEK = new Color3D(0.76D, 0.6D, 0.33D);
 	
 	/**
-	 * A {@code Color3D} denoting the color metallic gold (AU).
+	 * A {@code Color3D} denoting the color metallic gold (Au).
 	 */
 	public static final Color3D AU_METALLIC = new Color3D(0.83D, 0.69D, 0.22D);
 	
@@ -68,7 +68,7 @@ public final class Color3D {
 	public static final Color3D BLUE = new Color3D(0.0D, 0.0D, 1.0D);
 	
 	/**
-	 * A {@code Color3D} denoting the color copper (CU).
+	 * A {@code Color3D} denoting the color copper (Cu).
 	 */
 	public static final Color3D CU = new Color3D(0.72D, 0.45D, 0.2D);
 	

@@ -28,34 +28,74 @@ package org.dayflower.color;
  */
 public final class IrregularSpectralCurveF extends SpectralCurveF {
 	/**
-	 * An {@code IrregularSpectralCurveF} instance for copper (CU).
-	 */
-	public static final IrregularSpectralCurveF CU_ETA = new IrregularSpectralCurveF(SPDF.CU_ETA, SPDF.CU_WAVELENGTH);
-	
-	/**
-	 * An {@code IrregularSpectralCurveF} instance for copper (CU).
-	 */
-	public static final IrregularSpectralCurveF CU_K = new IrregularSpectralCurveF(SPDF.CU_K, SPDF.CU_WAVELENGTH);
-	
-	/**
-	 * An {@code IrregularSpectralCurveF} instance for gold (AU).
-	 */
-	public static final IrregularSpectralCurveF AU_ETA = new IrregularSpectralCurveF(SPDF.AU_ETA, SPDF.AU_WAVELENGTH);
-	
-	/**
-	 * An {@code IrregularSpectralCurveF} instance for gold (AU).
-	 */
-	public static final IrregularSpectralCurveF AU_K = new IrregularSpectralCurveF(SPDF.AU_K, SPDF.AU_WAVELENGTH);
-	
-	/**
-	 * An {@code IrregularSpectralCurveF} instance for silver (AG).
+	 * An {@code IrregularSpectralCurveF} instance for silver (Ag).
 	 */
 	public static final IrregularSpectralCurveF AG_ETA = new IrregularSpectralCurveF(SPDF.AG_ETA, SPDF.AG_WAVELENGTH);
 	
 	/**
-	 * An {@code IrregularSpectralCurveF} instance for silver (AG).
+	 * An {@code IrregularSpectralCurveF} instance for silver (Ag).
 	 */
 	public static final IrregularSpectralCurveF AG_K = new IrregularSpectralCurveF(SPDF.AG_K, SPDF.AG_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for aluminum (Al).
+	 */
+	public static final IrregularSpectralCurveF AL_ETA = new IrregularSpectralCurveF(SPDF.AL_ETA, SPDF.AL_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for aluminum (Al).
+	 */
+	public static final IrregularSpectralCurveF AL_K = new IrregularSpectralCurveF(SPDF.AL_K, SPDF.AL_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for gold (Au).
+	 */
+	public static final IrregularSpectralCurveF AU_ETA = new IrregularSpectralCurveF(SPDF.AU_ETA, SPDF.AU_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for gold (Au).
+	 */
+	public static final IrregularSpectralCurveF AU_K = new IrregularSpectralCurveF(SPDF.AU_K, SPDF.AU_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for beryllium (Be).
+	 */
+	public static final IrregularSpectralCurveF BE_ETA = new IrregularSpectralCurveF(SPDF.BE_ETA, SPDF.BE_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for beryllium (Be).
+	 */
+	public static final IrregularSpectralCurveF BE_K = new IrregularSpectralCurveF(SPDF.BE_K, SPDF.BE_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for chromium (Cr).
+	 */
+	public static final IrregularSpectralCurveF CR_ETA = new IrregularSpectralCurveF(SPDF.CR_ETA, SPDF.CR_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for chromium (Cr).
+	 */
+	public static final IrregularSpectralCurveF CR_K = new IrregularSpectralCurveF(SPDF.CR_K, SPDF.CR_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for copper (Cu).
+	 */
+	public static final IrregularSpectralCurveF CU_ETA = new IrregularSpectralCurveF(SPDF.CU_ETA, SPDF.CU_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for copper (Cu).
+	 */
+	public static final IrregularSpectralCurveF CU_K = new IrregularSpectralCurveF(SPDF.CU_K, SPDF.CU_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for mercury (Hg).
+	 */
+	public static final IrregularSpectralCurveF HG_ETA = new IrregularSpectralCurveF(SPDF.HG_ETA, SPDF.HG_WAVELENGTH);
+	
+	/**
+	 * An {@code IrregularSpectralCurveF} instance for mercury (Hg).
+	 */
+	public static final IrregularSpectralCurveF HG_K = new IrregularSpectralCurveF(SPDF.HG_K, SPDF.HG_WAVELENGTH);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

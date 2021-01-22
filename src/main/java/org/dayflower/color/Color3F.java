@@ -48,34 +48,54 @@ import org.dayflower.utility.ParameterArguments;
  */
 public final class Color3F {
 	/**
-	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for silver (AG).
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for silver (Ag).
 	 */
 	public static final Color3F AG_ETA = IrregularSpectralCurveF.AG_ETA.toColorRGB();
 	
 	/**
-	 * A {@code Color3F} that contains the absorption coefficient for silver (AG).
+	 * A {@code Color3F} that contains the absorption coefficient for silver (Ag).
 	 */
 	public static final Color3F AG_K = IrregularSpectralCurveF.AG_K.toColorRGB();
 	
 	/**
-	 * A {@code Color3F} denoting the color Aztek gold (AU).
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for aluminum (Al).
+	 */
+	public static final Color3F AL_ETA = IrregularSpectralCurveF.AL_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} that contains the absorption coefficient for aluminum (Al).
+	 */
+	public static final Color3F AL_K = IrregularSpectralCurveF.AL_K.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} denoting the color Aztek gold (Au).
 	 */
 	public static final Color3F AU_AZTEK = new Color3F(0.76F, 0.6F, 0.33F);
 	
 	/**
-	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for gold (AU).
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for gold (Au).
 	 */
 	public static final Color3F AU_ETA = IrregularSpectralCurveF.AU_ETA.toColorRGB();
 	
 	/**
-	 * A {@code Color3F} that contains the absorption coefficient for gold (AU).
+	 * A {@code Color3F} that contains the absorption coefficient for gold (Au).
 	 */
 	public static final Color3F AU_K = IrregularSpectralCurveF.AU_K.toColorRGB();
 	
 	/**
-	 * A {@code Color3F} denoting the color metallic gold (AU).
+	 * A {@code Color3F} denoting the color metallic gold (Au).
 	 */
 	public static final Color3F AU_METALLIC = new Color3F(0.83F, 0.69F, 0.22F);
+	
+	/**
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for beryllium (Be).
+	 */
+	public static final Color3F BE_ETA = IrregularSpectralCurveF.BE_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} that contains the absorption coefficient for beryllium (Be).
+	 */
+	public static final Color3F BE_K = IrregularSpectralCurveF.BE_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3F} denoting the color black.
@@ -88,17 +108,27 @@ public final class Color3F {
 	public static final Color3F BLUE = new Color3F(0.0F, 0.0F, 1.0F);
 	
 	/**
-	 * A {@code Color3F} denoting the color copper (CU).
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for chromium (Cr).
+	 */
+	public static final Color3F CR_ETA = IrregularSpectralCurveF.CR_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} that contains the absorption coefficient for chromium (Cr).
+	 */
+	public static final Color3F CR_K = IrregularSpectralCurveF.CR_K.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} denoting the color copper (Cu).
 	 */
 	public static final Color3F CU = new Color3F(0.72F, 0.45F, 0.2F);
 	
 	/**
-	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for copper (CU).
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for copper (Cu).
 	 */
 	public static final Color3F CU_ETA = IrregularSpectralCurveF.CU_ETA.toColorRGB();
 	
 	/**
-	 * A {@code Color3F} that contains the absorption coefficient for copper (CU).
+	 * A {@code Color3F} that contains the absorption coefficient for copper (Cu).
 	 */
 	public static final Color3F CU_K = IrregularSpectralCurveF.CU_K.toColorRGB();
 	
@@ -156,6 +186,16 @@ public final class Color3F {
 	 * A {@code Color3F} denoting the color green.
 	 */
 	public static final Color3F GREEN = new Color3F(0.0F, 1.0F, 0.0F);
+	
+	/**
+	 * A {@code Color3F} that contains the eta, also called the index of refraction (IOR), for mercury (Hg).
+	 */
+	public static final Color3F HG_ETA = IrregularSpectralCurveF.HG_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3F} that contains the absorption coefficient for mercury (Hg).
+	 */
+	public static final Color3F HG_K = IrregularSpectralCurveF.HG_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3F} denoting the color magenta.

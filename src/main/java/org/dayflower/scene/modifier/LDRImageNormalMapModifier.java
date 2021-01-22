@@ -18,9 +18,7 @@
  */
 package org.dayflower.scene.modifier;
 
-import static org.dayflower.utility.Floats.ceil;
 import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.floor;
 import static org.dayflower.utility.Floats.positiveModulo;
 import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Ints.positiveModulo;
@@ -609,9 +607,10 @@ public final class LDRImageNormalMapModifier implements Modifier {
 		final float x = positiveModulo(textureCoordinatesScaledU, resolutionX);
 		final float y = positiveModulo(textureCoordinatesScaledV, resolutionY);
 		
-		return doGetColorRGB(x, y);
+		return doGetColorRGB(toInt(x), toInt(y));
 	}
 	
+	/*
 	private Color3F doGetColorRGB(final float x, final float y) {
 		final int minimumX = toInt(floor(x));
 		final int maximumX = toInt(ceil(x));
@@ -635,6 +634,7 @@ public final class LDRImageNormalMapModifier implements Modifier {
 		
 		return color;
 	}
+	*/
 	
 	private Color3F doGetColorRGB(final int x, final int y) {
 		return Color3F.unpack(this.image[positiveModulo(y, this.resolutionY) * this.resolutionX + positiveModulo(x, this.resolutionX)]);

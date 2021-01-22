@@ -18,9 +18,7 @@
  */
 package org.dayflower.scene.modifier;
 
-import static org.dayflower.utility.Floats.cos;
 import static org.dayflower.utility.Floats.positiveModulo;
-import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Ints.positiveModulo;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -579,35 +577,12 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F doGetColorRGB(final Intersection intersection) {
-		final AngleF angle = this.angle;
-		
 		final Point2F textureCoordinates = intersection.getTextureCoordinates();
+		final Point2F textureCoordinatesRotated = Point2F.rotate(textureCoordinates, this.angle);
+		final Point2F textureCoordinatesScaled = Point2F.scale(textureCoordinatesRotated, this.scale);
+		final Point2F textureCoordinatesImage = Point2F.toImage(textureCoordinatesScaled, this.resolutionX, this.resolutionY);
 		
-		final Vector2F scale = this.scale;
-		
-		final float angleRadians = angle.getRadians();
-		final float angleRadiansCos = cos(angleRadians);
-		final float angleRadiansSin = sin(angleRadians);
-		
-		final float resolutionX = this.resolutionX;
-		final float resolutionY = this.resolutionY;
-		
-		final float scaleU = scale.getU();
-		final float scaleV = scale.getV();
-		
-		final float textureCoordinatesU = textureCoordinates.getU();
-		final float textureCoordinatesV = textureCoordinates.getV();
-		
-		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
-		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
-		
-		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
-		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
-		
-		final float x = positiveModulo(textureCoordinatesScaledU, resolutionX);
-		final float y = positiveModulo(textureCoordinatesScaledV, resolutionY);
-		
-		return doGetColorRGB(toInt(x), toInt(y));
+		return doGetColorRGB(toInt(textureCoordinatesImage.getX()), toInt(textureCoordinatesImage.getY()));
 	}
 	
 	/*

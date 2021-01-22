@@ -20,9 +20,12 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.cos;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.positiveModulo;
+import static org.dayflower.utility.Floats.sin;
 
 import java.util.Objects;
 
@@ -336,6 +339,48 @@ public final class Point2F implements Node {
 	}
 	
 	/**
+	 * Rotates {@code point} using {@code angle}.
+	 * <p>
+	 * Returns a new {@code Point2F} instance with the rotation applied.
+	 * <p>
+	 * If either {@code point} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point2F} instance
+	 * @param angle an {@link AngleF} instance
+	 * @return a new {@code Point2F} instance with the rotation applied
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code angle} are {@code null}
+	 */
+	public static Point2F rotate(final Point2F point, final AngleF angle) {
+		final float angleRadians = angle.getRadians();
+		final float angleRadiansCos = cos(angleRadians);
+		final float angleRadiansSin = sin(angleRadians);
+		
+		final float component1 = point.component1 * angleRadiansCos - point.component2 * angleRadiansSin;
+		final float component2 = point.component2 * angleRadiansCos + point.component1 * angleRadiansSin;
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
+	 * Scales {@code point} using {@code scale}.
+	 * <p>
+	 * Returns a new {@code Point2F} instance with the scale applied.
+	 * <p>
+	 * If either {@code point} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point2F} instance
+	 * @param scale a {@link Vector2F} instance
+	 * @return a new {@code Point2F} instance with the scale applied
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
+	 */
+	public static Point2F scale(final Point2F point, final Vector2F scale) {
+		final float component1 = point.component1 * scale.getComponent1();
+		final float component2 = point.component2 * scale.getComponent2();
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
 	 * Returns a new {@code Point2F} instance with the spherical coordinates of {@code direction} as its component values.
 	 * <p>
 	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -346,6 +391,24 @@ public final class Point2F implements Node {
 	 */
 	public static Point2F sphericalCoordinates(final Vector3F direction) {
 		return new Point2F(direction.sphericalPhi() * PI_MULTIPLIED_BY_2_RECIPROCAL, direction.sphericalTheta() * PI_RECIPROCAL);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance with {@code point} inside the image represented by {@code resolutionX} and {@code resolutionY}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point2F} instance
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new {@code Point2F} instance with {@code point} inside the image represented by {@code resolutionX} and {@code resolutionY}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Point2F toImage(final Point2F point, final float resolutionX, final float resolutionY) {
+		final float component1 = positiveModulo(point.component1 * resolutionX - 0.5F, resolutionX);
+		final float component2 = positiveModulo(point.component2 * resolutionY - 0.5F, resolutionY);
+		
+		return new Point2F(component1, component2);
 	}
 	
 	/**

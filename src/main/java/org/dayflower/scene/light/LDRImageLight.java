@@ -22,10 +22,8 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.asinpi;
 import static org.dayflower.utility.Floats.atan2;
 import static org.dayflower.utility.Floats.ceil;
-import static org.dayflower.utility.Floats.cos;
 import static org.dayflower.utility.Floats.floor;
 import static org.dayflower.utility.Floats.positiveModulo;
-import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Ints.padding;
 import static org.dayflower.utility.Ints.positiveModulo;
 import static org.dayflower.utility.Ints.toInt;
@@ -270,35 +268,12 @@ public final class LDRImageLight implements Light {
 	 */
 	@Override
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
-		final AngleF angle = this.angle;
-		
 		final Point2F textureCoordinates = new Point2F(0.5F + atan2(ray.getDirection().getZ(), ray.getDirection().getX()) * PI_MULTIPLIED_BY_2_RECIPROCAL, 0.5F - asinpi(ray.getDirection().getY()));
+		final Point2F textureCoordinatesRotated = Point2F.rotate(textureCoordinates, this.angle);
+		final Point2F textureCoordinatesScaled = Point2F.scale(textureCoordinatesRotated, this.scale);
+		final Point2F textureCoordinatesImage = Point2F.toImage(textureCoordinatesScaled, this.resolutionX, this.resolutionY);
 		
-		final Vector2F scale = this.scale;
-		
-		final float angleRadians = angle.getRadians();
-		final float angleRadiansCos = cos(angleRadians);
-		final float angleRadiansSin = sin(angleRadians);
-		
-		final float resolutionX = this.resolutionX;
-		final float resolutionY = this.resolutionY;
-		
-		final float scaleU = scale.getU();
-		final float scaleV = scale.getV();
-		
-		final float textureCoordinatesU = textureCoordinates.getU();
-		final float textureCoordinatesV = textureCoordinates.getV();
-		
-		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
-		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
-		
-		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
-		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
-		
-		final float x = positiveModulo(textureCoordinatesScaledU, resolutionX);
-		final float y = positiveModulo(textureCoordinatesScaledV, resolutionY);
-		
-		return doGetColorRGB(x, y);
+		return doGetColorRGB(textureCoordinatesImage.getX(), textureCoordinatesImage.getY());
 	}
 	
 	/**

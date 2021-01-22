@@ -20,9 +20,12 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
+import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.positiveModulo;
+import static org.dayflower.utility.Doubles.sin;
 
 import java.util.Objects;
 
@@ -336,6 +339,48 @@ public final class Point2D implements Node {
 	}
 	
 	/**
+	 * Rotates {@code point} using {@code angle}.
+	 * <p>
+	 * Returns a new {@code Point2D} instance with the rotation applied.
+	 * <p>
+	 * If either {@code point} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point2D} instance
+	 * @param angle an {@link AngleD} instance
+	 * @return a new {@code Point2D} instance with the rotation applied
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code angle} are {@code null}
+	 */
+	public static Point2D rotate(final Point2D point, final AngleD angle) {
+		final double angleRadians = angle.getRadians();
+		final double angleRadiansCos = cos(angleRadians);
+		final double angleRadiansSin = sin(angleRadians);
+		
+		final double component1 = point.component1 * angleRadiansCos - point.component2 * angleRadiansSin;
+		final double component2 = point.component2 * angleRadiansCos + point.component1 * angleRadiansSin;
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Scales {@code point} using {@code scale}.
+	 * <p>
+	 * Returns a new {@code Point2D} instance with the scale applied.
+	 * <p>
+	 * If either {@code point} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point2D} instance
+	 * @param scale a {@link Vector2D} instance
+	 * @return a new {@code Point2D} instance with the scale applied
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code scale} are {@code null}
+	 */
+	public static Point2D scale(final Point2D point, final Vector2D scale) {
+		final double component1 = point.component1 * scale.getComponent1();
+		final double component2 = point.component2 * scale.getComponent2();
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
 	 * Returns a new {@code Point2D} instance with the spherical coordinates of {@code direction} as its component values.
 	 * <p>
 	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -346,6 +391,24 @@ public final class Point2D implements Node {
 	 */
 	public static Point2D sphericalCoordinates(final Vector3D direction) {
 		return new Point2D(direction.sphericalPhi() * PI_MULTIPLIED_BY_2_RECIPROCAL, direction.sphericalTheta() * PI_RECIPROCAL);
+	}
+	
+	/**
+	 * Returns a new {@code Point2D} instance with {@code point} inside the image represented by {@code resolutionX} and {@code resolutionY}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@code Point2D} instance
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new {@code Point2D} instance with {@code point} inside the image represented by {@code resolutionX} and {@code resolutionY}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public static Point2D toImage(final Point2D point, final double resolutionX, final double resolutionY) {
+		final double component1 = positiveModulo(point.component1 * resolutionX - 0.5D, resolutionX);
+		final double component2 = positiveModulo(point.component2 * resolutionY - 0.5D, resolutionY);
+		
+		return new Point2D(component1, component2);
 	}
 	
 	/**

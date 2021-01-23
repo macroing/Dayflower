@@ -24,6 +24,7 @@ import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.toDouble;
 import static org.dayflower.utility.Ints.toInt;
 
 import java.util.Objects;
@@ -96,7 +97,7 @@ public final class Color4D {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public Color4D(final Color3F color) {
-		this(color.getComponent1(), color.getComponent2(), color.getComponent3());
+		this(toDouble(color.getComponent1()), toDouble(color.getComponent2()), toDouble(color.getComponent3()));
 	}
 	
 	/**

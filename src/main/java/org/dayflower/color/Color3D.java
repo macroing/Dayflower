@@ -48,14 +48,54 @@ import org.dayflower.utility.ParameterArguments;
  */
 public final class Color3D {
 	/**
+	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for silver (Ag).
+	 */
+	public static final Color3D AG_ETA = IrregularSpectralCurveD.AG_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3D} that contains the absorption coefficient for silver (Ag).
+	 */
+	public static final Color3D AG_K = IrregularSpectralCurveD.AG_K.toColorRGB();
+	
+	/**
+	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for aluminum (Al).
+	 */
+	public static final Color3D AL_ETA = IrregularSpectralCurveD.AL_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3D} that contains the absorption coefficient for aluminum (Al).
+	 */
+	public static final Color3D AL_K = IrregularSpectralCurveD.AL_K.toColorRGB();
+	
+	/**
 	 * A {@code Color3D} denoting the color Aztek gold (Au).
 	 */
 	public static final Color3D AU_AZTEK = new Color3D(0.76D, 0.6D, 0.33D);
 	
 	/**
+	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for gold (Au).
+	 */
+	public static final Color3D AU_ETA = IrregularSpectralCurveD.AU_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3D} that contains the absorption coefficient for gold (Au).
+	 */
+	public static final Color3D AU_K = IrregularSpectralCurveD.AU_K.toColorRGB();
+	
+	/**
 	 * A {@code Color3D} denoting the color metallic gold (Au).
 	 */
 	public static final Color3D AU_METALLIC = new Color3D(0.83D, 0.69D, 0.22D);
+	
+	/**
+	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for beryllium (Be).
+	 */
+	public static final Color3D BE_ETA = IrregularSpectralCurveD.BE_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3D} that contains the absorption coefficient for beryllium (Be).
+	 */
+	public static final Color3D BE_K = IrregularSpectralCurveD.BE_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} denoting the color black.
@@ -68,9 +108,29 @@ public final class Color3D {
 	public static final Color3D BLUE = new Color3D(0.0D, 0.0D, 1.0D);
 	
 	/**
+	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for chromium (Cr).
+	 */
+	public static final Color3D CR_ETA = IrregularSpectralCurveD.CR_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3D} that contains the absorption coefficient for chromium (Cr).
+	 */
+	public static final Color3D CR_K = IrregularSpectralCurveD.CR_K.toColorRGB();
+	
+	/**
 	 * A {@code Color3D} denoting the color copper (Cu).
 	 */
 	public static final Color3D CU = new Color3D(0.72D, 0.45D, 0.2D);
+	
+	/**
+	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for copper (Cu).
+	 */
+	public static final Color3D CU_ETA = IrregularSpectralCurveD.CU_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3D} that contains the absorption coefficient for copper (Cu).
+	 */
+	public static final Color3D CU_K = IrregularSpectralCurveD.CU_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} denoting the color cyan.
@@ -126,6 +186,16 @@ public final class Color3D {
 	 * A {@code Color3D} denoting the color green.
 	 */
 	public static final Color3D GREEN = new Color3D(0.0D, 1.0D, 0.0D);
+	
+	/**
+	 * A {@code Color3D} that contains the eta, also called the index of refraction (IOR), for mercury (Hg).
+	 */
+	public static final Color3D HG_ETA = IrregularSpectralCurveD.HG_ETA.toColorRGB();
+	
+	/**
+	 * A {@code Color3D} that contains the absorption coefficient for mercury (Hg).
+	 */
+	public static final Color3D HG_K = IrregularSpectralCurveD.HG_K.toColorRGB();
 	
 	/**
 	 * A {@code Color3D} denoting the color magenta.
@@ -184,6 +254,18 @@ public final class Color3D {
 	 */
 	public Color3D(final Color3F color) {
 		this(toDouble(color.getComponent1()), toDouble(color.getComponent2()), toDouble(color.getComponent3()));
+	}
+	
+	/**
+	 * Constructs a new {@code Color3D} instance from {@code color}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color4D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Color3D(final Color4D color) {
+		this(color.getComponent1(), color.getComponent2(), color.getComponent3());
 	}
 	
 	/**

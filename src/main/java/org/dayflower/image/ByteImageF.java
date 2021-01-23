@@ -18,31 +18,13 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.utility.Floats.ceil;
-import static org.dayflower.utility.Floats.floor;
-import static org.dayflower.utility.Ints.toInt;
-
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-
-import javax.imageio.ImageIO;
 
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color3F;
 import org.dayflower.color.PackedIntComponentOrder;
-import org.dayflower.geometry.Point2I;
-import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.ParameterArguments;
-
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.WritableImage;
 
 /**
  * A {@code ByteImageF} is an {@link ImageF} implementation that stores individual pixels as four {@code byte} values in a {@code byte[]}.
@@ -54,11 +36,8 @@ import javafx.scene.image.WritableImage;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ByteImageF implements ImageF {
+public final class ByteImageF extends ImageF {
 	private final byte[] bytes;
-	private final int resolution;
-	private final int resolutionX;
-	private final int resolutionY;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -85,10 +64,9 @@ public final class ByteImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, {@code byteImage} is {@code null}
 	 */
 	public ByteImageF(final ByteImageF byteImage) {
+		super(byteImage.getResolutionX(), byteImage.getResolutionY());
+		
 		this.bytes = byteImage.bytes.clone();
-		this.resolution = byteImage.resolution;
-		this.resolutionX = byteImage.resolutionX;
-		this.resolutionY = byteImage.resolutionY;
 	}
 	
 	/**
@@ -101,10 +79,9 @@ public final class ByteImageF implements ImageF {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
 	public ByteImageF(final int resolutionX, final int resolutionY) {
-		this.resolutionX = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.bytes = new byte[this.resolution * 4];
+		super(resolutionX, resolutionY);
+		
+		this.bytes = new byte[getResolution() * 4];
 	}
 	
 	/**
@@ -149,30 +126,12 @@ public final class ByteImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, {@code bytes} is {@code null}
 	 */
 	public ByteImageF(final int resolutionX, final int resolutionY, final byte[] bytes, final boolean isWrapping) {
-		this.resolutionX = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
-		this.bytes = ParameterArguments.requireExactArrayLength(isWrapping ? Objects.requireNonNull(bytes, "bytes == null") : Objects.requireNonNull(bytes, "bytes == null").clone(), this.resolution * 4, "bytes");
+		super(resolutionX, resolutionY);
+		
+		this.bytes = ParameterArguments.requireExactArrayLength(isWrapping ? Objects.requireNonNull(bytes, "bytes == null") : Objects.requireNonNull(bytes, "bytes == null").clone(), getResolution() * 4, "bytes");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@code BufferedImage} representation of this {@code ByteImageF} instance.
-	 * 
-	 * @return a {@code BufferedImage} representation of this {@code ByteImageF} instance
-	 */
-	@Override
-	public BufferedImage toBufferedImage() {
-		final BufferedImage bufferedImage = new BufferedImage(this.resolutionX, this.resolutionY, BufferedImage.TYPE_INT_ARGB);
-		
-		final int[] dataSource = toIntArrayPackedForm();
-		final int[] dataTarget = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
-		
-		System.arraycopy(dataSource, 0, dataTarget, 0, dataSource.length);
-		
-		return bufferedImage;
-	}
 	
 	/**
 	 * Returns a copy of this {@code ByteImageF} instance.
@@ -182,85 +141,6 @@ public final class ByteImageF implements ImageF {
 	@Override
 	public ByteImageF copy() {
 		return new ByteImageF(this);
-	}
-	
-	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
-	 * <p>
-	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * byteImage.getColorRGB(x, y, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
-	 */
-	@Override
-	public Color3F getColorRGB(final float x, final float y) {
-		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
-	}
-	
-	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
-	 * <p>
-	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
-	 * <p>
-	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
-	 * 
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
-	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
-	 */
-	@Override
-	public Color3F getColorRGB(final float x, final float y, final PixelOperation pixelOperation) {
-		final int minimumX = toInt(floor(x));
-		final int maximumX = toInt(ceil(x));
-		
-		final int minimumY = toInt(floor(y));
-		final int maximumY = toInt(ceil(y));
-		
-		if(minimumX == maximumX && minimumY == maximumY) {
-			return getColorRGB(minimumX, minimumY, pixelOperation);
-		}
-		
-		final Color3F color00 = getColorRGB(minimumX, minimumY, pixelOperation);
-		final Color3F color01 = getColorRGB(maximumX, minimumY, pixelOperation);
-		final Color3F color10 = getColorRGB(minimumX, maximumY, pixelOperation);
-		final Color3F color11 = getColorRGB(maximumX, maximumY, pixelOperation);
-		
-		final float xFactor = x - minimumX;
-		final float yFactor = y - minimumY;
-		
-		final Color3F color = Color3F.blend(Color3F.blend(color00, color01, xFactor), Color3F.blend(color10, color11, xFactor), yFactor);
-		
-		return color;
-	}
-	
-	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * byteImage.getColorRGB(index, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param index the index of the pixel
-	 * @return the {@code Color3F} of the pixel represented by {@code index}
-	 */
-	@Override
-	public Color3F getColorRGB(final int index) {
-		return getColorRGB(index, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
@@ -277,7 +157,7 @@ public final class ByteImageF implements ImageF {
 	 */
 	@Override
 	public Color3F getColorRGB(final int index, final PixelOperation pixelOperation) {
-		final int resolution = this.resolution;
+		final int resolution = getResolution();
 		
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
 		
@@ -295,25 +175,6 @@ public final class ByteImageF implements ImageF {
 	/**
 	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * byteImage.getColorRGB(x, y, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
-	 */
-	@Override
-	public Color3F getColorRGB(final int x, final int y) {
-		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
-	}
-	
-	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
-	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
@@ -326,8 +187,8 @@ public final class ByteImageF implements ImageF {
 	 */
 	@Override
 	public Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
-		final int resolutionX = this.resolutionX;
-		final int resolutionY = this.resolutionY;
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
 		
 		final int xTransformed = pixelOperation.getX(x, resolutionX);
 		final int yTransformed = pixelOperation.getY(y, resolutionY);
@@ -346,78 +207,13 @@ public final class ByteImageF implements ImageF {
 	}
 	
 	/**
-	 * Finds the bounds for {@code image} in this {@code ByteImageF} instance.
-	 * <p>
-	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code ByteImageF} instance.
-	 * <p>
-	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param image an {@link ImageF} instance
-	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code ByteImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
-	 */
-	@Override
-	public List<Rectangle2I> findBoundsFor(final ImageF image) {
-		Objects.requireNonNull(image, "image == null");
-		
-		final List<Rectangle2I> rectangles = new ArrayList<>();
-		
-		for(int y = 0; y < getResolutionY() - image.getResolutionY(); y++) {
-			for(int x = 0; x < getResolutionX() - image.getResolutionX(); x++) {
-				Rectangle2I rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x, y));
-				
-				labelImage:
-				if(getColorRGB(x, y).equals(image.getColorRGB(0, 0))) {
-					for(int imageY = 0; imageY < image.getResolutionY(); imageY++) {
-						for(int imageX = 0; imageX < image.getResolutionX(); imageX++) {
-							if(!getColorRGB(x + imageX, y + imageY).equals(image.getColorRGB(imageX, imageY))) {
-								break labelImage;
-							}
-							
-							rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x + imageX + 1, y + imageY + 1));
-						}
-					}
-					
-					rectangles.add(rectangle);
-				}
-			}
-		}
-		
-		return rectangles;
-	}
-	
-	/**
-	 * Returns a {@link Rectangle2I} with the bounds of this {@code ByteImageF} instance.
-	 * 
-	 * @return a {@code Rectangle2I} with the bounds of this {@code ByteImageF} instance
-	 */
-	@Override
-	public Rectangle2I getBounds() {
-		return new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
-	}
-	
-	/**
 	 * Returns a {@code String} representation of this {@code ByteImageF} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code ByteImageF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ByteImageF(%d, %d)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY));
-	}
-	
-	/**
-	 * Returns a {@code WritableImage} representation of this {@code ByteImageF} instance.
-	 * 
-	 * @return a {@code WritableImage} representation of this {@code ByteImageF} instance
-	 */
-	@Override
-	public WritableImage toWritableImage() {
-		final
-		WritableImage writableImage = new WritableImage(this.resolutionX, this.resolutionY);
-		writableImage.getPixelWriter().setPixels(0, 0, this.resolutionX, this.resolutionY, PixelFormat.getIntArgbInstance(), toIntArrayPackedForm(), 0, this.resolutionX);
-		
-		return writableImage;
+		return String.format("new ByteImageF(%d, %d)", Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()));
 	}
 	
 	/**
@@ -434,13 +230,13 @@ public final class ByteImageF implements ImageF {
 			return true;
 		} else if(!(object instanceof ByteImageF)) {
 			return false;
+		} else if(getResolution() != ByteImageF.class.cast(object).getResolution()) {
+			return false;
+		} else if(getResolutionX() != ByteImageF.class.cast(object).getResolutionX()) {
+			return false;
+		} else if(getResolutionY() != ByteImageF.class.cast(object).getResolutionY()) {
+			return false;
 		} else if(!Arrays.equals(this.bytes, ByteImageF.class.cast(object).bytes)) {
-			return false;
-		} else if(this.resolution != ByteImageF.class.cast(object).resolution) {
-			return false;
-		} else if(this.resolutionX != ByteImageF.class.cast(object).resolutionX) {
-			return false;
-		} else if(this.resolutionY != ByteImageF.class.cast(object).resolutionY) {
 			return false;
 		} else {
 			return true;
@@ -474,71 +270,13 @@ public final class ByteImageF implements ImageF {
 	}
 	
 	/**
-	 * Returns the resolution of this {@code ByteImageF} instance.
-	 * <p>
-	 * The resolution of {@code byteImage} can be computed by:
-	 * <pre>
-	 * {@code
-	 * int resolution = byteImage.getResolutionX() * byteImage.getResolutionY();
-	 * }
-	 * </pre>
-	 * 
-	 * @return the resolution of this {@code ByteImageF} instance
-	 */
-	@Override
-	public int getResolution() {
-		return this.resolution;
-	}
-	
-	/**
-	 * Returns the resolution of the X-axis of this {@code ByteImageF} instance.
-	 * <p>
-	 * The resolution of the X-axis is also known as the width.
-	 * 
-	 * @return the resolution of the X-axis of this {@code ByteImageF} instance
-	 */
-	@Override
-	public int getResolutionX() {
-		return this.resolutionX;
-	}
-	
-	/**
-	 * Returns the resolution of the Y-axis of this {@code ByteImageF} instance.
-	 * <p>
-	 * The resolution of the Y-axis is also known as the height.
-	 * 
-	 * @return the resolution of the Y-axis of this {@code ByteImageF} instance
-	 */
-	@Override
-	public int getResolutionY() {
-		return this.resolutionY;
-	}
-	
-	/**
 	 * Returns a hash code for this {@code ByteImageF} instance.
 	 * 
 	 * @return a hash code for this {@code ByteImageF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(Arrays.hashCode(this.bytes)), Integer.valueOf(this.resolution), Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY));
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code ByteImageF} instance in a packed form.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * byteImage.toIntArrayPackedForm(PackedIntComponentOrder.ARGB);
-	 * }
-	 * </pre>
-	 * 
-	 * @return an {@code int[]} representation of this {@code ByteImageF} instance in a packed form
-	 */
-	@Override
-	public int[] toIntArrayPackedForm() {
-		return toIntArrayPackedForm(PackedIntComponentOrder.ARGB);
+		return Objects.hash(Integer.valueOf(getResolution()), Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), Integer.valueOf(Arrays.hashCode(this.bytes)));
 	}
 	
 	/**
@@ -554,9 +292,11 @@ public final class ByteImageF implements ImageF {
 	public int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder) {
 		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");
 		
-		final int[] intArray = new int[this.resolution];
+		final int resolution = getResolution();
 		
-		for(int i = 0; i < this.resolution; i++) {
+		final int[] intArray = new int[resolution];
+		
+		for(int i = 0; i < resolution; i++) {
 			final int r = this.bytes[i * 4 + 0] & 0xFF;
 			final int g = this.bytes[i * 4 + 1] & 0xFF;
 			final int b = this.bytes[i * 4 + 2] & 0xFF;
@@ -566,142 +306,6 @@ public final class ByteImageF implements ImageF {
 		}
 		
 		return intArray;
-	}
-	
-	/**
-	 * Copies the individual component values of the colors in this {@code ByteImageF} instance to the {@code byte[]} {@code array}.
-	 * <p>
-	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code array.length != byteImage.getResolution() * ArrayComponentOrder.BGRA.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * byteImage.copyTo(array, ArrayComponentOrder.BGRA);
-	 * }
-	 * </pre>
-	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ByteImageF} instance to
-	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != byteImage.getResolution() * ArrayComponentOrder.BGRA.getComponentCount()}
-	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
-	 */
-	@Override
-	public void copyTo(final byte[] array) {
-		copyTo(array, ArrayComponentOrder.BGRA);
-	}
-	
-	/**
-	 * Copies the individual component values of the colors in this {@code ByteImageF} instance to the {@code byte[]} {@code array}.
-	 * <p>
-	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code array.length != byteImage.getResolution() * arrayComponentOrder.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ByteImageF} instance to
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder} to copy the components to {@code array} in the correct order
-	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != byteImage.getResolution() * arrayComponentOrder.getComponentCount()}
-	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
-	 */
-	@Override
-	public void copyTo(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
-		Objects.requireNonNull(array, "array == null");
-		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
-		
-		ParameterArguments.requireExact(array.length, this.resolution * arrayComponentOrder.getComponentCount(), "array");
-		
-		for(int i = 0, j = 0; i < this.resolution; i++, j += arrayComponentOrder.getComponentCount()) {
-			final byte r = this.bytes[i * 4 + 0];
-			final byte g = this.bytes[i * 4 + 1];
-			final byte b = this.bytes[i * 4 + 2];
-			final byte a = this.bytes[i * 4 + 3];
-			
-			if(arrayComponentOrder.hasOffsetR()) {
-				array[j + arrayComponentOrder.getOffsetR()] = r;
-			}
-			
-			if(arrayComponentOrder.hasOffsetG()) {
-				array[j + arrayComponentOrder.getOffsetG()] = g;
-			}
-			
-			if(arrayComponentOrder.hasOffsetB()) {
-				array[j + arrayComponentOrder.getOffsetB()] = b;
-			}
-			
-			if(arrayComponentOrder.hasOffsetA()) {
-				array[j + arrayComponentOrder.getOffsetA()] = a;
-			}
-		}
-	}
-	
-	/**
-	 * Saves this {@code ByteImageF} as a .PNG image to the file represented by {@code file}.
-	 * <p>
-	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * 
-	 * @param file a {@code File} that represents the file to save to
-	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	@Override
-	public void save(final File file) {
-		try {
-			final File parentFile = file.getParentFile();
-			
-			if(parentFile != null && !parentFile.isDirectory()) {
-				parentFile.mkdirs();
-			}
-			
-			ImageIO.write(toBufferedImage(), "png", Objects.requireNonNull(file, "file == null"));
-		} catch(final IOException e) {
-			throw new UncheckedIOException(e);
-		}
-	}
-	
-	/**
-	 * Saves this {@code ByteImageF} as a .PNG image to the file represented by the pathname {@code pathname}.
-	 * <p>
-	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * byteImage.save(new File(pathname));
-	 * }
-	 * </pre>
-	 * 
-	 * @param pathname a {@code String} that represents the pathname of the file to save to
-	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	@Override
-	public void save(final String pathname) {
-		save(new File(pathname));
-	}
-	
-	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
-	 * <p>
-	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * byteImage.setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param colorRGB the {@code Color3F} to set
-	 * @param index the index of the pixel
-	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
-	 */
-	@Override
-	public void setColorRGB(final Color3F colorRGB, final int index) {
-		setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
@@ -721,35 +325,15 @@ public final class ByteImageF implements ImageF {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		
-		final int indexTransformed = pixelOperation.getIndex(index, this.resolution);
+		final int resolution = getResolution();
 		
-		if(indexTransformed >= 0 && indexTransformed < this.resolution) {
+		final int indexTransformed = pixelOperation.getIndex(index, resolution);
+		
+		if(indexTransformed >= 0 && indexTransformed < resolution) {
 			this.bytes[indexTransformed * 4 + 0] = colorRGB.getAsByteR();
 			this.bytes[indexTransformed * 4 + 1] = colorRGB.getAsByteG();
 			this.bytes[indexTransformed * 4 + 2] = colorRGB.getAsByteB();
 		}
-	}
-	
-	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
-	 * <p>
-	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * byteImage.setColor(colorRGB, x, y, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param colorRGB the {@code Color3F} to set
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
-	 */
-	@Override
-	public void setColorRGB(final Color3F colorRGB, final int x, final int y) {
-		setColorRGB(colorRGB, x, y, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
@@ -770,11 +354,14 @@ public final class ByteImageF implements ImageF {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		
-		final int xTransformed = pixelOperation.getX(x, this.resolutionX);
-		final int yTransformed = pixelOperation.getY(y, this.resolutionY);
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
 		
-		if(xTransformed >= 0 && xTransformed < this.resolutionX && yTransformed >= 0 && yTransformed < this.resolutionY) {
-			final int index = yTransformed * this.resolutionX + xTransformed;
+		final int xTransformed = pixelOperation.getX(x, resolutionX);
+		final int yTransformed = pixelOperation.getY(y, resolutionY);
+		
+		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
+			final int index = yTransformed * resolutionX + xTransformed;
 			
 			this.bytes[index * 4 + 0] = colorRGB.getAsByteR();
 			this.bytes[index * 4 + 1] = colorRGB.getAsByteG();

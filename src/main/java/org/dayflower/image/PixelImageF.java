@@ -30,13 +30,10 @@ import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -57,10 +54,6 @@ import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.utility.BufferedImages;
-import org.dayflower.utility.ParameterArguments;
-
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.WritableImage;
 
 /**
  * A {@code PixelImageF} is an {@link ImageF} implementation that stores individual pixels as {@link PixelF} instances.
@@ -76,13 +69,10 @@ import javafx.scene.image.WritableImage;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PixelImageF implements ImageF {
+public final class PixelImageF extends ImageF {
 	private final Filter2F filter;
 	private final PixelF[] pixels;
 	private final float[] filterTable;
-	private final int resolution;
-	private final int resolutionX;
-	private final int resolutionY;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -135,12 +125,11 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, either {@code bufferedImage} or {@code filter} are {@code null}
 	 */
 	public PixelImageF(final BufferedImage bufferedImage, final Filter2F filter) {
+		super(bufferedImage.getWidth(), bufferedImage.getHeight());
+		
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.pixels = PixelF.createPixels(bufferedImage);
 		this.filterTable = filter.createFilterTable();
-		this.resolution = ParameterArguments.requireRange(bufferedImage.getWidth() * bufferedImage.getHeight(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth() * bufferedImage.getHeight()");
-		this.resolutionX = ParameterArguments.requireRange(bufferedImage.getWidth(), 0, Integer.MAX_VALUE, "bufferedImage.getWidth()");
-		this.resolutionY = ParameterArguments.requireRange(bufferedImage.getHeight(), 0, Integer.MAX_VALUE, "bufferedImage.getHeight()");
 	}
 	
 	/**
@@ -152,12 +141,11 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, {@code pixelImage} is {@code null}
 	 */
 	public PixelImageF(final PixelImageF pixelImage) {
+		super(pixelImage.getResolutionX(), pixelImage.getResolutionY());
+		
 		this.filter = pixelImage.filter;
 		this.pixels = Arrays.stream(pixelImage.pixels).map(pixel -> pixel.copy()).toArray(PixelF[]::new);
 		this.filterTable = pixelImage.filterTable.clone();
-		this.resolution = pixelImage.resolution;
-		this.resolutionX = pixelImage.resolutionX;
-		this.resolutionY = pixelImage.resolutionY;
 	}
 	
 	/**
@@ -219,9 +207,8 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code filter} are {@code null}
 	 */
 	public PixelImageF(final int resolutionX, final int resolutionY, final Color4F colorRGBA, final Filter2F filter) {
-		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		super(resolutionX, resolutionY);
+		
 		this.pixels = PixelF.createPixels(resolutionX, resolutionY, colorRGBA);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
@@ -266,9 +253,8 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, at least one of its elements or {@code filter} are {@code null}
 	 */
 	public PixelImageF(final int resolutionX, final int resolutionY, final Color4F[] colorRGBAs, final Filter2F filter) {
-		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		super(resolutionX, resolutionY);
+		
 		this.pixels = PixelF.createPixels(resolutionX, resolutionY, colorRGBAs);
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
@@ -325,9 +311,8 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
 	 */
 	public PixelImageF(final int resolutionX, final int resolutionY, final byte[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter2F filter) {
-		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		super(resolutionX, resolutionY);
+		
 		this.pixels = PixelF.createPixels(resolutionX, resolutionY, Color4F.arrayRead(colorRGBAs, arrayComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
@@ -384,9 +369,8 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code arrayComponentOrder} or {@code filter} are {@code null}
 	 */
 	public PixelImageF(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final ArrayComponentOrder arrayComponentOrder, final Filter2F filter) {
-		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		super(resolutionX, resolutionY);
+		
 		this.pixels = PixelF.createPixels(resolutionX, resolutionY, Color4F.arrayRead(colorRGBAs, arrayComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
@@ -433,111 +417,14 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBAs}, {@code packedIntComponentOrder} or {@code filter} are {@code null}
 	 */
 	public PixelImageF(final int resolutionX, final int resolutionY, final int[] colorRGBAs, final PackedIntComponentOrder packedIntComponentOrder, final Filter2F filter) {
-		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		super(resolutionX, resolutionY);
+		
 		this.pixels = PixelF.createPixels(resolutionX, resolutionY, Color4F.arrayUnpack(colorRGBAs, packedIntComponentOrder));
 		this.filter = Objects.requireNonNull(filter, "filter == null");
 		this.filterTable = filter.createFilterTable();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@code BufferedImage} representation of this {@code PixelImageF} instance.
-	 * 
-	 * @return a {@code BufferedImage} representation of this {@code PixelImageF} instance
-	 */
-	@Override
-	public BufferedImage toBufferedImage() {
-		final BufferedImage bufferedImage = new BufferedImage(this.resolutionX, this.resolutionY, BufferedImage.TYPE_INT_ARGB);
-		
-		final int[] dataSource = toIntArrayPackedForm();
-		final int[] dataTarget = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
-		
-		System.arraycopy(dataSource, 0, dataTarget, 0, dataSource.length);
-		
-		return bufferedImage;
-	}
-	
-	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
-	 * <p>
-	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.getColorRGB(x, y, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
-	 */
-	@Override
-	public Color3F getColorRGB(final float x, final float y) {
-		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
-	}
-	
-	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
-	 * <p>
-	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
-	 * <p>
-	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
-	 * 
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
-	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
-	 */
-	@Override
-	public Color3F getColorRGB(final float x, final float y, final PixelOperation pixelOperation) {
-		final int minimumX = toInt(floor(x));
-		final int maximumX = toInt(ceil(x));
-		
-		final int minimumY = toInt(floor(y));
-		final int maximumY = toInt(ceil(y));
-		
-		if(minimumX == maximumX && minimumY == maximumY) {
-			return getColorRGB(minimumX, minimumY, pixelOperation);
-		}
-		
-		final Color3F color00 = getColorRGB(minimumX, minimumY, pixelOperation);
-		final Color3F color01 = getColorRGB(maximumX, minimumY, pixelOperation);
-		final Color3F color10 = getColorRGB(minimumX, maximumY, pixelOperation);
-		final Color3F color11 = getColorRGB(maximumX, maximumY, pixelOperation);
-		
-		final float xFactor = x - minimumX;
-		final float yFactor = y - minimumY;
-		
-		final Color3F color = Color3F.blend(Color3F.blend(color00, color01, xFactor), Color3F.blend(color10, color11, xFactor), yFactor);
-		
-		return color;
-	}
-	
-	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.getColorRGB(index, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param index the index of the pixel
-	 * @return the {@code Color3F} of the pixel represented by {@code index}
-	 */
-	@Override
-	public Color3F getColorRGB(final int index) {
-		return getColorRGB(index, PixelOperation.NO_CHANGE);
-	}
 	
 	/**
 	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
@@ -559,25 +446,6 @@ public final class PixelImageF implements ImageF {
 	/**
 	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.getColorRGB(x, y, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
-	 */
-	@Override
-	public Color3F getColorRGB(final int x, final int y) {
-		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
-	}
-	
-	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
-	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
@@ -591,47 +459,6 @@ public final class PixelImageF implements ImageF {
 	@Override
 	public Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
 		return new Color3F(getPixel(x, y, pixelOperation).map(pixel -> pixel.getColorRGBA()).orElse(Color4F.BLACK));
-	}
-	
-	/**
-	 * Finds the bounds for {@code image} in this {@code PixelImageF} instance.
-	 * <p>
-	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code PixelImageF} instance.
-	 * <p>
-	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param image an {@link ImageF} instance
-	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code PixelImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
-	 */
-	@Override
-	public List<Rectangle2I> findBoundsFor(final ImageF image) {
-		Objects.requireNonNull(image, "image == null");
-		
-		final List<Rectangle2I> rectangles = new ArrayList<>();
-		
-		for(int y = 0; y < getResolutionY() - image.getResolutionY(); y++) {
-			for(int x = 0; x < getResolutionX() - image.getResolutionX(); x++) {
-				Rectangle2I rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x, y));
-				
-				labelImage:
-				if(getColorRGB(x, y).equals(image.getColorRGB(0, 0))) {
-					for(int imageY = 0; imageY < image.getResolutionY(); imageY++) {
-						for(int imageX = 0; imageX < image.getResolutionX(); imageX++) {
-							if(!getColorRGB(x + imageX, y + imageY).equals(image.getColorRGB(imageX, imageY))) {
-								break labelImage;
-							}
-							
-							rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x + imageX + 1, y + imageY + 1));
-						}
-					}
-					
-					rectangles.add(rectangle);
-				}
-			}
-		}
-		
-		return rectangles;
 	}
 	
 	/**
@@ -664,7 +491,7 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
 	public Optional<PixelF> getPixel(final int index, final PixelOperation pixelOperation) {
-		final int resolution = this.resolution;
+		final int resolution = getResolution();
 		
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
 		
@@ -707,8 +534,8 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
 	public Optional<PixelF> getPixel(final int x, final int y, final PixelOperation pixelOperation) {
-		final int resolutionX = this.resolutionX;
-		final int resolutionY = this.resolutionY;
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
 		
 		final int xTransformed = pixelOperation.getX(x, resolutionX);
 		final int yTransformed = pixelOperation.getY(y, resolutionY);
@@ -731,37 +558,13 @@ public final class PixelImageF implements ImageF {
 	}
 	
 	/**
-	 * Returns a {@link Rectangle2I} with the bounds of this {@code PixelImageF} instance.
-	 * 
-	 * @return a {@code Rectangle2I} with the bounds of this {@code PixelImageF} instance
-	 */
-	@Override
-	public Rectangle2I getBounds() {
-		return new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
-	}
-	
-	/**
 	 * Returns a {@code String} representation of this {@code PixelImageF} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code PixelImageF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PixelImageF(%d, %d, new Color3F[] {...}, %s)", Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), this.filter);
-	}
-	
-	/**
-	 * Returns a {@code WritableImage} representation of this {@code PixelImageF} instance.
-	 * 
-	 * @return a {@code WritableImage} representation of this {@code PixelImageF} instance
-	 */
-	@Override
-	public WritableImage toWritableImage() {
-		final
-		WritableImage writableImage = new WritableImage(this.resolutionX, this.resolutionY);
-		writableImage.getPixelWriter().setPixels(0, 0, this.resolutionX, this.resolutionY, PixelFormat.getIntArgbInstance(), toIntArrayPackedForm(), 0, this.resolutionX);
-		
-		return writableImage;
+		return String.format("new PixelImageF(%d, %d, new Color3F[] {...}, %s)", Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), this.filter);
 	}
 	
 	/**
@@ -778,62 +581,21 @@ public final class PixelImageF implements ImageF {
 			return true;
 		} else if(!(object instanceof PixelImageF)) {
 			return false;
+		} else if(getResolution() != PixelImageF.class.cast(object).getResolution()) {
+			return false;
+		} else if(getResolutionX() != PixelImageF.class.cast(object).getResolutionX()) {
+			return false;
+		} else if(getResolutionY() != PixelImageF.class.cast(object).getResolutionY()) {
+			return false;
 		} else if(!Objects.equals(this.filter, PixelImageF.class.cast(object).filter)) {
 			return false;
 		} else if(!Arrays.equals(this.pixels, PixelImageF.class.cast(object).pixels)) {
 			return false;
 		} else if(!Arrays.equals(this.filterTable, PixelImageF.class.cast(object).filterTable)) {
 			return false;
-		} else if(this.resolution != PixelImageF.class.cast(object).resolution) {
-			return false;
-		} else if(this.resolutionX != PixelImageF.class.cast(object).resolutionX) {
-			return false;
-		} else if(this.resolutionY != PixelImageF.class.cast(object).resolutionY) {
-			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the resolution of this {@code PixelImageF} instance.
-	 * <p>
-	 * The resolution of {@code pixelImage} can be computed by:
-	 * <pre>
-	 * {@code
-	 * int resolution = pixelImage.getResolutionX() * pixelImage.getResolutionY();
-	 * }
-	 * </pre>
-	 * 
-	 * @return the resolution of this {@code PixelImageF} instance
-	 */
-	@Override
-	public int getResolution() {
-		return this.resolution;
-	}
-	
-	/**
-	 * Returns the resolution of the X-axis of this {@code PixelImageF} instance.
-	 * <p>
-	 * The resolution of the X-axis is also known as the width.
-	 * 
-	 * @return the resolution of the X-axis of this {@code PixelImageF} instance
-	 */
-	@Override
-	public int getResolutionX() {
-		return this.resolutionX;
-	}
-	
-	/**
-	 * Returns the resolution of the Y-axis of this {@code PixelImageF} instance.
-	 * <p>
-	 * The resolution of the Y-axis is also known as the height.
-	 * 
-	 * @return the resolution of the Y-axis of this {@code PixelImageF} instance
-	 */
-	@Override
-	public int getResolutionY() {
-		return this.resolutionY;
 	}
 	
 	/**
@@ -843,24 +605,7 @@ public final class PixelImageF implements ImageF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.filter, Integer.valueOf(Arrays.hashCode(this.pixels)), Integer.valueOf(Arrays.hashCode(this.filterTable)), Integer.valueOf(this.resolution), Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY));
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code PixelImageF} instance in a packed form.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.toIntArrayPackedForm(PackedIntComponentOrder.ARGB);
-	 * }
-	 * </pre>
-	 * 
-	 * @return an {@code int[]} representation of this {@code PixelImageF} instance in a packed form
-	 */
-	@Override
-	public int[] toIntArrayPackedForm() {
-		return toIntArrayPackedForm(PackedIntComponentOrder.ARGB);
+		return Objects.hash(Integer.valueOf(getResolution()), Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), this.filter, Integer.valueOf(Arrays.hashCode(this.pixels)), Integer.valueOf(Arrays.hashCode(this.filterTable)));
 	}
 	
 	/**
@@ -876,9 +621,11 @@ public final class PixelImageF implements ImageF {
 	public int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder) {
 		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");
 		
-		final int[] intArray = new int[this.resolution];
+		final int resolution = getResolution();
 		
-		for(int i = 0; i < this.resolution; i++) {
+		final int[] intArray = new int[resolution];
+		
+		for(int i = 0; i < resolution; i++) {
 			intArray[i] = this.pixels[i].pack(packedIntComponentOrder);
 		}
 		
@@ -912,69 +659,6 @@ public final class PixelImageF implements ImageF {
 		
 		for(final PixelF pixel : this.pixels) {
 			pixel.setColorRGB(colorRGB);
-		}
-	}
-	
-	/**
-	 * Copies the individual component values of the {@link Color3F} instances in this {@code PixelImageF} instance to the {@code byte[]} {@code array}.
-	 * <p>
-	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code array.length != pixelImage.getResolution() * ArrayComponentOrder.BGRA.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.copyTo(array, ArrayComponentOrder.BGRA);
-	 * }
-	 * </pre>
-	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the {@code Color3F} instances in this {@code PixelImageF} instance to
-	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != pixelImage.getResolution() * ArrayComponentOrder.BGRA.getComponentCount()}
-	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
-	 */
-	@Override
-	public void copyTo(final byte[] array) {
-		copyTo(array, ArrayComponentOrder.BGRA);
-	}
-	
-	/**
-	 * Copies the individual component values of the {@link Color3F} instances in this {@code PixelImageF} instance to the {@code byte[]} {@code array}.
-	 * <p>
-	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code array.length != pixelImage.getResolution() * arrayComponentOrder.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the {@code Color3F} instances in this {@code PixelImageF} instance to
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder} to copy the components to {@code array} in the correct order
-	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != pixelImage.getResolution() * arrayComponentOrder.getComponentCount()}
-	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
-	 */
-	@Override
-	public void copyTo(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
-		Objects.requireNonNull(array, "array == null");
-		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
-		
-		ParameterArguments.requireExact(array.length, this.pixels.length * arrayComponentOrder.getComponentCount(), "array");
-		
-		for(int i = 0, j = 0; i < this.pixels.length; i++, j += arrayComponentOrder.getComponentCount()) {
-			final Color4F colorRGBA = this.pixels[i].getColorRGBA();
-			
-			if(arrayComponentOrder.hasOffsetR()) {
-				array[j + arrayComponentOrder.getOffsetR()] = colorRGBA.getAsByteR();
-			}
-			
-			if(arrayComponentOrder.hasOffsetG()) {
-				array[j + arrayComponentOrder.getOffsetG()] = colorRGBA.getAsByteG();
-			}
-			
-			if(arrayComponentOrder.hasOffsetB()) {
-				array[j + arrayComponentOrder.getOffsetB()] = colorRGBA.getAsByteB();
-			}
-			
-			if(arrayComponentOrder.hasOffsetA()) {
-				array[j + arrayComponentOrder.getOffsetA()] = colorRGBA.getAsByteA();
-			}
 		}
 	}
 	
@@ -1095,7 +779,7 @@ public final class PixelImageF implements ImageF {
 		Objects.requireNonNull(line, "line == null");
 		Objects.requireNonNull(function, "function == null");
 		
-		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
+		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(getResolutionX(), getResolutionY()));
 		
 		final Point2I[] scanline = Rasterizer2I.rasterize(line, rectangle);
 		
@@ -1528,7 +1212,7 @@ public final class PixelImageF implements ImageF {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(function, "function == null");
 		
-		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
+		final Rectangle2I rectangle = new Rectangle2I(new Point2I(), new Point2I(getResolutionX(), getResolutionY()));
 		
 		final Point2I[][] scanlines = Rasterizer2I.rasterize(triangle, rectangle);
 		
@@ -1592,8 +1276,8 @@ public final class PixelImageF implements ImageF {
 		final float deltaX = x - 0.5F;
 		final float deltaY = y - 0.5F;
 		
-		final int resolutionX = this.resolutionX;
-		final int resolutionY = this.resolutionY;
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
 		
 		final int minimumFilterX = toInt(max(ceil(deltaX - filterResolutionX), 0));
 		final int maximumFilterX = toInt(min(floor(deltaX + filterResolutionX), resolutionX - 1));
@@ -1715,9 +1399,12 @@ public final class PixelImageF implements ImageF {
 	 * Flips this {@code PixelImageF} instance along the X-axis.
 	 */
 	public void flipX() {
-		for(int xL = 0, xR = this.resolutionX - 1; xL < xR; xL++, xR--) {
-			for(int y = 0; y < this.resolutionY; y++) {
-				PixelF.swap(this.pixels[y * this.resolutionX + xL], this.pixels[y * this.resolutionX + xR]);
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		for(int xL = 0, xR = resolutionX - 1; xL < xR; xL++, xR--) {
+			for(int y = 0; y < resolutionY; y++) {
+				PixelF.swap(this.pixels[y * resolutionX + xL], this.pixels[y * resolutionX + xR]);
 			}
 		}
 	}
@@ -1726,9 +1413,12 @@ public final class PixelImageF implements ImageF {
 	 * Flips this {@code PixelImageF} instance along the Y-axis.
 	 */
 	public void flipY() {
-		for(int yT = 0, yB = this.resolutionY - 1; yT < yB; yT++, yB--) {
-			for(int x = 0; x < this.resolutionX; x++) {
-				PixelF.swap(this.pixels[yT * this.resolutionX + x], this.pixels[yB * this.resolutionX + x]);
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		for(int yT = 0, yB = resolutionY - 1; yT < yB; yT++, yB--) {
+			for(int x = 0; x < resolutionX; x++) {
+				PixelF.swap(this.pixels[yT * resolutionX + x], this.pixels[yB * resolutionX + x]);
 			}
 		}
 	}
@@ -1756,8 +1446,11 @@ public final class PixelImageF implements ImageF {
 		
 		final PixelImageF pixelImage = copy();
 		
-		for(int y = 0; y < this.resolutionY; y++) {
-			for(int x = 0; x < this.resolutionX; x++) {
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
 				Color3F colorRGB = Color3F.BLACK;
 				
 //				Row #1:
@@ -1800,8 +1493,11 @@ public final class PixelImageF implements ImageF {
 		
 		final PixelImageF pixelImage = copy();
 		
-		for(int y = 0; y < this.resolutionY; y++) {
-			for(int x = 0; x < this.resolutionX; x++) {
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
 				Color3F colorRGB = Color3F.BLACK;
 				
 //				Row #1:
@@ -1869,76 +1565,6 @@ public final class PixelImageF implements ImageF {
 	}
 	
 	/**
-	 * Saves this {@code PixelImageF} as a .PNG image to the file represented by {@code file}.
-	 * <p>
-	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * 
-	 * @param file a {@code File} that represents the file to save to
-	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	@Override
-	public void save(final File file) {
-		try {
-			final File parentFile = file.getParentFile();
-			
-			if(parentFile != null && !parentFile.isDirectory()) {
-				parentFile.mkdirs();
-			}
-			
-			ImageIO.write(toBufferedImage(), "png", Objects.requireNonNull(file, "file == null"));
-		} catch(final IOException e) {
-			throw new UncheckedIOException(e);
-		}
-	}
-	
-	/**
-	 * Saves this {@code PixelImageF} as a .PNG image to the file represented by the pathname {@code pathname}.
-	 * <p>
-	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.save(new File(pathname));
-	 * }
-	 * </pre>
-	 * 
-	 * @param pathname a {@code String} that represents the pathname of the file to save to
-	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	@Override
-	public void save(final String pathname) {
-		save(new File(pathname));
-	}
-	
-	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
-	 * <p>
-	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param colorRGB the {@code Color3F} to set
-	 * @param index the index of the pixel
-	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
-	 */
-	@Override
-	public void setColorRGB(final Color3F colorRGB, final int index) {
-		setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
-	}
-	
-	/**
 	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
 	 * <p>
 	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -1955,33 +1581,13 @@ public final class PixelImageF implements ImageF {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		
-		final int indexTransformed = pixelOperation.getIndex(index, this.resolution);
+		final int resolution = getResolution();
 		
-		if(indexTransformed >= 0 && indexTransformed < this.resolution) {
+		final int indexTransformed = pixelOperation.getIndex(index, resolution);
+		
+		if(indexTransformed >= 0 && indexTransformed < resolution) {
 			this.pixels[indexTransformed].setColorRGB(colorRGB);
 		}
-	}
-	
-	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
-	 * <p>
-	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.setColor(colorRGB, x, y, PixelOperation.NO_CHANGE);
-	 * }
-	 * </pre>
-	 * 
-	 * @param colorRGB the {@code Color3F} to set
-	 * @param x the X-coordinate of the pixel
-	 * @param y the Y-coordinate of the pixel
-	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
-	 */
-	@Override
-	public void setColorRGB(final Color3F colorRGB, final int x, final int y) {
-		setColorRGB(colorRGB, x, y, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
@@ -2002,11 +1608,14 @@ public final class PixelImageF implements ImageF {
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		
-		final int xTransformed = pixelOperation.getX(x, this.resolutionX);
-		final int yTransformed = pixelOperation.getY(y, this.resolutionY);
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
 		
-		if(xTransformed >= 0 && xTransformed < this.resolutionX && yTransformed >= 0 && yTransformed < this.resolutionY) {
-			final int index = yTransformed * this.resolutionX + xTransformed;
+		final int xTransformed = pixelOperation.getX(x, resolutionX);
+		final int yTransformed = pixelOperation.getY(y, resolutionY);
+		
+		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
+			final int index = yTransformed * resolutionX + xTransformed;
 			
 			this.pixels[index].setColorRGB(colorRGB);
 		}
@@ -2087,8 +1696,8 @@ public final class PixelImageF implements ImageF {
 		
 		final int minimumX = max(min(aX, bX), 0);
 		final int minimumY = max(min(aY, bY), 0);
-		final int maximumX = min(max(aX, bX), this.resolutionX);
-		final int maximumY = min(max(aY, bY), this.resolutionY);
+		final int maximumX = min(max(aX, bX), getResolutionX());
+		final int maximumY = min(max(aY, bY), getResolutionY());
 		
 		for(int y = minimumY; y < maximumY; y++) {
 			for(int x = minimumX; x < maximumX; x++) {
@@ -2169,11 +1778,11 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
 	 */
 	public static PixelImageF blend(final PixelImageF pixelImageA, final PixelImageF pixelImageB, final float tComponent1, final float tComponent2, final float tComponent3) {
-		final int pixelImageAResolutionX = pixelImageA.resolutionX;
-		final int pixelImageAResolutionY = pixelImageA.resolutionY;
+		final int pixelImageAResolutionX = pixelImageA.getResolutionX();
+		final int pixelImageAResolutionY = pixelImageA.getResolutionY();
 		
-		final int pixelImageBResolutionX = pixelImageB.resolutionX;
-		final int pixelImageBResolutionY = pixelImageB.resolutionY;
+		final int pixelImageBResolutionX = pixelImageB.getResolutionX();
+		final int pixelImageBResolutionY = pixelImageB.getResolutionY();
 		
 		final int pixelImageCResolutionX = max(pixelImageAResolutionX, pixelImageBResolutionX);
 		final int pixelImageCResolutionY = max(pixelImageAResolutionY, pixelImageBResolutionY);
@@ -2225,10 +1834,13 @@ public final class PixelImageF implements ImageF {
 	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
 	 */
 	public static PixelImageF difference(final PixelImageF pixelImageA, final PixelImageF pixelImageB) {
-		final PixelImageF pixelImageC = new PixelImageF(max(pixelImageA.resolutionX, pixelImageB.resolutionX), max(pixelImageA.resolutionY, pixelImageB.resolutionY));
+		final int resolutionX = max(pixelImageA.getResolutionX(), pixelImageB.getResolutionX());
+		final int resolutionY = max(pixelImageA.getResolutionY(), pixelImageB.getResolutionY());
 		
-		for(int y = 0; y < pixelImageC.resolutionY; y++) {
-			for(int x = 0; x < pixelImageC.resolutionX; x++) {
+		final PixelImageF pixelImageC = new PixelImageF(resolutionX, resolutionY);
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
 				final Color3F colorA = pixelImageA.getColorRGB(x, y);
 				final Color3F colorB = pixelImageB.getColorRGB(x, y);
 				final Color3F colorC = colorA.equals(colorB) ? colorA : Color3F.BLACK;

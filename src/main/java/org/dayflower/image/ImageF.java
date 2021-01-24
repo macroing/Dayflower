@@ -1042,8 +1042,8 @@ public abstract class ImageF {
 		final int targetMaximumX = targetBounds.getC().getX();
 		final int targetMaximumY = targetBounds.getC().getY();
 		
-		for(int sourceY = sourceMinimumY, targetY = targetMinimumY; sourceY <= sourceMaximumY && targetY <= targetMaximumY; sourceY++, targetY++) {
-			for(int sourceX = sourceMinimumX, targetX = targetMinimumX; sourceX <= sourceMaximumX && targetX <= targetMaximumX; sourceX++, targetX++) {
+		for(int sourceY = sourceMinimumY, targetY = targetMinimumY; sourceY < sourceMaximumY && targetY < targetMaximumY; sourceY++, targetY++) {
+			for(int sourceX = sourceMinimumX, targetX = targetMinimumX; sourceX < sourceMaximumX && targetX < targetMaximumX; sourceX++, targetX++) {
 				final Color4F sourceColorRGBA = sourceImage.getColorRGBA(sourceX, sourceY);
 				final Color4F targetColorRGBA = targetImage.getColorRGBA(targetX, targetY);
 				final Color4F colorRGBA = Objects.requireNonNull(triFunction.apply(sourceColorRGBA, targetColorRGBA, new Point2I(targetX, targetY)));

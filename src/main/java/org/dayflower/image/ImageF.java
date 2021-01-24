@@ -1401,17 +1401,43 @@ public abstract class ImageF {
 	}
 	
 	/**
-	 * Saves this {@code ImageF} as a .PNG image to the file represented by {@code file}.
+	 * Saves this {@code ImageF} to the file represented by {@code file} using the informal format name {@code "png"}.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.save(file, "png");
+	 * }
+	 * </pre>
 	 * 
 	 * @param file a {@code File} that represents the file to save to
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public final void save(final File file) {
+		save(file, "png");
+	}
+	
+	/**
+	 * Saves this {@code ImageF} to the file represented by {@code file} using the informal format name {@code formatName}.
+	 * <p>
+	 * If either {@code file} or {@code formatName} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} that represents the file to save to
+	 * @param formatName the informal format name, such as {@code "png"}
+	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code formatName} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public final void save(final File file, final String formatName) {
+		Objects.requireNonNull(file, "file == null");
+		Objects.requireNonNull(formatName, "formatName == null");
+		
 		try {
 			final File parentFile = file.getParentFile();
 			
@@ -1419,14 +1445,14 @@ public abstract class ImageF {
 				parentFile.mkdirs();
 			}
 			
-			ImageIO.write(toBufferedImage(), "png", Objects.requireNonNull(file, "file == null"));
+			ImageIO.write(toBufferedImage(), formatName, file);
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 	
 	/**
-	 * Saves this {@code ImageF} as a .PNG image to the file represented by the pathname {@code pathname}.
+	 * Saves this {@code ImageF} to the file represented by the pathname {@code pathname} using the informal format name {@code "png"}.
 	 * <p>
 	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1435,7 +1461,7 @@ public abstract class ImageF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.save(new File(pathname));
+	 * image.save(pathname, "png");
 	 * }
 	 * </pre>
 	 * 
@@ -1444,7 +1470,30 @@ public abstract class ImageF {
 	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
 	 */
 	public final void save(final String pathname) {
-		save(new File(pathname));
+		save(pathname, "png");
+	}
+	
+	/**
+	 * Saves this {@code ImageF} to the file represented by the pathname {@code pathname} using the informal format name {@code formatName}.
+	 * <p>
+	 * If either {@code pathname} or {@code formatName} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.save(new File(pathname), formatName);
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} that represents the pathname of the file to save to
+	 * @param formatName the informal format name, such as {@code "png"}
+	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code formatName} are {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public final void save(final String pathname, final String formatName) {
+		save(new File(pathname), formatName);
 	}
 	
 	/**

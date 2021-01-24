@@ -22,6 +22,7 @@ import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isInfinite;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isZero;
+import static org.dayflower.utility.Doubles.lerp;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.toDouble;
@@ -47,6 +48,11 @@ public final class Color4D {
 	 * A {@code Color4D} denoting the color black.
 	 */
 	public static final Color4D BLACK = new Color4D();
+	
+	/**
+	 * A {@code Color4D} denoting the color red.
+	 */
+	public static final Color4D RED = new Color4D(1.0D, 0.0D, 0.0D);
 	
 	/**
 	 * A {@code Color4D} denoting the color white.
@@ -880,6 +886,78 @@ public final class Color4D {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the blend.
+	 * <p>
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4D.blend(colorLHS, colorRHS, 0.5D);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorLHS the {@code Color4D} instance on the left-hand side
+	 * @param colorRHS the {@code Color4D} instance on the right-hand side
+	 * @return a new {@code Color4D} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
+	 */
+	public static Color4D blend(final Color4D colorLHS, final Color4D colorRHS) {
+		return blend(colorLHS, colorRHS, 0.5D);
+	}
+	
+	/**
+	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the blend.
+	 * <p>
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4D.blend(colorLHS, colorRHS, t, t, t, t);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorLHS the {@code Color4D} instance on the left-hand side
+	 * @param colorRHS the {@code Color4D} instance on the right-hand side
+	 * @param t the factor to use for all components in the blending process
+	 * @return a new {@code Color4D} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
+	 */
+	public static Color4D blend(final Color4D colorLHS, final Color4D colorRHS, final double t) {
+		return blend(colorLHS, colorRHS, t, t, t, t);
+	}
+	
+	/**
+	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the blend.
+	 * <p>
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorLHS the {@code Color4D} instance on the left-hand side
+	 * @param colorRHS the {@code Color4D} instance on the right-hand side
+	 * @param tComponent1 the factor to use for component 1 in the blending process
+	 * @param tComponent2 the factor to use for component 2 in the blending process
+	 * @param tComponent3 the factor to use for component 3 in the blending process
+	 * @param tComponent4 the factor to use for component 4 in the blending process
+	 * @return a new {@code Color4D} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
+	 */
+	public static Color4D blend(final Color4D colorLHS, final Color4D colorRHS, final double tComponent1, final double tComponent2, final double tComponent3, final double tComponent4) {
+		final double component1 = lerp(colorLHS.component1, colorRHS.component1, tComponent1);
+		final double component2 = lerp(colorLHS.component2, colorRHS.component2, tComponent2);
+		final double component3 = lerp(colorLHS.component3, colorRHS.component3, tComponent3);
+		final double component4 = lerp(colorLHS.component4, colorRHS.component4, tComponent4);
+		
+		return new Color4D(component1, component2, component3, component4);
+	}
 	
 	/**
 	 * Returns a {@code Color4D} instance with random component values.

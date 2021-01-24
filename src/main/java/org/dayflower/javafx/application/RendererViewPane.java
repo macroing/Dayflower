@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
 import org.dayflower.filter.BoxFilter2F;
 import org.dayflower.geometry.Point2I;
@@ -425,7 +424,7 @@ final class RendererViewPane extends BorderPane {
 		
 		final
 		PixelImageF pixelImageF = PixelImageF.class.cast(combinedProgressiveImageOrderRenderer.getImage());
-		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color3F(181, 181, 181));
+		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
 		
 		return pixelImageF.toWritableImage();
 	}
@@ -434,7 +433,7 @@ final class RendererViewPane extends BorderPane {
 	private static WritableImage doCreateWritableImageShape(final Shape3F shape) {
 		final
 		PixelImageF pixelImageF = new PixelImageF(32, 32, Color4F.WHITE);
-		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color3F(181, 181, 181));
+		pixelImageF.drawRectangle(new Rectangle2I(new Point2I(0, 0), new Point2I(pixelImageF.getResolutionX() - 1, pixelImageF.getResolutionY() - 1)), new Color4F(181, 181, 181));
 		
 		return pixelImageF.toWritableImage();
 	}

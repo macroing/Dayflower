@@ -18,19 +18,19 @@
  */
 package org.dayflower.example;
 
-import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 
 public class PixelImageFFillExample {
 	public static void main(String[] args) {
-		PixelImageF pixelImageF0 = PixelImageF.random(50, 50);
-		
-		PixelImageF pixelImageF = new PixelImageF(150, 150);
-		pixelImageF.fillCircle(new Circle2I(new Point2I(75, 75), 50), Color3F.RED);
-		pixelImageF.fillPixelImage(pixelImageF0, pixelImageF0.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
-		pixelImageF.save("PixelImageF-Fill-Example.png");
+		ImageF imageFRandom = PixelImageF.random(50, 50);
+		ImageF imageF = new PixelImageF(150, 150);
+		imageF.fillCircle(new Circle2I(new Point2I(75, 75), 50), Color4F.RED);
+		imageF.fillImage(imageFRandom, imageFRandom.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
+		imageF.save("PixelImageF-Fill-Example.png");
 	}
 }

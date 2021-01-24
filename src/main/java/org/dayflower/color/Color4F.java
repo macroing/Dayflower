@@ -22,6 +22,7 @@ import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.lerp;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.toFloat;
@@ -47,6 +48,11 @@ public final class Color4F {
 	 * A {@code Color4F} denoting the color black.
 	 */
 	public static final Color4F BLACK = new Color4F();
+	
+	/**
+	 * A {@code Color4F} denoting the color red.
+	 */
+	public static final Color4F RED = new Color4F(1.0F, 0.0F, 0.0F);
 	
 	/**
 	 * A {@code Color4F} denoting the color white.
@@ -880,6 +886,78 @@ public final class Color4F {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
+	 * <p>
+	 * Returns a new {@code Color4F} instance with the result of the blend.
+	 * <p>
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4F.blend(colorLHS, colorRHS, 0.5F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorLHS the {@code Color4F} instance on the left-hand side
+	 * @param colorRHS the {@code Color4F} instance on the right-hand side
+	 * @return a new {@code Color4F} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
+	 */
+	public static Color4F blend(final Color4F colorLHS, final Color4F colorRHS) {
+		return blend(colorLHS, colorRHS, 0.5F);
+	}
+	
+	/**
+	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
+	 * <p>
+	 * Returns a new {@code Color4F} instance with the result of the blend.
+	 * <p>
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Color4F.blend(colorLHS, colorRHS, t, t, t, t);
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorLHS the {@code Color4F} instance on the left-hand side
+	 * @param colorRHS the {@code Color4F} instance on the right-hand side
+	 * @param t the factor to use for all components in the blending process
+	 * @return a new {@code Color4F} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
+	 */
+	public static Color4F blend(final Color4F colorLHS, final Color4F colorRHS, final float t) {
+		return blend(colorLHS, colorRHS, t, t, t, t);
+	}
+	
+	/**
+	 * Blends the component values of {@code colorLHS} and {@code colorRHS}.
+	 * <p>
+	 * Returns a new {@code Color4F} instance with the result of the blend.
+	 * <p>
+	 * If either {@code colorLHS} or {@code colorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorLHS the {@code Color4F} instance on the left-hand side
+	 * @param colorRHS the {@code Color4F} instance on the right-hand side
+	 * @param tComponent1 the factor to use for component 1 in the blending process
+	 * @param tComponent2 the factor to use for component 2 in the blending process
+	 * @param tComponent3 the factor to use for component 3 in the blending process
+	 * @param tComponent4 the factor to use for component 4 in the blending process
+	 * @return a new {@code Color4F} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code colorLHS} or {@code colorRHS} are {@code null}
+	 */
+	public static Color4F blend(final Color4F colorLHS, final Color4F colorRHS, final float tComponent1, final float tComponent2, final float tComponent3, final float tComponent4) {
+		final float component1 = lerp(colorLHS.component1, colorRHS.component1, tComponent1);
+		final float component2 = lerp(colorLHS.component2, colorRHS.component2, tComponent2);
+		final float component3 = lerp(colorLHS.component3, colorRHS.component3, tComponent3);
+		final float component4 = lerp(colorLHS.component4, colorRHS.component4, tComponent4);
+		
+		return new Color4F(component1, component2, component3, component4);
+	}
 	
 	/**
 	 * Returns a {@code Color4F} instance with random component values.

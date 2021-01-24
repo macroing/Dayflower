@@ -40,20 +40,21 @@ public class PixelImageFBlendExample {
 #### PixelImageF Draw Example
 The following example creates an empty image, draws a line, a rectangle and a triangle and saves the result to your hard drive.
 ```java
-import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 
 public class PixelImageFDrawExample {
     public static void main(String[] args) {
-        PixelImageF pixelImageF = new PixelImageF(150, 150);
-        pixelImageF.drawLine(new Line2I(new Point2I(20, 20), new Point2I(100, 100)), Color3F.RED);
-        pixelImageF.drawRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)), Color3F.RED);
-        pixelImageF.drawTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)), Color3F.RED);
-        pixelImageF.save("PixelImageF-Draw-Example.png");
+        ImageF imageF = new PixelImageF(150, 150);
+        imageF.drawLine(new Line2I(new Point2I(20, 20), new Point2I(100, 100)), Color4F.RED);
+        imageF.drawRectangle(new Rectangle2I(new Point2I(20, 20), new Point2I(100, 100)), Color4F.RED);
+        imageF.drawTriangle(new Triangle2I(new Point2I(60, 20), new Point2I(100, 100), new Point2I(20, 100)), Color4F.RED);
+        imageF.save("PixelImageF-Draw-Example.png");
     }
 }
 ```
@@ -61,20 +62,20 @@ public class PixelImageFDrawExample {
 #### PixelImageF Fill Example
 The following example creates two images, one empty and one random. Then it fills the empty image with a circle and the random image and saves the result to your hard drive.
 ```java
-import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 
 public class PixelImageFFillExample {
     public static void main(String[] args) {
-        PixelImageF pixelImageF0 = PixelImageF.random(50, 50);
-        
-        PixelImageF pixelImageF = new PixelImageF(150, 150);
-        pixelImageF.fillCircle(new Circle2I(new Point2I(75, 75), 50), Color3F.RED);
-        pixelImageF.fillPixelImage(pixelImageF0, pixelImageF0.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
-        pixelImageF.save("PixelImageF-Fill-Example.png");
+        ImageF imageFRandom = PixelImageF.random(50, 50);
+        ImageF imageF = new PixelImageF(150, 150);
+        imageF.fillCircle(new Circle2I(new Point2I(75, 75), 50), Color4F.RED);
+        imageF.fillPixelImage(imageFRandom, imageFRandom.getBounds(), new Rectangle2I(new Point2I(50, 50), new Point2I(100, 100)));
+        imageF.save("PixelImageF-Fill-Example.png");
     }
 }
 ```

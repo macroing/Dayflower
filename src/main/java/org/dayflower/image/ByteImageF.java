@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.dayflower.color.ArrayComponentOrder;
-import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.utility.ParameterArguments;
 
@@ -144,7 +144,7 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
+	 * Returns the {@link Color4F} of the pixel represented by {@code index}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -152,11 +152,11 @@ public final class ByteImageF extends ImageF {
 	 * 
 	 * @param index the index of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color3F} of the pixel represented by {@code index}
+	 * @return the {@code Color4F} of the pixel represented by {@code index}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
 	@Override
-	public Color3F getColorRGB(final int index, final PixelOperation pixelOperation) {
+	public Color4F getColorRGBA(final int index, final PixelOperation pixelOperation) {
 		final int resolution = getResolution();
 		
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
@@ -165,15 +165,16 @@ public final class ByteImageF extends ImageF {
 			final int r = this.bytes[indexTransformed * 4 + 0] & 0xFF;
 			final int g = this.bytes[indexTransformed * 4 + 1] & 0xFF;
 			final int b = this.bytes[indexTransformed * 4 + 2] & 0xFF;
+			final int a = this.bytes[indexTransformed * 4 + 3] & 0xFF;
 			
-			return new Color3F(r, g, b);
+			return new Color4F(r, g, b, a);
 		}
 		
-		return Color3F.BLACK;
+		return Color4F.BLACK;
 	}
 	
 	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color4F} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -182,11 +183,11 @@ public final class ByteImageF extends ImageF {
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color4F} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
 	@Override
-	public Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
+	public Color4F getColorRGBA(final int x, final int y, final PixelOperation pixelOperation) {
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
 		
@@ -199,11 +200,12 @@ public final class ByteImageF extends ImageF {
 			final int r = this.bytes[index * 4 + 0] & 0xFF;
 			final int g = this.bytes[index * 4 + 1] & 0xFF;
 			final int b = this.bytes[index * 4 + 2] & 0xFF;
+			final int a = this.bytes[index * 4 + 3] & 0xFF;
 			
-			return new Color3F(r, g, b);
+			return new Color4F(r, g, b, a);
 		}
 		
-		return Color3F.BLACK;
+		return Color4F.BLACK;
 	}
 	
 	/**
@@ -395,20 +397,20 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
+	 * Sets the {@link Color4F} of the pixel represented by {@code index} to {@code colorRGBA}.
 	 * <p>
-	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param colorRGB the {@code Color3F} to set
+	 * @param colorRGBA the {@code Color4F} to set
 	 * @param index the index of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
 	@Override
-	public void setColorRGB(final Color3F colorRGB, final int index, final PixelOperation pixelOperation) {
-		Objects.requireNonNull(colorRGB, "colorRGB == null");
+	public void setColorRGBA(final Color4F colorRGBA, final int index, final PixelOperation pixelOperation) {
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		
 		final int resolution = getResolution();
@@ -416,28 +418,29 @@ public final class ByteImageF extends ImageF {
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
 		
 		if(indexTransformed >= 0 && indexTransformed < resolution) {
-			this.bytes[indexTransformed * 4 + 0] = colorRGB.getAsByteR();
-			this.bytes[indexTransformed * 4 + 1] = colorRGB.getAsByteG();
-			this.bytes[indexTransformed * 4 + 2] = colorRGB.getAsByteB();
+			this.bytes[indexTransformed * 4 + 0] = colorRGBA.getAsByteR();
+			this.bytes[indexTransformed * 4 + 1] = colorRGBA.getAsByteG();
+			this.bytes[indexTransformed * 4 + 2] = colorRGBA.getAsByteB();
+			this.bytes[indexTransformed * 4 + 3] = colorRGBA.getAsByteA();
 		}
 	}
 	
 	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
+	 * Sets the {@link Color4F} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
 	 * <p>
-	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param colorRGB the {@code Color3F} to set
+	 * @param colorRGBA the {@code Color4F} to set
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
 	@Override
-	public void setColorRGB(final Color3F colorRGB, final int x, final int y, final PixelOperation pixelOperation) {
-		Objects.requireNonNull(colorRGB, "colorRGB == null");
+	public void setColorRGBA(final Color4F colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
+		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		
 		final int resolutionX = getResolutionX();
@@ -449,9 +452,10 @@ public final class ByteImageF extends ImageF {
 		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
 			final int index = yTransformed * resolutionX + xTransformed;
 			
-			this.bytes[index * 4 + 0] = colorRGB.getAsByteR();
-			this.bytes[index * 4 + 1] = colorRGB.getAsByteG();
-			this.bytes[index * 4 + 2] = colorRGB.getAsByteB();
+			this.bytes[index * 4 + 0] = colorRGBA.getAsByteR();
+			this.bytes[index * 4 + 1] = colorRGBA.getAsByteG();
+			this.bytes[index * 4 + 2] = colorRGBA.getAsByteB();
+			this.bytes[index * 4 + 3] = colorRGBA.getAsByteA();
 		}
 	}
 }

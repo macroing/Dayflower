@@ -270,6 +270,49 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	/**
+	 * Returns a {@code byte[]} representation of this {@code ByteImageF} instance.
+	 * <p>
+	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
+	 * @return a {@code byte[]} representation of this {@code ByteImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
+	 */
+	@Override
+	public byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder) {
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		final int resolution = getResolution();
+		
+		final byte[] byteArray = new byte[resolution * arrayComponentOrder.getComponentCount()];
+		
+		for(int i = 0; i < resolution; i++) {
+			final byte r = this.bytes[i * 4 + 0];
+			final byte g = this.bytes[i * 4 + 1];
+			final byte b = this.bytes[i * 4 + 2];
+			final byte a = this.bytes[i * 4 + 3];
+			
+			if(arrayComponentOrder.hasOffsetR()) {
+				byteArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetR()] = r;
+			}
+			
+			if(arrayComponentOrder.hasOffsetG()) {
+				byteArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetG()] = g;
+			}
+			
+			if(arrayComponentOrder.hasOffsetB()) {
+				byteArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetB()] = b;
+			}
+			
+			if(arrayComponentOrder.hasOffsetA()) {
+				byteArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetA()] = a;
+			}
+		}
+		
+		return byteArray;
+	}
+	
+	/**
 	 * Returns a hash code for this {@code ByteImageF} instance.
 	 * 
 	 * @return a hash code for this {@code ByteImageF} instance
@@ -277,6 +320,49 @@ public final class ByteImageF extends ImageF {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Integer.valueOf(getResolution()), Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), Integer.valueOf(Arrays.hashCode(this.bytes)));
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code ByteImageF} instance.
+	 * <p>
+	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
+	 * @return an {@code int[]} representation of this {@code ByteImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
+	 */
+	@Override
+	public int[] toIntArray(final ArrayComponentOrder arrayComponentOrder) {
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		final int resolution = getResolution();
+		
+		final int[] intArray = new int[resolution * arrayComponentOrder.getComponentCount()];
+		
+		for(int i = 0; i < resolution; i++) {
+			final int r = this.bytes[i * 4 + 0] & 0xFF;
+			final int g = this.bytes[i * 4 + 1] & 0xFF;
+			final int b = this.bytes[i * 4 + 2] & 0xFF;
+			final int a = this.bytes[i * 4 + 3] & 0xFF;
+			
+			if(arrayComponentOrder.hasOffsetR()) {
+				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetR()] = r;
+			}
+			
+			if(arrayComponentOrder.hasOffsetG()) {
+				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetG()] = g;
+			}
+			
+			if(arrayComponentOrder.hasOffsetB()) {
+				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetB()] = b;
+			}
+			
+			if(arrayComponentOrder.hasOffsetA()) {
+				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetA()] = a;
+			}
+		}
+		
+		return intArray;
 	}
 	
 	/**

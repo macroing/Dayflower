@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
+import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.image.ImageF;
 import org.dayflower.javafx.concurrent.PredicateTask;
 
@@ -313,7 +314,7 @@ public final class ConcurrentImageCanvas extends Canvas {
 				final WritableImage writableImage = this.writableImage;
 				
 				final PredicateTask newPredicateTask = new PredicateTask(() -> Boolean.valueOf(renderPredicate.test(image)), () -> {
-					image.copyTo(byteBuffer.array());
+					image.copyTo(byteBuffer.array(), ArrayComponentOrder.BGRA);
 					
 					final
 					PixelWriter pixelWriter = writableImage.getPixelWriter();

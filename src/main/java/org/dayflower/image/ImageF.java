@@ -282,6 +282,33 @@ public abstract class ImageF {
 	}
 	
 	/**
+	 * Returns a {@code byte[]} representation of this {@code ImageF} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.toByteArray(ArrayComponentOrder.RGBA);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code byte[]} representation of this {@code ImageF} instance
+	 */
+	public final byte[] toByteArray() {
+		return toByteArray(ArrayComponentOrder.RGBA);
+	}
+	
+	/**
+	 * Returns a {@code byte[]} representation of this {@code ImageF} instance.
+	 * <p>
+	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
+	 * @return a {@code byte[]} representation of this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
+	 */
+	public abstract byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder);
+	
+	/**
 	 * Returns the resolution of this {@code ImageF} instance.
 	 * <p>
 	 * The resolution of {@code image} can be computed by:
@@ -320,6 +347,33 @@ public abstract class ImageF {
 	}
 	
 	/**
+	 * Returns an {@code int[]} representation of this {@code ImageF} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.toIntArray(ArrayComponentOrder.RGBA);
+	 * }
+	 * </pre>
+	 * 
+	 * @return an {@code int[]} representation of this {@code ImageF} instance
+	 */
+	public final int[] toIntArray() {
+		return toIntArray(ArrayComponentOrder.RGBA);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code ImageF} instance.
+	 * <p>
+	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
+	 * @return an {@code int[]} representation of this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
+	 */
+	public abstract int[] toIntArray(final ArrayComponentOrder arrayComponentOrder);
+	
+	/**
 	 * Returns an {@code int[]} representation of this {@code ImageF} instance in a packed form.
 	 * <p>
 	 * Calling this method is equivalent to the following:
@@ -356,7 +410,7 @@ public abstract class ImageF {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.copyTo(array, ArrayComponentOrder.BGRA);
+	 * image.copyTo(array, ArrayComponentOrder.RGBA);
 	 * }
 	 * </pre>
 	 * 
@@ -365,7 +419,7 @@ public abstract class ImageF {
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public final void copyTo(final byte[] array) {
-		copyTo(array, ArrayComponentOrder.BGRA);
+		copyTo(array, ArrayComponentOrder.RGBA);
 	}
 	
 	/**
@@ -386,34 +440,10 @@ public abstract class ImageF {
 		
 		ParameterArguments.requireExact(array.length, this.resolution * arrayComponentOrder.getComponentCount(), "array");
 		
-		final PackedIntComponentOrder packedIntComponentOrder = PackedIntComponentOrder.ARGB;
+		final byte[] sourceArray = toByteArray(arrayComponentOrder);
+		final byte[] targetArray = array;
 		
-		final int[] imageARGB = toIntArrayPackedForm();
-		
-		for(int i = 0, j = 0; i < imageARGB.length; i++, j += arrayComponentOrder.getComponentCount()) {
-			final int colorARGB = imageARGB[i];
-			
-			final int r = packedIntComponentOrder.unpackR(colorARGB);
-			final int g = packedIntComponentOrder.unpackG(colorARGB);
-			final int b = packedIntComponentOrder.unpackB(colorARGB);
-			final int a = packedIntComponentOrder.unpackA(colorARGB);
-			
-			if(arrayComponentOrder.hasOffsetR()) {
-				array[j + arrayComponentOrder.getOffsetR()] = (byte)(r);
-			}
-			
-			if(arrayComponentOrder.hasOffsetG()) {
-				array[j + arrayComponentOrder.getOffsetG()] = (byte)(g);
-			}
-			
-			if(arrayComponentOrder.hasOffsetB()) {
-				array[j + arrayComponentOrder.getOffsetB()] = (byte)(b);
-			}
-			
-			if(arrayComponentOrder.hasOffsetA()) {
-				array[j + arrayComponentOrder.getOffsetA()] = (byte)(a);
-			}
-		}
+		System.arraycopy(sourceArray, 0, targetArray, 0, targetArray.length);
 	}
 	
 	/**

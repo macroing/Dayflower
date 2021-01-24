@@ -36,7 +36,6 @@ import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
@@ -46,7 +45,6 @@ import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.filter.Filter2F;
 import org.dayflower.filter.MitchellFilter2F;
-import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.BufferedImages;
 
@@ -1128,80 +1126,6 @@ public final class PixelImageF extends ImageF {
 	public void undoGammaCorrectionSRGB() {
 		for(final PixelF pixel : this.pixels) {
 			pixel.setColorRGB(Color3F.undoGammaCorrectionSRGB(pixel.getColorRGB()));
-		}
-	}
-	
-	/**
-	 * Updates this {@code PixelImageF} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
-	 * <p>
-	 * If {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.update(function, 0, 0, pixelImage.getResolutionX(), pixelImage.getResolutionY());
-	 * }
-	 * </pre>
-	 * 
-	 * @param function a {@code Function} that updates the old {@code Color3F} instances with new {@code Color3F} instances
-	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}
-	 */
-	public void update(final Function<Color3F, Color3F> function) {
-		update(function, 0, 0, getResolutionX(), getResolutionY());
-	}
-	
-	/**
-	 * Updates this {@code PixelImageF} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
-	 * <p>
-	 * If either {@code function}, {@code a} or {@code b} are {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * pixelImage.update(function, a.getX(), a.getY(), b.getX(), b.getY());
-	 * }
-	 * </pre>
-	 * 
-	 * @param function a {@code Function} that updates the old {@code Color3F} instances with new {@code Color3F} instances
-	 * @param a a {@link Point2I} instance with the minimum (inclusive) or maximum (exclusive) X-coordinate and the minimum (inclusive) or maximum (exclusive) Y-coordinate of the region to be updated
-	 * @param b a {@code Point2I} instance with the maximum (exclusive) or minimum (inclusive) X-coordinate and the maximum (exclusive) or minimum (inclusive) Y-coordinate of the region to be updated
-	 * @throws NullPointerException thrown if, and only if, either {@code function}, {@code a} or {@code b} are {@code null} or {@code function.apply(oldColor)} returns {@code null}
-	 */
-	public void update(final Function<Color3F, Color3F> function, final Point2I a, final Point2I b) {
-		update(function, a.getX(), a.getY(), b.getX(), b.getY());
-	}
-	
-	/**
-	 * Updates this {@code PixelImageF} instance with new {@link Color3F} instances by applying {@code function} to the old {@code Color3F} instances.
-	 * <p>
-	 * If {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param function a {@code Function} that updates the old {@code Color3F} instances with new {@code Color3F} instances
-	 * @param aX the minimum (inclusive) or maximum (exclusive) X-coordinate of the region to be updated
-	 * @param aY the minimum (inclusive) or maximum (exclusive) Y-coordinate of the region to be updated
-	 * @param bX the maximum (exclusive) or minimum (inclusive) X-coordinate of the region to be updated
-	 * @param bY the maximum (exclusive) or minimum (inclusive) Y-coordinate of the region to be updated
-	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null} or {@code function.apply(oldColor)} returns {@code null}
-	 */
-	public void update(final Function<Color3F, Color3F> function, final int aX, final int aY, final int bX, final int bY) {
-		Objects.requireNonNull(function, "function == null");
-		
-		final int minimumX = max(min(aX, bX), 0);
-		final int minimumY = max(min(aY, bY), 0);
-		final int maximumX = min(max(aX, bX), getResolutionX());
-		final int maximumY = min(max(aY, bY), getResolutionY());
-		
-		for(int y = minimumY; y < maximumY; y++) {
-			for(int x = minimumX; x < maximumX; x++) {
-				final Color3F oldColor = getColorRGB(x, y);
-				final Color3F newColor = function.apply(oldColor);
-				
-				if(newColor == null) {
-					throw new NullPointerException(String.format("function.apply(%s) == null: x=%s, y=%s", oldColor, Integer.valueOf(x), Integer.valueOf(y)));
-				}
-				
-				setColorRGB(newColor, x, y);
-			}
 		}
 	}
 	

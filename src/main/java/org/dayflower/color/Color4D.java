@@ -50,6 +50,31 @@ public final class Color4D {
 	public static final Color4D BLACK = new Color4D();
 	
 	/**
+	 * A {@code Color4D} denoting the color blue.
+	 */
+	public static final Color4D BLUE = new Color4D(0.0D, 0.0D, 1.0D);
+	
+	/**
+	 * A {@code Color4D} denoting the color cyan.
+	 */
+	public static final Color4D CYAN = new Color4D(0.0D, 1.0D, 1.0D);
+	
+	/**
+	 * A {@code Color4D} denoting the color green.
+	 */
+	public static final Color4D GREEN = new Color4D(0.0D, 1.0D, 0.0D);
+	
+	/**
+	 * A {@code Color4D} denoting the color magenta.
+	 */
+	public static final Color4D MAGENTA = new Color4D(1.0D, 0.0D, 1.0D);
+	
+	/**
+	 * A {@code Color4D} denoting the color orange.
+	 */
+	public static final Color4D ORANGE = new Color4D(1.0D, 0.5D, 0.0D);
+	
+	/**
 	 * A {@code Color4D} denoting the color red.
 	 */
 	public static final Color4D RED = new Color4D(1.0D, 0.0D, 0.0D);
@@ -58,6 +83,11 @@ public final class Color4D {
 	 * A {@code Color4D} denoting the color white.
 	 */
 	public static final Color4D WHITE = new Color4D(1.0D, 1.0D, 1.0D);
+	
+	/**
+	 * A {@code Color4D} denoting the color yellow.
+	 */
+	public static final Color4D YELLOW = new Color4D(1.0D, 1.0D, 0.0D);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -974,6 +1004,66 @@ public final class Color4D {
 	public static Color4D random() {
 		final double component1 = Doubles.random();
 		final double component2 = Doubles.random();
+		final double component3 = Doubles.random();
+		
+		return new Color4D(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Color4D} instance with a random component 1 value.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color4D(Doubles.random(), 0.0D, 0.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color4D} instance with a random component 1 value
+	 */
+	public static Color4D randomComponent1() {
+		final double component1 = Doubles.random();
+		final double component2 = 0.0D;
+		final double component3 = 0.0D;
+		
+		return new Color4D(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Color4D} instance with a random component 2 value.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color4D(0.0D, Doubles.random(), 0.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color4D} instance with a random component 2 value
+	 */
+	public static Color4D randomComponent2() {
+		final double component1 = 0.0D;
+		final double component2 = Doubles.random();
+		final double component3 = 0.0D;
+		
+		return new Color4D(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Color4D} instance with a random component 3 value.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color4D(0.0D, 0.0D, Doubles.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color4D} instance with a random component 3 value
+	 */
+	public static Color4D randomComponent3() {
+		final double component1 = 0.0D;
+		final double component2 = 0.0D;
 		final double component3 = Doubles.random();
 		
 		return new Color4D(component1, component2, component3);

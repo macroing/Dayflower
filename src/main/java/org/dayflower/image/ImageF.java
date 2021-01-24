@@ -686,12 +686,14 @@ public abstract class ImageF {
 					final int circleX = x + circle.getCenter().getX();
 					final int circleY = y + circle.getCenter().getY();
 					
-					final Point2I point = new Point2I(circleX, circleY);
-					
-					final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
-					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-					
-					setColorRGBA(newColorRGBA, circleX, circleY);
+					if(circleX >= 0 && circleX < this.resolutionX && circleY >= 0 && circleY < this.resolutionY) {
+						final Point2I point = new Point2I(circleX, circleY);
+						
+						final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
+						final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+						
+						setColorRGBA(newColorRGBA, circleX, circleY);
+					}
 				}
 			}
 		}
@@ -753,10 +755,15 @@ public abstract class ImageF {
 		final Point2I[] scanline = Rasterizer2I.rasterize(line, rectangle);
 		
 		for(final Point2I point : scanline) {
-			final Color4F oldColorRGBA = getColorRGBA(point.getX(), point.getY());
-			final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+			final int x = point.getX();
+			final int y = point.getY();
 			
-			setColorRGBA(newColorRGBA, point.getX(), point.getY());
+			if(x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
+				final Color4F oldColorRGBA = getColorRGBA(x, y);
+				final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+				
+				setColorRGBA(newColorRGBA, point.getX(), point.getY());
+			}
 		}
 	}
 	
@@ -818,7 +825,7 @@ public abstract class ImageF {
 		
 		for(int y = minimumY; y <= maximumY; y++) {
 			for(int x = minimumX; x <= maximumX; x++) {
-				if(x == minimumX || x == maximumX || y == minimumY || y == maximumY) {
+				if((x == minimumX || x == maximumX || y == minimumY || y == maximumY) && x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
 					final Point2I point = new Point2I(x, y);
 					
 					final Color4F oldColorRGBA = getColorRGBA(x, y);
@@ -943,12 +950,14 @@ public abstract class ImageF {
 					final int circleX = x + circle.getCenter().getX();
 					final int circleY = y + circle.getCenter().getY();
 					
-					final Point2I point = new Point2I(circleX, circleY);
-					
-					final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
-					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-					
-					setColorRGBA(newColorRGBA, circleX, circleY);
+					if(circleX >= 0 && circleX < this.resolutionX && circleY >= 0 && circleY < this.resolutionY) {
+						final Point2I point = new Point2I(circleX, circleY);
+						
+						final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
+						final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+						
+						setColorRGBA(newColorRGBA, circleX, circleY);
+					}
 				}
 			}
 		}
@@ -1044,11 +1053,13 @@ public abstract class ImageF {
 		
 		for(int sourceY = sourceMinimumY, targetY = targetMinimumY; sourceY < sourceMaximumY && targetY < targetMaximumY; sourceY++, targetY++) {
 			for(int sourceX = sourceMinimumX, targetX = targetMinimumX; sourceX < sourceMaximumX && targetX < targetMaximumX; sourceX++, targetX++) {
-				final Color4F sourceColorRGBA = sourceImage.getColorRGBA(sourceX, sourceY);
-				final Color4F targetColorRGBA = targetImage.getColorRGBA(targetX, targetY);
-				final Color4F colorRGBA = Objects.requireNonNull(triFunction.apply(sourceColorRGBA, targetColorRGBA, new Point2I(targetX, targetY)));
-				
-				targetImage.setColorRGBA(colorRGBA, targetX, targetY);
+				if(targetX >= 0 && targetX < this.resolutionX && targetY >= 0 && targetY < this.resolutionY) {
+					final Color4F sourceColorRGBA = sourceImage.getColorRGBA(sourceX, sourceY);
+					final Color4F targetColorRGBA = targetImage.getColorRGBA(targetX, targetY);
+					final Color4F colorRGBA = Objects.requireNonNull(triFunction.apply(sourceColorRGBA, targetColorRGBA, new Point2I(targetX, targetY)));
+					
+					targetImage.setColorRGBA(colorRGBA, targetX, targetY);
+				}
 			}
 		}
 	}
@@ -1068,6 +1079,27 @@ public abstract class ImageF {
 	 */
 	public final void fillRectangle(final Rectangle2I rectangle) {
 		fillRectangle(rectangle, Color4F.BLACK);
+	}
+	
+	/**
+	 * Fills {@code rectangle} in this {@code ImageF} instance with {@code colorRGB} as its color.
+	 * <p>
+	 * If either {@code rectangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is essentially equivalent to the following:
+	 * <pre>
+	 * image.fillRectangle(rectangle, new Color4F(colorRGB));
+	 * </pre>
+	 * 
+	 * @param rectangle the {@link Rectangle2I} to fill
+	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code colorRGB} are {@code null}
+	 */
+	public final void fillRectangle(final Rectangle2I rectangle, final Color3F colorRGB) {
+		Objects.requireNonNull(rectangle, "rectangle == null");
+		Objects.requireNonNull(colorRGB, "colorRGB == null");
+		
+		fillRectangle(rectangle, new Color4F(colorRGB));
 	}
 	
 	/**
@@ -1111,12 +1143,14 @@ public abstract class ImageF {
 		
 		for(int y = minimumY; y <= maximumY; y++) {
 			for(int x = minimumX; x <= maximumX; x++) {
-				final Point2I point = new Point2I(x, y);
-				
-				final Color4F oldColorRGBA = getColorRGBA(x, y);
-				final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
-				
-				setColorRGBA(newColorRGBA, x, y);
+				if(x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
+					final Point2I point = new Point2I(x, y);
+					
+					final Color4F oldColorRGBA = getColorRGBA(x, y);
+					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+					
+					setColorRGBA(newColorRGBA, x, y);
+				}
 			}
 		}
 	}
@@ -1178,10 +1212,15 @@ public abstract class ImageF {
 		
 		for(final Point2I[] scanline : scanlines) {
 			for(final Point2I point : scanline) {
-				final Color4F oldColorRGBA = getColorRGBA(point.getX(), point.getY());
-				final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+				final int x = point.getX();
+				final int y = point.getY();
 				
-				setColorRGBA(newColorRGBA, point.getX(), point.getY());
+				if(x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
+					final Color4F oldColorRGBA = getColorRGBA(x, y);
+					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+					
+					setColorRGBA(newColorRGBA, point.getX(), point.getY());
+				}
 			}
 		}
 	}

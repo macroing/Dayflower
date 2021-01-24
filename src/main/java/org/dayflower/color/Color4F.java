@@ -50,6 +50,31 @@ public final class Color4F {
 	public static final Color4F BLACK = new Color4F();
 	
 	/**
+	 * A {@code Color4F} denoting the color blue.
+	 */
+	public static final Color4F BLUE = new Color4F(0.0F, 0.0F, 1.0F);
+	
+	/**
+	 * A {@code Color4F} denoting the color cyan.
+	 */
+	public static final Color4F CYAN = new Color4F(0.0F, 1.0F, 1.0F);
+	
+	/**
+	 * A {@code Color4F} denoting the color green.
+	 */
+	public static final Color4F GREEN = new Color4F(0.0F, 1.0F, 0.0F);
+	
+	/**
+	 * A {@code Color4F} denoting the color magenta.
+	 */
+	public static final Color4F MAGENTA = new Color4F(1.0F, 0.0F, 1.0F);
+	
+	/**
+	 * A {@code Color4F} denoting the color orange.
+	 */
+	public static final Color4F ORANGE = new Color4F(1.0F, 0.5F, 0.0F);
+	
+	/**
 	 * A {@code Color4F} denoting the color red.
 	 */
 	public static final Color4F RED = new Color4F(1.0F, 0.0F, 0.0F);
@@ -58,6 +83,11 @@ public final class Color4F {
 	 * A {@code Color4F} denoting the color white.
 	 */
 	public static final Color4F WHITE = new Color4F(1.0F, 1.0F, 1.0F);
+	
+	/**
+	 * A {@code Color4F} denoting the color yellow.
+	 */
+	public static final Color4F YELLOW = new Color4F(1.0F, 1.0F, 0.0F);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -974,6 +1004,66 @@ public final class Color4F {
 	public static Color4F random() {
 		final float component1 = Floats.random();
 		final float component2 = Floats.random();
+		final float component3 = Floats.random();
+		
+		return new Color4F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Color4F} instance with a random component 1 value.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color4F(Floats.random(), 0.0F, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color4F} instance with a random component 1 value
+	 */
+	public static Color4F randomComponent1() {
+		final float component1 = Floats.random();
+		final float component2 = 0.0F;
+		final float component3 = 0.0F;
+		
+		return new Color4F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Color4F} instance with a random component 2 value.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color4F(0.0F, Floats.random(), 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color4F} instance with a random component 2 value
+	 */
+	public static Color4F randomComponent2() {
+		final float component1 = 0.0F;
+		final float component2 = Floats.random();
+		final float component3 = 0.0F;
+		
+		return new Color4F(component1, component2, component3);
+	}
+	
+	/**
+	 * Returns a {@code Color4F} instance with a random component 3 value.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color4F(0.0F, 0.0F, Floats.random());
+	 * }
+	 * </pre>
+	 * 
+	 * @return a {@code Color4F} instance with a random component 3 value
+	 */
+	public static Color4F randomComponent3() {
+		final float component1 = 0.0F;
+		final float component2 = 0.0F;
 		final float component3 = Floats.random();
 		
 		return new Color4F(component1, component2, component3);

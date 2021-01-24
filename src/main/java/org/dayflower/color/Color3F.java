@@ -1163,7 +1163,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F convertRGBToXYZUsingSRGB(final Color3F color) {
-		return ColorSpace3F.SRGB.convertRGBToXYZ(color);
+		return ColorSpaceF.SRGB.convertRGBToXYZ(color);
 	}
 	
 	/**
@@ -1197,7 +1197,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F convertXYZToRGBUsingSRGB(final Color3F color) {
-		return ColorSpace3F.SRGB.convertXYZToRGB(color);
+		return ColorSpaceF.SRGB.convertXYZToRGB(color);
 	}
 	
 	/**
@@ -1781,7 +1781,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F redoGammaCorrectionSRGB(final Color3F color) {
-		return ColorSpace3F.SRGB.redoGammaCorrection(color);
+		return ColorSpaceF.SRGB.redoGammaCorrection(color);
 	}
 	
 	/**
@@ -2197,7 +2197,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F undoGammaCorrectionSRGB(final Color3F color) {
-		return ColorSpace3F.SRGB.undoGammaCorrection(color);
+		return ColorSpaceF.SRGB.undoGammaCorrection(color);
 	}
 	
 	/**
@@ -2447,169 +2447,5 @@ public final class Color3F {
 		}
 		
 		return colors;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class ColorSpace3F {
-		public static final ColorSpace3F SRGB = new ColorSpace3F(0.00304F, 2.4F, 0.6400F, 0.3300F, 0.3000F, 0.6000F, 0.1500F, 0.0600F, 0.31271F, 0.32902F);
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		private final float breakPoint;
-		private final float gamma;
-		private final float segmentOffset;
-		private final float slope;
-		private final float slopeMatch;
-		private final float[] matrixRGBToXYZ;
-		private final float[] matrixXYZToRGB;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public ColorSpace3F(final float breakPoint, final float gamma, final float xR, final float yR, final float xG, final float yG, final float xB, final float yB, final float xW, final float yW) {
-			this.breakPoint = breakPoint;
-			this.gamma = gamma;
-			this.slope = breakPoint > 0.0F ? 1.0F / (gamma / pow(breakPoint, 1.0F / gamma - 1.0F) - gamma * breakPoint + breakPoint) : 1.0F;
-			this.slopeMatch = breakPoint > 0.0F ? gamma * this.slope / pow(breakPoint, 1.0F / gamma - 1.0F) : 1.0F;
-			this.segmentOffset = breakPoint > 0.0F ? this.slopeMatch * pow(breakPoint, 1.0F / gamma) - this.slope * breakPoint : 0.0F;
-			this.matrixXYZToRGB = doCreateColorSpace3MatrixXYZToRGB(xR, yR, xG, yG, xB, yB, xW, yW);
-			this.matrixRGBToXYZ = doCreateColorSpace3MatrixRGBToXYZ(xW, yW, this.matrixXYZToRGB);
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Color3F convertRGBToXYZ(final Color3F color) {
-			final float r = color.getR();
-			final float g = color.getG();
-			final float b = color.getB();
-			
-			final float x = this.matrixRGBToXYZ[0] * r + this.matrixRGBToXYZ[3] * g + this.matrixRGBToXYZ[6] * b;
-			final float y = this.matrixRGBToXYZ[1] * r + this.matrixRGBToXYZ[4] * g + this.matrixRGBToXYZ[7] * b;
-			final float z = this.matrixRGBToXYZ[2] * r + this.matrixRGBToXYZ[5] * g + this.matrixRGBToXYZ[8] * b;
-			
-			return new Color3F(x, y, z);
-		}
-		
-		public Color3F convertXYZToRGB(final Color3F color) {
-			final float x = color.getX();
-			final float y = color.getY();
-			final float z = color.getZ();
-			
-			final float r = this.matrixXYZToRGB[0] * x + this.matrixXYZToRGB[1] * y + this.matrixXYZToRGB[2] * z;
-			final float g = this.matrixXYZToRGB[3] * x + this.matrixXYZToRGB[4] * y + this.matrixXYZToRGB[5] * z;
-			final float b = this.matrixXYZToRGB[6] * x + this.matrixXYZToRGB[7] * y + this.matrixXYZToRGB[8] * z;
-			
-			return new Color3F(r, g, b);
-		}
-		
-		public Color3F redoGammaCorrection(final Color3F color) {
-			final float component1 = doRedoGammaCorrection(color.getComponent1());
-			final float component2 = doRedoGammaCorrection(color.getComponent2());
-			final float component3 = doRedoGammaCorrection(color.getComponent3());
-			
-			return new Color3F(component1, component2, component3);
-		}
-		
-		public Color3F undoGammaCorrection(final Color3F color) {
-			final float component1 = doUndoGammaCorrection(color.getComponent1());
-			final float component2 = doUndoGammaCorrection(color.getComponent2());
-			final float component3 = doUndoGammaCorrection(color.getComponent3());
-			
-			return new Color3F(component1, component2, component3);
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		private float doRedoGammaCorrection(final float value) {
-			if(value <= 0.0F) {
-				return 0.0F;
-			} else if(value >= 1.0F) {
-				return 1.0F;
-			} else if(value <= this.breakPoint) {
-				return value * this.slope;
-			} else {
-				return this.slopeMatch * pow(value, 1.0F / this.gamma) - this.segmentOffset;
-			}
-		}
-		
-		private float doUndoGammaCorrection(final float value) {
-			if(value <= 0.0F) {
-				return 0.0F;
-			} else if(value >= 1.0F) {
-				return 1.0F;
-			} else if(value <= this.breakPoint * this.slope) {
-				return value / this.slope;
-			} else {
-				return pow((value + this.segmentOffset) / this.slopeMatch, this.gamma);
-			}
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		private static float[] doCreateColorSpace3MatrixRGBToXYZ(final float xW, final float yW, final float[] m) {
-			final float a = m[0] * (m[4] * m[8] - m[7] * m[5]);
-			final float b = m[1] * (m[3] * m[8] - m[6] * m[5]);
-			final float c = m[2] * (m[3] * m[7] - m[6] * m[4]);
-			final float s = 1.0F / (a - b + c);
-			
-			final float eXR = s * (m[4] * m[8] - m[5] * m[7]);
-			final float eYR = s * (m[5] * m[6] - m[3] * m[8]);
-			final float eZR = s * (m[3] * m[7] - m[4] * m[6]);
-			final float eXG = s * (m[2] * m[7] - m[1] * m[8]);
-			final float eYG = s * (m[0] * m[8] - m[2] * m[6]);
-			final float eZG = s * (m[1] * m[6] - m[0] * m[7]);
-			final float eXB = s * (m[1] * m[5] - m[2] * m[4]);
-			final float eYB = s * (m[2] * m[3] - m[0] * m[5]);
-			final float eZB = s * (m[0] * m[4] - m[1] * m[3]);
-			final float eXW = xW;
-			final float eYW = yW;
-			final float eZW = 1.0F - (xW + yW);
-			
-			return new float[] {
-				eXR, eYR, eZR,
-				eXG, eYG, eZG,
-				eXB, eYB, eZB,
-				eXW, eYW, eZW
-			};
-		}
-		
-		private static float[] doCreateColorSpace3MatrixXYZToRGB(final float xR, final float yR, final float xG, final float yG, final float xB, final float yB, final float xW, final float yW) {
-			final float zR = 1.0F - (xR + yR);
-			final float zG = 1.0F - (xG + yG);
-			final float zB = 1.0F - (xB + yB);
-			final float zW = 1.0F - (xW + yW);
-			final float rX = (yG * zB) - (yB * zG);
-			final float rY = (xB * zG) - (xG * zB);
-			final float rZ = (xG * yB) - (xB * yG);
-			final float rW = ((rX * xW) + (rY * yW) + (rZ * zW)) / yW;
-			final float gX = (yB * zR) - (yR * zB);
-			final float gY = (xR * zB) - (xB * zR);
-			final float gZ = (xB * yR) - (xR * yB);
-			final float gW = ((gX * xW) + (gY * yW) + (gZ * zW)) / yW;
-			final float bX = (yR * zG) - (yG * zR);
-			final float bY = (xG * zR) - (xR * zG);
-			final float bZ = (xR * yG) - (xG * yR);
-			final float bW = ((bX * xW) + (bY * yW) + (bZ * zW)) / yW;
-			
-			final float eRX = rX / rW;
-			final float eRY = rY / rW;
-			final float eRZ = rZ / rW;
-			final float eGX = gX / gW;
-			final float eGY = gY / gW;
-			final float eGZ = gZ / gW;
-			final float eBX = bX / bW;
-			final float eBY = bY / bW;
-			final float eBZ = bZ / bW;
-			final float eRW = rW;
-			final float eGW = gW;
-			final float eBW = bW;
-			
-			return new float[] {
-				eRX, eRY, eRZ,
-				eGX, eGY, eGZ,
-				eBX, eBY, eBZ,
-				eRW, eGW, eBW
-			};
-		}
 	}
 }

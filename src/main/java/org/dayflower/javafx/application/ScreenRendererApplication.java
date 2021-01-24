@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.color.Color4F;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.ConvolutionKernel33F;
@@ -191,15 +192,15 @@ public final class ScreenRendererApplication extends Application {
 			if(selectedItem != null) {
 				switch(selectedItem) {
 					case OPERATION_BLEND_BLUE:
-						doSetOperationBlend(function, Color3F.randomComponent3());
+						doSetOperationBlend(function, Color4F.randomComponent3());
 						
 						break;
 					case OPERATION_BLEND_GREEN:
-						doSetOperationBlend(function, Color3F.randomComponent2());
+						doSetOperationBlend(function, Color4F.randomComponent2());
 						
 						break;
 					case OPERATION_BLEND_RED:
-						doSetOperationBlend(function, Color3F.randomComponent1());
+						doSetOperationBlend(function, Color4F.randomComponent1());
 						
 						break;
 					case OPERATION_BOX_BLUR:
@@ -247,21 +248,21 @@ public final class ScreenRendererApplication extends Application {
 						break;
 					case OPERATION_THRESHOLD:
 						function.set(pixelImage -> {
-							pixelImage.update(color -> {
+							pixelImage.fillRectangle(pixelImage.getBounds(), (color, point) -> {
 								if(color.isCyan()) {
-									return Color3F.CYAN;
+									return Color4F.CYAN;
 								} else if(color.isMagenta()) {
-									return Color3F.MAGENTA;
+									return Color4F.MAGENTA;
 								} else if(color.isYellow()) {
-									return Color3F.YELLOW;
+									return Color4F.YELLOW;
 								} else if(color.isRed(0.2F, 0.2F)) {
-									return Color3F.RED;
+									return Color4F.RED;
 								} else if(color.isGreen(0.2F, 0.2F)) {
-									return Color3F.GREEN;
+									return Color4F.GREEN;
 								} else if(color.isBlue(0.2F, 0.2F)) {
-									return Color3F.BLUE;
+									return Color4F.BLUE;
 								} else {
-									return Color3F.BLACK;
+									return Color4F.BLACK;
 								}
 							});
 							
@@ -276,9 +277,9 @@ public final class ScreenRendererApplication extends Application {
 		};
 	}
 	
-	private static void doSetOperationBlend(final AtomicReference<Function<PixelImageF, PixelImageF>> function, final Color3F colorNew) {
+	private static void doSetOperationBlend(final AtomicReference<Function<PixelImageF, PixelImageF>> function, final Color4F colorNew) {
 		function.set(pixelImage -> {
-			pixelImage.update(colorOld -> Color3F.blend(colorOld, colorNew, 0.5F));
+			pixelImage.fillRectangle(pixelImage.getBounds(), (colorOld, point) -> Color4F.blend(colorOld, colorNew, 0.5F));
 			
 			return pixelImage;
 		});

@@ -20,11 +20,12 @@ package org.dayflower.example;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 
 public class PixelImageFScreenCaptureExample {
 	public static void main(String[] args) {
-		PixelImageF pixelImageF = PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-		pixelImageF.save("PixelImageF-Screen-Capture-Example.png");
+		ImageF imageF = PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+		imageF.save("PixelImageF-Screen-Capture-Example.png");
 	}
 }

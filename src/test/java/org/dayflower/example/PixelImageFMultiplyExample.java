@@ -19,12 +19,13 @@
 package org.dayflower.example;
 
 import org.dayflower.image.ConvolutionKernel33F;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 
 public class PixelImageFMultiplyExample {
 	public static void main(String[] args) {
-		PixelImageF pixelImageF = PixelImageF.load("Image.png");
-		pixelImageF.multiply(ConvolutionKernel33F.SHARPEN);
-		pixelImageF.save("PixelImageF-Multiply-Example.png");
+		ImageF imageF = PixelImageF.load("Image.png");
+		imageF.multiply(ConvolutionKernel33F.SHARPEN);
+		imageF.save("PixelImageF-Multiply-Example.png");
 	}
 }

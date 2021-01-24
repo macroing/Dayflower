@@ -23,15 +23,15 @@ Below follows a few examples that demonstrates various features.
 #### PixelImageF Blend Example
 The following example loads two images from your hard drive, blends them together and saves the result to your hard drive.
 ```java
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 
 public class PixelImageFBlendExample {
     public static void main(String[] args) {
-        PixelImageF pixelImageF0 = PixelImageF.load("Image-0.png");
-        PixelImageF pixelImageF1 = PixelImageF.load("Image-1.png");
-        
-        PixelImageF pixelImageF = PixelImageF.blend(pixelImageF0, pixelImageF1, 0.5F);
-        pixelImageF.save("PixelImageF-Blend-Example.png");
+        ImageF imageF0 = PixelImageF.load("Image-0.png");
+        ImageF imageF1 = PixelImageF.load("Image-1.png");
+        ImageF imageF = PixelImageF.blend(imageF0, imageF1, 0.5F);
+        imageF.save("PixelImageF-Blend-Example.png");
     }
 }
 ```
@@ -83,13 +83,14 @@ public class PixelImageFFillExample {
 The following example loads an image from your hard drive, multiplies it with a convolution kernel and saves the result to your hard drive.
 ```java
 import org.dayflower.image.ConvolutionKernel33F;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 
 public class PixelImageFMultiplyExample {
     public static void main(String[] args) {
-        PixelImageF pixelImageF = PixelImageF.load("Image.png");
-        pixelImageF.multiply(ConvolutionKernel33F.SHARPEN);
-        pixelImageF.save("PixelImageF-Multiply-Example.png");
+        ImageF imageF = PixelImageF.load("Image.png");
+        imageF.multiply(ConvolutionKernel33F.SHARPEN);
+        imageF.save("PixelImageF-Multiply-Example.png");
     }
 }
 ```
@@ -99,12 +100,13 @@ The following example captures the contents of the screen and saves the result t
 ```java
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 
 public class PixelImageFScreenCaptureExample {
     public static void main(String[] args) {
-        PixelImageF pixelImageF = PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
-        pixelImageF.save("PixelImageF-Screen-Capture-Example.png");
+        ImageF imageF = PixelImageF.createScreenCapture(new Rectangle2I(new Point2I(100, 100), new Point2I(200, 200)));
+        imageF.save("PixelImageF-Screen-Capture-Example.png");
     }
 }
 ```

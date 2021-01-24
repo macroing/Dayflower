@@ -458,4 +458,39 @@ public final class ByteImageF extends ImageF {
 			this.bytes[index * 4 + 3] = colorRGBA.getAsByteA();
 		}
 	}
+	
+	/**
+	 * Swaps the pixels represented by {@code indexA} and {@code indexB}.
+	 * <p>
+	 * If either {@code indexA} or {@code indexB} are less than {@code 0} or greater than or equal to {@code getResolution()}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param indexA one of the pixel indices
+	 * @param indexB one of the pixel indices
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code indexA} or {@code indexB} are less than {@code 0} or greater than or equal to {@code getResolution()}
+	 */
+	@Override
+	public void swap(final int indexA, final int indexB) {
+		ParameterArguments.requireRange(indexA, 0, getResolution() - 1, "indexA");
+		ParameterArguments.requireRange(indexB, 0, getResolution() - 1, "indexB");
+		
+		final byte rA = this.bytes[indexA * 4 + 0];
+		final byte gA = this.bytes[indexA * 4 + 1];
+		final byte bA = this.bytes[indexA * 4 + 2];
+		final byte aA = this.bytes[indexA * 4 + 3];
+		
+		final byte rB = this.bytes[indexB * 4 + 0];
+		final byte gB = this.bytes[indexB * 4 + 1];
+		final byte bB = this.bytes[indexB * 4 + 2];
+		final byte aB = this.bytes[indexB * 4 + 3];
+		
+		this.bytes[indexA + 0] = rB;
+		this.bytes[indexA + 1] = gB;
+		this.bytes[indexA + 2] = bB;
+		this.bytes[indexA + 3] = aB;
+		
+		this.bytes[indexB + 0] = rA;
+		this.bytes[indexB + 1] = gA;
+		this.bytes[indexB + 2] = bA;
+		this.bytes[indexB + 3] = aA;
+	}
 }

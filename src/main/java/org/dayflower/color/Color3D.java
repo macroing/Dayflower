@@ -1163,7 +1163,7 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3D convertRGBToXYZUsingSRGB(final Color3D color) {
-		return ColorSpace3D.SRGB.convertRGBToXYZ(color);
+		return ColorSpaceD.SRGB.convertRGBToXYZ(color);
 	}
 	
 	/**
@@ -1197,7 +1197,7 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3D convertXYZToRGBUsingSRGB(final Color3D color) {
-		return ColorSpace3D.SRGB.convertXYZToRGB(color);
+		return ColorSpaceD.SRGB.convertXYZToRGB(color);
 	}
 	
 	/**
@@ -1781,7 +1781,7 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3D redoGammaCorrectionSRGB(final Color3D color) {
-		return ColorSpace3D.SRGB.redoGammaCorrection(color);
+		return ColorSpaceD.SRGB.redoGammaCorrection(color);
 	}
 	
 	/**
@@ -2197,7 +2197,7 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3D undoGammaCorrectionSRGB(final Color3D color) {
-		return ColorSpace3D.SRGB.undoGammaCorrection(color);
+		return ColorSpaceD.SRGB.undoGammaCorrection(color);
 	}
 	
 	/**
@@ -2447,169 +2447,5 @@ public final class Color3D {
 		}
 		
 		return colors;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static final class ColorSpace3D {
-		public static final ColorSpace3D SRGB = new ColorSpace3D(0.00304D, 2.4D, 0.6400D, 0.3300D, 0.3000D, 0.6000D, 0.1500D, 0.0600D, 0.31271D, 0.32902D);
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		private final double breakPoint;
-		private final double gamma;
-		private final double segmentOffset;
-		private final double slope;
-		private final double slopeMatch;
-		private final double[] matrixRGBToXYZ;
-		private final double[] matrixXYZToRGB;
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public ColorSpace3D(final double breakPoint, final double gamma, final double xR, final double yR, final double xG, final double yG, final double xB, final double yB, final double xW, final double yW) {
-			this.breakPoint = breakPoint;
-			this.gamma = gamma;
-			this.slope = breakPoint > 0.0D ? 1.0D / (gamma / pow(breakPoint, 1.0D / gamma - 1.0D) - gamma * breakPoint + breakPoint) : 1.0D;
-			this.slopeMatch = breakPoint > 0.0D ? gamma * this.slope / pow(breakPoint, 1.0D / gamma - 1.0D) : 1.0D;
-			this.segmentOffset = breakPoint > 0.0D ? this.slopeMatch * pow(breakPoint, 1.0D / gamma) - this.slope * breakPoint : 0.0D;
-			this.matrixXYZToRGB = doCreateColorSpace3MatrixXYZToRGB(xR, yR, xG, yG, xB, yB, xW, yW);
-			this.matrixRGBToXYZ = doCreateColorSpace3MatrixRGBToXYZ(xW, yW, this.matrixXYZToRGB);
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		public Color3D convertRGBToXYZ(final Color3D color) {
-			final double r = color.getR();
-			final double g = color.getG();
-			final double b = color.getB();
-			
-			final double x = this.matrixRGBToXYZ[0] * r + this.matrixRGBToXYZ[3] * g + this.matrixRGBToXYZ[6] * b;
-			final double y = this.matrixRGBToXYZ[1] * r + this.matrixRGBToXYZ[4] * g + this.matrixRGBToXYZ[7] * b;
-			final double z = this.matrixRGBToXYZ[2] * r + this.matrixRGBToXYZ[5] * g + this.matrixRGBToXYZ[8] * b;
-			
-			return new Color3D(x, y, z);
-		}
-		
-		public Color3D convertXYZToRGB(final Color3D color) {
-			final double x = color.getX();
-			final double y = color.getY();
-			final double z = color.getZ();
-			
-			final double r = this.matrixXYZToRGB[0] * x + this.matrixXYZToRGB[1] * y + this.matrixXYZToRGB[2] * z;
-			final double g = this.matrixXYZToRGB[3] * x + this.matrixXYZToRGB[4] * y + this.matrixXYZToRGB[5] * z;
-			final double b = this.matrixXYZToRGB[6] * x + this.matrixXYZToRGB[7] * y + this.matrixXYZToRGB[8] * z;
-			
-			return new Color3D(r, g, b);
-		}
-		
-		public Color3D redoGammaCorrection(final Color3D color) {
-			final double component1 = doRedoGammaCorrection(color.getComponent1());
-			final double component2 = doRedoGammaCorrection(color.getComponent2());
-			final double component3 = doRedoGammaCorrection(color.getComponent3());
-			
-			return new Color3D(component1, component2, component3);
-		}
-		
-		public Color3D undoGammaCorrection(final Color3D color) {
-			final double component1 = doUndoGammaCorrection(color.getComponent1());
-			final double component2 = doUndoGammaCorrection(color.getComponent2());
-			final double component3 = doUndoGammaCorrection(color.getComponent3());
-			
-			return new Color3D(component1, component2, component3);
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		private double doRedoGammaCorrection(final double value) {
-			if(value <= 0.0D) {
-				return 0.0F;
-			} else if(value >= 1.0D) {
-				return 1.0D;
-			} else if(value <= this.breakPoint) {
-				return value * this.slope;
-			} else {
-				return this.slopeMatch * pow(value, 1.0D / this.gamma) - this.segmentOffset;
-			}
-		}
-		
-		private double doUndoGammaCorrection(final double value) {
-			if(value <= 0.0D) {
-				return 0.0D;
-			} else if(value >= 1.0D) {
-				return 1.0D;
-			} else if(value <= this.breakPoint * this.slope) {
-				return value / this.slope;
-			} else {
-				return pow((value + this.segmentOffset) / this.slopeMatch, this.gamma);
-			}
-		}
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		private static double[] doCreateColorSpace3MatrixRGBToXYZ(final double xW, final double yW, final double[] m) {
-			final double a = m[0] * (m[4] * m[8] - m[7] * m[5]);
-			final double b = m[1] * (m[3] * m[8] - m[6] * m[5]);
-			final double c = m[2] * (m[3] * m[7] - m[6] * m[4]);
-			final double s = 1.0D / (a - b + c);
-			
-			final double eXR = s * (m[4] * m[8] - m[5] * m[7]);
-			final double eYR = s * (m[5] * m[6] - m[3] * m[8]);
-			final double eZR = s * (m[3] * m[7] - m[4] * m[6]);
-			final double eXG = s * (m[2] * m[7] - m[1] * m[8]);
-			final double eYG = s * (m[0] * m[8] - m[2] * m[6]);
-			final double eZG = s * (m[1] * m[6] - m[0] * m[7]);
-			final double eXB = s * (m[1] * m[5] - m[2] * m[4]);
-			final double eYB = s * (m[2] * m[3] - m[0] * m[5]);
-			final double eZB = s * (m[0] * m[4] - m[1] * m[3]);
-			final double eXW = xW;
-			final double eYW = yW;
-			final double eZW = 1.0D - (xW + yW);
-			
-			return new double[] {
-				eXR, eYR, eZR,
-				eXG, eYG, eZG,
-				eXB, eYB, eZB,
-				eXW, eYW, eZW
-			};
-		}
-		
-		private static double[] doCreateColorSpace3MatrixXYZToRGB(final double xR, final double yR, final double xG, final double yG, final double xB, final double yB, final double xW, final double yW) {
-			final double zR = 1.0D - (xR + yR);
-			final double zG = 1.0D - (xG + yG);
-			final double zB = 1.0D - (xB + yB);
-			final double zW = 1.0D - (xW + yW);
-			final double rX = (yG * zB) - (yB * zG);
-			final double rY = (xB * zG) - (xG * zB);
-			final double rZ = (xG * yB) - (xB * yG);
-			final double rW = ((rX * xW) + (rY * yW) + (rZ * zW)) / yW;
-			final double gX = (yB * zR) - (yR * zB);
-			final double gY = (xR * zB) - (xB * zR);
-			final double gZ = (xB * yR) - (xR * yB);
-			final double gW = ((gX * xW) + (gY * yW) + (gZ * zW)) / yW;
-			final double bX = (yR * zG) - (yG * zR);
-			final double bY = (xG * zR) - (xR * zG);
-			final double bZ = (xR * yG) - (xG * yR);
-			final double bW = ((bX * xW) + (bY * yW) + (bZ * zW)) / yW;
-			
-			final double eRX = rX / rW;
-			final double eRY = rY / rW;
-			final double eRZ = rZ / rW;
-			final double eGX = gX / gW;
-			final double eGY = gY / gW;
-			final double eGZ = gZ / gW;
-			final double eBX = bX / bW;
-			final double eBY = bY / bW;
-			final double eBZ = bZ / bW;
-			final double eRW = rW;
-			final double eGW = gW;
-			final double eBW = bW;
-			
-			return new double[] {
-				eRX, eRY, eRZ,
-				eGX, eGY, eGZ,
-				eBX, eBY, eBZ,
-				eRW, eGW, eBW
-			};
-		}
 	}
 }

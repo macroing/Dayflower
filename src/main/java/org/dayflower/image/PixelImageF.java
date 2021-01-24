@@ -47,6 +47,7 @@ import org.dayflower.filter.Filter2F;
 import org.dayflower.filter.MitchellFilter2F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.BufferedImages;
+import org.dayflower.utility.ParameterArguments;
 
 /**
  * A {@code PixelImageF} is an {@link ImageF} implementation that stores individual pixels as {@link PixelF} instances.
@@ -886,175 +887,6 @@ public final class PixelImageF extends ImageF {
 	}
 	
 	/**
-	 * Flips this {@code PixelImageF} instance along the X-axis.
-	 */
-	public void flipX() {
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(int xL = 0, xR = resolutionX - 1; xL < xR; xL++, xR--) {
-			for(int y = 0; y < resolutionY; y++) {
-				PixelF.swap(this.pixels[y * resolutionX + xL], this.pixels[y * resolutionX + xR]);
-			}
-		}
-	}
-	
-	/**
-	 * Flips this {@code PixelImageF} instance along the Y-axis.
-	 */
-	public void flipY() {
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(int yT = 0, yB = resolutionY - 1; yT < yB; yT++, yB--) {
-			for(int x = 0; x < resolutionX; x++) {
-				PixelF.swap(this.pixels[yT * resolutionX + x], this.pixels[yB * resolutionX + x]);
-			}
-		}
-	}
-	
-	/**
-	 * Inverts this {@code PixelImageF} instance.
-	 */
-	public void invert() {
-		for(final PixelF pixel : this.pixels) {
-			pixel.setColorRGB(Color3F.invert(pixel.getColorRGB()));
-		}
-	}
-	
-	/**
-	 * Multiplies this {@code PixelImageF} instance with {@code convolutionKernel}.
-	 * <p>
-	 * If {@code convolutionKernel} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param convolutionKernel a {@link ConvolutionKernel33F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code convolutionKernel} is {@code null}
-	 */
-	public void multiply(final ConvolutionKernel33F convolutionKernel) {
-		final Color3F factor = new Color3F(convolutionKernel.getFactor());
-		final Color3F bias = new Color3F(convolutionKernel.getBias());
-		
-		final PixelImageF pixelImage = copy();
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(int y = 0; y < resolutionY; y++) {
-			for(int x = 0; x < resolutionX; x++) {
-				Color3F colorRGB = Color3F.BLACK;
-				
-//				Row #1:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -1, y + -1), convolutionKernel.getElement11()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +0, y + -1), convolutionKernel.getElement12()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +1, y + -1), convolutionKernel.getElement13()));
-				
-//				Row #2:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -1, y + +0), convolutionKernel.getElement21()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +0, y + +0), convolutionKernel.getElement22()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +1, y + +0), convolutionKernel.getElement23()));
-				
-//				Row #3:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -1, y + +1), convolutionKernel.getElement31()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +0, y + +1), convolutionKernel.getElement32()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +1, y + +1), convolutionKernel.getElement33()));
-				
-//				Multiply with the factor and add the bias:
-				colorRGB = Color3F.multiply(colorRGB, factor);
-				colorRGB = Color3F.add(colorRGB, bias);
-				colorRGB = Color3F.minimumTo0(colorRGB);
-				colorRGB = Color3F.maximumTo1(colorRGB);
-				
-				setColorRGB(colorRGB, x, y);
-			}
-		}
-	}
-	
-	/**
-	 * Multiplies this {@code PixelImageF} instance with {@code convolutionKernel}.
-	 * <p>
-	 * If {@code convolutionKernel} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param convolutionKernel a {@link ConvolutionKernel55F} instance
-	 * @throws NullPointerException thrown if, and only if, {@code convolutionKernel} is {@code null}
-	 */
-	public void multiply(final ConvolutionKernel55F convolutionKernel) {
-		final Color3F factor = new Color3F(convolutionKernel.getFactor());
-		final Color3F bias = new Color3F(convolutionKernel.getBias());
-		
-		final PixelImageF pixelImage = copy();
-		
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(int y = 0; y < resolutionY; y++) {
-			for(int x = 0; x < resolutionX; x++) {
-				Color3F colorRGB = Color3F.BLACK;
-				
-//				Row #1:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -2, y + -2), convolutionKernel.getElement11()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -1, y + -2), convolutionKernel.getElement12()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +0, y + -2), convolutionKernel.getElement13()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +1, y + -2), convolutionKernel.getElement14()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +2, y + -2), convolutionKernel.getElement15()));
-				
-//				Row #2:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -2, y + -1), convolutionKernel.getElement21()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -1, y + -1), convolutionKernel.getElement22()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +0, y + -1), convolutionKernel.getElement23()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +1, y + -1), convolutionKernel.getElement24()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +2, y + -1), convolutionKernel.getElement25()));
-				
-//				Row #3:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -2, y + +0), convolutionKernel.getElement31()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -1, y + +0), convolutionKernel.getElement32()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +0, y + +0), convolutionKernel.getElement33()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +1, y + +0), convolutionKernel.getElement34()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +2, y + +0), convolutionKernel.getElement35()));
-				
-//				Row #4:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -2, y + +1), convolutionKernel.getElement41()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -1, y + +1), convolutionKernel.getElement42()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +0, y + +1), convolutionKernel.getElement43()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +1, y + +1), convolutionKernel.getElement44()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +2, y + +1), convolutionKernel.getElement45()));
-				
-//				Row #5:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -2, y + +2), convolutionKernel.getElement51()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + -1, y + +2), convolutionKernel.getElement52()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +0, y + +2), convolutionKernel.getElement53()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +1, y + +2), convolutionKernel.getElement54()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(pixelImage.getColorRGB(x + +2, y + +2), convolutionKernel.getElement55()));
-				
-//				Multiply with the factor and add the bias:
-				colorRGB = Color3F.multiply(colorRGB, factor);
-				colorRGB = Color3F.add(colorRGB, bias);
-				colorRGB = Color3F.minimumTo0(colorRGB);
-				colorRGB = Color3F.maximumTo1(colorRGB);
-				
-				setColorRGB(colorRGB, x, y);
-			}
-		}
-	}
-	
-	/**
-	 * Redoes gamma correction on this {@code PixelImageF} instance using PBRT.
-	 */
-	public void redoGammaCorrectionPBRT() {
-		for(final PixelF pixel : this.pixels) {
-			pixel.setColorRGB(Color3F.redoGammaCorrectionPBRT(pixel.getColorRGB()));
-		}
-	}
-	
-	/**
-	 * Redoes gamma correction on this {@code PixelImageF} instance using SRGB.
-	 */
-	public void redoGammaCorrectionSRGB() {
-		for(final PixelF pixel : this.pixels) {
-			pixel.setColorRGB(Color3F.redoGammaCorrectionSRGB(pixel.getColorRGB()));
-		}
-	}
-	
-	/**
 	 * Sets the {@link Color4F} of the pixel represented by {@code index} to {@code colorRGBA}.
 	 * <p>
 	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -1112,106 +944,106 @@ public final class PixelImageF extends ImageF {
 	}
 	
 	/**
-	 * Undoes gamma correction on this {@code PixelImageF} instance using PBRT.
+	 * Swaps the pixels represented by {@code indexA} and {@code indexB}.
+	 * <p>
+	 * If either {@code indexA} or {@code indexB} are less than {@code 0} or greater than or equal to {@code getResolution()}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param indexA one of the pixel indices
+	 * @param indexB one of the pixel indices
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code indexA} or {@code indexB} are less than {@code 0} or greater than or equal to {@code getResolution()}
 	 */
-	public void undoGammaCorrectionPBRT() {
-		for(final PixelF pixel : this.pixels) {
-			pixel.setColorRGB(Color3F.undoGammaCorrectionPBRT(pixel.getColorRGB()));
-		}
-	}
-	
-	/**
-	 * Undoes gamma correction on this {@code PixelImageF} instance using SRGB.
-	 */
-	public void undoGammaCorrectionSRGB() {
-		for(final PixelF pixel : this.pixels) {
-			pixel.setColorRGB(Color3F.undoGammaCorrectionSRGB(pixel.getColorRGB()));
-		}
+	@Override
+	public void swap(final int indexA, final int indexB) {
+		ParameterArguments.requireRange(indexA, 0, getResolution() - 1, "indexA");
+		ParameterArguments.requireRange(indexB, 0, getResolution() - 1, "indexB");
+		
+		PixelF.swap(this.pixels[indexA], this.pixels[indexB]);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Blends {@code pixelImageA} and {@code pixelImageB} using the factor {@code 0.5F}.
+	 * Blends {@code imageA} and {@code imageB} using the factor {@code 0.5F}.
 	 * <p>
 	 * Returns a new {@code PixelImageF} instance with the result of the blend operation.
 	 * <p>
-	 * If either {@code pixelImageA} or {@code pixelImageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImageF.blend(pixelImageA, pixelImageB, 0.5F);
+	 * PixelImageF.blend(imageA, imageB, 0.5F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param pixelImageA one of the {@code PixelImageF} instances to blend
-	 * @param pixelImageB one of the {@code PixelImageF} instances to blend
+	 * @param imageA one of the {@code ImageF} instances to blend
+	 * @param imageB one of the {@code ImageF} instances to blend
 	 * @return a new {@code PixelImageF} instance with the result of the blend operation
-	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
 	 */
-	public static PixelImageF blend(final PixelImageF pixelImageA, final PixelImageF pixelImageB) {
-		return blend(pixelImageA, pixelImageB, 0.5F);
+	public static PixelImageF blend(final ImageF imageA, final ImageF imageB) {
+		return blend(imageA, imageB, 0.5F);
 	}
 	
 	/**
-	 * Blends {@code pixelImageA} and {@code pixelImageB} using the factor {@code t}.
+	 * Blends {@code imageA} and {@code imageB} using the factor {@code t}.
 	 * <p>
 	 * Returns a new {@code PixelImageF} instance with the result of the blend operation.
 	 * <p>
-	 * If either {@code pixelImageA} or {@code pixelImageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * PixelImageF.blend(pixelImageA, pixelImageB, t, t, t);
+	 * PixelImageF.blend(imageA, imageB, t, t, t, t);
 	 * }
 	 * </pre>
 	 * 
-	 * @param pixelImageA one of the {@code PixelImageF} instances to blend
-	 * @param pixelImageB one of the {@code PixelImageF} instances to blend
+	 * @param imageA one of the {@code ImageF} instances to blend
+	 * @param imageB one of the {@code ImageF} instances to blend
 	 * @param t the factor to use for all components in the blending process
 	 * @return a new {@code PixelImageF} instance with the result of the blend operation
-	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
 	 */
-	public static PixelImageF blend(final PixelImageF pixelImageA, final PixelImageF pixelImageB, final float t) {
-		return blend(pixelImageA, pixelImageB, t, t, t);
+	public static PixelImageF blend(final ImageF imageA, final ImageF imageB, final float t) {
+		return blend(imageA, imageB, t, t, t, t);
 	}
 	
 	/**
-	 * Blends {@code pixelImageA} and {@code pixelImageB} using the factors {@code tComponent1}, {@code tComponent2} and {@code tComponent3}.
+	 * Blends {@code imageA} and {@code imageB} using the factors {@code tComponent1}, {@code tComponent2}, {@code tComponent3} and {@code tComponent4}.
 	 * <p>
 	 * Returns a new {@code PixelImageF} instance with the result of the blend operation.
 	 * <p>
-	 * If either {@code pixelImageA} or {@code pixelImageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pixelImageA one of the {@code PixelImageF} instances to blend
-	 * @param pixelImageB one of the {@code PixelImageF} instances to blend
+	 * @param imageA one of the {@code ImageF} instances to blend
+	 * @param imageB one of the {@code ImageF} instances to blend
 	 * @param tComponent1 the factor to use for component 1 in the blending process
-	 * @param tComponent2 the factor to use for component 1 in the blending process
-	 * @param tComponent3 the factor to use for component 1 in the blending process
+	 * @param tComponent2 the factor to use for component 2 in the blending process
+	 * @param tComponent3 the factor to use for component 3 in the blending process
+	 * @param tComponent4 the factor to use for component 4 in the blending process
 	 * @return a new {@code PixelImageF} instance with the result of the blend operation
-	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
 	 */
-	public static PixelImageF blend(final PixelImageF pixelImageA, final PixelImageF pixelImageB, final float tComponent1, final float tComponent2, final float tComponent3) {
-		final int pixelImageAResolutionX = pixelImageA.getResolutionX();
-		final int pixelImageAResolutionY = pixelImageA.getResolutionY();
+	public static PixelImageF blend(final ImageF imageA, final ImageF imageB, final float tComponent1, final float tComponent2, final float tComponent3, final float tComponent4) {
+		final int imageAResolutionX = imageA.getResolutionX();
+		final int imageAResolutionY = imageA.getResolutionY();
 		
-		final int pixelImageBResolutionX = pixelImageB.getResolutionX();
-		final int pixelImageBResolutionY = pixelImageB.getResolutionY();
+		final int imageBResolutionX = imageB.getResolutionX();
+		final int imageBResolutionY = imageB.getResolutionY();
 		
-		final int pixelImageCResolutionX = max(pixelImageAResolutionX, pixelImageBResolutionX);
-		final int pixelImageCResolutionY = max(pixelImageAResolutionY, pixelImageBResolutionY);
+		final int pixelImageCResolutionX = max(imageAResolutionX, imageBResolutionX);
+		final int pixelImageCResolutionY = max(imageAResolutionY, imageBResolutionY);
 		
 		final PixelImageF pixelImageC = new PixelImageF(pixelImageCResolutionX, pixelImageCResolutionY);
 		
 		for(int y = 0; y < pixelImageCResolutionY; y++) {
 			for(int x = 0; x < pixelImageCResolutionX; x++) {
-				final Color3F colorA = pixelImageA.getColorRGB(x, y);
-				final Color3F colorB = pixelImageB.getColorRGB(x, y);
-				final Color3F colorC = Color3F.blend(colorA, colorB, tComponent1, tComponent2, tComponent3);
+				final Color4F colorA = imageA.getColorRGBA(x, y);
+				final Color4F colorB = imageB.getColorRGBA(x, y);
+				final Color4F colorC = Color4F.blend(colorA, colorB, tComponent1, tComponent2, tComponent3, tComponent4);
 				
-				pixelImageC.setColorRGB(colorC, x, y);
+				pixelImageC.setColorRGBA(colorC, x, y);
 			}
 		}
 		
@@ -1240,28 +1072,28 @@ public final class PixelImageF extends ImageF {
 	}
 	
 	/**
-	 * Returns a {@code PixelImageF} that shows the difference between {@code pixelImageA} and {@code pixelImageB} with {@code Color3F.BLACK}.
+	 * Returns a {@code PixelImageF} that shows the difference between {@code imageA} and {@code imageB} with {@code Color4F.BLACK}.
 	 * <p>
-	 * If either {@code pixelImageA} or {@code pixelImageB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code imageA} or {@code imageB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param pixelImageA an {@code PixelImageF} instance
-	 * @param pixelImageB an {@code PixelImageF} instance
-	 * @return a {@code PixelImage} that shows the difference between {@code pixelImageA} and {@code pixelImageB} with {@code Color3F.BLACK}
-	 * @throws NullPointerException thrown if, and only if, either {@code pixelImageA} or {@code pixelImageB} are {@code null}
+	 * @param imageA an {@code ImageF} instance
+	 * @param imageB an {@code ImageF} instance
+	 * @return a {@code PixelImage} that shows the difference between {@code imageA} and {@code imageB} with {@code Color4F.BLACK}
+	 * @throws NullPointerException thrown if, and only if, either {@code imageA} or {@code imageB} are {@code null}
 	 */
-	public static PixelImageF difference(final PixelImageF pixelImageA, final PixelImageF pixelImageB) {
-		final int resolutionX = max(pixelImageA.getResolutionX(), pixelImageB.getResolutionX());
-		final int resolutionY = max(pixelImageA.getResolutionY(), pixelImageB.getResolutionY());
+	public static PixelImageF difference(final ImageF imageA, final ImageF imageB) {
+		final int resolutionX = max(imageA.getResolutionX(), imageB.getResolutionX());
+		final int resolutionY = max(imageA.getResolutionY(), imageB.getResolutionY());
 		
 		final PixelImageF pixelImageC = new PixelImageF(resolutionX, resolutionY);
 		
 		for(int y = 0; y < resolutionY; y++) {
 			for(int x = 0; x < resolutionX; x++) {
-				final Color3F colorA = pixelImageA.getColorRGB(x, y);
-				final Color3F colorB = pixelImageB.getColorRGB(x, y);
-				final Color3F colorC = colorA.equals(colorB) ? colorA : Color3F.BLACK;
+				final Color4F colorA = imageA.getColorRGBA(x, y);
+				final Color4F colorB = imageB.getColorRGBA(x, y);
+				final Color4F colorC = colorA.equals(colorB) ? colorA : Color4F.BLACK;
 				
-				pixelImageC.setColorRGB(colorC, x, y);
+				pixelImageC.setColorRGBA(colorC, x, y);
 			}
 		}
 		

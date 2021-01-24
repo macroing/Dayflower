@@ -25,6 +25,7 @@ import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.lerp;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.pow;
 import static org.dayflower.utility.Doubles.toDouble;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -990,6 +991,96 @@ public final class Color4D {
 	}
 	
 	/**
+	 * Converts {@code color} from the RGB-color space to the XYZ-color space using the algorithm provided by PBRT.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the conversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance in RGB-color space
+	 * @return a new {@code Color4D} instance with the result of the conversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D convertRGBAToXYZAUsingPBRT(final Color4D color) {
+		final double x = color.getR() * 0.412453D + color.getG() * 0.357580D + color.getB() * 0.180423D;
+		final double y = color.getR() * 0.212671D + color.getG() * 0.715160D + color.getB() * 0.072169D;
+		final double z = color.getR() * 0.019334D + color.getG() * 0.119193D + color.getB() * 0.950227D;
+		final double a = color.getA();
+		
+		return new Color4D(x, y, z, a);
+	}
+	
+	/**
+	 * Converts {@code color} from the RGB-color space to the XYZ-color space using sRGB.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the conversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance in RGB-color space
+	 * @return a new {@code Color4D} instance with the result of the conversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D convertRGBAToXYZAUsingSRGB(final Color4D color) {
+		return ColorSpaceD.SRGB.convertRGBAToXYZA(color);
+	}
+	
+	/**
+	 * Converts {@code color} from the XYZ-color space to the RGB-color space using the algorithm provided by PBRT.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the conversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance in XYZ-color space
+	 * @return a new {@code Color4D} instance with the result of the conversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D convertXYZAToRGBAUsingPBRT(final Color4D color) {
+		final double r = color.getX() * +3.240479D - color.getY() * 1.537150D - color.getZ() * 0.498535D;
+		final double g = color.getX() * -0.969256D + color.getY() * 1.875991D + color.getZ() * 0.041556D;
+		final double b = color.getX() * +0.055648D - color.getY() * 0.204043D + color.getZ() * 1.057311D;
+		final double a = color.getA();
+		
+		return new Color4D(r, g, b, a);
+	}
+	
+	/**
+	 * Converts {@code color} from the XYZ-color space to the RGB-color space using sRGB.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the conversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance in XYZ-color space
+	 * @return a new {@code Color4D} instance with the result of the conversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D convertXYZAToRGBAUsingSRGB(final Color4D color) {
+		return ColorSpaceD.SRGB.convertXYZAToRGBA(color);
+	}
+	
+	/**
+	 * Inverts the component values of {@code color}.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the inversion.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a new {@code Color4D} instance with the result of the inversion
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D invert(final Color4D color) {
+		final double component1 = 1.0D - color.component1;
+		final double component2 = 1.0D - color.component2;
+		final double component3 = 1.0D - color.component3;
+		final double component4 =        color.component4;
+		
+		return new Color4D(component1, component2, component3, component4);
+	}
+	
+	/**
 	 * Returns a {@code Color4D} instance with random component values.
 	 * <p>
 	 * Calling this method is equivalent to the following:
@@ -1067,6 +1158,76 @@ public final class Color4D {
 		final double component3 = Doubles.random();
 		
 		return new Color4D(component1, component2, component3);
+	}
+	
+	/**
+	 * Redoes gamma correction on the component values of {@code color} using the algorithm provided by PBRT.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a new {@code Color4D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D redoGammaCorrectionPBRT(final Color4D color) {
+		final double component1 = color.component1 <= 0.0031308D ? 12.92D * color.component1 : 1.055D * pow(color.component1, 1.0D / 2.4D) - 0.055D;
+		final double component2 = color.component2 <= 0.0031308D ? 12.92D * color.component2 : 1.055D * pow(color.component2, 1.0D / 2.4D) - 0.055D;
+		final double component3 = color.component3 <= 0.0031308D ? 12.92D * color.component3 : 1.055D * pow(color.component3, 1.0D / 2.4D) - 0.055D;
+		final double component4 = color.component4;
+		
+		return new Color4D(component1, component2, component3, component4);
+	}
+	
+	/**
+	 * Redoes gamma correction on the component values of {@code color} using sRGB.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a new {@code Color4D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D redoGammaCorrectionSRGB(final Color4D color) {
+		return ColorSpaceD.SRGB.redoGammaCorrection(color);
+	}
+	
+	/**
+	 * Undoes gamma correction on the component values of {@code color} using the algorithm provided by PBRT.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a new {@code Color4D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D undoGammaCorrectionPBRT(final Color4D color) {
+		final double component1 = color.component1 <= 0.04045D ? color.component1 * 1.0D / 12.92D : pow((color.component1 + 0.055D) * 1.0D / 1.055D, 2.4D);
+		final double component2 = color.component2 <= 0.04045D ? color.component2 * 1.0D / 12.92D : pow((color.component2 + 0.055D) * 1.0D / 1.055D, 2.4D);
+		final double component3 = color.component3 <= 0.04045D ? color.component3 * 1.0D / 12.92D : pow((color.component3 + 0.055D) * 1.0D / 1.055D, 2.4D);
+		final double component4 = color.component4;
+		
+		return new Color4D(component1, component2, component3, component4);
+	}
+	
+	/**
+	 * Undoes gamma correction on the component values of {@code color} using sRGB.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a new {@code Color4D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D undoGammaCorrectionSRGB(final Color4D color) {
+		return ColorSpaceD.SRGB.undoGammaCorrection(color);
 	}
 	
 	/**

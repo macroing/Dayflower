@@ -77,6 +77,7 @@ public final class CenteredVBox extends VBox {
 	 * <p>
 	 * Returns the {@code ComboBox} instance.
 	 * 
+	 * @param <T> the generic type of the items
 	 * @param items a {@code Collection} of items
 	 * @param value the value to use
 	 * @return the {@code ComboBox} instance

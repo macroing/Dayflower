@@ -587,8 +587,8 @@ public final class Floats {
 	 * <p>
 	 * Returns the result of the linear interpolation operation.
 	 * 
-	 * @param value0 a {@code float} value
 	 * @param value1 a {@code float} value
+	 * @param value2 a {@code float} value
 	 * @param t the factor
 	 * @return the result of the linear interpolation operation
 	 */

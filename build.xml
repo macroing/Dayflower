@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Dayflower" default="distribution" basedir=".">
+	<!--The following properties should be specified by each project. Some of them are the same for all projects, whereas others are not.-->
+	<property name="java.source" value="1.8"/>
+	<property name="java.target" value="1.8"/>
+	<property name="project.class.classpath" value=". ./lib/aparapi.jar"/>
+	<property name="project.class.main" value="org.dayflower.javafx.application.DayflowerApplication"/>
+	<property name="project.directory.root" location="."/>
+	<property name="project.name" value="${ant.project.name}"/>
+	<property name="project.vendor" value="Dayflower.org"/>
+	<property name="project.version" value="0.0.0"/>
+	
+	<!--The following properties are based on the above properties and don't really need to change.-->
+	<property name="project.directory.binary" location="bin"/>
+	<property name="project.directory.distribution" location="${project.directory.root}/distribution"/>
+	<property name="project.directory.distribution.current" location="${project.directory.distribution}/${project.name}"/>
+	<property name="project.directory.library" location="lib"/>
+	<property name="project.directory.resources" location="src/main/resources"/>
+	<property name="project.directory.source" location="src/main/java"/>
+	
+	<target name="clean" description="Deletes generated directories and files for project ${project.name}.">
+		<delete dir="${project.directory.binary}"/>
+		<delete dir="${project.directory.distribution}"/>
+	</target>
+	
+	<target name="distribution" depends="clean">
+		<!--Initialize all directories.-->
+		<mkdir dir="${project.directory.binary}"/>
+		<mkdir dir="${project.directory.distribution.current}"/>
+		<mkdir dir="${project.directory.source}"/>
+		
+		<path id="library.path">
+			<fileset dir="${project.directory.library}" includes="**/*.jar"/>
+		</path>
+		
+		<!--Perform Java compilation.-->
+		<javac classpathref="library.path" debug="true" debuglevel="lines,vars,source" destdir="${project.directory.binary}" encoding="UTF-8" includeAntRuntime="false" source="${java.source}" sourcepath="" srcdir="${project.directory.source}" target="${java.target}">
+			<compilerarg value="-Xlint:all"/>
+			
+			<include name="org/dayflower/**"/>
+		</javac>
+		
+		<!--Initialize time-stamps.-->
+		<tstamp>
+			<format property="build.date" pattern="EEEE, d MMMM yyyy"/>
+			<format property="build.time" pattern="hh:mm a"/>
+		</tstamp>
+		
+		<!--Create a JAR-file.-->
+		<jar basedir="${project.directory.binary}" destfile="${project.directory.distribution.current}/${project.name}.jar" excludes="">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Class-Path" value="${project.class.classpath}"/>
+				<attribute name="Main-Class" value="${project.class.main}"/>
+				<attribute name="Specification-Title" value="${project.name}"/>
+				<attribute name="Specification-Version" value="${project.version}"/>
+				<attribute name="Specification-Vendor" value="${project.vendor}"/>
+				<attribute name="Implementation-Title" value="${project.name}"/>
+				<attribute name="Implementation-Version" value="${project.version}"/>
+				<attribute name="Implementation-Vendor" value="${project.vendor}"/>
+			</manifest>
+			
+			<!--
+			<fileset dir="${project.directory.resources}" excludes="**/.*/**"/>
+			-->
+		</jar>
+		
+		<!--Generate Javadocs.-->
+		<javadoc access="protected" author="true" charset="UTF-8" destdir="${project.directory.distribution.current}/doc" docencoding="UTF-8" encoding="UTF-8" linksource="false" use="true" useexternalfile="yes" version="true" windowtitle="${project.name} API">
+			<classpath>
+				<path refid="library.path"/>
+				<pathelement location="${project.directory.binary}"/>
+			</classpath>
+			
+			<fileset defaultexcludes="yes" dir="${project.directory.source}">
+				<include name="org/dayflower/**"/>
+			</fileset>
+		</javadoc>
+		
+		<!--Copy files.-->
+		<copy todir="${project.directory.distribution.current}">
+			<fileset dir="." includes="COPYING"/>
+			<fileset dir="." includes="COPYING.LESSER"/>
+			<fileset dir="." includes="README.md"/>
+		</copy>
+		
+		<!--Copy the source code.-->
+		<copy todir="${project.directory.distribution.current}/src">
+			<fileset dir="${project.directory.source}" excludes=""/>
+		</copy>
+		
+		<!--Zip the source code.-->
+		<zip basedir="${project.directory.distribution.current}/src" destfile="${project.directory.distribution.current}/${project.name}-src.zip"/>
+	</target>
+</project>

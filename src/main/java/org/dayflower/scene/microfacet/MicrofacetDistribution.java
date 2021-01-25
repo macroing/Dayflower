@@ -138,7 +138,7 @@ public abstract class MicrofacetDistribution {
 	 * Computes the shadowing and masking term for {@code outgoing}.
 	 * <p>
 	 * Returns a {@code float} value with the computed shadowing and masking term.
-	 * <o>
+	 * <p>
 	 * If {@code outgoing} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * This method represents the {@code MicrofacetDistribution} method {@code G1(const Vector3f &w)} that returns a {@code Float} in PBRT.

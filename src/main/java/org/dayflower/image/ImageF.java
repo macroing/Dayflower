@@ -415,7 +415,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.drawCircle(circle, Color4F.BLACK);
+	 * }
 	 * </pre>
 	 * 
 	 * @param circle the {@link Circle2I} to draw
@@ -432,7 +434,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.drawCircle(circle, (color, point) -> colorRGBA);
+	 * }
 	 * </pre>
 	 * 
 	 * @param circle the {@link Circle2I} to draw
@@ -488,7 +492,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.drawLine(line, Color4F.BLACK);
+	 * }
 	 * </pre>
 	 * 
 	 * @param line the {@link Line2I} to draw
@@ -505,7 +511,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.drawLine(line, (color, point) -> colorRGBA);
+	 * }
 	 * </pre>
 	 * 
 	 * @param line the {@link Line2I} to draw
@@ -559,7 +567,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.drawRectangle(rectangle, Color4F.BLACK);
+	 * }
 	 * </pre>
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to draw
@@ -576,7 +586,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.drawRectangle(rectangle, (color, point) -> colorRGBA);
+	 * }
 	 * </pre>
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to draw
@@ -632,7 +644,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.drawTriangle(triangle, Color4F.BLACK);
+	 * }
 	 * </pre>
 	 * 
 	 * @param triangle the {@link Triangle2I} to draw
@@ -649,7 +663,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.drawTriangle(triangle, (color, point) -> colorRGBA);
+	 * }
 	 * </pre>
 	 * 
 	 * @param triangle the {@link Triangle2I} to draw
@@ -688,7 +704,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.fillCircle(circle, Color4F.BLACK);
+	 * }
 	 * </pre>
 	 * 
 	 * @param circle the {@link Circle2I} to fill
@@ -705,7 +723,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.fillCircle(circle, (color, point) -> colorRGBA);
+	 * }
 	 * </pre>
 	 * 
 	 * @param circle the {@link Circle2I} to fill
@@ -865,7 +885,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.fillRectangle(rectangle, Color4F.BLACK);
+	 * }
 	 * </pre>
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to fill
@@ -882,7 +904,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.fillRectangle(rectangle, new Color4F(colorRGB));
+	 * }
 	 * </pre>
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to fill
@@ -903,7 +927,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.fillRectangle(rectangle, (color, point) -> colorRGBA);
+	 * }
 	 * </pre>
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to fill
@@ -959,7 +985,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.fillTriangle(triangle, Color4F.BLACK);
+	 * }
 	 * </pre>
 	 * 
 	 * @param triangle the {@link Triangle2I} to fill
@@ -976,7 +1004,9 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
+	 * {@code
 	 * image.fillTriangle(triangle, (color, point) -> colorRGBA);
+	 * }
 	 * </pre>
 	 * 
 	 * @param triangle the {@link Triangle2I} to fill

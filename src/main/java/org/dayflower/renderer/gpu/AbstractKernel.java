@@ -81,7 +81,7 @@ public abstract class AbstractKernel extends Kernel {
 	protected static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
 	
 	/**
-	 * The size of the point represented in the array {@link #point3FArray_$private$9}.
+	 * The size of the point represented in the array {@link #point3FArray_$private$3}.
 	 */
 	protected static final int POINT_3_F_ARRAY_SIZE = 3;
 	
@@ -440,8 +440,8 @@ public abstract class AbstractKernel extends Kernel {
 	 * <p>
 	 * Returns the result of the linear interpolation operation.
 	 * 
-	 * @param value0 a {@code float} value
 	 * @param value1 a {@code float} value
+	 * @param value2 a {@code float} value
 	 * @param t the factor
 	 * @return the result of the linear interpolation operation
 	 */

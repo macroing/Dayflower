@@ -19,6 +19,7 @@
 package org.dayflower.scene;
 
 import java.io.File;
+import java.io.UncheckedIOException;
 
 /**
  * A {@code SceneLoader} is used to load {@link Scene} instances.

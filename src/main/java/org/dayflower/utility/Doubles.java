@@ -240,7 +240,7 @@ public class Doubles {
 	 * 
 	 * @param value the value whose arc sine divided by pi is to be returned
 	 * @return the result of {@code asin(value)} divided by pi
-	 * @see #asin(float)
+	 * @see #asin(double)
 	 */
 	public static double asinpi(final double value) {
 		return asin(value) / PI;
@@ -304,7 +304,7 @@ public class Doubles {
 	 * @param y the ordinate coordinate
 	 * @param x the abscissa coordinate
 	 * @return the result of {@code atan2(y, x)} divided by (pi * 2)
-	 * @see #atan2(float, float)
+	 * @see #atan2(double, double)
 	 */
 	public static double atan2pi2(final double y, final double x) {
 		return atan2(y, x) / PI_MULTIPLIED_BY_2;
@@ -329,7 +329,7 @@ public class Doubles {
 	 * @param tX the X-axis factor
 	 * @param tY the Y-axis factor
 	 * @return the result of the bilinear interpolation operation
-	 * @see #lerp(float, float, float)
+	 * @see #lerp(double, double, double)
 	 */
 	public static double blerp(final double value00, final double value01, final double value10, final double value11, final double tX, final double tY) {
 		return lerp(lerp(value00, value01, tX), lerp(value10, value11, tX), tY);
@@ -587,8 +587,8 @@ public class Doubles {
 	 * <p>
 	 * Returns the result of the linear interpolation operation.
 	 * 
-	 * @param value0 a {@code double} value
 	 * @param value1 a {@code double} value
+	 * @param value2 a {@code double} value
 	 * @param t the factor
 	 * @return the result of the linear interpolation operation
 	 */

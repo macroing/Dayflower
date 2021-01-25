@@ -66,7 +66,6 @@ import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
-import org.dayflower.utility.Lists;
 
 final class SceneCompiler {
 	private final AtomicLong timeMillis;
@@ -433,7 +432,9 @@ final class SceneCompiler {
 		this.distinctAxisAlignedBoundingBoxes.addAll(NodeFilter.filterAllDistinct(scene, AxisAlignedBoundingBox3F.class));
 		this.distinctBoundingSpheres.addAll(NodeFilter.filterAllDistinct(scene, BoundingSphere3F.class));
 		this.distinctInfiniteBoundingVolumes.addAll(NodeFilter.filterAllDistinct(scene, InfiniteBoundingVolume3F.class));
-		this.distinctBoundingVolumes.addAll(Lists.merge(this.distinctAxisAlignedBoundingBoxes, this.distinctBoundingSpheres, this.distinctInfiniteBoundingVolumes));
+		this.distinctBoundingVolumes.addAll(this.distinctAxisAlignedBoundingBoxes);
+		this.distinctBoundingVolumes.addAll(this.distinctBoundingSpheres);
+		this.distinctBoundingVolumes.addAll(this.distinctInfiniteBoundingVolumes);
 	}
 	
 	private void doFilterAllDistinctLights(final Scene scene) {
@@ -450,7 +451,15 @@ final class SceneCompiler {
 		this.distinctMetalSmallPTMaterials.addAll(NodeFilter.filterAllDistinct(scene, MetalSmallPTMaterial.class));
 		this.distinctMirrorRayitoMaterials.addAll(NodeFilter.filterAllDistinct(scene, MirrorRayitoMaterial.class));
 		this.distinctMirrorSmallPTMaterials.addAll(NodeFilter.filterAllDistinct(scene, MirrorSmallPTMaterial.class));
-		this.distinctMaterials.addAll(Lists.merge(this.distinctClearCoatSmallPTMaterials, this.distinctGlassRayitoMaterials, this.distinctGlassSmallPTMaterials, this.distinctMatteRayitoMaterials, this.distinctMatteSmallPTMaterials, this.distinctMetalRayitoMaterials, this.distinctMetalSmallPTMaterials, this.distinctMirrorRayitoMaterials, this.distinctMirrorSmallPTMaterials));
+		this.distinctMaterials.addAll(this.distinctClearCoatSmallPTMaterials);
+		this.distinctMaterials.addAll(this.distinctGlassRayitoMaterials);
+		this.distinctMaterials.addAll(this.distinctGlassSmallPTMaterials);
+		this.distinctMaterials.addAll(this.distinctMatteRayitoMaterials);
+		this.distinctMaterials.addAll(this.distinctMatteSmallPTMaterials);
+		this.distinctMaterials.addAll(this.distinctMetalRayitoMaterials);
+		this.distinctMaterials.addAll(this.distinctMetalSmallPTMaterials);
+		this.distinctMaterials.addAll(this.distinctMirrorRayitoMaterials);
+		this.distinctMaterials.addAll(this.distinctMirrorSmallPTMaterials);
 	}
 	
 	private void doFilterAllDistinctShapes(final Scene scene) {
@@ -460,7 +469,12 @@ final class SceneCompiler {
 		this.distinctToruses.addAll(NodeFilter.filterAllDistinct(scene, Torus3F.class));
 		this.distinctTriangles.addAll(NodeFilter.filterAllDistinct(scene, Triangle3F.class));
 		this.distinctTriangleMeshes.addAll(NodeFilter.filterAllDistinct(scene, TriangleMesh3F.class));
-		this.distinctShapes.addAll(Lists.merge(this.distinctPlanes, this.distinctRectangularCuboids, this.distinctSpheres, this.distinctToruses, this.distinctTriangles, this.distinctTriangleMeshes));
+		this.distinctShapes.addAll(this.distinctPlanes);
+		this.distinctShapes.addAll(this.distinctRectangularCuboids);
+		this.distinctShapes.addAll(this.distinctSpheres);
+		this.distinctShapes.addAll(this.distinctToruses);
+		this.distinctShapes.addAll(this.distinctTriangles);
+		this.distinctShapes.addAll(this.distinctTriangleMeshes);
 	}
 	
 	private void doFilterAllDistinctTextures(final Scene scene) {

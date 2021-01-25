@@ -577,6 +577,7 @@ public final class Matrix44D implements Node {
 	 * <p>
 	 * To make sure {@code matrix} is invertible, consider calling {@link #isInvertible()}.
 	 * 
+	 * @param matrix a {@code Matrix44D} instance
 	 * @return a new {@code Matrix44D} instance that is the inverse of {@code matrix}
 	 * @throws IllegalArgumentException thrown if, and only if, {@code matrix} cannot be inverted
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
@@ -1039,6 +1040,7 @@ public final class Matrix44D implements Node {
 	 * <p>
 	 * If {@code matrix} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
+	 * @param matrix a {@code Matrix44D} instance
 	 * @return a new {@code Matrix44D} instance that is the transpose of {@code matrix}
 	 * @throws NullPointerException thrown if, and only if, {@code matrix} is {@code null}
 	 */

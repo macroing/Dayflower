@@ -175,7 +175,7 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	}
 	
 	/**
-	 * Renders the associated {@link Scene} instance to the associated {@link ImageF} instance and, optionally, updates the associated {@link Display} instance.
+	 * Renders the associated {@link Scene} instance to the associated {@link ImageF} instance and, optionally, updates the associated {@link RendererObserver} instance.
 	 * <p>
 	 * Returns {@code true} if, and only if, rendering was performed, {@code false} otherwise.
 	 * 

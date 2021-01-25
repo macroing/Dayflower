@@ -205,7 +205,7 @@ public final class ConvolutionKernel55F {
 		final String row4 = String.format("%+.10f, %+.10f, %+.10f, %+.10f, %+.10f", Float.valueOf(this.element41), Float.valueOf(this.element42), Float.valueOf(this.element43), Float.valueOf(this.element44), Float.valueOf(this.element45));
 		final String row5 = String.format("%+.10f, %+.10f, %+.10f, %+.10f, %+.10f", Float.valueOf(this.element51), Float.valueOf(this.element52), Float.valueOf(this.element53), Float.valueOf(this.element54), Float.valueOf(this.element55));
 		
-		return String.format("new ConvolutionKernel33F(%s, %s, %s, %s, %s, %+.10f, %+.10f)", row1, row2, row3, row4, row5, Float.valueOf(this.factor), Float.valueOf(this.bias));
+		return String.format("new ConvolutionKernel55F(%s, %s, %s, %s, %s, %+.10f, %+.10f)", row1, row2, row3, row4, row5, Float.valueOf(this.factor), Float.valueOf(this.bias));
 	}
 	
 	/**

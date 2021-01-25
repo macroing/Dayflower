@@ -34,7 +34,14 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code ConstructiveSolidGeometry3D} denotes a 3-dimensional Constructive Solid Geometry (CSG) shape that uses the data type {@code double}.
+ * <p>
+ * This class is immutable and therefore thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class ConstructiveSolidGeometry3D implements Shape3D {
 	/**
 	 * The name of this {@code ConstructiveSolidGeometry3D} class.

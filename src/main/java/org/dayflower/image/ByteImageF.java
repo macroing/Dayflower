@@ -25,7 +25,6 @@ import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.utility.Bytes;
-import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -298,20 +297,6 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of this {@code ByteImageF} instance.
-	 * <p>
-	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
-	 * @return an {@code int[]} representation of this {@code ByteImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
-	 */
-	@Override
-	public int[] toIntArray(final ArrayComponentOrder arrayComponentOrder) {
-		return Ints.toArray(toByteArray(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null")), true);
-	}
-	
-	/**
 	 * Returns an {@code int[]} representation of this {@code ByteImageF} instance in a packed form.
 	 * <p>
 	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -322,22 +307,7 @@ public final class ByteImageF extends ImageF {
 	 */
 	@Override
 	public int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder) {
-		Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null");
-		
-		final int resolution = getResolution();
-		
-		final int[] intArray = new int[resolution];
-		
-		for(int i = 0; i < resolution; i++) {
-			final int r = this.data[i * 4 + 0] & 0xFF;
-			final int g = this.data[i * 4 + 1] & 0xFF;
-			final int b = this.data[i * 4 + 2] & 0xFF;
-			final int a = this.data[i * 4 + 3] & 0xFF;
-			
-			intArray[i] = packedIntComponentOrder.pack(r, g, b, a);
-		}
-		
-		return intArray;
+		return Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null").pack(ArrayComponentOrder.RGBA, this.data);
 	}
 	
 	/**

@@ -593,53 +593,6 @@ public final class PixelImageF extends ImageF {
 	}
 	
 	/**
-	 * Returns a {@code byte[]} representation of this {@code PixelImageF} instance.
-	 * <p>
-	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
-	 * @return a {@code byte[]} representation of this {@code PixelImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
-	 */
-	@Override
-	public byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder) {
-		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
-		
-		final int resolution = getResolution();
-		
-		final byte[] byteArray = new byte[resolution * arrayComponentOrder.getComponentCount()];
-		
-		for(int i = 0; i < resolution; i++) {
-			final PixelF pixel = this.pixels[i];
-			
-			final Color4F colorRGBA = pixel.getColorRGBA();
-			
-			final byte r = colorRGBA.getAsByteR();
-			final byte g = colorRGBA.getAsByteG();
-			final byte b = colorRGBA.getAsByteB();
-			final byte a = colorRGBA.getAsByteA();
-			
-			if(arrayComponentOrder.hasOffsetR()) {
-				byteArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetR()] = r;
-			}
-			
-			if(arrayComponentOrder.hasOffsetG()) {
-				byteArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetG()] = g;
-			}
-			
-			if(arrayComponentOrder.hasOffsetB()) {
-				byteArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetB()] = b;
-			}
-			
-			if(arrayComponentOrder.hasOffsetA()) {
-				byteArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetA()] = a;
-			}
-		}
-		
-		return byteArray;
-	}
-	
-	/**
 	 * Returns a hash code for this {@code PixelImageF} instance.
 	 * 
 	 * @return a hash code for this {@code PixelImageF} instance
@@ -647,53 +600,6 @@ public final class PixelImageF extends ImageF {
 	@Override
 	public int hashCode() {
 		return Objects.hash(Integer.valueOf(getResolution()), Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), this.filter, Integer.valueOf(Arrays.hashCode(this.pixels)), Integer.valueOf(Arrays.hashCode(this.filterTable)));
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code PixelImageF} instance.
-	 * <p>
-	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
-	 * @return an {@code int[]} representation of this {@code PixelImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
-	 */
-	@Override
-	public int[] toIntArray(final ArrayComponentOrder arrayComponentOrder) {
-		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
-		
-		final int resolution = getResolution();
-		
-		final int[] intArray = new int[resolution * arrayComponentOrder.getComponentCount()];
-		
-		for(int i = 0; i < resolution; i++) {
-			final PixelF pixel = this.pixels[i];
-			
-			final Color4F colorRGBA = pixel.getColorRGBA();
-			
-			final int r = colorRGBA.getAsIntR();
-			final int g = colorRGBA.getAsIntG();
-			final int b = colorRGBA.getAsIntB();
-			final int a = colorRGBA.getAsIntA();
-			
-			if(arrayComponentOrder.hasOffsetR()) {
-				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetR()] = r;
-			}
-			
-			if(arrayComponentOrder.hasOffsetG()) {
-				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetG()] = g;
-			}
-			
-			if(arrayComponentOrder.hasOffsetB()) {
-				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetB()] = b;
-			}
-			
-			if(arrayComponentOrder.hasOffsetA()) {
-				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetA()] = a;
-			}
-		}
-		
-		return intArray;
 	}
 	
 	/**

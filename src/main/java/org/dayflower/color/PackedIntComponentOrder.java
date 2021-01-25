@@ -251,39 +251,169 @@ public enum PackedIntComponentOrder {
 		return hasShiftR() ? (color >> getShiftR()) & 0xFF : 0;
 	}
 	
+	/**
+	 * Packs the {@code byte[]} {@code array} stored as {@code arrayComponentOrder} to a new packed {@code int[]} stores as this {@code PackedIntComponentOrder} instance.
+	 * <p>
+	 * Returns a new {@code int[]} with the result of the operation.
+	 * <p>
+	 * If either {@code arrayComponentOrder} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % arrayComponentOrder.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param arrayComponentOrder the {@link ArrayComponentOrder} to read the color component values with
+	 * @param array a {@code byte[]} with color component values
+	 * @return a new {@code int[]} with the result of the operation
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount() != 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrder} or {@code array} are {@code null}
+	 */
+	public int[] pack(final ArrayComponentOrder arrayComponentOrder, final byte[] array) {
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		if(array.length % arrayComponentOrder.getComponentCount() != 0) {
+			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(array.length), Integer.valueOf(arrayComponentOrder.getComponentCount())));
+		}
+		
+		final int resolution = array.length / arrayComponentOrder.getComponentCount();
+		
+		final int[] arrayPacked = new int[resolution];
+		
+		for(int i = 0; i < resolution; i++) {
+			final int offset = i * arrayComponentOrder.getComponentCount();
+			
+			final int r = arrayComponentOrder.readR(array, offset);
+			final int g = arrayComponentOrder.readG(array, offset);
+			final int b = arrayComponentOrder.readB(array, offset);
+			final int a = arrayComponentOrder.readA(array, offset);
+			
+			arrayPacked[i] = pack(r, g, b, a);
+		}
+		
+		return arrayPacked;
+	}
+	
+	/**
+	 * Packs the {@code int[]} {@code array} stored as {@code arrayComponentOrder} to a new packed {@code int[]} stores as this {@code PackedIntComponentOrder} instance.
+	 * <p>
+	 * Returns a new {@code int[]} with the result of the operation.
+	 * <p>
+	 * If either {@code arrayComponentOrder} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code array.length % arrayComponentOrder.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param arrayComponentOrder the {@link ArrayComponentOrder} to read the color component values with
+	 * @param array an {@code int[]} with color component values
+	 * @return a new {@code int[]} with the result of the operation
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount() != 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrder} or {@code array} are {@code null}
+	 */
+	public int[] pack(final ArrayComponentOrder arrayComponentOrder, final int[] array) {
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		if(array.length % arrayComponentOrder.getComponentCount() != 0) {
+			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(array.length), Integer.valueOf(arrayComponentOrder.getComponentCount())));
+		}
+		
+		final int resolution = array.length / arrayComponentOrder.getComponentCount();
+		
+		final int[] arrayPacked = new int[resolution];
+		
+		for(int i = 0; i < resolution; i++) {
+			final int offset = i * arrayComponentOrder.getComponentCount();
+			
+			final int r = arrayComponentOrder.readR(array, offset);
+			final int g = arrayComponentOrder.readG(array, offset);
+			final int b = arrayComponentOrder.readB(array, offset);
+			final int a = arrayComponentOrder.readA(array, offset);
+			
+			arrayPacked[i] = pack(r, g, b, a);
+		}
+		
+		return arrayPacked;
+	}
+	
+	/**
+	 * Unpacks the {@code int[]} {@code array} stored as this {@code PackedIntComponentOrder} instance to a new {@code int[]} stored as {@code arrayComponentOrder}.
+	 * <p>
+	 * Returns a new {@code int[]} with the result of the operation.
+	 * <p>
+	 * If either {@code arrayComponentOrder} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param arrayComponentOrder the {@link ArrayComponentOrder} to write the color component values with
+	 * @param array an {@code int[]} with packed color component values
+	 * @return a new {@code int[]} with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrder} or {@code array} are {@code null}
+	 */
+	public int[] unpack(final ArrayComponentOrder arrayComponentOrder, final int[] array) {
+		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		final int[] arrayUnpacked = new int[array.length * arrayComponentOrder.getComponentCount()];
+		
+		for(int i = 0; i < array.length; i++) {
+			final int color = array[i];
+			
+			final int r = unpackR(color);
+			final int g = unpackG(color);
+			final int b = unpackB(color);
+			final int a = unpackA(color);
+			
+			final int offset = i * arrayComponentOrder.getComponentCount();
+			
+			if(arrayComponentOrder.hasOffsetR()) {
+				arrayUnpacked[offset + arrayComponentOrder.getOffsetR()] = r;
+			}
+			
+			if(arrayComponentOrder.hasOffsetG()) {
+				arrayUnpacked[offset + arrayComponentOrder.getOffsetG()] = g;
+			}
+			
+			if(arrayComponentOrder.hasOffsetB()) {
+				arrayUnpacked[offset + arrayComponentOrder.getOffsetB()] = b;
+			}
+			
+			if(arrayComponentOrder.hasOffsetA()) {
+				arrayUnpacked[offset + arrayComponentOrder.getOffsetA()] = a;
+			}
+		}
+		
+		return arrayUnpacked;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Converts the {@code int[]} {@code data} stored as {@code packedIntComponentOrderA} to a new {@code int[]} stored as {@code packedIntComponentOrderB}.
+	 * Converts the {@code int[]} {@code array} stored as {@code packedIntComponentOrderA} to a new {@code int[]} stored as {@code packedIntComponentOrderB}.
 	 * <p>
 	 * Returns a new {@code int[]} with the result of the conversion.
 	 * <p>
-	 * If either {@code packedIntComponentOrderA}, {@code packedIntComponentOrderB} or {@code data} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code packedIntComponentOrderA}, {@code packedIntComponentOrderB} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param packedIntComponentOrderA the {@code PackedIntComponentOrder} to convert from
 	 * @param packedIntComponentOrderB the {@code PackedIntComponentOrder} to convert to
-	 * @param data an {@code int[]} with color data
+	 * @param array an {@code int[]} with packed color component values
 	 * @return a new {@code int[]} with the result of the conversion
-	 * @throws NullPointerException thrown if, and only if, either {@code packedIntComponentOrderA}, {@code packedIntComponentOrderB} or {@code data} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code packedIntComponentOrderA}, {@code packedIntComponentOrderB} or {@code array} are {@code null}
 	 */
-	public static int[] convert(final PackedIntComponentOrder packedIntComponentOrderA, final PackedIntComponentOrder packedIntComponentOrderB, final int[] data) {
+	public static int[] convert(final PackedIntComponentOrder packedIntComponentOrderA, final PackedIntComponentOrder packedIntComponentOrderB, final int[] array) {
 		Objects.requireNonNull(packedIntComponentOrderA, "packedIntComponentOrderA == null");
 		Objects.requireNonNull(packedIntComponentOrderB, "packedIntComponentOrderB == null");
-		Objects.requireNonNull(data, "data == null");
+		Objects.requireNonNull(array, "array == null");
 		
-		final int[] dataConverted = new int[data.length];
+		final int[] arrayConverted = new int[array.length];
 		
-		for(int i = 0; i < data.length; i++) {
-			final int color = data[i];
+		for(int i = 0; i < array.length; i++) {
+			final int color = array[i];
 			
 			final int r = packedIntComponentOrderA.unpackR(color);
 			final int g = packedIntComponentOrderA.unpackG(color);
 			final int b = packedIntComponentOrderA.unpackB(color);
 			final int a = packedIntComponentOrderA.unpackA(color);
 			
-			data[i] = packedIntComponentOrderB.pack(r, g, b, a);
+			arrayConverted[i] = packedIntComponentOrderB.pack(r, g, b, a);
 		}
 		
-		return dataConverted;
+		return arrayConverted;
 	}
 }

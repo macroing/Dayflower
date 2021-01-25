@@ -44,6 +44,7 @@ import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
+import org.dayflower.utility.Bytes;
 import org.dayflower.utility.ParameterArguments;
 import org.dayflower.utility.TriFunction;
 
@@ -435,12 +436,16 @@ public abstract class ImageF {
 	 * Returns a {@code byte[]} representation of this {@code ImageF} instance.
 	 * <p>
 	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method may be overridden in order to optimize the conversion.
 	 * 
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
 	 * @return a {@code byte[]} representation of this {@code ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
 	 */
-	public abstract byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder);
+	public byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder) {
+		return Bytes.toArray(toIntArray(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null")));
+	}
 	
 	/**
 	 * Returns the resolution of this {@code ImageF} instance.
@@ -500,12 +505,16 @@ public abstract class ImageF {
 	 * Returns an {@code int[]} representation of this {@code ImageF} instance.
 	 * <p>
 	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method may be overridden in order to optimize the conversion.
 	 * 
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
 	 * @return an {@code int[]} representation of this {@code ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
 	 */
-	public abstract int[] toIntArray(final ArrayComponentOrder arrayComponentOrder);
+	public int[] toIntArray(final ArrayComponentOrder arrayComponentOrder) {
+		return PackedIntComponentOrder.ARGB.unpack(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null"), toIntArrayPackedForm());
+	}
 	
 	/**
 	 * Returns an {@code int[]} representation of this {@code ImageF} instance in a packed form.

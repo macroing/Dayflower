@@ -349,118 +349,118 @@ public enum ArrayComponentOrder {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Converts the {@code byte[]} {@code data} stored as {@code arrayComponentOrderA} to a new {@code byte[]} stored as {@code arrayComponentOrderB}.
+	 * Converts the {@code byte[]} {@code array} stored as {@code arrayComponentOrderA} to a new {@code byte[]} stored as {@code arrayComponentOrderB}.
 	 * <p>
 	 * Returns a new {@code byte[]} with the result of the conversion.
 	 * <p>
-	 * If either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code data} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code data.length % arrayComponentOrderA.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code array.length % arrayComponentOrderA.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param arrayComponentOrderA the {@code ArrayComponentOrder} to convert from
 	 * @param arrayComponentOrderB the {@code ArrayComponentOrder} to convert to
-	 * @param data a {@code byte[]} with color data
+	 * @param array a {@code byte[]} with color component values
 	 * @return a new {@code byte[]} with the result of the conversion
-	 * @throws IllegalArgumentException thrown if, and only if, {@code data.length % arrayComponentOrderA.getComponentCount() != 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code data} are {@code null}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrderA.getComponentCount() != 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code array} are {@code null}
 	 */
-	public static byte[] convert(final ArrayComponentOrder arrayComponentOrderA, final ArrayComponentOrder arrayComponentOrderB, final byte[] data) {
+	public static byte[] convert(final ArrayComponentOrder arrayComponentOrderA, final ArrayComponentOrder arrayComponentOrderB, final byte[] array) {
 		Objects.requireNonNull(arrayComponentOrderA, "arrayComponentOrderA == null");
 		Objects.requireNonNull(arrayComponentOrderB, "arrayComponentOrderB == null");
-		Objects.requireNonNull(data, "data == null");
+		Objects.requireNonNull(array, "array == null");
 		
-		if(data.length % arrayComponentOrderA.getComponentCount() != 0) {
-			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(data.length), Integer.valueOf(arrayComponentOrderA.getComponentCount())));
+		if(array.length % arrayComponentOrderA.getComponentCount() != 0) {
+			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(array.length), Integer.valueOf(arrayComponentOrderA.getComponentCount())));
 		}
 		
-		final int resolution = data.length / arrayComponentOrderA.getComponentCount();
+		final int resolution = array.length / arrayComponentOrderA.getComponentCount();
 		
-		final byte[] dataConverted = new byte[resolution * arrayComponentOrderB.getComponentCount()];
+		final byte[] arrayConverted = new byte[resolution * arrayComponentOrderB.getComponentCount()];
 		
 		for(int i = 0; i < resolution; i++) {
 			final int offsetA = i * arrayComponentOrderA.getComponentCount();
 			final int offsetB = i * arrayComponentOrderB.getComponentCount();
 			
-			final int r = arrayComponentOrderA.readR(data, offsetA);
-			final int g = arrayComponentOrderA.readG(data, offsetA);
-			final int b = arrayComponentOrderA.readB(data, offsetA);
-			final int a = arrayComponentOrderA.readA(data, offsetA);
+			final int r = arrayComponentOrderA.readR(array, offsetA);
+			final int g = arrayComponentOrderA.readG(array, offsetA);
+			final int b = arrayComponentOrderA.readB(array, offsetA);
+			final int a = arrayComponentOrderA.readA(array, offsetA);
 			
 			if(arrayComponentOrderB.hasOffsetR()) {
-				dataConverted[offsetB + arrayComponentOrderB.getOffsetR()] = (byte)(r);
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = (byte)(r);
 			}
 			
 			if(arrayComponentOrderB.hasOffsetG()) {
-				dataConverted[offsetB + arrayComponentOrderB.getOffsetG()] = (byte)(g);
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = (byte)(g);
 			}
 			
 			if(arrayComponentOrderB.hasOffsetB()) {
-				dataConverted[offsetB + arrayComponentOrderB.getOffsetB()] = (byte)(b);
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = (byte)(b);
 			}
 			
 			if(arrayComponentOrderB.hasOffsetA()) {
-				dataConverted[offsetB + arrayComponentOrderB.getOffsetA()] = (byte)(a);
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = (byte)(a);
 			}
 		}
 		
-		return dataConverted;
+		return arrayConverted;
 	}
 	
 	/**
-	 * Converts the {@code int[]} {@code data} stored as {@code arrayComponentOrderA} to a new {@code int[]} stored as {@code arrayComponentOrderB}.
+	 * Converts the {@code int[]} {@code array} stored as {@code arrayComponentOrderA} to a new {@code int[]} stored as {@code arrayComponentOrderB}.
 	 * <p>
 	 * Returns a new {@code int[]} with the result of the conversion.
 	 * <p>
-	 * If either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code data} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code data.length % arrayComponentOrderA.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
+	 * If {@code array.length % arrayComponentOrderA.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param arrayComponentOrderA the {@code ArrayComponentOrder} to convert from
 	 * @param arrayComponentOrderB the {@code ArrayComponentOrder} to convert to
-	 * @param data an {@code int[]} with color data
+	 * @param array an {@code int[]} with color component values
 	 * @return a new {@code int[]} with the result of the conversion
-	 * @throws IllegalArgumentException thrown if, and only if, {@code data.length % arrayComponentOrderA.getComponentCount() != 0}
-	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code data} are {@code null}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrderA.getComponentCount() != 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code array} are {@code null}
 	 */
-	public static int[] convert(final ArrayComponentOrder arrayComponentOrderA, final ArrayComponentOrder arrayComponentOrderB, final int[] data) {
+	public static int[] convert(final ArrayComponentOrder arrayComponentOrderA, final ArrayComponentOrder arrayComponentOrderB, final int[] array) {
 		Objects.requireNonNull(arrayComponentOrderA, "arrayComponentOrderA == null");
 		Objects.requireNonNull(arrayComponentOrderB, "arrayComponentOrderB == null");
-		Objects.requireNonNull(data, "data == null");
+		Objects.requireNonNull(array, "array == null");
 		
-		if(data.length % arrayComponentOrderA.getComponentCount() != 0) {
-			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(data.length), Integer.valueOf(arrayComponentOrderA.getComponentCount())));
+		if(array.length % arrayComponentOrderA.getComponentCount() != 0) {
+			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(array.length), Integer.valueOf(arrayComponentOrderA.getComponentCount())));
 		}
 		
-		final int resolution = data.length / arrayComponentOrderA.getComponentCount();
+		final int resolution = array.length / arrayComponentOrderA.getComponentCount();
 		
-		final int[] dataConverted = new int[resolution * arrayComponentOrderB.getComponentCount()];
+		final int[] arrayConverted = new int[resolution * arrayComponentOrderB.getComponentCount()];
 		
 		for(int i = 0; i < resolution; i++) {
 			final int offsetA = i * arrayComponentOrderA.getComponentCount();
 			final int offsetB = i * arrayComponentOrderB.getComponentCount();
 			
-			final int r = arrayComponentOrderA.readR(data, offsetA);
-			final int g = arrayComponentOrderA.readG(data, offsetA);
-			final int b = arrayComponentOrderA.readB(data, offsetA);
-			final int a = arrayComponentOrderA.readA(data, offsetA);
+			final int r = arrayComponentOrderA.readR(array, offsetA);
+			final int g = arrayComponentOrderA.readG(array, offsetA);
+			final int b = arrayComponentOrderA.readB(array, offsetA);
+			final int a = arrayComponentOrderA.readA(array, offsetA);
 			
 			if(arrayComponentOrderB.hasOffsetR()) {
-				dataConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
 			}
 			
 			if(arrayComponentOrderB.hasOffsetG()) {
-				dataConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
 			}
 			
 			if(arrayComponentOrderB.hasOffsetB()) {
-				dataConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
 			}
 			
 			if(arrayComponentOrderB.hasOffsetA()) {
-				dataConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;
+				arrayConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;
 			}
 		}
 		
-		return dataConverted;
+		return arrayConverted;
 	}
 }

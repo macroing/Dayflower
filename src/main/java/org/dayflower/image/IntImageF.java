@@ -24,7 +24,6 @@ import java.util.Objects;
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
-import org.dayflower.utility.Bytes;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
@@ -250,20 +249,6 @@ public final class IntImageF extends ImageF {
 	}
 	
 	/**
-	 * Returns a {@code byte[]} representation of this {@code IntImageF} instance.
-	 * <p>
-	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
-	 * @return a {@code byte[]} representation of this {@code IntImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
-	 */
-	@Override
-	public byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder) {
-		return Bytes.toArray(toIntArray(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null")));
-	}
-	
-	/**
 	 * Returns a hash code for this {@code IntImageF} instance.
 	 * 
 	 * @return a hash code for this {@code IntImageF} instance
@@ -310,38 +295,7 @@ public final class IntImageF extends ImageF {
 	 */
 	@Override
 	public int[] toIntArray(final ArrayComponentOrder arrayComponentOrder) {
-		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
-		
-		final int resolution = getResolution();
-		
-		final int[] intArray = new int[resolution * arrayComponentOrder.getComponentCount()];
-		
-		for(int i = 0; i < resolution; i++) {
-			final int colorARGB = this.data[i];
-			
-			final int r = PackedIntComponentOrder.ARGB.unpackR(colorARGB);
-			final int g = PackedIntComponentOrder.ARGB.unpackG(colorARGB);
-			final int b = PackedIntComponentOrder.ARGB.unpackB(colorARGB);
-			final int a = PackedIntComponentOrder.ARGB.unpackA(colorARGB);
-			
-			if(arrayComponentOrder.hasOffsetR()) {
-				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetR()] = r;
-			}
-			
-			if(arrayComponentOrder.hasOffsetG()) {
-				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetG()] = g;
-			}
-			
-			if(arrayComponentOrder.hasOffsetB()) {
-				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetB()] = b;
-			}
-			
-			if(arrayComponentOrder.hasOffsetA()) {
-				intArray[i * arrayComponentOrder.getComponentCount() + arrayComponentOrder.getOffsetA()] = a;
-			}
-		}
-		
-		return intArray;
+		return PackedIntComponentOrder.ARGB.unpack(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null"), this.data);
 	}
 	
 	/**

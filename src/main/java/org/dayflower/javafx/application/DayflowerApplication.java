@@ -244,15 +244,19 @@ public final class DayflowerApplication extends Application {
 	
 	@SuppressWarnings("unused")
 	private void doHandleEventFileOpen(final ActionEvent actionEvent) {
-		final
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(INITIAL_DIRECTORY_SCENES);
-		fileChooser.setTitle(TITLE_OPEN);
-		
-		final File file = fileChooser.showOpenDialog(doGetStage());
-		
-		if(file != null) {
-			doAddRenderer(file);
+		try {
+			final
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setInitialDirectory(doFindDirectory(INITIAL_DIRECTORY_SCENES));
+			fileChooser.setTitle(TITLE_OPEN);
+			
+			final File file = fileChooser.showOpenDialog(doGetStage());
+			
+			if(file != null) {
+				doAddRenderer(file);
+			}
+		} catch(final IllegalArgumentException e) {
+//			Do nothing for now.
 		}
 	}
 	
@@ -281,7 +285,7 @@ public final class DayflowerApplication extends Application {
 			} else {
 				final
 				FileChooser fileChooser = new FileChooser();
-				fileChooser.setInitialDirectory(INITIAL_DIRECTORY_IMAGES);
+				fileChooser.setInitialDirectory(doFindDirectory(INITIAL_DIRECTORY_IMAGES));
 				fileChooser.setTitle(TITLE_SAVE_AS);
 				
 				final File file = fileChooser.showSaveDialog(doGetStage());
@@ -305,7 +309,7 @@ public final class DayflowerApplication extends Application {
 			
 			final
 			FileChooser fileChooser = new FileChooser();
-			fileChooser.setInitialDirectory(INITIAL_DIRECTORY_IMAGES);
+			fileChooser.setInitialDirectory(doFindDirectory(INITIAL_DIRECTORY_IMAGES));
 			fileChooser.setTitle(TITLE_SAVE_AS);
 			
 			final File file = fileChooser.showSaveDialog(doGetStage());
@@ -340,5 +344,17 @@ public final class DayflowerApplication extends Application {
 	
 	private void doSetStage(final Stage stage) {
 		this.stage.set(Objects.requireNonNull(stage, "stage == null"));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static File doFindDirectory(final File directory) {
+		File currentDirectory = directory;
+		
+		while(currentDirectory != null && !currentDirectory.isDirectory()) {
+			currentDirectory = currentDirectory.getParentFile();
+		}
+		
+		return currentDirectory != null && currentDirectory.isDirectory() ? currentDirectory : new File(".");
 	}
 }

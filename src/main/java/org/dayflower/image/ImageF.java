@@ -22,48 +22,28 @@ import static org.dayflower.utility.Floats.ceil;
 import static org.dayflower.utility.Floats.floor;
 import static org.dayflower.utility.Ints.toInt;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-import javax.imageio.ImageIO;
-
-import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
-import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.rasterizer.Rasterizer2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
-import org.dayflower.utility.Bytes;
-import org.dayflower.utility.ParameterArguments;
 import org.dayflower.utility.TriFunction;
 
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.WritableImage;
-
 /**
- * An {@code ImageF} is an image that can be drawn to.
+ * An {@code ImageF} is an {@link Image} implementation that operates using the data type {@code float}.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class ImageF {
-	private final int resolution;
-	private final int resolutionX;
-	private final int resolutionY;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+public abstract class ImageF extends Image {
 	/**
 	 * Constructs a new {@code ImageF} instance.
 	 * <p>
@@ -74,28 +54,10 @@ public abstract class ImageF {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
 	protected ImageF(final int resolutionX, final int resolutionY) {
-		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
-		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
-		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+		super(resolutionX, resolutionY);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@code BufferedImage} representation of this {@code ImageF} instance.
-	 * 
-	 * @return a {@code BufferedImage} representation of this {@code ImageF} instance
-	 */
-	public final BufferedImage toBufferedImage() {
-		final BufferedImage bufferedImage = new BufferedImage(this.resolutionX, this.resolutionY, BufferedImage.TYPE_INT_ARGB);
-		
-		final int[] dataSource = toIntArrayPackedForm();
-		final int[] dataTarget = DataBufferInt.class.cast(bufferedImage.getRaster().getDataBuffer()).getData();
-		
-		System.arraycopy(dataSource, 0, dataTarget, 0, dataSource.length);
-		
-		return bufferedImage;
-	}
 	
 	/**
 	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
@@ -352,6 +314,7 @@ public abstract class ImageF {
 	 * 
 	 * @return a copy of this {@code ImageF} instance
 	 */
+	@Override
 	public abstract ImageF copy();
 	
 	/**
@@ -393,155 +356,6 @@ public abstract class ImageF {
 		
 		return rectangles;
 	}
-	
-	/**
-	 * Returns a {@link Rectangle2I} with the bounds of this {@code ImageF} instance.
-	 * 
-	 * @return a {@code Rectangle2I} with the bounds of this {@code ImageF} instance
-	 */
-	public final Rectangle2I getBounds() {
-		return new Rectangle2I(new Point2I(), new Point2I(this.resolutionX, this.resolutionY));
-	}
-	
-	/**
-	 * Returns a {@code WritableImage} representation of this {@code ImageF} instance.
-	 * 
-	 * @return a {@code WritableImage} representation of this {@code ImageF} instance
-	 */
-	public final WritableImage toWritableImage() {
-		final
-		WritableImage writableImage = new WritableImage(this.resolutionX, this.resolutionY);
-		writableImage.getPixelWriter().setPixels(0, 0, this.resolutionX, this.resolutionY, PixelFormat.getIntArgbInstance(), toIntArrayPackedForm(), 0, this.resolutionX);
-		
-		return writableImage;
-	}
-	
-	/**
-	 * Returns a {@code byte[]} representation of this {@code ImageF} instance.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.toByteArray(ArrayComponentOrder.RGBA);
-	 * }
-	 * </pre>
-	 * 
-	 * @return a {@code byte[]} representation of this {@code ImageF} instance
-	 */
-	public final byte[] toByteArray() {
-		return toByteArray(ArrayComponentOrder.RGBA);
-	}
-	
-	/**
-	 * Returns a {@code byte[]} representation of this {@code ImageF} instance.
-	 * <p>
-	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method may be overridden in order to optimize the conversion.
-	 * 
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
-	 * @return a {@code byte[]} representation of this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
-	 */
-	public byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder) {
-		return Bytes.toArray(toIntArray(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null")));
-	}
-	
-	/**
-	 * Returns the resolution of this {@code ImageF} instance.
-	 * <p>
-	 * The resolution of {@code image} can be computed by:
-	 * <pre>
-	 * {@code
-	 * int resolution = image.getResolutionX() * image.getResolutionY();
-	 * }
-	 * </pre>
-	 * 
-	 * @return the resolution of this {@code ImageF} instance
-	 */
-	public final int getResolution() {
-		return this.resolution;
-	}
-	
-	/**
-	 * Returns the resolution of the X-axis of this {@code ImageF} instance.
-	 * <p>
-	 * The resolution of the X-axis is also known as the width.
-	 * 
-	 * @return the resolution of the X-axis of this {@code ImageF} instance
-	 */
-	public final int getResolutionX() {
-		return this.resolutionX;
-	}
-	
-	/**
-	 * Returns the resolution of the Y-axis of this {@code ImageF} instance.
-	 * <p>
-	 * The resolution of the Y-axis is also known as the height.
-	 * 
-	 * @return the resolution of the Y-axis of this {@code ImageF} instance
-	 */
-	public final int getResolutionY() {
-		return this.resolutionY;
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code ImageF} instance.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.toIntArray(ArrayComponentOrder.RGBA);
-	 * }
-	 * </pre>
-	 * 
-	 * @return an {@code int[]} representation of this {@code ImageF} instance
-	 */
-	public final int[] toIntArray() {
-		return toIntArray(ArrayComponentOrder.RGBA);
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code ImageF} instance.
-	 * <p>
-	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method may be overridden in order to optimize the conversion.
-	 * 
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
-	 * @return an {@code int[]} representation of this {@code ImageF} instance
-	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
-	 */
-	public int[] toIntArray(final ArrayComponentOrder arrayComponentOrder) {
-		return PackedIntComponentOrder.ARGB.unpack(Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null"), toIntArrayPackedForm());
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code ImageF} instance in a packed form.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.toIntArrayPackedForm(PackedIntComponentOrder.ARGB);
-	 * }
-	 * </pre>
-	 * 
-	 * @return an {@code int[]} representation of this {@code ImageF} instance in a packed form
-	 */
-	public final int[] toIntArrayPackedForm() {
-		return toIntArrayPackedForm(PackedIntComponentOrder.ARGB);
-	}
-	
-	/**
-	 * Returns an {@code int[]} representation of this {@code ImageF} instance in a packed form.
-	 * <p>
-	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder}
-	 * @return an {@code int[]} representation of this {@code ImageF} instance in a packed form
-	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
-	 */
-	public abstract int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder);
 	
 	/**
 	 * Clears this {@code ImageF} instance with a {@link Color4F} of {@code Color4F.BLACK}.
@@ -587,55 +401,11 @@ public abstract class ImageF {
 	public final void clear(final Color4F colorRGBA) {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
-		for(int i = 0; i < this.resolution; i++) {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
 			setColorRGBA(colorRGBA, i);
 		}
-	}
-	
-	/**
-	 * Copies the individual component values of the colors in this {@code ImageF} instance to the {@code byte[]} {@code array}.
-	 * <p>
-	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code array.length != image.getResolution() * ArrayComponentOrder.BGRA.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.copyTo(array, ArrayComponentOrder.RGBA);
-	 * }
-	 * </pre>
-	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ImageF} instance to
-	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != image.getResolution() * ArrayComponentOrder.BGRA.getComponentCount()}
-	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
-	 */
-	public final void copyTo(final byte[] array) {
-		copyTo(array, ArrayComponentOrder.RGBA);
-	}
-	
-	/**
-	 * Copies the individual component values of the colors in this {@code ImageF} instance to the {@code byte[]} {@code array}.
-	 * <p>
-	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If {@code array.length != image.getResolution() * arrayComponentOrder.getComponentCount()}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param array the {@code byte[]} to copy the individual component values of the colors in this {@code ImageF} instance to
-	 * @param arrayComponentOrder an {@link ArrayComponentOrder} to copy the components to {@code array} in the correct order
-	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length != image.getResolution() * arrayComponentOrder.getComponentCount()}
-	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
-	 */
-	public final void copyTo(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
-		Objects.requireNonNull(array, "array == null");
-		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
-		
-		ParameterArguments.requireExact(array.length, this.resolution * arrayComponentOrder.getComponentCount(), "array");
-		
-		final byte[] sourceArray = toByteArray(arrayComponentOrder);
-		final byte[] targetArray = array;
-		
-		System.arraycopy(sourceArray, 0, targetArray, 0, targetArray.length);
 	}
 	
 	/**
@@ -689,13 +459,16 @@ public abstract class ImageF {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
 		for(int y = -circle.getRadius(); y <= circle.getRadius(); y++) {
 			for(int x = -circle.getRadius(); x <= circle.getRadius(); x++) {
 				if(x * x + y * y <= circle.getRadius() * circle.getRadius() && x * x + y * y > (circle.getRadius() - 1) * (circle.getRadius() - 1)) {
 					final int circleX = x + circle.getCenter().getX();
 					final int circleY = y + circle.getCenter().getY();
 					
-					if(circleX >= 0 && circleX < this.resolutionX && circleY >= 0 && circleY < this.resolutionY) {
+					if(circleX >= 0 && circleX < resolutionX && circleY >= 0 && circleY < resolutionY) {
 						final Point2I point = new Point2I(circleX, circleY);
 						
 						final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
@@ -763,11 +536,14 @@ public abstract class ImageF {
 		
 		final Point2I[] scanline = Rasterizer2I.rasterize(line, rectangle);
 		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
 		for(final Point2I point : scanline) {
 			final int x = point.getX();
 			final int y = point.getY();
 			
-			if(x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
+			if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
 				final Color4F oldColorRGBA = getColorRGBA(x, y);
 				final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 				
@@ -832,9 +608,12 @@ public abstract class ImageF {
 		final int maximumX = rectangle.getC().getX();
 		final int maximumY = rectangle.getC().getY();
 		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
 		for(int y = minimumY; y <= maximumY; y++) {
 			for(int x = minimumX; x <= maximumX; x++) {
-				if((x == minimumX || x == maximumX || y == minimumY || y == maximumY) && x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
+				if((x == minimumX || x == maximumX || y == minimumY || y == maximumY) && x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
 					final Point2I point = new Point2I(x, y);
 					
 					final Color4F oldColorRGBA = getColorRGBA(x, y);
@@ -953,13 +732,16 @@ public abstract class ImageF {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
 		for(int y = -circle.getRadius(); y <= circle.getRadius(); y++) {
 			for(int x = -circle.getRadius(); x <= circle.getRadius(); x++) {
 				if(x * x + y * y <= circle.getRadius() * circle.getRadius()) {
 					final int circleX = x + circle.getCenter().getX();
 					final int circleY = y + circle.getCenter().getY();
 					
-					if(circleX >= 0 && circleX < this.resolutionX && circleY >= 0 && circleY < this.resolutionY) {
+					if(circleX >= 0 && circleX < resolutionX && circleY >= 0 && circleY < resolutionY) {
 						final Point2I point = new Point2I(circleX, circleY);
 						
 						final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
@@ -1060,9 +842,12 @@ public abstract class ImageF {
 		final int targetMaximumX = targetBounds.getC().getX();
 		final int targetMaximumY = targetBounds.getC().getY();
 		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
 		for(int sourceY = sourceMinimumY, targetY = targetMinimumY; sourceY < sourceMaximumY && targetY < targetMaximumY; sourceY++, targetY++) {
 			for(int sourceX = sourceMinimumX, targetX = targetMinimumX; sourceX < sourceMaximumX && targetX < targetMaximumX; sourceX++, targetX++) {
-				if(targetX >= 0 && targetX < this.resolutionX && targetY >= 0 && targetY < this.resolutionY) {
+				if(targetX >= 0 && targetX < resolutionX && targetY >= 0 && targetY < resolutionY) {
 					final Color4F sourceColorRGBA = sourceImage.getColorRGBA(sourceX, sourceY);
 					final Color4F targetColorRGBA = targetImage.getColorRGBA(targetX, targetY);
 					final Color4F colorRGBA = Objects.requireNonNull(triFunction.apply(sourceColorRGBA, targetColorRGBA, new Point2I(targetX, targetY)));
@@ -1150,9 +935,12 @@ public abstract class ImageF {
 		final int maximumX = rectangle.getC().getX();
 		final int maximumY = rectangle.getC().getY();
 		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
 		for(int y = minimumY; y <= maximumY; y++) {
 			for(int x = minimumX; x <= maximumX; x++) {
-				if(x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
+				if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
 					final Point2I point = new Point2I(x, y);
 					
 					final Color4F oldColorRGBA = getColorRGBA(x, y);
@@ -1219,12 +1007,15 @@ public abstract class ImageF {
 		
 		final Point2I[][] scanlines = Rasterizer2I.rasterize(triangle, rectangle);
 		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
 		for(final Point2I[] scanline : scanlines) {
 			for(final Point2I point : scanline) {
 				final int x = point.getX();
 				final int y = point.getY();
 				
-				if(x >= 0 && x < this.resolutionX && y >= 0 && y < this.resolutionY) {
+				if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
 					final Color4F oldColorRGBA = getColorRGBA(x, y);
 					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 					
@@ -1235,38 +1026,12 @@ public abstract class ImageF {
 	}
 	
 	/**
-	 * Flips this {@code ImageF} instance along the X-axis.
-	 */
-	public final void flipX() {
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(int xL = 0, xR = resolutionX - 1; xL < xR; xL++, xR--) {
-			for(int y = 0; y < resolutionY; y++) {
-				swap(y * resolutionX + xL, y * resolutionX + xR);
-			}
-		}
-	}
-	
-	/**
-	 * Flips this {@code ImageF} instance along the Y-axis.
-	 */
-	public final void flipY() {
-		final int resolutionX = getResolutionX();
-		final int resolutionY = getResolutionY();
-		
-		for(int yT = 0, yB = resolutionY - 1; yT < yB; yT++, yB--) {
-			for(int x = 0; x < resolutionX; x++) {
-				swap(yT * resolutionX + x, yB * resolutionX + x);
-			}
-		}
-	}
-	
-	/**
 	 * Inverts this {@code ImageF} instance.
 	 */
 	public final void invert() {
-		for(int i = 0; i < this.resolution; i++) {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
 			setColorRGBA(Color4F.invert(getColorRGBA(i)), i);
 		}
 	}
@@ -1395,7 +1160,9 @@ public abstract class ImageF {
 	 * Redoes gamma correction on this {@code ImageF} instance using PBRT.
 	 */
 	public final void redoGammaCorrectionPBRT() {
-		for(int i = 0; i < this.resolution; i++) {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
 			setColorRGBA(Color4F.redoGammaCorrectionPBRT(getColorRGBA(i)), i);
 		}
 	}
@@ -1404,105 +1171,11 @@ public abstract class ImageF {
 	 * Redoes gamma correction on this {@code ImageF} instance using SRGB.
 	 */
 	public final void redoGammaCorrectionSRGB() {
-		for(int i = 0; i < this.resolution; i++) {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
 			setColorRGBA(Color4F.redoGammaCorrectionSRGB(getColorRGBA(i)), i);
 		}
-	}
-	
-	/**
-	 * Saves this {@code ImageF} to the file represented by {@code file} using the informal format name {@code "png"}.
-	 * <p>
-	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.save(file, "png");
-	 * }
-	 * </pre>
-	 * 
-	 * @param file a {@code File} that represents the file to save to
-	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	public final void save(final File file) {
-		save(file, "png");
-	}
-	
-	/**
-	 * Saves this {@code ImageF} to the file represented by {@code file} using the informal format name {@code formatName}.
-	 * <p>
-	 * If either {@code file} or {@code formatName} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * 
-	 * @param file a {@code File} that represents the file to save to
-	 * @param formatName the informal format name, such as {@code "png"}
-	 * @throws NullPointerException thrown if, and only if, either {@code file} or {@code formatName} are {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	public final void save(final File file, final String formatName) {
-		Objects.requireNonNull(file, "file == null");
-		Objects.requireNonNull(formatName, "formatName == null");
-		
-		try {
-			final File parentFile = file.getParentFile();
-			
-			if(parentFile != null && !parentFile.isDirectory()) {
-				parentFile.mkdirs();
-			}
-			
-			ImageIO.write(toBufferedImage(), formatName, file);
-		} catch(final IOException e) {
-			throw new UncheckedIOException(e);
-		}
-	}
-	
-	/**
-	 * Saves this {@code ImageF} to the file represented by the pathname {@code pathname} using the informal format name {@code "png"}.
-	 * <p>
-	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.save(pathname, "png");
-	 * }
-	 * </pre>
-	 * 
-	 * @param pathname a {@code String} that represents the pathname of the file to save to
-	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	public final void save(final String pathname) {
-		save(pathname, "png");
-	}
-	
-	/**
-	 * Saves this {@code ImageF} to the file represented by the pathname {@code pathname} using the informal format name {@code formatName}.
-	 * <p>
-	 * If either {@code pathname} or {@code formatName} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * image.save(new File(pathname), formatName);
-	 * }
-	 * </pre>
-	 * 
-	 * @param pathname a {@code String} that represents the pathname of the file to save to
-	 * @param formatName the informal format name, such as {@code "png"}
-	 * @throws NullPointerException thrown if, and only if, either {@code pathname} or {@code formatName} are {@code null}
-	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
-	 */
-	public final void save(final String pathname, final String formatName) {
-		save(new File(pathname), formatName);
 	}
 	
 	/**
@@ -1650,21 +1323,12 @@ public abstract class ImageF {
 	public abstract void setColorRGBA(final Color4F colorRGBA, final int x, final int y, final PixelOperation pixelOperation);
 	
 	/**
-	 * Swaps the pixels represented by {@code indexA} and {@code indexB}.
-	 * <p>
-	 * If either {@code indexA} or {@code indexB} are less than {@code 0} or greater than or equal to {@code getResolution()}, an {@code IllegalArgumentException} will be thrown.
-	 * 
-	 * @param indexA one of the pixel indices
-	 * @param indexB one of the pixel indices
-	 * @throws IllegalArgumentException thrown if, and only if, either {@code indexA} or {@code indexB} are less than {@code 0} or greater than or equal to {@code getResolution()}
-	 */
-	public abstract void swap(final int indexA, final int indexB);
-	
-	/**
 	 * Undoes gamma correction on this {@code ImageF} instance using PBRT.
 	 */
 	public final void undoGammaCorrectionPBRT() {
-		for(int i = 0; i < this.resolution; i++) {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
 			setColorRGBA(Color4F.undoGammaCorrectionPBRT(getColorRGBA(i)), i);
 		}
 	}
@@ -1673,7 +1337,9 @@ public abstract class ImageF {
 	 * Undoes gamma correction on this {@code ImageF} instance using sRGB.
 	 */
 	public final void undoGammaCorrectionSRGB() {
-		for(int i = 0; i < this.resolution; i++) {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
 			setColorRGBA(Color4F.undoGammaCorrectionSRGB(getColorRGBA(i)), i);
 		}
 	}

@@ -390,6 +390,28 @@ public final class Ints {
 	}
 	
 	/**
+	 * Returns an {@code int[]} representation of {@code byteArray}.
+	 * <p>
+	 * If {@code byteArray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param byteArray a {@code byte[]}
+	 * @param isUnsigned {@code true} if, and only if, unsigned values should be used, {@code false} otherwise
+	 * @return an {@code int[]} representation of {@code byteArray}
+	 * @throws NullPointerException thrown if, and only if, {@code byteArray} is {@code null}
+	 */
+	public static int[] toArray(final byte[] byteArray, final boolean isUnsigned) {
+		Objects.requireNonNull(byteArray, "byteArray == null");
+		
+		final int[] intArray = new int[byteArray.length];
+		
+		for(int i = 0; i < byteArray.length; i++) {
+			intArray[i] = isUnsigned ? byteArray[i] & 0xFF : byteArray[i];
+		}
+		
+		return intArray;
+	}
+	
+	/**
 	 * Unpacks the {@code int} value {@code packedValue} into two {@code int} values in an {@code int[]}.
 	 * <p>
 	 * Returns an {@code int[]} with the unpacked {@code int} values.

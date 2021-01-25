@@ -219,7 +219,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 			if(image instanceof ByteImageF) {
 				final ByteImageF byteImage = ByteImageF.class.cast(image);
 				
-				final byte[] bytes = byteImage.getBytes(true);
+				final byte[] bytes = byteImage.getData(true);
 				final byte[] imageColorByteArray = getImageColorByteArray();
 				
 				System.arraycopy(imageColorByteArray, 0, bytes, 0, bytes.length);

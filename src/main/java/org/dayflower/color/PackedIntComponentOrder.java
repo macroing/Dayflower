@@ -18,6 +18,8 @@
  */
 package org.dayflower.color;
 
+import java.util.Objects;
+
 /**
  * A {@code PackedIntComponentOrder} is used to tell us what order the R-, G-, B- and A-components are stored in an {@code int}, in a packed form.
  * <p>
@@ -247,5 +249,41 @@ public enum PackedIntComponentOrder {
 	 */
 	public int unpackR(final int color) {
 		return hasShiftR() ? (color >> getShiftR()) & 0xFF : 0;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Converts the {@code int[]} {@code data} stored as {@code packedIntComponentOrderA} to a new {@code int[]} stored as {@code packedIntComponentOrderB}.
+	 * <p>
+	 * Returns a new {@code int[]} with the result of the conversion.
+	 * <p>
+	 * If either {@code packedIntComponentOrderA}, {@code packedIntComponentOrderB} or {@code data} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param packedIntComponentOrderA the {@code PackedIntComponentOrder} to convert from
+	 * @param packedIntComponentOrderB the {@code PackedIntComponentOrder} to convert to
+	 * @param data an {@code int[]} with color data
+	 * @return a new {@code int[]} with the result of the conversion
+	 * @throws NullPointerException thrown if, and only if, either {@code packedIntComponentOrderA}, {@code packedIntComponentOrderB} or {@code data} are {@code null}
+	 */
+	public static int[] convert(final PackedIntComponentOrder packedIntComponentOrderA, final PackedIntComponentOrder packedIntComponentOrderB, final int[] data) {
+		Objects.requireNonNull(packedIntComponentOrderA, "packedIntComponentOrderA == null");
+		Objects.requireNonNull(packedIntComponentOrderB, "packedIntComponentOrderB == null");
+		Objects.requireNonNull(data, "data == null");
+		
+		final int[] dataConverted = new int[data.length];
+		
+		for(int i = 0; i < data.length; i++) {
+			final int color = data[i];
+			
+			final int r = packedIntComponentOrderA.unpackR(color);
+			final int g = packedIntComponentOrderA.unpackG(color);
+			final int b = packedIntComponentOrderA.unpackB(color);
+			final int a = packedIntComponentOrderA.unpackA(color);
+			
+			data[i] = packedIntComponentOrderB.pack(r, g, b, a);
+		}
+		
+		return dataConverted;
 	}
 }

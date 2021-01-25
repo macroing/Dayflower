@@ -18,6 +18,8 @@
  */
 package org.dayflower.color;
 
+import java.util.Objects;
+
 /**
  * An {@code ArrayComponentOrder} is used to tell us what order the R-, G-, B- and A-components are stored in arrays.
  * <p>
@@ -342,5 +344,123 @@ public enum ArrayComponentOrder {
 	 */
 	public int readR(final int[] array, final int offset) {
 		return hasOffsetR() ? array[offset + getOffsetR()] & 0xFF : 0;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Converts the {@code byte[]} {@code data} stored as {@code arrayComponentOrderA} to a new {@code byte[]} stored as {@code arrayComponentOrderB}.
+	 * <p>
+	 * Returns a new {@code byte[]} with the result of the conversion.
+	 * <p>
+	 * If either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code data} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code data.length % arrayComponentOrderA.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param arrayComponentOrderA the {@code ArrayComponentOrder} to convert from
+	 * @param arrayComponentOrderB the {@code ArrayComponentOrder} to convert to
+	 * @param data a {@code byte[]} with color data
+	 * @return a new {@code byte[]} with the result of the conversion
+	 * @throws IllegalArgumentException thrown if, and only if, {@code data.length % arrayComponentOrderA.getComponentCount() != 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code data} are {@code null}
+	 */
+	public static byte[] convert(final ArrayComponentOrder arrayComponentOrderA, final ArrayComponentOrder arrayComponentOrderB, final byte[] data) {
+		Objects.requireNonNull(arrayComponentOrderA, "arrayComponentOrderA == null");
+		Objects.requireNonNull(arrayComponentOrderB, "arrayComponentOrderB == null");
+		Objects.requireNonNull(data, "data == null");
+		
+		if(data.length % arrayComponentOrderA.getComponentCount() != 0) {
+			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(data.length), Integer.valueOf(arrayComponentOrderA.getComponentCount())));
+		}
+		
+		final int resolution = data.length / arrayComponentOrderA.getComponentCount();
+		
+		final byte[] dataConverted = new byte[resolution * arrayComponentOrderB.getComponentCount()];
+		
+		for(int i = 0; i < resolution; i++) {
+			final int offsetA = i * arrayComponentOrderA.getComponentCount();
+			final int offsetB = i * arrayComponentOrderB.getComponentCount();
+			
+			final int r = arrayComponentOrderA.readR(data, offsetA);
+			final int g = arrayComponentOrderA.readG(data, offsetA);
+			final int b = arrayComponentOrderA.readB(data, offsetA);
+			final int a = arrayComponentOrderA.readA(data, offsetA);
+			
+			if(arrayComponentOrderB.hasOffsetR()) {
+				dataConverted[offsetB + arrayComponentOrderB.getOffsetR()] = (byte)(r);
+			}
+			
+			if(arrayComponentOrderB.hasOffsetG()) {
+				dataConverted[offsetB + arrayComponentOrderB.getOffsetG()] = (byte)(g);
+			}
+			
+			if(arrayComponentOrderB.hasOffsetB()) {
+				dataConverted[offsetB + arrayComponentOrderB.getOffsetB()] = (byte)(b);
+			}
+			
+			if(arrayComponentOrderB.hasOffsetA()) {
+				dataConverted[offsetB + arrayComponentOrderB.getOffsetA()] = (byte)(a);
+			}
+		}
+		
+		return dataConverted;
+	}
+	
+	/**
+	 * Converts the {@code int[]} {@code data} stored as {@code arrayComponentOrderA} to a new {@code int[]} stored as {@code arrayComponentOrderB}.
+	 * <p>
+	 * Returns a new {@code int[]} with the result of the conversion.
+	 * <p>
+	 * If either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code data} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code data.length % arrayComponentOrderA.getComponentCount() != 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param arrayComponentOrderA the {@code ArrayComponentOrder} to convert from
+	 * @param arrayComponentOrderB the {@code ArrayComponentOrder} to convert to
+	 * @param data an {@code int[]} with color data
+	 * @return a new {@code int[]} with the result of the conversion
+	 * @throws IllegalArgumentException thrown if, and only if, {@code data.length % arrayComponentOrderA.getComponentCount() != 0}
+	 * @throws NullPointerException thrown if, and only if, either {@code arrayComponentOrderA}, {@code arrayComponentOrderB} or {@code data} are {@code null}
+	 */
+	public static int[] convert(final ArrayComponentOrder arrayComponentOrderA, final ArrayComponentOrder arrayComponentOrderB, final int[] data) {
+		Objects.requireNonNull(arrayComponentOrderA, "arrayComponentOrderA == null");
+		Objects.requireNonNull(arrayComponentOrderB, "arrayComponentOrderB == null");
+		Objects.requireNonNull(data, "data == null");
+		
+		if(data.length % arrayComponentOrderA.getComponentCount() != 0) {
+			throw new IllegalArgumentException(String.format("%d %% %d != 0", Integer.valueOf(data.length), Integer.valueOf(arrayComponentOrderA.getComponentCount())));
+		}
+		
+		final int resolution = data.length / arrayComponentOrderA.getComponentCount();
+		
+		final int[] dataConverted = new int[resolution * arrayComponentOrderB.getComponentCount()];
+		
+		for(int i = 0; i < resolution; i++) {
+			final int offsetA = i * arrayComponentOrderA.getComponentCount();
+			final int offsetB = i * arrayComponentOrderB.getComponentCount();
+			
+			final int r = arrayComponentOrderA.readR(data, offsetA);
+			final int g = arrayComponentOrderA.readG(data, offsetA);
+			final int b = arrayComponentOrderA.readB(data, offsetA);
+			final int a = arrayComponentOrderA.readA(data, offsetA);
+			
+			if(arrayComponentOrderB.hasOffsetR()) {
+				dataConverted[offsetB + arrayComponentOrderB.getOffsetR()] = r;
+			}
+			
+			if(arrayComponentOrderB.hasOffsetG()) {
+				dataConverted[offsetB + arrayComponentOrderB.getOffsetG()] = g;
+			}
+			
+			if(arrayComponentOrderB.hasOffsetB()) {
+				dataConverted[offsetB + arrayComponentOrderB.getOffsetB()] = b;
+			}
+			
+			if(arrayComponentOrderB.hasOffsetA()) {
+				dataConverted[offsetB + arrayComponentOrderB.getOffsetA()] = a;
+			}
+		}
+		
+		return dataConverted;
 	}
 }

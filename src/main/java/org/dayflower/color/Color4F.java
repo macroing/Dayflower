@@ -1022,7 +1022,7 @@ public final class Color4F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color4F convertRGBAToXYZAUsingSRGB(final Color4F color) {
-		return ColorSpaceF.SRGB.convertRGBAToXYZA(color);
+		return ColorSpaceF.S_R_G_B.convertRGBAToXYZA(color);
 	}
 	
 	/**
@@ -1057,7 +1057,7 @@ public final class Color4F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color4F convertXYZAToRGBAUsingSRGB(final Color4F color) {
-		return ColorSpaceF.SRGB.convertXYZAToRGBA(color);
+		return ColorSpaceF.S_R_G_B.convertXYZAToRGBA(color);
 	}
 	
 	/**
@@ -1192,7 +1192,7 @@ public final class Color4F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color4F redoGammaCorrectionSRGB(final Color4F color) {
-		return ColorSpaceF.SRGB.redoGammaCorrection(color);
+		return ColorSpaceF.S_R_G_B.redoGammaCorrection(color);
 	}
 	
 	/**
@@ -1227,7 +1227,7 @@ public final class Color4F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color4F undoGammaCorrectionSRGB(final Color4F color) {
-		return ColorSpaceF.SRGB.undoGammaCorrection(color);
+		return ColorSpaceF.S_R_G_B.undoGammaCorrection(color);
 	}
 	
 	/**

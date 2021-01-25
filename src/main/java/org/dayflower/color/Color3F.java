@@ -1163,7 +1163,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F convertRGBToXYZUsingSRGB(final Color3F color) {
-		return ColorSpaceF.SRGB.convertRGBToXYZ(color);
+		return ColorSpaceF.S_R_G_B.convertRGBToXYZ(color);
 	}
 	
 	/**
@@ -1197,7 +1197,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F convertXYZToRGBUsingSRGB(final Color3F color) {
-		return ColorSpaceF.SRGB.convertXYZToRGB(color);
+		return ColorSpaceF.S_R_G_B.convertXYZToRGB(color);
 	}
 	
 	/**
@@ -1781,7 +1781,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F redoGammaCorrectionSRGB(final Color3F color) {
-		return ColorSpaceF.SRGB.redoGammaCorrection(color);
+		return ColorSpaceF.S_R_G_B.redoGammaCorrection(color);
 	}
 	
 	/**
@@ -2197,7 +2197,7 @@ public final class Color3F {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F undoGammaCorrectionSRGB(final Color3F color) {
-		return ColorSpaceF.SRGB.undoGammaCorrection(color);
+		return ColorSpaceF.S_R_G_B.undoGammaCorrection(color);
 	}
 	
 	/**

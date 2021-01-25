@@ -31,9 +31,54 @@ import static org.dayflower.utility.Doubles.pow;
  */
 public final class ColorSpaceD {
 	/**
+	 * A {@code ColorSpaceD} instance that represents the Adobe color space.
+	 */
+	public static final ColorSpaceD ADOBE = new ColorSpaceD(0.0D, 2.2D, 0.6400D, 0.3300D, 0.2100D, 0.7100D, 0.1500D, 0.0600D, 0.31271D, 0.32902D);
+	
+	/**
+	 * A {@code ColorSpaceD} instance that represents the Apple color space.
+	 */
+	public static final ColorSpaceD APPLE = new ColorSpaceD(0.0D, 1.8D, 0.6250D, 0.3400D, 0.2800D, 0.5950D, 0.1550D, 0.0700D, 0.31271D, 0.32902D);
+	
+	/**
+	 * A {@code ColorSpaceD} instance that represents the NTSC color space.
+	 */
+	public static final ColorSpaceD NTSC = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6700D, 0.3300D, 0.2100D, 0.7100D, 0.1400D, 0.0800D, 0.31010D, 0.31620D);
+	
+	/**
+	 * A {@code ColorSpaceD} instance that represents the HDTV color space.
+	 */
+	public static final ColorSpaceD HDTV = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6400D, 0.3300D, 0.3000D, 0.6000D, 0.1500D, 0.0600D, 0.31271D, 0.32902D);
+	
+	/**
+	 * A {@code ColorSpaceD} instance that represents the CIE color space.
+	 */
+	public static final ColorSpaceD CIE = new ColorSpaceD(0.0D, 2.2D, 0.7350D, 0.2650D, 0.2740D, 0.7170D, 0.1670D, 0.0090D, 1.0D / 3.0D, 1.0D / 3.0D);
+	
+	/**
+	 * A {@code ColorSpaceD} instance that represents the EBU color space.
+	 */
+	public static final ColorSpaceD EBU = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6400D, 0.3300D, 0.2900D, 0.6000D, 0.1500D, 0.0600D, 0.31271D, 0.32902D);
+	
+	/**
+	 * A {@code ColorSpaceD} instance that represents the SMPTE 240M color space.
+	 */
+	public static final ColorSpaceD SMPTE_240M = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6300D, 0.3400D, 0.3100D, 0.5950D, 0.1550D, 0.0700D, 0.31271D, 0.32902D);
+	
+	/**
+	 * A {@code ColorSpaceD} instance that represents the SMPTE C color space.
+	 */
+	public static final ColorSpaceD SMPTE_C = new ColorSpaceD(0.018D, 20.0D / 9.0D, 0.6300D, 0.3400D, 0.3100D, 0.5950D, 0.1550D, 0.0700D, 0.31271D, 0.32902D);
+	
+	/**
 	 * A {@code ColorSpaceD} instance that represents the sRGB color space.
 	 */
 	public static final ColorSpaceD SRGB = new ColorSpaceD(0.00304D, 2.4D, 0.6400D, 0.3300D, 0.3000D, 0.6000D, 0.1500D, 0.0600D, 0.31271D, 0.32902D);
+	
+	/**
+	 * A {@code ColorSpaceD} instance that represents the Wide Gamut color space.
+	 */
+	public static final ColorSpaceD WIDE_GAMUT = new ColorSpaceD(0.0D, 2.2D, 0.7347D, 0.2653D, 0.1152D, 0.8264D, 0.1566D, 0.0177D, 0.3457D, 0.3585D);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

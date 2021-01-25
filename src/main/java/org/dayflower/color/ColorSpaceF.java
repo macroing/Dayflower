@@ -31,9 +31,54 @@ import static org.dayflower.utility.Floats.pow;
  */
 public final class ColorSpaceF {
 	/**
+	 * A {@code ColorSpaceF} instance that represents the Adobe color space.
+	 */
+	public static final ColorSpaceF ADOBE = new ColorSpaceF(0.0F, 2.2F, 0.6400F, 0.3300F, 0.2100F, 0.7100F, 0.1500F, 0.0600F, 0.31271F, 0.32902F);
+	
+	/**
+	 * A {@code ColorSpaceF} instance that represents the Apple color space.
+	 */
+	public static final ColorSpaceF APPLE = new ColorSpaceF(0.0F, 1.8F, 0.6250F, 0.3400F, 0.2800F, 0.5950F, 0.1550F, 0.0700F, 0.31271F, 0.32902F);
+	
+	/**
+	 * A {@code ColorSpaceF} instance that represents the NTSC color space.
+	 */
+	public static final ColorSpaceF NTSC = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6700F, 0.3300F, 0.2100F, 0.7100F, 0.1400F, 0.0800F, 0.31010F, 0.31620F);
+	
+	/**
+	 * A {@code ColorSpaceF} instance that represents the HDTV color space.
+	 */
+	public static final ColorSpaceF HDTV = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6400F, 0.3300F, 0.3000F, 0.6000F, 0.1500F, 0.0600F, 0.31271F, 0.32902F);
+	
+	/**
+	 * A {@code ColorSpaceF} instance that represents the CIE color space.
+	 */
+	public static final ColorSpaceF CIE = new ColorSpaceF(0.0F, 2.2F, 0.7350F, 0.2650F, 0.2740F, 0.7170F, 0.1670F, 0.0090F, 1.0F / 3.0F, 1.0F / 3.0F);
+	
+	/**
+	 * A {@code ColorSpaceF} instance that represents the EBU color space.
+	 */
+	public static final ColorSpaceF EBU = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6400F, 0.3300F, 0.2900F, 0.6000F, 0.1500F, 0.0600F, 0.31271F, 0.32902F);
+	
+	/**
+	 * A {@code ColorSpaceF} instance that represents the SMPTE 240M color space.
+	 */
+	public static final ColorSpaceF SMPTE_240M = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6300F, 0.3400F, 0.3100F, 0.5950F, 0.1550F, 0.0700F, 0.31271F, 0.32902F);
+	
+	/**
+	 * A {@code ColorSpaceF} instance that represents the SMPTE C color space.
+	 */
+	public static final ColorSpaceF SMPTE_C = new ColorSpaceF(0.018F, 20.0F / 9.0F, 0.6300F, 0.3400F, 0.3100F, 0.5950F, 0.1550F, 0.0700F, 0.31271F, 0.32902F);
+	
+	/**
 	 * A {@code ColorSpaceF} instance that represents the sRGB color space.
 	 */
 	public static final ColorSpaceF SRGB = new ColorSpaceF(0.00304F, 2.4F, 0.6400F, 0.3300F, 0.3000F, 0.6000F, 0.1500F, 0.0600F, 0.31271F, 0.32902F);
+	
+	/**
+	 * A {@code ColorSpaceF} instance that represents the Wide Gamut color space.
+	 */
+	public static final ColorSpaceF WIDE_GAMUT = new ColorSpaceF(0.0F, 2.2F, 0.7347F, 0.2653F, 0.1152F, 0.8264F, 0.1566F, 0.0177F, 0.3457F, 0.3585F);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

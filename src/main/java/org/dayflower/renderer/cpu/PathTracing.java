@@ -190,7 +190,7 @@ final class PathTracing {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static Color3F doLightEstimateAllPrimitiveLights(final Color3F throughput, final BSDF bSDF, final Intersection intersection, final Scene scene, final Vector3F directionO, final List<Light> lights, final Primitive primitiveToSkip) {
+	private static Color3F doLightEstimateAllPrimitiveLights(final Color3F throughput, final BSDF bSDF, final Intersection intersection, final Scene scene, final Vector3F outgoing, final List<Light> lights, final Primitive primitiveToSkip) {
 		float radianceR = 0.0F;
 		float radianceG = 0.0F;
 		float radianceB = 0.0F;
@@ -218,7 +218,8 @@ final class PathTracing {
 				final int samples = 1;
 				
 				for(int currentSample = 0; currentSample < samples; currentSample++) {
-					final Optional<Sample> optionalSample = primitive.sample(surfaceIntersectionPoint, surfaceNormal, random(), random());
+					final Optional<Sample> optionalSample = primitive.sample(new Point2F(random(), random()), intersection);
+//					final Optional<Sample> optionalSample = primitive.sample(surfaceIntersectionPoint, surfaceNormal, random(), random());
 					
 					if(optionalSample.isPresent()) {
 						final Sample sample = optionalSample.get();
@@ -228,15 +229,14 @@ final class PathTracing {
 						final float probabilityDensityFunctionValueA1 = sample.getSurfaceSampleWorldSpace().getProbabilityDensityFunctionValue();
 						
 						if(probabilityDensityFunctionValueA1 > 0.0F) {
-							final Vector3F selectedDirectionI = Vector3F.normalize(Vector3F.direction(point, surfaceIntersectionPoint));
-							final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
+							final Vector3F incoming = Vector3F.directionNormalized(surfaceIntersectionPoint, point);
 							
-							final float probabilityDensityFunctionValueB1 = bSDF.evaluateProbabilityDensityFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);
+							final float probabilityDensityFunctionValueB1 = bSDF.evaluateProbabilityDensityFunction(BXDFType.ALL, outgoing, surfaceNormal, incoming);
 							
-							final Color3F result = bSDF.evaluateDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, selectedDirectionO);
+							final Color3F result = bSDF.evaluateDistributionFunction(BXDFType.ALL, outgoing, surfaceNormal, incoming);
 							
 							if(probabilityDensityFunctionValueB1 > 0.0F && !result.isBlack()) {
-								final Ray3F ray = intersection.createRay(selectedDirectionO);
+								final Ray3F ray = intersection.createRay(incoming);
 								
 								final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 								
@@ -250,18 +250,18 @@ final class PathTracing {
 										
 										final Color3F emittance = material.emittance(intersectionLight);
 										
-										final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
+										final float incomingDotSurfaceNormalAbs = abs(Vector3F.dotProduct(incoming, surfaceNormal));
 										final float probabilityDensityFunctionValueReciprocal = 1.0F / probabilityDensityFunctionValueA1;
 										
-										radianceLightR += emittance.getR() * result.getR() * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
-										radianceLightG += emittance.getG() * result.getG() * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
-										radianceLightB += emittance.getB() * result.getB() * oDotNAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+										radianceLightR += emittance.getR() * result.getR() * incomingDotSurfaceNormalAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+										radianceLightG += emittance.getG() * result.getG() * incomingDotSurfaceNormalAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
+										radianceLightB += emittance.getB() * result.getB() * incomingDotSurfaceNormalAbs * multipleImportanceSampleWeightLight * probabilityDensityFunctionValueReciprocal;
 									}
 								}
 							}
 						}
 						
-						final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, directionO, surfaceNormal, new Point2F(random(), random()));
+						final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, surfaceNormal, new Point2F(random(), random()));
 						
 						if(optionalBSDFResult.isPresent()) {
 							final BSDFResult bSDFResult = optionalBSDFResult.get();
@@ -271,10 +271,9 @@ final class PathTracing {
 							final float probabilityDensityFunctionValueA2 = bSDFResult.getProbabilityDensityFunctionValue();
 							
 							if(probabilityDensityFunctionValueA2 > 0.0F && !result.isBlack()) {
-								final Vector3F selectedDirectionI = bSDFResult.getIncoming();
-								final Vector3F selectedDirectionO = Vector3F.negate(selectedDirectionI);
+								final Vector3F incoming = bSDFResult.getIncoming();
 								
-								final Ray3F ray = intersection.createRay(selectedDirectionO);
+								final Ray3F ray = intersection.createRay(incoming);
 								
 								final Optional<Intersection> optionalIntersectionLight = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 								
@@ -284,19 +283,20 @@ final class PathTracing {
 									if(primitive == intersectionLight.getPrimitive()) {
 										final Material material = primitive.getMaterial();
 										
-										final float probabilityDensityFunctionValueB2 = primitive.evaluateProbabilityDensityFunction(ray, intersectionLight);
+//										final float probabilityDensityFunctionValueB2 = primitive.evaluateProbabilityDensityFunction(ray, intersectionLight);
+										final float probabilityDensityFunctionValueB2 = primitive.evaluateProbabilityDensityFunction(intersectionLight, incoming);
 										
 										if(probabilityDensityFunctionValueB2 > 0.0F) {
 											final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA2, probabilityDensityFunctionValueB2, 1, 1);
 											
 											final Color3F emittance = material.emittance(intersectionLight);
 											
-											final float oDotNAbs = abs(Vector3F.dotProduct(selectedDirectionO, surfaceNormal));
+											final float incomingDotSurfaceNormalAbs = abs(Vector3F.dotProduct(incoming, surfaceNormal));
 											final float probabilityDensityFunctionValueReciprocal = 1.0F / probabilityDensityFunctionValueA2;
 											
-											radianceLightR += emittance.getR() * result.getR() * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
-											radianceLightG += emittance.getG() * result.getG() * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
-											radianceLightB += emittance.getB() * result.getB() * oDotNAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+											radianceLightR += emittance.getR() * result.getR() * incomingDotSurfaceNormalAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+											radianceLightG += emittance.getG() * result.getG() * incomingDotSurfaceNormalAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
+											radianceLightB += emittance.getB() * result.getB() * incomingDotSurfaceNormalAbs * multipleImportanceSampleWeightBRDF * probabilityDensityFunctionValueReciprocal;
 										}
 									}
 								}

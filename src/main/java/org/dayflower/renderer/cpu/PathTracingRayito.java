@@ -173,7 +173,8 @@ final class PathTracingRayito {
 				final int samples = 1;
 				
 				for(int currentSample = 0; currentSample < samples; currentSample++) {
-					final Optional<Sample> optionalSample = primitive.sample(surfaceIntersectionPoint, surfaceNormal, random(), random());
+					final Optional<Sample> optionalSample = primitive.sample(new Point2F(random(), random()), intersection);
+//					final Optional<Sample> optionalSample = primitive.sample(surfaceIntersectionPoint, surfaceNormal, random(), random());
 					
 					if(optionalSample.isPresent()) {
 						final Sample sample = optionalSample.get();
@@ -237,7 +238,8 @@ final class PathTracingRayito {
 									if(primitive == intersectionLight.getPrimitive()) {
 										final Material material = primitive.getMaterial();
 										
-										final float probabilityDensityFunctionValueB2 = primitive.evaluateProbabilityDensityFunction(ray, intersectionLight);
+//										final float probabilityDensityFunctionValueB2 = primitive.evaluateProbabilityDensityFunction(ray, intersectionLight);
+										final float probabilityDensityFunctionValueB2 = primitive.evaluateProbabilityDensityFunction(intersectionLight, incoming);
 										
 										if(probabilityDensityFunctionValueB2 > 0.0F) {
 											final float multipleImportanceSampleWeightBRDF = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(probabilityDensityFunctionValueA2, probabilityDensityFunctionValueB2, 1, 1);

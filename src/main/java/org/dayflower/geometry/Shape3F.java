@@ -124,12 +124,12 @@ public interface Shape3F extends Node {
 	 * @return an optional {@code SurfaceSample3F} with the surface sample
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
 	 */
-	default Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		
-		return SurfaceSample3F.EMPTY;
-	}
+//	default Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
+//		Objects.requireNonNull(referencePoint, "referencePoint == null");
+//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+//		
+//		return SurfaceSample3F.EMPTY;
+//	}
 	
 	/**
 	 * Performs an intersection test between {@code surfaceIntersector} and this {@code Shape3F} instance.
@@ -161,6 +161,14 @@ public interface Shape3F extends Node {
 		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
+//	TODO: Add Javadocs!
+	default float evaluateProbabilityDensityFunction(final SurfaceIntersection3F surfaceIntersection, final Vector3F incoming) {
+		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
+		return 0.0F;
+	}
+	
 	/**
 	 * Returns the probability density function (PDF) value for solid angle.
 	 * <p>
@@ -173,14 +181,14 @@ public interface Shape3F extends Node {
 	 * @return the probability density function (PDF) value for solid angle
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
 	 */
-	default float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		Objects.requireNonNull(point, "point == null");
-		Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
-		
-		return 0.0F;
-	}
+//	default float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
+//		Objects.requireNonNull(referencePoint, "referencePoint == null");
+//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+//		Objects.requireNonNull(point, "point == null");
+//		Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
+//		
+//		return 0.0F;
+//	}
 	
 	/**
 	 * Returns the probability density function (PDF) value for solid angle.
@@ -193,11 +201,11 @@ public interface Shape3F extends Node {
 	 * @return the probability density function (PDF) value for solid angle
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
 	 */
-	default float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		Objects.requireNonNull(direction, "direction == null");
-		
-		return 0.0F;
-	}
+//	default float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
+//		Objects.requireNonNull(referencePoint, "referencePoint == null");
+//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+//		Objects.requireNonNull(direction, "direction == null");
+//		
+//		return 0.0F;
+//	}
 }

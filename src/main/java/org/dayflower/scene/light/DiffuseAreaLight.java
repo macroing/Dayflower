@@ -159,22 +159,23 @@ public final class DiffuseAreaLight extends AreaLight {
 //		pdfPos = shape->Pdf(it);
 //		pdfDir = twoSided ? (.5 * CosineHemispherePdf(AbsDot(n, ray.d))) : CosineHemispherePdf(Dot(n, ray.d));
 		
-		final Matrix44F lightToWorld = getLightToWorld();
-		final Matrix44F worldToLight = getWorldToLight();
+//		final Matrix44F lightToWorld = getLightToWorld();
+//		final Matrix44F worldToLight = getWorldToLight();
 		
-		final Point3F referencePointWorldSpace = ray.getOrigin();
-		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
+//		final Point3F referencePointWorldSpace = ray.getOrigin();
+//		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
 		
 		final Vector3F referenceSurfaceNormalWorldSpace = normal;
-		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
+//		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
 		
 		final Vector3F directionWorldSpace = ray.getDirection();
-		final Vector3F directionLightSpace = Vector3F.transform(worldToLight, directionWorldSpace);
+//		final Vector3F directionLightSpace = Vector3F.transform(worldToLight, directionWorldSpace);
 		
 		final Color3F result = Color3F.BLACK;
 		
 		final float probabilityDensityFunctionValueDirection = this.isTwoSided ? 0.5F * SampleGeneratorF.hemisphereCosineDistributionProbabilityDensityFunction(abs(Vector3F.dotProduct(referenceSurfaceNormalWorldSpace, directionWorldSpace))) : SampleGeneratorF.hemisphereCosineDistributionProbabilityDensityFunction(Vector3F.dotProduct(referenceSurfaceNormalWorldSpace, directionWorldSpace));
-		final float probabilityDensityFunctionValuePosition = this.shape.evaluateProbabilityDensityFunction(referencePointLightSpace, referenceSurfaceNormalLightSpace, directionLightSpace);
+//		final float probabilityDensityFunctionValuePosition = this.shape.evaluateProbabilityDensityFunction(referencePointLightSpace, referenceSurfaceNormalLightSpace, directionLightSpace);
+		final float probabilityDensityFunctionValuePosition = 0.0F;
 		
 		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
 	}
@@ -393,15 +394,16 @@ public final class DiffuseAreaLight extends AreaLight {
 		final Matrix44F lightToWorld = getLightToWorld();
 		final Matrix44F worldToLight = getWorldToLight();
 		
-		final Point3F referencePointWorldSpace = intersection.getSurfaceIntersectionPoint();
-		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
+//		final Point3F referencePointWorldSpace = intersection.getSurfaceIntersectionPoint();
+//		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
 		
-		final Vector3F referenceSurfaceNormalWorldSpace = intersection.getSurfaceNormalS();
-		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
+//		final Vector3F referenceSurfaceNormalWorldSpace = intersection.getSurfaceNormalS();
+//		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
 		
 		final Vector3F incomingLightSpace = Vector3F.transform(worldToLight, incoming);
 		
-		return this.shape.evaluateProbabilityDensityFunction(referencePointLightSpace, referenceSurfaceNormalLightSpace, incomingLightSpace);
+		return this.shape.evaluateProbabilityDensityFunction(SurfaceIntersection3F.transform(intersection.getSurfaceIntersectionWorldSpace(), worldToLight, lightToWorld), incomingLightSpace);
+//		return this.shape.evaluateProbabilityDensityFunction(referencePointLightSpace, referenceSurfaceNormalLightSpace, incomingLightSpace);
 	}
 	
 	/**

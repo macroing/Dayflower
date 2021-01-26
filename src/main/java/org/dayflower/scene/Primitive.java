@@ -298,30 +298,30 @@ public final class Primitive implements Node {
 	 * @return an optional {@code Sample} with the sample
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
 	 */
-	public Optional<Sample> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-		final Transform transform = getTransform();
-		
-		final Matrix44F objectToWorld = transform.getObjectToWorld();
-		final Matrix44F worldToObject = transform.getWorldToObject();
-		
-		final Shape3F shape = getShape();
-		
-		final Point3F referencePointObjectSpace = Point3F.transformAndDivide(worldToObject, referencePoint);
-		
-		final Vector3F referenceSurfaceNormalObjectSpace = Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal);
-		
-		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = shape.sample(referencePointObjectSpace, referenceSurfaceNormalObjectSpace, u, v);
-		
-		if(optionalSurfaceSampleObjectSpace.isPresent()) {
-			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSampleObjectSpace.get();
-			
-			if(Vector3F.dotProduct(surfaceSampleObjectSpace.getSurfaceNormal(), Vector3F.direction(surfaceSampleObjectSpace.getPoint(), referencePointObjectSpace)) >= 0.0F) {
-				return Optional.of(new Sample(this, surfaceSampleObjectSpace));
-			}
-		}
-		
-		return Sample.EMPTY;
-	}
+//	public Optional<Sample> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
+//		final Transform transform = getTransform();
+//		
+//		final Matrix44F objectToWorld = transform.getObjectToWorld();
+//		final Matrix44F worldToObject = transform.getWorldToObject();
+//		
+//		final Shape3F shape = getShape();
+//		
+//		final Point3F referencePointObjectSpace = Point3F.transformAndDivide(worldToObject, referencePoint);
+//		
+//		final Vector3F referenceSurfaceNormalObjectSpace = Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal);
+//		
+//		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = shape.sample(referencePointObjectSpace, referenceSurfaceNormalObjectSpace, u, v);
+//		
+//		if(optionalSurfaceSampleObjectSpace.isPresent()) {
+//			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSampleObjectSpace.get();
+//			
+//			if(Vector3F.dotProduct(surfaceSampleObjectSpace.getSurfaceNormal(), Vector3F.direction(surfaceSampleObjectSpace.getPoint(), referencePointObjectSpace)) >= 0.0F) {
+//				return Optional.of(new Sample(this, surfaceSampleObjectSpace));
+//			}
+//		}
+//		
+//		return Sample.EMPTY;
+//	}
 	
 	/**
 	 * Returns the {@link Shape3F} instance associated with this {@code Primitive} instance.
@@ -481,6 +481,18 @@ public final class Primitive implements Node {
 		return this.primitiveObservers.remove(Objects.requireNonNull(primitiveObserver, "primitiveObserver == null"));
 	}
 	
+//	TODO: Add Javadocs!
+	public float evaluateProbabilityDensityFunction(final Intersection intersection, final Vector3F incoming) {
+		final Transform transform = getTransform();
+		
+		final Matrix44F objectToWorld = transform.getObjectToWorld();
+		final Matrix44F worldToObject = transform.getWorldToObject();
+		
+		final Shape3F shape = getShape();
+		
+		return shape.evaluateProbabilityDensityFunction(SurfaceIntersection3F.transform(intersection.getSurfaceIntersectionWorldSpace(), worldToObject, objectToWorld), Vector3F.transform(worldToObject, incoming));
+	}
+	
 	/**
 	 * Returns the probability density function (PDF) value for solid angle.
 	 * <p>
@@ -493,16 +505,16 @@ public final class Primitive implements Node {
 	 * @return the probability density function (PDF) value for solid angle
 	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
 	 */
-	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-		final Transform transform = getTransform();
-		
-		final Matrix44F objectToWorld = transform.getObjectToWorld();
-		final Matrix44F worldToObject = transform.getWorldToObject();
-		
-		final Shape3F shape = getShape();
-		
-		return shape.evaluateProbabilityDensityFunction(Point3F.transformAndDivide(worldToObject, referencePoint), Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal), Point3F.transformAndDivide(worldToObject, point), Vector3F.transformTranspose(objectToWorld, surfaceNormal));
-	}
+//	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
+//		final Transform transform = getTransform();
+//		
+//		final Matrix44F objectToWorld = transform.getObjectToWorld();
+//		final Matrix44F worldToObject = transform.getWorldToObject();
+//		
+//		final Shape3F shape = getShape();
+//		
+//		return shape.evaluateProbabilityDensityFunction(Point3F.transformAndDivide(worldToObject, referencePoint), Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal), Point3F.transformAndDivide(worldToObject, point), Vector3F.transformTranspose(objectToWorld, surfaceNormal));
+//	}
 	
 	/**
 	 * Returns the probability density function (PDF) value for solid angle.
@@ -521,9 +533,9 @@ public final class Primitive implements Node {
 	 * @return the probability density function (PDF) value for solid angle
 	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code intersection} are {@code null}
 	 */
-	public float evaluateProbabilityDensityFunction(final Ray3F ray, final Intersection intersection) {
-		return evaluateProbabilityDensityFunction(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionPoint(), intersection.getSurfaceNormalS());
-	}
+//	public float evaluateProbabilityDensityFunction(final Ray3F ray, final Intersection intersection) {
+//		return evaluateProbabilityDensityFunction(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionPoint(), intersection.getSurfaceNormalS());
+//	}
 	
 	/**
 	 * Performs an intersection test between {@code ray} and this {@code Primitive} instance.

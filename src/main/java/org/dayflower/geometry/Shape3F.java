@@ -20,7 +20,6 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Floats.isNaN;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -95,17 +94,19 @@ public interface Shape3F extends Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples this {@code Shape3F} instance.
+	 * <p>
+	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
+	 * <p>
+	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sample a {@link Point2F} instance with a sample point
+	 * @return an optional {@code SurfaceSample3F} with the surface sample
+	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
+	 */
 	default Optional<SurfaceSample3F> sample(final Point2F sample) {
 		Objects.requireNonNull(sample, "sample == null");
-		
-		return SurfaceSample3F.EMPTY;
-	}
-	
-//	TODO: Add Javadocs!
-	default Optional<SurfaceSample3F> sample(final Point2F sample, final SurfaceIntersection3F surfaceIntersection) {
-		Objects.requireNonNull(sample, "sample == null");
-		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
 		
 		return SurfaceSample3F.EMPTY;
 	}
@@ -115,21 +116,19 @@ public interface Shape3F extends Node {
 	 * <p>
 	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
 	 * <p>
-	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code sample} or {@code surfaceIntersection} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param referencePoint the reference point on this {@code Shape3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3F} instance
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param sample a {@link Point2F} instance with a sample point
+	 * @param surfaceIntersection a {@link SurfaceIntersection3F} instance
 	 * @return an optional {@code SurfaceSample3F} with the surface sample
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code sample} or {@code surfaceIntersection} are {@code null}
 	 */
-//	default Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-//		Objects.requireNonNull(referencePoint, "referencePoint == null");
-//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-//		
-//		return SurfaceSample3F.EMPTY;
-//	}
+	default Optional<SurfaceSample3F> sample(final Point2F sample, final SurfaceIntersection3F surfaceIntersection) {
+		Objects.requireNonNull(sample, "sample == null");
+		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
+		
+		return SurfaceSample3F.EMPTY;
+	}
 	
 	/**
 	 * Performs an intersection test between {@code surfaceIntersector} and this {@code Shape3F} instance.
@@ -161,51 +160,22 @@ public interface Shape3F extends Node {
 		return !isNaN(intersectionT(ray, tMinimum, tMaximum));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density function (PDF) for {@code surfaceIntersection} and {@code incoming}.
+	 * <p>
+	 * Returns the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code surfaceIntersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceIntersection a {@link SurfaceIntersection3F} instance
+	 * @param incoming a {@link Vector3F} instance with the incoming direction
+	 * @return the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code incoming} are {@code null}
+	 */
 	default float evaluateProbabilityDensityFunction(final SurfaceIntersection3F surfaceIntersection, final Vector3F incoming) {
 		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
 		return 0.0F;
 	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Shape3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3F} instance
-	 * @param point the point on this {@code Shape3F} instance
-	 * @param surfaceNormal the surface normal on this {@code Shape3F} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
-	 */
-//	default float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-//		Objects.requireNonNull(referencePoint, "referencePoint == null");
-//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-//		Objects.requireNonNull(point, "point == null");
-//		Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
-//		
-//		return 0.0F;
-//	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Shape3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3F} instance
-	 * @param direction the direction to this {@code Shape3F} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
-	 */
-//	default float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
-//		Objects.requireNonNull(referencePoint, "referencePoint == null");
-//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-//		Objects.requireNonNull(direction, "direction == null");
-//		
-//		return 0.0F;
-//	}
 }

@@ -22,7 +22,6 @@ import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -258,7 +257,18 @@ public final class Primitive implements Node {
 		return Optional.empty();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples this {@code Primitive} instance.
+	 * <p>
+	 * Returns an optional {@link Sample} with the sample.
+	 * <p>
+	 * If either {@code sample} or {@code intersection} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sample a {@link Point2F} instance with a sample point
+	 * @param intersection an {@link Intersection} instance
+	 * @return an optional {@code Sample} with the sample
+	 * @throws NullPointerException thrown if, and only if, either {@code sample} or {@code intersection} are {@code null}
+	 */
 	public Optional<Sample> sample(final Point2F sample, final Intersection intersection) {
 		Objects.requireNonNull(sample, "sample == null");
 		Objects.requireNonNull(intersection, "intersection == null");
@@ -283,45 +293,6 @@ public final class Primitive implements Node {
 		
 		return Sample.EMPTY;
 	}
-	
-	/**
-	 * Samples this {@code Primitive} instance.
-	 * <p>
-	 * Returns an optional {@link Sample} with the sample.
-	 * <p>
-	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Primitive} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Primitive} instance
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @return an optional {@code Sample} with the sample
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
-	 */
-//	public Optional<Sample> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-//		final Transform transform = getTransform();
-//		
-//		final Matrix44F objectToWorld = transform.getObjectToWorld();
-//		final Matrix44F worldToObject = transform.getWorldToObject();
-//		
-//		final Shape3F shape = getShape();
-//		
-//		final Point3F referencePointObjectSpace = Point3F.transformAndDivide(worldToObject, referencePoint);
-//		
-//		final Vector3F referenceSurfaceNormalObjectSpace = Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal);
-//		
-//		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = shape.sample(referencePointObjectSpace, referenceSurfaceNormalObjectSpace, u, v);
-//		
-//		if(optionalSurfaceSampleObjectSpace.isPresent()) {
-//			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSampleObjectSpace.get();
-//			
-//			if(Vector3F.dotProduct(surfaceSampleObjectSpace.getSurfaceNormal(), Vector3F.direction(surfaceSampleObjectSpace.getPoint(), referencePointObjectSpace)) >= 0.0F) {
-//				return Optional.of(new Sample(this, surfaceSampleObjectSpace));
-//			}
-//		}
-//		
-//		return Sample.EMPTY;
-//	}
 	
 	/**
 	 * Returns the {@link Shape3F} instance associated with this {@code Primitive} instance.
@@ -481,7 +452,18 @@ public final class Primitive implements Node {
 		return this.primitiveObservers.remove(Objects.requireNonNull(primitiveObserver, "primitiveObserver == null"));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density function (PDF) for {@code intersection} and {@code incoming}.
+	 * <p>
+	 * Returns the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param incoming a {@link Vector3F} instance with the incoming direction
+	 * @return the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
+	 */
 	public float evaluateProbabilityDensityFunction(final Intersection intersection, final Vector3F incoming) {
 		final Transform transform = getTransform();
 		
@@ -492,50 +474,6 @@ public final class Primitive implements Node {
 		
 		return shape.evaluateProbabilityDensityFunction(SurfaceIntersection3F.transform(intersection.getSurfaceIntersectionWorldSpace(), worldToObject, objectToWorld), Vector3F.transform(worldToObject, incoming));
 	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Primitive} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Primitive} instance
-	 * @param point the point on this {@code Primitive} instance
-	 * @param surfaceNormal the surface normal on this {@code Primitive} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
-	 */
-//	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-//		final Transform transform = getTransform();
-//		
-//		final Matrix44F objectToWorld = transform.getObjectToWorld();
-//		final Matrix44F worldToObject = transform.getWorldToObject();
-//		
-//		final Shape3F shape = getShape();
-//		
-//		return shape.evaluateProbabilityDensityFunction(Point3F.transformAndDivide(worldToObject, referencePoint), Vector3F.transformTranspose(objectToWorld, referenceSurfaceNormal), Point3F.transformAndDivide(worldToObject, point), Vector3F.transformTranspose(objectToWorld, surfaceNormal));
-//	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code ray} or {@code intersection} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this method is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * primitive.evaluateProbabilityDensityFunction(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceIntersectionPoint(), intersection.getSurfaceIntersectionWorldSpace().getSurfaceNormalS());
-	 * }
-	 * </pre>
-	 * 
-	 * @param ray a {@link Ray3F} instance
-	 * @param intersection an {@link Intersection} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code intersection} are {@code null}
-	 */
-//	public float evaluateProbabilityDensityFunction(final Ray3F ray, final Intersection intersection) {
-//		return evaluateProbabilityDensityFunction(ray.getOrigin(), ray.getDirection(), intersection.getSurfaceIntersectionPoint(), intersection.getSurfaceNormalS());
-//	}
 	
 	/**
 	 * Performs an intersection test between {@code ray} and this {@code Primitive} instance.

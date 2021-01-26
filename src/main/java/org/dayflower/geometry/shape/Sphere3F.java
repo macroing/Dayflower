@@ -147,7 +147,17 @@ public final class Sphere3F implements Shape3F {
 		return new BoundingSphere3F(this.radius, this.center);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples this {@code Sphere3F} instance.
+	 * <p>
+	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
+	 * <p>
+	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sample a {@link Point2F} instance with a sample point
+	 * @return an optional {@code SurfaceSample3F} with the surface sample
+	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
+	 */
 	@Override
 	public Optional<SurfaceSample3F> sample(final Point2F sample) {
 		Objects.requireNonNull(sample, "sample == null");
@@ -167,7 +177,18 @@ public final class Sphere3F implements Shape3F {
 		return Optional.of(surfaceSample);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples this {@code Sphere3F} instance.
+	 * <p>
+	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
+	 * <p>
+	 * If either {@code sample} or {@code surfaceIntersection} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sample a {@link Point2F} instance with a sample point
+	 * @param surfaceIntersection a {@link SurfaceIntersection3F} instance
+	 * @return an optional {@code SurfaceSample3F} with the surface sample
+	 * @throws NullPointerException thrown if, and only if, either {@code sample} or {@code surfaceIntersection} are {@code null}
+	 */
 	@Override
 	public Optional<SurfaceSample3F> sample(final Point2F sample, final SurfaceIntersection3F surfaceIntersection) {
 		Objects.requireNonNull(sample, "sample == null");
@@ -243,72 +264,6 @@ public final class Sphere3F implements Shape3F {
 		
 		return Optional.of(new SurfaceSample3F(samplePoint, samplePointError, sampleSurfaceNormal, probabilityDensityFunctionValue));
 	}
-	
-	/**
-	 * Samples this {@code Sphere3F} instance.
-	 * <p>
-	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
-	 * <p>
-	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Sphere3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Sphere3F} instance
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @return an optional {@code SurfaceSample3F} with the surface sample
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
-	 */
-//	@Override
-//	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-//		
-//		final Point3F center = getCenter();
-//		
-//		final Vector3F directionToCenter = Vector3F.direction(referencePoint, center);
-//		
-//		final float lengthSquared = directionToCenter.lengthSquared();
-//		final float radius = getRadius();
-//		final float radiusSquared = getRadiusSquared();
-//		
-//		if(lengthSquared < radiusSquared * 1.00001F) {
-//			final Vector3F surfaceNormal = SampleGeneratorF.sampleSphereUniformDistribution(u, v);
-//			
-//			final Point3F point = Point3F.add(center, surfaceNormal, radius);
-//			
-//			final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
-//			final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
-//			
-//			final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (3.0F / getSurfaceArea()) / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
-//			
-//			return Optional.of(new SurfaceSample3F(point, new Vector3F(), surfaceNormal, probabilityDensityFunctionValue));
-//		}
-//		
-//		final float sinThetaMaxSquared = radiusSquared / lengthSquared;
-//		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
-//		
-//		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(directionToCenter);
-//		
-//		final Vector3F coneLocalSpace = SampleGeneratorF.sampleConeUniformDistribution(u, v, cosThetaMax);
-//		final Vector3F coneGlobalSpace = Vector3F.normalize(Vector3F.transform(coneLocalSpace, orthonormalBasis));
-//		
-//		final Ray3F ray = new Ray3F(referencePoint, coneGlobalSpace);
-//		
-//		TODO: Check if these variables should be supplied as parameters?
-//		final float tMinimum = 0.001F;
-//		final float tMaximum = Float.MAX_VALUE;
-//		
-//		final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = intersection(ray, tMinimum, tMaximum);
-//		
-//		final float t = optionalSurfaceIntersection.isPresent() ? optionalSurfaceIntersection.get().getT() : Vector3F.dotProduct(directionToCenter, coneGlobalSpace);
-//		
-//		final Point3F point = Point3F.add(ray.getOrigin(), ray.getDirection(), t);
-//		
-//		final Vector3F surfaceNormal = Vector3F.directionNormalized(center, point);
-//		
-//		final float probabilityDensityFunctionValue = cosThetaMax >= 1.0F ? 0.0F : SampleGeneratorF.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
-//		
-//		return Optional.of(new SurfaceSample3F(point, new Vector3F(), surfaceNormal, probabilityDensityFunctionValue));
-//	}
 	
 	/**
 	 * Performs an intersection test between {@code ray} and this {@code Sphere3F} instance.
@@ -454,7 +409,18 @@ public final class Sphere3F implements Shape3F {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density function (PDF) for {@code surfaceIntersection} and {@code incoming}.
+	 * <p>
+	 * Returns the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code surfaceIntersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param surfaceIntersection a {@link SurfaceIntersection3F} instance
+	 * @param incoming a {@link Vector3F} instance with the incoming direction
+	 * @return the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code incoming} are {@code null}
+	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final SurfaceIntersection3F surfaceIntersection, final Vector3F incoming) {
 		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
@@ -476,82 +442,6 @@ public final class Sphere3F implements Shape3F {
 		
 		return 0.0F;
 	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Sphere3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Sphere3F} instance
-	 * @param point the point on this {@code Sphere3F} instance
-	 * @param surfaceNormal the surface normal on this {@code Sphere3F} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
-	 */
-//	@Override
-//	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-//		
-//		final Point3F center = this.center;
-//		
-//		final Vector3F directionToCenter = Vector3F.direction(referencePoint, center);
-//		
-//		final float lengthSquared = directionToCenter.lengthSquared();
-//		final float radius = this.radius;
-//		final float radiusSquared = radius * radius;
-//		
-//		if(lengthSquared < radiusSquared * 1.00001F) {
-//			final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
-//			final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
-//			
-//			final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (3.0F / getSurfaceArea()) / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
-//			
-//			return probabilityDensityFunctionValue;
-//		}
-//		
-//		final float sinThetaMaxSquared = radiusSquared / lengthSquared;
-//		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
-//		final float probabilityDensityFunctionValue = SampleGeneratorF.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
-//		
-//		return probabilityDensityFunctionValue;
-//	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Sphere3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Sphere3F} instance
-	 * @param direction the direction to this {@code Sphere3F} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
-	 */
-//	@Override
-//	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
-//		Objects.requireNonNull(referencePoint, "referencePoint == null");
-//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-//		Objects.requireNonNull(direction, "direction == null");
-//		
-//		TODO: Check if these variables should be supplied as parameters?
-//		final float tMinimum = 0.001F;
-//		final float tMaximum = Float.MAX_VALUE;
-//		
-//		final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = intersection(new Ray3F(referencePoint, direction), tMinimum, tMaximum);
-//		
-//		if(optionalSurfaceIntersection.isPresent()) {
-//			final SurfaceIntersection3F surfaceIntersection = optionalSurfaceIntersection.get();
-//			
-//			final Point3F point = surfaceIntersection.getSurfaceIntersectionPoint();
-//			
-//			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
-//			
-//			return evaluateProbabilityDensityFunction(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
-//		}
-//		
-//		return 0.0F;
-//	}
 	
 	/**
 	 * Returns the radius of this {@code Sphere3F} instance.

@@ -24,7 +24,9 @@ import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.gamma;
+import static org.dayflower.utility.Doubles.isInfinite;
 import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.pow;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
@@ -150,67 +152,117 @@ public final class Sphere3D implements Shape3D {
 	 * <p>
 	 * Returns an optional {@link SurfaceSample3D} with the surface sample.
 	 * <p>
-	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param referencePoint the reference point on this {@code Sphere3D} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Sphere3D} instance
-	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
-	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param sample a {@link Point2D} instance with a sample point
 	 * @return an optional {@code SurfaceSample3D} with the surface sample
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
 	 */
 	@Override
-	public Optional<SurfaceSample3D> sample(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final double u, final double v) {
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+	public Optional<SurfaceSample3D> sample(final Point2D sample) {
+		Objects.requireNonNull(sample, "sample == null");
 		
-		final Point3D center = getCenter();
+		final Vector3D direction = SampleGeneratorD.sampleSphereUniformDistribution(sample.getU(), sample.getV());
 		
-		final Vector3D directionToCenter = Vector3D.direction(referencePoint, center);
+		final Point3D point0 = Point3D.add(this.center, direction, this.radius);
+		final Point3D point1 = Point3D.add(point0, new Vector3D(1.0D), this.radius / Point3D.distance(this.center, point0));
 		
-		final double lengthSquared = directionToCenter.lengthSquared();
-		final double radius = getRadius();
-		final double radiusSquared = getRadiusSquared();
+		final Vector3D pointError = Vector3D.multiply(Vector3D.absolute(new Vector3D(point1)), gamma(5));
+		final Vector3D surfaceNormal = Vector3D.directionNormalized(this.center, point0);
 		
-		if(lengthSquared < radiusSquared * 1.00001D) {
-			final Vector3D surfaceNormal = SampleGeneratorD.sampleSphereUniformDistribution(u, v);
+		final double probabilityDensityFunctionValue = 1.0D / getSurfaceArea();
+		
+		final SurfaceSample3D surfaceSample = new SurfaceSample3D(point1, pointError, surfaceNormal, probabilityDensityFunctionValue);
+		
+		return Optional.of(surfaceSample);
+	}
+	
+	/**
+	 * Samples this {@code Sphere3D} instance.
+	 * <p>
+	 * Returns an optional {@link SurfaceSample3D} with the surface sample.
+	 * <p>
+	 * If either {@code sample} or {@code surfaceIntersection} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sample a {@link Point2D} instance with a sample point
+	 * @param surfaceIntersection a {@link SurfaceIntersection3D} instance
+	 * @return an optional {@code SurfaceSample3D} with the surface sample
+	 * @throws NullPointerException thrown if, and only if, either {@code sample} or {@code surfaceIntersection} are {@code null}
+	 */
+	@Override
+	public Optional<SurfaceSample3D> sample(final Point2D sample, final SurfaceIntersection3D surfaceIntersection) {
+		Objects.requireNonNull(sample, "sample == null");
+		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
+		
+		final Point3D center = this.center;
+		final Point3D surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+		
+		final Vector3D direction = Vector3D.direction(surfaceIntersectionPoint, center);
+		final Vector3D surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+		final Vector3D surfaceIntersectionPointError = surfaceIntersection.getSurfaceIntersectionPointError();
+		
+		final Point3D origin = Point3D.offset(surfaceIntersectionPoint, direction, surfaceNormal, surfaceIntersectionPointError);
+		
+		final double radius = this.radius;
+		final double radiusSquared = radius * radius;
+		
+		if(Point3D.distanceSquared(center, origin) <= radiusSquared) {
+			final Optional<SurfaceSample3D> optionalSurfaceSample = sample(sample);
 			
-			final Point3D point = Point3D.add(center, surfaceNormal, radius);
+			if(optionalSurfaceSample.isPresent()) {
+				final SurfaceSample3D surfaceSample = optionalSurfaceSample.get();
+				
+				final Point3D point = surfaceSample.getPoint();
+				
+				final Vector3D incoming = Vector3D.direction(surfaceIntersectionPoint, point);
+				
+				if(isZero(incoming.lengthSquared())) {
+					return SurfaceSample3D.EMPTY;
+				}
+				
+				final Vector3D incomingNormalized = Vector3D.normalize(incoming);
+				final Vector3D incomingNormalizedNegated = Vector3D.negate(incomingNormalized);
+				
+				final double probabilityDensityFunctionValue = Point3D.distanceSquared(point, surfaceIntersectionPoint) / abs(Vector3D.dotProduct(surfaceSample.getSurfaceNormal(), incomingNormalizedNegated));
+				
+				if(isInfinite(probabilityDensityFunctionValue)) {
+					return SurfaceSample3D.EMPTY;
+				}
+				
+				return Optional.of(new SurfaceSample3D(point, surfaceSample.getPointError(), surfaceSample.getSurfaceNormal(), probabilityDensityFunctionValue));
+			}
 			
-			final Vector3D directionToSurface = Vector3D.direction(point, referencePoint);
-//			final Vector3D directionToSurface = Vector3D.direction(referencePoint, point);
-			final Vector3D directionToSurfaceNormalized = Vector3D.normalize(directionToSurface);
-			
-//			final double probabilityDensityFunctionValue = (1.0D / getSurfaceArea()) * (directionToSurface.lengthSquared() / abs(Vector3D.dotProduct(Vector3D.negate(directionToSurfaceNormalized), surfaceNormal)));
-			final double probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (3.0D / getSurfaceArea()) / abs(Vector3D.dotProduct(directionToSurfaceNormalized, surfaceNormal));
-			
-			return Optional.of(new SurfaceSample3D(point, surfaceNormal, probabilityDensityFunctionValue));
+			return SurfaceSample3D.EMPTY;
 		}
 		
-		final double sinThetaMaxSquared = radiusSquared / lengthSquared;
-		final double cosThetaMax = sqrt(max(0.0D, 1.0D - sinThetaMaxSquared));
+		final double distance = Point3D.distance(center, surfaceIntersectionPoint);
+		final double distanceReciprocal = 1.0D / distance;
+		
+		final Vector3D directionToCenter = Vector3D.multiply(Vector3D.direction(surfaceIntersectionPoint, center), distanceReciprocal);
 		
 		final OrthonormalBasis33D orthonormalBasis = new OrthonormalBasis33D(directionToCenter);
 		
-		final Vector3D coneLocalSpace = SampleGeneratorD.sampleConeUniformDistribution(u, v, cosThetaMax);
-		final Vector3D coneGlobalSpace = Vector3D.normalize(Vector3D.transform(coneLocalSpace, orthonormalBasis));
+		final double sinThetaMax = radius * distanceReciprocal;
+		final double sinThetaMaxSquared = sinThetaMax * sinThetaMax;
+		final double sinThetaMaxReciprocal = 1.0D / sinThetaMax;
+		final double cosThetaMax = sqrt(max(0.0D, 1.0D - sinThetaMaxSquared));
+		final double cosTheta = sinThetaMaxSquared < 0.00068523D ? sqrt(1.0D - sinThetaMaxSquared * sample.getU()) : (cosThetaMax - 1.0D) * sample.getU() + 1.0D;
+		final double sinThetaSquared = sinThetaMaxSquared < 0.00068523D ? sinThetaMaxSquared * sample.getU() : 1.0D - cosTheta * cosTheta;
+		final double cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * sqrt(max(0.0D, 1.0D - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
+		final double sinAlpha = sqrt(max(0.0D, 1.0D - cosAlpha * cosAlpha));
+		final double phi = sample.getV() * 2.0D * PI;
 		
-		final Ray3D ray = new Ray3D(referencePoint, coneGlobalSpace);
+		final Vector3D sphericalDirectionLocal = Vector3D.directionSpherical(sinAlpha, cosAlpha, phi);
+		final Vector3D sphericalDirection = Vector3D.transform(sphericalDirectionLocal, OrthonormalBasis33D.flip(orthonormalBasis));
 		
-//		TODO: Check if these variables should be supplied as parameters?
-		final double tMinimum = 0.001D;
-		final double tMaximum = Double.MAX_VALUE;
+		final Point3D samplePoint = Point3D.add(center, sphericalDirection, radius);
 		
-		final Optional<SurfaceIntersection3D> optionalSurfaceIntersection = intersection(ray, tMinimum, tMaximum);
+		final Vector3D samplePointError = Vector3D.multiply(Vector3D.absolute(new Vector3D(samplePoint)), gamma(5));
+		final Vector3D sampleSurfaceNormal = Vector3D.normalize(sphericalDirection);
 		
-		final double t = optionalSurfaceIntersection.isPresent() ? optionalSurfaceIntersection.get().getT() : Vector3D.dotProduct(directionToCenter, coneGlobalSpace);
+		final double probabilityDensityFunctionValue = 1.0D / (2.0D * PI * (1.0D - cosThetaMax));
 		
-		final Point3D point = Point3D.add(ray.getOrigin(), ray.getDirection(), t);
-		
-		final Vector3D surfaceNormal = Vector3D.directionNormalized(center, point);
-		
-		final double probabilityDensityFunctionValue = SampleGeneratorD.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
-		
-		return Optional.of(new SurfaceSample3D(point, surfaceNormal, probabilityDensityFunctionValue));
+		return Optional.of(new SurfaceSample3D(samplePoint, samplePointError, sampleSurfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -358,76 +410,34 @@ public final class Sphere3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns the probability density function (PDF) value for solid angle.
+	 * Evaluates the probability density function (PDF) for {@code surfaceIntersection} and {@code incoming}.
 	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * Returns the probability density function (PDF) value.
+	 * <p>
+	 * If either {@code surfaceIntersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param referencePoint the reference point on this {@code Sphere3D} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Sphere3D} instance
-	 * @param point the point on this {@code Sphere3D} instance
-	 * @param surfaceNormal the surface normal on this {@code Sphere3D} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
+	 * @param surfaceIntersection a {@link SurfaceIntersection3D} instance
+	 * @param incoming a {@link Vector3D} instance with the incoming direction
+	 * @return the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code incoming} are {@code null}
 	 */
 	@Override
-	public double evaluateProbabilityDensityFunction(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Point3D point, final Vector3D surfaceNormal) {
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+	public double evaluateProbabilityDensityFunction(final SurfaceIntersection3D surfaceIntersection, final Vector3D incoming) {
+		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
+		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Point3D center = this.center;
+		final Ray3D ray = surfaceIntersection.createRay(incoming);
 		
-		final Vector3D directionToCenter = Vector3D.direction(referencePoint, center);
+		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, Double.MAX_VALUE);
 		
-		final double lengthSquared = directionToCenter.lengthSquared();
-		final double radius = this.radius;
-		final double radiusSquared = radius * radius;
-		
-		if(lengthSquared < radiusSquared * 1.00001D) {
-			final Vector3D directionToSurface = Vector3D.direction(point, referencePoint);
-			final Vector3D directionToSurfaceNormalized = Vector3D.normalize(directionToSurface);
+		if(optionalSurfaceIntersectionShape.isPresent()) {
+			final SurfaceIntersection3D surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();
 			
-			final double probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (3.0D / getSurfaceArea()) / abs(Vector3D.dotProduct(directionToSurfaceNormalized, surfaceNormal));
+			final double probabilityDensityFunctionValue = Point3D.distanceSquared(surfaceIntersectionShape.getSurfaceIntersectionPoint(), surfaceIntersection.getSurfaceIntersectionPoint()) / abs(Vector3D.dotProduct(surfaceIntersectionShape.getSurfaceNormalS(), Vector3D.negate(incoming))) * getSurfaceArea();
 			
-			return probabilityDensityFunctionValue;
-		}
-		
-		final double sinThetaMaxSquared = radiusSquared / lengthSquared;
-		final double cosThetaMax = sqrt(max(0.0D, 1.0D - sinThetaMaxSquared));
-		final double probabilityDensityFunctionValue = SampleGeneratorD.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
-		
-		return probabilityDensityFunctionValue;
-	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Sphere3D} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Sphere3D} instance
-	 * @param direction the direction to this {@code Sphere3D} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
-	 */
-	@Override
-	public double evaluateProbabilityDensityFunction(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Vector3D direction) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		Objects.requireNonNull(direction, "direction == null");
-		
-//		TODO: Check if these variables should be supplied as parameters?
-		final double tMinimum = 0.001D;
-		final double tMaximum = Double.MAX_VALUE;
-		
-		final Optional<SurfaceIntersection3D> optionalSurfaceIntersection = intersection(new Ray3D(referencePoint, direction), tMinimum, tMaximum);
-		
-		if(optionalSurfaceIntersection.isPresent()) {
-			final SurfaceIntersection3D surfaceIntersection = optionalSurfaceIntersection.get();
-			
-			final Point3D point = surfaceIntersection.getSurfaceIntersectionPoint();
-			
-			final Vector3D surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
-			
-			return evaluateProbabilityDensityFunction(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
+			if(!isInfinite(probabilityDensityFunctionValue)) {
+				return probabilityDensityFunctionValue;
+			}
 		}
 		
 		return 0.0D;

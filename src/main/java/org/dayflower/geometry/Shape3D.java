@@ -99,18 +99,33 @@ public interface Shape3D extends Node {
 	 * <p>
 	 * Returns an optional {@link SurfaceSample3D} with the surface sample.
 	 * <p>
-	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param referencePoint the reference point on this {@code Shape3D} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3D} instance
-	 * @param u a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
-	 * @param v a random {@code double} with a uniform distribution between {@code 0.0D} and {@code 1.0D}
+	 * @param sample a {@link Point2D} instance with a sample point
 	 * @return an optional {@code SurfaceSample3D} with the surface sample
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
 	 */
-	default Optional<SurfaceSample3D> sample(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final double u, final double v) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
+	default Optional<SurfaceSample3D> sample(final Point2D sample) {
+		Objects.requireNonNull(sample, "sample == null");
+		
+		return SurfaceSample3D.EMPTY;
+	}
+	
+	/**
+	 * Samples this {@code Shape3D} instance.
+	 * <p>
+	 * Returns an optional {@link SurfaceSample3D} with the surface sample.
+	 * <p>
+	 * If either {@code sample} or {@code surfaceIntersection} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param sample a {@link Point2D} instance with a sample point
+	 * @param surfaceIntersection a {@link SurfaceIntersection3D} instance
+	 * @return an optional {@code SurfaceSample3D} with the surface sample
+	 * @throws NullPointerException thrown if, and only if, either {@code sample} or {@code surfaceIntersection} are {@code null}
+	 */
+	default Optional<SurfaceSample3D> sample(final Point2D sample, final SurfaceIntersection3D surfaceIntersection) {
+		Objects.requireNonNull(sample, "sample == null");
+		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
 		
 		return SurfaceSample3D.EMPTY;
 	}
@@ -146,41 +161,20 @@ public interface Shape3D extends Node {
 	}
 	
 	/**
-	 * Returns the probability density function (PDF) value for solid angle.
+	 * Evaluates the probability density function (PDF) for {@code surfaceIntersection} and {@code incoming}.
 	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Shape3D} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3D} instance
-	 * @param point the point on this {@code Shape3D} instance
-	 * @param surfaceNormal the surface normal on this {@code Shape3D} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
-	 */
-	default double evaluateProbabilityDensityFunction(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Point3D point, final Vector3D surfaceNormal) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		Objects.requireNonNull(point, "point == null");
-		Objects.requireNonNull(surfaceNormal, "surfaceNormal == null");
-		
-		return 0.0D;
-	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
+	 * Returns the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code surfaceIntersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param referencePoint the reference point on this {@code Shape3D} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Shape3D} instance
-	 * @param direction the direction to this {@code Shape3D} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
+	 * @param surfaceIntersection a {@link SurfaceIntersection3D} instance
+	 * @param incoming a {@link Vector3D} instance with the incoming direction
+	 * @return the probability density function (PDF) value
+	 * @throws NullPointerException thrown if, and only if, either {@code surfaceIntersection} or {@code incoming} are {@code null}
 	 */
-	default double evaluateProbabilityDensityFunction(final Point3D referencePoint, final Vector3D referenceSurfaceNormal, final Vector3D direction) {
-		Objects.requireNonNull(referencePoint, "referencePoint == null");
-		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-		Objects.requireNonNull(direction, "direction == null");
+	default double evaluateProbabilityDensityFunction(final SurfaceIntersection3D surfaceIntersection, final Vector3D incoming) {
+		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
+		Objects.requireNonNull(incoming, "incoming == null");
 		
 		return 0.0D;
 	}

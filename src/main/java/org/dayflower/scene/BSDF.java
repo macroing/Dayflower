@@ -231,7 +231,10 @@ public final class BSDF {
 		
 		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalG();
 		
-		final boolean isReflecting = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) * Vector3F.dotProduct(incomingWorldSpaceCorrectlyOriented, surfaceNormalG) > 0.0F;
+		final float iDotN = Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG);
+		final float oDotN = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG);
+		
+		final boolean isReflecting = iDotN * oDotN > 0.0F;
 		
 		Color3F result = Color3F.BLACK;
 		
@@ -317,7 +320,10 @@ public final class BSDF {
 		}
 		
 		if(!matchingBXDF.getBXDFType().isSpecular()) {
-			final boolean isReflecting = Vector3F.dotProduct(incomingWorldSpaceCorrectlyOriented, surfaceNormalG) * Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG) > 0.0F;
+			final float iDotN = Vector3F.dotProduct(incomingWorldSpaceCorrectlyOriented, surfaceNormalG);
+			final float oDotN = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG);
+			
+			final boolean isReflecting = iDotN * oDotN > 0.0F;
 			
 			result = Color3F.BLACK;
 			

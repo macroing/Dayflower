@@ -701,8 +701,8 @@ public final class PixelImageF extends ImageF {
 				
 				for(int filterX = minimumFilterX; filterX <= maximumFilterX; filterX++) {
 					final
-					PixelF pixel = pixels[filterYResolutionX + filterX];
-					pixel.addColorXYZ(colorXYZ, sampleWeight, filterTable[filterOffsetYOffsetFilterTableSize + filterOffsetX[filterX - minimumFilterX]]);
+					PixelF pixelF = pixels[filterYResolutionX + filterX];
+					pixelF.addColorXYZ(colorXYZ, sampleWeight, filterTable[filterOffsetYOffsetFilterTableSize + filterOffsetX[filterX - minimumFilterX]]);
 				}
 			}
 		}

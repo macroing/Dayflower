@@ -326,7 +326,7 @@ public final class Primitive implements Node {
 	/**
 	 * Returns the {@link Shape3F} instance associated with this {@code Primitive} instance.
 	 * 
-	 * @return the {@link Shape3F} instance associated with this {@code Primitive} instance
+	 * @return the {@code Shape3F} instance associated with this {@code Primitive} instance
 	 */
 	public Shape3F getShape() {
 		return this.shape;

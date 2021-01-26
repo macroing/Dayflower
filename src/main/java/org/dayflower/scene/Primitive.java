@@ -22,6 +22,7 @@ import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ import java.util.Optional;
 
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Ray3F;
@@ -254,6 +256,32 @@ public final class Primitive implements Node {
 		}
 		
 		return Optional.empty();
+	}
+	
+//	TODO: Add Javadocs!
+	public Optional<Sample> sample(final Point2F sample, final Intersection intersection) {
+		Objects.requireNonNull(sample, "sample == null");
+		Objects.requireNonNull(intersection, "intersection == null");
+		
+		final Transform transform = getTransform();
+		
+		final Matrix44F objectToWorld = transform.getObjectToWorld();
+		final Matrix44F worldToObject = transform.getWorldToObject();
+		
+		final Shape3F shape = getShape();
+		
+		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
+		final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
+		
+		final Optional<SurfaceSample3F> optionalSurfaceSample = shape.sample(sample, surfaceIntersectionObjectSpace);
+		
+		if(optionalSurfaceSample.isPresent()) {
+			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSample.get();
+			
+			return Optional.of(new Sample(this, surfaceSampleObjectSpace));
+		}
+		
+		return Sample.EMPTY;
 	}
 	
 	/**

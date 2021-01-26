@@ -204,7 +204,7 @@ public final class Triangle3F implements Shape3F {
 		
 		final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (1.0F / getSurfaceArea()) / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
 		
-		return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
+		return Optional.of(new SurfaceSample3F(point, new Vector3F(), surfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**

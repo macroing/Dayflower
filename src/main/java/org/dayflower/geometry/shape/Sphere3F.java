@@ -24,7 +24,9 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.gamma;
+import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.pow;
 import static org.dayflower.utility.Floats.solveQuadraticSystem;
@@ -145,6 +147,103 @@ public final class Sphere3F implements Shape3F {
 		return new BoundingSphere3F(this.radius, this.center);
 	}
 	
+//	TODO: Add Javadocs!
+	@Override
+	public Optional<SurfaceSample3F> sample(final Point2F sample) {
+		Objects.requireNonNull(sample, "sample == null");
+		
+		final Vector3F direction = SampleGeneratorF.sampleSphereUniformDistribution(sample.getU(), sample.getV());
+		
+		final Point3F point0 = Point3F.add(this.center, direction, this.radius);
+		final Point3F point1 = Point3F.add(point0, new Vector3F(1.0F), this.radius / Point3F.distance(this.center, point0));
+		
+		final Vector3F pointError = Vector3F.multiply(Vector3F.absolute(new Vector3F(point1)), gamma(5));
+		final Vector3F surfaceNormal = Vector3F.directionNormalized(this.center, point0);
+		
+		final float probabilityDensityFunctionValue = 1.0F / getSurfaceArea();
+		
+		final SurfaceSample3F surfaceSample = new SurfaceSample3F(point1, pointError, surfaceNormal, probabilityDensityFunctionValue);
+		
+		return Optional.of(surfaceSample);
+	}
+	
+//	TODO: Add Javadocs!
+	@Override
+	public Optional<SurfaceSample3F> sample(final Point2F sample, final SurfaceIntersection3F surfaceIntersection) {
+		Objects.requireNonNull(sample, "sample == null");
+		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
+		
+		final Point3F center = this.center;
+		final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+		
+		final Vector3F direction = Vector3F.direction(surfaceIntersectionPoint, center);
+		final Vector3F surfaceNormal = surfaceIntersection.getSurfaceNormalS();
+		final Vector3F surfaceIntersectionPointError = surfaceIntersection.getSurfaceIntersectionPointError();
+		
+		final Point3F origin = Point3F.offset(surfaceIntersectionPoint, direction, surfaceNormal, surfaceIntersectionPointError);
+		
+		final float radius = this.radius;
+		final float radiusSquared = radius * radius;
+		
+		if(Point3F.distanceSquared(center, origin) <= radiusSquared) {
+			final Optional<SurfaceSample3F> optionalSurfaceSample = sample(sample);
+			
+			if(optionalSurfaceSample.isPresent()) {
+				final SurfaceSample3F surfaceSample = optionalSurfaceSample.get();
+				
+				final Point3F point = surfaceSample.getPoint();
+				
+				final Vector3F incoming = Vector3F.direction(surfaceIntersectionPoint, point);
+				
+				if(isZero(incoming.lengthSquared())) {
+					return SurfaceSample3F.EMPTY;
+				}
+				
+				final Vector3F incomingNormalized = Vector3F.normalize(incoming);
+				final Vector3F incomingNormalizedNegated = Vector3F.negate(incomingNormalized);
+				
+				final float probabilityDensityFunctionValue = Point3F.distanceSquared(point, surfaceIntersectionPoint) / abs(Vector3F.dotProduct(surfaceSample.getSurfaceNormal(), incomingNormalizedNegated));
+				
+				if(isInfinite(probabilityDensityFunctionValue)) {
+					return SurfaceSample3F.EMPTY;
+				}
+				
+				return Optional.of(new SurfaceSample3F(point, surfaceSample.getPointError(), surfaceSample.getSurfaceNormal(), probabilityDensityFunctionValue));
+			}
+			
+			return SurfaceSample3F.EMPTY;
+		}
+		
+		final float distance = Point3F.distance(center, surfaceIntersectionPoint);
+		final float distanceReciprocal = 1.0F / distance;
+		
+		final Vector3F directionToCenter = Vector3F.multiply(Vector3F.direction(surfaceIntersectionPoint, center), distanceReciprocal);
+		
+		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(directionToCenter);
+		
+		final float sinThetaMax = radius * distanceReciprocal;
+		final float sinThetaMaxSquared = sinThetaMax * sinThetaMax;
+		final float sinThetaMaxReciprocal = 1.0F / sinThetaMax;
+		final float cosThetaMax = sqrt(max(0.0F, 1.0F - sinThetaMaxSquared));
+		final float cosTheta = sinThetaMaxSquared < 0.00068523F ? sqrt(1.0F - sinThetaMaxSquared * sample.getU()) : (cosThetaMax - 1.0F) * sample.getU() + 1.0F;
+		final float sinThetaSquared = sinThetaMaxSquared < 0.00068523F ? sinThetaMaxSquared * sample.getU() : 1.0F - cosTheta * cosTheta;
+		final float cosAlpha = sinThetaSquared * sinThetaMaxReciprocal + cosTheta * sqrt(max(0.0F, 1.0F - sinThetaSquared * sinThetaMaxReciprocal * sinThetaMaxReciprocal));
+		final float sinAlpha = sqrt(max(0.0F, 1.0F - cosAlpha * cosAlpha));
+		final float phi = sample.getV() * 2.0F * PI;
+		
+		final Vector3F sphericalDirectionLocal = Vector3F.directionSpherical(sinAlpha, cosAlpha, phi);
+		final Vector3F sphericalDirection = Vector3F.transform(sphericalDirectionLocal, OrthonormalBasis33F.flip(orthonormalBasis));
+		
+		final Point3F samplePoint = Point3F.add(center, sphericalDirection, radius);
+		
+		final Vector3F samplePointError = Vector3F.multiply(Vector3F.absolute(new Vector3F(samplePoint)), gamma(5));
+		final Vector3F sampleSurfaceNormal = Vector3F.normalize(sphericalDirection);
+		
+		final float probabilityDensityFunctionValue = 1.0F / (2.0F * PI * (1.0F - cosThetaMax));
+		
+		return Optional.of(new SurfaceSample3F(samplePoint, samplePointError, sampleSurfaceNormal, probabilityDensityFunctionValue));
+	}
+	
 	/**
 	 * Samples this {@code Sphere3F} instance.
 	 * <p>
@@ -177,13 +276,11 @@ public final class Sphere3F implements Shape3F {
 			final Point3F point = Point3F.add(center, surfaceNormal, radius);
 			
 			final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
-//			final Vector3F directionToSurface = Vector3F.direction(referencePoint, point);
 			final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
 			
-//			final float probabilityDensityFunctionValue = (1.0F / getSurfaceArea()) * (directionToSurface.lengthSquared() / abs(Vector3F.dotProduct(Vector3F.negate(directionToSurfaceNormalized), surfaceNormal)));
 			final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (3.0F / getSurfaceArea()) / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
 			
-			return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
+			return Optional.of(new SurfaceSample3F(point, new Vector3F(), surfaceNormal, probabilityDensityFunctionValue));
 		}
 		
 		final float sinThetaMaxSquared = radiusSquared / lengthSquared;
@@ -208,9 +305,9 @@ public final class Sphere3F implements Shape3F {
 		
 		final Vector3F surfaceNormal = Vector3F.directionNormalized(center, point);
 		
-		final float probabilityDensityFunctionValue = SampleGeneratorF.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
+		final float probabilityDensityFunctionValue = cosThetaMax >= 1.0F ? 0.0F : SampleGeneratorF.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
 		
-		return Optional.of(new SurfaceSample3F(point, surfaceNormal, probabilityDensityFunctionValue));
+		return Optional.of(new SurfaceSample3F(point, new Vector3F(), surfaceNormal, probabilityDensityFunctionValue));
 	}
 	
 	/**

@@ -20,6 +20,7 @@ package org.dayflower.geometry;
 
 import static org.dayflower.utility.Floats.isNaN;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -93,6 +94,21 @@ public interface Shape3F extends Node {
 	int getID();
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	default Optional<SurfaceSample3F> sample(final Point2F sample) {
+		Objects.requireNonNull(sample, "sample == null");
+		
+		return SurfaceSample3F.EMPTY;
+	}
+	
+//	TODO: Add Javadocs!
+	default Optional<SurfaceSample3F> sample(final Point2F sample, final SurfaceIntersection3F surfaceIntersection) {
+		Objects.requireNonNull(sample, "sample == null");
+		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
+		
+		return SurfaceSample3F.EMPTY;
+	}
 	
 	/**
 	 * Samples this {@code Shape3F} instance.

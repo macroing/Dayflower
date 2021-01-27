@@ -36,6 +36,22 @@ public class PixelImageFBlendExample {
 }
 ```
 
+#### PixelImageF Construction Example
+The following example demonstrates a few ways to create `PixelImageF` instances.
+```java
+import org.dayflower.color.Color4F;
+import org.dayflower.filter.MitchellFilter2F;
+import org.dayflower.image.PixelImageF;
+
+public class PixelImageFConstructionExample {
+    public static void main(String[] args) {
+        PixelImageF pixelImageF0 = new PixelImageF(800, 800, Color4F.WHITE, new MitchellFilter2F());
+        PixelImageF pixelImageF1 = new PixelImageF(pixelImageF0);
+        PixelImageF pixelImageF2 = new PixelImageF(800, 800, Color4F.arrayRead(pixelImageF1.toIntArray()));
+    }
+}
+```
+
 #### PixelImageF Draw Example
 The following example creates an empty image, draws a line, a rectangle and a triangle and saves the result to your hard drive.
 ```java

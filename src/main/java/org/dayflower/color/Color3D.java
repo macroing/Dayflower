@@ -2301,26 +2301,26 @@ public final class Color3D {
 	}
 	
 	/**
-	 * Returns a {@code Color3D[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color3D} instances read from {@code array}.
+	 * Returns a {@code Color3D[]} with a length of {@code array.length / ArrayComponentOrder.RGB.getComponentCount()} and contains {@code Color3D} instances read from {@code array}.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code array.length % ArrayComponentOrder.RGB.getComponentCount()} is not {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Color3D.arrayRead(array, ArrayComponentOrder.BGRA);
+	 * Color3D.arrayRead(array, ArrayComponentOrder.RGB);
 	 * }
 	 * </pre>
 	 * 
 	 * @param array the array to read from
-	 * @return a {@code Color3D[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color3D} instances read from {@code array}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}
+	 * @return a {@code Color3D[]} with a length of {@code array.length / ArrayComponentOrder.RGB.getComponentCount()} and contains {@code Color3D} instances read from {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % ArrayComponentOrder.RGB.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public static Color3D[] arrayRead(final byte[] array) {
-		return arrayRead(array, ArrayComponentOrder.BGRA);
+		return arrayRead(array, ArrayComponentOrder.RGB);
 	}
 	
 	/**
@@ -2328,17 +2328,19 @@ public final class Color3D {
 	 * <p>
 	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param array the array to read from
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
 	 * @return a {@code Color3D[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color3D} instances read from {@code array}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
 	 */
 	public static Color3D[] arrayRead(final byte[] array, final ArrayComponentOrder arrayComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		ParameterArguments.requireExact(array.length % arrayComponentOrder.getComponentCount(), 0, "array.length % arrayComponentOrder.getComponentCount()");
 		
 		final Color3D[] colors = new Color3D[array.length / arrayComponentOrder.getComponentCount()];
 		
@@ -2354,26 +2356,26 @@ public final class Color3D {
 	}
 	
 	/**
-	 * Returns a {@code Color3D[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color3D} instances read from {@code array}.
+	 * Returns a {@code Color3D[]} with a length of {@code array.length / ArrayComponentOrder.RGB.getComponentCount()} and contains {@code Color3D} instances read from {@code array}.
 	 * <p>
 	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code array.length % ArrayComponentOrder.RGB.getComponentCount()} is not {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Color3D.arrayRead(array, ArrayComponentOrder.BGRA);
+	 * Color3D.arrayRead(array, ArrayComponentOrder.RGB);
 	 * }
 	 * </pre>
 	 * 
 	 * @param array the array to read from
-	 * @return a {@code Color3D[]} with a length of {@code array.length / ArrayComponentOrder.BGRA.getComponentCount()} and contains {@code Color3D} instances read from {@code array}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % ArrayComponentOrder.BGRA.getComponentCount()} is not {@code 0}
+	 * @return a {@code Color3D[]} with a length of {@code array.length / ArrayComponentOrder.RGB.getComponentCount()} and contains {@code Color3D} instances read from {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % ArrayComponentOrder.RGB.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
 	 */
 	public static Color3D[] arrayRead(final int[] array) {
-		return arrayRead(array, ArrayComponentOrder.BGRA);
+		return arrayRead(array, ArrayComponentOrder.RGB);
 	}
 	
 	/**
@@ -2381,17 +2383,19 @@ public final class Color3D {
 	 * <p>
 	 * If either {@code array} or {@code arrayComponentOrder} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
-	 * If {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code ArrayIndexOutOfBoundsException} will be thrown.
+	 * If {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @param array the array to read from
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder} instance
 	 * @return a {@code Color3D[]} with a length of {@code array.length / arrayComponentOrder.getComponentCount()} and contains {@code Color3D} instances read from {@code array}
-	 * @throws ArrayIndexOutOfBoundsException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code array.length % arrayComponentOrder.getComponentCount()} is not {@code 0}
 	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code arrayComponentOrder} are {@code null}
 	 */
 	public static Color3D[] arrayRead(final int[] array, final ArrayComponentOrder arrayComponentOrder) {
 		Objects.requireNonNull(array, "array == null");
 		Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null");
+		
+		ParameterArguments.requireExact(array.length % arrayComponentOrder.getComponentCount(), 0, "array.length % arrayComponentOrder.getComponentCount()");
 		
 		final Color3D[] colors = new Color3D[array.length / arrayComponentOrder.getComponentCount()];
 		

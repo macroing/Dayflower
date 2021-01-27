@@ -22,13 +22,13 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.dayflower.color.ArrayComponentOrder;
-import org.dayflower.color.Color4F;
+import org.dayflower.color.Color4D;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.utility.Bytes;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code ByteImageF} is an {@link ImageF} implementation that stores individual pixels as four {@code byte} values in a {@code byte[]}.
+ * A {@code ByteImageD} is an {@link ImageD} implementation that stores individual pixels as four {@code byte} values in a {@code byte[]}.
  * <p>
  * The {@code byte} values for a single pixel are ordered as {@link ArrayComponentOrder#RGBA}.
  * <p>
@@ -37,41 +37,41 @@ import org.dayflower.utility.ParameterArguments;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ByteImageF extends ImageF {
+public final class ByteImageD extends ImageD {
 	private final byte[] data;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code ByteImageF} instance.
+	 * Constructs a new {@code ByteImageD} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ByteImageF(800, 800);
+	 * new ByteImageD(800, 800);
 	 * }
 	 * </pre>
 	 */
-	public ByteImageF() {
+	public ByteImageD() {
 		this(800, 800);
 	}
 	
 	/**
-	 * Constructs a new {@code ByteImageF} instance from {@code byteImage}.
+	 * Constructs a new {@code ByteImageD} instance from {@code byteImage}.
 	 * <p>
 	 * If {@code byteImage} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param byteImage a {@code ByteImageF} instance
+	 * @param byteImage a {@code ByteImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code byteImage} is {@code null}
 	 */
-	public ByteImageF(final ByteImageF byteImage) {
+	public ByteImageD(final ByteImageD byteImage) {
 		super(byteImage.getResolutionX(), byteImage.getResolutionY());
 		
 		this.data = byteImage.data.clone();
 	}
 	
 	/**
-	 * Constructs a new {@code ByteImageF} instance.
+	 * Constructs a new {@code ByteImageD} instance.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
@@ -79,14 +79,14 @@ public final class ByteImageF extends ImageF {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
-	public ByteImageF(final int resolutionX, final int resolutionY) {
+	public ByteImageD(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 		
 		this.data = Bytes.array(resolutionX * resolutionY * 4, (byte)(0), (byte)(0), (byte)(0), (byte)(255));
 	}
 	
 	/**
-	 * Constructs a new {@code ByteImageF} instance for {@code data}.
+	 * Constructs a new {@code ByteImageD} instance for {@code data}.
 	 * <p>
 	 * If {@code data} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -95,7 +95,7 @@ public final class ByteImageF extends ImageF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new ByteImageF(resolutionX, resolutionY, data, false);
+	 * new ByteImageD(resolutionX, resolutionY, data, false);
 	 * }
 	 * </pre>
 	 * 
@@ -105,28 +105,28 @@ public final class ByteImageF extends ImageF {
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0} or {@code data.length != resolutionX * resolutionY * 4}
 	 * @throws NullPointerException thrown if, and only if, {@code data} is {@code null}
 	 */
-	public ByteImageF(final int resolutionX, final int resolutionY, final byte[] data) {
+	public ByteImageD(final int resolutionX, final int resolutionY, final byte[] data) {
 		this(resolutionX, resolutionY, data, false);
 	}
 	
 	/**
-	 * Constructs a new {@code ByteImageF} instance for {@code data}.
+	 * Constructs a new {@code ByteImageD} instance for {@code data}.
 	 * <p>
 	 * If {@code data} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0} or {@code data.length != resolutionX * resolutionY * 4}, an {@code IllegalArgumentException} will be thrown.
 	 * <p>
-	 * This constructor will either copy or wrap {@code data}, depending on the value of {@code isWrapping}. If {@code isWrapping} is {@code true}, {@code data} will be wrapped, which means it will be associated with this {@code ByteImageF} instance.
-	 * If {@code isWrapping} is {@code false}, a copy of {@code data} will be associated with this {@code ByteImageF} instance.
+	 * This constructor will either copy or wrap {@code data}, depending on the value of {@code isWrapping}. If {@code isWrapping} is {@code true}, {@code data} will be wrapped, which means it will be associated with this {@code ByteImageD} instance.
+	 * If {@code isWrapping} is {@code false}, a copy of {@code data} will be associated with this {@code ByteImageD} instance.
 	 * 
 	 * @param resolutionX the resolution of the X-axis
 	 * @param resolutionY the resolution of the Y-axis
 	 * @param data the {@code byte[]} to copy or wrap
-	 * @param isWrapping {@code true} if, and only if, this {@code ByteImageF} instance should wrap {@code data}, {@code false} otherwise
+	 * @param isWrapping {@code true} if, and only if, this {@code ByteImageD} instance should wrap {@code data}, {@code false} otherwise
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0} or {@code data.length != resolutionX * resolutionY * 4}
 	 * @throws NullPointerException thrown if, and only if, {@code data} is {@code null}
 	 */
-	public ByteImageF(final int resolutionX, final int resolutionY, final byte[] data, final boolean isWrapping) {
+	public ByteImageD(final int resolutionX, final int resolutionY, final byte[] data, final boolean isWrapping) {
 		super(resolutionX, resolutionY);
 		
 		this.data = ParameterArguments.requireExactArrayLength(isWrapping ? Objects.requireNonNull(data, "data == null") : Objects.requireNonNull(data, "data == null").clone(), getResolution() * 4, "data");
@@ -135,17 +135,17 @@ public final class ByteImageF extends ImageF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a copy of this {@code ByteImageF} instance.
+	 * Returns a copy of this {@code ByteImageD} instance.
 	 * 
-	 * @return a copy of this {@code ByteImageF} instance
+	 * @return a copy of this {@code ByteImageD} instance
 	 */
 	@Override
-	public ByteImageF copy() {
-		return new ByteImageF(this);
+	public ByteImageD copy() {
+		return new ByteImageD(this);
 	}
 	
 	/**
-	 * Returns the {@link Color4F} of the pixel represented by {@code index}.
+	 * Returns the {@link Color4D} of the pixel represented by {@code index}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -153,11 +153,11 @@ public final class ByteImageF extends ImageF {
 	 * 
 	 * @param index the index of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color4F} of the pixel represented by {@code index}
+	 * @return the {@code Color4D} of the pixel represented by {@code index}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
 	@Override
-	public Color4F getColorRGBA(final int index, final PixelOperation pixelOperation) {
+	public Color4D getColorRGBA(final int index, final PixelOperation pixelOperation) {
 		final int resolution = getResolution();
 		
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
@@ -168,14 +168,14 @@ public final class ByteImageF extends ImageF {
 			final int b = this.data[indexTransformed * 4 + 2] & 0xFF;
 			final int a = this.data[indexTransformed * 4 + 3] & 0xFF;
 			
-			return new Color4F(r, g, b, a);
+			return new Color4D(r, g, b, a);
 		}
 		
-		return Color4F.BLACK;
+		return Color4D.BLACK;
 	}
 	
 	/**
-	 * Returns the {@link Color4F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color4D} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -184,11 +184,11 @@ public final class ByteImageF extends ImageF {
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color4F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
 	@Override
-	public Color4F getColorRGBA(final int x, final int y, final PixelOperation pixelOperation) {
+	public Color4D getColorRGBA(final int x, final int y, final PixelOperation pixelOperation) {
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
 		
@@ -203,43 +203,43 @@ public final class ByteImageF extends ImageF {
 			final int b = this.data[index * 4 + 2] & 0xFF;
 			final int a = this.data[index * 4 + 3] & 0xFF;
 			
-			return new Color4F(r, g, b, a);
+			return new Color4D(r, g, b, a);
 		}
 		
-		return Color4F.BLACK;
+		return Color4D.BLACK;
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code ByteImageF} instance.
+	 * Returns a {@code String} representation of this {@code ByteImageD} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code ByteImageF} instance
+	 * @return a {@code String} representation of this {@code ByteImageD} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ByteImageF(%d, %d)", Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()));
+		return String.format("new ByteImageD(%d, %d)", Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code ByteImageF} instance for equality.
+	 * Compares {@code object} to this {@code ByteImageD} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ByteImageF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ByteImageD}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code ByteImageF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ByteImageF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code ByteImageD} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ByteImageD}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof ByteImageF)) {
+		} else if(!(object instanceof ByteImageD)) {
 			return false;
-		} else if(getResolution() != ByteImageF.class.cast(object).getResolution()) {
+		} else if(getResolution() != ByteImageD.class.cast(object).getResolution()) {
 			return false;
-		} else if(getResolutionX() != ByteImageF.class.cast(object).getResolutionX()) {
+		} else if(getResolutionX() != ByteImageD.class.cast(object).getResolutionX()) {
 			return false;
-		} else if(getResolutionY() != ByteImageF.class.cast(object).getResolutionY()) {
+		} else if(getResolutionY() != ByteImageD.class.cast(object).getResolutionY()) {
 			return false;
-		} else if(!Arrays.equals(this.data, ByteImageF.class.cast(object).data)) {
+		} else if(!Arrays.equals(this.data, ByteImageD.class.cast(object).data)) {
 			return false;
 		} else {
 			return true;
@@ -273,12 +273,12 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	/**
-	 * Returns a {@code byte[]} representation of this {@code ByteImageF} instance.
+	 * Returns a {@code byte[]} representation of this {@code ByteImageD} instance.
 	 * <p>
 	 * If {@code arrayComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param arrayComponentOrder an {@link ArrayComponentOrder}
-	 * @return a {@code byte[]} representation of this {@code ByteImageF} instance
+	 * @return a {@code byte[]} representation of this {@code ByteImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code arrayComponentOrder} is {@code null}
 	 */
 	@Override
@@ -287,9 +287,9 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code ByteImageF} instance.
+	 * Returns a hash code for this {@code ByteImageD} instance.
 	 * 
-	 * @return a hash code for this {@code ByteImageF} instance
+	 * @return a hash code for this {@code ByteImageD} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -297,12 +297,12 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	/**
-	 * Returns an {@code int[]} representation of this {@code ByteImageF} instance in a packed form.
+	 * Returns an {@code int[]} representation of this {@code ByteImageD} instance in a packed form.
 	 * <p>
 	 * If {@code packedIntComponentOrder} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param packedIntComponentOrder a {@link PackedIntComponentOrder}
-	 * @return an {@code int[]} representation of this {@code ByteImageF} instance in a packed form
+	 * @return an {@code int[]} representation of this {@code ByteImageD} instance in a packed form
 	 * @throws NullPointerException thrown if, and only if, {@code packedIntComponentOrder} is {@code null}
 	 */
 	@Override
@@ -311,19 +311,19 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	/**
-	 * Sets the {@link Color4F} of the pixel represented by {@code index} to {@code colorRGBA}.
+	 * Sets the {@link Color4D} of the pixel represented by {@code index} to {@code colorRGBA}.
 	 * <p>
 	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param colorRGBA the {@code Color4F} to set
+	 * @param colorRGBA the {@code Color4D} to set
 	 * @param index the index of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
 	@Override
-	public void setColorRGBA(final Color4F colorRGBA, final int index, final PixelOperation pixelOperation) {
+	public void setColorRGBA(final Color4D colorRGBA, final int index, final PixelOperation pixelOperation) {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		
@@ -340,20 +340,20 @@ public final class ByteImageF extends ImageF {
 	}
 	
 	/**
-	 * Sets the {@link Color4F} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
+	 * Sets the {@link Color4D} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
 	 * <p>
 	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param colorRGBA the {@code Color4F} to set
+	 * @param colorRGBA the {@code Color4D} to set
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
 	@Override
-	public void setColorRGBA(final Color4F colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
+	public void setColorRGBA(final Color4D colorRGBA, final int x, final int y, final PixelOperation pixelOperation) {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		Objects.requireNonNull(pixelOperation, "pixelOperation == null");
 		

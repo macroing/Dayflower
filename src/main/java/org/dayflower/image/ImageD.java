@@ -18,8 +18,8 @@
  */
 package org.dayflower.image;
 
-import static org.dayflower.utility.Floats.ceil;
-import static org.dayflower.utility.Floats.floor;
+import static org.dayflower.utility.Doubles.ceil;
+import static org.dayflower.utility.Doubles.floor;
 import static org.dayflower.utility.Ints.toInt;
 
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-import org.dayflower.color.Color3F;
-import org.dayflower.color.Color4F;
+import org.dayflower.color.Color3D;
+import org.dayflower.color.Color4D;
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.rasterizer.Rasterizer2I;
 import org.dayflower.geometry.shape.Circle2I;
@@ -38,14 +38,14 @@ import org.dayflower.geometry.shape.Triangle2I;
 import org.dayflower.utility.TriFunction;
 
 /**
- * An {@code ImageF} is an {@link Image} implementation that operates using the data type {@code float}.
+ * An {@code ImageD} is an {@link Image} implementation that operates using the data type {@code double}.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class ImageF extends Image {
+public abstract class ImageD extends Image {
 	/**
-	 * Constructs a new {@code ImageF} instance.
+	 * Constructs a new {@code ImageD} instance.
 	 * <p>
 	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
@@ -53,16 +53,16 @@ public abstract class ImageF extends Image {
 	 * @param resolutionY the resolution of the Y-axis
 	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
 	 */
-	protected ImageF(final int resolutionX, final int resolutionY) {
+	protected ImageD(final int resolutionX, final int resolutionY) {
 		super(resolutionX, resolutionY);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color3D} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
-	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * This method performs bilinear interpolation on the four closest {@code Color3D} instances.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -73,16 +73,16 @@ public abstract class ImageF extends Image {
 	 * 
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color3D} of the pixel represented by {@code x} and {@code y}
 	 */
-	public final Color3F getColorRGB(final float x, final float y) {
+	public final Color3D getColorRGB(final double x, final double y) {
 		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color3D} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
-	 * This method performs bilinear interpolation on the four closest {@code Color3F} instances.
+	 * This method performs bilinear interpolation on the four closest {@code Color3D} instances.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -91,10 +91,10 @@ public abstract class ImageF extends Image {
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color3D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
-	public final Color3F getColorRGB(final float x, final float y, final PixelOperation pixelOperation) {
+	public final Color3D getColorRGB(final double x, final double y, final PixelOperation pixelOperation) {
 		final int minimumX = toInt(floor(x));
 		final int maximumX = toInt(ceil(x));
 		
@@ -105,21 +105,21 @@ public abstract class ImageF extends Image {
 			return getColorRGB(minimumX, minimumY, pixelOperation);
 		}
 		
-		final Color3F color00 = getColorRGB(minimumX, minimumY, pixelOperation);
-		final Color3F color01 = getColorRGB(maximumX, minimumY, pixelOperation);
-		final Color3F color10 = getColorRGB(minimumX, maximumY, pixelOperation);
-		final Color3F color11 = getColorRGB(maximumX, maximumY, pixelOperation);
+		final Color3D color00 = getColorRGB(minimumX, minimumY, pixelOperation);
+		final Color3D color01 = getColorRGB(maximumX, minimumY, pixelOperation);
+		final Color3D color10 = getColorRGB(minimumX, maximumY, pixelOperation);
+		final Color3D color11 = getColorRGB(maximumX, maximumY, pixelOperation);
 		
-		final float xFactor = x - minimumX;
-		final float yFactor = y - minimumY;
+		final double xFactor = x - minimumX;
+		final double yFactor = y - minimumY;
 		
-		final Color3F color = Color3F.blend(Color3F.blend(color00, color01, xFactor), Color3F.blend(color10, color11, xFactor), yFactor);
+		final Color3D color = Color3D.blend(Color3D.blend(color00, color01, xFactor), Color3D.blend(color10, color11, xFactor), yFactor);
 		
 		return color;
 	}
 	
 	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
+	 * Returns the {@link Color3D} of the pixel represented by {@code index}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -129,14 +129,14 @@ public abstract class ImageF extends Image {
 	 * </pre>
 	 * 
 	 * @param index the index of the pixel
-	 * @return the {@code Color3F} of the pixel represented by {@code index}
+	 * @return the {@code Color3D} of the pixel represented by {@code index}
 	 */
-	public final Color3F getColorRGB(final int index) {
+	public final Color3D getColorRGB(final int index) {
 		return getColorRGB(index, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code index}.
+	 * Returns the {@link Color3D} of the pixel represented by {@code index}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -144,15 +144,15 @@ public abstract class ImageF extends Image {
 	 * 
 	 * @param index the index of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color3F} of the pixel represented by {@code index}
+	 * @return the {@code Color3D} of the pixel represented by {@code index}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
-	public final Color3F getColorRGB(final int index, final PixelOperation pixelOperation) {
-		return new Color3F(getColorRGBA(index, pixelOperation));
+	public final Color3D getColorRGB(final int index, final PixelOperation pixelOperation) {
+		return new Color3D(getColorRGBA(index, pixelOperation));
 	}
 	
 	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color3D} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -163,14 +163,14 @@ public abstract class ImageF extends Image {
 	 * 
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color3D} of the pixel represented by {@code x} and {@code y}
 	 */
-	public final Color3F getColorRGB(final int x, final int y) {
+	public final Color3D getColorRGB(final int x, final int y) {
 		return getColorRGB(x, y, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Returns the {@link Color3F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color3D} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -179,17 +179,17 @@ public abstract class ImageF extends Image {
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color3F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color3D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
-	public final Color3F getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
-		return new Color3F(getColorRGBA(x, y, pixelOperation));
+	public final Color3D getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
+		return new Color3D(getColorRGBA(x, y, pixelOperation));
 	}
 	
 	/**
-	 * Returns the {@link Color4F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color4D} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
-	 * This method performs bilinear interpolation on the four closest {@code Color4F} instances.
+	 * This method performs bilinear interpolation on the four closest {@code Color4D} instances.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -200,16 +200,16 @@ public abstract class ImageF extends Image {
 	 * 
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
-	 * @return the {@code Color4F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 */
-	public final Color4F getColorRGBA(final float x, final float y) {
+	public final Color4D getColorRGBA(final double x, final double y) {
 		return getColorRGBA(x, y, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Returns the {@link Color4F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color4D} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
-	 * This method performs bilinear interpolation on the four closest {@code Color4F} instances.
+	 * This method performs bilinear interpolation on the four closest {@code Color4D} instances.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -218,10 +218,10 @@ public abstract class ImageF extends Image {
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color4F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
-	public final Color4F getColorRGBA(final float x, final float y, final PixelOperation pixelOperation) {
+	public final Color4D getColorRGBA(final double x, final double y, final PixelOperation pixelOperation) {
 		final int minimumX = toInt(floor(x));
 		final int maximumX = toInt(ceil(x));
 		
@@ -232,21 +232,21 @@ public abstract class ImageF extends Image {
 			return getColorRGBA(minimumX, minimumY, pixelOperation);
 		}
 		
-		final Color4F color00 = getColorRGBA(minimumX, minimumY, pixelOperation);
-		final Color4F color01 = getColorRGBA(maximumX, minimumY, pixelOperation);
-		final Color4F color10 = getColorRGBA(minimumX, maximumY, pixelOperation);
-		final Color4F color11 = getColorRGBA(maximumX, maximumY, pixelOperation);
+		final Color4D color00 = getColorRGBA(minimumX, minimumY, pixelOperation);
+		final Color4D color01 = getColorRGBA(maximumX, minimumY, pixelOperation);
+		final Color4D color10 = getColorRGBA(minimumX, maximumY, pixelOperation);
+		final Color4D color11 = getColorRGBA(maximumX, maximumY, pixelOperation);
 		
-		final float xFactor = x - minimumX;
-		final float yFactor = y - minimumY;
+		final double xFactor = x - minimumX;
+		final double yFactor = y - minimumY;
 		
-		final Color4F color = Color4F.blend(Color4F.blend(color00, color01, xFactor), Color4F.blend(color10, color11, xFactor), yFactor);
+		final Color4D color = Color4D.blend(Color4D.blend(color00, color01, xFactor), Color4D.blend(color10, color11, xFactor), yFactor);
 		
 		return color;
 	}
 	
 	/**
-	 * Returns the {@link Color4F} of the pixel represented by {@code index}.
+	 * Returns the {@link Color4D} of the pixel represented by {@code index}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -256,14 +256,14 @@ public abstract class ImageF extends Image {
 	 * </pre>
 	 * 
 	 * @param index the index of the pixel
-	 * @return the {@code Color4F} of the pixel represented by {@code index}
+	 * @return the {@code Color4D} of the pixel represented by {@code index}
 	 */
-	public final Color4F getColorRGBA(final int index) {
+	public final Color4D getColorRGBA(final int index) {
 		return getColorRGBA(index, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Returns the {@link Color4F} of the pixel represented by {@code index}.
+	 * Returns the {@link Color4D} of the pixel represented by {@code index}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -271,13 +271,13 @@ public abstract class ImageF extends Image {
 	 * 
 	 * @param index the index of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color4F} of the pixel represented by {@code index}
+	 * @return the {@code Color4D} of the pixel represented by {@code index}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
-	public abstract Color4F getColorRGBA(final int index, final PixelOperation pixelOperation);
+	public abstract Color4D getColorRGBA(final int index, final PixelOperation pixelOperation);
 	
 	/**
-	 * Returns the {@link Color4F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color4D} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
@@ -288,14 +288,14 @@ public abstract class ImageF extends Image {
 	 * 
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
-	 * @return the {@code Color4F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 */
-	public final Color4F getColorRGBA(final int x, final int y) {
+	public final Color4D getColorRGBA(final int x, final int y) {
 		return getColorRGBA(x, y, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Returns the {@link Color4F} of the pixel represented by {@code x} and {@code y}.
+	 * Returns the {@link Color4D} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -304,31 +304,31 @@ public abstract class ImageF extends Image {
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
-	 * @return the {@code Color4F} of the pixel represented by {@code x} and {@code y}
+	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
 	 * @throws NullPointerException thrown if, and only if, {@code pixelOperation} is {@code null}
 	 */
-	public abstract Color4F getColorRGBA(final int x, final int y, final PixelOperation pixelOperation);
+	public abstract Color4D getColorRGBA(final int x, final int y, final PixelOperation pixelOperation);
 	
 	/**
-	 * Returns a copy of this {@code ImageF} instance.
+	 * Returns a copy of this {@code ImageD} instance.
 	 * 
-	 * @return a copy of this {@code ImageF} instance
+	 * @return a copy of this {@code ImageD} instance
 	 */
 	@Override
-	public abstract ImageF copy();
+	public abstract ImageD copy();
 	
 	/**
-	 * Finds the bounds for {@code image} in this {@code ImageF} instance.
+	 * Finds the bounds for {@code image} in this {@code ImageD} instance.
 	 * <p>
-	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code ImageF} instance.
+	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code ImageD} instance.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param image an {@code ImageF} instance
-	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code ImageF} instance
+	 * @param image an {@code ImageD} instance
+	 * @return a {@code List} with all {@code Rectangle2I} bounds found for {@code image} in this {@code ImageD} instance
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
-	public final List<Rectangle2I> findBoundsFor(final ImageF image) {
+	public final List<Rectangle2I> findBoundsFor(final ImageD image) {
 		Objects.requireNonNull(image, "image == null");
 		
 		final List<Rectangle2I> rectangles = new ArrayList<>();
@@ -358,47 +358,47 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Clears this {@code ImageF} instance with a {@link Color4F} of {@code Color4F.BLACK}.
+	 * Clears this {@code ImageD} instance with a {@link Color4D} of {@code Color4D.BLACK}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.clear(Color4F.BLACK);
+	 * image.clear(Color4D.BLACK);
 	 * }
 	 * </pre>
 	 */
 	public final void clear() {
-		clear(Color4F.BLACK);
+		clear(Color4D.BLACK);
 	}
 	
 	/**
-	 * Clears this {@code ImageF} instance with a {@link Color3F} of {@code colorRGB}.
+	 * Clears this {@code ImageD} instance with a {@link Color3D} of {@code colorRGB}.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.clear(new Color4F(colorRGB));
+	 * image.clear(new Color4D(colorRGB));
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorRGB the {@code Color3F} to clear with
+	 * @param colorRGB the {@code Color3D} to clear with
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
-	public final void clear(final Color3F colorRGB) {
-		clear(new Color4F(colorRGB));
+	public final void clear(final Color3D colorRGB) {
+		clear(new Color4D(colorRGB));
 	}
 	
 	/**
-	 * Clears this {@code ImageF} instance with a {@link Color4F} of {@code colorRGBA}.
+	 * Clears this {@code ImageD} instance with a {@link Color4D} of {@code colorRGBA}.
 	 * <p>
 	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param colorRGBA the {@code Color4F} to clear with
+	 * @param colorRGBA the {@code Color4D} to clear with
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
-	public final void clear(final Color4F colorRGBA) {
+	public final void clear(final Color4D colorRGBA) {
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
 		final int resolution = getResolution();
@@ -409,14 +409,14 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Draws {@code circle} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Draws {@code circle} to this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
 	 * <p>
 	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawCircle(circle, Color4F.BLACK);
+	 * image.drawCircle(circle, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -424,11 +424,11 @@ public abstract class ImageF extends Image {
 	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
 	 */
 	public final void drawCircle(final Circle2I circle) {
-		drawCircle(circle, Color4F.BLACK);
+		drawCircle(circle, Color4D.BLACK);
 	}
 	
 	/**
-	 * Draws {@code circle} to this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Draws {@code circle} to this {@code ImageD} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * If either {@code circle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -440,10 +440,10 @@ public abstract class ImageF extends Image {
 	 * </pre>
 	 * 
 	 * @param circle the {@link Circle2I} to draw
-	 * @param colorRGBA the {@link Color4F} to use as its color
+	 * @param colorRGBA the {@link Color4D} to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code colorRGBA} are {@code null}
 	 */
-	public final void drawCircle(final Circle2I circle, final Color4F colorRGBA) {
+	public final void drawCircle(final Circle2I circle, final Color4D colorRGBA) {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
@@ -451,15 +451,15 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Draws {@code circle} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Draws {@code circle} to this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * If either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param circle the {@link Circle2I} to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final void drawCircle(final Circle2I circle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+	public final void drawCircle(final Circle2I circle, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
@@ -475,8 +475,8 @@ public abstract class ImageF extends Image {
 					if(circleX >= 0 && circleX < resolutionX && circleY >= 0 && circleY < resolutionY) {
 						final Point2I point = new Point2I(circleX, circleY);
 						
-						final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
-						final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+						final Color4D oldColorRGBA = getColorRGBA(circleX, circleY);
+						final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 						
 						setColorRGBA(newColorRGBA, circleX, circleY);
 					}
@@ -486,14 +486,14 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Draws {@code line} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Draws {@code line} to this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
 	 * <p>
 	 * If {@code line} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawLine(line, Color4F.BLACK);
+	 * image.drawLine(line, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -501,11 +501,11 @@ public abstract class ImageF extends Image {
 	 * @throws NullPointerException thrown if, and only if, {@code line} is {@code null}
 	 */
 	public final void drawLine(final Line2I line) {
-		drawLine(line, Color4F.BLACK);
+		drawLine(line, Color4D.BLACK);
 	}
 	
 	/**
-	 * Draws {@code line} to this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Draws {@code line} to this {@code ImageD} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * If either {@code line} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -517,10 +517,10 @@ public abstract class ImageF extends Image {
 	 * </pre>
 	 * 
 	 * @param line the {@link Line2I} to draw
-	 * @param colorRGBA the {@link Color4F} to use as its color
+	 * @param colorRGBA the {@link Color4D} to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code line} or {@code colorRGBA} are {@code null}
 	 */
-	public final void drawLine(final Line2I line, final Color4F colorRGBA) {
+	public final void drawLine(final Line2I line, final Color4D colorRGBA) {
 		Objects.requireNonNull(line, "line == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
@@ -528,15 +528,15 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Draws {@code line} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Draws {@code line} to this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * If either {@code line} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param line the {@link Line2I} to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code line} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final void drawLine(final Line2I line, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+	public final void drawLine(final Line2I line, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(line, "line == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
@@ -552,8 +552,8 @@ public abstract class ImageF extends Image {
 			final int y = point.getY();
 			
 			if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
-				final Color4F oldColorRGBA = getColorRGBA(x, y);
-				final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+				final Color4D oldColorRGBA = getColorRGBA(x, y);
+				final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 				
 				setColorRGBA(newColorRGBA, point.getX(), point.getY());
 			}
@@ -561,14 +561,14 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Draws {@code rectangle} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Draws {@code rectangle} to this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
 	 * <p>
 	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawRectangle(rectangle, Color4F.BLACK);
+	 * image.drawRectangle(rectangle, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -576,11 +576,11 @@ public abstract class ImageF extends Image {
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 */
 	public final void drawRectangle(final Rectangle2I rectangle) {
-		drawRectangle(rectangle, Color4F.BLACK);
+		drawRectangle(rectangle, Color4D.BLACK);
 	}
 	
 	/**
-	 * Draws {@code rectangle} to this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Draws {@code rectangle} to this {@code ImageD} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * If either {@code rectangle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -592,10 +592,10 @@ public abstract class ImageF extends Image {
 	 * </pre>
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to draw
-	 * @param colorRGBA the {@link Color4F} to use as its color
+	 * @param colorRGBA the {@link Color4D} to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code colorRGBA} are {@code null}
 	 */
-	public final void drawRectangle(final Rectangle2I rectangle, final Color4F colorRGBA) {
+	public final void drawRectangle(final Rectangle2I rectangle, final Color4D colorRGBA) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
@@ -603,15 +603,15 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Draws {@code rectangle} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Draws {@code rectangle} to this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * If either {@code rectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final void drawRectangle(final Rectangle2I rectangle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+	public final void drawRectangle(final Rectangle2I rectangle, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
@@ -628,8 +628,8 @@ public abstract class ImageF extends Image {
 				if((x == minimumX || x == maximumX || y == minimumY || y == maximumY) && x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
 					final Point2I point = new Point2I(x, y);
 					
-					final Color4F oldColorRGBA = getColorRGBA(x, y);
-					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+					final Color4D oldColorRGBA = getColorRGBA(x, y);
+					final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 					
 					setColorRGBA(newColorRGBA, x, y);
 				}
@@ -638,14 +638,14 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Draws {@code triangle} to this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Draws {@code triangle} to this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
 	 * <p>
 	 * If {@code triangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.drawTriangle(triangle, Color4F.BLACK);
+	 * image.drawTriangle(triangle, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -653,11 +653,11 @@ public abstract class ImageF extends Image {
 	 * @throws NullPointerException thrown if, and only if, {@code triangle} is {@code null}
 	 */
 	public final void drawTriangle(final Triangle2I triangle) {
-		drawTriangle(triangle, Color4F.BLACK);
+		drawTriangle(triangle, Color4D.BLACK);
 	}
 	
 	/**
-	 * Draws {@code triangle} to this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Draws {@code triangle} to this {@code ImageD} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * If either {@code triangle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -669,10 +669,10 @@ public abstract class ImageF extends Image {
 	 * </pre>
 	 * 
 	 * @param triangle the {@link Triangle2I} to draw
-	 * @param colorRGBA the {@link Color4F} to use as its color
+	 * @param colorRGBA the {@link Color4D} to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code colorRGBA} are {@code null}
 	 */
-	public final void drawTriangle(final Triangle2I triangle, final Color4F colorRGBA) {
+	public final void drawTriangle(final Triangle2I triangle, final Color4D colorRGBA) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
@@ -680,15 +680,15 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Draws {@code triangle} to this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Draws {@code triangle} to this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * If either {@code triangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param triangle the {@link Triangle2I} to draw
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final void drawTriangle(final Triangle2I triangle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+	public final void drawTriangle(final Triangle2I triangle, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
@@ -698,14 +698,14 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Fills {@code circle} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Fills {@code circle} in this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
 	 * <p>
 	 * If {@code circle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillCircle(circle, Color4F.BLACK);
+	 * image.fillCircle(circle, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -713,11 +713,11 @@ public abstract class ImageF extends Image {
 	 * @throws NullPointerException thrown if, and only if, {@code circle} is {@code null}
 	 */
 	public final void fillCircle(final Circle2I circle) {
-		fillCircle(circle, Color4F.BLACK);
+		fillCircle(circle, Color4D.BLACK);
 	}
 	
 	/**
-	 * Fills {@code circle} in this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Fills {@code circle} in this {@code ImageD} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * If either {@code circle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -729,10 +729,10 @@ public abstract class ImageF extends Image {
 	 * </pre>
 	 * 
 	 * @param circle the {@link Circle2I} to fill
-	 * @param colorRGBA the {@link Color4F} to use as its color
+	 * @param colorRGBA the {@link Color4D} to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code colorRGBA} are {@code null}
 	 */
-	public final void fillCircle(final Circle2I circle, final Color4F colorRGBA) {
+	public final void fillCircle(final Circle2I circle, final Color4D colorRGBA) {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
@@ -740,15 +740,15 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Fills {@code circle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Fills {@code circle} in this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * If either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param circle the {@link Circle2I} to fill
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code circle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final void fillCircle(final Circle2I circle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+	public final void fillCircle(final Circle2I circle, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(circle, "circle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
@@ -764,8 +764,8 @@ public abstract class ImageF extends Image {
 					if(circleX >= 0 && circleX < resolutionX && circleY >= 0 && circleY < resolutionY) {
 						final Point2I point = new Point2I(circleX, circleY);
 						
-						final Color4F oldColorRGBA = getColorRGBA(circleX, circleY);
-						final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+						final Color4D oldColorRGBA = getColorRGBA(circleX, circleY);
+						final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 						
 						setColorRGBA(newColorRGBA, circleX, circleY);
 					}
@@ -775,7 +775,7 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Fills {@code sourceImage} in this {@code ImageF} instance.
+	 * Fills {@code sourceImage} in this {@code ImageD} instance.
 	 * <p>
 	 * If {@code sourceImage} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -786,15 +786,15 @@ public abstract class ImageF extends Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param sourceImage the {@code ImageF} to fill
+	 * @param sourceImage the {@code ImageD} to fill
 	 * @throws NullPointerException thrown if, and only if, {@code sourceImage} is {@code null}
 	 */
-	public final void fillImage(final ImageF sourceImage) {
+	public final void fillImage(final ImageD sourceImage) {
 		fillImage(sourceImage, sourceImage.getBounds());
 	}
 	
 	/**
-	 * Fills {@code sourceImage} in this {@code ImageF} instance.
+	 * Fills {@code sourceImage} in this {@code ImageD} instance.
 	 * <p>
 	 * If either {@code sourceImage} or {@code sourceBounds} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -805,16 +805,16 @@ public abstract class ImageF extends Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param sourceImage the {@code ImageF} to fill
+	 * @param sourceImage the {@code ImageD} to fill
 	 * @param sourceBounds a {@link Rectangle2I} that represents the bounds of the region in {@code sourceImage} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage} or {@code sourceBounds} are {@code null}
 	 */
-	public final void fillImage(final ImageF sourceImage, final Rectangle2I sourceBounds) {
+	public final void fillImage(final ImageD sourceImage, final Rectangle2I sourceBounds) {
 		fillImage(sourceImage, sourceBounds, getBounds());
 	}
 	
 	/**
-	 * Fills {@code sourceImage} in this {@code ImageF} instance.
+	 * Fills {@code sourceImage} in this {@code ImageD} instance.
 	 * <p>
 	 * If either {@code sourceImage}, {@code sourceBounds} or {@code targetBounds} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -825,33 +825,33 @@ public abstract class ImageF extends Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param sourceImage the {@code ImageF} to fill
+	 * @param sourceImage the {@code ImageD} to fill
 	 * @param sourceBounds a {@link Rectangle2I} that represents the bounds of the region in {@code sourceImage} to use
-	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code ImageF} instance to use
+	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code ImageD} instance to use
 	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage}, {@code sourceBounds} or {@code targetBounds} are {@code null}
 	 */
-	public final void fillImage(final ImageF sourceImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds) {
+	public final void fillImage(final ImageD sourceImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds) {
 		fillImage(sourceImage, sourceBounds, targetBounds, (sourceColorRGBA, targetColorRGBA, targetPoint) -> sourceColorRGBA);
 	}
 	
 	/**
-	 * Fills {@code sourceImage} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code triFunction} as its color.
+	 * Fills {@code sourceImage} in this {@code ImageD} instance with {@link Color4D} instances returned by {@code triFunction} as its color.
 	 * <p>
 	 * If either {@code sourceImage}, {@code sourceBounds}, {@code targetBounds} or {@code triFunction} are {@code null} or {@code triFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param sourceImage the {@code ImageF} to fill
+	 * @param sourceImage the {@code ImageD} to fill
 	 * @param sourceBounds a {@link Rectangle2I} that represents the bounds of the region in {@code sourceImage} to use
-	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code ImageF} instance to use
-	 * @param triFunction a {@code TriFunction} that returns {@code Color4F} instances to use as its color
+	 * @param targetBounds a {@code Rectangle2I} that represents the bounds of the region in this {@code ImageD} instance to use
+	 * @param triFunction a {@code TriFunction} that returns {@code Color4D} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code sourceImage}, {@code sourceBounds}, {@code targetBounds} or {@code triFunction} are {@code null} or {@code triFunction} returns {@code null}
 	 */
-	public final void fillImage(final ImageF sourceImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds, final TriFunction<Color4F, Color4F, Point2I, Color4F> triFunction) {
+	public final void fillImage(final ImageD sourceImage, final Rectangle2I sourceBounds, final Rectangle2I targetBounds, final TriFunction<Color4D, Color4D, Point2I, Color4D> triFunction) {
 		Objects.requireNonNull(sourceImage, "sourceImage == null");
 		Objects.requireNonNull(sourceBounds, "sourceBounds == null");
 		Objects.requireNonNull(targetBounds, "targetBounds == null");
 		Objects.requireNonNull(triFunction, "triFunction == null");
 		
-		final ImageF targetImage = this;
+		final ImageD targetImage = this;
 		
 		final int sourceMinimumX = sourceBounds.getA().getX();
 		final int sourceMinimumY = sourceBounds.getA().getY();
@@ -868,9 +868,9 @@ public abstract class ImageF extends Image {
 		for(int sourceY = sourceMinimumY, targetY = targetMinimumY; sourceY < sourceMaximumY && targetY < targetMaximumY; sourceY++, targetY++) {
 			for(int sourceX = sourceMinimumX, targetX = targetMinimumX; sourceX < sourceMaximumX && targetX < targetMaximumX; sourceX++, targetX++) {
 				if(targetX >= 0 && targetX < resolutionX && targetY >= 0 && targetY < resolutionY) {
-					final Color4F sourceColorRGBA = sourceImage.getColorRGBA(sourceX, sourceY);
-					final Color4F targetColorRGBA = targetImage.getColorRGBA(targetX, targetY);
-					final Color4F colorRGBA = Objects.requireNonNull(triFunction.apply(sourceColorRGBA, targetColorRGBA, new Point2I(targetX, targetY)));
+					final Color4D sourceColorRGBA = sourceImage.getColorRGBA(sourceX, sourceY);
+					final Color4D targetColorRGBA = targetImage.getColorRGBA(targetX, targetY);
+					final Color4D colorRGBA = Objects.requireNonNull(triFunction.apply(sourceColorRGBA, targetColorRGBA, new Point2I(targetX, targetY)));
 					
 					targetImage.setColorRGBA(colorRGBA, targetX, targetY);
 				}
@@ -879,14 +879,14 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Fills {@code rectangle} in this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
 	 * <p>
 	 * If {@code rectangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillRectangle(rectangle, Color4F.BLACK);
+	 * image.fillRectangle(rectangle, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -894,34 +894,34 @@ public abstract class ImageF extends Image {
 	 * @throws NullPointerException thrown if, and only if, {@code rectangle} is {@code null}
 	 */
 	public final void fillRectangle(final Rectangle2I rectangle) {
-		fillRectangle(rectangle, Color4F.BLACK);
+		fillRectangle(rectangle, Color4D.BLACK);
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code ImageF} instance with {@code colorRGB} as its color.
+	 * Fills {@code rectangle} in this {@code ImageD} instance with {@code colorRGB} as its color.
 	 * <p>
 	 * If either {@code rectangle} or {@code colorRGB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is essentially equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillRectangle(rectangle, new Color4F(colorRGB));
+	 * image.fillRectangle(rectangle, new Color4D(colorRGB));
 	 * }
 	 * </pre>
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to fill
-	 * @param colorRGB the {@link Color3F} to use as its color
+	 * @param colorRGB the {@link Color3D} to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code colorRGB} are {@code null}
 	 */
-	public final void fillRectangle(final Rectangle2I rectangle, final Color3F colorRGB) {
+	public final void fillRectangle(final Rectangle2I rectangle, final Color3D colorRGB) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(colorRGB, "colorRGB == null");
 		
-		fillRectangle(rectangle, new Color4F(colorRGB));
+		fillRectangle(rectangle, new Color4D(colorRGB));
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Fills {@code rectangle} in this {@code ImageD} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * If either {@code rectangle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -933,10 +933,10 @@ public abstract class ImageF extends Image {
 	 * </pre>
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to fill
-	 * @param colorRGBA the {@link Color4F} to use as its color
+	 * @param colorRGBA the {@link Color4D} to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code colorRGBA} are {@code null}
 	 */
-	public final void fillRectangle(final Rectangle2I rectangle, final Color4F colorRGBA) {
+	public final void fillRectangle(final Rectangle2I rectangle, final Color4D colorRGBA) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
@@ -944,15 +944,15 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Fills {@code rectangle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Fills {@code rectangle} in this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * If either {@code rectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param rectangle the {@link Rectangle2I} to fill
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final void fillRectangle(final Rectangle2I rectangle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+	public final void fillRectangle(final Rectangle2I rectangle, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(rectangle, "rectangle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
@@ -969,8 +969,8 @@ public abstract class ImageF extends Image {
 				if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
 					final Point2I point = new Point2I(x, y);
 					
-					final Color4F oldColorRGBA = getColorRGBA(x, y);
-					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+					final Color4D oldColorRGBA = getColorRGBA(x, y);
+					final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 					
 					setColorRGBA(newColorRGBA, x, y);
 				}
@@ -979,14 +979,14 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Fills {@code triangle} in this {@code ImageF} instance with {@code Color4F.BLACK} as its color.
+	 * Fills {@code triangle} in this {@code ImageD} instance with {@code Color4D.BLACK} as its color.
 	 * <p>
 	 * If {@code triangle} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * image.fillTriangle(triangle, Color4F.BLACK);
+	 * image.fillTriangle(triangle, Color4D.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -994,11 +994,11 @@ public abstract class ImageF extends Image {
 	 * @throws NullPointerException thrown if, and only if, {@code triangle} is {@code null}
 	 */
 	public final void fillTriangle(final Triangle2I triangle) {
-		fillTriangle(triangle, Color4F.BLACK);
+		fillTriangle(triangle, Color4D.BLACK);
 	}
 	
 	/**
-	 * Fills {@code triangle} in this {@code ImageF} instance with {@code colorRGBA} as its color.
+	 * Fills {@code triangle} in this {@code ImageD} instance with {@code colorRGBA} as its color.
 	 * <p>
 	 * If either {@code triangle} or {@code colorRGBA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1010,10 +1010,10 @@ public abstract class ImageF extends Image {
 	 * </pre>
 	 * 
 	 * @param triangle the {@link Triangle2I} to fill
-	 * @param colorRGBA the {@link Color4F} to use as its color
+	 * @param colorRGBA the {@link Color4D} to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code colorRGBA} are {@code null}
 	 */
-	public final void fillTriangle(final Triangle2I triangle, final Color4F colorRGBA) {
+	public final void fillTriangle(final Triangle2I triangle, final Color4D colorRGBA) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(colorRGBA, "colorRGBA == null");
 		
@@ -1021,15 +1021,15 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Fills {@code triangle} in this {@code ImageF} instance with {@link Color4F} instances returned by {@code biFunction} as its color.
+	 * Fills {@code triangle} in this {@code ImageD} instance with {@link Color4D} instances returned by {@code biFunction} as its color.
 	 * <p>
 	 * If either {@code triangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param triangle the {@link Triangle2I} to fill
-	 * @param biFunction a {@code BiFunction} that returns {@code Color4F} instances to use as its color
+	 * @param biFunction a {@code BiFunction} that returns {@code Color4D} instances to use as its color
 	 * @throws NullPointerException thrown if, and only if, either {@code triangle} or {@code biFunction} are {@code null} or {@code biFunction} returns {@code null}
 	 */
-	public final void fillTriangle(final Triangle2I triangle, final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+	public final void fillTriangle(final Triangle2I triangle, final BiFunction<Color4D, Point2I, Color4D> biFunction) {
 		Objects.requireNonNull(triangle, "triangle == null");
 		Objects.requireNonNull(biFunction, "biFunction == null");
 		
@@ -1046,8 +1046,8 @@ public abstract class ImageF extends Image {
 				final int y = point.getY();
 				
 				if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
-					final Color4F oldColorRGBA = getColorRGBA(x, y);
-					final Color4F newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
+					final Color4D oldColorRGBA = getColorRGBA(x, y);
+					final Color4D newColorRGBA = Objects.requireNonNull(biFunction.apply(oldColorRGBA, point));
 					
 					setColorRGBA(newColorRGBA, point.getX(), point.getY());
 				}
@@ -1056,60 +1056,60 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Inverts this {@code ImageF} instance.
+	 * Inverts this {@code ImageD} instance.
 	 */
 	public final void invert() {
 		final int resolution = getResolution();
 		
 		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4F.invert(getColorRGBA(i)), i);
+			setColorRGBA(Color4D.invert(getColorRGBA(i)), i);
 		}
 	}
 	
 	/**
-	 * Multiplies this {@code ImageF} instance with {@code convolutionKernel}.
+	 * Multiplies this {@code ImageD} instance with {@code convolutionKernel}.
 	 * <p>
 	 * If {@code convolutionKernel} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param convolutionKernel a {@link ConvolutionKernel33F} instance
+	 * @param convolutionKernel a {@link ConvolutionKernel33D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code convolutionKernel} is {@code null}
 	 */
-	public final void multiply(final ConvolutionKernel33F convolutionKernel) {
-		final Color3F factor = new Color3F(convolutionKernel.getFactor());
-		final Color3F bias = new Color3F(convolutionKernel.getBias());
+	public final void multiply(final ConvolutionKernel33D convolutionKernel) {
+		final Color3D factor = new Color3D(convolutionKernel.getFactor());
+		final Color3D bias = new Color3D(convolutionKernel.getBias());
 		
-		final ImageF image = copy();
+		final ImageD image = copy();
 		
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
 		
 		for(int y = 0; y < resolutionY; y++) {
 			for(int x = 0; x < resolutionX; x++) {
-				Color3F colorRGB = Color3F.BLACK;
-				Color4F colorRGBA = image.getColorRGBA(x, y);
+				Color3D colorRGB = Color3D.BLACK;
+				Color4D colorRGBA = image.getColorRGBA(x, y);
 				
 //				Row #1:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + -1), convolutionKernel.getElement11()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + -1), convolutionKernel.getElement12()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + -1), convolutionKernel.getElement13()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -1, y + -1), convolutionKernel.getElement11()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +0, y + -1), convolutionKernel.getElement12()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +1, y + -1), convolutionKernel.getElement13()));
 				
 //				Row #2:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +0), convolutionKernel.getElement21()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +0), convolutionKernel.getElement22()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +0), convolutionKernel.getElement23()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -1, y + +0), convolutionKernel.getElement21()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +0, y + +0), convolutionKernel.getElement22()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +1, y + +0), convolutionKernel.getElement23()));
 				
 //				Row #3:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +1), convolutionKernel.getElement31()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +1), convolutionKernel.getElement32()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +1), convolutionKernel.getElement33()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -1, y + +1), convolutionKernel.getElement31()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +0, y + +1), convolutionKernel.getElement32()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +1, y + +1), convolutionKernel.getElement33()));
 				
 //				Multiply with the factor and add the bias:
-				colorRGB = Color3F.multiply(colorRGB, factor);
-				colorRGB = Color3F.add(colorRGB, bias);
-				colorRGB = Color3F.minimumTo0(colorRGB);
-				colorRGB = Color3F.maximumTo1(colorRGB);
+				colorRGB = Color3D.multiply(colorRGB, factor);
+				colorRGB = Color3D.add(colorRGB, bias);
+				colorRGB = Color3D.minimumTo0(colorRGB);
+				colorRGB = Color3D.maximumTo1(colorRGB);
 				
-				colorRGBA = new Color4F(colorRGB.getR(), colorRGB.getG(), colorRGB.getB(), colorRGBA.getA());
+				colorRGBA = new Color4D(colorRGB.getR(), colorRGB.getG(), colorRGB.getB(), colorRGBA.getA());
 				
 				setColorRGBA(colorRGBA, x, y);
 			}
@@ -1117,69 +1117,69 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Multiplies this {@code ImageF} instance with {@code convolutionKernel}.
+	 * Multiplies this {@code ImageD} instance with {@code convolutionKernel}.
 	 * <p>
 	 * If {@code convolutionKernel} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param convolutionKernel a {@link ConvolutionKernel55F} instance
+	 * @param convolutionKernel a {@link ConvolutionKernel55D} instance
 	 * @throws NullPointerException thrown if, and only if, {@code convolutionKernel} is {@code null}
 	 */
-	public final void multiply(final ConvolutionKernel55F convolutionKernel) {
-		final Color3F factor = new Color3F(convolutionKernel.getFactor());
-		final Color3F bias = new Color3F(convolutionKernel.getBias());
+	public final void multiply(final ConvolutionKernel55D convolutionKernel) {
+		final Color3D factor = new Color3D(convolutionKernel.getFactor());
+		final Color3D bias = new Color3D(convolutionKernel.getBias());
 		
-		final ImageF image = copy();
+		final ImageD image = copy();
 		
 		final int resolutionX = getResolutionX();
 		final int resolutionY = getResolutionY();
 		
 		for(int y = 0; y < resolutionY; y++) {
 			for(int x = 0; x < resolutionX; x++) {
-				Color3F colorRGB = Color3F.BLACK;
-				Color4F colorRGBA = image.getColorRGBA(x, y);
+				Color3D colorRGB = Color3D.BLACK;
+				Color4D colorRGBA = image.getColorRGBA(x, y);
 				
 //				Row #1:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + -2), convolutionKernel.getElement11()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + -2), convolutionKernel.getElement12()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + -2), convolutionKernel.getElement13()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + -2), convolutionKernel.getElement14()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + -2), convolutionKernel.getElement15()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -2, y + -2), convolutionKernel.getElement11()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -1, y + -2), convolutionKernel.getElement12()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +0, y + -2), convolutionKernel.getElement13()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +1, y + -2), convolutionKernel.getElement14()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +2, y + -2), convolutionKernel.getElement15()));
 				
 //				Row #2:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + -1), convolutionKernel.getElement21()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + -1), convolutionKernel.getElement22()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + -1), convolutionKernel.getElement23()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + -1), convolutionKernel.getElement24()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + -1), convolutionKernel.getElement25()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -2, y + -1), convolutionKernel.getElement21()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -1, y + -1), convolutionKernel.getElement22()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +0, y + -1), convolutionKernel.getElement23()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +1, y + -1), convolutionKernel.getElement24()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +2, y + -1), convolutionKernel.getElement25()));
 				
 //				Row #3:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + +0), convolutionKernel.getElement31()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +0), convolutionKernel.getElement32()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +0), convolutionKernel.getElement33()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +0), convolutionKernel.getElement34()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + +0), convolutionKernel.getElement35()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -2, y + +0), convolutionKernel.getElement31()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -1, y + +0), convolutionKernel.getElement32()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +0, y + +0), convolutionKernel.getElement33()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +1, y + +0), convolutionKernel.getElement34()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +2, y + +0), convolutionKernel.getElement35()));
 				
 //				Row #4:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + +1), convolutionKernel.getElement41()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +1), convolutionKernel.getElement42()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +1), convolutionKernel.getElement43()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +1), convolutionKernel.getElement44()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + +1), convolutionKernel.getElement45()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -2, y + +1), convolutionKernel.getElement41()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -1, y + +1), convolutionKernel.getElement42()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +0, y + +1), convolutionKernel.getElement43()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +1, y + +1), convolutionKernel.getElement44()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +2, y + +1), convolutionKernel.getElement45()));
 				
 //				Row #5:
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -2, y + +2), convolutionKernel.getElement51()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + -1, y + +2), convolutionKernel.getElement52()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +0, y + +2), convolutionKernel.getElement53()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +1, y + +2), convolutionKernel.getElement54()));
-				colorRGB = Color3F.add(colorRGB, Color3F.multiply(image.getColorRGB(x + +2, y + +2), convolutionKernel.getElement55()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -2, y + +2), convolutionKernel.getElement51()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + -1, y + +2), convolutionKernel.getElement52()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +0, y + +2), convolutionKernel.getElement53()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +1, y + +2), convolutionKernel.getElement54()));
+				colorRGB = Color3D.add(colorRGB, Color3D.multiply(image.getColorRGB(x + +2, y + +2), convolutionKernel.getElement55()));
 				
 //				Multiply with the factor and add the bias:
-				colorRGB = Color3F.multiply(colorRGB, factor);
-				colorRGB = Color3F.add(colorRGB, bias);
-				colorRGB = Color3F.minimumTo0(colorRGB);
-				colorRGB = Color3F.maximumTo1(colorRGB);
+				colorRGB = Color3D.multiply(colorRGB, factor);
+				colorRGB = Color3D.add(colorRGB, bias);
+				colorRGB = Color3D.minimumTo0(colorRGB);
+				colorRGB = Color3D.maximumTo1(colorRGB);
 				
-				colorRGBA = new Color4F(colorRGB.getR(), colorRGB.getG(), colorRGB.getB(), colorRGBA.getA());
+				colorRGBA = new Color4D(colorRGB.getR(), colorRGB.getG(), colorRGB.getB(), colorRGBA.getA());
 				
 				setColorRGBA(colorRGBA, x, y);
 			}
@@ -1187,29 +1187,29 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
-	 * Redoes gamma correction on this {@code ImageF} instance using PBRT.
+	 * Redoes gamma correction on this {@code ImageD} instance using PBRT.
 	 */
 	public final void redoGammaCorrectionPBRT() {
 		final int resolution = getResolution();
 		
 		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4F.redoGammaCorrectionPBRT(getColorRGBA(i)), i);
+			setColorRGBA(Color4D.redoGammaCorrectionPBRT(getColorRGBA(i)), i);
 		}
 	}
 	
 	/**
-	 * Redoes gamma correction on this {@code ImageF} instance using sRGB.
+	 * Redoes gamma correction on this {@code ImageD} instance using sRGB.
 	 */
 	public final void redoGammaCorrectionSRGB() {
 		final int resolution = getResolution();
 		
 		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4F.redoGammaCorrectionSRGB(getColorRGBA(i)), i);
+			setColorRGBA(Color4D.redoGammaCorrectionSRGB(getColorRGBA(i)), i);
 		}
 	}
 	
 	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
+	 * Sets the {@link Color3D} of the pixel represented by {@code index} to {@code colorRGB}.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1220,32 +1220,32 @@ public abstract class ImageF extends Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorRGB the {@code Color3F} to set
+	 * @param colorRGB the {@code Color3D} to set
 	 * @param index the index of the pixel
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
-	public final void setColorRGB(final Color3F colorRGB, final int index) {
+	public final void setColorRGB(final Color3D colorRGB, final int index) {
 		setColorRGB(colorRGB, index, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code index} to {@code colorRGB}.
+	 * Sets the {@link Color3D} of the pixel represented by {@code index} to {@code colorRGB}.
 	 * <p>
 	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param colorRGB the {@code Color3F} to set
+	 * @param colorRGB the {@code Color3D} to set
 	 * @param index the index of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
 	 */
-	public final void setColorRGB(final Color3F colorRGB, final int index, final PixelOperation pixelOperation) {
-		setColorRGBA(new Color4F(colorRGB), index, pixelOperation);
+	public final void setColorRGB(final Color3D colorRGB, final int index, final PixelOperation pixelOperation) {
+		setColorRGBA(new Color4D(colorRGB), index, pixelOperation);
 	}
 	
 	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
+	 * Sets the {@link Color3D} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1256,34 +1256,34 @@ public abstract class ImageF extends Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorRGB the {@code Color3F} to set
+	 * @param colorRGB the {@code Color3D} to set
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGB} is {@code null}
 	 */
-	public final void setColorRGB(final Color3F colorRGB, final int x, final int y) {
+	public final void setColorRGB(final Color3D colorRGB, final int x, final int y) {
 		setColorRGB(colorRGB, x, y, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Sets the {@link Color3F} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
+	 * Sets the {@link Color3D} of the pixel represented by {@code x} and {@code y} to {@code colorRGB}.
 	 * <p>
 	 * If either {@code colorRGB} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param colorRGB the {@code Color3F} to set
+	 * @param colorRGB the {@code Color3D} to set
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGB} or {@code pixelOperation} are {@code null}
 	 */
-	public final void setColorRGB(final Color3F colorRGB, final int x, final int y, final PixelOperation pixelOperation) {
-		setColorRGBA(new Color4F(colorRGB), x, y, pixelOperation);
+	public final void setColorRGB(final Color3D colorRGB, final int x, final int y, final PixelOperation pixelOperation) {
+		setColorRGBA(new Color4D(colorRGB), x, y, pixelOperation);
 	}
 	
 	/**
-	 * Sets the {@link Color4F} of the pixel represented by {@code index} to {@code colorRGBA}.
+	 * Sets the {@link Color4D} of the pixel represented by {@code index} to {@code colorRGBA}.
 	 * <p>
 	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1294,30 +1294,30 @@ public abstract class ImageF extends Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorRGBA the {@code Color4F} to set
+	 * @param colorRGBA the {@code Color4D} to set
 	 * @param index the index of the pixel
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
-	public final void setColorRGBA(final Color4F colorRGBA, final int index) {
+	public final void setColorRGBA(final Color4D colorRGBA, final int index) {
 		setColorRGBA(colorRGBA, index, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Sets the {@link Color4F} of the pixel represented by {@code index} to {@code colorRGBA}.
+	 * Sets the {@link Color4D} of the pixel represented by {@code index} to {@code colorRGBA}.
 	 * <p>
 	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param colorRGBA the {@code Color4F} to set
+	 * @param colorRGBA the {@code Color4D} to set
 	 * @param index the index of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
-	public abstract void setColorRGBA(final Color4F colorRGBA, final int index, final PixelOperation pixelOperation);
+	public abstract void setColorRGBA(final Color4D colorRGBA, final int index, final PixelOperation pixelOperation);
 	
 	/**
-	 * Sets the {@link Color4F} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
+	 * Sets the {@link Color4D} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
 	 * <p>
 	 * If {@code colorRGBA} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -1328,49 +1328,49 @@ public abstract class ImageF extends Image {
 	 * }
 	 * </pre>
 	 * 
-	 * @param colorRGBA the {@code Color4F} to set
+	 * @param colorRGBA the {@code Color4D} to set
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @throws NullPointerException thrown if, and only if, {@code colorRGBA} is {@code null}
 	 */
-	public final void setColorRGBA(final Color4F colorRGBA, final int x, final int y) {
+	public final void setColorRGBA(final Color4D colorRGBA, final int x, final int y) {
 		setColorRGBA(colorRGBA, x, y, PixelOperation.NO_CHANGE);
 	}
 	
 	/**
-	 * Sets the {@link Color4F} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
+	 * Sets the {@link Color4D} of the pixel represented by {@code x} and {@code y} to {@code colorRGBA}.
 	 * <p>
 	 * If either {@code colorRGBA} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
 	 * 
-	 * @param colorRGBA the {@code Color4F} to set
+	 * @param colorRGBA the {@code Color4D} to set
 	 * @param x the X-coordinate of the pixel
 	 * @param y the Y-coordinate of the pixel
 	 * @param pixelOperation the {@code PixelOperation} to use
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
-	public abstract void setColorRGBA(final Color4F colorRGBA, final int x, final int y, final PixelOperation pixelOperation);
+	public abstract void setColorRGBA(final Color4D colorRGBA, final int x, final int y, final PixelOperation pixelOperation);
 	
 	/**
-	 * Undoes gamma correction on this {@code ImageF} instance using PBRT.
+	 * Undoes gamma correction on this {@code ImageD} instance using PBRT.
 	 */
 	public final void undoGammaCorrectionPBRT() {
 		final int resolution = getResolution();
 		
 		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4F.undoGammaCorrectionPBRT(getColorRGBA(i)), i);
+			setColorRGBA(Color4D.undoGammaCorrectionPBRT(getColorRGBA(i)), i);
 		}
 	}
 	
 	/**
-	 * Undoes gamma correction on this {@code ImageF} instance using sRGB.
+	 * Undoes gamma correction on this {@code ImageD} instance using sRGB.
 	 */
 	public final void undoGammaCorrectionSRGB() {
 		final int resolution = getResolution();
 		
 		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4F.undoGammaCorrectionSRGB(getColorRGBA(i)), i);
+			setColorRGBA(Color4D.undoGammaCorrectionSRGB(getColorRGBA(i)), i);
 		}
 	}
 }

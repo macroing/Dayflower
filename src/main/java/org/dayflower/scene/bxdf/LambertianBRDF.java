@@ -199,7 +199,7 @@ public final class LambertianBRDF extends BXDF {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LambertianBRDF(%s)", this.reflectanceScale);
+		return String.format("new LambertianBRDF(%s, %s, %s)", this.reflectanceScale, Boolean.toString(this.isNegatingIncoming), Boolean.toString(this.isUsingNormal));
 	}
 	
 	/**

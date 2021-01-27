@@ -13,6 +13,11 @@ Packages
 * `org.dayflower.geometry.rasterizer` - The Geometry Rasterizer API.
 * `org.dayflower.geometry.shape` - The Geometry Shape API.
 
+Dependencies
+------------
+* The Node API
+* The Utility API
+
 Examples
 --------
 Coming soon...

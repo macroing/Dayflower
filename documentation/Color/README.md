@@ -10,6 +10,10 @@ Packages
 --------
 * `org.dayflower.color` - The Color API.
 
+Dependencies
+------------
+* The Utility API
+
 Examples
 --------
 Coming soon...

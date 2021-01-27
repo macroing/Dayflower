@@ -25,6 +25,14 @@ Packages
 --------
 * `org.dayflower.image` - The Image API.
 
+Dependencies
+------------
+* The Color API
+* The Filter API
+* The Geometry API
+* The Node API
+* The Utility API
+
 Examples
 --------
 Below follows a few examples that demonstrates various features.

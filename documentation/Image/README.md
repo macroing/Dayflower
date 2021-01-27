@@ -4,11 +4,20 @@ The Image API provides image processing functionality for Dayflower.
 
 Supported Features
 ------------------
+* `ByteImageD` - An implementation of `ImageD` that stores individual pixels as four `byte` values in a `byte[]`.
 * `ByteImageF` - An implementation of `ImageF` that stores individual pixels as four `byte` values in a `byte[]`.
+* `ConvolutionKernel33D` - A convolution kernel with three rows and three columns of data type `double`.
 * `ConvolutionKernel33F` - A convolution kernel with three rows and three columns of data type `float`.
+* `ConvolutionKernel55D` - A convolution kernel with five rows and five columns of data type `double`.
 * `ConvolutionKernel55F` - A convolution kernel with five rows and five columns of data type `float`.
-* `ImageF` - An image that can be drawn to and uses the data type `float`.
+* `Image` - An abstract class that provides the general contract for an image.
+* `ImageD` - An abstract class that implements `Image` and uses the data type `double`.
+* `ImageF` - An abstract class that implements `Image` and uses the data type `float`.
+* `IntImageD` - An implementation of `ImageD` that stores individual pixels as packed `int` values in an `int[]`.
+* `IntImageF` - An implementation of `ImageF` that stores individual pixels as packed `int` values in an `int[]`.
+* `PixelD` - A pixel representation that is used by the `PixelImageD` class.
 * `PixelF` - A pixel representation that is used by the `PixelImageF` class.
+* `PixelImageD` - An implementation of `ImageD` that stores individual pixels as `PixelD` instances.
 * `PixelImageF` - An implementation of `ImageF` that stores individual pixels as `PixelF` instances.
 * `PixelOperation` - An enumeration that can perform operations on pixel coordinates or indices.
 

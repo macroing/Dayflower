@@ -29,7 +29,7 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.LambertianRayitoBRDF;
+import org.dayflower.scene.bxdf.LambertianBRDF;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
@@ -190,7 +190,7 @@ public final class MatteRayitoMaterial implements Material {
 		
 		final Color3F colorKD = this.textureKD.getColor(intersection);
 		
-		return Optional.of(new BSDF(intersection, new LambertianRayitoBRDF(colorKD), true));
+		return Optional.of(new BSDF(intersection, new LambertianBRDF(colorKD, true, true), true));
 	}
 	
 	/**

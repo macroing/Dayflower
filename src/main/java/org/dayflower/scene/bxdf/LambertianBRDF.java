@@ -16,9 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.pbrt;
+package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.abs;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,30 +35,56 @@ import org.dayflower.scene.BXDFType;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code LambertianPBRTBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Lambertian reflection.
+ * A {@code LambertianBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Lambertian reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LambertianPBRTBRDF extends BXDF {
+public final class LambertianBRDF extends BXDF {
 	private final Color3F reflectanceScale;
+	private final boolean isNegatingIncoming;
+	private final boolean isUsingNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+
 	/**
-	 * Constructs a new {@code LambertianPBRTBRDF} instance.
+	 * Constructs a new {@code LambertianBRDF} instance.
 	 * <p>
 	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new LambertianBRDF(reflectanceScale, false, false);
+	 * }
+	 * </pre>
 	 * 
 	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public LambertianPBRTBRDF(final Color3F reflectanceScale) {
+	public LambertianBRDF(final Color3F reflectanceScale) {
+		this(reflectanceScale, false, false);
+	}
+	
+	/**
+	 * Constructs a new {@code LambertianBRDF} instance.
+	 * <p>
+	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @param isNegatingIncoming {@code true} if, and only if, the incoming direction should be negated, {@code false} otherwise
+	 * @param isUsingNormal {@code true} if, and only if, the normal supplied should be used, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
+	 */
+	public LambertianBRDF(final Color3F reflectanceScale, final boolean isNegatingIncoming, final boolean isUsingNormal) {
 		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
+		this.isNegatingIncoming = isNegatingIncoming;
+		this.isUsingNormal = isUsingNormal;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +154,11 @@ public final class LambertianPBRTBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL);
+		if(doCheckAngles(outgoing, normal, incoming)) {
+			return Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL);
+		}
+		
+		return Color3F.BLACK;
 	}
 	
 	/**
@@ -149,43 +180,48 @@ public final class LambertianPBRTBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F incoming = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
-		final Vector3F incomingCorrectlyOriented = outgoing.getZ() < 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
+		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incomingSampleCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingSample) : incomingSample;
+		final Vector3F incoming = this.isUsingNormal ? Vector3F.dotProduct(normal, outgoing) < 0.0F ? Vector3F.negate(incomingSampleCorrectlyOriented) : incomingSampleCorrectlyOriented : outgoing.getZ() < 0.0F ? Vector3F.negateComponent3(incomingSampleCorrectlyOriented) : incomingSampleCorrectlyOriented;
 		
 		final BXDFType bXDFType = getBXDFType();
 		
-		final Color3F result = evaluateDistributionFunction(outgoing, normal, incomingCorrectlyOriented);
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 		
-		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incomingCorrectlyOriented);
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 		
-		return Optional.of(new BXDFResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code LambertianPBRTBRDF} instance.
+	 * Returns a {@code String} representation of this {@code LambertianBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code LambertianPBRTBRDF} instance
+	 * @return a {@code String} representation of this {@code LambertianBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LambertianPBRTBRDF(%s)", this.reflectanceScale);
+		return String.format("new LambertianBRDF(%s)", this.reflectanceScale);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LambertianPBRTBRDF} instance for equality.
+	 * Compares {@code object} to this {@code LambertianBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianPBRTBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LambertianPBRTBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianPBRTBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code LambertianBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LambertianPBRTBRDF)) {
+		} else if(!(object instanceof LambertianBRDF)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, LambertianPBRTBRDF.class.cast(object).reflectanceScale)) {
+		} else if(!Objects.equals(this.reflectanceScale, LambertianBRDF.class.cast(object).reflectanceScale)) {
+			return false;
+		} else if(this.isNegatingIncoming != LambertianBRDF.class.cast(object).isNegatingIncoming) {
+			return false;
+		} else if(this.isUsingNormal != LambertianBRDF.class.cast(object).isUsingNormal) {
 			return false;
 		} else {
 			return true;
@@ -211,16 +247,41 @@ public final class LambertianPBRTBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Vector3F.sameHemisphereZ(outgoing, incoming) ? incoming.cosThetaAbs() * PI_RECIPROCAL : 0.0F;
+		if(doCheckAngles(outgoing, normal, incoming)) {
+			return (this.isUsingNormal ? abs(Vector3F.dotProduct(normal, incoming)) : incoming.cosThetaAbs()) * PI_RECIPROCAL;
+		}
+		
+		return 0.0F;
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LambertianPBRTBRDF} instance.
+	 * Returns a hash code for this {@code LambertianBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code LambertianPBRTBRDF} instance
+	 * @return a hash code for this {@code LambertianBRDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.reflectanceScale);
+		return Objects.hash(this.reflectanceScale, Boolean.valueOf(this.isNegatingIncoming), Boolean.valueOf(this.isUsingNormal));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doCheckAngles(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
+		if(this.isUsingNormal) {
+			final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
+			final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
+			
+			if(this.isNegatingIncoming && (normalDotIncoming > 0.0F && normalDotOutgoing > 0.0F || normalDotIncoming < 0.0F && normalDotOutgoing < 0.0F)) {
+				return false;
+			}
+			
+			if(!this.isNegatingIncoming && (normalDotIncoming > 0.0F && normalDotOutgoing < 0.0F || normalDotIncoming < 0.0F && normalDotOutgoing > 0.0F)) {
+				return false;
+			}
+			
+			return true;
+		}
+		
+		return this.isNegatingIncoming ? !Vector3F.sameHemisphereZ(outgoing, incoming) : Vector3F.sameHemisphereZ(outgoing, incoming);
 	}
 }

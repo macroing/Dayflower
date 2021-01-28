@@ -65,7 +65,7 @@ public final class GlassMaterial implements Material {
 	/**
 	 * The ID of this {@code GlassMaterial} class.
 	 */
-	public static final int ID = 101;
+	public static final int ID = 102;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

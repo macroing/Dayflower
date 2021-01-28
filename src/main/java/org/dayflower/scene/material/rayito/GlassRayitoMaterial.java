@@ -308,7 +308,6 @@ public final class GlassRayitoMaterial implements Material {
 		final float etaB = colorEta.average();
 		
 		return Optional.of(new BSDF(intersection, new SpecularBXDF(colorKR, colorKT, etaA, etaB), true, etaB));
-		
 	}
 	
 	/**

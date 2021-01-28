@@ -18,14 +18,13 @@
  */
 package org.dayflower.scene.material;
 
-import static org.dayflower.utility.Floats.isZero;
-import static org.dayflower.utility.Floats.saturate;
+import static org.dayflower.utility.Floats.random;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.color.Color3F;
-import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
@@ -34,219 +33,222 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.LambertianBRDF;
-import org.dayflower.scene.bxdf.OrenNayarBRDF;
+import org.dayflower.scene.bxdf.ScaledBXDF;
+import org.dayflower.scene.bxdf.SpecularBRDF;
+import org.dayflower.scene.fresnel.ConstantFresnel;
+import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MatteMaterial} is an implementation of {@link Material} and is used for matte surfaces.
+ * A {@code ClearCoatMaterial} is an implementation of {@link Material} that represents a clear coat material.
  * <p>
  * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MatteMaterial implements Material {
+public final class ClearCoatMaterial implements Material {
 	/**
-	 * The name of this {@code MatteMaterial} class.
+	 * The name of this {@code ClearCoatMaterial} class.
 	 */
-	public static final String NAME = "Matte";
+	public static final String NAME = "Clear Coat";
 	
 	/**
-	 * The ID of this {@code MatteMaterial} class.
+	 * The ID of this {@code ClearCoatMaterial} class.
 	 */
-	public static final int ID = 104;
+	public static final int ID = 100;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Modifier modifier;
-	private final Texture textureAngle;
 	private final Texture textureEmission;
 	private final Texture textureKD;
+	private final Texture textureKS;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code ClearCoatMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteMaterial(Color3F.GRAY_0_50);
+	 * new ClearCoatMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
-	public MatteMaterial() {
+	public ClearCoatMaterial() {
 		this(Color3F.GRAY_0_50);
 	}
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code ClearCoatMaterial} instance.
 	 * <p>
 	 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteMaterial(colorKD, Color3F.BLACK);
+	 * new ClearCoatMaterial(colorKD, Color3F.WHITE);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
-	public MatteMaterial(final Color3F colorKD) {
-		this(colorKD, Color3F.BLACK);
+	public ClearCoatMaterial(final Color3F colorKD) {
+		this(colorKD, Color3F.WHITE);
 	}
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code ClearCoatMaterial} instance.
 	 * <p>
-	 * If either {@code colorKD} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorKD} or {@code colorKS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteMaterial(colorKD, colorEmission, 0.0F);
+	 * new ClearCoatMaterial(colorKD, colorKS, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
-	 * @param colorEmission a {@code Color3F} instance for emission
-	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorEmission} are {@code null}
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorKS} are {@code null}
 	 */
-	public MatteMaterial(final Color3F colorKD, final Color3F colorEmission) {
-		this(colorKD, colorEmission, 0.0F);
+	public ClearCoatMaterial(final Color3F colorKD, final Color3F colorKS) {
+		this(colorKD, colorKS, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code ClearCoatMaterial} instance.
 	 * <p>
-	 * If either {@code colorKD} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteMaterial(colorKD, colorEmission, floatAngle, new NoOpModifier());
+	 * new ClearCoatMaterial(colorKD, colorKS, colorEmission, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
 	 * @param colorEmission a {@code Color3F} instance for emission
-	 * @param floatAngle a {@code float} for the angle
-	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorEmission} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS} or {@code colorEmission} are {@code null}
 	 */
-	public MatteMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle) {
-		this(colorKD, colorEmission, floatAngle, new NoOpModifier());
+	public ClearCoatMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission) {
+		this(colorKD, colorKS, colorEmission, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code ClearCoatMaterial} instance.
 	 * <p>
-	 * If either {@code colorKD}, {@code colorEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code colorKD}, {@code colorKS}, {@code colorEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+	 * @param colorKS a {@code Color3F} instance for the specular coefficient
 	 * @param colorEmission a {@code Color3F} instance for emission
-	 * @param floatAngle a {@code float} for the angle
 	 * @param modifier a {@link Modifier} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorEmission} or {@code modifier} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKS}, {@code colorEmission} or {@code modifier} are {@code null}
 	 */
-	public MatteMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle, final Modifier modifier) {
+	public ClearCoatMaterial(final Color3F colorKD, final Color3F colorKS, final Color3F colorEmission, final Modifier modifier) {
 		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
+		this.textureKS = new ConstantTexture(Objects.requireNonNull(colorKS, "colorKS == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
-		this.textureAngle = new ConstantTexture(floatAngle);
 		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code ClearCoatMaterial} instance.
 	 * <p>
 	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteMaterial(textureKD, ConstantTexture.BLACK);
+	 * new ClearCoatMaterial(textureKD, ConstantTexture.WHITE);
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
 	 */
-	public MatteMaterial(final Texture textureKD) {
-		this(textureKD, ConstantTexture.BLACK);
+	public ClearCoatMaterial(final Texture textureKD) {
+		this(textureKD, ConstantTexture.WHITE);
 	}
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code ClearCoatMaterial} instance.
 	 * <p>
-	 * If either {@code textureKD} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKD} or {@code textureKS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteMaterial(textureKD, textureEmission, ConstantTexture.BLACK);
+	 * new ClearCoatMaterial(textureKD, textureKS, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
-	 * @param textureEmission a {@code Texture} instance for emission
-	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureEmission} are {@code null}
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureKS} are {@code null}
 	 */
-	public MatteMaterial(final Texture textureKD, final Texture textureEmission) {
-		this(textureKD, textureEmission, ConstantTexture.BLACK);
+	public ClearCoatMaterial(final Texture textureKD, final Texture textureKS) {
+		this(textureKD, textureKS, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code ClearCoatMaterial} instance.
 	 * <p>
-	 * If either {@code textureKD}, {@code textureEmission} or {@code textureAngle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKD}, {@code textureKS} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MatteMaterial(textureKD, textureEmission, textureAngle, new NoOpModifier());
+	 * new ClearCoatMaterial(textureKD, textureKS, textureEmission, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
 	 * @param textureEmission a {@code Texture} instance for emission
-	 * @param textureAngle a {@code Texture} instance for the angle
-	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureEmission} or {@code textureAngle} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS} or {@code textureEmission} are {@code null}
 	 */
-	public MatteMaterial(final Texture textureKD, final Texture textureEmission, final Texture textureAngle) {
-		this(textureKD, textureEmission, textureAngle, new NoOpModifier());
+	public ClearCoatMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission) {
+		this(textureKD, textureKS, textureEmission, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code MatteMaterial} instance.
+	 * Constructs a new {@code ClearCoatMaterial} instance.
 	 * <p>
-	 * If either {@code textureKD}, {@code textureEmission}, {@code textureAngle} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKD}, {@code textureKS}, {@code textureEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
+	 * @param textureKS a {@code Texture} instance for the specular coefficient
 	 * @param textureEmission a {@code Texture} instance for emission
-	 * @param textureAngle a {@code Texture} instance for the angle
 	 * @param modifier a {@link Modifier} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureEmission}, {@code textureAngle} or {@code modifier} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKS}, {@code textureEmission} or {@code modifier} are {@code null}
 	 */
-	public MatteMaterial(final Texture textureKD, final Texture textureEmission, final Texture textureAngle, final Modifier modifier) {
+	public ClearCoatMaterial(final Texture textureKD, final Texture textureKS, final Texture textureEmission, final Modifier modifier) {
 		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
+		this.textureKS = Objects.requireNonNull(textureKS, "textureKS == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
-		this.textureAngle = Objects.requireNonNull(textureAngle, "textureAngle == null");
 		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code MatteMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code ClearCoatMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code MatteMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code ClearCoatMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -283,21 +285,47 @@ public final class MatteMaterial implements Material {
 		
 		this.modifier.modify(intersection);
 		
-		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKD = this.textureKD.getColor(intersection);
+		final Color3F colorKS = this.textureKS.getColor(intersection);
 		
-		final float floatAngle = this.textureAngle.getFloat(intersection);
+		final Vector3F direction = intersection.getRay().getDirection();
 		
-		final AngleF angle = AngleF.degrees(saturate(floatAngle, 0.0F, 90.0F));
+		final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
+		final Vector3F surfaceNormalCorrectlyOriented = Vector3F.faceForwardNegated(surfaceNormal, direction);
 		
-		if(colorKD.isBlack()) {
-			return Optional.empty();
+		final boolean isEntering = Vector3F.dotProduct(surfaceNormal, surfaceNormalCorrectlyOriented) > 0.0F;
+		
+		final float etaA = 1.0F;
+		final float etaB = 1.5F;
+		final float etaI = isEntering ? etaA : etaB;
+		final float etaT = isEntering ? etaB : etaA;
+		final float eta = etaI / etaT;
+		
+		final Optional<Vector3F> optionalRefractionDirection = Vector3F.refraction2(direction, surfaceNormalCorrectlyOriented, eta);
+		
+		if(optionalRefractionDirection.isPresent()) {
+			final Vector3F refractionDirection = optionalRefractionDirection.get();
+			
+			final float cosThetaI = Vector3F.dotProduct(direction, surfaceNormalCorrectlyOriented);
+			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : Vector3F.dotProduct(refractionDirection, surfaceNormal);
+			
+			final float reflectance = DielectricFresnel.evaluate(cosThetaICorrectlyOriented, etaA, etaB);
+			final float transmittance = 1.0F - reflectance;
+			
+			final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+			final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+			final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+			
+			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
+			
+			if(isChoosingSpecularReflection) {
+				return Optional.of(new BSDF(intersection, new ScaledBXDF(new SpecularBRDF(colorKS, new ConstantFresnel()), new Color3F(probabilityRussianRouletteReflection))));
+			}
+			
+			return Optional.of(new BSDF(intersection, new ScaledBXDF(new LambertianBRDF(colorKD), new Color3F(probabilityRussianRouletteTransmission))));
 		}
 		
-		if(isZero(angle.getDegrees())) {
-			return Optional.of(new BSDF(intersection, new LambertianBRDF(colorKD)));
-		}
-		
-		return Optional.of(new BSDF(intersection, new OrenNayarBRDF(angle, colorKD)));
+		return Optional.of(new BSDF(intersection, new SpecularBRDF(colorKS, new ConstantFresnel())));
 	}
 	
 	/**
@@ -322,9 +350,9 @@ public final class MatteMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code MatteMaterial} instance.
+	 * Returns a {@code String} with the name of this {@code ClearCoatMaterial} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code MatteMaterial} instance
+	 * @return a {@code String} with the name of this {@code ClearCoatMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -332,22 +360,13 @@ public final class MatteMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code MatteMaterial} instance.
+	 * Returns a {@code String} representation of this {@code ClearCoatMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code MatteMaterial} instance
+	 * @return a {@code String} representation of this {@code ClearCoatMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MatteMaterial(%s, %s, %s, %s)", this.textureKD, this.textureEmission, this.textureAngle, this.modifier);
-	}
-	
-	/**
-	 * Returns the {@link Texture} instance for the angle.
-	 * 
-	 * @return the {@code Texture} instance for the angle
-	 */
-	public Texture getTextureAngle() {
-		return this.textureAngle;
+		return String.format("new ClearCoatMaterial(%s, %s, %s, %s)", this.textureKD, this.textureKS, this.textureEmission, this.modifier);
 	}
 	
 	/**
@@ -366,6 +385,15 @@ public final class MatteMaterial implements Material {
 	 */
 	public Texture getTextureKD() {
 		return this.textureKD;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance for the specular coefficient.
+	 * 
+	 * @return the {@code Texture} instance for the specular coefficient
+	 */
+	public Texture getTextureKS() {
+		return this.textureKS;
 	}
 	
 	/**
@@ -399,15 +427,15 @@ public final class MatteMaterial implements Material {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.textureAngle.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
 				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
 				if(!this.textureKD.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureKS.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -419,26 +447,26 @@ public final class MatteMaterial implements Material {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code MatteMaterial} instance for equality.
+	 * Compares {@code object} to this {@code ClearCoatMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MatteMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ClearCoatMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code MatteMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MatteMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code ClearCoatMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ClearCoatMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof MatteMaterial)) {
+		} else if(!(object instanceof ClearCoatMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.modifier, MatteMaterial.class.cast(object).modifier)) {
+		} else if(!Objects.equals(this.modifier, ClearCoatMaterial.class.cast(object).modifier)) {
 			return false;
-		} else if(!Objects.equals(this.textureAngle, MatteMaterial.class.cast(object).textureAngle)) {
+		} else if(!Objects.equals(this.textureEmission, ClearCoatMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmission, MatteMaterial.class.cast(object).textureEmission)) {
+		} else if(!Objects.equals(this.textureKD, ClearCoatMaterial.class.cast(object).textureKD)) {
 			return false;
-		} else if(!Objects.equals(this.textureKD, MatteMaterial.class.cast(object).textureKD)) {
+		} else if(!Objects.equals(this.textureKS, ClearCoatMaterial.class.cast(object).textureKS)) {
 			return false;
 		} else {
 			return true;
@@ -446,9 +474,9 @@ public final class MatteMaterial implements Material {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code MatteMaterial} instance.
+	 * Returns an {@code int} with the ID of this {@code ClearCoatMaterial} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code MatteMaterial} instance
+	 * @return an {@code int} with the ID of this {@code ClearCoatMaterial} instance
 	 */
 	@Override
 	public int getID() {
@@ -456,12 +484,12 @@ public final class MatteMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code MatteMaterial} instance.
+	 * Returns a hash code for this {@code ClearCoatMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code MatteMaterial} instance
+	 * @return a hash code for this {@code ClearCoatMaterial} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.modifier, this.textureAngle, this.textureEmission, this.textureKD);
+		return Objects.hash(this.modifier, this.textureEmission, this.textureKD, this.textureKS);
 	}
 }

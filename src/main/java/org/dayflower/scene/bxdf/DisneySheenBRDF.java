@@ -16,14 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.rayito;
+package org.dayflower.scene.bxdf;
 
-import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Floats.abs;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.fresnelDielectricSchlick;
-import static org.dayflower.utility.Floats.pow;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.fresnelSchlickWeight;
+import static org.dayflower.utility.Floats.isZero;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,35 +36,30 @@ import org.dayflower.scene.BXDFType;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * An {@code AshikhminShirleyRayitoBRDF} is an implementation of {@link BXDF} that represents an Ashikhmin-Shirley BRDF (Bidirectional Reflectance Distribution Function).
+ * A {@code DisneySheenBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney Sheen reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class AshikhminShirleyRayitoBRDF extends BXDF {
+public final class DisneySheenBRDF extends BXDF {
 	private final Color3F reflectanceScale;
-	private final float exponent;
-	private final float roughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code AshikhminShirleyRayitoBRDF} instance.
+	 * Constructs a new {@code DisneySheenBRDF} instance.
 	 * <p>
 	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
-	 * @param roughness the roughness to use
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public AshikhminShirleyRayitoBRDF(final Color3F reflectanceScale, final float roughness) {
-		super(BXDFType.GLOSSY_REFLECTION);
+	public DisneySheenBRDF(final Color3F reflectanceScale) {
+		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
-		this.exponent = 1.0F / (roughness * roughness);
-		this.roughness = roughness;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,13 +78,13 @@ public final class AshikhminShirleyRayitoBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
 	@Override
-	public final Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
 		Objects.requireNonNull(normal, "normal == null");
 		
-		return Color3F.BLACK;
+		return this.reflectanceScale;
 	}
 	
 	/**
@@ -109,13 +101,13 @@ public final class AshikhminShirleyRayitoBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}
 	 */
 	@Override
-	public final Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
-		return Color3F.BLACK;
+		return this.reflectanceScale;
 	}
 	
 	/**
@@ -137,21 +129,17 @@ public final class AshikhminShirleyRayitoBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Vector3F half = Vector3F.half(outgoing, normal, incoming);
+		final Vector3F n = Vector3F.add(incoming, outgoing);
 		
-		final float normalDotHalf = Vector3F.dotProduct(normal, half);
-		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
-		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
-		final float outgoingDotHalf = Vector3F.dotProduct(outgoing, half);
-		
-		final float d = (this.exponent + 1.0F) * pow(abs(normalDotHalf), this.exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float f = fresnelDielectricSchlick(outgoingDotHalf, 1.0F);
-		
-		if(normalDotIncoming > 0.0F && normalDotOutgoing > 0.0F || normalDotIncoming < 0.0F && normalDotOutgoing < 0.0F) {
+		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
 			return Color3F.BLACK;
 		}
 		
-		return Color3F.divide(Color3F.multiply(Color3F.multiply(this.reflectanceScale, d), f), 4.0F * abs(normalDotOutgoing + -normalDotIncoming - normalDotOutgoing * -normalDotIncoming));
+		final Vector3F nNormalized = Vector3F.normalize(n);
+		
+		final float cosThetaD = Vector3F.dotProduct(incoming, nNormalized);
+		
+		return Color3F.multiply(this.reflectanceScale, fresnelSchlickWeight(cosThetaD));
 	}
 	
 	/**
@@ -173,14 +161,8 @@ public final class AshikhminShirleyRayitoBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
-		
-		final Vector3F halfSample = SampleGeneratorF.sampleHemispherePowerCosineDistribution(sample.getU(), sample.getV(), this.exponent);
-		final Vector3F half = normalDotOutgoing < 0.0F ? Vector3F.negate(halfSample) : halfSample;
-		
-		final float outgoingDotHalf = Vector3F.dotProduct(outgoing, half);
-		
-		final Vector3F incoming = Vector3F.subtract(outgoing, Vector3F.multiply(half, 2.0F * outgoingDotHalf));
+		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
 		
 		final BXDFType bXDFType = getBXDFType();
 		
@@ -192,34 +174,30 @@ public final class AshikhminShirleyRayitoBRDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code AshikhminShirleyRayitoBRDF} instance.
+	 * Returns a {@code String} representation of this {@code DisneySheenBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code AshikhminShirleyRayitoBRDF} instance
+	 * @return a {@code String} representation of this {@code DisneySheenBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new AshikhminShirleyRayitoBRDF(%s, %+.10f)", this.reflectanceScale, Float.valueOf(this.roughness));
+		return String.format("new DisneySheenBRDF(%s)", this.reflectanceScale);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code AshikhminShirleyRayitoBRDF} instance for equality.
+	 * Compares {@code object} to this {@code DisneySheenBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code AshikhminShirleyRayitoBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneySheenBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code AshikhminShirleyRayitoBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code AshikhminShirleyRayitoBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code DisneySheenBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneySheenBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof AshikhminShirleyRayitoBRDF)) {
+		} else if(!(object instanceof DisneySheenBRDF)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, AshikhminShirleyRayitoBRDF.class.cast(object).reflectanceScale)) {
-			return false;
-		} else if(!equal(this.exponent, AshikhminShirleyRayitoBRDF.class.cast(object).exponent)) {
-			return false;
-		} else if(!equal(this.roughness, AshikhminShirleyRayitoBRDF.class.cast(object).roughness)) {
+		} else if(!Objects.equals(this.reflectanceScale, DisneySheenBRDF.class.cast(object).reflectanceScale)) {
 			return false;
 		} else {
 			return true;
@@ -245,27 +223,16 @@ public final class AshikhminShirleyRayitoBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Vector3F half = Vector3F.half(outgoing, normal, incoming);
-		
-		final float normalDotHalf = Vector3F.dotProduct(normal, half);
-		final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
-		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
-		final float outgoingDotHalf = Vector3F.dotProduct(outgoing, half);
-		
-		if(normalDotIncoming > 0.0F && normalDotOutgoing > 0.0F || normalDotIncoming < 0.0F && normalDotOutgoing < 0.0F) {
-			return 0.0F;
-		}
-		
-		return (this.exponent + 1.0F) * pow(abs(normalDotHalf), this.exponent) / (PI * 8.0F * abs(outgoingDotHalf));
+		return Vector3F.sameHemisphereZ(outgoing, incoming) ? incoming.cosThetaAbs() * PI_RECIPROCAL : 0.0F;
 	}
 	
 	/**
-	 * Returns a hash code for this {@code AshikhminShirleyRayitoBRDF} instance.
+	 * Returns a hash code for this {@code DisneySheenBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code AshikhminShirleyRayitoBRDF} instance
+	 * @return a hash code for this {@code DisneySheenBRDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.reflectanceScale, Float.valueOf(this.exponent), Float.valueOf(this.roughness));
+		return Objects.hash(this.reflectanceScale);
 	}
 }

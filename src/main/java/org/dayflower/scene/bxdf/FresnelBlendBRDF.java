@@ -16,10 +16,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.pbrt;
+package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.random;
 
 import java.util.List;
@@ -33,47 +37,44 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
-import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.fresnel.DielectricFresnel;
+import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code FresnelSpecularPBRTBXDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for specular reflection and transmission.
+ * A {@code FresnelBlendBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for glossy reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class FresnelSpecularPBRTBXDF extends BXDF {
-	private final Color3F reflectanceScale;
-	private final Color3F transmittanceScale;
-	private final TransportMode transportMode;
-	private final float etaA;
-	private final float etaB;
+public final class FresnelBlendBRDF extends BXDF {
+	private static final float ONE_MINUS_EPSILON = 0.99999994F;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private final Color3F reflectanceScaleDiffuse;
+	private final Color3F reflectanceScaleSpecular;
+	private final MicrofacetDistribution microfacetDistribution;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code FresnelSpecularPBRTBXDF} instance.
+	 * Constructs a new {@code FresnelBlendBRDF} instance.
 	 * <p>
-	 * If either {@code reflectanceScale}, {@code transmittanceScale} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code reflectanceScaleDiffuse}, {@code reflectanceScaleSpecular} or {@code microfacetDistribution} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
-	 * @param transmittanceScale a {@code Color3F} instance that represents the transmittance scale
-	 * @param transportMode a {@link TransportMode} instance
-	 * @param etaA one of the indices of refraction (IOR)
-	 * @param etaB one of the indices of refraction (IOR)
-	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScale}, {@code transmittanceScale} or {@code transportMode} are {@code null}
+	 * @param reflectanceScaleDiffuse a {@link Color3F} instance that represents the reflectance scale for the diffuse component
+	 * @param reflectanceScaleSpecular a {@code Color3F} instance that represents the reflectance scale for the specular component
+	 * @param microfacetDistribution a {@link MicrofacetDistribution} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScaleDiffuse}, {@code reflectanceScaleSpecular} or {@code microfacetDistribution} are {@code null}
 	 */
-	public FresnelSpecularPBRTBXDF(final Color3F reflectanceScale, final Color3F transmittanceScale, final TransportMode transportMode, final float etaA, final float etaB) {
-		super(BXDFType.SPECULAR_REFLECTION_AND_TRANSMISSION);
+	public FresnelBlendBRDF(final Color3F reflectanceScaleDiffuse, final Color3F reflectanceScaleSpecular, final MicrofacetDistribution microfacetDistribution) {
+		super(BXDFType.GLOSSY_REFLECTION);
 		
-		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
-		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
-		this.transportMode = Objects.requireNonNull(transportMode, "transportMode == null");
-		this.etaA = etaA;
-		this.etaB = etaB;
+		this.reflectanceScaleDiffuse = Objects.requireNonNull(reflectanceScaleDiffuse, "reflectanceScaleDiffuse == null");
+		this.reflectanceScaleSpecular = Objects.requireNonNull(reflectanceScaleSpecular, "reflectanceScaleSpecular == null");
+		this.microfacetDistribution = Objects.requireNonNull(microfacetDistribution, "microfacetDistribution == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,8 +94,6 @@ public final class FresnelSpecularPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
@@ -144,8 +143,6 @@ public final class FresnelSpecularPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
@@ -191,13 +188,32 @@ public final class FresnelSpecularPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of FresnelSpecular.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Color3F.BLACK;
+		final Vector3F n = Vector3F.add(outgoing, incoming);
+		
+		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+			return Color3F.BLACK;
+		}
+		
+		final Vector3F nNormalized = Vector3F.normalize(n);
+		
+		final float a = 28.0F / (23.0F * PI);
+		final float b = 1.0F - doPow5(1.0F - 0.5F * incoming.cosThetaAbs());
+		final float c = 1.0F - doPow5(1.0F - 0.5F * outgoing.cosThetaAbs());
+		final float d = this.microfacetDistribution.computeDifferentialArea(nNormalized);
+		final float e = 4.0F * abs(Vector3F.dotProduct(incoming, nNormalized)) * max(incoming.cosThetaAbs(), outgoing.cosThetaAbs());
+		final float f = d / e;
+		
+		final Color3F reflectanceScaleDiffuse = this.reflectanceScaleDiffuse;
+		final Color3F reflectanceScaleSpecular = this.reflectanceScaleSpecular;
+		final Color3F fresnel = doFresnelDielectricSchlick(reflectanceScaleSpecular, Vector3F.dotProduct(incoming, nNormalized));
+		final Color3F colorDiffuse = Color3F.multiply(Color3F.multiply(Color3F.multiply(Color3F.multiply(reflectanceScaleDiffuse, a), Color3F.subtract(Color3F.WHITE, reflectanceScaleSpecular)), b), c);
+		final Color3F colorSpecular = Color3F.multiply(fresnel, f);
+		
+		return Color3F.add(colorDiffuse, colorSpecular);
 	}
 	
 	/**
@@ -215,81 +231,75 @@ public final class FresnelSpecularPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
-//		PBRT: Implementation of FresnelSpecular.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final float reflectance = DielectricFresnel.evaluate(outgoing.cosTheta(), this.etaA, this.etaB);
-		
-		if(sample.getU() < reflectance) {
-			final BXDFType bXDFType = BXDFType.SPECULAR_REFLECTION;
+		if(sample.getU() < 0.5F) {
+			final float u = min(2.0F * sample.getU(), ONE_MINUS_EPSILON);
+			final float v = sample.getV();
 			
-			final Vector3F incoming = new Vector3F(-outgoing.getX(), -outgoing.getY(), outgoing.getZ());
+			final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(u, v);
+			final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
 			
-			final Color3F result = Color3F.divide(Color3F.multiply(this.reflectanceScale, reflectance), incoming.cosThetaAbs());
+			final BXDFType bXDFType = getBXDFType();
 			
-			final float probabilityDensityFunctionValue = reflectance;
+			final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 			
-			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
-		}
-		
-		final boolean isEntering = outgoing.cosTheta() > 0.0F;
-		
-		final float etaI = isEntering ? this.etaA : this.etaB;
-		final float etaT = isEntering ? this.etaB : this.etaA;
-		
-		final Optional<Vector3F> optionalIncoming = Vector3F.refraction(outgoing, Vector3F.faceForward(Vector3F.z(), outgoing), etaI / etaT);
-		
-		if(optionalIncoming.isPresent()) {
-			final BXDFType bXDFType = BXDFType.SPECULAR_TRANSMISSION;
-			
-			final Vector3F incoming = optionalIncoming.get();
-			
-			final Color3F result = doComputeResult(incoming, etaI, etaT, reflectance);
-			
-			final float probabilityDensityFunctionValue = 1.0F - reflectance;
+			final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 			
 			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 		}
 		
-		return Optional.empty();
+		final float u = min(2.0F * (sample.getU() - 0.5F), ONE_MINUS_EPSILON);
+		final float v = sample.getV();
+		
+		final Vector3F n = this.microfacetDistribution.sampleNormal(outgoing, new Point2F(u, v));
+		
+		final Vector3F incoming = Vector3F.reflection(outgoing, n);
+		
+		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
+			return Optional.empty();
+		}
+		
+		final BXDFType bXDFType = getBXDFType();
+		
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
+		
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
+		
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code FresnelSpecularPBRTBXDF} instance.
+	 * Returns a {@code String} representation of this {@code FresnelBlendBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code FresnelSpecularPBRTBXDF} instance
+	 * @return a {@code String} representation of this {@code FresnelBlendBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new FresnelSpecularPBRTBXDF(%s, %s, %s, %+.10f, %+.10f)", this.reflectanceScale, this.transmittanceScale, this.transportMode, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+		return String.format("new FresnelBlendBRDF(%s, %s, %s)", this.reflectanceScaleDiffuse, this.reflectanceScaleSpecular, this.microfacetDistribution);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code FresnelSpecularPBRTBXDF} instance for equality.
+	 * Compares {@code object} to this {@code FresnelBlendBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code FresnelSpecularPBRTBXDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code FresnelBlendBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code FresnelSpecularPBRTBXDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code FresnelSpecularPBRTBXDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code FresnelBlendBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code FresnelBlendBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof FresnelSpecularPBRTBXDF)) {
+		} else if(!(object instanceof FresnelBlendBRDF)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, FresnelSpecularPBRTBXDF.class.cast(object).reflectanceScale)) {
+		} else if(!Objects.equals(this.reflectanceScaleDiffuse, FresnelBlendBRDF.class.cast(object).reflectanceScaleDiffuse)) {
 			return false;
-		} else if(!Objects.equals(this.transmittanceScale, FresnelSpecularPBRTBXDF.class.cast(object).transmittanceScale)) {
+		} else if(!Objects.equals(this.reflectanceScaleSpecular, FresnelBlendBRDF.class.cast(object).reflectanceScaleSpecular)) {
 			return false;
-		} else if(!Objects.equals(this.transportMode, FresnelSpecularPBRTBXDF.class.cast(object).transportMode)) {
-			return false;
-		} else if(!equal(this.etaA, FresnelSpecularPBRTBXDF.class.cast(object).etaA)) {
-			return false;
-		} else if(!equal(this.etaB, FresnelSpecularPBRTBXDF.class.cast(object).etaB)) {
+		} else if(!Objects.equals(this.microfacetDistribution, FresnelBlendBRDF.class.cast(object).microfacetDistribution)) {
 			return false;
 		} else {
 			return true;
@@ -311,35 +321,36 @@ public final class FresnelSpecularPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of FresnelSpecular.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return 0.0F;
+		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
+			return 0.0F;
+		}
+		
+		final Vector3F n = Vector3F.normalize(Vector3F.add(outgoing, incoming));
+		
+		return 0.5F * (incoming.cosThetaAbs() * PI_RECIPROCAL + this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n)));
 	}
 	
 	/**
-	 * Returns a hash code for this {@code FresnelSpecularPBRTBXDF} instance.
+	 * Returns a hash code for this {@code FresnelBlendBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code FresnelSpecularPBRTBXDF} instance
+	 * @return a hash code for this {@code FresnelBlendBRDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.reflectanceScale, this.transmittanceScale, this.transportMode, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+		return Objects.hash(this.reflectanceScaleDiffuse, this.reflectanceScaleSpecular, this.microfacetDistribution);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Color3F doComputeResult(final Vector3F incoming, final float etaI, final float etaT, final float reflectance) {
-		switch(this.transportMode) {
-			case IMPORTANCE:
-				return Color3F.divide(Color3F.multiply(this.transmittanceScale, 1.0F - reflectance), incoming.cosThetaAbs());
-			case RADIANCE:
-				return Color3F.divide(Color3F.multiply(Color3F.multiply(this.transmittanceScale, 1.0F - reflectance), (etaI * etaI) / (etaT * etaT)), incoming.cosThetaAbs());
-			default:
-				return Color3F.divide(Color3F.multiply(this.transmittanceScale, 1.0F - reflectance), incoming.cosThetaAbs());
-		}
+	private static Color3F doFresnelDielectricSchlick(final Color3F f0, final float cosTheta) {
+		return Color3F.add(f0, Color3F.multiply(Color3F.subtract(Color3F.WHITE, f0), doPow5(1.0F - cosTheta)));
+	}
+	
+	private static float doPow5(final float value) {
+		return (value * value) * (value * value) * value;
 	}
 }

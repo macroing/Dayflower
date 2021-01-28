@@ -16,12 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.pbrt;
+package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.random;
 
 import java.util.List;
@@ -29,47 +27,47 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.color.Color3F;
-import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.fresnel.Fresnel;
+import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * An {@code OrenNayarPBRTBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Oren-Nayar.
+ * A {@code TorranceSparrowBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Torrance-Sparrow reflection using a microfacet distribution.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class OrenNayarPBRTBRDF extends BXDF {
-	private final AngleF angle;
+public final class TorranceSparrowBRDF extends BXDF {
 	private final Color3F reflectanceScale;
-	private final float a;
-	private final float b;
+	private final Fresnel fresnel;
+	private final MicrofacetDistribution microfacetDistribution;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code OrenNayarPBRTBRDF} instance.
+	 * Constructs a new {@code TorranceSparrowBRDF} instance.
 	 * <p>
-	 * If either {@code angle} or {@code reflectanceScale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code reflectanceScale}, {@code fresnel} or {@code microfacetDistribution} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param angle an {@link AngleF} instance
 	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
-	 * @throws NullPointerException thrown if, and only if, either {@code angle} or {@code reflectanceScale} are {@code null}
+	 * @param fresnel a {@link Fresnel} instance
+	 * @param microfacetDistribution a {@link MicrofacetDistribution} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScale}, {@code fresnel} or {@code microfacetDistribution} are {@code null}
 	 */
-	public OrenNayarPBRTBRDF(final AngleF angle, final Color3F reflectanceScale) {
-		super(BXDFType.DIFFUSE_REFLECTION);
+	public TorranceSparrowBRDF(final Color3F reflectanceScale, final Fresnel fresnel, final MicrofacetDistribution microfacetDistribution) {
+		super(BXDFType.GLOSSY_REFLECTION);
 		
-		this.angle = Objects.requireNonNull(angle, "angle == null");
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
-		this.a = 1.0F - ((angle.getRadians() * angle.getRadians()) / (2.0F * ((angle.getRadians() * angle.getRadians()) + 0.33F)));
-		this.b = 0.45F * (angle.getRadians() * angle.getRadians()) / ((angle.getRadians() * angle.getRadians()) + 0.09F);
+		this.fresnel = Objects.requireNonNull(fresnel, "fresnel == null");
+		this.microfacetDistribution = Objects.requireNonNull(microfacetDistribution, "microfacetDistribution == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,8 +87,6 @@ public final class OrenNayarPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
@@ -140,8 +136,6 @@ public final class OrenNayarPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
@@ -187,28 +181,32 @@ public final class OrenNayarPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of OrenNayar.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
 		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
+		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
 		
-		final float sinThetaIncoming = incoming.sinTheta();
-		final float sinThetaOutgoing = outgoing.sinTheta();
+		if(isZero(cosThetaAbsOutgoing) || isZero(cosThetaAbsIncoming)) {
+			return Color3F.BLACK;
+		}
 		
-		final float maxCos = sinThetaIncoming > 1.0e-4F && sinThetaOutgoing > 1.0e-4F ? max(0.0F, incoming.cosPhi() * outgoing.cosPhi() + incoming.sinPhi() * outgoing.sinPhi()) : 0.0F;
+		final Vector3F n = Vector3F.add(incoming, outgoing);
 		
-		final float sinA = cosThetaAbsIncoming > cosThetaAbsOutgoing ? sinThetaOutgoing : sinThetaIncoming;
-		final float tanB = cosThetaAbsIncoming > cosThetaAbsOutgoing ? sinThetaIncoming / cosThetaAbsIncoming : sinThetaOutgoing / cosThetaAbsOutgoing;
+		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+			return Color3F.BLACK;
+		}
 		
-		final float a = this.a;
-		final float b = this.b;
-		final float c = (a + b * maxCos * sinA * tanB);
+		final Vector3F nNormalized = Vector3F.normalize(n);
 		
-		return Color3F.multiply(Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL), c);
+		final float d = this.microfacetDistribution.computeDifferentialArea(nNormalized);
+		final float g = this.microfacetDistribution.computeShadowingAndMasking(outgoing, incoming);
+		
+		final Color3F r = this.reflectanceScale;
+		final Color3F f = this.fresnel.evaluate(Vector3F.dotProduct(incoming, Vector3F.faceForward(nNormalized, Vector3F.z())));
+		
+		return Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(r, d), g), f), 4.0F * cosThetaAbsIncoming * cosThetaAbsOutgoing);
 	}
 	
 	/**
@@ -226,55 +224,64 @@ public final class OrenNayarPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
-//		PBRT: Implementation of BxDF.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F incoming = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
-		final Vector3F incomingCorrectlyOriented = outgoing.getZ() < 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
+		if(isZero(outgoing.getZ())) {
+			return Optional.empty();
+		}
+		
+		final Vector3F n = this.microfacetDistribution.sampleNormal(outgoing, sample);
+		
+		if(Vector3F.dotProduct(outgoing, n) < 0.0F) {
+			return Optional.empty();
+		}
+		
+		final Vector3F incoming = Vector3F.reflection(outgoing, n);
+		
+		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
+			return Optional.empty();
+		}
 		
 		final BXDFType bXDFType = getBXDFType();
 		
-		final Color3F result = evaluateDistributionFunction(outgoing, normal, incomingCorrectlyOriented);
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 		
-		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incomingCorrectlyOriented);
+		final float probabilityDensityFunctionValue = this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n));
 		
-		return Optional.of(new BXDFResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code OrenNayarPBRTBRDF} instance.
+	 * Returns a {@code String} representation of this {@code TorranceSparrowBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code OrenNayarPBRTBRDF} instance
+	 * @return a {@code String} representation of this {@code TorranceSparrowBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new OrenNayarPBRTBRDF(%s, %s)", this.angle, this.reflectanceScale);
+		return String.format("new TorranceSparrowBRDF(%s, %s, %s)", this.reflectanceScale, this.fresnel, this.microfacetDistribution);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code OrenNayarPBRTBRDF} instance for equality.
+	 * Compares {@code object} to this {@code TorranceSparrowBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarPBRTBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code TorranceSparrowBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code OrenNayarPBRTBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code OrenNayarPBRTBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code TorranceSparrowBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TorranceSparrowBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof OrenNayarPBRTBRDF)) {
+		} else if(!(object instanceof TorranceSparrowBRDF)) {
 			return false;
-		} else if(!Objects.equals(this.angle, OrenNayarPBRTBRDF.class.cast(object).angle)) {
+		} else if(!Objects.equals(this.reflectanceScale, TorranceSparrowBRDF.class.cast(object).reflectanceScale)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, OrenNayarPBRTBRDF.class.cast(object).reflectanceScale)) {
+		} else if(!Objects.equals(this.fresnel, TorranceSparrowBRDF.class.cast(object).fresnel)) {
 			return false;
-		} else if(!equal(this.a, OrenNayarPBRTBRDF.class.cast(object).a)) {
-			return false;
-		} else if(!equal(this.b, OrenNayarPBRTBRDF.class.cast(object).b)) {
+		} else if(!Objects.equals(this.microfacetDistribution, TorranceSparrowBRDF.class.cast(object).microfacetDistribution)) {
 			return false;
 		} else {
 			return true;
@@ -296,22 +303,26 @@ public final class OrenNayarPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of BxDF.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Vector3F.sameHemisphereZ(outgoing, incoming) ? incoming.cosThetaAbs() * PI_RECIPROCAL : 0.0F;
+		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
+			return 0.0F;
+		}
+		
+		final Vector3F n = Vector3F.normalize(Vector3F.add(outgoing, incoming));
+		
+		return this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n));
 	}
 	
 	/**
-	 * Returns a hash code for this {@code OrenNayarPBRTBRDF} instance.
+	 * Returns a hash code for this {@code TorranceSparrowBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code OrenNayarPBRTBRDF} instance
+	 * @return a hash code for this {@code TorranceSparrowBRDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.angle, this.reflectanceScale, Float.valueOf(this.a), Float.valueOf(this.b));
+		return Objects.hash(this.reflectanceScale, this.fresnel, this.microfacetDistribution);
 	}
 }

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.pbrt;
+package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.equal;
@@ -42,26 +42,26 @@ import org.dayflower.scene.BXDFType;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code DisneyClearCoatPBRTBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney Clear Coat reflection.
+ * A {@code DisneyClearCoatBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney Clear Coat reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DisneyClearCoatPBRTBRDF extends BXDF {
+public final class DisneyClearCoatBRDF extends BXDF {
 	private final float gloss;
 	private final float weight;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code DisneyClearCoatPBRTBRDF} instance.
+	 * Constructs a new {@code DisneyClearCoatBRDF} instance.
 	 * 
 	 * @param gloss a {@code float} that represents the gloss
 	 * @param weight a {@code float} that represents the weight
 	 */
-	public DisneyClearCoatPBRTBRDF(final float gloss, final float weight) {
+	public DisneyClearCoatBRDF(final float gloss, final float weight) {
 		super(BXDFType.GLOSSY_REFLECTION);
 		
 		this.gloss = gloss;
@@ -85,8 +85,6 @@ public final class DisneyClearCoatPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
@@ -136,8 +134,6 @@ public final class DisneyClearCoatPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
@@ -183,8 +179,6 @@ public final class DisneyClearCoatPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of DisneyClearcoat.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
@@ -219,8 +213,6 @@ public final class DisneyClearCoatPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
-//		PBRT: Implementation of DisneyClearcoat.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
@@ -252,32 +244,32 @@ public final class DisneyClearCoatPBRTBRDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code DisneyClearCoatPBRTBRDF} instance.
+	 * Returns a {@code String} representation of this {@code DisneyClearCoatBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code DisneyClearCoatPBRTBRDF} instance
+	 * @return a {@code String} representation of this {@code DisneyClearCoatBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new DisneyClearCoatPBRTBRDF(%+.10f, %+.10f)", Float.valueOf(this.gloss), Float.valueOf(this.weight));
+		return String.format("new DisneyClearCoatBRDF(%+.10f, %+.10f)", Float.valueOf(this.gloss), Float.valueOf(this.weight));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code DisneyClearCoatPBRTBRDF} instance for equality.
+	 * Compares {@code object} to this {@code DisneyClearCoatBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyClearCoatPBRTBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyClearCoatBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code DisneyClearCoatPBRTBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyClearCoatPBRTBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code DisneyClearCoatBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyClearCoatBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof DisneyClearCoatPBRTBRDF)) {
+		} else if(!(object instanceof DisneyClearCoatBRDF)) {
 			return false;
-		} else if(!equal(this.gloss, DisneyClearCoatPBRTBRDF.class.cast(object).gloss)) {
+		} else if(!equal(this.gloss, DisneyClearCoatBRDF.class.cast(object).gloss)) {
 			return false;
-		} else if(!equal(this.weight, DisneyClearCoatPBRTBRDF.class.cast(object).weight)) {
+		} else if(!equal(this.weight, DisneyClearCoatBRDF.class.cast(object).weight)) {
 			return false;
 		} else {
 			return true;
@@ -299,8 +291,6 @@ public final class DisneyClearCoatPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of DisneyClearcoat.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
@@ -324,9 +314,9 @@ public final class DisneyClearCoatPBRTBRDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code DisneyClearCoatPBRTBRDF} instance.
+	 * Returns a hash code for this {@code DisneyClearCoatBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code DisneyClearCoatPBRTBRDF} instance
+	 * @return a hash code for this {@code DisneyClearCoatBRDF} instance
 	 */
 	@Override
 	public int hashCode() {

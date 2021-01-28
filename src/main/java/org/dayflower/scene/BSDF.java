@@ -57,6 +57,26 @@ public final class BSDF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
+	 * new BSDF(intersection, bXDF, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param bXDF a {@link BXDF} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code bXDF} are {@code null}
+	 */
+	public BSDF(final Intersection intersection, final BXDF bXDF) {
+		this(intersection, bXDF, false);
+	}
+	
+	/**
+	 * Constructs a new {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection} or {@code bXDF} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
 	 * new BSDF(intersection, bXDF, isNegatingIncoming, 1.0F);
 	 * }
 	 * </pre>
@@ -86,6 +106,28 @@ public final class BSDF {
 		this.bXDFs = Arrays.asList(Objects.requireNonNull(bXDF, "bXDF == null"));
 		this.isNegatingIncoming = isNegatingIncoming;
 		this.eta = eta;
+	}
+	
+	/**
+	 * Constructs a new {@code BSDF} instance.
+	 * <p>
+	 * If either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The {@code List} {@code bXDFs} will be copied.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new BSDF(intersection, bXDFs, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param bXDFs a {@code List} of {@link BXDF} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code bXDFs} or at least one element in {@code bXDFs} are {@code null}
+	 */
+	public BSDF(final Intersection intersection, final List<BXDF> bXDFs) {
+		this(intersection, bXDFs, false);
 	}
 	
 	/**

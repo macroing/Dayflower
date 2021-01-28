@@ -19,7 +19,6 @@
 package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-import static org.dayflower.utility.Floats.abs;
 
 import java.util.List;
 import java.util.Objects;
@@ -44,8 +43,6 @@ import org.dayflower.utility.ParameterArguments;
  */
 public final class LambertianBRDF extends BXDF {
 	private final Color3F reflectanceScale;
-	private final boolean isNegatingIncoming;
-	private final boolean isUsingNormal;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -53,57 +50,14 @@ public final class LambertianBRDF extends BXDF {
 	 * Constructs a new {@code LambertianBRDF} instance.
 	 * <p>
 	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new LambertianBRDF(reflectanceScale, false);
-	 * }
-	 * </pre>
 	 * 
 	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
 	public LambertianBRDF(final Color3F reflectanceScale) {
-		this(reflectanceScale, false, false);
-	}
-	
-	/**
-	 * Constructs a new {@code LambertianBRDF} instance.
-	 * <p>
-	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new LambertianBRDF(reflectanceScale, isNegatingIncoming, false);
-	 * }
-	 * </pre>
-	 * 
-	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
-	 * @param isNegatingIncoming {@code true} if, and only if, the incoming direction should be negated, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
-	 */
-	public LambertianBRDF(final Color3F reflectanceScale, final boolean isNegatingIncoming) {
-		this(reflectanceScale, isNegatingIncoming, false);
-	}
-	
-	/**
-	 * Constructs a new {@code LambertianBRDF} instance.
-	 * <p>
-	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
-	 * @param isNegatingIncoming {@code true} if, and only if, the incoming direction should be negated, {@code false} otherwise
-	 * @param isUsingNormal {@code true} if, and only if, the normal supplied should be used, {@code false} otherwise
-	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
-	 */
-	public LambertianBRDF(final Color3F reflectanceScale, final boolean isNegatingIncoming, final boolean isUsingNormal) {
 		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
-		this.isNegatingIncoming = isNegatingIncoming;
-		this.isUsingNormal = isUsingNormal;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,11 +127,7 @@ public final class LambertianBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		if(doCheckAngles(outgoing, normal, incoming)) {
-			return Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL);
-		}
-		
-		return Color3F.BLACK;
+		return Color3F.multiply(this.reflectanceScale, PI_RECIPROCAL);
 	}
 	
 	/**
@@ -199,7 +149,8 @@ public final class LambertianBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F incoming = doSampleIncoming(outgoing, normal, sample);
+		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
 		
 		final BXDFType bXDFType = getBXDFType();
 		
@@ -217,7 +168,7 @@ public final class LambertianBRDF extends BXDF {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LambertianBRDF(%s, %s, %s)", this.reflectanceScale, Boolean.toString(this.isNegatingIncoming), Boolean.toString(this.isUsingNormal));
+		return String.format("new LambertianBRDF(%s)", this.reflectanceScale);
 	}
 	
 	/**
@@ -235,10 +186,6 @@ public final class LambertianBRDF extends BXDF {
 		} else if(!(object instanceof LambertianBRDF)) {
 			return false;
 		} else if(!Objects.equals(this.reflectanceScale, LambertianBRDF.class.cast(object).reflectanceScale)) {
-			return false;
-		} else if(this.isNegatingIncoming != LambertianBRDF.class.cast(object).isNegatingIncoming) {
-			return false;
-		} else if(this.isUsingNormal != LambertianBRDF.class.cast(object).isUsingNormal) {
 			return false;
 		} else {
 			return true;
@@ -264,11 +211,7 @@ public final class LambertianBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		if(doCheckAngles(outgoing, normal, incoming)) {
-			return (this.isUsingNormal ? abs(Vector3F.dotProduct(normal, incoming)) : incoming.cosThetaAbs()) * PI_RECIPROCAL;
-		}
-		
-		return 0.0F;
+		return Vector3F.sameHemisphereZ(outgoing, incoming) ? incoming.cosThetaAbs() * PI_RECIPROCAL : 0.0F;
 	}
 	
 	/**
@@ -278,35 +221,6 @@ public final class LambertianBRDF extends BXDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.reflectanceScale, Boolean.valueOf(this.isNegatingIncoming), Boolean.valueOf(this.isUsingNormal));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private Vector3F doSampleIncoming(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
-		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
-		final Vector3F incomingSampleCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingSample) : incomingSample;
-		final Vector3F incoming = this.isUsingNormal ? Vector3F.faceForward(normal, outgoing, incomingSampleCorrectlyOriented) : Vector3F.faceForwardComponent3(outgoing, incomingSampleCorrectlyOriented);
-		
-		return incoming;
-	}
-	
-	private boolean doCheckAngles(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-		if(this.isUsingNormal) {
-			final float normalDotIncoming = Vector3F.dotProduct(normal, incoming);
-			final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
-			
-			if(this.isNegatingIncoming && (normalDotIncoming > 0.0F && normalDotOutgoing > 0.0F || normalDotIncoming < 0.0F && normalDotOutgoing < 0.0F)) {
-				return false;
-			}
-			
-			if(!this.isNegatingIncoming && (normalDotIncoming > 0.0F && normalDotOutgoing < 0.0F || normalDotIncoming < 0.0F && normalDotOutgoing > 0.0F)) {
-				return false;
-			}
-			
-			return true;
-		}
-		
-		return this.isNegatingIncoming ? !Vector3F.sameHemisphereZ(outgoing, incoming) : Vector3F.sameHemisphereZ(outgoing, incoming);
+		return Objects.hash(this.reflectanceScale);
 	}
 }

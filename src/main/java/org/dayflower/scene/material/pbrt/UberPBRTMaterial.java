@@ -33,9 +33,9 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.LambertianBRDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
+import org.dayflower.scene.bxdf.SpecularBRDF;
+import org.dayflower.scene.bxdf.SpecularBTDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBRDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
@@ -694,7 +694,7 @@ public final class UberPBRTMaterial implements Material {
 		final List<BXDF> bXDFs = new ArrayList<>();
 		
 		if(!colorTransmittanceScale.isBlack()) {
-			bXDFs.add(new SpecularPBRTBTDF(colorTransmittanceScale, transportMode, 1.0F, 1.0F));
+			bXDFs.add(new SpecularBTDF(colorTransmittanceScale, transportMode, 1.0F, 1.0F));
 		}
 		
 		if(!colorKD.isBlack()) {
@@ -702,15 +702,15 @@ public final class UberPBRTMaterial implements Material {
 		}
 		
 		if(!colorKS.isBlack()) {
-			bXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV)));
+			bXDFs.add(new TorranceSparrowBRDF(colorKS, new DielectricFresnel(1.0F, eta), new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV)));
 		}
 		
 		if(!colorKR.isBlack()) {
-			bXDFs.add(new SpecularPBRTBRDF(colorKR, new DielectricFresnel(1.0F, eta)));
+			bXDFs.add(new SpecularBRDF(colorKR, new DielectricFresnel(1.0F, eta)));
 		}
 		
 		if(!colorKT.isBlack()) {
-			bXDFs.add(new SpecularPBRTBTDF(colorKT, transportMode, 1.0F, eta));
+			bXDFs.add(new SpecularBTDF(colorKT, transportMode, 1.0F, eta));
 		}
 		
 		return Optional.of(new BSDF(intersection, bXDFs, false, colorTransmittanceScale.isBlack() ? eta : 1.0F));

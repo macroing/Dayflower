@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.rayito;
+package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
@@ -36,14 +36,14 @@ import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code SpecularRayitoBXDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for specular reflection and transmission.
+ * A {@code SpecularBXDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for specular reflection and transmission.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class SpecularRayitoBXDF extends BXDF {
+public final class SpecularBXDF extends BXDF {
 	private final Color3F reflectanceScale;
 	private final Color3F transmittanceScale;
 	private final float etaA;
@@ -52,7 +52,7 @@ public final class SpecularRayitoBXDF extends BXDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code SpecularRayitoBXDF} instance.
+	 * Constructs a new {@code SpecularBXDF} instance.
 	 * <p>
 	 * If either {@code reflectanceScale} or {@code transmittanceScale} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -62,7 +62,7 @@ public final class SpecularRayitoBXDF extends BXDF {
 	 * @param etaB the index of refraction denoted by {@code B}
 	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScale} or {@code transmittanceScale} are {@code null}
 	 */
-	public SpecularRayitoBXDF(final Color3F reflectanceScale, final Color3F transmittanceScale, final float etaA, final float etaB) {
+	public SpecularBXDF(final Color3F reflectanceScale, final Color3F transmittanceScale, final float etaA, final float etaB) {
 		super(BXDFType.SPECULAR_REFLECTION_AND_TRANSMISSION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
@@ -223,36 +223,36 @@ public final class SpecularRayitoBXDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code SpecularRayitoBXDF} instance.
+	 * Returns a {@code String} representation of this {@code SpecularBXDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code SpecularRayitoBXDF} instance
+	 * @return a {@code String} representation of this {@code SpecularBXDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new SpecularRayitoBXDF(%s, %s, %+.10f, %+.10f)", this.reflectanceScale, this.transmittanceScale, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+		return String.format("new SpecularBXDF(%s, %s, %+.10f, %+.10f)", this.reflectanceScale, this.transmittanceScale, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code SpecularRayitoBXDF} instance for equality.
+	 * Compares {@code object} to this {@code SpecularBXDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SpecularRayitoBXDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SpecularBXDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code SpecularRayitoBXDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SpecularRayitoBXDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code SpecularBXDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SpecularBXDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof SpecularRayitoBXDF)) {
+		} else if(!(object instanceof SpecularBXDF)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, SpecularRayitoBXDF.class.cast(object).reflectanceScale)) {
+		} else if(!Objects.equals(this.reflectanceScale, SpecularBXDF.class.cast(object).reflectanceScale)) {
 			return false;
-		} else if(!Objects.equals(this.transmittanceScale, SpecularRayitoBXDF.class.cast(object).transmittanceScale)) {
+		} else if(!Objects.equals(this.transmittanceScale, SpecularBXDF.class.cast(object).transmittanceScale)) {
 			return false;
-		} else if(!equal(this.etaA, SpecularRayitoBXDF.class.cast(object).etaA)) {
+		} else if(!equal(this.etaA, SpecularBXDF.class.cast(object).etaA)) {
 			return false;
-		} else if(!equal(this.etaB, SpecularRayitoBXDF.class.cast(object).etaB)) {
+		} else if(!equal(this.etaB, SpecularBXDF.class.cast(object).etaB)) {
 			return false;
 		} else {
 			return true;
@@ -282,9 +282,9 @@ public final class SpecularRayitoBXDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code SpecularRayitoBXDF} instance.
+	 * Returns a hash code for this {@code SpecularBXDF} instance.
 	 * 
-	 * @return a hash code for this {@code SpecularRayitoBXDF} instance
+	 * @return a hash code for this {@code SpecularBXDF} instance
 	 */
 	@Override
 	public int hashCode() {

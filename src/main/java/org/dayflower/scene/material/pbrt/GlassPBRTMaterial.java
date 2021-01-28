@@ -34,11 +34,11 @@ import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.FresnelSpecularPBRTBXDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBTDF;
+import org.dayflower.scene.bxdf.FresnelSpecularBXDF;
+import org.dayflower.scene.bxdf.SpecularBRDF;
+import org.dayflower.scene.bxdf.SpecularBTDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBRDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBTDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.fresnel.Fresnel;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
@@ -513,7 +513,7 @@ public final class GlassPBRTMaterial implements Material {
 		final boolean isSpecular = isZero(roughnessU) && isZero(roughnessV);
 		
 		if(isSpecular && isAllowingMultipleLobes) {
-			return Optional.of(new BSDF(intersection, new FresnelSpecularPBRTBXDF(colorKR, colorKT, transportMode, 1.0F, eta), false, eta));
+			return Optional.of(new BSDF(intersection, new FresnelSpecularBXDF(colorKR, colorKT, transportMode, 1.0F, eta), false, eta));
 		}
 		
 		if(isSpecular) {
@@ -522,11 +522,11 @@ public final class GlassPBRTMaterial implements Material {
 			if(!colorKR.isBlack()) {
 				final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 				
-				bXDFs.add(new SpecularPBRTBRDF(colorKR, fresnel));
+				bXDFs.add(new SpecularBRDF(colorKR, fresnel));
 			}
 			
 			if(!colorKT.isBlack()) {
-				bXDFs.add(new SpecularPBRTBTDF(colorKT, transportMode, 1.0F, eta));
+				bXDFs.add(new SpecularBTDF(colorKT, transportMode, 1.0F, eta));
 			}
 			
 			return Optional.of(new BSDF(intersection, bXDFs, false, eta));
@@ -542,11 +542,11 @@ public final class GlassPBRTMaterial implements Material {
 		if(!colorKR.isBlack()) {
 			final Fresnel fresnel = new DielectricFresnel(1.0F, eta);
 			
-			bXDFs.add(new TorranceSparrowPBRTBRDF(colorKR, fresnel, microfacetDistribution));
+			bXDFs.add(new TorranceSparrowBRDF(colorKR, fresnel, microfacetDistribution));
 		}
 		
 		if(!colorKT.isBlack()) {
-			bXDFs.add(new TorranceSparrowPBRTBTDF(colorKT, microfacetDistribution, transportMode, 1.0F, eta));
+			bXDFs.add(new TorranceSparrowBTDF(colorKT, microfacetDistribution, transportMode, 1.0F, eta));
 		}
 		
 		return Optional.of(new BSDF(intersection, bXDFs, false, eta));

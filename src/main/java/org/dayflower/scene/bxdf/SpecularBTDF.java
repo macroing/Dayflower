@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.pbrt;
+package org.dayflower.scene.bxdf;
 
-import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.random;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,33 +33,47 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.TransportMode;
+import org.dayflower.scene.fresnel.DielectricFresnel;
+import org.dayflower.scene.fresnel.Fresnel;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code LambertianPBRTBTDF} is an implementation of {@link BXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for Lambertian transmission.
+ * A {@code SpecularBTDF} is an implementation of {@link BXDF} that represents a BTDF (Bidirectional Transmittance Distribution Function) for specular transmission.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LambertianPBRTBTDF extends BXDF {
+public final class SpecularBTDF extends BXDF {
 	private final Color3F transmittanceScale;
+	private final Fresnel fresnel;
+	private final TransportMode transportMode;
+	private final float etaA;
+	private final float etaB;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code LambertianPBRTBTDF} instance.
+	 * Constructs a new {@code SpecularBTDF} instance.
 	 * <p>
-	 * If {@code transmittanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code transmittanceScale} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param transmittanceScale a {@link Color3F} instance that represents the transmittance scale
-	 * @throws NullPointerException thrown if, and only if, {@code transmittanceScale} is {@code null}
+	 * @param transportMode a {@link TransportMode} instance
+	 * @param etaA one of the indices of refraction (IOR)
+	 * @param etaB one of the indices of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code transmittanceScale} or {@code transportMode} are {@code null}
 	 */
-	public LambertianPBRTBTDF(final Color3F transmittanceScale) {
-		super(BXDFType.DIFFUSE_TRANSMISSION);
+	public SpecularBTDF(final Color3F transmittanceScale, final TransportMode transportMode, final float etaA, final float etaB) {
+		super(BXDFType.SPECULAR_TRANSMISSION);
 		
 		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
+		this.fresnel = new DielectricFresnel(etaA, etaB);
+		this.transportMode = Objects.requireNonNull(transportMode, "transportMode == null");
+		this.etaA = etaA;
+		this.etaB = etaB;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,14 +93,38 @@ public final class LambertianPBRTBTDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
-//		PBRT: Implementation of LambertianTransmission.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
 		Objects.requireNonNull(normal, "normal == null");
 		
-		return this.transmittanceScale;
+		Color3F reflectance = Color3F.BLACK;
+		
+		for(int i = 0; i < samplesA.size(); i++) {
+			final Point2F sampleA = samplesA.get(i);
+			final Point2F sampleB = i < samplesB.size() ? samplesB.get(i) : new Point2F(random(), random());
+			
+			final Vector3F outgoing = SampleGeneratorF.sampleHemisphereUniformDistribution(sampleB.getU(), sampleB.getV());
+			
+			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
+			
+			if(optionalBXDFResult.isPresent()) {
+				final BXDFResult bXDFResult = optionalBXDFResult.get();
+				
+				final float probabilityDensityFunctionValueIncoming = bXDFResult.getProbabilityDensityFunctionValue();
+				final float probabilityDensityFunctionValueOutgoing = SampleGeneratorF.hemisphereUniformDistributionProbabilityDensityFunction();
+				
+				if(probabilityDensityFunctionValueIncoming > 0.0F) {
+					final Color3F result = bXDFResult.getResult();
+					
+					final Vector3F incoming = bXDFResult.getIncoming();
+					
+					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(Color3F.multiply(result, incoming.cosThetaAbs()), outgoing.cosThetaAbs()), probabilityDensityFunctionValueOutgoing * probabilityDensityFunctionValueIncoming));
+				}
+			}
+		}
+		
+		return Color3F.divide(reflectance, PI * samplesA.size());
 	}
 	
 	/**
@@ -102,14 +142,34 @@ public final class LambertianPBRTBTDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
-//		PBRT: Implementation of LambertianTransmission.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
-		return this.transmittanceScale;
+		Color3F reflectance = Color3F.BLACK;
+		
+		for(int i = 0; i < samplesA.size(); i++) {
+			final Point2F sampleA = samplesA.get(i);
+			
+			final Optional<BXDFResult> optionalBXDFResult = sampleDistributionFunction(outgoing, normal, sampleA);
+			
+			if(optionalBXDFResult.isPresent()) {
+				final BXDFResult bXDFResult = optionalBXDFResult.get();
+				
+				final float probabilityDensityFunctionValue = bXDFResult.getProbabilityDensityFunctionValue();
+				
+				if(probabilityDensityFunctionValue > 0.0F) {
+					final Color3F result = bXDFResult.getResult();
+					
+					final Vector3F incoming = bXDFResult.getIncoming();
+					
+					reflectance = Color3F.add(reflectance, Color3F.divide(Color3F.multiply(result, incoming.cosThetaAbs()), probabilityDensityFunctionValue));
+				}
+			}
+		}
+		
+		return Color3F.divide(reflectance, samplesA.size());
 	}
 	
 	/**
@@ -127,13 +187,11 @@ public final class LambertianPBRTBTDF extends BXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of LambertianTransmission.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Color3F.multiply(this.transmittanceScale, PI_RECIPROCAL);
+		return Color3F.BLACK;
 	}
 	
 	/**
@@ -151,49 +209,65 @@ public final class LambertianPBRTBTDF extends BXDF {
 	 */
 	@Override
 	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
-//		PBRT: Implementation of LambertianTransmission.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F incoming = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
-		final Vector3F incomingCorrectlyOriented = outgoing.getZ() > 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
+		final boolean isEntering = outgoing.cosTheta() > 0.0F;
+		
+		final float etaI = isEntering ? this.etaA : this.etaB;
+		final float etaT = isEntering ? this.etaB : this.etaA;
+		
+		final Optional<Vector3F> optionalIncoming = Vector3F.refraction(outgoing, Vector3F.faceForward(Vector3F.z(), outgoing), etaI / etaT);
+		
+		if(!optionalIncoming.isPresent()) {
+			return Optional.empty();
+		}
+		
+		final Vector3F incoming = optionalIncoming.get();
 		
 		final BXDFType bXDFType = getBXDFType();
 		
-		final Color3F result = evaluateDistributionFunction(outgoing, normal, incomingCorrectlyOriented);
+		final Color3F result = doComputeResult(incoming, etaI, etaT);
 		
-		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incomingCorrectlyOriented);
+		final float probabilityDensityFunctionValue = 1.0F;
 		
-		return Optional.of(new BXDFResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code LambertianPBRTBTDF} instance.
+	 * Returns a {@code String} representation of this {@code SpecularBTDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code LambertianPBRTBTDF} instance
+	 * @return a {@code String} representation of this {@code SpecularBTDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new LambertianPBRTBTDF(%s)", this.transmittanceScale);
+		return String.format("new SpecularBTDF(%s, %s, %+.10f, %+.10f)", this.transmittanceScale, this.transportMode, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code LambertianPBRTBTDF} instance for equality.
+	 * Compares {@code object} to this {@code SpecularBTDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code LambertianPBRTBTDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SpecularBTDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code LambertianPBRTBTDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code LambertianPBRTBTDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code SpecularBTDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SpecularBTDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof LambertianPBRTBTDF)) {
+		} else if(!(object instanceof SpecularBTDF)) {
 			return false;
-		} else if(!Objects.equals(this.transmittanceScale, LambertianPBRTBTDF.class.cast(object).transmittanceScale)) {
+		} else if(!Objects.equals(this.transmittanceScale, SpecularBTDF.class.cast(object).transmittanceScale)) {
+			return false;
+		} else if(!Objects.equals(this.fresnel, SpecularBTDF.class.cast(object).fresnel)) {
+			return false;
+		} else if(!Objects.equals(this.transportMode, SpecularBTDF.class.cast(object).transportMode)) {
+			return false;
+		} else if(!equal(this.etaA, SpecularBTDF.class.cast(object).etaA)) {
+			return false;
+		} else if(!equal(this.etaB, SpecularBTDF.class.cast(object).etaB)) {
 			return false;
 		} else {
 			return true;
@@ -215,22 +289,33 @@ public final class LambertianPBRTBTDF extends BXDF {
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of LambertianTransmission.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Vector3F.sameHemisphereZ(outgoing, incoming) ? 0.0F : incoming.cosThetaAbs() * PI_RECIPROCAL;
+		return 0.0F;
 	}
 	
 	/**
-	 * Returns a hash code for this {@code LambertianPBRTBTDF} instance.
+	 * Returns a hash code for this {@code SpecularBTDF} instance.
 	 * 
-	 * @return a hash code for this {@code LambertianPBRTBTDF} instance
+	 * @return a hash code for this {@code SpecularBTDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.transmittanceScale);
+		return Objects.hash(this.transmittanceScale, this.fresnel, this.transportMode, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Color3F doComputeResult(final Vector3F incoming, final float etaI, final float etaT) {
+		switch(this.transportMode) {
+			case IMPORTANCE:
+				return Color3F.divide(Color3F.multiply(this.transmittanceScale, Color3F.subtract(Color3F.WHITE, this.fresnel.evaluate(incoming.cosTheta()))), incoming.cosThetaAbs());
+			case RADIANCE:
+				return Color3F.divide(Color3F.multiply(Color3F.multiply(this.transmittanceScale, Color3F.subtract(Color3F.WHITE, this.fresnel.evaluate(incoming.cosTheta()))), (etaI * etaI) / (etaT * etaT)), incoming.cosThetaAbs());
+			default:
+				return Color3F.divide(Color3F.multiply(this.transmittanceScale, Color3F.subtract(Color3F.WHITE, this.fresnel.evaluate(incoming.cosTheta()))), incoming.cosThetaAbs());
+		}
 	}
 }

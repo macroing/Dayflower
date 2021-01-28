@@ -16,7 +16,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.pbrt;
+package org.dayflower.scene.bxdf;
+
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.fresnelSchlickWeight;
+import static org.dayflower.utility.Floats.isZero;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,39 +29,41 @@ import java.util.Optional;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
+import org.dayflower.scene.BXDFType;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code ScaledPBRTBXDF} is an implementation of {@link BXDF} that scales the result of another {@code BXDF} instance.
+ * A {@code DisneyRetroBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney Retro reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class ScaledPBRTBXDF extends BXDF {
-	private final BXDF bXDF;
-	private final Color3F scale;
+public final class DisneyRetroBRDF extends BXDF {
+	private final Color3F reflectanceScale;
+	private final float roughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code ScaledPBRTBXDF} instance.
+	 * Constructs a new {@code DisneyRetroBRDF} instance.
 	 * <p>
-	 * If either {@code bXDF} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param bXDF the {@link BXDF} instance to scale
-	 * @param scale the {@link Color3F} instance to use as the scale
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDF} or {@code scale} are {@code null}
+	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @param roughness a {@code float} that represents the roughness
+	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public ScaledPBRTBXDF(final BXDF bXDF, final Color3F scale) {
-		super(Objects.requireNonNull(bXDF, "bXDF == null").getBXDFType());
+	public DisneyRetroBRDF(final Color3F reflectanceScale, final float roughness) {
+		super(BXDFType.DIFFUSE_REFLECTION);
 		
-		this.bXDF = bXDF;
-		this.scale = Objects.requireNonNull(scale, "scale == null");
+		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
+		this.roughness = roughness;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +88,7 @@ public final class ScaledPBRTBXDF extends BXDF {
 		
 		Objects.requireNonNull(normal, "normal == null");
 		
-		return Color3F.multiply(this.bXDF.computeReflectanceFunction(samplesA, samplesB, normal), this.scale);
+		return this.reflectanceScale;
 	}
 	
 	/**
@@ -104,7 +111,7 @@ public final class ScaledPBRTBXDF extends BXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
-		return Color3F.multiply(this.bXDF.computeReflectanceFunction(samplesA, outgoing, normal), this.scale);
+		return this.reflectanceScale;
 	}
 	
 	/**
@@ -126,7 +133,27 @@ public final class ScaledPBRTBXDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Color3F.multiply(this.bXDF.evaluateDistributionFunction(outgoing, normal, incoming), this.scale);
+		final Vector3F n = Vector3F.add(incoming, outgoing);
+		
+		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+			return Color3F.BLACK;
+		}
+		
+		final Vector3F nNormalized = Vector3F.normalize(n);
+		
+		final float cosThetaD = Vector3F.dotProduct(incoming, nNormalized);
+		
+		final float fresnelOutgoing = fresnelSchlickWeight(outgoing.cosThetaAbs());
+		final float fresnelIncoming = fresnelSchlickWeight(incoming.cosThetaAbs());
+		
+		final float a = 2.0F * this.roughness * cosThetaD * cosThetaD;
+		final float b = fresnelOutgoing + fresnelIncoming + fresnelOutgoing * fresnelIncoming * (a - 1.0F);
+		
+		final float component1 = this.reflectanceScale.getComponent1() * PI_RECIPROCAL * a * b;
+		final float component2 = this.reflectanceScale.getComponent2() * PI_RECIPROCAL * a * b;
+		final float component3 = this.reflectanceScale.getComponent3() * PI_RECIPROCAL * a * b;
+		
+		return new Color3F(component1, component2, component3);
 	}
 	
 	/**
@@ -148,42 +175,45 @@ public final class ScaledPBRTBXDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Optional<BXDFResult> optionalBXDFResult = this.bXDF.sampleDistributionFunction(outgoing, normal, sample);
+		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
 		
-		if(optionalBXDFResult.isPresent()) {
-			return Optional.of(BXDFResult.scale(optionalBXDFResult.get(), this.scale));
-		}
+		final BXDFType bXDFType = getBXDFType();
 		
-		return Optional.empty();
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
+		
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
+		
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code ScaledPBRTBXDF} instance.
+	 * Returns a {@code String} representation of this {@code DisneyRetroBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code ScaledPBRTBXDF} instance
+	 * @return a {@code String} representation of this {@code DisneyRetroBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new ScaledPBRTBXDF(%s, %s)", this.bXDF, this.scale);
+		return String.format("new DisneyRetroBRDF(%s, %+.10f)", this.reflectanceScale, Float.valueOf(this.roughness));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code ScaledPBRTBXDF} instance for equality.
+	 * Compares {@code object} to this {@code DisneyRetroBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code ScaledPBRTBXDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyRetroBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code ScaledPBRTBXDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code ScaledPBRTBXDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code DisneyRetroBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyRetroBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof ScaledPBRTBXDF)) {
+		} else if(!(object instanceof DisneyRetroBRDF)) {
 			return false;
-		} else if(!Objects.equals(this.bXDF, ScaledPBRTBXDF.class.cast(object).bXDF)) {
+		} else if(!Objects.equals(this.reflectanceScale, DisneyRetroBRDF.class.cast(object).reflectanceScale)) {
 			return false;
-		} else if(!Objects.equals(this.scale, ScaledPBRTBXDF.class.cast(object).scale)) {
+		} else if(!equal(this.roughness, DisneyRetroBRDF.class.cast(object).roughness)) {
 			return false;
 		} else {
 			return true;
@@ -209,16 +239,16 @@ public final class ScaledPBRTBXDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return this.bXDF.evaluateProbabilityDensityFunction(outgoing, normal, incoming);
+		return Vector3F.sameHemisphereZ(outgoing, incoming) ? incoming.cosThetaAbs() * PI_RECIPROCAL : 0.0F;
 	}
 	
 	/**
-	 * Returns a hash code for this {@code ScaledPBRTBXDF} instance.
+	 * Returns a hash code for this {@code DisneyRetroBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code ScaledPBRTBXDF} instance
+	 * @return a hash code for this {@code DisneyRetroBRDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.bXDF, this.scale);
+		return Objects.hash(this.reflectanceScale, Float.valueOf(this.roughness));
 	}
 }

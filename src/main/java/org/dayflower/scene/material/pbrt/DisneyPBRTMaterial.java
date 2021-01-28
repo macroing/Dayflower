@@ -36,15 +36,15 @@ import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.DisneyClearCoatPBRTBRDF;
-import org.dayflower.scene.bxdf.pbrt.DisneyDiffusePBRTBRDF;
-import org.dayflower.scene.bxdf.pbrt.DisneyFakeSSPBRTBRDF;
-import org.dayflower.scene.bxdf.pbrt.DisneyRetroPBRTBRDF;
-import org.dayflower.scene.bxdf.pbrt.DisneySheenPBRTBRDF;
-import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBTDF;
-import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBTDF;
+import org.dayflower.scene.bxdf.DisneyClearCoatBRDF;
+import org.dayflower.scene.bxdf.DisneyDiffuseBRDF;
+import org.dayflower.scene.bxdf.DisneyFakeSSBRDF;
+import org.dayflower.scene.bxdf.DisneyRetroBRDF;
+import org.dayflower.scene.bxdf.DisneySheenBRDF;
+import org.dayflower.scene.bxdf.LambertianBTDF;
+import org.dayflower.scene.bxdf.SpecularBTDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBRDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBTDF;
 import org.dayflower.scene.fresnel.DisneyFresnel;
 import org.dayflower.scene.fresnel.Fresnel;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
@@ -1144,22 +1144,22 @@ public final class DisneyPBRTMaterial implements Material {
 				final Color3F colorReflectanceScale0 = Color3F.multiply(colorColor, diffuseWeight * (1.0F - floatFlatness) * (1.0F - floatDiffuseTransmission));
 				final Color3F colorReflectanceScale1 = Color3F.multiply(colorColor, diffuseWeight * (0.0F + floatFlatness) * (1.0F - floatDiffuseTransmission));
 				
-				bXDFs.add(new DisneyDiffusePBRTBRDF(colorReflectanceScale0));
-				bXDFs.add(new DisneyFakeSSPBRTBRDF(colorReflectanceScale1, floatRoughness));
+				bXDFs.add(new DisneyDiffuseBRDF(colorReflectanceScale0));
+				bXDFs.add(new DisneyFakeSSBRDF(colorReflectanceScale1, floatRoughness));
 			} else {
 				final Color3F colorScatterDistance = this.textureScatterDistance.getColor(intersection);
 				
 				if(colorScatterDistance.isBlack()) {
-					bXDFs.add(new DisneyDiffusePBRTBRDF(Color3F.multiply(colorColor, diffuseWeight)));
+					bXDFs.add(new DisneyDiffuseBRDF(Color3F.multiply(colorColor, diffuseWeight)));
 				} else {
-					bXDFs.add(new SpecularPBRTBTDF(Color3F.WHITE, transportMode, 1.0F, floatEta));
+					bXDFs.add(new SpecularBTDF(Color3F.WHITE, transportMode, 1.0F, floatEta));
 				}
 			}
 			
-			bXDFs.add(new DisneyRetroPBRTBRDF(Color3F.multiply(colorColor, diffuseWeight), floatRoughness));
+			bXDFs.add(new DisneyRetroBRDF(Color3F.multiply(colorColor, diffuseWeight), floatRoughness));
 			
 			if(floatSheen > 0.0F) {
-				bXDFs.add(new DisneySheenPBRTBRDF(Color3F.multiply(colorSheen, diffuseWeight * floatSheen)));
+				bXDFs.add(new DisneySheenBRDF(Color3F.multiply(colorSheen, diffuseWeight * floatSheen)));
 			}
 		}
 		
@@ -1176,10 +1176,10 @@ public final class DisneyPBRTMaterial implements Material {
 		
 		final Fresnel fresnel = new DisneyFresnel(colorSpecularR0, floatEta, floatMetallic);
 		
-		bXDFs.add(new TorranceSparrowPBRTBRDF(Color3F.WHITE, fresnel, microfacetDistribution));
+		bXDFs.add(new TorranceSparrowBRDF(Color3F.WHITE, fresnel, microfacetDistribution));
 		
 		if(floatClearCoat > 0.0F) {
-			bXDFs.add(new DisneyClearCoatPBRTBRDF(lerp(0.1F, 0.001F, this.textureClearCoatGloss.getFloat(intersection)), floatClearCoat));
+			bXDFs.add(new DisneyClearCoatBRDF(lerp(0.1F, 0.001F, this.textureClearCoatGloss.getFloat(intersection)), floatClearCoat));
 		}
 		
 		if(floatSpecularTransmission > 0.0F) {
@@ -1193,17 +1193,17 @@ public final class DisneyPBRTMaterial implements Material {
 				
 				final MicrofacetDistribution microfacetDistributionScaled = new TrowbridgeReitzMicrofacetDistribution(true, false, alphaXScaled, alphaYScaled);
 				
-				bXDFs.add(new TorranceSparrowPBRTBTDF(transmittanceScale, microfacetDistributionScaled, transportMode, 1.0F, floatEta));
+				bXDFs.add(new TorranceSparrowBTDF(transmittanceScale, microfacetDistributionScaled, transportMode, 1.0F, floatEta));
 			} else {
-				bXDFs.add(new TorranceSparrowPBRTBTDF(transmittanceScale, microfacetDistribution, transportMode, 1.0F, floatEta));
+				bXDFs.add(new TorranceSparrowBTDF(transmittanceScale, microfacetDistribution, transportMode, 1.0F, floatEta));
 			}
 		}
 		
 		if(this.isThin) {
-			bXDFs.add(new LambertianPBRTBTDF(Color3F.multiply(colorColor, floatDiffuseTransmission)));
+			bXDFs.add(new LambertianBTDF(Color3F.multiply(colorColor, floatDiffuseTransmission)));
 		}
 		
-		return Optional.of(new BSDF(intersection, bXDFs, false));
+		return Optional.of(new BSDF(intersection, bXDFs));
 	}
 	
 	/**

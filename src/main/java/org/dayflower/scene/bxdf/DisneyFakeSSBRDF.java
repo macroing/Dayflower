@@ -16,9 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.rayito;
+package org.dayflower.scene.bxdf;
 
-import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.fresnelSchlickWeight;
+import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.lerp;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +30,7 @@ import java.util.Optional;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
@@ -33,30 +38,33 @@ import org.dayflower.scene.BXDFType;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code SpecularRayitoBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for specular reflection.
+ * A {@code DisneyFakeSSBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney Fake Subsurface Scattering (SS) reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class SpecularRayitoBRDF extends BXDF {
+public final class DisneyFakeSSBRDF extends BXDF {
 	private final Color3F reflectanceScale;
+	private final float roughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code SpecularRayitoBRDF} instance.
+	 * Constructs a new {@code DisneyFakeSSBRDF} instance.
 	 * <p>
 	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @param roughness a {@code float} that represents the roughness
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public SpecularRayitoBRDF(final Color3F reflectanceScale) {
-		super(BXDFType.SPECULAR_REFLECTION);
+	public DisneyFakeSSBRDF(final Color3F reflectanceScale, final float roughness) {
+		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
+		this.roughness = roughness;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,13 +83,13 @@ public final class SpecularRayitoBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code samplesB}, {@code normal} or an element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
 	@Override
-	public final Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
 		Objects.requireNonNull(normal, "normal == null");
 		
-		return Color3F.BLACK;
+		return this.reflectanceScale;
 	}
 	
 	/**
@@ -98,13 +106,13 @@ public final class SpecularRayitoBRDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, either {@code samplesA}, {@code outgoing}, {@code normal} or an element in {@code samplesA} are {@code null}
 	 */
 	@Override
-	public final Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
+	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		
-		return Color3F.BLACK;
+		return this.reflectanceScale;
 	}
 	
 	/**
@@ -126,7 +134,30 @@ public final class SpecularRayitoBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return Color3F.BLACK;
+		final Vector3F n = Vector3F.add(incoming, outgoing);
+		
+		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+			return Color3F.BLACK;
+		}
+		
+		final Vector3F nNormalized = Vector3F.normalize(n);
+		
+		final float cosThetaD = Vector3F.dotProduct(incoming, nNormalized);
+		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
+		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
+		
+		final float fresnelSS90 = cosThetaD * cosThetaD * this.roughness;
+		final float fresnelOutgoing = fresnelSchlickWeight(cosThetaAbsOutgoing);
+		final float fresnelIncoming = fresnelSchlickWeight(cosThetaAbsIncoming);
+		final float fresnelSS = lerp(1.0F, fresnelSS90, fresnelOutgoing) * lerp(1.0F, fresnelSS90, fresnelIncoming);
+		
+		final float scaleSS = 1.25F * (fresnelSS * (1.0F / (cosThetaAbsOutgoing + cosThetaAbsIncoming) - 0.5F) + 0.5F);
+		
+		final float component1 = this.reflectanceScale.getComponent1() * PI_RECIPROCAL * scaleSS;
+		final float component2 = this.reflectanceScale.getComponent2() * PI_RECIPROCAL * scaleSS;
+		final float component3 = this.reflectanceScale.getComponent3() * PI_RECIPROCAL * scaleSS;
+		
+		return new Color3F(component1, component2, component3);
 	}
 	
 	/**
@@ -148,45 +179,45 @@ public final class SpecularRayitoBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final float normalDotOutgoing = Vector3F.dotProduct(normal, outgoing);
-		
-		final Vector3F incoming = normalDotOutgoing < 0.0F ? Vector3F.add(outgoing, Vector3F.multiply(normal, 2.0F * normalDotOutgoing)) : Vector3F.subtract(outgoing, Vector3F.multiply(normal, 2.0F * normalDotOutgoing));
+		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
 		
 		final BXDFType bXDFType = getBXDFType();
 		
-		final Color3F result = this.reflectanceScale;
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 		
-		final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, incoming));
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 		
-//		TODO: Find out why the PDF and Reflectance variables seems to be swapped? Swapping them does not work.
 		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code SpecularRayitoBRDF} instance.
+	 * Returns a {@code String} representation of this {@code DisneyFakeSSBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code SpecularRayitoBRDF} instance
+	 * @return a {@code String} representation of this {@code DisneyFakeSSBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new SpecularRayitoBRDF(%s)", this.reflectanceScale);
+		return String.format("new DisneyFakeSSBRDF(%s, %+.10f)", this.reflectanceScale, Float.valueOf(this.roughness));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code SpecularRayitoBRDF} instance for equality.
+	 * Compares {@code object} to this {@code DisneyFakeSSBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code SpecularRayitoBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyFakeSSBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code SpecularRayitoBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code SpecularRayitoBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code DisneyFakeSSBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyFakeSSBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof SpecularRayitoBRDF)) {
+		} else if(!(object instanceof DisneyFakeSSBRDF)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, SpecularRayitoBRDF.class.cast(object).reflectanceScale)) {
+		} else if(!Objects.equals(this.reflectanceScale, DisneyFakeSSBRDF.class.cast(object).reflectanceScale)) {
+			return false;
+		} else if(!equal(this.roughness, DisneyFakeSSBRDF.class.cast(object).roughness)) {
 			return false;
 		} else {
 			return true;
@@ -212,16 +243,16 @@ public final class SpecularRayitoBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return 0.0F;
+		return Vector3F.sameHemisphereZ(outgoing, incoming) ? incoming.cosThetaAbs() * PI_RECIPROCAL : 0.0F;
 	}
 	
 	/**
-	 * Returns a hash code for this {@code SpecularRayitoBRDF} instance.
+	 * Returns a hash code for this {@code DisneyFakeSSBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code SpecularRayitoBRDF} instance
+	 * @return a hash code for this {@code DisneyFakeSSBRDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.reflectanceScale);
+		return Objects.hash(this.reflectanceScale, Float.valueOf(this.roughness));
 	}
 }

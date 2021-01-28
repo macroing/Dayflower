@@ -29,7 +29,7 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.AshikhminShirleyRayitoBRDF;
+import org.dayflower.scene.bxdf.AshikhminShirleyBRDF;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
@@ -269,7 +269,7 @@ public final class MetalRayitoMaterial implements Material {
 		
 		final float roughness = colorRoughness.average();
 		
-		return Optional.of(new BSDF(intersection, new AshikhminShirleyRayitoBRDF(colorKR, roughness), true));
+		return Optional.of(new BSDF(intersection, new AshikhminShirleyBRDF(colorKR, roughness), true));
 	}
 	
 	/**

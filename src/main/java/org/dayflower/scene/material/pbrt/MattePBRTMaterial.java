@@ -34,7 +34,7 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.LambertianBRDF;
-import org.dayflower.scene.bxdf.pbrt.OrenNayarPBRTBRDF;
+import org.dayflower.scene.bxdf.OrenNayarBRDF;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -294,10 +294,10 @@ public final class MattePBRTMaterial implements Material {
 		}
 		
 		if(isZero(angle.getDegrees())) {
-			return Optional.of(new BSDF(intersection, new LambertianBRDF(colorKD), false));
+			return Optional.of(new BSDF(intersection, new LambertianBRDF(colorKD)));
 		}
 		
-		return Optional.of(new BSDF(intersection, new OrenNayarPBRTBRDF(angle, colorKD), false));
+		return Optional.of(new BSDF(intersection, new OrenNayarBRDF(angle, colorKD)));
 	}
 	
 	/**

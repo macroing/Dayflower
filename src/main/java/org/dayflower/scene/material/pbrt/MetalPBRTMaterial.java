@@ -29,7 +29,7 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBRDF;
 import org.dayflower.scene.fresnel.ConductorFresnel;
 import org.dayflower.scene.fresnel.Fresnel;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
@@ -446,7 +446,7 @@ public final class MetalPBRTMaterial implements Material {
 		
 		final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV);
 		
-		return Optional.of(new BSDF(intersection, new TorranceSparrowPBRTBRDF(colorEtaI, fresnel, microfacetDistribution), false));
+		return Optional.of(new BSDF(intersection, new TorranceSparrowBRDF(colorEtaI, fresnel, microfacetDistribution)));
 	}
 	
 	/**

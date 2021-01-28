@@ -33,7 +33,7 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.LambertianBRDF;
-import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBRDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.fresnel.Fresnel;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
@@ -402,11 +402,11 @@ public final class PlasticPBRTMaterial implements Material {
 			
 			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughness, roughness);
 			
-			bXDFs.add(new TorranceSparrowPBRTBRDF(colorKS, fresnel, microfacetDistribution));
+			bXDFs.add(new TorranceSparrowBRDF(colorKS, fresnel, microfacetDistribution));
 		}
 		
 		if(bXDFs.size() > 0) {
-			return Optional.of(new BSDF(intersection, bXDFs, false));
+			return Optional.of(new BSDF(intersection, bXDFs));
 		}
 		
 		return Optional.empty();

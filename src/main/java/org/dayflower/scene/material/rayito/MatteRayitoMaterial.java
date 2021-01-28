@@ -190,7 +190,11 @@ public final class MatteRayitoMaterial implements Material {
 		
 		final Color3F colorKD = this.textureKD.getColor(intersection);
 		
-		return Optional.of(new BSDF(intersection, new LambertianBRDF(colorKD, true, true), true));
+		if(colorKD.isBlack()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(new BSDF(intersection, new LambertianBRDF(colorKD)));
 	}
 	
 	/**

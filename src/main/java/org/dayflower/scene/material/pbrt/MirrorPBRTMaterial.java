@@ -29,7 +29,7 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
+import org.dayflower.scene.bxdf.SpecularBRDF;
 import org.dayflower.scene.fresnel.ConstantFresnel;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
@@ -235,7 +235,7 @@ public final class MirrorPBRTMaterial implements Material {
 		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorKR.isBlack()) {
-			return Optional.of(new BSDF(intersection, new SpecularPBRTBRDF(colorKR, new ConstantFresnel()), false));
+			return Optional.of(new BSDF(intersection, new SpecularBRDF(colorKR, new ConstantFresnel())));
 		}
 		
 		return Optional.empty();

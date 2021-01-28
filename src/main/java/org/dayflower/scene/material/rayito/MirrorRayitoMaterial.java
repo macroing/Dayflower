@@ -29,7 +29,8 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.rayito.SpecularRayitoBRDF;
+import org.dayflower.scene.bxdf.SpecularBRDF;
+import org.dayflower.scene.fresnel.ConstantFresnel;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
@@ -188,9 +189,13 @@ public final class MirrorRayitoMaterial implements Material {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(transportMode, "transportMode == null");
 		
-		final Color3F colorKR = this.textureKR.getColor(intersection);
+		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
-		return Optional.of(new BSDF(intersection, new SpecularRayitoBRDF(colorKR), true));
+		if(!colorKR.isBlack()) {
+			return Optional.of(new BSDF(intersection, new SpecularBRDF(colorKR, new ConstantFresnel())));
+		}
+		
+		return Optional.empty();
 	}
 	
 	/**

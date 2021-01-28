@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.pbrt;
+package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.random;
 
 import java.util.List;
@@ -33,41 +33,47 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
-import org.dayflower.scene.fresnel.Fresnel;
-import org.dayflower.scene.microfacet.MicrofacetDistribution;
+import org.dayflower.scene.TransportMode;
+import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code TorranceSparrowPBRTBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Torrance-Sparrow reflection using a microfacet distribution.
+ * A {@code FresnelSpecularBXDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for specular reflection and transmission.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class TorranceSparrowPBRTBRDF extends BXDF {
+public final class FresnelSpecularBXDF extends BXDF {
 	private final Color3F reflectanceScale;
-	private final Fresnel fresnel;
-	private final MicrofacetDistribution microfacetDistribution;
+	private final Color3F transmittanceScale;
+	private final TransportMode transportMode;
+	private final float etaA;
+	private final float etaB;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code TorranceSparrowPBRTBRDF} instance.
+	 * Constructs a new {@code FresnelSpecularBXDF} instance.
 	 * <p>
-	 * If either {@code reflectanceScale}, {@code fresnel} or {@code microfacetDistribution} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code reflectanceScale}, {@code transmittanceScale} or {@code transportMode} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
-	 * @param fresnel a {@link Fresnel} instance
-	 * @param microfacetDistribution a {@link MicrofacetDistribution} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScale}, {@code fresnel} or {@code microfacetDistribution} are {@code null}
+	 * @param transmittanceScale a {@code Color3F} instance that represents the transmittance scale
+	 * @param transportMode a {@link TransportMode} instance
+	 * @param etaA one of the indices of refraction (IOR)
+	 * @param etaB one of the indices of refraction (IOR)
+	 * @throws NullPointerException thrown if, and only if, either {@code reflectanceScale}, {@code transmittanceScale} or {@code transportMode} are {@code null}
 	 */
-	public TorranceSparrowPBRTBRDF(final Color3F reflectanceScale, final Fresnel fresnel, final MicrofacetDistribution microfacetDistribution) {
-		super(BXDFType.GLOSSY_REFLECTION);
+	public FresnelSpecularBXDF(final Color3F reflectanceScale, final Color3F transmittanceScale, final TransportMode transportMode, final float etaA, final float etaB) {
+		super(BXDFType.SPECULAR_REFLECTION_AND_TRANSMISSION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
-		this.fresnel = Objects.requireNonNull(fresnel, "fresnel == null");
-		this.microfacetDistribution = Objects.requireNonNull(microfacetDistribution, "microfacetDistribution == null");
+		this.transmittanceScale = Objects.requireNonNull(transmittanceScale, "transmittanceScale == null");
+		this.transportMode = Objects.requireNonNull(transportMode, "transportMode == null");
+		this.etaA = etaA;
+		this.etaB = etaB;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,8 +93,6 @@ public final class TorranceSparrowPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
@@ -138,8 +142,6 @@ public final class TorranceSparrowPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
@@ -185,34 +187,11 @@ public final class TorranceSparrowPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of MicrofacetReflection.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
-		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
-		
-		if(isZero(cosThetaAbsOutgoing) || isZero(cosThetaAbsIncoming)) {
-			return Color3F.BLACK;
-		}
-		
-		final Vector3F n = Vector3F.add(incoming, outgoing);
-		
-		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
-			return Color3F.BLACK;
-		}
-		
-		final Vector3F nNormalized = Vector3F.normalize(n);
-		
-		final float d = this.microfacetDistribution.computeDifferentialArea(nNormalized);
-		final float g = this.microfacetDistribution.computeShadowingAndMasking(outgoing, incoming);
-		
-		final Color3F r = this.reflectanceScale;
-		final Color3F f = this.fresnel.evaluate(Vector3F.dotProduct(incoming, Vector3F.faceForward(nNormalized, Vector3F.z())));
-		
-		return Color3F.divide(Color3F.multiply(Color3F.multiply(Color3F.multiply(r, d), g), f), 4.0F * cosThetaAbsIncoming * cosThetaAbsOutgoing);
+		return Color3F.BLACK;
 	}
 	
 	/**
@@ -230,66 +209,79 @@ public final class TorranceSparrowPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
-//		PBRT: Implementation of MicrofacetReflection.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		if(isZero(outgoing.getZ())) {
-			return Optional.empty();
+		final float reflectance = DielectricFresnel.evaluate(outgoing.cosTheta(), this.etaA, this.etaB);
+		
+		if(sample.getU() < reflectance) {
+			final BXDFType bXDFType = BXDFType.SPECULAR_REFLECTION;
+			
+			final Vector3F incoming = new Vector3F(-outgoing.getX(), -outgoing.getY(), outgoing.getZ());
+			
+			final Color3F result = Color3F.divide(Color3F.multiply(this.reflectanceScale, reflectance), incoming.cosThetaAbs());
+			
+			final float probabilityDensityFunctionValue = reflectance;
+			
+			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 		}
 		
-		final Vector3F n = this.microfacetDistribution.sampleNormal(outgoing, sample);
+		final boolean isEntering = outgoing.cosTheta() > 0.0F;
 		
-		if(Vector3F.dotProduct(outgoing, n) < 0.0F) {
-			return Optional.empty();
+		final float etaI = isEntering ? this.etaA : this.etaB;
+		final float etaT = isEntering ? this.etaB : this.etaA;
+		
+		final Optional<Vector3F> optionalIncoming = Vector3F.refraction(outgoing, Vector3F.faceForward(Vector3F.z(), outgoing), etaI / etaT);
+		
+		if(optionalIncoming.isPresent()) {
+			final BXDFType bXDFType = BXDFType.SPECULAR_TRANSMISSION;
+			
+			final Vector3F incoming = optionalIncoming.get();
+			
+			final Color3F result = doComputeResult(incoming, etaI, etaT, reflectance);
+			
+			final float probabilityDensityFunctionValue = 1.0F - reflectance;
+			
+			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 		}
 		
-		final Vector3F incoming = Vector3F.reflection(outgoing, n);
-		
-		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
-			return Optional.empty();
-		}
-		
-		final BXDFType bXDFType = getBXDFType();
-		
-		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
-		
-		final float probabilityDensityFunctionValue = this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n));
-		
-		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+		return Optional.empty();
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code TorranceSparrowPBRTBRDF} instance.
+	 * Returns a {@code String} representation of this {@code FresnelSpecularBXDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code TorranceSparrowPBRTBRDF} instance
+	 * @return a {@code String} representation of this {@code FresnelSpecularBXDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new TorranceSparrowPBRTBRDF(%s, %s, %s)", this.reflectanceScale, this.fresnel, this.microfacetDistribution);
+		return String.format("new FresnelSpecularBXDF(%s, %s, %s, %+.10f, %+.10f)", this.reflectanceScale, this.transmittanceScale, this.transportMode, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code TorranceSparrowPBRTBRDF} instance for equality.
+	 * Compares {@code object} to this {@code FresnelSpecularBXDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code TorranceSparrowPBRTBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code FresnelSpecularBXDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code TorranceSparrowPBRTBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code TorranceSparrowPBRTBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code FresnelSpecularBXDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code FresnelSpecularBXDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof TorranceSparrowPBRTBRDF)) {
+		} else if(!(object instanceof FresnelSpecularBXDF)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, TorranceSparrowPBRTBRDF.class.cast(object).reflectanceScale)) {
+		} else if(!Objects.equals(this.reflectanceScale, FresnelSpecularBXDF.class.cast(object).reflectanceScale)) {
 			return false;
-		} else if(!Objects.equals(this.fresnel, TorranceSparrowPBRTBRDF.class.cast(object).fresnel)) {
+		} else if(!Objects.equals(this.transmittanceScale, FresnelSpecularBXDF.class.cast(object).transmittanceScale)) {
 			return false;
-		} else if(!Objects.equals(this.microfacetDistribution, TorranceSparrowPBRTBRDF.class.cast(object).microfacetDistribution)) {
+		} else if(!Objects.equals(this.transportMode, FresnelSpecularBXDF.class.cast(object).transportMode)) {
+			return false;
+		} else if(!equal(this.etaA, FresnelSpecularBXDF.class.cast(object).etaA)) {
+			return false;
+		} else if(!equal(this.etaB, FresnelSpecularBXDF.class.cast(object).etaB)) {
 			return false;
 		} else {
 			return true;
@@ -311,28 +303,33 @@ public final class TorranceSparrowPBRTBRDF extends BXDF {
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of MicrofacetReflection.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
-			return 0.0F;
-		}
-		
-		final Vector3F n = Vector3F.normalize(Vector3F.add(outgoing, incoming));
-		
-		return this.microfacetDistribution.computeProbabilityDensityFunctionValue(outgoing, n) / (4.0F * Vector3F.dotProduct(outgoing, n));
+		return 0.0F;
 	}
 	
 	/**
-	 * Returns a hash code for this {@code TorranceSparrowPBRTBRDF} instance.
+	 * Returns a hash code for this {@code FresnelSpecularBXDF} instance.
 	 * 
-	 * @return a hash code for this {@code TorranceSparrowPBRTBRDF} instance
+	 * @return a hash code for this {@code FresnelSpecularBXDF} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.reflectanceScale, this.fresnel, this.microfacetDistribution);
+		return Objects.hash(this.reflectanceScale, this.transmittanceScale, this.transportMode, Float.valueOf(this.etaA), Float.valueOf(this.etaB));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Color3F doComputeResult(final Vector3F incoming, final float etaI, final float etaT, final float reflectance) {
+		switch(this.transportMode) {
+			case IMPORTANCE:
+				return Color3F.divide(Color3F.multiply(this.transmittanceScale, 1.0F - reflectance), incoming.cosThetaAbs());
+			case RADIANCE:
+				return Color3F.divide(Color3F.multiply(Color3F.multiply(this.transmittanceScale, 1.0F - reflectance), (etaI * etaI) / (etaT * etaT)), incoming.cosThetaAbs());
+			default:
+				return Color3F.divide(Color3F.multiply(this.transmittanceScale, 1.0F - reflectance), incoming.cosThetaAbs());
+		}
 	}
 }

@@ -31,7 +31,7 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.HairPBRTBXDF;
+import org.dayflower.scene.bxdf.HairBXDF;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -121,7 +121,7 @@ public final class HairPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor} or {@code colorEmission} are {@code null}
 	 */
 	public HairPBRTMaterial(final Color3F colorColor, final Color3F colorEmission) {
-		this(colorColor, colorEmission, HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F));
+		this(colorColor, colorEmission, HairBXDF.computeSigmaAFromConcentration(1.3F, 0.0F));
 	}
 	
 	/**
@@ -358,7 +358,7 @@ public final class HairPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor} or {@code textureEmission} are {@code null}
 	 */
 	public HairPBRTMaterial(final Texture textureColor, final Texture textureEmission) {
-		this(textureColor, textureEmission, new ConstantTexture(HairPBRTBXDF.computeSigmaAFromConcentration(1.3F, 0.0F)));
+		this(textureColor, textureEmission, new ConstantTexture(HairBXDF.computeSigmaAFromConcentration(1.3F, 0.0F)));
 	}
 	
 	/**
@@ -619,7 +619,7 @@ public final class HairPBRTMaterial implements Material {
 		
 		final float h = -1.0F + 2.0F * intersection.getTextureCoordinates().getV();
 		
-		return Optional.of(new BSDF(intersection, new HairPBRTBXDF(sigmaA, alpha, betaM, betaN, eta, h), false, eta));
+		return Optional.of(new BSDF(intersection, new HairBXDF(sigmaA, alpha, betaM, betaN, eta, h), false, eta));
 	}
 	
 	/**
@@ -889,12 +889,12 @@ public final class HairPBRTMaterial implements Material {
 		final Color3F color = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!color.isBlack()) {
-			return HairPBRTBXDF.computeSigmaAFromReflectance(color, betaN);
+			return HairBXDF.computeSigmaAFromReflectance(color, betaN);
 		}
 		
 		final float eumelanin = max(0.0F, this.textureEumelanin.getFloat(intersection));
 		final float pheomelanin = max(0.0F, this.texturePheomelanin.getFloat(intersection));
 		
-		return HairPBRTBXDF.computeSigmaAFromConcentration(eumelanin, pheomelanin);
+		return HairBXDF.computeSigmaAFromConcentration(eumelanin, pheomelanin);
 	}
 }

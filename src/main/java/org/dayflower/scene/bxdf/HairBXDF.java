@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.pbrt;
+package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.abs;
@@ -50,14 +50,14 @@ import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code HairPBRTBXDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for hair.
+ * A {@code HairBXDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for hair.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class HairPBRTBXDF extends BXDF {
+public final class HairBXDF extends BXDF {
 	private final Color3F sigmaA;
 	private final float alpha;
 	private final float betaM;
@@ -73,7 +73,7 @@ public final class HairPBRTBXDF extends BXDF {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code HairPBRTBXDF} instance.
+	 * Constructs a new {@code HairBXDF} instance.
 	 * <p>
 	 * If {@code sigmaA} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -85,7 +85,7 @@ public final class HairPBRTBXDF extends BXDF {
 	 * @param h a {@code float} value
 	 * @throws NullPointerException thrown if, and only if, {@code sigmaA} is {@code null}
 	 */
-	public HairPBRTBXDF(final Color3F sigmaA, final float alpha, final float betaM, final float betaN, final float eta, final float h) {
+	public HairBXDF(final Color3F sigmaA, final float alpha, final float betaM, final float betaN, final float eta, final float h) {
 		super(BXDFType.GLOSSY_REFLECTION_AND_TRANSMISSION);
 		
 		this.sigmaA = Objects.requireNonNull(sigmaA, "sigmaA == null");
@@ -132,8 +132,6 @@ public final class HairPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
@@ -183,8 +181,6 @@ public final class HairPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
-//		PBRT: Implementation of BxDF.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
@@ -230,9 +226,8 @@ public final class HairPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of HairBSDF.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
+		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
 		final float sinThetaOutgoing = outgoing.getX();
@@ -315,8 +310,6 @@ public final class HairPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
-//		PBRT: Implementation of HairBSDF.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
@@ -427,50 +420,50 @@ public final class HairPBRTBXDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code HairPBRTBXDF} instance.
+	 * Returns a {@code String} representation of this {@code HairBXDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code HairPBRTBXDF} instance
+	 * @return a {@code String} representation of this {@code HairBXDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new HairPBRTBXDF(%s, %+.10f, %+.10f, %+.10f, %+.10f, %+.10f)", this.sigmaA, Float.valueOf(this.alpha), Float.valueOf(this.betaM), Float.valueOf(this.betaN), Float.valueOf(this.eta), Float.valueOf(this.h));
+		return String.format("new HairBXDF(%s, %+.10f, %+.10f, %+.10f, %+.10f, %+.10f)", this.sigmaA, Float.valueOf(this.alpha), Float.valueOf(this.betaM), Float.valueOf(this.betaN), Float.valueOf(this.eta), Float.valueOf(this.h));
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code HairPBRTBXDF} instance for equality.
+	 * Compares {@code object} to this {@code HairBXDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code HairPBRTBXDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code HairBXDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code HairPBRTBXDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code HairPBRTBXDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code HairBXDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code HairBXDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof HairPBRTBXDF)) {
+		} else if(!(object instanceof HairBXDF)) {
 			return false;
-		} else if(!Objects.equals(this.sigmaA, HairPBRTBXDF.class.cast(object).sigmaA)) {
+		} else if(!Objects.equals(this.sigmaA, HairBXDF.class.cast(object).sigmaA)) {
 			return false;
-		} else if(!equal(this.alpha, HairPBRTBXDF.class.cast(object).alpha)) {
+		} else if(!equal(this.alpha, HairBXDF.class.cast(object).alpha)) {
 			return false;
-		} else if(!equal(this.betaM, HairPBRTBXDF.class.cast(object).betaM)) {
+		} else if(!equal(this.betaM, HairBXDF.class.cast(object).betaM)) {
 			return false;
-		} else if(!equal(this.betaN, HairPBRTBXDF.class.cast(object).betaN)) {
+		} else if(!equal(this.betaN, HairBXDF.class.cast(object).betaN)) {
 			return false;
-		} else if(!equal(this.eta, HairPBRTBXDF.class.cast(object).eta)) {
+		} else if(!equal(this.eta, HairBXDF.class.cast(object).eta)) {
 			return false;
-		} else if(!equal(this.gammaOutgoing, HairPBRTBXDF.class.cast(object).gammaOutgoing)) {
+		} else if(!equal(this.gammaOutgoing, HairBXDF.class.cast(object).gammaOutgoing)) {
 			return false;
-		} else if(!equal(this.h, HairPBRTBXDF.class.cast(object).h)) {
+		} else if(!equal(this.h, HairBXDF.class.cast(object).h)) {
 			return false;
-		} else if(!equal(this.s, HairPBRTBXDF.class.cast(object).s)) {
+		} else if(!equal(this.s, HairBXDF.class.cast(object).s)) {
 			return false;
-		} else if(!Arrays.equals(this.cos2KAlpha, HairPBRTBXDF.class.cast(object).cos2KAlpha)) {
+		} else if(!Arrays.equals(this.cos2KAlpha, HairBXDF.class.cast(object).cos2KAlpha)) {
 			return false;
-		} else if(!Arrays.equals(this.sin2KAlpha, HairPBRTBXDF.class.cast(object).sin2KAlpha)) {
+		} else if(!Arrays.equals(this.sin2KAlpha, HairBXDF.class.cast(object).sin2KAlpha)) {
 			return false;
-		} else if(!Arrays.equals(this.v, HairPBRTBXDF.class.cast(object).v)) {
+		} else if(!Arrays.equals(this.v, HairBXDF.class.cast(object).v)) {
 			return false;
 		} else {
 			return true;
@@ -492,8 +485,6 @@ public final class HairPBRTBXDF extends BXDF {
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of HairBSDF.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
@@ -554,9 +545,9 @@ public final class HairPBRTBXDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code HairPBRTBXDF} instance.
+	 * Returns a hash code for this {@code HairBXDF} instance.
 	 * 
-	 * @return a hash code for this {@code HairPBRTBXDF} instance
+	 * @return a hash code for this {@code HairBXDF} instance
 	 */
 	@Override
 	public int hashCode() {
@@ -764,9 +755,9 @@ public final class HairPBRTBXDF extends BXDF {
 	private static int doCompact1By1(final int x) {
 		final int a = x & 0x55555555;
 		final int b = (a ^ (a >> 1)) & 0x33333333;
-		final int c = (b ^ (b >> 2)) & 0x0f0f0f0f;
-		final int d = (c ^ (c >> 4)) & 0x00ff00ff;
-		final int e = (d ^ (d >> 8)) & 0x0000ffff;
+		final int c = (b ^ (b >> 2)) & 0x0F0F0F0F;
+		final int d = (c ^ (c >> 4)) & 0x00FF00FF;
+		final int e = (d ^ (d >> 8)) & 0x0000FFFF;
 		
 		return e;
 	}

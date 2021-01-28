@@ -29,7 +29,7 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.FresnelBlendPBRTBRDF;
+import org.dayflower.scene.bxdf.FresnelBlendBRDF;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 import org.dayflower.scene.modifier.Modifier;
@@ -442,7 +442,7 @@ public final class SubstratePBRTMaterial implements Material {
 			
 			final MicrofacetDistribution microfacetDistribution = new TrowbridgeReitzMicrofacetDistribution(true, false, roughnessU, roughnessV);
 			
-			return Optional.of(new BSDF(intersection, new FresnelBlendPBRTBRDF(colorKD, colorKS, microfacetDistribution), false));
+			return Optional.of(new BSDF(intersection, new FresnelBlendBRDF(colorKD, colorKS, microfacetDistribution)));
 		}
 		
 		return Optional.empty();

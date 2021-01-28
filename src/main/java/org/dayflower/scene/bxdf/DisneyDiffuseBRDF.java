@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.bxdf.pbrt;
+package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 import static org.dayflower.utility.Floats.fresnelSchlickWeight;
@@ -35,27 +35,27 @@ import org.dayflower.scene.BXDFType;
 import org.dayflower.utility.ParameterArguments;
 
 /**
- * A {@code DisneyDiffusePBRTBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney diffuse reflection.
+ * A {@code DisneyDiffuseBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney diffuse reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DisneyDiffusePBRTBRDF extends BXDF {
+public final class DisneyDiffuseBRDF extends BXDF {
 	private final Color3F reflectanceScale;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code DisneyDiffusePBRTBRDF} instance.
+	 * Constructs a new {@code DisneyDiffuseBRDF} instance.
 	 * <p>
 	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
 	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
 	 */
-	public DisneyDiffusePBRTBRDF(final Color3F reflectanceScale) {
+	public DisneyDiffuseBRDF(final Color3F reflectanceScale) {
 		super(BXDFType.DIFFUSE_REFLECTION);
 		
 		this.reflectanceScale = Objects.requireNonNull(reflectanceScale, "reflectanceScale == null");
@@ -78,8 +78,6 @@ public final class DisneyDiffusePBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normal) {
-//		PBRT: Implementation of DisneyDiffuse.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
@@ -103,8 +101,6 @@ public final class DisneyDiffusePBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F computeReflectanceFunction(final List<Point2F> samplesA, final Vector3F outgoing, final Vector3F normal) {
-//		PBRT: Implementation of DisneyDiffuse.
-		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
 		Objects.requireNonNull(outgoing, "outgoing == null");
@@ -128,8 +124,6 @@ public final class DisneyDiffusePBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Color3F evaluateDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of DisneyDiffuse.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
@@ -162,49 +156,47 @@ public final class DisneyDiffusePBRTBRDF extends BXDF {
 	 */
 	@Override
 	public Optional<BXDFResult> sampleDistributionFunction(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
-//		PBRT: Implementation of BxDF.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F incoming = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
-		final Vector3F incomingCorrectlyOriented = outgoing.getZ() < 0.0F ? new Vector3F(incoming.getX(), incoming.getY(), -incoming.getZ()) : incoming;
+		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incoming = Vector3F.faceForwardComponent3(outgoing, incomingSample);
 		
 		final BXDFType bXDFType = getBXDFType();
 		
-		final Color3F result = evaluateDistributionFunction(outgoing, normal, incomingCorrectlyOriented);
+		final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
 		
-		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incomingCorrectlyOriented);
+		final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
 		
-		return Optional.of(new BXDFResult(bXDFType, result, incomingCorrectlyOriented, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code DisneyDiffusePBRTBRDF} instance.
+	 * Returns a {@code String} representation of this {@code DisneyDiffuseBRDF} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code DisneyDiffusePBRTBRDF} instance
+	 * @return a {@code String} representation of this {@code DisneyDiffuseBRDF} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new DisneyDiffusePBRTBRDF(%s)", this.reflectanceScale);
+		return String.format("new DisneyDiffuseBRDF(%s)", this.reflectanceScale);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code DisneyDiffusePBRTBRDF} instance for equality.
+	 * Compares {@code object} to this {@code DisneyDiffuseBRDF} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyDiffusePBRTBRDF}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyDiffuseBRDF}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code DisneyDiffusePBRTBRDF} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyDiffusePBRTBRDF}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code DisneyDiffuseBRDF} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyDiffuseBRDF}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof DisneyDiffusePBRTBRDF)) {
+		} else if(!(object instanceof DisneyDiffuseBRDF)) {
 			return false;
-		} else if(!Objects.equals(this.reflectanceScale, DisneyDiffusePBRTBRDF.class.cast(object).reflectanceScale)) {
+		} else if(!Objects.equals(this.reflectanceScale, DisneyDiffuseBRDF.class.cast(object).reflectanceScale)) {
 			return false;
 		} else {
 			return true;
@@ -226,8 +218,6 @@ public final class DisneyDiffusePBRTBRDF extends BXDF {
 	 */
 	@Override
 	public float evaluateProbabilityDensityFunction(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
-//		PBRT: Implementation of BxDF.
-		
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
@@ -236,9 +226,9 @@ public final class DisneyDiffusePBRTBRDF extends BXDF {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code DisneyDiffusePBRTBRDF} instance.
+	 * Returns a hash code for this {@code DisneyDiffuseBRDF} instance.
 	 * 
-	 * @return a hash code for this {@code DisneyDiffusePBRTBRDF} instance
+	 * @return a hash code for this {@code DisneyDiffuseBRDF} instance
 	 */
 	@Override
 	public int hashCode() {

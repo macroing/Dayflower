@@ -226,9 +226,9 @@ public final class DisneyClearCoatBRDF extends BXDF {
 		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 		final float phi = 2.0F * PI * sample.getV();
 		
-		final Vector3F n = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
-		final Vector3F nCorrectlyOriented = Vector3F.sameHemisphereZ(outgoing, n) ? n : Vector3F.negate(n);
-		final Vector3F incoming = Vector3F.reflection(outgoing, nCorrectlyOriented);
+		final Vector3F nSample = Vector3F.directionSpherical(sinTheta, cosTheta, phi);
+		final Vector3F n = Vector3F.sameHemisphereZ(outgoing, nSample) ? nSample : Vector3F.negate(nSample);
+		final Vector3F incoming = Vector3F.reflection(outgoing, n);
 		
 		if(!Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return Optional.empty();

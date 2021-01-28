@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.material.pbrt;
+package org.dayflower.scene.material;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,21 +45,21 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * An {@code UberPBRTMaterial} is an implementation of {@link Material} that can represent a wide variety of materials.
+ * An {@code UberMaterial} is an implementation of {@link Material} that can represent a wide variety of materials.
  * <p>
  * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class UberPBRTMaterial implements Material {
+public final class UberMaterial implements Material {
 	/**
-	 * The name of this {@code UberPBRTMaterial} class.
+	 * The name of this {@code UberMaterial} class.
 	 */
-	public static final String NAME = "PBRT - Uber";
+	public static final String NAME = "Uber";
 	
 	/**
-	 * The ID of this {@code UberPBRTMaterial} class.
+	 * The ID of this {@code UberMaterial} class.
 	 */
 	public static final int ID = 108;
 	
@@ -80,47 +80,47 @@ public final class UberPBRTMaterial implements Material {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(Color3F.GRAY_0_25);
+	 * new UberMaterial(Color3F.GRAY_0_25);
 	 * }
 	 * </pre>
 	 */
-	public UberPBRTMaterial() {
+	public UberMaterial() {
 		this(Color3F.GRAY_0_25);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, Color3F.BLACK);
+	 * new UberMaterial(colorKD, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD) {
+	public UberMaterial(final Color3F colorKD) {
 		this(colorKD, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD} or {@code colorKR} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, colorKR, Color3F.GRAY_0_25);
+	 * new UberMaterial(colorKD, colorKR, Color3F.GRAY_0_25);
 	 * }
 	 * </pre>
 	 * 
@@ -128,19 +128,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param colorKR a {@code Color3F} instance for the reflection coefficient
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorKR} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR) {
 		this(colorKD, colorKR, Color3F.GRAY_0_25);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR} or {@code colorKS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, colorKR, colorKS, Color3F.BLACK);
+	 * new UberMaterial(colorKD, colorKR, colorKS, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -149,19 +149,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param colorKS a {@code Color3F} instance for the specular coefficient
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR} or {@code colorKS} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS) {
 		this(colorKD, colorKR, colorKS, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS} or {@code colorKT} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, colorKR, colorKS, colorKT, Color3F.BLACK);
+	 * new UberMaterial(colorKD, colorKR, colorKS, colorKT, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -171,19 +171,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param colorKT a {@code Color3F} instance for the transmission coefficient
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS} or {@code colorKT} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT) {
 		this(colorKD, colorKR, colorKS, colorKT, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, Color3F.WHITE);
+	 * new UberMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, Color3F.WHITE);
 	 * }
 	 * </pre>
 	 * 
@@ -194,19 +194,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param colorEmission a {@code Color3F} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT} or {@code colorEmission} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission) {
 		this(colorKD, colorKR, colorKS, colorKT, colorEmission, Color3F.WHITE);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, 1.5F);
+	 * new UberMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, 1.5F);
 	 * }
 	 * </pre>
 	 * 
@@ -218,19 +218,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param colorOpacity a {@code Color3F} instance for the opacity
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity) {
 		this(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, 1.5F);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, 0.1F);
+	 * new UberMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, 0.1F);
 	 * }
 	 * </pre>
 	 * 
@@ -243,19 +243,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param floatEta a {@code float} for the index of refraction (IOR)
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta) {
 		this(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, 0.1F);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughness, floatRoughness);
+	 * new UberMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughness, floatRoughness);
 	 * }
 	 * </pre>
 	 * 
@@ -269,19 +269,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param floatRoughness a {@code float} for the roughness along the U-axis and the V-axis
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughness) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughness) {
 		this(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughness, floatRoughness);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughnessU, floatRoughnessV, true);
+	 * new UberMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughnessU, floatRoughnessV, true);
 	 * }
 	 * </pre>
 	 * 
@@ -296,19 +296,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param floatRoughnessV a {@code float} for the roughness along the V-axis
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughnessU, final float floatRoughnessV) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughnessU, final float floatRoughnessV) {
 		this(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughnessU, floatRoughnessV, true);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughnessU, floatRoughnessV, isRemappingRoughness, new NoOpModifier());
+	 * new UberMaterial(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughnessU, floatRoughnessV, isRemappingRoughness, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
@@ -324,12 +324,12 @@ public final class UberPBRTMaterial implements Material {
 	 * @param isRemappingRoughness {@code true} if, and only if, the roughness values should be remapped, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission} or {@code colorOpacity} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughnessU, final float floatRoughnessV, final boolean isRemappingRoughness) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughnessU, final float floatRoughnessV, final boolean isRemappingRoughness) {
 		this(colorKD, colorKR, colorKS, colorKT, colorEmission, colorOpacity, floatEta, floatRoughnessU, floatRoughnessV, isRemappingRoughness, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission}, {@code colorOpacity} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -346,7 +346,7 @@ public final class UberPBRTMaterial implements Material {
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorKR}, {@code colorKS}, {@code colorKT}, {@code colorEmission}, {@code colorOpacity} or {@code modifier} are {@code null}
 	 */
-	public UberPBRTMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughnessU, final float floatRoughnessV, final boolean isRemappingRoughness, final Modifier modifier) {
+	public UberMaterial(final Color3F colorKD, final Color3F colorKR, final Color3F colorKS, final Color3F colorKT, final Color3F colorEmission, final Color3F colorOpacity, final float floatEta, final float floatRoughnessU, final float floatRoughnessV, final boolean isRemappingRoughness, final Modifier modifier) {
 		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
 		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
 		this.textureKS = new ConstantTexture(Objects.requireNonNull(colorKS, "colorKS == null"));
@@ -361,33 +361,33 @@ public final class UberPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, ConstantTexture.BLACK);
+	 * new UberMaterial(textureKD, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD) {
+	public UberMaterial(final Texture textureKD) {
 		this(textureKD, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD} or {@code textureKR} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, textureKR, ConstantTexture.GRAY_0_25);
+	 * new UberMaterial(textureKD, textureKR, ConstantTexture.GRAY_0_25);
 	 * }
 	 * </pre>
 	 * 
@@ -395,19 +395,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param textureKR a {@code Texture} instance for the reflection coefficient
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureKR} are {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR) {
 		this(textureKD, textureKR, ConstantTexture.GRAY_0_25);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR} or {@code textureKS} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, textureKR, textureKS, ConstantTexture.BLACK);
+	 * new UberMaterial(textureKD, textureKR, textureKS, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -416,19 +416,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param textureKS a {@code Texture} instance for the specular coefficient
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR} or {@code textureKS} are {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS) {
 		this(textureKD, textureKR, textureKS, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS} or {@code textureKT} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, textureKR, textureKS, textureKT, ConstantTexture.BLACK);
+	 * new UberMaterial(textureKD, textureKR, textureKS, textureKT, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -438,19 +438,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param textureKT a {@code Texture} instance for the transmission coefficient
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR}, {@code textureKS} or {@code textureKT} are {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT) {
 		this(textureKD, textureKR, textureKS, textureKT, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, ConstantTexture.WHITE);
+	 * new UberMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, ConstantTexture.WHITE);
 	 * }
 	 * </pre>
 	 * 
@@ -461,19 +461,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param textureEmission a {@code Texture} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT} or {@code textureEmission} are {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission) {
 		this(textureKD, textureKR, textureKS, textureKT, textureEmission, ConstantTexture.WHITE);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission} or {@code textureOpacity} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, ConstantTexture.GRAY_1_50);
+	 * new UberMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, ConstantTexture.GRAY_1_50);
 	 * }
 	 * </pre>
 	 * 
@@ -485,19 +485,19 @@ public final class UberPBRTMaterial implements Material {
 	 * @param textureOpacity a {@code Texture} instance for the opacity
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission} or {@code textureOpacity} are {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity) {
 		this(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, ConstantTexture.GRAY_1_50);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity} or {@code textureEta} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, ConstantTexture.GRAY_0_10);
+	 * new UberMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, ConstantTexture.GRAY_0_10);
 	 * }
 	 * </pre>
 	 * 
@@ -510,12 +510,12 @@ public final class UberPBRTMaterial implements Material {
 	 * @param textureEta a {@code Texture} instance for the index of refraction (IOR)
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity} or {@code textureEta} are {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta) {
 		this(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, ConstantTexture.GRAY_0_10);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be
 	 * thrown.
@@ -523,7 +523,7 @@ public final class UberPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughness, textureRoughness);
+	 * new UberMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughness, textureRoughness);
 	 * }
 	 * </pre>
 	 * 
@@ -538,12 +538,12 @@ public final class UberPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta} or {@code textureRoughness} are
 	 *                              {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughness) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughness) {
 		this(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughness, textureRoughness);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a
 	 * {@code NullPointerException} will be thrown.
@@ -551,7 +551,7 @@ public final class UberPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughnessU, textureRoughnessV, true);
+	 * new UberMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughnessU, textureRoughnessV, true);
 	 * }
 	 * </pre>
 	 * 
@@ -567,12 +567,12 @@ public final class UberPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta}, {@code textureRoughnessU} or
 	 *                              {@code textureRoughnessV} are {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV) {
 		this(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughnessU, textureRoughnessV, true);
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta}, {@code textureRoughnessU} or {@code textureRoughnessV} are {@code null}, a
 	 * {@code NullPointerException} will be thrown.
@@ -580,7 +580,7 @@ public final class UberPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new UberPBRTMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughnessU, textureRoughnessV, isRemappingRoughness, new NoOpModifier());
+	 * new UberMaterial(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughnessU, textureRoughnessV, isRemappingRoughness, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
@@ -597,12 +597,12 @@ public final class UberPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta}, {@code textureRoughnessU} or
 	 *                              {@code textureRoughnessV} are {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness) {
 		this(textureKD, textureKR, textureKS, textureKT, textureEmission, textureOpacity, textureEta, textureRoughnessU, textureRoughnessV, isRemappingRoughness, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code UberPBRTMaterial} instance.
+	 * Constructs a new {@code UberMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta}, {@code textureRoughnessU}, {@code textureRoughnessV} or {@code modifier} are {@code null},
 	 * a {@code NullPointerException} will be thrown.
@@ -621,7 +621,7 @@ public final class UberPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureKR}, {@code textureKS}, {@code textureKT}, {@code textureEmission}, {@code textureOpacity}, {@code textureEta}, {@code textureRoughnessU},
 	 *                              {@code textureRoughnessV} or {@code modifier} are {@code null}
 	 */
-	public UberPBRTMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness, final Modifier modifier) {
+	public UberMaterial(final Texture textureKD, final Texture textureKR, final Texture textureKS, final Texture textureKT, final Texture textureEmission, final Texture textureOpacity, final Texture textureEta, final Texture textureRoughnessU, final Texture textureRoughnessV, final boolean isRemappingRoughness, final Modifier modifier) {
 		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
 		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
 		this.textureKS = Objects.requireNonNull(textureKS, "textureKS == null");
@@ -638,12 +638,12 @@ public final class UberPBRTMaterial implements Material {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code UberPBRTMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code UberMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code UberPBRTMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code UberMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -738,9 +738,9 @@ public final class UberPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code UberPBRTMaterial} instance.
+	 * Returns a {@code String} with the name of this {@code UberMaterial} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code UberPBRTMaterial} instance
+	 * @return a {@code String} with the name of this {@code UberMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -748,13 +748,13 @@ public final class UberPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code UberPBRTMaterial} instance.
+	 * Returns a {@code String} representation of this {@code UberMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code UberPBRTMaterial} instance
+	 * @return a {@code String} representation of this {@code UberMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new UberPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureKD, this.textureKR, this.textureKS, this.textureKT, this.textureEmission, this.textureOpacity, this.textureEta, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness), this.modifier);
+		return String.format("new UberMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureKD, this.textureKR, this.textureKS, this.textureKT, this.textureEmission, this.textureOpacity, this.textureEta, this.textureRoughnessU, this.textureRoughnessV, Boolean.toString(this.isRemappingRoughness), this.modifier);
 	}
 	
 	/**
@@ -913,40 +913,40 @@ public final class UberPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code UberPBRTMaterial} instance for equality.
+	 * Compares {@code object} to this {@code UberMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code UberPBRTMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code UberMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code UberPBRTMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code UberPBRTMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code UberMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code UberMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof UberPBRTMaterial)) {
+		} else if(!(object instanceof UberMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.modifier, UberPBRTMaterial.class.cast(object).modifier)) {
+		} else if(!Objects.equals(this.modifier, UberMaterial.class.cast(object).modifier)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmission, UberPBRTMaterial.class.cast(object).textureEmission)) {
+		} else if(!Objects.equals(this.textureEmission, UberMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureEta, UberPBRTMaterial.class.cast(object).textureEta)) {
+		} else if(!Objects.equals(this.textureEta, UberMaterial.class.cast(object).textureEta)) {
 			return false;
-		} else if(!Objects.equals(this.textureKD, UberPBRTMaterial.class.cast(object).textureKD)) {
+		} else if(!Objects.equals(this.textureKD, UberMaterial.class.cast(object).textureKD)) {
 			return false;
-		} else if(!Objects.equals(this.textureKR, UberPBRTMaterial.class.cast(object).textureKR)) {
+		} else if(!Objects.equals(this.textureKR, UberMaterial.class.cast(object).textureKR)) {
 			return false;
-		} else if(!Objects.equals(this.textureKS, UberPBRTMaterial.class.cast(object).textureKS)) {
+		} else if(!Objects.equals(this.textureKS, UberMaterial.class.cast(object).textureKS)) {
 			return false;
-		} else if(!Objects.equals(this.textureKT, UberPBRTMaterial.class.cast(object).textureKT)) {
+		} else if(!Objects.equals(this.textureKT, UberMaterial.class.cast(object).textureKT)) {
 			return false;
-		} else if(!Objects.equals(this.textureOpacity, UberPBRTMaterial.class.cast(object).textureOpacity)) {
+		} else if(!Objects.equals(this.textureOpacity, UberMaterial.class.cast(object).textureOpacity)) {
 			return false;
-		} else if(!Objects.equals(this.textureRoughnessU, UberPBRTMaterial.class.cast(object).textureRoughnessU)) {
+		} else if(!Objects.equals(this.textureRoughnessU, UberMaterial.class.cast(object).textureRoughnessU)) {
 			return false;
-		} else if(!Objects.equals(this.textureRoughnessV, UberPBRTMaterial.class.cast(object).textureRoughnessV)) {
+		} else if(!Objects.equals(this.textureRoughnessV, UberMaterial.class.cast(object).textureRoughnessV)) {
 			return false;
-		} else if(this.isRemappingRoughness != UberPBRTMaterial.class.cast(object).isRemappingRoughness) {
+		} else if(this.isRemappingRoughness != UberMaterial.class.cast(object).isRemappingRoughness) {
 			return false;
 		} else {
 			return true;
@@ -963,9 +963,9 @@ public final class UberPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code UberPBRTMaterial} instance.
+	 * Returns an {@code int} with the ID of this {@code UberMaterial} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code UberPBRTMaterial} instance
+	 * @return an {@code int} with the ID of this {@code UberMaterial} instance
 	 */
 	@Override
 	public int getID() {
@@ -973,9 +973,9 @@ public final class UberPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code UberPBRTMaterial} instance.
+	 * Returns a hash code for this {@code UberMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code UberPBRTMaterial} instance
+	 * @return a hash code for this {@code UberMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

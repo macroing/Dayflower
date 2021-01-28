@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.material.pbrt;
+package org.dayflower.scene.material;
 
 import static org.dayflower.utility.Floats.lerp;
 import static org.dayflower.utility.Floats.max;
@@ -55,21 +55,21 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code DisneyPBRTMaterial} is an implementation of {@link Material} that represents a Disney material.
+ * A {@code DisneyMaterial} is an implementation of {@link Material} that represents a Disney material.
  * <p>
  * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class DisneyPBRTMaterial implements Material {
+public final class DisneyMaterial implements Material {
 	/**
-	 * The name of this {@code DisneyPBRTMaterial} class.
+	 * The name of this {@code DisneyMaterial} class.
 	 */
-	public static final String NAME = "PBRT - Disney";
+	public static final String NAME = "Disney";
 	
 	/**
-	 * The ID of this {@code DisneyPBRTMaterial} class.
+	 * The ID of this {@code DisneyMaterial} class.
 	 */
 	public static final int ID = 100;
 	
@@ -96,47 +96,47 @@ public final class DisneyPBRTMaterial implements Material {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(Color3F.GRAY_0_50);
+	 * new DisneyMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
-	public DisneyPBRTMaterial() {
+	public DisneyMaterial() {
 		this(Color3F.GRAY_0_50);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If {@code colorColor} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, Color3F.BLACK);
+	 * new DisneyMaterial(colorColor, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorColor a {@link Color3F} instance for the color
 	 * @throws NullPointerException thrown if, and only if, {@code colorColor} is {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor) {
+	public DisneyMaterial(final Color3F colorColor) {
 		this(colorColor, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, Color3F.BLACK);
+	 * new DisneyMaterial(colorColor, colorEmission, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -144,19 +144,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param colorEmission a {@code Color3F} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor} or {@code colorEmission} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission) {
 		this(colorColor, colorEmission, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, 0.0F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -165,19 +165,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param colorScatterDistance a {@code Color3F} instance for the scatter distance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance) {
 		this(colorColor, colorEmission, colorScatterDistance, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, 0.0F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -187,19 +187,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatAnisotropic a {@code float} for the anisotropic value
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, 1.0F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, 1.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -210,19 +210,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatClearCoat a {@code float} for the clear coat value
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, 1.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, 1.0F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, 1.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -234,19 +234,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatClearCoatGloss a {@code float} for the clear coat gloss value
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, 1.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, 1.5F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, 1.5F);
 	 * }
 	 * </pre>
 	 * 
@@ -259,19 +259,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatDiffuseTransmission a {@code float} for the diffuse transmission
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, 1.5F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, 0.0F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -285,19 +285,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatEta a {@code float} for the index of refraction (IOR)
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, 0.0F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -312,19 +312,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatFlatness a {@code float} for the flatness
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, 0.5F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, 0.5F);
 	 * }
 	 * </pre>
 	 * 
@@ -340,19 +340,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatMetallic a {@code float} for the metallic value
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, 0.5F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, 0.0F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -369,19 +369,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatRoughness a {@code float} for the roughness
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, 0.5F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, 0.5F);
 	 * }
 	 * </pre>
 	 * 
@@ -399,19 +399,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatSheen a {@code float} for the sheen value
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, 0.5F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, 0.0F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -430,19 +430,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatSheenTint a {@code float} for the sheen tint value
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, 0.0F);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -462,19 +462,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatSpecularTint a {@code float} for the specular tint
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, floatSpecularTransmission, false);
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, floatSpecularTransmission, false);
 	 * }
 	 * </pre>
 	 * 
@@ -495,19 +495,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param floatSpecularTransmission a {@code float} for the specular transmission
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint, final float floatSpecularTransmission) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint, final float floatSpecularTransmission) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, floatSpecularTransmission, false);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, floatSpecularTransmission, isThin, new NoOpModifier());
+	 * new DisneyMaterial(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, floatSpecularTransmission, isThin, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
@@ -529,12 +529,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param isThin {@code true} if, and only if, this {@code DisneyPBRTMaterial} instance is thin, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint, final float floatSpecularTransmission, final boolean isThin) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint, final float floatSpecularTransmission, final boolean isThin) {
 		this(colorColor, colorEmission, colorScatterDistance, floatAnisotropic, floatClearCoat, floatClearCoatGloss, floatDiffuseTransmission, floatEta, floatFlatness, floatMetallic, floatRoughness, floatSheen, floatSheenTint, floatSpecularTint, floatSpecularTransmission, isThin, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code colorColor}, {@code colorEmission}, {@code colorScatterDistance} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -557,7 +557,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission}, {@code colorScatterDistance} or {@code modifier} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint, final float floatSpecularTransmission, final boolean isThin, final Modifier modifier) {
+	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint, final float floatSpecularTransmission, final boolean isThin, final Modifier modifier) {
 		this.textureColor = new ConstantTexture(Objects.requireNonNull(colorColor, "colorColor == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 		this.textureScatterDistance = new ConstantTexture(Objects.requireNonNull(colorScatterDistance, "colorScatterDistance == null"));
@@ -578,33 +578,33 @@ public final class DisneyPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If {@code textureColor} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, ConstantTexture.BLACK);
+	 * new DisneyMaterial(textureColor, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureColor a {@link Texture} instance for the color
 	 * @throws NullPointerException thrown if, and only if, {@code textureColor} is {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor) {
+	public DisneyMaterial(final Texture textureColor) {
 		this(textureColor, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, ConstantTexture.BLACK);
+	 * new DisneyMaterial(textureColor, textureEmission, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -612,19 +612,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param textureEmission a {@code Texture} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor} or {@code textureEmission} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission) {
 		this(textureColor, textureEmission, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission} or {@code textureScatterDistance} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, ConstantTexture.BLACK);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -633,19 +633,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param textureScatterDistance a {@code Texture} instance for the scatter distance
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission} or {@code textureScatterDistance} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance) {
 		this(textureColor, textureEmission, textureScatterDistance, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance} or {@code textureAnisotropic} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, ConstantTexture.BLACK);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -655,19 +655,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param textureAnisotropic a {@code Texture} instance for the anisotropic value
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance} or {@code textureAnisotropic} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic} or {@code textureClearCoat} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, ConstantTexture.WHITE);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, ConstantTexture.WHITE);
 	 * }
 	 * </pre>
 	 * 
@@ -678,19 +678,19 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param textureClearCoat a {@code Texture} instance for the clear coat value
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic} or {@code textureClearCoat} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, ConstantTexture.WHITE);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat} or {@code textureClearCoatGloss} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, ConstantTexture.WHITE);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, ConstantTexture.WHITE);
 	 * }
 	 * </pre>
 	 * 
@@ -702,12 +702,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @param textureClearCoatGloss a {@code Texture} instance for the clear coat gloss value
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat} or {@code textureClearCoatGloss} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, ConstantTexture.WHITE);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss} or {@code textureDiffuseTransmission} are {@code null}, a
 	 * {@code NullPointerException} will be thrown.
@@ -715,7 +715,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, ConstantTexture.GRAY_1_50);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, ConstantTexture.GRAY_1_50);
 	 * }
 	 * </pre>
 	 * 
@@ -729,12 +729,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss} or
 	 *                              {@code textureDiffuseTransmission} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, ConstantTexture.GRAY_1_50);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission} or {@code textureEta} are
 	 * {@code null}, a {@code NullPointerException} will be thrown.
@@ -742,7 +742,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, ConstantTexture.BLACK);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -757,12 +757,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss},
 	 *                              {@code textureDiffuseTransmission} or {@code textureEta} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta} or
 	 * {@code textureFlatness} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -770,7 +770,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, ConstantTexture.BLACK);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -786,12 +786,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss},
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta} or {@code textureFlatness} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
 	 * {@code textureFlatness} or {@code textureMetallic} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -799,7 +799,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, ConstantTexture.GRAY_0_50);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, ConstantTexture.GRAY_0_50);
 	 * }
 	 * </pre>
 	 * 
@@ -816,12 +816,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss},
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness} or {@code textureMetallic} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, ConstantTexture.GRAY_0_50);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
 	 * {@code textureFlatness}, {@code textureMetallic} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -829,7 +829,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, ConstantTexture.BLACK);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -847,12 +847,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss},
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic} or {@code textureRoughness} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
 	 * {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness} or {@code textureSheen} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -860,7 +860,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, ConstantTexture.GRAY_0_50);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, ConstantTexture.GRAY_0_50);
 	 * }
 	 * </pre>
 	 * 
@@ -879,12 +879,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss},
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness} or {@code textureSheen} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, ConstantTexture.GRAY_0_50);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
 	 * {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen} or {@code textureSheenTint} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -892,7 +892,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, ConstantTexture.BLACK);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -912,12 +912,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss},
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen} or {@code textureSheenTint} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
 	 * {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint} or {@code textureSpecularTint} are {@code null}, a {@code NullPointerException} will be thrown.
@@ -925,7 +925,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, ConstantTexture.BLACK);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -947,12 +947,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint} or {@code textureSpecularTint} are
 	 *                              {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
 	 * {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint} or {@code textureSpecularTransmission} are {@code null}, a {@code NullPointerException} will
@@ -961,7 +961,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, textureSpecularTransmission, false);
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, textureSpecularTransmission, false);
 	 * }
 	 * </pre>
 	 * 
@@ -984,12 +984,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint} or
 	 *                              {@code textureSpecularTransmission} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint, final Texture textureSpecularTransmission) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint, final Texture textureSpecularTransmission) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, textureSpecularTransmission, false);
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
 	 * {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint} or {@code textureSpecularTransmission} are {@code null}, a {@code NullPointerException} will
@@ -998,7 +998,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new DisneyPBRTMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, textureSpecularTransmission, isThin, new NoOpModifier());
+	 * new DisneyMaterial(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, textureSpecularTransmission, isThin, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
@@ -1022,12 +1022,12 @@ public final class DisneyPBRTMaterial implements Material {
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint} or
 	 *                              {@code textureSpecularTransmission} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint, final Texture textureSpecularTransmission, final boolean isThin) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint, final Texture textureSpecularTransmission, final boolean isThin) {
 		this(textureColor, textureEmission, textureScatterDistance, textureAnisotropic, textureClearCoat, textureClearCoatGloss, textureDiffuseTransmission, textureEta, textureFlatness, textureMetallic, textureRoughness, textureSheen, textureSheenTint, textureSpecularTint, textureSpecularTransmission, isThin, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code DisneyPBRTMaterial} instance.
+	 * Constructs a new {@code DisneyMaterial} instance.
 	 * <p>
 	 * If either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss}, {@code textureDiffuseTransmission}, {@code textureEta},
 	 * {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint}, {@code textureSpecularTransmission} or {@code modifier} are {@code null}, a
@@ -1054,7 +1054,7 @@ public final class DisneyPBRTMaterial implements Material {
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint},
 	 *                              {@code textureSpecularTransmission} or {@code modifier} are {@code null}
 	 */
-	public DisneyPBRTMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint, final Texture textureSpecularTransmission, final boolean isThin, final Modifier modifier) {
+	public DisneyMaterial(final Texture textureColor, final Texture textureEmission, final Texture textureScatterDistance, final Texture textureAnisotropic, final Texture textureClearCoat, final Texture textureClearCoatGloss, final Texture textureDiffuseTransmission, final Texture textureEta, final Texture textureFlatness, final Texture textureMetallic, final Texture textureRoughness, final Texture textureSheen, final Texture textureSheenTint, final Texture textureSpecularTint, final Texture textureSpecularTransmission, final boolean isThin, final Modifier modifier) {
 		this.textureColor = Objects.requireNonNull(textureColor, "textureColor == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureScatterDistance = Objects.requireNonNull(textureScatterDistance, "textureScatterDistance == null");
@@ -1077,12 +1077,12 @@ public final class DisneyPBRTMaterial implements Material {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code DisneyPBRTMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code DisneyMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code DisneyPBRTMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code DisneyMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -1245,9 +1245,9 @@ public final class DisneyPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code DisneyPBRTMaterial} instance.
+	 * Returns a {@code String} with the name of this {@code DisneyMaterial} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code DisneyPBRTMaterial} instance
+	 * @return a {@code String} with the name of this {@code DisneyMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -1255,13 +1255,13 @@ public final class DisneyPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code DisneyPBRTMaterial} instance.
+	 * Returns a {@code String} representation of this {@code DisneyMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code DisneyPBRTMaterial} instance
+	 * @return a {@code String} representation of this {@code DisneyMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new DisneyPBRTMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureColor, this.textureEmission, this.textureScatterDistance, this.textureAnisotropic, this.textureClearCoat, this.textureClearCoatGloss, this.textureDiffuseTransmission, this.textureEta, this.textureFlatness, this.textureMetallic, this.textureRoughness, this.textureSheen, this.textureSheenTint, this.textureSpecularTint, this.textureSpecularTransmission, Boolean.toString(this.isThin), this.modifier);
+		return String.format("new DisneyMaterial(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", this.textureColor, this.textureEmission, this.textureScatterDistance, this.textureAnisotropic, this.textureClearCoat, this.textureClearCoatGloss, this.textureDiffuseTransmission, this.textureEta, this.textureFlatness, this.textureMetallic, this.textureRoughness, this.textureSheen, this.textureSheenTint, this.textureSpecularTint, this.textureSpecularTransmission, Boolean.toString(this.isThin), this.modifier);
 	}
 	
 	/**
@@ -1498,52 +1498,52 @@ public final class DisneyPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code DisneyPBRTMaterial} instance for equality.
+	 * Compares {@code object} to this {@code DisneyMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyPBRTMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code DisneyMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code DisneyPBRTMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyPBRTMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code DisneyMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code DisneyMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof DisneyPBRTMaterial)) {
+		} else if(!(object instanceof DisneyMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.modifier, DisneyPBRTMaterial.class.cast(object).modifier)) {
+		} else if(!Objects.equals(this.modifier, DisneyMaterial.class.cast(object).modifier)) {
 			return false;
-		} else if(!Objects.equals(this.textureAnisotropic, DisneyPBRTMaterial.class.cast(object).textureAnisotropic)) {
+		} else if(!Objects.equals(this.textureAnisotropic, DisneyMaterial.class.cast(object).textureAnisotropic)) {
 			return false;
-		} else if(!Objects.equals(this.textureClearCoat, DisneyPBRTMaterial.class.cast(object).textureClearCoat)) {
+		} else if(!Objects.equals(this.textureClearCoat, DisneyMaterial.class.cast(object).textureClearCoat)) {
 			return false;
-		} else if(!Objects.equals(this.textureClearCoatGloss, DisneyPBRTMaterial.class.cast(object).textureClearCoatGloss)) {
+		} else if(!Objects.equals(this.textureClearCoatGloss, DisneyMaterial.class.cast(object).textureClearCoatGloss)) {
 			return false;
-		} else if(!Objects.equals(this.textureColor, DisneyPBRTMaterial.class.cast(object).textureColor)) {
+		} else if(!Objects.equals(this.textureColor, DisneyMaterial.class.cast(object).textureColor)) {
 			return false;
-		} else if(!Objects.equals(this.textureDiffuseTransmission, DisneyPBRTMaterial.class.cast(object).textureDiffuseTransmission)) {
+		} else if(!Objects.equals(this.textureDiffuseTransmission, DisneyMaterial.class.cast(object).textureDiffuseTransmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmission, DisneyPBRTMaterial.class.cast(object).textureEmission)) {
+		} else if(!Objects.equals(this.textureEmission, DisneyMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureEta, DisneyPBRTMaterial.class.cast(object).textureEta)) {
+		} else if(!Objects.equals(this.textureEta, DisneyMaterial.class.cast(object).textureEta)) {
 			return false;
-		} else if(!Objects.equals(this.textureFlatness, DisneyPBRTMaterial.class.cast(object).textureFlatness)) {
+		} else if(!Objects.equals(this.textureFlatness, DisneyMaterial.class.cast(object).textureFlatness)) {
 			return false;
-		} else if(!Objects.equals(this.textureMetallic, DisneyPBRTMaterial.class.cast(object).textureMetallic)) {
+		} else if(!Objects.equals(this.textureMetallic, DisneyMaterial.class.cast(object).textureMetallic)) {
 			return false;
-		} else if(!Objects.equals(this.textureRoughness, DisneyPBRTMaterial.class.cast(object).textureRoughness)) {
+		} else if(!Objects.equals(this.textureRoughness, DisneyMaterial.class.cast(object).textureRoughness)) {
 			return false;
-		} else if(!Objects.equals(this.textureScatterDistance, DisneyPBRTMaterial.class.cast(object).textureScatterDistance)) {
+		} else if(!Objects.equals(this.textureScatterDistance, DisneyMaterial.class.cast(object).textureScatterDistance)) {
 			return false;
-		} else if(!Objects.equals(this.textureSheen, DisneyPBRTMaterial.class.cast(object).textureSheen)) {
+		} else if(!Objects.equals(this.textureSheen, DisneyMaterial.class.cast(object).textureSheen)) {
 			return false;
-		} else if(!Objects.equals(this.textureSheenTint, DisneyPBRTMaterial.class.cast(object).textureSheenTint)) {
+		} else if(!Objects.equals(this.textureSheenTint, DisneyMaterial.class.cast(object).textureSheenTint)) {
 			return false;
-		} else if(!Objects.equals(this.textureSpecularTint, DisneyPBRTMaterial.class.cast(object).textureSpecularTint)) {
+		} else if(!Objects.equals(this.textureSpecularTint, DisneyMaterial.class.cast(object).textureSpecularTint)) {
 			return false;
-		} else if(!Objects.equals(this.textureSpecularTransmission, DisneyPBRTMaterial.class.cast(object).textureSpecularTransmission)) {
+		} else if(!Objects.equals(this.textureSpecularTransmission, DisneyMaterial.class.cast(object).textureSpecularTransmission)) {
 			return false;
-		} else if(this.isThin != DisneyPBRTMaterial.class.cast(object).isThin) {
+		} else if(this.isThin != DisneyMaterial.class.cast(object).isThin) {
 			return false;
 		} else {
 			return true;
@@ -1551,18 +1551,18 @@ public final class DisneyPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code DisneyPBRTMaterial} instance is thin, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, this {@code DisneyMaterial} instance is thin, {@code false} otherwise.
 	 * 
-	 * @return {@code true} if, and only if, this {@code DisneyPBRTMaterial} instance is thin, {@code false} otherwise
+	 * @return {@code true} if, and only if, this {@code DisneyMaterial} instance is thin, {@code false} otherwise
 	 */
 	public boolean isThin() {
 		return this.isThin;
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code DisneyPBRTMaterial} instance.
+	 * Returns an {@code int} with the ID of this {@code DisneyMaterial} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code DisneyPBRTMaterial} instance
+	 * @return an {@code int} with the ID of this {@code DisneyMaterial} instance
 	 */
 	@Override
 	public int getID() {
@@ -1570,9 +1570,9 @@ public final class DisneyPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code DisneyPBRTMaterial} instance.
+	 * Returns a hash code for this {@code DisneyMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code DisneyPBRTMaterial} instance
+	 * @return a hash code for this {@code DisneyMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

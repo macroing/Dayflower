@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.material.pbrt;
+package org.dayflower.scene.material;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -37,21 +37,21 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MirrorPBRTMaterial} is an implementation of {@link Material} that represents a mirror.
+ * A {@code MirrorMaterial} is an implementation of {@link Material} that represents a mirror.
  * <p>
  * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MirrorPBRTMaterial implements Material {
+public final class MirrorMaterial implements Material {
 	/**
-	 * The name of this {@code MirrorPBRTMaterial} class.
+	 * The name of this {@code MirrorMaterial} class.
 	 */
-	public static final String NAME = "PBRT - Mirror";
+	public static final String NAME = "Mirror";
 	
 	/**
-	 * The ID of this {@code MirrorPBRTMaterial} class.
+	 * The ID of this {@code MirrorMaterial} class.
 	 */
 	public static final int ID = 105;
 	
@@ -64,47 +64,47 @@ public final class MirrorPBRTMaterial implements Material {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code MirrorPBRTMaterial} instance.
+	 * Constructs a new {@code MirrorMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorPBRTMaterial(Color3F.WHITE);
+	 * new MirrorMaterial(Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
-	public MirrorPBRTMaterial() {
+	public MirrorMaterial() {
 		this(Color3F.WHITE);
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorPBRTMaterial} instance.
+	 * Constructs a new {@code MirrorMaterial} instance.
 	 * <p>
 	 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorPBRTMaterial(colorKR, Color3F.BLACK);
+	 * new MirrorMaterial(colorKR, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
 	 */
-	public MirrorPBRTMaterial(final Color3F colorKR) {
+	public MirrorMaterial(final Color3F colorKR) {
 		this(colorKR, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorPBRTMaterial} instance.
+	 * Constructs a new {@code MirrorMaterial} instance.
 	 * <p>
 	 * If either {@code colorKR} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorPBRTMaterial(colorKR, colorEmission, new NoOpModifier());
+	 * new MirrorMaterial(colorKR, colorEmission, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
@@ -112,12 +112,12 @@ public final class MirrorPBRTMaterial implements Material {
 	 * @param colorEmission a {@code Color3F} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
 	 */
-	public MirrorPBRTMaterial(final Color3F colorKR, final Color3F colorEmission) {
+	public MirrorMaterial(final Color3F colorKR, final Color3F colorEmission) {
 		this(colorKR, colorEmission, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorPBRTMaterial} instance.
+	 * Constructs a new {@code MirrorMaterial} instance.
 	 * <p>
 	 * If either {@code colorKR}, {@code colorEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -126,40 +126,40 @@ public final class MirrorPBRTMaterial implements Material {
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorEmission} or {@code modifier} are {@code null}
 	 */
-	public MirrorPBRTMaterial(final Color3F colorKR, final Color3F colorEmission, final Modifier modifier) {
+	public MirrorMaterial(final Color3F colorKR, final Color3F colorEmission, final Modifier modifier) {
 		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorPBRTMaterial} instance.
+	 * Constructs a new {@code MirrorMaterial} instance.
 	 * <p>
 	 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorPBRTMaterial(textureKR, ConstantTexture.BLACK);
+	 * new MirrorMaterial(textureKR, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureKR a {@link Texture} instance for the reflection coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
 	 */
-	public MirrorPBRTMaterial(final Texture textureKR) {
+	public MirrorMaterial(final Texture textureKR) {
 		this(textureKR, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorPBRTMaterial} instance.
+	 * Constructs a new {@code MirrorMaterial} instance.
 	 * <p>
 	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorPBRTMaterial(textureKR, textureEmission, new NoOpModifier());
+	 * new MirrorMaterial(textureKR, textureEmission, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
@@ -167,12 +167,12 @@ public final class MirrorPBRTMaterial implements Material {
 	 * @param textureEmission a {@code Texture} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
 	 */
-	public MirrorPBRTMaterial(final Texture textureKR, final Texture textureEmission) {
+	public MirrorMaterial(final Texture textureKR, final Texture textureEmission) {
 		this(textureKR, textureEmission, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorPBRTMaterial} instance.
+	 * Constructs a new {@code MirrorMaterial} instance.
 	 * <p>
 	 * If either {@code textureKR}, {@code textureEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -181,7 +181,7 @@ public final class MirrorPBRTMaterial implements Material {
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureEmission} or {@code modifier} are {@code null}
 	 */
-	public MirrorPBRTMaterial(final Texture textureKR, final Texture textureEmission, final Modifier modifier) {
+	public MirrorMaterial(final Texture textureKR, final Texture textureEmission, final Modifier modifier) {
 		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
@@ -190,12 +190,12 @@ public final class MirrorPBRTMaterial implements Material {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code MirrorPBRTMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code MirrorMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code MirrorPBRTMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code MirrorMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -263,9 +263,9 @@ public final class MirrorPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code MirrorPBRTMaterial} instance.
+	 * Returns a {@code String} with the name of this {@code MirrorMaterial} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code MirrorPBRTMaterial} instance
+	 * @return a {@code String} with the name of this {@code MirrorMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -273,13 +273,13 @@ public final class MirrorPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code MirrorPBRTMaterial} instance.
+	 * Returns a {@code String} representation of this {@code MirrorMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code MirrorPBRTMaterial} instance
+	 * @return a {@code String} representation of this {@code MirrorMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MirrorPBRTMaterial(%s, %s, %s)", this.textureKR, this.textureEmission, this.modifier);
+		return String.format("new MirrorMaterial(%s, %s, %s)", this.textureKR, this.textureEmission, this.modifier);
 	}
 	
 	/**
@@ -347,24 +347,24 @@ public final class MirrorPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code MirrorPBRTMaterial} instance for equality.
+	 * Compares {@code object} to this {@code MirrorMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MirrorPBRTMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MirrorMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code MirrorPBRTMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MirrorPBRTMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code MirrorMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MirrorMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof MirrorPBRTMaterial)) {
+		} else if(!(object instanceof MirrorMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.modifier, MirrorPBRTMaterial.class.cast(object).modifier)) {
+		} else if(!Objects.equals(this.modifier, MirrorMaterial.class.cast(object).modifier)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmission, MirrorPBRTMaterial.class.cast(object).textureEmission)) {
+		} else if(!Objects.equals(this.textureEmission, MirrorMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureKR, MirrorPBRTMaterial.class.cast(object).textureKR)) {
+		} else if(!Objects.equals(this.textureKR, MirrorMaterial.class.cast(object).textureKR)) {
 			return false;
 		} else {
 			return true;
@@ -372,9 +372,9 @@ public final class MirrorPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code MirrorPBRTMaterial} instance.
+	 * Returns an {@code int} with the ID of this {@code MirrorMaterial} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code MirrorPBRTMaterial} instance
+	 * @return an {@code int} with the ID of this {@code MirrorMaterial} instance
 	 */
 	@Override
 	public int getID() {
@@ -382,9 +382,9 @@ public final class MirrorPBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code MirrorPBRTMaterial} instance.
+	 * Returns a hash code for this {@code MirrorMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code MirrorPBRTMaterial} instance
+	 * @return a hash code for this {@code MirrorMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

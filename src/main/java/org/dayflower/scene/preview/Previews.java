@@ -31,7 +31,7 @@ import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
 import org.dayflower.scene.light.DiffuseAreaLight;
 import org.dayflower.scene.light.PerezLight;
-import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
+import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.smallpt.SmallPTMaterial;
 
 /**
@@ -71,7 +71,7 @@ public final class Previews {
 		
 		final Material material0 = material;
 //		final Material material1 = new MattePBRTMaterial();
-		final Material material2 = new MattePBRTMaterial();
+		final Material material2 = new MatteMaterial();
 		
 		final Shape3F shape0 = new Sphere3F();//new Sphere3F();
 //		final Shape3F shape1 = new Sphere3F(10.0F);

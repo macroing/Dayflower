@@ -189,37 +189,25 @@ public final class SpecularBXDF extends BXDF {
 			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
-				final BXDFType bXDFType = getBXDFType();
-				
-				final Color3F result = Color3F.multiply(this.reflectanceScale, probabilityRussianRouletteReflection);
-				
 				final Vector3F incoming = Vector3F.negate(Vector3F.reflection(direction, normal, true));
 				
-				final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, incoming));
+				final Color3F result = Color3F.divide(Color3F.multiply(this.reflectanceScale, probabilityRussianRouletteReflection), abs(Vector3F.dotProduct(normal, incoming)));
 				
-				return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+				return Optional.of(new BXDFResult(getBXDFType(), result, incoming, outgoing, 1.0F));
 			}
 			
-			final BXDFType bXDFType = getBXDFType();
+			final Vector3F incoming = Vector3F.negate(refractionDirection);
 			
-			final Color3F result = Color3F.multiply(this.transmittanceScale, probabilityRussianRouletteTransmission);
+			final Color3F result = Color3F.divide(Color3F.multiply(this.transmittanceScale, probabilityRussianRouletteTransmission), abs(Vector3F.dotProduct(normal, incoming)));
 			
-			final Vector3F incoming = Vector3F.negate(optionalRefractionDirection.get());
-			
-			final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, incoming));
-			
-			return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+			return Optional.of(new BXDFResult(getBXDFType(), result, incoming, outgoing, 1.0F));
 		}
-		
-		final BXDFType bXDFType = getBXDFType();
-		
-		final Color3F result = this.reflectanceScale;
 		
 		final Vector3F incoming = Vector3F.negate(Vector3F.reflection(direction, normal, true));
 		
-		final float probabilityDensityFunctionValue = abs(Vector3F.dotProduct(normal, incoming));
+		final Color3F result = Color3F.divide(this.reflectanceScale, abs(Vector3F.dotProduct(normal, incoming)));
 		
-		return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+		return Optional.of(new BXDFResult(getBXDFType(), result, incoming, outgoing, 1.0F));
 	}
 	
 	/**

@@ -36,15 +36,15 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
-import org.dayflower.scene.material.pbrt.DisneyPBRTMaterial;
-import org.dayflower.scene.material.pbrt.GlassPBRTMaterial;
-import org.dayflower.scene.material.pbrt.HairPBRTMaterial;
-import org.dayflower.scene.material.pbrt.MattePBRTMaterial;
-import org.dayflower.scene.material.pbrt.MetalPBRTMaterial;
-import org.dayflower.scene.material.pbrt.MirrorPBRTMaterial;
-import org.dayflower.scene.material.pbrt.PlasticPBRTMaterial;
-import org.dayflower.scene.material.pbrt.SubstratePBRTMaterial;
-import org.dayflower.scene.material.pbrt.UberPBRTMaterial;
+import org.dayflower.scene.material.DisneyMaterial;
+import org.dayflower.scene.material.GlassMaterial;
+import org.dayflower.scene.material.HairMaterial;
+import org.dayflower.scene.material.MatteMaterial;
+import org.dayflower.scene.material.MeasuredMetalMaterial;
+import org.dayflower.scene.material.MirrorMaterial;
+import org.dayflower.scene.material.PlasticMaterial;
+import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.material.UberMaterial;
 import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
 import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
 import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
@@ -89,7 +89,7 @@ final class CenteredVBoxes {
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Scene Configuration", 16.0D);
 		
-		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(DisneyPBRTMaterial.NAME, GlassPBRTMaterial.NAME, HairPBRTMaterial.NAME, MattePBRTMaterial.NAME, MetalPBRTMaterial.NAME, MirrorPBRTMaterial.NAME, PlasticPBRTMaterial.NAME, SubstratePBRTMaterial.NAME, UberPBRTMaterial.NAME, GlassRayitoMaterial.NAME, MatteRayitoMaterial.NAME, MetalRayitoMaterial.NAME, MirrorRayitoMaterial.NAME, ClearCoatSmallPTMaterial.NAME, GlassSmallPTMaterial.NAME, MatteSmallPTMaterial.NAME, MetalSmallPTMaterial.NAME, MirrorSmallPTMaterial.NAME), MattePBRTMaterial.NAME);
+		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(DisneyMaterial.NAME, GlassMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MeasuredMetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME, GlassRayitoMaterial.NAME, MatteRayitoMaterial.NAME, MetalRayitoMaterial.NAME, MirrorRayitoMaterial.NAME, ClearCoatSmallPTMaterial.NAME, GlassSmallPTMaterial.NAME, MatteSmallPTMaterial.NAME, MetalSmallPTMaterial.NAME, MirrorSmallPTMaterial.NAME), MatteMaterial.NAME);
 		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Plane3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
 		
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
@@ -125,24 +125,24 @@ final class CenteredVBoxes {
 		
 		if(selectedItem != null) {
 			switch(selectedItem) {
-				case DisneyPBRTMaterial.NAME:
-					return new DisneyPBRTMaterial();
-				case GlassPBRTMaterial.NAME:
-					return new GlassPBRTMaterial();
-				case HairPBRTMaterial.NAME:
-					return new HairPBRTMaterial();
-				case MattePBRTMaterial.NAME:
-					return new MattePBRTMaterial();
-				case MetalPBRTMaterial.NAME:
-					return new MetalPBRTMaterial();
-				case MirrorPBRTMaterial.NAME:
-					return new MirrorPBRTMaterial();
-				case PlasticPBRTMaterial.NAME:
-					return new PlasticPBRTMaterial();
-				case SubstratePBRTMaterial.NAME:
-					return new SubstratePBRTMaterial();
-				case UberPBRTMaterial.NAME:
-					return new UberPBRTMaterial();
+				case DisneyMaterial.NAME:
+					return new DisneyMaterial();
+				case GlassMaterial.NAME:
+					return new GlassMaterial();
+				case HairMaterial.NAME:
+					return new HairMaterial();
+				case MatteMaterial.NAME:
+					return new MatteMaterial();
+				case MeasuredMetalMaterial.NAME:
+					return new MeasuredMetalMaterial();
+				case MirrorMaterial.NAME:
+					return new MirrorMaterial();
+				case PlasticMaterial.NAME:
+					return new PlasticMaterial();
+				case SubstrateMaterial.NAME:
+					return new SubstrateMaterial();
+				case UberMaterial.NAME:
+					return new UberMaterial();
 				case GlassRayitoMaterial.NAME:
 					return new GlassRayitoMaterial();
 				case MatteRayitoMaterial.NAME:

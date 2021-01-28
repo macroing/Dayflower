@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.scene.material.pbrt;
+package org.dayflower.scene.material;
 
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.saturate;
@@ -41,21 +41,21 @@ import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MattePBRTMaterial} is an implementation of {@link Material} and is used for matte surfaces.
+ * A {@code MatteMaterial} is an implementation of {@link Material} and is used for matte surfaces.
  * <p>
  * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MattePBRTMaterial implements Material {
+public final class MatteMaterial implements Material {
 	/**
-	 * The name of this {@code MattePBRTMaterial} class.
+	 * The name of this {@code MatteMaterial} class.
 	 */
-	public static final String NAME = "PBRT - Matte";
+	public static final String NAME = "Matte";
 	
 	/**
-	 * The ID of this {@code MattePBRTMaterial} class.
+	 * The ID of this {@code MatteMaterial} class.
 	 */
 	public static final int ID = 103;
 	
@@ -69,47 +69,47 @@ public final class MattePBRTMaterial implements Material {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * Constructs a new {@code MatteMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MattePBRTMaterial(Color3F.GRAY_0_50);
+	 * new MatteMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
-	public MattePBRTMaterial() {
+	public MatteMaterial() {
 		this(Color3F.GRAY_0_50);
 	}
 	
 	/**
-	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * Constructs a new {@code MatteMaterial} instance.
 	 * <p>
 	 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MattePBRTMaterial(colorKD, Color3F.BLACK);
+	 * new MatteMaterial(colorKD, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
 	 */
-	public MattePBRTMaterial(final Color3F colorKD) {
+	public MatteMaterial(final Color3F colorKD) {
 		this(colorKD, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * Constructs a new {@code MatteMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MattePBRTMaterial(colorKD, colorEmission, 0.0F);
+	 * new MatteMaterial(colorKD, colorEmission, 0.0F);
 	 * }
 	 * </pre>
 	 * 
@@ -117,19 +117,19 @@ public final class MattePBRTMaterial implements Material {
 	 * @param colorEmission a {@code Color3F} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorEmission} are {@code null}
 	 */
-	public MattePBRTMaterial(final Color3F colorKD, final Color3F colorEmission) {
+	public MatteMaterial(final Color3F colorKD, final Color3F colorEmission) {
 		this(colorKD, colorEmission, 0.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * Constructs a new {@code MatteMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MattePBRTMaterial(colorKD, colorEmission, floatAngle, new NoOpModifier());
+	 * new MatteMaterial(colorKD, colorEmission, floatAngle, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
@@ -138,12 +138,12 @@ public final class MattePBRTMaterial implements Material {
 	 * @param floatAngle a {@code float} for the angle
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD} or {@code colorEmission} are {@code null}
 	 */
-	public MattePBRTMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle) {
+	public MatteMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle) {
 		this(colorKD, colorEmission, floatAngle, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * Constructs a new {@code MatteMaterial} instance.
 	 * <p>
 	 * If either {@code colorKD}, {@code colorEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -153,7 +153,7 @@ public final class MattePBRTMaterial implements Material {
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKD}, {@code colorEmission} or {@code modifier} are {@code null}
 	 */
-	public MattePBRTMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle, final Modifier modifier) {
+	public MatteMaterial(final Color3F colorKD, final Color3F colorEmission, final float floatAngle, final Modifier modifier) {
 		this.textureKD = new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
 		this.textureAngle = new ConstantTexture(floatAngle);
@@ -161,33 +161,33 @@ public final class MattePBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * Constructs a new {@code MatteMaterial} instance.
 	 * <p>
 	 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MattePBRTMaterial(textureKD, ConstantTexture.BLACK);
+	 * new MatteMaterial(textureKD, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureKD a {@link Texture} instance for the diffuse coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
 	 */
-	public MattePBRTMaterial(final Texture textureKD) {
+	public MatteMaterial(final Texture textureKD) {
 		this(textureKD, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * Constructs a new {@code MatteMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MattePBRTMaterial(textureKD, textureEmission, ConstantTexture.BLACK);
+	 * new MatteMaterial(textureKD, textureEmission, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
@@ -195,19 +195,19 @@ public final class MattePBRTMaterial implements Material {
 	 * @param textureEmission a {@code Texture} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD} or {@code textureEmission} are {@code null}
 	 */
-	public MattePBRTMaterial(final Texture textureKD, final Texture textureEmission) {
+	public MatteMaterial(final Texture textureKD, final Texture textureEmission) {
 		this(textureKD, textureEmission, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * Constructs a new {@code MatteMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureEmission} or {@code textureAngle} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MattePBRTMaterial(textureKD, textureEmission, textureAngle, new NoOpModifier());
+	 * new MatteMaterial(textureKD, textureEmission, textureAngle, new NoOpModifier());
 	 * }
 	 * </pre>
 	 * 
@@ -216,12 +216,12 @@ public final class MattePBRTMaterial implements Material {
 	 * @param textureAngle a {@code Texture} instance for the angle
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureEmission} or {@code textureAngle} are {@code null}
 	 */
-	public MattePBRTMaterial(final Texture textureKD, final Texture textureEmission, final Texture textureAngle) {
+	public MatteMaterial(final Texture textureKD, final Texture textureEmission, final Texture textureAngle) {
 		this(textureKD, textureEmission, textureAngle, new NoOpModifier());
 	}
 	
 	/**
-	 * Constructs a new {@code MattePBRTMaterial} instance.
+	 * Constructs a new {@code MatteMaterial} instance.
 	 * <p>
 	 * If either {@code textureKD}, {@code textureEmission}, {@code textureAngle} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
@@ -231,7 +231,7 @@ public final class MattePBRTMaterial implements Material {
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKD}, {@code textureEmission}, {@code textureAngle} or {@code modifier} are {@code null}
 	 */
-	public MattePBRTMaterial(final Texture textureKD, final Texture textureEmission, final Texture textureAngle, final Modifier modifier) {
+	public MatteMaterial(final Texture textureKD, final Texture textureEmission, final Texture textureAngle, final Modifier modifier) {
 		this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
 		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
 		this.textureAngle = Objects.requireNonNull(textureAngle, "textureAngle == null");
@@ -241,12 +241,12 @@ public final class MattePBRTMaterial implements Material {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code MattePBRTMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code MatteMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code MattePBRTMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code MatteMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -322,9 +322,9 @@ public final class MattePBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code MattePBRTMaterial} instance.
+	 * Returns a {@code String} with the name of this {@code MatteMaterial} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code MattePBRTMaterial} instance
+	 * @return a {@code String} with the name of this {@code MatteMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -332,13 +332,13 @@ public final class MattePBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code MattePBRTMaterial} instance.
+	 * Returns a {@code String} representation of this {@code MatteMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code MattePBRTMaterial} instance
+	 * @return a {@code String} representation of this {@code MatteMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MattePBRTMaterial(%s, %s, %s, %s)", this.textureKD, this.textureEmission, this.textureAngle, this.modifier);
+		return String.format("new MatteMaterial(%s, %s, %s, %s)", this.textureKD, this.textureEmission, this.textureAngle, this.modifier);
 	}
 	
 	/**
@@ -419,26 +419,26 @@ public final class MattePBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code MattePBRTMaterial} instance for equality.
+	 * Compares {@code object} to this {@code MatteMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MattePBRTMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MatteMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code MattePBRTMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MattePBRTMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code MatteMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MatteMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof MattePBRTMaterial)) {
+		} else if(!(object instanceof MatteMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.modifier, MattePBRTMaterial.class.cast(object).modifier)) {
+		} else if(!Objects.equals(this.modifier, MatteMaterial.class.cast(object).modifier)) {
 			return false;
-		} else if(!Objects.equals(this.textureAngle, MattePBRTMaterial.class.cast(object).textureAngle)) {
+		} else if(!Objects.equals(this.textureAngle, MatteMaterial.class.cast(object).textureAngle)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmission, MattePBRTMaterial.class.cast(object).textureEmission)) {
+		} else if(!Objects.equals(this.textureEmission, MatteMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureKD, MattePBRTMaterial.class.cast(object).textureKD)) {
+		} else if(!Objects.equals(this.textureKD, MatteMaterial.class.cast(object).textureKD)) {
 			return false;
 		} else {
 			return true;
@@ -446,9 +446,9 @@ public final class MattePBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code MattePBRTMaterial} instance.
+	 * Returns an {@code int} with the ID of this {@code MatteMaterial} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code MattePBRTMaterial} instance
+	 * @return an {@code int} with the ID of this {@code MatteMaterial} instance
 	 */
 	@Override
 	public int getID() {
@@ -456,9 +456,9 @@ public final class MattePBRTMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code MattePBRTMaterial} instance.
+	 * Returns a hash code for this {@code MatteMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code MattePBRTMaterial} instance
+	 * @return a hash code for this {@code MatteMaterial} instance
 	 */
 	@Override
 	public int hashCode() {

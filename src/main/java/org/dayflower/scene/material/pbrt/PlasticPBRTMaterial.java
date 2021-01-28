@@ -32,7 +32,7 @@ import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
+import org.dayflower.scene.bxdf.LambertianBRDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.fresnel.Fresnel;
@@ -392,7 +392,7 @@ public final class PlasticPBRTMaterial implements Material {
 		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE);
 		
 		if(!colorKD.isBlack()) {
-			bXDFs.add(new LambertianPBRTBRDF(colorKD));
+			bXDFs.add(new LambertianBRDF(colorKD));
 		}
 		
 		if(!colorKS.isBlack()) {

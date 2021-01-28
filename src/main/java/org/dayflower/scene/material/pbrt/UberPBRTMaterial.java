@@ -32,7 +32,7 @@ import org.dayflower.scene.BXDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.pbrt.LambertianPBRTBRDF;
+import org.dayflower.scene.bxdf.LambertianBRDF;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBRDF;
 import org.dayflower.scene.bxdf.pbrt.SpecularPBRTBTDF;
 import org.dayflower.scene.bxdf.pbrt.TorranceSparrowPBRTBRDF;
@@ -698,7 +698,7 @@ public final class UberPBRTMaterial implements Material {
 		}
 		
 		if(!colorKD.isBlack()) {
-			bXDFs.add(new LambertianPBRTBRDF(colorKD));
+			bXDFs.add(new LambertianBRDF(colorKD));
 		}
 		
 		if(!colorKS.isBlack()) {

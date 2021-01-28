@@ -57,7 +57,7 @@ public final class LambertianBRDF extends BXDF {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new LambertianBRDF(reflectanceScale, false, false);
+	 * new LambertianBRDF(reflectanceScale, false);
 	 * }
 	 * </pre>
 	 * 
@@ -66,6 +66,26 @@ public final class LambertianBRDF extends BXDF {
 	 */
 	public LambertianBRDF(final Color3F reflectanceScale) {
 		this(reflectanceScale, false, false);
+	}
+	
+	/**
+	 * Constructs a new {@code LambertianBRDF} instance.
+	 * <p>
+	 * If {@code reflectanceScale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new LambertianBRDF(reflectanceScale, isNegatingIncoming, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param reflectanceScale a {@link Color3F} instance that represents the reflectance scale
+	 * @param isNegatingIncoming {@code true} if, and only if, the incoming direction should be negated, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code reflectanceScale} is {@code null}
+	 */
+	public LambertianBRDF(final Color3F reflectanceScale, final boolean isNegatingIncoming) {
+		this(reflectanceScale, isNegatingIncoming, false);
 	}
 	
 	/**
@@ -179,9 +199,7 @@ public final class LambertianBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
-		final Vector3F incomingSampleCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingSample) : incomingSample;
-		final Vector3F incoming = this.isUsingNormal ? Vector3F.dotProduct(normal, outgoing) < 0.0F ? Vector3F.negate(incomingSampleCorrectlyOriented) : incomingSampleCorrectlyOriented : outgoing.getZ() < 0.0F ? Vector3F.negateComponent3(incomingSampleCorrectlyOriented) : incomingSampleCorrectlyOriented;
+		final Vector3F incoming = doSampleIncoming(outgoing, normal, sample);
 		
 		final BXDFType bXDFType = getBXDFType();
 		
@@ -264,6 +282,14 @@ public final class LambertianBRDF extends BXDF {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Vector3F doSampleIncoming(final Vector3F outgoing, final Vector3F normal, final Point2F sample) {
+		final Vector3F incomingSample = SampleGeneratorF.sampleHemisphereCosineDistribution(sample.getU(), sample.getV());
+		final Vector3F incomingSampleCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingSample) : incomingSample;
+		final Vector3F incoming = this.isUsingNormal ? Vector3F.faceForward(normal, outgoing, incomingSampleCorrectlyOriented) : Vector3F.faceForwardComponent3(outgoing, incomingSampleCorrectlyOriented);
+		
+		return incoming;
+	}
 	
 	private boolean doCheckAngles(final Vector3F outgoing, final Vector3F normal, final Vector3F incoming) {
 		if(this.isUsingNormal) {

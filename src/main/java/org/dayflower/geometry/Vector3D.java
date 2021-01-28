@@ -767,6 +767,35 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns {@code Vector3D.negate(direction)} or {@code direction} as {@code Vector3D.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively.
+	 * <p>
+	 * If either {@code vectorLHS}, {@code vectorRHS} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector3D} instance on the right-hand side
+	 * @param direction the {@code Vector3D} instance to potentially negate and then return
+	 * @return {@code Vector3D.negate(direction)} or {@code direction} as {@code Vector3D.dotProduct(vectorLHS, vectorRHS)} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS}, {@code vectorRHS} or {@code direction} are {@code null}
+	 */
+	public static Vector3D faceForward(final Vector3D vectorLHS, final Vector3D vectorRHS, final Vector3D direction) {
+		return dotProduct(vectorLHS, vectorRHS) < 0.0D ? negate(direction) : Objects.requireNonNull(direction, "direction == null");
+	}
+	
+	/**
+	 * Returns {@code Vector3D.negateComponent3(vectorRHS)} or {@code vectorRHS} as {@code vectorLHS.getComponent3()} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively.
+	 * <p>
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector3D} instance on the right-hand side to potentially negate and then return
+	 * @return {@code Vector3D.negateComponent3(vectorRHS)} or {@code vectorRHS} as {@code vectorLHS.getComponent3()} is less than {@code 0.0D} or greater than or equal to {@code 0.0D}, respectively
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static Vector3D faceForwardComponent3(final Vector3D vectorLHS, final Vector3D vectorRHS) {
+		return vectorLHS.component3 < 0.0D ? negateComponent3(vectorRHS) : Objects.requireNonNull(vectorRHS, "vectorRHS == null");
+	}
+	
+	/**
 	 * Returns {@code Vector3D.negate(vectorLHS)} or {@code vectorLHS} as {@code Vector3D.dotProduct(vectorLHS, vectorRHS)} is greater than or equal to {@code 0.0D} or less than {@code 0.0D}, respectively.
 	 * <p>
 	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.

@@ -168,44 +168,45 @@ public final class Triangle3F implements Shape3F {
 	 * <p>
 	 * Returns an optional {@link SurfaceSample3F} with the surface sample.
 	 * <p>
-	 * If either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param referencePoint the reference point on this {@code Triangle3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Triangle3F} instance
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param sample a {@link Point2F} instance with a sample point
 	 * @return an optional {@code SurfaceSample3F} with the surface sample
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint} or {@code referenceSurfaceNormal} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
 	 */
-//	@Override
-//	public Optional<SurfaceSample3F> sample(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final float u, final float v) {
-//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-//		
-//		final Point3F barycentricCoordinates = SampleGeneratorF.sampleTriangleUniformDistribution(u, v);
-//		
-//		final Point4F positionA = this.a.getPosition();
-//		final Point4F positionB = this.b.getPosition();
-//		final Point4F positionC = this.c.getPosition();
-//		
-//		final Vector3F normalA = this.a.getOrthonormalBasis().getW();
-//		final Vector3F normalB = this.b.getOrthonormalBasis().getW();
-//		final Vector3F normalC = this.c.getOrthonormalBasis().getW();
-//		
-//		final float x = positionA.getX() * barycentricCoordinates.getX() + positionB.getX() * barycentricCoordinates.getY() + positionC.getX() * barycentricCoordinates.getZ();
-//		final float y = positionA.getY() * barycentricCoordinates.getX() + positionB.getY() * barycentricCoordinates.getY() + positionC.getY() * barycentricCoordinates.getZ();
-//		final float z = positionA.getZ() * barycentricCoordinates.getX() + positionB.getZ() * barycentricCoordinates.getY() + positionC.getZ() * barycentricCoordinates.getZ();
-//		
-//		final Point3F point = new Point3F(x, y, z);
-//		
-//		final Vector3F surfaceNormal = Vector3F.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
-//		
-//		final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
-//		final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
-//		
-//		final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (1.0F / getSurfaceArea()) / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
-//		
-//		return Optional.of(new SurfaceSample3F(point, new Vector3F(), surfaceNormal, probabilityDensityFunctionValue));
-//	}
+	@Override
+	public Optional<SurfaceSample3F> sample(final Point2F sample) {
+		Objects.requireNonNull(sample, "sample == null");
+		
+//		TODO: Find out if the Barycentric coordinates has to follow the same pattern as in the intersection operation, which is W, U and V.
+		final Point3F barycentricCoordinates = SampleGeneratorF.sampleTriangleUniformDistribution(sample.getU(), sample.getV());
+		
+		final Point4F positionA = this.a.getPosition();
+		final Point4F positionB = this.b.getPosition();
+		final Point4F positionC = this.c.getPosition();
+		
+		final Vector3F normalA = this.a.getOrthonormalBasis().getW();
+		final Vector3F normalB = this.b.getOrthonormalBasis().getW();
+		final Vector3F normalC = this.c.getOrthonormalBasis().getW();
+		
+		final float x = positionA.getX() * barycentricCoordinates.getX() + positionB.getX() * barycentricCoordinates.getY() + positionC.getX() * barycentricCoordinates.getZ();
+		final float y = positionA.getY() * barycentricCoordinates.getX() + positionB.getY() * barycentricCoordinates.getY() + positionC.getY() * barycentricCoordinates.getZ();
+		final float z = positionA.getZ() * barycentricCoordinates.getX() + positionB.getZ() * barycentricCoordinates.getY() + positionC.getZ() * barycentricCoordinates.getZ();
+		
+		final Point3F point = new Point3F(x, y, z);
+		
+		final Vector3F surfaceNormal = Vector3F.normalNormalized(normalA, normalB, normalC, barycentricCoordinates);
+		
+		final float pointErrorX = (abs(positionA.getX() * barycentricCoordinates.getX()) + abs(positionB.getX() * barycentricCoordinates.getY()) + abs(positionC.getX() * barycentricCoordinates.getZ())) * gamma(6);
+		final float pointErrorY = (abs(positionA.getY() * barycentricCoordinates.getX()) + abs(positionB.getY() * barycentricCoordinates.getY()) + abs(positionC.getY() * barycentricCoordinates.getZ())) * gamma(6);
+		final float pointErrorZ = (abs(positionA.getZ() * barycentricCoordinates.getX()) + abs(positionB.getZ() * barycentricCoordinates.getY()) + abs(positionC.getZ() * barycentricCoordinates.getZ())) * gamma(6);
+		
+		final Vector3F pointError = new Vector3F(pointErrorX, pointErrorY, pointErrorZ);
+		
+		final float probabilityDensityFunctionValue = 1.0F / getSurfaceArea();
+		
+		return Optional.of(new SurfaceSample3F(point, pointError, surfaceNormal, probabilityDensityFunctionValue));
+	}
 	
 	/**
 	 * Performs an intersection test between {@code ray} and this {@code Triangle3F} instance.
@@ -447,66 +448,6 @@ public final class Triangle3F implements Shape3F {
 			return true;
 		}
 	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Triangle3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Triangle3F} instance
-	 * @param point the point on this {@code Triangle3F} instance
-	 * @param surfaceNormal the surface normal on this {@code Triangle3F} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal}, {@code point} or {@code surfaceNormal} are {@code null}
-	 */
-//	@Override
-//	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Point3F point, final Vector3F surfaceNormal) {
-//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-//		
-//		final Vector3F directionToSurface = Vector3F.direction(point, referencePoint);
-//		final Vector3F directionToSurfaceNormalized = Vector3F.normalize(directionToSurface);
-//		
-//		final float probabilityDensityFunctionValue = directionToSurface.lengthSquared() * (1.0F / getSurfaceArea()) / abs(Vector3F.dotProduct(directionToSurfaceNormalized, surfaceNormal));
-//		
-//		return probabilityDensityFunctionValue;
-//	}
-	
-	/**
-	 * Returns the probability density function (PDF) value for solid angle.
-	 * <p>
-	 * If either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param referencePoint the reference point on this {@code Triangle3F} instance
-	 * @param referenceSurfaceNormal the reference surface normal on this {@code Triangle3F} instance
-	 * @param direction the direction to this {@code Triangle3F} instance
-	 * @return the probability density function (PDF) value for solid angle
-	 * @throws NullPointerException thrown if, and only if, either {@code referencePoint}, {@code referenceSurfaceNormal} or {@code direction} are {@code null}
-	 */
-//	@Override
-//	public float evaluateProbabilityDensityFunction(final Point3F referencePoint, final Vector3F referenceSurfaceNormal, final Vector3F direction) {
-//		Objects.requireNonNull(referencePoint, "referencePoint == null");
-//		Objects.requireNonNull(referenceSurfaceNormal, "referenceSurfaceNormal == null");
-//		Objects.requireNonNull(direction, "direction == null");
-//		
-//		TODO: Check if these variables should be supplied as parameters?
-//		final float tMinimum = 0.001F;
-//		final float tMaximum = Float.MAX_VALUE;
-//		
-//		final Optional<SurfaceIntersection3F> optionalSurfaceIntersection = intersection(new Ray3F(referencePoint, direction), tMinimum, tMaximum);
-//		
-//		if(optionalSurfaceIntersection.isPresent()) {
-//			final SurfaceIntersection3F surfaceIntersection = optionalSurfaceIntersection.get();
-//			
-//			final Point3F point = surfaceIntersection.getSurfaceIntersectionPoint();
-//			
-//			final Vector3F surfaceNormal = surfaceIntersection.getOrthonormalBasisS().getW();
-//			
-//			return evaluateProbabilityDensityFunction(referencePoint, referenceSurfaceNormal, point, surfaceNormal);
-//		}
-//		
-//		return 0.0F;
-//	}
 	
 	/**
 	 * Returns the surface area of this {@code Triangle3F} instance.

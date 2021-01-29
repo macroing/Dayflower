@@ -18,7 +18,10 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.isNaN;
+import static org.dayflower.utility.Floats.isZero;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -127,7 +130,35 @@ public interface Shape3F extends Node {
 		Objects.requireNonNull(sample, "sample == null");
 		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
 		
-		return SurfaceSample3F.EMPTY;
+		final Optional<SurfaceSample3F> optionalSurfaceSample = sample(sample);
+		
+		if(optionalSurfaceSample.isPresent()) {
+			final SurfaceSample3F surfaceSample = optionalSurfaceSample.get();
+			
+			final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+			final Point3F point = surfaceSample.getPoint();
+			
+			final Vector3F incoming = Vector3F.direction(surfaceIntersectionPoint, point);
+			
+			if(isZero(incoming.lengthSquared())) {
+				return Optional.empty();
+			}
+			
+			final Vector3F surfaceNormal = surfaceSample.getSurfaceNormal();
+			final Vector3F incomingNormalized = Vector3F.normalize(incoming);
+			
+			final float probabilityDensityFunctionValue = Point3F.distanceSquared(point, surfaceIntersectionPoint) / abs(Vector3F.dotProduct(surfaceNormal, Vector3F.negate(incomingNormalized)));
+			
+			if(isInfinite(probabilityDensityFunctionValue)) {
+				return Optional.empty();
+			}
+			
+			final Vector3F pointError = surfaceSample.getPointError();
+			
+			return Optional.of(new SurfaceSample3F(point, pointError, surfaceNormal, probabilityDensityFunctionValue));
+		}
+		
+		return Optional.empty();
 	}
 	
 	/**
@@ -175,6 +206,25 @@ public interface Shape3F extends Node {
 	default float evaluateProbabilityDensityFunction(final SurfaceIntersection3F surfaceIntersection, final Vector3F incoming) {
 		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
+		
+		final Ray3F ray = surfaceIntersection.createRay(incoming);
+		
+		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionShape = intersection(ray, 0.001F, Float.MAX_VALUE);
+		
+		if(optionalSurfaceIntersectionShape.isPresent()) {
+			final SurfaceIntersection3F surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();
+			
+			final Point3F surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+			final Point3F surfaceIntersectionPointShape = surfaceIntersectionShape.getSurfaceIntersectionPoint();
+			
+			final float probabilityDensityFunctionValue = Point3F.distanceSquared(surfaceIntersectionPointShape, surfaceIntersectionPoint) / (abs(Vector3F.dotProduct(surfaceIntersectionShape.getSurfaceNormalS(), Vector3F.negate(incoming)) * getSurfaceArea()));
+			
+			if(isInfinite(probabilityDensityFunctionValue)) {
+				return 0.0F;
+			}
+			
+			return probabilityDensityFunctionValue;
+		}
 		
 		return 0.0F;
 	}

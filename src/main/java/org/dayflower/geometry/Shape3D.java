@@ -18,7 +18,10 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.isNaN;
+import static org.dayflower.utility.Doubles.isInfinite;
+import static org.dayflower.utility.Doubles.isZero;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -127,7 +130,35 @@ public interface Shape3D extends Node {
 		Objects.requireNonNull(sample, "sample == null");
 		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
 		
-		return SurfaceSample3D.EMPTY;
+		final Optional<SurfaceSample3D> optionalSurfaceSample = sample(sample);
+		
+		if(optionalSurfaceSample.isPresent()) {
+			final SurfaceSample3D surfaceSample = optionalSurfaceSample.get();
+			
+			final Point3D surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+			final Point3D point = surfaceSample.getPoint();
+			
+			final Vector3D incoming = Vector3D.direction(surfaceIntersectionPoint, point);
+			
+			if(isZero(incoming.lengthSquared())) {
+				return Optional.empty();
+			}
+			
+			final Vector3D surfaceNormal = surfaceSample.getSurfaceNormal();
+			final Vector3D incomingNormalized = Vector3D.normalize(incoming);
+			
+			final double probabilityDensityFunctionValue = Point3D.distanceSquared(point, surfaceIntersectionPoint) / abs(Vector3D.dotProduct(surfaceNormal, Vector3D.negate(incomingNormalized)));
+			
+			if(isInfinite(probabilityDensityFunctionValue)) {
+				return Optional.empty();
+			}
+			
+			final Vector3D pointError = surfaceSample.getPointError();
+			
+			return Optional.of(new SurfaceSample3D(point, pointError, surfaceNormal, probabilityDensityFunctionValue));
+		}
+		
+		return Optional.empty();
 	}
 	
 	/**
@@ -175,6 +206,25 @@ public interface Shape3D extends Node {
 	default double evaluateProbabilityDensityFunction(final SurfaceIntersection3D surfaceIntersection, final Vector3D incoming) {
 		Objects.requireNonNull(surfaceIntersection, "surfaceIntersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
+		
+		final Ray3D ray = surfaceIntersection.createRay(incoming);
+		
+		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, Double.MAX_VALUE);
+		
+		if(optionalSurfaceIntersectionShape.isPresent()) {
+			final SurfaceIntersection3D surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();
+			
+			final Point3D surfaceIntersectionPoint = surfaceIntersection.getSurfaceIntersectionPoint();
+			final Point3D surfaceIntersectionPointShape = surfaceIntersectionShape.getSurfaceIntersectionPoint();
+			
+			final double probabilityDensityFunctionValue = Point3D.distanceSquared(surfaceIntersectionPointShape, surfaceIntersectionPoint) / (abs(Vector3D.dotProduct(surfaceIntersectionShape.getSurfaceNormalS(), Vector3D.negate(incoming)) * getSurfaceArea()));
+			
+			if(isInfinite(probabilityDensityFunctionValue)) {
+				return 0.0D;
+			}
+			
+			return probabilityDensityFunctionValue;
+		}
 		
 		return 0.0D;
 	}

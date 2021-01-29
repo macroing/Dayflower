@@ -247,20 +247,24 @@ public final class JavaSceneLoader implements SceneLoader {
 		try {
 			final JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 			
-			final List<File> files = doGetFiles(URLClassLoader.class.cast(ClassLoader.getSystemClassLoader()).getURLs());
-			
-			try(final StandardJavaFileManager standardJavaFileManager = javaCompiler.getStandardFileManager(null, null, null)) {
-				standardJavaFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(binaryDirectory));
-				standardJavaFileManager.setLocation(StandardLocation.CLASS_PATH, files);
-				standardJavaFileManager.setLocation(StandardLocation.SOURCE_PATH, Arrays.asList(sourceDirectory));
+			if(javaCompiler != null) {
+				final List<File> files = doGetFiles(URLClassLoader.class.cast(ClassLoader.getSystemClassLoader()).getURLs());
 				
-				final CompilationTask compilationTask = javaCompiler.getTask(null, standardJavaFileManager, null, null, null, standardJavaFileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile)));
-				
-				final boolean isCompiled = compilationTask.call().booleanValue();
-				
-				if(!isCompiled) {
-					return null;
+				try(final StandardJavaFileManager standardJavaFileManager = javaCompiler.getStandardFileManager(null, null, null)) {
+					standardJavaFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(binaryDirectory));
+					standardJavaFileManager.setLocation(StandardLocation.CLASS_PATH, files);
+					standardJavaFileManager.setLocation(StandardLocation.SOURCE_PATH, Arrays.asList(sourceDirectory));
+					
+					final CompilationTask compilationTask = javaCompiler.getTask(null, standardJavaFileManager, null, null, null, standardJavaFileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile)));
+					
+					final boolean hasCompiled = compilationTask.call().booleanValue();
+					
+					if(!hasCompiled) {
+						return null;
+					}
 				}
+			} else {
+				return null;
 			}
 		} catch(final IOException e) {
 			throw new UncheckedIOException(e);

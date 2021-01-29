@@ -388,8 +388,8 @@ public final class JavaSceneLoader implements SceneLoader {
 			try {
 				final Class<?> clazz = object.getClass();
 				
-				final Method method = clazz.getMethod("load", File.class, Scene.class);
-				
+				final
+				Method method = clazz.getMethod("load", File.class, Scene.class);
 				method.invoke(object, directory, scene);
 			} catch(final IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 //				Do nothing for now!

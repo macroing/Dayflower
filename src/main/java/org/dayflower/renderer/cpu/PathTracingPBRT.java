@@ -21,7 +21,6 @@ package org.dayflower.renderer.cpu;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
-import static org.dayflower.utility.Floats.random;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,8 +53,10 @@ final class PathTracingPBRT {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Color3F radiance(final Ray3F ray, final Sampler sampler, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int minimumBounceRussianRoulette) {
+	public static Color3F radiance(final Ray3F ray, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int minimumBounceRussianRoulette) {
 		final List<Light> lights = scene.getLights();
+		
+		final Sampler sampler = scene.getSampler();
 		
 		Color3F radiance = Color3F.BLACK;
 		Color3F throughput = Color3F.WHITE;
@@ -126,11 +127,7 @@ final class PathTracingPBRT {
 			
 			final BSDFResult bSDFResult = optionalBSDFResult.get();
 			
-			final BXDFType bXDFType = bSDFResult.getBXDFType();
-			
 			final Color3F result = bSDFResult.getResult();
-			
-			final Vector3F incoming = bSDFResult.getIncoming();
 			
 			final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
 			
@@ -138,7 +135,11 @@ final class PathTracingPBRT {
 				break;
 			}
 			
+			final Vector3F incoming = bSDFResult.getIncoming();
+			
 			throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result, abs(Vector3F.dotProduct(incoming, surfaceNormalS))), probabilityDensityFunctionValue));
+			
+			final BXDFType bXDFType = bSDFResult.getBXDFType();
 			
 			isSpecularBounce = bXDFType.isSpecular();
 			
@@ -155,7 +156,7 @@ final class PathTracingPBRT {
 			if(russianRouletteThroughput.maximum() < 1.0F && currentBounce > minimumBounceRussianRoulette) {
 				final float probability = max(0.05F, 1.0F - russianRouletteThroughput.maximum());
 				
-				if(random() < probability) {
+				if(sampler.sample1().getU() < probability) {
 					break;
 				}
 				

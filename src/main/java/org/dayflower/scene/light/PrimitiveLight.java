@@ -23,9 +23,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.color.Color3F;
+import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceEmittedResult;
@@ -40,7 +45,7 @@ import org.dayflower.scene.Primitive;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PrimitiveLight implements Light {
+public final class PrimitiveLight extends AreaLight {
 	private final Primitive primitive;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,10 +59,32 @@ public final class PrimitiveLight implements Light {
 	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
 	 */
 	public PrimitiveLight(final Primitive primitive) {
-		this.primitive = Objects.requireNonNull(primitive, "primitive == null");
+		super(primitive.getTransform().getObjectToWorld(), 1);
+		
+		this.primitive = primitive;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance for {@code intersection} and {@code direction}.
+	 * <p>
+	 * If either {@code intersection} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method represents the {@code AreaLight} method {@code L(const Interaction &intr, const Vector3f &w)} that returns a {@code Spectrum} in PBRT.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param direction a {@link Vector3F} instance with a direction
+	 * @return a {@code Color3F} instance with the radiance for {@code intersection} and {@code direction}
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code direction} are {@code null}
+	 */
+	@Override
+	public Color3F evaluateRadiance(final Intersection intersection, final Vector3F direction) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(direction, "direction == null");
+		
+		return Vector3F.dotProduct(intersection.getSurfaceNormalS(), direction) > 0.0F ? this.primitive.getMaterial().emittance(intersection) : Color3F.BLACK;
+	}
 	
 	/**
 	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
@@ -152,7 +179,40 @@ public final class PrimitiveLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		return Optional.empty();//TODO: Implement!
+		final Matrix44F lightToWorld = getLightToWorld();
+		final Matrix44F worldToLight = getWorldToLight();
+		
+		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
+		final SurfaceIntersection3F surfaceIntersectionLightSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToLight, lightToWorld);
+		
+		final Optional<SurfaceSample3F> optionalSurfaceSampleLightSpace = this.primitive.getShape().sample(sample, surfaceIntersectionLightSpace);
+		
+		if(optionalSurfaceSampleLightSpace.isPresent()) {
+			final SurfaceSample3F surfaceSampleLightSpace = optionalSurfaceSampleLightSpace.get();
+			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleLightSpace, lightToWorld, worldToLight);
+			
+			final float probabilityDensityFunctionValue = surfaceSampleWorldSpace.getProbabilityDensityFunctionValue();
+			
+			final Point3F pointWorldSpace = surfaceSampleWorldSpace.getPoint();
+			
+			final Vector3F incomingWorldSpace = Vector3F.directionNormalized(surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint(), pointWorldSpace);
+			
+			if(probabilityDensityFunctionValue > 0.0F && Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.negate(incomingWorldSpace)) > 0.0F) {
+				final Ray3F ray = new Ray3F(surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint(), incomingWorldSpace);
+				
+				final Optional<Intersection> optionalIntersection = this.primitive.intersection(ray, 0.001F, Float.MAX_VALUE);
+				
+				if(optionalIntersection.isPresent()) {
+					final Color3F radianceEmitted = this.primitive.getMaterial().emittance(optionalIntersection.get());
+					
+					if(!radianceEmitted.isBlack()) {
+						return Optional.of(new LightRadianceIncomingResult(radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
+					}
+				}
+			}
+		}
+		
+		return Optional.empty();
 	}
 	
 	/**
@@ -226,17 +286,12 @@ public final class PrimitiveLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return 0.0F;//TODO: Implement!
-	}
-	
-	/**
-	 * Returns the sample count associated with this {@code PrimitiveLight} instance.
-	 * 
-	 * @return the sample count associated with this {@code PrimitiveLight} instance
-	 */
-	@Override
-	public int getSampleCount() {
-		return 1;
+		final Matrix44F lightToWorld = getLightToWorld();
+		final Matrix44F worldToLight = getWorldToLight();
+		
+		final Vector3F incomingLightSpace = Vector3F.transform(worldToLight, incoming);
+		
+		return this.primitive.getShape().evaluateProbabilityDensityFunction(SurfaceIntersection3F.transform(intersection.getSurfaceIntersectionWorldSpace(), worldToLight, lightToWorld), incomingLightSpace);
 	}
 	
 	/**

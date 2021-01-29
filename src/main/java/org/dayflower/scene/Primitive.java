@@ -288,7 +288,14 @@ public final class Primitive implements Node {
 		if(optionalSurfaceSample.isPresent()) {
 			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSample.get();
 			
-			return Optional.of(new Sample(this, surfaceSampleObjectSpace));
+			final Vector3F surfaceNormalObjectSpace = surfaceSampleObjectSpace.getSurfaceNormal();
+			final Vector3F incomingObjectSpace = Vector3F.normalize(Vector3F.direction(surfaceSampleObjectSpace.getPoint(), surfaceIntersectionObjectSpace.getSurfaceIntersectionPoint()));
+			
+			final float probabilityDensityFunctionValue = surfaceSampleObjectSpace.getProbabilityDensityFunctionValue();
+			
+			if(probabilityDensityFunctionValue > 0.0F && Vector3F.dotProduct(surfaceNormalObjectSpace, incomingObjectSpace) > 0.0F) {
+				return Optional.of(new Sample(this, surfaceSampleObjectSpace));
+			}
 		}
 		
 		return Sample.EMPTY;

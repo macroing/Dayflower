@@ -286,17 +286,10 @@ public final class DiffuseAreaLight extends AreaLight {
 		final Matrix44F lightToWorld = getLightToWorld();
 		final Matrix44F worldToLight = getWorldToLight();
 		
-//		final Point3F referencePointWorldSpace = intersection.getSurfaceIntersectionPoint();
-//		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
-		
-//		final Vector3F referenceSurfaceNormalWorldSpace = intersection.getSurfaceNormalS();
-//		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
-		
 		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
 		final SurfaceIntersection3F surfaceIntersectionLightSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToLight, lightToWorld);
 		
 		final Optional<SurfaceSample3F> optionalSurfaceSampleLightSpace = this.shape.sample(sample, surfaceIntersectionLightSpace);
-//		final Optional<SurfaceSample3F> optionalSurfaceSampleLightSpace = this.shape.sample(referencePointLightSpace, referenceSurfaceNormalLightSpace, sample.getU(), sample.getV());
 		
 		if(optionalSurfaceSampleLightSpace.isPresent()) {
 			final SurfaceSample3F surfaceSampleLightSpace = optionalSurfaceSampleLightSpace.get();
@@ -306,7 +299,6 @@ public final class DiffuseAreaLight extends AreaLight {
 			
 			final Point3F pointWorldSpace = surfaceSampleWorldSpace.getPoint();
 			
-//			final Vector3F incomingWorldSpace = Vector3F.directionNormalized(referencePointWorldSpace, pointWorldSpace);
 			final Vector3F incomingWorldSpace = Vector3F.directionNormalized(surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint(), pointWorldSpace);
 			
 			if(probabilityDensityFunctionValue > 0.0F && (this.isTwoSided || Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.negate(incomingWorldSpace)) > 0.0F)) {
@@ -394,16 +386,9 @@ public final class DiffuseAreaLight extends AreaLight {
 		final Matrix44F lightToWorld = getLightToWorld();
 		final Matrix44F worldToLight = getWorldToLight();
 		
-//		final Point3F referencePointWorldSpace = intersection.getSurfaceIntersectionPoint();
-//		final Point3F referencePointLightSpace = Point3F.transformAndDivide(worldToLight, referencePointWorldSpace);
-		
-//		final Vector3F referenceSurfaceNormalWorldSpace = intersection.getSurfaceNormalS();
-//		final Vector3F referenceSurfaceNormalLightSpace = Vector3F.transformTranspose(lightToWorld, referenceSurfaceNormalWorldSpace);
-		
 		final Vector3F incomingLightSpace = Vector3F.transform(worldToLight, incoming);
 		
 		return this.shape.evaluateProbabilityDensityFunction(SurfaceIntersection3F.transform(intersection.getSurfaceIntersectionWorldSpace(), worldToLight, lightToWorld), incomingLightSpace);
-//		return this.shape.evaluateProbabilityDensityFunction(referencePointLightSpace, referenceSurfaceNormalLightSpace, incomingLightSpace);
 	}
 	
 	/**

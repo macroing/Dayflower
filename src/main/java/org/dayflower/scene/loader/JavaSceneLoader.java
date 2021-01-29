@@ -119,7 +119,9 @@ public final class JavaSceneLoader implements SceneLoader {
 		Objects.requireNonNull(file, "file == null");
 		Objects.requireNonNull(scene, "scene == null");
 		
-		doLoad(doLoadObject(file), scene);
+		final File directory = file.getParentFile() != null ? file.getParentFile() : new File(".");
+		
+		doLoad(doLoadObject(file), directory, scene);
 		
 		return scene;
 	}
@@ -322,7 +324,7 @@ public final class JavaSceneLoader implements SceneLoader {
 		doAppendLinef(stringBuilder, "		");
 		doAppendLinef(stringBuilder, "	}");
 		doAppendLinef(stringBuilder, "	");
-		doAppendLinef(stringBuilder, "	public Scene load(final Scene scene) {");
+		doAppendLinef(stringBuilder, "	public Scene load(final File directory, final Scene scene) {");
 		doAppendLinef(stringBuilder, "		try {");
 		doAppendLinef(stringBuilder, "			%s", doFormatSourceCode(sourceCode));
 		doAppendLinef(stringBuilder, "		} catch(final Exception e) {");
@@ -377,14 +379,14 @@ public final class JavaSceneLoader implements SceneLoader {
 		}
 	}
 	
-	private static void doLoad(final Object object, final Scene scene) {
+	private static void doLoad(final Object object, final File directory, final Scene scene) {
 		if(object != null) {
 			try {
 				final Class<?> clazz = object.getClass();
 				
-				final Method method = clazz.getMethod("load", Scene.class);
+				final Method method = clazz.getMethod("load", File.class, Scene.class);
 				
-				method.invoke(object, scene);
+				method.invoke(object, directory, scene);
 			} catch(final IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 //				Do nothing for now!
 			}

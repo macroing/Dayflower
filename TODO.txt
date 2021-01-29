@@ -1,3 +1,12 @@
+Scene Loader Parameter Selection:
+
+	Description:
+
+		Create a general purpose API for parameter selection. One implementation of the API could be a GUI dialog box.
+		It should support parameters of type boolean, float, int and String, as well as default values for these types.
+		It should also support options, where a list of options are supplied and only one can be selected.
+		An API like this would be useful in combination with a SceneLoader, such that parameters could be retrieved when generating a Scene.
+
 GPU Memory Optimization:
 
 	Description:

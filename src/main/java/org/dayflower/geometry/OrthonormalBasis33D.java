@@ -73,8 +73,13 @@ public final class OrthonormalBasis33D implements Node {
 	 */
 	public OrthonormalBasis33D(final Vector3D w) {
 		this.w = Vector3D.normalize(w);
-		this.v = Vector3D.normalize(Vector3D.computeV(this.w));
+		this.v = Vector3D.computeV(w);
 		this.u = Vector3D.crossProduct(this.v, this.w);
+		
+//		The following seems to produce the same result as new OrthonormalBasis33D(w, v):
+//		this.w = Vector3D.normalize(w);
+//		this.u = Vector3D.computeV(w);
+//		this.v = Vector3D.crossProduct(this.w, this.u);
 	}
 	
 	/**

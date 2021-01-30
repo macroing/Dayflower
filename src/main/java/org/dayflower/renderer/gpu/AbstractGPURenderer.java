@@ -29,8 +29,6 @@ import org.dayflower.image.PixelImageF;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
-import org.dayflower.sampler.NRooksSampler;
-import org.dayflower.sampler.Sampler;
 import org.dayflower.scene.Scene;
 import org.dayflower.utility.Timer;
 
@@ -48,7 +46,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	private final AtomicReference<RendererObserver> rendererObserver;
 	private ImageF image;
 	private RenderingAlgorithm renderingAlgorithm;
-	private Sampler sampler;
 	private Timer timer;
 	private boolean isPreviewMode;
 	private float maximumDistance;
@@ -75,7 +72,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
 		this.image = new PixelImageF(800, 800);
 		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
-		this.sampler = new NRooksSampler();
 		this.timer = new Timer();
 		this.isPreviewMode = false;
 		this.maximumDistance = 20.0F;
@@ -117,16 +113,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	@Override
 	public final RenderingAlgorithm getRenderingAlgorithm() {
 		return this.renderingAlgorithm;
-	}
-	
-	/**
-	 * Returns the {@link Sampler} instance associated with this {@code AbstractGPURenderer} instance.
-	 * 
-	 * @return the {@code Sampler} instance associated with this {@code AbstractGPURenderer} instance
-	 */
-	@Override
-	public final Sampler getSampler() {
-		return this.sampler;
 	}
 	
 	/**
@@ -473,19 +459,6 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	@Override
 	public final void setRenderingAlgorithm(final RenderingAlgorithm renderingAlgorithm) {
 		this.renderingAlgorithm = Objects.requireNonNull(renderingAlgorithm, "renderingAlgorithm == null");
-	}
-	
-	/**
-	 * Sets the {@link Sampler} instance associated with this {@code AbstractGPURenderer} instance to {@code sampler}.
-	 * <p>
-	 * If {@code sampler} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param sampler the {@code Sampler} instance associated with this {@code AbstractGPURenderer} instance
-	 * @throws NullPointerException thrown if, and only if, {@code sampler} is {@code null}
-	 */
-	@Override
-	public final void setSampler(final Sampler sampler) {
-		this.sampler = Objects.requireNonNull(sampler, "sampler == null");
 	}
 	
 	/**

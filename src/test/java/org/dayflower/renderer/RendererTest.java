@@ -25,7 +25,6 @@ import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.FileRendererObserver;
-import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.loader.JavaSceneLoader;
 
 public final class RendererTest {
@@ -99,7 +98,6 @@ public final class RendererTest {
 		cPURenderer.setScene(new JavaSceneLoader().load(pathname));
 		cPURenderer.setImage(new PixelImageF((int)(cPURenderer.getScene().getCamera().getResolutionX()), (int)(cPURenderer.getScene().getCamera().getResolutionY())));
 		cPURenderer.setRenderingAlgorithm(renderingAlgorithm);
-		cPURenderer.setSampler(new RandomSampler());
 		cPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), cPURenderer.getScene().getName()));
 		
 		return cPURenderer;
@@ -112,7 +110,6 @@ public final class RendererTest {
 		gPURenderer.setImage(new ByteImageF((int)(gPURenderer.getScene().getCamera().getResolutionX()), (int)(gPURenderer.getScene().getCamera().getResolutionY())));
 		gPURenderer.setRenderPasses(10);
 		gPURenderer.setRenderingAlgorithm(renderingAlgorithm);
-		gPURenderer.setSampler(new RandomSampler());
 		gPURenderer.setRendererObserver(doCreateRendererObserver(renderingAlgorithm.getName(), gPURenderer.getScene().getName()));
 		
 		return gPURenderer;

@@ -53,8 +53,10 @@ final class RayTracingPBRT {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static Color3F radiance(final Ray3F ray, final Sampler sampler, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int currentBounce) {
+	public static Color3F radiance(final Ray3F ray, final Scene scene, final boolean isPreviewMode, final int maximumBounce, final int currentBounce) {
 		Color3F radiance = Color3F.BLACK;
+		
+		final Sampler sampler = scene.getSampler();
 		
 		final Optional<Intersection> optionalIntersection = scene.intersection(ray, T_MINIMUM, T_MAXIMUM);
 		
@@ -68,7 +70,7 @@ final class RayTracingPBRT {
 			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
 			
 			if(!optionalBSDF.isPresent()) {
-				return radiance(intersection.createRay(ray.getDirection()), sampler, scene, isPreviewMode, maximumBounce, currentBounce);
+				return radiance(intersection.createRay(ray.getDirection()), scene, isPreviewMode, maximumBounce, currentBounce);
 			}
 			
 			final BSDF bSDF = optionalBSDF.get();
@@ -138,7 +140,7 @@ final class RayTracingPBRT {
 			final float incomingDotNormalAbs = abs(incomingDotNormal);
 			
 			if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F && incomingDotNormalAbs > 0.0F) {
-				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, radiance(intersection.createRay(incoming), sampler, scene, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
+				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, radiance(intersection.createRay(incoming), scene, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
 			}
 		}
 		
@@ -166,7 +168,7 @@ final class RayTracingPBRT {
 			final float incomingDotNormalAbs = abs(incomingDotNormal);
 			
 			if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F && incomingDotNormalAbs > 0.0F) {
-				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, radiance(intersection.createRay(incoming), sampler, scene, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
+				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, radiance(intersection.createRay(incoming), scene, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
 			}
 		}
 		

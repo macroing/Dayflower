@@ -30,7 +30,6 @@ import org.dayflower.javafx.canvas.ConcurrentImageCanvas.Observer;
 import org.dayflower.renderer.cpu.AbstractCPURenderer;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
-import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.loader.JavaSceneLoader;
 
@@ -170,7 +169,6 @@ public final class CPUApplication extends Application {
 		combinedProgressiveImageOrderRenderer.setRenderPasses(1);
 		combinedProgressiveImageOrderRenderer.setRendererObserver(new NoOpRendererObserver());
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(renderingAlgorithm);
-		combinedProgressiveImageOrderRenderer.setSampler(new RandomSampler());
 		combinedProgressiveImageOrderRenderer.setScene(scene);
 		combinedProgressiveImageOrderRenderer.setup();
 		

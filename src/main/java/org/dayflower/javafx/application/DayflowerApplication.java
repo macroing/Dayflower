@@ -32,7 +32,6 @@ import org.dayflower.javafx.scene.control.PathMenuBar;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
-import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.SceneLoader;
@@ -161,7 +160,6 @@ public final class DayflowerApplication extends Application {
 			combinedProgressiveImageOrderRenderer.setRenderPasses(1);
 			combinedProgressiveImageOrderRenderer.setRenderPassesPerDisplayUpdate(1);
 			combinedProgressiveImageOrderRenderer.setSamples(1);
-			combinedProgressiveImageOrderRenderer.setSampler(new RandomSampler());
 			combinedProgressiveImageOrderRenderer.setScene(scene);
 			combinedProgressiveImageOrderRenderer.setup();
 			

@@ -47,7 +47,6 @@ import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
-import org.dayflower.sampler.RandomSampler;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
@@ -418,7 +417,6 @@ final class RendererViewPane extends BorderPane {
 		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(doCreateRenderingAlgorithm(material));
 		combinedProgressiveImageOrderRenderer.setRenderPasses(10);
-		combinedProgressiveImageOrderRenderer.setSampler(new RandomSampler());
 		combinedProgressiveImageOrderRenderer.setScene(Previews.createMaterialPreviewScene(material));
 		combinedProgressiveImageOrderRenderer.render();
 		

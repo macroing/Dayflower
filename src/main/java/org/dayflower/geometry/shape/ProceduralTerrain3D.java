@@ -35,6 +35,7 @@ import org.dayflower.geometry.SurfaceIntersection3D;
 import org.dayflower.geometry.Vector3D;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
 import org.dayflower.utility.Doubles;
+import org.dayflower.utility.NoiseD;
 
 /**
  * A {@code ProceduralTerrain3D} denotes a 3-dimensional procedural terrain that uses the data type {@code double}.
@@ -243,7 +244,7 @@ public final class ProceduralTerrain3D implements Shape3D {
 	 * @return a {@code ProceduralTerrain3D} instance that uses a Simplex-based fractal algorithm
 	 */
 	public static ProceduralTerrain3D simplexFractalXY(final double amplitude, final double frequency, final double gain, final double lacunarity, final int octaves) {
-		return new ProceduralTerrain3D((x, y) -> Doubles.simplexFractalXY(x, y, amplitude, frequency, gain, lacunarity, octaves));
+		return new ProceduralTerrain3D((x, y) -> NoiseD.simplexFractalXY(x, y, amplitude, frequency, gain, lacunarity, octaves));
 	}
 	
 	/**

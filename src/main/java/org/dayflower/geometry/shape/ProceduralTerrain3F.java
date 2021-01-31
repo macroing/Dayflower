@@ -35,6 +35,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.utility.FloatBinaryOperator;
 import org.dayflower.utility.Floats;
+import org.dayflower.utility.NoiseF;
 
 /**
  * A {@code ProceduralTerrain3F} denotes a 3-dimensional procedural terrain that uses the data type {@code float}.
@@ -243,7 +244,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	 * @return a {@code ProceduralTerrain3F} instance that uses a Simplex-based fractal algorithm
 	 */
 	public static ProceduralTerrain3F simplexFractalXY(final float amplitude, final float frequency, final float gain, final float lacunarity, final int octaves) {
-		return new ProceduralTerrain3F((x, y) -> Floats.simplexFractalXY(x, y, amplitude, frequency, gain, lacunarity, octaves));
+		return new ProceduralTerrain3F((x, y) -> NoiseF.simplexFractalXY(x, y, amplitude, frequency, gain, lacunarity, octaves));
 	}
 	
 	/**

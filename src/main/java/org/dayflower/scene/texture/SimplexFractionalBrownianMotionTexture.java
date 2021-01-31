@@ -19,7 +19,7 @@
 package org.dayflower.scene.texture;
 
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.simplexFractionalBrownianMotionXYZ;
+import static org.dayflower.utility.NoiseF.simplexFractionalBrownianMotionXYZ;
 
 import java.util.Objects;
 

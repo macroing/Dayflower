@@ -21,8 +21,8 @@ package org.dayflower.scene.texture;
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.perlinTurbulenceXYZ;
 import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.NoiseF.perlinTurbulenceXYZ;
 
 import java.util.Objects;
 

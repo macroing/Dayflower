@@ -27,7 +27,7 @@ import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.image.ConvolutionKernel33F;
 import org.dayflower.image.PixelImageF;
-import org.dayflower.utility.Floats;
+import org.dayflower.utility.NoiseF;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -223,7 +223,7 @@ public final class ScreenRendererApplication extends Application {
 								final float x = (index % pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionX());
 								final float y = (index / pixelImage.getResolutionX()) / (float)(pixelImage.getResolutionY());
 								
-								final float noise = Floats.simplexFractionalBrownianMotionXY(x, y, 5.0F, 0.5F, 0.0F, 1.0F, 8);
+								final float noise = NoiseF.simplexFractionalBrownianMotionXY(x, y, 5.0F, 0.5F, 0.0F, 1.0F, 8);
 								
 								final Color3F color = Color3F.redoGammaCorrectionSRGB(Color3F.maximumTo1(Color3F.minimumTo0(Color3F.multiply(base, noise))));
 								

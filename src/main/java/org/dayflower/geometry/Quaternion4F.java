@@ -405,6 +405,26 @@ public final class Quaternion4F implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Quaternion4F} instance based on the direction {@code direction}.
+	 * <p>
+	 * If {@code direction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Quaternion4F.from(Matrix44F.rotate(new OrthonormalBasis33F(direction)));
+	 * }
+	 * </pre>
+	 * 
+	 * @param direction a {@link Vector3F} instance
+	 * @return a new {@code Quaternion4F} instance based on the direction {@code direction}
+	 * @throws NullPointerException thrown if, and only if, {@code direction} is {@code null}
+	 */
+	public static Quaternion4F from(final Vector3F direction) {
+		return from(Matrix44F.rotate(new OrthonormalBasis33F(direction)));
+	}
+	
+	/**
 	 * Performs a normalized linear interpolation between {@code quaternionLHS} and {@code quaternionRHS}.
 	 * <p>
 	 * Returns a new {@code Quaternion4F} instance with the result of the operation.

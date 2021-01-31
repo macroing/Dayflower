@@ -51,7 +51,8 @@ camera.setFieldOfViewY(AngleF.degrees(58.0F));
 camera.setFieldOfViewX();
 
 //scene.addLight(areaLight09);
-scene.addLight(new PointLight(new Color3F(12.0F), new Point3F(0.0F, 4.0F, 9.0F)));
+//scene.addLight(new PointLight(new Color3F(12.0F), new Point3F(0.0F, 4.0F, 9.0F)));
+scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(5.0F), new Color3F(50.0F), new Point3F(0.0F, 4.9F, 9.0F), Vector3F.y(-1.0F)));
 scene.addPrimitive(primitive01);
 scene.addPrimitive(primitive02);
 scene.addPrimitive(primitive03);

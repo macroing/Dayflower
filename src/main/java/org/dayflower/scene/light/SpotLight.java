@@ -27,16 +27,13 @@ import java.util.Optional;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
-import org.dayflower.geometry.Matrix44F;
-import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
-import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
+import org.dayflower.scene.Transform;
 
 /**
  * A {@code SpotLight} is an implementation of {@link Light} that represents a spotlight.
@@ -50,12 +47,6 @@ public final class SpotLight extends Light {
 	private final AngleF coneAngle;
 	private final AngleF coneAngleDelta;
 	private final Color3F intensity;
-	private final Matrix44F lightToWorld;
-	private final Matrix44F lightToWorldInternal;
-	private final Matrix44F worldToLightInternal;
-	private final Point3F eye;
-	private final Point3F lookAt;
-	private final Point3F position;
 	private final float cosConeAngle;
 	private final float cosConeAngleMinusConeAngleDelta;
 	
@@ -122,7 +113,7 @@ public final class SpotLight extends Light {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new SpotLight(coneAngle, coneAngleDelta, intensity, Matrix44F.identity());
+	 * new SpotLight(coneAngle, coneAngleDelta, intensity, new Point3F());
 	 * }
 	 * </pre>
 	 * 
@@ -132,57 +123,71 @@ public final class SpotLight extends Light {
 	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta} or {@code intensity} are {@code null}
 	 */
 	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity) {
-		this(coneAngle, coneAngleDelta, intensity, Matrix44F.identity());
+		this(coneAngle, coneAngleDelta, intensity, new Point3F());
 	}
 	
 	/**
 	 * Constructs a new {@code SpotLight} instance.
 	 * <p>
-	 * If either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity} or {@code lightToWorld} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity} or {@code position} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new SpotLight(coneAngle, coneAngleDelta, intensity, lightToWorld, new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F));
+	 * new SpotLight(coneAngle, coneAngleDelta, intensity, position, Vector3F.z());
 	 * }
 	 * </pre>
 	 * 
 	 * @param coneAngle an {@link AngleF} instance with the cone angle
 	 * @param coneAngleDelta an {@code AngleF} instance with the cone angle delta
 	 * @param intensity a {@link Color3F} instance with the intensity
-	 * @param lightToWorld a {@link Matrix44F} instance with the light to world transformation
-	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity} or {@code lightToWorld} are {@code null}
+	 * @param position a {@link Point3F} instance with the position
+	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity} or {@code position} are {@code null}
 	 */
-	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity, final Matrix44F lightToWorld) {
-		this(coneAngle, coneAngleDelta, intensity, lightToWorld, new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, 0.0F, 1.0F));
+	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity, final Point3F position) {
+		this(coneAngle, coneAngleDelta, intensity, position, Vector3F.z());
 	}
 	
 	/**
 	 * Constructs a new {@code SpotLight} instance.
 	 * <p>
-	 * If either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity}, {@code lightToWorld}, {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity}, {@code position} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new SpotLight(coneAngle, coneAngleDelta, intensity, new Transform(position, direction));
+	 * }
+	 * </pre>
 	 * 
 	 * @param coneAngle an {@link AngleF} instance with the cone angle
 	 * @param coneAngleDelta an {@code AngleF} instance with the cone angle delta
 	 * @param intensity a {@link Color3F} instance with the intensity
-	 * @param lightToWorld a {@link Matrix44F} instance with the light to world transformation
-	 * @param eye a {@link Point3F} instance with the point to look from
-	 * @param lookAt a {@code Point3F} instance with the point to look at
-	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity}, {@code lightToWorld}, {@code eye} or {@code lookAt} are {@code null}
+	 * @param position a {@link Point3F} instance with the position
+	 * @param direction a {@link Vector3F} instance with the direction
+	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity}, {@code position} or {@code direction} are {@code null}
 	 */
-	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity, final Matrix44F lightToWorld, final Point3F eye, final Point3F lookAt) {
-		super(null, 1, true);
+	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity, final Point3F position, final Vector3F direction) {
+		this(coneAngle, coneAngleDelta, intensity, new Transform(position, direction));
+	}
+	
+	/**
+	 * Constructs a new {@code SpotLight} instance.
+	 * <p>
+	 * If either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity} or {@code transform} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param coneAngle an {@link AngleF} instance with the cone angle
+	 * @param coneAngleDelta an {@code AngleF} instance with the cone angle delta
+	 * @param intensity a {@link Color3F} instance with the intensity
+	 * @param transform a {@link Transform} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity} or {@code transform} are {@code null}
+	 */
+	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity, final Transform transform) {
+		super(Objects.requireNonNull(transform, "transform == null"), 1, true);
 		
 		this.coneAngle = Objects.requireNonNull(coneAngle, "coneAngle == null");
 		this.coneAngleDelta = Objects.requireNonNull(coneAngleDelta, "coneAngleDelta == null");
 		this.intensity = Objects.requireNonNull(intensity, "intensity == null");
-		this.lightToWorld = Objects.requireNonNull(lightToWorld, "lightToWorld == null");
-//		this.lightToWorldInternal = Matrix44F.multiply(Matrix44F.multiply(lightToWorld, Matrix44F.translate(eye)), Matrix44F.inverse(Matrix44F.transpose(Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.directionNormalized(eye, lookAt))))));
-		this.lightToWorldInternal = Matrix44F.multiply(Matrix44F.multiply(lightToWorld, Matrix44F.translate(eye)), Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.directionNormalized(eye, lookAt))));
-		this.worldToLightInternal = Matrix44F.inverse(this.lightToWorldInternal);
-		this.eye = Objects.requireNonNull(eye, "eye == null");
-		this.lookAt = Objects.requireNonNull(lookAt, "lookAt == null");
-		this.position = Point3F.transformAndDivide(this.lightToWorldInternal, new Point3F());
 		this.cosConeAngle = cos(coneAngle.getRadians());
 		this.cosConeAngleMinusConeAngleDelta = cos(AngleF.subtract(coneAngle, coneAngleDelta).getRadians());
 	}
@@ -190,27 +195,7 @@ public final class SpotLight extends Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Le(const RayDifferential &r)} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	@Override
-	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
-		Objects.requireNonNull(ray, "ray == null");
-		
-		return Color3F.BLACK;
-	}
-	
-	/**
 	 * Returns a {@link Color3F} instance with the power of this {@code SpotLight} instance.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @return a {@code Color3F} instance with the power of this {@code SpotLight} instance
 	 */
@@ -225,12 +210,10 @@ public final class SpotLight extends Light {
 	 * Returns an optional {@link LightSample} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param sample a {@link Point2F} instance
-	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
+	 * @return an optional {@code LightSample} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
 	@Override
@@ -238,7 +221,7 @@ public final class SpotLight extends Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Point3F position = this.position;
+		final Point3F position = Point3F.transformAndDivide(getTransform().getObjectToWorld(), new Point3F());
 		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
 		final Vector3F incoming = Vector3F.directionNormalized(surfaceIntersectionPoint, position);
@@ -258,7 +241,7 @@ public final class SpotLight extends Light {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new SpotLight(%s, %s, %s, %s, %s, %s)", this.coneAngle, this.coneAngleDelta, this.intensity, this.lightToWorld, this.eye, this.lookAt);
+		return String.format("new SpotLight(%s, %s, %s, %s)", this.coneAngle, this.coneAngleDelta, this.intensity, getTransform());
 	}
 	
 	/**
@@ -275,23 +258,13 @@ public final class SpotLight extends Light {
 			return true;
 		} else if(!(object instanceof SpotLight)) {
 			return false;
+		} else if(!Objects.equals(getTransform(), SpotLight.class.cast(object).getTransform())) {
+			return false;
 		} else if(!Objects.equals(this.coneAngle, SpotLight.class.cast(object).coneAngle)) {
 			return false;
 		} else if(!Objects.equals(this.coneAngleDelta, SpotLight.class.cast(object).coneAngleDelta)) {
 			return false;
 		} else if(!Objects.equals(this.intensity, SpotLight.class.cast(object).intensity)) {
-			return false;
-		} else if(!Objects.equals(this.lightToWorld, SpotLight.class.cast(object).lightToWorld)) {
-			return false;
-		} else if(!Objects.equals(this.lightToWorldInternal, SpotLight.class.cast(object).lightToWorldInternal)) {
-			return false;
-		} else if(!Objects.equals(this.worldToLightInternal, SpotLight.class.cast(object).worldToLightInternal)) {
-			return false;
-		} else if(!Objects.equals(this.eye, SpotLight.class.cast(object).eye)) {
-			return false;
-		} else if(!Objects.equals(this.lookAt, SpotLight.class.cast(object).lookAt)) {
-			return false;
-		} else if(!Objects.equals(this.position, SpotLight.class.cast(object).position)) {
 			return false;
 		} else if(!equal(this.cosConeAngle, SpotLight.class.cast(object).cosConeAngle)) {
 			return false;
@@ -303,43 +276,21 @@ public final class SpotLight extends Light {
 	}
 	
 	/**
-	 * Evaluates the probability density function (PDF) for incoming radiance.
-	 * <p>
-	 * Returns a {@code float} with the probability density function (PDF) value.
-	 * <p>
-	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Pdf_Li(const Interaction &ref, const Vector3f &wi)} that returns a {@code Float} in PBRT.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
-	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
-	 */
-	@Override
-	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(incoming, "incoming == null");
-		
-		return 0.0F;
-	}
-	
-	/**
 	 * Returns a hash code for this {@code SpotLight} instance.
 	 * 
 	 * @return a hash code for this {@code SpotLight} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.coneAngle, this.coneAngleDelta, this.intensity, this.lightToWorld, this.lightToWorldInternal, this.worldToLightInternal, this.eye, this.lookAt, this.position, Float.valueOf(this.cosConeAngle), Float.valueOf(this.cosConeAngleMinusConeAngleDelta));
+		return Objects.hash(getTransform(), this.coneAngle, this.coneAngleDelta, this.intensity, Float.valueOf(this.cosConeAngle), Float.valueOf(this.cosConeAngleMinusConeAngleDelta));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private float doComputeFalloff(final Vector3F direction) {
-		final Vector3F directionLightSpace = Vector3F.normalize(Vector3F.transform(this.worldToLightInternal, direction));
+		final Vector3F directionObjectSpace = Vector3F.normalize(Vector3F.transform(getTransform().getWorldToObject(), direction));
 		
-		final float cosTheta = directionLightSpace.cosTheta();
+		final float cosTheta = directionObjectSpace.cosTheta();
 		
 		if(cosTheta < this.cosConeAngle) {
 			return 0.0F;

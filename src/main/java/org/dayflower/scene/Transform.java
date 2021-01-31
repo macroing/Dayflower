@@ -122,6 +122,26 @@ public final class Transform implements Node {
 		this.scale = Objects.requireNonNull(scale, "scale == null");
 	}
 	
+	/**
+	 * Constructs a new {@code Transform} instance.
+	 * <p>
+	 * If either {@code position} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Transform(position, Quaternion4F.from(direction));
+	 * }
+	 * </pre>
+	 * 
+	 * @param position a {@link Point3F} instance with the position associated with this {@code Transform} instance
+	 * @param direction a {@link Vector3F} instance with the direction of the rotation associated with this {@code Transform} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code position} or {@code direction} are {@code null}
+	 */
+	public Transform(final Point3F position, final Vector3F direction) {
+		this(position, Quaternion4F.from(direction));
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**

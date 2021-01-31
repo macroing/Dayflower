@@ -89,59 +89,19 @@ public abstract class Light implements Node {
 	}
 	
 	/**
-	 * Evaluates the probability density functions (PDFs) for the emitted radiance.
-	 * <p>
-	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the evaluation.
-	 * <p>
-	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray a {@link Ray3F} instance
-	 * @param normal a {@link Vector3F} instance
-	 * @return an optional {@code LightRadianceEmittedResult} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
-	 */
-	@SuppressWarnings("static-method")
-	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
-		Objects.requireNonNull(ray, "ray == null");
-		Objects.requireNonNull(normal, "normal == null");
-		
-		return Optional.empty();
-	}
-	
-	/**
-	 * Samples the emitted radiance.
-	 * <p>
-	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the sampling.
-	 * <p>
-	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param sampleA a {@link Point2F} instance
-	 * @param sampleB a {@code Point2F} instance
-	 * @return an optional {@code LightRadianceEmittedResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
-	 */
-	@SuppressWarnings("static-method")
-	public Optional<LightRadianceEmittedResult> sampleRadianceEmitted(final Point2F sampleA, final Point2F sampleB) {
-		Objects.requireNonNull(sampleA, "sampleA == null");
-		Objects.requireNonNull(sampleB, "sampleB == null");
-		
-		return Optional.empty();
-	}
-	
-	/**
 	 * Samples the incoming radiance.
 	 * <p>
-	 * Returns an optional {@link LightRadianceIncomingResult} with the result of the sampling.
+	 * Returns an optional {@link LightSample} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param sample a {@link Point2F} instance
-	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
+	 * @return an optional {@code LightSample} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
 	@SuppressWarnings("static-method")
-	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
+	public Optional<LightSample> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		

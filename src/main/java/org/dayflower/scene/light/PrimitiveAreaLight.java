@@ -32,8 +32,7 @@ import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.LightRadianceEmittedResult;
-import org.dayflower.scene.LightRadianceIncomingResult;
+import org.dayflower.scene.LightSample;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Transform;
 
@@ -117,53 +116,9 @@ public final class PrimitiveAreaLight extends AreaLight {
 	}
 	
 	/**
-	 * Evaluates the probability density functions (PDFs) for emitted radiance.
-	 * <p>
-	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the evaluation.
-	 * <p>
-	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Pdf_Le(const Ray &ray, const Normal3f &nLight, Float *pdfPos, Float *pdfDir)} in PBRT.
-	 * 
-	 * @param ray a {@link Ray3F} instance
-	 * @param normal a {@link Vector3F} instance
-	 * @return an optional {@code LightRadianceEmittedResult} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
-	 */
-	@Override
-	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
-		Objects.requireNonNull(ray, "ray == null");
-		Objects.requireNonNull(normal, "normal == null");
-		
-		return Optional.empty();//TODO: Implement!
-	}
-	
-	/**
-	 * Samples the emitted radiance.
-	 * <p>
-	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the sampling.
-	 * <p>
-	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir)} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @param sampleA a {@link Point2F} instance
-	 * @param sampleB a {@code Point2F} instance
-	 * @return an optional {@code LightRadianceEmittedResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
-	 */
-	@Override
-	public Optional<LightRadianceEmittedResult> sampleRadianceEmitted(final Point2F sampleA, final Point2F sampleB) {
-		Objects.requireNonNull(sampleA, "sampleA == null");
-		Objects.requireNonNull(sampleB, "sampleB == null");
-		
-		return Optional.empty();//TODO: Implement!
-	}
-	
-	/**
 	 * Samples the incoming radiance.
 	 * <p>
-	 * Returns an optional {@link LightRadianceIncomingResult} with the result of the sampling.
+	 * Returns an optional {@link LightSample} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
@@ -175,7 +130,7 @@ public final class PrimitiveAreaLight extends AreaLight {
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
+	public Optional<LightSample> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
@@ -208,7 +163,7 @@ public final class PrimitiveAreaLight extends AreaLight {
 					final Color3F radianceEmitted = this.primitive.getMaterial().emittance(optionalIntersection.get());
 					
 					if(!radianceEmitted.isBlack()) {
-						return Optional.of(new LightRadianceIncomingResult(radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
+						return Optional.of(new LightSample(radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
 					}
 				}
 			}

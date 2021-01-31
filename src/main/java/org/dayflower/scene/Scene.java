@@ -421,6 +421,43 @@ public final class Scene implements Node {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code intersection} is visible to {@code light} given {@code lightSample}, {@code false} otherwise.
+	 * <p>
+	 * If either {@code intersection}, {@code light} or {@code lightSample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param intersection an {@link Intersection} instance
+	 * @param light a {@link Light} instance
+	 * @param lightSample a {@link LightSample} instance
+	 * @return {@code true} if, and only if, {@code intersection} is visible to {@code light} given {@code lightSample}, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, either {@code intersection}, {@code light} or {@code lightSample} are {@code null}
+	 */
+	public boolean checkLightVisibility(final Intersection intersection, final Light light, final LightSample lightSample) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(light, "light == null");
+		Objects.requireNonNull(lightSample, "lightSample == null");
+		
+		final Point3F point = lightSample.getPoint();
+		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
+		
+		final Ray3F ray = intersection.createRay(point);
+		
+		final float tMinimum = 0.001F;
+		final float tMaximum = abs(Point3F.distance(surfaceIntersectionPoint, point)) + 0.001F;
+		
+		if(light instanceof AreaLight) {
+			final Optional<Intersection> optionalIntersection = intersection(ray, tMinimum, tMaximum);
+			
+			if(optionalIntersection.isPresent()) {
+				return optionalIntersection.get().getPrimitive().getAreaLight().orElse(null) == light;
+			}
+			
+			return true;
+		}
+		
+		return !intersects(ray, tMinimum, tMaximum);
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Scene} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Scene}, and their respective values are equal, {@code false} otherwise.
@@ -760,24 +797,24 @@ public final class Scene implements Node {
 		if(light.isUsingDeltaDistribution()) {
 			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
 			
-			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
+			final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
 			
 			final Vector3F normal = intersection.getSurfaceNormalS();
 			final Vector3F outgoing = Vector3F.negate(intersection.getRay().getDirection());
 			
-			if(optionalLightRadianceIncomingResult.isPresent()) {
-				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
+			if(optionalLightSample.isPresent()) {
+				final LightSample lightSample = optionalLightSample.get();
 				
-				final Color3F lightIncoming = lightRadianceIncomingResult.getResult();
+				final Color3F lightIncoming = lightSample.getResult();
 				
-				final Vector3F incoming = lightRadianceIncomingResult.getIncoming();
+				final Vector3F incoming = lightSample.getIncoming();
 				
-				final float lightPDFValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
+				final float lightPDFValue = lightSample.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
 					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), abs(Vector3F.dotProduct(incoming, normal)));
 					
-					if(!scatteringResult.isBlack() && doCheckLightVisibility(intersection, light, lightRadianceIncomingResult)) {
+					if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
 						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, lightPDFValue);
 					}
 				}
@@ -785,26 +822,26 @@ public final class Scene implements Node {
 		} else {
 			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
 			
-			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);
+			final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
 			
 			final Vector3F normal = intersection.getSurfaceNormalS();
 			final Vector3F outgoing = Vector3F.negate(intersection.getRay().getDirection());
 			
-			if(optionalLightRadianceIncomingResult.isPresent()) {
-				final LightRadianceIncomingResult lightRadianceIncomingResult = optionalLightRadianceIncomingResult.get();
+			if(optionalLightSample.isPresent()) {
+				final LightSample lightSample = optionalLightSample.get();
 				
-				final Color3F lightIncoming = lightRadianceIncomingResult.getResult();
+				final Color3F lightIncoming = lightSample.getResult();
 				
-				final Vector3F incoming = lightRadianceIncomingResult.getIncoming();
+				final Vector3F incoming = lightSample.getIncoming();
 				
-				final float lightPDFValue = lightRadianceIncomingResult.getProbabilityDensityFunctionValue();
+				final float lightPDFValue = lightSample.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
 					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), abs(Vector3F.dotProduct(incoming, normal)));
 					
 					final float scatteringPDFValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, normal, incoming);
 					
-					if(!scatteringResult.isBlack() && doCheckLightVisibility(intersection, light, lightRadianceIncomingResult)) {
+					if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
 						final float weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightPDFValue, scatteringPDFValue, 1, 1);
 						
 						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, weight, lightPDFValue);
@@ -866,28 +903,6 @@ public final class Scene implements Node {
 		}
 		
 		return lightDirect;
-	}
-	
-	private boolean doCheckLightVisibility(final Intersection intersection, final Light light, final LightRadianceIncomingResult lightIncomingRadianceResult) {
-		final Point3F point = lightIncomingRadianceResult.getPoint();
-		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
-		
-		final Ray3F ray = intersection.createRay(point);
-		
-		final float tMinimum = 0.001F;
-		final float tMaximum = abs(Point3F.distance(surfaceIntersectionPoint, point)) + 0.001F;
-		
-		if(light instanceof AreaLight) {
-			final Optional<Intersection> optionalIntersection = intersection(ray, tMinimum, tMaximum);
-			
-			if(optionalIntersection.isPresent()) {
-				return optionalIntersection.get().getPrimitive().getAreaLight().orElse(null) == light;
-			}
-			
-			return true;
-		}
-		
-		return !intersects(ray, tMinimum, tMaximum);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

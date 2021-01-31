@@ -26,13 +26,10 @@ import java.util.Optional;
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
-import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
-import org.dayflower.scene.LightRadianceEmittedResult;
-import org.dayflower.scene.LightRadianceIncomingResult;
+import org.dayflower.scene.LightSample;
 import org.dayflower.scene.Transform;
 
 /**
@@ -118,87 +115,32 @@ public final class PointLight extends Light {
 	}
 	
 	/**
-	 * Evaluates the probability density functions (PDFs) for the emitted radiance.
-	 * <p>
-	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the evaluation.
-	 * <p>
-	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param ray a {@link Ray3F} instance
-	 * @param normal a {@link Vector3F} instance
-	 * @return an optional {@code LightRadianceEmittedResult} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
-	 */
-	@Override
-	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
-		Objects.requireNonNull(ray, "ray == null");
-		Objects.requireNonNull(normal, "normal == null");
-		
-		final Color3F result = this.intensity;
-		
-		final float probabilityDensityFunctionValueDirection = SampleGeneratorF.sphereUniformDistributionProbabilityDensityFunction();
-		final float probabilityDensityFunctionValuePosition = 1.0F;
-		
-		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
-	}
-	
-	/**
-	 * Samples the emitted radiance.
-	 * <p>
-	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the sampling.
-	 * <p>
-	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * 
-	 * @param sampleA a {@link Point2F} instance
-	 * @param sampleB a {@code Point2F} instance
-	 * @return an optional {@code LightRadianceEmittedResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
-	 */
-	@Override
-	public Optional<LightRadianceEmittedResult> sampleRadianceEmitted(final Point2F sampleA, final Point2F sampleB) {
-		Objects.requireNonNull(sampleA, "sampleA == null");
-		Objects.requireNonNull(sampleB, "sampleB == null");
-		
-		final Color3F result = this.intensity;
-		
-		final Ray3F ray = new Ray3F(getTransform().getPosition(), SampleGeneratorF.sampleSphereUniformDistribution(sampleA.getU(), sampleA.getV()));
-		
-		final Vector3F normal = ray.getDirection();
-		
-		final float probabilityDensityFunctionValueDirection = SampleGeneratorF.sphereUniformDistributionProbabilityDensityFunction();
-		final float probabilityDensityFunctionValuePosition = 1.0F;
-		
-		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
-	}
-	
-	/**
 	 * Samples the incoming radiance.
 	 * <p>
-	 * Returns an optional {@link LightRadianceIncomingResult} with the result of the sampling.
+	 * Returns an optional {@link LightSample} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param sample a {@link Point2F} instance
-	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
+	 * @return an optional {@code LightSample} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
 	@Override
-	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
+	public Optional<LightSample> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
 		final Point3F position = getTransform().getPosition();
 		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
-		final Color3F intensity = this.intensity;
-		final Color3F result = Color3F.divide(intensity, Point3F.distanceSquared(surfaceIntersectionPoint, position));
+		final Color3F result = Color3F.divide(this.intensity, Point3F.distanceSquared(surfaceIntersectionPoint, position));
 		
 		final Vector3F incoming = Vector3F.normalize(Vector3F.direction(surfaceIntersectionPoint, position));
 		
 		final float probabilityDensityFunctionValue = 1.0F;
 		
-		return Optional.of(new LightRadianceIncomingResult(result, position, incoming, probabilityDensityFunctionValue));
+		return Optional.of(new LightSample(result, position, incoming, probabilityDensityFunctionValue));
 	}
 	
 	/**

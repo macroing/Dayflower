@@ -27,16 +27,10 @@ import java.util.Optional;
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
-import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
-import org.dayflower.geometry.Ray3F;
-import org.dayflower.geometry.SampleGeneratorF;
 import org.dayflower.geometry.Vector3F;
-import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
-import org.dayflower.scene.LightRadianceEmittedResult;
-import org.dayflower.scene.LightRadianceIncomingResult;
 import org.dayflower.scene.Transform;
 
 /**
@@ -84,73 +78,6 @@ public final class DirectionalLight extends Light {
 	public Color3F power() {
 		return Color3F.multiply(Color3F.multiply(Color3F.multiply(this.radiance, PI), this.radius), this.radius);
 	}
-	
-	/**
-	 * Evaluates the probability density functions (PDFs) for emitted radiance.
-	 * <p>
-	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the evaluation.
-	 * <p>
-	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Pdf_Le(const Ray &ray, const Normal3f &nLight, Float *pdfPos, Float *pdfDir)} in PBRT.
-	 * 
-	 * @param ray a {@link Ray3F} instance
-	 * @param normal a {@link Vector3F} instance
-	 * @return an optional {@code LightRadianceEmittedResult} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
-	 */
-	@Override
-	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
-		Objects.requireNonNull(ray, "ray == null");
-		Objects.requireNonNull(normal, "normal == null");
-		
-		final Color3F result = this.radiance;
-		
-		final float probabilityDensityFunctionValueDirection = 0.0F;
-		final float probabilityDensityFunctionValuePosition = 1.0F / (PI * this.radius * this.radius);
-		
-		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
-	}
-	
-	/**
-	 * Samples the emitted radiance.
-	 * <p>
-	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the sampling.
-	 * <p>
-	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir)} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @param sampleA a {@link Point2F} instance
-	 * @param sampleB a {@code Point2F} instance
-	 * @return an optional {@code LightRadianceEmittedResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
-	 */
-/*	@Override
-	public Optional<LightRadianceEmittedResult> sampleRadianceEmitted(final Point2F sampleA, final Point2F sampleB) {
-		Objects.requireNonNull(sampleA, "sampleA == null");
-		Objects.requireNonNull(sampleB, "sampleB == null");
-		
-		final OrthonormalBasis33F orthonormalBasis = new OrthonormalBasis33F(this.direction);
-		
-		final Vector3F u = orthonormalBasis.getU();
-		final Vector3F v = orthonormalBasis.getV();
-		
-		final Point2F pointA = SampleGeneratorF.sampleDiskUniformDistributionByConcentricMapping(sampleA.getU(), sampleA.getV());
-		
-		final Point3F pointB = Point3F.add(this.center, Vector3F.multiply(Vector3F.add(Vector3F.multiply(u, pointA.getU()), Vector3F.multiply(v, pointA.getV())), this.radius));
-		
-		final Color3F result = this.radiance;
-		
-		final Ray3F ray = new Ray3F(Point3F.add(pointB, this.direction, this.radius), Vector3F.negate(this.direction));
-		
-		final Vector3F normal = ray.getDirection();
-		
-		final float probabilityDensityFunctionValueDirection = 1.0F;
-		final float probabilityDensityFunctionValuePosition = 1.0F / (PI * this.radius * this.radius);
-		
-		return Optional.of(new LightRadianceEmittedResult(result, ray, normal, probabilityDensityFunctionValueDirection, probabilityDensityFunctionValuePosition));
-	}*/
 	
 	/**
 	 * Samples the incoming radiance.

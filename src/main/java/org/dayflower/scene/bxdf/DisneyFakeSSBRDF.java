@@ -20,7 +20,6 @@ package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.fresnelSchlickWeight;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.lerp;
 
@@ -35,6 +34,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.fresnel.Schlick;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -147,8 +147,8 @@ public final class DisneyFakeSSBRDF extends BXDF {
 		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
 		
 		final float fresnelSS90 = cosThetaD * cosThetaD * this.roughness;
-		final float fresnelOutgoing = fresnelSchlickWeight(cosThetaAbsOutgoing);
-		final float fresnelIncoming = fresnelSchlickWeight(cosThetaAbsIncoming);
+		final float fresnelOutgoing = Schlick.fresnelWeight(cosThetaAbsOutgoing);
+		final float fresnelIncoming = Schlick.fresnelWeight(cosThetaAbsIncoming);
 		final float fresnelSS = lerp(1.0F, fresnelSS90, fresnelOutgoing) * lerp(1.0F, fresnelSS90, fresnelIncoming);
 		
 		final float scaleSS = 1.25F * (fresnelSS * (1.0F / (cosThetaAbsOutgoing + cosThetaAbsIncoming) - 0.5F) + 0.5F);

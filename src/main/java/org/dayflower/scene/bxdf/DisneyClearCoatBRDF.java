@@ -20,7 +20,6 @@ package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.fresnelSchlickWeightLerp;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.log;
 import static org.dayflower.utility.Floats.max;
@@ -39,6 +38,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.fresnel.Schlick;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -192,7 +192,7 @@ public final class DisneyClearCoatBRDF extends BXDF {
 		final Vector3F nNormalized = Vector3F.normalize(n);
 		
 		final float d = doGTR1(nNormalized.cosThetaAbs(), this.gloss);
-		final float f = fresnelSchlickWeightLerp(Vector3F.dotProduct(outgoing, nNormalized), 0.04F);
+		final float f = Schlick.fresnelWeightLerp(Vector3F.dotProduct(outgoing, nNormalized), 0.04F);
 		final float g = doSmithGGGX(outgoing.cosThetaAbs(), 0.25F) * doSmithGGGX(incoming.cosThetaAbs(), 0.25F);
 		
 		return new Color3F(this.weight * g * f * d / 4.0F);

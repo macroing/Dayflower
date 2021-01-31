@@ -19,7 +19,6 @@
 package org.dayflower.scene.fresnel;
 
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.fresnelSchlickWeight;
 
 import java.util.Objects;
 
@@ -66,7 +65,7 @@ public final class DisneyFresnel implements Fresnel {
 	 */
 	@Override
 	public Color3F evaluate(final float cosThetaI) {
-		return Color3F.blend(new Color3F(DielectricFresnel.evaluate(cosThetaI, 1.0F, this.eta)), Color3F.blend(this.r0, Color3F.WHITE, fresnelSchlickWeight(cosThetaI)), this.metallic);
+		return Color3F.blend(new Color3F(DielectricFresnel.evaluate(cosThetaI, 1.0F, this.eta)), Color3F.blend(this.r0, Color3F.WHITE, Schlick.fresnelWeight(cosThetaI)), this.metallic);
 	}
 	
 	/**

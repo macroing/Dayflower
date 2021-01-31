@@ -19,7 +19,6 @@
 package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-import static org.dayflower.utility.Floats.fresnelSchlickWeight;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +31,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.fresnel.Schlick;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -128,8 +128,8 @@ public final class DisneyDiffuseBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final float fresnelOutgoing = fresnelSchlickWeight(outgoing.cosThetaAbs());
-		final float fresnelIncoming = fresnelSchlickWeight(incoming.cosThetaAbs());
+		final float fresnelOutgoing = Schlick.fresnelWeight(outgoing.cosThetaAbs());
+		final float fresnelIncoming = Schlick.fresnelWeight(incoming.cosThetaAbs());
 		
 		final float a = 1.0F - fresnelOutgoing / 2.0F;
 		final float b = 1.0F - fresnelIncoming / 2.0F;

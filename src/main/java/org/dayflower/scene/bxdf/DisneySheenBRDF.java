@@ -19,7 +19,6 @@
 package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
-import static org.dayflower.utility.Floats.fresnelSchlickWeight;
 import static org.dayflower.utility.Floats.isZero;
 
 import java.util.List;
@@ -33,6 +32,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.fresnel.Schlick;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -139,7 +139,7 @@ public final class DisneySheenBRDF extends BXDF {
 		
 		final float cosThetaD = Vector3F.dotProduct(incoming, nNormalized);
 		
-		return Color3F.multiply(this.reflectanceScale, fresnelSchlickWeight(cosThetaD));
+		return Color3F.multiply(this.reflectanceScale, Schlick.fresnelWeight(cosThetaD));
 	}
 	
 	/**

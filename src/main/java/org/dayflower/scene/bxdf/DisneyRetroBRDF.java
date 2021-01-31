@@ -20,7 +20,6 @@ package org.dayflower.scene.bxdf;
 
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.fresnelSchlickWeight;
 import static org.dayflower.utility.Floats.isZero;
 
 import java.util.List;
@@ -34,6 +33,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.fresnel.Schlick;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -143,8 +143,8 @@ public final class DisneyRetroBRDF extends BXDF {
 		
 		final float cosThetaD = Vector3F.dotProduct(incoming, nNormalized);
 		
-		final float fresnelOutgoing = fresnelSchlickWeight(outgoing.cosThetaAbs());
-		final float fresnelIncoming = fresnelSchlickWeight(incoming.cosThetaAbs());
+		final float fresnelOutgoing = Schlick.fresnelWeight(outgoing.cosThetaAbs());
+		final float fresnelIncoming = Schlick.fresnelWeight(incoming.cosThetaAbs());
 		
 		final float a = 2.0F * this.roughness * cosThetaD * cosThetaD;
 		final float b = fresnelOutgoing + fresnelIncoming + fresnelOutgoing * fresnelIncoming * (a - 1.0F);

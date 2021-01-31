@@ -22,7 +22,6 @@ import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
-import static org.dayflower.utility.Floats.fresnelDielectricSchlick;
 import static org.dayflower.utility.Floats.pow;
 
 import java.util.List;
@@ -36,6 +35,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.fresnel.Schlick;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -140,7 +140,7 @@ public final class AshikhminShirleyBRDF extends BXDF {
 		final Vector3F n = Vector3F.normalize(Vector3F.subtract(outgoing, incoming));
 		
 		final float d = (this.exponent + 1.0F) * pow(abs(n.cosTheta()), this.exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float f = fresnelDielectricSchlick(Vector3F.dotProduct(outgoing, n), 1.0F);
+		final float f = Schlick.fresnelDielectric(Vector3F.dotProduct(outgoing, n), 1.0F);
 		
 		return Color3F.divide(Color3F.multiply(Color3F.multiply(this.reflectanceScale, d), f), 4.0F * abs(outgoing.cosTheta() + -incoming.cosTheta() - outgoing.cosTheta() * -incoming.cosTheta()));
 	}

@@ -33,18 +33,18 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceEmittedResult;
 import org.dayflower.scene.LightRadianceIncomingResult;
+import org.dayflower.scene.Transform;
 
 /**
  * A {@code PointLight} is an implementation of {@link Light} that represents a point light.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is mutable and not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PointLight implements Light {
+public final class PointLight extends Light {
 	private final Color3F intensity;
-	private final Point3F position;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -54,66 +54,49 @@ public final class PointLight implements Light {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PointLight(new Point3F());
+	 * new PointLight(Color3F.WHITE);
 	 * }
 	 * </pre>
 	 */
 	public PointLight() {
-		this(new Point3F());
+		this(Color3F.WHITE);
 	}
 	
 	/**
 	 * Constructs a new {@code PointLight} instance.
 	 * <p>
-	 * If {@code position} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * If {@code intensity} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new PointLight(position, Color3F.WHITE);
+	 * new PointLight(intensity, new Point3F());
 	 * }
 	 * </pre>
 	 * 
-	 * @param position a {@link Point3F} instance with the position associated with this {@code PointLight} instance
-	 * @throws NullPointerException thrown if, and only if, {@code position} is {@code null}
+	 * @param intensity a {@link Color3F} instance with the intensity associated with this {@code PointLight} instance
+	 * @throws NullPointerException thrown if, and only if, {@code intensity} is {@code null}
 	 */
-	public PointLight(final Point3F position) {
-		this(position, Color3F.WHITE);
+	public PointLight(final Color3F intensity) {
+		this(intensity, new Point3F());
 	}
 	
 	/**
 	 * Constructs a new {@code PointLight} instance.
 	 * <p>
-	 * If either {@code position} or {@code intensity} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code intensity} or {@code position} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param position a {@link Point3F} instance with the position associated with this {@code PointLight} instance
 	 * @param intensity a {@link Color3F} instance with the intensity associated with this {@code PointLight} instance
-	 * @throws NullPointerException thrown if, and only if, either {@code position} or {@code intensity} are {@code null}
+	 * @param position a {@link Point3F} instance with the position associated with this {@code PointLight} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code intensity} or {@code position} are {@code null}
 	 */
-	public PointLight(final Point3F position, final Color3F intensity) {
-		this.position = Objects.requireNonNull(position, "position == null");
+	public PointLight(final Color3F intensity, final Point3F position) {
+		super(new Transform(Objects.requireNonNull(position, "position == null")), 1, true);
+		
 		this.intensity = Objects.requireNonNull(intensity, "intensity == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Le(const RayDifferential &r)} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-	@Override
-	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
-		Objects.requireNonNull(ray, "ray == null");
-		
-		return Color3F.BLACK;
-	}
 	
 	/**
 	 * Returns a {@link Color3F} instance with the intensity associated with this {@code PointLight} instance.
@@ -126,8 +109,6 @@ public final class PointLight implements Light {
 	
 	/**
 	 * Returns a {@link Color3F} instance with the power of this {@code PointLight} instance.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @return a {@code Color3F} instance with the power of this {@code PointLight} instance
 	 */
@@ -137,22 +118,11 @@ public final class PointLight implements Light {
 	}
 	
 	/**
-	 * Returns a {@link Point3F} instance with the position associated with this {@code PointLight} instance.
-	 * 
-	 * @return a {@code Point3F} instance with the position associated with this {@code PointLight} instance
-	 */
-	public Point3F getPosition() {
-		return this.position;
-	}
-	
-	/**
-	 * Evaluates the probability density functions (PDFs) for emitted radiance.
+	 * Evaluates the probability density functions (PDFs) for the emitted radiance.
 	 * <p>
 	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the evaluation.
 	 * <p>
 	 * If either {@code ray} or {@code normal} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Pdf_Le(const Ray &ray, const Normal3f &nLight, Float *pdfPos, Float *pdfDir)} in PBRT.
 	 * 
 	 * @param ray a {@link Ray3F} instance
 	 * @param normal a {@link Vector3F} instance
@@ -178,8 +148,6 @@ public final class PointLight implements Light {
 	 * Returns an optional {@link LightRadianceEmittedResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code sampleA} or {@code sampleB} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Sample_Le(const Point2f &u1, const Point2f &u2, Float time, Ray *ray, Normal3f *nLight, Float *pdfPos, Float *pdfDir)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param sampleA a {@link Point2F} instance
 	 * @param sampleB a {@code Point2F} instance
@@ -193,7 +161,7 @@ public final class PointLight implements Light {
 		
 		final Color3F result = this.intensity;
 		
-		final Ray3F ray = new Ray3F(this.position, SampleGeneratorF.sampleSphereUniformDistribution(sampleA.getU(), sampleA.getV()));
+		final Ray3F ray = new Ray3F(getTransform().getPosition(), SampleGeneratorF.sampleSphereUniformDistribution(sampleA.getU(), sampleA.getV()));
 		
 		final Vector3F normal = ray.getDirection();
 		
@@ -209,8 +177,6 @@ public final class PointLight implements Light {
 	 * Returns an optional {@link LightRadianceIncomingResult} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param sample a {@link Point2F} instance
@@ -222,7 +188,7 @@ public final class PointLight implements Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Point3F position = this.position;
+		final Point3F position = getTransform().getPosition();
 		final Point3F surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
 		
 		final Color3F intensity = this.intensity;
@@ -242,7 +208,7 @@ public final class PointLight implements Light {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PointLight(%s, %s)", this.position, this.intensity);
+		return String.format("new PointLight(%s, %s)", getTransform().getPosition(), this.intensity);
 	}
 	
 	/**
@@ -259,57 +225,13 @@ public final class PointLight implements Light {
 			return true;
 		} else if(!(object instanceof PointLight)) {
 			return false;
-		} else if(!Objects.equals(this.intensity, PointLight.class.cast(object).intensity)) {
+		} else if(!Objects.equals(getTransform(), PointLight.class.cast(object).getTransform())) {
 			return false;
-		} else if(!Objects.equals(this.position, PointLight.class.cast(object).position)) {
+		} else if(!Objects.equals(this.intensity, PointLight.class.cast(object).intensity)) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, this {@link Light} instance uses a delta distribution, {@code false} otherwise.
-	 * <p>
-	 * This {@code PointLight} class uses a delta distribution, so this method will return {@code true}.
-	 * 
-	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
-	 */
-	@Override
-	public boolean isDeltaDistribution() {
-		return true;
-	}
-	
-	/**
-	 * Evaluates the probability density function (PDF) for incoming radiance.
-	 * <p>
-	 * Returns a {@code float} with the probability density function (PDF) value.
-	 * <p>
-	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Pdf_Li(const Interaction &ref, const Vector3f &wi)} that returns a {@code Float} in PBRT.
-	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
-	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
-	 */
-	@Override
-	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(incoming, "incoming == null");
-		
-		return 0.0F;
-	}
-	
-	/**
-	 * Returns the sample count associated with this {@code PointLight} instance.
-	 * 
-	 * @return the sample count associated with this {@code PointLight} instance
-	 */
-	@Override
-	public int getSampleCount() {
-		return 1;
 	}
 	
 	/**
@@ -319,6 +241,6 @@ public final class PointLight implements Light {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.intensity, this.position);
+		return Objects.hash(getTransform(), this.intensity);
 	}
 }

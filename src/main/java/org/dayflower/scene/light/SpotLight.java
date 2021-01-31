@@ -47,7 +47,7 @@ import org.dayflower.scene.LightRadianceIncomingResult;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class SpotLight implements Light {
+public final class SpotLight extends Light {
 	private final AngleF coneAngle;
 	private final AngleF coneAngleDelta;
 	private final Color3F intensity;
@@ -172,6 +172,8 @@ public final class SpotLight implements Light {
 	 * @throws NullPointerException thrown if, and only if, either {@code coneAngle}, {@code coneAngleDelta}, {@code intensity}, {@code lightToWorld}, {@code eye} or {@code lookAt} are {@code null}
 	 */
 	public SpotLight(final AngleF coneAngle, final AngleF coneAngleDelta, final Color3F intensity, final Matrix44F lightToWorld, final Point3F eye, final Point3F lookAt) {
+		super(null, 1, true);
+		
 		this.coneAngle = Objects.requireNonNull(coneAngle, "coneAngle == null");
 		this.coneAngleDelta = Objects.requireNonNull(coneAngleDelta, "coneAngleDelta == null");
 		this.intensity = Objects.requireNonNull(intensity, "intensity == null");
@@ -363,18 +365,6 @@ public final class SpotLight implements Light {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@link Light} instance uses a delta distribution, {@code false} otherwise.
-	 * <p>
-	 * This {@code SpotLight} class uses a delta distribution, so this method will return {@code true}.
-	 * 
-	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
-	 */
-	@Override
-	public boolean isDeltaDistribution() {
-		return true;
-	}
-	
-	/**
 	 * Evaluates the probability density function (PDF) for incoming radiance.
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
@@ -394,16 +384,6 @@ public final class SpotLight implements Light {
 		Objects.requireNonNull(incoming, "incoming == null");
 		
 		return 0.0F;
-	}
-	
-	/**
-	 * Returns the sample count associated with this {@code SpotLight} instance.
-	 * 
-	 * @return the sample count associated with this {@code SpotLight} instance
-	 */
-	@Override
-	public int getSampleCount() {
-		return 1;
 	}
 	
 	/**

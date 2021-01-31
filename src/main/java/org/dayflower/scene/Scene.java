@@ -757,7 +757,7 @@ public final class Scene implements Node {
 	private Color3F doEstimateDirectLight(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final boolean isSpecular) {
 		Color3F lightDirect = Color3F.BLACK;
 		
-		if(light.isDeltaDistribution()) {
+		if(light.isUsingDeltaDistribution()) {
 			final BXDFType bXDFType = isSpecular ? BXDFType.ALL : BXDFType.ALL_EXCEPT_SPECULAR;
 			
 			final Optional<LightRadianceIncomingResult> optionalLightRadianceIncomingResult = light.sampleRadianceIncoming(intersection, sampleA);

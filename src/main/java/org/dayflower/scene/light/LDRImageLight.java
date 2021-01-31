@@ -64,7 +64,7 @@ import org.dayflower.utility.ParameterArguments;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class LDRImageLight implements Light {
+public final class LDRImageLight extends Light {
 	/**
 	 * The name of this {@code LDRImageLight} class.
 	 */
@@ -236,6 +236,8 @@ public final class LDRImageLight implements Light {
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
 	public LDRImageLight(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
+		super(null, 1, false);
+		
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
@@ -453,16 +455,6 @@ public final class LDRImageLight implements Light {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code LDRImageLight} instance uses a delta distribution, {@code false} otherwise.
-	 * 
-	 * @return {@code true} if, and only if, this {@code LDRImageLight} instance uses a delta distribution, {@code false} otherwise
-	 */
-	@Override
-	public boolean isDeltaDistribution() {
-		return false;
-	}
-	
-	/**
 	 * Evaluates the probability density function (PDF) for incoming radiance.
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
@@ -543,16 +535,6 @@ public final class LDRImageLight implements Light {
 	 */
 	public int getResolutionY() {
 		return this.resolutionY;
-	}
-	
-	/**
-	 * Returns the sample count associated with this {@code LDRImageLight} instance.
-	 * 
-	 * @return the sample count associated with this {@code LDRImageLight} instance
-	 */
-	@Override
-	public int getSampleCount() {
-		return 0;
 	}
 	
 	/**

@@ -41,7 +41,7 @@ import org.dayflower.utility.ParameterArguments;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class InfiniteAreaLight implements Light {
+public final class InfiniteAreaLight extends Light {
 	private final Color3F intensity;
 	private final Matrix44F lightToWorld;
 	private final Matrix44F worldToLight;
@@ -63,6 +63,8 @@ public final class InfiniteAreaLight implements Light {
 	 * @throws NullPointerException thrown if, and only if, either {@code intensity} or {@code lightToWorld} are {@code null}
 	 */
 	public InfiniteAreaLight(final Color3F intensity, final Matrix44F lightToWorld, final int sampleCount) {
+		super(null, 1, false);
+		
 		this.intensity = Objects.requireNonNull(intensity, "intensity == null");
 		this.lightToWorld = Objects.requireNonNull(lightToWorld, "lightToWorld == null");
 		this.worldToLight = Matrix44F.inverse(lightToWorld);
@@ -302,10 +304,10 @@ public final class InfiniteAreaLight implements Light {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
 	 */
-	@Override
-	public boolean isDeltaDistribution() {
-		return false;
-	}
+//	@Override
+//	public boolean isDeltaDistribution() {
+//		return false;
+//	}
 	
 	/**
 	 * Evaluates the probability density function (PDF) for incoming radiance.
@@ -348,10 +350,10 @@ public final class InfiniteAreaLight implements Light {
 	 * 
 	 * @return the sample count associated with this {@code InfiniteAreaLight} instance
 	 */
-	@Override
-	public int getSampleCount() {
-		return this.sampleCount;
-	}
+//	@Override
+//	public int getSampleCount() {
+//		return this.sampleCount;
+//	}
 	
 	/**
 	 * Returns a hash code for this {@code InfiniteAreaLight} instance.

@@ -63,7 +63,7 @@ import org.dayflower.scene.LightRadianceIncomingResult;
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PerezLight implements Light {
+public final class PerezLight extends Light {
 	private static final SpectralCurveF K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
 	private static final SpectralCurveF K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
 	private static final SpectralCurveF K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
@@ -153,6 +153,8 @@ public final class PerezLight implements Light {
 	 * @throws NullPointerException thrown if, and only if, {@code sunDirectionWorldSpace} is {@code null}
 	 */
 	public PerezLight(final float turbidity, final Vector3F sunDirectionWorldSpace) {
+		super(null, 1, false);
+		
 		set(turbidity, sunDirectionWorldSpace);
 	}
 	
@@ -473,16 +475,6 @@ public final class PerezLight implements Light {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@code PerezLight} instance uses a delta distribution, {@code false} otherwise.
-	 * 
-	 * @return {@code true} if, and only if, this {@code PerezLight} instance uses a delta distribution, {@code false} otherwise
-	 */
-	@Override
-	public boolean isDeltaDistribution() {
-		return false;
-	}
-	
-	/**
 	 * Evaluates the probability density function (PDF) for incoming radiance.
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
@@ -530,16 +522,6 @@ public final class PerezLight implements Light {
 		final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample, true) / (2.0F * PI * PI * sinTheta);
 		
 		return probabilityDensityFunctionValue;
-	}
-	
-	/**
-	 * Returns the sample count associated with this {@code PerezLight} instance.
-	 * 
-	 * @return the sample count associated with this {@code PerezLight} instance
-	 */
-	@Override
-	public int getSampleCount() {
-		return 1;
 	}
 	
 	/**

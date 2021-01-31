@@ -41,16 +41,17 @@ Primitive primitive07 = new Primitive(material07, shape07, transform07);
 Primitive primitive08 = new Primitive(material08, shape08, transform08);
 Primitive primitive09 = new Primitive(material09, shape09, transform09);
 
-AreaLight areaLight09 = isDiffuseAreaLight ? new DiffuseAreaLight(transform09.getObjectToWorld(), 1, new Color3F(12.0F), shape09, false) : new PrimitiveLight(primitive09);
+//AreaLight areaLight09 = isDiffuseAreaLight ? new DiffuseAreaLight(transform09.getObjectToWorld(), 1, new Color3F(12.0F), shape09, false) : new PrimitiveLight(primitive09);
 
-primitive09.setAreaLight(areaLight09);
+//primitive09.setAreaLight(areaLight09);
 
 Camera camera = new Camera(new Point3F(0.0F, 2.5F, 1.0F));
 camera.setResolution(1024.0F, 768.0F);
 camera.setFieldOfViewY(AngleF.degrees(58.0F));
 camera.setFieldOfViewX();
 
-scene.addLight(areaLight09);
+//scene.addLight(areaLight09);
+scene.addLight(new PointLight(new Color3F(12.0F), new Point3F(0.0F, 4.0F, 9.0F)));
 scene.addPrimitive(primitive01);
 scene.addPrimitive(primitive02);
 scene.addPrimitive(primitive03);

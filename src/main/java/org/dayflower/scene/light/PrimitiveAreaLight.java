@@ -32,34 +32,34 @@ import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Light;
 import org.dayflower.scene.LightRadianceEmittedResult;
 import org.dayflower.scene.LightRadianceIncomingResult;
 import org.dayflower.scene.Primitive;
+import org.dayflower.scene.Transform;
 
 /**
- * A {@code PrimitiveLight} is an implementation of {@link Light} that contains a {@link Primitive}.
+ * A {@code PrimitiveAreaLight} is an implementation of {@link AreaLight} that contains a {@link Primitive} instance.
  * <p>
  * This class is indirectly mutable and therefore not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class PrimitiveLight extends AreaLight {
+public final class PrimitiveAreaLight extends AreaLight {
 	private final Primitive primitive;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code PrimitiveLight} instance.
+	 * Constructs a new {@code PrimitiveAreaLight} instance.
 	 * <p>
 	 * If {@code primitive} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param primitive the {@link Primitive} instance associated with this {@code PrimitiveLight} instance
+	 * @param primitive the {@link Primitive} instance associated with this {@code PrimitiveAreaLight} instance
 	 * @throws NullPointerException thrown if, and only if, {@code primitive} is {@code null}
 	 */
-	public PrimitiveLight(final Primitive primitive) {
-		super(primitive.getTransform().getObjectToWorld(), 1);
+	public PrimitiveAreaLight(final Primitive primitive) {
+		super(primitive.getTransform(), 1);
 		
 		this.primitive = primitive;
 	}
@@ -105,11 +105,11 @@ public final class PrimitiveLight extends AreaLight {
 	}
 	
 	/**
-	 * Returns a {@link Color3F} instance with the power of this {@code PrimitiveLight} instance.
+	 * Returns a {@link Color3F} instance with the power of this {@code PrimitiveAreaLight} instance.
 	 * <p>
 	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
 	 * 
-	 * @return a {@code Color3F} instance with the power of this {@code PrimitiveLight} instance
+	 * @return a {@code Color3F} instance with the power of this {@code PrimitiveAreaLight} instance
 	 */
 	@Override
 	public Color3F power() {
@@ -179,8 +179,10 @@ public final class PrimitiveLight extends AreaLight {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Matrix44F lightToWorld = getLightToWorld();
-		final Matrix44F worldToLight = getWorldToLight();
+		final Transform transform = getTransform();
+		
+		final Matrix44F lightToWorld = transform.getObjectToWorld();
+		final Matrix44F worldToLight = transform.getWorldToObject();
 		
 		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
 		final SurfaceIntersection3F surfaceIntersectionLightSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToLight, lightToWorld);
@@ -216,55 +218,43 @@ public final class PrimitiveLight extends AreaLight {
 	}
 	
 	/**
-	 * Returns the {@link Primitive} instance associated with this {@code PrimitiveLight} instance.
+	 * Returns the {@link Primitive} instance associated with this {@code PrimitiveAreaLight} instance.
 	 * 
-	 * @return the {@code Primitive} instance associated with this {@code PrimitiveLight} instance
+	 * @return the {@code Primitive} instance associated with this {@code PrimitiveAreaLight} instance
 	 */
 	public Primitive getPrimitive() {
 		return this.primitive;
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code PrimitiveLight} instance.
+	 * Returns a {@code String} representation of this {@code PrimitiveAreaLight} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code PrimitiveLight} instance
+	 * @return a {@code String} representation of this {@code PrimitiveAreaLight} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new PrimitiveLight(%s)", this.primitive);
+		return String.format("new PrimitiveAreaLight(%s)", this.primitive);
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code PrimitiveLight} instance for equality.
+	 * Compares {@code object} to this {@code PrimitiveAreaLight} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PrimitiveLight}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code PrimitiveAreaLight}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code PrimitiveLight} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PrimitiveLight}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code PrimitiveAreaLight} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code PrimitiveAreaLight}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof PrimitiveLight)) {
+		} else if(!(object instanceof PrimitiveAreaLight)) {
 			return false;
-		} else if(!Objects.equals(this.primitive, PrimitiveLight.class.cast(object).primitive)) {
+		} else if(!Objects.equals(this.primitive, PrimitiveAreaLight.class.cast(object).primitive)) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, this {@link Light} instance uses a delta distribution, {@code false} otherwise.
-	 * <p>
-	 * This {@code PrimitiveLight} class does not use a delta distribution, so this method will return {@code false}.
-	 * 
-	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
-	 */
-	@Override
-	public boolean isDeltaDistribution() {
-		return false;
 	}
 	
 	/**
@@ -286,8 +276,10 @@ public final class PrimitiveLight extends AreaLight {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Matrix44F lightToWorld = getLightToWorld();
-		final Matrix44F worldToLight = getWorldToLight();
+		final Transform transform = getTransform();
+		
+		final Matrix44F lightToWorld = transform.getObjectToWorld();
+		final Matrix44F worldToLight = transform.getWorldToObject();
 		
 		final Vector3F incomingLightSpace = Vector3F.transform(worldToLight, incoming);
 		
@@ -295,9 +287,9 @@ public final class PrimitiveLight extends AreaLight {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code PrimitiveLight} instance.
+	 * Returns a hash code for this {@code PrimitiveAreaLight} instance.
 	 * 
-	 * @return a hash code for this {@code PrimitiveLight} instance
+	 * @return a hash code for this {@code PrimitiveAreaLight} instance
 	 */
 	@Override
 	public int hashCode() {

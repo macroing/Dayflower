@@ -74,7 +74,8 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * @throws NullPointerException thrown if, and only if, either {@code lightToWorld}, {@code radianceEmitted} or {@code shape} are {@code null}
 	 */
 	public DiffuseAreaLight(final Matrix44F lightToWorld, final int sampleCount, final Color3F radianceEmitted, final Shape3F shape, final boolean isTwoSided) {
-		super(lightToWorld, sampleCount);
+//		super(lightToWorld, sampleCount);
+		super(null, sampleCount);
 		
 		this.radianceEmitted = Objects.requireNonNull(radianceEmitted, "radianceEmitted == null");
 		this.shape = Objects.requireNonNull(shape, "shape == null");
@@ -96,7 +97,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * @return a {@code Color3F} instance with the radiance for {@code intersection} and {@code direction}
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code direction} are {@code null}
 	 */
-	@Override
+//	@Override
 	public Color3F evaluateRadiance(final Intersection intersection, final Vector3F direction) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(direction, "direction == null");
@@ -115,7 +116,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
-	@Override
+//	@Override
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
 		
@@ -129,7 +130,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * 
 	 * @return a {@code Color3F} instance with the power of this {@code DiffuseAreaLight} instance
 	 */
-	@Override
+//	@Override
 	public Color3F power() {
 		return Color3F.multiply(this.radianceEmitted, (this.isTwoSided ? 2.0F : 1.0F) * this.surfaceArea * PI);
 	}
@@ -148,7 +149,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * @return an optional {@code LightRadianceEmittedResult} with the result of the evaluation
 	 * @throws NullPointerException thrown if, and only if, either {@code ray} or {@code normal} are {@code null}
 	 */
-	@Override
+//	@Override
 	public Optional<LightRadianceEmittedResult> evaluateProbabilityDensityFunctionRadianceEmitted(final Ray3F ray, final Vector3F normal) {
 		Objects.requireNonNull(ray, "ray == null");
 		Objects.requireNonNull(normal, "normal == null");
@@ -194,7 +195,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * @return an optional {@code LightRadianceEmittedResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code sampleA} or {@code sampleB} are {@code null}
 	 */
-	@Override
+//	@Override
 	public Optional<LightRadianceEmittedResult> sampleRadianceEmitted(final Point2F sampleA, final Point2F sampleB) {
 		Objects.requireNonNull(sampleA, "sampleA == null");
 		Objects.requireNonNull(sampleB, "sampleB == null");
@@ -256,7 +257,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
-	@Override
+//	@Override
 	public Optional<LightRadianceIncomingResult> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
 //		Spectrum DiffuseAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis) const {
 //			Interaction pShape = shape->Sample(ref, u, pdf);
@@ -283,28 +284,28 @@ public final class DiffuseAreaLight extends AreaLight {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		final Matrix44F lightToWorld = getLightToWorld();
-		final Matrix44F worldToLight = getWorldToLight();
+//		final Matrix44F lightToWorld = getLightToWorld();
+//		final Matrix44F worldToLight = getWorldToLight();
 		
-		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
-		final SurfaceIntersection3F surfaceIntersectionLightSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToLight, lightToWorld);
+//		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
+//		final SurfaceIntersection3F surfaceIntersectionLightSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToLight, lightToWorld);
 		
-		final Optional<SurfaceSample3F> optionalSurfaceSampleLightSpace = this.shape.sample(sample, surfaceIntersectionLightSpace);
+//		final Optional<SurfaceSample3F> optionalSurfaceSampleLightSpace = this.shape.sample(sample, surfaceIntersectionLightSpace);
 		
-		if(optionalSurfaceSampleLightSpace.isPresent()) {
-			final SurfaceSample3F surfaceSampleLightSpace = optionalSurfaceSampleLightSpace.get();
-			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleLightSpace, lightToWorld, worldToLight);
+//		if(optionalSurfaceSampleLightSpace.isPresent()) {
+//			final SurfaceSample3F surfaceSampleLightSpace = optionalSurfaceSampleLightSpace.get();
+//			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleLightSpace, lightToWorld, worldToLight);
 			
-			final float probabilityDensityFunctionValue = surfaceSampleWorldSpace.getProbabilityDensityFunctionValue();
+//			final float probabilityDensityFunctionValue = surfaceSampleWorldSpace.getProbabilityDensityFunctionValue();
 			
-			final Point3F pointWorldSpace = surfaceSampleWorldSpace.getPoint();
+//			final Point3F pointWorldSpace = surfaceSampleWorldSpace.getPoint();
 			
-			final Vector3F incomingWorldSpace = Vector3F.directionNormalized(surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint(), pointWorldSpace);
+//			final Vector3F incomingWorldSpace = Vector3F.directionNormalized(surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint(), pointWorldSpace);
 			
-			if(probabilityDensityFunctionValue > 0.0F && (this.isTwoSided || Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.negate(incomingWorldSpace)) > 0.0F)) {
-				return Optional.of(new LightRadianceIncomingResult(this.radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
-			}
-		}
+//			if(probabilityDensityFunctionValue > 0.0F && (this.isTwoSided || Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.negate(incomingWorldSpace)) > 0.0F)) {
+//				return Optional.of(new LightRadianceIncomingResult(this.radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
+//			}
+//		}
 		
 		return Optional.empty();
 	}
@@ -314,10 +315,10 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * 
 	 * @return a {@code String} representation of this {@code DiffuseAreaLight} instance
 	 */
-	@Override
-	public String toString() {
-		return String.format("new DiffuseAreaLight(%s, %d, %s, %s, %s)", getLightToWorld(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.toString(this.isTwoSided));
-	}
+//	@Override
+//	public String toString() {
+//		return String.format("new DiffuseAreaLight(%s, %d, %s, %s, %s)", getLightToWorld(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.toString(this.isTwoSided));
+//	}
 	
 	/**
 	 * Compares {@code object} to this {@code DiffuseAreaLight} instance for equality.
@@ -333,12 +334,12 @@ public final class DiffuseAreaLight extends AreaLight {
 			return true;
 		} else if(!(object instanceof DiffuseAreaLight)) {
 			return false;
-		} else if(!Objects.equals(getLightToWorld(), DiffuseAreaLight.class.cast(object).getLightToWorld())) {
-			return false;
-		} else if(!Objects.equals(getWorldToLight(), DiffuseAreaLight.class.cast(object).getWorldToLight())) {
-			return false;
-		} else if(getSampleCount() != DiffuseAreaLight.class.cast(object).getSampleCount()) {
-			return false;
+//		} else if(!Objects.equals(getLightToWorld(), DiffuseAreaLight.class.cast(object).getLightToWorld())) {
+//			return false;
+//		} else if(!Objects.equals(getWorldToLight(), DiffuseAreaLight.class.cast(object).getWorldToLight())) {
+//			return false;
+//		} else if(getSampleCount() != DiffuseAreaLight.class.cast(object).getSampleCount()) {
+//			return false;
 		} else if(!Objects.equals(this.radianceEmitted, DiffuseAreaLight.class.cast(object).radianceEmitted)) {
 			return false;
 		} else if(!Objects.equals(this.shape, DiffuseAreaLight.class.cast(object).shape)) {
@@ -359,7 +360,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * 
 	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
 	 */
-	@Override
+//	@Override
 	public boolean isDeltaDistribution() {
 		return false;
 	}
@@ -378,26 +379,26 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
 	 */
-	@Override
-	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
-		Objects.requireNonNull(intersection, "intersection == null");
-		Objects.requireNonNull(incoming, "incoming == null");
-		
-		final Matrix44F lightToWorld = getLightToWorld();
-		final Matrix44F worldToLight = getWorldToLight();
-		
-		final Vector3F incomingLightSpace = Vector3F.transform(worldToLight, incoming);
-		
-		return this.shape.evaluateProbabilityDensityFunction(SurfaceIntersection3F.transform(intersection.getSurfaceIntersectionWorldSpace(), worldToLight, lightToWorld), incomingLightSpace);
-	}
+//	@Override
+//	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
+//		Objects.requireNonNull(intersection, "intersection == null");
+//		Objects.requireNonNull(incoming, "incoming == null");
+//		
+//		final Matrix44F lightToWorld = getLightToWorld();
+//		final Matrix44F worldToLight = getWorldToLight();
+//		
+//		final Vector3F incomingLightSpace = Vector3F.transform(worldToLight, incoming);
+//		
+//		return this.shape.evaluateProbabilityDensityFunction(SurfaceIntersection3F.transform(intersection.getSurfaceIntersectionWorldSpace(), worldToLight, lightToWorld), incomingLightSpace);
+//	}
 	
 	/**
 	 * Returns a hash code for this {@code DiffuseAreaLight} instance.
 	 * 
 	 * @return a hash code for this {@code DiffuseAreaLight} instance
 	 */
-	@Override
-	public int hashCode() {
-		return Objects.hash(getLightToWorld(), getWorldToLight(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.valueOf(this.isTwoSided), Float.valueOf(this.surfaceArea));
-	}
+//	@Override
+//	public int hashCode() {
+//		return Objects.hash(getLightToWorld(), getWorldToLight(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.valueOf(this.isTwoSided), Float.valueOf(this.surfaceArea));
+//	}
 }

@@ -36,6 +36,19 @@ public final class Longs {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code long} with the bits of {@code value} reversed.
+	 * 
+	 * @param value a {@code long} value
+	 * @return a {@code long} with the bits of {@code value} reversed
+	 */
+	public static long reverseBits(final long value) {
+		final long value0 = Ints.reverseBits((int)(value >>>  0));
+		final long value1 = Ints.reverseBits((int)(value >>> 32));
+		
+		return (value0 << 32) | value1;
+	}
+	
+	/**
 	 * Returns a {@code long[]} with a length of {@code length} and is filled with {@code 0L}.
 	 * <p>
 	 * If {@code length} is less than {@code 0}, an {@code IllegalArgumentException} will be thrown.

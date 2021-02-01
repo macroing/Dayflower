@@ -19,27 +19,28 @@
 package org.dayflower.scene.light;
 
 import static org.dayflower.utility.Floats.PI;
-import static org.dayflower.utility.Floats.equal;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.Point2F;
-import org.dayflower.geometry.Ray3F;
+import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Shape3F;
+import org.dayflower.geometry.SurfaceIntersection3F;
+import org.dayflower.geometry.SurfaceSample3F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Intersection;
-import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
+import org.dayflower.scene.Transform;
 
 /**
  * A {@code DiffuseAreaLight} is an implementation of {@link AreaLight} that represents a diffuse area light.
  * <p>
- * This class can be considered immutable and thread-safe if, and only if, its associated {@link Shape3F} instance is.
+ * This class is mutable and not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -48,50 +49,150 @@ public final class DiffuseAreaLight extends AreaLight {
 	private final Color3F radianceEmitted;
 	private final Shape3F shape;
 	private final boolean isTwoSided;
-	private final float surfaceArea;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Constructs a new {@code DiffuseAreaLight} instance.
 	 * <p>
-	 * If either {@code lightToWorld}, {@code radianceEmitted} or {@code shape} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new DiffuseAreaLight(new Transform());
+	 * }
+	 * </pre>
+	 */
+	public DiffuseAreaLight() {
+		this(new Transform());
+	}
+	
+	/**
+	 * Constructs a new {@code DiffuseAreaLight} instance.
+	 * <p>
+	 * If {@code transform} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new DiffuseAreaLight(transform, 1);
+	 * }
+	 * </pre>
+	 * 
+	 * @param transform the {@link Transform} instance associated with this {@code AreaLight} instance
+	 * @throws NullPointerException thrown if, and only if, {@code transform} is {@code null}
+	 */
+	public DiffuseAreaLight(final Transform transform) {
+		this(transform, 1);
+	}
+	
+	/**
+	 * Constructs a new {@code DiffuseAreaLight} instance.
+	 * <p>
+	 * If {@code transform} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sampleCount} is less than {@code 1}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new DiffuseAreaLight(transform, sampleCount, Color3F.WHITE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param transform the {@link Transform} instance associated with this {@code AreaLight} instance
+	 * @param sampleCount the sample count associated with this {@code AreaLight} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sampleCount} is less than {@code 1}
+	 * @throws NullPointerException thrown if, and only if, {@code transform} is {@code null}
+	 */
+	public DiffuseAreaLight(final Transform transform, final int sampleCount) {
+		this(transform, sampleCount, Color3F.WHITE);
+	}
+	
+	/**
+	 * Constructs a new {@code DiffuseAreaLight} instance.
+	 * <p>
+	 * If either {@code transform} or {@code radianceEmitted} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sampleCount} is less than {@code 1}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new DiffuseAreaLight(transform, sampleCount, radianceEmitted, new Sphere3F());
+	 * }
+	 * </pre>
+	 * 
+	 * @param transform the {@link Transform} instance associated with this {@code AreaLight} instance
+	 * @param sampleCount the sample count associated with this {@code AreaLight} instance
+	 * @param radianceEmitted a {@link Color3F} instance with the radiance emitted
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sampleCount} is less than {@code 1}
+	 * @throws NullPointerException thrown if, and only if, either {@code transform} or {@code radianceEmitted} are {@code null}
+	 */
+	public DiffuseAreaLight(final Transform transform, final int sampleCount, final Color3F radianceEmitted) {
+		this(transform, sampleCount, radianceEmitted, new Sphere3F());
+	}
+	
+	/**
+	 * Constructs a new {@code DiffuseAreaLight} instance.
+	 * <p>
+	 * If either {@code transform}, {@code radianceEmitted} or {@code shape} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code sampleCount} is less than {@code 1}, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new DiffuseAreaLight(transform, sampleCount, radianceEmitted, shape, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param transform the {@link Transform} instance associated with this {@code AreaLight} instance
+	 * @param sampleCount the sample count associated with this {@code AreaLight} instance
+	 * @param radianceEmitted a {@link Color3F} instance with the radiance emitted
+	 * @param shape a {@link Shape3F} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code sampleCount} is less than {@code 1}
+	 * @throws NullPointerException thrown if, and only if, either {@code transform}, {@code radianceEmitted} or {@code shape} are {@code null}
+	 */
+	public DiffuseAreaLight(final Transform transform, final int sampleCount, final Color3F radianceEmitted, final Shape3F shape) {
+		this(transform, sampleCount, radianceEmitted, shape, false);
+	}
+	
+	/**
+	 * Constructs a new {@code DiffuseAreaLight} instance.
+	 * <p>
+	 * If either {@code transform}, {@code radianceEmitted} or {@code shape} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * If {@code sampleCount} is less than {@code 1}, an {@code IllegalArgumentException} will be thrown.
 	 * 
-	 * @param lightToWorld the {@link Matrix44F} instance that is used to transform from light space to world space and is associated with this {@code DiffuseAreaLight} instance
+	 * @param transform the {@link Transform} instance associated with this {@code AreaLight} instance
 	 * @param sampleCount the sample count associated with this {@code AreaLight} instance
 	 * @param radianceEmitted a {@link Color3F} instance with the radiance emitted
 	 * @param shape a {@link Shape3F} instance
 	 * @param isTwoSided {@code true} if, and only if, this {@code DiffuseAreaLight} is two-sided, {@code false} otherwise
 	 * @throws IllegalArgumentException thrown if, and only if, {@code sampleCount} is less than {@code 1}
-	 * @throws NullPointerException thrown if, and only if, either {@code lightToWorld}, {@code radianceEmitted} or {@code shape} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code transform}, {@code radianceEmitted} or {@code shape} are {@code null}
 	 */
-	public DiffuseAreaLight(final Matrix44F lightToWorld, final int sampleCount, final Color3F radianceEmitted, final Shape3F shape, final boolean isTwoSided) {
-//		super(lightToWorld, sampleCount);
-		super(null, sampleCount);
+	public DiffuseAreaLight(final Transform transform, final int sampleCount, final Color3F radianceEmitted, final Shape3F shape, final boolean isTwoSided) {
+		super(transform, sampleCount);
 		
 		this.radianceEmitted = Objects.requireNonNull(radianceEmitted, "radianceEmitted == null");
 		this.shape = Objects.requireNonNull(shape, "shape == null");
 		this.isTwoSided = isTwoSided;
-		this.surfaceArea = shape.getSurfaceArea();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the radiance for {@code intersection} and {@code direction}.
+	 * Returns a {@link Color3F} instance with the radiance on {@code intersection} emitted in the direction of {@code direction}.
 	 * <p>
 	 * If either {@code intersection} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code AreaLight} method {@code L(const Interaction &intr, const Vector3f &w)} that returns a {@code Spectrum} in PBRT.
 	 * 
-	 * @param intersection an {@link Intersection} instance
-	 * @param direction a {@link Vector3F} instance with a direction
-	 * @return a {@code Color3F} instance with the radiance for {@code intersection} and {@code direction}
+	 * @param intersection an {@link Intersection} instance from which the radiance is emitted
+	 * @param direction a {@link Vector3F} instance with a direction in which the radiance is emitted
+	 * @return a {@code Color3F} instance with the radiance on {@code intersection} emitted in the direction of {@code direction}
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code direction} are {@code null}
 	 */
-//	@Override
+	@Override
 	public Color3F evaluateRadiance(final Intersection intersection, final Vector3F direction) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(direction, "direction == null");
@@ -100,33 +201,13 @@ public final class DiffuseAreaLight extends AreaLight {
 	}
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
-	 * <p>
-	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Le(const RayDifferential &r)} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
-	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
-	 */
-//	@Override
-	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
-		Objects.requireNonNull(ray, "ray == null");
-		
-		return Color3F.BLACK;
-	}
-	
-	/**
 	 * Returns a {@link Color3F} instance with the power of this {@code DiffuseAreaLight} instance.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @return a {@code Color3F} instance with the power of this {@code DiffuseAreaLight} instance
 	 */
-//	@Override
+	@Override
 	public Color3F power() {
-		return Color3F.multiply(this.radianceEmitted, (this.isTwoSided ? 2.0F : 1.0F) * this.surfaceArea * PI);
+		return Color3F.multiply(this.radianceEmitted, (this.isTwoSided ? 2.0F : 1.0F) * this.shape.getSurfaceArea() * PI);
 	}
 	
 	/**
@@ -135,63 +216,41 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * Returns an optional {@link LightSample} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param sample a {@link Point2F} instance
-	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
+	 * @return an optional {@code LightSample} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
-//	@Override
+	@Override
 	public Optional<LightSample> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
-//		Spectrum DiffuseAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis) const {
-//			Interaction pShape = shape->Sample(ref, u, pdf);
-//			
-//			pShape.mediumInterface = mediumInterface;
-//			
-//			if (*pdf == 0 || (pShape.p - ref.p).LengthSquared() == 0) {
-//				*pdf = 0;
-//				
-//				return 0.f;
-//			}
-//			
-//			*wi = Normalize(pShape.p - ref.p);
-//			
-//			*vis = VisibilityTester(ref, pShape);
-//			
-//			return L(pShape, -*wi);
-//		}
-//		
-//		Spectrum L(const Interaction &intr, const Vector3f &w) const {
-//			return (twoSided || Dot(intr.n, w) > 0) ? Lemit : Spectrum(0.f);
-//		}
-		
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-//		final Matrix44F lightToWorld = getLightToWorld();
-//		final Matrix44F worldToLight = getWorldToLight();
+		final Transform transform = getTransform();
 		
-//		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
-//		final SurfaceIntersection3F surfaceIntersectionLightSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToLight, lightToWorld);
+		final Matrix44F objectToWorld = transform.getObjectToWorld();
+		final Matrix44F worldToObject = transform.getWorldToObject();
 		
-//		final Optional<SurfaceSample3F> optionalSurfaceSampleLightSpace = this.shape.sample(sample, surfaceIntersectionLightSpace);
+		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
+		final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
 		
-//		if(optionalSurfaceSampleLightSpace.isPresent()) {
-//			final SurfaceSample3F surfaceSampleLightSpace = optionalSurfaceSampleLightSpace.get();
-//			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleLightSpace, lightToWorld, worldToLight);
+		final Optional<SurfaceSample3F> optionalSurfaceSampleObjectSpace = this.shape.sample(sample, surfaceIntersectionObjectSpace);
+		
+		if(optionalSurfaceSampleObjectSpace.isPresent()) {
+			final SurfaceSample3F surfaceSampleObjectSpace = optionalSurfaceSampleObjectSpace.get();
+			final SurfaceSample3F surfaceSampleWorldSpace = SurfaceSample3F.transform(surfaceSampleObjectSpace, objectToWorld, worldToObject);
 			
-//			final float probabilityDensityFunctionValue = surfaceSampleWorldSpace.getProbabilityDensityFunctionValue();
+			final float probabilityDensityFunctionValue = surfaceSampleWorldSpace.getProbabilityDensityFunctionValue();
 			
-//			final Point3F pointWorldSpace = surfaceSampleWorldSpace.getPoint();
+			final Point3F pointWorldSpace = surfaceSampleWorldSpace.getPoint();
 			
-//			final Vector3F incomingWorldSpace = Vector3F.directionNormalized(surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint(), pointWorldSpace);
+			final Vector3F incomingWorldSpace = Vector3F.directionNormalized(surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint(), pointWorldSpace);
 			
-//			if(probabilityDensityFunctionValue > 0.0F && (this.isTwoSided || Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.negate(incomingWorldSpace)) > 0.0F)) {
-//				return Optional.of(new LightRadianceIncomingResult(this.radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
-//			}
-//		}
+			if(probabilityDensityFunctionValue > 0.0F && (this.isTwoSided || Vector3F.dotProduct(intersection.getSurfaceNormalS(), Vector3F.negate(incomingWorldSpace)) > 0.0F)) {
+				return Optional.of(new LightSample(this.radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
+			}
+		}
 		
 		return Optional.empty();
 	}
@@ -201,10 +260,10 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * 
 	 * @return a {@code String} representation of this {@code DiffuseAreaLight} instance
 	 */
-//	@Override
-//	public String toString() {
-//		return String.format("new DiffuseAreaLight(%s, %d, %s, %s, %s)", getLightToWorld(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.toString(this.isTwoSided));
-//	}
+	@Override
+	public String toString() {
+		return String.format("new DiffuseAreaLight(%s, %d, %s, %s, %s)", getTransform(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.toString(this.isTwoSided));
+	}
 	
 	/**
 	 * Compares {@code object} to this {@code DiffuseAreaLight} instance for equality.
@@ -220,19 +279,15 @@ public final class DiffuseAreaLight extends AreaLight {
 			return true;
 		} else if(!(object instanceof DiffuseAreaLight)) {
 			return false;
-//		} else if(!Objects.equals(getLightToWorld(), DiffuseAreaLight.class.cast(object).getLightToWorld())) {
-//			return false;
-//		} else if(!Objects.equals(getWorldToLight(), DiffuseAreaLight.class.cast(object).getWorldToLight())) {
-//			return false;
-//		} else if(getSampleCount() != DiffuseAreaLight.class.cast(object).getSampleCount()) {
-//			return false;
+		} else if(!Objects.equals(getTransform(), DiffuseAreaLight.class.cast(object).getTransform())) {
+			return false;
+		} else if(getSampleCount() != DiffuseAreaLight.class.cast(object).getSampleCount()) {
+			return false;
 		} else if(!Objects.equals(this.radianceEmitted, DiffuseAreaLight.class.cast(object).radianceEmitted)) {
 			return false;
 		} else if(!Objects.equals(this.shape, DiffuseAreaLight.class.cast(object).shape)) {
 			return false;
 		} else if(this.isTwoSided != DiffuseAreaLight.class.cast(object).isTwoSided) {
-			return false;
-		} else if(!equal(this.surfaceArea, DiffuseAreaLight.class.cast(object).surfaceArea)) {
 			return false;
 		} else {
 			return true;
@@ -240,51 +295,42 @@ public final class DiffuseAreaLight extends AreaLight {
 	}
 	
 	/**
-	 * Returns {@code true} if, and only if, this {@link Light} instance uses a delta distribution, {@code false} otherwise.
-	 * <p>
-	 * This {@code DiffuseAreaLight} class does not use a delta distribution, so this method will return {@code false}.
-	 * 
-	 * @return {@code true} if, and only if, this {@code Light} instance uses a delta distribution, {@code false} otherwise
-	 */
-//	@Override
-	public boolean isDeltaDistribution() {
-		return false;
-	}
-	
-	/**
-	 * Evaluates the probability density function (PDF) for incoming radiance.
+	 * Evaluates the probability density function (PDF) for the incoming radiance.
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
 	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Pdf_Li(const Interaction &ref, const Vector3f &wi)} that returns a {@code Float} in PBRT.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @param incoming the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
 	 */
-//	@Override
-//	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
-//		Objects.requireNonNull(intersection, "intersection == null");
-//		Objects.requireNonNull(incoming, "incoming == null");
-//		
-//		final Matrix44F lightToWorld = getLightToWorld();
-//		final Matrix44F worldToLight = getWorldToLight();
-//		
-//		final Vector3F incomingLightSpace = Vector3F.transform(worldToLight, incoming);
-//		
-//		return this.shape.evaluateProbabilityDensityFunction(SurfaceIntersection3F.transform(intersection.getSurfaceIntersectionWorldSpace(), worldToLight, lightToWorld), incomingLightSpace);
-//	}
+	@Override
+	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		Objects.requireNonNull(incoming, "incoming == null");
+		
+		final Transform transform = getTransform();
+		
+		final Matrix44F objectToWorld = transform.getObjectToWorld();
+		final Matrix44F worldToObject = transform.getWorldToObject();
+		
+		final Vector3F incomingObjectSpace = Vector3F.transform(worldToObject, incoming);
+		
+		final SurfaceIntersection3F surfaceIntersectionWorldSpace = intersection.getSurfaceIntersectionWorldSpace();
+		final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
+		
+		return this.shape.evaluateProbabilityDensityFunction(surfaceIntersectionObjectSpace, incomingObjectSpace);
+	}
 	
 	/**
 	 * Returns a hash code for this {@code DiffuseAreaLight} instance.
 	 * 
 	 * @return a hash code for this {@code DiffuseAreaLight} instance
 	 */
-//	@Override
-//	public int hashCode() {
-//		return Objects.hash(getLightToWorld(), getWorldToLight(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.valueOf(this.isTwoSided), Float.valueOf(this.surfaceArea));
-//	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(getTransform(), Integer.valueOf(getSampleCount()), this.radianceEmitted, this.shape, Boolean.valueOf(this.isTwoSided));
+	}
 }

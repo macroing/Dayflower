@@ -38,7 +38,7 @@ import org.dayflower.scene.Transform;
 /**
  * A {@code SpotLight} is an implementation of {@link Light} that represents a spotlight.
  * <p>
- * This class is immutable and therefore thread-safe.
+ * This class is mutable and not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

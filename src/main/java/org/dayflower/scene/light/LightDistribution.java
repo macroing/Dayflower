@@ -18,13 +18,24 @@
  */
 package org.dayflower.scene.light;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.geometry.Point3F;
 import org.dayflower.sampler.Distribution1F;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code LightDistribution} can be used when sampling {@link Light} instances using probability distributions.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface LightDistribution {
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Distribution1F} given {@code point}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return a {@code Distribution1F} given {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
 	Distribution1F find(final Point3F point);
 }

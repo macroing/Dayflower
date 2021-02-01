@@ -20,28 +20,50 @@ package org.dayflower.scene.light;
 
 import static org.dayflower.utility.Floats.array;
 
-import java.lang.reflect.Field;
+import java.util.Objects;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.sampler.Distribution1F;
 import org.dayflower.scene.Scene;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code UniformLightDistribution} is an implementation of {@link LightDistribution} that is using a uniform probability distribution.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class UniformLightDistribution implements LightDistribution {
 	private final Distribution1F distribution;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code UniformLightDistribution} instance.
+	 * <p>
+	 * If {@code scene} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param scene a {@link Scene} instance
+	 * @throws NullPointerException thrown if, and only if, {@code scene} is {@code null}
+	 */
 	public UniformLightDistribution(final Scene scene) {
 		this.distribution = new Distribution1F(array(scene.getLightCount(), 1.0F));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@link Distribution1F} given {@code point}.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point3F} instance
+	 * @return a {@code Distribution1F} given {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
 	@Override
 	public Distribution1F find(final Point3F point) {
+		Objects.requireNonNull(point, "point == null");
+		
 		return this.distribution;
 	}
 }

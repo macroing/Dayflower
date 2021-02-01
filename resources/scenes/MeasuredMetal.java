@@ -11,7 +11,8 @@ Shape3F shape2 = new Triangle3F(vertexA, vertexB, vertexC);
 Transform transform1 = new Transform(new Point3F(0.0F, 0.0F, 0.0F));
 Transform transform2 = new Transform(new Point3F(0.0F, 1.5F, 0.0F));
 
-scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(50.0F), Matrix44F.translate(0.0F, 2.0F, -5.0F), new Point3F(0.0F, 2.0F, -5.0F), new Point3F(0.0F, 2.0F, 20.0F)));
+scene.addLight(new PointLight(new Color3F(12.0F), new Point3F(0.0F, 4.0F, -5.0F)));
+//scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(5.0F), new Color3F(50.0F), new Point3F(0.0F, 2.0F, -5.0F), Vector3F.z()));
 scene.addPrimitive(new Primitive(material1, shape1, transform1));
 scene.addPrimitive(new Primitive(material2, shape2, transform2));
 scene.setCamera(new Camera(new Point3F(0.0F, 2.0F, -10.0F), AngleF.degrees(40.0F)));

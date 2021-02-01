@@ -56,5 +56,5 @@ public abstract class AreaLight extends Light {
 	 * @return a {@code Color3F} instance with the radiance on {@code intersection} emitted in the direction of {@code direction}
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code direction} are {@code null}
 	 */
-	public abstract Color3F evaluateRadiance(final Intersection intersection, final Vector3F direction);
+	public abstract Color3F evaluateRadianceEmitted(final Intersection intersection, final Vector3F direction);
 }

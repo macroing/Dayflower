@@ -92,7 +92,7 @@ public final class Intersection {
 		if(optionalAreaLight.isPresent()) {
 			final AreaLight areaLight = optionalAreaLight.get();
 			
-			return areaLight.evaluateRadiance(this, direction);
+			return areaLight.evaluateRadianceEmitted(this, direction);
 		}
 		
 		return Color3F.BLACK;

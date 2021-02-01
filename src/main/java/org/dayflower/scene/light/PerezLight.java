@@ -32,7 +32,6 @@ import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Floats.sin;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -53,6 +52,7 @@ import org.dayflower.sampler.Sample2F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
+import org.dayflower.scene.Transform;
 
 /**
  * A {@code PerezLight} is a {@link Light} implementation of the Perez algorithm.
@@ -152,7 +152,7 @@ public final class PerezLight extends Light {
 	 * @throws NullPointerException thrown if, and only if, {@code sunDirectionWorldSpace} is {@code null}
 	 */
 	public PerezLight(final float turbidity, final Vector3F sunDirectionWorldSpace) {
-		super(null, 1, false);
+		super(new Transform(), 1, false);
 		
 		set(turbidity, sunDirectionWorldSpace);
 	}
@@ -160,26 +160,17 @@ public final class PerezLight extends Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
+	 * Returns a {@link Color3F} instance with the radiance emitted along {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Le(const RayDifferential &r)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
+	 * @return a {@code Color3F} instance with the radiance emitted along {@code ray}
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
-//		TODO: Verify!
-//		Spectrum InfiniteAreaLight::Le(const RayDifferential &ray) const {
-//			Vector3f w = Normalize(WorldToLight(ray.d));
-//			
-//			Point2f st(SphericalPhi(w) * Inv2Pi, SphericalTheta(w) * InvPi);
-//			
-//			return Spectrum(Lmap->Lookup(st), SpectrumType::Illuminant);
-//		}
+		Objects.requireNonNull(ray, "ray == null");
 		
 		final Vector3F incoming = ray.getDirection();
 		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
@@ -200,18 +191,11 @@ public final class PerezLight extends Light {
 	
 	/**
 	 * Returns a {@link Color3F} instance with the power of this {@code PerezLight} instance.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @return a {@code Color3F} instance with the power of this {@code PerezLight} instance
 	 */
 	@Override
 	public Color3F power() {
-//		TODO: Verify!
-//		Spectrum InfiniteAreaLight::Power() const {
-//			return Pi * worldRadius * worldRadius * Spectrum(Lmap->Lookup(Point2f(.5f, .5f), .5f), SpectrumType::Illuminant);
-//		}
-		
 		final Vector3F incomingLocal = Vector3F.directionSpherical(0.5F, 0.5F);
 		
 		final Color3F result = doRadianceSky(incomingLocal);
@@ -225,45 +209,16 @@ public final class PerezLight extends Light {
 	 * Returns an optional {@link LightSample} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param sample a {@link Point2F} instance
-	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
+	 * @return an optional {@code LightSample} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
 	@Override
 	public Optional<LightSample> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
-		
-//		TODO: Verify!
-//		Spectrum InfiniteAreaLight::Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis) const {
-//			Float mapPdf;
-//			
-//			Point2f uv = distribution->SampleContinuous(u, &mapPdf);
-//			
-//			if (mapPdf == 0) {
-//				return Spectrum(0.f);
-//			}
-//			
-//			Float theta = uv[1] * Pi, phi = uv[0] * 2 * Pi;
-//			Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
-//			Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
-//			
-//			*wi = LightToWorld(Vector3f(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
-//			
-//			*pdf = mapPdf / (2 * Pi * Pi * sinTheta);
-//			
-//			if (sinTheta == 0) {
-//				*pdf = 0;
-//			}
-//			
-//			*vis = VisibilityTester(ref, Interaction(ref.p + *wi * (2 * worldRadius), ref.time, mediumInterface));
-//			
-//			return Spectrum(Lmap->Lookup(uv), SpectrumType::Illuminant);
-//		}
 		
 		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());
 		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
@@ -325,6 +280,8 @@ public final class PerezLight extends Light {
 			return true;
 		} else if(!(object instanceof PerezLight)) {
 			return false;
+		} else if(!Objects.equals(getTransform(), PerezLight.class.cast(object).getTransform())) {
+			return false;
 		} else if(!Objects.equals(this.sunColor, PerezLight.class.cast(object).sunColor)) {
 			return false;
 		} else if(!Objects.equals(this.distribution, PerezLight.class.cast(object).distribution)) {
@@ -357,16 +314,14 @@ public final class PerezLight extends Light {
 	}
 	
 	/**
-	 * Evaluates the probability density function (PDF) for incoming radiance.
+	 * Evaluates the probability density function (PDF) for the incoming radiance.
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
 	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Pdf_Li(const Interaction &ref, const Vector3f &wi)} that returns a {@code Float} in PBRT.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @param incoming the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
 	 */
@@ -374,20 +329,6 @@ public final class PerezLight extends Light {
 	public float evaluateProbabilityDensityFunctionRadianceIncoming(final Intersection intersection, final Vector3F incoming) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
-		
-//		TODO: Verify!
-//		Float InfiniteAreaLight::Pdf_Li(const Interaction &, const Vector3f &w) const {
-//			Vector3f wi = WorldToLight(w);
-//			
-//			Float theta = SphericalTheta(wi), phi = SphericalPhi(wi);
-//			Float sinTheta = std::sin(theta);
-//			
-//			if (sinTheta == 0) {
-//				return 0;
-//			}
-//			
-//			return distribution->Pdf(Point2f(phi * Inv2Pi, theta * InvPi)) / (2 * Pi * Pi * sinTheta);
-//		}
 		
 		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
 		
@@ -413,7 +354,7 @@ public final class PerezLight extends Light {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.sunColor, this.distribution, this.orthonormalBasis, this.sunSpectralRadiance, this.sunDirection, this.sunDirectionWorldSpace, Integer.valueOf(Arrays.hashCode(this.perezRelativeLuminance)), Integer.valueOf(Arrays.hashCode(this.perezX)), Integer.valueOf(Arrays.hashCode(this.perezY)), Integer.valueOf(Arrays.hashCode(this.zenith)), Float.valueOf(this.radius), Float.valueOf(this.theta), Float.valueOf(this.turbidity));
+		return Objects.hash(getTransform(), this.sunColor, this.distribution, this.orthonormalBasis, this.sunSpectralRadiance, this.sunDirection, this.sunDirectionWorldSpace, Integer.valueOf(Arrays.hashCode(this.perezRelativeLuminance)), Integer.valueOf(Arrays.hashCode(this.perezX)), Integer.valueOf(Arrays.hashCode(this.perezY)), Integer.valueOf(Arrays.hashCode(this.zenith)), Float.valueOf(this.radius), Float.valueOf(this.theta), Float.valueOf(this.turbidity));
 	}
 	
 	/**
@@ -456,6 +397,8 @@ public final class PerezLight extends Light {
 	 * @throws NullPointerException thrown if, and only if, {@code sunDirectionWorldSpace} is {@code null}
 	 */
 	public void set(final float turbidity, final Vector3F sunDirectionWorldSpace) {
+		Objects.requireNonNull(sunDirectionWorldSpace, "sunDirectionWorldSpace == null");
+		
 		doSetOrthonormalBasis();
 		doSetRadius();
 		doSetTurbidity(turbidity);
@@ -566,7 +509,7 @@ public final class PerezLight extends Light {
 	}
 	
 	private void doSetRadius() {
-		this.radius = 1000.0F;
+		this.radius = 10.0F;
 	}
 	
 	private void doSetSunColorAndSunSpectralRadiance() {

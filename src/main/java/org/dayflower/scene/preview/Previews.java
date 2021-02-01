@@ -81,19 +81,19 @@ public final class Previews {
 //		final Transform transform1 = new Transform(camera.getEye());
 		final Transform transform2 = new Transform(camera.getPointBehindEye(4.0F));
 		
-		//final AreaLight areaLight2 = new DiffuseAreaLight(transform2.getObjectToWorld(), 1, new Color3F(12.0F), shape2, false);
+		final AreaLight areaLight2 = new DiffuseAreaLight(transform2, 1, new Color3F(12.0F), shape2, true);
 		
 		final Primitive primitive0 = new Primitive(material0, shape0, transform0);
 //		final Primitive primitive1 = new Primitive(material1, shape1, transform1);
-		//final Primitive primitive2 = new Primitive(material2, shape2, transform2, areaLight2);
+		final Primitive primitive2 = new Primitive(material2, shape2, transform2, areaLight2);
 		
 		final
 		Scene scene = new Scene();
-		//scene.addLight(areaLight2);
+		scene.addLight(areaLight2);
 //		scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(100.0F), Matrix44F.translate(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 20.0F)));
 		scene.addPrimitive(primitive0);
 //		scene.addPrimitive(primitive1);
-		//scene.addPrimitive(primitive2);
+		scene.addPrimitive(primitive2);
 		scene.setCamera(camera);
 		scene.setName("Preview");
 		

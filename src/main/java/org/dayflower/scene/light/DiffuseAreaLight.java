@@ -193,7 +193,7 @@ public final class DiffuseAreaLight extends AreaLight {
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code direction} are {@code null}
 	 */
 	@Override
-	public Color3F evaluateRadiance(final Intersection intersection, final Vector3F direction) {
+	public Color3F evaluateRadianceEmitted(final Intersection intersection, final Vector3F direction) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(direction, "direction == null");
 		

@@ -41,8 +41,7 @@ Primitive primitive07 = new Primitive(material07, shape07, transform07);
 Primitive primitive08 = new Primitive(material08, shape08, transform08);
 Primitive primitive09 = new Primitive(material09, shape09, transform09);
 
-//AreaLight areaLight09 = isDiffuseAreaLight ? new DiffuseAreaLight(transform09.getObjectToWorld(), 1, new Color3F(12.0F), shape09, false) : new PrimitiveLight(primitive09);
-AreaLight areaLight09 = new DiffuseAreaLight(transform09, 1, new Color3F(12.0F), shape09, true);
+AreaLight areaLight09 = isDiffuseAreaLight ? new DiffuseAreaLight(transform09, 1, new Color3F(12.0F), shape09, true) : new PrimitiveAreaLight(primitive09);
 
 primitive09.setAreaLight(areaLight09);
 

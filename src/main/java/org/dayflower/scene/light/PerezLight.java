@@ -42,9 +42,11 @@ import org.dayflower.color.ConstantSpectralCurveF;
 import org.dayflower.color.IrregularSpectralCurveF;
 import org.dayflower.color.RegularSpectralCurveF;
 import org.dayflower.color.SpectralCurveF;
+import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.sampler.Distribution2F;
@@ -98,7 +100,6 @@ public final class PerezLight extends Light {
 	
 	private Color3F sunColor;
 	private Distribution2F distribution;
-	private OrthonormalBasis33F orthonormalBasis;
 	private SpectralCurveF sunSpectralRadiance;
 	private Vector3F sunDirection;
 	private Vector3F sunDirectionWorldSpace;
@@ -172,10 +173,10 @@ public final class PerezLight extends Light {
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
 		Objects.requireNonNull(ray, "ray == null");
 		
-		final Vector3F incoming = ray.getDirection();
-		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
+		final Vector3F incomingWorldSpace = ray.getDirection();
+		final Vector3F incomingObjectSpace = doTransformToObjectSpace(incomingWorldSpace);
 		
-		final Color3F result = Color3F.minimumTo0(doRadianceSky(incomingLocal));
+		final Color3F result = Color3F.minimumTo0(doRadianceSky(incomingObjectSpace));
 		
 		return result;
 	}
@@ -196,9 +197,9 @@ public final class PerezLight extends Light {
 	 */
 	@Override
 	public Color3F power() {
-		final Vector3F incomingLocal = Vector3F.directionSpherical(0.5F, 0.5F);
+		final Vector3F incomingObjectSpace = Vector3F.directionSpherical(0.5F, 0.5F);
 		
-		final Color3F result = doRadianceSky(incomingLocal);
+		final Color3F result = doRadianceSky(incomingObjectSpace);
 		
 		return Color3F.multiply(result, PI * this.radius * this.radius);
 	}
@@ -229,22 +230,22 @@ public final class PerezLight extends Light {
 			return Optional.empty();
 		}
 		
-		final Vector3F incomingLocal = Vector3F.directionSpherical(sample1.getU(), sample1.getV());
-		final Vector3F incoming = doTransformToWorldSpace(incomingLocal);
+		final Vector3F incomingObjectSpace = Vector3F.directionSpherical(sample1.getU(), sample1.getV());
+		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incomingObjectSpace);
 		
-		final float sinTheta = incomingLocal.sinTheta();
+		final float sinTheta = incomingObjectSpace.sinTheta();
 		
 		if(isZero(sinTheta)) {
 			return Optional.empty();
 		}
 		
-		final Color3F result = doRadianceSky(incomingLocal);
+		final Color3F result = doRadianceSky(incomingObjectSpace);
 		
-		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incoming, 2.0F * this.radius);
+		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
 		
 		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
 		
-		return Optional.of(new LightSample(result, point, incoming, probabilityDensityFunctionValue1));
+		return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue1));
 	}
 	
 	/**
@@ -285,8 +286,6 @@ public final class PerezLight extends Light {
 		} else if(!Objects.equals(this.sunColor, PerezLight.class.cast(object).sunColor)) {
 			return false;
 		} else if(!Objects.equals(this.distribution, PerezLight.class.cast(object).distribution)) {
-			return false;
-		} else if(!Objects.equals(this.orthonormalBasis, PerezLight.class.cast(object).orthonormalBasis)) {
 			return false;
 		} else if(!Objects.equals(this.sunSpectralRadiance, PerezLight.class.cast(object).sunSpectralRadiance)) {
 			return false;
@@ -330,15 +329,15 @@ public final class PerezLight extends Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		final Vector3F incomingLocal = doTransformToLocalSpace(incoming);
+		final Vector3F incomingObjectSpace = doTransformToObjectSpace(incoming);
 		
-		final float sinTheta = sin(incomingLocal.sphericalTheta());
+		final float sinTheta = sin(incomingObjectSpace.sphericalTheta());
 		
 		if(isZero(sinTheta)) {
 			return 0.0F;
 		}
 		
-		final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingLocal);
+		final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
 		
 		final Sample2F sample = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
 		
@@ -354,7 +353,7 @@ public final class PerezLight extends Light {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(getTransform(), this.sunColor, this.distribution, this.orthonormalBasis, this.sunSpectralRadiance, this.sunDirection, this.sunDirectionWorldSpace, Integer.valueOf(Arrays.hashCode(this.perezRelativeLuminance)), Integer.valueOf(Arrays.hashCode(this.perezX)), Integer.valueOf(Arrays.hashCode(this.perezY)), Integer.valueOf(Arrays.hashCode(this.zenith)), Float.valueOf(this.radius), Float.valueOf(this.theta), Float.valueOf(this.turbidity));
+		return Objects.hash(getTransform(), this.sunColor, this.distribution, this.sunSpectralRadiance, this.sunDirection, this.sunDirectionWorldSpace, Integer.valueOf(Arrays.hashCode(this.perezRelativeLuminance)), Integer.valueOf(Arrays.hashCode(this.perezX)), Integer.valueOf(Arrays.hashCode(this.perezY)), Integer.valueOf(Arrays.hashCode(this.zenith)), Float.valueOf(this.radius), Float.valueOf(this.theta), Float.valueOf(this.turbidity));
 	}
 	
 	/**
@@ -399,7 +398,7 @@ public final class PerezLight extends Light {
 	public void set(final float turbidity, final Vector3F sunDirectionWorldSpace) {
 		Objects.requireNonNull(sunDirectionWorldSpace, "sunDirectionWorldSpace == null");
 		
-		doSetOrthonormalBasis();
+		doSetTransform();
 		doSetRadius();
 		doSetTurbidity(turbidity);
 		doSetSunDirectionWorldSpace(sunDirectionWorldSpace);
@@ -437,12 +436,12 @@ public final class PerezLight extends Light {
 		return Color3F.convertXYZToRGBUsingPBRT(new Color3F(x0, y0, z0));
 	}
 	
-	private Vector3F doTransformToLocalSpace(final Vector3F vector) {
-		return Vector3F.normalize(Vector3F.transformReverse(vector, this.orthonormalBasis));
+	private Vector3F doTransformToObjectSpace(final Vector3F vector) {
+		return Vector3F.normalize(Vector3F.transform(getTransform().getWorldToObject(), vector));
 	}
 	
 	private Vector3F doTransformToWorldSpace(final Vector3F vector) {
-		return Vector3F.normalize(Vector3F.transform(vector, this.orthonormalBasis));
+		return Vector3F.normalize(Vector3F.transform(getTransform().getObjectToWorld(), vector));
 	}
 	
 	private double doCalculatePerezFunction(final double[] lam, final double theta, final double gamma, final double lvz) {
@@ -504,10 +503,6 @@ public final class PerezLight extends Light {
 		this.perezY[4] = -0.01092D * this.turbidity + 0.05291D;
 	}
 	
-	private void doSetOrthonormalBasis() {
-		this.orthonormalBasis = new OrthonormalBasis33F(Vector3F.y(), Vector3F.x());
-	}
-	
 	private void doSetRadius() {
 		this.radius = 10.0F;
 	}
@@ -523,7 +518,7 @@ public final class PerezLight extends Light {
 	}
 	
 	private void doSetSunDirection() {
-		this.sunDirection = Vector3F.normalize(Vector3F.transformReverse(this.sunDirectionWorldSpace, this.orthonormalBasis));
+		this.sunDirection = doTransformToObjectSpace(this.sunDirectionWorldSpace);
 	}
 	
 	private void doSetSunDirectionWorldSpace(final Vector3F sunDirectionWorldSpace) {
@@ -532,6 +527,10 @@ public final class PerezLight extends Light {
 	
 	private void doSetTheta() {
 		this.theta = acos(saturate(this.sunDirection.getZ(), -1.0F, 1.0F));
+	}
+	
+	private void doSetTransform() {
+		setTransform(new Transform(new Point3F(), Quaternion4F.from(Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.y(), Vector3F.x())))));
 	}
 	
 	private void doSetTurbidity(final float turbidity) {

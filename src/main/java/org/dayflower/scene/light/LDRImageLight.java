@@ -18,12 +18,13 @@
  */
 package org.dayflower.scene.light;
 
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
-import static org.dayflower.utility.Floats.asinpi;
-import static org.dayflower.utility.Floats.atan2;
+import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.ceil;
+import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.floor;
+import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.positiveModulo;
+import static org.dayflower.utility.Floats.sin;
 import static org.dayflower.utility.Ints.padding;
 import static org.dayflower.utility.Ints.positiveModulo;
 import static org.dayflower.utility.Ints.toInt;
@@ -33,7 +34,6 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,23 +42,30 @@ import javax.imageio.ImageIO;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Matrix44F;
+import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
+import org.dayflower.sampler.Distribution2F;
+import org.dayflower.sampler.Sample2F;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
+import org.dayflower.scene.Transform;
 import org.dayflower.utility.BufferedImages;
 import org.dayflower.utility.ParameterArguments;
 
 /**
  * An {@code LDRImageLight} is a {@link Light} implementation backed by a low-dynamic-range (LDR) image.
  * <p>
- * This class is mutable and therefore not thread-safe.
+ * This class is mutable and not thread-safe.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -102,7 +109,9 @@ public final class LDRImageLight extends Light {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final AngleF angle;
+	private final Distribution2F distribution;
 	private final Vector2F scale;
+	private final float radius;
 	private final int resolution;
 	private final int resolutionX;
 	private final int resolutionY;
@@ -235,7 +244,7 @@ public final class LDRImageLight extends Light {
 	 * @throws NullPointerException thrown if, and only if, either {@code image}, {@code angle} or {@code scale} are {@code null}
 	 */
 	public LDRImageLight(final int resolutionX, final int resolutionY, final int[] image, final AngleF angle, final Vector2F scale) {
-		super(null, 1, false);
+		super(new Transform(new Point3F(), Quaternion4F.from(Matrix44F.rotate(new OrthonormalBasis33F(Vector3F.y(), Vector3F.x())))), 1, false);
 		
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
@@ -243,6 +252,8 @@ public final class LDRImageLight extends Light {
 		this.image = ParameterArguments.requireExactArrayLength(Objects.requireNonNull(image, "image == null"), resolutionX * resolutionY, "image").clone();
 		this.angle = Objects.requireNonNull(angle, "angle == null");
 		this.scale = Objects.requireNonNull(scale, "scale == null");
+		this.distribution = doCreateDistribution();
+		this.radius = 10.0F;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,36 +268,24 @@ public final class LDRImageLight extends Light {
 	}
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emitted radiance for {@code ray}.
+	 * Returns a {@link Color3F} instance with the radiance emitted along {@code ray}.
 	 * <p>
 	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Le(const RayDifferential &r)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param ray a {@link Ray3F} instance
-	 * @return a {@code Color3F} instance with the emitted radiance for {@code ray}
+	 * @return a {@code Color3F} instance with the radiance emitted along {@code ray}
 	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
 	 */
 	@Override
 	public Color3F evaluateRadianceEmitted(final Ray3F ray) {
-		final Point2F textureCoordinates = new Point2F(0.5F + atan2(ray.getDirection().getZ(), ray.getDirection().getX()) * PI_MULTIPLIED_BY_2_RECIPROCAL, 0.5F - asinpi(ray.getDirection().getY()));
-		final Point2F textureCoordinatesRotated = Point2F.rotate(textureCoordinates, this.angle);
-		final Point2F textureCoordinatesScaled = Point2F.scale(textureCoordinatesRotated, this.scale);
-		final Point2F textureCoordinatesImage = Point2F.toImage(textureCoordinatesScaled, this.resolutionX, this.resolutionY);
+		Objects.requireNonNull(ray, "ray == null");
 		
-		return doGetColorRGB(textureCoordinatesImage.getX(), textureCoordinatesImage.getY());
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance with the power of this {@code LDRImageLight} instance.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Power()} that returns a {@code Spectrum} in PBRT.
-	 * 
-	 * @return a {@code Color3F} instance with the power of this {@code LDRImageLight} instance
-	 */
-	@Override
-	public Color3F power() {
-		return Color3F.BLACK;//TODO: Implement!
+		final Vector3F incomingWorldSpace = ray.getDirection();
+		final Vector3F incomingObjectSpace = doTransformToObjectSpace(incomingWorldSpace);
+		
+		final Color3F result = doRadianceSky(incomingObjectSpace);
+		
+		return result;
 	}
 	
 	/**
@@ -295,12 +294,10 @@ public final class LDRImageLight extends Light {
 	 * Returns an optional {@link LightSample} with the result of the sampling.
 	 * <p>
 	 * If either {@code intersection} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi, Float *pdf, VisibilityTester *vis)} that returns a {@code Spectrum} in PBRT.
 	 * 
 	 * @param intersection an {@link Intersection} instance
 	 * @param sample a {@link Point2F} instance
-	 * @return an optional {@code LightRadianceIncomingResult} with the result of the sampling
+	 * @return an optional {@code LightSample} with the result of the sampling
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code sample} are {@code null}
 	 */
 	@Override
@@ -308,7 +305,31 @@ public final class LDRImageLight extends Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		return Optional.empty();//TODO: Implement!
+		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());
+		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
+		
+		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample1, true);
+		
+		if(isZero(probabilityDensityFunctionValue0)) {
+			return Optional.empty();
+		}
+		
+		final Vector3F incomingObjectSpace = Vector3F.directionSpherical(sample1.getU(), sample1.getV());
+		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incomingObjectSpace);
+		
+		final float sinTheta = incomingObjectSpace.sinTheta();
+		
+		if(isZero(sinTheta)) {
+			return Optional.empty();
+		}
+		
+		final Color3F result = doRadianceSky(incomingObjectSpace);
+		
+		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
+		
+		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
+		
+		return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue1));
 	}
 	
 	/**
@@ -392,9 +413,15 @@ public final class LDRImageLight extends Light {
 			return true;
 		} else if(!(object instanceof LDRImageLight)) {
 			return false;
+		} else if(!Objects.equals(getTransform(), LDRImageLight.class.cast(object).getTransform())) {
+			return false;
 		} else if(!Objects.equals(this.angle, LDRImageLight.class.cast(object).angle)) {
 			return false;
+		} else if(!Objects.equals(this.distribution, LDRImageLight.class.cast(object).distribution)) {
+			return false;
 		} else if(!Objects.equals(this.scale, LDRImageLight.class.cast(object).scale)) {
+			return false;
+		} else if(!equal(this.radius, LDRImageLight.class.cast(object).radius)) {
 			return false;
 		} else if(this.resolution != LDRImageLight.class.cast(object).resolution) {
 			return false;
@@ -410,16 +437,14 @@ public final class LDRImageLight extends Light {
 	}
 	
 	/**
-	 * Evaluates the probability density function (PDF) for incoming radiance.
+	 * Evaluates the probability density function (PDF) for the incoming radiance.
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
 	 * If either {@code intersection} or {@code incoming} are {@code null}, a {@code NullPointerException} will be thrown.
-	 * <p>
-	 * This method represents the {@code Light} method {@code Pdf_Li(const Interaction &ref, const Vector3f &wi)} that returns a {@code Float} in PBRT.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @param incoming the incoming direction, called {@code wi} in PBRT
+	 * @param incoming the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
 	 * @throws NullPointerException thrown if, and only if, either {@code intersection} or {@code incoming} are {@code null}
 	 */
@@ -428,7 +453,21 @@ public final class LDRImageLight extends Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
-		return 0.0F;//TODO: Implement!
+		final Vector3F incomingObjectSpace = doTransformToObjectSpace(incoming);
+		
+		final float sinTheta = sin(incomingObjectSpace.sphericalTheta());
+		
+		if(isZero(sinTheta)) {
+			return 0.0F;
+		}
+		
+		final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
+		
+		final Sample2F sample = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
+		
+		final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample, true) / (2.0F * PI * PI * sinTheta);
+		
+		return probabilityDensityFunctionValue;
 	}
 	
 	/**
@@ -499,7 +538,7 @@ public final class LDRImageLight extends Light {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.angle, this.scale, Integer.valueOf(this.resolution), Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), Integer.valueOf(Arrays.hashCode(this.image)));
+		return Objects.hash(getTransform(), this.angle, this.distribution, this.scale, Float.valueOf(this.radius), Integer.valueOf(this.resolution), Integer.valueOf(this.resolutionX), Integer.valueOf(this.resolutionY), Integer.valueOf(Arrays.hashCode(this.image)));
 	}
 	
 	/**
@@ -744,5 +783,47 @@ public final class LDRImageLight extends Light {
 	
 	private Color3F doGetColorRGB(final int x, final int y) {
 		return Color3F.unpack(this.image[positiveModulo(y, this.resolutionY) * this.resolutionX + positiveModulo(x, this.resolutionX)]);
+	}
+	
+	private Color3F doRadianceSky(final Vector3F direction) {
+		final Point2F textureCoordinates = Point2F.sphericalCoordinates(direction);
+		final Point2F textureCoordinatesRotated = Point2F.rotate(textureCoordinates, this.angle);
+		final Point2F textureCoordinatesScaled = Point2F.scale(textureCoordinatesRotated, this.scale);
+		final Point2F textureCoordinatesImage = Point2F.toImage(textureCoordinatesScaled, this.resolutionX, this.resolutionY);
+		
+		return doGetColorRGB(textureCoordinatesImage.getX(), textureCoordinatesImage.getY());
+	}
+	
+	private Distribution2F doCreateDistribution() {
+		final int resolutionU = this.resolutionX;
+		final int resolutionV = this.resolutionY;
+		
+		final float resolutionUReciprocal = 1.0F / resolutionU;
+		final float resolutionVReciprocal = 1.0F / resolutionV;
+		
+		final float[][] functions = new float[resolutionU][resolutionV];
+		
+		for(int u = 0; u < resolutionU; u++) {
+			final float sphericalU = (u + 0.5F) * resolutionUReciprocal;
+			
+			for(int v = 0; v < resolutionV; v++) {
+				final float sphericalV = (v + 0.5F) * resolutionVReciprocal;
+				final float sinTheta = sin(PI * sphericalV);
+				
+				final Color3F colorRGB = doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV));
+				
+				functions[u][v] = colorRGB.luminance() * sinTheta;
+			}
+		}
+		
+		return new Distribution2F(functions, true);
+	}
+	
+	private Vector3F doTransformToObjectSpace(final Vector3F vector) {
+		return Vector3F.normalize(Vector3F.transform(getTransform().getWorldToObject(), vector));
+	}
+	
+	private Vector3F doTransformToWorldSpace(final Vector3F vector) {
+		return Vector3F.normalize(Vector3F.transform(getTransform().getObjectToWorld(), vector));
 	}
 }

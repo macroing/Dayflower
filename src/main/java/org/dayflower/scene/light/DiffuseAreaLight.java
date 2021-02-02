@@ -247,7 +247,7 @@ public final class DiffuseAreaLight extends AreaLight {
 			
 			final Vector3F incomingWorldSpace = Vector3F.directionNormalized(surfaceIntersectionWorldSpace.getSurfaceIntersectionPoint(), pointWorldSpace);
 			
-			if(probabilityDensityFunctionValue > 0.0F && (this.isTwoSided || Vector3F.dotProduct(intersection.getSurfaceNormalS(), Vector3F.negate(incomingWorldSpace)) > 0.0F)) {
+			if(probabilityDensityFunctionValue > 0.0F && (this.isTwoSided || Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.negate(incomingWorldSpace)) > 0.0F)) {
 				return Optional.of(new LightSample(this.radianceEmitted, pointWorldSpace, incomingWorldSpace, probabilityDensityFunctionValue));
 			}
 		}

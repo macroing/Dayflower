@@ -682,6 +682,26 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Vector3D} instance that is pointing in the direction of {@code u} and {@code v}.
+	 * 
+	 * @param u the spherical U-coordinate
+	 * @param v the spherical V-coordinate
+	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code u} and {@code v}
+	 */
+	public static Vector3D directionSpherical(final double u, final double v) {
+		final double phi = u * PI_MULTIPLIED_BY_2;
+		final double theta = v * PI;
+		
+		return directionSpherical(sin(theta), cos(theta), phi);
+		
+//		final double cosTheta = 1.0D - 2.0D * u;
+//		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
+//		final double phi = v * PI_MULTIPLIED_BY_2;
+		
+//		return directionSpherical(sinTheta, cosTheta, phi);
+	}
+	
+	/**
 	 * Returns a new {@code Vector3D} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}.
 	 * <p>
 	 * This method is based on PBRT.
@@ -700,23 +720,27 @@ public final class Vector3D implements Node {
 	}
 	
 	/**
-	 * Returns a new {@code Vector3D} instance that is pointing in the direction of {@code u} and {@code v}.
+	 * Returns a new {@code Vector3D} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}, as well as the coordinate system {@code x}, {@code y} and {@code z}.
+	 * <p>
+	 * If either {@code x}, {@code y} or {@code z} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method is based on PBRT.
 	 * 
-	 * @param u the spherical U-coordinate
-	 * @param v the spherical V-coordinate
-	 * @return a new {@code Vector3D} instance that is pointing in the direction of {@code u} and {@code v}
+	 * @param sinTheta the sine of the angle theta
+	 * @param cosTheta the cosine of the angle theta
+	 * @param phi the angle phi
+	 * @param x the X-direction of the coordinate system
+	 * @param y the Y-direction of the coordinate system
+	 * @param z the Z-direction of the coordinate system
+	 * @return a new {@code Vector3D} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}, as well as the coordinate system {@code x}, {@code y} and {@code z}
+	 * @throws NullPointerException thrown if, and only if, either {@code x}, {@code y} or {@code z} are {@code null}
 	 */
-	public static Vector3D directionSpherical(final double u, final double v) {
-		final double phi = u * PI_MULTIPLIED_BY_2;
-		final double theta = v * PI;
+	public static Vector3D directionSpherical(final double sinTheta, final double cosTheta, final double phi, final Vector3D x, final Vector3D y, final Vector3D z) {
+		final Vector3D sphericalX = multiply(x, sinTheta * cos(phi));
+		final Vector3D sphericalY = multiply(y, sinTheta * sin(phi));
+		final Vector3D sphericalZ = multiply(z, cosTheta);
 		
-		return directionSpherical(sin(theta), cos(theta), phi);
-		
-//		final double cosTheta = 1.0D - 2.0D * u;
-//		final double sinTheta = sqrt(max(0.0D, 1.0D - cosTheta * cosTheta));
-//		final double phi = v * PI_MULTIPLIED_BY_2;
-		
-//		return directionSpherical(sinTheta, cosTheta, phi);
+		return add(sphericalX, sphericalY, sphericalZ);
 	}
 	
 	/**
@@ -1497,6 +1521,20 @@ public final class Vector3D implements Node {
 	 */
 	public static double dotProduct(final Vector3D vectorLHS, final Vector3D vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3;
+	}
+	
+	/**
+	 * Returns the absolute dot product of {@code vectorLHS} and {@code vectorRHS}.
+	 * <p>
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectorLHS the {@code Vector3D} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector3D} instance on the right-hand side
+	 * @return the absolute dot product of {@code vectorLHS} and {@code vectorRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static double dotProductAbs(final Vector3D vectorLHS, final Vector3D vectorRHS) {
+		return abs(dotProduct(vectorLHS, vectorRHS));
 	}
 	
 	/**

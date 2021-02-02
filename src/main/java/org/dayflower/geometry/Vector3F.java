@@ -682,6 +682,26 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v}.
+	 * 
+	 * @param u the spherical U-coordinate
+	 * @param v the spherical V-coordinate
+	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v}
+	 */
+	public static Vector3F directionSpherical(final float u, final float v) {
+		final float phi = u * PI_MULTIPLIED_BY_2;
+		final float theta = v * PI;
+		
+		return directionSpherical(sin(theta), cos(theta), phi);
+		
+//		final float cosTheta = 1.0F - 2.0F * u;
+//		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+//		final float phi = v * PI_MULTIPLIED_BY_2;
+		
+//		return directionSpherical(sinTheta, cosTheta, phi);
+	}
+	
+	/**
 	 * Returns a new {@code Vector3F} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}.
 	 * <p>
 	 * This method is based on PBRT.
@@ -700,23 +720,27 @@ public final class Vector3F implements Node {
 	}
 	
 	/**
-	 * Returns a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v}.
+	 * Returns a new {@code Vector3F} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}, as well as the coordinate system {@code x}, {@code y} and {@code z}.
+	 * <p>
+	 * If either {@code x}, {@code y} or {@code z} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * This method is based on PBRT.
 	 * 
-	 * @param u the spherical U-coordinate
-	 * @param v the spherical V-coordinate
-	 * @return a new {@code Vector3F} instance that is pointing in the direction of {@code u} and {@code v}
+	 * @param sinTheta the sine of the angle theta
+	 * @param cosTheta the cosine of the angle theta
+	 * @param phi the angle phi
+	 * @param x the X-direction of the coordinate system
+	 * @param y the Y-direction of the coordinate system
+	 * @param z the Z-direction of the coordinate system
+	 * @return a new {@code Vector3F} instance that is pointing in the spherical direction given {@code sinTheta}, {@code cosTheta} and {@code phi}, as well as the coordinate system {@code x}, {@code y} and {@code z}
+	 * @throws NullPointerException thrown if, and only if, either {@code x}, {@code y} or {@code z} are {@code null}
 	 */
-	public static Vector3F directionSpherical(final float u, final float v) {
-		final float phi = u * PI_MULTIPLIED_BY_2;
-		final float theta = v * PI;
+	public static Vector3F directionSpherical(final float sinTheta, final float cosTheta, final float phi, final Vector3F x, final Vector3F y, final Vector3F z) {
+		final Vector3F sphericalX = multiply(x, sinTheta * cos(phi));
+		final Vector3F sphericalY = multiply(y, sinTheta * sin(phi));
+		final Vector3F sphericalZ = multiply(z, cosTheta);
 		
-		return directionSpherical(sin(theta), cos(theta), phi);
-		
-//		final float cosTheta = 1.0F - 2.0F * u;
-//		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
-//		final float phi = v * PI_MULTIPLIED_BY_2;
-		
-//		return directionSpherical(sinTheta, cosTheta, phi);
+		return add(sphericalX, sphericalY, sphericalZ);
 	}
 	
 	/**
@@ -1497,6 +1521,20 @@ public final class Vector3F implements Node {
 	 */
 	public static float dotProduct(final Vector3F vectorLHS, final Vector3F vectorRHS) {
 		return vectorLHS.component1 * vectorRHS.component1 + vectorLHS.component2 * vectorRHS.component2 + vectorLHS.component3 * vectorRHS.component3;
+	}
+	
+	/**
+	 * Returns the absolute dot product of {@code vectorLHS} and {@code vectorRHS}.
+	 * <p>
+	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param vectorLHS the {@code Vector3F} instance on the left-hand side
+	 * @param vectorRHS the {@code Vector3F} instance on the right-hand side
+	 * @return the absolute dot product of {@code vectorLHS} and {@code vectorRHS}
+	 * @throws NullPointerException thrown if, and only if, either {@code vectorLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static float dotProductAbs(final Vector3F vectorLHS, final Vector3F vectorRHS) {
+		return abs(dotProduct(vectorLHS, vectorRHS));
 	}
 	
 	/**

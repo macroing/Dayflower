@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.abs;
+import static org.dayflower.utility.Doubles.sqrt;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -273,6 +276,22 @@ public final class OrthonormalBasis33D implements Node {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code OrthonormalBasis33D} instance that is based on PBRT.
+	 * <p>
+	 * If {@code w} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param w the W-direction
+	 * @return a new {@code OrthonormalBasis33D} instance that is based on PBRT
+	 * @throws NullPointerException thrown if, and only if, {@code w} is {@code null}
+	 */
+	public static OrthonormalBasis33D coordinateSystem(final Vector3D w) {
+		final Vector3D u = abs(w.getX()) > abs(w.getY()) ? Vector3D.divide(new Vector3D(-w.getZ(), 0.0D, w.getX()), sqrt(w.getX() * w.getX() + w.getZ() * w.getZ())) : Vector3D.divide(new Vector3D(0.0D, w.getZ(), - w.getY()), sqrt(w.getY() * w.getY() + w.getZ() * w.getZ()));
+		final Vector3D v = Vector3D.crossProduct(w, u);
+		
+		return new OrthonormalBasis33D(w, v, u);
+	}
 	
 	/**
 	 * Returns a cached version of {@code orthonormalBasis}.

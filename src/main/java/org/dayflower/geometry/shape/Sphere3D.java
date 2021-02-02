@@ -21,7 +21,6 @@ package org.dayflower.geometry.shape;
 import static org.dayflower.utility.Doubles.PI;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
-import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.gamma;
 import static org.dayflower.utility.Doubles.isInfinite;
@@ -223,7 +222,7 @@ public final class Sphere3D implements Shape3D {
 				final Vector3D incomingNormalized = Vector3D.normalize(incoming);
 				final Vector3D incomingNormalizedNegated = Vector3D.negate(incomingNormalized);
 				
-				final double probabilityDensityFunctionValue = Point3D.distanceSquared(point, surfaceIntersectionPoint) / abs(Vector3D.dotProduct(surfaceSample.getSurfaceNormal(), incomingNormalizedNegated));
+				final double probabilityDensityFunctionValue = Point3D.distanceSquared(point, surfaceIntersectionPoint) / Vector3D.dotProductAbs(surfaceSample.getSurfaceNormal(), incomingNormalizedNegated);
 				
 				if(isInfinite(probabilityDensityFunctionValue)) {
 					return SurfaceSample3D.EMPTY;
@@ -240,7 +239,11 @@ public final class Sphere3D implements Shape3D {
 		
 		final Vector3D directionToCenter = Vector3D.multiply(Vector3D.direction(surfaceIntersectionPoint, center), distanceReciprocal);
 		
-		final OrthonormalBasis33D orthonormalBasis = new OrthonormalBasis33D(directionToCenter);
+		final OrthonormalBasis33D orthonormalBasis = OrthonormalBasis33D.coordinateSystem(directionToCenter);
+		
+		final Vector3D x = Vector3D.negate(orthonormalBasis.getU());
+		final Vector3D y = Vector3D.negate(orthonormalBasis.getV());
+		final Vector3D z = Vector3D.negate(orthonormalBasis.getW());
 		
 		final double sinThetaMax = radius * distanceReciprocal;
 		final double sinThetaMaxSquared = sinThetaMax * sinThetaMax;
@@ -252,15 +255,14 @@ public final class Sphere3D implements Shape3D {
 		final double sinAlpha = sqrt(max(0.0D, 1.0D - cosAlpha * cosAlpha));
 		final double phi = sample.getV() * 2.0D * PI;
 		
-		final Vector3D sphericalDirectionLocal = Vector3D.directionSpherical(sinAlpha, cosAlpha, phi);
-		final Vector3D sphericalDirection = Vector3D.transform(sphericalDirectionLocal, OrthonormalBasis33D.flip(orthonormalBasis));
+		final Vector3D sphericalDirection = Vector3D.directionSpherical(sinAlpha, cosAlpha, phi, x, y, z);
 		
 		final Point3D samplePoint = Point3D.add(center, sphericalDirection, radius);
 		
 		final Vector3D samplePointError = Vector3D.multiply(Vector3D.absolute(new Vector3D(samplePoint)), gamma(5));
 		final Vector3D sampleSurfaceNormal = Vector3D.normalize(sphericalDirection);
 		
-		final double probabilityDensityFunctionValue = 1.0D / (2.0D * PI * (1.0D - cosThetaMax));
+		final double probabilityDensityFunctionValue = SampleGeneratorD.coneUniformDistributionProbabilityDensityFunction(cosThetaMax);
 		
 		return Optional.of(new SurfaceSample3D(samplePoint, samplePointError, sampleSurfaceNormal, probabilityDensityFunctionValue));
 	}
@@ -433,7 +435,7 @@ public final class Sphere3D implements Shape3D {
 		if(optionalSurfaceIntersectionShape.isPresent()) {
 			final SurfaceIntersection3D surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();
 			
-			final double probabilityDensityFunctionValue = Point3D.distanceSquared(surfaceIntersectionShape.getSurfaceIntersectionPoint(), surfaceIntersection.getSurfaceIntersectionPoint()) / abs(Vector3D.dotProduct(surfaceIntersectionShape.getSurfaceNormalS(), Vector3D.negate(incoming))) * getSurfaceArea();
+			final double probabilityDensityFunctionValue = Point3D.distanceSquared(surfaceIntersectionShape.getSurfaceIntersectionPoint(), surfaceIntersection.getSurfaceIntersectionPoint()) / Vector3D.dotProductAbs(surfaceIntersectionShape.getSurfaceNormalS(), Vector3D.negate(incoming)) * getSurfaceArea();
 			
 			if(!isInfinite(probabilityDensityFunctionValue)) {
 				return probabilityDensityFunctionValue;

@@ -76,30 +76,7 @@ public final class SmallPTD {
 		}
 		
 		switch(sphere.getMaterial()) {
-			case DIFFUSE_LAMBERTIAN: {
-				final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution2();
-				final Vector3D w = surfaceNormalCorrectlyOriented;
-				final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.getX()) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
-				final Vector3D v = Vector3D.crossProduct(w, u);
-				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
-				
-				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
-			}
-			case GLOSSY_PHONG: {
-				final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(random(), random(), 20.0D);
-				final Vector3D w = Vector3D.normalize(Vector3D.reflection(direction, surfaceNormal, true));
-				final Vector3D v = Vector3D.computeV(w);
-				final Vector3D u = Vector3D.crossProduct(v, w);
-				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
-				
-				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
-			}
-			case REFLECTIVE: {
-				final Vector3D d = Vector3D.reflection(direction, surfaceNormal, true);
-				
-				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
-			}
-			case REFLECTIVE_AND_REFRACTIVE: {
+			case GLASS: {
 				final Vector3D reflectionDirection = Vector3D.reflection(direction, surfaceNormal, true);
 				
 				final Ray3D reflectionRay = new Ray3D(surfaceIntersectionPoint, reflectionDirection);
@@ -146,6 +123,29 @@ public final class SmallPTD {
 					default:
 						return Color3D.BLACK;
 				}
+			}
+			case MATTE: {
+				final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution2();
+				final Vector3D w = surfaceNormalCorrectlyOriented;
+				final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.getX()) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
+				final Vector3D v = Vector3D.crossProduct(w, u);
+				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
+				
+				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
+			}
+			case METAL: {
+				final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(random(), random(), 20.0D);
+				final Vector3D w = Vector3D.normalize(Vector3D.reflection(direction, surfaceNormal, true));
+				final Vector3D v = Vector3D.computeV(w);
+				final Vector3D u = Vector3D.crossProduct(v, w);
+				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
+				
+				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
+			}
+			case MIRROR: {
+				final Vector3D d = Vector3D.reflection(direction, surfaceNormal, true);
+				
+				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
 			}
 			default: {
 				return Color3D.BLACK;
@@ -310,15 +310,15 @@ public final class SmallPTD {
 		
 		public Scene() {
 			this.spheres = new Sphere3D[] {
-				new Sphere3D(1.0e5D, new Point3D( 1.0e5D +  1.0D,   40.8D,           81.6D),          new Color3D(),                    new Color3D(0.750D, 0.250D, 0.250D), Material.DIFFUSE_LAMBERTIAN),
-				new Sphere3D(1.0e5D, new Point3D(-1.0e5D + 99.0D,   40.8D,           81.6D),          new Color3D(),                    new Color3D(0.250D, 0.250D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
-				new Sphere3D(1.0e5D, new Point3D(  50.0D,           40.8D,          1.0e5D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
-				new Sphere3D(1.0e5D, new Point3D(  50.0D,           40.8D,         -1.0e5D + 170.0D), new Color3D(),                    new Color3D(),                       Material.DIFFUSE_LAMBERTIAN),
-				new Sphere3D(1.0e5D, new Point3D(  50.0D,          1.0e5D,           81.6D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
-				new Sphere3D(1.0e5D, new Point3D(  50.0D,         -1.0e5D + 81.6D,   81.6D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.DIFFUSE_LAMBERTIAN),
-				new Sphere3D( 16.5D, new Point3D(  27.0D,           16.5D,           47.0D),          new Color3D(),                    new Color3D(0.999D, 0.999D, 0.999D), Material.REFLECTIVE),
-				new Sphere3D( 16.5D, new Point3D(  73.0D,           16.5D,           78.0D),          new Color3D(),                    new Color3D(0.999D, 0.999D, 0.999D), Material.REFLECTIVE_AND_REFRACTIVE),
-				new Sphere3D(600.0D, new Point3D(  50.0D,          681.6D - 0.27D,   81.6D),          new Color3D(12.0D, 12.0D, 12.0D), new Color3D(),                       Material.DIFFUSE_LAMBERTIAN)
+				new Sphere3D(1.0e5D, new Point3D( 1.0e5D +  1.0D,   40.8D,           81.6D),          new Color3D(),                    new Color3D(0.750D, 0.250D, 0.250D), Material.MATTE),
+				new Sphere3D(1.0e5D, new Point3D(-1.0e5D + 99.0D,   40.8D,           81.6D),          new Color3D(),                    new Color3D(0.250D, 0.250D, 0.750D), Material.MATTE),
+				new Sphere3D(1.0e5D, new Point3D(  50.0D,           40.8D,          1.0e5D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.MATTE),
+				new Sphere3D(1.0e5D, new Point3D(  50.0D,           40.8D,         -1.0e5D + 170.0D), new Color3D(),                    new Color3D(),                       Material.MATTE),
+				new Sphere3D(1.0e5D, new Point3D(  50.0D,          1.0e5D,           81.6D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.MATTE),
+				new Sphere3D(1.0e5D, new Point3D(  50.0D,         -1.0e5D + 81.6D,   81.6D),          new Color3D(),                    new Color3D(0.750D, 0.750D, 0.750D), Material.MATTE),
+				new Sphere3D( 16.5D, new Point3D(  27.0D,           16.5D,           47.0D),          new Color3D(),                    new Color3D(0.999D, 0.999D, 0.999D), Material.MIRROR),
+				new Sphere3D( 16.5D, new Point3D(  73.0D,           16.5D,           78.0D),          new Color3D(),                    new Color3D(0.999D, 0.999D, 0.999D), Material.GLASS),
+				new Sphere3D(600.0D, new Point3D(  50.0D,          681.6D - 0.27D,   81.6D),          new Color3D(12.0D, 12.0D, 12.0D), new Color3D(),                       Material.MATTE)
 			};
 		}
 		
@@ -431,10 +431,10 @@ public final class SmallPTD {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static enum Material {
-		DIFFUSE_LAMBERTIAN,
-		GLOSSY_PHONG,
-		REFLECTIVE,
-		REFLECTIVE_AND_REFRACTIVE;
+		GLASS,
+		MATTE,
+		METAL,
+		MIRROR;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		

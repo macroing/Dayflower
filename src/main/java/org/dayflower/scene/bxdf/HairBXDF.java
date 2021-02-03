@@ -619,7 +619,6 @@ public final class HairBXDF extends BXDF {
 	
 	private static Point2F doDemuxFloat(final float value) {
 		final int mortonCode = (int)(value * (1L << 32L));
-		
 		final int mortonCodeX = MortonCodes.decode1By1X(mortonCode);
 		final int mortonCodeY = MortonCodes.decode1By1Y(mortonCode);
 		

@@ -25,16 +25,17 @@ Below follows a few lists of features available in the Scene API.
 #### The Scene Loader API
 * `JavaSceneLoader` - A `SceneLoader` that produces `Scene` instances by loading, compiling and executing snippets of Java source code.
 
-#### The Scene Material PBRT API
-* `DisneyPBRTMaterial` - A `Material` that represents a Disney material.
-* `GlassPBRTMaterial` - A `Material` that represents glass.
-* `HairPBRTMaterial` - A `Material` that represents hair.
-* `MattePBRTMaterial` - A `Material` that is used for matte surfaces.
-* `MetalPBRTMaterial` - A `Material` that represents metal.
-* `MirrorPBRTMaterial` - A `Material` that represents a mirror.
-* `PlasticPBRTMaterial` - A `Material` that represents plastic.
-* `SubstratePBRTMaterial` - A `Material` that represents a substrate material.
-* `UberPBRTMaterial` - A `Material` that can represent a wide variety of materials.
+#### The Scene Material API
+* `ClearCoatMaterial` - A `Material` that represents clear coat.
+* `DisneyMaterial` - A `Material` that represents a Disney material.
+* `GlassMaterial` - A `Material` that represents glass.
+* `HairMaterial` - A `Material` that represents hair.
+* `MatteMaterial` - A `Material` that is used for matte surfaces.
+* `MeasuredMetalMaterial` - A `Material` that represents metal.
+* `MirrorMaterial` - A `Material` that represents a mirror.
+* `PlasticMaterial` - A `Material` that represents plastic.
+* `SubstrateMaterial` - A `Material` that represents a substrate material.
+* `UberMaterial` - A `Material` that can represent a wide variety of materials.
 
 #### The Scene Material Rayito API
 * `GlassRayitoMaterial` - A `Material` that represents glass.
@@ -66,12 +67,11 @@ Packages
 --------
 * `org.dayflower.scene` - The Scene API.
 * `org.dayflower.scene.bssrdf` - The Scene BSSRDF API.
-* `org.dayflower.scene.bxdf.pbrt` - The Scene BXDF PBRT API.
-* `org.dayflower.scene.bxdf.rayito` - The Scene BXDF Rayito API.
+* `org.dayflower.scene.bxdf` - The Scene BXDF API.
 * `org.dayflower.scene.fresnel` - The Scene Fresnel API.
 * `org.dayflower.scene.light` - The Scene Light API.
 * `org.dayflower.scene.loader` - The Scene Loader API.
-* `org.dayflower.scene.material.pbrt` - The Scene Material PBRT API.
+* `org.dayflower.scene.material` - The Scene Material API.
 * `org.dayflower.scene.material.rayito` - The Scene Material Rayito API.
 * `org.dayflower.scene.material.smallpt` - The Scene Material SmallPT API.
 * `org.dayflower.scene.microfacet` - The Scene Microfacet API.
@@ -82,30 +82,37 @@ Examples
 --------
 Below follows a few examples that demonstrates various features.
 
-#### Disney PBRT Material Example
-The following example demonstrates how the `DisneyPBRTMaterial` can be created and looks visually.
+#### Clear Coat Material Example
+The following example demonstrates how the `ClearCoatMaterial` can be created and looks visually.
 ```java
-new DisneyPBRTMaterial(new Color3F(255, 127, 80), Color3F.BLACK, Color3F.BLACK, 0.4F, 1.75F, 1.0F, 1.0F, 1.2F, 0.0F, 0.39F, 0.475F, 0.1F, 0.5F, 0.5F, 0.0F);
+new ClearCoatMaterial(new Color3F(0.5F, 0.01F, 0.01F));
 ```
-![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/DisneyPBRTMaterial.png "DisneyPBRTMaterial")
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/ClearCoatMaterial.png "ClearCoatMaterial")
 
-#### Metal PBRT Material Example
-The following example demonstrates how the `MetalPBRTMaterial` can be created and looks visually.
+#### Disney Material Example
+The following example demonstrates how the `DisneyMaterial` can be created and looks visually.
 ```java
-new MetalPBRTMaterial();
+new DisneyMaterial(new Color3F(255, 127, 80), Color3F.BLACK, Color3F.BLACK, 0.4F, 1.75F, 1.0F, 1.0F, 1.2F, 0.0F, 0.39F, 0.475F, 0.1F, 0.5F, 0.5F, 0.0F);
 ```
-![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MetalPBRTMaterial.png "MetalPBRTMaterial")
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/DisneyMaterial.png "DisneyMaterial")
 
-#### Plastic PBRT Material Example
-The following example demonstrates how the `PlasticPBRTMaterial` can be created and looks visually.
+#### Measured Metal Material Example
+The following example demonstrates how the `MeasuredMetalMaterial` can be created and looks visually.
 ```java
-new PlasticPBRTMaterial(new Color3F(0.2F, 0.2F, 1.0F), Color3F.GRAY_0_50, Color3F.BLACK, 0.01F);
+new MeasuredMetalMaterial();
 ```
-![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/PlasticPBRTMaterial.png "PlasticPBRTMaterial")
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MeasuredMetalMaterial.png "MeasuredMetalMaterial")
 
-#### Substrate PBRT Material Example
-The following example demonstrates how the `SubstratePBRTMaterial` can be created and looks visually.
+#### Plastic Material Example
+The following example demonstrates how the `PlasticMaterial` can be created and looks visually.
 ```java
-new SubstratePBRTMaterial(new Color3F(1.0F, 0.2F, 0.2F));
+new PlasticMaterial(new Color3F(0.2F, 0.2F, 1.0F), Color3F.GRAY_0_50, Color3F.BLACK, 0.01F);
 ```
-![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SubstratePBRTMaterial.png "SubstratePBRTMaterial")
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/PlasticMaterial.png "PlasticMaterial")
+
+#### Substrate Material Example
+The following example demonstrates how the `SubstrateMaterial` can be created and looks visually.
+```java
+new SubstrateMaterial(new Color3F(1.0F, 0.2F, 0.2F));
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/SubstrateMaterial.png "SubstrateMaterial")

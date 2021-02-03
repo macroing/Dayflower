@@ -21,7 +21,10 @@ package org.dayflower.scene.fresnel;
 import static org.dayflower.utility.Doubles.lerp;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Floats.lerp;
+import static org.dayflower.utility.Floats.pow5;
 import static org.dayflower.utility.Floats.saturate;
+
+import org.dayflower.color.Color3F;
 
 /**
  * A class that consists exclusively of static methods that performs Fresnel operations based on Schlicks approximation.
@@ -35,6 +38,20 @@ public final class Schlick {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the dielectric Fresnel reflectance based on Schlicks approximation.
+	 * <p>
+	 * If {@code r0} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param cosTheta the cosine of the angle theta
+	 * @param r0 the reflectance at grazing angle
+	 * @return the dielectric Fresnel reflectance based on Schlicks approximation
+	 * @throws NullPointerException thrown if, and only if, {@code r0} is {@code null}
+	 */
+	public static Color3F fresnelDielectric(final float cosTheta, final Color3F r0) {
+		return Color3F.add(r0, Color3F.multiply(Color3F.subtract(Color3F.WHITE, r0), pow5(1.0F - cosTheta)));
+	}
 	
 	/**
 	 * Returns the dielectric Fresnel reflectance based on Schlicks approximation.

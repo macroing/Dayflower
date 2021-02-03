@@ -806,6 +806,41 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns {@code base} raised to the power of {@code 5.0F}.
+	 * <p>
+	 * This method should be faster than {@link #pow(float, float)}.
+	 * 
+	 * @param base the base
+	 * @return {@code base} raised to the power of {@code 5.0F}
+	 */
+	public static float pow5(final float base) {
+		return (base * base) * (base * base) * base;
+	}
+	
+	/**
+	 * Returns {@code base} raised to the power of {@code exponent}.
+	 * <p>
+	 * This method is recursive and uses a divide and conquer approach.
+	 * 
+	 * @param base the base
+	 * @param exponent the exponent
+	 * @return {@code base} raised to the power of {@code exponent}
+	 */
+	public static float powR(final float base, final int exponent) {
+		switch(exponent) {
+			case 0:
+				return 1.0F;
+			case 1:
+				return base;
+			default:
+				final float a = powR(base, exponent / 2);
+				final float b = powR(base, exponent & 1);
+				
+				return a * a * b;
+		}
+	}
+	
+	/**
 	 * Returns a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive).
 	 * 
 	 * @return a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive)

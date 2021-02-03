@@ -24,6 +24,7 @@ import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.pow5;
 import static org.dayflower.utility.Floats.random;
 
 import java.util.List;
@@ -37,6 +38,7 @@ import org.dayflower.geometry.Vector3F;
 import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
+import org.dayflower.scene.fresnel.Schlick;
 import org.dayflower.scene.microfacet.MicrofacetDistribution;
 import org.dayflower.utility.ParameterArguments;
 
@@ -201,15 +203,15 @@ public final class FresnelBlendBRDF extends BXDF {
 		final Vector3F nNormalized = Vector3F.normalize(n);
 		
 		final float a = 28.0F / (23.0F * PI);
-		final float b = 1.0F - doPow5(1.0F - 0.5F * incoming.cosThetaAbs());
-		final float c = 1.0F - doPow5(1.0F - 0.5F * outgoing.cosThetaAbs());
+		final float b = 1.0F - pow5(1.0F - 0.5F * incoming.cosThetaAbs());
+		final float c = 1.0F - pow5(1.0F - 0.5F * outgoing.cosThetaAbs());
 		final float d = this.microfacetDistribution.computeDifferentialArea(nNormalized);
 		final float e = 4.0F * abs(Vector3F.dotProduct(incoming, nNormalized)) * max(incoming.cosThetaAbs(), outgoing.cosThetaAbs());
 		final float f = d / e;
 		
 		final Color3F reflectanceScaleDiffuse = this.reflectanceScaleDiffuse;
 		final Color3F reflectanceScaleSpecular = this.reflectanceScaleSpecular;
-		final Color3F fresnel = doFresnelDielectricSchlick(reflectanceScaleSpecular, Vector3F.dotProduct(incoming, nNormalized));
+		final Color3F fresnel = Schlick.fresnelDielectric(Vector3F.dotProduct(incoming, nNormalized), reflectanceScaleSpecular);
 		final Color3F colorDiffuse = Color3F.multiply(Color3F.multiply(Color3F.multiply(Color3F.multiply(reflectanceScaleDiffuse, a), Color3F.subtract(Color3F.WHITE, reflectanceScaleSpecular)), b), c);
 		final Color3F colorSpecular = Color3F.multiply(fresnel, f);
 		
@@ -342,15 +344,5 @@ public final class FresnelBlendBRDF extends BXDF {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.reflectanceScaleDiffuse, this.reflectanceScaleSpecular, this.microfacetDistribution);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Color3F doFresnelDielectricSchlick(final Color3F f0, final float cosTheta) {
-		return Color3F.add(f0, Color3F.multiply(Color3F.subtract(Color3F.WHITE, f0), doPow5(1.0F - cosTheta)));
-	}
-	
-	private static float doPow5(final float value) {
-		return (value * value) * (value * value) * value;
 	}
 }

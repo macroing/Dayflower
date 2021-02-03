@@ -27,6 +27,7 @@ import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.exp;
 import static org.dayflower.utility.Floats.log;
 import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.powR;
 import static org.dayflower.utility.Floats.random;
 import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Floats.sin;
@@ -95,11 +96,11 @@ public final class HairBXDF extends BXDF {
 		this.eta = eta;
 		this.gammaOutgoing = asin(saturate(h, -1.0F, 1.0F));
 		this.h = h;
-		this.s = 0.626657069F * (0.265F * betaN + 1.194F * (betaN * betaN) + 5.372F * doPow(betaN, 22));
+		this.s = 0.626657069F * (0.265F * betaN + 1.194F * (betaN * betaN) + 5.372F * powR(betaN, 22));
 		this.cos2KAlpha = new float[3];
 		this.sin2KAlpha = new float[3];
 		this.v = new float[4];
-		this.v[0] = (0.726F * betaM + 0.812F * (betaM * betaM) + 3.7F * doPow(betaM, 20)) * (0.726F * betaM + 0.812F * (betaM * betaM) + 3.7F * doPow(betaM, 20));
+		this.v[0] = (0.726F * betaM + 0.812F * (betaM * betaM) + 3.7F * powR(betaM, 20)) * (0.726F * betaM + 0.812F * (betaM * betaM) + 3.7F * powR(betaM, 20));
 		this.v[1] = 0.25F * this.v[0];
 		this.v[2] = 4.0F * this.v[0];
 		this.v[3] = this.v[2];
@@ -590,7 +591,7 @@ public final class HairBXDF extends BXDF {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3F computeSigmaAFromReflectance(final Color3F color, final float betaN) {
-		final float constant = (5.969F - 0.215F * betaN + 2.532F * (betaN * betaN) - 10.73F * doPow(betaN, 3) + 5.574F * doPow(betaN, 4) + 0.245F * doPow(betaN, 5));
+		final float constant = (5.969F - 0.215F * betaN + 2.532F * (betaN * betaN) - 10.73F * powR(betaN, 3) + 5.574F * powR(betaN, 4) + 0.245F * powR(betaN, 5));
 		
 		final float component1 = log(color.getComponent1()) / constant;
 		final float component2 = log(color.getComponent2()) / constant;
@@ -669,7 +670,7 @@ public final class HairBXDF extends BXDF {
 	private static float doLogistic(final float a, final float b) {
 		final float c = abs(a);
 		final float d = exp(-c / b);
-		final float e = 1.0F + exp(-c / b);
+		final float e = 1.0F + d;
 		
 		return d / (b * (e * e));
 	}
@@ -712,18 +713,6 @@ public final class HairBXDF extends BXDF {
 		}
 		
 		return doLogisticTrimmed(deltaPhi, s, -PI, PI);
-	}
-	
-	private static float doPow(final float value, final int exponent) {
-		if(exponent == 0) {
-			return 1.0F;
-		} else if(exponent == 1) {
-			return value;
-		} else {
-			final float n2 = doPow(value, exponent / 2);
-			
-			return n2 * n2 * doPow(value, exponent & 1);
-		}
 	}
 	
 	private static float[] doComputeAPProbabilityDensityFunctionValues(final Color3F sigmaA, final float cosThetaOutgoing, final float eta, final float h) {

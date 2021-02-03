@@ -806,6 +806,41 @@ public class Doubles {
 	}
 	
 	/**
+	 * Returns {@code base} raised to the power of {@code 5.0D}.
+	 * <p>
+	 * This method should be faster than {@link #pow(double, double)}.
+	 * 
+	 * @param base the base
+	 * @return {@code base} raised to the power of {@code 5.0D}
+	 */
+	public static double pow5(final double base) {
+		return (base * base) * (base * base) * base;
+	}
+	
+	/**
+	 * Returns {@code base} raised to the power of {@code exponent}.
+	 * <p>
+	 * This method is recursive and uses a divide and conquer approach.
+	 * 
+	 * @param base the base
+	 * @param exponent the exponent
+	 * @return {@code base} raised to the power of {@code exponent}
+	 */
+	public static double powR(final double base, final int exponent) {
+		switch(exponent) {
+			case 0:
+				return 1.0D;
+			case 1:
+				return base;
+			default:
+				final double a = powR(base, exponent / 2);
+				final double b = powR(base, exponent & 1);
+				
+				return a * a * b;
+		}
+	}
+	
+	/**
 	 * Returns a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code 1.0D} (exclusive).
 	 * 
 	 * @return a pseudorandom {@code double} value between {@code 0.0D} (inclusive) and {@code 1.0D} (exclusive)

@@ -48,6 +48,7 @@ import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.fresnel.DielectricFresnel;
+import org.dayflower.utility.MortonCodes;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -617,13 +618,13 @@ public final class HairBXDF extends BXDF {
 	}
 	
 	private static Point2F doDemuxFloat(final float value) {
-		final long a = (int)(value * (1L << 32));
+		final int mortonCode = (int)(value * (1L << 32L));
 		
-		final int b = doCompact1By1((int)(a));
-		final int c = doCompact1By1((int)(a >> 1));
+		final int mortonCodeX = MortonCodes.decode1By1X(mortonCode);
+		final int mortonCodeY = MortonCodes.decode1By1Y(mortonCode);
 		
-		final float x = b / (float)(1 << 16);
-		final float y = c / (float)(1 << 16);
+		final float x = mortonCodeX / (float)(1 << 16);
+		final float y = mortonCodeY / (float)(1 << 16);
 		
 		return new Point2F(x, y);
 	}
@@ -668,11 +669,10 @@ public final class HairBXDF extends BXDF {
 	}
 	
 	private static float doLogistic(final float a, final float b) {
-		final float c = abs(a);
-		final float d = exp(-c / b);
-		final float e = 1.0F + d;
+		final float c = exp(-abs(a) / b);
+		final float d = 1.0F + c;
 		
-		return d / (b * (e * e));
+		return c / (b * (d * d));
 	}
 	
 	private static float doLogisticCDF(final float a, final float b) {
@@ -739,15 +739,5 @@ public final class HairBXDF extends BXDF {
 		}
 		
 		return probabilityDensityFunctionValues;
-	}
-	
-	private static int doCompact1By1(final int x) {
-		final int a = x & 0x55555555;
-		final int b = (a ^ (a >> 1)) & 0x33333333;
-		final int c = (b ^ (b >> 2)) & 0x0F0F0F0F;
-		final int d = (c ^ (c >> 4)) & 0x00FF00FF;
-		final int e = (d ^ (d >> 8)) & 0x0000FFFF;
-		
-		return e;
 	}
 }

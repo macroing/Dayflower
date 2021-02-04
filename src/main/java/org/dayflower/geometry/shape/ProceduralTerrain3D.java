@@ -20,7 +20,6 @@ package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Doubles.isNaN;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.DoubleBinaryOperator;
@@ -115,7 +114,6 @@ public final class ProceduralTerrain3D implements Shape3D {
 			final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(doCalculateSurfaceNormalG(surfaceIntersectionPoint));
 			final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 			
-//			TODO: Implement!
 			final Vector3D surfaceIntersectionPointError = new Vector3D();
 			
 			return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));

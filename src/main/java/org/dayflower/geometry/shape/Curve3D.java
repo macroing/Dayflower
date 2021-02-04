@@ -1201,19 +1201,19 @@ public final class Curve3D implements Shape3D {
 	private static OrthonormalBasis33D doComputeOrthonormalBasisG(final Data data, final Matrix44D objectToRay, final Matrix44D rayToObject, final double hitWidth, final double u, final double v) {
 		switch(data.getType()) {
 			case CYLINDER: {
-				final Vector3D directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
-				final Vector3D directionUPlane = Vector3D.transform(objectToRay, directionU);
-				final Vector3D directionVPlane = Vector3D.transform(Matrix44D.rotate(AngleD.degrees(-lerp(-90.0D, 90.0D, v), -90.0D, 90.0D), directionUPlane), Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.getY(), directionUPlane.getX(), 0.0D)), hitWidth));
-				final Vector3D directionV = Vector3D.transform(rayToObject, directionVPlane);
+				final Vector3D directionU = Vector3D.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
+				final Vector3D directionUPlane = Vector3D.normalize(Vector3D.transform(objectToRay, directionU));
+				final Vector3D directionVPlane = Vector3D.normalize(Vector3D.transform(Matrix44D.rotate(AngleD.degrees(-lerp(-90.0D, 90.0D, v), -90.0D, 90.0D), directionUPlane), Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.getY(), directionUPlane.getX(), 0.0D)), hitWidth)));
+				final Vector3D directionV = Vector3D.normalize(Vector3D.transform(rayToObject, directionVPlane));
 				final Vector3D directionW = Vector3D.normalize(Vector3D.crossProduct(directionU, directionV));
 				
 				return new OrthonormalBasis33D(directionW, directionV, directionU);
 			}
 			case FLAT: {
-				final Vector3D directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
-				final Vector3D directionUPlane = Vector3D.transform(objectToRay, directionU);
-				final Vector3D directionVPlane = Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.getY(), directionUPlane.getX(), 0.0D)), hitWidth);
-				final Vector3D directionV = Vector3D.transform(rayToObject, directionVPlane);
+				final Vector3D directionU = Vector3D.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
+				final Vector3D directionUPlane = Vector3D.normalize(Vector3D.transform(objectToRay, directionU));
+				final Vector3D directionVPlane = Vector3D.normalize(Vector3D.multiply(Vector3D.normalize(new Vector3D(-directionUPlane.getY(), directionUPlane.getX(), 0.0D)), hitWidth));
+				final Vector3D directionV = Vector3D.normalize(Vector3D.transform(rayToObject, directionVPlane));
 				final Vector3D directionW = Vector3D.normalize(Vector3D.crossProduct(directionU, directionV));
 				
 				return new OrthonormalBasis33D(directionW, directionV, directionU);
@@ -1222,10 +1222,10 @@ public final class Curve3D implements Shape3D {
 				final double sinA = sin((1.0D - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
 				final double sinB = sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
 				
-				final Vector3D normal = Vector3D.add(Vector3D.multiply(data.getNormalA(), sinA), Vector3D.multiply(data.getNormalB(), sinB));
+				final Vector3D normal = Vector3D.normalize(Vector3D.add(Vector3D.multiply(data.getNormalA(), sinA), Vector3D.multiply(data.getNormalB(), sinB)));
 				
-				final Vector3D directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
-				final Vector3D directionV = Vector3D.multiply(Vector3D.normalize(Vector3D.crossProduct(normal, directionU)), hitWidth);
+				final Vector3D directionU = Vector3D.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
+				final Vector3D directionV = Vector3D.normalize(Vector3D.multiply(Vector3D.normalize(Vector3D.crossProduct(normal, directionU)), hitWidth));
 				final Vector3D directionW = Vector3D.normalize(Vector3D.crossProduct(directionU, directionV));
 				
 				return new OrthonormalBasis33D(directionW, directionV, directionU);
@@ -1320,6 +1320,6 @@ public final class Curve3D implements Shape3D {
 		
 		final int bits = Float.floatToIntBits((float)(value));
 		
-		return (bits >> 23) - 127 + ((bits & (1 << 22)) != 0 ? 1 : 0);
+		return (bits >>> 23) - 127 + ((bits & (1 << 22)) != 0 ? 1 : 0);
 	}
 }

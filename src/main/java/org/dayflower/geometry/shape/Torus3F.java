@@ -31,7 +31,6 @@ import static org.dayflower.utility.Floats.getOrAdd;
 import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Floats.toFloat;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -186,7 +185,6 @@ public final class Torus3F implements Shape3F {
 				final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(doCreateSurfaceNormalG(surfaceIntersectionPoint, this.radiusInnerSquared, this.radiusOuterSquared));
 				final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 				
-//				TODO: Implement!
 				final Vector3F surfaceIntersectionPointError = new Vector3F();
 				
 				return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));

@@ -22,7 +22,6 @@ import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.minOrNaN;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -62,7 +61,16 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code ConstructiveSolidGeometry3F} instance.
+	 * <p>
+	 * If either {@code operation}, {@code shapeL} or {@code shapeR} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param operation the {@link Operation} instance associated with this {@code ConstructiveSolidGeometry3F} instance
+	 * @param shapeL the {@link Shape3F} instance associated with the left-hand side of this {@code ConstructiveSolidGeometry3F} instance
+	 * @param shapeR the {@link Shape3F} instance associated with the right-hand side of this {@code ConstructiveSolidGeometry3F} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code operation}, {@code shapeL} or {@code shapeR} are {@code null}
+	 */
 	public ConstructiveSolidGeometry3F(final Operation operation, final Shape3F shapeL, final Shape3F shapeR) {
 		this.operation = Objects.requireNonNull(operation, "operation == null");
 		this.shapeL = Objects.requireNonNull(shapeL, "shapeL == null");
@@ -385,15 +393,26 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code Operation} represents an operation that can be performed on a {@link ConstructiveSolidGeometry3F} instance.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
 	public static enum Operation {
-//		TODO: Add Javadocs!
+		/**
+		 * An {@code Operation} instance that represents a difference operation.
+		 */
 		DIFFERENCE,
 		
-//		TODO: Add Javadocs!
+		/**
+		 * An {@code Operation} instance that represents an intersection operation.
+		 */
 		INTERSECTION,
 		
-//		TODO: Add Javadocs!
+		/**
+		 * An {@code Operation} instance that represents a union operation.
+		 */
 		UNION;
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////

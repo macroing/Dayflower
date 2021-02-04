@@ -1201,19 +1201,19 @@ public final class Curve3F implements Shape3F {
 	private static OrthonormalBasis33F doComputeOrthonormalBasisG(final Data data, final Matrix44F objectToRay, final Matrix44F rayToObject, final float hitWidth, final float u, final float v) {
 		switch(data.getType()) {
 			case CYLINDER: {
-				final Vector3F directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
-				final Vector3F directionUPlane = Vector3F.transform(objectToRay, directionU);
-				final Vector3F directionVPlane = Vector3F.transform(Matrix44F.rotate(AngleF.degrees(-lerp(-90.0F, 90.0F, v), -90.0F, 90.0F), directionUPlane), Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth));
-				final Vector3F directionV = Vector3F.transform(rayToObject, directionVPlane);
+				final Vector3F directionU = Vector3F.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
+				final Vector3F directionUPlane = Vector3F.normalize(Vector3F.transform(objectToRay, directionU));
+				final Vector3F directionVPlane = Vector3F.normalize(Vector3F.transform(Matrix44F.rotate(AngleF.degrees(-lerp(-90.0F, 90.0F, v), -90.0F, 90.0F), directionUPlane), Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth)));
+				final Vector3F directionV = Vector3F.normalize(Vector3F.transform(rayToObject, directionVPlane));
 				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
 				
 				return new OrthonormalBasis33F(directionW, directionV, directionU);
 			}
 			case FLAT: {
-				final Vector3F directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
-				final Vector3F directionUPlane = Vector3F.transform(objectToRay, directionU);
-				final Vector3F directionVPlane = Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth);
-				final Vector3F directionV = Vector3F.transform(rayToObject, directionVPlane);
+				final Vector3F directionU = Vector3F.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
+				final Vector3F directionUPlane = Vector3F.normalize(Vector3F.transform(objectToRay, directionU));
+				final Vector3F directionVPlane = Vector3F.normalize(Vector3F.multiply(Vector3F.normalize(new Vector3F(-directionUPlane.getY(), directionUPlane.getX(), 0.0F)), hitWidth));
+				final Vector3F directionV = Vector3F.normalize(Vector3F.transform(rayToObject, directionVPlane));
 				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
 				
 				return new OrthonormalBasis33F(directionW, directionV, directionU);
@@ -1222,10 +1222,10 @@ public final class Curve3F implements Shape3F {
 				final float sinA = sin((1.0F - u) * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
 				final float sinB = sin(u * data.getNormalAngle()) * data.getNormalAngleSinReciprocal();
 				
-				final Vector3F normal = Vector3F.add(Vector3F.multiply(data.getNormalA(), sinA), Vector3F.multiply(data.getNormalB(), sinB));
+				final Vector3F normal = Vector3F.normalize(Vector3F.add(Vector3F.multiply(data.getNormalA(), sinA), Vector3F.multiply(data.getNormalB(), sinB)));
 				
-				final Vector3F directionU = doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u);
-				final Vector3F directionV = Vector3F.multiply(Vector3F.normalize(Vector3F.crossProduct(normal, directionU)), hitWidth);
+				final Vector3F directionU = Vector3F.normalize(doBezierEvaluateDerivative(data.getPointA(), data.getPointB(), data.getPointC(), data.getPointD(), u));
+				final Vector3F directionV = Vector3F.normalize(Vector3F.multiply(Vector3F.normalize(Vector3F.crossProduct(normal, directionU)), hitWidth));
 				final Vector3F directionW = Vector3F.normalize(Vector3F.crossProduct(directionU, directionV));
 				
 				return new OrthonormalBasis33F(directionW, directionV, directionU);
@@ -1320,6 +1320,6 @@ public final class Curve3F implements Shape3F {
 		
 		final int bits = Float.floatToIntBits(value);
 		
-		return (bits >> 23) - 127 + ((bits & (1 << 22)) != 0 ? 1 : 0);
+		return (bits >>> 23) - 127 + ((bits & (1 << 22)) != 0 ? 1 : 0);
 	}
 }

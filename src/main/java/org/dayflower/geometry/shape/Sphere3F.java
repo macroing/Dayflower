@@ -31,7 +31,6 @@ import static org.dayflower.utility.Floats.pow;
 import static org.dayflower.utility.Floats.solveQuadraticSystem;
 import static org.dayflower.utility.Floats.sqrt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 

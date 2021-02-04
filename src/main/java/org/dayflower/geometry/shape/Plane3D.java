@@ -21,7 +21,6 @@ package org.dayflower.geometry.shape;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.isZero;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -200,7 +199,6 @@ public final class Plane3D implements Shape3D {
 		
 		final Point2D textureCoordinates = new Point2D(u, v);
 		
-//		TODO: Implement!
 		final Vector3D surfaceIntersectionPointError = new Vector3D();
 		
 		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));

@@ -22,7 +22,6 @@ import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.gamma;
 import static org.dayflower.utility.Floats.isZero;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -178,7 +177,6 @@ public final class Triangle3F implements Shape3F {
 	public Optional<SurfaceSample3F> sample(final Point2F sample) {
 		Objects.requireNonNull(sample, "sample == null");
 		
-//		TODO: Find out if the Barycentric coordinates has to follow the same pattern as in the intersection operation, which is W, U and V.
 		final Point3F barycentricCoordinates = SampleGeneratorF.sampleTriangleUniformDistribution(sample.getU(), sample.getV());
 		
 		final Point4F positionA = this.a.getPosition();

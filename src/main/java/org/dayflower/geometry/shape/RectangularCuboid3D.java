@@ -23,7 +23,6 @@ import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.normalize;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -167,7 +166,6 @@ public final class RectangularCuboid3D implements Shape3D {
 		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(doCalculateSurfaceNormalG(face));
 		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 		
-//		TODO: Implement!
 		final Vector3D surfaceIntersectionPointError = new Vector3D();
 		
 		return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));

@@ -30,7 +30,6 @@ import static org.dayflower.utility.Doubles.getOrAdd;
 import static org.dayflower.utility.Doubles.saturate;
 import static org.dayflower.utility.Doubles.solveQuartic;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -185,7 +184,6 @@ public final class Torus3D implements Shape3D {
 				final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(doCreateSurfaceNormalG(surfaceIntersectionPoint, this.radiusInnerSquared, this.radiusOuterSquared));
 				final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 				
-//				TODO: Implement!
 				final Vector3D surfaceIntersectionPointError = new Vector3D();
 				
 				return Optional.of(new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));

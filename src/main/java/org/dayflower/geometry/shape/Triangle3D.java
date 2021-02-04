@@ -22,7 +22,6 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.gamma;
 import static org.dayflower.utility.Doubles.isZero;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -178,7 +177,6 @@ public final class Triangle3D implements Shape3D {
 	public Optional<SurfaceSample3D> sample(final Point2D sample) {
 		Objects.requireNonNull(sample, "sample == null");
 		
-//		TODO: Find out if the Barycentric coordinates has to follow the same pattern as in the intersection operation, which is W, U and V.
 		final Point3D barycentricCoordinates = SampleGeneratorD.sampleTriangleUniformDistribution(sample.getU(), sample.getV());
 		
 		final Point4D positionA = this.a.getPosition();

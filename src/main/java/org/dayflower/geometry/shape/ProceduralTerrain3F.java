@@ -20,7 +20,6 @@ package org.dayflower.geometry.shape;
 
 import static org.dayflower.utility.Floats.isNaN;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -115,7 +114,6 @@ public final class ProceduralTerrain3F implements Shape3F {
 			final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(doCalculateSurfaceNormalG(surfaceIntersectionPoint));
 			final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 			
-//			TODO: Implement!
 			final Vector3F surfaceIntersectionPointError = new Vector3F();
 			
 			return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));

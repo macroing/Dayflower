@@ -21,7 +21,6 @@ package org.dayflower.geometry.shape;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.isZero;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -200,7 +199,6 @@ public final class Plane3F implements Shape3F {
 		
 		final Point2F textureCoordinates = new Point2F(u, v);
 		
-//		TODO: Implement!
 		final Vector3F surfaceIntersectionPointError = new Vector3F();
 		
 		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));

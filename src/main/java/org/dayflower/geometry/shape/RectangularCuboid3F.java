@@ -23,7 +23,6 @@ import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.normalize;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -167,7 +166,6 @@ public final class RectangularCuboid3F implements Shape3F {
 		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(doCalculateSurfaceNormalG(face));
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
-//		TODO: Implement!
 		final Vector3F surfaceIntersectionPointError = new Vector3F();
 		
 		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));

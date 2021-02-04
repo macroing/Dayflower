@@ -20,6 +20,7 @@ package org.dayflower.scene.light;
 
 import org.dayflower.geometry.Point3F;
 import org.dayflower.sampler.Distribution1F;
+import org.dayflower.scene.Light;
 
 /**
  * A {@code LightDistribution} can be used when sampling {@link Light} instances using probability distributions.

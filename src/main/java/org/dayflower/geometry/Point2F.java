@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import org.dayflower.node.Node;
 import org.dayflower.utility.Floats;
+import org.dayflower.utility.MortonCodes;
 
 /**
  * A {@code Point2F} denotes a 2-dimensional point with two coordinates, of type {@code float}.
@@ -222,6 +223,32 @@ public final class Point2F implements Node {
 		final float v = textureCoordinatesA.getV() * barycentricCoordinates.getU() + textureCoordinatesB.getV() * barycentricCoordinates.getV() + textureCoordinatesC.getV() * barycentricCoordinates.getW();
 		
 		return new Point2F(u, v);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance based on the decoded coordinates of the Morton code {@code mortonCode}.
+	 * 
+	 * @param mortonCode the Morton code to decode
+	 * @return a new {@code Point2F} instance based on the decoded coordinates of the Morton code {@code mortonCode}
+	 */
+	public static Point2F decodeMortonCode1By1(final float mortonCode) {
+		return decodeMortonCode1By1((int)(mortonCode * (1L << 32L)));
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance based on the decoded coordinates of the Morton code {@code mortonCode}.
+	 * 
+	 * @param mortonCode the Morton code to decode
+	 * @return a new {@code Point2F} instance based on the decoded coordinates of the Morton code {@code mortonCode}
+	 */
+	public static Point2F decodeMortonCode1By1(final int mortonCode) {
+		final int mortonCodeX = MortonCodes.decode1By1X(mortonCode);
+		final int mortonCodeY = MortonCodes.decode1By1Y(mortonCode);
+		
+		final float x = mortonCodeX / (float)(1 << 16);
+		final float y = mortonCodeY / (float)(1 << 16);
+		
+		return new Point2F(x, y);
 	}
 	
 	/**

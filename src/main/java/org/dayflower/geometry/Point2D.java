@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import org.dayflower.node.Node;
 import org.dayflower.utility.Doubles;
+import org.dayflower.utility.MortonCodes;
 
 /**
  * A {@code Point2D} denotes a 2-dimensional point with two coordinates, of type {@code double}.
@@ -222,6 +223,32 @@ public final class Point2D implements Node {
 		final double v = textureCoordinatesA.getV() * barycentricCoordinates.getU() + textureCoordinatesB.getV() * barycentricCoordinates.getV() + textureCoordinatesC.getV() * barycentricCoordinates.getW();
 		
 		return new Point2D(u, v);
+	}
+	
+	/**
+	 * Returns a new {@code Point2D} instance based on the decoded coordinates of the Morton code {@code mortonCode}.
+	 * 
+	 * @param mortonCode the Morton code to decode
+	 * @return a new {@code Point2D} instance based on the decoded coordinates of the Morton code {@code mortonCode}
+	 */
+	public static Point2D decodeMortonCode1By1(final double mortonCode) {
+		return decodeMortonCode1By1((int)(mortonCode * (1L << 32L)));
+	}
+	
+	/**
+	 * Returns a new {@code Point2D} instance based on the decoded coordinates of the Morton code {@code mortonCode}.
+	 * 
+	 * @param mortonCode the Morton code to decode
+	 * @return a new {@code Point2D} instance based on the decoded coordinates of the Morton code {@code mortonCode}
+	 */
+	public static Point2D decodeMortonCode1By1(final int mortonCode) {
+		final int mortonCodeX = MortonCodes.decode1By1X(mortonCode);
+		final int mortonCodeY = MortonCodes.decode1By1Y(mortonCode);
+		
+		final double x = mortonCodeX / (double)(1 << 16);
+		final double y = mortonCodeY / (double)(1 << 16);
+		
+		return new Point2D(x, y);
 	}
 	
 	/**

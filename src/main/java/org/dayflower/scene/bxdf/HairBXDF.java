@@ -48,7 +48,6 @@ import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.fresnel.DielectricFresnel;
-import org.dayflower.utility.MortonCodes;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -320,7 +319,7 @@ public final class HairBXDF extends BXDF {
 		final float cosThetaOutgoing = sqrt(max(0.0F, 1.0F - sinThetaOutgoing * sinThetaOutgoing));
 		final float phiOutgoing = atan2(outgoing.getZ(), outgoing.getY());
 		
-		final Point2F[] samples = new Point2F[] {doDemuxFloat(sample.getU()), doDemuxFloat(sample.getV())};
+		final Point2F[] samples = new Point2F[] {Point2F.decodeMortonCode1By1(sample.getU()), Point2F.decodeMortonCode1By1(sample.getV())};
 		
 		final float[] probabilityDensityFunctionValues = doComputeAPProbabilityDensityFunctionValues(this.sigmaA, cosThetaOutgoing, this.eta, this.h);
 		
@@ -615,17 +614,6 @@ public final class HairBXDF extends BXDF {
 		final Color3F color3 = Color3F.divide(Color3F.multiply(Color3F.multiply(color2, color0), transmittance), Color3F.subtract(Color3F.WHITE, Color3F.multiply(transmittance, color0)));
 		
 		return new Color3F[] {color0, color1, color2, color3};
-	}
-	
-	private static Point2F doDemuxFloat(final float value) {
-		final int mortonCode = (int)(value * (1L << 32L));
-		final int mortonCodeX = MortonCodes.decode1By1X(mortonCode);
-		final int mortonCodeY = MortonCodes.decode1By1Y(mortonCode);
-		
-		final float x = mortonCodeX / (float)(1 << 16);
-		final float y = mortonCodeY / (float)(1 << 16);
-		
-		return new Point2F(x, y);
 	}
 	
 	private static float doComputePhi(final float gammaOutgoing, final float gammaTransmission, final int p) {

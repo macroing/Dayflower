@@ -15,8 +15,9 @@
 	<property name="project.directory.distribution" location="${project.directory.root}/distribution"/>
 	<property name="project.directory.distribution.current" location="${project.directory.distribution}/${project.name}"/>
 	<property name="project.directory.library" location="lib"/>
-	<property name="project.directory.resources" location="src/main/resources"/>
-	<property name="project.directory.source" location="src/main/java"/>
+	<property name="project.directory.resources" location="resources"/>
+	<property name="project.directory.source.java" location="src/main/java"/>
+	<property name="project.directory.source.resources" location="src/main/resources"/>
 	
 	<target name="clean" description="Deletes generated directories and files for project ${project.name}.">
 		<delete dir="${project.directory.binary}"/>
@@ -27,14 +28,15 @@
 		<!--Initialize all directories.-->
 		<mkdir dir="${project.directory.binary}"/>
 		<mkdir dir="${project.directory.distribution.current}"/>
-		<mkdir dir="${project.directory.source}"/>
+		<mkdir dir="${project.directory.resources}"/>
+		<mkdir dir="${project.directory.source.java}"/>
 		
 		<path id="library.path">
 			<fileset dir="${project.directory.library}" includes="**/*.jar"/>
 		</path>
 		
 		<!--Perform Java compilation.-->
-		<javac classpathref="library.path" debug="true" debuglevel="lines,vars,source" destdir="${project.directory.binary}" encoding="UTF-8" includeAntRuntime="false" source="${java.source}" sourcepath="" srcdir="${project.directory.source}" target="${java.target}">
+		<javac classpathref="library.path" debug="true" debuglevel="lines,vars,source" destdir="${project.directory.binary}" encoding="UTF-8" includeAntRuntime="false" source="${java.source}" sourcepath="" srcdir="${project.directory.source.java}" target="${java.target}">
 			<compilerarg value="-Xlint:all"/>
 			
 			<include name="org/dayflower/**"/>
@@ -61,7 +63,7 @@
 			</manifest>
 			
 			<!--
-			<fileset dir="${project.directory.resources}" excludes="**/.*/**"/>
+			<fileset dir="${project.directory.source.resources}" excludes="**/.*/**"/>
 			-->
 		</jar>
 		
@@ -72,7 +74,7 @@
 				<pathelement location="${project.directory.binary}"/>
 			</classpath>
 			
-			<fileset defaultexcludes="yes" dir="${project.directory.source}">
+			<fileset defaultexcludes="yes" dir="${project.directory.source.java}">
 				<include name="org/dayflower/**"/>
 			</fileset>
 		</javadoc>
@@ -84,9 +86,14 @@
 			<fileset dir="." includes="README.md"/>
 		</copy>
 		
+		<!--Copy the resources.-->
+		<copy todir="${project.directory.distribution.current}/resources">
+			<fileset dir="${project.directory.resources}" excludes=""/>
+		</copy>
+		
 		<!--Copy the source code.-->
 		<copy todir="${project.directory.distribution.current}/src">
-			<fileset dir="${project.directory.source}" excludes=""/>
+			<fileset dir="${project.directory.source.java}" excludes=""/>
 		</copy>
 		
 		<!--Zip the source code.-->

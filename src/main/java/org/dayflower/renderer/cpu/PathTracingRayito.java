@@ -89,9 +89,7 @@ final class PathTracingRayito {
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(Vector3F.negate(currentRay.getDirection()))));
 				}
 				
-				if(bSDF.countBXDFsBySpecularType(true) > 0) {
-					currentBounceSpecular++;
-				} else {
+				if(bSDF.countBXDFsBySpecularType(false) > 0) {
 					radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.sampleOneLightUniformDistribution(bSDF, intersection)));
 				}
 				
@@ -107,6 +105,10 @@ final class PathTracingRayito {
 				}
 				
 				final BSDFResult bSDFResult = optionalBSDFResult.get();
+				
+				if(bSDFResult.getBXDFType().isSpecular()) {
+					currentBounceSpecular++;
+				}
 				
 				final Color3F result = bSDFResult.getResult();
 				

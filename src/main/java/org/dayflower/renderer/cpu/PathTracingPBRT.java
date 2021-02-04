@@ -70,97 +70,97 @@ final class PathTracingPBRT {
 		for(int currentBounce = 0; true; currentBounce++) {
 			final Optional<Intersection> optionalIntersection = scene.intersection(currentRay, T_MINIMUM, T_MAXIMUM);
 			
-			final boolean hasFoundIntersection = optionalIntersection.isPresent();
-			
-			if(currentBounce == 0 && !hasFoundIntersection && isPreviewMode) {
-				return Color3F.WHITE;
-			}
-			
-			if(currentBounce == 0 || isSpecularBounce) {
-				if(hasFoundIntersection) {
-					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(Vector3F.negate(currentRay.getDirection()))));
-				} else {
-					for(final Light light : lights) {
-						radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateRadianceEmitted(currentRay)));
-					}
+			if(optionalIntersection.isPresent()) {
+				final Intersection intersection = optionalIntersection.get();
+				
+				final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
+				
+				if(currentBounce == 0 || isSpecularBounce) {
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(outgoing)));
 				}
-			}
-			
-			if(!hasFoundIntersection || currentBounce >= maximumBounce) {
-				break;
-			}
-			
-			final Intersection intersection = optionalIntersection.get();
-			
-			final Primitive primitive = intersection.getPrimitive();
-			
-			final Material material = primitive.getMaterial();
-			
-			final Vector3F surfaceNormalG = intersection.getSurfaceNormalG();
-			final Vector3F surfaceNormalS = intersection.getSurfaceNormalS();
-			
-			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
-			
-			if(!optionalBSDF.isPresent()) {
-				currentRay = intersection.createRay(currentRay.getDirection());
 				
-				currentBounce--;
-				
-				continue;
-			}
-			
-			final BSDF bSDF = optionalBSDF.get();
-			
-			if(bSDF.countBXDFsBySpecularType(false) > 0) {
-				radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.sampleOneLightUniformDistribution(bSDF, intersection)));
-			}
-			
-			final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
-			
-			final Sample2F sample = sampler.sample2();
-			
-			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, surfaceNormalS, new Point2F(sample.getU(), sample.getV()));
-			
-			if(!optionalBSDFResult.isPresent()) {
-				break;
-			}
-			
-			final BSDFResult bSDFResult = optionalBSDFResult.get();
-			
-			final Color3F result = bSDFResult.getResult();
-			
-			final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
-			
-			if(result.isBlack() || isZero(probabilityDensityFunctionValue)) {
-				break;
-			}
-			
-			final Vector3F incoming = bSDFResult.getIncoming();
-			
-			throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result, abs(Vector3F.dotProduct(incoming, surfaceNormalS))), probabilityDensityFunctionValue));
-			
-			final BXDFType bXDFType = bSDFResult.getBXDFType();
-			
-			isSpecularBounce = bXDFType.isSpecular();
-			
-			if(bXDFType.hasTransmission() && bXDFType.isSpecular()) {
-				final float eta = bSDF.getEta();
-				
-				etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalG) > 0.0F ? eta * eta : 1.0F / (eta * eta);
-			}
-			
-			currentRay = intersection.createRay(incoming);
-			
-			final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
-			
-			if(russianRouletteThroughput.maximum() < 1.0F && currentBounce > minimumBounceRussianRoulette) {
-				final float probability = max(0.05F, 1.0F - russianRouletteThroughput.maximum());
-				
-				if(sampler.sample1().getU() < probability) {
+				if(currentBounce >= maximumBounce) {
 					break;
 				}
 				
-				throughput = Color3F.divide(throughput, 1.0F - probability);
+				final Primitive primitive = intersection.getPrimitive();
+				
+				final Material material = primitive.getMaterial();
+				
+				final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
+				
+				if(!optionalBSDF.isPresent()) {
+					currentRay = intersection.createRay(currentRay.getDirection());
+					
+					currentBounce--;
+					
+					continue;
+				}
+				
+				final BSDF bSDF = optionalBSDF.get();
+				
+				if(bSDF.countBXDFsBySpecularType(false) > 0) {
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, scene.sampleOneLightUniformDistribution(bSDF, intersection)));
+				}
+				
+				final Vector3F surfaceNormalG = intersection.getSurfaceNormalG();
+				final Vector3F surfaceNormalS = intersection.getSurfaceNormalS();
+				
+				final Sample2F sample = sampler.sample2();
+				
+				final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, surfaceNormalS, new Point2F(sample.getU(), sample.getV()));
+				
+				if(!optionalBSDFResult.isPresent()) {
+					break;
+				}
+				
+				final BSDFResult bSDFResult = optionalBSDFResult.get();
+				
+				final Color3F result = bSDFResult.getResult();
+				
+				final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
+				
+				if(result.isBlack() || isZero(probabilityDensityFunctionValue)) {
+					break;
+				}
+				
+				final Vector3F incoming = bSDFResult.getIncoming();
+				
+				throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result, abs(Vector3F.dotProduct(incoming, surfaceNormalS))), probabilityDensityFunctionValue));
+				
+				final BXDFType bXDFType = bSDFResult.getBXDFType();
+				
+				isSpecularBounce = bXDFType.isSpecular();
+				
+				if(bXDFType.hasTransmission() && bXDFType.isSpecular()) {
+					etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalG) > 0.0F ? bSDF.getEta() * bSDF.getEta() : 1.0F / (bSDF.getEta() * bSDF.getEta());
+				}
+				
+				currentRay = intersection.createRay(incoming);
+				
+				final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
+				
+				if(russianRouletteThroughput.maximum() < 1.0F && currentBounce > minimumBounceRussianRoulette) {
+					final float probability = max(0.05F, 1.0F - russianRouletteThroughput.maximum());
+					
+					if(sampler.sample1().getU() < probability) {
+						break;
+					}
+					
+					throughput = Color3F.divide(throughput, 1.0F - probability);
+				}
+			} else if(currentBounce == 0 && isPreviewMode) {
+				radiance = Color3F.WHITE;
+				
+				break;
+			} else if(currentBounce == 0 || isSpecularBounce) {
+				for(final Light light : lights) {
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateRadianceEmitted(currentRay)));
+				}
+				
+				break;
+			} else {
+				break;
 			}
 		}
 		

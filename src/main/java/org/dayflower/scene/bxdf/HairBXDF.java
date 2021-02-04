@@ -247,7 +247,9 @@ public final class HairBXDF extends BXDF {
 		final float cosGammaTransmission = sqrt(max(0.0F, 1.0F - sinGammaTransmission * sinGammaTransmission));
 		final float gammaTransmission = asin(saturate(sinGammaTransmission, -1.0F, 1.0F));
 		
-		final Color3F transmittance = new Color3F(exp(-this.sigmaA.getR() * (2.0F * cosGammaTransmission / cosThetaTransmission)), exp(-this.sigmaA.getG() * (2.0F * cosGammaTransmission / cosThetaTransmission)), exp(-this.sigmaA.getB() * (2.0F * cosGammaTransmission / cosThetaTransmission)));
+		final float scale = 2.0F * cosGammaTransmission / cosThetaTransmission;
+		
+		final Color3F transmittance = new Color3F(exp(-this.sigmaA.getR() * scale), exp(-this.sigmaA.getG() * scale), exp(-this.sigmaA.getB() * scale));
 		
 		final float phi = phiIncoming - phiOutgoing;
 		
@@ -616,18 +618,18 @@ public final class HairBXDF extends BXDF {
 		return new Color3F[] {color0, color1, color2, color3};
 	}
 	
-	private static float doComputePhi(final float gammaOutgoing, final float gammaTransmission, final int p) {
-		return 2.0F * p * gammaTransmission - 2.0F * gammaOutgoing + p * PI;
-	}
-	
-	private static float doComputeY(final Color3F[] colors) {
-		float y = 0.0F;
+	private static float doComputeLuminance(final Color3F[] colors) {
+		float luminance = 0.0F;
 		
 		for(final Color3F color : colors) {
-			y += color.getY();
+			luminance += color.luminance();
 		}
 		
-		return y;
+		return luminance;
+	}
+	
+	private static float doComputePhi(final float gammaOutgoing, final float gammaTransmission, final int p) {
+		return 2.0F * p * gammaTransmission - 2.0F * gammaOutgoing + p * PI;
 	}
 	
 	private static float doI0(final float x) {
@@ -713,16 +715,18 @@ public final class HairBXDF extends BXDF {
 		final float sinGammaTransmission = h / etap;
 		final float cosGammaTransmission = sqrt(max(0.0F, 1.0F - sinGammaTransmission * sinGammaTransmission));
 		
-		final Color3F transmittance = new Color3F(exp(-sigmaA.getR() * (2.0F * cosGammaTransmission / cosThetaTransmission)), exp(-sigmaA.getG() * (2.0F * cosGammaTransmission / cosThetaTransmission)), exp(-sigmaA.getB() * (2.0F * cosGammaTransmission / cosThetaTransmission)));
+		final float scale = 2.0F * cosGammaTransmission / cosThetaTransmission;
+		
+		final Color3F transmittance = new Color3F(exp(-sigmaA.getR() * scale), exp(-sigmaA.getG() * scale), exp(-sigmaA.getB() * scale));
 		
 		final Color3F[] colors = doComputeAP(transmittance, cosThetaOutgoing, eta, h);
 		
-		final float y = doComputeY(colors);
+		final float luminance = doComputeLuminance(colors);
 		
 		final float[] probabilityDensityFunctionValues = new float[colors.length];
 		
 		for(int i = 0; i < probabilityDensityFunctionValues.length; i++) {
-			probabilityDensityFunctionValues[i] = colors[i].getY() / y;
+			probabilityDensityFunctionValues[i] = colors[i].luminance() / luminance;
 		}
 		
 		return probabilityDensityFunctionValues;

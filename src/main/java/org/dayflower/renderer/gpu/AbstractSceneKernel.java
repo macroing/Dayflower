@@ -79,10 +79,14 @@ import org.dayflower.utility.Floats;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractSceneKernel extends AbstractImageKernel {
-//	TODO: Add Javadocs!
+	/**
+	 * The default maximum parametric distance value.
+	 */
 	protected static final float DEFAULT_T_MAXIMUM = Float.MAX_VALUE;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The default minimum parametric distance value.
+	 */
 	protected static final float DEFAULT_T_MINIMUM = 0.001F;
 	
 //	TODO: Add Javadocs!

@@ -17,7 +17,7 @@ Shape3F shape03 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F, -
 Shape3F shape04 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(1.0F, 0.0F,  0.0F));//Front
 Shape3F shape05 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F, -1.0F));//Right
 Shape3F shape06 = new Plane3F(new Point3F(0.0F, 0.0F, 0.0F), new Point3F(0.0F,  1.0F,  0.0F), new Point3F(0.0F, 0.0F,  1.0F));//Left
-Shape3F shape07 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
+Shape3F shape07 = new RectangularCuboid3F(new Point3F(-1.0F, -1.0F, -1.0F), new Point3F(1.0F, 1.0F, 1.0F));//new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
 Shape3F shape08 = new Sphere3F(1.0F, new Point3F(0.0F, 0.0F, 0.0F));
 Shape3F shape09 = isTriangleLight ? new Triangle3F() : new Sphere3F();
 
@@ -43,15 +43,15 @@ Primitive primitive09 = new Primitive(material09, shape09, transform09);
 
 AreaLight areaLight09 = isDiffuseAreaLight ? new DiffuseAreaLight(transform09, 1, new Color3F(12.0F), shape09, false) : new PrimitiveAreaLight(primitive09);
 
-primitive09.setAreaLight(areaLight09);
+//primitive09.setAreaLight(areaLight09);
 
 Camera camera = new Camera(new Point3F(0.0F, 2.5F, 1.0F));
 camera.setResolution(1024.0F, 768.0F);
 camera.setFieldOfViewY(AngleF.degrees(58.0F));
 camera.setFieldOfViewX();
 
-scene.addLight(areaLight09);
-//scene.addLight(new PointLight(new Color3F(12.0F), new Point3F(0.0F, 4.0F, 9.0F)));
+//scene.addLight(areaLight09);
+scene.addLight(new PointLight(new Color3F(12.0F), new Point3F(0.0F, 4.0F, 9.0F)));
 //scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(5.0F), new Color3F(50.0F), new Point3F(0.0F, 4.9F, 9.0F), Vector3F.y(-1.0F)));
 scene.addPrimitive(primitive01);
 scene.addPrimitive(primitive02);
@@ -61,6 +61,6 @@ scene.addPrimitive(primitive05);
 scene.addPrimitive(primitive06);
 scene.addPrimitive(primitive07);
 scene.addPrimitive(primitive08);
-scene.addPrimitive(primitive09);
+//scene.addPrimitive(primitive09);
 scene.setCamera(camera);
 scene.setName("CornellBox");

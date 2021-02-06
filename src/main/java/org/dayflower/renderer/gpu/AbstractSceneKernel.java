@@ -89,34 +89,54 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected static final float DEFAULT_T_MINIMUM = 0.001F;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the vector that points in the U-direction of the orthonormal basis for geometry represented in the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U = 0;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the vector that points in the V-direction of the orthonormal basis for geometry represented in the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V = 3;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the vector that points in the W-direction of the orthonormal basis for geometry represented in the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W = 6;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the vector that points in the U-direction of the orthonormal basis for shading represented in the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U = 9;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the vector that points in the V-direction of the orthonormal basis for shading represented in the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V = 12;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the vector that points in the W-direction of the orthonormal basis for shading represented in the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W = 15;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the index of the primitive represented in the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX = 18;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the surface intersection point represented in the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT = 19;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The offset for the texture coordinates represented in the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES = 22;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The size of the array {@link #intersectionArray_$private$24}.
+	 */
 	protected static final int INTERSECTION_ARRAY_SIZE = 24;
 	
 //	TODO: Add Javadocs!

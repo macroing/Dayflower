@@ -31,7 +31,7 @@ Below follows a few lists of features available in the Scene API.
 * `GlassMaterial` - A `Material` that represents glass.
 * `HairMaterial` - A `Material` that represents hair.
 * `MatteMaterial` - A `Material` that is used for matte surfaces.
-* `MeasuredMetalMaterial` - A `Material` that represents metal.
+* `MetalMaterial` - A `Material` that represents metal.
 * `MirrorMaterial` - A `Material` that represents a mirror.
 * `PlasticMaterial` - A `Material` that represents plastic.
 * `SubstrateMaterial` - A `Material` that represents a substrate material.
@@ -96,12 +96,12 @@ new DisneyMaterial(new Color3F(255, 127, 80), Color3F.BLACK, Color3F.BLACK, 0.4F
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/DisneyMaterial.png "DisneyMaterial")
 
-#### Measured Metal Material Example
-The following example demonstrates how the `MeasuredMetalMaterial` can be created and looks visually.
+#### Metal Material Example
+The following example demonstrates how the `MetalMaterial` can be created and looks visually.
 ```java
-new MeasuredMetalMaterial();
+new MetalMaterial();
 ```
-![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MeasuredMetalMaterial.png "MeasuredMetalMaterial")
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MetalMaterial.png "MetalMaterial")
 
 #### Plastic Material Example
 The following example demonstrates how the `PlasticMaterial` can be created and looks visually.

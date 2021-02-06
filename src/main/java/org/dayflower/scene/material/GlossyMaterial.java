@@ -29,82 +29,97 @@ import org.dayflower.scene.BSSRDF;
 import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
-import org.dayflower.scene.bxdf.SpecularBRDF;
-import org.dayflower.scene.fresnel.ConstantFresnel;
+import org.dayflower.scene.bxdf.AshikhminShirleyBRDF;
 import org.dayflower.scene.modifier.Modifier;
 import org.dayflower.scene.modifier.NoOpModifier;
 import org.dayflower.scene.texture.ConstantTexture;
 import org.dayflower.scene.texture.Texture;
 
 /**
- * A {@code MirrorMaterial} is an implementation of {@link Material} that represents a mirror.
+ * A {@code GlossyMaterial} is an implementation of {@link Material} that represents a glossy material.
  * <p>
  * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class MirrorMaterial implements Material {
+public final class GlossyMaterial implements Material {
 	/**
-	 * The name of this {@code MirrorMaterial} class.
+	 * The name of this {@code GlossyMaterial} class.
 	 */
-	public static final String NAME = "Mirror";
+	public static final String NAME = "Glossy";
 	
 	/**
-	 * The ID of this {@code MirrorMaterial} class.
+	 * The length of the {@code int[]}.
 	 */
-	public static final int ID = 107;
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code KR} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_R = 1;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Roughness} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS = 2;
+	
+	/**
+	 * The ID of this {@code GlossyMaterial} class.
+	 */
+	public static final int ID = 103;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Modifier modifier;
 	private final Texture textureEmission;
 	private final Texture textureKR;
+	private final Texture textureRoughness;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code MirrorMaterial} instance.
+	 * Constructs a new {@code GlossyMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorMaterial(Color3F.WHITE);
+	 * new GlossyMaterial(Color3F.GRAY_0_50);
 	 * }
 	 * </pre>
 	 */
-	public MirrorMaterial() {
-		this(Color3F.WHITE);
+	public GlossyMaterial() {
+		this(Color3F.GRAY_0_50);
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorMaterial} instance.
+	 * Constructs a new {@code GlossyMaterial} instance.
 	 * <p>
 	 * If {@code colorKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorMaterial(colorKR, Color3F.BLACK);
+	 * new GlossyMaterial(colorKR, Color3F.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code colorKR} is {@code null}
 	 */
-	public MirrorMaterial(final Color3F colorKR) {
+	public GlossyMaterial(final Color3F colorKR) {
 		this(colorKR, Color3F.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorMaterial} instance.
+	 * Constructs a new {@code GlossyMaterial} instance.
 	 * <p>
 	 * If either {@code colorKR} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorMaterial(colorKR, colorEmission, new NoOpModifier());
+	 * new GlossyMaterial(colorKR, colorEmission, 0.2F);
 	 * }
 	 * </pre>
 	 * 
@@ -112,54 +127,77 @@ public final class MirrorMaterial implements Material {
 	 * @param colorEmission a {@code Color3F} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
 	 */
-	public MirrorMaterial(final Color3F colorKR, final Color3F colorEmission) {
-		this(colorKR, colorEmission, new NoOpModifier());
+	public GlossyMaterial(final Color3F colorKR, final Color3F colorEmission) {
+		this(colorKR, colorEmission, 0.2F);
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorMaterial} instance.
+	 * Constructs a new {@code GlossyMaterial} instance.
+	 * <p>
+	 * If either {@code colorKR} or {@code colorEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlossyMaterial(colorKR, colorEmission, roughness, new NoOpModifier());
+	 * }
+	 * </pre>
+	 * 
+	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
+	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param roughness the roughness to use
+	 * @throws NullPointerException thrown if, and only if, either {@code colorKR} or {@code colorEmission} are {@code null}
+	 */
+	public GlossyMaterial(final Color3F colorKR, final Color3F colorEmission, final float roughness) {
+		this(colorKR, colorEmission, roughness, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code GlossyMaterial} instance.
 	 * <p>
 	 * If either {@code colorKR}, {@code colorEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param colorKR a {@link Color3F} instance for the reflection coefficient
 	 * @param colorEmission a {@code Color3F} instance for emission
+	 * @param roughness the roughness to use
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorKR}, {@code colorEmission} or {@code modifier} are {@code null}
 	 */
-	public MirrorMaterial(final Color3F colorKR, final Color3F colorEmission, final Modifier modifier) {
+	public GlossyMaterial(final Color3F colorKR, final Color3F colorEmission, final float roughness, final Modifier modifier) {
 		this.textureKR = new ConstantTexture(Objects.requireNonNull(colorKR, "colorKR == null"));
 		this.textureEmission = new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null"));
+		this.textureRoughness = new ConstantTexture(new Color3F(roughness));
 		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorMaterial} instance.
+	 * Constructs a new {@code GlossyMaterial} instance.
 	 * <p>
 	 * If {@code textureKR} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorMaterial(textureKR, ConstantTexture.BLACK);
+	 * new GlossyMaterial(textureKR, ConstantTexture.BLACK);
 	 * }
 	 * </pre>
 	 * 
 	 * @param textureKR a {@link Texture} instance for the reflection coefficient
 	 * @throws NullPointerException thrown if, and only if, {@code textureKR} is {@code null}
 	 */
-	public MirrorMaterial(final Texture textureKR) {
+	public GlossyMaterial(final Texture textureKR) {
 		this(textureKR, ConstantTexture.BLACK);
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorMaterial} instance.
+	 * Constructs a new {@code GlossyMaterial} instance.
 	 * <p>
 	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new MirrorMaterial(textureKR, textureEmission, new NoOpModifier());
+	 * new GlossyMaterial(textureKR, textureEmission, 0.2F);
 	 * }
 	 * </pre>
 	 * 
@@ -167,49 +205,106 @@ public final class MirrorMaterial implements Material {
 	 * @param textureEmission a {@code Texture} instance for emission
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
 	 */
-	public MirrorMaterial(final Texture textureKR, final Texture textureEmission) {
-		this(textureKR, textureEmission, new NoOpModifier());
+	public GlossyMaterial(final Texture textureKR, final Texture textureEmission) {
+		this(textureKR, textureEmission, 0.2F);
 	}
 	
 	/**
-	 * Constructs a new {@code MirrorMaterial} instance.
+	 * Constructs a new {@code GlossyMaterial} instance.
 	 * <p>
-	 * If either {@code textureKR}, {@code textureEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code textureKR}, {@code textureEmission} or {@code textureRoughness} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlossyMaterial(textureKR, textureEmission, textureRoughness, new NoOpModifier());
+	 * }
+	 * </pre>
 	 * 
 	 * @param textureKR a {@link Texture} instance for the reflection coefficient
 	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughness a {@code Texture} instance with the roughness to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureEmission} or {@code textureRoughness} are {@code null}
+	 */
+	public GlossyMaterial(final Texture textureKR, final Texture textureEmission, final Texture textureRoughness) {
+		this(textureKR, textureEmission, textureRoughness, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code GlossyMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureEmission}, {@code textureRoughness} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param textureRoughness a {@code Texture} instance with the roughness to use
+	 * @param modifier a {@link Modifier} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureEmission}, {@code textureRoughness} or {@code modifier} are {@code null}
+	 */
+	public GlossyMaterial(final Texture textureKR, final Texture textureEmission, final Texture textureRoughness, final Modifier modifier) {
+		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
+		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+		this.textureRoughness = Objects.requireNonNull(textureRoughness, "textureRoughness == null");
+		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
+	}
+	
+	/**
+	 * Constructs a new {@code GlossyMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR} or {@code textureEmission} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlossyMaterial(textureKR, textureEmission, roughness, new NoOpModifier());
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param roughness the roughness to use
+	 * @throws NullPointerException thrown if, and only if, either {@code textureKR} or {@code textureEmission} are {@code null}
+	 */
+	public GlossyMaterial(final Texture textureKR, final Texture textureEmission, final float roughness) {
+		this(textureKR, textureEmission, roughness, new NoOpModifier());
+	}
+	
+	/**
+	 * Constructs a new {@code GlossyMaterial} instance.
+	 * <p>
+	 * If either {@code textureKR}, {@code textureEmission} or {@code modifier} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new GlossyMaterial(textureKR, textureEmission, new ConstantTexture(roughness), modifier);
+	 * }
+	 * </pre>
+	 * 
+	 * @param textureKR a {@link Texture} instance for the reflection coefficient
+	 * @param textureEmission a {@code Texture} instance for emission
+	 * @param roughness the roughness to use
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code textureKR}, {@code textureEmission} or {@code modifier} are {@code null}
 	 */
-	public MirrorMaterial(final Texture textureKR, final Texture textureEmission, final Modifier modifier) {
-		this.textureKR = Objects.requireNonNull(textureKR, "textureKR == null");
-		this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
-		this.modifier = Objects.requireNonNull(modifier, "modifier == null");
+	public GlossyMaterial(final Texture textureKR, final Texture textureEmission, final float roughness, final Modifier modifier) {
+		this(textureKR, textureEmission, new ConstantTexture(roughness), modifier);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code MirrorMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code GlossyMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code MirrorMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code GlossyMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
 		return this.textureEmission.getColor(intersection);
-	}
-	
-	/**
-	 * Returns the {@link Modifier} instance.
-	 * 
-	 * @return the {@code Modifier} instance
-	 */
-	public Modifier getModifier() {
-		return this.modifier;
 	}
 	
 	/**
@@ -232,13 +327,12 @@ public final class MirrorMaterial implements Material {
 		
 		this.modifier.modify(intersection);
 		
-		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKR = this.textureKR.getColor(intersection);
+		final Color3F colorRoughness = this.textureRoughness.getColor(intersection);
 		
-		if(!colorKR.isBlack()) {
-			return Optional.of(new BSDF(intersection, new SpecularBRDF(colorKR, new ConstantFresnel())));
-		}
+		final float roughness = colorRoughness.average();
 		
-		return Optional.empty();
+		return Optional.of(new BSDF(intersection, new AshikhminShirleyBRDF(colorKR, roughness), true));
 	}
 	
 	/**
@@ -263,9 +357,9 @@ public final class MirrorMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code MirrorMaterial} instance.
+	 * Returns a {@code String} with the name of this {@code GlossyMaterial} instance.
 	 * 
-	 * @return a {@code String} with the name of this {@code MirrorMaterial} instance
+	 * @return a {@code String} with the name of this {@code GlossyMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -273,13 +367,13 @@ public final class MirrorMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code MirrorMaterial} instance.
+	 * Returns a {@code String} representation of this {@code GlossyMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code MirrorMaterial} instance
+	 * @return a {@code String} representation of this {@code GlossyMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new MirrorMaterial(%s, %s, %s)", this.textureKR, this.textureEmission, this.modifier);
+		return String.format("new GlossyMaterial(%s, %s, %s)", this.textureKR, this.textureEmission, this.textureRoughness);
 	}
 	
 	/**
@@ -298,6 +392,15 @@ public final class MirrorMaterial implements Material {
 	 */
 	public Texture getTextureKR() {
 		return this.textureKR;
+	}
+	
+	/**
+	 * Returns the {@link Texture} instance with the roughness.
+	 * 
+	 * @return the {@code Texture} instance with the roughness
+	 */
+	public Texture getTextureRoughness() {
+		return this.textureRoughness;
 	}
 	
 	/**
@@ -327,15 +430,15 @@ public final class MirrorMaterial implements Material {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(!this.modifier.accept(nodeHierarchicalVisitor)) {
-					return nodeHierarchicalVisitor.visitLeave(this);
-				}
-				
 				if(!this.textureEmission.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
 				if(!this.textureKR.accept(nodeHierarchicalVisitor)) {
+					return nodeHierarchicalVisitor.visitLeave(this);
+				}
+				
+				if(!this.textureRoughness.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -347,24 +450,24 @@ public final class MirrorMaterial implements Material {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code MirrorMaterial} instance for equality.
+	 * Compares {@code object} to this {@code GlossyMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code MirrorMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code GlossyMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code MirrorMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code MirrorMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code GlossyMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code GlossyMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof MirrorMaterial)) {
+		} else if(!(object instanceof GlossyMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.modifier, MirrorMaterial.class.cast(object).modifier)) {
+		} else if(!Objects.equals(this.textureEmission, GlossyMaterial.class.cast(object).textureEmission)) {
 			return false;
-		} else if(!Objects.equals(this.textureEmission, MirrorMaterial.class.cast(object).textureEmission)) {
+		} else if(!Objects.equals(this.textureKR, GlossyMaterial.class.cast(object).textureKR)) {
 			return false;
-		} else if(!Objects.equals(this.textureKR, MirrorMaterial.class.cast(object).textureKR)) {
+		} else if(!Objects.equals(this.textureRoughness, GlossyMaterial.class.cast(object).textureRoughness)) {
 			return false;
 		} else {
 			return true;
@@ -372,9 +475,9 @@ public final class MirrorMaterial implements Material {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code MirrorMaterial} instance.
+	 * Returns an {@code int} with the ID of this {@code GlossyMaterial} instance.
 	 * 
-	 * @return an {@code int} with the ID of this {@code MirrorMaterial} instance
+	 * @return an {@code int} with the ID of this {@code GlossyMaterial} instance
 	 */
 	@Override
 	public int getID() {
@@ -382,12 +485,33 @@ public final class MirrorMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code MirrorMaterial} instance.
+	 * Returns a hash code for this {@code GlossyMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code MirrorMaterial} instance
+	 * @return a hash code for this {@code GlossyMaterial} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.modifier, this.textureEmission, this.textureKR);
+		return Objects.hash(this.textureEmission, this.textureKR, this.textureRoughness);
+	}
+	
+	/**
+	 * Returns a {@code int[]} representation of this {@code GlossyMaterial} instance.
+	 * 
+	 * @return a {@code int[]} representation of this {@code GlossyMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the GlossyMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();		//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R] = this.textureKR.getID();					//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS] = this.textureRoughness.getID();		//Block #1
+		array[3] = 0;																//Block #1
+		array[4] = 0;																//Block #1
+		array[5] = 0;																//Block #1
+		array[6] = 0;																//Block #1
+		array[7] = 0;																//Block #1
+		
+		return array;
 	}
 }

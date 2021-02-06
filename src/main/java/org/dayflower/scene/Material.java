@@ -33,6 +33,11 @@ import org.dayflower.node.Node;
  */
 public interface Material extends Node {
 	/**
+	 * The offset for the {@code Texture} denoted by {@code Emission} in the {@code float[]} or {@code int[]}.
+	 */
+	int ARRAY_OFFSET_TEXTURE_EMISSION = 0;
+	
+	/**
 	 * The offset for the ID of the {@code Texture} denoted by {@code Emission} in the {@code float[]} or {@code int[]}.
 	 */
 	int ARRAY_OFFSET_TEXTURE_EMISSION_ID = 0;

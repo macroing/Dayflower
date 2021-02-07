@@ -1943,6 +1943,23 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 * @return the parametric T value for a given triangle mesh in object space, or {@code 0.0F} if no intersection was found
 	 */
 	protected final float intersectionTShape3FTriangleMesh3F(final int shape3FTriangleMesh3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		/*
+		 * T0 (Next = NO, Left = T1)
+		 *     T1 (Next = T4, Left = T2)
+		 *         T2 (Next = T3, Left = L0)
+		 *             L0 (Next = L1)
+		 *             L1 (Next = L2)
+		 *             L2 (Next = T3)
+		 *         T3 (Next = T4, Left = L3)
+		 *             L3 (Next = L4)
+		 *             L4 (Next = L5)
+		 *             L5 (Next = T4)
+		 *     T4 (Next = NO, Left = L6)
+		 *         L6 (Next = L7)
+		 *         L7 (Next = L8)
+		 *         L8 (Next = NO)
+		 */
+		
 		float t = 0.0F;
 		float tMinimumObjectSpace = rayTMinimum;
 		float tMaximumObjectSpace = rayTMaximum;

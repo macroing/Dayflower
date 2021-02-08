@@ -96,6 +96,13 @@ new DisneyMaterial(new Color3F(255, 127, 80), Color3F.BLACK, Color3F.BLACK, 0.4F
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/DisneyMaterial.png "DisneyMaterial")
 
+#### Glossy Material Example
+The following example demonstrates how the `GlossyMaterial` can be created and looks visually.
+```java
+new GlossyMaterial(new Color3F(0.01F, 0.5F, 0.01F), Color3F.BLACK, 0.1F);
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/GlossyMaterial.png "GlossyMaterial")
+
 #### Metal Material Example
 The following example demonstrates how the `MetalMaterial` can be created and looks visually.
 ```java

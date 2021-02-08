@@ -126,6 +126,13 @@ new MetalMaterial();
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MetalMaterial.png "MetalMaterial")
 
+#### Mirror Material Example
+The following example demonstrates how the `MirrorMaterial` can be created and looks visually.
+```java
+new MirrorMaterial(Color3F.GRAY_0_50);
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MirrorMaterial.png "MirrorMaterial")
+
 #### Plastic Material Example
 The following example demonstrates how the `PlasticMaterial` can be created and looks visually.
 ```java

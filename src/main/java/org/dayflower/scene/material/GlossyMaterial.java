@@ -67,7 +67,7 @@ public final class GlossyMaterial implements Material {
 	/**
 	 * The ID of this {@code GlossyMaterial} class.
 	 */
-	public static final int ID = 103;
+	public static final int ID = 104;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -304,6 +304,8 @@ public final class GlossyMaterial implements Material {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
 		return this.textureEmission.getColor(intersection);
 	}
 	

@@ -53,7 +53,7 @@ public final class MirrorMaterial implements Material {
 	/**
 	 * The ID of this {@code MirrorMaterial} class.
 	 */
-	public static final int ID = 107;
+	public static final int ID = 108;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -200,6 +200,8 @@ public final class MirrorMaterial implements Material {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
 		return this.textureEmission.getColor(intersection);
 	}
 	

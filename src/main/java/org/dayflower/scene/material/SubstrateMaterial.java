@@ -54,7 +54,7 @@ public final class SubstrateMaterial implements Material {
 	/**
 	 * The ID of this {@code SubstrateMaterial} class.
 	 */
-	public static final int ID = 109;
+	public static final int ID = 110;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -401,6 +401,8 @@ public final class SubstrateMaterial implements Material {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
 		return this.textureEmission.getColor(intersection);
 	}
 	

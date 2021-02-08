@@ -71,7 +71,7 @@ public final class DisneyMaterial implements Material {
 	/**
 	 * The ID of this {@code DisneyMaterial} class.
 	 */
-	public static final int ID = 101;
+	public static final int ID = 102;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -1087,6 +1087,8 @@ public final class DisneyMaterial implements Material {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
 		return this.textureEmission.getColor(intersection);
 	}
 	

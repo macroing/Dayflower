@@ -60,7 +60,7 @@ public final class PlasticMaterial implements Material {
 	/**
 	 * The ID of this {@code PlasticMaterial} class.
 	 */
-	public static final int ID = 108;
+	public static final int ID = 109;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -354,6 +354,8 @@ public final class PlasticMaterial implements Material {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
 		return this.textureEmission.getColor(intersection);
 	}
 	

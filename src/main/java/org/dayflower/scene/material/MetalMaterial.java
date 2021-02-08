@@ -56,7 +56,7 @@ public final class MetalMaterial implements Material {
 	/**
 	 * The ID of this {@code MetalMaterial} class.
 	 */
-	public static final int ID = 106;
+	public static final int ID = 107;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -403,6 +403,8 @@ public final class MetalMaterial implements Material {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
 		return this.textureEmission.getColor(intersection);
 	}
 	

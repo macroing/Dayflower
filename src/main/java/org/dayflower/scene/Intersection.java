@@ -95,7 +95,7 @@ public final class Intersection {
 			return areaLight.evaluateRadianceEmitted(this, direction);
 		}
 		
-		return Color3F.BLACK;
+		return this.primitive.getMaterial().emittance(this);
 	}
 	
 	/**

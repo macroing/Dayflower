@@ -59,7 +59,7 @@ public final class ClearCoatMaterial implements Material {
 	/**
 	 * The ID of this {@code ClearCoatMaterial} class.
 	 */
-	public static final int ID = 100;
+	public static final int ID = 101;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -253,6 +253,8 @@ public final class ClearCoatMaterial implements Material {
 	 */
 	@Override
 	public Color3F emittance(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
 		return this.textureEmission.getColor(intersection);
 	}
 	

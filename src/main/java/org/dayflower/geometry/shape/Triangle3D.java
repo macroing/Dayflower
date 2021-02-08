@@ -226,38 +226,40 @@ public final class Triangle3D implements Shape3D {
 		final Point4D c = this.c.getPosition();
 		
 		final Vector3D edgeAB = Vector3D.direction(a, b);
-		final Vector3D edgeAC = Vector3D.direction(a, c);
+		final Vector3D edgeCA = Vector3D.direction(c, a);
 		final Vector3D direction0 = ray.getDirection();
-		final Vector3D direction1 = Vector3D.crossProduct(direction0, edgeAC);
+		final Vector3D direction1 = Vector3D.crossProduct(edgeAB, edgeCA);
 		
-		final double determinant = Vector3D.dotProduct(edgeAB, direction1);
-		
-		if(determinant >= -0.0001D && determinant <= 0.0001D) {
-			return SurfaceIntersection3D.EMPTY;
-		}
+		final double determinant = Vector3D.dotProduct(direction0, direction1);
+		final double determinantReciprocal = 1.0D / determinant;
 		
 		final Point3D origin = ray.getOrigin();
 		
-		final Vector3D direction2 = Vector3D.direction(new Point3D(a), origin);
+		final Vector3D direction2 = Vector3D.direction(origin, new Point3D(a));
 		
-		final double determinantReciprocal = 1.0D / determinant;
-		final double u = Vector3D.dotProduct(direction2, direction1) * determinantReciprocal;
-		
-		if(u < 0.0D || u > 1.0D) {
-			return SurfaceIntersection3D.EMPTY;
-		}
-		
-		final Vector3D direction3 = Vector3D.crossProduct(direction2, edgeAB);
-		
-		final double v = Vector3D.dotProduct(direction0, direction3) * determinantReciprocal;
-		
-		if(v < 0.0D || u + v > 1.0D) {
-			return SurfaceIntersection3D.EMPTY;
-		}
-		
-		final double t = Vector3D.dotProduct(edgeAC, direction3) * determinantReciprocal;
+		final double t = Vector3D.dotProduct(direction1, direction2) * determinantReciprocal;
 		
 		if(t <= tMinimum || t >= tMaximum) {
+			return SurfaceIntersection3D.EMPTY;
+		}
+		
+		final Vector3D direction3 = Vector3D.crossProduct(direction2, direction0);
+		
+		final double uScaled = Vector3D.dotProduct(direction3, edgeCA);
+		final double u = uScaled * determinantReciprocal;
+		
+		if(u < 0.0D) {
+			return SurfaceIntersection3D.EMPTY;
+		}
+		
+		final double vScaled = Vector3D.dotProduct(direction3, edgeAB);
+		final double v = vScaled * determinantReciprocal;
+		
+		if(v < 0.0D) {
+			return SurfaceIntersection3D.EMPTY;
+		}
+		
+		if((uScaled + vScaled) * determinant > determinant * determinant) {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
@@ -266,19 +268,22 @@ public final class Triangle3D implements Shape3D {
 		final Point3D barycentricCoordinates = new Point3D(w, u, v);
 		final Point3D surfaceIntersectionPoint = Point3D.add(origin, direction0, t);
 		
-		final Point2D textureCoordinates = Point2D.createTextureCoordinates(this.a.getTextureCoordinates(), this.b.getTextureCoordinates(), this.c.getTextureCoordinates(), barycentricCoordinates);
+		final Point2D textureCoordinatesA = this.a.getTextureCoordinates();
+		final Point2D textureCoordinatesB = this.b.getTextureCoordinates();
+		final Point2D textureCoordinatesC = this.c.getTextureCoordinates();
+		final Point2D textureCoordinates = Point2D.createTextureCoordinates(textureCoordinatesA, textureCoordinatesB, textureCoordinatesC, barycentricCoordinates);
 		
-		final OrthonormalBasis33D aOrthonormalBasis = this.a.getOrthonormalBasis();
-		final OrthonormalBasis33D bOrthonormalBasis = this.b.getOrthonormalBasis();
-		final OrthonormalBasis33D cOrthonormalBasis = this.c.getOrthonormalBasis();
+		final OrthonormalBasis33D orthonormalBasisA = this.a.getOrthonormalBasis();
+		final OrthonormalBasis33D orthonormalBasisB = this.b.getOrthonormalBasis();
+		final OrthonormalBasis33D orthonormalBasisC = this.c.getOrthonormalBasis();
 		
 		final Vector3D surfaceNormalG = this.surfaceNormal;
-		final Vector3D surfaceNormalS = Vector3D.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
+		final Vector3D surfaceNormalS = Vector3D.normalNormalized(orthonormalBasisA.getW(), orthonormalBasisB.getW(), orthonormalBasisC.getW(), barycentricCoordinates);
 		
-		final double dU1 = this.a.getTextureCoordinates().getU() - this.c.getTextureCoordinates().getU();
-		final double dU2 = this.b.getTextureCoordinates().getU() - this.c.getTextureCoordinates().getU();
-		final double dV1 = this.a.getTextureCoordinates().getV() - this.c.getTextureCoordinates().getV();
-		final double dV2 = this.b.getTextureCoordinates().getV() - this.c.getTextureCoordinates().getV();
+		final double dU1 = textureCoordinatesA.getU() - textureCoordinatesC.getU();
+		final double dU2 = textureCoordinatesB.getU() - textureCoordinatesC.getU();
+		final double dV1 = textureCoordinatesA.getV() - textureCoordinatesC.getV();
+		final double dV2 = textureCoordinatesB.getV() - textureCoordinatesC.getV();
 		
 		final double determinantUV = dU1 * dV2 - dV1 * dU2;
 		
@@ -494,38 +499,40 @@ public final class Triangle3D implements Shape3D {
 		final Point4D c = this.c.getPosition();
 		
 		final Vector3D edgeAB = Vector3D.direction(a, b);
-		final Vector3D edgeAC = Vector3D.direction(a, c);
+		final Vector3D edgeCA = Vector3D.direction(c, a);
 		final Vector3D direction0 = ray.getDirection();
-		final Vector3D direction1 = Vector3D.crossProduct(direction0, edgeAC);
+		final Vector3D direction1 = Vector3D.crossProduct(edgeAB, edgeCA);
 		
-		final double determinant = Vector3D.dotProduct(edgeAB, direction1);
-		
-		if(determinant >= -0.0001D && determinant <= 0.0001D) {
-			return Double.NaN;
-		}
+		final double determinant = Vector3D.dotProduct(direction0, direction1);
+		final double determinantReciprocal = 1.0D / determinant;
 		
 		final Point3D origin = ray.getOrigin();
 		
-		final Vector3D direction2 = Vector3D.direction(new Point3D(a), origin);
+		final Vector3D direction2 = Vector3D.direction(origin, new Point3D(a));
 		
-		final double determinantReciprocal = 1.0D / determinant;
-		final double u = Vector3D.dotProduct(direction2, direction1) * determinantReciprocal;
-		
-		if(u < 0.0D || u > 1.0D) {
-			return Double.NaN;
-		}
-		
-		final Vector3D direction3 = Vector3D.crossProduct(direction2, edgeAB);
-		
-		final double v = Vector3D.dotProduct(direction0, direction3) * determinantReciprocal;
-		
-		if(v < 0.0D || u + v > 1.0D) {
-			return Double.NaN;
-		}
-		
-		final double t = Vector3D.dotProduct(edgeAC, direction3) * determinantReciprocal;
+		final double t = Vector3D.dotProduct(direction1, direction2) * determinantReciprocal;
 		
 		if(t <= tMinimum || t >= tMaximum) {
+			return Double.NaN;
+		}
+		
+		final Vector3D direction3 = Vector3D.crossProduct(direction2, direction0);
+		
+		final double uScaled = Vector3D.dotProduct(direction3, edgeCA);
+		final double u = uScaled * determinantReciprocal;
+		
+		if(u < 0.0D) {
+			return Double.NaN;
+		}
+		
+		final double vScaled = Vector3D.dotProduct(direction3, edgeAB);
+		final double v = vScaled * determinantReciprocal;
+		
+		if(v < 0.0D) {
+			return Double.NaN;
+		}
+		
+		if((uScaled + vScaled) * determinant > determinant * determinant) {
 			return Double.NaN;
 		}
 		

@@ -112,6 +112,13 @@ new GlossyMaterial(new Color3F(0.01F, 0.5F, 0.01F), Color3F.BLACK, 0.1F);
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/GlossyMaterial.png "GlossyMaterial")
 
+#### Matte Material Example
+The following example demonstrates how the `MatteMaterial` can be created and looks visually.
+```java
+new MatteMaterial();
+```
+![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/MatteMaterial.png "MatteMaterial")
+
 #### Metal Material Example
 The following example demonstrates how the `MetalMaterial` can be created and looks visually.
 ```java

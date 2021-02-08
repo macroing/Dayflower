@@ -29,6 +29,7 @@ Below follows a few lists of features available in the Scene API.
 * `ClearCoatMaterial` - A `Material` that represents clear coat.
 * `DisneyMaterial` - A `Material` that represents a Disney material.
 * `GlassMaterial` - A `Material` that represents glass.
+* `GlossyMaterial` - A `Material` that represents a glossy material.
 * `HairMaterial` - A `Material` that represents hair.
 * `MatteMaterial` - A `Material` that is used for matte surfaces.
 * `MetalMaterial` - A `Material` that represents metal.

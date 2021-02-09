@@ -61,6 +61,11 @@ Below follows a few lists of features available in the Scene API.
 * `MetalSmallPTMaterial` - A `Material` that represents metal.
 * `MirrorSmallPTMaterial` - A `Material` that represents a mirror.
 
+#### The Scene Modifier API
+* `LDRImageNormalMapModifier` - A `Modifier` that performs normal mapping using a low-dynamic-range (LDR) image.
+* `Modifier` - A modifier assigned to a specific `Material` instance and can modify the current `Intersection` instance.
+* `NoOpModifier` - A `Modifier` that does nothing.
+
 #### The Scene Texture API
 * `BlendTexture` - Returns a `Color3F` by blending two `Texture` instances together.
 * `BullseyeTexture` - Returns a `Color3F` by alternating between two `Texture` instances in a bullseye pattern.
@@ -86,6 +91,7 @@ Packages
 * `org.dayflower.scene.material.rayito` - The Scene Material Rayito API.
 * `org.dayflower.scene.material.smallpt` - The Scene Material SmallPT API.
 * `org.dayflower.scene.microfacet` - The Scene Microfacet API.
+* `org.dayflower.scene.modifier` - The Scene Modifier API.
 * `org.dayflower.scene.preview` - The Scene Preview API.
 * `org.dayflower.scene.texture` - The Scene Texture API.
 

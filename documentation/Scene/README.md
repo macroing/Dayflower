@@ -22,6 +22,15 @@ Below follows a few lists of features available in the Scene API.
 * `SceneLoader` - Loads a `Scene` instance.
 * `Transform` - A transform assigned to a specific `Primitive` instance.
 
+#### The Scene Light API
+* `DiffuseAreaLight` - An `AreaLight` that represents a diffuse area light.
+* `DirectionalLight` - A `Light` that represents a directional light.
+* `LDRImageLight` - A `Light` that is backed by a low-dynamic-range (LDR) image.
+* `PerezLight` - A `Light` implementation of the Perez algorithm.
+* `PointLight` - A `Light` that represents a point light.
+* `PrimitiveAreaLight` - An `AreaLight` that contains a `Primitive` instance.
+* `SpotLight` - A `Light` that represents a spotlight.
+
 #### The Scene Loader API
 * `JavaSceneLoader` - A `SceneLoader` that produces `Scene` instances by loading, compiling and executing snippets of Java source code.
 

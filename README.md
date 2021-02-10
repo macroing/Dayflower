@@ -34,6 +34,17 @@ Dependencies
 ------------
  - [Java 8](http://www.java.com)
 
+References
+----------
+This library has been created with the help of many articles, books and renderer implementations.
+
+The following list shows the renderer implementations that have been referenced the most, in alphabetical order.
+
+ - [PBRT](https://www.pbrt.org/)
+ - [Rayito](https://github.com/Tecla/Rayito)
+ - [SmallPT](https://www.kevinbeason.com/smallpt/)
+ - [Sunflow](http://sunflow.sourceforge.net/)
+
 Note
 ----
 This library has not reached version 1.0.0 and been released to the public yet. Therefore, you can expect that backward incompatible changes are likely to occur between commits. When this library reaches version 1.0.0, it will be tagged and available on the "releases" page. At that point, backward incompatible changes should only occur when a new major release is made.

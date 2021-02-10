@@ -48,19 +48,6 @@ Below follows a few lists of features available in the Scene API.
 * `SubstrateMaterial` - A `Material` that represents a substrate material.
 * `UberMaterial` - A `Material` that can represent a wide variety of materials.
 
-#### The Scene Material Rayito API
-* `GlassRayitoMaterial` - A `Material` that represents glass.
-* `MatteRayitoMaterial` - A `Material` that is used for matte surfaces.
-* `MetalRayitoMaterial` - A `Material` that represents metal.
-* `MirrorRayitoMaterial` - A `Material` that represents a mirror.
-
-#### The Scene Material SmallPT API
-* `ClearCoatSmallPTMaterial` - A `Material` that represents clear coat.
-* `GlassSmallPTMaterial` - A `Material` that represents glass.
-* `MatteSmallPTMaterial` - A `Material` that is used for matte surfaces.
-* `MetalSmallPTMaterial` - A `Material` that represents metal.
-* `MirrorSmallPTMaterial` - A `Material` that represents a mirror.
-
 #### The Scene Modifier API
 * `LDRImageNormalMapModifier` - A `Modifier` that performs normal mapping using a low-dynamic-range (LDR) image.
 * `Modifier` - A modifier assigned to a specific `Material` instance and can modify the current `Intersection` instance.
@@ -88,8 +75,6 @@ Packages
 * `org.dayflower.scene.light` - The Scene Light API.
 * `org.dayflower.scene.loader` - The Scene Loader API.
 * `org.dayflower.scene.material` - The Scene Material API.
-* `org.dayflower.scene.material.rayito` - The Scene Material Rayito API.
-* `org.dayflower.scene.material.smallpt` - The Scene Material SmallPT API.
 * `org.dayflower.scene.microfacet` - The Scene Microfacet API.
 * `org.dayflower.scene.modifier` - The Scene Modifier API.
 * `org.dayflower.scene.preview` - The Scene Preview API.

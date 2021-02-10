@@ -29,6 +29,7 @@ import static org.dayflower.utility.Floats.acos;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.random;
 import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Floats.sin;
 
@@ -220,6 +221,29 @@ public final class PerezLight extends Light {
 	public Optional<LightSample> sampleRadianceIncoming(final Intersection intersection, final Point2F sample) {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
+		
+		if(random() > 0.5F && Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalG()) > 0.0F && Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalS()) > 0.0F) {
+			final Vector3F incomingObjectSpace = this.sunDirection;
+			final Vector3F incomingWorldSpace = this.sunDirectionWorldSpace;
+			
+			final float sinTheta = incomingObjectSpace.sinTheta();
+			
+			if(isZero(sinTheta)) {
+				return Optional.empty();
+			}
+			
+			final Color3F result = this.sunColor;
+			
+			final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
+			
+			final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
+			
+			final Sample2F sample0 = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
+			
+			final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample0, true) / (2.0F * PI * PI * sinTheta);
+			
+			return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue));
+		}
 		
 		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());
 		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
@@ -510,7 +534,7 @@ public final class PerezLight extends Light {
 	private void doSetSunColorAndSunSpectralRadiance() {
 		if(this.sunDirection.getZ() > 0.0F) {
 			this.sunSpectralRadiance = doCalculateAttenuatedSunlight(this.theta, this.turbidity);
-			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingSRGB(Color3F.multiply(this.sunSpectralRadiance.toColorXYZ(), 1.0e-4F)));
+			this.sunColor = Color3F.minimumTo0(Color3F.convertXYZToRGBUsingSRGB(Color3F.multiply(this.sunSpectralRadiance.toColorXYZ(), 0.01F)));//The original factor was 0.0001F.
 		} else {
 			this.sunSpectralRadiance = new ConstantSpectralCurveF(0.0F);
 			this.sunColor = Color3F.BLACK;

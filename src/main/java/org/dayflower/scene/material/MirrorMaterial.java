@@ -51,6 +51,16 @@ public final class MirrorMaterial implements Material {
 	public static final String NAME = "Mirror";
 	
 	/**
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 2;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code KR} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_R = 1;
+	
+	/**
 	 * The ID of this {@code MirrorMaterial} class.
 	 */
 	public static final int ID = 108;
@@ -391,5 +401,20 @@ public final class MirrorMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureEmission, this.textureKR);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code MirrorMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code MirrorMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the MirrorMaterial occupy 2/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R] = this.textureKR.getID();			//Block #1
+		
+		return array;
 	}
 }

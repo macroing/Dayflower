@@ -52,7 +52,7 @@ public final class GlossyMaterial implements Material {
 	/**
 	 * The length of the {@code int[]}.
 	 */
-	public static final int ARRAY_LENGTH = 8;
+	public static final int ARRAY_LENGTH = 4;
 	
 	/**
 	 * The offset for the {@link Texture} denoted by {@code KR} in the {@code int[]}.
@@ -504,15 +504,11 @@ public final class GlossyMaterial implements Material {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-//		Because the GlossyMaterial occupy 8/8 positions in a block, it should be aligned.
+//		Because the GlossyMaterial occupy 4/8 positions in a block, it should be aligned.
 		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();		//Block #1
 		array[ARRAY_OFFSET_TEXTURE_K_R] = this.textureKR.getID();					//Block #1
 		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS] = this.textureRoughness.getID();		//Block #1
 		array[3] = 0;																//Block #1
-		array[4] = 0;																//Block #1
-		array[5] = 0;																//Block #1
-		array[6] = 0;																//Block #1
-		array[7] = 0;																//Block #1
 		
 		return array;
 	}

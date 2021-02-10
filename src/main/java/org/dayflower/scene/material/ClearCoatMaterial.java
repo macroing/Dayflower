@@ -57,6 +57,21 @@ public final class ClearCoatMaterial implements Material {
 	public static final String NAME = "Clear Coat";
 	
 	/**
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code KD} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_D = 1;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code KS} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_S = 2;
+	
+	/**
 	 * The ID of this {@code ClearCoatMaterial} class.
 	 */
 	public static final int ID = 101;
@@ -493,5 +508,22 @@ public final class ClearCoatMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureEmission, this.textureKD, this.textureKS);
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code ClearCoatMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code ClearCoatMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the ClearCoatMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D] = this.textureKD.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_S] = this.textureKS.getID();			//Block #1
+		array[3] = 0;														//Block #1
+		
+		return array;
 	}
 }

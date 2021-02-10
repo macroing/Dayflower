@@ -22,6 +22,7 @@ import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.pow;
 
 import java.util.List;
@@ -137,7 +138,18 @@ public final class AshikhminShirleyBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
+		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
+		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
+		
+		if(isZero(cosThetaAbsOutgoing) || isZero(cosThetaAbsIncoming)) {
+			return Color3F.BLACK;
+		}
+		
 		final Vector3F n = Vector3F.normalize(Vector3F.subtract(outgoing, incoming));
+		
+		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
+			return Color3F.BLACK;
+		}
 		
 		final float d = (this.exponent + 1.0F) * pow(abs(n.cosTheta()), this.exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float f = Schlick.fresnelDielectric(Vector3F.dotProduct(outgoing, n), 1.0F);
@@ -164,8 +176,16 @@ public final class AshikhminShirleyBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
+		if(isZero(outgoing.getZ())) {
+			return Optional.empty();
+		}
+		
 		final Vector3F nSample = SampleGeneratorF.sampleHemispherePowerCosineDistribution(sample.getU(), sample.getV(), this.exponent);
 		final Vector3F n = Vector3F.faceForward(normal, outgoing, nSample);
+		
+		if(Vector3F.dotProduct(outgoing, n) < 0.0F) {
+			return Optional.empty();
+		}
 		
 		final Vector3F incoming = Vector3F.reflection(outgoing, n, true);
 		
@@ -231,6 +251,10 @@ public final class AshikhminShirleyBRDF extends BXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
+		
+		if(Vector3F.sameHemisphereZ(outgoing, incoming)) {
+			return 0.0F;
+		}
 		
 		final Vector3F n = Vector3F.normalize(Vector3F.subtract(outgoing, incoming));
 		

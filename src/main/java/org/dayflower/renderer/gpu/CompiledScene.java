@@ -41,15 +41,11 @@ final class CompiledScene {
 	private float[] textureMarbleTextureArray;
 	private float[] textureSimplexFractionalBrownianMotionTextureArray;
 	private int[] lightLDRImageLightOffsetArray;
-	private int[] materialClearCoatSmallPTMaterialArray;
-	private int[] materialGlassRayitoMaterialArray;
-	private int[] materialGlassSmallPTMaterialArray;
-	private int[] materialMatteRayitoMaterialArray;
-	private int[] materialMatteSmallPTMaterialArray;
-	private int[] materialMetalRayitoMaterialArray;
-	private int[] materialMetalSmallPTMaterialArray;
-	private int[] materialMirrorRayitoMaterialArray;
-	private int[] materialMirrorSmallPTMaterialArray;
+	private int[] materialClearCoatMaterialArray;
+	private int[] materialGlassMaterialArray;
+	private int[] materialGlossyMaterialArray;
+	private int[] materialMatteMaterialArray;
+	private int[] materialMirrorMaterialArray;
 	private int[] primitiveArray;
 	private int[] shape3FTriangleMesh3FArray;
 	
@@ -61,15 +57,11 @@ final class CompiledScene {
 		setCameraArray(new float[1]);
 		setLightLDRImageLightArray(new float[1]);
 		setLightLDRImageLightOffsetArray(new int[1]);
-		setMaterialClearCoatSmallPTMaterialArray(new int[1]);
-		setMaterialGlassRayitoMaterialArray(new int[1]);
-		setMaterialGlassSmallPTMaterialArray(new int[1]);
-		setMaterialMatteRayitoMaterialArray(new int[1]);
-		setMaterialMatteSmallPTMaterialArray(new int[1]);
-		setMaterialMetalRayitoMaterialArray(new int[1]);
-		setMaterialMetalSmallPTMaterialArray(new int[1]);
-		setMaterialMirrorRayitoMaterialArray(new int[1]);
-		setMaterialMirrorSmallPTMaterialArray(new int[1]);
+		setMaterialClearCoatMaterialArray(new int[1]);
+		setMaterialGlassMaterialArray(new int[1]);
+		setMaterialGlossyMaterialArray(new int[1]);
+		setMaterialMatteMaterialArray(new int[1]);
+		setMaterialMirrorMaterialArray(new int[1]);
 		setMatrix44FArray(new float[1]);
 		setPrimitiveArray(new int[1]);
 		setShape3FPlane3FArray(new float[1]);
@@ -169,40 +161,24 @@ final class CompiledScene {
 		return this.lightLDRImageLightOffsetArray;
 	}
 	
-	public int[] getMaterialClearCoatSmallPTMaterialArray() {
-		return this.materialClearCoatSmallPTMaterialArray;
+	public int[] getMaterialClearCoatMaterialArray() {
+		return this.materialClearCoatMaterialArray;
 	}
 	
-	public int[] getMaterialGlassRayitoMaterialArray() {
-		return this.materialGlassRayitoMaterialArray;
+	public int[] getMaterialGlassMaterialArray() {
+		return this.materialGlassMaterialArray;
 	}
 	
-	public int[] getMaterialGlassSmallPTMaterialArray() {
-		return this.materialGlassSmallPTMaterialArray;
+	public int[] getMaterialGlossyMaterialArray() {
+		return this.materialGlossyMaterialArray;
 	}
 	
-	public int[] getMaterialMatteRayitoMaterialArray() {
-		return this.materialMatteRayitoMaterialArray;
+	public int[] getMaterialMatteMaterialArray() {
+		return this.materialMatteMaterialArray;
 	}
 	
-	public int[] getMaterialMatteSmallPTMaterialArray() {
-		return this.materialMatteSmallPTMaterialArray;
-	}
-	
-	public int[] getMaterialMetalRayitoMaterialArray() {
-		return this.materialMetalRayitoMaterialArray;
-	}
-	
-	public int[] getMaterialMetalSmallPTMaterialArray() {
-		return this.materialMetalSmallPTMaterialArray;
-	}
-	
-	public int[] getMaterialMirrorRayitoMaterialArray() {
-		return this.materialMirrorRayitoMaterialArray;
-	}
-	
-	public int[] getMaterialMirrorSmallPTMaterialArray() {
-		return this.materialMirrorSmallPTMaterialArray;
+	public int[] getMaterialMirrorMaterialArray() {
+		return this.materialMirrorMaterialArray;
 	}
 	
 	public int[] getPrimitiveArray() {
@@ -233,40 +209,24 @@ final class CompiledScene {
 		this.lightLDRImageLightOffsetArray = Objects.requireNonNull(lightLDRImageLightOffsetArray, "lightLDRImageLightOffsetArray == null");
 	}
 	
-	public void setMaterialClearCoatSmallPTMaterialArray(final int[] materialClearCoatSmallPTMaterialArray) {
-		this.materialClearCoatSmallPTMaterialArray = Objects.requireNonNull(materialClearCoatSmallPTMaterialArray, "materialClearCoatSmallPTMaterialArray == null");
+	public void setMaterialClearCoatMaterialArray(final int[] materialClearCoatMaterialArray) {
+		this.materialClearCoatMaterialArray = Objects.requireNonNull(materialClearCoatMaterialArray, "materialClearCoatMaterialArray == null");
 	}
 	
-	public void setMaterialGlassRayitoMaterialArray(final int[] materialGlassRayitoMaterialArray) {
-		this.materialGlassRayitoMaterialArray = Objects.requireNonNull(materialGlassRayitoMaterialArray, "materialGlassRayitoMaterialArray == null");
+	public void setMaterialGlassMaterialArray(final int[] materialGlassMaterialArray) {
+		this.materialGlassMaterialArray = Objects.requireNonNull(materialGlassMaterialArray, "materialGlassMaterialArray == null");
 	}
 	
-	public void setMaterialGlassSmallPTMaterialArray(final int[] materialGlassSmallPTMaterialArray) {
-		this.materialGlassSmallPTMaterialArray = Objects.requireNonNull(materialGlassSmallPTMaterialArray, "materialGlassSmallPTMaterialArray == null");
+	public void setMaterialGlossyMaterialArray(final int[] materialGlossyMaterialArray) {
+		this.materialGlossyMaterialArray = Objects.requireNonNull(materialGlossyMaterialArray, "materialGlossyMaterialArray == null");
 	}
 	
-	public void setMaterialMatteRayitoMaterialArray(final int[] materialMatteRayitoMaterialArray) {
-		this.materialMatteRayitoMaterialArray = Objects.requireNonNull(materialMatteRayitoMaterialArray, "materialMatteRayitoMaterialArray == null");
+	public void setMaterialMatteMaterialArray(final int[] materialMatteMaterialArray) {
+		this.materialMatteMaterialArray = Objects.requireNonNull(materialMatteMaterialArray, "materialMatteMaterialArray == null");
 	}
 	
-	public void setMaterialMatteSmallPTMaterialArray(final int[] materialMatteSmallPTMaterialArray) {
-		this.materialMatteSmallPTMaterialArray = Objects.requireNonNull(materialMatteSmallPTMaterialArray, "materialMatteSmallPTMaterialArray == null");
-	}
-	
-	public void setMaterialMetalRayitoMaterialArray(final int[] materialMetalRayitoMaterialArray) {
-		this.materialMetalRayitoMaterialArray = Objects.requireNonNull(materialMetalRayitoMaterialArray, "materialMetalRayitoMaterialArray == null");
-	}
-	
-	public void setMaterialMetalSmallPTMaterialArray(final int[] materialMetalSmallPTMaterialArray) {
-		this.materialMetalSmallPTMaterialArray = Objects.requireNonNull(materialMetalSmallPTMaterialArray, "materialMetalSmallPTMaterialArray == null");
-	}
-	
-	public void setMaterialMirrorRayitoMaterialArray(final int[] materialMirrorRayitoMaterialArray) {
-		this.materialMirrorRayitoMaterialArray = Objects.requireNonNull(materialMirrorRayitoMaterialArray, "materialMirrorRayitoMaterialArray == null");
-	}
-	
-	public void setMaterialMirrorSmallPTMaterialArray(final int[] materialMirrorSmallPTMaterialArray) {
-		this.materialMirrorSmallPTMaterialArray = Objects.requireNonNull(materialMirrorSmallPTMaterialArray, "materialMirrorSmallPTMaterialArray == null");
+	public void setMaterialMirrorMaterialArray(final int[] materialMirrorMaterialArray) {
+		this.materialMirrorMaterialArray = Objects.requireNonNull(materialMirrorMaterialArray, "materialMirrorMaterialArray == null");
 	}
 	
 	public void setMatrix44FArray(final float[] matrix44FArray) {

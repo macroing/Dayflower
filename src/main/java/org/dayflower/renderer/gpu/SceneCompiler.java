@@ -18,6 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.utility.Ints.pack;
 import static org.dayflower.utility.Ints.padding;
 
 import java.util.ArrayList;
@@ -43,16 +44,11 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.LDRImageLight;
-import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
-import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
-import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
-import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
-import org.dayflower.scene.material.smallpt.ClearCoatSmallPTMaterial;
-import org.dayflower.scene.material.smallpt.GlassSmallPTMaterial;
-import org.dayflower.scene.material.smallpt.MatteSmallPTMaterial;
-import org.dayflower.scene.material.smallpt.MetalSmallPTMaterial;
-import org.dayflower.scene.material.smallpt.MirrorSmallPTMaterial;
-import org.dayflower.scene.material.smallpt.SmallPTMaterial;
+import org.dayflower.scene.material.ClearCoatMaterial;
+import org.dayflower.scene.material.GlassMaterial;
+import org.dayflower.scene.material.GlossyMaterial;
+import org.dayflower.scene.material.MatteMaterial;
+import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -76,22 +72,18 @@ final class SceneCompiler {
 	private final List<BoundingVolume3F> distinctBoundingVolumes;
 	private final List<BullseyeTexture> distinctBullseyeTextures;
 	private final List<CheckerboardTexture> distinctCheckerboardTextures;
-	private final List<ClearCoatSmallPTMaterial> distinctClearCoatSmallPTMaterials;
+	private final List<ClearCoatMaterial> distinctClearCoatMaterials;
 	private final List<ConstantTexture> distinctConstantTextures;
 	private final List<FunctionTexture> distinctFunctionTextures;
-	private final List<GlassRayitoMaterial> distinctGlassRayitoMaterials;
-	private final List<GlassSmallPTMaterial> distinctGlassSmallPTMaterials;
+	private final List<GlassMaterial> distinctGlassMaterials;
+	private final List<GlossyMaterial> distinctGlossyMaterials;
 	private final List<InfiniteBoundingVolume3F> distinctInfiniteBoundingVolumes;
 	private final List<LDRImageLight> distinctLDRImageLights;
 	private final List<LDRImageTexture> distinctLDRImageTextures;
 	private final List<MarbleTexture> distinctMarbleTextures;
 	private final List<Material> distinctMaterials;
-	private final List<MatteRayitoMaterial> distinctMatteRayitoMaterials;
-	private final List<MatteSmallPTMaterial> distinctMatteSmallPTMaterials;
-	private final List<MetalRayitoMaterial> distinctMetalRayitoMaterials;
-	private final List<MetalSmallPTMaterial> distinctMetalSmallPTMaterials;
-	private final List<MirrorRayitoMaterial> distinctMirrorRayitoMaterials;
-	private final List<MirrorSmallPTMaterial> distinctMirrorSmallPTMaterials;
+	private final List<MatteMaterial> distinctMatteMaterials;
+	private final List<MirrorMaterial> distinctMirrorMaterials;
 	private final List<Plane3F> distinctPlanes;
 	private final List<Primitive> filteredPrimitives;
 	private final List<RectangularCuboid3F> distinctRectangularCuboids;
@@ -108,19 +100,15 @@ final class SceneCompiler {
 	private final Map<BoundingSphere3F, Integer> distinctToOffsetsBoundingSpheres;
 	private final Map<BullseyeTexture, Integer> distinctToOffsetsBullseyeTextures;
 	private final Map<CheckerboardTexture, Integer> distinctToOffsetsCheckerboardTextures;
-	private final Map<ClearCoatSmallPTMaterial, Integer> distinctToOffsetsClearCoatSmallPTMaterials;
+	private final Map<ClearCoatMaterial, Integer> distinctToOffsetsClearCoatMaterials;
 	private final Map<ConstantTexture, Integer> distinctToOffsetsConstantTextures;
-	private final Map<GlassRayitoMaterial, Integer> distinctToOffsetsGlassRayitoMaterials;
-	private final Map<GlassSmallPTMaterial, Integer> distinctToOffsetsGlassSmallPTMaterials;
+	private final Map<GlassMaterial, Integer> distinctToOffsetsGlassMaterials;
+	private final Map<GlossyMaterial, Integer> distinctToOffsetsGlossyMaterials;
 	private final Map<LDRImageLight, Integer> distinctToOffsetsLDRImageLights;
 	private final Map<LDRImageTexture, Integer> distinctToOffsetsLDRImageTextures;
 	private final Map<MarbleTexture, Integer> distinctToOffsetsMarbleTextures;
-	private final Map<MatteRayitoMaterial, Integer> distinctToOffsetsMatteRayitoMaterials;
-	private final Map<MatteSmallPTMaterial, Integer> distinctToOffsetsMatteSmallPTMaterials;
-	private final Map<MetalRayitoMaterial, Integer> distinctToOffsetsMetalRayitoMaterials;
-	private final Map<MetalSmallPTMaterial, Integer> distinctToOffsetsMetalSmallPTMaterials;
-	private final Map<MirrorRayitoMaterial, Integer> distinctToOffsetsMirrorRayitoMaterials;
-	private final Map<MirrorSmallPTMaterial, Integer> distinctToOffsetsMirrorSmallPTMaterials;
+	private final Map<MatteMaterial, Integer> distinctToOffsetsMatteMaterials;
+	private final Map<MirrorMaterial, Integer> distinctToOffsetsMirrorMaterials;
 	private final Map<Plane3F, Integer> distinctToOffsetsPlanes;
 	private final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids;
 	private final Map<SimplexFractionalBrownianMotionTexture, Integer> distinctToOffsetsSimplexFractionalBrownianMotionTextures;
@@ -140,22 +128,18 @@ final class SceneCompiler {
 		this.distinctBoundingVolumes = new ArrayList<>();
 		this.distinctBullseyeTextures = new ArrayList<>();
 		this.distinctCheckerboardTextures = new ArrayList<>();
-		this.distinctClearCoatSmallPTMaterials = new ArrayList<>();
+		this.distinctClearCoatMaterials = new ArrayList<>();
 		this.distinctConstantTextures = new ArrayList<>();
 		this.distinctFunctionTextures = new ArrayList<>();
-		this.distinctGlassRayitoMaterials = new ArrayList<>();
-		this.distinctGlassSmallPTMaterials = new ArrayList<>();
+		this.distinctGlassMaterials = new ArrayList<>();
+		this.distinctGlossyMaterials = new ArrayList<>();
 		this.distinctInfiniteBoundingVolumes = new ArrayList<>();
 		this.distinctLDRImageLights = new ArrayList<>();
 		this.distinctLDRImageTextures = new ArrayList<>();
 		this.distinctMarbleTextures = new ArrayList<>();
 		this.distinctMaterials = new ArrayList<>();
-		this.distinctMatteRayitoMaterials = new ArrayList<>();
-		this.distinctMatteSmallPTMaterials = new ArrayList<>();
-		this.distinctMetalRayitoMaterials = new ArrayList<>();
-		this.distinctMetalSmallPTMaterials = new ArrayList<>();
-		this.distinctMirrorRayitoMaterials = new ArrayList<>();
-		this.distinctMirrorSmallPTMaterials = new ArrayList<>();
+		this.distinctMatteMaterials = new ArrayList<>();
+		this.distinctMirrorMaterials = new ArrayList<>();
 		this.distinctPlanes = new ArrayList<>();
 		this.filteredPrimitives = new ArrayList<>();
 		this.distinctRectangularCuboids = new ArrayList<>();
@@ -172,19 +156,15 @@ final class SceneCompiler {
 		this.distinctToOffsetsBoundingSpheres = new LinkedHashMap<>();
 		this.distinctToOffsetsBullseyeTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsCheckerboardTextures = new LinkedHashMap<>();
-		this.distinctToOffsetsClearCoatSmallPTMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsClearCoatMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsConstantTextures = new LinkedHashMap<>();
-		this.distinctToOffsetsGlassRayitoMaterials = new LinkedHashMap<>();
-		this.distinctToOffsetsGlassSmallPTMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsGlassMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsGlossyMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsLDRImageLights = new LinkedHashMap<>();
 		this.distinctToOffsetsLDRImageTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsMarbleTextures = new LinkedHashMap<>();
-		this.distinctToOffsetsMatteRayitoMaterials = new LinkedHashMap<>();
-		this.distinctToOffsetsMatteSmallPTMaterials = new LinkedHashMap<>();
-		this.distinctToOffsetsMetalRayitoMaterials = new LinkedHashMap<>();
-		this.distinctToOffsetsMetalSmallPTMaterials = new LinkedHashMap<>();
-		this.distinctToOffsetsMirrorRayitoMaterials = new LinkedHashMap<>();
-		this.distinctToOffsetsMirrorSmallPTMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsMatteMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsMirrorMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsPlanes = new LinkedHashMap<>();
 		this.distinctToOffsetsRectangularCuboids = new LinkedHashMap<>();
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures = new LinkedHashMap<>();
@@ -278,15 +258,11 @@ final class SceneCompiler {
 		final int[] lightLDRImageLightOffsetArray = new int[this.distinctLDRImageLights.size()];
 		
 //		Retrieve the int[] for all Material instances:
-		final int[] materialClearCoatSmallPTMaterialArray = Ints.toArray(this.distinctClearCoatSmallPTMaterials, clearCoatSmallPTMaterial -> clearCoatSmallPTMaterial.toArray(), 1);
-		final int[] materialGlassRayitoMaterialArray = Ints.toArray(this.distinctGlassRayitoMaterials, glassRayitoMaterial -> glassRayitoMaterial.toArray(), 1);
-		final int[] materialGlassSmallPTMaterialArray = Ints.toArray(this.distinctGlassSmallPTMaterials, glassSmallPTMaterial -> glassSmallPTMaterial.toArray(), 1);
-		final int[] materialMatteRayitoMaterialArray = Ints.toArray(this.distinctMatteRayitoMaterials, matteRayitoMaterial -> matteRayitoMaterial.toArray(), 1);
-		final int[] materialMatteSmallPTMaterialArray = Ints.toArray(this.distinctMatteSmallPTMaterials, matteSmallPTMaterial -> matteSmallPTMaterial.toArray(), 1);
-		final int[] materialMetalRayitoMaterialArray = Ints.toArray(this.distinctMetalRayitoMaterials, metalRayitoMaterial -> metalRayitoMaterial.toArray(), 1);
-		final int[] materialMetalSmallPTMaterialArray = Ints.toArray(this.distinctMetalSmallPTMaterials, metalSmallPTMaterial -> metalSmallPTMaterial.toArray(), 1);
-		final int[] materialMirrorRayitoMaterialArray = Ints.toArray(this.distinctMirrorRayitoMaterials, mirrorRayitoMaterial -> mirrorRayitoMaterial.toArray(), 1);
-		final int[] materialMirrorSmallPTMaterialArray = Ints.toArray(this.distinctMirrorSmallPTMaterials, mirrorSmallPTMaterial -> mirrorSmallPTMaterial.toArray(), 1);
+		final int[] materialClearCoatMaterialArray = Ints.toArray(this.distinctClearCoatMaterials, clearCoatMaterial -> clearCoatMaterial.toArray(), 1);
+		final int[] materialGlassMaterialArray = Ints.toArray(this.distinctGlassMaterials, glassMaterial -> glassMaterial.toArray(), 1);
+		final int[] materialGlossyMaterialArray = Ints.toArray(this.distinctGlossyMaterials, glossyMaterial -> glossyMaterial.toArray(), 1);
+		final int[] materialMatteMaterialArray = Ints.toArray(this.distinctMatteMaterials, matteMaterial -> matteMaterial.toArray(), 1);
+		final int[] materialMirrorMaterialArray = Ints.toArray(this.distinctMirrorMaterials, mirrorMaterial -> mirrorMaterial.toArray(), 1);
 		
 //		Retrieve the float[] for the Matrix44F instances:
 		final float[] matrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> primitive.getTransform().toArray(), 1);
@@ -315,15 +291,11 @@ final class SceneCompiler {
 		
 //		Populate the float[] or int[] with data:
 		doPopulateLightLDRImageLightOffsetArray(lightLDRImageLightOffsetArray);
-		doPopulateMaterialClearCoatSmallPTMaterialArrayWithTextures(materialClearCoatSmallPTMaterialArray);
-		doPopulateMaterialGlassRayitoMaterialArrayWithTextures(materialGlassRayitoMaterialArray);
-		doPopulateMaterialGlassSmallPTMaterialArrayWithTextures(materialGlassSmallPTMaterialArray);
-		doPopulateMaterialMatteRayitoMaterialArrayWithTextures(materialMatteRayitoMaterialArray);
-		doPopulateMaterialMatteSmallPTMaterialArrayWithTextures(materialMatteSmallPTMaterialArray);
-		doPopulateMaterialMetalRayitoMaterialArrayWithTextures(materialMetalRayitoMaterialArray);
-		doPopulateMaterialMetalSmallPTMaterialArrayWithTextures(materialMetalSmallPTMaterialArray);
-		doPopulateMaterialMirrorRayitoMaterialArrayWithTextures(materialMirrorRayitoMaterialArray);
-		doPopulateMaterialMirrorSmallPTMaterialArrayWithTextures(materialMirrorSmallPTMaterialArray);
+		doPopulateMaterialClearCoatMaterialArrayWithTextures(materialClearCoatMaterialArray);
+		doPopulateMaterialGlassMaterialArrayWithTextures(materialGlassMaterialArray);
+		doPopulateMaterialGlossyMaterialArrayWithTextures(materialGlossyMaterialArray);
+		doPopulateMaterialMatteMaterialArrayWithTextures(materialMatteMaterialArray);
+		doPopulateMaterialMirrorMaterialArrayWithTextures(materialMirrorMaterialArray);
 		doPopulatePrimitiveArrayWithBoundingVolumes(primitiveArray);
 		doPopulatePrimitiveArrayWithMaterials(primitiveArray);
 		doPopulatePrimitiveArrayWithShapes(primitiveArray);
@@ -339,15 +311,11 @@ final class SceneCompiler {
 		compiledScene.setCameraArray(cameraArray);
 		compiledScene.setLightLDRImageLightArray(lightLDRImageLightArray);
 		compiledScene.setLightLDRImageLightOffsetArray(lightLDRImageLightOffsetArray);
-		compiledScene.setMaterialClearCoatSmallPTMaterialArray(materialClearCoatSmallPTMaterialArray);
-		compiledScene.setMaterialGlassRayitoMaterialArray(materialGlassRayitoMaterialArray);
-		compiledScene.setMaterialGlassSmallPTMaterialArray(materialGlassSmallPTMaterialArray);
-		compiledScene.setMaterialMatteRayitoMaterialArray(materialMatteRayitoMaterialArray);
-		compiledScene.setMaterialMatteSmallPTMaterialArray(materialMatteSmallPTMaterialArray);
-		compiledScene.setMaterialMetalRayitoMaterialArray(materialMetalRayitoMaterialArray);
-		compiledScene.setMaterialMetalSmallPTMaterialArray(materialMetalSmallPTMaterialArray);
-		compiledScene.setMaterialMirrorRayitoMaterialArray(materialMirrorRayitoMaterialArray);
-		compiledScene.setMaterialMirrorSmallPTMaterialArray(materialMirrorSmallPTMaterialArray);
+		compiledScene.setMaterialClearCoatMaterialArray(materialClearCoatMaterialArray);
+		compiledScene.setMaterialGlassMaterialArray(materialGlassMaterialArray);
+		compiledScene.setMaterialGlossyMaterialArray(materialGlossyMaterialArray);
+		compiledScene.setMaterialMatteMaterialArray(materialMatteMaterialArray);
+		compiledScene.setMaterialMirrorMaterialArray(materialMirrorMaterialArray);
 		compiledScene.setMatrix44FArray(matrix44FArray);
 		compiledScene.setPrimitiveArray(primitiveArray);
 		compiledScene.setShape3FPlane3FArray(shape3FPlane3FArray);
@@ -374,22 +342,18 @@ final class SceneCompiler {
 		this.distinctBoundingVolumes.clear();
 		this.distinctBullseyeTextures.clear();
 		this.distinctCheckerboardTextures.clear();
-		this.distinctClearCoatSmallPTMaterials.clear();
+		this.distinctClearCoatMaterials.clear();
 		this.distinctConstantTextures.clear();
 		this.distinctFunctionTextures.clear();
-		this.distinctGlassRayitoMaterials.clear();
-		this.distinctGlassSmallPTMaterials.clear();
+		this.distinctGlassMaterials.clear();
+		this.distinctGlossyMaterials.clear();
 		this.distinctInfiniteBoundingVolumes.clear();
 		this.distinctLDRImageLights.clear();
 		this.distinctLDRImageTextures.clear();
 		this.distinctMarbleTextures.clear();
 		this.distinctMaterials.clear();
-		this.distinctMatteRayitoMaterials.clear();
-		this.distinctMatteSmallPTMaterials.clear();
-		this.distinctMetalRayitoMaterials.clear();
-		this.distinctMetalSmallPTMaterials.clear();
-		this.distinctMirrorRayitoMaterials.clear();
-		this.distinctMirrorSmallPTMaterials.clear();
+		this.distinctMatteMaterials.clear();
+		this.distinctMirrorMaterials.clear();
 		this.distinctPlanes.clear();
 		this.filteredPrimitives.clear();
 		this.distinctRectangularCuboids.clear();
@@ -406,19 +370,15 @@ final class SceneCompiler {
 		this.distinctToOffsetsBoundingSpheres.clear();
 		this.distinctToOffsetsBullseyeTextures.clear();
 		this.distinctToOffsetsCheckerboardTextures.clear();
-		this.distinctToOffsetsClearCoatSmallPTMaterials.clear();
+		this.distinctToOffsetsClearCoatMaterials.clear();
 		this.distinctToOffsetsConstantTextures.clear();
-		this.distinctToOffsetsGlassRayitoMaterials.clear();
-		this.distinctToOffsetsGlassSmallPTMaterials.clear();
+		this.distinctToOffsetsGlassMaterials.clear();
+		this.distinctToOffsetsGlossyMaterials.clear();
 		this.distinctToOffsetsLDRImageLights.clear();
 		this.distinctToOffsetsLDRImageTextures.clear();
 		this.distinctToOffsetsMarbleTextures.clear();
-		this.distinctToOffsetsMatteRayitoMaterials.clear();
-		this.distinctToOffsetsMatteSmallPTMaterials.clear();
-		this.distinctToOffsetsMetalRayitoMaterials.clear();
-		this.distinctToOffsetsMetalSmallPTMaterials.clear();
-		this.distinctToOffsetsMirrorRayitoMaterials.clear();
-		this.distinctToOffsetsMirrorSmallPTMaterials.clear();
+		this.distinctToOffsetsMatteMaterials.clear();
+		this.distinctToOffsetsMirrorMaterials.clear();
 		this.distinctToOffsetsPlanes.clear();
 		this.distinctToOffsetsRectangularCuboids.clear();
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
@@ -442,24 +402,16 @@ final class SceneCompiler {
 	}
 	
 	private void doFilterAllDistinctMaterials(final Scene scene) {
-		this.distinctClearCoatSmallPTMaterials.addAll(NodeFilter.filterAllDistinct(scene, ClearCoatSmallPTMaterial.class));
-		this.distinctGlassRayitoMaterials.addAll(NodeFilter.filterAllDistinct(scene, GlassRayitoMaterial.class));
-		this.distinctGlassSmallPTMaterials.addAll(NodeFilter.filterAllDistinct(scene, GlassSmallPTMaterial.class));
-		this.distinctMatteRayitoMaterials.addAll(NodeFilter.filterAllDistinct(scene, MatteRayitoMaterial.class));
-		this.distinctMatteSmallPTMaterials.addAll(NodeFilter.filterAllDistinct(scene, MatteSmallPTMaterial.class));
-		this.distinctMetalRayitoMaterials.addAll(NodeFilter.filterAllDistinct(scene, MetalRayitoMaterial.class));
-		this.distinctMetalSmallPTMaterials.addAll(NodeFilter.filterAllDistinct(scene, MetalSmallPTMaterial.class));
-		this.distinctMirrorRayitoMaterials.addAll(NodeFilter.filterAllDistinct(scene, MirrorRayitoMaterial.class));
-		this.distinctMirrorSmallPTMaterials.addAll(NodeFilter.filterAllDistinct(scene, MirrorSmallPTMaterial.class));
-		this.distinctMaterials.addAll(this.distinctClearCoatSmallPTMaterials);
-		this.distinctMaterials.addAll(this.distinctGlassRayitoMaterials);
-		this.distinctMaterials.addAll(this.distinctGlassSmallPTMaterials);
-		this.distinctMaterials.addAll(this.distinctMatteRayitoMaterials);
-		this.distinctMaterials.addAll(this.distinctMatteSmallPTMaterials);
-		this.distinctMaterials.addAll(this.distinctMetalRayitoMaterials);
-		this.distinctMaterials.addAll(this.distinctMetalSmallPTMaterials);
-		this.distinctMaterials.addAll(this.distinctMirrorRayitoMaterials);
-		this.distinctMaterials.addAll(this.distinctMirrorSmallPTMaterials);
+		this.distinctClearCoatMaterials.addAll(NodeFilter.filterAllDistinct(scene, ClearCoatMaterial.class));
+		this.distinctGlassMaterials.addAll(NodeFilter.filterAllDistinct(scene, GlassMaterial.class));
+		this.distinctGlossyMaterials.addAll(NodeFilter.filterAllDistinct(scene, GlossyMaterial.class));
+		this.distinctMatteMaterials.addAll(NodeFilter.filterAllDistinct(scene, MatteMaterial.class));
+		this.distinctMirrorMaterials.addAll(NodeFilter.filterAllDistinct(scene, MirrorMaterial.class));
+		this.distinctMaterials.addAll(this.distinctClearCoatMaterials);
+		this.distinctMaterials.addAll(this.distinctGlassMaterials);
+		this.distinctMaterials.addAll(this.distinctGlossyMaterials);
+		this.distinctMaterials.addAll(this.distinctMatteMaterials);
+		this.distinctMaterials.addAll(this.distinctMirrorMaterials);
 	}
 	
 	private void doFilterAllDistinctShapes(final Scene scene) {
@@ -504,15 +456,11 @@ final class SceneCompiler {
 	}
 	
 	private void doMapAllDistinctMaterials() {
-		this.distinctToOffsetsClearCoatSmallPTMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctClearCoatSmallPTMaterials, ClearCoatSmallPTMaterial.ARRAY_LENGTH));
-		this.distinctToOffsetsGlassRayitoMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlassRayitoMaterials, GlassRayitoMaterial.ARRAY_LENGTH));
-		this.distinctToOffsetsGlassSmallPTMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlassSmallPTMaterials, GlassSmallPTMaterial.ARRAY_LENGTH));
-		this.distinctToOffsetsMatteRayitoMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMatteRayitoMaterials, MatteRayitoMaterial.ARRAY_LENGTH));
-		this.distinctToOffsetsMatteSmallPTMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMatteSmallPTMaterials, MatteSmallPTMaterial.ARRAY_LENGTH));
-		this.distinctToOffsetsMetalRayitoMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMetalRayitoMaterials, MetalRayitoMaterial.ARRAY_LENGTH));
-		this.distinctToOffsetsMetalSmallPTMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMetalSmallPTMaterials, MetalSmallPTMaterial.ARRAY_LENGTH));
-		this.distinctToOffsetsMirrorRayitoMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMirrorRayitoMaterials, MirrorRayitoMaterial.ARRAY_LENGTH));
-		this.distinctToOffsetsMirrorSmallPTMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMirrorSmallPTMaterials, MirrorSmallPTMaterial.ARRAY_LENGTH));
+		this.distinctToOffsetsClearCoatMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctClearCoatMaterials, ClearCoatMaterial.ARRAY_LENGTH));
+		this.distinctToOffsetsGlassMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlassMaterials, GlassMaterial.ARRAY_LENGTH));
+		this.distinctToOffsetsGlossyMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlossyMaterials, GlossyMaterial.ARRAY_LENGTH));
+		this.distinctToOffsetsMatteMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMatteMaterials, MatteMaterial.ARRAY_LENGTH));
+		this.distinctToOffsetsMirrorMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMirrorMaterials, MirrorMaterial.ARRAY_LENGTH));
 	}
 	
 	private void doMapAllDistinctShapes() {
@@ -544,159 +492,90 @@ final class SceneCompiler {
 		}
 	}
 	
-	private void doPopulateMaterialClearCoatSmallPTMaterialArrayWithTextures(final int[] materialClearCoatSmallPTMaterialArray) {
-		for(int i = 0; i < this.distinctClearCoatSmallPTMaterials.size(); i++) {
-			final ClearCoatSmallPTMaterial clearCoatSmallPTMaterial = this.distinctClearCoatSmallPTMaterials.get(i);
+	private void doPopulateMaterialClearCoatMaterialArrayWithTextures(final int[] materialClearCoatMaterialArray) {
+		for(int i = 0; i < this.distinctClearCoatMaterials.size(); i++) {
+			final ClearCoatMaterial clearCoatMaterial = this.distinctClearCoatMaterials.get(i);
 			
-			final Texture textureEmission = clearCoatSmallPTMaterial.getTextureEmission();
-			final Texture textureKD = clearCoatSmallPTMaterial.getTextureKD();
-			final Texture textureKS = clearCoatSmallPTMaterial.getTextureKS();
+			final Texture textureEmission = clearCoatMaterial.getTextureEmission();
+			final Texture textureKD = clearCoatMaterial.getTextureKD();
+			final Texture textureKS = clearCoatMaterial.getTextureKS();
 			
-			final int materialClearCoatSmallPTMaterialArrayTextureEmissionOffset = i * ClearCoatSmallPTMaterial.ARRAY_LENGTH + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
-			final int materialClearCoatSmallPTMaterialArrayTextureKDOffset = i * ClearCoatSmallPTMaterial.ARRAY_LENGTH + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET;
-			final int materialClearCoatSmallPTMaterialArrayTextureKSOffset = i * ClearCoatSmallPTMaterial.ARRAY_LENGTH + ClearCoatSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_S_OFFSET;
+			final int materialClearCoatMaterialArrayTextureEmission = i * ClearCoatMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
+			final int materialClearCoatMaterialArrayTextureKD = i * ClearCoatMaterial.ARRAY_LENGTH + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_D;
+			final int materialClearCoatMaterialArrayTextureKS = i * ClearCoatMaterial.ARRAY_LENGTH + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_S;
 			
-			materialClearCoatSmallPTMaterialArray[materialClearCoatSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
-			materialClearCoatSmallPTMaterialArray[materialClearCoatSmallPTMaterialArrayTextureKDOffset] = doFindTextureOffset(textureKD);
-			materialClearCoatSmallPTMaterialArray[materialClearCoatSmallPTMaterialArrayTextureKSOffset] = doFindTextureOffset(textureKS);
+			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
+			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureKD] = pack(textureKD.getID(), doFindTextureOffset(textureKD));
+			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureKS] = pack(textureKS.getID(), doFindTextureOffset(textureKS));
 		}
 	}
 	
-	private void doPopulateMaterialGlassRayitoMaterialArrayWithTextures(final int[] materialGlassRayitoMaterialArray) {
-		for(int i = 0; i < this.distinctGlassRayitoMaterials.size(); i++) {
-			final GlassRayitoMaterial glassRayitoMaterial = this.distinctGlassRayitoMaterials.get(i);
+	private void doPopulateMaterialGlassMaterialArrayWithTextures(final int[] materialGlassMaterialArray) {
+		for(int i = 0; i < this.distinctGlassMaterials.size(); i++) {
+			final GlassMaterial glassMaterial = this.distinctGlassMaterials.get(i);
 			
-			final Texture textureEmission = glassRayitoMaterial.getTextureEmission();
-			final Texture textureEta = glassRayitoMaterial.getTextureEta();
-			final Texture textureKR = glassRayitoMaterial.getTextureKR();
-			final Texture textureKT = glassRayitoMaterial.getTextureKT();
+			final Texture textureEmission = glassMaterial.getTextureEmission();
+			final Texture textureEta = glassMaterial.getTextureEta();
+			final Texture textureKR = glassMaterial.getTextureKR();
+			final Texture textureKT = glassMaterial.getTextureKT();
 			
-			final int materialGlassRayitoMaterialArrayTextureEmissionOffset = i * GlassRayitoMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
-			final int materialGlassRayitoMaterialArrayTextureEtaOffset = i * GlassRayitoMaterial.ARRAY_LENGTH + GlassRayitoMaterial.ARRAY_OFFSET_TEXTURE_ETA_OFFSET;
-			final int materialGlassRayitoMaterialArrayTextureKROffset = i * GlassRayitoMaterial.ARRAY_LENGTH + GlassRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
-			final int materialGlassRayitoMaterialArrayTextureKTOffset = i * GlassRayitoMaterial.ARRAY_LENGTH + GlassRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_T_OFFSET;
+			final int materialGlassMaterialArrayTextureEmission = i * GlassMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
+			final int materialGlassMaterialArrayTextureEta = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_ETA;
+			final int materialGlassMaterialArrayTextureKR = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_K_R;
+			final int materialGlassMaterialArrayTextureKT = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_K_T;
 			
-			materialGlassRayitoMaterialArray[materialGlassRayitoMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
-			materialGlassRayitoMaterialArray[materialGlassRayitoMaterialArrayTextureEtaOffset] = doFindTextureOffset(textureEta);
-			materialGlassRayitoMaterialArray[materialGlassRayitoMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
-			materialGlassRayitoMaterialArray[materialGlassRayitoMaterialArrayTextureKTOffset] = doFindTextureOffset(textureKT);
+			materialGlassMaterialArray[materialGlassMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
+			materialGlassMaterialArray[materialGlassMaterialArrayTextureEta] = pack(textureEta.getID(), doFindTextureOffset(textureEta));
+			materialGlassMaterialArray[materialGlassMaterialArrayTextureKR] = pack(textureKR.getID(), doFindTextureOffset(textureKR));
+			materialGlassMaterialArray[materialGlassMaterialArrayTextureKT] = pack(textureKT.getID(), doFindTextureOffset(textureKT));
 		}
 	}
 	
-	private void doPopulateMaterialGlassSmallPTMaterialArrayWithTextures(final int[] materialGlassSmallPTMaterialArray) {
-		for(int i = 0; i < this.distinctGlassSmallPTMaterials.size(); i++) {
-			final GlassSmallPTMaterial glassSmallPTMaterial = this.distinctGlassSmallPTMaterials.get(i);
+	private void doPopulateMaterialGlossyMaterialArrayWithTextures(final int[] materialGlossyMaterialArray) {
+		for(int i = 0; i < this.distinctGlossyMaterials.size(); i++) {
+			final GlossyMaterial glossyMaterial = this.distinctGlossyMaterials.get(i);
 			
-			final Texture textureEmission = glassSmallPTMaterial.getTextureEmission();
-			final Texture textureEta = glassSmallPTMaterial.getTextureEta();
-			final Texture textureKR = glassSmallPTMaterial.getTextureKR();
-			final Texture textureKT = glassSmallPTMaterial.getTextureKT();
+			final Texture textureEmission = glossyMaterial.getTextureEmission();
+			final Texture textureKR = glossyMaterial.getTextureKR();
+			final Texture textureRoughness = glossyMaterial.getTextureRoughness();
 			
-			final int materialGlassSmallPTMaterialArrayTextureEmissionOffset = i * GlassSmallPTMaterial.ARRAY_LENGTH + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
-			final int materialGlassSmallPTMaterialArrayTextureEtaOffset = i * GlassSmallPTMaterial.ARRAY_LENGTH + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_ETA_OFFSET;
-			final int materialGlassSmallPTMaterialArrayTextureKROffset = i * GlassSmallPTMaterial.ARRAY_LENGTH + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
-			final int materialGlassSmallPTMaterialArrayTextureKTOffset = i * GlassSmallPTMaterial.ARRAY_LENGTH + GlassSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_T_OFFSET;
+			final int materialGlossyMaterialArrayTextureEmission = i * GlossyMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
+			final int materialGlossyMaterialArrayTextureKR = i * GlossyMaterial.ARRAY_LENGTH + GlossyMaterial.ARRAY_OFFSET_TEXTURE_K_R;
+			final int materialGlossyMaterialArrayTextureRoughness = i * GlossyMaterial.ARRAY_LENGTH + GlossyMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS;
 			
-			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
-			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureEtaOffset] = doFindTextureOffset(textureEta);
-			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
-			materialGlassSmallPTMaterialArray[materialGlassSmallPTMaterialArrayTextureKTOffset] = doFindTextureOffset(textureKT);
+			materialGlossyMaterialArray[materialGlossyMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
+			materialGlossyMaterialArray[materialGlossyMaterialArrayTextureKR] = pack(textureKR.getID(), doFindTextureOffset(textureKR));
+			materialGlossyMaterialArray[materialGlossyMaterialArrayTextureRoughness] = pack(textureRoughness.getID(), doFindTextureOffset(textureRoughness));
 		}
 	}
 	
-	private void doPopulateMaterialMatteRayitoMaterialArrayWithTextures(final int[] materialMatteRayitoMaterialArray) {
-		for(int i = 0; i < this.distinctMatteRayitoMaterials.size(); i++) {
-			final MatteRayitoMaterial matteRayitoMaterial = this.distinctMatteRayitoMaterials.get(i);
+	private void doPopulateMaterialMatteMaterialArrayWithTextures(final int[] materialMatteMaterialArray) {
+		for(int i = 0; i < this.distinctMatteMaterials.size(); i++) {
+			final MatteMaterial matteMaterial = this.distinctMatteMaterials.get(i);
 			
-			final Texture textureEmission = matteRayitoMaterial.getTextureEmission();
-			final Texture textureKD = matteRayitoMaterial.getTextureKD();
+			final Texture textureEmission = matteMaterial.getTextureEmission();
+			final Texture textureKD = matteMaterial.getTextureKD();
 			
-			final int materialMatteRayitoMaterialArrayTextureEmissionOffset = i * MatteRayitoMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
-			final int materialMatteRayitoMaterialArrayTextureKDOffset = i * MatteRayitoMaterial.ARRAY_LENGTH + MatteRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET;
+			final int materialMatteMaterialArrayTextureEmission = i * MatteMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
+			final int materialMatteMaterialArrayTextureKD = i * MatteMaterial.ARRAY_LENGTH + MatteMaterial.ARRAY_OFFSET_TEXTURE_K_D;
 			
-			materialMatteRayitoMaterialArray[materialMatteRayitoMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
-			materialMatteRayitoMaterialArray[materialMatteRayitoMaterialArrayTextureKDOffset] = doFindTextureOffset(textureKD);
+			materialMatteMaterialArray[materialMatteMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
+			materialMatteMaterialArray[materialMatteMaterialArrayTextureKD] = pack(textureKD.getID(), doFindTextureOffset(textureKD));
 		}
 	}
 	
-	private void doPopulateMaterialMatteSmallPTMaterialArrayWithTextures(final int[] materialMatteSmallPTMaterialArray) {
-		for(int i = 0; i < this.distinctMatteSmallPTMaterials.size(); i++) {
-			final MatteSmallPTMaterial matteSmallPTMaterial = this.distinctMatteSmallPTMaterials.get(i);
+	private void doPopulateMaterialMirrorMaterialArrayWithTextures(final int[] materialMirrorMaterialArray) {
+		for(int i = 0; i < this.distinctMirrorMaterials.size(); i++) {
+			final MirrorMaterial mirrorMaterial = this.distinctMirrorMaterials.get(i);
 			
-			final Texture textureEmission = matteSmallPTMaterial.getTextureEmission();
-			final Texture textureKD = matteSmallPTMaterial.getTextureKD();
+			final Texture textureEmission = mirrorMaterial.getTextureEmission();
+			final Texture textureKR = mirrorMaterial.getTextureKR();
 			
-			final int materialMatteSmallPTMaterialArrayTextureEmissionOffset = i * MatteSmallPTMaterial.ARRAY_LENGTH + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
-			final int materialMatteSmallPTMaterialArrayTextureKDOffset = i * MatteSmallPTMaterial.ARRAY_LENGTH + MatteSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_D_OFFSET;
+			final int materialMirrorMaterialArrayTextureEmission = i * MirrorMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
+			final int materialMirrorMaterialArrayTextureKR = i * MirrorMaterial.ARRAY_LENGTH + MirrorMaterial.ARRAY_OFFSET_TEXTURE_K_R;
 			
-			materialMatteSmallPTMaterialArray[materialMatteSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
-			materialMatteSmallPTMaterialArray[materialMatteSmallPTMaterialArrayTextureKDOffset] = doFindTextureOffset(textureKD);
-		}
-	}
-	
-	private void doPopulateMaterialMetalRayitoMaterialArrayWithTextures(final int[] materialMetalRayitoMaterialArray) {
-		for(int i = 0; i < this.distinctMetalRayitoMaterials.size(); i++) {
-			final MetalRayitoMaterial metalRayitoMaterial = this.distinctMetalRayitoMaterials.get(i);
-			
-			final Texture textureEmission = metalRayitoMaterial.getTextureEmission();
-			final Texture textureKR = metalRayitoMaterial.getTextureKR();
-			final Texture textureRoughness = metalRayitoMaterial.getTextureRoughness();
-			
-			final int materialMetalRayitoMaterialArrayTextureEmissionOffset = i * MetalRayitoMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
-			final int materialMetalRayitoMaterialArrayTextureKROffset = i * MetalRayitoMaterial.ARRAY_LENGTH + MetalRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
-			final int materialMetalRayitoMaterialArrayTextureRoughnessOffset = i * MetalRayitoMaterial.ARRAY_LENGTH + MetalRayitoMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_OFFSET;
-			
-			materialMetalRayitoMaterialArray[materialMetalRayitoMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
-			materialMetalRayitoMaterialArray[materialMetalRayitoMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
-			materialMetalRayitoMaterialArray[materialMetalRayitoMaterialArrayTextureRoughnessOffset] = doFindTextureOffset(textureRoughness);
-		}
-	}
-	
-	private void doPopulateMaterialMetalSmallPTMaterialArrayWithTextures(final int[] materialMetalSmallPTMaterialArray) {
-		for(int i = 0; i < this.distinctMetalSmallPTMaterials.size(); i++) {
-			final MetalSmallPTMaterial metalSmallPTMaterial = this.distinctMetalSmallPTMaterials.get(i);
-			
-			final Texture textureEmission = metalSmallPTMaterial.getTextureEmission();
-			final Texture textureKR = metalSmallPTMaterial.getTextureKR();
-			final Texture textureRoughness = metalSmallPTMaterial.getTextureRoughness();
-			
-			final int materialMetalSmallPTMaterialArrayTextureEmissionOffset = i * MetalSmallPTMaterial.ARRAY_LENGTH + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
-			final int materialMetalSmallPTMaterialArrayTextureKROffset = i * MetalSmallPTMaterial.ARRAY_LENGTH + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
-			final int materialMetalSmallPTMaterialArrayTextureRoughnessOffset = i * MetalSmallPTMaterial.ARRAY_LENGTH + MetalSmallPTMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_OFFSET;
-			
-			materialMetalSmallPTMaterialArray[materialMetalSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
-			materialMetalSmallPTMaterialArray[materialMetalSmallPTMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
-			materialMetalSmallPTMaterialArray[materialMetalSmallPTMaterialArrayTextureRoughnessOffset] = doFindTextureOffset(textureRoughness);
-		}
-	}
-	
-	private void doPopulateMaterialMirrorRayitoMaterialArrayWithTextures(final int[] materialMirrorRayitoMaterialArray) {
-		for(int i = 0; i < this.distinctMirrorRayitoMaterials.size(); i++) {
-			final MirrorRayitoMaterial mirrorRayitoMaterial = this.distinctMirrorRayitoMaterials.get(i);
-			
-			final Texture textureEmission = mirrorRayitoMaterial.getTextureEmission();
-			final Texture textureKR = mirrorRayitoMaterial.getTextureKR();
-			
-			final int materialMirrorRayitoMaterialArrayTextureEmissionOffset = i * MirrorRayitoMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
-			final int materialMirrorRayitoMaterialArrayTextureKROffset = i * MirrorRayitoMaterial.ARRAY_LENGTH + MirrorRayitoMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
-			
-			materialMirrorRayitoMaterialArray[materialMirrorRayitoMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
-			materialMirrorRayitoMaterialArray[materialMirrorRayitoMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
-		}
-	}
-	
-	private void doPopulateMaterialMirrorSmallPTMaterialArrayWithTextures(final int[] materialMirrorSmallPTMaterialArray) {
-		for(int i = 0; i < this.distinctMirrorSmallPTMaterials.size(); i++) {
-			final MirrorSmallPTMaterial mirrorSmallPTMaterial = this.distinctMirrorSmallPTMaterials.get(i);
-			
-			final Texture textureEmission = mirrorSmallPTMaterial.getTextureEmission();
-			final Texture textureKR = mirrorSmallPTMaterial.getTextureKR();
-			
-			final int materialMirrorSmallPTMaterialArrayTextureEmissionOffset = i * MirrorSmallPTMaterial.ARRAY_LENGTH + SmallPTMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_OFFSET;
-			final int materialMirrorSmallPTMaterialArrayTextureKROffset = i * MirrorSmallPTMaterial.ARRAY_LENGTH + MirrorSmallPTMaterial.ARRAY_OFFSET_TEXTURE_K_R_OFFSET;
-			
-			materialMirrorSmallPTMaterialArray[materialMirrorSmallPTMaterialArrayTextureEmissionOffset] = doFindTextureOffset(textureEmission);
-			materialMirrorSmallPTMaterialArray[materialMirrorSmallPTMaterialArrayTextureKROffset] = doFindTextureOffset(textureKR);
+			materialMirrorMaterialArray[materialMirrorMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
+			materialMirrorMaterialArray[materialMirrorMaterialArrayTextureKR] = pack(textureKR.getID(), doFindTextureOffset(textureKR));
 		}
 	}
 	
@@ -726,24 +605,16 @@ final class SceneCompiler {
 			
 			final int primitiveArrayMaterialOffset = i * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET;
 			
-			if(material instanceof ClearCoatSmallPTMaterial) {
-				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsClearCoatSmallPTMaterials.get(material).intValue();
-			} else if(material instanceof GlassRayitoMaterial) {
-				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsGlassRayitoMaterials.get(material).intValue();
-			} else if(material instanceof GlassSmallPTMaterial) {
-				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsGlassSmallPTMaterials.get(material).intValue();
-			} else if(material instanceof MatteRayitoMaterial) {
-				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMatteRayitoMaterials.get(material).intValue();
-			} else if(material instanceof MatteSmallPTMaterial) {
-				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMatteSmallPTMaterials.get(material).intValue();
-			} else if(material instanceof MetalRayitoMaterial) {
-				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMetalRayitoMaterials.get(material).intValue();
-			} else if(material instanceof MetalSmallPTMaterial) {
-				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMetalSmallPTMaterials.get(material).intValue();
-			} else if(material instanceof MirrorRayitoMaterial) {
-				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMirrorRayitoMaterials.get(material).intValue();
-			} else if(material instanceof MirrorSmallPTMaterial) {
-				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMirrorSmallPTMaterials.get(material).intValue();
+			if(material instanceof ClearCoatMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsClearCoatMaterials.get(material).intValue();
+			} else if(material instanceof GlassMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsGlassMaterials.get(material).intValue();
+			} else if(material instanceof GlossyMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsGlossyMaterials.get(material).intValue();
+			} else if(material instanceof MatteMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMatteMaterials.get(material).intValue();
+			} else if(material instanceof MirrorMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMirrorMaterials.get(material).intValue();
 			}
 		}
 	}

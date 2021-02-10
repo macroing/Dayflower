@@ -463,8 +463,8 @@ public final class Ints {
 	 * @return an {@code int[]} with the unpacked {@code int} values
 	 */
 	public static int[] unpack(final int packedValue) {
-		final int a = (packedValue >> 16) & 0xFFFF;
-		final int b = (packedValue >>  0) & 0xFFFF;
+		final int a = (packedValue >>> 16) & 0xFFFF;
+		final int b = (packedValue >>>  0) & 0xFFFF;
 		
 		return new int[] {a, b};
 	}

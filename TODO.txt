@@ -26,3 +26,8 @@ GPU Memory Optimization:
 		Change the meaning of the Texture offset, such that 0 refers to the first Texture, 1 to the second and so forth. Currently it refers to the offset in the array.
 		For Texture instances with a variable length, a lookup table has to be created. LDRImageTexture is currently the only variable length Texture.
 		This change will allow more Texture instances to be referenced using the 16 bit limitations for Texture offsets, as presented in Material Structure Change.
+
+	Status:
+
+		The Material Structure Change is now complete.
+		All *RayitoMaterial and *SmallPTMaterial types have also been removed from the GPU renderer. The default *Material types are used instead.

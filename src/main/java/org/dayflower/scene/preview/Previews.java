@@ -30,9 +30,7 @@ import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
 import org.dayflower.scene.light.DiffuseAreaLight;
-import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.material.MatteMaterial;
-import org.dayflower.scene.material.smallpt.SmallPTMaterial;
 
 /**
  * A class that consists exclusively of static methods that returns {@link Scene} instances used for previews.
@@ -57,12 +55,8 @@ public final class Previews {
 	 * @throws NullPointerException thrown if, and only if, {@code material} is {@code null}
 	 */
 	public static Scene createMaterialPreviewScene(final Material material) {
-		return material instanceof SmallPTMaterial ? doCreateMaterialPreviewSceneSmallPTMaterial(SmallPTMaterial.class.cast(material)) : doCreateMaterialPreviewSceneMaterial(Objects.requireNonNull(material, "material == null"));
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Scene doCreateMaterialPreviewSceneMaterial(final Material material) {
+		Objects.requireNonNull(material, "material == null");
+		
 		final
 		Camera camera = new Camera();
 		camera.setResolution(32.0F, 32.0F);
@@ -70,55 +64,24 @@ public final class Previews {
 		camera.setOrthonormalBasis();
 		
 		final Material material0 = material;
-//		final Material material1 = new MattePBRTMaterial();
-		final Material material2 = new MatteMaterial();
-		
-		final Shape3F shape0 = new Sphere3F();//new Sphere3F();
-//		final Shape3F shape1 = new Sphere3F(10.0F);
-		final Shape3F shape2 = new Sphere3F(2.0F);
-		
-		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(4.0F));
-//		final Transform transform1 = new Transform(camera.getEye());
-		final Transform transform2 = new Transform(camera.getPointBehindEye(4.0F));
-		
-		final AreaLight areaLight2 = new DiffuseAreaLight(transform2, 1, new Color3F(12.0F), shape2, true);
-		
-		final Primitive primitive0 = new Primitive(material0, shape0, transform0);
-//		final Primitive primitive1 = new Primitive(material1, shape1, transform1);
-		final Primitive primitive2 = new Primitive(material2, shape2, transform2, areaLight2);
-		
-		final
-		Scene scene = new Scene();
-		scene.addLight(areaLight2);
-//		scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(100.0F), Matrix44F.translate(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 0.0F), new Point3F(0.0F, 1.0F, 20.0F)));
-		scene.addPrimitive(primitive0);
-//		scene.addPrimitive(primitive1);
-		scene.addPrimitive(primitive2);
-		scene.setCamera(camera);
-		scene.setName("Preview");
-		
-		return scene;
-	}
-	
-	private static Scene doCreateMaterialPreviewSceneSmallPTMaterial(final SmallPTMaterial smallPTMaterial) {
-		final
-		Camera camera = new Camera();
-		camera.setResolution(32.0F, 32.0F);
-		camera.setFieldOfViewY();
-		camera.setOrthonormalBasis();
-		
-		final Material material0 = smallPTMaterial;
+		final Material material1 = new MatteMaterial();
 		
 		final Shape3F shape0 = new Sphere3F();
+		final Shape3F shape1 = new Sphere3F(2.0F);
 		
-		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(5.0F));
+		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(4.0F));
+		final Transform transform1 = new Transform(camera.getPointBehindEye(4.0F));
+		
+		final AreaLight areaLight1 = new DiffuseAreaLight(transform1, 1, new Color3F(12.0F), shape1, true);
 		
 		final Primitive primitive0 = new Primitive(material0, shape0, transform0);
+		final Primitive primitive1 = new Primitive(material1, shape1, transform1, areaLight1);
 		
 		final
 		Scene scene = new Scene();
-		scene.addLight(new PerezLight());
+		scene.addLight(areaLight1);
 		scene.addPrimitive(primitive0);
+		scene.addPrimitive(primitive1);
 		scene.setCamera(camera);
 		scene.setName("Preview");
 		

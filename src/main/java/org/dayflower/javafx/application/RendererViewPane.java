@@ -52,7 +52,6 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
-import org.dayflower.scene.material.smallpt.SmallPTMaterial;
 import org.dayflower.scene.preview.Previews;
 
 import javafx.geometry.Insets;
@@ -406,16 +405,12 @@ final class RendererViewPane extends BorderPane {
 		};
 	}
 	
-	private static RenderingAlgorithm doCreateRenderingAlgorithm(final Material material) {
-		return material instanceof SmallPTMaterial ? RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE : RenderingAlgorithm.PATH_TRACING;
-	}
-	
 	private static WritableImage doCreateWritableImageMaterial(final Material material) {
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
 		combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(32, 32, Color4F.BLACK, new BoxFilter2F()));
 		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
-		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(doCreateRenderingAlgorithm(material));
+		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
 		combinedProgressiveImageOrderRenderer.setRenderPasses(10);
 		combinedProgressiveImageOrderRenderer.setScene(Previews.createMaterialPreviewScene(material));
 		combinedProgressiveImageOrderRenderer.render();

@@ -77,19 +77,11 @@ public final class CPURenderer extends AbstractCPURenderer {
 			case AMBIENT_OCCLUSION:
 				return AmbientOcclusion.radiance(ray, getScene(), isPreviewMode(), getMaximumDistance(), getSamples());
 			case PATH_TRACING:
-				return PathTracingPBRT.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
-			case PATH_TRACING_P_B_R_T:
-				return PathTracingPBRT.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
-			case PATH_TRACING_RAYITO:
-				return PathTracingRayito.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
-			case PATH_TRACING_SMALL_P_T_ITERATIVE:
-				return PathTracingSmallPTIterative.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
-			case PATH_TRACING_SMALL_P_T_RECURSIVE:
-				return PathTracingSmallPTRecursive.radiance(ray, getScene(), getMaximumBounce(), getMinimumBounceRussianRoulette());
+				return PathTracing.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
 			case RAY_CASTING:
 				return RayCasting.radiance(ray, getScene(), isPreviewMode());
-			case RAY_TRACING_P_B_R_T:
-				return RayTracingPBRT.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), 0);
+			case RAY_TRACING:
+				return RayTracing.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), 0);
 			default:
 				return Color3F.BLACK;
 		}

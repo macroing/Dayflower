@@ -36,10 +36,7 @@ public final class RendererTest {
 	
 	public static void main(final String[] args) {
 //		doTestCPURendererAmbientOcclusion();
-		doTestCPURendererPathTracingPBRT();
-//		doTestCPURendererPathTracingRayito();
-//		doTestCPURendererPathTracingSmallPTIterative();
-//		doTestCPURendererPathTracingSmallPTRecursive();
+		doTestCPURendererPathTracing();
 //		doTestCPURendererRayCasting();
 //		doTestGPURenderer();
 	}
@@ -52,27 +49,9 @@ public final class RendererTest {
 		renderer.render();
 	}
 	
-	static void doTestCPURendererPathTracingPBRT() {
+	static void doTestCPURendererPathTracing() {
 		final
-		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_P_B_R_T, "./resources/scenes/PBRTShowcaseMaterial.java");
-		renderer.render();
-	}
-	
-	static void doTestCPURendererPathTracingRayito() {
-		final
-		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_RAYITO, "./resources/scenes/RayitoShowcaseShape3FConstructiveSolidGeometry3F.java");
-		renderer.render();
-	}
-	
-	static void doTestCPURendererPathTracingSmallPTIterative() {
-		final
-		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE, "./resources/scenes/RayitoDefault.java");
-		renderer.render();
-	}
-	
-	static void doTestCPURendererPathTracingSmallPTRecursive() {
-		final
-		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING_SMALL_P_T_RECURSIVE, "./resources/scenes/RayitoDefault.java");
+		Renderer renderer = doCreateCPURenderer(RenderingAlgorithm.PATH_TRACING, "./resources/scenes/PBRTShowcaseMaterial.java");
 		renderer.render();
 	}
 	

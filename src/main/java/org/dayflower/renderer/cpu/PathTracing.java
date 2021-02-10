@@ -41,13 +41,13 @@ import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.TransportMode;
 
-final class PathTracingPBRT {
+final class PathTracing {
 	private static final float T_MAXIMUM = Float.MAX_VALUE;
 	private static final float T_MINIMUM = 0.001F;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private PathTracingPBRT() {
+	private PathTracing() {
 		
 	}
 	

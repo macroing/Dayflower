@@ -39,6 +39,8 @@ import org.dayflower.utility.ParameterArguments;
  * A {@code SpecularBXDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for specular reflection and transmission.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This class implements the BRDF and BTDF of the glass material in SmallPT.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

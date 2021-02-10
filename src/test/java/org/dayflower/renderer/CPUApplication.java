@@ -54,7 +54,7 @@ public final class CPUApplication extends Application {
 	public CPUApplication() {
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.label = new Label();
-		this.renderer = doCreateRenderer(RenderingAlgorithm.PATH_TRACING_P_B_R_T, "./resources/scenes/CPUTest.java");
+		this.renderer = doCreateRenderer(RenderingAlgorithm.PATH_TRACING, "./resources/scenes/CPUTest.java");
 		this.renderer.setRendererObserver(new RendererObserverImpl(this.label));
 	}
 	

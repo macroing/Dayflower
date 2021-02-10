@@ -330,11 +330,10 @@ public final class GlossyMaterial implements Material {
 		this.modifier.modify(intersection);
 		
 		final Color3F colorKR = this.textureKR.getColor(intersection);
-		final Color3F colorRoughness = this.textureRoughness.getColor(intersection);
 		
-		final float roughness = colorRoughness.average();
+		final float floatRoughness = this.textureRoughness.getFloat(intersection);
 		
-		return Optional.of(new BSDF(intersection, new AshikhminShirleyBRDF(colorKR, roughness), true));
+		return Optional.of(new BSDF(intersection, new AshikhminShirleyBRDF(colorKR, floatRoughness), true));
 	}
 	
 	/**

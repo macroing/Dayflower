@@ -39,6 +39,7 @@ import org.dayflower.scene.Transform;
 import org.dayflower.scene.material.ClearCoatMaterial;
 import org.dayflower.scene.material.DisneyMaterial;
 import org.dayflower.scene.material.GlassMaterial;
+import org.dayflower.scene.material.GlossyMaterial;
 import org.dayflower.scene.material.HairMaterial;
 import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.MetalMaterial;
@@ -46,15 +47,6 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.material.UberMaterial;
-import org.dayflower.scene.material.rayito.GlassRayitoMaterial;
-import org.dayflower.scene.material.rayito.MatteRayitoMaterial;
-import org.dayflower.scene.material.rayito.MetalRayitoMaterial;
-import org.dayflower.scene.material.rayito.MirrorRayitoMaterial;
-import org.dayflower.scene.material.smallpt.ClearCoatSmallPTMaterial;
-import org.dayflower.scene.material.smallpt.GlassSmallPTMaterial;
-import org.dayflower.scene.material.smallpt.MatteSmallPTMaterial;
-import org.dayflower.scene.material.smallpt.MetalSmallPTMaterial;
-import org.dayflower.scene.material.smallpt.MirrorSmallPTMaterial;
 
 import javafx.scene.control.ComboBox;
 
@@ -70,7 +62,7 @@ final class CenteredVBoxes {
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Renderer Configuration", 16.0D);
 		
-		final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.PATH_TRACING_P_B_R_T, RenderingAlgorithm.PATH_TRACING_RAYITO, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_ITERATIVE, RenderingAlgorithm.PATH_TRACING_SMALL_P_T_RECURSIVE, RenderingAlgorithm.RAY_CASTING, RenderingAlgorithm.RAY_TRACING_P_B_R_T), combinedProgressiveImageOrderRenderer.getRenderingAlgorithm());
+		final ComboBox<RenderingAlgorithm> comboBox = centeredVBox.addComboBox(Arrays.asList(RenderingAlgorithm.AMBIENT_OCCLUSION, RenderingAlgorithm.PATH_TRACING, RenderingAlgorithm.RAY_CASTING, RenderingAlgorithm.RAY_TRACING), combinedProgressiveImageOrderRenderer.getRenderingAlgorithm());
 		
 		centeredVBox.addButton("Update Renderer", actionEvent -> {
 			final RenderingAlgorithm renderingAlgorithm = comboBox.getValue();
@@ -90,7 +82,7 @@ final class CenteredVBoxes {
 		CenteredVBox centeredVBox = new CenteredVBox();
 		centeredVBox.addLabel("Scene Configuration", 16.0D);
 		
-		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(ClearCoatMaterial.NAME, DisneyMaterial.NAME, GlassMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME, GlassRayitoMaterial.NAME, MatteRayitoMaterial.NAME, MetalRayitoMaterial.NAME, MirrorRayitoMaterial.NAME, ClearCoatSmallPTMaterial.NAME, GlassSmallPTMaterial.NAME, MatteSmallPTMaterial.NAME, MetalSmallPTMaterial.NAME, MirrorSmallPTMaterial.NAME), MatteMaterial.NAME);
+		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(ClearCoatMaterial.NAME, DisneyMaterial.NAME, GlassMaterial.NAME, GlossyMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME), MatteMaterial.NAME);
 		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Plane3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
 		
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
@@ -132,6 +124,8 @@ final class CenteredVBoxes {
 					return new DisneyMaterial();
 				case GlassMaterial.NAME:
 					return new GlassMaterial();
+				case GlossyMaterial.NAME:
+					return new GlossyMaterial();
 				case HairMaterial.NAME:
 					return new HairMaterial();
 				case MatteMaterial.NAME:
@@ -146,24 +140,6 @@ final class CenteredVBoxes {
 					return new SubstrateMaterial();
 				case UberMaterial.NAME:
 					return new UberMaterial();
-				case GlassRayitoMaterial.NAME:
-					return new GlassRayitoMaterial();
-				case MatteRayitoMaterial.NAME:
-					return new MatteRayitoMaterial();
-				case MetalRayitoMaterial.NAME:
-					return new MetalRayitoMaterial();
-				case MirrorRayitoMaterial.NAME:
-					return new MirrorRayitoMaterial();
-				case ClearCoatSmallPTMaterial.NAME:
-					return new ClearCoatSmallPTMaterial();
-				case GlassSmallPTMaterial.NAME:
-					return new GlassSmallPTMaterial();
-				case MatteSmallPTMaterial.NAME:
-					return new MatteSmallPTMaterial();
-				case MetalSmallPTMaterial.NAME:
-					return new MetalSmallPTMaterial();
-				case MirrorSmallPTMaterial.NAME:
-					return new MirrorSmallPTMaterial();
 				default:
 					return null;
 			}

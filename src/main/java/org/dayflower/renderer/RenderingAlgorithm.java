@@ -38,34 +38,14 @@ public enum RenderingAlgorithm {
 	PATH_TRACING("PathTracing", "Path Tracing"),
 	
 	/**
-	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to PBRT.
-	 */
-	PATH_TRACING_P_B_R_T("PathTracing-PBRT", "Path Tracing - PBRT"),
-	
-	/**
-	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to Rayito.
-	 */
-	PATH_TRACING_RAYITO("PathTracing-Rayito", "Path Tracing - Rayito"),
-	
-	/**
-	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to SmallPT and is iterative.
-	 */
-	PATH_TRACING_SMALL_P_T_ITERATIVE("PathTracing-SmallPT-Iterative", "Path Tracing - SmallPT - Iterative"),
-	
-	/**
-	 * A {@code RenderingAlgorithm} that represents Path Tracing with an implementation similar to SmallPT and is recursive.
-	 */
-	PATH_TRACING_SMALL_P_T_RECURSIVE("PathTracing-SmallPT-Recursive", "Path Tracing - SmallPT - Recursive"),
-	
-	/**
 	 * A {@code RenderingAlgorithm} that represents Ray Casting.
 	 */
 	RAY_CASTING("RayCasting", "Ray Casting"),
 	
 	/**
-	 * A {@code RenderingAlgorithm} that represents Ray Tracing with an implementation similar to PBRT.
+	 * A {@code RenderingAlgorithm} that represents Ray Tracing.
 	 */
-	RAY_TRACING_P_B_R_T("RayTracing-PBRT", "Ray Tracing - PBRT");
+	RAY_TRACING("RayTracing", "Ray Tracing");
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

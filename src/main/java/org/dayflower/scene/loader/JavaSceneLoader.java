@@ -317,8 +317,6 @@ public final class JavaSceneLoader implements SceneLoader {
 		doAppendLinef(stringBuilder, "import org.dayflower.scene.fresnel.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.scene.light.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.scene.material.*;");
-		doAppendLinef(stringBuilder, "import org.dayflower.scene.material.rayito.*;");
-		doAppendLinef(stringBuilder, "import org.dayflower.scene.material.smallpt.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.scene.microfacet.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.scene.modifier.*;");
 		doAppendLinef(stringBuilder, "import org.dayflower.scene.texture.*;");

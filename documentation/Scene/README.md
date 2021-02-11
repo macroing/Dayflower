@@ -52,6 +52,7 @@ Below follows a few lists of features available in the Scene API.
 * `LDRImageNormalMapModifier` - A `Modifier` that performs normal mapping using a low-dynamic-range (LDR) image.
 * `Modifier` - A modifier assigned to a specific `Material` instance and can modify the current `Intersection` instance.
 * `NoOpModifier` - A `Modifier` that does nothing.
+* `SimplexNoiseNormalMapModifier` - A `Modifier` that performs normal mapping using Simplex noise.
 
 #### The Scene Texture API
 * `BlendTexture` - Returns a `Color3F` by blending two `Texture` instances together.

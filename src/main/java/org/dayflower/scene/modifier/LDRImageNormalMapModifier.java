@@ -355,6 +355,8 @@ public final class LDRImageNormalMapModifier implements Modifier {
 	 */
 	@Override
 	public void modify(final Intersection intersection) {
+		Objects.requireNonNull(intersection, "intersection == null");
+		
 		final Color3F colorRGB = doGetColorRGB(intersection);
 		
 		final float r = colorRGB.getR();

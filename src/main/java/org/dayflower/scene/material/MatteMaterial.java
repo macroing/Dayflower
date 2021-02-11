@@ -67,7 +67,7 @@ public final class MatteMaterial implements Material {
 	/**
 	 * The ID of this {@code MatteMaterial} class.
 	 */
-	public static final int ID = 106;
+	public static final int ID = 107;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

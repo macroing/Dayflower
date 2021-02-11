@@ -67,7 +67,7 @@ public final class GlossyMaterial implements Material {
 	/**
 	 * The ID of this {@code GlossyMaterial} class.
 	 */
-	public static final int ID = 104;
+	public static final int ID = 105;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

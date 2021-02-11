@@ -63,7 +63,7 @@ public final class MirrorMaterial implements Material {
 	/**
 	 * The ID of this {@code MirrorMaterial} class.
 	 */
-	public static final int ID = 108;
+	public static final int ID = 109;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

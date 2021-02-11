@@ -35,6 +35,7 @@ Below follows a few lists of features available in the Scene API.
 * `JavaSceneLoader` - A `SceneLoader` that produces `Scene` instances by loading, compiling and executing snippets of Java source code.
 
 #### The Scene Material API
+* `BullseyeMaterial` - A `Material` that alternates between two `Material` instances in a bullseye pattern.
 * `CheckerboardMaterial` - A `Material` that alternates between two `Material` instances in a checkerboard pattern.
 * `ClearCoatMaterial` - A `Material` that represents clear coat.
 * `DisneyMaterial` - A `Material` that represents a Disney material.

@@ -18,16 +18,15 @@
  */
 package org.dayflower.scene.material;
 
-import static org.dayflower.utility.Floats.cos;
-import static org.dayflower.utility.Floats.fractionalPart;
-import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Floats.equal;
+import static org.dayflower.utility.Floats.remainder;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import org.dayflower.color.Color3F;
-import org.dayflower.geometry.AngleF;
-import org.dayflower.geometry.Vector2F;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.Vector3F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 import org.dayflower.scene.BSDF;
@@ -37,124 +36,115 @@ import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 
 /**
- * A {@code CheckerboardMaterial} is an implementation of {@link Material} that alternates between two other {@code Material} instances in a checkerboard pattern.
+ * A {@code BullseyeMaterial} is an implementation of {@link Material} that alternates between two other {@code Material} instances in a bullseye pattern.
  * <p>
  * This class is immutable and thread-safe as long as its two associated {@link Material} instances are.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public final class CheckerboardMaterial implements Material {
+public final class BullseyeMaterial implements Material {
 	/**
-	 * The name of this {@code CheckerboardMaterial} class.
+	 * The name of this {@code BullseyeMaterial} class.
 	 */
-	public static final String NAME = "Checkerboard";
+	public static final String NAME = "Bullseye";
 	
 	/**
-	 * The ID of this {@code CheckerboardMaterial} class.
+	 * The ID of this {@code BullseyeMaterial} class.
 	 */
-	public static final int ID = 101;
+	public static final int ID = 100;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final AngleF angle;
 	private final Material materialA;
 	private final Material materialB;
-	private final Vector2F scale;
+	private final Point3F origin;
+	private final float scale;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Constructs a new {@code CheckerboardMaterial} instance.
+	 * Constructs a new {@code BullseyeMaterial} instance.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardMaterial(new MatteMaterial(Color3F.GRAY_0_50), new MatteMaterial(Color3F.WHITE));
+	 * new BullseyeMaterial(new MatteMaterial(Color3F.GRAY_0_50), new MatteMaterial(Color3F.WHITE));
 	 * }
 	 * </pre>
 	 */
-	public CheckerboardMaterial() {
+	public BullseyeMaterial() {
 		this(new MatteMaterial(Color3F.GRAY_0_50), new MatteMaterial(Color3F.WHITE));
 	}
 	
 	/**
-	 * Constructs a new {@code CheckerboardMaterial} instance.
+	 * Constructs a new {@code BullseyeMaterial} instance.
 	 * <p>
 	 * If either {@code materialA} or {@code materialB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardMaterial(materialA, materialB, AngleF.degrees(0.0F));
+	 * new BullseyeMaterial(materialA, materialB, new Point3F());
 	 * }
 	 * </pre>
 	 * 
-	 * @param materialA the {@link Material} instance that is denoted by {@code A} and is used as the first checkerboard pattern component
-	 * @param materialB the {@code Material} instance that is denoted by {@code B} and is used as the second checkerboard pattern component
+	 * @param materialA the {@link Material} instance that is denoted by {@code A} and is used as the first bullseye pattern component
+	 * @param materialB the {@code Material} instance that is denoted by {@code B} and is used as the second bullseye pattern component
 	 * @throws NullPointerException thrown if, and only if, either {@code materialA} or {@code materialB} are {@code null}
 	 */
-	public CheckerboardMaterial(final Material materialA, final Material materialB) {
-		this(materialA, materialB, AngleF.degrees(0.0F));
+	public BullseyeMaterial(final Material materialA, final Material materialB) {
+		this(materialA, materialB, new Point3F());
 	}
 	
 	/**
-	 * Constructs a new {@code CheckerboardMaterial} instance.
+	 * Constructs a new {@code BullseyeMaterial} instance.
 	 * <p>
-	 * If either {@code materialA}, {@code materialB} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code materialA}, {@code materialB} or {@code origin} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new CheckerboardMaterial(materialA, materialB, angle, new Vector2F(1.0F, 1.0F));
+	 * new BullseyeMaterial(materialA, materialB, origin, 1.0F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param materialA the {@link Material} instance that is denoted by {@code A} and is used as the first checkerboard pattern component
-	 * @param materialB the {@code Material} instance that is denoted by {@code B} and is used as the second checkerboard pattern component
-	 * @param angle the {@link AngleF} instance that is used to rotate the checkerboard pattern
-	 * @throws NullPointerException thrown if, and only if, either {@code materialA}, {@code materialB} or {@code angle} are {@code null}
+	 * @param materialA the {@link Material} instance that is denoted by {@code A} and is used as the first bullseye pattern component
+	 * @param materialB the {@code Material} instance that is denoted by {@code B} and is used as the second bullseye pattern component
+	 * @param origin the {@link Point3F} instance that is used as the origin for the bullseye pattern
+	 * @throws NullPointerException thrown if, and only if, either {@code materialA}, {@code materialB} or {@code origin} are {@code null}
 	 */
-	public CheckerboardMaterial(final Material materialA, final Material materialB, final AngleF angle) {
-		this(materialA, materialB, angle, new Vector2F(1.0F, 1.0F));
+	public BullseyeMaterial(final Material materialA, final Material materialB, final Point3F origin) {
+		this(materialA, materialB, origin, 1.0F);
 	}
 	
 	/**
-	 * Constructs a new {@code CheckerboardMaterial} instance.
+	 * Constructs a new {@code BullseyeMaterial} instance.
 	 * <p>
-	 * If either {@code materialA}, {@code materialB}, {@code angle} or {@code scale} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code materialA}, {@code materialB} or {@code origin} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
-	 * @param materialA the {@link Material} instance that is denoted by {@code A} and is used as the first checkerboard pattern component
-	 * @param materialB the {@code Material} instance that is denoted by {@code B} and is used as the second checkerboard pattern component
-	 * @param angle the {@link AngleF} instance that is used to rotate the checkerboard pattern
-	 * @param scale the {@link Vector2F} instance that is used to scale the checkerboard pattern
-	 * @throws NullPointerException thrown if, and only if, either {@code materialA}, {@code materialB}, {@code angle} or {@code scale} are {@code null}
+	 * @param materialA the {@link Material} instance that is denoted by {@code A} and is used as the first bullseye pattern component
+	 * @param materialB the {@code Material} instance that is denoted by {@code B} and is used as the second bullseye pattern component
+	 * @param origin the {@link Point3F} instance that is used as the origin for the bullseye pattern
+	 * @param scale the {@code float} value that is used to scale the bullseye pattern
+	 * @throws NullPointerException thrown if, and only if, either {@code materialA}, {@code materialB} or {@code origin} are {@code null}
 	 */
-	public CheckerboardMaterial(final Material materialA, final Material materialB, final AngleF angle, final Vector2F scale) {
+	public BullseyeMaterial(final Material materialA, final Material materialB, final Point3F origin, final float scale) {
 		this.materialA = Objects.requireNonNull(materialA, "materialA == null");
 		this.materialB = Objects.requireNonNull(materialB, "materialB == null");
-		this.angle = Objects.requireNonNull(angle, "angle == null");
-		this.scale = Objects.requireNonNull(scale, "scale == null");
+		this.origin = Objects.requireNonNull(origin, "origin == null");
+		this.scale = scale;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@link AngleF} instance that is used to rotate the checkerboard pattern.
-	 * 
-	 * @return the {@code AngleF} instance that is used to rotate the checkerboard pattern
-	 */
-	public AngleF getAngle() {
-		return this.angle;
-	}
-	
-	/**
-	 * Returns a {@link Color3F} instance with the emittance of this {@code CheckerboardMaterial} instance at {@code intersection}.
+	 * Returns a {@link Color3F} instance with the emittance of this {@code BullseyeMaterial} instance at {@code intersection}.
 	 * <p>
 	 * If {@code intersection} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param intersection an {@link Intersection} instance
-	 * @return a {@code Color3F} instance with the emittance of this {@code CheckerboardMaterial} instance at {@code intersection}
+	 * @return a {@code Color3F} instance with the emittance of this {@code BullseyeMaterial} instance at {@code intersection}
 	 * @throws NullPointerException thrown if, and only if, {@code intersection} is {@code null}
 	 */
 	@Override
@@ -169,18 +159,18 @@ public final class CheckerboardMaterial implements Material {
 	}
 	
 	/**
-	 * Returns the {@link Material} instance that is denoted by {@code A} and is used as the first checkerboard pattern component.
+	 * Returns the {@link Material} instance that is denoted by {@code A} and is used as the first bullseye pattern component.
 	 * 
-	 * @return the {@code Material} instance that is denoted by {@code A} and is used as the first checkerboard pattern component
+	 * @return the {@code Material} instance that is denoted by {@code A} and is used as the first bullseye pattern component
 	 */
 	public Material getMaterialA() {
 		return this.materialA;
 	}
 	
 	/**
-	 * Returns the {@link Material} instance that is denoted by {@code B} and is used as the second checkerboard pattern component.
+	 * Returns the {@link Material} instance that is denoted by {@code B} and is used as the second bullseye pattern component.
 	 * 
-	 * @return the {@code Material} instance that is denoted by {@code B} and is used as the second checkerboard pattern component
+	 * @return the {@code Material} instance that is denoted by {@code B} and is used as the second bullseye pattern component
 	 */
 	public Material getMaterialB() {
 		return this.materialB;
@@ -237,9 +227,18 @@ public final class CheckerboardMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} with the name of this {@code CheckerboardMaterial} instance.
+	 * Returns the {@link Point3F} instance that is used as the origin for the bullseye pattern.
 	 * 
-	 * @return a {@code String} with the name of this {@code CheckerboardMaterial} instance
+	 * @return the {@code Point3F} instance that is used as the origin for the bullseye pattern
+	 */
+	public Point3F getOrigin() {
+		return this.origin;
+	}
+	
+	/**
+	 * Returns a {@code String} with the name of this {@code BullseyeMaterial} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code BullseyeMaterial} instance
 	 */
 	@Override
 	public String getName() {
@@ -247,22 +246,13 @@ public final class CheckerboardMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a {@code String} representation of this {@code CheckerboardMaterial} instance.
+	 * Returns a {@code String} representation of this {@code BullseyeMaterial} instance.
 	 * 
-	 * @return a {@code String} representation of this {@code CheckerboardMaterial} instance
+	 * @return a {@code String} representation of this {@code BullseyeMaterial} instance
 	 */
 	@Override
 	public String toString() {
-		return String.format("new CheckerboardMaterial(%s, %s, %s, %s)", this.materialA, this.materialB, this.angle, this.scale);
-	}
-	
-	/**
-	 * Returns the {@link Vector2F} instance that is used to scale the checkerboard pattern.
-	 * 
-	 * @return the {@code Vector2F} instance that is used to scale the checkerboard pattern
-	 */
-	public Vector2F getScale() {
-		return this.scale;
+		return String.format("new BullseyeMaterial(%s, %s, %s, %+.10f)", this.materialA, this.materialB, this.origin, Float.valueOf(this.scale));
 	}
 	
 	/**
@@ -300,7 +290,7 @@ public final class CheckerboardMaterial implements Material {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(!this.scale.accept(nodeHierarchicalVisitor)) {
+				if(!this.origin.accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 			}
@@ -312,26 +302,26 @@ public final class CheckerboardMaterial implements Material {
 	}
 	
 	/**
-	 * Compares {@code object} to this {@code CheckerboardMaterial} instance for equality.
+	 * Compares {@code object} to this {@code BullseyeMaterial} instance for equality.
 	 * <p>
-	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code CheckerboardMaterial}, and their respective values are equal, {@code false} otherwise.
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BullseyeMaterial}, and their respective values are equal, {@code false} otherwise.
 	 * 
-	 * @param object the {@code Object} to compare to this {@code CheckerboardMaterial} instance for equality
-	 * @return {@code true} if, and only if, {@code object} is an instance of {@code CheckerboardMaterial}, and their respective values are equal, {@code false} otherwise
+	 * @param object the {@code Object} to compare to this {@code BullseyeMaterial} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BullseyeMaterial}, and their respective values are equal, {@code false} otherwise
 	 */
 	@Override
 	public boolean equals(final Object object) {
 		if(object == this) {
 			return true;
-		} else if(!(object instanceof CheckerboardMaterial)) {
+		} else if(!(object instanceof BullseyeMaterial)) {
 			return false;
-		} else if(!Objects.equals(this.angle, CheckerboardMaterial.class.cast(object).angle)) {
+		} else if(!Objects.equals(this.materialA, BullseyeMaterial.class.cast(object).materialA)) {
 			return false;
-		} else if(!Objects.equals(this.materialA, CheckerboardMaterial.class.cast(object).materialA)) {
+		} else if(!Objects.equals(this.materialB, BullseyeMaterial.class.cast(object).materialB)) {
 			return false;
-		} else if(!Objects.equals(this.materialB, CheckerboardMaterial.class.cast(object).materialB)) {
+		} else if(!Objects.equals(this.origin, BullseyeMaterial.class.cast(object).origin)) {
 			return false;
-		} else if(!Objects.equals(this.scale, CheckerboardMaterial.class.cast(object).scale)) {
+		} else if(!equal(this.scale, BullseyeMaterial.class.cast(object).scale)) {
 			return false;
 		} else {
 			return true;
@@ -339,9 +329,18 @@ public final class CheckerboardMaterial implements Material {
 	}
 	
 	/**
-	 * Returns an {@code int} with the ID of this {@code CheckerboardMaterial} instance.
+	 * Returns the {@code float} value that is used to scale the bullseye pattern.
 	 * 
-	 * @return an {@code int} with the ID of this {@code CheckerboardMaterial} instance
+	 * @return the {@code float} value that is used to scale the bullseye pattern
+	 */
+	public float getScale() {
+		return this.scale;
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code BullseyeMaterial} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code BullseyeMaterial} instance
 	 */
 	@Override
 	public int getID() {
@@ -349,27 +348,24 @@ public final class CheckerboardMaterial implements Material {
 	}
 	
 	/**
-	 * Returns a hash code for this {@code CheckerboardMaterial} instance.
+	 * Returns a hash code for this {@code BullseyeMaterial} instance.
 	 * 
-	 * @return a hash code for this {@code CheckerboardMaterial} instance
+	 * @return a hash code for this {@code BullseyeMaterial} instance
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.angle, this.materialA, this.materialB, this.scale);
+		return Objects.hash(this.materialA, this.materialB, this.origin, Float.valueOf(this.scale));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Material doGetMaterial(final Intersection intersection) {
-		final float cosAngleRadians = cos(this.angle.getRadians());
-		final float sinAngleRadians = sin(this.angle.getRadians());
+		final Vector3F direction = Vector3F.direction(this.origin, intersection.getSurfaceIntersectionObjectSpace().getSurfaceIntersectionPoint());
 		
-		final float u = intersection.getTextureCoordinates().getU();
-		final float v = intersection.getTextureCoordinates().getV();
+		final float directionLength = direction.length();
+		final float directionLengthScaled = directionLength * this.scale;
+		final float directionLengthScaledRemainder = remainder(directionLengthScaled, 1.0F);
 		
-		final boolean isU = fractionalPart((u * cosAngleRadians - v * sinAngleRadians) * this.scale.getU()) > 0.5F;
-		final boolean isV = fractionalPart((v * cosAngleRadians + u * sinAngleRadians) * this.scale.getV()) > 0.5F;
-		
-		return isU ^ isV ? this.materialA : this.materialB;
+		return directionLengthScaledRemainder > 0.5F ? this.materialA : this.materialB;
 	}
 }

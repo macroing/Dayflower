@@ -74,7 +74,7 @@ public final class ClearCoatMaterial implements Material {
 	/**
 	 * The ID of this {@code ClearCoatMaterial} class.
 	 */
-	public static final int ID = 101;
+	public static final int ID = 102;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

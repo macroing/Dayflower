@@ -71,7 +71,7 @@ public final class DisneyMaterial implements Material {
 	/**
 	 * The ID of this {@code DisneyMaterial} class.
 	 */
-	public static final int ID = 102;
+	public static final int ID = 103;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

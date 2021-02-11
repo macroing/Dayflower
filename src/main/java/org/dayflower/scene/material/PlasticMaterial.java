@@ -60,7 +60,7 @@ public final class PlasticMaterial implements Material {
 	/**
 	 * The ID of this {@code PlasticMaterial} class.
 	 */
-	public static final int ID = 109;
+	public static final int ID = 110;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

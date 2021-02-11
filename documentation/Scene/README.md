@@ -39,6 +39,7 @@ Below follows a few lists of features available in the Scene API.
 * `CheckerboardMaterial` - A `Material` that alternates between two `Material` instances in a checkerboard pattern.
 * `ClearCoatMaterial` - A `Material` that represents clear coat.
 * `DisneyMaterial` - A `Material` that represents a Disney material.
+* `FunctionMaterial` - A `Material` that alternates between different `Material` instances based on a `Function` instance.
 * `GlassMaterial` - A `Material` that represents glass.
 * `GlossyMaterial` - A `Material` that represents a glossy material.
 * `HairMaterial` - A `Material` that represents hair.

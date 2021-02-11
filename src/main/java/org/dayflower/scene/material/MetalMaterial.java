@@ -56,7 +56,7 @@ public final class MetalMaterial implements Material {
 	/**
 	 * The ID of this {@code MetalMaterial} class.
 	 */
-	public static final int ID = 108;
+	public static final int ID = 109;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

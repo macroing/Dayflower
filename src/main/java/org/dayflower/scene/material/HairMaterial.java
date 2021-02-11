@@ -54,7 +54,7 @@ public final class HairMaterial implements Material {
 	/**
 	 * The ID of this {@code HairMaterial} class.
 	 */
-	public static final int ID = 106;
+	public static final int ID = 107;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

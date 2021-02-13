@@ -55,7 +55,7 @@ public final class Disk3F implements Shape3F {
 	/**
 	 * The ID of this {@code Disk3F} class.
 	 */
-	public static final int ID = 5;
+	public static final int ID = 6;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

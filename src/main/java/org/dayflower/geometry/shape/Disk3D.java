@@ -55,7 +55,7 @@ public final class Disk3D implements Shape3D {
 	/**
 	 * The ID of this {@code Disk3D} class.
 	 */
-	public static final int ID = 5;
+	public static final int ID = 6;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

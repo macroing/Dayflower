@@ -119,7 +119,7 @@ public final class TriangleMesh3F implements Shape3F {
 	/**
 	 * The ID of this {@code TriangleMesh3F} class.
 	 */
-	public static final int ID = 12;
+	public static final int ID = 13;
 	
 	/**
 	 * The ID for all leaf nodes in the bounding volume hierarchy (BVH).

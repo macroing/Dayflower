@@ -53,7 +53,7 @@ public final class ProceduralTerrain3F implements Shape3F {
 	/**
 	 * The ID of this {@code ProceduralTerrain3F} class.
 	 */
-	public static final int ID = 7;
+	public static final int ID = 8;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

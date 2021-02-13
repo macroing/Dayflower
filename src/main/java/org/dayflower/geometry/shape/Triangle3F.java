@@ -109,7 +109,7 @@ public final class Triangle3F implements Shape3F {
 	/**
 	 * The ID of this {@code Triangle3F} class.
 	 */
-	public static final int ID = 10;
+	public static final int ID = 11;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

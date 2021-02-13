@@ -50,7 +50,7 @@ public final class ConstructiveSolidGeometry3F implements Shape3F {
 	/**
 	 * The ID of this {@code ConstructiveSolidGeometry3F} class.
 	 */
-	public static final int ID = 1;
+	public static final int ID = 2;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

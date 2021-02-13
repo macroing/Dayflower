@@ -71,7 +71,7 @@ public final class Curve3F implements Shape3F {
 	/**
 	 * The ID of this {@code Curve3F} class.
 	 */
-	public static final int ID = 2;
+	public static final int ID = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

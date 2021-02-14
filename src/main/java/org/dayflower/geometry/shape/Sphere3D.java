@@ -80,7 +80,7 @@ public final class Sphere3D implements Shape3D {
 	/**
 	 * The ID of this {@code Sphere3D} class.
 	 */
-	public static final int ID = 11;
+	public static final int ID = 12;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

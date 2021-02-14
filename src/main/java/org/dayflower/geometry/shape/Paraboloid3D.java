@@ -57,7 +57,7 @@ public final class Paraboloid3D implements Shape3D {
 	/**
 	 * The ID of this {@code Paraboloid3D} class.
 	 */
-	public static final int ID = 7;
+	public static final int ID = 8;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -284,7 +284,7 @@ public final class Paraboloid3D implements Shape3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Paraboloid3D(%s, %+.10f, %+.10f)", this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
+		return String.format("new Paraboloid3D(%s, %+.10f, %+.10f, %+.10f)", this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
 	}
 	
 	/**

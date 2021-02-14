@@ -285,7 +285,7 @@ public final class Cylinder3F implements Shape3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Cylinder3F(%s, %+.10f, %+.10f)", this.phiMax, Float.valueOf(this.radius), Float.valueOf(this.zMax), Float.valueOf(this.zMin));
+		return String.format("new Cylinder3F(%s, %+.10f, %+.10f, %+.10f)", this.phiMax, Float.valueOf(this.radius), Float.valueOf(this.zMax), Float.valueOf(this.zMin));
 	}
 	
 	/**

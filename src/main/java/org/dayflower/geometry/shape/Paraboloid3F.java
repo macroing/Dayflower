@@ -57,7 +57,7 @@ public final class Paraboloid3F implements Shape3F {
 	/**
 	 * The ID of this {@code Paraboloid3F} class.
 	 */
-	public static final int ID = 7;
+	public static final int ID = 8;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -284,7 +284,7 @@ public final class Paraboloid3F implements Shape3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Paraboloid3F(%s, %+.10f, %+.10f)", this.phiMax, Float.valueOf(this.radius), Float.valueOf(this.zMax), Float.valueOf(this.zMin));
+		return String.format("new Paraboloid3F(%s, %+.10f, %+.10f, %+.10f)", this.phiMax, Float.valueOf(this.radius), Float.valueOf(this.zMax), Float.valueOf(this.zMin));
 	}
 	
 	/**

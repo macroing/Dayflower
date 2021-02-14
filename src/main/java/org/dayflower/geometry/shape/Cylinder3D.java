@@ -285,7 +285,7 @@ public final class Cylinder3D implements Shape3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Cylinder3D(%s, %+.10f, %+.10f)", this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
+		return String.format("new Cylinder3D(%s, %+.10f, %+.10f, %+.10f)", this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
 	}
 	
 	/**

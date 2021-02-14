@@ -78,7 +78,7 @@ public final class Torus3F implements Shape3F {
 	/**
 	 * The ID of this {@code Torus3F} class.
 	 */
-	public static final int ID = 12;
+	public static final int ID = 13;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

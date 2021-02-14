@@ -25,6 +25,7 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
+import org.dayflower.geometry.shape.Hyperboloid3F;
 import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
@@ -87,7 +88,7 @@ final class CenteredVBoxes {
 		centeredVBox.addLabel("Scene Configuration", 16.0D);
 		
 		final ComboBox<String> comboBoxMaterial = centeredVBox.addComboBox(Arrays.asList(ClearCoatMaterial.NAME, DisneyMaterial.NAME, GlassMaterial.NAME, GlossyMaterial.NAME, HairMaterial.NAME, MatteMaterial.NAME, MetalMaterial.NAME, MirrorMaterial.NAME, PlasticMaterial.NAME, SubstrateMaterial.NAME, UberMaterial.NAME), MatteMaterial.NAME);
-		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Cone3F.NAME, Cylinder3F.NAME, Disk3F.NAME, Paraboloid3F.NAME, Plane3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
+		final ComboBox<String> comboBoxShape = centeredVBox.addComboBox(Arrays.asList(Cone3F.NAME, Cylinder3F.NAME, Disk3F.NAME, Hyperboloid3F.NAME, Paraboloid3F.NAME, Plane3F.NAME, RectangularCuboid3F.NAME, Sphere3F.NAME, Torus3F.NAME, Triangle3F.NAME), Plane3F.NAME);
 		
 		centeredVBox.addButton("Add Primitive", actionEvent -> {
 			final Material material = doCreateMaterial(comboBoxMaterial);
@@ -159,6 +160,8 @@ final class CenteredVBoxes {
 			return renderer.getScene().getCamera().getPointInfrontOfEye(7.5F);
 		} else if(shape instanceof Disk3F) {
 			return renderer.getScene().getCamera().getPointInfrontOfEye(7.5F);
+		} else if(shape instanceof Hyperboloid3F) {
+			return renderer.getScene().getCamera().getPointInfrontOfEye(7.5F);
 		} else if(shape instanceof Paraboloid3F) {
 			return renderer.getScene().getCamera().getPointInfrontOfEye(7.5F);
 		} else if(shape instanceof Plane3F) {
@@ -187,6 +190,8 @@ final class CenteredVBoxes {
 					return new Cylinder3F();
 				case Disk3F.NAME:
 					return new Disk3F();
+				case Hyperboloid3F.NAME:
+					return new Hyperboloid3F();
 				case Paraboloid3F.NAME:
 					return new Paraboloid3F();
 				case Plane3F.NAME:

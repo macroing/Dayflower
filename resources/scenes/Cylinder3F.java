@@ -1,4 +1,4 @@
-Material material1 = new MatteMaterial(new CheckerboardTexture());
+Material material1 = new MatteMaterial();
 Material material2 = new MatteMaterial(new CheckerboardTexture(Color3F.GRAY_0_50, Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F)));
 
 Shape3F shape1 = new Plane3F();

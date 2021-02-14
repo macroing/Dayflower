@@ -28,6 +28,7 @@ import static org.dayflower.utility.Doubles.sqrt;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.AngleD;
 import org.dayflower.geometry.BoundingVolume3D;
 import org.dayflower.geometry.OrthonormalBasis33D;
 import org.dayflower.geometry.Point2D;
@@ -59,10 +60,10 @@ public final class Disk3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final double height;
-	private final double phiMax;
+	private final AngleD phiMax;
 	private final double radiusInner;
 	private final double radiusOuter;
+	private final double zMax;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -72,81 +73,102 @@ public final class Disk3D implements Shape3D {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Disk3D(0.0D);
+	 * new Disk3D(AngleD.degrees(360.0D));
 	 * }
 	 * </pre>
 	 */
 	public Disk3D() {
-		this(0.0D);
+		this(AngleD.degrees(360.0D));
 	}
 	
 	/**
 	 * Constructs a new {@code Disk3D} instance.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Disk3D(height, 360.0D);
-	 * }
-	 * </pre>
-	 * 
-	 * @param height the height
-	 */
-	public Disk3D(final double height) {
-		this(height, 360.0D);
-	}
-	
-	/**
-	 * Constructs a new {@code Disk3D} instance.
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Disk3D(height, phiMax, 0.0D);
+	 * new Disk3D(phiMax, 0.0D);
 	 * }
 	 * </pre>
 	 * 
-	 * @param height the height
 	 * @param phiMax the maximum phi
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Disk3D(final double height, final double phiMax) {
-		this(height, phiMax, 0.0D);
+	public Disk3D(final AngleD phiMax) {
+		this(phiMax, 0.0D);
 	}
 	
 	/**
 	 * Constructs a new {@code Disk3D} instance.
 	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Disk3D(height, phiMax, radiusInner, 1.0D);
+	 * new Disk3D(phiMax, radiusInner, 1.0D);
 	 * }
 	 * </pre>
 	 * 
-	 * @param height the height
 	 * @param phiMax the maximum phi
 	 * @param radiusInner the inner radius
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Disk3D(final double height, final double phiMax, final double radiusInner) {
-		this(height, phiMax, radiusInner, 1.0D);
+	public Disk3D(final AngleD phiMax, final double radiusInner) {
+		this(phiMax, radiusInner, 1.0D);
 	}
 	
 	/**
 	 * Constructs a new {@code Disk3D} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Disk3D(phiMax, radiusInner, radiusOuter, 0.0D);
+	 * }
+	 * </pre>
 	 * 
-	 * @param height the height
 	 * @param phiMax the maximum phi
 	 * @param radiusInner the inner radius
 	 * @param radiusOuter the outer radius
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Disk3D(final double height, final double phiMax, final double radiusInner, final double radiusOuter) {
-		this.height = height;
-		this.phiMax = phiMax;
+	public Disk3D(final AngleD phiMax, final double radiusInner, final double radiusOuter) {
+		this(phiMax, radiusInner, radiusOuter, 0.0D);
+	}
+	
+	/**
+	 * Constructs a new {@code Disk3D} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param phiMax the maximum phi
+	 * @param radiusInner the inner radius
+	 * @param radiusOuter the outer radius
+	 * @param zMax the maximum Z
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
+	 */
+	public Disk3D(final AngleD phiMax, final double radiusInner, final double radiusOuter, final double zMax) {
+		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
 		this.radiusInner = radiusInner;
 		this.radiusOuter = radiusOuter;
+		this.zMax = zMax;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the maximum phi of this {@code Disk3D} instance.
+	 * 
+	 * @return the maximum phi of this {@code Disk3D} instance
+	 */
+	public AngleD getPhiMax() {
+		return this.phiMax;
+	}
 	
 	/**
 	 * Returns a {@link BoundingVolume3D} instance that contains this {@code Disk3D} instance.
@@ -155,7 +177,7 @@ public final class Disk3D implements Shape3D {
 	 */
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
-		return new AxisAlignedBoundingBox3D(new Point3D(-this.radiusOuter, -this.radiusOuter, this.height), new Point3D(this.radiusOuter, this.radiusOuter, this.height));
+		return new AxisAlignedBoundingBox3D(new Point3D(-this.radiusOuter, -this.radiusOuter, this.zMax), new Point3D(this.radiusOuter, this.radiusOuter, this.zMax));
 	}
 	
 	/**
@@ -181,7 +203,7 @@ public final class Disk3D implements Shape3D {
 			return SurfaceIntersection3D.EMPTY;
 		}
 		
-		final double t = (this.height - origin.getZ()) / direction.getZ();
+		final double t = (this.zMax - origin.getZ()) / direction.getZ();
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return SurfaceIntersection3D.EMPTY;
@@ -202,7 +224,7 @@ public final class Disk3D implements Shape3D {
 		}
 		
 		final double phi = getOrAdd(atan2(y, x), 0.0D, PI_MULTIPLIED_BY_2);
-		final double phiMax = this.phiMax;
+		final double phiMax = this.phiMax.getRadians();
 		
 		if(phi > phiMax) {
 			return SurfaceIntersection3D.EMPTY;
@@ -221,7 +243,7 @@ public final class Disk3D implements Shape3D {
 		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormalG, dPDV, dPDU);
 		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;
 		
-		final Point3D surfaceIntersectionPoint = new Point3D(x, y, this.height);
+		final Point3D surfaceIntersectionPoint = new Point3D(x, y, this.zMax);
 		
 		final Point2D textureCoordinates = new Point2D(u, v);
 		
@@ -247,7 +269,7 @@ public final class Disk3D implements Shape3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Disk3D(%+.10f, %+.10f, %+.10f, %+.10f)", Double.valueOf(this.height), Double.valueOf(this.phiMax), Double.valueOf(this.radiusInner), Double.valueOf(this.radiusOuter));
+		return String.format("new Disk3D(%s, %+.10f, %+.10f, %+.10f)", this.phiMax, Double.valueOf(this.radiusInner), Double.valueOf(this.radiusOuter), Double.valueOf(this.zMax));
 	}
 	
 	/**
@@ -264,35 +286,17 @@ public final class Disk3D implements Shape3D {
 			return true;
 		} else if(!(object instanceof Disk3D)) {
 			return false;
-		} else if(!equal(this.height, Disk3D.class.cast(object).height)) {
-			return false;
-		} else if(!equal(this.phiMax, Disk3D.class.cast(object).phiMax)) {
+		} else if(!Objects.equals(this.phiMax, Disk3D.class.cast(object).phiMax)) {
 			return false;
 		} else if(!equal(this.radiusInner, Disk3D.class.cast(object).radiusInner)) {
 			return false;
 		} else if(!equal(this.radiusOuter, Disk3D.class.cast(object).radiusOuter)) {
 			return false;
+		} else if(!equal(this.zMax, Disk3D.class.cast(object).zMax)) {
+			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the height of this {@code Disk3D} instance.
-	 * 
-	 * @return the height of this {@code Disk3D} instance
-	 */
-	public double getHeight() {
-		return this.height;
-	}
-	
-	/**
-	 * Returns the maximum phi of this {@code Disk3D} instance.
-	 * 
-	 * @return the maximum phi of this {@code Disk3D} instance
-	 */
-	public double getPhiMax() {
-		return this.phiMax;
 	}
 	
 	/**
@@ -320,7 +324,16 @@ public final class Disk3D implements Shape3D {
 	 */
 	@Override
 	public double getSurfaceArea() {
-		return this.phiMax * 0.5D * (this.radiusOuter * this.radiusOuter - this.radiusInner * this.radiusInner);
+		return this.phiMax.getRadians() * 0.5D * (this.radiusOuter * this.radiusOuter - this.radiusInner * this.radiusInner);
+	}
+	
+	/**
+	 * Returns the maximum Z of this {@code Disk3D} instance.
+	 * 
+	 * @return the maximum Z of this {@code Disk3D} instance
+	 */
+	public double getZMax() {
+		return this.zMax;
 	}
 	
 	/**
@@ -346,7 +359,7 @@ public final class Disk3D implements Shape3D {
 			return Double.NaN;
 		}
 		
-		final double t = (this.height - origin.getZ()) / direction.getZ();
+		final double t = (this.zMax - origin.getZ()) / direction.getZ();
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return Double.NaN;
@@ -367,7 +380,7 @@ public final class Disk3D implements Shape3D {
 		}
 		
 		final double phi = getOrAdd(atan2(y, x), 0.0D, PI_MULTIPLIED_BY_2);
-		final double phiMax = this.phiMax;
+		final double phiMax = this.phiMax.getRadians();
 		
 		if(phi > phiMax) {
 			return Double.NaN;
@@ -393,6 +406,6 @@ public final class Disk3D implements Shape3D {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(this.height), Double.valueOf(this.phiMax), Double.valueOf(this.radiusInner), Double.valueOf(this.radiusOuter));
+		return Objects.hash(this.phiMax, Double.valueOf(this.radiusInner), Double.valueOf(this.radiusOuter), Double.valueOf(this.zMax));
 	}
 }

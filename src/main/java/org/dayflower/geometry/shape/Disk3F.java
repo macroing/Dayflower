@@ -28,6 +28,7 @@ import static org.dayflower.utility.Floats.sqrt;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
@@ -59,10 +60,10 @@ public final class Disk3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final float height;
-	private final float phiMax;
+	private final AngleF phiMax;
 	private final float radiusInner;
 	private final float radiusOuter;
+	private final float zMax;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -72,81 +73,102 @@ public final class Disk3F implements Shape3F {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Disk3F(0.0F);
+	 * new Disk3F(AngleF.degrees(360.0F));
 	 * }
 	 * </pre>
 	 */
 	public Disk3F() {
-		this(0.0F);
+		this(AngleF.degrees(360.0F));
 	}
 	
 	/**
 	 * Constructs a new {@code Disk3F} instance.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Disk3F(height, 360.0F);
-	 * }
-	 * </pre>
-	 * 
-	 * @param height the height
-	 */
-	public Disk3F(final float height) {
-		this(height, 360.0F);
-	}
-	
-	/**
-	 * Constructs a new {@code Disk3F} instance.
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Disk3F(height, phiMax, 0.0F);
+	 * new Disk3F(phiMax, 0.0F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param height the height
 	 * @param phiMax the maximum phi
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Disk3F(final float height, final float phiMax) {
-		this(height, phiMax, 0.0F);
+	public Disk3F(final AngleF phiMax) {
+		this(phiMax, 0.0F);
 	}
 	
 	/**
 	 * Constructs a new {@code Disk3F} instance.
 	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Disk3F(height, phiMax, radiusInner, 1.0F);
+	 * new Disk3F(phiMax, radiusInner, 1.0F);
 	 * }
 	 * </pre>
 	 * 
-	 * @param height the height
 	 * @param phiMax the maximum phi
 	 * @param radiusInner the inner radius
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Disk3F(final float height, final float phiMax, final float radiusInner) {
-		this(height, phiMax, radiusInner, 1.0F);
+	public Disk3F(final AngleF phiMax, final float radiusInner) {
+		this(phiMax, radiusInner, 1.0F);
 	}
 	
 	/**
 	 * Constructs a new {@code Disk3F} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Disk3F(phiMax, radiusInner, radiusOuter, 0.0F);
+	 * }
+	 * </pre>
 	 * 
-	 * @param height the height
 	 * @param phiMax the maximum phi
 	 * @param radiusInner the inner radius
 	 * @param radiusOuter the outer radius
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Disk3F(final float height, final float phiMax, final float radiusInner, final float radiusOuter) {
-		this.height = height;
-		this.phiMax = phiMax;
+	public Disk3F(final AngleF phiMax, final float radiusInner, final float radiusOuter) {
+		this(phiMax, radiusInner, radiusOuter, 0.0F);
+	}
+	
+	/**
+	 * Constructs a new {@code Disk3F} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param phiMax the maximum phi
+	 * @param radiusInner the inner radius
+	 * @param radiusOuter the outer radius
+	 * @param zMax the maximum Z
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
+	 */
+	public Disk3F(final AngleF phiMax, final float radiusInner, final float radiusOuter, final float zMax) {
+		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
 		this.radiusInner = radiusInner;
 		this.radiusOuter = radiusOuter;
+		this.zMax = zMax;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the maximum phi of this {@code Disk3F} instance.
+	 * 
+	 * @return the maximum phi of this {@code Disk3F} instance
+	 */
+	public AngleF getPhiMax() {
+		return this.phiMax;
+	}
 	
 	/**
 	 * Returns a {@link BoundingVolume3F} instance that contains this {@code Disk3F} instance.
@@ -155,7 +177,7 @@ public final class Disk3F implements Shape3F {
 	 */
 	@Override
 	public BoundingVolume3F getBoundingVolume() {
-		return new AxisAlignedBoundingBox3F(new Point3F(-this.radiusOuter, -this.radiusOuter, this.height), new Point3F(this.radiusOuter, this.radiusOuter, this.height));
+		return new AxisAlignedBoundingBox3F(new Point3F(-this.radiusOuter, -this.radiusOuter, this.zMax), new Point3F(this.radiusOuter, this.radiusOuter, this.zMax));
 	}
 	
 	/**
@@ -181,7 +203,7 @@ public final class Disk3F implements Shape3F {
 			return SurfaceIntersection3F.EMPTY;
 		}
 		
-		final float t = (this.height - origin.getZ()) / direction.getZ();
+		final float t = (this.zMax - origin.getZ()) / direction.getZ();
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return SurfaceIntersection3F.EMPTY;
@@ -202,7 +224,7 @@ public final class Disk3F implements Shape3F {
 		}
 		
 		final float phi = getOrAdd(atan2(y, x), 0.0F, PI_MULTIPLIED_BY_2);
-		final float phiMax = this.phiMax;
+		final float phiMax = this.phiMax.getRadians();
 		
 		if(phi > phiMax) {
 			return SurfaceIntersection3F.EMPTY;
@@ -221,7 +243,7 @@ public final class Disk3F implements Shape3F {
 		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG, dPDV, dPDU);
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;
 		
-		final Point3F surfaceIntersectionPoint = new Point3F(x, y, this.height);
+		final Point3F surfaceIntersectionPoint = new Point3F(x, y, this.zMax);
 		
 		final Point2F textureCoordinates = new Point2F(u, v);
 		
@@ -247,7 +269,7 @@ public final class Disk3F implements Shape3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Disk3F(%+.10f, %+.10f, %+.10f, %+.10f)", Float.valueOf(this.height), Float.valueOf(this.phiMax), Float.valueOf(this.radiusInner), Float.valueOf(this.radiusOuter));
+		return String.format("new Disk3F(%s, %+.10f, %+.10f, %+.10f)", this.phiMax, Float.valueOf(this.radiusInner), Float.valueOf(this.radiusOuter), Float.valueOf(this.zMax));
 	}
 	
 	/**
@@ -264,35 +286,17 @@ public final class Disk3F implements Shape3F {
 			return true;
 		} else if(!(object instanceof Disk3F)) {
 			return false;
-		} else if(!equal(this.height, Disk3F.class.cast(object).height)) {
-			return false;
-		} else if(!equal(this.phiMax, Disk3F.class.cast(object).phiMax)) {
+		} else if(!Objects.equals(this.phiMax, Disk3F.class.cast(object).phiMax)) {
 			return false;
 		} else if(!equal(this.radiusInner, Disk3F.class.cast(object).radiusInner)) {
 			return false;
 		} else if(!equal(this.radiusOuter, Disk3F.class.cast(object).radiusOuter)) {
 			return false;
+		} else if(!equal(this.zMax, Disk3F.class.cast(object).zMax)) {
+			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the height of this {@code Disk3F} instance.
-	 * 
-	 * @return the height of this {@code Disk3F} instance
-	 */
-	public float getHeight() {
-		return this.height;
-	}
-	
-	/**
-	 * Returns the maximum phi of this {@code Disk3F} instance.
-	 * 
-	 * @return the maximum phi of this {@code Disk3F} instance
-	 */
-	public float getPhiMax() {
-		return this.phiMax;
 	}
 	
 	/**
@@ -320,7 +324,16 @@ public final class Disk3F implements Shape3F {
 	 */
 	@Override
 	public float getSurfaceArea() {
-		return this.phiMax * 0.5F * (this.radiusOuter * this.radiusOuter - this.radiusInner * this.radiusInner);
+		return this.phiMax.getRadians() * 0.5F * (this.radiusOuter * this.radiusOuter - this.radiusInner * this.radiusInner);
+	}
+	
+	/**
+	 * Returns the maximum Z of this {@code Disk3F} instance.
+	 * 
+	 * @return the maximum Z of this {@code Disk3F} instance
+	 */
+	public float getZMax() {
+		return this.zMax;
 	}
 	
 	/**
@@ -346,7 +359,7 @@ public final class Disk3F implements Shape3F {
 			return Float.NaN;
 		}
 		
-		final float t = (this.height - origin.getZ()) / direction.getZ();
+		final float t = (this.zMax - origin.getZ()) / direction.getZ();
 		
 		if(t <= tMinimum || t >= tMaximum) {
 			return Float.NaN;
@@ -367,7 +380,7 @@ public final class Disk3F implements Shape3F {
 		}
 		
 		final float phi = getOrAdd(atan2(y, x), 0.0F, PI_MULTIPLIED_BY_2);
-		final float phiMax = this.phiMax;
+		final float phiMax = this.phiMax.getRadians();
 		
 		if(phi > phiMax) {
 			return Float.NaN;
@@ -393,6 +406,6 @@ public final class Disk3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.height), Float.valueOf(this.phiMax), Float.valueOf(this.radiusInner), Float.valueOf(this.radiusOuter));
+		return Objects.hash(this.phiMax, Float.valueOf(this.radiusInner), Float.valueOf(this.radiusOuter), Float.valueOf(this.zMax));
 	}
 }

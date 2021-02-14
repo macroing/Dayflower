@@ -29,6 +29,7 @@ import static org.dayflower.utility.Floats.solveQuadraticSystem;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.BoundingVolume3F;
 import org.dayflower.geometry.OrthonormalBasis33F;
 import org.dayflower.geometry.Point2F;
@@ -60,7 +61,7 @@ public final class Paraboloid3F implements Shape3F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final float phiMax;
+	private final AngleF phiMax;
 	private final float radius;
 	private final float zMax;
 	private final float zMin;
@@ -73,16 +74,18 @@ public final class Paraboloid3F implements Shape3F {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Paraboloid3F(360.0F);
+	 * new Paraboloid3F(AngleF.degrees(360.0F));
 	 * }
 	 * </pre>
 	 */
 	public Paraboloid3F() {
-		this(360.0F);
+		this(AngleF.degrees(360.0F));
 	}
 	
 	/**
 	 * Constructs a new {@code Paraboloid3F} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
@@ -92,13 +95,16 @@ public final class Paraboloid3F implements Shape3F {
 	 * </pre>
 	 * 
 	 * @param phiMax the maximum phi
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Paraboloid3F(final float phiMax) {
+	public Paraboloid3F(final AngleF phiMax) {
 		this(phiMax, 1.0F);
 	}
 	
 	/**
 	 * Constructs a new {@code Paraboloid3F} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
@@ -109,13 +115,16 @@ public final class Paraboloid3F implements Shape3F {
 	 * 
 	 * @param phiMax the maximum phi
 	 * @param radius the radius
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Paraboloid3F(final float phiMax, final float radius) {
+	public Paraboloid3F(final AngleF phiMax, final float radius) {
 		this(phiMax, radius, 1.0F);
 	}
 	
 	/**
 	 * Constructs a new {@code Paraboloid3F} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
@@ -127,27 +136,40 @@ public final class Paraboloid3F implements Shape3F {
 	 * @param phiMax the maximum phi
 	 * @param radius the radius
 	 * @param zMax the maximum Z
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Paraboloid3F(final float phiMax, final float radius, final float zMax) {
+	public Paraboloid3F(final AngleF phiMax, final float radius, final float zMax) {
 		this(phiMax, radius, zMax, 0.0F);
 	}
 	
 	/**
 	 * Constructs a new {@code Paraboloid3F} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param phiMax the maximum phi
 	 * @param radius the radius
 	 * @param zMax the maximum Z
 	 * @param zMin the minimum Z
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Paraboloid3F(final float phiMax, final float radius, final float zMax, final float zMin) {
-		this.phiMax = phiMax;
+	public Paraboloid3F(final AngleF phiMax, final float radius, final float zMax, final float zMin) {
+		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
 		this.radius = radius;
 		this.zMax = zMax;
 		this.zMin = zMin;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the maximum phi of this {@code Paraboloid3F} instance.
+	 * 
+	 * @return the maximum phi of this {@code Paraboloid3F} instance
+	 */
+	public AngleF getPhiMax() {
+		return this.phiMax;
+	}
 	
 	/**
 	 * Returns a {@link BoundingVolume3F} instance that contains this {@code Paraboloid3F} instance.
@@ -186,7 +208,7 @@ public final class Paraboloid3F implements Shape3F {
 		final float directionY = direction.getY();
 		final float directionZ = direction.getZ();
 		
-		final float phiMax = this.phiMax;
+		final float phiMax = this.phiMax.getRadians();
 		final float radius = this.radius;
 		final float zMax = this.zMax;
 		final float zMin = this.zMin;
@@ -262,7 +284,7 @@ public final class Paraboloid3F implements Shape3F {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Paraboloid3F(%+.10f, %+.10f, %+.10f)", Float.valueOf(this.phiMax), Float.valueOf(this.radius), Float.valueOf(this.zMax), Float.valueOf(this.zMin));
+		return String.format("new Paraboloid3F(%s, %+.10f, %+.10f)", this.phiMax, Float.valueOf(this.radius), Float.valueOf(this.zMax), Float.valueOf(this.zMin));
 	}
 	
 	/**
@@ -279,7 +301,7 @@ public final class Paraboloid3F implements Shape3F {
 			return true;
 		} else if(!(object instanceof Paraboloid3F)) {
 			return false;
-		} else if(!equal(this.phiMax, Paraboloid3F.class.cast(object).phiMax)) {
+		} else if(!Objects.equals(this.phiMax, Paraboloid3F.class.cast(object).phiMax)) {
 			return false;
 		} else if(!equal(this.radius, Paraboloid3F.class.cast(object).radius)) {
 			return false;
@@ -293,21 +315,31 @@ public final class Paraboloid3F implements Shape3F {
 	}
 	
 	/**
-	 * Returns the maximum phi of this {@code Paraboloid3F} instance.
-	 * 
-	 * @return the maximum phi of this {@code Paraboloid3F} instance
-	 */
-	public float getPhiMax() {
-		return this.phiMax;
-	}
-	
-	/**
 	 * Returns the radius of this {@code Paraboloid3F} instance.
 	 * 
 	 * @return the radius of this {@code Paraboloid3F} instance
 	 */
 	public float getRadius() {
 		return this.radius;
+	}
+	
+	/**
+	 * Returns the surface area of this {@code Paraboloid3F} instance.
+	 * 
+	 * @return the surface area of this {@code Paraboloid3F} instance
+	 */
+	@Override
+	public float getSurfaceArea() {
+		final float phiMax = this.phiMax.getRadians();
+		final float radius = this.radius;
+		final float radiusSquared = radius * radius;
+		final float zMax = this.zMax;
+		final float zMin = this.zMin;
+		final float k = 4.0F * zMax / radiusSquared;
+		final float a = radiusSquared * radiusSquared * phiMax / (12.0F * zMax * zMax);
+		final float b = pow(k * zMax + 1.0F, 1.5F) - pow(k * zMin + 1.0F, 1.5F);
+		
+		return a * b;
 	}
 	
 	/**
@@ -326,25 +358,6 @@ public final class Paraboloid3F implements Shape3F {
 	 */
 	public float getZMin() {
 		return this.zMin;
-	}
-	
-	/**
-	 * Returns the surface area of this {@code Paraboloid3F} instance.
-	 * 
-	 * @return the surface area of this {@code Paraboloid3F} instance
-	 */
-	@Override
-	public float getSurfaceArea() {
-		final float phiMax = this.phiMax;
-		final float radius = this.radius;
-		final float radiusSquared = radius * radius;
-		final float zMax = this.zMax;
-		final float zMin = this.zMin;
-		final float k = 4.0F * zMax / radiusSquared;
-		final float a = radiusSquared * radiusSquared * phiMax / (12.0F * zMax * zMax);
-		final float b = pow(k * zMax + 1.0F, 1.5F) - pow(k * zMin + 1.0F, 1.5F);
-		
-		return a * b;
 	}
 	
 	/**
@@ -374,7 +387,7 @@ public final class Paraboloid3F implements Shape3F {
 		final float directionY = direction.getY();
 		final float directionZ = direction.getZ();
 		
-		final float phiMax = this.phiMax;
+		final float phiMax = this.phiMax.getRadians();
 		final float radius = this.radius;
 		final float zMax = this.zMax;
 		final float zMin = this.zMin;
@@ -450,13 +463,13 @@ public final class Paraboloid3F implements Shape3F {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Float.valueOf(this.phiMax), Float.valueOf(this.radius), Float.valueOf(this.zMax), Float.valueOf(this.zMin));
+		return Objects.hash(this.phiMax, Float.valueOf(this.radius), Float.valueOf(this.zMax), Float.valueOf(this.zMin));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private SurfaceIntersection3F doCreateSurfaceIntersection(final Ray3F ray, final float phi, final float t, final float x, final float y, final float z) {
-		final float phiMax = this.phiMax;
+		final float phiMax = this.phiMax.getRadians();
 		final float zMax = this.zMax;
 		final float zMin = this.zMin;
 		

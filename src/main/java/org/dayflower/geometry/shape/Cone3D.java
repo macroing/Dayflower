@@ -29,6 +29,7 @@ import static org.dayflower.utility.Doubles.sqrt;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.AngleD;
 import org.dayflower.geometry.BoundingVolume3D;
 import org.dayflower.geometry.OrthonormalBasis33D;
 import org.dayflower.geometry.Point2D;
@@ -60,9 +61,9 @@ public final class Cone3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final double height;
-	private final double phiMax;
+	private final AngleD phiMax;
 	private final double radius;
+	private final double zMax;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -72,61 +73,79 @@ public final class Cone3D implements Shape3D {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Cone3D(1.0D);
+	 * new Cone3D(AngleD.degrees(360.0D));
 	 * }
 	 * </pre>
 	 */
 	public Cone3D() {
-		this(1.0D);
+		this(AngleD.degrees(360.0D));
 	}
 	
 	/**
 	 * Constructs a new {@code Cone3D} instance.
 	 * <p>
-	 * Calling this constructor is equivalent to the following:
-	 * <pre>
-	 * {@code
-	 * new Cone3D(height, 360.0D);
-	 * }
-	 * </pre>
-	 * 
-	 * @param height the height
-	 */
-	public Cone3D(final double height) {
-		this(height, 360.0D);
-	}
-	
-	/**
-	 * Constructs a new {@code Cone3D} instance.
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Cone3D(height, phiMax, 1.0D);
+	 * new Cone3D(phiMax, 1.0D);
 	 * }
 	 * </pre>
 	 * 
-	 * @param height the height
 	 * @param phiMax the maximum phi
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Cone3D(final double height, final double phiMax) {
-		this(height, phiMax, 1.0D);
+	public Cone3D(final AngleD phiMax) {
+		this(phiMax, 1.0D);
 	}
 	
 	/**
 	 * Constructs a new {@code Cone3D} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Cone3D(phiMax, radius, 1.0D);
+	 * }
+	 * </pre>
 	 * 
-	 * @param height the height
 	 * @param phiMax the maximum phi
 	 * @param radius the radius
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Cone3D(final double height, final double phiMax, final double radius) {
-		this.height = height;
-		this.phiMax = phiMax;
+	public Cone3D(final AngleD phiMax, double radius) {
+		this(phiMax, radius, 1.0D);
+	}
+	
+	/**
+	 * Constructs a new {@code Cone3D} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param phiMax the maximum phi
+	 * @param radius the radius
+	 * @param zMax the maximum Z
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
+	 */
+	public Cone3D(final AngleD phiMax, double radius, final double zMax) {
+		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
 		this.radius = radius;
+		this.zMax = zMax;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the maximum phi of this {@code Cone3D} instance.
+	 * 
+	 * @return the maximum phi of this {@code Cone3D} instance
+	 */
+	public AngleD getPhiMax() {
+		return this.phiMax;
+	}
 	
 	/**
 	 * Returns a {@link BoundingVolume3D} instance that contains this {@code Cone3D} instance.
@@ -135,7 +154,7 @@ public final class Cone3D implements Shape3D {
 	 */
 	@Override
 	public BoundingVolume3D getBoundingVolume() {
-		return new AxisAlignedBoundingBox3D(new Point3D(-this.radius, -this.radius, 0.0D), new Point3D(this.radius, this.radius, this.height));
+		return new AxisAlignedBoundingBox3D(new Point3D(-this.radius, -this.radius, 0.0D), new Point3D(this.radius, this.radius, this.zMax));
 	}
 	
 	/**
@@ -165,15 +184,15 @@ public final class Cone3D implements Shape3D {
 		final double directionY = direction.getY();
 		final double directionZ = direction.getZ();
 		
-		final double height = this.height;
-		final double phiMax = this.phiMax;
+		final double phiMax = this.phiMax.getRadians();
 		final double radius = this.radius;
+		final double zMax = this.zMax;
 		
-		final double k = (radius / height) * (radius / height);
+		final double k = (radius / zMax) * (radius / zMax);
 		
 		final double a = directionX * directionX + directionY * directionY - k * directionZ * directionZ;
-		final double b = 2.0D * (directionX * originX + directionY * originY - k * directionZ * (originZ - height));
-		final double c = originX * originX + originY * originY - k * (originZ - height) * (originZ - height);
+		final double b = 2.0D * (directionX * originX + directionY * originY - k * directionZ * (originZ - zMax));
+		final double c = originX * originX + originY * originY - k * (originZ - zMax) * (originZ - zMax);
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -194,7 +213,7 @@ public final class Cone3D implements Shape3D {
 		
 		final double phiClosest = getOrAdd(atan2(yClosest, xClosest), 0.0D, PI_MULTIPLIED_BY_2);
 		
-		if(zClosest < 0.0D || zClosest > height || phiClosest > phiMax) {
+		if(zClosest < 0.0D || zClosest > zMax || phiClosest > phiMax) {
 			if(equal(tClosest, t1)) {
 				return SurfaceIntersection3D.EMPTY;
 			}
@@ -213,7 +232,7 @@ public final class Cone3D implements Shape3D {
 			
 			final double phiClipped = getOrAdd(atan2(yClipped, xClipped), 0.0D, PI_MULTIPLIED_BY_2);
 			
-			if(zClipped < 0.0D || zClipped > height || phiClipped > phiMax) {
+			if(zClipped < 0.0D || zClipped > zMax || phiClipped > phiMax) {
 				return SurfaceIntersection3D.EMPTY;
 			}
 			
@@ -240,7 +259,7 @@ public final class Cone3D implements Shape3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Cone3D(%+.10f, %+.10f, %+.10f)", Double.valueOf(this.height), Double.valueOf(this.phiMax), Double.valueOf(this.radius));
+		return String.format("new Cone3D(%s, %+.10f, %+.10f)", this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax));
 	}
 	
 	/**
@@ -257,33 +276,15 @@ public final class Cone3D implements Shape3D {
 			return true;
 		} else if(!(object instanceof Cone3D)) {
 			return false;
-		} else if(!equal(this.height, Cone3D.class.cast(object).height)) {
-			return false;
-		} else if(!equal(this.phiMax, Cone3D.class.cast(object).phiMax)) {
+		} else if(!Objects.equals(this.phiMax, Cone3D.class.cast(object).phiMax)) {
 			return false;
 		} else if(!equal(this.radius, Cone3D.class.cast(object).radius)) {
+			return false;
+		} else if(!equal(this.zMax, Cone3D.class.cast(object).zMax)) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Returns the height of this {@code Cone3D} instance.
-	 * 
-	 * @return the height of this {@code Cone3D} instance
-	 */
-	public double getHeight() {
-		return this.height;
-	}
-	
-	/**
-	 * Returns the maximum phi of this {@code Cone3D} instance.
-	 * 
-	 * @return the maximum phi of this {@code Cone3D} instance
-	 */
-	public double getPhiMax() {
-		return this.phiMax;
 	}
 	
 	/**
@@ -302,7 +303,16 @@ public final class Cone3D implements Shape3D {
 	 */
 	@Override
 	public double getSurfaceArea() {
-		return this.radius * sqrt((this.height * this.height) + (this.radius * this.radius)) * this.phiMax / 2.0D;
+		return this.radius * sqrt((this.zMax * this.zMax) + (this.radius * this.radius)) * this.phiMax.getRadians() / 2.0D;
+	}
+	
+	/**
+	 * Returns the maximum Z of this {@code Cone3D} instance.
+	 * 
+	 * @return the maximum Z of this {@code Cone3D} instance
+	 */
+	public double getZMax() {
+		return this.zMax;
 	}
 	
 	/**
@@ -332,15 +342,15 @@ public final class Cone3D implements Shape3D {
 		final double directionY = direction.getY();
 		final double directionZ = direction.getZ();
 		
-		final double height = this.height;
-		final double phiMax = this.phiMax;
+		final double phiMax = this.phiMax.getRadians();
 		final double radius = this.radius;
+		final double zMax = this.zMax;
 		
-		final double k = (radius / height) * (radius / height);
+		final double k = (radius / zMax) * (radius / zMax);
 		
 		final double a = directionX * directionX + directionY * directionY - k * directionZ * directionZ;
-		final double b = 2.0D * (directionX * originX + directionY * originY - k * directionZ * (originZ - height));
-		final double c = originX * originX + originY * originY - k * (originZ - height) * (originZ - height);
+		final double b = 2.0D * (directionX * originX + directionY * originY - k * directionZ * (originZ - zMax));
+		final double c = originX * originX + originY * originY - k * (originZ - zMax) * (originZ - zMax);
 		
 		final double[] ts = solveQuadraticSystem(a, b, c);
 		
@@ -361,7 +371,7 @@ public final class Cone3D implements Shape3D {
 		
 		final double phiClosest = getOrAdd(atan2(yClosest, xClosest), 0.0D, PI_MULTIPLIED_BY_2);
 		
-		if(zClosest < 0.0D || zClosest > height || phiClosest > phiMax) {
+		if(zClosest < 0.0D || zClosest > zMax || phiClosest > phiMax) {
 			if(equal(tClosest, t1)) {
 				return Double.NaN;
 			}
@@ -380,7 +390,7 @@ public final class Cone3D implements Shape3D {
 			
 			final double phiClipped = getOrAdd(atan2(yClipped, xClipped), 0.0D, PI_MULTIPLIED_BY_2);
 			
-			if(zClipped < 0.0D || zClipped > height || phiClipped > phiMax) {
+			if(zClipped < 0.0D || zClipped > zMax || phiClipped > phiMax) {
 				return Double.NaN;
 			}
 			
@@ -407,20 +417,20 @@ public final class Cone3D implements Shape3D {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(this.height), Double.valueOf(this.phiMax), Double.valueOf(this.radius));
+		return Objects.hash(this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double phi, final double t, final double x, final double y, final double z) {
-		final double height = this.height;
-		final double phiMax = this.phiMax;
+		final double phiMax = this.phiMax.getRadians();
+		final double zMax = this.zMax;
 		
 		final double u = phi / phiMax;
-		final double v = z / height;
+		final double v = z / zMax;
 		
 		final Vector3D dPDU = Vector3D.normalize(new Vector3D(-phiMax * y, phiMax * x, 0.0D));
-		final Vector3D dPDV = Vector3D.normalize(new Vector3D(-x / (1.0D - v), -y / (1.0D - v), height));
+		final Vector3D dPDV = Vector3D.normalize(new Vector3D(-x / (1.0D - v), -y / (1.0D - v), zMax));
 		
 //		final Vector3D d2PDUU = new Vector3D(x * -phiMax * phiMax, y * -phiMax * phiMax, 0.0D);
 //		final Vector3D d2PDUV = new Vector3D(y * (phiMax / (1.0D - v)), -x * (phiMax / (1.0D - v)), 0.0D);

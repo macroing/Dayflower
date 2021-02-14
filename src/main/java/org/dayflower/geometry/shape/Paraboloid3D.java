@@ -29,6 +29,7 @@ import static org.dayflower.utility.Doubles.solveQuadraticSystem;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.AngleD;
 import org.dayflower.geometry.BoundingVolume3D;
 import org.dayflower.geometry.OrthonormalBasis33D;
 import org.dayflower.geometry.Point2D;
@@ -60,7 +61,7 @@ public final class Paraboloid3D implements Shape3D {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private final double phiMax;
+	private final AngleD phiMax;
 	private final double radius;
 	private final double zMax;
 	private final double zMin;
@@ -73,16 +74,18 @@ public final class Paraboloid3D implements Shape3D {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new Paraboloid3D(360.0D);
+	 * new Paraboloid3D(AngleD.degrees(360.0D));
 	 * }
 	 * </pre>
 	 */
 	public Paraboloid3D() {
-		this(360.0D);
+		this(AngleD.degrees(360.0D));
 	}
 	
 	/**
 	 * Constructs a new {@code Paraboloid3D} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
@@ -92,13 +95,16 @@ public final class Paraboloid3D implements Shape3D {
 	 * </pre>
 	 * 
 	 * @param phiMax the maximum phi
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Paraboloid3D(final double phiMax) {
+	public Paraboloid3D(final AngleD phiMax) {
 		this(phiMax, 1.0D);
 	}
 	
 	/**
 	 * Constructs a new {@code Paraboloid3D} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
@@ -109,13 +115,16 @@ public final class Paraboloid3D implements Shape3D {
 	 * 
 	 * @param phiMax the maximum phi
 	 * @param radius the radius
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Paraboloid3D(final double phiMax, final double radius) {
+	public Paraboloid3D(final AngleD phiMax, final double radius) {
 		this(phiMax, radius, 1.0D);
 	}
 	
 	/**
 	 * Constructs a new {@code Paraboloid3D} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
@@ -127,27 +136,40 @@ public final class Paraboloid3D implements Shape3D {
 	 * @param phiMax the maximum phi
 	 * @param radius the radius
 	 * @param zMax the maximum Z
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Paraboloid3D(final double phiMax, final double radius, final double zMax) {
+	public Paraboloid3D(final AngleD phiMax, final double radius, final double zMax) {
 		this(phiMax, radius, zMax, 0.0D);
 	}
 	
 	/**
 	 * Constructs a new {@code Paraboloid3D} instance.
+	 * <p>
+	 * If {@code phiMax} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param phiMax the maximum phi
 	 * @param radius the radius
 	 * @param zMax the maximum Z
 	 * @param zMin the minimum Z
+	 * @throws NullPointerException thrown if, and only if, {@code phiMax} is {@code null}
 	 */
-	public Paraboloid3D(final double phiMax, final double radius, final double zMax, final double zMin) {
-		this.phiMax = phiMax;
+	public Paraboloid3D(final AngleD phiMax, final double radius, final double zMax, final double zMin) {
+		this.phiMax = Objects.requireNonNull(phiMax, "phiMax == null");
 		this.radius = radius;
 		this.zMax = zMax;
 		this.zMin = zMin;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the maximum phi of this {@code Paraboloid3D} instance.
+	 * 
+	 * @return the maximum phi of this {@code Paraboloid3D} instance
+	 */
+	public AngleD getPhiMax() {
+		return this.phiMax;
+	}
 	
 	/**
 	 * Returns a {@link BoundingVolume3D} instance that contains this {@code Paraboloid3D} instance.
@@ -186,7 +208,7 @@ public final class Paraboloid3D implements Shape3D {
 		final double directionY = direction.getY();
 		final double directionZ = direction.getZ();
 		
-		final double phiMax = this.phiMax;
+		final double phiMax = this.phiMax.getRadians();
 		final double radius = this.radius;
 		final double zMax = this.zMax;
 		final double zMin = this.zMin;
@@ -262,7 +284,7 @@ public final class Paraboloid3D implements Shape3D {
 	 */
 	@Override
 	public String toString() {
-		return String.format("new Paraboloid3D(%+.10f, %+.10f, %+.10f)", Double.valueOf(this.phiMax), Double.valueOf(this.radius), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
+		return String.format("new Paraboloid3D(%s, %+.10f, %+.10f)", this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
 	}
 	
 	/**
@@ -279,7 +301,7 @@ public final class Paraboloid3D implements Shape3D {
 			return true;
 		} else if(!(object instanceof Paraboloid3D)) {
 			return false;
-		} else if(!equal(this.phiMax, Paraboloid3D.class.cast(object).phiMax)) {
+		} else if(!Objects.equals(this.phiMax, Paraboloid3D.class.cast(object).phiMax)) {
 			return false;
 		} else if(!equal(this.radius, Paraboloid3D.class.cast(object).radius)) {
 			return false;
@@ -293,21 +315,31 @@ public final class Paraboloid3D implements Shape3D {
 	}
 	
 	/**
-	 * Returns the maximum phi of this {@code Paraboloid3D} instance.
-	 * 
-	 * @return the maximum phi of this {@code Paraboloid3D} instance
-	 */
-	public double getPhiMax() {
-		return this.phiMax;
-	}
-	
-	/**
 	 * Returns the radius of this {@code Paraboloid3D} instance.
 	 * 
 	 * @return the radius of this {@code Paraboloid3D} instance
 	 */
 	public double getRadius() {
 		return this.radius;
+	}
+	
+	/**
+	 * Returns the surface area of this {@code Paraboloid3D} instance.
+	 * 
+	 * @return the surface area of this {@code Paraboloid3D} instance
+	 */
+	@Override
+	public double getSurfaceArea() {
+		final double phiMax = this.phiMax.getRadians();
+		final double radius = this.radius;
+		final double radiusSquared = radius * radius;
+		final double zMax = this.zMax;
+		final double zMin = this.zMin;
+		final double k = 4.0D * zMax / radiusSquared;
+		final double a = radiusSquared * radiusSquared * phiMax / (12.0D * zMax * zMax);
+		final double b = pow(k * zMax + 1.0D, 1.5D) - pow(k * zMin + 1.0D, 1.5D);
+		
+		return a * b;
 	}
 	
 	/**
@@ -326,25 +358,6 @@ public final class Paraboloid3D implements Shape3D {
 	 */
 	public double getZMin() {
 		return this.zMin;
-	}
-	
-	/**
-	 * Returns the surface area of this {@code Paraboloid3D} instance.
-	 * 
-	 * @return the surface area of this {@code Paraboloid3D} instance
-	 */
-	@Override
-	public double getSurfaceArea() {
-		final double phiMax = this.phiMax;
-		final double radius = this.radius;
-		final double radiusSquared = radius * radius;
-		final double zMax = this.zMax;
-		final double zMin = this.zMin;
-		final double k = 4.0D * zMax / radiusSquared;
-		final double a = radiusSquared * radiusSquared * phiMax / (12.0D * zMax * zMax);
-		final double b = pow(k * zMax + 1.0D, 1.5D) - pow(k * zMin + 1.0D, 1.5D);
-		
-		return a * b;
 	}
 	
 	/**
@@ -374,7 +387,7 @@ public final class Paraboloid3D implements Shape3D {
 		final double directionY = direction.getY();
 		final double directionZ = direction.getZ();
 		
-		final double phiMax = this.phiMax;
+		final double phiMax = this.phiMax.getRadians();
 		final double radius = this.radius;
 		final double zMax = this.zMax;
 		final double zMin = this.zMin;
@@ -450,13 +463,13 @@ public final class Paraboloid3D implements Shape3D {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Double.valueOf(this.phiMax), Double.valueOf(this.radius), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
+		return Objects.hash(this.phiMax, Double.valueOf(this.radius), Double.valueOf(this.zMax), Double.valueOf(this.zMin));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private SurfaceIntersection3D doCreateSurfaceIntersection(final Ray3D ray, final double phi, final double t, final double x, final double y, final double z) {
-		final double phiMax = this.phiMax;
+		final double phiMax = this.phiMax.getRadians();
 		final double zMax = this.zMax;
 		final double zMin = this.zMin;
 		

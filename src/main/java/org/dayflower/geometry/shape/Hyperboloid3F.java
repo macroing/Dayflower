@@ -146,17 +146,35 @@ public final class Hyperboloid3F implements Shape3F {
 		Objects.requireNonNull(a, "a == null");
 		Objects.requireNonNull(b, "b == null");
 		
+		Point3F pointA = isZero(a.getZ()) ? a : isZero(b.getZ()) ? b : a;
+		Point3F pointB = isZero(a.getZ()) ? b : isZero(b.getZ()) ? a : b;
+		Point3F pointC = pointA;
+		
+		float aH = Float.POSITIVE_INFINITY;
+		float cH = Float.POSITIVE_INFINITY;
+		
+		for(int i = 0; i < 10 && (isInfinite(aH) || isNaN(aH)); i++) {
+			pointC = Point3F.add(pointC, Vector3F.multiply(Vector3F.direction(pointA, pointB), 2.0F));
+			
+			final float c = pointC.getX() * pointC.getX() + pointC.getY() * pointC.getY();
+			final float d = pointB.getX() * pointB.getX() + pointB.getY() * pointB.getY();
+			
+			aH = (1.0F / c - (pointC.getZ() * pointC.getZ()) / (c * pointB.getZ() * pointB.getZ())) / (1.0F - (d * pointC.getZ() * pointC.getZ()) / (c * pointB.getZ() * pointB.getZ()));
+			cH = (aH * d - 1.0F) / (pointB.getZ() * pointB.getZ());
+		}
+		
+		if(isInfinite(aH) || isNaN(aH)) {
+			throw new IllegalArgumentException();
+		}
+		
 		this.phiMax = phiMax;
-		this.a = isZero(a.getZ()) ? a : isZero(b.getZ()) ? b : a;
-		this.b = isZero(a.getZ()) ? b : isZero(b.getZ()) ? a : b;
+		this.a = pointA;
+		this.b = pointB;
+		this.aH = aH;
+		this.cH = cH;
 		this.rMax = max(sqrt(a.getX() * a.getX() + a.getY() * a.getY()), sqrt(b.getX() * b.getX() + b.getY() * b.getY()));
 		this.zMax = max(a.getZ(), b.getZ());
 		this.zMin = min(a.getZ(), b.getZ());
-		
-		final float[] coefficients = doCreateImplicitFunctionCoefficients(this.a, this.b);
-		
-		this.aH = coefficients[0];
-		this.cH = coefficients[1];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -546,30 +564,5 @@ public final class Hyperboloid3F implements Shape3F {
 		final Vector3F surfaceIntersectionPointError = new Vector3F();
 		
 		return new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static float[] doCreateImplicitFunctionCoefficients(final Point3F a, final Point3F b) {
-		float cX = a.getX();
-		float cY = a.getY();
-		float cZ = a.getZ();
-		
-		float aH = 0.0F;
-		float cH = 0.0F;
-		
-		do {
-			cX += 2.0F * (b.getX() - a.getX());
-			cY += 2.0F * (b.getY() - a.getY());
-			cZ += 2.0F * (b.getZ() - a.getZ());
-			
-			final float d = cX * cX + cY * cY;
-			final float e = b.getX() * b.getX() + b.getY() * b.getY();
-			
-			aH = (1.0F / d - (cZ * cZ) / (d * b.getZ() * b.getZ())) / (1.0F - (e * cZ * cZ) / (d * b.getZ() * b.getZ()));
-			cH = (aH * e - 1.0F) / (b.getZ() * b.getZ());
-		} while(isInfinite(aH) || isNaN(aH));
-		
-		return new float[] {aH, cH};
 	}
 }

@@ -146,17 +146,35 @@ public final class Hyperboloid3D implements Shape3D {
 		Objects.requireNonNull(a, "a == null");
 		Objects.requireNonNull(b, "b == null");
 		
+		Point3D pointA = isZero(a.getZ()) ? a : isZero(b.getZ()) ? b : a;
+		Point3D pointB = isZero(a.getZ()) ? b : isZero(b.getZ()) ? a : b;
+		Point3D pointC = pointA;
+		
+		double aH = Double.POSITIVE_INFINITY;
+		double cH = Double.POSITIVE_INFINITY;
+		
+		for(int i = 0; i < 10 && (isInfinite(aH) || isNaN(aH)); i++) {
+			pointC = Point3D.add(pointC, Vector3D.multiply(Vector3D.direction(pointA, pointB), 2.0D));
+			
+			final double c = pointC.getX() * pointC.getX() + pointC.getY() * pointC.getY();
+			final double d = pointB.getX() * pointB.getX() + pointB.getY() * pointB.getY();
+			
+			aH = (1.0D / c - (pointC.getZ() * pointC.getZ()) / (c * pointB.getZ() * pointB.getZ())) / (1.0D - (d * pointC.getZ() * pointC.getZ()) / (c * pointB.getZ() * pointB.getZ()));
+			cH = (aH * d - 1.0D) / (pointB.getZ() * pointB.getZ());
+		}
+		
+		if(isInfinite(aH) || isNaN(aH)) {
+			throw new IllegalArgumentException();
+		}
+		
 		this.phiMax = phiMax;
-		this.a = isZero(a.getZ()) ? a : isZero(b.getZ()) ? b : a;
-		this.b = isZero(a.getZ()) ? b : isZero(b.getZ()) ? a : b;
+		this.a = pointA;
+		this.b = pointB;
+		this.aH = aH;
+		this.cH = cH;
 		this.rMax = max(sqrt(a.getX() * a.getX() + a.getY() * a.getY()), sqrt(b.getX() * b.getX() + b.getY() * b.getY()));
 		this.zMax = max(a.getZ(), b.getZ());
 		this.zMin = min(a.getZ(), b.getZ());
-		
-		final double[] coefficients = doCreateImplicitFunctionCoefficients(this.a, this.b);
-		
-		this.aH = coefficients[0];
-		this.cH = coefficients[1];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -546,30 +564,5 @@ public final class Hyperboloid3D implements Shape3D {
 		final Vector3D surfaceIntersectionPointError = new Vector3D();
 		
 		return new SurfaceIntersection3D(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static double[] doCreateImplicitFunctionCoefficients(final Point3D a, final Point3D b) {
-		double cX = a.getX();
-		double cY = a.getY();
-		double cZ = a.getZ();
-		
-		double aH = 0.0D;
-		double cH = 0.0D;
-		
-		do {
-			cX += 2.0D * (b.getX() - a.getX());
-			cY += 2.0D * (b.getY() - a.getY());
-			cZ += 2.0D * (b.getZ() - a.getZ());
-			
-			final double d = cX * cX + cY * cY;
-			final double e = b.getX() * b.getX() + b.getY() * b.getY();
-			
-			aH = (1.0D / d - (cZ * cZ) / (d * b.getZ() * b.getZ())) / (1.0D - (e * cZ * cZ) / (d * b.getZ() * b.getZ()));
-			cH = (aH * e - 1.0D) / (b.getZ() * b.getZ());
-		} while(isInfinite(aH) || isNaN(aH));
-		
-		return new double[] {aH, cH};
 	}
 }

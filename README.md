@@ -1,6 +1,8 @@
 Dayflower
 =========
-Dayflower is a 3D-renderer written in Java. Its primary focus is photorealism, preferably in realtime.
+Dayflower is an application, a framework and a library for rendering in Java.
+
+Its primary focus is photorealistic 3D-rendering, preferably in realtime. However, it can also be used for 2D-rendering and image processing.
 
 ![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-001.png "Dayflower")
 ![alt text](https://github.com/macroing/Dayflower/blob/master/images/Image-005.png "Dayflower")

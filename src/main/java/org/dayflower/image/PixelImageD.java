@@ -33,7 +33,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -288,6 +290,17 @@ public final class PixelImageD extends ImageD {
 	@Override
 	public Color4D getColorRGBA(final int x, final int y, final PixelOperation pixelOperation) {
 		return getPixel(x, y, pixelOperation).map(pixel -> pixel.getColorRGBA()).orElse(Color4D.BLACK);
+	}
+	
+	/**
+	 * Returns a {@code List} with all {@link PixelD} instances associated with this {@code PixelImageD} instance.
+	 * <p>
+	 * Modifications to the returned {@code List} will not affect this {@code PixelImageD} instance.
+	 * 
+	 * @return a {@code List} with all {@code PixelD} instances associated with this {@code PixelImageD} instance
+	 */
+	public List<PixelD> getPixels() {
+		return new ArrayList<>(Arrays.asList(this.pixels));
 	}
 	
 	/**

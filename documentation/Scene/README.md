@@ -87,6 +87,41 @@ Examples
 --------
 Below follows a few examples that demonstrates various features.
 
+#### Scene Radiance Example
+The following example demonstrates a simple way to render an image using the Color, Geometry, Image and Scene APIs.
+```java
+import org.dayflower.color.Color3F;
+import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Point3F;
+import org.dayflower.geometry.shape.Plane3F;
+import org.dayflower.image.PixelImageF;
+import org.dayflower.scene.Camera;
+import org.dayflower.scene.Primitive;
+import org.dayflower.scene.Scene;
+import org.dayflower.scene.light.PerezLight;
+import org.dayflower.scene.material.MatteMaterial;
+
+public class SceneRadianceExample {
+    public static void main(String[] args) {
+        Camera camera = new Camera(new Point3F(0.0F, 1.0F, 0.0F), AngleF.degrees(40.0F));
+        camera.setResolution(800.0F, 800.0F);
+        camera.setFieldOfViewY();
+        camera.setOrthonormalBasis();
+        
+        Scene scene = new Scene(camera);
+        scene.addLight(new PerezLight());
+        scene.addPrimitive(new Primitive(new MatteMaterial(), new Plane3F()));
+        
+        PixelImageF pixelImageF = new PixelImageF(800, 800);
+        pixelImageF.getPixels().forEach(pixel -> camera.createPrimaryRay(pixel.getX(), pixel.getY(), 0.5F, 0.5F).ifPresent(ray -> {
+            pixelImageF.filmAddColorXYZ(pixel.getX() + 0.5F, pixel.getY() + 0.5F, Color3F.convertRGBToXYZUsingPBRT(scene.radiancePathTracer(ray)));
+        }));
+        pixelImageF.filmRender();
+        pixelImageF.save("SceneRadianceExample.png", "png");
+    }
+}
+```
+
 #### Clear Coat Material Example
 The following example demonstrates how the `ClearCoatMaterial` can be created and looks visually.
 ```java

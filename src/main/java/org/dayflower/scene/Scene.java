@@ -54,7 +54,7 @@ import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.node.Node;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-import org.dayflower.sampler.NRooksSampler;
+import org.dayflower.sampler.RandomSampler;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.sampler.Sampler;
 import org.dayflower.utility.ParameterArguments;
@@ -145,7 +145,7 @@ public final class Scene implements Node {
 		this.primitives = new CopyOnWriteArrayList<>();
 		this.primitivesExternalToBVH = new CopyOnWriteArrayList<>();
 		this.primitiveObserver = new PrimitiveObserverImpl(this, this.sceneObservers);
-		this.sampler = new NRooksSampler();
+		this.sampler = new RandomSampler();
 		this.name = Objects.requireNonNull(name, "name == null");
 	}
 	

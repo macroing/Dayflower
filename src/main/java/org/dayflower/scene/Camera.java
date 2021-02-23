@@ -277,6 +277,26 @@ public final class Camera implements Node {
 	}
 	
 	/**
+	 * Creates a new primary {@link Ray3F} instance given {@code imageX} and {@code imageY} as the image coordinates and {@code 0.5F} and {@code 0.5F} as the pixel coordinates.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@code Ray3F} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * camera.createPrimaryRay(imageX, imageY, 0.5F, 0.5F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param imageX the X-coordinate of the image
+	 * @param imageY the Y-coordinate of the image
+	 * @return an {@code Optional} with an optional {@code Ray3F} instance
+	 */
+	public Optional<Ray3F> createPrimaryRay(final float imageX, final float imageY) {
+		return createPrimaryRay(imageX, imageY, 0.5F, 0.5F);
+	}
+	
+	/**
 	 * Creates a new primary {@link Ray3F} instance given {@code imageX} and {@code imageY} as the image coordinates and {@code pixelX} and {@code pixelY} as the pixel coordinates.
 	 * <p>
 	 * Returns an {@code Optional} with an optional {@code Ray3F} instance.

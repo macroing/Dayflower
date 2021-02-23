@@ -24,6 +24,7 @@ import org.dayflower.color.Color3F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.observer.FileRendererObserver;
+import org.dayflower.scene.Scene;
 
 /**
  * A {@code CPURenderer} is an implementation of {@link AbstractCPURenderer} that supports various rendering algorithms.
@@ -75,13 +76,13 @@ public final class CPURenderer extends AbstractCPURenderer {
 		
 		switch(getRenderingAlgorithm()) {
 			case AMBIENT_OCCLUSION:
-				return AmbientOcclusion.radiance(ray, getScene(), isPreviewMode(), getMaximumDistance(), getSamples());
+				return getScene().radianceAmbientOcclusion(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM, isPreviewMode(), getMaximumDistance(), getSamples());
 			case PATH_TRACING:
-				return PathTracing.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
+				return getScene().radiancePathTracer(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM, isPreviewMode(), getMaximumBounce(), getMinimumBounceRussianRoulette());
 			case RAY_CASTING:
-				return RayCasting.radiance(ray, getScene(), isPreviewMode());
+				return getScene().radianceRayCaster(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM, isPreviewMode());
 			case RAY_TRACING:
-				return RayTracing.radiance(ray, getScene(), isPreviewMode(), getMaximumBounce(), 0);
+				return getScene().radianceRayTracer(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM, isPreviewMode(), getMaximumBounce());
 			default:
 				return Color3F.BLACK;
 		}

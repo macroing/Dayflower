@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene;
 
+import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isNaN;
@@ -25,7 +26,9 @@ import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Floats.minOrNaN;
+import static org.dayflower.utility.Floats.normalize;
 import static org.dayflower.utility.Floats.random;
+import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
 
@@ -65,6 +68,18 @@ import org.dayflower.utility.ParameterArguments;
  * @author J&#246;rgen Lundgren
  */
 public final class Scene implements Node {
+	/**
+	 * The default maximum parametric distance value that is equal to {@code Float.MAX_VALUE}.
+	 */
+	public static final float T_MAXIMUM = Float.MAX_VALUE;
+	
+	/**
+	 * The default minimum parametric distance value that is equal to {@code 0.001F}.
+	 */
+	public static final float T_MINIMUM = 0.001F;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private BVHNode bVHNode;
 	private Camera camera;
 	private final CameraObserver cameraObserver;
@@ -154,6 +169,527 @@ public final class Scene implements Node {
 		synchronized(this.camera) {
 			return this.camera.copy();
 		}
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radianceAmbientOcclusion(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceAmbientOcclusion(final Ray3F ray) {
+		return radianceAmbientOcclusion(ray, T_MINIMUM, T_MAXIMUM);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radianceAmbientOcclusion(ray, tMinimum, tMaximum, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceAmbientOcclusion(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return radianceAmbientOcclusion(ray, tMinimum, tMaximum, false);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radianceAmbientOcclusion(ray, tMinimum, tMaximum, isPreviewMode, 20.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceAmbientOcclusion(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode) {
+		return radianceAmbientOcclusion(ray, tMinimum, tMaximum, isPreviewMode, 20.0F);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radianceAmbientOcclusion(ray, tMinimum, tMaximum, isPreviewMode, maximumDistance, 10);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @param maximumDistance the maximum distance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceAmbientOcclusion(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode, final float maximumDistance) {
+		return radianceAmbientOcclusion(ray, tMinimum, tMaximum, isPreviewMode, maximumDistance, 10);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @param maximumDistance the maximum distance
+	 * @param samples the samples to use
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using an Ambient Occlusion algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceAmbientOcclusion(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode, final float maximumDistance, final int samples) {
+		final Optional<Intersection> optionalIntersection = intersection(ray, tMinimum, tMaximum);
+		
+		if(optionalIntersection.isPresent()) {
+			Color3F radiance = Color3F.BLACK;
+			
+			final Intersection intersection = optionalIntersection.get();
+			
+			final OrthonormalBasis33F orthonormalBasisGWorldSpace = intersection.getOrthonormalBasisG();
+			
+			for(int sample = 0; sample < samples; sample++) {
+				final Vector3F directionWorldSpace = Vector3F.normalize(Vector3F.transform(SampleGeneratorF.sampleHemisphereUniformDistribution(), orthonormalBasisGWorldSpace));
+				
+				final Ray3F rayWorldSpaceShadow = intersection.createRay(directionWorldSpace);
+				
+				if(maximumDistance > 0.0F) {
+					final Optional<Intersection> optionalIntersectionShadow = intersection(rayWorldSpaceShadow, tMinimum, tMaximum);
+					
+					if(optionalIntersectionShadow.isPresent()) {
+						final Intersection intersectionShadow = optionalIntersectionShadow.get();
+						
+						final float t = intersectionShadow.getT();
+						
+						radiance = Color3F.add(radiance, new Color3F(normalize(saturate(t, 0.0F, maximumDistance), 0.0F, maximumDistance)));
+					} else {
+						radiance = Color3F.add(radiance, Color3F.WHITE);
+					}
+				} else if(!intersects(rayWorldSpaceShadow, tMinimum, tMaximum)) {
+					radiance = Color3F.add(radiance, Color3F.WHITE);
+				}
+			}
+			
+			radiance = Color3F.multiply(radiance, PI / samples);
+			radiance = Color3F.divide(radiance, PI);
+			
+			return radiance;
+		} else if(isPreviewMode) {
+			return Color3F.WHITE;
+		} else {
+			return Color3F.BLACK;
+		}
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radiancePathTracer(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radiancePathTracer(final Ray3F ray) {
+		return radiancePathTracer(ray, T_MINIMUM, T_MAXIMUM);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radiancePathTracer(ray, tMinimum, tMaximum, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radiancePathTracer(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return radiancePathTracer(ray, tMinimum, tMaximum, false);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radiancePathTracer(ray, tMinimum, tMaximum, isPreviewMode, 20);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radiancePathTracer(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode) {
+		return radiancePathTracer(ray, tMinimum, tMaximum, isPreviewMode, 20);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radiancePathTracer(ray, tMinimum, tMaximum, isPreviewMode, maximumBounce, 5);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @param maximumBounce the maximum bounce
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radiancePathTracer(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode, final int maximumBounce) {
+		return radiancePathTracer(ray, tMinimum, tMaximum, isPreviewMode, maximumBounce, 5);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @param maximumBounce the maximum bounce
+	 * @param minimumBounceRussianRoulette the minimum bounce before Russian roulette termination occurs
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Path Tracer algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radiancePathTracer(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode, final int maximumBounce, final int minimumBounceRussianRoulette) {
+		final List<Light> lights = this.lights;
+		
+		final Sampler sampler = getSampler();
+		
+		Color3F radiance = Color3F.BLACK;
+		Color3F throughput = Color3F.WHITE;
+		
+		Ray3F currentRay = ray;
+		
+		boolean isSpecularBounce = false;
+		
+		float etaScale = 1.0F;
+		
+		for(int currentBounce = 0; true; currentBounce++) {
+			final Optional<Intersection> optionalIntersection = intersection(currentRay, tMinimum, tMaximum);
+			
+			if(optionalIntersection.isPresent()) {
+				final Intersection intersection = optionalIntersection.get();
+				
+				final Vector3F outgoing = Vector3F.negate(currentRay.getDirection());
+				
+				if(currentBounce == 0 || isSpecularBounce) {
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, optionalIntersection.get().evaluateRadianceEmitted(outgoing)));
+				}
+				
+				if(currentBounce >= maximumBounce) {
+					break;
+				}
+				
+				final Primitive primitive = intersection.getPrimitive();
+				
+				final Material material = primitive.getMaterial();
+				
+				final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
+				
+				if(!optionalBSDF.isPresent()) {
+					currentRay = intersection.createRay(currentRay.getDirection());
+					
+					currentBounce--;
+					
+					continue;
+				}
+				
+				final BSDF bSDF = optionalBSDF.get();
+				
+				if(bSDF.countBXDFsBySpecularType(false) > 0) {
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, sampleOneLightUniformDistribution(bSDF, intersection)));
+				}
+				
+				final Vector3F surfaceNormalG = intersection.getSurfaceNormalG();
+				final Vector3F surfaceNormalS = intersection.getSurfaceNormalS();
+				
+				final Sample2F sample = sampler.sample2();
+				
+				final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, surfaceNormalS, new Point2F(sample.getU(), sample.getV()));
+				
+				if(!optionalBSDFResult.isPresent()) {
+					break;
+				}
+				
+				final BSDFResult bSDFResult = optionalBSDFResult.get();
+				
+				final Color3F result = bSDFResult.getResult();
+				
+				final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
+				
+				if(result.isBlack() || isZero(probabilityDensityFunctionValue)) {
+					break;
+				}
+				
+				final Vector3F incoming = bSDFResult.getIncoming();
+				
+				throughput = Color3F.multiply(throughput, Color3F.divide(Color3F.multiply(result, abs(Vector3F.dotProduct(incoming, surfaceNormalS))), probabilityDensityFunctionValue));
+				
+				final BXDFType bXDFType = bSDFResult.getBXDFType();
+				
+				isSpecularBounce = bXDFType.isSpecular();
+				
+				if(bXDFType.hasTransmission() && bXDFType.isSpecular()) {
+					etaScale *= Vector3F.dotProduct(outgoing, surfaceNormalG) > 0.0F ? bSDF.getEta() * bSDF.getEta() : 1.0F / (bSDF.getEta() * bSDF.getEta());
+				}
+				
+				currentRay = intersection.createRay(incoming);
+				
+				final Color3F russianRouletteThroughput = Color3F.multiply(throughput, etaScale);
+				
+				if(russianRouletteThroughput.maximum() < 1.0F && currentBounce > minimumBounceRussianRoulette) {
+					final float probability = max(0.05F, 1.0F - russianRouletteThroughput.maximum());
+					
+					if(sampler.sample1().getU() < probability) {
+						break;
+					}
+					
+					throughput = Color3F.divide(throughput, 1.0F - probability);
+				}
+			} else if(currentBounce == 0 && isPreviewMode) {
+				radiance = Color3F.WHITE;
+				
+				break;
+			} else if(currentBounce == 0 || isSpecularBounce) {
+				for(final Light light : lights) {
+					radiance = Color3F.add(radiance, Color3F.multiply(throughput, light.evaluateRadianceEmitted(currentRay)));
+				}
+				
+				break;
+			} else {
+				break;
+			}
+		}
+		
+		return radiance;
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Ray Caster algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radianceRayCaster(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Ray Caster algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceRayCaster(final Ray3F ray) {
+		return radianceRayCaster(ray, T_MINIMUM, T_MAXIMUM);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Ray Caster algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radianceRayCaster(ray, tMinimum, tMaximum, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Ray Caster algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceRayCaster(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return radianceRayCaster(ray, tMinimum, tMaximum, false);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Ray Caster algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Ray Caster algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceRayCaster(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode) {
+		Color3F radiance = Color3F.BLACK;
+		
+		final Optional<Intersection> optionalIntersection = intersection(ray, tMinimum, tMaximum);
+		
+		if(optionalIntersection.isPresent()) {
+			final Intersection intersection = optionalIntersection.get();
+			
+			final Vector3F surfaceNormal = intersection.getSurfaceNormalS();
+			
+			radiance = Color3F.multiply(Color3F.GRAY_0_50, abs(Vector3F.dotProduct(surfaceNormal, ray.getDirection())));
+		} else if(isPreviewMode) {
+			return Color3F.WHITE;
+		} else {
+			for(final Light light : this.lights) {
+				radiance = Color3F.add(radiance, light.evaluateRadianceEmitted(ray));
+			}
+		}
+		
+		return radiance;
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Ray Tracer algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radianceRayTracer(ray, Scene.T_MINIMUM, Scene.T_MAXIMUM);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Ray Tracer algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceRayTracer(final Ray3F ray) {
+		return radianceRayTracer(ray, T_MINIMUM, T_MAXIMUM);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Ray Tracer algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radianceRayTracer(ray, tMinimum, tMaximum, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Ray Tracer algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceRayTracer(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		return radianceRayTracer(ray, tMinimum, tMaximum, false);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Ray Tracer algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * scene.radianceRayTracer(ray, tMinimum, tMaximum, isPreviewMode, 20);
+	 * }
+	 * </pre>
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Ray Tracer algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceRayTracer(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode) {
+		return radianceRayTracer(ray, tMinimum, tMaximum, isPreviewMode, 20);
+	}
+	
+	/**
+	 * Returns a {@link Color3F} instance with the radiance along {@code ray} using a Ray Tracer algorithm.
+	 * <p>
+	 * If {@code ray} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param ray the {@link Ray3F} instance to trace
+	 * @param tMinimum the minimum parametric distance
+	 * @param tMaximum the maximum parametric distance
+	 * @param isPreviewMode {@code true} if, and only if, preview mode is enabled, {@code false} otherwise
+	 * @param maximumBounce the maximum bounce
+	 * @return a {@code Color3F} instance with the radiance along {@code ray} using a Ray Tracer algorithm
+	 * @throws NullPointerException thrown if, and only if, {@code ray} is {@code null}
+	 */
+	public Color3F radianceRayTracer(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode, final int maximumBounce) {
+		return doRadianceRayTracer(ray, tMinimum, tMaximum, isPreviewMode, maximumBounce, 0);
 	}
 	
 	/**
@@ -791,6 +1327,62 @@ public final class Scene implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private Color3F doComputeSpecularReflection(final Ray3F ray, final float tMinimum, final float tMaximum, final Sampler sampler, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
+		final Vector3F normal = intersection.getSurfaceNormalS();
+		final Vector3F outgoing = Vector3F.negate(ray.getDirection());
+		
+		final Sample2F sample = sampler.sample2();
+		
+		final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.SPECULAR_REFLECTION, outgoing, normal, new Point2F(sample.getU(), sample.getV()));
+		
+		if(optionalBSDFResult.isPresent()) {
+			final BSDFResult bSDFResult = optionalBSDFResult.get();
+			
+			final Color3F result = bSDFResult.getResult();
+			
+			final Vector3F incoming = bSDFResult.getIncoming();
+			
+			final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
+			
+			final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
+			final float incomingDotNormalAbs = abs(incomingDotNormal);
+			
+			if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F && incomingDotNormalAbs > 0.0F) {
+				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, doRadianceRayTracer(intersection.createRay(incoming), tMinimum, tMaximum, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
+			}
+		}
+		
+		return Color3F.BLACK;
+	}
+	
+	private Color3F doComputeSpecularTransmission(final Ray3F ray, final float tMinimum, final float tMaximum, final Sampler sampler, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
+		final Vector3F normal = intersection.getSurfaceNormalS();
+		final Vector3F outgoing = Vector3F.negate(ray.getDirection());
+		
+		final Sample2F sample = sampler.sample2();
+		
+		final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.SPECULAR_TRANSMISSION, outgoing, normal, new Point2F(sample.getU(), sample.getV()));
+		
+		if(optionalBSDFResult.isPresent()) {
+			final BSDFResult bSDFResult = optionalBSDFResult.get();
+			
+			final Color3F result = bSDFResult.getResult();
+			
+			final Vector3F incoming = bSDFResult.getIncoming();
+			
+			final float probabilityDensityFunctionValue = bSDFResult.getProbabilityDensityFunctionValue();
+			
+			final float incomingDotNormal = Vector3F.dotProduct(incoming, normal);
+			final float incomingDotNormalAbs = abs(incomingDotNormal);
+			
+			if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F && incomingDotNormalAbs > 0.0F) {
+				return Color3F.addMultiplyAndDivide(Color3F.BLACK, result, doRadianceRayTracer(intersection.createRay(incoming), tMinimum, tMaximum, isPreviewMode, maximumBounce, currentBounce + 1), incomingDotNormalAbs, probabilityDensityFunctionValue);
+			}
+		}
+		
+		return Color3F.BLACK;
+	}
+	
 	private Color3F doEstimateDirectLight(final BSDF bSDF, final Intersection intersection, final Light light, final Point2F sampleA, final Point2F sampleB, final boolean isSpecular) {
 		Color3F lightDirect = Color3F.BLACK;
 		
@@ -903,6 +1495,70 @@ public final class Scene implements Node {
 		}
 		
 		return lightDirect;
+	}
+	
+	private Color3F doRadianceRayTracer(final Ray3F ray, final float tMinimum, final float tMaximum, final boolean isPreviewMode, final int maximumBounce, final int currentBounce) {
+		Color3F radiance = Color3F.BLACK;
+		
+		final Sampler sampler = getSampler();
+		
+		final Optional<Intersection> optionalIntersection = intersection(ray, tMinimum, tMaximum);
+		
+		if(optionalIntersection.isPresent()) {
+			final Intersection intersection = optionalIntersection.get();
+			
+			final Primitive primitive = intersection.getPrimitive();
+			
+			final Material material = primitive.getMaterial();
+			
+			final Optional<BSDF> optionalBSDF = material.computeBSDF(intersection, TransportMode.RADIANCE, true);
+			
+			if(!optionalBSDF.isPresent()) {
+				return doRadianceRayTracer(intersection.createRay(ray.getDirection()), tMinimum, tMaximum, isPreviewMode, maximumBounce, currentBounce);
+			}
+			
+			final BSDF bSDF = optionalBSDF.get();
+			
+			final Vector3F normal = intersection.getSurfaceNormalS();
+			final Vector3F outgoing = Vector3F.negate(ray.getDirection());
+			
+			radiance = Color3F.add(radiance, intersection.evaluateRadianceEmitted(outgoing));
+			
+			for(final Light light : this.lights) {
+				final Sample2F sample = sampler.sample2();
+				
+				final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, new Point2F(sample.getU(), sample.getV()));
+				
+				if(optionalLightSample.isPresent()) {
+					final LightSample lightSample = optionalLightSample.get();
+					
+					final Color3F result = lightSample.getResult();
+					
+					final Vector3F incoming = lightSample.getIncoming();
+					
+					final float probabilityDensityFunctionValue = lightSample.getProbabilityDensityFunctionValue();
+					
+					if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F) {
+						final Color3F scatteringResult = bSDF.evaluateDistributionFunction(BXDFType.ALL, outgoing, normal, incoming);
+						
+						if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
+							radiance = Color3F.addMultiplyAndDivide(radiance, scatteringResult, result, abs(Vector3F.dotProduct(incoming, normal)), probabilityDensityFunctionValue);
+						}
+					}
+				}
+			}
+			
+			if(currentBounce + 1 < maximumBounce) {
+				radiance = Color3F.add(radiance, doComputeSpecularReflection(ray, tMinimum, tMaximum, sampler, isPreviewMode, maximumBounce, currentBounce, bSDF, intersection));
+				radiance = Color3F.add(radiance, doComputeSpecularTransmission(ray, tMinimum, tMaximum, sampler, isPreviewMode, maximumBounce, currentBounce, bSDF, intersection));
+			}
+		} else {
+			for(final Light light : this.lights) {
+				radiance = Color3F.add(radiance, light.evaluateRadianceEmitted(ray));
+			}
+		}
+		
+		return radiance;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

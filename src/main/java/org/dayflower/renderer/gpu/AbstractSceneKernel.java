@@ -60,20 +60,23 @@ import org.dayflower.scene.texture.UVTexture;
 import org.dayflower.utility.Floats;
 
 /**
- * An {@code AbstractSceneKernel} is an abstract extension of the {@code AbstractImageKernel} class that adds additional features.
+ * An {@code AbstractSceneKernel} is an abstract extension of the {@code AbstractGeometryKernel} class that adds additional features.
  * <p>
  * The features added are the following:
  * <ul>
  * <li>Bounding volume intersection methods</li>
  * <li>Camera ray generation methods</li>
+ * <li>Light evaluation methods</li>
+ * <li>Material evaluation methods</li>
  * <li>Primitive intersection methods</li>
  * <li>Shape intersection methods</li>
+ * <li>Texture evaluation methods</li>
  * </ul>
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractSceneKernel extends AbstractImageKernel {
+public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 	/**
 	 * The default maximum parametric distance value.
 	 */
@@ -146,21 +149,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //	TODO: Add Javadocs!
 	protected static final int MATERIAL_B_X_D_F_ARRAY_SIZE = 16;
 	
-//	TODO: Add Javadocs!
-	protected static final int RAY_3_F_ARRAY_OFFSET_DIRECTION = 3;
-	
-//	TODO: Add Javadocs!
-	protected static final int RAY_3_F_ARRAY_OFFSET_ORIGIN = 0;
-	
-//	TODO: Add Javadocs!
-	protected static final int RAY_3_F_ARRAY_OFFSET_T_MAXIMUM = 7;
-	
-//	TODO: Add Javadocs!
-	protected static final int RAY_3_F_ARRAY_OFFSET_T_MINIMUM = 6;
-	
-//	TODO: Add Javadocs!
-	protected static final int RAY_3_F_ARRAY_SIZE = 8;
-	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
@@ -186,9 +174,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected float[] pixelArray;
-	
-//	TODO: Add Javadocs!
-	protected float[] ray3FArray_$private$8;
 	
 //	TODO: Add Javadocs!
 	protected float[] shape3FPlane3FArray;
@@ -277,7 +262,6 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
 		this.matrix44FArray = new float[1];
 		this.pixelArray = new float[1];
-		this.ray3FArray_$private$8 = new float[RAY_3_F_ARRAY_SIZE];
 		this.shape3FPlane3FArray = new float[1];
 		this.shape3FRectangularCuboid3FArray = new float[1];
 		this.shape3FSphere3FArray = new float[1];
@@ -401,12 +385,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final boolean containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionReciprocalX = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionReciprocalY = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionReciprocalZ = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalComponent1();
+		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalComponent2();
+		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
 		
 //		Retrieve the axis aligned bounding box variables:
 		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
@@ -459,12 +443,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final boolean containsOrIntersectsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the bounding sphere variables:
 		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
@@ -521,8 +505,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
 			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
 			
-			final float tMinimumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-			final float tMaximumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+			final float tMinimumWorldSpace = ray3FGetTMinimum();
+			final float tMaximumWorldSpace = ray3FGetTMaximum();
 			
 			boolean isIntersectingBoundingVolume = false;
 			
@@ -540,8 +524,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				
 				float tObjectSpace = 0.0F;
 				
-				final float tMinimumObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-				final float tMaximumObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+				final float tMinimumObjectSpace = ray3FGetTMinimum();
+				final float tMaximumObjectSpace = ray3FGetTMaximum();
 				
 				if(shapeID == Plane3F.ID) {
 					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
@@ -558,7 +542,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				}
 				
 				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
-					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = tObjectSpace;
+					ray3FSetTMaximum(tObjectSpace);
 					
 					primitiveIndex = index;
 				}
@@ -577,7 +561,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			
 			ray3FSetMatrix44FTransformWorldToObject(primitiveIndex);
 			
-			final float tObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+			final float tObjectSpace = ray3FGetTMaximum();
 			
 			if(shapeID == Plane3F.ID) {
 				intersectionComputeShape3FPlane3F(tObjectSpace, primitiveIndex, shapeOffset);
@@ -782,9 +766,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float colorKSG = color3FLHSGetComponent2();
 		final float colorKSB = color3FLHSGetComponent3();
 		
-		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float directionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float directionX = ray3FGetDirectionComponent1();
+		final float directionY = ray3FGetDirectionComponent2();
+		final float directionZ = ray3FGetDirectionComponent3();
 		
 		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
@@ -798,8 +782,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		
 		final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
 		
-		final float etaA = ETA_VACUUM;
-		final float etaB = ETA_GLASS;
+		final float etaA = 1.0F;
+		final float etaB = 1.5F;
 		final float etaI = isEntering ? etaA : etaB;
 		final float etaT = isEntering ? etaB : etaA;
 		final float eta = etaI / etaT;
@@ -808,9 +792,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final boolean isReflecting = !isRefracting;
 		
 		if(isRefracting) {
-			final float refractionDirectionX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-			final float refractionDirectionY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-			final float refractionDirectionZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+			final float refractionDirectionX = vector3FGetComponent1();
+			final float refractionDirectionY = vector3FGetComponent2();
+			final float refractionDirectionZ = vector3FGetComponent3();
 			
 			final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
@@ -878,9 +862,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float colorKTG = color3FLHSGetComponent2();
 		final float colorKTB = color3FLHSGetComponent3();
 		
-		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float directionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float directionX = ray3FGetDirectionComponent1();
+		final float directionY = ray3FGetDirectionComponent2();
+		final float directionZ = ray3FGetDirectionComponent3();
 		
 		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
@@ -894,8 +878,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		
 		final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
 		
-		final float etaA = ETA_VACUUM;
-//		final float etaB = ETA_GLASS;
+		final float etaA = 1.0F;
 		final float etaB = (colorEtaR + colorEtaG + colorEtaB) / 3.0F;
 		final float etaI = isEntering ? etaA : etaB;
 		final float etaT = isEntering ? etaB : etaA;
@@ -905,9 +888,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final boolean isReflecting = !isRefracting;
 		
 		if(isRefracting) {
-			final float refractionDirectionX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-			final float refractionDirectionY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-			final float refractionDirectionZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+			final float refractionDirectionX = vector3FGetComponent1();
+			final float refractionDirectionY = vector3FGetComponent2();
+			final float refractionDirectionZ = vector3FGetComponent3();
 			
 			final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
 			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
@@ -1009,9 +992,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		vector3FSetSampleHemispherePowerCosineDistribution(random(), random(), exponent);
 		
 //		Retrieve the half vector in local space:
-		final float halfLocalSpaceX = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] : super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float halfLocalSpaceY = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] : super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float halfLocalSpaceZ = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] : super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float halfLocalSpaceX = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -vector3FGetComponent1() : vector3FGetComponent1();
+		final float halfLocalSpaceY = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -vector3FGetComponent2() : vector3FGetComponent2();
+		final float halfLocalSpaceZ = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -vector3FGetComponent3() : vector3FGetComponent3();
 		
 //		Compute the dot product between the outgoing direction in shade space and the half vector in local space:
 		final float outgoingShadeSpaceDotHalfLocalSpace = vector3FDotProduct(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, halfLocalSpaceX, halfLocalSpaceY, halfLocalSpaceZ);
@@ -1025,9 +1008,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		vector3FSetHalf(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
 		
 //		Retrieve the half vector in shade space:
-		final float halfShadeSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float halfShadeSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float halfShadeSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float halfShadeSpaceX = vector3FGetComponent1();
+		final float halfShadeSpaceY = vector3FGetComponent2();
+		final float halfShadeSpaceZ = vector3FGetComponent3();
 		
 //		Compute the dot product between the normal in shade space and the half vector in shade space:
 		final float normalShadeSpaceDotHalfShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, halfShadeSpaceX, halfShadeSpaceY, halfShadeSpaceZ);
@@ -1075,9 +1058,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		 * Material:
 		 */
 		
-		final float incomingWorldSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float incomingWorldSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float incomingWorldSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float incomingWorldSpaceX = vector3FGetComponent1();
+		final float incomingWorldSpaceY = vector3FGetComponent2();
+		final float incomingWorldSpaceZ = vector3FGetComponent3();
 		
 		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 		final float normalWorldSpaceY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
@@ -1112,9 +1095,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float colorKDG = color3FLHSGetComponent2();
 		final float colorKDB = color3FLHSGetComponent3();
 		
-		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float directionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float directionX = ray3FGetDirectionComponent1();
+		final float directionY = ray3FGetDirectionComponent2();
+		final float directionZ = ray3FGetDirectionComponent3();
 		
 		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
@@ -1143,9 +1126,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float colorKRG = color3FLHSGetComponent2();
 		final float colorKRB = color3FLHSGetComponent3();
 		
-		final float directionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float directionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float directionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float directionX = ray3FGetDirectionComponent1();
+		final float directionY = ray3FGetDirectionComponent2();
+		final float directionZ = ray3FGetDirectionComponent3();
 		
 		final float surfaceNormalX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 		final float surfaceNormalY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
@@ -1250,14 +1233,10 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final int pixelArrayOffset = getGlobalId() * 2;
 		
 //		Fill in the ray array:
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0] = originX;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1] = originY;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2] = originZ;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0] = directionNormalizedX;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1] = directionNormalizedY;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2] = directionNormalizedZ;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = DEFAULT_T_MINIMUM;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = DEFAULT_T_MAXIMUM;
+		ray3FSetOrigin(originX, originY, originZ);
+		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		ray3FSetTMinimum(DEFAULT_T_MINIMUM);
+		ray3FSetTMaximum(DEFAULT_T_MAXIMUM);
 		
 //		Fill in the pixel array:
 		this.pixelArray[pixelArrayOffset + 0] = pixelX;
@@ -1276,12 +1255,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final float intersectionTBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionReciprocalX = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionReciprocalY = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionReciprocalZ = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalComponent1();
+		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalComponent2();
+		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
 		
 //		Retrieve the axis aligned bounding box variables:
 		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
@@ -1326,12 +1305,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final float intersectionTBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the bounding sphere variables:
 		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
@@ -1376,8 +1355,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
 			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
 			
-			final float tMinimumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-			final float tMaximumWorldSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+			final float tMinimumWorldSpace = ray3FGetTMinimum();
+			final float tMaximumWorldSpace = ray3FGetTMaximum();
 			
 			boolean isIntersectingBoundingVolume = false;
 			
@@ -1395,8 +1374,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				
 				float tObjectSpace = 0.0F;
 				
-				final float tMinimumObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-				final float tMaximumObjectSpace = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+				final float tMinimumObjectSpace = ray3FGetTMinimum();
+				final float tMaximumObjectSpace = ray3FGetTMaximum();
 				
 				if(shapeID == Plane3F.ID) {
 					tObjectSpace = intersectionTShape3FPlane3F(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
@@ -1413,7 +1392,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 				}
 				
 				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
-					this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = tObjectSpace;
+					ray3FSetTMaximum(tObjectSpace);
 					
 					hasFoundIntersection = true;
 				}
@@ -1422,7 +1401,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			}
 		}
 		
-		return hasFoundIntersection ? this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] : 0.0F;
+		return hasFoundIntersection ? ray3FGetTMaximum() : 0.0F;
 	}
 	
 	/**
@@ -1435,12 +1414,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final float intersectionTShape3FPlane3F(final int shape3FPlane3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the plane variables that will be referred to by 'planeA' and 'planeSurfaceNormal' in the comments:
 		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_A + 0];
@@ -1483,12 +1462,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final float intersectionTShape3FRectangularCuboid3F(final int shape3FRectangularCuboid3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionReciprocalX = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionReciprocalY = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionReciprocalZ = 1.0F / this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalComponent1();
+		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalComponent2();
+		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
 		
 //		Retrieve the rectangular cuboid variables:
 		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MAXIMUM + 0];
@@ -1533,12 +1512,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final float intersectionTShape3FSphere3F(final int shape3FSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the sphere variables:
 		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 0];
@@ -1573,12 +1552,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final float intersectionTShape3FTorus3F(final int shape3FTorus3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the torus variables:
 		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_INNER];
@@ -1644,12 +1623,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	 */
 	protected final float intersectionTShape3FTriangle3F(final int shape3FTriangle3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
 		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 0];
@@ -1797,12 +1776,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //	TODO: Add Javadocs!
 	protected final void intersectionComputeShape3FPlane3F(final float t, final int primitiveIndex, final int shape3FPlane3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the plane variables:
 		final float planeAX = this.shape3FPlane3FArray[shape3FPlane3FArrayOffset + Plane3F.ARRAY_OFFSET_A + 0];
@@ -1905,12 +1884,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //	TODO: Add Javadocs!
 	protected final void intersectionComputeShape3FRectangularCuboid3F(final float t, final int primitiveIndex, final int shape3FRectangularCuboid3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the rectangular cuboid variables:
 		final float rectangularCuboidMaximumX = this.shape3FRectangularCuboid3FArray[shape3FRectangularCuboid3FArrayOffset + RectangularCuboid3F.ARRAY_OFFSET_MAXIMUM + 0];
@@ -2008,12 +1987,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //	TODO: Add Javadocs!
 	protected final void intersectionComputeShape3FSphere3F(final float t, final int primitiveIndex, final int shape3FSphere3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the sphere variables:
 		final float sphereCenterX = this.shape3FSphere3FArray[shape3FSphere3FArrayOffset + Sphere3F.ARRAY_OFFSET_CENTER + 0];
@@ -2039,15 +2018,15 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		orthonormalBasis33FSetFromWV(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, vGX, vGY, vGZ);
 		
 //		Retrieve the geometric orthonormal basis:
-		final float orthonormalBasisGUNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0];
-		final float orthonormalBasisGUNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1];
-		final float orthonormalBasisGUNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2];
-		final float orthonormalBasisGVNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0];
-		final float orthonormalBasisGVNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1];
-		final float orthonormalBasisGVNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2];
-		final float orthonormalBasisGWNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0];
-		final float orthonormalBasisGWNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1];
-		final float orthonormalBasisGWNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2];
+		final float orthonormalBasisGUNormalizedX = orthonormalBasis33FGetUComponent1();
+		final float orthonormalBasisGUNormalizedY = orthonormalBasis33FGetUComponent2();
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasis33FGetUComponent3();
+		final float orthonormalBasisGVNormalizedX = orthonormalBasis33FGetVComponent1();
+		final float orthonormalBasisGVNormalizedY = orthonormalBasis33FGetVComponent2();
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasis33FGetVComponent3();
+		final float orthonormalBasisGWNormalizedX = orthonormalBasis33FGetWComponent1();
+		final float orthonormalBasisGWNormalizedY = orthonormalBasis33FGetWComponent2();
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasis33FGetWComponent3();
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = addIfLessThanThreshold(atan2(surfaceNormalGY, surfaceNormalGX), 0.0F, PI_MULTIPLIED_BY_2) * PI_MULTIPLIED_BY_2_RECIPROCAL;
@@ -2083,12 +2062,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //	TODO: Add Javadocs!
 	protected final void intersectionComputeShape3FTorus3F(final float t, final int primitiveIndex, final int shape3FTorus3FArrayOffset) {
 //		Retrieve the ray variables:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the torus variables:
 		final float torusRadiusInner = this.shape3FTorus3FArray[shape3FTorus3FArrayOffset + Torus3F.ARRAY_OFFSET_RADIUS_INNER];
@@ -2170,12 +2149,12 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 //	TODO: Add Javadocs!
 	protected final void intersectionComputeShape3FTriangle3F(final float t, final int primitiveIndex, final int shape3FTriangle3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
-		final float rayOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float rayOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float rayOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the triangle variables that will be referred to by 'triangleAPosition', 'triangleBPosition' and 'triangleCPosition' in the comments:
 		final float triangleAPositionX = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_A_POSITION + 0];
@@ -2286,15 +2265,15 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		orthonormalBasis33FSetFromW(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
 		
 //		Retrieve the orthonormal basis for the geometry:
-		final float orthonormalBasisGUNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0];
-		final float orthonormalBasisGUNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1];
-		final float orthonormalBasisGUNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2];
-		final float orthonormalBasisGVNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0];
-		final float orthonormalBasisGVNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1];
-		final float orthonormalBasisGVNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2];
-		final float orthonormalBasisGWNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0];
-		final float orthonormalBasisGWNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1];
-		final float orthonormalBasisGWNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2];
+		final float orthonormalBasisGUNormalizedX = orthonormalBasis33FGetUComponent1();
+		final float orthonormalBasisGUNormalizedY = orthonormalBasis33FGetUComponent2();
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasis33FGetUComponent3();
+		final float orthonormalBasisGVNormalizedX = orthonormalBasis33FGetVComponent1();
+		final float orthonormalBasisGVNormalizedY = orthonormalBasis33FGetVComponent2();
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasis33FGetVComponent3();
+		final float orthonormalBasisGWNormalizedX = orthonormalBasis33FGetWComponent1();
+		final float orthonormalBasisGWNormalizedY = orthonormalBasis33FGetWComponent2();
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasis33FGetWComponent3();
 		
 //		Compute the orthonormal basis for shading:
 		if(determinantUV != 0.0F) {
@@ -2317,15 +2296,15 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		}
 		
 //		Retrieve the orthonormal basis for shading:
-		final float orthonormalBasisSUNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0];
-		final float orthonormalBasisSUNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 1];
-		final float orthonormalBasisSUNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 2];
-		final float orthonormalBasisSVNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 0];
-		final float orthonormalBasisSVNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 1];
-		final float orthonormalBasisSVNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V + 2];
-		final float orthonormalBasisSWNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 0];
-		final float orthonormalBasisSWNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1];
-		final float orthonormalBasisSWNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2];
+		final float orthonormalBasisSUNormalizedX = orthonormalBasis33FGetUComponent1();
+		final float orthonormalBasisSUNormalizedY = orthonormalBasis33FGetUComponent2();
+		final float orthonormalBasisSUNormalizedZ = orthonormalBasis33FGetUComponent3();
+		final float orthonormalBasisSVNormalizedX = orthonormalBasis33FGetVComponent1();
+		final float orthonormalBasisSVNormalizedY = orthonormalBasis33FGetVComponent2();
+		final float orthonormalBasisSVNormalizedZ = orthonormalBasis33FGetVComponent3();
+		final float orthonormalBasisSWNormalizedX = orthonormalBasis33FGetWComponent1();
+		final float orthonormalBasisSWNormalizedY = orthonormalBasis33FGetWComponent2();
+		final float orthonormalBasisSWNormalizedZ = orthonormalBasis33FGetWComponent3();
 		
 //		Compute the texture coordinates:
 		final float textureCoordinatesU = triangleATextureCoordinatesU * w + triangleBTextureCoordinatesU * u + triangleCTextureCoordinatesU * v;
@@ -2425,57 +2404,57 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGUX, oldOrthonormalBasisGUY, oldOrthonormalBasisGUZ);
 		
 //		Retrieve the transformed U-direction of the geometric orthonormal basis:
-		final float newOrthonormalBasisGUX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float newOrthonormalBasisGUY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float newOrthonormalBasisGUZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float newOrthonormalBasisGUX = vector3FGetComponent1();
+		final float newOrthonormalBasisGUY = vector3FGetComponent2();
+		final float newOrthonormalBasisGUZ = vector3FGetComponent3();
 		
 //		Transform the V-direction of the geometric orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGVX, oldOrthonormalBasisGVY, oldOrthonormalBasisGVZ);
 		
 //		Retrieve the transformed V-direction of the geometric orthonormal basis:
-		final float newOrthonormalBasisGVX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float newOrthonormalBasisGVY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float newOrthonormalBasisGVZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float newOrthonormalBasisGVX = vector3FGetComponent1();
+		final float newOrthonormalBasisGVY = vector3FGetComponent2();
+		final float newOrthonormalBasisGVZ = vector3FGetComponent3();
 		
 //		Transform the W-direction of the geometric orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisGWX, oldOrthonormalBasisGWY, oldOrthonormalBasisGWZ);
 		
 //		Retrieve the transformed W-direction of the geometric orthonormal basis:
-		final float newOrthonormalBasisGWX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float newOrthonormalBasisGWY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float newOrthonormalBasisGWZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float newOrthonormalBasisGWX = vector3FGetComponent1();
+		final float newOrthonormalBasisGWY = vector3FGetComponent2();
+		final float newOrthonormalBasisGWZ = vector3FGetComponent3();
 		
 //		Transform the U-direction of the shading orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSUX, oldOrthonormalBasisSUY, oldOrthonormalBasisSUZ);
 		
 //		Retrieve the transformed U-direction of the shading orthonormal basis:
-		final float newOrthonormalBasisSUX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float newOrthonormalBasisSUY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float newOrthonormalBasisSUZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float newOrthonormalBasisSUX = vector3FGetComponent1();
+		final float newOrthonormalBasisSUY = vector3FGetComponent2();
+		final float newOrthonormalBasisSUZ = vector3FGetComponent3();
 		
 //		Transform the V-direction of the shading orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSVX, oldOrthonormalBasisSVY, oldOrthonormalBasisSVZ);
 		
 //		Retrieve the transformed V-direction of the shading orthonormal basis:
-		final float newOrthonormalBasisSVX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float newOrthonormalBasisSVY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float newOrthonormalBasisSVZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float newOrthonormalBasisSVX = vector3FGetComponent1();
+		final float newOrthonormalBasisSVY = vector3FGetComponent2();
+		final float newOrthonormalBasisSVZ = vector3FGetComponent3();
 		
 //		Transform the W-direction of the shading orthonormal basis:
 		vector3FSetMatrix44FTransformTransposeNormalize(matrixInverseElement11, matrixInverseElement12, matrixInverseElement13, matrixInverseElement21, matrixInverseElement22, matrixInverseElement23, matrixInverseElement31, matrixInverseElement32, matrixInverseElement33, oldOrthonormalBasisSWX, oldOrthonormalBasisSWY, oldOrthonormalBasisSWZ);
 		
 //		Retrieve the transformed W-direction of the shading orthonormal basis:
-		final float newOrthonormalBasisSWX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float newOrthonormalBasisSWY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float newOrthonormalBasisSWZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float newOrthonormalBasisSWX = vector3FGetComponent1();
+		final float newOrthonormalBasisSWY = vector3FGetComponent2();
+		final float newOrthonormalBasisSWZ = vector3FGetComponent3();
 		
 //		Transform the surface intersection point:
 		point3FSetMatrix44FTransformAndDivide(matrixElement11, matrixElement12, matrixElement13, matrixElement14, matrixElement21, matrixElement22, matrixElement23, matrixElement24, matrixElement31, matrixElement32, matrixElement33, matrixElement34, matrixElement41, matrixElement42, matrixElement43, matrixElement44, oldSurfaceIntersectionPointX, oldSurfaceIntersectionPointY, oldSurfaceIntersectionPointZ);
 		
 //		Retrieve the transformed surface intersection point:
-		final float newSurfaceIntersectionPointX = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float newSurfaceIntersectionPointY = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float newSurfaceIntersectionPointZ = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float newSurfaceIntersectionPointX = point3FGetComponent1();
+		final float newSurfaceIntersectionPointY = point3FGetComponent2();
+		final float newSurfaceIntersectionPointZ = point3FGetComponent3();
 		
 //		Update the intersection array:
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = newOrthonormalBasisGUX;
@@ -2537,9 +2516,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 	
 //	TODO: Add Javadocs!
 	protected final void lightEvaluateRadianceEmittedOneLDRImageLight(final int offset, final float probabilityDensityFunctionValue) {
-		final float rayDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
 		
 		final float textureCoordinatesU = 0.5F + atan2(rayDirectionZ, rayDirectionX) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float textureCoordinatesV = 0.5F - asinpi(rayDirectionY);
@@ -2596,9 +2575,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		orthonormalBasis33FSetIntersectionOrthonormalBasisS();
 		
 //		Retrieve the ray direction in world space:
-		final float rayDirectionWorldSpaceX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float rayDirectionWorldSpaceY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float rayDirectionWorldSpaceZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float rayDirectionWorldSpaceX = ray3FGetDirectionComponent1();
+		final float rayDirectionWorldSpaceY = ray3FGetDirectionComponent2();
+		final float rayDirectionWorldSpaceZ = ray3FGetDirectionComponent3();
 		
 //		Compute the outgoing direction in world space as the negated ray direction in world space:
 		final float outgoingWorldSpaceX = -rayDirectionWorldSpaceX;
@@ -2609,9 +2588,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		vector3FSetOrthonormalBasis33FTransformReverseNormalize(outgoingWorldSpaceX, outgoingWorldSpaceY, outgoingWorldSpaceZ);
 		
 //		Retrieve the outgoing direction in shade space:
-		final float outgoingShadeSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float outgoingShadeSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float outgoingShadeSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float outgoingShadeSpaceX = vector3FGetComponent1();
+		final float outgoingShadeSpaceY = vector3FGetComponent2();
+		final float outgoingShadeSpaceZ = vector3FGetComponent3();
 		
 //		Retrieve the normal in world space:
 		final float normalWorldSpaceX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
@@ -2622,9 +2601,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		vector3FSetOrthonormalBasis33FTransformReverseNormalize(normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
 		
 //		Retrieve the normal in shade space:
-		final float normalShadeSpaceX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float normalShadeSpaceY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float normalShadeSpaceZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float normalShadeSpaceX = vector3FGetComponent1();
+		final float normalShadeSpaceY = vector3FGetComponent2();
+		final float normalShadeSpaceZ = vector3FGetComponent3();
 		
 //		Set the values:
 		materialBXDFSetNormal(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ);
@@ -2642,9 +2621,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		vector3FSetOrthonormalBasis33FTransformNormalize(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
 		
 //		Retrieve the incoming direction in world space:
-		final float incomingWorldSpaceX = -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float incomingWorldSpaceY = -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float incomingWorldSpaceZ = -super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float incomingWorldSpaceX = -vector3FGetComponent1();
+		final float incomingWorldSpaceY = -vector3FGetComponent2();
+		final float incomingWorldSpaceZ = -vector3FGetComponent3();
 		
 //		Set the values:
 		vector3FSet(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
@@ -2699,7 +2678,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		textureEvaluate(textureEmissionID, textureEmissionOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets an orthonormal basis in {@link AbstractKernel#orthonormalBasis33FArray_$private$9 orthonormalBasis33FArray_$private$9}.
+	 * <p>
+	 * The orthonormal basis is constructed from the orthonormal basis in {@link #intersectionArray_$private$24} that is used for geometry.
+	 */
 	protected final void orthonormalBasis33FSetIntersectionOrthonormalBasisG() {
 //		Get the orthonormal basis:
 		final float orthonormalBasisGUX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
@@ -2724,7 +2707,11 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2] = orthonormalBasisGWZ;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets an orthonormal basis in {@link AbstractKernel#orthonormalBasis33FArray_$private$9 orthonormalBasis33FArray_$private$9}.
+	 * <p>
+	 * The orthonormal basis is constructed from the orthonormal basis in {@link #intersectionArray_$private$24} that is used for shading.
+	 */
 	protected final void orthonormalBasis33FSetIntersectionOrthonormalBasisS() {
 //		Get the orthonormal basis:
 		final float orthonormalBasisSUX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
@@ -2749,15 +2736,20 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2] = orthonormalBasisSWZ;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets a ray in {@link #ray3FArray_$private$8}.
+	 * <p>
+	 * The ray direction is constructed using a normalized representation of the current vector in {@link AbstractKernel#vector3FArray_$private$3 vector3FArray_$private$3}. The origin is constructed by offsetting the surface intersection point in
+	 * {@link #intersectionArray_$private$24} slightly, in the direction of the ray itself.
+	 */
 	protected final void ray3FSetFromSurfaceIntersectionPointAndVector3F() {
 		final float surfaceIntersectionPointX = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
 		final float surfaceIntersectionPointY = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
 		final float surfaceIntersectionPointZ = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
 		
-		final float directionX = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float directionY = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float directionZ = super.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float directionX = vector3FGetComponent1();
+		final float directionY = vector3FGetComponent2();
+		final float directionZ = vector3FGetComponent3();
 		final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
 		final float directionNormalizedX = directionX * directionLengthReciprocal;
 		final float directionNormalizedY = directionY * directionLengthReciprocal;
@@ -2767,22 +2759,30 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float originY = surfaceIntersectionPointY + directionNormalizedY * 0.001F;
 		final float originZ = surfaceIntersectionPointZ + directionNormalizedZ * 0.001F;
 		
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0] = originX;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1] = originY;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2] = originZ;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0] = directionNormalizedX;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1] = directionNormalizedY;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2] = directionNormalizedZ;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = DEFAULT_T_MINIMUM;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = DEFAULT_T_MAXIMUM;
+		ray3FSetOrigin(originX, originY, originZ);
+		ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+		ray3FSetTMinimum(DEFAULT_T_MINIMUM);
+		ray3FSetTMaximum(DEFAULT_T_MAXIMUM);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets a ray in {@link #ray3FArray_$private$8}.
+	 * <p>
+	 * The ray is constructed by transforming the current ray in {@code ray3FArray_$private$8} with the object-to-world matrix of the primitive at index {@code primitiveIndex}.
+	 * 
+	 * @param primitiveIndex the index of the primitive
+	 */
 	protected final void ray3FSetMatrix44FTransformObjectToWorld(final int primitiveIndex) {
 		doRay3FSetMatrix44FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets a ray in {@link #ray3FArray_$private$8}.
+	 * <p>
+	 * The ray is constructed by transforming the current ray in {@code ray3FArray_$private$8} with the world-to-object matrix of the primitive at index {@code primitiveIndex}.
+	 * 
+	 * @param primitiveIndex the index of the primitive
+	 */
 	protected final void ray3FSetMatrix44FTransformWorldToObject(final int primitiveIndex) {
 		doRay3FSetMatrix44FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
 	}
@@ -3049,18 +3049,18 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float element44 = this.matrix44FArray[matrix44FArrayOffset + Matrix44F.ARRAY_OFFSET_ELEMENT_4_4];
 		
 //		Retrieve the ray origin components from the old space:
-		final float oldOriginX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0];
-		final float oldOriginY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1];
-		final float oldOriginZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2];
+		final float oldOriginX = ray3FGetOriginComponent1();
+		final float oldOriginY = ray3FGetOriginComponent2();
+		final float oldOriginZ = ray3FGetOriginComponent3();
 		
 //		Retrieve the ray direction components from the old space:
-		final float oldDirectionX = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-		final float oldDirectionY = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-		final float oldDirectionZ = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+		final float oldDirectionX = ray3FGetDirectionComponent1();
+		final float oldDirectionY = ray3FGetDirectionComponent2();
+		final float oldDirectionZ = ray3FGetDirectionComponent3();
 		
 //		Retrieve the ray boundary variables from the old space:
-		final float oldTMinimum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
-		final float oldTMaximum = this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM];
+		final float oldTMinimum = ray3FGetTMinimum();
+		final float oldTMaximum = ray3FGetTMaximum();
 		
 //		Transform the ray origin from the old space to the new space:
 		point3FSetMatrix44FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldOriginX, oldOriginY, oldOriginZ);
@@ -3069,14 +3069,14 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		vector3FSetMatrix44FTransformNormalize(element11, element12, element13, element21, element22, element23, element31, element32, element33, oldDirectionX, oldDirectionY, oldDirectionZ);
 		
 //		Retrieve the ray origin components from the new space:
-		final float newOriginX = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float newOriginY = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float newOriginZ = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float newOriginX = point3FGetComponent1();
+		final float newOriginY = point3FGetComponent2();
+		final float newOriginZ = point3FGetComponent3();
 		
 //		Retrieve the ray direction components from the new space:
-		final float newDirectionX = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1];
-		final float newDirectionY = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2];
-		final float newDirectionZ = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
+		final float newDirectionX = vector3FGetComponent1();
+		final float newDirectionY = vector3FGetComponent2();
+		final float newDirectionZ = vector3FGetComponent3();
 		
 //		Initialize the ray boundary variables of the new space to the ray boundary variables from the old space:
 		float newTMinimum = oldTMinimum;
@@ -3093,9 +3093,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			point3FSetMatrix44FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMinimumX, oldReferencePointTMinimumY, oldReferencePointTMinimumZ);
 			
 //			Retrieve the reference point from the new space:
-			final float newReferencePointTMinimumX = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];
-			final float newReferencePointTMinimumY = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2];
-			final float newReferencePointTMinimumZ = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3];
+			final float newReferencePointTMinimumX = point3FGetComponent1();
+			final float newReferencePointTMinimumY = point3FGetComponent2();
+			final float newReferencePointTMinimumZ = point3FGetComponent3();
 			
 //			Compute the distance from the origin in the new space to the reference point in the new space:
 			final float distanceOriginToReferencePointTMinimum = point3FDistance(newOriginX, newOriginY, newOriginZ, newReferencePointTMinimumX, newReferencePointTMinimumY, newReferencePointTMinimumZ);
@@ -3115,9 +3115,9 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 			point3FSetMatrix44FTransformAndDivide(element11, element12, element13, element14, element21, element22, element23, element24, element31, element32, element33, element34, element41, element42, element43, element44, oldReferencePointTMaximumX, oldReferencePointTMaximumY, oldReferencePointTMaximumZ);
 			
 //			Retrieve the reference point from the new space:
-			final float newReferencePointTMaximumX = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1];
-			final float newReferencePointTMaximumY = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2];
-			final float newReferencePointTMaximumZ = this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3];
+			final float newReferencePointTMaximumX = point3FGetComponent1();
+			final float newReferencePointTMaximumY = point3FGetComponent2();
+			final float newReferencePointTMaximumZ = point3FGetComponent3();
 			
 //			Compute the distance from the origin in the new space to the reference point in the new space:
 			final float distanceOriginToReferencePointTMaximum = point3FDistance(newOriginX, newOriginY, newOriginZ, newReferencePointTMaximumX, newReferencePointTMaximumY, newReferencePointTMaximumZ);
@@ -3127,14 +3127,10 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		}
 		
 //		Set the new variables:
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 0] = newOriginX;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 1] = newOriginY;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_ORIGIN + 2] = newOriginZ;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0] = newDirectionX;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1] = newDirectionY;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2] = newDirectionZ;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = newTMinimum;
-		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MAXIMUM] = newTMaximum;
+		ray3FSetOrigin(newOriginX, newOriginY, newOriginZ);
+		ray3FSetDirection(newDirectionX, newDirectionY, newDirectionZ);
+		ray3FSetTMinimum(newTMinimum);
+		ray3FSetTMaximum(newTMaximum);
 	}
 	
 	private void doSetupPixelArray() {

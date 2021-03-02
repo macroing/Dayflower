@@ -1662,71 +1662,59 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float triangleCPositionY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 1];
 		final float triangleCPositionZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_POSITION + 2];
 		
-//		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'direction0' in the comments:
-		final float direction0X = triangleBPositionX - triangleAPositionX;
-		final float direction0Y = triangleBPositionY - triangleAPositionY;
-		final float direction0Z = triangleBPositionZ - triangleAPositionZ;
+//		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'edgeAB' in the comments:
+		final float edgeABX = triangleBPositionX - triangleAPositionX;
+		final float edgeABY = triangleBPositionY - triangleAPositionY;
+		final float edgeABZ = triangleBPositionZ - triangleAPositionZ;
 		
-//		Compute the direction from 'triangleAPosition' to 'triangleCPosition', denoted by 'direction1' in the comments:
-		final float direction1X = triangleCPositionX - triangleAPositionX;
-		final float direction1Y = triangleCPositionY - triangleAPositionY;
-		final float direction1Z = triangleCPositionZ - triangleAPositionZ;
+//		Compute the direction from 'triangleCPosition' to 'triangleAPosition', denoted by 'edgeCA' in the comments:
+		final float edgeCAX = triangleAPositionX - triangleCPositionX;
+		final float edgeCAY = triangleAPositionY - triangleCPositionY;
+		final float edgeCAZ = triangleAPositionZ - triangleCPositionZ;
 		
-//		Compute the cross product between 'rayDirection' and 'direction1', denoted by 'direction2' in the comments:
-		final float direction2X = rayDirectionY * direction1Z - rayDirectionZ * direction1Y;
-		final float direction2Y = rayDirectionZ * direction1X - rayDirectionX * direction1Z;
-		final float direction2Z = rayDirectionX * direction1Y - rayDirectionY * direction1X;
+//		Compute the cross product between 'edgeAB' and 'edgeCA', denoted by 'direction0' in the comments:
+		final float direction0X = edgeABY * edgeCAZ - edgeABZ * edgeCAY;
+		final float direction0Y = edgeABZ * edgeCAX - edgeABX * edgeCAZ;
+		final float direction0Z = edgeABX * edgeCAY - edgeABY * edgeCAX;
 		
-//		Compute the determinant, which is the dot product between 'direction0' and 'direction2':
-		final float determinant = direction0X * direction2X + direction0Y * direction2Y + direction0Z * direction2Z;
-		
-//		Check if the determinant is close to 0.0 and, if that is the case, return a miss:
-		if(determinant >= -0.0001F && determinant <= +0.0001F) {
-			return 0.0F;
-		}
-		
-//		Compute the direction from 'triangleAPosition' to 'rayOrigin', denoted by 'direction3' in the comments:
-		final float direction3X = rayOriginX - triangleAPositionX;
-		final float direction3Y = rayOriginY - triangleAPositionY;
-		final float direction3Z = rayOriginZ - triangleAPositionZ;
-		
-//		Compute the reciprocal (or inverse) of the determinant, such that multiplications can be used instead of divisions:
+//		Compute the determinant, which is the dot product between 'rayDirection' and 'direction0' and its reciprocal (or inverse):
+		final float determinant = rayDirectionX * direction0X + rayDirectionY * direction0Y + rayDirectionZ * direction0Z;
 		final float determinantReciprocal = 1.0F / determinant;
 		
-//		Compute the Barycentric U-coordinate as the dot product between 'direction3' and 'direction2' followed by a multiplication with the reciprocal (or inverse) determinant:
-		final float barycentricU = (direction3X * direction2X + direction3Y * direction2Y + direction3Z * direction2Z) * determinantReciprocal;
+//		Compute the direction from 'rayOrigin' to 'triangleAPosition', denoted by 'direction1' in the comments:
+		final float direction1X = triangleAPositionX - rayOriginX;
+		final float direction1Y = triangleAPositionY - rayOriginY;
+		final float direction1Z = triangleAPositionZ - rayOriginZ;
 		
-//		Check that the Barycentric U-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
-		if(barycentricU < 0.0F || barycentricU > 1.0F) {
+//		Compute the intersection as the dot product between 'direction0' and 'direction1' followed by a multiplication with the reciprocal (or inverse) determinant:
+		final float t = (direction0X * direction1X + direction0Y * direction1Y + direction0Z * direction1Z) * determinantReciprocal;
+		
+		if(t <= rayTMinimum || t >= rayTMaximum) {
 			return 0.0F;
 		}
 		
-//		Compute the cross product between 'direction3' and 'direction0', denoted by 'direction4' in the comments:
-		final float direction4X = direction3Y * direction0Z - direction3Z * direction0Y;
-		final float direction4Y = direction3Z * direction0X - direction3X * direction0Z;
-		final float direction4Z = direction3X * direction0Y - direction3Y * direction0X;
+//		Compute the cross product between 'direction1' and 'rayDirection', denoted by 'direction2' in the comments:
+		final float direction2X = direction1Y * rayDirectionZ - direction1Z * rayDirectionY;
+		final float direction2Y = direction1Z * rayDirectionX - direction1X * rayDirectionZ;
+		final float direction2Z = direction1X * rayDirectionY - direction1Y * rayDirectionX;
 		
-//		Compute the Barycentric V-coordinate as the dot product between 'rayDirection' and 'direction4' followed by a multiplication with the reciprocal (or inverse) determinant:
-		final float barycentricV = (rayDirectionX * direction4X + rayDirectionY * direction4Y + rayDirectionZ * direction4Z) * determinantReciprocal;
+//		Compute the Barycentric U-coordinate:
+		final float uScaled = direction2X * edgeCAX + direction2Y * edgeCAY + direction2Z * edgeCAZ;
+		final float u = uScaled * determinantReciprocal;
 		
-//		Check that the Barycentric V-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
-		if(barycentricV < 0.0F || barycentricV > 1.0F) {
+		if(u < 0.0F) {
 			return 0.0F;
 		}
 		
-//		Check that the sum of the Barycentric U-coordinate and the Barycentric V-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
-		if(barycentricU + barycentricV > 1.0F) {
+//		Compute the Barycentric V-coordinate:
+		final float vScaled = direction2X * edgeABX + direction2Y * edgeABY + direction2Z * edgeABZ;
+		final float v = vScaled * determinantReciprocal;
+		
+		if(v < 0.0F || (uScaled + vScaled) * determinant > determinant * determinant) {
 			return 0.0F;
 		}
 		
-//		Compute the intersection as the dot product between 'direction1' and 'direction4' followed by a multiplication with the reciprocal (or inverse) determinant:
-		final float intersectionT = (direction1X * direction4X + direction1Y * direction4Y + direction1Z * direction4Z) * determinantReciprocal;
-		
-		if(intersectionT > rayTMinimum && intersectionT < rayTMaximum) {
-			return intersectionT;
-		}
-		
-		return 0.0F;
+		return t;
 	}
 	
 	/**
@@ -2219,65 +2207,58 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float triangleCOrthonormalBasisWY = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 1];
 		final float triangleCOrthonormalBasisWZ = this.shape3FTriangle3FArray[shape3FTriangle3FArrayOffset + Triangle3F.ARRAY_OFFSET_C_ORTHONORMAL_BASIS_W + 2];
 		
-//		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'direction0' in the comments:
-		final float direction0X = triangleBPositionX - triangleAPositionX;
-		final float direction0Y = triangleBPositionY - triangleAPositionY;
-		final float direction0Z = triangleBPositionZ - triangleAPositionZ;
+//		Compute the direction from 'triangleAPosition' to 'triangleBPosition', denoted by 'edgeAB' in the comments:
+		final float edgeABX = triangleBPositionX - triangleAPositionX;
+		final float edgeABY = triangleBPositionY - triangleAPositionY;
+		final float edgeABZ = triangleBPositionZ - triangleAPositionZ;
 		
-//		Compute the direction from 'triangleAPosition' to 'triangleCPosition', denoted by 'direction1' in the comments:
-		final float direction1X = triangleCPositionX - triangleAPositionX;
-		final float direction1Y = triangleCPositionY - triangleAPositionY;
-		final float direction1Z = triangleCPositionZ - triangleAPositionZ;
+//		Compute the direction from 'triangleAPosition' to 'triangleCPosition', denoted by 'edgeAC' in the comments:
+		final float edgeACX = triangleCPositionX - triangleAPositionX;
+		final float edgeACY = triangleCPositionY - triangleAPositionY;
+		final float edgeACZ = triangleCPositionZ - triangleAPositionZ;
 		
-//		Compute the cross product between 'rayDirection' and 'direction1', denoted by 'direction2' in the comments:
-		final float direction2X = rayDirectionY * direction1Z - rayDirectionZ * direction1Y;
-		final float direction2Y = rayDirectionZ * direction1X - rayDirectionX * direction1Z;
-		final float direction2Z = rayDirectionX * direction1Y - rayDirectionY * direction1X;
+//		Compute the direction from 'triangleCPosition' to 'triangleAPosition', denoted by 'edgeCA' in the comments:
+		final float edgeCAX = triangleAPositionX - triangleCPositionX;
+		final float edgeCAY = triangleAPositionY - triangleCPositionY;
+		final float edgeCAZ = triangleAPositionZ - triangleCPositionZ;
 		
-//		Compute the determinant, which is the dot product between 'direction0' and 'direction2':
-		final float determinant = direction0X * direction2X + direction0Y * direction2Y + direction0Z * direction2Z;
+//		Compute the cross product between 'edgeAB' and 'edgeCA', denoted by 'direction0' in the comments:
+		final float direction0X = edgeABY * edgeCAZ - edgeABZ * edgeCAY;
+		final float direction0Y = edgeABZ * edgeCAX - edgeABX * edgeCAZ;
+		final float direction0Z = edgeABX * edgeCAY - edgeABY * edgeCAX;
 		
-//		Check if the determinant is close to 0.0 and, if that is the case, return a miss:
-		if(determinant >= -0.0001F && determinant <= +0.0001F) {
-			return;
-		}
-		
-//		Compute the direction from 'triangleAPosition' to 'rayOrigin', denoted by 'direction3' in the comments:
-		final float direction3X = rayOriginX - triangleAPositionX;
-		final float direction3Y = rayOriginY - triangleAPositionY;
-		final float direction3Z = rayOriginZ - triangleAPositionZ;
-		
-//		Compute the reciprocal (or inverse) of the determinant, such that multiplications can be used instead of divisions:
+//		Compute the determinant, which is the dot product between 'rayDirection' and 'direction0' and its reciprocal (or inverse):
+		final float determinant = rayDirectionX * direction0X + rayDirectionY * direction0Y + rayDirectionZ * direction0Z;
 		final float determinantReciprocal = 1.0F / determinant;
 		
-//		Compute the Barycentric U-coordinate as the dot product between 'direction3' and 'direction2' followed by a multiplication with the reciprocal (or inverse) determinant:
-		final float barycentricU = (direction3X * direction2X + direction3Y * direction2Y + direction3Z * direction2Z) * determinantReciprocal;
+//		Compute the direction from 'rayOrigin' to 'triangleAPosition', denoted by 'direction1' in the comments:
+		final float direction1X = triangleAPositionX - rayOriginX;
+		final float direction1Y = triangleAPositionY - rayOriginY;
+		final float direction1Z = triangleAPositionZ - rayOriginZ;
 		
-//		Check that the Barycentric U-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
-		if(barycentricU < 0.0F || barycentricU > 1.0F) {
+//		Compute the cross product between 'direction1' and 'rayDirection', denoted by 'direction2' in the comments:
+		final float direction2X = direction1Y * rayDirectionZ - direction1Z * rayDirectionY;
+		final float direction2Y = direction1Z * rayDirectionX - direction1X * rayDirectionZ;
+		final float direction2Z = direction1X * rayDirectionY - direction1Y * rayDirectionX;
+		
+//		Compute the Barycentric U-coordinate:
+		final float uScaled = direction2X * edgeCAX + direction2Y * edgeCAY + direction2Z * edgeCAZ;
+		final float u = uScaled * determinantReciprocal;
+		
+		if(u < 0.0F) {
 			return;
 		}
 		
-//		Compute the cross product between 'direction3' and 'direction0', denoted by 'direction4' in the comments:
-		final float direction4X = direction3Y * direction0Z - direction3Z * direction0Y;
-		final float direction4Y = direction3Z * direction0X - direction3X * direction0Z;
-		final float direction4Z = direction3X * direction0Y - direction3Y * direction0X;
+//		Compute the Barycentric V-coordinate:
+		final float vScaled = direction2X * edgeABX + direction2Y * edgeABY + direction2Z * edgeABZ;
+		final float v = vScaled * determinantReciprocal;
 		
-//		Compute the Barycentric V-coordinate as the dot product between 'rayDirection' and 'direction4' followed by a multiplication with the reciprocal (or inverse) determinant:
-		final float barycentricV = (rayDirectionX * direction4X + rayDirectionY * direction4Y + rayDirectionZ * direction4Z) * determinantReciprocal;
-		
-//		Check that the Barycentric V-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
-		if(barycentricV < 0.0F || barycentricV > 1.0F) {
-			return;
-		}
-		
-//		Check that the sum of the Barycentric U-coordinate and the Barycentric V-coordinate is in the interval [0.0, 1.0] and, if it is not, return a miss:
-		if(barycentricU + barycentricV > 1.0F) {
+		if(v < 0.0F || (uScaled + vScaled) * determinant > determinant * determinant) {
 			return;
 		}
 		
 //		Compute the Barycentric W-coordinate:
-		final float barycentricW = 1.0F - barycentricU - barycentricV;
+		final float w = 1.0F - u - v;
 		
 //		Compute the surface intersection point:
 		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
@@ -2285,14 +2266,14 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
 		
 //		Compute the surface normal for the geometry:
-		final float surfaceNormalGX = direction0Y * direction1Z - direction0Z * direction1Y;
-		final float surfaceNormalGY = direction0Z * direction1X - direction0X * direction1Z;
-		final float surfaceNormalGZ = direction0X * direction1Y - direction0Y * direction1X;
+		final float surfaceNormalGX = edgeABY * edgeACZ - edgeABZ * edgeACY;
+		final float surfaceNormalGY = edgeABZ * edgeACX - edgeABX * edgeACZ;
+		final float surfaceNormalGZ = edgeABX * edgeACY - edgeABY * edgeACX;
 		
 //		Compute the surface normal for shading:
-		final float surfaceNormalSX = triangleAOrthonormalBasisWX * barycentricW + triangleBOrthonormalBasisWX * barycentricU + triangleCOrthonormalBasisWX * barycentricV;
-		final float surfaceNormalSY = triangleAOrthonormalBasisWY * barycentricW + triangleBOrthonormalBasisWY * barycentricU + triangleCOrthonormalBasisWY * barycentricV;
-		final float surfaceNormalSZ = triangleAOrthonormalBasisWZ * barycentricW + triangleBOrthonormalBasisWZ * barycentricU + triangleCOrthonormalBasisWZ * barycentricV;
+		final float surfaceNormalSX = triangleAOrthonormalBasisWX * w + triangleBOrthonormalBasisWX * u + triangleCOrthonormalBasisWX * v;
+		final float surfaceNormalSY = triangleAOrthonormalBasisWY * w + triangleBOrthonormalBasisWY * u + triangleCOrthonormalBasisWY * v;
+		final float surfaceNormalSZ = triangleAOrthonormalBasisWZ * w + triangleBOrthonormalBasisWZ * u + triangleCOrthonormalBasisWZ * v;
 		
 		final float dU1 = triangleATextureCoordinatesU - triangleCTextureCoordinatesU;
 		final float dU2 = triangleBTextureCoordinatesU - triangleCTextureCoordinatesU;
@@ -2302,11 +2283,7 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float determinantUV = dU1 * dV2 - dV1 * dU2;
 		
 //		Compute the orthonormal basis for the geometry:
-		if(determinantUV != 0.0F) {
-			orthonormalBasis33FSetFromWV(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ, direction0X, direction0Y, direction0Z);
-		} else {
-			orthonormalBasis33FSetFromW(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
-		}
+		orthonormalBasis33FSetFromW(surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
 		
 //		Retrieve the orthonormal basis for the geometry:
 		final float orthonormalBasisGUNormalizedX = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U + 0];
@@ -2319,15 +2296,15 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float orthonormalBasisGWNormalizedY = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 1];
 		final float orthonormalBasisGWNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2];
 		
-		final float dPUX = triangleAPositionX - triangleCPositionX;
-		final float dPUY = triangleAPositionY - triangleCPositionY;
-		final float dPUZ = triangleAPositionZ - triangleCPositionZ;
-		final float dPVX = triangleBPositionX - triangleCPositionX;
-		final float dPVY = triangleBPositionY - triangleCPositionY;
-		final float dPVZ = triangleBPositionZ - triangleCPositionZ;
-		
 //		Compute the orthonormal basis for shading:
 		if(determinantUV != 0.0F) {
+			final float dPUX = triangleAPositionX - triangleCPositionX;
+			final float dPUY = triangleAPositionY - triangleCPositionY;
+			final float dPUZ = triangleAPositionZ - triangleCPositionZ;
+			final float dPVX = triangleBPositionX - triangleCPositionX;
+			final float dPVY = triangleBPositionY - triangleCPositionY;
+			final float dPVZ = triangleBPositionZ - triangleCPositionZ;
+			
 			final float determinantUVReciprocal = 1.0F / determinantUV;
 			
 			final float vSX = (-dU2 * dPUX + dU1 * dPVX) * determinantUVReciprocal;
@@ -2351,8 +2328,8 @@ public abstract class AbstractSceneKernel extends AbstractImageKernel {
 		final float orthonormalBasisSWNormalizedZ = super.orthonormalBasis33FArray_$private$9[ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W + 2];
 		
 //		Compute the texture coordinates:
-		final float textureCoordinatesU = triangleATextureCoordinatesU * barycentricW + triangleBTextureCoordinatesU * barycentricU + triangleCTextureCoordinatesU * barycentricV;
-		final float textureCoordinatesV = triangleATextureCoordinatesV * barycentricW + triangleBTextureCoordinatesV * barycentricU + triangleCTextureCoordinatesV * barycentricV;
+		final float textureCoordinatesU = triangleATextureCoordinatesU * w + triangleBTextureCoordinatesU * u + triangleCTextureCoordinatesU * v;
+		final float textureCoordinatesV = triangleATextureCoordinatesV * w + triangleBTextureCoordinatesV * u + triangleCTextureCoordinatesV * v;
 		
 //		Update the intersection array:
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = orthonormalBasisGUNormalizedX;

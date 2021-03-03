@@ -150,12 +150,6 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	protected float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
-	
-//	TODO: Add Javadocs!
-	protected float[] boundingVolume3FBoundingSphere3FArray;
-	
-//	TODO: Add Javadocs!
 	protected float[] cameraArray;
 	
 //	TODO: Add Javadocs!
@@ -252,8 +246,6 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 	 * Constructs a new {@code AbstractSceneKernel} instance.
 	 */
 	protected AbstractSceneKernel() {
-		this.boundingVolume3FAxisAlignedBoundingBox3FArray = new float[1];
-		this.boundingVolume3FBoundingSphere3FArray = new float[1];
 		this.cameraArray = new float[1];
 		this.intersectionArray_$private$24 = new float[INTERSECTION_ARRAY_SIZE];
 		this.lightLDRImageLightArray = new float[1];
@@ -330,154 +322,6 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns {@code true} if, and only if, a point is contained by a given axis aligned bounding box, {@code false} otherwise.
-	 * 
-	 * @param boundingVolume3FAxisAlignedBoundingBox3FArrayOffset the offset for the axis aligned bounding box in {@link #boundingVolume3FAxisAlignedBoundingBox3FArray}
-	 * @param pointX the X-component of the point
-	 * @param pointY the Y-component of the point
-	 * @param pointZ the Z-component of the point
-	 * @return {@code true} if, and only if, a point is contained by a given axis aligned bounding box, {@code false} otherwise
-	 */
-	protected final boolean containsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float pointX, final float pointY, final float pointZ) {
-		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
-		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
-		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 2];
-		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 0];
-		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 1];
-		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 2];
-		
-		final boolean containsX = pointX >= axisAlignedBoundingBoxMinimumX && pointX <= axisAlignedBoundingBoxMaximumX;
-		final boolean containsY = pointY >= axisAlignedBoundingBoxMinimumY && pointY <= axisAlignedBoundingBoxMaximumY;
-		final boolean containsZ = pointZ >= axisAlignedBoundingBoxMinimumZ && pointZ <= axisAlignedBoundingBoxMaximumZ;
-		
-		return containsX && containsY && containsZ;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, a point is contained by a given bounding sphere, {@code false} otherwise.
-	 * 
-	 * @param boundingVolume3FBoundingSphere3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FBoundingSphere3FArray}
-	 * @param pointX the X-component of the point
-	 * @param pointY the Y-component of the point
-	 * @param pointZ the Z-component of the point
-	 * @return {@code true} if, and only if, a point is contained by a given bounding sphere, {@code false} otherwise
-	 */
-	protected final boolean containsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float pointX, final float pointY, final float pointZ) {
-		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
-		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
-		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
-		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
-		
-		final float distanceSquared = point3FDistanceSquared(boundingSphereCenterX, boundingSphereCenterY, boundingSphereCenterZ, pointX, pointY, pointZ);
-		
-		return distanceSquared < boundingSphereRadius * boundingSphereRadius;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray is contained by or intersects a given axis aligned bounding box, {@code false} otherwise.
-	 * 
-	 * @param boundingVolume3FAxisAlignedBoundingBox3FArrayOffset the offset for the axis aligned bounding box in {@link #boundingVolume3FAxisAlignedBoundingBox3FArray}
-	 * @param rayTMinimum the minimum parametric T value
-	 * @param rayTMaximum the maximum parametric T value
-	 * @return {@code true} if, and only if, the current ray is contained by or intersects a given axis aligned bounding box, {@code false} otherwise
-	 */
-	protected final boolean containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
-//		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalComponent1();
-		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalComponent2();
-		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
-		
-//		Retrieve the axis aligned bounding box variables:
-		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
-		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
-		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 2];
-		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 0];
-		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 1];
-		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 2];
-		
-		final boolean containsX = rayOriginX >= axisAlignedBoundingBoxMinimumX && rayOriginX <= axisAlignedBoundingBoxMaximumX;
-		final boolean containsY = rayOriginY >= axisAlignedBoundingBoxMinimumY && rayOriginY <= axisAlignedBoundingBoxMaximumY;
-		final boolean containsZ = rayOriginZ >= axisAlignedBoundingBoxMinimumZ && rayOriginZ <= axisAlignedBoundingBoxMaximumZ;
-		
-		if(containsX && containsY && containsZ) {
-			return true;
-		}
-		
-//		Compute the intersection:
-		final float intersectionTMinimumX = (axisAlignedBoundingBoxMinimumX - rayOriginX) * rayDirectionReciprocalX;
-		final float intersectionTMinimumY = (axisAlignedBoundingBoxMinimumY - rayOriginY) * rayDirectionReciprocalY;
-		final float intersectionTMinimumZ = (axisAlignedBoundingBoxMinimumZ - rayOriginZ) * rayDirectionReciprocalZ;
-		final float intersectionTMaximumX = (axisAlignedBoundingBoxMaximumX - rayOriginX) * rayDirectionReciprocalX;
-		final float intersectionTMaximumY = (axisAlignedBoundingBoxMaximumY - rayOriginY) * rayDirectionReciprocalY;
-		final float intersectionTMaximumZ = (axisAlignedBoundingBoxMaximumZ - rayOriginZ) * rayDirectionReciprocalZ;
-		final float intersectionTMinimum = max(min(intersectionTMinimumX, intersectionTMaximumX), min(intersectionTMinimumY, intersectionTMaximumY), min(intersectionTMinimumZ, intersectionTMaximumZ));
-		final float intersectionTMaximum = min(max(intersectionTMinimumX, intersectionTMaximumX), max(intersectionTMinimumY, intersectionTMaximumY), max(intersectionTMinimumZ, intersectionTMaximumZ));
-		
-		if(intersectionTMinimum > intersectionTMaximum) {
-			return false;
-		}
-		
-		if(intersectionTMinimum > rayTMinimum && intersectionTMinimum < rayTMaximum) {
-			return true;
-		}
-		
-		if(intersectionTMaximum > rayTMinimum && intersectionTMaximum < rayTMaximum) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray is contained by or intersects a given bounding sphere, {@code false} otherwise.
-	 * 
-	 * @param boundingVolume3FBoundingSphere3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FBoundingSphere3FArray}
-	 * @param rayTMinimum the minimum parametric T value
-	 * @param rayTMaximum the maximum parametric T value
-	 * @return {@code true} if, and only if, the current ray is contained by or intersects a given bounding sphere, {@code false} otherwise
-	 */
-	protected final boolean containsOrIntersectsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
-//		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
-		
-//		Retrieve the bounding sphere variables:
-		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
-		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
-		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
-		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
-		final float boundingSphereRadiusSquared = boundingSphereRadius * boundingSphereRadius;
-		
-		final float distanceSquared = point3FDistanceSquared(boundingSphereCenterX, boundingSphereCenterY, boundingSphereCenterZ, rayOriginX, rayOriginY, rayOriginZ);
-		
-		if(distanceSquared < boundingSphereRadius * boundingSphereRadius) {
-			return true;
-		}
-		
-//		Compute the direction from the bounding sphere center to the ray origin:
-		final float boundingSphereCenterToRayOriginX = rayOriginX - boundingSphereCenterX;
-		final float boundingSphereCenterToRayOriginY = rayOriginY - boundingSphereCenterY;
-		final float boundingSphereCenterToRayOriginZ = rayOriginZ - boundingSphereCenterZ;
-		
-//		Compute the variables for the quadratic system:
-		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
-		final float b = 2.0F * (boundingSphereCenterToRayOriginX * rayDirectionX + boundingSphereCenterToRayOriginY * rayDirectionY + boundingSphereCenterToRayOriginZ * rayDirectionZ);
-		final float c = (boundingSphereCenterToRayOriginX * boundingSphereCenterToRayOriginX + boundingSphereCenterToRayOriginY * boundingSphereCenterToRayOriginY + boundingSphereCenterToRayOriginZ * boundingSphereCenterToRayOriginZ) - boundingSphereRadiusSquared;
-		
-//		Compute the intersection by solving the quadratic system and checking the valid intersection interval:
-		final float t = solveQuadraticSystem(a, b, c, rayTMinimum, rayTMaximum);
-		
-		return t > 0.0F;
-	}
-	
-	/**
 	 * Performs an intersection test against all primitives in the scene and computes intersection information for the closest.
 	 * <p>
 	 * Returns {@code true} if, and only if, an intersection was found, {@code false} otherwise.
@@ -512,9 +356,9 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
 			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
-				isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+				isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			} else if(boundingVolumeID == BoundingSphere3F.ID) {
-				isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+				isIntersectingBoundingVolume = boundingVolume3FBoundingSphere3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			}
 			
 			if(isIntersectingBoundingVolume) {
@@ -583,30 +427,6 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 		}
 		
 		return false;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given axis aligned bounding box, {@code false} otherwise.
-	 * 
-	 * @param boundingVolume3FAxisAlignedBoundingBox3FArrayOffset the offset for the axis aligned bounding box in {@link #boundingVolume3FAxisAlignedBoundingBox3FArray}
-	 * @param rayTMinimum the minimum parametric T value
-	 * @param rayTMaximum the maximum parametric T value
-	 * @return {@code true} if, and only if, the current ray intersects a given axis aligned bounding box, {@code false} otherwise
-	 */
-	protected final boolean intersectsBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
-		return intersectionTBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
-	}
-	
-	/**
-	 * Returns {@code true} if, and only if, the current ray intersects a given bounding sphere, {@code false} otherwise.
-	 * 
-	 * @param boundingVolume3FBoundingSphere3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FBoundingSphere3FArray}
-	 * @param rayTMinimum the minimum parametric T value
-	 * @param rayTMaximum the maximum parametric T value
-	 * @return {@code true} if, and only if, the current ray intersects a given bounding sphere, {@code false} otherwise
-	 */
-	protected final boolean intersectsBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
-		return intersectionTBoundingVolume3FBoundingSphere3F(boundingVolume3FBoundingSphere3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
 	}
 	
 	/**
@@ -1244,96 +1064,6 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 	}
 	
 	/**
-	 * Returns the parametric T value for a given axis aligned bounding box, or {@code 0.0F} if no intersection was found.
-	 * 
-	 * @param boundingVolume3FAxisAlignedBoundingBox3FArrayOffset the offset for the axis aligned bounding box in {@link #boundingVolume3FAxisAlignedBoundingBox3FArray}
-	 * @param rayTMinimum the minimum parametric T value
-	 * @param rayTMaximum the maximum parametric T value
-	 * @return the parametric T value for a given axis aligned bounding box, or {@code 0.0F} if no intersection was found
-	 */
-	protected final float intersectionTBoundingVolume3FAxisAlignedBoundingBox3F(final int boundingVolume3FAxisAlignedBoundingBox3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
-//		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionReciprocalX = ray3FGetDirectionReciprocalComponent1();
-		final float rayDirectionReciprocalY = ray3FGetDirectionReciprocalComponent2();
-		final float rayDirectionReciprocalZ = ray3FGetDirectionReciprocalComponent3();
-		
-//		Retrieve the axis aligned bounding box variables:
-		final float axisAlignedBoundingBoxMaximumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 0];
-		final float axisAlignedBoundingBoxMaximumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 1];
-		final float axisAlignedBoundingBoxMaximumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MAXIMUM + 2];
-		final float axisAlignedBoundingBoxMinimumX = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 0];
-		final float axisAlignedBoundingBoxMinimumY = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 1];
-		final float axisAlignedBoundingBoxMinimumZ = this.boundingVolume3FAxisAlignedBoundingBox3FArray[boundingVolume3FAxisAlignedBoundingBox3FArrayOffset + AxisAlignedBoundingBox3F.ARRAY_OFFSET_MINIMUM + 2];
-		
-//		Compute the intersection:
-		final float intersectionTMinimumX = (axisAlignedBoundingBoxMinimumX - rayOriginX) * rayDirectionReciprocalX;
-		final float intersectionTMinimumY = (axisAlignedBoundingBoxMinimumY - rayOriginY) * rayDirectionReciprocalY;
-		final float intersectionTMinimumZ = (axisAlignedBoundingBoxMinimumZ - rayOriginZ) * rayDirectionReciprocalZ;
-		final float intersectionTMaximumX = (axisAlignedBoundingBoxMaximumX - rayOriginX) * rayDirectionReciprocalX;
-		final float intersectionTMaximumY = (axisAlignedBoundingBoxMaximumY - rayOriginY) * rayDirectionReciprocalY;
-		final float intersectionTMaximumZ = (axisAlignedBoundingBoxMaximumZ - rayOriginZ) * rayDirectionReciprocalZ;
-		final float intersectionTMinimum = max(min(intersectionTMinimumX, intersectionTMaximumX), min(intersectionTMinimumY, intersectionTMaximumY), min(intersectionTMinimumZ, intersectionTMaximumZ));
-		final float intersectionTMaximum = min(max(intersectionTMinimumX, intersectionTMaximumX), max(intersectionTMinimumY, intersectionTMaximumY), max(intersectionTMinimumZ, intersectionTMaximumZ));
-		
-		if(intersectionTMinimum > intersectionTMaximum) {
-			return 0.0F;
-		}
-		
-		if(intersectionTMinimum > rayTMinimum && intersectionTMinimum < rayTMaximum) {
-			return intersectionTMinimum;
-		}
-		
-		if(intersectionTMaximum > rayTMinimum && intersectionTMaximum < rayTMaximum) {
-			return intersectionTMaximum;
-		}
-		
-		return 0.0F;
-	}
-	
-	/**
-	 * Returns the parametric T value for a given bounding sphere, or {@code 0.0F} if no intersection was found.
-	 * 
-	 * @param boundingVolume3FBoundingSphere3FArrayOffset the offset for the bounding sphere in {@link #boundingVolume3FBoundingSphere3FArray}
-	 * @param rayTMinimum the minimum parametric T value
-	 * @param rayTMaximum the maximum parametric T value
-	 * @return the parametric T value for a given bounding sphere, or {@code 0.0F} if no intersection was found
-	 */
-	protected final float intersectionTBoundingVolume3FBoundingSphere3F(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
-//		Retrieve the ray variables:
-		final float rayOriginX = ray3FGetOriginComponent1();
-		final float rayOriginY = ray3FGetOriginComponent2();
-		final float rayOriginZ = ray3FGetOriginComponent3();
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
-		
-//		Retrieve the bounding sphere variables:
-		final float boundingSphereCenterX = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 0];
-		final float boundingSphereCenterY = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 1];
-		final float boundingSphereCenterZ = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_CENTER + 2];
-		final float boundingSphereRadius = this.boundingVolume3FBoundingSphere3FArray[boundingVolume3FBoundingSphere3FArrayOffset + BoundingSphere3F.ARRAY_OFFSET_RADIUS];
-		final float boundingSphereRadiusSquared = boundingSphereRadius * boundingSphereRadius;
-		
-//		Compute the direction from the bounding sphere center to the ray origin:
-		final float boundingSphereCenterToRayOriginX = rayOriginX - boundingSphereCenterX;
-		final float boundingSphereCenterToRayOriginY = rayOriginY - boundingSphereCenterY;
-		final float boundingSphereCenterToRayOriginZ = rayOriginZ - boundingSphereCenterZ;
-		
-//		Compute the variables for the quadratic system:
-		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY + rayDirectionZ * rayDirectionZ;
-		final float b = 2.0F * (boundingSphereCenterToRayOriginX * rayDirectionX + boundingSphereCenterToRayOriginY * rayDirectionY + boundingSphereCenterToRayOriginZ * rayDirectionZ);
-		final float c = (boundingSphereCenterToRayOriginX * boundingSphereCenterToRayOriginX + boundingSphereCenterToRayOriginY * boundingSphereCenterToRayOriginY + boundingSphereCenterToRayOriginZ * boundingSphereCenterToRayOriginZ) - boundingSphereRadiusSquared;
-		
-//		Compute the intersection by solving the quadratic system and checking the valid intersection interval:
-		final float t = solveQuadraticSystem(a, b, c, rayTMinimum, rayTMaximum);
-		
-		return t;
-	}
-	
-	/**
 	 * Returns the parametric T value for the closest shape in world space, or {@code 0.0F} if no intersection was found.
 	 * 
 	 * @return the parametric T value for the closest shape in world space, or {@code 0.0F} if no intersection was found
@@ -1362,9 +1092,9 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
 			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
-				isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+				isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			} else if(boundingVolumeID == BoundingSphere3F.ID) {
-				isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FBoundingSphere3F(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+				isIntersectingBoundingVolume = boundingVolume3FBoundingSphere3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
 			}
 			
 			if(isIntersectingBoundingVolume) {
@@ -1734,7 +1464,7 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_NEXT_OFFSET];
 			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT];
 			
-			final boolean isIntersectingBoundingVolume = containsOrIntersectsBoundingVolume3FAxisAlignedBoundingBox3F(boundingVolumeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+			final boolean isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 			
 			if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_LEAF_B_V_H_NODE) {
 				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
@@ -3124,8 +2854,8 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 		
 		final CompiledScene compiledScene = sceneCompiler.compile(getScene());
 		
-		put(this.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
-		put(this.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
+		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
+		put(super.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
 		put(this.cameraArray = compiledScene.getCameraArray());
 		put(this.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
 		put(this.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());

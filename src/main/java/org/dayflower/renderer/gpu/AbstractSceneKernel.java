@@ -47,11 +47,9 @@ import org.dayflower.scene.material.GlassMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
 import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
-import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
-import org.dayflower.scene.texture.FunctionTexture;
 import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
@@ -2847,15 +2845,7 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 		final float textureCoordinatesV = this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
 		
 		while(currentTextureID != -1 && currentTextureOffset != -1) {
-			if(currentTextureID == BlendTexture.ID) {
-//				TODO: Implement!
-				component1 = 0.5F;
-				component2 = 0.5F;
-				component3 = 0.5F;
-				
-				currentTextureID = -1;
-				currentTextureOffset = -1;
-			} else if(currentTextureID == BullseyeTexture.ID) {
+			if(currentTextureID == BullseyeTexture.ID) {
 				final float originX = this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_ORIGIN + 0];
 				final float originY = this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_ORIGIN + 1];
 				final float originZ = this.textureBullseyeTextureArray[currentTextureOffset + BullseyeTexture.ARRAY_OFFSET_ORIGIN + 2];
@@ -2899,14 +2889,6 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 				component1 = this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR + 0];
 				component2 = this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR + 1];
 				component3 = this.textureConstantTextureArray[currentTextureOffset + ConstantTexture.ARRAY_OFFSET_COLOR + 2];
-				
-				currentTextureID = -1;
-				currentTextureOffset = -1;
-			} else if(currentTextureID == FunctionTexture.ID) {
-//				The FunctionTexture is not supported:
-				component1 = 0.5F;
-				component2 = 0.5F;
-				component3 = 0.5F;
 				
 				currentTextureID = -1;
 				currentTextureOffset = -1;

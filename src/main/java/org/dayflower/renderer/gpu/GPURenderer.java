@@ -75,7 +75,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 	void doRunAmbientOcclusion(final float maximumDistance, final int samples) {
 		float radiance = 0.0F;
 		
-		if(ray3FCameraGenerate(random(), random()) && intersectionComputeShape3F()) {
+		if(ray3FCameraGenerate(random(), random()) && primitiveIntersectionCompute()) {
 			orthonormalBasis33FSetIntersectionOrthonormalBasisG();
 			
 			for(int sample = 0; sample < samples; sample++) {
@@ -85,11 +85,11 @@ public final class GPURenderer extends AbstractGPURenderer {
 				ray3FSetFromSurfaceIntersectionPointAndVector3F();
 				
 				if(maximumDistance > 0.0F) {
-					final float t = intersectionTShape3F();
+					final float t = primitiveIntersectionT();
 					final float s = t > 0.0F ? normalize(saturateF(t, 0.0F, maximumDistance), 0.0F, maximumDistance) : 1.0F;
 					
 					radiance += s;
-				} else if(!intersectsShape3F()) {
+				} else if(!primitiveIntersects()) {
 					radiance += 1.0F;
 				}
 			}
@@ -123,7 +123,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 			int currentBounceSpecular = 0;
 			
 			while(currentBounce < maximumBounce) {
-				if(intersectionComputeShape3F()) {
+				if(primitiveIntersectionCompute()) {
 					if(currentBounce == 0 || currentBounce == currentBounceSpecular) {
 						materialEmittance();
 						
@@ -205,7 +205,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 			int currentBounce = 0;
 			
 			while(currentBounce < maximumBounce) {
-				if(intersectionComputeShape3F()) {
+				if(primitiveIntersectionCompute()) {
 					materialEmittance();
 					
 					radianceR += throughputR * color3FLHSGetComponent1();
@@ -260,7 +260,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 	
 	void doRunRayCasting() {
 		if(ray3FCameraGenerate(random(), random())) {
-			if(intersectionComputeShape3F()) {
+			if(primitiveIntersectionCompute()) {
 				final float rayDirectionX = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
 				final float rayDirectionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
 				final float rayDirectionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];

@@ -27,6 +27,7 @@ import java.lang.reflect.Field;
 
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
+import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -230,6 +231,11 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected float[] ray3FArray_$private$8;
 	
 	/**
+	 * A {@code float[]} that contains disks.
+	 */
+	protected float[] shape3FDisk3FArray;
+	
+	/**
 	 * A {@code float[]} that contains planes.
 	 */
 	protected float[] shape3FPlane3FArray;
@@ -281,6 +287,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.orthonormalBasis33FArray_$private$9 = new float[ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE];
 		this.point3FArray_$private$3 = new float[POINT_3_F_ARRAY_SIZE];
 		this.ray3FArray_$private$8 = new float[RAY_3_F_ARRAY_SIZE];
+		this.shape3FDisk3FArray = new float[1];
 		this.shape3FPlane3FArray = new float[1];
 		this.shape3FRectangularCuboid3FArray = new float[1];
 		this.shape3FSphere3FArray = new float[1];
@@ -463,6 +470,18 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final boolean boundingVolume3FBoundingSphere3FIntersects(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 		return boundingVolume3FBoundingSphere3FIntersectionT(boundingVolume3FBoundingSphere3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given disk in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FDisk3FArrayOffset the offset for the disk in {@link #shape3FDisk3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given disk in object space, {@code false} otherwise
+	 */
+	protected final boolean shape3FDisk3FIntersects(final int shape3FDisk3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return shape3FDisk3FIntersectionT(shape3FDisk3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
 	}
 	
 	/**
@@ -1041,6 +1060,57 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final float ray3FGetTMinimum() {
 		return this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
+	}
+	
+	/**
+	 * Returns the parametric T value for a given disk in object space, or {@code 0.0F} if no intersection was found.
+	 * 
+	 * @param shape3FDisk3FArrayOffset the offset for the disk in {@link #shape3FDisk3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given disk in object space, or {@code 0.0F} if no intersection was found
+	 */
+	protected final float shape3FDisk3FIntersectionT(final int shape3FDisk3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+		if(rayDirectionZ == 0.0F) {
+			return 0.0F;
+		}
+		
+//		Retrieve the disk variables that will be referred to by 'diskPhiMax', 'diskRadiusInner', 'diskRadiusOuter' and 'diskZMax' in the comments:
+		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_PHI_MAX];
+		final float diskRadiusInner = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_RADIUS_INNER];
+		final float diskRadiusOuter = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_RADIUS_OUTER];
+		final float diskZMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_Z_MAX];
+		
+		final float t = (diskZMax - rayOriginZ) / rayDirectionZ;
+		
+		if(t <= rayTMinimum || t >= rayTMaximum) {
+			return 0.0F;
+		}
+		
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		
+		final float distanceSquared = surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY;
+		
+		if(distanceSquared > diskRadiusOuter * diskRadiusOuter || distanceSquared < diskRadiusInner * diskRadiusInner) {
+			return 0.0F;
+		}
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		if(phi > diskPhiMax) {
+			return 0.0F;
+		}
+		
+		return t;
 	}
 	
 	/**
@@ -1850,6 +1920,74 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final void ray3FSetTMinimum(final float tMinimum) {
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = tMinimum;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void shape3FDisk3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FDisk3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+		if(rayDirectionZ == 0.0F) {
+			return;
+		}
+		
+//		Retrieve the disk variables that will be referred to by 'diskPhiMax', 'diskRadiusInner', 'diskRadiusOuter' and 'diskZMax' in the comments:
+		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_PHI_MAX];
+		final float diskRadiusInner = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_RADIUS_INNER];
+		final float diskRadiusOuter = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_RADIUS_OUTER];
+		final float diskZMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_Z_MAX];
+		
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = diskZMax;
+		
+		final float distanceSquared = surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY;
+		
+		if(distanceSquared > diskRadiusOuter * diskRadiusOuter || distanceSquared < diskRadiusInner * diskRadiusInner) {
+			return;
+		}
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		if(phi > diskPhiMax) {
+			return;
+		}
+		
+		final float distance = sqrt(distanceSquared);
+		
+		final float orthonormalBasisGUX = -diskPhiMax * surfaceIntersectionPointY;
+		final float orthonormalBasisGUY = +diskPhiMax * surfaceIntersectionPointX;
+		final float orthonormalBasisGUZ = 0.0F;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+		final float orthonormalBasisGVX = surfaceIntersectionPointX * (diskRadiusInner - diskRadiusOuter) / distance;
+		final float orthonormalBasisGVY = surfaceIntersectionPointY * (diskRadiusInner - diskRadiusOuter) / distance;
+		final float orthonormalBasisGVZ = 0.0F;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+		final float textureCoordinatesU = phi / diskPhiMax;
+		final float textureCoordinatesV = (diskRadiusOuter - distance) / (diskRadiusOuter - diskRadiusInner);
+		
+//		Update the intersection array:
+		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetPrimitiveIndex(primitiveIndex);
+		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 //	TODO: Add Javadocs!

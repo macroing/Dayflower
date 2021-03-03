@@ -23,8 +23,6 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.shape.Disk3F;
@@ -271,7 +269,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected int[] shape3FTriangleMesh3FArray;
 	
 	/**
-	 * An {@code int[]} that contains triangle offsets for triangle meshes.
+	 * An {@code int[]} that contains a triangle offset for a triangle mesh.
 	 */
 	protected int[] shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1;
 	
@@ -710,117 +708,209 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		return t;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisGUComponent1() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisGUComponent2() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the U-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisGUComponent3() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisGVComponent1() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisGVComponent2() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the V-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisGVComponent3() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisGWComponent1() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisGWComponent2() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the W-direction of the orthonormal basis for geometry in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisGWComponent3() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisSUComponent1() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisSUComponent2() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the U-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisSUComponent3() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisSVComponent1() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisSVComponent2() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the V-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisSVComponent3() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisSWComponent1() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisSWComponent2() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the W-direction of the orthonormal basis for shading in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetOrthonormalBasisSWComponent3() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 of the surface intersection point in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the surface intersection point in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetSurfaceIntersectionPointComponent1() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 of the surface intersection point in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the surface intersection point in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetSurfaceIntersectionPointComponent2() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 3 of the surface intersection point in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 3 of the surface intersection point in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetSurfaceIntersectionPointComponent3() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 1 of the texture coordinates in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 1 of the texture coordinates in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetTextureCoordinatesComponent1() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of component 2 of the texture coordinates in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the value of component 2 of the texture coordinates in {@link #intersectionArray_$private$24}
+	 */
 	protected final float intersectionGetTextureCoordinatesComponent2() {
 		return this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1];
 	}
@@ -1553,12 +1643,28 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		return component1 * component1 + component2 * component2 + component3 * component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the primitive index in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @return the primitive index in {@link #intersectionArray_$private$24}
+	 */
 	protected final int intersectionGetPrimitiveIndex() {
 		return (int)(this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX]);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the orthonormal basis for geometry in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @param uComponent1 component 1 of the U-direction
+	 * @param uComponent2 component 2 of the U-direction
+	 * @param uComponent3 component 3 of the U-direction
+	 * @param vComponent1 component 1 of the V-direction
+	 * @param vComponent2 component 2 of the V-direction
+	 * @param vComponent3 component 3 of the V-direction
+	 * @param wComponent1 component 1 of the W-direction
+	 * @param wComponent2 component 2 of the W-direction
+	 * @param wComponent3 component 3 of the W-direction
+	 */
 	protected final void intersectionSetOrthonormalBasisG(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 0] = uComponent1;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U + 1] = uComponent2;
@@ -1571,7 +1677,19 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W + 2] = wComponent3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the orthonormal basis for shading in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @param uComponent1 component 1 of the U-direction
+	 * @param uComponent2 component 2 of the U-direction
+	 * @param uComponent3 component 3 of the U-direction
+	 * @param vComponent1 component 1 of the V-direction
+	 * @param vComponent2 component 2 of the V-direction
+	 * @param vComponent3 component 3 of the V-direction
+	 * @param wComponent1 component 1 of the W-direction
+	 * @param wComponent2 component 2 of the W-direction
+	 * @param wComponent3 component 3 of the W-direction
+	 */
 	protected final void intersectionSetOrthonormalBasisS(final float uComponent1, final float uComponent2, final float uComponent3, final float vComponent1, final float vComponent2, final float vComponent3, final float wComponent1, final float wComponent2, final float wComponent3) {
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 0] = uComponent1;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U + 1] = uComponent2;
@@ -1584,19 +1702,34 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2] = wComponent3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the primitive index in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @param primitiveIndex the primitive index
+	 */
 	protected final void intersectionSetPrimitiveIndex(final int primitiveIndex) {
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX] = primitiveIndex;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the surface intersection point in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @param component1 component 1 of the surface intersection point
+	 * @param component2 component 2 of the surface intersection point
+	 * @param component3 component 3 of the surface intersection point
+	 */
 	protected final void intersectionSetSurfaceIntersectionPoint(final float component1, final float component2, final float component3) {
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 0] = component1;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 1] = component2;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT + 2] = component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the texture coordinates in {@link #intersectionArray_$private$24}.
+	 * 
+	 * @param component1 component 1 of the texture coordinates
+	 * @param component2 component 2 of the texture coordinates
+	 */
 	protected final void intersectionSetTextureCoordinates(final float component1, final float component2) {
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 0] = component1;
 		this.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES + 1] = component2;
@@ -1922,7 +2055,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = tMinimum;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the intersection properties for the disk at offset {@code shape3FDisk3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the disk
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FDisk3FArrayOffset the offset in {@link #shape3FDisk3FArray}
+	 */
 	protected final void shape3FDisk3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FDisk3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
@@ -1990,7 +2129,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the intersection properties for the plane at offset {@code shape3FPlane3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the plane
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FPlane3FArrayOffset the offset in {@link #shape3FPlane3FArray}
+	 */
 	protected final void shape3FPlane3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FPlane3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
@@ -2079,7 +2224,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the intersection properties for the rectangular cuboid at offset {@code shape3FRectangularCuboid3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the rectangular cuboid
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FRectangularCuboid3FArrayOffset the offset in {@link #shape3FRectangularCuboid3FArray}
+	 */
 	protected final void shape3FRectangularCuboid3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FRectangularCuboid3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
@@ -2163,7 +2314,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the intersection properties for the sphere at offset {@code shape3FSphere3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the sphere
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FSphere3FArrayOffset the offset in {@link #shape3FSphere3FArray}
+	 */
 	protected final void shape3FSphere3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FSphere3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
@@ -2219,7 +2376,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the intersection properties for the torus at offset {@code shape3FTorus3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the torus
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FTorus3FArrayOffset the offset in {@link #shape3FTorus3FArray}
+	 */
 	protected final void shape3FTorus3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FTorus3FArrayOffset) {
 //		Retrieve the ray variables:
 		final float rayOriginX = ray3FGetOriginComponent1();
@@ -2287,7 +2450,13 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the intersection properties for the triangle at offset {@code shape3FTriangle3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the triangle
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FTriangle3FArrayOffset the offset in {@link #shape3FTriangle3FArray}
+	 */
 	protected final void shape3FTriangle3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FTriangle3FArrayOffset) {
 //		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
 		final float rayOriginX = ray3FGetOriginComponent1();
@@ -2459,7 +2628,12 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the intersection properties for the triangle at offset {@code shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0]} in the triangle mesh.
+	 * 
+	 * @param t the parametric distance to the triangle mesh
+	 * @param primitiveIndex the index of the primitive
+	 */
 	protected final void shape3FTriangleMesh3FIntersectionCompute(final float t, final int primitiveIndex) {
 		final int shape3FTriangle3FArrayOffset = this.shape3FTriangleMesh3FArrayToShape3FTriangle3FArray_$private$1[0];
 		

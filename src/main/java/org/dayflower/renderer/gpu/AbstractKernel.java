@@ -53,6 +53,11 @@ public abstract class AbstractKernel extends Kernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * A {@code float[]} that contains the solutions to the quadratic system.
+	 */
+	protected float[] quadraticSystemArray_$private$2;
+	
+	/**
 	 * A {@code float[]} that contains a gradient for Simplex noise.
 	 */
 	protected float[] simplexGradient3Array;
@@ -100,6 +105,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * Constructs a new {@code AbstractKernel} instance.
 	 */
 	protected AbstractKernel() {
+		this.quadraticSystemArray_$private$2 = new float[2];
 		this.simplexGradient3Array = new float[0];
 		this.simplexGradient4Array = new float[0];
 		this.resolutionX = 0;
@@ -1367,6 +1373,24 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
+	 * Returns the maximum value of the solution to the quadratic system computed by {@link #solveQuadraticSystemToArray(float, float, float, float, float)}.
+	 * 
+	 * @return the maximum value of the solution to the quadratic system computed by {@code  solveQuadraticSystemToArray(float, float, float, float, float)}
+	 */
+	protected final float solveQuadraticSystemToArrayGetMaximum() {
+		return this.quadraticSystemArray_$private$2[1];
+	}
+	
+	/**
+	 * Returns the minimum value of the solution to the quadratic system computed by {@link #solveQuadraticSystemToArray(float, float, float, float, float)}.
+	 * 
+	 * @return the minimum value of the solution to the quadratic system computed by {@code  solveQuadraticSystemToArray(float, float, float, float, float)}
+	 */
+	protected final float solveQuadraticSystemToArrayGetMinimum() {
+		return this.quadraticSystemArray_$private$2[0];
+	}
+	
+	/**
 	 * Attempts to solve the quartic system based on the values {@code a}, {@code b}, {@code c}, {@code d} and {@code e}.
 	 * <p>
 	 * Returns the smallest solution that is greater than {@code minimum} and less than {@code maximum} or {@code 0.0F}.
@@ -1734,6 +1758,43 @@ public abstract class AbstractKernel extends Kernel {
 		this.resolutionX = ParameterArguments.requireRange(resolutionX, 0, Integer.MAX_VALUE, "resolutionX");
 		this.resolutionY = ParameterArguments.requireRange(resolutionY, 0, Integer.MAX_VALUE, "resolutionY");
 		this.resolution = ParameterArguments.requireRange(resolutionX * resolutionY, 0, Integer.MAX_VALUE, "resolutionX * resolutionY");
+	}
+	
+	/**
+	 * Attempts to solve the quadratic system based on the values {@code a}, {@code b} and {@code c}.
+	 * 
+	 * @param a a value
+	 * @param b a value
+	 * @param c a value
+	 * @param minimum the minimum boundary
+	 * @param maximum the maximum boundary
+	 */
+	protected final void solveQuadraticSystemToArray(final float a, final float b, final float c, final float minimum, final float maximum) {
+		final float discriminantSquared = b * b - 4.0F * a * c;
+		
+		if(discriminantSquared == -0.0F || discriminantSquared == +0.0F) {
+			final float q0 = -0.5F * b / a;
+			final float q1 = q0 > minimum && q0 < maximum ? q0 : 0.0F;
+			
+			this.quadraticSystemArray_$private$2[0] = q1;
+			this.quadraticSystemArray_$private$2[1] = 0.0F;
+		} else if(discriminantSquared > 0.0F) {
+			final float discriminant = sqrt(discriminantSquared);
+			
+			final float q0 = -0.5F * (b > 0.0F ? b + discriminant : b - discriminant);
+			final float q1 = q0 / a;
+			final float q2 = c / q0;
+			final float q3 = min(q1, q2);
+			final float q4 = max(q1, q2);
+			final float q5 = q3 > minimum && q3 < maximum ? q3 : q4 > minimum && q4 < maximum ? q4 : 0.0F;
+			final float q6 = q5 == q3 && q4 > minimum && q4 < maximum ? q4 : 0.0F;
+			
+			this.quadraticSystemArray_$private$2[0] = q5;
+			this.quadraticSystemArray_$private$2[1] = q6;
+		} else {
+			this.quadraticSystemArray_$private$2[0] = 0.0F;
+			this.quadraticSystemArray_$private$2[1] = 0.0F;
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

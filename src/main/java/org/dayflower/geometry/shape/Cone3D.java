@@ -55,6 +55,26 @@ public final class Cone3D implements Shape3D {
 	public static final String NAME = "Cone";
 	
 	/**
+	 * The length of the {@code double[]}.
+	 */
+	public static final int ARRAY_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link AngleD} instance representing the maximum phi in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_PHI_MAX = 0;
+	
+	/**
+	 * The offset for the radius in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_RADIUS = 1;
+	
+	/**
+	 * The offset for the maximum Z in the {@code double[]}.
+	 */
+	public static final int ARRAY_OFFSET_Z_MAX = 2;
+	
+	/**
 	 * The ID of this {@code Cone3D} class.
 	 */
 	public static final int ID = 1;
@@ -398,6 +418,22 @@ public final class Cone3D implements Shape3D {
 		}
 		
 		return tClosest;
+	}
+	
+	/**
+	 * Returns a {@code double[]} representation of this {@code Cone3D} instance.
+	 * 
+	 * @return a {@code double[]} representation of this {@code Cone3D} instance
+	 */
+	public double[] toArray() {
+		final double[] array = new double[ARRAY_LENGTH];
+		
+		array[ARRAY_OFFSET_PHI_MAX] = this.phiMax.getRadians();
+		array[ARRAY_OFFSET_RADIUS] = this.radius;
+		array[ARRAY_OFFSET_Z_MAX] = this.zMax;
+		array[3] = 0.0D;
+		
+		return array;
 	}
 	
 	/**

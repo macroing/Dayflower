@@ -25,6 +25,7 @@ import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
+import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
@@ -227,6 +228,11 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * A {@code float[]} that contains a ray that consists of a point called origin, a vector called direction, the minimum parametric distance value and the maximum parametric distance value.
 	 */
 	protected float[] ray3FArray_$private$8;
+	
+	/**
+	 * A {@code float[]} that contains cones.
+	 */
+	protected float[] shape3FCone3FArray;
 	
 	/**
 	 * A {@code float[]} that contains disks.
@@ -468,6 +474,18 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final boolean boundingVolume3FBoundingSphere3FIntersects(final int boundingVolume3FBoundingSphere3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 		return boundingVolume3FBoundingSphere3FIntersectionT(boundingVolume3FBoundingSphere3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given cone in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FCone3FArrayOffset the offset for the cone in {@link #shape3FCone3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given cone in object space, {@code false} otherwise
+	 */
+	protected final boolean shape3FCone3FIntersects(final int shape3FCone3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return shape3FCone3FIntersectionT(shape3FCone3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
 	}
 	
 	/**
@@ -1150,6 +1168,70 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final float ray3FGetTMinimum() {
 		return this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM];
+	}
+	
+	/**
+	 * Returns the parametric T value for a given cone in object space, or {@code 0.0F} if no intersection was found.
+	 * 
+	 * @param shape3FCone3FArrayOffset the offset for the cone in {@link #shape3FCone3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given cone in object space, or {@code 0.0F} if no intersection was found
+	 */
+	protected final float shape3FCone3FIntersectionT(final int shape3FCone3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the disk variables that will be referred to by 'conePhiMax', 'coneRadius' and 'coneZMax' in the comments:
+		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_PHI_MAX];
+		final float coneRadius = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_RADIUS];
+		final float coneZMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_Z_MAX];
+		
+		final float k = (coneRadius / coneZMax) * (coneRadius / coneZMax);
+		
+		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY - k * rayDirectionZ * rayDirectionZ;
+		final float b = 2.0F * (rayDirectionX * rayOriginX + rayDirectionY * rayOriginY - k * rayDirectionZ * (rayOriginZ - coneZMax));
+		final float c = rayOriginX * rayOriginX + rayOriginY * rayOriginY - k * (rayOriginZ - coneZMax) * (rayOriginZ - coneZMax);
+		
+		solveQuadraticSystemToArray(a, b, c, rayTMinimum, rayTMaximum);
+		
+		final float tMinimum = solveQuadraticSystemToArrayGetMinimum();
+		final float tMaximum = solveQuadraticSystemToArrayGetMaximum();
+		
+		if(tMinimum == 0.0F) {
+			return 0.0F;
+		}
+		
+		final float xMinimum = rayOriginX + rayDirectionX * tMinimum;
+		final float yMinimum = rayOriginY + rayDirectionY * tMinimum;
+		final float zMinimum = rayOriginZ + rayDirectionZ * tMinimum;
+		
+		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum, xMinimum), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		if(zMinimum < 0.0F || zMinimum > coneZMax || phiMinimum > conePhiMax) {
+			if(tMaximum == 0.0F) {
+				return 0.0F;
+			}
+			
+			final float xMaximum = rayOriginX + rayDirectionX * tMaximum;
+			final float yMaximum = rayOriginY + rayDirectionY * tMaximum;
+			final float zMaximum = rayOriginZ + rayDirectionZ * tMaximum;
+			
+			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum, xMaximum), 0.0F, PI_MULTIPLIED_BY_2);
+			
+			if(zMaximum < 0.0F || zMaximum > coneZMax || phiMaximum > conePhiMax) {
+				return 0.0F;
+			}
+			
+			return tMaximum;
+		}
+		
+		return tMinimum;
 	}
 	
 	/**
@@ -2053,6 +2135,63 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final void ray3FSetTMinimum(final float tMinimum) {
 		this.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_T_MINIMUM] = tMinimum;
+	}
+	
+	/**
+	 * Computes the intersection properties for the cone at offset {@code shape3FCone3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the cone
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FCone3FArrayOffset the offset in {@link #shape3FCone3FArray}
+	 */
+	protected final void shape3FCone3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FCone3FArrayOffset) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the disk variables that will be referred to by 'conePhiMax' and 'coneZMax' in the comments:
+		final float conePhiMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_PHI_MAX];
+		final float coneZMax = this.shape3FCone3FArray[shape3FCone3FArrayOffset + Cone3F.ARRAY_OFFSET_Z_MAX];
+		
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		final float textureCoordinatesU = phi / conePhiMax;
+		final float textureCoordinatesV = surfaceIntersectionPointZ / coneZMax;
+		
+		final float orthonormalBasisGUX = -conePhiMax * surfaceIntersectionPointY;
+		final float orthonormalBasisGUY = +conePhiMax * surfaceIntersectionPointX;
+		final float orthonormalBasisGUZ = 0.0F;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+		final float orthonormalBasisGVX = -surfaceIntersectionPointX / (1.0F - textureCoordinatesV);
+		final float orthonormalBasisGVY = -surfaceIntersectionPointY / (1.0F - textureCoordinatesV);
+		final float orthonormalBasisGVZ = coneZMax;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+//		Update the intersection array:
+		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetPrimitiveIndex(primitiveIndex);
+		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
 	}
 	
 	/**

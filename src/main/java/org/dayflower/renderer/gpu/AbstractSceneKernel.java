@@ -29,6 +29,7 @@ import org.dayflower.geometry.Matrix44F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
+import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
@@ -723,7 +724,9 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 				final float tMinimumObjectSpace = ray3FGetTMinimum();
 				final float tMaximumObjectSpace = ray3FGetTMaximum();
 				
-				if(shapeID == Disk3F.ID) {
+				if(shapeID == Cone3F.ID) {
+					tObjectSpace = shape3FCone3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Disk3F.ID) {
 					tObjectSpace = shape3FDisk3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
 					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
@@ -761,7 +764,9 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 			
 			final float tObjectSpace = ray3FGetTMaximum();
 			
-			if(shapeID == Disk3F.ID) {
+			if(shapeID == Cone3F.ID) {
+				shape3FCone3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
+			} else if(shapeID == Disk3F.ID) {
 				shape3FDisk3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
 			} else if(shapeID == Plane3F.ID) {
 				shape3FPlane3FIntersectionCompute(tObjectSpace, primitiveIndex, shapeOffset);
@@ -942,7 +947,9 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 				final float tMinimumObjectSpace = ray3FGetTMinimum();
 				final float tMaximumObjectSpace = ray3FGetTMaximum();
 				
-				if(shapeID == Disk3F.ID) {
+				if(shapeID == Cone3F.ID) {
+					tObjectSpace = shape3FCone3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Disk3F.ID) {
 					tObjectSpace = shape3FDisk3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
 					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
@@ -1657,6 +1664,7 @@ public abstract class AbstractSceneKernel extends AbstractGeometryKernel {
 		
 		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		put(super.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
+		put(super.shape3FCone3FArray = compiledScene.getShape3FCone3FArray());
 		put(super.shape3FDisk3FArray = compiledScene.getShape3FDisk3FArray());
 		put(super.shape3FPlane3FArray = compiledScene.getShape3FPlane3FArray());
 		put(super.shape3FRectangularCuboid3FArray = compiledScene.getShape3FRectangularCuboid3FArray());

@@ -28,6 +28,7 @@ final class CompiledScene {
 	private float[] cameraArray;
 	private float[] lightLDRImageLightArray;
 	private float[] matrix44FArray;
+	private float[] shape3FCone3FArray;
 	private float[] shape3FDisk3FArray;
 	private float[] shape3FPlane3FArray;
 	private float[] shape3FRectangularCuboid3FArray;
@@ -65,6 +66,7 @@ final class CompiledScene {
 		setMaterialMirrorMaterialArray(new int[1]);
 		setMatrix44FArray(new float[1]);
 		setPrimitiveArray(new int[1]);
+		setShape3FCone3FArray(new float[1]);
 		setShape3FDisk3FArray(new float[1]);
 		setShape3FPlane3FArray(new float[1]);
 		setShape3FRectangularCuboid3FArray(new float[1]);
@@ -101,6 +103,10 @@ final class CompiledScene {
 	
 	public float[] getMatrix44FArray() {
 		return this.matrix44FArray;
+	}
+	
+	public float[] getShape3FCone3FArray() {
+		return this.shape3FCone3FArray;
 	}
 	
 	public float[] getShape3FDisk3FArray() {
@@ -241,6 +247,10 @@ final class CompiledScene {
 	
 	public void setPrimitiveArray(final int[] primitiveArray) {
 		this.primitiveArray = Objects.requireNonNull(primitiveArray, "primitiveArray == null");
+	}
+	
+	public void setShape3FCone3FArray(final float[] shape3FCone3FArray) {
+		this.shape3FCone3FArray = Objects.requireNonNull(shape3FCone3FArray, "shape3FCone3FArray == null");
 	}
 	
 	public void setShape3FDisk3FArray(final float[] shape3FDisk3FArray) {

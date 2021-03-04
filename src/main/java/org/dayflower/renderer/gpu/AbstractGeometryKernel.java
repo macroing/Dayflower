@@ -26,6 +26,7 @@ import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.shape.Cone3F;
+import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
@@ -235,6 +236,11 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected float[] shape3FCone3FArray;
 	
 	/**
+	 * A {@code float[]} that contains cylinders.
+	 */
+	protected float[] shape3FCylinder3FArray;
+	
+	/**
 	 * A {@code float[]} that contains disks.
 	 */
 	protected float[] shape3FDisk3FArray;
@@ -291,6 +297,8 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.orthonormalBasis33FArray_$private$9 = new float[ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE];
 		this.point3FArray_$private$3 = new float[POINT_3_F_ARRAY_SIZE];
 		this.ray3FArray_$private$8 = new float[RAY_3_F_ARRAY_SIZE];
+		this.shape3FCone3FArray = new float[1];
+		this.shape3FCylinder3FArray = new float[1];
 		this.shape3FDisk3FArray = new float[1];
 		this.shape3FPlane3FArray = new float[1];
 		this.shape3FRectangularCuboid3FArray = new float[1];
@@ -486,6 +494,18 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final boolean shape3FCone3FIntersects(final int shape3FCone3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 		return shape3FCone3FIntersectionT(shape3FCone3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given cylinder in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FCylinder3FArrayOffset the offset for the cone in {@link #shape3FCylinder3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given cylinder in object space, {@code false} otherwise
+	 */
+	protected final boolean shape3FCylinder3FIntersects(final int shape3FCylinder3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return shape3FCylinder3FIntersectionT(shape3FCylinder3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
 	}
 	
 	/**
@@ -1225,6 +1245,81 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum, xMaximum), 0.0F, PI_MULTIPLIED_BY_2);
 			
 			if(zMaximum < 0.0F || zMaximum > coneZMax || phiMaximum > conePhiMax) {
+				return 0.0F;
+			}
+			
+			return tMaximum;
+		}
+		
+		return tMinimum;
+	}
+	
+	/**
+	 * Returns the parametric T value for a given cylinder in object space, or {@code 0.0F} if no intersection was found.
+	 * 
+	 * @param shape3FCylinder3FArrayOffset the offset for the cylinder in {@link #shape3FCylinder3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given cylinder in object space, or {@code 0.0F} if no intersection was found
+	 */
+	protected final float shape3FCylinder3FIntersectionT(final int shape3FCylinder3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the cylinder variables that will be referred to by 'cylinderPhiMax', 'cylinderRadius', 'cylinderZMax' and 'cylinderZMin' in the comments:
+		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_PHI_MAX];
+		final float cylinderRadius = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_RADIUS];
+		final float cylinderZMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_Z_MAX];
+		final float cylinderZMin = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_Z_MIN];
+		
+		final float a = rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY;
+		final float b = 2.0F * (rayDirectionX * rayOriginX + rayDirectionY * rayOriginY);
+		final float c = rayOriginX * rayOriginX + rayOriginY * rayOriginY - cylinderRadius * cylinderRadius;
+		
+		solveQuadraticSystemToArray(a, b, c, rayTMinimum, rayTMaximum);
+		
+		final float tMinimum = solveQuadraticSystemToArrayGetMinimum();
+		final float tMaximum = solveQuadraticSystemToArrayGetMaximum();
+		
+		if(tMinimum == 0.0F) {
+			return 0.0F;
+		}
+		
+		final float xMinimum0 = rayOriginX + rayDirectionX * tMinimum;
+		final float yMinimum0 = rayOriginY + rayDirectionY * tMinimum;
+		final float zMinimum0 = rayOriginZ + rayDirectionZ * tMinimum;
+		
+		final float radiusMinimum = sqrt(xMinimum0 * xMinimum0 + yMinimum0 * yMinimum0);
+		
+		final float xMinimum1 = xMinimum0 * (cylinderRadius / radiusMinimum);
+		final float yMinimum1 = yMinimum0 * (cylinderRadius / radiusMinimum);
+		final float zMinimum1 = zMinimum0;
+		
+		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum1, xMinimum1), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		if(zMinimum1 < cylinderZMin || zMinimum1 > cylinderZMax || phiMinimum > cylinderPhiMax) {
+			if(tMaximum == 0.0F) {
+				return 0.0F;
+			}
+			
+			final float xMaximum0 = rayOriginX + rayDirectionX * tMaximum;
+			final float yMaximum0 = rayOriginY + rayDirectionY * tMaximum;
+			final float zMaximum0 = rayOriginZ + rayDirectionZ * tMaximum;
+			
+			final float radiusMaximum = sqrt(xMaximum0 * xMaximum0 + yMaximum0 * yMaximum0);
+			
+			final float xMaximum1 = xMaximum0 * (cylinderRadius / radiusMaximum);
+			final float yMaximum1 = yMaximum0 * (cylinderRadius / radiusMaximum);
+			final float zMaximum1 = zMaximum0;
+			
+			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum1, xMaximum1), 0.0F, PI_MULTIPLIED_BY_2);
+			
+			if(zMaximum1 < cylinderZMin || zMaximum1 > cylinderZMax || phiMaximum > cylinderPhiMax) {
 				return 0.0F;
 			}
 			
@@ -2177,6 +2272,71 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float orthonormalBasisGVX = -surfaceIntersectionPointX / (1.0F - textureCoordinatesV);
 		final float orthonormalBasisGVY = -surfaceIntersectionPointY / (1.0F - textureCoordinatesV);
 		final float orthonormalBasisGVZ = coneZMax;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+//		Update the intersection array:
+		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetPrimitiveIndex(primitiveIndex);
+		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the cylinder at offset {@code shape3FCylinder3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the cylinder
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FCylinder3FArrayOffset the offset in {@link #shape3FCylinder3FArray}
+	 */
+	protected final void shape3FCylinder3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FCylinder3FArrayOffset) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the cylinder variables that will be referred to by 'cylinderPhiMax', 'cylinderRadius', 'cylinderZMax' and 'cylinderZMin' in the comments:
+		final float cylinderPhiMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_PHI_MAX];
+		final float cylinderRadius = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_RADIUS];
+		final float cylinderZMax = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_Z_MAX];
+		final float cylinderZMin = this.shape3FCylinder3FArray[shape3FCylinder3FArrayOffset + Cylinder3F.ARRAY_OFFSET_Z_MIN];
+		
+		final float x = rayOriginX + rayDirectionX * t;
+		final float y = rayOriginY + rayDirectionY * t;
+		final float z = rayOriginZ + rayDirectionZ * t;
+		
+		final float radius = sqrt(x * x + y * y);
+		
+		final float surfaceIntersectionPointX = x * (cylinderRadius / radius);
+		final float surfaceIntersectionPointY = y * (cylinderRadius / radius);
+		final float surfaceIntersectionPointZ = z;
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		final float textureCoordinatesU = phi / cylinderPhiMax;
+		final float textureCoordinatesV = (surfaceIntersectionPointZ - cylinderZMin) / (cylinderZMax - cylinderZMin);
+		
+		final float orthonormalBasisGUX = -cylinderPhiMax * surfaceIntersectionPointY;
+		final float orthonormalBasisGUY = +cylinderPhiMax * surfaceIntersectionPointX;
+		final float orthonormalBasisGUZ = 0.0F;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+		final float orthonormalBasisGVX = 0.0F;
+		final float orthonormalBasisGVY = 0.0F;
+		final float orthonormalBasisGVZ = cylinderZMax - cylinderZMin;
 		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
 		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
 		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;

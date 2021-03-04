@@ -34,6 +34,7 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.geometry.shape.Cone3F;
+import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
@@ -77,6 +78,7 @@ final class SceneCompiler {
 	private final List<ClearCoatMaterial> distinctClearCoatMaterials;
 	private final List<Cone3F> distinctCones;
 	private final List<ConstantTexture> distinctConstantTextures;
+	private final List<Cylinder3F> distinctCylinders;
 	private final List<Disk3F> distinctDisks;
 	private final List<FunctionTexture> distinctFunctionTextures;
 	private final List<GlassMaterial> distinctGlassMaterials;
@@ -107,6 +109,7 @@ final class SceneCompiler {
 	private final Map<ClearCoatMaterial, Integer> distinctToOffsetsClearCoatMaterials;
 	private final Map<Cone3F, Integer> distinctToOffsetsCones;
 	private final Map<ConstantTexture, Integer> distinctToOffsetsConstantTextures;
+	private final Map<Cylinder3F, Integer> distinctToOffsetsCylinders;
 	private final Map<Disk3F, Integer> distinctToOffsetsDisks;
 	private final Map<GlassMaterial, Integer> distinctToOffsetsGlassMaterials;
 	private final Map<GlossyMaterial, Integer> distinctToOffsetsGlossyMaterials;
@@ -137,6 +140,7 @@ final class SceneCompiler {
 		this.distinctClearCoatMaterials = new ArrayList<>();
 		this.distinctCones = new ArrayList<>();
 		this.distinctConstantTextures = new ArrayList<>();
+		this.distinctCylinders = new ArrayList<>();
 		this.distinctDisks = new ArrayList<>();
 		this.distinctFunctionTextures = new ArrayList<>();
 		this.distinctGlassMaterials = new ArrayList<>();
@@ -167,6 +171,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsClearCoatMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsCones = new LinkedHashMap<>();
 		this.distinctToOffsetsConstantTextures = new LinkedHashMap<>();
+		this.distinctToOffsetsCylinders = new LinkedHashMap<>();
 		this.distinctToOffsetsDisks = new LinkedHashMap<>();
 		this.distinctToOffsetsGlassMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsGlossyMaterials = new LinkedHashMap<>();
@@ -279,6 +284,7 @@ final class SceneCompiler {
 		
 //		Retrieve the float[] for all Shape3F instances:
 		final float[] shape3FCone3FArray = Floats.toArray(this.distinctCones, cone -> cone.toArray(), 1);
+		final float[] shape3FCylinder3FArray = Floats.toArray(this.distinctCylinders, cylinder -> cylinder.toArray(), 1);
 		final float[] shape3FDisk3FArray = Floats.toArray(this.distinctDisks, disk -> disk.toArray(), 1);
 		final float[] shape3FPlane3FArray = Floats.toArray(this.distinctPlanes, plane -> plane.toArray(), 1);
 		final float[] shape3FRectangularCuboid3FArray = Floats.toArray(this.distinctRectangularCuboids, rectangularCuboid -> rectangularCuboid.toArray(), 1);
@@ -331,6 +337,7 @@ final class SceneCompiler {
 		compiledScene.setMatrix44FArray(matrix44FArray);
 		compiledScene.setPrimitiveArray(primitiveArray);
 		compiledScene.setShape3FCone3FArray(shape3FCone3FArray);
+		compiledScene.setShape3FCylinder3FArray(shape3FCylinder3FArray);
 		compiledScene.setShape3FDisk3FArray(shape3FDisk3FArray);
 		compiledScene.setShape3FPlane3FArray(shape3FPlane3FArray);
 		compiledScene.setShape3FRectangularCuboid3FArray(shape3FRectangularCuboid3FArray);
@@ -359,6 +366,7 @@ final class SceneCompiler {
 		this.distinctClearCoatMaterials.clear();
 		this.distinctCones.clear();
 		this.distinctConstantTextures.clear();
+		this.distinctCylinders.clear();
 		this.distinctDisks.clear();
 		this.distinctFunctionTextures.clear();
 		this.distinctGlassMaterials.clear();
@@ -389,6 +397,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsClearCoatMaterials.clear();
 		this.distinctToOffsetsCones.clear();
 		this.distinctToOffsetsConstantTextures.clear();
+		this.distinctToOffsetsCylinders.clear();
 		this.distinctToOffsetsDisks.clear();
 		this.distinctToOffsetsGlassMaterials.clear();
 		this.distinctToOffsetsGlossyMaterials.clear();
@@ -434,6 +443,7 @@ final class SceneCompiler {
 	
 	private void doFilterAllDistinctShapes(final Scene scene) {
 		this.distinctCones.addAll(NodeFilter.filterAllDistinct(scene, Cone3F.class));
+		this.distinctCylinders.addAll(NodeFilter.filterAllDistinct(scene, Cylinder3F.class));
 		this.distinctDisks.addAll(NodeFilter.filterAllDistinct(scene, Disk3F.class));
 		this.distinctPlanes.addAll(NodeFilter.filterAllDistinct(scene, Plane3F.class));
 		this.distinctRectangularCuboids.addAll(NodeFilter.filterAllDistinct(scene, RectangularCuboid3F.class));
@@ -442,6 +452,7 @@ final class SceneCompiler {
 		this.distinctTriangles.addAll(NodeFilter.filterAllDistinct(scene, Triangle3F.class));
 		this.distinctTriangleMeshes.addAll(NodeFilter.filterAllDistinct(scene, TriangleMesh3F.class));
 		this.distinctShapes.addAll(this.distinctCones);
+		this.distinctShapes.addAll(this.distinctCylinders);
 		this.distinctShapes.addAll(this.distinctDisks);
 		this.distinctShapes.addAll(this.distinctPlanes);
 		this.distinctShapes.addAll(this.distinctRectangularCuboids);
@@ -487,6 +498,7 @@ final class SceneCompiler {
 	
 	private void doMapAllDistinctShapes() {
 		this.distinctToOffsetsCones.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCones, Cone3F.ARRAY_LENGTH));
+		this.distinctToOffsetsCylinders.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCylinders, Cylinder3F.ARRAY_LENGTH));
 		this.distinctToOffsetsDisks.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisks, Disk3F.ARRAY_LENGTH));
 		this.distinctToOffsetsPlanes.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlanes, Plane3F.ARRAY_LENGTH));
 		this.distinctToOffsetsRectangularCuboids.putAll(NodeFilter.mapDistinctToOffsets(this.distinctRectangularCuboids, RectangularCuboid3F.ARRAY_LENGTH));
@@ -653,6 +665,8 @@ final class SceneCompiler {
 			
 			if(shape instanceof Cone3F) {
 				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsCones.get(shape).intValue();
+			} else if(shape instanceof Cylinder3F) {
+				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsCylinders.get(shape).intValue();
 			} else if(shape instanceof Disk3F) {
 				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsDisks.get(shape).intValue();
 			} else if(shape instanceof Plane3F) {

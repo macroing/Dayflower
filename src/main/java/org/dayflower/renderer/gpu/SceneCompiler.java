@@ -36,6 +36,7 @@ import org.dayflower.geometry.boundingvolume.InfiniteBoundingVolume3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
+import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -90,6 +91,7 @@ final class SceneCompiler {
 	private final List<Material> distinctMaterials;
 	private final List<MatteMaterial> distinctMatteMaterials;
 	private final List<MirrorMaterial> distinctMirrorMaterials;
+	private final List<Paraboloid3F> distinctParaboloids;
 	private final List<Plane3F> distinctPlanes;
 	private final List<Primitive> filteredPrimitives;
 	private final List<RectangularCuboid3F> distinctRectangularCuboids;
@@ -118,6 +120,7 @@ final class SceneCompiler {
 	private final Map<MarbleTexture, Integer> distinctToOffsetsMarbleTextures;
 	private final Map<MatteMaterial, Integer> distinctToOffsetsMatteMaterials;
 	private final Map<MirrorMaterial, Integer> distinctToOffsetsMirrorMaterials;
+	private final Map<Paraboloid3F, Integer> distinctToOffsetsParaboloids;
 	private final Map<Plane3F, Integer> distinctToOffsetsPlanes;
 	private final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids;
 	private final Map<SimplexFractionalBrownianMotionTexture, Integer> distinctToOffsetsSimplexFractionalBrownianMotionTextures;
@@ -152,6 +155,7 @@ final class SceneCompiler {
 		this.distinctMaterials = new ArrayList<>();
 		this.distinctMatteMaterials = new ArrayList<>();
 		this.distinctMirrorMaterials = new ArrayList<>();
+		this.distinctParaboloids = new ArrayList<>();
 		this.distinctPlanes = new ArrayList<>();
 		this.filteredPrimitives = new ArrayList<>();
 		this.distinctRectangularCuboids = new ArrayList<>();
@@ -180,6 +184,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsMarbleTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsMatteMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsMirrorMaterials = new LinkedHashMap<>();
+		this.distinctToOffsetsParaboloids = new LinkedHashMap<>();
 		this.distinctToOffsetsPlanes = new LinkedHashMap<>();
 		this.distinctToOffsetsRectangularCuboids = new LinkedHashMap<>();
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures = new LinkedHashMap<>();
@@ -286,6 +291,7 @@ final class SceneCompiler {
 		final float[] shape3FCone3FArray = Floats.toArray(this.distinctCones, cone -> cone.toArray(), 1);
 		final float[] shape3FCylinder3FArray = Floats.toArray(this.distinctCylinders, cylinder -> cylinder.toArray(), 1);
 		final float[] shape3FDisk3FArray = Floats.toArray(this.distinctDisks, disk -> disk.toArray(), 1);
+		final float[] shape3FParaboloid3FArray = Floats.toArray(this.distinctParaboloids, paraboloid -> paraboloid.toArray(), 1);
 		final float[] shape3FPlane3FArray = Floats.toArray(this.distinctPlanes, plane -> plane.toArray(), 1);
 		final float[] shape3FRectangularCuboid3FArray = Floats.toArray(this.distinctRectangularCuboids, rectangularCuboid -> rectangularCuboid.toArray(), 1);
 		final float[] shape3FSphere3FArray = Floats.toArray(this.distinctSpheres, sphere -> sphere.toArray(), 1);
@@ -339,6 +345,7 @@ final class SceneCompiler {
 		compiledScene.setShape3FCone3FArray(shape3FCone3FArray);
 		compiledScene.setShape3FCylinder3FArray(shape3FCylinder3FArray);
 		compiledScene.setShape3FDisk3FArray(shape3FDisk3FArray);
+		compiledScene.setShape3FParaboloid3FArray(shape3FParaboloid3FArray);
 		compiledScene.setShape3FPlane3FArray(shape3FPlane3FArray);
 		compiledScene.setShape3FRectangularCuboid3FArray(shape3FRectangularCuboid3FArray);
 		compiledScene.setShape3FSphere3FArray(shape3FSphere3FArray);
@@ -378,6 +385,7 @@ final class SceneCompiler {
 		this.distinctMaterials.clear();
 		this.distinctMatteMaterials.clear();
 		this.distinctMirrorMaterials.clear();
+		this.distinctParaboloids.clear();
 		this.distinctPlanes.clear();
 		this.filteredPrimitives.clear();
 		this.distinctRectangularCuboids.clear();
@@ -406,6 +414,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsMarbleTextures.clear();
 		this.distinctToOffsetsMatteMaterials.clear();
 		this.distinctToOffsetsMirrorMaterials.clear();
+		this.distinctToOffsetsParaboloids.clear();
 		this.distinctToOffsetsPlanes.clear();
 		this.distinctToOffsetsRectangularCuboids.clear();
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
@@ -445,6 +454,7 @@ final class SceneCompiler {
 		this.distinctCones.addAll(NodeFilter.filterAllDistinct(scene, Cone3F.class));
 		this.distinctCylinders.addAll(NodeFilter.filterAllDistinct(scene, Cylinder3F.class));
 		this.distinctDisks.addAll(NodeFilter.filterAllDistinct(scene, Disk3F.class));
+		this.distinctParaboloids.addAll(NodeFilter.filterAllDistinct(scene, Paraboloid3F.class));
 		this.distinctPlanes.addAll(NodeFilter.filterAllDistinct(scene, Plane3F.class));
 		this.distinctRectangularCuboids.addAll(NodeFilter.filterAllDistinct(scene, RectangularCuboid3F.class));
 		this.distinctSpheres.addAll(NodeFilter.filterAllDistinct(scene, Sphere3F.class));
@@ -454,6 +464,7 @@ final class SceneCompiler {
 		this.distinctShapes.addAll(this.distinctCones);
 		this.distinctShapes.addAll(this.distinctCylinders);
 		this.distinctShapes.addAll(this.distinctDisks);
+		this.distinctShapes.addAll(this.distinctParaboloids);
 		this.distinctShapes.addAll(this.distinctPlanes);
 		this.distinctShapes.addAll(this.distinctRectangularCuboids);
 		this.distinctShapes.addAll(this.distinctSpheres);
@@ -500,6 +511,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsCones.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCones, Cone3F.ARRAY_LENGTH));
 		this.distinctToOffsetsCylinders.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCylinders, Cylinder3F.ARRAY_LENGTH));
 		this.distinctToOffsetsDisks.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisks, Disk3F.ARRAY_LENGTH));
+		this.distinctToOffsetsParaboloids.putAll(NodeFilter.mapDistinctToOffsets(this.distinctParaboloids, Paraboloid3F.ARRAY_LENGTH));
 		this.distinctToOffsetsPlanes.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlanes, Plane3F.ARRAY_LENGTH));
 		this.distinctToOffsetsRectangularCuboids.putAll(NodeFilter.mapDistinctToOffsets(this.distinctRectangularCuboids, RectangularCuboid3F.ARRAY_LENGTH));
 		this.distinctToOffsetsSpheres.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSpheres, Sphere3F.ARRAY_LENGTH));
@@ -669,6 +681,8 @@ final class SceneCompiler {
 				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsCylinders.get(shape).intValue();
 			} else if(shape instanceof Disk3F) {
 				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsDisks.get(shape).intValue();
+			} else if(shape instanceof Paraboloid3F) {
+				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsParaboloids.get(shape).intValue();
 			} else if(shape instanceof Plane3F) {
 				primitiveArray[primitiveArrayShapeOffset] = this.distinctToOffsetsPlanes.get(shape).intValue();
 			} else if(shape instanceof RectangularCuboid3F) {

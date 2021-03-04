@@ -28,6 +28,7 @@ import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.shape.Cone3F;
 import org.dayflower.geometry.shape.Cylinder3F;
 import org.dayflower.geometry.shape.Disk3F;
+import org.dayflower.geometry.shape.Paraboloid3F;
 import org.dayflower.geometry.shape.Plane3F;
 import org.dayflower.geometry.shape.RectangularCuboid3F;
 import org.dayflower.geometry.shape.Sphere3F;
@@ -246,6 +247,11 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected float[] shape3FDisk3FArray;
 	
 	/**
+	 * A {@code float[]} that contains paraboloids.
+	 */
+	protected float[] shape3FParaboloid3FArray;
+	
+	/**
 	 * A {@code float[]} that contains planes.
 	 */
 	protected float[] shape3FPlane3FArray;
@@ -300,6 +306,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.shape3FCone3FArray = new float[1];
 		this.shape3FCylinder3FArray = new float[1];
 		this.shape3FDisk3FArray = new float[1];
+		this.shape3FParaboloid3FArray = new float[1];
 		this.shape3FPlane3FArray = new float[1];
 		this.shape3FRectangularCuboid3FArray = new float[1];
 		this.shape3FSphere3FArray = new float[1];
@@ -518,6 +525,18 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final boolean shape3FDisk3FIntersects(final int shape3FDisk3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 		return shape3FDisk3FIntersectionT(shape3FDisk3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current ray intersects a given paraboloid in object space, {@code false} otherwise.
+	 * 
+	 * @param shape3FParaboloid3FArrayOffset the offset for the plane in {@link #shape3FParaboloid3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return {@code true} if, and only if, the current ray intersects a given paraboloid in object space, {@code false} otherwise
+	 */
+	protected final boolean shape3FParaboloid3FIntersects(final int shape3FParaboloid3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+		return shape3FParaboloid3FIntersectionT(shape3FParaboloid3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
 	}
 	
 	/**
@@ -1378,6 +1397,71 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		}
 		
 		return t;
+	}
+	
+	/**
+	 * Returns the parametric T value for a given paraboloid in object space, or {@code 0.0F} if no intersection was found.
+	 * 
+	 * @param shape3FParaboloid3FArrayOffset the offset for the plane in {@link #shape3FParaboloid3FArray}
+	 * @param rayTMinimum the minimum parametric T value
+	 * @param rayTMaximum the maximum parametric T value
+	 * @return the parametric T value for a given paraboloid in object space, or {@code 0.0F} if no intersection was found
+	 */
+	protected final float shape3FParaboloid3FIntersectionT(final int shape3FParaboloid3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
+//		Retrieve the ray variables that will be referred to by 'rayOrigin' and 'rayDirection' in the comments:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the paraboloid variables that will be referred to by 'paraboloidPhiMax', 'paraboloidRadius', 'paraboloidZMax' and 'paraboloidZMin' in the comments:
+		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_PHI_MAX];
+		final float paraboloidRadius = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_RADIUS];
+		final float paraboloidZMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_Z_MAX];
+		final float paraboloidZMin = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_Z_MIN];
+		
+		final float k = paraboloidZMax / (paraboloidRadius * paraboloidRadius);
+		
+		final float a = k * (rayDirectionX * rayDirectionX + rayDirectionY * rayDirectionY);
+		final float b = 2.0F * k * (rayDirectionX * rayOriginX + rayDirectionY * rayOriginY) - rayDirectionZ;
+		final float c = k * (rayOriginX * rayOriginX + rayOriginY * rayOriginY) - rayOriginZ;
+		
+		solveQuadraticSystemToArray(a, b, c, rayTMinimum, rayTMaximum);
+		
+		final float tMinimum = solveQuadraticSystemToArrayGetMinimum();
+		final float tMaximum = solveQuadraticSystemToArrayGetMaximum();
+		
+		if(tMinimum == 0.0F) {
+			return 0.0F;
+		}
+		
+		final float xMinimum = rayOriginX + rayDirectionX * tMinimum;
+		final float yMinimum = rayOriginY + rayDirectionY * tMinimum;
+		final float zMinimum = rayOriginZ + rayDirectionZ * tMinimum;
+		
+		final float phiMinimum = addIfLessThanThreshold(atan2(yMinimum, xMinimum), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		if(zMinimum < paraboloidZMin || zMinimum > paraboloidZMax || phiMinimum > paraboloidPhiMax) {
+			if(tMaximum == 0.0F) {
+				return 0.0F;
+			}
+			
+			final float xMaximum = rayOriginX + rayDirectionX * tMaximum;
+			final float yMaximum = rayOriginY + rayDirectionY * tMaximum;
+			final float zMaximum = rayOriginZ + rayDirectionZ * tMaximum;
+			
+			final float phiMaximum = addIfLessThanThreshold(atan2(yMaximum, xMaximum), 0.0F, PI_MULTIPLIED_BY_2);
+			
+			if(zMaximum < paraboloidZMin || zMaximum > paraboloidZMax || phiMaximum > paraboloidPhiMax) {
+				return 0.0F;
+			}
+			
+			return tMaximum;
+		}
+		
+		return tMinimum;
 	}
 	
 	/**
@@ -2323,9 +2407,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		
 		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
 		
-		final float textureCoordinatesU = phi / cylinderPhiMax;
-		final float textureCoordinatesV = (surfaceIntersectionPointZ - cylinderZMin) / (cylinderZMax - cylinderZMin);
-		
 		final float orthonormalBasisGUX = -cylinderPhiMax * surfaceIntersectionPointY;
 		final float orthonormalBasisGUY = +cylinderPhiMax * surfaceIntersectionPointX;
 		final float orthonormalBasisGUZ = 0.0F;
@@ -2345,6 +2426,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
 		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
 		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+		final float textureCoordinatesU = phi / cylinderPhiMax;
+		final float textureCoordinatesV = (surfaceIntersectionPointZ - cylinderZMin) / (cylinderZMax - cylinderZMin);
 		
 //		Update the intersection array:
 		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
@@ -2419,6 +2503,64 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		
 		final float textureCoordinatesU = phi / diskPhiMax;
 		final float textureCoordinatesV = (diskRadiusOuter - distance) / (diskRadiusOuter - diskRadiusInner);
+		
+//		Update the intersection array:
+		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetOrthonormalBasisS(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);
+		intersectionSetPrimitiveIndex(primitiveIndex);
+		intersectionSetSurfaceIntersectionPoint(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ);
+		intersectionSetTextureCoordinates(textureCoordinatesU, textureCoordinatesV);
+	}
+	
+	/**
+	 * Computes the intersection properties for the paraboloid at offset {@code shape3FParaboloid3FArrayOffset}.
+	 * 
+	 * @param t the parametric distance to the paraboloid
+	 * @param primitiveIndex the index of the primitive
+	 * @param shape3FParaboloid3FArrayOffset the offset in {@link #shape3FParaboloid3FArray}
+	 */
+	protected final void shape3FParaboloid3FIntersectionCompute(final float t, final int primitiveIndex, final int shape3FParaboloid3FArrayOffset) {
+//		Retrieve the ray variables:
+		final float rayOriginX = ray3FGetOriginComponent1();
+		final float rayOriginY = ray3FGetOriginComponent2();
+		final float rayOriginZ = ray3FGetOriginComponent3();
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+//		Retrieve the paraboloid variables that will be referred to by 'paraboloidPhiMax', 'paraboloidZMax' and 'paraboloidZMin' in the comments:
+		final float paraboloidPhiMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_PHI_MAX];
+		final float paraboloidZMax = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_Z_MAX];
+		final float paraboloidZMin = this.shape3FParaboloid3FArray[shape3FParaboloid3FArrayOffset + Paraboloid3F.ARRAY_OFFSET_Z_MIN];
+		
+		final float surfaceIntersectionPointX = rayOriginX + rayDirectionX * t;
+		final float surfaceIntersectionPointY = rayOriginY + rayDirectionY * t;
+		final float surfaceIntersectionPointZ = rayOriginZ + rayDirectionZ * t;
+		
+		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
+		
+		final float orthonormalBasisGUX = -paraboloidPhiMax * surfaceIntersectionPointY;
+		final float orthonormalBasisGUY = +paraboloidPhiMax * surfaceIntersectionPointX;
+		final float orthonormalBasisGUZ = 0.0F;
+		final float orthonormalBasisGULengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGUX, orthonormalBasisGUY, orthonormalBasisGUZ);
+		final float orthonormalBasisGUNormalizedX = orthonormalBasisGUX * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedY = orthonormalBasisGUY * orthonormalBasisGULengthReciprocal;
+		final float orthonormalBasisGUNormalizedZ = orthonormalBasisGUZ * orthonormalBasisGULengthReciprocal;
+		
+		final float orthonormalBasisGVX = (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointX / (2.0F * surfaceIntersectionPointZ));
+		final float orthonormalBasisGVY = (paraboloidZMax - paraboloidZMin) * (surfaceIntersectionPointY / (2.0F * surfaceIntersectionPointZ));
+		final float orthonormalBasisGVZ = paraboloidZMax - paraboloidZMin;
+		final float orthonormalBasisGVLengthReciprocal = vector3FLengthReciprocal(orthonormalBasisGVX, orthonormalBasisGVY, orthonormalBasisGVZ);
+		final float orthonormalBasisGVNormalizedX = orthonormalBasisGVX * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedY = orthonormalBasisGVY * orthonormalBasisGVLengthReciprocal;
+		final float orthonormalBasisGVNormalizedZ = orthonormalBasisGVZ * orthonormalBasisGVLengthReciprocal;
+		
+		final float orthonormalBasisGWNormalizedX = orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedZ - orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedY;
+		final float orthonormalBasisGWNormalizedY = orthonormalBasisGUNormalizedZ * orthonormalBasisGVNormalizedX - orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedZ;
+		final float orthonormalBasisGWNormalizedZ = orthonormalBasisGUNormalizedX * orthonormalBasisGVNormalizedY - orthonormalBasisGUNormalizedY * orthonormalBasisGVNormalizedX;
+		
+		final float textureCoordinatesU = phi / paraboloidPhiMax;
+		final float textureCoordinatesV = (surfaceIntersectionPointZ - paraboloidZMin) / (paraboloidZMax - paraboloidZMin);
 		
 //		Update the intersection array:
 		intersectionSetOrthonormalBasisG(orthonormalBasisGUNormalizedX, orthonormalBasisGUNormalizedY, orthonormalBasisGUNormalizedZ, orthonormalBasisGVNormalizedX, orthonormalBasisGVNormalizedY, orthonormalBasisGVNormalizedZ, orthonormalBasisGWNormalizedX, orthonormalBasisGWNormalizedY, orthonormalBasisGWNormalizedZ);

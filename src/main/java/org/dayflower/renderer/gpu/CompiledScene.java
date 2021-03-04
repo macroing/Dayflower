@@ -31,6 +31,7 @@ final class CompiledScene {
 	private float[] shape3FCone3FArray;
 	private float[] shape3FCylinder3FArray;
 	private float[] shape3FDisk3FArray;
+	private float[] shape3FParaboloid3FArray;
 	private float[] shape3FPlane3FArray;
 	private float[] shape3FRectangularCuboid3FArray;
 	private float[] shape3FSphere3FArray;
@@ -70,6 +71,7 @@ final class CompiledScene {
 		setShape3FCone3FArray(new float[1]);
 		setShape3FCylinder3FArray(new float[1]);
 		setShape3FDisk3FArray(new float[1]);
+		setShape3FParaboloid3FArray(new float[1]);
 		setShape3FPlane3FArray(new float[1]);
 		setShape3FRectangularCuboid3FArray(new float[1]);
 		setShape3FSphere3FArray(new float[1]);
@@ -117,6 +119,10 @@ final class CompiledScene {
 	
 	public float[] getShape3FDisk3FArray() {
 		return this.shape3FDisk3FArray;
+	}
+	
+	public float[] getShape3FParaboloid3FArray() {
+		return this.shape3FParaboloid3FArray;
 	}
 	
 	public float[] getShape3FPlane3FArray() {
@@ -265,6 +271,10 @@ final class CompiledScene {
 	
 	public void setShape3FDisk3FArray(final float[] shape3FDisk3FArray) {
 		this.shape3FDisk3FArray = Objects.requireNonNull(shape3FDisk3FArray, "shape3FDisk3FArray == null");
+	}
+	
+	public void setShape3FParaboloid3FArray(final float[] shape3FParaboloid3FArray) {
+		this.shape3FParaboloid3FArray = Objects.requireNonNull(shape3FParaboloid3FArray, "shape3FParaboloid3FArray == null");
 	}
 	
 	public void setShape3FPlane3FArray(final float[] shape3FPlane3FArray) {

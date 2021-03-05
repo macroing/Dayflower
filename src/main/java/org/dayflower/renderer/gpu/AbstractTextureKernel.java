@@ -18,8 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
-import java.lang.reflect.Field;
-
+import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
 import org.dayflower.scene.texture.ConstantTexture;
@@ -27,34 +26,69 @@ import org.dayflower.scene.texture.LDRImageTexture;
 import org.dayflower.scene.texture.MarbleTexture;
 import org.dayflower.scene.texture.SimplexFractionalBrownianMotionTexture;
 import org.dayflower.scene.texture.SurfaceNormalTexture;
+import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
 
-//TODO: Add Javadocs!
+/**
+ * An {@code AbstractTextureKernel} is an abstract extension of the {@code AbstractGeometryKernel} class that adds additional features.
+ * <p>
+ * The features added are the following:
+ * <ul>
+ * <li>{@link BlendTexture}</li>
+ * <li>{@link BullseyeTexture}</li>
+ * <li>{@link CheckerboardTexture}</li>
+ * <li>{@link ConstantTexture}</li>
+ * <li>{@link LDRImageTexture}</li>
+ * <li>{@link MarbleTexture}</li>
+ * <li>{@link SimplexFractionalBrownianMotionTexture}</li>
+ * <li>{@link SurfaceNormalTexture}</li>
+ * <li>{@link UVTexture}</li>
+ * </ul>
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link BlendTexture} instances.
+	 */
 	protected float[] textureBlendTextureArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link BullseyeTexture} instances.
+	 */
 	protected float[] textureBullseyeTextureArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link CheckerboardTexture} instances.
+	 */
 	protected float[] textureCheckerboardTextureArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link ConstantTexture} instances.
+	 */
 	protected float[] textureConstantTextureArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link LDRImageTexture} instances.
+	 */
 	protected float[] textureLDRImageTextureArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link MarbleTexture} instances.
+	 */
 	protected float[] textureMarbleTextureArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link SimplexFractionalBrownianMotionTexture} instances.
+	 */
 	protected float[] textureSimplexFractionalBrownianMotionTextureArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code AbstractTextureKernel} instance.
+	 */
 	protected AbstractTextureKernel() {
 		this.textureBlendTextureArray = new float[1];
 		this.textureBullseyeTextureArray = new float[1];
@@ -67,10 +101,13 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the current {@link Texture} instance, which may be any of the supported {@code Texture} types.
+	 * 
+	 * @param textureID the ID of the {@code Texture} instance
+	 * @param textureOffset the offset of the {@code Texture} instance
+	 */
 	protected final void textureEvaluate(final int textureID, final int textureOffset) {
-		/*
-//		This takes too long. From 9 - 10 ms to 13 - 14 ms.
 		if(textureID == BlendTexture.ID) {
 			final int textureA = (int)(this.textureBlendTextureArray[textureOffset + BlendTexture.ARRAY_OFFSET_TEXTURE_A]);
 			final int textureAID = (textureA >>> 16) & 0xFFFF;
@@ -103,12 +140,14 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 		} else {
 			textureEvaluateExcludingBlendTexture(textureID, textureOffset);
 		}
-		*/
-		
-		textureEvaluateExcludingBlendTexture(textureID, textureOffset);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the current {@link Texture} instance, which may be any of the supported {@code Texture} types except for {@link BlendTexture}.
+	 * 
+	 * @param textureID the ID of the {@code Texture} instance
+	 * @param textureOffset the offset of the {@code Texture} instance
+	 */
 	protected final void textureEvaluateExcludingBlendTexture(final int textureID, final int textureOffset) {
 		int currentTextureID = textureID;
 		int currentTextureOffset = textureOffset;
@@ -284,7 +323,6 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 				currentTextureID = -1;
 				currentTextureOffset = -1;
 			} else {
-//				The Texture is not supported:
 				component1 = 0.5F;
 				component2 = 0.5F;
 				component3 = 0.5F;

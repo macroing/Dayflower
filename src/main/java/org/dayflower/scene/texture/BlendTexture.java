@@ -44,39 +44,29 @@ public final class BlendTexture implements Texture {
 	public static final int ARRAY_LENGTH = 8;
 	
 	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code A} in the {@code float[]}.
+	 * The offset for the {@link Texture} denoted by {@code A} in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_A_ID = 0;
+	public static final int ARRAY_OFFSET_TEXTURE_A = 0;
 	
 	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code A} in the {@code float[]}.
+	 * The offset for the {@link Texture} denoted by {@code B} in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_A_OFFSET = 1;
-	
-	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code B} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_B_ID = 2;
-	
-	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code B} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_B_OFFSET = 3;
+	public static final int ARRAY_OFFSET_TEXTURE_B = 1;
 	
 	/**
 	 * The offset for the factor to use for component 1 in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_T_COMPONENT_1 = 4;
+	public static final int ARRAY_OFFSET_T_COMPONENT_1 = 2;
 	
 	/**
 	 * The offset for the factor to use for component 2 in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_T_COMPONENT_2 = 5;
+	public static final int ARRAY_OFFSET_T_COMPONENT_2 = 3;
 	
 	/**
 	 * The offset for the factor to use for component 3 in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_T_COMPONENT_3 = 6;
+	public static final int ARRAY_OFFSET_T_COMPONENT_3 = 4;
 	
 	/**
 	 * The ID of this {@code BlendTexture} class.
@@ -325,14 +315,14 @@ public final class BlendTexture implements Texture {
 		final float[] array = new float[ARRAY_LENGTH];
 		
 //		Because the BlendTexture occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_A_ID] = this.textureA.getID();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_A_OFFSET] = 0.0F;				//Block #1
-		array[ARRAY_OFFSET_TEXTURE_B_ID] = this.textureB.getID();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_B_OFFSET] = 0.0F;				//Block #1
-		array[ARRAY_OFFSET_T_COMPONENT_1] = this.tComponent1;		//Block #1
-		array[ARRAY_OFFSET_T_COMPONENT_2] = this.tComponent2;		//Block #1
-		array[ARRAY_OFFSET_T_COMPONENT_3] = this.tComponent3;		//Block #1
-		array[7] = 0.0F;											//Block #1
+		array[ARRAY_OFFSET_TEXTURE_A] = this.textureA.getID();	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_B] = this.textureB.getID();	//Block #1
+		array[ARRAY_OFFSET_T_COMPONENT_1] = this.tComponent1;	//Block #1
+		array[ARRAY_OFFSET_T_COMPONENT_2] = this.tComponent2;	//Block #1
+		array[ARRAY_OFFSET_T_COMPONENT_3] = this.tComponent3;	//Block #1
+		array[5] = 0.0F;										//Block #1
+		array[6] = 0.0F;										//Block #1
+		array[7] = 0.0F;										//Block #1
 		
 		return array;
 	}

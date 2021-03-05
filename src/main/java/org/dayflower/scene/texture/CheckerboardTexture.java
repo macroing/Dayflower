@@ -60,27 +60,17 @@ public final class CheckerboardTexture implements Texture {
 	/**
 	 * The offset for the {@link Vector2F} instance representing the scale in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_SCALE = 6;
+	public static final int ARRAY_OFFSET_SCALE = 4;
 	
 	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code A} in the {@code float[]}.
+	 * The offset for the {@link Texture} denoted by {@code A} in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_A_ID = 2;
+	public static final int ARRAY_OFFSET_TEXTURE_A = 2;
 	
 	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code A} in the {@code float[]}.
+	 * The offset for the {@link Texture} denoted by {@code B} in the {@code float[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_A_OFFSET = 3;
-	
-	/**
-	 * The offset for the ID of the {@link Texture} denoted by {@code B} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_B_ID = 4;
-	
-	/**
-	 * The offset for the offset of the {@link Texture} denoted by {@code B} in the {@code float[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_B_OFFSET = 5;
+	public static final int ARRAY_OFFSET_TEXTURE_B = 3;
 	
 	/**
 	 * The ID of this {@code CheckerboardTexture} class.
@@ -401,12 +391,12 @@ public final class CheckerboardTexture implements Texture {
 //		Because the CheckerboardTexture occupy 8/8 positions in a block, it should be aligned.
 		array[ARRAY_OFFSET_ANGLE_DEGREES] = this.angle.getDegrees();//Block #1
 		array[ARRAY_OFFSET_ANGLE_RADIANS] = this.angle.getRadians();//Block #1
-		array[ARRAY_OFFSET_TEXTURE_A_ID] = this.textureA.getID();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_A_OFFSET] = 0.0F;				//Block #1
-		array[ARRAY_OFFSET_TEXTURE_B_ID] = this.textureB.getID();	//Block #1
-		array[ARRAY_OFFSET_TEXTURE_B_OFFSET] = 0.0F;				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_A] = this.textureA.getID();		//Block #1
+		array[ARRAY_OFFSET_TEXTURE_B] = this.textureB.getID();		//Block #1
 		array[ARRAY_OFFSET_SCALE + 0] = this.scale.getX();			//Block #1
 		array[ARRAY_OFFSET_SCALE + 1] = this.scale.getY();			//Block #1
+		array[6] = 0.0F;											//Block #1
+		array[7] = 0.0F;											//Block #1
 		
 		return array;
 	}

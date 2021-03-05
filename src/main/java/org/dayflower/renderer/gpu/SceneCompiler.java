@@ -602,12 +602,15 @@ final class SceneCompiler {
 			final MatteMaterial matteMaterial = this.distinctMatteMaterials.get(i);
 			
 			final Texture textureEmission = matteMaterial.getTextureEmission();
+			final Texture textureAngle = matteMaterial.getTextureAngle();
 			final Texture textureKD = matteMaterial.getTextureKD();
 			
 			final int materialMatteMaterialArrayTextureEmission = i * MatteMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
+			final int materialMatteMaterialArrayTextureAngle = i * MatteMaterial.ARRAY_LENGTH + MatteMaterial.ARRAY_OFFSET_TEXTURE_ANGLE;
 			final int materialMatteMaterialArrayTextureKD = i * MatteMaterial.ARRAY_LENGTH + MatteMaterial.ARRAY_OFFSET_TEXTURE_K_D;
 			
 			materialMatteMaterialArray[materialMatteMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
+			materialMatteMaterialArray[materialMatteMaterialArrayTextureAngle] = pack(textureAngle.getID(), doFindTextureOffset(textureAngle));
 			materialMatteMaterialArray[materialMatteMaterialArrayTextureKD] = pack(textureKD.getID(), doFindTextureOffset(textureKD));
 		}
 	}

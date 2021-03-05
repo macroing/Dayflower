@@ -57,12 +57,17 @@ public final class MatteMaterial implements Material {
 	/**
 	 * The length of the {@code int[]}.
 	 */
-	public static final int ARRAY_LENGTH = 2;
+	public static final int ARRAY_LENGTH = 4;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Angle} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ANGLE = 1;
 	
 	/**
 	 * The offset for the {@link Texture} denoted by {@code KD} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_D = 1;
+	public static final int ARRAY_OFFSET_TEXTURE_K_D = 2;
 	
 	/**
 	 * The ID of this {@code MatteMaterial} class.
@@ -485,9 +490,11 @@ public final class MatteMaterial implements Material {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-//		Because the MatteMaterial occupy 2/8 positions in a block, it should be aligned.
+//		Because the MatteMaterial occupy 4/8 positions in a block, it should be aligned.
 		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ANGLE] = this.textureAngle.getID();		//Block #1
 		array[ARRAY_OFFSET_TEXTURE_K_D] = this.textureKD.getID();			//Block #1
+		array[3] = 0;														//Block #1
 		
 		return array;
 	}

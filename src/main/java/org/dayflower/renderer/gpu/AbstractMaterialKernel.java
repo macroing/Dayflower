@@ -33,6 +33,27 @@ import org.dayflower.scene.material.MirrorMaterial;
 //TODO: Add Javadocs!
 public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
+	protected static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 3;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH = 6;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_A = 4;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_ANGLE_RADIANS = 0;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B = 5;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 1;
+	
+//	TODO: Add Javadocs!
 	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
 	
 //	TODO: Add Javadocs!
@@ -45,6 +66,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected static final int MATERIAL_B_X_D_F_ARRAY_SIZE = 16;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	protected float[] bXDFLambertianBRDFArray_$private$3;
+	
+//	TODO: Add Javadocs!
+	protected float[] bXDFOrenNayarBRDFArray_$private$6;
 	
 //	TODO: Add Javadocs!
 	protected float[] materialBXDFResultArray_$private$16;
@@ -68,6 +95,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 //	TODO: Add Javadocs!
 	protected AbstractMaterialKernel() {
+		this.bXDFLambertianBRDFArray_$private$3 = new float[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH];
+		this.bXDFOrenNayarBRDFArray_$private$6 = new float[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH];
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
 		this.materialClearCoatMaterialArray = new int[1];
 		this.materialGlassMaterialArray = new int[1];
@@ -588,5 +617,93 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final int textureEmissionOffset = textureEmission & 0xFFFF;
 		
 		textureEvaluate(textureEmissionID, textureEmissionOffset);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/*
+	 * The following is a test implementation of the Material API in the CPU-renderer that is based on PBRT. It is an early work-in-progress. However, it is necessary in order to support most (if not all) Material implementations.
+	 */
+	
+//	TODO: Add Javadocs!
+	protected final boolean testMaterialBSDFComputeMatteMaterial(final int materialMatteMaterialArrayOffset) {
+		final int textureKD = this.materialMatteMaterialArray[materialMatteMaterialArrayOffset + MatteMaterial.ARRAY_OFFSET_TEXTURE_K_D];
+		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
+		final int textureKDOffset = textureKD & 0xFFFF;
+		
+		textureEvaluate(textureKDID, textureKDOffset);
+		
+		final float colorKDR = color3FLHSGetComponent1();
+		final float colorKDG = color3FLHSGetComponent2();
+		final float colorKDB = color3FLHSGetComponent3();
+		
+		final int textureAngle = this.materialMatteMaterialArray[materialMatteMaterialArrayOffset + MatteMaterial.ARRAY_OFFSET_TEXTURE_ANGLE];
+		final int textureAngleID = (textureAngle >>> 16) & 0xFFFF;
+		final int textureAngleOffset = textureAngle & 0xFFFF;
+		
+		textureEvaluate(textureAngleID, textureAngleOffset);
+		
+		final float colorAngleR = color3FLHSGetComponent1();
+		final float colorAngleG = color3FLHSGetComponent2();
+		final float colorAngleB = color3FLHSGetComponent3();
+		
+		final float floatAngle = (colorAngleR + colorAngleG + colorAngleB) / 3.0F;
+		
+		if(colorKDR == 0.0F && colorKDG == 0.0F && colorKDB == 0.0F) {
+			return false;
+		}
+		
+		if(floatAngle == 0.0F) {
+			testMaterialBXDFLambertianBRDFSet(colorKDR, colorKDG, colorKDB);
+			
+			return true;
+		}
+		
+		testMaterialBXDFOrenNayarBRDFSet(floatAngle, colorKDR, colorKDG, colorKDB);
+		
+		return true;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final int testMaterialBSDFCountBXDFsBySpecularType(final boolean isSpecular) {
+		return 0;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void testMaterialBSDFEvaluateDistributionFunction() {
+		
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void testMaterialBSDFEvaluateProbabilityDensityFunction() {
+		
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void testMaterialBSDFSampleDistributionFunction() {
+		
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void testMaterialBXDFLambertianBRDFSet(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+		this.bXDFLambertianBRDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
+		this.bXDFLambertianBRDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
+		this.bXDFLambertianBRDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void testMaterialBXDFOrenNayarBRDFSet(final float angleDegrees, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+		final float angleRadians = toRadians(angleDegrees);
+		final float angleRadiansSquared = angleRadians * angleRadians;
+		
+		final float a = 1.0F - (angleRadiansSquared / (2.0F * (angleRadiansSquared + 0.33F)));
+		final float b = 0.45F * angleRadiansSquared / (angleRadiansSquared + 0.09F);
+		
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_ANGLE_RADIANS] = angleRadians;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_A] = a;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B] = b;
 	}
 }

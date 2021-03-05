@@ -125,14 +125,14 @@ public final class GPURenderer extends AbstractGPURenderer {
 			while(currentBounce < maximumBounce) {
 				if(primitiveIntersectionCompute()) {
 					if(currentBounce == 0 || currentBounce == currentBounceSpecular) {
-						materialEmittance();
+						materialEmittance(primitiveGetMaterialID(), primitiveGetMaterialOffset());
 						
 						radianceR += throughputR * color3FLHSGetComponent1();
 						radianceG += throughputG * color3FLHSGetComponent2();
 						radianceB += throughputB * color3FLHSGetComponent3();
 					}
 					
-					if(materialIsSpecular()) {
+					if(materialIsSpecular(primitiveGetMaterialID())) {
 						currentBounceSpecular++;
 					} else {
 //						TODO: Add direct light sampling!
@@ -141,7 +141,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 						radianceB += throughputB * 0.0F;
 					}
 					
-					if(materialSampleDistributionFunction()) {
+					if(materialSampleDistributionFunction(primitiveGetMaterialID(), primitiveGetMaterialOffset())) {
 						throughputR *= color3FLHSGetComponent1();
 						throughputG *= color3FLHSGetComponent2();
 						throughputB *= color3FLHSGetComponent3();
@@ -206,13 +206,13 @@ public final class GPURenderer extends AbstractGPURenderer {
 			
 			while(currentBounce < maximumBounce) {
 				if(primitiveIntersectionCompute()) {
-					materialEmittance();
+					materialEmittance(primitiveGetMaterialID(), primitiveGetMaterialOffset());
 					
 					radianceR += throughputR * color3FLHSGetComponent1();
 					radianceG += throughputG * color3FLHSGetComponent2();
 					radianceB += throughputB * color3FLHSGetComponent3();
 					
-					if(materialSampleDistributionFunction()) {
+					if(materialSampleDistributionFunction(primitiveGetMaterialID(), primitiveGetMaterialOffset())) {
 						throughputR *= color3FLHSGetComponent1();
 						throughputG *= color3FLHSGetComponent2();
 						throughputB *= color3FLHSGetComponent3();

@@ -18,7 +18,6 @@
  */
 package org.dayflower.renderer.gpu;
 
-import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 
@@ -40,54 +39,30 @@ import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.Camera;
-import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.LDRImageLight;
-import org.dayflower.scene.material.ClearCoatMaterial;
-import org.dayflower.scene.material.GlassMaterial;
-import org.dayflower.scene.material.GlossyMaterial;
-import org.dayflower.scene.material.MatteMaterial;
-import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.utility.Floats;
 
 /**
- * An {@code AbstractSceneKernel} is an abstract extension of the {@code AbstractTextureKernel} class that adds additional features.
+ * An {@code AbstractSceneKernel} is an abstract extension of the {@code AbstractMaterialKernel} class that adds additional features.
  * <p>
  * The features added are the following:
  * <ul>
  * <li>Camera ray generation methods</li>
  * <li>Light evaluation methods</li>
- * <li>Material evaluation methods</li>
  * <li>Primitive intersection methods</li>
  * </ul>
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractSceneKernel extends AbstractTextureKernel {
-//	TODO: Add Javadocs!
-	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
-	
-//	TODO: Add Javadocs!
-	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL = 3;
-	
-//	TODO: Add Javadocs!
-	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING = 6;
-	
-//	TODO: Add Javadocs!
-	protected static final int MATERIAL_B_X_D_F_ARRAY_SIZE = 16;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+public abstract class AbstractSceneKernel extends AbstractMaterialKernel {
 //	TODO: Add Javadocs!
 	protected float[] cameraArray;
 	
 //	TODO: Add Javadocs!
 	protected float[] lightLDRImageLightArray;
-	
-//	TODO: Add Javadocs!
-	protected float[] materialBXDFResultArray_$private$16;
 	
 //	TODO: Add Javadocs!
 	protected float[] matrix44FArray;
@@ -105,21 +80,6 @@ public abstract class AbstractSceneKernel extends AbstractTextureKernel {
 	protected int[] lightLDRImageLightOffsetArray;
 	
 //	TODO: Add Javadocs!
-	protected int[] materialClearCoatMaterialArray;
-	
-//	TODO: Add Javadocs!
-	protected int[] materialGlassMaterialArray;
-	
-//	TODO: Add Javadocs!
-	protected int[] materialGlossyMaterialArray;
-	
-//	TODO: Add Javadocs!
-	protected int[] materialMatteMaterialArray;
-	
-//	TODO: Add Javadocs!
-	protected int[] materialMirrorMaterialArray;
-	
-//	TODO: Add Javadocs!
 	protected int[] primitiveArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,17 +94,11 @@ public abstract class AbstractSceneKernel extends AbstractTextureKernel {
 	protected AbstractSceneKernel() {
 		this.cameraArray = new float[1];
 		this.lightLDRImageLightArray = new float[1];
-		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
 		this.matrix44FArray = new float[1];
 		this.pixelArray = new float[1];
 		this.lightLDRImageLightCount = 0;
 		this.primitiveCount = 0;
 		this.lightLDRImageLightOffsetArray = new int[1];
-		this.materialClearCoatMaterialArray = new int[1];
-		this.materialGlassMaterialArray = new int[1];
-		this.materialGlossyMaterialArray = new int[1];
-		this.materialMatteMaterialArray = new int[1];
-		this.materialMirrorMaterialArray = new int[1];
 		this.primitiveArray = new int[1];
 		this.scene = new Scene();
 	}
@@ -191,455 +145,6 @@ public abstract class AbstractSceneKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Returns {@code true} if, and only if, the material of the currently intersected primitive is specular, {@code false} otherwise.
-	 * 
-	 * @return {@code true} if, and only if, the material of the currently intersected primitive is specular, {@code false} otherwise
-	 */
-	protected final boolean materialIsSpecular() {
-		final int primitiveIndex = intersectionGetPrimitiveIndex();
-		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-		final int materialID = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_ID];
-		
-		if(materialID == GlassMaterial.ID) {
-			return true;
-		}
-		
-		if(materialID == MirrorMaterial.ID) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunction() {
-		final int primitiveIndex = intersectionGetPrimitiveIndex();
-		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-		final int materialID = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_ID];
-		
-		if(materialID == ClearCoatMaterial.ID) {
-			return materialSampleDistributionFunctionClearCoatMaterial();
-		}
-		
-		if(materialID == GlassMaterial.ID) {
-			return materialSampleDistributionFunctionGlassMaterial();
-		}
-		
-		if(materialID == GlossyMaterial.ID) {
-			return materialSampleDistributionFunctionGlossyMaterial();
-		}
-		
-		if(materialID == MatteMaterial.ID) {
-			return materialSampleDistributionFunctionMatteMaterial();
-		}
-		
-		if(materialID == MirrorMaterial.ID) {
-			return materialSampleDistributionFunctionMirrorMaterial();
-		}
-		
-		return false;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionClearCoatMaterial() {
-		final int primitiveIndex = intersectionGetPrimitiveIndex();
-		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int textureKD = this.materialClearCoatMaterialArray[materialOffset + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_D];
-		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
-		final int textureKDOffset = textureKD & 0xFFFF;
-		final int textureKS = this.materialClearCoatMaterialArray[materialOffset + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_S];
-		final int textureKSID = (textureKS >>> 16) & 0xFFFF;
-		final int textureKSOffset = textureKS & 0xFFFF;
-		
-		textureEvaluate(textureKDID, textureKDOffset);
-		
-		final float colorKDR = color3FLHSGetComponent1();
-		final float colorKDG = color3FLHSGetComponent2();
-		final float colorKDB = color3FLHSGetComponent3();
-		
-		textureEvaluate(textureKSID, textureKSOffset);
-		
-		final float colorKSR = color3FLHSGetComponent1();
-		final float colorKSG = color3FLHSGetComponent2();
-		final float colorKSB = color3FLHSGetComponent3();
-		
-		final float directionX = ray3FGetDirectionComponent1();
-		final float directionY = ray3FGetDirectionComponent2();
-		final float directionZ = ray3FGetDirectionComponent3();
-		
-		final float surfaceNormalX = intersectionGetOrthonormalBasisSWComponent1();
-		final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
-		final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
-		
-		vector3FSetFaceForwardNegated(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
-		
-		final float surfaceNormalCorrectlyOrientedX = vector3FGetComponent1();
-		final float surfaceNormalCorrectlyOrientedY = vector3FGetComponent2();
-		final float surfaceNormalCorrectlyOrientedZ = vector3FGetComponent3();
-		
-		final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
-		
-		final float etaA = 1.0F;
-		final float etaB = 1.5F;
-		final float etaI = isEntering ? etaA : etaB;
-		final float etaT = isEntering ? etaB : etaA;
-		final float eta = etaI / etaT;
-		
-		final boolean isRefracting = vector3FSetRefraction(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, eta);
-		final boolean isReflecting = !isRefracting;
-		
-		if(isRefracting) {
-			final float refractionDirectionX = vector3FGetComponent1();
-			final float refractionDirectionY = vector3FGetComponent2();
-			final float refractionDirectionZ = vector3FGetComponent3();
-			
-			final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
-			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
-			
-//			final float reflectance = fresnelDielectricSchlick(cosThetaICorrectlyOriented, ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA)));
-			final float reflectance = fresnelDielectric(cosThetaICorrectlyOriented, etaA, etaB);
-			final float transmittance = 1.0F - reflectance;
-			
-			final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
-			final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
-			final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
-			
-			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
-			
-			if(isChoosingSpecularReflection) {
-				vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
-				
-				color3FLHSSet(colorKSR * probabilityRussianRouletteReflection, colorKSG * probabilityRussianRouletteReflection, colorKSB * probabilityRussianRouletteReflection);
-			} else {
-				vector3FSetDiffuseReflection(surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, random(), random());
-				
-				color3FLHSSet(colorKDR * probabilityRussianRouletteTransmission, colorKDG * probabilityRussianRouletteTransmission, colorKDB * probabilityRussianRouletteTransmission);
-			}
-		}
-		
-		if(isReflecting) {
-			vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
-			
-			color3FLHSSet(colorKSR, colorKSG, colorKSB);
-		}
-		
-		return true;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionGlassMaterial() {
-		final int primitiveIndex = intersectionGetPrimitiveIndex();
-		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int textureEta = this.materialGlassMaterialArray[materialOffset + GlassMaterial.ARRAY_OFFSET_TEXTURE_ETA];
-		final int textureEtaID = (textureEta >>> 16) & 0xFFFF;
-		final int textureEtaOffset = textureEta & 0xFFFF;
-		final int textureKR = this.materialGlassMaterialArray[materialOffset + GlassMaterial.ARRAY_OFFSET_TEXTURE_K_R];
-		final int textureKRID = (textureKR >>> 16) & 0xFFFF;
-		final int textureKROffset = textureKR & 0xFFFF;
-		final int textureKT = this.materialGlassMaterialArray[materialOffset + GlassMaterial.ARRAY_OFFSET_TEXTURE_K_T];
-		final int textureKTID = (textureKT >>> 16) & 0xFFFF;
-		final int textureKTOffset = textureKT & 0xFFFF;
-		
-		textureEvaluate(textureEtaID, textureEtaOffset);
-		
-		final float colorEtaR = color3FLHSGetComponent1();
-		final float colorEtaG = color3FLHSGetComponent2();
-		final float colorEtaB = color3FLHSGetComponent3();
-		
-		textureEvaluate(textureKRID, textureKROffset);
-		
-		final float colorKRR = color3FLHSGetComponent1();
-		final float colorKRG = color3FLHSGetComponent2();
-		final float colorKRB = color3FLHSGetComponent3();
-		
-		textureEvaluate(textureKTID, textureKTOffset);
-		
-		final float colorKTR = color3FLHSGetComponent1();
-		final float colorKTG = color3FLHSGetComponent2();
-		final float colorKTB = color3FLHSGetComponent3();
-		
-		final float directionX = ray3FGetDirectionComponent1();
-		final float directionY = ray3FGetDirectionComponent2();
-		final float directionZ = ray3FGetDirectionComponent3();
-		
-		final float surfaceNormalX = intersectionGetOrthonormalBasisSWComponent1();
-		final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
-		final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
-		
-		vector3FSetFaceForwardNegated(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
-		
-		final float surfaceNormalCorrectlyOrientedX = vector3FGetComponent1();
-		final float surfaceNormalCorrectlyOrientedY = vector3FGetComponent2();
-		final float surfaceNormalCorrectlyOrientedZ = vector3FGetComponent3();
-		
-		final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
-		
-		final float etaA = 1.0F;
-		final float etaB = (colorEtaR + colorEtaG + colorEtaB) / 3.0F;
-		final float etaI = isEntering ? etaA : etaB;
-		final float etaT = isEntering ? etaB : etaA;
-		final float eta = etaI / etaT;
-		
-		final boolean isRefracting = vector3FSetRefraction(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, eta);
-		final boolean isReflecting = !isRefracting;
-		
-		if(isRefracting) {
-			final float refractionDirectionX = vector3FGetComponent1();
-			final float refractionDirectionY = vector3FGetComponent2();
-			final float refractionDirectionZ = vector3FGetComponent3();
-			
-			final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
-			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
-			
-//			final float reflectance = fresnelDielectricSchlick(cosThetaICorrectlyOriented, ((etaB - etaA) * (etaB - etaA)) / ((etaB + etaA) * (etaB + etaA)));
-			final float reflectance = fresnelDielectric(cosThetaICorrectlyOriented, etaA, etaB);
-			final float transmittance = 1.0F - reflectance;
-			
-			final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
-			final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
-			final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
-			
-			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
-			
-			if(isChoosingSpecularReflection) {
-				vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
-				
-				color3FLHSSet(colorKRR * probabilityRussianRouletteReflection, colorKRG * probabilityRussianRouletteReflection, colorKRB * probabilityRussianRouletteReflection);
-			} else {
-				color3FLHSSet(colorKTR * probabilityRussianRouletteTransmission, colorKTG * probabilityRussianRouletteTransmission, colorKTB * probabilityRussianRouletteTransmission);
-			}
-		}
-		
-		if(isReflecting) {
-			vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
-			
-			color3FLHSSet(colorKRR, colorKRG, colorKRB);
-		}
-		
-		return true;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionGlossyMaterial() {
-		/*
-		 * Material:
-		 */
-		
-//		Retrieve indices and offsets:
-		final int primitiveIndex = intersectionGetPrimitiveIndex();
-		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int textureKR = this.materialGlossyMaterialArray[materialOffset + GlossyMaterial.ARRAY_OFFSET_TEXTURE_K_R];
-		final int textureKRID = (textureKR >>> 16) & 0xFFFF;
-		final int textureKROffset = textureKR & 0xFFFF;
-		final int textureRoughness = this.materialGlossyMaterialArray[materialOffset + GlossyMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS];
-		final int textureRoughnessID = (textureRoughness >>> 16) & 0xFFFF;
-		final int textureRoughnessOffset = textureRoughness & 0xFFFF;
-		
-//		Evaluate the KR texture:
-		textureEvaluate(textureKRID, textureKROffset);
-		
-//		Retrieve the color from the KR texture:
-		final float colorKRR = color3FLHSGetComponent1();
-		final float colorKRG = color3FLHSGetComponent2();
-		final float colorKRB = color3FLHSGetComponent3();
-		
-//		Evaluate the Roughness texture:
-		textureEvaluate(textureRoughnessID, textureRoughnessOffset);
-		
-//		Retrieve the color from the Roughness texture:
-		final float colorRoughnessR = color3FLHSGetComponent1();
-		final float colorRoughnessG = color3FLHSGetComponent2();
-		final float colorRoughnessB = color3FLHSGetComponent3();
-		
-//		Compute the roughness and exponent:
-		final float roughness = (colorRoughnessR + colorRoughnessG + colorRoughnessB) / 3.0F;
-		final float exponent = 1.0F / (roughness * roughness);
-		
-		
-		
-		/*
-		 * BSDF:
-		 */
-		
-//		Perform world space to shade space transformations:
-		materialBXDFBegin();
-		
-		
-		
-		/*
-		 * BXDF:
-		 */
-		
-//		Retrieve the normal in shade space:
-		final float normalShadeSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 0];
-		final float normalShadeSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 1];
-		final float normalShadeSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 2];
-		
-//		Retrieve the outgoing direction in shade space:
-		final float outgoingShadeSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 0];
-		final float outgoingShadeSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 1];
-		final float outgoingShadeSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 2];
-		
-//		Compute the dot product between the normal in shade space and the outgoing direction in shade space:
-		final float normalShadeSpaceDotOutgoingShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ);
-		
-//		Sample the hemisphere in local space using a power-cosine distribution:
-		vector3FSetSampleHemispherePowerCosineDistribution(random(), random(), exponent);
-		
-//		Retrieve the half vector in local space:
-		final float halfLocalSpaceX = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -vector3FGetComponent1() : vector3FGetComponent1();
-		final float halfLocalSpaceY = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -vector3FGetComponent2() : vector3FGetComponent2();
-		final float halfLocalSpaceZ = normalShadeSpaceDotOutgoingShadeSpace < 0.0F ? -vector3FGetComponent3() : vector3FGetComponent3();
-		
-//		Compute the dot product between the outgoing direction in shade space and the half vector in local space:
-		final float outgoingShadeSpaceDotHalfLocalSpace = vector3FDotProduct(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, halfLocalSpaceX, halfLocalSpaceY, halfLocalSpaceZ);
-		
-//		Compute the incoming direction in shade space:
-		final float incomingShadeSpaceX = outgoingShadeSpaceX - halfLocalSpaceX * 2.0F * outgoingShadeSpaceDotHalfLocalSpace;
-		final float incomingShadeSpaceY = outgoingShadeSpaceY - halfLocalSpaceY * 2.0F * outgoingShadeSpaceDotHalfLocalSpace;
-		final float incomingShadeSpaceZ = outgoingShadeSpaceZ - halfLocalSpaceZ * 2.0F * outgoingShadeSpaceDotHalfLocalSpace;
-		
-//		Compute the half vector in shade space:
-		vector3FSetHalf(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
-		
-//		Retrieve the half vector in shade space:
-		final float halfShadeSpaceX = vector3FGetComponent1();
-		final float halfShadeSpaceY = vector3FGetComponent2();
-		final float halfShadeSpaceZ = vector3FGetComponent3();
-		
-//		Compute the dot product between the normal in shade space and the half vector in shade space:
-		final float normalShadeSpaceDotHalfShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, halfShadeSpaceX, halfShadeSpaceY, halfShadeSpaceZ);
-		
-//		Compute the dot product between the normal in shade space and the incoming direction in shade space and its absolute representation:
-		final float normalShadeSpaceDotIncomingShadeSpace = vector3FDotProduct(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ, incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
-		
-//		Compute the dot product between the outgoing direction in shade space and the half vector in shade space:
-		final float outgoingShadeSpaceDotHalfShadeSpace = vector3FDotProduct(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ, halfShadeSpaceX, halfShadeSpaceY, halfShadeSpaceZ);
-		
-//		Check that the dot products are opposite:
-		if(normalShadeSpaceDotIncomingShadeSpace > 0.0F && normalShadeSpaceDotOutgoingShadeSpace > 0.0F || normalShadeSpaceDotIncomingShadeSpace < 0.0F && normalShadeSpaceDotOutgoingShadeSpace < 0.0F) {
-			return false;
-		}
-		
-//		Compute the probability density function (PDF) value:
-		final float probabilityDensityFunctionValue = (exponent + 1.0F) * pow(abs(normalShadeSpaceDotHalfShadeSpace), exponent) / (PI * 8.0F * abs(outgoingShadeSpaceDotHalfShadeSpace));
-		
-		if(probabilityDensityFunctionValue <= 0.0F) {
-			return false;
-		}
-		
-		final float d = (exponent + 1.0F) * pow(abs(normalShadeSpaceDotHalfShadeSpace), exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float f = fresnelDielectricSchlick(outgoingShadeSpaceDotHalfShadeSpace, 1.0F);
-		final float g = 4.0F * abs(normalShadeSpaceDotOutgoingShadeSpace + -normalShadeSpaceDotIncomingShadeSpace - normalShadeSpaceDotOutgoingShadeSpace * -normalShadeSpaceDotIncomingShadeSpace);
-		
-//		Compute the result:
-		final float resultR = colorKRR * d * f / g;
-		final float resultG = colorKRG * d * f / g;
-		final float resultB = colorKRB * d * f / g;
-		
-		
-		
-		/*
-		 * BSDF:
-		 */
-		
-//		Set the incoming direction in shade space and perform shade space to world space transformations:
-		materialBXDFSetIncoming(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
-		materialBXDFEnd();
-		
-		
-		
-		/*
-		 * Material:
-		 */
-		
-		final float incomingWorldSpaceX = vector3FGetComponent1();
-		final float incomingWorldSpaceY = vector3FGetComponent2();
-		final float incomingWorldSpaceZ = vector3FGetComponent3();
-		
-		final float normalWorldSpaceX = intersectionGetOrthonormalBasisSWComponent1();
-		final float normalWorldSpaceY = intersectionGetOrthonormalBasisSWComponent2();
-		final float normalWorldSpaceZ = intersectionGetOrthonormalBasisSWComponent3();
-		
-		final float incomingWorldSpaceDotNormalWorldSpace = vector3FDotProduct(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ, normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
-		final float incomingWorldSpaceDotNormalWorldSpaceAbs = abs(incomingWorldSpaceDotNormalWorldSpace);
-		
-		final float colorR = resultR * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
-		final float colorG = resultG * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
-		final float colorB = resultB * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
-		
-		color3FLHSSet(colorR, colorG, colorB);
-		
-		
-		
-		return true;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionMatteMaterial() {
-		final int primitiveIndex = intersectionGetPrimitiveIndex();
-		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int textureKD = this.materialMatteMaterialArray[materialOffset + MatteMaterial.ARRAY_OFFSET_TEXTURE_K_D];
-		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
-		final int textureKDOffset = textureKD & 0xFFFF;
-		
-		textureEvaluate(textureKDID, textureKDOffset);
-		
-		final float colorKDR = color3FLHSGetComponent1();
-		final float colorKDG = color3FLHSGetComponent2();
-		final float colorKDB = color3FLHSGetComponent3();
-		
-		final float directionX = ray3FGetDirectionComponent1();
-		final float directionY = ray3FGetDirectionComponent2();
-		final float directionZ = ray3FGetDirectionComponent3();
-		
-		final float surfaceNormalX = intersectionGetOrthonormalBasisSWComponent1();
-		final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
-		final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
-		
-		vector3FSetFaceForwardNegated(surfaceNormalX, surfaceNormalY, surfaceNormalZ, directionX, directionY, directionZ);
-		vector3FSetDiffuseReflection(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), random(), random());
-		
-		color3FLHSSet(colorKDR, colorKDG, colorKDB);
-		
-		return true;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionMirrorMaterial() {
-		final int primitiveIndex = intersectionGetPrimitiveIndex();
-		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int textureKR = this.materialMirrorMaterialArray[materialOffset + MirrorMaterial.ARRAY_OFFSET_TEXTURE_K_R];
-		final int textureKRID = (textureKR >>> 16) & 0xFFFF;
-		final int textureKROffset = textureKR & 0xFFFF;
-		
-		textureEvaluate(textureKRID, textureKROffset);
-		
-		final float colorKRR = color3FLHSGetComponent1();
-		final float colorKRG = color3FLHSGetComponent2();
-		final float colorKRB = color3FLHSGetComponent3();
-		
-		final float directionX = ray3FGetDirectionComponent1();
-		final float directionY = ray3FGetDirectionComponent2();
-		final float directionZ = ray3FGetDirectionComponent3();
-		
-		final float surfaceNormalX = intersectionGetOrthonormalBasisSWComponent1();
-		final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
-		final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
-		
-		vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
-		
-		color3FLHSSet(colorKRR, colorKRG, colorKRB);
-		
-		return true;
-	}
 	
 	/**
 	 * Performs an intersection test against all primitives in the scene and computes intersection information for the closest.
@@ -965,6 +470,16 @@ public abstract class AbstractSceneKernel extends AbstractTextureKernel {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final int primitiveGetMaterialID() {
+		return this.primitiveArray[intersectionGetPrimitiveIndex() * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_MATERIAL_ID];
+	}
+	
+//	TODO: Add Javadocs!
+	protected final int primitiveGetMaterialOffset() {
+		return this.primitiveArray[intersectionGetPrimitiveIndex() * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
+	}
+	
+//	TODO: Add Javadocs!
 	protected final void intersectionTransform(final int matrix44FArrayOffsetMatrix, final int matrix44FArrayOffsetMatrixInverse) {
 //		Retrieve the matrix elements:
 		final float matrixElement11 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
@@ -1169,115 +684,6 @@ public abstract class AbstractSceneKernel extends AbstractTextureKernel {
 		color3FLHSSet(component1 / probabilityDensityFunctionValue, component2 / probabilityDensityFunctionValue, component3 / probabilityDensityFunctionValue);
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFBegin() {
-//		Initialize the orthonormal basis:
-		orthonormalBasis33FSetIntersectionOrthonormalBasisS();
-		
-//		Retrieve the ray direction in world space:
-		final float rayDirectionWorldSpaceX = ray3FGetDirectionComponent1();
-		final float rayDirectionWorldSpaceY = ray3FGetDirectionComponent2();
-		final float rayDirectionWorldSpaceZ = ray3FGetDirectionComponent3();
-		
-//		Compute the outgoing direction in world space as the negated ray direction in world space:
-		final float outgoingWorldSpaceX = -rayDirectionWorldSpaceX;
-		final float outgoingWorldSpaceY = -rayDirectionWorldSpaceY;
-		final float outgoingWorldSpaceZ = -rayDirectionWorldSpaceZ;
-		
-//		Transform the outgoing direction in world space to the outgoing direction in shade space:
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(outgoingWorldSpaceX, outgoingWorldSpaceY, outgoingWorldSpaceZ);
-		
-//		Retrieve the outgoing direction in shade space:
-		final float outgoingShadeSpaceX = vector3FGetComponent1();
-		final float outgoingShadeSpaceY = vector3FGetComponent2();
-		final float outgoingShadeSpaceZ = vector3FGetComponent3();
-		
-//		Retrieve the normal in world space:
-		final float normalWorldSpaceX = intersectionGetOrthonormalBasisSWComponent1();
-		final float normalWorldSpaceY = intersectionGetOrthonormalBasisSWComponent2();
-		final float normalWorldSpaceZ = intersectionGetOrthonormalBasisSWComponent3();
-		
-//		Transform the normal in world space to the normal in shade space:
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(normalWorldSpaceX, normalWorldSpaceY, normalWorldSpaceZ);
-		
-//		Retrieve the normal in shade space:
-		final float normalShadeSpaceX = vector3FGetComponent1();
-		final float normalShadeSpaceY = vector3FGetComponent2();
-		final float normalShadeSpaceZ = vector3FGetComponent3();
-		
-//		Set the values:
-		materialBXDFSetNormal(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ);
-		materialBXDFSetOutgoing(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ);
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFEnd() {
-//		Retrieve the incoming direction in shade space:
-		final float incomingShadeSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0];
-		final float incomingShadeSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1];
-		final float incomingShadeSpaceZ = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 2];
-		
-//		Transform the incoming direction in shade space to the incoming direction in world space:
-		vector3FSetOrthonormalBasis33FTransformNormalize(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
-		
-//		Retrieve the incoming direction in world space:
-		final float incomingWorldSpaceX = -vector3FGetComponent1();
-		final float incomingWorldSpaceY = -vector3FGetComponent2();
-		final float incomingWorldSpaceZ = -vector3FGetComponent3();
-		
-//		Set the values:
-		vector3FSet(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFSetIncoming(final float incomingX, final float incomingY, final float incomingZ) {
-		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0] = incomingX;
-		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1] = incomingY;
-		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 2] = incomingZ;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFSetNormal(final float normalX, final float normalY, final float normalZ) {
-		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 0] = normalX;
-		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 1] = normalY;
-		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 2] = normalZ;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFSetOutgoing(final float outgoingX, final float outgoingY, final float outgoingZ) {
-		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 0] = outgoingX;
-		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 1] = outgoingY;
-		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 2] = outgoingZ;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void materialEmittance() {
-		final int primitiveIndex = intersectionGetPrimitiveIndex();
-		final int primitiveArrayOffset = primitiveIndex * Primitive.ARRAY_LENGTH;
-		final int materialID = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_ID];
-		final int materialOffset = this.primitiveArray[primitiveArrayOffset + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
-		final int materialOffsetTextureEmission = materialOffset + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-		
-		int textureEmission = 0;
-		
-		if(materialID == ClearCoatMaterial.ID) {
-			textureEmission = this.materialClearCoatMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == GlassMaterial.ID) {
-			textureEmission = this.materialGlassMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == GlossyMaterial.ID) {
-			textureEmission = this.materialGlossyMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == MatteMaterial.ID) {
-			textureEmission = this.materialMatteMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == MirrorMaterial.ID) {
-			textureEmission = this.materialMirrorMaterialArray[materialOffsetTextureEmission];
-		}
-		
-		final int textureEmissionID = (textureEmission >>> 16) & 0xFFFF;
-		final int textureEmissionOffset = textureEmission & 0xFFFF;
-		
-		textureEvaluate(textureEmissionID, textureEmissionOffset);
-	}
-	
 	/**
 	 * Sets a ray in {@link #ray3FArray_$private$8}.
 	 * <p>
@@ -1436,14 +842,15 @@ public abstract class AbstractSceneKernel extends AbstractTextureKernel {
 		put(super.textureMarbleTextureArray = compiledScene.getTextureMarbleTextureArray());
 		put(super.textureSimplexFractionalBrownianMotionTextureArray = compiledScene.getTextureSimplexFractionalBrownianMotionTextureArray());
 		
+		put(super.materialClearCoatMaterialArray = compiledScene.getMaterialClearCoatMaterialArray());
+		put(super.materialGlassMaterialArray = compiledScene.getMaterialGlassMaterialArray());
+		put(super.materialGlossyMaterialArray = compiledScene.getMaterialGlossyMaterialArray());
+		put(super.materialMatteMaterialArray = compiledScene.getMaterialMatteMaterialArray());
+		put(super.materialMirrorMaterialArray = compiledScene.getMaterialMirrorMaterialArray());
+		
 		put(this.cameraArray = compiledScene.getCameraArray());
 		put(this.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
 		put(this.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());
-		put(this.materialClearCoatMaterialArray = compiledScene.getMaterialClearCoatMaterialArray());
-		put(this.materialGlassMaterialArray = compiledScene.getMaterialGlassMaterialArray());
-		put(this.materialGlossyMaterialArray = compiledScene.getMaterialGlossyMaterialArray());
-		put(this.materialMatteMaterialArray = compiledScene.getMaterialMatteMaterialArray());
-		put(this.materialMirrorMaterialArray = compiledScene.getMaterialMirrorMaterialArray());
 		put(this.matrix44FArray = compiledScene.getMatrix44FArray());
 		put(this.primitiveArray = compiledScene.getPrimitiveArray());
 		

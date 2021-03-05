@@ -178,6 +178,19 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	/**
+	 * Returns the average value in {@link #color3FLHSArray_$private$3}.
+	 * 
+	 * @return the average value in {@link #color3FLHSArray_$private$3}
+	 */
+	protected final float color3FLHSGetAverage() {
+		final float component1 = color3FLHSGetComponent1();
+		final float component2 = color3FLHSGetComponent2();
+		final float component3 = color3FLHSGetComponent3();
+		
+		return (component1 + component2 + component3) / 3.0F;
+	}
+	
+	/**
 	 * Returns the value of component 1 in {@link #color3FLHSArray_$private$3}.
 	 * 
 	 * @return the value of component 1 in {@link #color3FLHSArray_$private$3}

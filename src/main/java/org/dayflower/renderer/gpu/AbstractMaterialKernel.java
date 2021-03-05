@@ -33,10 +33,16 @@ import org.dayflower.scene.material.MirrorMaterial;
 //TODO: Add Javadocs!
 public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
+	protected static final int B_S_D_F_ARRAY_LENGTH = 8;
+	
+//	TODO: Add Javadocs!
 	protected static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 3;
 	
 //	TODO: Add Javadocs!
 	protected static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ID = 1;
 	
 //	TODO: Add Javadocs!
 	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH = 6;
@@ -52,6 +58,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 //	TODO: Add Javadocs!
 	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 1;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ID = 2;
 	
 //	TODO: Add Javadocs!
 	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
@@ -77,6 +86,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected float[] materialBXDFResultArray_$private$16;
 	
 //	TODO: Add Javadocs!
+	protected int[] bSDFArray_$private$8;
+	
+//	TODO: Add Javadocs!
 	protected int[] materialClearCoatMaterialArray;
 	
 //	TODO: Add Javadocs!
@@ -95,6 +107,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 //	TODO: Add Javadocs!
 	protected AbstractMaterialKernel() {
+		this.bSDFArray_$private$8 = new int[B_S_D_F_ARRAY_LENGTH];
 		this.bXDFLambertianBRDFArray_$private$3 = new float[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH];
 		this.bXDFOrenNayarBRDFArray_$private$6 = new float[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH];
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
@@ -627,38 +640,52 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 //	TODO: Add Javadocs!
 	protected final boolean testMaterialBSDFComputeMatteMaterial(final int materialMatteMaterialArrayOffset) {
+		/*
+		 * Evaluate the Texture instances:
+		 */
+		
+//		Retrieve the ID and offset for the KD Texture:
 		final int textureKD = this.materialMatteMaterialArray[materialMatteMaterialArrayOffset + MatteMaterial.ARRAY_OFFSET_TEXTURE_K_D];
 		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
 		final int textureKDOffset = textureKD & 0xFFFF;
 		
+//		Evaluate the KD Texture:
 		textureEvaluate(textureKDID, textureKDOffset);
 		
+//		Retrieve the color from the KD Texture:
 		final float colorKDR = color3FLHSGetComponent1();
 		final float colorKDG = color3FLHSGetComponent2();
 		final float colorKDB = color3FLHSGetComponent3();
 		
+//		Retrieve the ID and offset for the Angle Texture:
 		final int textureAngle = this.materialMatteMaterialArray[materialMatteMaterialArrayOffset + MatteMaterial.ARRAY_OFFSET_TEXTURE_ANGLE];
 		final int textureAngleID = (textureAngle >>> 16) & 0xFFFF;
 		final int textureAngleOffset = textureAngle & 0xFFFF;
 		
+//		Evaluate the Angle Texture:
 		textureEvaluate(textureAngleID, textureAngleOffset);
 		
-		final float colorAngleR = color3FLHSGetComponent1();
-		final float colorAngleG = color3FLHSGetComponent2();
-		final float colorAngleB = color3FLHSGetComponent3();
-		
-		final float floatAngle = (colorAngleR + colorAngleG + colorAngleB) / 3.0F;
+//		Retrieve the average color from the Angle Texture:
+		final float floatAngle = color3FLHSGetAverage();
 		
 		if(colorKDR == 0.0F && colorKDG == 0.0F && colorKDB == 0.0F) {
 			return false;
 		}
 		
+		/*
+		 * Compute the BSDF:
+		 */
+		
+		testMaterialBSDFClear();
+		
 		if(floatAngle == 0.0F) {
+			testMaterialBSDFSet(0, B_X_D_F_LAMBERTIAN_B_R_D_F_ID);
 			testMaterialBXDFLambertianBRDFSet(colorKDR, colorKDG, colorKDB);
 			
 			return true;
 		}
 		
+		testMaterialBSDFSet(0, B_X_D_F_OREN_NAYAR_B_R_D_F_ID);
 		testMaterialBXDFOrenNayarBRDFSet(floatAngle, colorKDR, colorKDG, colorKDB);
 		
 		return true;
@@ -667,6 +694,18 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
 	protected final int testMaterialBSDFCountBXDFsBySpecularType(final boolean isSpecular) {
 		return 0;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void testMaterialBSDFClear() {
+		this.bSDFArray_$private$8[0] = 0;
+		this.bSDFArray_$private$8[1] = 0;
+		this.bSDFArray_$private$8[2] = 0;
+		this.bSDFArray_$private$8[3] = 0;
+		this.bSDFArray_$private$8[4] = 0;
+		this.bSDFArray_$private$8[5] = 0;
+		this.bSDFArray_$private$8[6] = 0;
+		this.bSDFArray_$private$8[7] = 0;
 	}
 	
 //	TODO: Add Javadocs!
@@ -682,6 +721,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
 	protected final void testMaterialBSDFSampleDistributionFunction() {
 		
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void testMaterialBSDFSet(final int index, final int value) {
+		this.bSDFArray_$private$8[index] = value;
 	}
 	
 //	TODO: Add Javadocs!

@@ -263,7 +263,7 @@ public final class Disk3F implements Shape3F {
 		final Vector3F dPDU = Vector3F.normalize(new Vector3F(-phiMax * y, phiMax * x, 0.0F));
 		final Vector3F dPDV = Vector3F.normalize(new Vector3F(x * (radiusInner - radiusOuter) / distance, y * (radiusInner - radiusOuter) / distance, 0.0F));
 		
-		final Vector3F surfaceNormalG = Vector3F.normalize(Vector3F.crossProduct(dPDU, dPDV));
+		final Vector3F surfaceNormalG = Vector3F.crossProduct(dPDU, dPDV);
 		
 		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(surfaceNormalG, dPDV, dPDU);
 		final OrthonormalBasis33F orthonormalBasisS = orthonormalBasisG;

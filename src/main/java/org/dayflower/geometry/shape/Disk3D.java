@@ -263,7 +263,7 @@ public final class Disk3D implements Shape3D {
 		final Vector3D dPDU = Vector3D.normalize(new Vector3D(-phiMax * y, phiMax * x, 0.0D));
 		final Vector3D dPDV = Vector3D.normalize(new Vector3D(x * (radiusInner - radiusOuter) / distance, y * (radiusInner - radiusOuter) / distance, 0.0D));
 		
-		final Vector3D surfaceNormalG = Vector3D.normalize(Vector3D.crossProduct(dPDU, dPDV));
+		final Vector3D surfaceNormalG = Vector3D.crossProduct(dPDU, dPDV);
 		
 		final OrthonormalBasis33D orthonormalBasisG = new OrthonormalBasis33D(surfaceNormalG, dPDV, dPDU);
 		final OrthonormalBasis33D orthonormalBasisS = orthonormalBasisG;

@@ -543,7 +543,7 @@ public final class Hyperboloid3F implements Shape3F {
 //		final float f0 = Vector3F.dotProduct(dPDU, dPDV);
 //		final float g0 = Vector3F.dotProduct(dPDV, dPDV);
 		
-		final Vector3F surfaceNormalG = Vector3F.normalize(Vector3F.crossProduct(dPDU, dPDV));
+		final Vector3F surfaceNormalG = Vector3F.crossProduct(dPDU, dPDV);
 		
 //		final float e1 = Vector3F.dotProduct(surfaceNormalG, d2PDUU);
 //		final float f1 = Vector3F.dotProduct(surfaceNormalG, d2PDUV);

@@ -528,7 +528,7 @@ public final class Paraboloid3D implements Shape3D {
 //		final double f0 = Vector3D.dotProduct(dPDU, dPDV);
 //		final double g0 = Vector3D.dotProduct(dPDV, dPDV);
 		
-		final Vector3D surfaceNormalG = Vector3D.normalize(Vector3D.crossProduct(dPDU, dPDV));
+		final Vector3D surfaceNormalG = Vector3D.crossProduct(dPDU, dPDV);
 		
 //		final double e1 = Vector3D.dotProduct(surfaceNormalG, d2PDUU);
 //		final double f1 = Vector3D.dotProduct(surfaceNormalG, d2PDUV);

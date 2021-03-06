@@ -261,13 +261,13 @@ public final class GPURenderer extends AbstractGPURenderer {
 	void doRunRayCasting() {
 		if(ray3FCameraGenerate(random(), random())) {
 			if(primitiveIntersectionCompute()) {
-				final float rayDirectionX = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 0];
-				final float rayDirectionY = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 1];
-				final float rayDirectionZ = super.ray3FArray_$private$8[RAY_3_F_ARRAY_OFFSET_DIRECTION + 2];
+				final float rayDirectionX = ray3FGetDirectionComponent1();
+				final float rayDirectionY = ray3FGetDirectionComponent2();
+				final float rayDirectionZ = ray3FGetDirectionComponent3();
 				
-				final float surfaceNormalX = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 0];
-				final float surfaceNormalY = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 1];
-				final float surfaceNormalZ = super.intersectionArray_$private$24[INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W + 2];
+				final float surfaceNormalX = intersectionGetOrthonormalBasisSWComponent1();
+				final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
+				final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
 				
 				final float rayDirectionDotSurfaceNormal = vector3FDotProduct(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 				final float rayDirectionDotSurfaceNormalAbs = abs(rayDirectionDotSurfaceNormal);

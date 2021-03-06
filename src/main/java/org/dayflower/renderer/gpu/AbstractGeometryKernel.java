@@ -64,140 +64,35 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected static final float DEFAULT_T_MINIMUM = 0.001F;
 	
-	/**
-	 * The offset for the vector that points in the U-direction of the orthonormal basis for geometry represented in the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U = 0;
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * The offset for the vector that points in the V-direction of the orthonormal basis for geometry represented in the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V = 3;
-	
-	/**
-	 * The offset for the vector that points in the W-direction of the orthonormal basis for geometry represented in the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W = 6;
-	
-	/**
-	 * The offset for the vector that points in the U-direction of the orthonormal basis for shading represented in the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U = 9;
-	
-	/**
-	 * The offset for the vector that points in the V-direction of the orthonormal basis for shading represented in the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V = 12;
-	
-	/**
-	 * The offset for the vector that points in the W-direction of the orthonormal basis for shading represented in the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W = 15;
-	
-	/**
-	 * The offset for the index of the primitive represented in the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX = 18;
-	
-	/**
-	 * The offset for the surface intersection point represented in the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT = 19;
-	
-	/**
-	 * The offset for the texture coordinates represented in the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES = 22;
-	
-	/**
-	 * The size of the array {@link #intersectionArray_$private$24}.
-	 */
-	protected static final int INTERSECTION_ARRAY_SIZE = 24;
-	
-	/**
-	 * The offset for the vector that points in the U-direction of the orthonormal basis represented in the array {@link #orthonormalBasis33FArray_$private$9}.
-	 */
-	protected static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U = 0;
-	
-	/**
-	 * The offset for the vector that points in the V-direction of the orthonormal basis represented in the array {@link #orthonormalBasis33FArray_$private$9}.
-	 */
-	protected static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V = 3;
-	
-	/**
-	 * The offset for the vector that points in the W-direction of the orthonormal basis represented in the array {@link #orthonormalBasis33FArray_$private$9}.
-	 */
-	protected static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W = 6;
-	
-	/**
-	 * The size of the orthonormal basis represented in the array {@link #orthonormalBasis33FArray_$private$9}.
-	 */
-	protected static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE = 9;
-	
-	/**
-	 * The offset for component 1 of the point represented in the array {@link #point3FArray_$private$3}.
-	 */
-	protected static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
-	
-	/**
-	 * The offset for component 2 of the point represented in the array {@link #point3FArray_$private$3}.
-	 */
-	protected static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_2 = 1;
-	
-	/**
-	 * The offset for component 3 of the point represented in the array {@link #point3FArray_$private$3}.
-	 */
-	protected static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
-	
-	/**
-	 * The size of the point represented in the array {@link #point3FArray_$private$3}.
-	 */
-	protected static final int POINT_3_F_ARRAY_SIZE = 3;
-	
-	/**
-	 * The offset for the vector called direction of the ray represented in the array {@link #ray3FArray_$private$8}.
-	 */
-	protected static final int RAY_3_F_ARRAY_OFFSET_DIRECTION = 3;
-	
-	/**
-	 * The offset for the point called origin of the ray represented in the array {@link #ray3FArray_$private$8}.
-	 */
-	protected static final int RAY_3_F_ARRAY_OFFSET_ORIGIN = 0;
-	
-	/**
-	 * The offset for the maximum parametric distance of the ray represented in the array {@link #ray3FArray_$private$8}.
-	 */
-	protected static final int RAY_3_F_ARRAY_OFFSET_T_MAXIMUM = 7;
-	
-	/**
-	 * The offset for the minimum parametric distance of the ray represented in the array {@link #ray3FArray_$private$8}.
-	 */
-	protected static final int RAY_3_F_ARRAY_OFFSET_T_MINIMUM = 6;
-	
-	/**
-	 * The size of the ray represented in the array {@link #ray3FArray_$private$8}.
-	 */
-	protected static final int RAY_3_F_ARRAY_SIZE = 8;
-	
-	/**
-	 * The offset for component 1 of the vector represented in the array {@link #vector3FArray_$private$3}.
-	 */
-	protected static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
-	
-	/**
-	 * The offset for component 2 of the vector represented in the array {@link #vector3FArray_$private$3}.
-	 */
-	protected static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2 = 1;
-	
-	/**
-	 * The offset for component 3 of the vector represented in the array {@link #vector3FArray_$private$3}.
-	 */
-	protected static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
-	
-	/**
-	 * The size of the vector represented in the array {@link #vector3FArray_$private$3}.
-	 */
-	protected static final int VECTOR_3_F_ARRAY_SIZE = 3;
+	private static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_U = 0;
+	private static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_V = 3;
+	private static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_G_W = 6;
+	private static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_U = 9;
+	private static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_V = 12;
+	private static final int INTERSECTION_ARRAY_OFFSET_ORTHONORMAL_BASIS_S_W = 15;
+	private static final int INTERSECTION_ARRAY_OFFSET_PRIMITIVE_INDEX = 18;
+	private static final int INTERSECTION_ARRAY_OFFSET_SURFACE_INTERSECTION_POINT = 19;
+	private static final int INTERSECTION_ARRAY_OFFSET_TEXTURE_COORDINATES = 22;
+	private static final int INTERSECTION_ARRAY_SIZE = 24;
+	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_U = 0;
+	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V = 3;
+	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W = 6;
+	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE = 9;
+	private static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
+	private static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_2 = 1;
+	private static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
+	private static final int POINT_3_F_ARRAY_SIZE = 3;
+	private static final int RAY_3_F_ARRAY_OFFSET_DIRECTION = 3;
+	private static final int RAY_3_F_ARRAY_OFFSET_ORIGIN = 0;
+	private static final int RAY_3_F_ARRAY_OFFSET_T_MAXIMUM = 7;
+	private static final int RAY_3_F_ARRAY_OFFSET_T_MINIMUM = 6;
+	private static final int RAY_3_F_ARRAY_SIZE = 8;
+	private static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
+	private static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2 = 1;
+	private static final int VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
+	private static final int VECTOR_3_F_ARRAY_SIZE = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

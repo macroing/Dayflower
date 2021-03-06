@@ -36,48 +36,14 @@ import org.dayflower.utility.Ints;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractImageKernel extends AbstractKernel {
-	/**
-	 * The offset for component 1 of the color represented in the array {@link #color3FLHSArray_$private$3}.
-	 */
-	protected static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_1 = 0;
-	
-	/**
-	 * The offset for component 2 of the color represented in the array {@link #color3FLHSArray_$private$3}.
-	 */
-	protected static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_2 = 1;
-	
-	/**
-	 * The offset for component 3 of the color represented in the array {@link #color3FLHSArray_$private$3}.
-	 */
-	protected static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_3 = 2;
-	
-	/**
-	 * The size of the color represented in the array {@link #color3FLHSArray_$private$3}.
-	 */
-	protected static final int COLOR_3_F_L_H_S_ARRAY_SIZE = 3;
-	
-	/**
-	 * The offset for component 1 of the color represented in the array {@link #color3FRHSArray_$private$3}.
-	 */
-	protected static final int COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1 = 0;
-	
-	/**
-	 * The offset for component 2 of the color represented in the array {@link #color3FRHSArray_$private$3}.
-	 */
-	protected static final int COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2 = 1;
-	
-	/**
-	 * The offset for component 3 of the color represented in the array {@link #color3FRHSArray_$private$3}.
-	 */
-	protected static final int COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3 = 2;
-	
-	/**
-	 * The size of the color represented in the array {@link #color3FRHSArray_$private$3}.
-	 */
-	protected static final int COLOR_3_F_R_H_S_ARRAY_SIZE = 3;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+	private static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_1 = 0;
+	private static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_2 = 1;
+	private static final int COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_3 = 2;
+	private static final int COLOR_3_F_L_H_S_ARRAY_SIZE = 3;
+	private static final int COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1 = 0;
+	private static final int COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2 = 1;
+	private static final int COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3 = 2;
+	private static final int COLOR_3_F_R_H_S_ARRAY_SIZE = 3;
 	private static final int FILM_FLAG_CLEAR = 0x0001;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -32,80 +32,31 @@ import org.dayflower.scene.material.MirrorMaterial;
 
 //TODO: Add Javadocs!
 public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
-//	TODO: Add Javadocs!
-	protected static final int B_S_D_F_ARRAY_LENGTH = 11;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_S_D_F_ARRAY_OFFSET_B_X_D_F = 3;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT = 2;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_S_D_F_ARRAY_OFFSET_ETA = 0;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING = 1;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 4;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_BIT_FLAGS = 0;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 1;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ID = 1;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH = 7;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_A = 5;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_ANGLE_RADIANS = 1;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B = 6;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_BIT_FLAGS = 0;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 2;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ID = 2;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION = 1 << 0;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION = 1 << 1;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE = 1 << 2;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY = 1 << 3;
-	
-//	TODO: Add Javadocs!
-	protected static final int B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR = 1 << 4;
-	
-//	TODO: Add Javadocs!
-	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
-	
-//	TODO: Add Javadocs!
-	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL = 3;
-	
-//	TODO: Add Javadocs!
-	protected static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING = 6;
-	
-//	TODO: Add Javadocs!
-	protected static final int MATERIAL_B_X_D_F_ARRAY_SIZE = 16;
+	private static final int B_S_D_F_ARRAY_LENGTH = 11;
+	private static final int B_S_D_F_ARRAY_OFFSET_B_X_D_F = 3;
+	private static final int B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT = 2;
+	private static final int B_S_D_F_ARRAY_OFFSET_ETA = 0;
+	private static final int B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING = 1;
+	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 4;
+	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_BIT_FLAGS = 0;
+	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 1;
+	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ID = 1;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH = 7;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_A = 5;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_ANGLE_RADIANS = 1;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B = 6;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_BIT_FLAGS = 0;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 2;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ID = 2;
+	private static final int B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION = 1 << 0;
+//	private static final int B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION = 1 << 1;
+	private static final int B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE = 1 << 2;
+//	private static final int B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY = 1 << 3;
+//	private static final int B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR = 1 << 4;
+	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
+	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL = 3;
+	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING = 6;
+	private static final int MATERIAL_B_X_D_F_ARRAY_SIZE = 16;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	

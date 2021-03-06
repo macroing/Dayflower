@@ -32,27 +32,39 @@ import org.dayflower.scene.material.MirrorMaterial;
 
 //TODO: Add Javadocs!
 public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION = 1 << 0;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION = 1 << 1;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE = 1 << 2;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY = 1 << 3;
+	
+//	TODO: Add Javadocs!
+	protected static final int B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR = 1 << 4;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static final int B_S_D_F_ARRAY_LENGTH = 11;
 	private static final int B_S_D_F_ARRAY_OFFSET_B_X_D_F = 3;
 	private static final int B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT = 2;
 	private static final int B_S_D_F_ARRAY_OFFSET_ETA = 0;
 	private static final int B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING = 1;
-	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 4;
-	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_BIT_FLAGS = 0;
-	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 1;
+	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 3;
+	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
+	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ID = 1;
-	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH = 7;
-	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_A = 5;
-	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_ANGLE_RADIANS = 1;
-	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B = 6;
-	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_BIT_FLAGS = 0;
-	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 2;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH = 6;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_A = 4;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_ANGLE_RADIANS = 0;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B = 5;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 1;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ID = 2;
-	private static final int B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION = 1 << 0;
-//	private static final int B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION = 1 << 1;
-	private static final int B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE = 1 << 2;
-//	private static final int B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY = 1 << 3;
-//	private static final int B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR = 1 << 4;
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL = 3;
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING = 6;
@@ -64,10 +76,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected float[] bSDFArray_$private$11;
 	
 //	TODO: Add Javadocs!
-	protected float[] bXDFLambertianBRDFArray_$private$4;
+	protected float[] bXDFLambertianBRDFArray_$private$3;
 	
 //	TODO: Add Javadocs!
-	protected float[] bXDFOrenNayarBRDFArray_$private$7;
+	protected float[] bXDFOrenNayarBRDFArray_$private$6;
 	
 //	TODO: Add Javadocs!
 	protected float[] materialBXDFResultArray_$private$16;
@@ -92,8 +104,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
 	protected AbstractMaterialKernel() {
 		this.bSDFArray_$private$11 = new float[B_S_D_F_ARRAY_LENGTH];
-		this.bXDFLambertianBRDFArray_$private$4 = new float[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH];
-		this.bXDFOrenNayarBRDFArray_$private$7 = new float[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH];
+		this.bXDFLambertianBRDFArray_$private$3 = new float[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH];
+		this.bXDFOrenNayarBRDFArray_$private$6 = new float[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH];
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
 		this.materialClearCoatMaterialArray = new int[1];
 		this.materialGlassMaterialArray = new int[1];
@@ -620,10 +632,47 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	/*
 	 * The following is a test implementation of the Material API in the CPU-renderer that is based on PBRT. It is an early work-in-progress. However, it is necessary in order to support most (if not all) Material implementations.
+	 * 
+	 * The method prefix "test" is used to avoid method name collisions with the current implementation. It will be removed when this test implementation is used as the official implementation.
 	 */
 	
-//	TODO: Add Javadocs!
-	protected final boolean testMaterialBSDFComputeMatteMaterial(final int materialMatteMaterialArrayOffset) {
+	protected final boolean testMaterialBSDFCompute() {
+		return false;
+	}
+	
+	protected final float testMaterialBSDFGetEta() {
+		return this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_ETA];
+	}
+	
+	protected final int testMaterialBSDFCountBXDFsBySpecularType(final boolean isSpecular) {
+		int countBySpecular = 0;
+		
+		final int countBXDFs = doMaterialBSDFGetBXDFCount();
+		
+		for(int i = 0; i < countBXDFs; i++) {
+			if(isSpecular == doMaterialBXDFIsSpecular(doMaterialBSDFGetBXDF(i))) {
+				countBySpecular++;
+			}
+		}
+		
+		return countBySpecular;
+	}
+	
+	protected final void testMaterialBSDFEvaluateDistributionFunction() {
+		
+	}
+	
+	protected final void testMaterialBSDFEvaluateProbabilityDensityFunction() {
+		
+	}
+	
+	protected final void testMaterialBSDFSampleDistributionFunction() {
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doMaterialBSDFComputeMatteMaterial(final int materialMatteMaterialArrayOffset) {
 		/*
 		 * Evaluate the Texture instances:
 		 */
@@ -661,72 +710,47 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Clear the BSDF:
-		testMaterialBSDFClear();
+		doMaterialBSDFClear();
 		
 		if(isZero(floatAngle)) {
 //			Set LambertianBRDF:
-			testMaterialBSDFSetBXDF(0, B_X_D_F_LAMBERTIAN_B_R_D_F_ID);
-			testMaterialBSDFSetBXDFCount(1);
-			testMaterialBSDFSetEta(1.0F);
-			testMaterialBSDFSetNegatingIncoming(false);
-			testMaterialBXDFLambertianBRDFSet(colorKDR, colorKDG, colorKDB);
+			doMaterialBSDFSetBXDF(0, B_X_D_F_LAMBERTIAN_B_R_D_F_ID);
+			doMaterialBSDFSetBXDFCount(1);
+			doMaterialBSDFSetEta(1.0F);
+			doMaterialBSDFSetNegatingIncoming(false);
+			doMaterialBXDFLambertianBRDFSet(colorKDR, colorKDG, colorKDB);
 			
 			return true;
 		}
 		
 //		Set OrenNayarBRDF:
-		testMaterialBSDFSetBXDF(0, B_X_D_F_OREN_NAYAR_B_R_D_F_ID);
-		testMaterialBSDFSetBXDFCount(1);
-		testMaterialBSDFSetEta(1.0F);
-		testMaterialBSDFSetNegatingIncoming(false);
-		testMaterialBXDFOrenNayarBRDFSet(floatAngle, colorKDR, colorKDG, colorKDB);
+		doMaterialBSDFSetBXDF(0, B_X_D_F_OREN_NAYAR_B_R_D_F_ID);
+		doMaterialBSDFSetBXDFCount(1);
+		doMaterialBSDFSetEta(1.0F);
+		doMaterialBSDFSetNegatingIncoming(false);
+		doMaterialBXDFOrenNayarBRDFSet(floatAngle, colorKDR, colorKDG, colorKDB);
 		
 		return true;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final boolean testMaterialBSDFIsNegatingIncoming() {
+	private boolean doMaterialBSDFIsNegatingIncoming() {
 		return !isZero(this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING]);
 	}
 	
-//	TODO: Add Javadocs!
 	@SuppressWarnings({"static-method", "unused"})
-	protected final boolean testMaterialBXDFIsSpecular(final int id) {
+	private boolean doMaterialBXDFIsSpecular(final int id) {
 		return false;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final float testMaterialBSDFGetEta() {
-		return this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_ETA];
-	}
-	
-//	TODO: Add Javadocs!
-	protected final int testMaterialBSDFCountBXDFsBySpecularType(final boolean isSpecular) {
-		int countBySpecular = 0;
-		
-		final int countBXDFs = testMaterialBSDFGetBXDFCount();
-		
-		for(int i = 0; i < countBXDFs; i++) {
-			if(isSpecular == testMaterialBXDFIsSpecular(testMaterialBSDFGetBXDF(i))) {
-				countBySpecular++;
-			}
-		}
-		
-		return countBySpecular;
-	}
-	
-//	TODO: Add Javadocs!
-	protected final int testMaterialBSDFGetBXDF(final int index) {
+	private int doMaterialBSDFGetBXDF(final int index) {
 		return (int)(this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F + index]);
 	}
 	
-//	TODO: Add Javadocs!
-	protected final int testMaterialBSDFGetBXDFCount() {
+	private int doMaterialBSDFGetBXDFCount() {
 		return (int)(this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT]);
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBSDFClear() {
+	private void doMaterialBSDFClear() {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_ETA] = 1.0F;
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING] = 0.0F;
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT] = 0.0F;
@@ -740,63 +764,40 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F + 7] = 0.0F;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBSDFEvaluateDistributionFunction() {
-		
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBSDFEvaluateProbabilityDensityFunction() {
-		
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBSDFSampleDistributionFunction() {
-		
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBSDFSetBXDF(final int index, final int id) {
+	private void doMaterialBSDFSetBXDF(final int index, final int id) {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F + index] = id;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBSDFSetBXDFCount(final int count) {
+	private void doMaterialBSDFSetBXDFCount(final int count) {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT] = count;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBSDFSetEta(final float eta) {
+	private void doMaterialBSDFSetEta(final float eta) {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_ETA] = eta;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBSDFSetNegatingIncoming(final boolean isNegatingIncoming) {
+	private void doMaterialBSDFSetNegatingIncoming(final boolean isNegatingIncoming) {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING] = isNegatingIncoming ? 1.0F : 0.0F;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBXDFLambertianBRDFSet(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
-		this.bXDFLambertianBRDFArray_$private$4[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_BIT_FLAGS] = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-		this.bXDFLambertianBRDFArray_$private$4[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
-		this.bXDFLambertianBRDFArray_$private$4[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
-		this.bXDFLambertianBRDFArray_$private$4[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
+	private void doMaterialBXDFLambertianBRDFSet(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+		this.bXDFLambertianBRDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
+		this.bXDFLambertianBRDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
+		this.bXDFLambertianBRDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void testMaterialBXDFOrenNayarBRDFSet(final float angleDegrees, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+	private void doMaterialBXDFOrenNayarBRDFSet(final float angleDegrees, final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
 		final float angleRadians = toRadians(angleDegrees);
 		final float angleRadiansSquared = angleRadians * angleRadians;
 		
 		final float a = 1.0F - (angleRadiansSquared / (2.0F * (angleRadiansSquared + 0.33F)));
 		final float b = 0.45F * angleRadiansSquared / (angleRadiansSquared + 0.09F);
 		
-		this.bXDFOrenNayarBRDFArray_$private$7[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_BIT_FLAGS] = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-		this.bXDFOrenNayarBRDFArray_$private$7[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_ANGLE_RADIANS] = angleRadians;
-		this.bXDFOrenNayarBRDFArray_$private$7[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
-		this.bXDFOrenNayarBRDFArray_$private$7[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
-		this.bXDFOrenNayarBRDFArray_$private$7[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
-		this.bXDFOrenNayarBRDFArray_$private$7[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_A] = a;
-		this.bXDFOrenNayarBRDFArray_$private$7[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B] = b;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_ANGLE_RADIANS] = angleRadians;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_A] = a;
+		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B] = b;
 	}
 }

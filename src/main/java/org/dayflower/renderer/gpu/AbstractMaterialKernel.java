@@ -709,9 +709,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 * Compute the BSDF:
 		 */
 		
+//		Clear the BSDF:
 		testMaterialBSDFClear();
 		
 		if(isZero(floatAngle)) {
+//			Set LambertianBRDF:
 			testMaterialBSDFSetBXDF(0, B_X_D_F_LAMBERTIAN_B_R_D_F_ID);
 			testMaterialBSDFSetBXDFCount(1);
 			testMaterialBSDFSetEta(1.0F);
@@ -721,6 +723,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return true;
 		}
 		
+//		Set OrenNayarBRDF:
 		testMaterialBSDFSetBXDF(0, B_X_D_F_OREN_NAYAR_B_R_D_F_ID);
 		testMaterialBSDFSetBXDFCount(1);
 		testMaterialBSDFSetEta(1.0F);

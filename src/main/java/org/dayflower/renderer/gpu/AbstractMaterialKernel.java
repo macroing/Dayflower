@@ -54,6 +54,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT = 2;
 	private static final int B_S_D_F_ARRAY_OFFSET_ETA = 0;
 	private static final int B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING = 1;
+	private static final int B_S_D_F_RESULT_ARRAY_LENGTH = 10;
+	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING = 3;
+	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING = 6;
+	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE = 9;
+	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_RESULT = 0;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 3;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
@@ -74,6 +79,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 //	TODO: Add Javadocs!
 	protected float[] bSDFArray_$private$11;
+	
+//	TODO: Add Javadocs!
+	protected float[] bSDFArrayResult_$private$10;
 	
 //	TODO: Add Javadocs!
 	protected float[] bXDFLambertianBRDFArray_$private$3;
@@ -104,6 +112,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
 	protected AbstractMaterialKernel() {
 		this.bSDFArray_$private$11 = new float[B_S_D_F_ARRAY_LENGTH];
+		this.bSDFArrayResult_$private$10 = new float[B_S_D_F_RESULT_ARRAY_LENGTH];
 		this.bXDFLambertianBRDFArray_$private$3 = new float[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH];
 		this.bXDFOrenNayarBRDFArray_$private$6 = new float[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH];
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
@@ -762,6 +771,28 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F + 5] = 0.0F;
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F + 6] = 0.0F;
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F + 7] = 0.0F;
+	}
+	
+	private void doMaterialBSDFResultSetIncoming(final float component1, final float component2, final float component3) {
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0] = component1;
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1] = component2;
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2] = component3;
+	}
+	
+	private void doMaterialBSDFResultSetOutgoing(final float component1, final float component2, final float component3) {
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0] = component1;
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1] = component2;
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2] = component3;
+	}
+	
+	private void doMaterialBSDFResultSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
+	}
+	
+	private void doMaterialBSDFResultSetResult(final float component1, final float component2, final float component3) {
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 0] = component1;
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 1] = component2;
+		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 2] = component3;
 	}
 	
 	private void doMaterialBSDFSetBXDF(final int index, final int id) {

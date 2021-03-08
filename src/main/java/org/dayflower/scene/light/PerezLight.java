@@ -228,21 +228,19 @@ public final class PerezLight extends Light {
 			
 			final float sinTheta = incomingObjectSpace.sinTheta();
 			
-			if(isZero(sinTheta)) {
-				return Optional.empty();
+			if(!isZero(sinTheta)) {
+				final Color3F result = this.sunColor;
+				
+				final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
+				
+				final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
+				
+				final Sample2F sample0 = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
+				
+				final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample0, true) / (2.0F * PI * PI * sinTheta);
+				
+				return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue));
 			}
-			
-			final Color3F result = this.sunColor;
-			
-			final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
-			
-			final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
-			
-			final Sample2F sample0 = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
-			
-			final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample0, true) / (2.0F * PI * PI * sinTheta);
-			
-			return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue));
 		}
 		
 		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());

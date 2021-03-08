@@ -223,6 +223,7 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public Optional<SurfaceIntersection3F> intersection(final Ray3F ray, final float tMinimum, final float tMaximum) {
+//		return doIntersectionOld(ray, tMinimum, tMaximum);
 //		return doIntersectionPBRT(ray, tMinimum, tMaximum);
 		return doIntersectionSunflow(ray, tMinimum, tMaximum);
 	}
@@ -402,6 +403,7 @@ public final class Triangle3F implements Shape3F {
 	 */
 	@Override
 	public float intersectionT(final Ray3F ray, final float tMinimum, final float tMaximum) {
+//		return doIntersectionTOld(ray, tMinimum, tMaximum);
 //		return doIntersectionTPBRT(ray, tMinimum, tMaximum);
 		return doIntersectionTSunflow(ray, tMinimum, tMaximum);
 	}
@@ -725,6 +727,82 @@ public final class Triangle3F implements Shape3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("unused")
+	private Optional<SurfaceIntersection3F> doIntersectionOld(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Point4F a = this.a.getPosition();
+		final Point4F b = this.b.getPosition();
+		final Point4F c = this.c.getPosition();
+		
+		final Vector3F edgeAB = Vector3F.direction(a, b);
+		final Vector3F edgeAC = Vector3F.direction(a, c);
+		final Vector3F direction0 = ray.getDirection();
+		final Vector3F direction1 = Vector3F.crossProduct(direction0, edgeAC);
+		
+		final float determinant = Vector3F.dotProduct(edgeAB, direction1);
+		
+		if(determinant >= -0.0001F && determinant <= 0.0001F) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final Point3F origin = ray.getOrigin();
+		
+		final Vector3F direction2 = Vector3F.direction(new Point3F(a), origin);
+		
+		final float determinantReciprocal = 1.0F / determinant;
+		final float u = Vector3F.dotProduct(direction2, direction1) * determinantReciprocal;
+		
+		if(u < 0.0F || u > 1.0F) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final Vector3F direction3 = Vector3F.crossProduct(direction2, edgeAB);
+		
+		final float v = Vector3F.dotProduct(direction0, direction3) * determinantReciprocal;
+		
+		if(v < 0.0F || u + v > 1.0F) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final float t = Vector3F.dotProduct(edgeAC, direction3) * determinantReciprocal;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return SurfaceIntersection3F.EMPTY;
+		}
+		
+		final float w = 1.0F - u - v;
+		
+		final Point3F barycentricCoordinates = new Point3F(w, u, v);
+		final Point3F surfaceIntersectionPoint = Point3F.add(origin, direction0, t);
+		
+		final Point2F textureCoordinates = Point2F.createTextureCoordinates(this.a.getTextureCoordinates(), this.b.getTextureCoordinates(), this.c.getTextureCoordinates(), barycentricCoordinates);
+		
+		final OrthonormalBasis33F aOrthonormalBasis = this.a.getOrthonormalBasis();
+		final OrthonormalBasis33F bOrthonormalBasis = this.b.getOrthonormalBasis();
+		final OrthonormalBasis33F cOrthonormalBasis = this.c.getOrthonormalBasis();
+		
+		final Vector3F gW = this.surfaceNormal;
+		final Vector3F sW = Vector3F.normalNormalized(aOrthonormalBasis.getW(), bOrthonormalBasis.getW(), cOrthonormalBasis.getW(), barycentricCoordinates);
+		
+		final Vector3F gV = Vector3F.directionNormalized(a, b);
+		final Vector3F sV = Vector3F.normalNormalized(aOrthonormalBasis.getV(), bOrthonormalBasis.getV(), cOrthonormalBasis.getV(), barycentricCoordinates);
+		
+//		final Vector3F gU = Vector3F.directionNormalized(a, c);
+//		final Vector3F sU = Vector3F.normalNormalized(aOrthonormalBasis.getU(), bOrthonormalBasis.getU(), cOrthonormalBasis.getU(), barycentricCoordinates);
+		
+		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW, gV);
+		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW, sV);
+//		final OrthonormalBasis33F orthonormalBasisG = new OrthonormalBasis33F(gW, gV, gU);
+//		final OrthonormalBasis33F orthonormalBasisS = new OrthonormalBasis33F(sW, sV, sU);
+		
+		final float xAbsSum = abs(barycentricCoordinates.getU() + a.getX()) + abs(barycentricCoordinates.getV() + b.getX()) + abs(barycentricCoordinates.getW() + c.getX());
+		final float yAbsSum = abs(barycentricCoordinates.getU() + a.getY()) + abs(barycentricCoordinates.getV() + b.getY()) + abs(barycentricCoordinates.getW() + c.getY());
+		final float zAbsSum = abs(barycentricCoordinates.getU() + a.getZ()) + abs(barycentricCoordinates.getV() + b.getZ()) + abs(barycentricCoordinates.getW() + c.getZ());
+		
+		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
+		
+		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+	}
+	
+	@SuppressWarnings("unused")
 	private Optional<SurfaceIntersection3F> doIntersectionPBRT(final Ray3F ray, final float tMinimum, final float tMaximum) {
 		final Point3F p0 = new Point3F(this.a.getPosition());
 		final Point3F p1 = new Point3F(this.b.getPosition());
@@ -955,6 +1033,51 @@ public final class Triangle3F implements Shape3F {
 		final Vector3F surfaceIntersectionPointError = Vector3F.multiply(new Vector3F(xAbsSum, yAbsSum, zAbsSum), gamma(7));
 		
 		return Optional.of(new SurfaceIntersection3F(orthonormalBasisG, orthonormalBasisS, textureCoordinates, surfaceIntersectionPoint, ray, this, surfaceIntersectionPointError, t));
+	}
+	
+	@SuppressWarnings("unused")
+	private float doIntersectionTOld(final Ray3F ray, final float tMinimum, final float tMaximum) {
+		final Point4F a = this.a.getPosition();
+		final Point4F b = this.b.getPosition();
+		final Point4F c = this.c.getPosition();
+		
+		final Vector3F edgeAB = Vector3F.direction(a, b);
+		final Vector3F edgeAC = Vector3F.direction(a, c);
+		final Vector3F direction0 = ray.getDirection();
+		final Vector3F direction1 = Vector3F.crossProduct(direction0, edgeAC);
+		
+		final float determinant = Vector3F.dotProduct(edgeAB, direction1);
+		
+		if(determinant >= -0.0001F && determinant <= 0.0001F) {
+			return Float.NaN;
+		}
+		
+		final Point3F origin = ray.getOrigin();
+		
+		final Vector3F direction2 = Vector3F.direction(new Point3F(a), origin);
+		
+		final float determinantReciprocal = 1.0F / determinant;
+		final float u = Vector3F.dotProduct(direction2, direction1) * determinantReciprocal;
+		
+		if(u < 0.0F || u > 1.0F) {
+			return Float.NaN;
+		}
+		
+		final Vector3F direction3 = Vector3F.crossProduct(direction2, edgeAB);
+		
+		final float v = Vector3F.dotProduct(direction0, direction3) * determinantReciprocal;
+		
+		if(v < 0.0F || u + v > 1.0F) {
+			return Float.NaN;
+		}
+		
+		final float t = Vector3F.dotProduct(edgeAC, direction3) * determinantReciprocal;
+		
+		if(t <= tMinimum || t >= tMaximum) {
+			return Float.NaN;
+		}
+		
+		return t;
 	}
 	
 	@SuppressWarnings("unused")

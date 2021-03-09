@@ -222,7 +222,20 @@ public final class PerezLight extends Light {
 		Objects.requireNonNull(intersection, "intersection == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
-		if(random() > 0.5F && Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalG()) > 0.0F && Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalS()) > 0.0F) {
+		final boolean isOrientedTowardsSun = Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalG()) > 0.0F && Vector3F.dotProduct(this.sunDirectionWorldSpace, intersection.getSurfaceNormalS()) > 0.0F;
+		
+//		final float sky = isOrientedTowardsSun ? random() : 1.0F;
+//		final float sun = 1.0F - sky;
+		
+//		final float probabilityRussianRoulette = 0.25F + 0.5F * sky;
+//		final float probabilityRussianRouletteSky = sky / probabilityRussianRoulette;
+//		final float probabilityRussianRouletteSun = sun / (1.0F - probabilityRussianRoulette);
+		
+//		final boolean isSamplingSky = random() < probabilityRussianRoulette;
+//		final boolean isSamplingSun = !isSamplingSky;
+		final boolean isSamplingSun = random() < 0.5F;
+		
+		if(isOrientedTowardsSun && isSamplingSun) {
 			final Vector3F incomingObjectSpace = this.sunDirection;
 			final Vector3F incomingWorldSpace = this.sunDirectionWorldSpace;
 			
@@ -235,24 +248,23 @@ public final class PerezLight extends Light {
 				
 				final Point2F sphericalCoordinates = Point2F.sphericalCoordinates(incomingObjectSpace);
 				
-				final Sample2F sample0 = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
+				final Sample2F sampleRemapped = new Sample2F(sphericalCoordinates.getU(), sphericalCoordinates.getV());
 				
-				final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample0, true) / (2.0F * PI * PI * sinTheta);
+				final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true)/* * probabilityRussianRouletteSun*/ / (2.0F * PI * PI * sinTheta);
 				
 				return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue));
 			}
 		}
 		
-		final Sample2F sample0 = new Sample2F(sample.getU(), sample.getV());
-		final Sample2F sample1 = this.distribution.continuousRemap(sample0);
+		final Sample2F sampleRemapped = this.distribution.continuousRemap(new Sample2F(sample.getU(), sample.getV()));
 		
-		final float probabilityDensityFunctionValue0 = this.distribution.continuousProbabilityDensityFunction(sample1, true);
+		final float probabilityDensityFunctionValueRemapped = this.distribution.continuousProbabilityDensityFunction(sampleRemapped, true);
 		
-		if(isZero(probabilityDensityFunctionValue0)) {
+		if(isZero(probabilityDensityFunctionValueRemapped)) {
 			return Optional.empty();
 		}
 		
-		final Vector3F incomingObjectSpace = Vector3F.directionSpherical(sample1.getU(), sample1.getV());
+		final Vector3F incomingObjectSpace = Vector3F.directionSpherical(sampleRemapped.getU(), sampleRemapped.getV());
 		final Vector3F incomingWorldSpace = doTransformToWorldSpace(incomingObjectSpace);
 		
 		final float sinTheta = incomingObjectSpace.sinTheta();
@@ -265,9 +277,9 @@ public final class PerezLight extends Light {
 		
 		final Point3F point = Point3F.add(intersection.getSurfaceIntersectionPoint(), incomingWorldSpace, 2.0F * this.radius);
 		
-		final float probabilityDensityFunctionValue1 = probabilityDensityFunctionValue0 / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped/* * probabilityRussianRouletteSky*/ / (2.0F * PI * PI * sinTheta);
 		
-		return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue1));
+		return Optional.of(new LightSample(result, point, incomingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**

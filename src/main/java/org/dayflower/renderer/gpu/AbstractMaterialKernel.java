@@ -54,10 +54,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT = 2;
 	private static final int B_S_D_F_ARRAY_OFFSET_ETA = 0;
 	private static final int B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING = 1;
-	private static final int B_S_D_F_RESULT_ARRAY_LENGTH = 10;
+	private static final int B_S_D_F_RESULT_ARRAY_LENGTH = 13;
 	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING = 3;
-	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING = 6;
-	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE = 9;
+	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_NORMAL = 6;
+	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING = 9;
+	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE = 12;
 	private static final int B_S_D_F_RESULT_ARRAY_OFFSET_RESULT = 0;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 3;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
@@ -70,6 +71,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 1;
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ID = 2;
+	private static final int B_X_D_F_RESULT_ARRAY_LENGTH = 13;
+	private static final int B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING = 3;
+	private static final int B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL = 6;
+	private static final int B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING = 9;
+	private static final int B_X_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE = 12;
+	private static final int B_X_D_F_RESULT_ARRAY_OFFSET_RESULT = 0;
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL = 3;
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING = 6;
@@ -81,13 +88,16 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected float[] bSDFArray_$private$11;
 	
 //	TODO: Add Javadocs!
-	protected float[] bSDFArrayResult_$private$10;
+	protected float[] bSDFResultArray_$private$10;
 	
 //	TODO: Add Javadocs!
 	protected float[] bXDFLambertianBRDFArray_$private$3;
 	
 //	TODO: Add Javadocs!
 	protected float[] bXDFOrenNayarBRDFArray_$private$6;
+	
+//	TODO: Add Javadocs!
+	protected float[] bXDFResultArray_$private$10;
 	
 //	TODO: Add Javadocs!
 	protected float[] materialBXDFResultArray_$private$16;
@@ -112,9 +122,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
 	protected AbstractMaterialKernel() {
 		this.bSDFArray_$private$11 = new float[B_S_D_F_ARRAY_LENGTH];
-		this.bSDFArrayResult_$private$10 = new float[B_S_D_F_RESULT_ARRAY_LENGTH];
+		this.bSDFResultArray_$private$10 = new float[B_S_D_F_RESULT_ARRAY_LENGTH];
 		this.bXDFLambertianBRDFArray_$private$3 = new float[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH];
 		this.bXDFOrenNayarBRDFArray_$private$6 = new float[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH];
+		this.bXDFResultArray_$private$10 = new float[B_X_D_F_RESULT_ARRAY_LENGTH];
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
 		this.materialClearCoatMaterialArray = new int[1];
 		this.materialGlassMaterialArray = new int[1];
@@ -645,14 +656,21 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * The method prefix "test" is used to avoid method name collisions with the current implementation. It will be removed when this test implementation is used as the official implementation.
 	 */
 	
-	protected final boolean testMaterialBSDFCompute() {
+//	TODO: Add Javadocs!
+	protected final boolean testMaterialBSDFCompute(final int materialID, final int materialOffset) {
+		if(materialID == MatteMaterial.ID) {
+			return doMaterialBSDFComputeMatteMaterial(materialOffset);
+		}
+		
 		return false;
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float testMaterialBSDFGetEta() {
 		return this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_ETA];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final int testMaterialBSDFCountBXDFsBySpecularType(final boolean isSpecular) {
 		int countBySpecular = 0;
 		
@@ -667,14 +685,32 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return countBySpecular;
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void testMaterialBSDFEvaluateDistributionFunction() {
+		final float incomingX = doMaterialBSDFResultGetIncomingX();
+		final float incomingY = doMaterialBSDFResultGetIncomingY();
+		final float incomingZ = doMaterialBSDFResultGetIncomingZ();
 		
+		final float outgoingX = doMaterialBSDFResultGetOutgoingX();
+		final float outgoingY = doMaterialBSDFResultGetOutgoingY();
+		final float outgoingZ = doMaterialBSDFResultGetOutgoingZ();
+		
+		final float normalX = intersectionGetOrthonormalBasisGWComponent1();
+		final float normalY = intersectionGetOrthonormalBasisGWComponent2();
+		final float normalZ = intersectionGetOrthonormalBasisGWComponent3();
+		
+		final float iDotN = vector3FDotProduct(incomingX, incomingY, incomingZ, normalX, normalY, normalZ);
+		final float oDotN = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
+		
+		final boolean isReflecting = iDotN * oDotN > 0.0F;
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void testMaterialBSDFEvaluateProbabilityDensityFunction() {
 		
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void testMaterialBSDFSampleDistributionFunction() {
 		
 	}
@@ -727,7 +763,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doMaterialBSDFSetBXDFCount(1);
 			doMaterialBSDFSetEta(1.0F);
 			doMaterialBSDFSetNegatingIncoming(false);
+			
 			doMaterialBXDFLambertianBRDFSet(colorKDR, colorKDG, colorKDB);
+			
+			doMaterialBSDFResultInitialize();
 			
 			return true;
 		}
@@ -737,7 +776,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doMaterialBSDFSetBXDFCount(1);
 		doMaterialBSDFSetEta(1.0F);
 		doMaterialBSDFSetNegatingIncoming(false);
+		
 		doMaterialBXDFOrenNayarBRDFSet(floatAngle, colorKDR, colorKDG, colorKDB);
+		
+		doMaterialBSDFResultInitialize();
 		
 		return true;
 	}
@@ -749,6 +791,78 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	@SuppressWarnings({"static-method", "unused"})
 	private boolean doMaterialBXDFIsSpecular(final int id) {
 		return false;
+	}
+	
+	private float doMaterialBSDFResultGetIncomingX() {
+		return this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0];
+	}
+	
+	private float doMaterialBSDFResultGetIncomingY() {
+		return this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1];
+	}
+	
+	private float doMaterialBSDFResultGetIncomingZ() {
+		return this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2];
+	}
+	
+	private float doMaterialBSDFResultGetNormalX() {
+		return this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_NORMAL + 0];
+	}
+	
+	private float doMaterialBSDFResultGetNormalY() {
+		return this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_NORMAL + 1];
+	}
+	
+	private float doMaterialBSDFResultGetNormalZ() {
+		return this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2];
+	}
+	
+	private float doMaterialBSDFResultGetOutgoingX() {
+		return this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0];
+	}
+	
+	private float doMaterialBSDFResultGetOutgoingY() {
+		return this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1];
+	}
+	
+	private float doMaterialBSDFResultGetOutgoingZ() {
+		return this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2];
+	}
+	
+	private float doMaterialBXDFResultGetIncomingX() {
+		return this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0];
+	}
+	
+	private float doMaterialBXDFResultGetIncomingY() {
+		return this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1];
+	}
+	
+	private float doMaterialBXDFResultGetIncomingZ() {
+		return this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2];
+	}
+	
+	private float doMaterialBXDFResultGetNormalX() {
+		return this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 0];
+	}
+	
+	private float doMaterialBXDFResultGetNormalY() {
+		return this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 1];
+	}
+	
+	private float doMaterialBXDFResultGetNormalZ() {
+		return this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2];
+	}
+	
+	private float doMaterialBXDFResultGetOutgoingX() {
+		return this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0];
+	}
+	
+	private float doMaterialBXDFResultGetOutgoingY() {
+		return this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1];
+	}
+	
+	private float doMaterialBXDFResultGetOutgoingZ() {
+		return this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2];
 	}
 	
 	private int doMaterialBSDFGetBXDF(final int index) {
@@ -773,26 +887,74 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F + 7] = 0.0F;
 	}
 	
-	private void doMaterialBSDFResultSetIncoming(final float component1, final float component2, final float component3) {
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0] = component1;
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1] = component2;
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2] = component3;
+	private void doMaterialBSDFResultInitialize() {
+		doMaterialBSDFResultSetNormalFromIntersection();
+		doMaterialBSDFResultSetOutgoingFromRay();
+		
+		orthonormalBasis33FSetIntersectionOrthonormalBasisS();
+		
+		doMaterialBXDFResultSetNormalTransformedFromBSDFResult();
+		doMaterialBXDFResultSetOutgoingTransformedFromBSDFResult();
 	}
 	
-	private void doMaterialBSDFResultSetOutgoing(final float component1, final float component2, final float component3) {
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0] = component1;
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1] = component2;
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2] = component3;
+	private void doMaterialBSDFResultSetIncoming(final float x, final float y, final float z) {
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0] = x;
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1] = y;
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2] = z;
+	}
+	
+	private void doMaterialBSDFResultSetIncomingFromBXDFResult() {
+		final boolean isNegatingIncoming = doMaterialBSDFIsNegatingIncoming();
+		
+		final float incomingX = doMaterialBXDFResultGetIncomingX();
+		final float incomingY = doMaterialBXDFResultGetIncomingY();
+		final float incomingZ = doMaterialBXDFResultGetIncomingZ();
+		
+		vector3FSetOrthonormalBasis33FTransformNormalize(incomingX, incomingY, incomingZ);
+		
+		final float incomingTransformedX = isNegatingIncoming ? -vector3FGetComponent1() : vector3FGetComponent1();
+		final float incomingTransformedY = isNegatingIncoming ? -vector3FGetComponent2() : vector3FGetComponent2();
+		final float incomingTransformedZ = isNegatingIncoming ? -vector3FGetComponent3() : vector3FGetComponent3();
+		
+		doMaterialBSDFResultSetIncoming(incomingTransformedX, incomingTransformedY, incomingTransformedZ);
+	}
+	
+	private void doMaterialBSDFResultSetNormal(final float x, final float y, final float z) {
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_NORMAL + 0] = x;
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_NORMAL + 1] = y;
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2] = z;
+	}
+	
+	private void doMaterialBSDFResultSetNormalFromIntersection() {
+		final float x = intersectionGetOrthonormalBasisSWComponent1();
+		final float y = intersectionGetOrthonormalBasisSWComponent2();
+		final float z = intersectionGetOrthonormalBasisSWComponent3();
+		
+		doMaterialBSDFResultSetNormal(x, y, z);
+	}
+	
+	private void doMaterialBSDFResultSetOutgoing(final float x, final float y, final float z) {
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0] = x;
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1] = y;
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2] = z;
+	}
+	
+	private void doMaterialBSDFResultSetOutgoingFromRay() {
+		final float x = -ray3FGetDirectionComponent1();
+		final float y = -ray3FGetDirectionComponent2();
+		final float z = -ray3FGetDirectionComponent3();
+		
+		doMaterialBSDFResultSetOutgoing(x, y, z);
 	}
 	
 	private void doMaterialBSDFResultSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
 	}
 	
-	private void doMaterialBSDFResultSetResult(final float component1, final float component2, final float component3) {
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 0] = component1;
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 1] = component2;
-		this.bSDFArrayResult_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 2] = component3;
+	private void doMaterialBSDFResultSetResult(final float r, final float g, final float b) {
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 0] = r;
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 1] = g;
+		this.bSDFResultArray_$private$10[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 2] = b;
 	}
 	
 	private void doMaterialBSDFSetBXDF(final int index, final int id) {
@@ -830,5 +992,77 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
 		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_A] = a;
 		this.bXDFOrenNayarBRDFArray_$private$6[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B] = b;
+	}
+	
+	private void doMaterialBXDFResultSetIncoming(final float x, final float y, final float z) {
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0] = x;
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1] = y;
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2] = z;
+	}
+	
+	private void doMaterialBXDFResultSetIncomingTransformedFromBSDFResult() {
+		final boolean isNegatingIncoming = doMaterialBSDFIsNegatingIncoming();
+		
+		final float incomingX = isNegatingIncoming ? -doMaterialBSDFResultGetIncomingX() : doMaterialBSDFResultGetIncomingX();
+		final float incomingY = isNegatingIncoming ? -doMaterialBSDFResultGetIncomingY() : doMaterialBSDFResultGetIncomingY();
+		final float incomingZ = isNegatingIncoming ? -doMaterialBSDFResultGetIncomingZ() : doMaterialBSDFResultGetIncomingZ();
+		
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(incomingX, incomingY, incomingZ);
+		
+		final float incomingTransformedX = vector3FGetComponent1();
+		final float incomingTransformedY = vector3FGetComponent2();
+		final float incomingTransformedZ = vector3FGetComponent3();
+		
+		doMaterialBXDFResultSetIncoming(incomingTransformedX, incomingTransformedY, incomingTransformedZ);
+	}
+	
+	private void doMaterialBXDFResultSetNormal(final float x, final float y, final float z) {
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 0] = x;
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 1] = y;
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2] = z;
+	}
+	
+	private void doMaterialBXDFResultSetNormalTransformedFromBSDFResult() {
+		final float normalX = doMaterialBSDFResultGetNormalX();
+		final float normalY = doMaterialBSDFResultGetNormalY();
+		final float normalZ = doMaterialBSDFResultGetNormalZ();
+		
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(normalX, normalY, normalZ);
+		
+		final float normalTransformedX = vector3FGetComponent1();
+		final float normalTransformedY = vector3FGetComponent2();
+		final float normalTransformedZ = vector3FGetComponent3();
+		
+		doMaterialBXDFResultSetNormal(normalTransformedX, normalTransformedY, normalTransformedZ);
+	}
+	
+	private void doMaterialBXDFResultSetOutgoing(final float x, final float y, final float z) {
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0] = x;
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1] = y;
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2] = z;
+	}
+	
+	private void doMaterialBXDFResultSetOutgoingTransformedFromBSDFResult() {
+		final float outgoingX = doMaterialBSDFResultGetOutgoingX();
+		final float outgoingY = doMaterialBSDFResultGetOutgoingY();
+		final float outgoingZ = doMaterialBSDFResultGetOutgoingZ();
+		
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(outgoingX, outgoingY, outgoingZ);
+		
+		final float outgoingTransformedX = vector3FGetComponent1();
+		final float outgoingTransformedY = vector3FGetComponent2();
+		final float outgoingTransformedZ = vector3FGetComponent3();
+		
+		doMaterialBXDFResultSetOutgoing(outgoingTransformedX, outgoingTransformedY, outgoingTransformedZ);
+	}
+	
+	private void doMaterialBXDFResultSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
+	}
+	
+	private void doMaterialBXDFResultSetResult(final float r, final float g, final float b) {
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 0] = r;
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 1] = g;
+		this.bXDFResultArray_$private$10[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 2] = b;
 	}
 }

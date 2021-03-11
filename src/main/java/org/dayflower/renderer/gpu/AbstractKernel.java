@@ -183,7 +183,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @return {@code true} if, and only if, {@code value} is zero, {@code false} otherwise
 	 */
 	@SuppressWarnings("static-method")
-	protected final boolean isZero(final float value) {
+	protected final boolean zero(final float value) {
 		final boolean isLTZero = value < -0.0F;
 		final boolean isGTZero = value > +0.0F;
 		

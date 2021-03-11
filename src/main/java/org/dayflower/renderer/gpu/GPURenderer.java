@@ -66,7 +66,8 @@ public final class GPURenderer extends AbstractGPURenderer {
 	public void run() {
 //		doRunAmbientOcclusion(0.0F, 1);
 //		doRunPathTracingRayito(20, 5);
-		doRunPathTracingSmallPT(20, 5);
+//		doRunPathTracingSmallPT(20, 5);
+		doRunPathTracingTest(20, 5);
 //		doRunRayCasting();
 	}
 	
@@ -216,6 +217,108 @@ public final class GPURenderer extends AbstractGPURenderer {
 						throughputR *= color3FLHSGetComponent1();
 						throughputG *= color3FLHSGetComponent2();
 						throughputB *= color3FLHSGetComponent3();
+						
+						ray3FSetFromSurfaceIntersectionPointAndVector3F();
+						
+						if(currentBounce >= minimumBounceRussianRoulette) {
+							final float probability = max(throughputR, throughputG, throughputB);
+							
+							if(random() > probability) {
+								currentBounce = maximumBounce;
+							} else {
+								throughputR /= probability;
+								throughputG /= probability;
+								throughputB /= probability;
+							}
+						}
+						
+						currentBounce++;
+					} else {
+						currentBounce = maximumBounce;
+					}
+				} else {
+					lightEvaluateRadianceEmittedAny();
+					
+					radianceR += throughputR * color3FLHSGetComponent1();
+					radianceG += throughputG * color3FLHSGetComponent2();
+					radianceB += throughputB * color3FLHSGetComponent3();
+					
+					currentBounce = maximumBounce;
+				}
+			}
+		} else {
+			radianceR = 1.0F;
+			radianceG = 1.0F;
+			radianceB = 1.0F;
+		}
+		
+		filmAddColor(radianceR, radianceG, radianceB);
+		
+		imageBegin();
+		imageRedoGammaCorrectionPBRT();
+		imageEnd();
+	}
+	
+	void doRunPathTracingTest(final int maximumBounce, final int minimumBounceRussianRoulette) {
+		float radianceR = 0.0F;
+		float radianceG = 0.0F;
+		float radianceB = 0.0F;
+		
+		float throughputR = 1.0F;
+		float throughputG = 1.0F;
+		float throughputB = 1.0F;
+		
+		final float pixel0X = 2.0F * random();
+		final float pixel1X = pixel0X < 1.0F ? sqrt(pixel0X) - 1.0F : 1.0F - sqrt(2.0F - pixel0X);
+		final float pixel0Y = 2.0F * random();
+		final float pixel1Y = pixel0Y < 1.0F ? sqrt(pixel0Y) - 1.0F : 1.0F - sqrt(2.0F - pixel0Y);
+		
+		if(ray3FCameraGenerate(pixel1X, pixel1Y)) {
+			int currentBounce = 0;
+			int currentBounceSpecular = 0;
+			
+			while(currentBounce < maximumBounce) {
+				if(primitiveIntersectionCompute()) {
+					if(currentBounce == 0 || currentBounce == currentBounceSpecular) {
+						materialEmittance(primitiveGetMaterialID(), primitiveGetMaterialOffset());
+						
+						radianceR += throughputR * color3FLHSGetComponent1();
+						radianceG += throughputG * color3FLHSGetComponent2();
+						radianceB += throughputB * color3FLHSGetComponent3();
+					}
+					
+					if(materialIsSpecular(primitiveGetMaterialID())) {
+						currentBounceSpecular++;
+					} else {
+//						TODO: Add direct light sampling!
+						radianceR += throughputR * 0.0F;
+						radianceG += throughputG * 0.0F;
+						radianceB += throughputB * 0.0F;
+					}
+					
+					if(testMaterialBSDFCompute(primitiveGetMaterialID(), primitiveGetMaterialOffset()) && testMaterialBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL)) {
+						final float incomingX = testMaterialBSDFResultGetIncomingX();
+						final float incomingY = testMaterialBSDFResultGetIncomingY();
+						final float incomingZ = testMaterialBSDFResultGetIncomingZ();
+						
+						final float probabilityDensityFunctionValue = testMaterialBSDFResultGetProbabilityDensityFunctionValue();
+						
+						final float resultR = testMaterialBSDFResultGetResultR();
+						final float resultG = testMaterialBSDFResultGetResultG();
+						final float resultB = testMaterialBSDFResultGetResultB();
+						
+						final float surfaceNormalSX = intersectionGetOrthonormalBasisSWComponent1();
+						final float surfaceNormalSY = intersectionGetOrthonormalBasisSWComponent2();
+						final float surfaceNormalSZ = intersectionGetOrthonormalBasisSWComponent3();
+						
+						final float incomingDotSurfaceNormalS = vector3FDotProduct(incomingX, incomingY, incomingZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
+						final float incomingDotSurfaceNormalSAbs = abs(incomingDotSurfaceNormalS);
+						
+						throughputR *= resultR * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
+						throughputG *= resultG * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
+						throughputB *= resultB * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
+						
+						vector3FSet(incomingX, incomingY, incomingZ);
 						
 						ray3FSetFromSurfaceIntersectionPointAndVector3F();
 						

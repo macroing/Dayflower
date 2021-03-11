@@ -19,6 +19,7 @@
 package org.dayflower.renderer.gpu;
 
 import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
+import static org.dayflower.utility.Floats.PI_DIVIDED_BY_4;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
@@ -1725,7 +1726,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected final float vector3FCosPhi(final float component1, final float component2, final float component3) {
 		final float sinTheta = vector3FSinTheta(component1, component2, component3);
 		
-		if(isZero(sinTheta)) {
+		if(zero(sinTheta)) {
 			return 1.0F;
 		}
 		
@@ -1842,7 +1843,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected final float vector3FSinPhi(final float component1, final float component2, final float component3) {
 		final float sinTheta = vector3FSinTheta(component1, component2, component3);
 		
-		if(isZero(sinTheta)) {
+		if(zero(sinTheta)) {
 			return 0.0F;
 		}
 		
@@ -2228,6 +2229,34 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = isDividing ? newComponent1 / newComponent4 : newComponent1;
 		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = isDividing ? newComponent2 / newComponent4 : newComponent2;
 		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = isDividing ? newComponent3 / newComponent4 : newComponent3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void point3FSetSampleDiskUniformDistributionByConcentricMapping(final float u, final float v, final float radius) {
+		if(zero(u) && zero(v)) {
+			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = 0.0F;
+			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = 0.0F;
+			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = 0.0F;
+		} else {
+			final float a = u * 2.0F - 1.0F;
+			final float b = v * 2.0F - 1.0F;
+			
+			if(a * a > b * b) {
+				final float phi = PI_DIVIDED_BY_4 * (b / a);
+				final float r = radius * a;
+				
+				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = r * cos(phi);
+				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = r * sin(phi);
+				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = 0.0F;
+			} else {
+				final float phi = PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
+				final float r = radius * b;
+				
+				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = r * cos(phi);
+				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = r * sin(phi);
+				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = 0.0F;
+			}
+		}
 	}
 	
 	/**
@@ -3124,6 +3153,16 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		}
 	}
 	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	protected final void vector3FSetFaceForwardComponent3(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		if(component3LHS < 0.0F) {
+			vector3FSet(+component1RHS, +component2RHS, -component3RHS);
+		} else {
+			vector3FSet(+component1RHS, +component2RHS, +component3RHS);
+		}
+	}
+	
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
@@ -3428,6 +3467,19 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float component3 = this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3];
 		
 		vector3FSetOrthonormalBasis33FTransformReverseNormalize(component1, component2, component3);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void vector3FSetSampleHemisphereCosineDistribution(final float u, final float v) {
+		point3FSetSampleDiskUniformDistributionByConcentricMapping(u, v, 1.0F);
+		
+		final float component1 = point3FGetComponent1();
+		final float component2 = point3FGetComponent2();
+		final float component3 = sqrt(max(0.0F, 1.0F - component1 * component1 - component2 * component2));
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = component2;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = component3;
 	}
 	
 	/**

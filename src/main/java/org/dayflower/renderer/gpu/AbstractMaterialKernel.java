@@ -34,6 +34,9 @@ import org.dayflower.scene.material.MirrorMaterial;
 //TODO: Add Javadocs!
 public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
+	protected static final int B_X_D_F_TYPE_BIT_FLAG_ALL = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4);
+	
+//	TODO: Add Javadocs!
 	protected static final int B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION = 1 << 0;
 	
 //	TODO: Add Javadocs!
@@ -680,7 +683,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			}
 		}
 		
-		if(matches > 0 && !isZero(doMaterialBXDFResultGetOutgoingZ())) {
+		if(matches > 0 && !zero(doMaterialBXDFResultGetOutgoingZ())) {
 			final float u = random();
 			final float v = random();
 			
@@ -707,9 +710,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 				if(doMaterialBXDFSampleDistributionFunction(uRemapped, vRemapped, matchingId)) {
 					doMaterialBSDFResultSetIncomingFromBXDFResult();
 					
-					final float incomingX = doMaterialBSDFResultGetIncomingX();
-					final float incomingY = doMaterialBSDFResultGetIncomingY();
-					final float incomingZ = doMaterialBSDFResultGetIncomingZ();
+					final float incomingX = testMaterialBSDFResultGetIncomingX();
+					final float incomingY = testMaterialBSDFResultGetIncomingY();
+					final float incomingZ = testMaterialBSDFResultGetIncomingZ();
 					
 					final float outgoingX = doMaterialBSDFResultGetOutgoingX();
 					final float outgoingY = doMaterialBSDFResultGetOutgoingY();
@@ -781,6 +784,41 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 //	TODO: Add Javadocs!
+	protected final float testMaterialBSDFResultGetIncomingX() {
+		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0];
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float testMaterialBSDFResultGetIncomingY() {
+		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float testMaterialBSDFResultGetIncomingZ() {
+		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2];
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float testMaterialBSDFResultGetProbabilityDensityFunctionValue() {
+		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE];
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float testMaterialBSDFResultGetResultB() {
+		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 2];
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float testMaterialBSDFResultGetResultG() {
+		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 1];
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float testMaterialBSDFResultGetResultR() {
+		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 0];
+	}
+	
+//	TODO: Add Javadocs!
 	protected final int testMaterialBSDFCountBXDFsBySpecularType(final boolean isSpecular) {
 		int countBySpecular = 0;
 		
@@ -797,9 +835,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 //	TODO: Add Javadocs!
 	protected final void testMaterialBSDFEvaluateDistributionFunction(final int bitFlags) {
-		final float incomingX = doMaterialBSDFResultGetIncomingX();
-		final float incomingY = doMaterialBSDFResultGetIncomingY();
-		final float incomingZ = doMaterialBSDFResultGetIncomingZ();
+		final float incomingX = testMaterialBSDFResultGetIncomingX();
+		final float incomingY = testMaterialBSDFResultGetIncomingY();
+		final float incomingZ = testMaterialBSDFResultGetIncomingZ();
 		
 		final float outgoingX = doMaterialBSDFResultGetOutgoingX();
 		final float outgoingY = doMaterialBSDFResultGetOutgoingY();
@@ -841,7 +879,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		float probabilityDensityFunctionValue = 0.0F;
 		
-		if(countBXDFs > 0 && !isZero(doMaterialBXDFResultGetOutgoingZ())) {
+		if(countBXDFs > 0 && !zero(doMaterialBXDFResultGetOutgoingZ())) {
 			int matches = 0;
 			
 			for(int i = 0; i < countBXDFs; i++) {
@@ -895,7 +933,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		Retrieve the average color from the Angle Texture:
 		final float floatAngle = color3FLHSGetAverage();
 		
-		if(isZero(colorKDR) && isZero(colorKDG) && isZero(colorKDB)) {
+		if(zero(colorKDR) && zero(colorKDG) && zero(colorKDB)) {
 			return false;
 		}
 		
@@ -906,9 +944,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		Clear the BSDF:
 		doMaterialBSDFClear();
 		
-		if(isZero(floatAngle)) {
+		if(zero(floatAngle)) {
 //			Set LambertianBRDF:
-			doMaterialBSDFSetBXDF(0, B_X_D_F_LAMBERTIAN_B_R_D_F_ID);
+			doMaterialBSDFSetBXDFLambertianBRDF(0);
 			doMaterialBSDFSetBXDFCount(1);
 			doMaterialBSDFSetEta(1.0F);
 			doMaterialBSDFSetNegatingIncoming(false);
@@ -919,7 +957,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 //		Set OrenNayarBRDF:
-		doMaterialBSDFSetBXDF(0, B_X_D_F_OREN_NAYAR_B_R_D_F_ID);
+		doMaterialBSDFSetBXDFOrenNayarBRDF(0);
 		doMaterialBSDFSetBXDFCount(1);
 		doMaterialBSDFSetEta(1.0F);
 		doMaterialBSDFSetNegatingIncoming(false);
@@ -930,7 +968,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doMaterialBSDFIsNegatingIncoming() {
-		return !isZero(this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING]);
+		return !zero(this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING]);
 	}
 	
 	private boolean doMaterialBXDFHasReflection(final int id) {
@@ -941,14 +979,30 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return false;
 	}
 	
+	private boolean doMaterialBXDFIsLambertianBRDF(final int id) {
+		return id == B_X_D_F_LAMBERTIAN_B_R_D_F_ID;
+	}
+	
 	private boolean doMaterialBXDFIsMatchingBitFlags(final int id, final int bitFlags) {
-		if(id == B_X_D_F_LAMBERTIAN_B_R_D_F_ID) {
-			return (B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS;
-		} else if(id == B_X_D_F_OREN_NAYAR_B_R_D_F_ID) {
-			return (B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS;
+		if(doMaterialBXDFIsLambertianBRDF(id)) {
+			return doMaterialBXDFIsMatchingBitFlagsLambertianBRDF(bitFlags);
+		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
+			return doMaterialBXDFIsMatchingBitFlagsOrenNayarBRDF(bitFlags);
 		} else {
 			return false;
 		}
+	}
+	
+	private boolean doMaterialBXDFIsMatchingBitFlagsLambertianBRDF(final int bitFlags) {
+		return (B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS;
+	}
+	
+	private boolean doMaterialBXDFIsMatchingBitFlagsOrenNayarBRDF(final int bitFlags) {
+		return (B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS;
+	}
+	
+	private boolean doMaterialBXDFIsOrenNayarBRDF(final int id) {
+		return id == B_X_D_F_OREN_NAYAR_B_R_D_F_ID;
 	}
 	
 	@SuppressWarnings({"static-method", "unused"})
@@ -957,9 +1011,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doMaterialBXDFSampleDistributionFunction(final float u, final float v, final int id) {
-		if(id == B_X_D_F_LAMBERTIAN_B_R_D_F_ID) {
+		if(doMaterialBXDFIsLambertianBRDF(id)) {
 			return doMaterialBXDFSampleDistributionFunctionLambertianBRDF(u, v);
-		} else if(id == B_X_D_F_OREN_NAYAR_B_R_D_F_ID) {
+		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
 			return doMaterialBXDFSampleDistributionFunctionOrenNayarBRDF(u, v);
 		} else {
 			return false;
@@ -967,23 +1021,25 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private boolean doMaterialBXDFSampleDistributionFunctionLambertianBRDF(final float u, final float v) {
-		return false;
+		vector3FSetSampleHemisphereCosineDistribution(u, v);
+		vector3FSetFaceForwardComponent3(doMaterialBXDFResultGetOutgoingX(), doMaterialBXDFResultGetOutgoingY(), doMaterialBXDFResultGetOutgoingZ(), vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		
+		doMaterialBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doMaterialBXDFEvaluateDistributionFunctionLambertianBRDF();
+		doMaterialBXDFEvaluateProbabilityDensityFunctionLambertianBRDF();
+		
+		return true;
 	}
 	
 	private boolean doMaterialBXDFSampleDistributionFunctionOrenNayarBRDF(final float u, final float v) {
-		return false;
-	}
-	
-	private float doMaterialBSDFResultGetIncomingX() {
-		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0];
-	}
-	
-	private float doMaterialBSDFResultGetIncomingY() {
-		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1];
-	}
-	
-	private float doMaterialBSDFResultGetIncomingZ() {
-		return this.bSDFResultArray_$private$13[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2];
+		vector3FSetSampleHemisphereCosineDistribution(u, v);
+		vector3FSetFaceForwardComponent3(doMaterialBXDFResultGetOutgoingX(), doMaterialBXDFResultGetOutgoingY(), doMaterialBXDFResultGetOutgoingZ(), vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		
+		doMaterialBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doMaterialBXDFEvaluateDistributionFunctionOrenNayarBRDF();
+		doMaterialBXDFEvaluateProbabilityDensityFunctionOrenNayarBRDF();
+		
+		return true;
 	}
 	
 	private float doMaterialBSDFResultGetNormalX() {
@@ -1158,6 +1214,14 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F + index] = id;
 	}
 	
+	private void doMaterialBSDFSetBXDFLambertianBRDF(final int index) {
+		doMaterialBSDFSetBXDF(index, B_X_D_F_LAMBERTIAN_B_R_D_F_ID);
+	}
+	
+	private void doMaterialBSDFSetBXDFOrenNayarBRDF(final int index) {
+		doMaterialBSDFSetBXDF(index, B_X_D_F_OREN_NAYAR_B_R_D_F_ID);
+	}
+	
 	private void doMaterialBSDFSetBXDFCount(final int count) {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT] = count;
 	}
@@ -1171,9 +1235,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private void doMaterialBXDFEvaluateDistributionFunction(final int id) {
-		if(id == B_X_D_F_LAMBERTIAN_B_R_D_F_ID) {
+		if(doMaterialBXDFIsLambertianBRDF(id)) {
 			doMaterialBXDFEvaluateDistributionFunctionLambertianBRDF();
-		} else if(id == B_X_D_F_OREN_NAYAR_B_R_D_F_ID) {
+		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
 			doMaterialBXDFEvaluateDistributionFunctionOrenNayarBRDF();
 		}
 	}
@@ -1232,9 +1296,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private void doMaterialBXDFEvaluateProbabilityDensityFunction(final int id) {
-		if(id == B_X_D_F_LAMBERTIAN_B_R_D_F_ID) {
+		if(doMaterialBXDFIsLambertianBRDF(id)) {
 			doMaterialBXDFEvaluateProbabilityDensityFunctionLambertianBRDF();
-		} else if(id == B_X_D_F_OREN_NAYAR_B_R_D_F_ID) {
+		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
 			doMaterialBXDFEvaluateProbabilityDensityFunctionOrenNayarBRDF();
 		}
 	}
@@ -1293,9 +1357,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private void doMaterialBXDFResultSetIncomingTransformedFromBSDFResult() {
 		final boolean isNegatingIncoming = doMaterialBSDFIsNegatingIncoming();
 		
-		final float incomingX = isNegatingIncoming ? -doMaterialBSDFResultGetIncomingX() : doMaterialBSDFResultGetIncomingX();
-		final float incomingY = isNegatingIncoming ? -doMaterialBSDFResultGetIncomingY() : doMaterialBSDFResultGetIncomingY();
-		final float incomingZ = isNegatingIncoming ? -doMaterialBSDFResultGetIncomingZ() : doMaterialBSDFResultGetIncomingZ();
+		final float incomingX = isNegatingIncoming ? -testMaterialBSDFResultGetIncomingX() : testMaterialBSDFResultGetIncomingX();
+		final float incomingY = isNegatingIncoming ? -testMaterialBSDFResultGetIncomingY() : testMaterialBSDFResultGetIncomingY();
+		final float incomingZ = isNegatingIncoming ? -testMaterialBSDFResultGetIncomingZ() : testMaterialBSDFResultGetIncomingZ();
 		
 		vector3FSetOrthonormalBasis33FTransformReverseNormalize(incomingX, incomingY, incomingZ);
 		

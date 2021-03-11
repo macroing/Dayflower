@@ -1214,11 +1214,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFIsMatchingBitFlags(final int id, final int bitFlags) {
 		if(doBXDFLambertianBRDFIsMatchingID(id)) {
-			return (B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS;
+			return doBXDFLambertianBRDFIsMatchingBitFlags(bitFlags);
 		} else if(doBXDFOrenNayarBRDFIsMatchingID(id)) {
-			return (B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS;
+			return doBXDFOrenNayarBRDFIsMatchingBitFlags(bitFlags);
 		} else if(doBXDFSpecularBRDFIsMatchingID(id)) {
-			return (B_X_D_F_SPECULAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_SPECULAR_B_R_D_F_BIT_FLAGS;
+			return doBXDFSpecularBRDFIsMatchingBitFlags(bitFlags);
 		} else {
 			return false;
 		}
@@ -1271,6 +1271,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF Lambertian BRDF ////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doBXDFLambertianBRDFIsMatchingBitFlags(final int bitFlags) {
+		return (B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS;
+	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFLambertianBRDFIsMatchingID(final int id) {
@@ -1333,6 +1338,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF Oren-Nayar BRDF ////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doBXDFOrenNayarBRDFIsMatchingBitFlags(final int bitFlags) {
+		return (B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS;
+	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFOrenNayarBRDFIsMatchingID(final int id) {
@@ -1556,6 +1566,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF Specular BRDF //////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doBXDFSpecularBRDFIsMatchingBitFlags(final int bitFlags) {
+		return (B_X_D_F_SPECULAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_SPECULAR_B_R_D_F_BIT_FLAGS;
+	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFSpecularBRDFIsMatchingID(final int id) {

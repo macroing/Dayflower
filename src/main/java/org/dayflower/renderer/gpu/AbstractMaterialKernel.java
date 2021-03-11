@@ -81,6 +81,14 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING = 9;
 	private static final int B_X_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE = 12;
 	private static final int B_X_D_F_RESULT_ARRAY_OFFSET_RESULT = 0;
+	private static final int B_X_D_F_SPECULAR_B_R_D_F_ARRAY_LENGTH = 4;
+	private static final int B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_FRESNEL_ID = 3;
+	private static final int B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
+	private static final int B_X_D_F_SPECULAR_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR;
+	private static final int B_X_D_F_SPECULAR_B_R_D_F_ID = 3;
+	private static final int FRESNEL_CONSTANT_ARRAY_LENGTH = 3;
+	private static final int FRESNEL_CONSTANT_ARRAY_OFFSET_LIGHT = 0;
+	private static final int FRESNEL_CONSTANT_ID = 1;
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL = 3;
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING = 6;
@@ -102,6 +110,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 //	TODO: Add Javadocs!
 	protected float[] bXDFResultArray_$private$13;
+	
+//	TODO: Add Javadocs!
+	protected float[] bXDFSpecularBRDFArray_$private$4;
+	
+//	TODO: Add Javadocs!
+	protected float[] fresnelConstantArray_$private$3;
 	
 //	TODO: Add Javadocs!
 	protected float[] materialBXDFResultArray_$private$16;
@@ -130,6 +144,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bXDFLambertianBRDFArray_$private$3 = new float[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH];
 		this.bXDFOrenNayarBRDFArray_$private$6 = new float[B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH];
 		this.bXDFResultArray_$private$13 = new float[B_X_D_F_RESULT_ARRAY_LENGTH];
+		this.bXDFSpecularBRDFArray_$private$4 = new float[B_X_D_F_SPECULAR_B_R_D_F_ARRAY_LENGTH];
+		this.fresnelConstantArray_$private$3 = new float[FRESNEL_CONSTANT_ARRAY_LENGTH];
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
 		this.materialClearCoatMaterialArray = new int[1];
 		this.materialGlassMaterialArray = new int[1];
@@ -664,9 +680,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected final boolean testMaterialBSDFCompute(final int materialID, final int materialOffset) {
 		if(materialID == MatteMaterial.ID) {
 			return doMaterialBSDFComputeMatteMaterial(materialOffset);
+		} else if(materialID == MirrorMaterial.ID) {
+			return doMaterialBSDFComputeMirrorMaterial(materialOffset);
+		} else {
+			return false;
 		}
-		
-		return false;
 	}
 	
 //	TODO: Add Javadocs!
@@ -967,47 +985,112 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return true;
 	}
 	
+	private boolean doMaterialBSDFComputeMirrorMaterial(final int materialMirrorMaterialArrayOffset) {
+		/*
+		 * Evaluate the Texture instances:
+		 */
+		
+//		Retrieve the ID and offset for the KR Texture:
+		final int textureKR = this.materialMirrorMaterialArray[materialMirrorMaterialArrayOffset + MirrorMaterial.ARRAY_OFFSET_TEXTURE_K_R];
+		final int textureKRID = (textureKR >>> 16) & 0xFFFF;
+		final int textureKROffset = textureKR & 0xFFFF;
+		
+//		Evaluate the KR Texture:
+		textureEvaluate(textureKRID, textureKROffset);
+		
+//		Retrieve the color from the KR Texture:
+		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
+		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
+		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		
+		if(zero(colorKRR) && zero(colorKRG) && zero(colorKRB)) {
+			return false;
+		}
+		
+		/*
+		 * Compute the BSDF:
+		 */
+		
+//		Clear the BSDF:
+		doMaterialBSDFClear();
+		
+//		Set the SpecularBRDF:
+		doMaterialBSDFSetBXDFSpecularBRDF(0);
+		doMaterialBSDFSetBXDFCount(1);
+		doMaterialBSDFSetEta(1.0F);
+		doMaterialBSDFSetNegatingIncoming(false);
+		doMaterialBSDFResultInitialize();
+		doMaterialBXDFSpecularBRDFSetFresnelConstant(colorKRR, colorKRG, colorKRB);
+		doMaterialFresnelConstantSet(1.0F, 1.0F, 1.0F);
+		
+		return true;
+	}
+	
 	private boolean doMaterialBSDFIsNegatingIncoming() {
 		return !zero(this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING]);
 	}
 	
 	private boolean doMaterialBXDFHasReflection(final int id) {
-		return true;
+		if(doMaterialBXDFIsLambertianBRDF(id)) {
+			return true;
+		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
+			return true;
+		} else if(doMaterialBXDFIsSpecularBRDF(id)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	private boolean doMaterialBXDFHasTransmission(final int id) {
-		return false;
+		if(doMaterialBXDFIsLambertianBRDF(id)) {
+			return false;
+		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
+			return false;
+		} else if(doMaterialBXDFIsSpecularBRDF(id)) {
+			return false;
+		} else {
+			return false;
+		}
 	}
 	
+	@SuppressWarnings("static-method")
 	private boolean doMaterialBXDFIsLambertianBRDF(final int id) {
 		return id == B_X_D_F_LAMBERTIAN_B_R_D_F_ID;
 	}
 	
 	private boolean doMaterialBXDFIsMatchingBitFlags(final int id, final int bitFlags) {
 		if(doMaterialBXDFIsLambertianBRDF(id)) {
-			return doMaterialBXDFIsMatchingBitFlagsLambertianBRDF(bitFlags);
+			return (B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS;
 		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
-			return doMaterialBXDFIsMatchingBitFlagsOrenNayarBRDF(bitFlags);
+			return (B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS;
+		} else if(doMaterialBXDFIsSpecularBRDF(id)) {
+			return (B_X_D_F_SPECULAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_SPECULAR_B_R_D_F_BIT_FLAGS;
 		} else {
 			return false;
 		}
 	}
 	
-	private boolean doMaterialBXDFIsMatchingBitFlagsLambertianBRDF(final int bitFlags) {
-		return (B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS;
-	}
-	
-	private boolean doMaterialBXDFIsMatchingBitFlagsOrenNayarBRDF(final int bitFlags) {
-		return (B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS;
-	}
-	
+	@SuppressWarnings("static-method")
 	private boolean doMaterialBXDFIsOrenNayarBRDF(final int id) {
 		return id == B_X_D_F_OREN_NAYAR_B_R_D_F_ID;
 	}
 	
-	@SuppressWarnings({"static-method", "unused"})
+	@SuppressWarnings("static-method")
+	private boolean doMaterialBXDFIsSpecularBRDF(final int id) {
+		return id == B_X_D_F_SPECULAR_B_R_D_F_ID;
+	}
+	
 	private boolean doMaterialBXDFIsSpecular(final int id) {
-		return false;
+		if(doMaterialBXDFIsLambertianBRDF(id)) {
+			return false;
+		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
+			return false;
+		} else if(doMaterialBXDFIsSpecularBRDF(id)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	private boolean doMaterialBXDFSampleDistributionFunction(final float u, final float v, final int id) {
@@ -1015,6 +1098,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return doMaterialBXDFSampleDistributionFunctionLambertianBRDF(u, v);
 		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
 			return doMaterialBXDFSampleDistributionFunctionOrenNayarBRDF(u, v);
+		} else if(doMaterialBXDFIsSpecularBRDF(id)) {
+			return doMaterialBXDFSampleDistributionFunctionSpecularBRDF(u, v);
 		} else {
 			return false;
 		}
@@ -1038,6 +1123,36 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doMaterialBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
 		doMaterialBXDFEvaluateDistributionFunctionOrenNayarBRDF();
 		doMaterialBXDFEvaluateProbabilityDensityFunctionOrenNayarBRDF();
+		
+		return true;
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean doMaterialBXDFSampleDistributionFunctionSpecularBRDF(final float u, final float v) {
+		final float incomingX = -doMaterialBXDFResultGetOutgoingX();
+		final float incomingY = -doMaterialBXDFResultGetOutgoingY();
+		final float incomingZ = +doMaterialBXDFResultGetOutgoingZ();
+		
+		final float cosTheta = vector3FCosTheta(incomingX, incomingY, incomingZ);
+		final float cosThetaAbs = abs(cosTheta);
+		
+		doMaterialFresnelEvaluate(cosTheta, doMaterialBXDFSpecularBRDFGetFresnelID());
+		
+		final float fresnelR = color3FLHSGetComponent1();
+		final float fresnelG = color3FLHSGetComponent2();
+		final float fresnelB = color3FLHSGetComponent3();
+		
+		final float reflectanceScaleR = this.bXDFSpecularBRDFArray_$private$4[B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0];
+		final float reflectanceScaleG = this.bXDFSpecularBRDFArray_$private$4[B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1];
+		final float reflectanceScaleB = this.bXDFSpecularBRDFArray_$private$4[B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2];
+		
+		final float resultR = fresnelR * reflectanceScaleR / cosThetaAbs;
+		final float resultG = fresnelG * reflectanceScaleG / cosThetaAbs;
+		final float resultB = fresnelB * reflectanceScaleB / cosThetaAbs;
+		
+		doMaterialBXDFResultSetIncoming(incomingX, incomingY, incomingZ);
+		doMaterialBXDFResultSetProbabilityDensityFunctionValue(1.0F);
+		doMaterialBXDFResultSetResult(resultR, resultG, resultB);
 		
 		return true;
 	}
@@ -1124,6 +1239,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private int doMaterialBSDFGetBXDFCount() {
 		return (int)(this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT]);
+	}
+	
+	private int doMaterialBXDFSpecularBRDFGetFresnelID() {
+		return (int)(this.bXDFSpecularBRDFArray_$private$4[B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_FRESNEL_ID]);
 	}
 	
 	private void doMaterialBSDFClear() {
@@ -1214,6 +1333,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F + index] = id;
 	}
 	
+	private void doMaterialBSDFSetBXDFCount(final int count) {
+		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT] = count;
+	}
+	
 	private void doMaterialBSDFSetBXDFLambertianBRDF(final int index) {
 		doMaterialBSDFSetBXDF(index, B_X_D_F_LAMBERTIAN_B_R_D_F_ID);
 	}
@@ -1222,8 +1345,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doMaterialBSDFSetBXDF(index, B_X_D_F_OREN_NAYAR_B_R_D_F_ID);
 	}
 	
-	private void doMaterialBSDFSetBXDFCount(final int count) {
-		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT] = count;
+	private void doMaterialBSDFSetBXDFSpecularBRDF(final int index) {
+		doMaterialBSDFSetBXDF(index, B_X_D_F_SPECULAR_B_R_D_F_ID);
 	}
 	
 	private void doMaterialBSDFSetEta(final float eta) {
@@ -1239,6 +1362,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doMaterialBXDFEvaluateDistributionFunctionLambertianBRDF();
 		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
 			doMaterialBXDFEvaluateDistributionFunctionOrenNayarBRDF();
+		} else if(doMaterialBXDFIsSpecularBRDF(id)) {
+			doMaterialBXDFEvaluateDistributionFunctionSpecularBRDF();
 		}
 	}
 	
@@ -1295,11 +1420,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doMaterialBXDFResultSetResult(resultR, resultG, resultB);
 	}
 	
+	private void doMaterialBXDFEvaluateDistributionFunctionSpecularBRDF() {
+		doMaterialBXDFResultSetResult(0.0F, 0.0F, 0.0F);
+	}
+	
 	private void doMaterialBXDFEvaluateProbabilityDensityFunction(final int id) {
 		if(doMaterialBXDFIsLambertianBRDF(id)) {
 			doMaterialBXDFEvaluateProbabilityDensityFunctionLambertianBRDF();
 		} else if(doMaterialBXDFIsOrenNayarBRDF(id)) {
 			doMaterialBXDFEvaluateProbabilityDensityFunctionOrenNayarBRDF();
+		} else if(doMaterialBXDFIsSpecularBRDF(id)) {
+			doMaterialBXDFEvaluateProbabilityDensityFunctionSpecularBRDF();
 		}
 	}
 	
@@ -1325,6 +1456,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float probabilityDensityFunctionValue = outgoingZ * incomingZ > 0.0F ? vector3FCosThetaAbs(incomingX, incomingY, incomingZ) * PI_RECIPROCAL : 0.0F;
 		
 		doMaterialBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+	}
+	
+	private void doMaterialBXDFEvaluateProbabilityDensityFunctionSpecularBRDF() {
+		doMaterialBXDFResultSetProbabilityDensityFunctionValue(0.0F);
 	}
 	
 	private void doMaterialBXDFLambertianBRDFSet(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
@@ -1418,5 +1553,33 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 0] = r;
 		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 1] = g;
 		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 2] = b;
+	}
+	
+	private void doMaterialBXDFSpecularBRDFSetFresnelConstant(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
+		this.bXDFSpecularBRDFArray_$private$4[B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
+		this.bXDFSpecularBRDFArray_$private$4[B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
+		this.bXDFSpecularBRDFArray_$private$4[B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
+		this.bXDFSpecularBRDFArray_$private$4[B_X_D_F_SPECULAR_B_R_D_F_ARRAY_OFFSET_FRESNEL_ID] = FRESNEL_CONSTANT_ID;
+	}
+	
+	@SuppressWarnings("unused")
+	private void doMaterialFresnelConstantEvaluate(final float cosThetaI) {
+		final float lightR = this.fresnelConstantArray_$private$3[FRESNEL_CONSTANT_ARRAY_OFFSET_LIGHT + 0];
+		final float lightG = this.fresnelConstantArray_$private$3[FRESNEL_CONSTANT_ARRAY_OFFSET_LIGHT + 1];
+		final float lightB = this.fresnelConstantArray_$private$3[FRESNEL_CONSTANT_ARRAY_OFFSET_LIGHT + 2];
+		
+		color3FLHSSet(lightR, lightG, lightB);
+	}
+	
+	private void doMaterialFresnelConstantSet(final float lightR, final float lightG, final float lightB) {
+		this.fresnelConstantArray_$private$3[FRESNEL_CONSTANT_ARRAY_OFFSET_LIGHT + 0] = lightR;
+		this.fresnelConstantArray_$private$3[FRESNEL_CONSTANT_ARRAY_OFFSET_LIGHT + 1] = lightG;
+		this.fresnelConstantArray_$private$3[FRESNEL_CONSTANT_ARRAY_OFFSET_LIGHT + 2] = lightB;
+	}
+	
+	private void doMaterialFresnelEvaluate(final float cosThetaI, final int id) {
+		if(id == FRESNEL_CONSTANT_ID) {
+			doMaterialFresnelConstantEvaluate(cosThetaI);
+		}
 	}
 }

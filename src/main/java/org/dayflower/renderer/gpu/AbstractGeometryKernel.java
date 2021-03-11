@@ -23,6 +23,8 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
+import java.lang.reflect.Field;
+
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.shape.Cone3F;
@@ -1719,6 +1721,43 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		return t;
 	}
 	
+//	TODO: Add Javadocs!
+	protected final float vector3FCosPhi(final float component1, final float component2, final float component3) {
+		final float sinTheta = vector3FSinTheta(component1, component2, component3);
+		
+		if(isZero(sinTheta)) {
+			return 1.0F;
+		}
+		
+		return saturateF(component1 / sinTheta, -1.0F, 1.0F);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FCosPhiSquared(final float component1, final float component2, final float component3) {
+		return vector3FCosPhi(component1, component2, component3) * vector3FCosPhi(component1, component2, component3);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings({"static-method", "unused"})
+	protected final float vector3FCosTheta(final float component1, final float component2, final float component3) {
+		return component3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FCosThetaAbs(final float component1, final float component2, final float component3) {
+		return abs(vector3FCosTheta(component1, component2, component3));
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FCosThetaQuartic(final float component1, final float component2, final float component3) {
+		return vector3FCosThetaSquared(component1, component2, component3) * vector3FCosThetaSquared(component1, component2, component3);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FCosThetaSquared(final float component1, final float component2, final float component3) {
+		return vector3FCosTheta(component1, component2, component3) * vector3FCosTheta(component1, component2, component3);
+	}
+	
 	/**
 	 * Returns the dot product between the vector represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} and the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS}.
 	 * 
@@ -1797,6 +1836,59 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	@SuppressWarnings("static-method")
 	protected final float vector3FLengthSquared(final float component1, final float component2, final float component3) {
 		return component1 * component1 + component2 * component2 + component3 * component3;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FSinPhi(final float component1, final float component2, final float component3) {
+		final float sinTheta = vector3FSinTheta(component1, component2, component3);
+		
+		if(isZero(sinTheta)) {
+			return 0.0F;
+		}
+		
+		return saturateF(component2 / sinTheta, -1.0F, 1.0F);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FSinPhiSquared(final float component1, final float component2, final float component3) {
+		return vector3FSinPhi(component1, component2, component3) * vector3FSinPhi(component1, component2, component3);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FSinTheta(final float component1, final float component2, final float component3) {
+		return sqrt(vector3FSinThetaSquared(component1, component2, component3));
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FSinThetaSquared(final float component1, final float component2, final float component3) {
+		return max(0.0F, 1.0F - vector3FCosThetaSquared(component1, component2, component3));
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	protected final float vector3FSphericalPhi(final float component1, final float component2, final float component3) {
+		return addIfLessThanThreshold(atan2(component2, component1), 0.0F, PI_MULTIPLIED_BY_2);
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings("unused")
+	protected final float vector3FSphericalTheta(final float component1, final float component2, final float component3) {
+		return acos(saturateF(component3, -1.0F, 1.0F));
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FTanTheta(final float component1, final float component2, final float component3) {
+		return vector3FSinTheta(component1, component2, component3) / vector3FCosTheta(component1, component2, component3);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FTanThetaAbs(final float component1, final float component2, final float component3) {
+		return abs(vector3FTanTheta(component1, component2, component3));
+	}
+	
+//	TODO: Add Javadocs!
+	protected final float vector3FTanThetaSquared(final float component1, final float component2, final float component3) {
+		return vector3FSinThetaSquared(component1, component2, component3) / vector3FCosThetaSquared(component1, component2, component3);
 	}
 	
 	/**

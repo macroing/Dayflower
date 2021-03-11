@@ -296,16 +296,16 @@ public final class GPURenderer extends AbstractGPURenderer {
 						radianceB += throughputB * 0.0F;
 					}
 					
-					if(testMaterialBSDFCompute(primitiveGetMaterialID(), primitiveGetMaterialOffset()) && testMaterialBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL)) {
-						final float incomingX = testMaterialBSDFResultGetIncomingX();
-						final float incomingY = testMaterialBSDFResultGetIncomingY();
-						final float incomingZ = testMaterialBSDFResultGetIncomingZ();
+					if(testBSDFCompute(primitiveGetMaterialID(), primitiveGetMaterialOffset()) && testBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL)) {
+						final float incomingX = testBSDFResultGetIncomingX();
+						final float incomingY = testBSDFResultGetIncomingY();
+						final float incomingZ = testBSDFResultGetIncomingZ();
 						
-						final float probabilityDensityFunctionValue = testMaterialBSDFResultGetProbabilityDensityFunctionValue();
+						final float probabilityDensityFunctionValue = testBSDFResultGetProbabilityDensityFunctionValue();
 						
-						final float resultR = testMaterialBSDFResultGetResultR();
-						final float resultG = testMaterialBSDFResultGetResultG();
-						final float resultB = testMaterialBSDFResultGetResultB();
+						final float resultR = testBSDFResultGetResultR();
+						final float resultG = testBSDFResultGetResultG();
+						final float resultB = testBSDFResultGetResultB();
 						
 						final float surfaceNormalSX = intersectionGetOrthonormalBasisSWComponent1();
 						final float surfaceNormalSY = intersectionGetOrthonormalBasisSWComponent2();

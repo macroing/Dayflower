@@ -337,7 +337,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 						}
 						
 						currentBounce = probabilityDensityFunctionValue > 0.0F ? currentBounce + 1 : maximumBounce;
-//						currentBounce++;
 					} else {
 						currentBounce = maximumBounce;
 					}

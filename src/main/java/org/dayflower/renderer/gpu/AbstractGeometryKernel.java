@@ -24,6 +24,8 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
+import java.lang.reflect.Field;
+
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.shape.Cone3F;
@@ -505,6 +507,17 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 */
 	protected final boolean shape3FTriangleMesh3FIntersects(final int shape3FTriangleMesh3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
 		return shape3FTriangleMesh3FIntersectionT(shape3FTriangleMesh3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	protected final boolean vector3FSameHemisphere(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		return vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) > 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	@SuppressWarnings({"static-method", "unused"})
+	protected final boolean vector3FSameHemisphereZ(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		return component3LHS * component3RHS > 0.0F;
 	}
 	
 	/**
@@ -3246,6 +3259,30 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
+	 * The vector is constructed by negating the vector represented by {@code component1Direction}, {@code component2Direction} and {@code component3Direction} if, and only if, the dot product between the vector represented by {@code component1LHS},
+	 * {@code component2LHS} and {@code component3LHS} and the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} is less than {@code 0.0F}. Otherwise, its current values will be used.
+	 * 
+	 * @param component1LHS the value of component 1 of the vector on the left-hand side
+	 * @param component2LHS the value of component 2 of the vector on the left-hand side
+	 * @param component3LHS the value of component 3 of the vector on the left-hand side
+	 * @param component1RHS the value of component 1 of the vector on the right-hand side
+	 * @param component2RHS the value of component 2 of the vector on the right-hand side
+	 * @param component3RHS the value of component 3 of the vector on the right-hand side
+	 * @param component1Direction the value of component 1 of the vector to set, whether it is negated or not
+	 * @param component2Direction the value of component 2 of the vector to set, whether it is negated or not
+	 * @param component3Direction the value of component 3 of the vector to set, whether it is negated or not
+	 */
+	protected final void vector3FSetFaceForwardDirection(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS, final float component1Direction, final float component2Direction, final float component3Direction) {
+		if(vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) < 0.0F) {
+			vector3FSet(-component1Direction, -component2Direction, -component3Direction);
+		} else {
+			vector3FSet(+component1Direction, +component2Direction, +component3Direction);
+		}
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
 	 * The vector is constructed by negating the vector represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} if, and only if, the dot product between that vector and the vector represented by {@code component1RHS},
 	 * {@code component2RHS} and {@code component3RHS} is less than {@code 0.0F}. Otherwise, its current values will be used.
 	 * 
@@ -3256,32 +3293,11 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param component2RHS the value of component 2 of the vector on the right-hand side
 	 * @param component3RHS the value of component 3 of the vector on the right-hand side
 	 */
-	protected final void vector3FSetFaceForward(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+	protected final void vector3FSetFaceForwardLHS(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
 		if(vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) < 0.0F) {
 			vector3FSet(-component1LHS, -component2LHS, -component3LHS);
 		} else {
 			vector3FSet(+component1LHS, +component2LHS, +component3LHS);
-		}
-	}
-	
-	/**
-	 * Sets a vector in {@link #vector3FArray_$private$3}.
-	 * <p>
-	 * The vector is constructed by negating component 3 of the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} if, and only if, {@code component3LHS} is less than {@code 0.0F}. Otherwise, its current value
-	 * will be used.
-	 * 
-	 * @param component1LHS the value of component 1 of the vector on the left-hand side
-	 * @param component2LHS the value of component 2 of the vector on the left-hand side
-	 * @param component3LHS the value of component 3 of the vector on the left-hand side
-	 * @param component1RHS the value of component 1 of the vector on the right-hand side
-	 * @param component2RHS the value of component 2 of the vector on the right-hand side
-	 * @param component3RHS the value of component 3 of the vector on the right-hand side
-	 */
-	protected final void vector3FSetFaceForwardComponent3(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
-		if(component3LHS < 0.0F) {
-			vector3FSet(+component1RHS, +component2RHS, -component3RHS);
-		} else {
-			vector3FSet(+component1RHS, +component2RHS, +component3RHS);
 		}
 	}
 	
@@ -3298,11 +3314,32 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param component2RHS the value of component 2 of the vector on the right-hand side
 	 * @param component3RHS the value of component 3 of the vector on the right-hand side
 	 */
-	protected final void vector3FSetFaceForwardNegated(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+	protected final void vector3FSetFaceForwardLHSNegated(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
 		if(vector3FDotProduct(component1LHS, component2LHS, component3LHS, component1RHS, component2RHS, component3RHS) < 0.0F) {
 			vector3FSet(+component1LHS, +component2LHS, +component3LHS);
 		} else {
 			vector3FSet(-component1LHS, -component2LHS, -component3LHS);
+		}
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed by negating component 3 of the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} if, and only if, {@code component3LHS} is less than {@code 0.0F}. Otherwise, its current value
+	 * will be used.
+	 * 
+	 * @param component1LHS the value of component 1 of the vector on the left-hand side
+	 * @param component2LHS the value of component 2 of the vector on the left-hand side
+	 * @param component3LHS the value of component 3 of the vector on the left-hand side
+	 * @param component1RHS the value of component 1 of the vector on the right-hand side
+	 * @param component2RHS the value of component 2 of the vector on the right-hand side
+	 * @param component3RHS the value of component 3 of the vector on the right-hand side
+	 */
+	protected final void vector3FSetFaceForwardRHSComponent3(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		if(component3LHS < 0.0F) {
+			vector3FSet(+component1RHS, +component2RHS, -component3RHS);
+		} else {
+			vector3FSet(+component1RHS, +component2RHS, +component3RHS);
 		}
 	}
 	

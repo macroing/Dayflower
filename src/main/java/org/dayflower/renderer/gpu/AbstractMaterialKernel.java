@@ -679,9 +679,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
 	protected final boolean testBSDFCompute(final int materialID, final int materialOffset) {
 		if(materialID == MatteMaterial.ID) {
-			return doBSDFComputeMatteMaterial(materialOffset);
+			return doMaterialMatteMaterialComputeBSDF(materialOffset);
 		} else if(materialID == MirrorMaterial.ID) {
-			return doBSDFComputeMirrorMaterial(materialOffset);
+			return doMaterialMirrorMaterialComputeBSDF(materialOffset);
 		} else {
 			return false;
 		}
@@ -924,7 +924,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	// Materials ///////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private boolean doBSDFComputeMatteMaterial(final int materialMatteMaterialArrayOffset) {
+	private boolean doMaterialMatteMaterialComputeBSDF(final int materialMatteMaterialArrayOffset) {
 		/*
 		 * Evaluate the Texture instances:
 		 */
@@ -987,7 +987,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return true;
 	}
 	
-	private boolean doBSDFComputeMirrorMaterial(final int materialMirrorMaterialArrayOffset) {
+	private boolean doMaterialMirrorMaterialComputeBSDF(final int materialMirrorMaterialArrayOffset) {
 		/*
 		 * Evaluate the Texture instances:
 		 */

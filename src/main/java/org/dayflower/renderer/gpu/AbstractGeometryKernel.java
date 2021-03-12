@@ -24,8 +24,6 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
 import org.dayflower.geometry.boundingvolume.BoundingSphere3F;
 import org.dayflower.geometry.shape.Cone3F;
@@ -1722,7 +1720,14 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		return t;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle phi.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the cosine of the angle phi
+	 */
 	protected final float vector3FCosPhi(final float component1, final float component2, final float component3) {
 		final float sinTheta = vector3FSinTheta(component1, component2, component3);
 		
@@ -1733,28 +1738,63 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		return saturateF(component1 / sinTheta, -1.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle phi in squared form.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the cosine of the angle phi in squared form
+	 */
 	protected final float vector3FCosPhiSquared(final float component1, final float component2, final float component3) {
 		return vector3FCosPhi(component1, component2, component3) * vector3FCosPhi(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
-	@SuppressWarnings({"static-method", "unused"})
+	/**
+	 * Returns the cosine of the angle theta.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the cosine of the angle theta
+	 */
+	@SuppressWarnings("static-method")
 	protected final float vector3FCosTheta(final float component1, final float component2, final float component3) {
 		return component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle theta in absolute form.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the cosine of the angle theta in absolute form
+	 */
 	protected final float vector3FCosThetaAbs(final float component1, final float component2, final float component3) {
 		return abs(vector3FCosTheta(component1, component2, component3));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle theta in quartic form.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the cosine of the angle theta in quartic form
+	 */
 	protected final float vector3FCosThetaQuartic(final float component1, final float component2, final float component3) {
 		return vector3FCosThetaSquared(component1, component2, component3) * vector3FCosThetaSquared(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the cosine of the angle theta in squared form.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the cosine of the angle theta in squared form
+	 */
 	protected final float vector3FCosThetaSquared(final float component1, final float component2, final float component3) {
 		return vector3FCosTheta(component1, component2, component3) * vector3FCosTheta(component1, component2, component3);
 	}
@@ -1839,7 +1879,14 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		return component1 * component1 + component2 * component2 + component3 * component3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the sine of the angle phi.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the sine of the angle phi
+	 */
 	protected final float vector3FSinPhi(final float component1, final float component2, final float component3) {
 		final float sinTheta = vector3FSinTheta(component1, component2, component3);
 		
@@ -1850,44 +1897,98 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		return saturateF(component2 / sinTheta, -1.0F, 1.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the sine of the angle phi in squared form.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the sine of the angle phi in squared form
+	 */
 	protected final float vector3FSinPhiSquared(final float component1, final float component2, final float component3) {
 		return vector3FSinPhi(component1, component2, component3) * vector3FSinPhi(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the sine of the angle theta.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the sine of the angle theta
+	 */
 	protected final float vector3FSinTheta(final float component1, final float component2, final float component3) {
 		return sqrt(vector3FSinThetaSquared(component1, component2, component3));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the sine of the angle theta in squared form.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the sine of the angle theta in squared form
+	 */
 	protected final float vector3FSinThetaSquared(final float component1, final float component2, final float component3) {
 		return max(0.0F, 1.0F - vector3FCosThetaSquared(component1, component2, component3));
 	}
 	
-//	TODO: Add Javadocs!
-	@SuppressWarnings("unused")
+	/**
+	 * Returns the spherical phi angle.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the spherical phi angle
+	 */
 	protected final float vector3FSphericalPhi(final float component1, final float component2, final float component3) {
 		return addIfLessThanThreshold(atan2(component2, component1), 0.0F, PI_MULTIPLIED_BY_2);
 	}
 	
-//	TODO: Add Javadocs!
-	@SuppressWarnings("unused")
+	/**
+	 * Returns the spherical theta angle.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the spherical theta angle
+	 */
 	protected final float vector3FSphericalTheta(final float component1, final float component2, final float component3) {
 		return acos(saturateF(component3, -1.0F, 1.0F));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the tangent of the angle theta.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the tangent of the angle theta
+	 */
 	protected final float vector3FTanTheta(final float component1, final float component2, final float component3) {
 		return vector3FSinTheta(component1, component2, component3) / vector3FCosTheta(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the tangent of the angle theta in absolute form.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the tangent of the angle theta in absolute form
+	 */
 	protected final float vector3FTanThetaAbs(final float component1, final float component2, final float component3) {
 		return abs(vector3FTanTheta(component1, component2, component3));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the tangent of the angle theta in squared form.
+	 * 
+	 * @param component1 the value of component 1 for the vector
+	 * @param component2 the value of component 2 for the vector
+	 * @param component3 the value of component 3 for the vector
+	 * @return the tangent of the angle theta in squared form
+	 */
 	protected final float vector3FTanThetaSquared(final float component1, final float component2, final float component3) {
 		return vector3FSinThetaSquared(component1, component2, component3) / vector3FCosThetaSquared(component1, component2, component3);
 	}
@@ -2231,7 +2332,17 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = isDividing ? newComponent3 / newComponent4 : newComponent3;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets a point in {@link #point3FArray_$private$3}.
+	 * <p>
+	 * The point is constructed by sampling a point on a disk with a uniform distribution using concentric mapping.
+	 * <p>
+	 * The point is 2-dimensional and not 3-dimensional as the name of this method may suggest. However, adding a new {@code point2FArray_$private$2} array just for this purpose seems unnecessary, at least for now.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param radius the radius of the disk
+	 */
 	protected final void point3FSetSampleDiskUniformDistributionByConcentricMapping(final float u, final float v, final float radius) {
 		if(zero(u) && zero(v)) {
 			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = 0.0F;
@@ -3153,8 +3264,19 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		}
 	}
 	
-//	TODO: Add Javadocs!
-	@SuppressWarnings("unused")
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed by negating component 3 of the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} if, and only if, {@code component3LHS} is less than {@code 0.0F}. Otherwise, its current value
+	 * will be used.
+	 * 
+	 * @param component1LHS the value of component 1 of the vector on the left-hand side
+	 * @param component2LHS the value of component 2 of the vector on the left-hand side
+	 * @param component3LHS the value of component 3 of the vector on the left-hand side
+	 * @param component1RHS the value of component 1 of the vector on the right-hand side
+	 * @param component2RHS the value of component 2 of the vector on the right-hand side
+	 * @param component3RHS the value of component 3 of the vector on the right-hand side
+	 */
 	protected final void vector3FSetFaceForwardComponent3(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
 		if(component3LHS < 0.0F) {
 			vector3FSet(+component1RHS, +component2RHS, -component3RHS);
@@ -3469,7 +3591,14 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		vector3FSetOrthonormalBasis33FTransformReverseNormalize(component1, component2, component3);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed by sampling a direction on a hemisphere with a cosine distribution.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 */
 	protected final void vector3FSetSampleHemisphereCosineDistribution(final float u, final float v) {
 		point3FSetSampleDiskUniformDistributionByConcentricMapping(u, v, 1.0F);
 		

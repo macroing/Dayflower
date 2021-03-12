@@ -314,9 +314,11 @@ public final class GPURenderer extends AbstractGPURenderer {
 						final float incomingDotSurfaceNormalS = vector3FDotProduct(incomingX, incomingY, incomingZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
 						final float incomingDotSurfaceNormalSAbs = abs(incomingDotSurfaceNormalS);
 						
-						throughputR *= resultR * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
-						throughputG *= resultG * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
-						throughputB *= resultB * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
+						if(probabilityDensityFunctionValue > 0.0F) {
+							throughputR *= resultR * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
+							throughputG *= resultG * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
+							throughputB *= resultB * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
+						}
 						
 						vector3FSet(incomingX, incomingY, incomingZ);
 						
@@ -334,7 +336,8 @@ public final class GPURenderer extends AbstractGPURenderer {
 							}
 						}
 						
-						currentBounce++;
+						currentBounce = probabilityDensityFunctionValue > 0.0F ? currentBounce + 1 : maximumBounce;
+//						currentBounce++;
 					} else {
 						currentBounce = maximumBounce;
 					}

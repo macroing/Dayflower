@@ -33,7 +33,6 @@ import org.dayflower.scene.Intersection;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.TransportMode;
 import org.dayflower.scene.bxdf.LambertianBRDF;
-import org.dayflower.scene.bxdf.ScaledBXDF;
 import org.dayflower.scene.bxdf.SpecularBRDF;
 import org.dayflower.scene.fresnel.ConstantFresnel;
 import org.dayflower.scene.fresnel.DielectricFresnel;
@@ -336,10 +335,12 @@ public final class ClearCoatMaterial implements Material {
 			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
-				return Optional.of(new BSDF(intersection, new ScaledBXDF(new SpecularBRDF(colorKS, new ConstantFresnel()), new Color3F(probabilityRussianRouletteReflection))));
+//				return Optional.of(new BSDF(intersection, new ScaledBXDF(new SpecularBRDF(colorKS, new ConstantFresnel()), new Color3F(probabilityRussianRouletteReflection))));
+				return Optional.of(new BSDF(intersection, new SpecularBRDF(Color3F.multiply(colorKS, probabilityRussianRouletteReflection), new ConstantFresnel())));
 			}
 			
-			return Optional.of(new BSDF(intersection, new ScaledBXDF(new LambertianBRDF(colorKD), new Color3F(probabilityRussianRouletteTransmission))));
+//			return Optional.of(new BSDF(intersection, new ScaledBXDF(new LambertianBRDF(colorKD), new Color3F(probabilityRussianRouletteTransmission))));
+			return Optional.of(new BSDF(intersection, new LambertianBRDF(Color3F.multiply(colorKD, probabilityRussianRouletteTransmission))));
 		}
 		
 		return Optional.of(new BSDF(intersection, new SpecularBRDF(colorKS, new ConstantFresnel())));

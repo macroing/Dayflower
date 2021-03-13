@@ -28,6 +28,8 @@ Below follows a few lists of features available in the Geometry API.
 * `Ray3F`
 * `SampleGeneratorD`
 * `SampleGeneratorF`
+* `Shape2D`
+* `Shape2F`
 * `Shape2I`
 * `Shape3D`
 * `Shape3F`
@@ -54,6 +56,8 @@ Below follows a few lists of features available in the Geometry API.
 * `Rasterizer2I`
 
 #### The Geometry Shape API
+* `Circle2D`
+* `Circle2F`
 * `Circle2I`
 * `Cone3D`
 * `Cone3F`
@@ -69,6 +73,8 @@ Below follows a few lists of features available in the Geometry API.
 * `Disk3F`
 * `Hyperboloid3D`
 * `Hyperboloid3F`
+* `Line2D`
+* `Line2F`
 * `Line2I`
 * `Paraboloid3D`
 * `Paraboloid3F`
@@ -76,6 +82,8 @@ Below follows a few lists of features available in the Geometry API.
 * `Plane3F`
 * `ProceduralTerrain3D`
 * `ProceduralTerrain3F`
+* `Rectangle2D`
+* `Rectangle2F`
 * `Rectangle2I`
 * `RectangularCuboid3D`
 * `RectangularCuboid3F`
@@ -83,6 +91,8 @@ Below follows a few lists of features available in the Geometry API.
 * `Sphere3F`
 * `Torus3D`
 * `Torus3F`
+* `Triangle2D`
+* `Triangle2F`
 * `Triangle2I`
 * `Triangle3D`
 * `Triangle3F`

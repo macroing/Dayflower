@@ -3346,6 +3346,27 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
+	 * The vector is constructed by negating component 3 of the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} if, and only if, {@code component3LHS} is greater than {@code 0.0F}. Otherwise, its current
+	 * value will be used.
+	 * 
+	 * @param component1LHS the value of component 1 of the vector on the left-hand side
+	 * @param component2LHS the value of component 2 of the vector on the left-hand side
+	 * @param component3LHS the value of component 3 of the vector on the left-hand side
+	 * @param component1RHS the value of component 1 of the vector on the right-hand side
+	 * @param component2RHS the value of component 2 of the vector on the right-hand side
+	 * @param component3RHS the value of component 3 of the vector on the right-hand side
+	 */
+	protected final void vector3FSetFaceForwardRHSComponent3Negated(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		if(component3LHS > 0.0F) {
+			vector3FSet(+component1RHS, +component2RHS, -component3RHS);
+		} else {
+			vector3FSet(+component1RHS, +component2RHS, +component3RHS);
+		}
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
 	 * The vector is constructed by perturbing the specular reflection direction with a direction sampled using a hemisphere power-cosine distribution.
 	 * <p>
 	 * The specular reflection direction is constructed by calling {@link #vector3FSetSpecularReflection(float, float, float, float, float, float, boolean)}, with the parameter arguments {@code directionX}, {@code directionY}, {@code directionZ},

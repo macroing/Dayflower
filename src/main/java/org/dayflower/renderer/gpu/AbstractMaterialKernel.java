@@ -690,7 +690,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 //	TODO: Add Javadocs!
 	protected final boolean testBSDFCompute(final int materialID, final int materialOffset) {
-		if(materialID == GlossyMaterial.ID) {
+		if(materialID == ClearCoatMaterial.ID) {
+			return doMaterialClearCoatMaterialComputeBSDF(materialOffset);
+		} else if(materialID == GlossyMaterial.ID) {
 			return doMaterialGlossyMaterialComputeBSDF(materialOffset);
 		} else if(materialID == MatteMaterial.ID) {
 			return doMaterialMatteMaterialComputeBSDF(materialOffset);
@@ -937,6 +939,117 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Materials ///////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doMaterialClearCoatMaterialComputeBSDF(final int materialClearCoatMaterialArrayOffset) {
+		/*
+		 * Evaluate the Texture instances:
+		 */
+		
+//		Retrieve the ID and offset for the KD Texture:
+		final int textureKD = this.materialClearCoatMaterialArray[materialClearCoatMaterialArrayOffset + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_D];
+		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
+		final int textureKDOffset = textureKD & 0xFFFF;
+		
+//		Evaluate the KD Texture:
+		textureEvaluate(textureKDID, textureKDOffset);
+		
+//		Retrieve the color from the KD Texture:
+		final float colorKDR = color3FLHSGetComponent1();
+		final float colorKDG = color3FLHSGetComponent2();
+		final float colorKDB = color3FLHSGetComponent3();
+		
+//		Retrieve the ID and offset for the KS Texture:
+		final int textureKS = this.materialClearCoatMaterialArray[materialClearCoatMaterialArrayOffset + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_S];
+		final int textureKSID = (textureKS >>> 16) & 0xFFFF;
+		final int textureKSOffset = textureKS & 0xFFFF;
+		
+//		Evaluate the KS Texture:
+		textureEvaluate(textureKSID, textureKSOffset);
+		
+//		Retrieve the color from the KS Texture:
+		final float colorKSR = color3FLHSGetComponent1();
+		final float colorKSG = color3FLHSGetComponent2();
+		final float colorKSB = color3FLHSGetComponent3();
+		
+		/*
+		 * Compute the BSDF:
+		 */
+		
+//		Clear the BSDF:
+		doBSDFClear();
+		
+		final float rayDirectionX = ray3FGetDirectionComponent1();
+		final float rayDirectionY = ray3FGetDirectionComponent2();
+		final float rayDirectionZ = ray3FGetDirectionComponent3();
+		
+		final float surfaceNormalX = intersectionGetOrthonormalBasisSWComponent1();
+		final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
+		final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
+		
+		final float surfaceNormalDotRayDirection = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, rayDirectionX, rayDirectionY, rayDirectionZ);
+		
+		final float surfaceNormalCorrectlyOrientedX = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalX : surfaceNormalX;
+		final float surfaceNormalCorrectlyOrientedY = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalY : surfaceNormalY;
+		final float surfaceNormalCorrectlyOrientedZ = surfaceNormalDotRayDirection > 0.0F ? -surfaceNormalZ : surfaceNormalZ;
+		
+		final boolean isEntering = vector3FDotProduct(surfaceNormalX, surfaceNormalY, surfaceNormalZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ) > 0.0F;
+		
+		final float etaA = 1.0F;
+		final float etaB = 1.5F;
+		final float etaI = isEntering ? etaA : etaB;
+		final float etaT = isEntering ? etaB : etaA;
+		final float eta = etaI / etaT;
+		
+		if(vector3FSetRefraction(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ, eta)) {
+			final float refractionDirectionX = vector3FGetComponent1();
+			final float refractionDirectionY = vector3FGetComponent2();
+			final float refractionDirectionZ = vector3FGetComponent3();
+			
+			final float cosThetaI = vector3FDotProduct(rayDirectionX, rayDirectionY, rayDirectionZ, surfaceNormalCorrectlyOrientedX, surfaceNormalCorrectlyOrientedY, surfaceNormalCorrectlyOrientedZ);
+			final float cosThetaICorrectlyOriented = isEntering ? -cosThetaI : vector3FDotProduct(refractionDirectionX, refractionDirectionY, refractionDirectionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
+			
+			final float reflectance = fresnelDielectric(cosThetaICorrectlyOriented, etaA, etaB);
+			final float transmittance = 1.0F - reflectance;
+			
+			final float probabilityRussianRoulette = 0.25F + 0.5F * reflectance;
+			final float probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+			final float probabilityRussianRouletteTransmission = transmittance / (1.0F - probabilityRussianRoulette);
+			
+			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
+			
+			if(isChoosingSpecularReflection) {
+//				Set the SpecularBRDF:
+				doBSDFSetBXDFSpecularBRDFFresnelConstant(0);
+				doBSDFSetBXDFCount(1);
+				doBSDFSetEta(1.0F);
+				doBSDFSetNegatingIncoming(false);
+				doBSDFResultInitialize();
+				doBXDFSpecularBRDFFresnelConstantSet(colorKSR * probabilityRussianRouletteReflection, colorKSG * probabilityRussianRouletteReflection, colorKSB * probabilityRussianRouletteReflection, 1.0F, 1.0F, 1.0F);
+				
+				return true;
+			}
+			
+//			Set LambertianBRDF:
+			doBSDFSetBXDFLambertianBRDF(0);
+			doBSDFSetBXDFCount(1);
+			doBSDFSetEta(1.0F);
+			doBSDFSetNegatingIncoming(false);
+			doBSDFResultInitialize();
+			doBXDFLambertianBRDFSet(colorKDR * probabilityRussianRouletteTransmission, colorKDG * probabilityRussianRouletteTransmission, colorKDB * probabilityRussianRouletteTransmission);
+			
+			return true;
+		}
+		
+//		Set the SpecularBRDF:
+		doBSDFSetBXDFSpecularBRDFFresnelConstant(0);
+		doBSDFSetBXDFCount(1);
+		doBSDFSetEta(1.0F);
+		doBSDFSetNegatingIncoming(false);
+		doBSDFResultInitialize();
+		doBXDFSpecularBRDFFresnelConstantSet(colorKSR, colorKSG, colorKSB, 1.0F, 1.0F, 1.0F);
+		
+		return true;
+	}
 	
 	private boolean doMaterialGlossyMaterialComputeBSDF(final int materialGlossyMaterialArrayOffset) {
 		/*
@@ -1981,28 +2094,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float etaI = doBXDFSpecularBRDFFresnelDielectricGetEtaI();
 		final float etaT = doBXDFSpecularBRDFFresnelDielectricGetEtaT();
 		
-		final float saturateCosThetaI = saturateF(cosThetaI, -1.0F, 1.0F);
+		final float reflectance = fresnelDielectric(cosThetaI, etaI, etaT);
 		
-		final boolean isEntering = saturateCosThetaI > 0.0F;
-		
-		final float currentCosThetaI = isEntering ? saturateCosThetaI : abs(saturateCosThetaI);
-		final float currentEtaI = isEntering ? etaI : etaT;
-		final float currentEtaT = isEntering ? etaT : etaI;
-		
-		final float currentSinThetaI = sqrt(max(0.0F, 1.0F - currentCosThetaI * currentCosThetaI));
-		final float currentSinThetaT = currentEtaI / currentEtaT * currentSinThetaI;
-		
-		if(currentSinThetaT >= 1.0F) {
-			color3FLHSSet(1.0F, 1.0F, 1.0F);
-		} else {
-			final float currentCosThetaT = sqrt(max(0.0F, 1.0F - currentSinThetaT * currentSinThetaT));
-			
-			final float reflectancePara = ((currentEtaT * currentCosThetaI) - (currentEtaI * currentCosThetaT)) / ((currentEtaT * currentCosThetaI) + (currentEtaI * currentCosThetaT));
-			final float reflectancePerp = ((currentEtaI * currentCosThetaI) - (currentEtaT * currentCosThetaT)) / ((currentEtaI * currentCosThetaI) + (currentEtaT * currentCosThetaT));
-			final float reflectance = (reflectancePara * reflectancePara + reflectancePerp * reflectancePerp) / 2.0F;
-			
-			color3FLHSSet(reflectance, reflectance, reflectance);
-		}
+		color3FLHSSet(reflectance, reflectance, reflectance);
 	}
 	
 	private void doBXDFSpecularBRDFFresnelDielectricEvaluateProbabilityDensityFunction() {

@@ -950,6 +950,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
 		final int textureKDOffset = textureKD & 0xFFFF;
 		
+//		Retrieve the ID and offset for the KS Texture:
+		final int textureKS = this.materialClearCoatMaterialArray[materialClearCoatMaterialArrayOffset + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_S];
+		final int textureKSID = (textureKS >>> 16) & 0xFFFF;
+		final int textureKSOffset = textureKS & 0xFFFF;
+		
 //		Evaluate the KD Texture:
 		textureEvaluate(textureKDID, textureKDOffset);
 		
@@ -957,11 +962,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKDR = color3FLHSGetComponent1();
 		final float colorKDG = color3FLHSGetComponent2();
 		final float colorKDB = color3FLHSGetComponent3();
-		
-//		Retrieve the ID and offset for the KS Texture:
-		final int textureKS = this.materialClearCoatMaterialArray[materialClearCoatMaterialArrayOffset + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_S];
-		final int textureKSID = (textureKS >>> 16) & 0xFFFF;
-		final int textureKSOffset = textureKS & 0xFFFF;
 		
 //		Evaluate the KS Texture:
 		textureEvaluate(textureKSID, textureKSOffset);
@@ -1061,6 +1061,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final int textureKRID = (textureKR >>> 16) & 0xFFFF;
 		final int textureKROffset = textureKR & 0xFFFF;
 		
+//		Retrieve the ID and offset for the Roughness Texture:
+		final int textureRoughness = this.materialGlossyMaterialArray[materialGlossyMaterialArrayOffset + GlossyMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS];
+		final int textureRoughnessID = (textureRoughness >>> 16) & 0xFFFF;
+		final int textureRoughnessOffset = textureRoughness & 0xFFFF;
+		
 //		Evaluate the KR Texture:
 		textureEvaluate(textureKRID, textureKROffset);
 		
@@ -1068,11 +1073,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKRR = color3FLHSGetComponent1();
 		final float colorKRG = color3FLHSGetComponent2();
 		final float colorKRB = color3FLHSGetComponent3();
-		
-//		Retrieve the ID and offset for the Roughness Texture:
-		final int textureRoughness = this.materialGlossyMaterialArray[materialGlossyMaterialArrayOffset + GlossyMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS];
-		final int textureRoughnessID = (textureRoughness >>> 16) & 0xFFFF;
-		final int textureRoughnessOffset = textureRoughness & 0xFFFF;
 		
 //		Evaluate the Roughness Texture:
 		textureEvaluate(textureRoughnessID, textureRoughnessOffset);
@@ -1108,6 +1108,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
 		final int textureKDOffset = textureKD & 0xFFFF;
 		
+//		Retrieve the ID and offset for the Angle Texture:
+		final int textureAngle = this.materialMatteMaterialArray[materialMatteMaterialArrayOffset + MatteMaterial.ARRAY_OFFSET_TEXTURE_ANGLE];
+		final int textureAngleID = (textureAngle >>> 16) & 0xFFFF;
+		final int textureAngleOffset = textureAngle & 0xFFFF;
+		
 //		Evaluate the KD Texture:
 		textureEvaluate(textureKDID, textureKDOffset);
 		
@@ -1115,11 +1120,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKDR = color3FLHSGetComponent1();
 		final float colorKDG = color3FLHSGetComponent2();
 		final float colorKDB = color3FLHSGetComponent3();
-		
-//		Retrieve the ID and offset for the Angle Texture:
-		final int textureAngle = this.materialMatteMaterialArray[materialMatteMaterialArrayOffset + MatteMaterial.ARRAY_OFFSET_TEXTURE_ANGLE];
-		final int textureAngleID = (textureAngle >>> 16) & 0xFFFF;
-		final int textureAngleOffset = textureAngle & 0xFFFF;
 		
 //		Evaluate the Angle Texture:
 		textureEvaluate(textureAngleID, textureAngleOffset);

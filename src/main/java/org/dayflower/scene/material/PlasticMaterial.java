@@ -58,6 +58,31 @@ public final class PlasticMaterial implements Material {
 	public static final String NAME = "Plastic";
 	
 	/**
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
+	 * The offset for the roughness remapping flag in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 4;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code KD} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_D = 1;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code KS} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K_S = 2;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Roughness} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS = 3;
+	
+	/**
 	 * The ID of this {@code PlasticMaterial} class.
 	 */
 	public static final int ID = 111;
@@ -603,5 +628,26 @@ public final class PlasticMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureEmission, this.textureKD, this.textureKS, this.textureRoughness, Boolean.valueOf(this.isRemappingRoughness));
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code PlasticMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code PlasticMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the PlasticMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D] = this.textureKD.getID();						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_S] = this.textureKS.getID();						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS] = this.textureRoughness.getID();			//Block #1
+		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;	//Block #1
+		array[5] = 0;																	//Block #1
+		array[6] = 0;																	//Block #1
+		array[7] = 0;																	//Block #1
+		
+		return array;
 	}
 }

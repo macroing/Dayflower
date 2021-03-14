@@ -30,6 +30,7 @@ import org.dayflower.scene.material.GlassMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
 import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
+import org.dayflower.scene.material.PlasticMaterial;
 
 //TODO: Add Javadocs!
 public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
@@ -197,6 +198,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //	TODO: Add Javadocs!
 	protected int[] materialMirrorMaterialArray;
 	
+//	TODO: Add Javadocs!
+	protected int[] materialPlasticMaterialArray;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
@@ -218,6 +222,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.materialGlossyMaterialArray = new int[1];
 		this.materialMatteMaterialArray = new int[1];
 		this.materialMirrorMaterialArray = new int[1];
+		this.materialPlasticMaterialArray = new int[1];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -726,6 +731,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			textureEmission = this.materialMatteMaterialArray[materialOffsetTextureEmission];
 		} else if(materialID == MirrorMaterial.ID) {
 			textureEmission = this.materialMirrorMaterialArray[materialOffsetTextureEmission];
+		} else if(materialID == PlasticMaterial.ID) {
+			textureEmission = this.materialPlasticMaterialArray[materialOffsetTextureEmission];
 		}
 		
 		final int textureEmissionID = (textureEmission >>> 16) & 0xFFFF;
@@ -752,6 +759,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return doMaterialMatteMaterialComputeBSDF(materialOffset);
 		} else if(materialID == MirrorMaterial.ID) {
 			return doMaterialMirrorMaterialComputeBSDF(materialOffset);
+		} else if(materialID == PlasticMaterial.ID) {
+			return doMaterialPlasticMaterialComputeBSDF(materialOffset);
 		} else {
 			return false;
 		}
@@ -1255,6 +1264,91 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return true;
 	}
 	
+	private boolean doMaterialPlasticMaterialComputeBSDF(final int materialPlasticMaterialArrayOffset) {
+		/*
+		 * Evaluate the Texture instances:
+		 */
+		
+//		Retrieve the ID and offset for the KD Texture:
+		final int textureKD = this.materialPlasticMaterialArray[materialPlasticMaterialArrayOffset + PlasticMaterial.ARRAY_OFFSET_TEXTURE_K_D];
+		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
+		final int textureKDOffset = textureKD & 0xFFFF;
+		
+//		Retrieve the ID and offset for the KS Texture:
+		final int textureKS = this.materialPlasticMaterialArray[materialPlasticMaterialArrayOffset + PlasticMaterial.ARRAY_OFFSET_TEXTURE_K_S];
+		final int textureKSID = (textureKS >>> 16) & 0xFFFF;
+		final int textureKSOffset = textureKS & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Roughness Texture:
+		final int textureRoughness = this.materialPlasticMaterialArray[materialPlasticMaterialArrayOffset + PlasticMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS];
+		final int textureRoughnessID = (textureRoughness >>> 16) & 0xFFFF;
+		final int textureRoughnessOffset = textureRoughness & 0xFFFF;
+		
+//		Retrieve the roughness remapping flag:
+		final boolean isRemappingRoughness = this.materialPlasticMaterialArray[materialPlasticMaterialArrayOffset + PlasticMaterial.ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] != 0;
+		
+//		Evaluate the KD Texture:
+		textureEvaluate(textureKDID, textureKDOffset);
+		
+//		Retrieve the color from the KD Texture:
+		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
+		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
+		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		
+		final boolean hasKD = !checkIsZero(colorKDR) || !checkIsZero(colorKDG) || !checkIsZero(colorKDB);
+		
+//		Evaluate the KS Texture:
+		textureEvaluate(textureKSID, textureKSOffset);
+		
+//		Retrieve the color from the KS Texture:
+		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
+		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
+		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		
+		final boolean hasKS = !checkIsZero(colorKSR) || !checkIsZero(colorKSG) || !checkIsZero(colorKSB);
+		
+		if(!hasKD && !hasKS) {
+			return false;
+		}
+		
+//		Evaluate the Roughness Texture:
+		textureEvaluate(textureRoughnessID, textureRoughnessOffset);
+		
+//		Retrieve the average color from the Roughness Texture and remap it if necessary:
+		final float floatRoughness = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(color3FLHSGetAverage()) : color3FLHSGetAverage();
+		
+		/*
+		 * Compute the BSDF:
+		 */
+		
+		final int count = (hasKD ? 1 : 0) + (hasKS ? 1 : 0);
+		
+		final int indexKD = hasKD ?           0 : -1;
+		final int indexKS = hasKS ? indexKD + 1 : -1;
+		
+//		Clear the BSDF:
+		doBSDFClear();
+		doBSDFSetBXDFCount(count);
+		doBSDFSetEta(1.0F);
+		doBSDFSetNegatingIncoming(false);
+		
+		if(hasKD) {
+//			Set LambertianBRDF:
+			doBSDFSetBXDFLambertianBRDF(indexKD);
+			doBXDFLambertianBRDFSet(colorKDR, colorKDG, colorKDB);
+		}
+		
+		if(hasKS) {
+//			Set TorranceSparrowBRDF:
+			doBSDFSetBXDFTorranceSparrowBRDFFresnelDielectric(indexKS);
+			doBXDFTorranceSparrowBRDFFresnelDielectricSet(colorKSR, colorKSG, colorKSB, 1.5F, 1.0F, true, false, floatRoughness, floatRoughness);
+		}
+		
+		doBSDFResultInitialize();
+		
+		return true;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BSDF ////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1311,6 +1405,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private void doBSDFSetBXDFSpecularBRDFFresnelDielectric(final int index) {
 		doBSDFSetBXDF(index, B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ID);
+	}
+	
+	private void doBSDFSetBXDFTorranceSparrowBRDFFresnelDielectric(final int index) {
+		doBSDFSetBXDF(index, B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ID);
 	}
 	
 	private void doBSDFSetEta(final float eta) {

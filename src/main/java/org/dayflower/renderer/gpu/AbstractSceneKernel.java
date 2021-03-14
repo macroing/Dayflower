@@ -847,6 +847,7 @@ public abstract class AbstractSceneKernel extends AbstractMaterialKernel {
 		put(super.materialGlossyMaterialArray = compiledScene.getMaterialGlossyMaterialArray());
 		put(super.materialMatteMaterialArray = compiledScene.getMaterialMatteMaterialArray());
 		put(super.materialMirrorMaterialArray = compiledScene.getMaterialMirrorMaterialArray());
+		put(super.materialPlasticMaterialArray = compiledScene.getMaterialPlasticMaterialArray());
 		
 		put(this.cameraArray = compiledScene.getCameraArray());
 		put(this.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());

@@ -53,6 +53,7 @@ import org.dayflower.scene.material.GlassMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
 import org.dayflower.scene.material.MatteMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
+import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.texture.BlendTexture;
 import org.dayflower.scene.texture.BullseyeTexture;
 import org.dayflower.scene.texture.CheckerboardTexture;
@@ -93,6 +94,7 @@ final class SceneCompiler {
 	private final List<MirrorMaterial> distinctMirrorMaterials;
 	private final List<Paraboloid3F> distinctParaboloids;
 	private final List<Plane3F> distinctPlanes;
+	private final List<PlasticMaterial> distinctPlasticMaterials;
 	private final List<Primitive> filteredPrimitives;
 	private final List<RectangularCuboid3F> distinctRectangularCuboids;
 	private final List<Shape3F> distinctShapes;
@@ -122,6 +124,7 @@ final class SceneCompiler {
 	private final Map<MirrorMaterial, Integer> distinctToOffsetsMirrorMaterials;
 	private final Map<Paraboloid3F, Integer> distinctToOffsetsParaboloids;
 	private final Map<Plane3F, Integer> distinctToOffsetsPlanes;
+	private final Map<PlasticMaterial, Integer> distinctToOffsetsPlasticMaterials;
 	private final Map<RectangularCuboid3F, Integer> distinctToOffsetsRectangularCuboids;
 	private final Map<SimplexFractionalBrownianMotionTexture, Integer> distinctToOffsetsSimplexFractionalBrownianMotionTextures;
 	private final Map<Sphere3F, Integer> distinctToOffsetsSpheres;
@@ -157,6 +160,7 @@ final class SceneCompiler {
 		this.distinctMirrorMaterials = new ArrayList<>();
 		this.distinctParaboloids = new ArrayList<>();
 		this.distinctPlanes = new ArrayList<>();
+		this.distinctPlasticMaterials = new ArrayList<>();
 		this.filteredPrimitives = new ArrayList<>();
 		this.distinctRectangularCuboids = new ArrayList<>();
 		this.distinctShapes = new ArrayList<>();
@@ -186,6 +190,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsMirrorMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsParaboloids = new LinkedHashMap<>();
 		this.distinctToOffsetsPlanes = new LinkedHashMap<>();
+		this.distinctToOffsetsPlasticMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsRectangularCuboids = new LinkedHashMap<>();
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsSpheres = new LinkedHashMap<>();
@@ -283,6 +288,7 @@ final class SceneCompiler {
 		final int[] materialGlossyMaterialArray = Ints.toArray(this.distinctGlossyMaterials, glossyMaterial -> glossyMaterial.toArray(), 1);
 		final int[] materialMatteMaterialArray = Ints.toArray(this.distinctMatteMaterials, matteMaterial -> matteMaterial.toArray(), 1);
 		final int[] materialMirrorMaterialArray = Ints.toArray(this.distinctMirrorMaterials, mirrorMaterial -> mirrorMaterial.toArray(), 1);
+		final int[] materialPlasticMaterialArray = Ints.toArray(this.distinctPlasticMaterials, plasticMaterial -> plasticMaterial.toArray(), 1);
 		
 //		Retrieve the float[] for the Matrix44F instances:
 		final float[] matrix44FArray = Floats.toArray(this.filteredPrimitives, primitive -> primitive.getTransform().toArray(), 1);
@@ -320,6 +326,7 @@ final class SceneCompiler {
 		doPopulateMaterialGlossyMaterialArrayWithTextures(materialGlossyMaterialArray);
 		doPopulateMaterialMatteMaterialArrayWithTextures(materialMatteMaterialArray);
 		doPopulateMaterialMirrorMaterialArrayWithTextures(materialMirrorMaterialArray);
+		doPopulateMaterialPlasticMaterialArrayWithTextures(materialPlasticMaterialArray);
 		doPopulatePrimitiveArrayWithBoundingVolumes(primitiveArray);
 		doPopulatePrimitiveArrayWithMaterials(primitiveArray);
 		doPopulatePrimitiveArrayWithShapes(primitiveArray);
@@ -340,6 +347,7 @@ final class SceneCompiler {
 		compiledScene.setMaterialGlossyMaterialArray(materialGlossyMaterialArray);
 		compiledScene.setMaterialMatteMaterialArray(materialMatteMaterialArray);
 		compiledScene.setMaterialMirrorMaterialArray(materialMirrorMaterialArray);
+		compiledScene.setMaterialPlasticMaterialArray(materialPlasticMaterialArray);
 		compiledScene.setMatrix44FArray(matrix44FArray);
 		compiledScene.setPrimitiveArray(primitiveArray);
 		compiledScene.setShape3FCone3FArray(shape3FCone3FArray);
@@ -387,6 +395,7 @@ final class SceneCompiler {
 		this.distinctMirrorMaterials.clear();
 		this.distinctParaboloids.clear();
 		this.distinctPlanes.clear();
+		this.distinctPlasticMaterials.clear();
 		this.filteredPrimitives.clear();
 		this.distinctRectangularCuboids.clear();
 		this.distinctShapes.clear();
@@ -416,6 +425,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsMirrorMaterials.clear();
 		this.distinctToOffsetsParaboloids.clear();
 		this.distinctToOffsetsPlanes.clear();
+		this.distinctToOffsetsPlasticMaterials.clear();
 		this.distinctToOffsetsRectangularCuboids.clear();
 		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.clear();
 		this.distinctToOffsetsSpheres.clear();
@@ -443,11 +453,13 @@ final class SceneCompiler {
 		this.distinctGlossyMaterials.addAll(NodeFilter.filterAllDistinct(scene, GlossyMaterial.class));
 		this.distinctMatteMaterials.addAll(NodeFilter.filterAllDistinct(scene, MatteMaterial.class));
 		this.distinctMirrorMaterials.addAll(NodeFilter.filterAllDistinct(scene, MirrorMaterial.class));
+		this.distinctPlasticMaterials.addAll(NodeFilter.filterAllDistinct(scene, PlasticMaterial.class));
 		this.distinctMaterials.addAll(this.distinctClearCoatMaterials);
 		this.distinctMaterials.addAll(this.distinctGlassMaterials);
 		this.distinctMaterials.addAll(this.distinctGlossyMaterials);
 		this.distinctMaterials.addAll(this.distinctMatteMaterials);
 		this.distinctMaterials.addAll(this.distinctMirrorMaterials);
+		this.distinctMaterials.addAll(this.distinctPlasticMaterials);
 	}
 	
 	private void doFilterAllDistinctShapes(final Scene scene) {
@@ -505,6 +517,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsGlossyMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlossyMaterials, GlossyMaterial.ARRAY_LENGTH));
 		this.distinctToOffsetsMatteMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMatteMaterials, MatteMaterial.ARRAY_LENGTH));
 		this.distinctToOffsetsMirrorMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMirrorMaterials, MirrorMaterial.ARRAY_LENGTH));
+		this.distinctToOffsetsPlasticMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPlasticMaterials, PlasticMaterial.ARRAY_LENGTH));
 	}
 	
 	private void doMapAllDistinctShapes() {
@@ -630,6 +643,27 @@ final class SceneCompiler {
 		}
 	}
 	
+	private void doPopulateMaterialPlasticMaterialArrayWithTextures(final int[] materialPlasticMaterialArray) {
+		for(int i = 0; i < this.distinctPlasticMaterials.size(); i++) {
+			final PlasticMaterial plasticMaterial = this.distinctPlasticMaterials.get(i);
+			
+			final Texture textureEmission = plasticMaterial.getTextureEmission();
+			final Texture textureKD = plasticMaterial.getTextureKD();
+			final Texture textureKS = plasticMaterial.getTextureKS();
+			final Texture textureRoughness = plasticMaterial.getTextureRoughness();
+			
+			final int materialPlasticMaterialArrayTextureEmission = i * PlasticMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
+			final int materialPlasticMaterialArrayTextureKD = i * PlasticMaterial.ARRAY_LENGTH + PlasticMaterial.ARRAY_OFFSET_TEXTURE_K_D;
+			final int materialPlasticMaterialArrayTextureKS = i * PlasticMaterial.ARRAY_LENGTH + PlasticMaterial.ARRAY_OFFSET_TEXTURE_K_S;
+			final int materialPlasticMaterialArrayTextureRoughness = i * PlasticMaterial.ARRAY_LENGTH + PlasticMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS;
+			
+			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
+			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureKD] = pack(textureKD.getID(), doFindTextureOffset(textureKD));
+			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureKS] = pack(textureKS.getID(), doFindTextureOffset(textureKS));
+			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureRoughness] = pack(textureRoughness.getID(), doFindTextureOffset(textureRoughness));
+		}
+	}
+	
 	private void doPopulatePrimitiveArrayWithBoundingVolumes(final int[] primitiveArray) {
 		for(int i = 0; i < this.filteredPrimitives.size(); i++) {
 			final Primitive primitive = this.filteredPrimitives.get(i);
@@ -666,6 +700,8 @@ final class SceneCompiler {
 				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMatteMaterials.get(material).intValue();
 			} else if(material instanceof MirrorMaterial) {
 				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsMirrorMaterials.get(material).intValue();
+			} else if(material instanceof PlasticMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsPlasticMaterials.get(material).intValue();
 			}
 		}
 	}

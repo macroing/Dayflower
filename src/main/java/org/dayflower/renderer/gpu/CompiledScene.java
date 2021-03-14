@@ -50,6 +50,7 @@ final class CompiledScene {
 	private int[] materialGlossyMaterialArray;
 	private int[] materialMatteMaterialArray;
 	private int[] materialMirrorMaterialArray;
+	private int[] materialPlasticMaterialArray;
 	private int[] primitiveArray;
 	private int[] shape3FTriangleMesh3FArray;
 	
@@ -66,6 +67,7 @@ final class CompiledScene {
 		setMaterialGlossyMaterialArray(new int[1]);
 		setMaterialMatteMaterialArray(new int[1]);
 		setMaterialMirrorMaterialArray(new int[1]);
+		setMaterialPlasticMaterialArray(new int[1]);
 		setMatrix44FArray(new float[1]);
 		setPrimitiveArray(new int[1]);
 		setShape3FCone3FArray(new float[1]);
@@ -205,6 +207,10 @@ final class CompiledScene {
 		return this.materialMirrorMaterialArray;
 	}
 	
+	public int[] getMaterialPlasticMaterialArray() {
+		return this.materialPlasticMaterialArray;
+	}
+	
 	public int[] getPrimitiveArray() {
 		return this.primitiveArray;
 	}
@@ -251,6 +257,10 @@ final class CompiledScene {
 	
 	public void setMaterialMirrorMaterialArray(final int[] materialMirrorMaterialArray) {
 		this.materialMirrorMaterialArray = Objects.requireNonNull(materialMirrorMaterialArray, "materialMirrorMaterialArray == null");
+	}
+	
+	public void setMaterialPlasticMaterialArray(final int[] materialPlasticMaterialArray) {
+		this.materialPlasticMaterialArray = Objects.requireNonNull(materialPlasticMaterialArray, "materialPlasticMaterialArray == null");
 	}
 	
 	public void setMatrix44FArray(final float[] matrix44FArray) {

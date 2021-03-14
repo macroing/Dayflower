@@ -579,16 +579,22 @@ final class SceneCompiler {
 			final Texture textureEta = glassMaterial.getTextureEta();
 			final Texture textureKR = glassMaterial.getTextureKR();
 			final Texture textureKT = glassMaterial.getTextureKT();
+			final Texture textureRoughnessU = glassMaterial.getTextureRoughnessU();
+			final Texture textureRoughnessV = glassMaterial.getTextureRoughnessV();
 			
 			final int materialGlassMaterialArrayTextureEmission = i * GlassMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
 			final int materialGlassMaterialArrayTextureEta = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_ETA;
 			final int materialGlassMaterialArrayTextureKR = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_K_R;
 			final int materialGlassMaterialArrayTextureKT = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_K_T;
+			final int materialGlassMaterialArrayTextureRoughnessU = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_U;
+			final int materialGlassMaterialArrayTextureRoughnessV = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_V;
 			
 			materialGlassMaterialArray[materialGlassMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
 			materialGlassMaterialArray[materialGlassMaterialArrayTextureEta] = pack(textureEta.getID(), doFindTextureOffset(textureEta));
 			materialGlassMaterialArray[materialGlassMaterialArrayTextureKR] = pack(textureKR.getID(), doFindTextureOffset(textureKR));
 			materialGlassMaterialArray[materialGlassMaterialArrayTextureKT] = pack(textureKT.getID(), doFindTextureOffset(textureKT));
+			materialGlassMaterialArray[materialGlassMaterialArrayTextureRoughnessU] = pack(textureRoughnessU.getID(), doFindTextureOffset(textureRoughnessU));
+			materialGlassMaterialArray[materialGlassMaterialArrayTextureRoughnessV] = pack(textureRoughnessV.getID(), doFindTextureOffset(textureRoughnessV));
 		}
 	}
 	

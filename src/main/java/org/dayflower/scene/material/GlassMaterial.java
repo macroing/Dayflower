@@ -65,7 +65,12 @@ public final class GlassMaterial implements Material {
 	/**
 	 * The length of the {@code int[]}.
 	 */
-	public static final int ARRAY_LENGTH = 4;
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
+	 * The offset for the roughness remapping flag in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 6;
 	
 	/**
 	 * The offset for the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
@@ -81,6 +86,16 @@ public final class GlassMaterial implements Material {
 	 * The offset for the {@link Texture} denoted by {@code KT} in the {@code int[]}.
 	 */
 	public static final int ARRAY_OFFSET_TEXTURE_K_T = 3;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Roughness U} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_U = 4;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Roughness V} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_V = 5;
 	
 	/**
 	 * The ID of this {@code GlassMaterial} class.
@@ -803,11 +818,15 @@ public final class GlassMaterial implements Material {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-//		Because the GlassMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ETA] = this.textureEta.getID();			//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_R] = this.textureKR.getID();			//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_T] = this.textureKT.getID();			//Block #1
+//		Because the GlassMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ETA] = this.textureEta.getID();						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R] = this.textureKR.getID();						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_T] = this.textureKT.getID();						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_U] = this.textureRoughnessU.getID();		//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_V] = this.textureRoughnessV.getID();		//Block #1
+		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;	//Block #1
+		array[7] = 0;																	//Block #1
 		
 		return array;
 	}

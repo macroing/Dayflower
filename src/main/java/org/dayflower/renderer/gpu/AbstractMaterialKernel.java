@@ -136,6 +136,13 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING = 6;
 	private static final int MATERIAL_B_X_D_F_ARRAY_SIZE = 16;
 	
+//	Constants for MicrofacetDistribution of type TrowbridgeReitz:
+	private static final int MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_LENGTH = 4;
+	private static final int MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_IS_SAMPLING_VISIBLE_AREA = 0;
+	private static final int MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_IS_SEPARABLE_MODEL = 1;
+	private static final int MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_ALPHA_X = 2;
+	private static final int MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_ALPHA_Y = 3;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
@@ -172,6 +179,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected float[] materialBXDFResultArray_$private$16;
 	
 //	TODO: Add Javadocs!
+	protected float[] microfacetDistributionTrowbridgeReitzArray_$private$4;
+	
+//	TODO: Add Javadocs!
 	protected int[] materialClearCoatMaterialArray;
 	
 //	TODO: Add Javadocs!
@@ -201,6 +211,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bXDFSpecularBRDFFresnelDielectricArray_$private$5 = new float[B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH];
 		this.bXDFTorranceSparrowBRDFFresnelDielectricArray_$private$9 = new float[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH];
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
+		this.microfacetDistributionTrowbridgeReitzArray_$private$4 = new float[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_LENGTH];
 		this.materialClearCoatMaterialArray = new int[1];
 		this.materialGlassMaterialArray = new int[1];
 		this.materialGlossyMaterialArray = new int[1];
@@ -759,7 +770,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			}
 		}
 		
-		if(matches > 0 && !zero(doBXDFResultGetOutgoingZ())) {
+		if(matches > 0 && !checkIsZero(doBXDFResultGetOutgoingZ())) {
 			final float u = random();
 			final float v = random();
 			
@@ -955,7 +966,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		float probabilityDensityFunctionValue = 0.0F;
 		
-		if(countBXDFs > 0 && !zero(doBXDFResultGetOutgoingZ())) {
+		if(countBXDFs > 0 && !checkIsZero(doBXDFResultGetOutgoingZ())) {
 			int matches = 0;
 			
 			for(int i = 0; i < countBXDFs; i++) {
@@ -1169,7 +1180,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		Retrieve the average color from the Angle Texture:
 		final float floatAngle = color3FLHSGetAverage();
 		
-		if(zero(colorKDR) && zero(colorKDG) && zero(colorKDB)) {
+		if(checkIsZero(colorKDR) && checkIsZero(colorKDG) && checkIsZero(colorKDB)) {
 			return false;
 		}
 		
@@ -1180,7 +1191,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		Clear the BSDF:
 		doBSDFClear();
 		
-		if(zero(floatAngle)) {
+		if(checkIsZero(floatAngle)) {
 //			Set LambertianBRDF:
 			doBSDFSetBXDFLambertianBRDF(0);
 			doBSDFSetBXDFCount(1);
@@ -1221,7 +1232,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
 		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
 		
-		if(zero(colorKRR) && zero(colorKRG) && zero(colorKRB)) {
+		if(checkIsZero(colorKRR) && checkIsZero(colorKRG) && checkIsZero(colorKRB)) {
 			return false;
 		}
 		
@@ -1248,7 +1259,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private boolean doBSDFIsNegatingIncoming() {
-		return !zero(this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING]);
+		return !checkIsZero(this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_IS_NEGATING_INCOMING]);
 	}
 	
 	private int doBSDFGetBXDF(final int index) {
@@ -1556,7 +1567,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalY = doBXDFResultGetNormalY();
 		final float normalZ = doBXDFResultGetNormalZ();
 		
-		if(zero(outgoingZ)) {
+		if(checkIsZero(outgoingZ)) {
 			return false;
 		}
 		
@@ -1612,7 +1623,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float cosThetaIncoming = vector3FCosTheta(incomingX, incomingY, incomingZ);
 		final float cosThetaIncomingAbs = abs(cosThetaIncoming);
 		
-		if(zero(cosThetaOutgoingAbs) || zero(cosThetaIncomingAbs)) {
+		if(checkIsZero(cosThetaOutgoingAbs) || checkIsZero(cosThetaIncomingAbs)) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -1627,7 +1638,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalNormalizedZ = normalZ * normalLengthReciprocal;
 		final float normalNormalizedCosThetaAbs = vector3FCosThetaAbs(normalNormalizedX, normalNormalizedY, normalNormalizedZ);
 		
-		if(zero(normalNormalizedX) && zero(normalNormalizedY) && zero(normalNormalizedZ)) {
+		if(checkIsZero(normalNormalizedX) && checkIsZero(normalNormalizedY) && checkIsZero(normalNormalizedZ)) {
 			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
 			
 			return;
@@ -2248,5 +2259,238 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bXDFTorranceSparrowBRDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL] = isSeparableModel ? 1.0F : 0.0F;
 		this.bXDFTorranceSparrowBRDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ALPHA_X] = max(alphaX, 0.001F);
 		this.bXDFTorranceSparrowBRDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ALPHA_Y] = max(alphaY, 0.001F);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Microfacet Distribution Trowbridge-Reitz ////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doMicrofacetDistributionTrowbridgeReitzIsSamplingVisibleArea() {
+		return !checkIsZero(this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_IS_SAMPLING_VISIBLE_AREA]);
+	}
+	
+	private boolean doMicrofacetDistributionTrowbridgeReitzIsSeparableModel() {
+		return !checkIsZero(this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_IS_SEPARABLE_MODEL]);
+	}
+	
+	private float doMicrofacetDistributionTrowbridgeReitzComputeDifferentialArea(final float normalX, final float normalY, final float normalZ) {
+		final float tanThetaSquaredNormal = vector3FTanThetaSquared(normalX, normalY, normalZ);
+		
+		if(checkIsInfinite(tanThetaSquaredNormal)) {
+			return 0.0F;
+		}
+		
+		final float alphaX = doMicrofacetDistributionTrowbridgeReitzGetAlphaX();
+		final float alphaXSquared = alphaX * alphaX;
+		final float alphaY = doMicrofacetDistributionTrowbridgeReitzGetAlphaY();
+		final float alphaYSquared = alphaY * alphaY;
+		
+		final float cosPhiSquaredNormal = vector3FCosPhiSquared(normalX, normalY, normalZ);
+		final float sinPhiSquaredNormal = vector3FSinPhiSquared(normalX, normalY, normalZ);
+		
+		final float cosThetaQuarticNormal = vector3FCosThetaQuartic(normalX, normalY, normalZ);
+		
+		final float exponent = (cosPhiSquaredNormal / alphaXSquared + sinPhiSquaredNormal / alphaYSquared) * tanThetaSquaredNormal;
+		
+		final float differentialArea = 1.0F / (PI * alphaX * alphaY * cosThetaQuarticNormal * (1.0F + exponent) * (1.0F + exponent));
+		
+		return differentialArea;
+	}
+	
+	private float doMicrofacetDistributionTrowbridgeReitzComputeLambda(final float outgoingX, final float outgoingY, final float outgoingZ) {
+		final float tanThetaAbsOutgoing = vector3FTanThetaAbs(outgoingX, outgoingY, outgoingZ);
+		
+		if(checkIsInfinite(tanThetaAbsOutgoing)) {
+			return 0.0F;
+		}
+		
+		final float alphaX = doMicrofacetDistributionTrowbridgeReitzGetAlphaX();
+		final float alphaY = doMicrofacetDistributionTrowbridgeReitzGetAlphaY();
+		
+		final float cosPhiSquaredOutgoing = vector3FCosPhiSquared(outgoingX, outgoingY, outgoingZ);
+		final float sinPhiSquaredOutgoing = vector3FSinPhiSquared(outgoingX, outgoingY, outgoingZ);
+		
+		final float alpha = sqrt(cosPhiSquaredOutgoing * alphaX * alphaX + sinPhiSquaredOutgoing * alphaY * alphaY);
+		final float alphaTanThetaAbsOutgoingSquared = (alpha * tanThetaAbsOutgoing) * (alpha * tanThetaAbsOutgoing);
+		
+		final float lambda = (-1.0F + sqrt(1.0F + alphaTanThetaAbsOutgoingSquared)) / 2.0F;
+		
+		return lambda;
+	}
+	
+	private float doMicrofacetDistributionTrowbridgeReitzComputeProbabilityDensityFunctionValue(final float outgoingX, final float outgoingY, final float outgoingZ, final float normalX, final float normalY, final float normalZ) {
+		final float differentialArea = doMicrofacetDistributionTrowbridgeReitzComputeDifferentialArea(normalX, normalY, normalZ);
+		
+		if(doMicrofacetDistributionTrowbridgeReitzIsSamplingVisibleArea()) {
+			final float shadowingAndMasking = doMicrofacetDistributionTrowbridgeReitzComputeShadowingAndMasking1(outgoingX, outgoingY, outgoingZ);
+			final float outgoingDotNormalAbs = abs(vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ));
+			final float outgoingCosThetaAbs = vector3FCosThetaAbs(outgoingX, outgoingY, outgoingZ);
+			final float probabilityDensityFunctionValue = differentialArea * shadowingAndMasking * outgoingDotNormalAbs / outgoingCosThetaAbs;
+			
+			return probabilityDensityFunctionValue;
+		}
+		
+		final float normalCosThetaAbs = vector3FCosThetaAbs(normalX, normalY, normalZ);
+		final float probabilityDensityFunctionValue = differentialArea * normalCosThetaAbs;
+		
+		return probabilityDensityFunctionValue;
+	}
+	
+	private float doMicrofacetDistributionTrowbridgeReitzComputeShadowingAndMasking1(final float outgoingX, final float outgoingY, final float outgoingZ) {
+		return 1.0F / (1.0F + doMicrofacetDistributionTrowbridgeReitzComputeLambda(outgoingX, outgoingY, outgoingZ));
+	}
+	
+	private float doMicrofacetDistributionTrowbridgeReitzComputeShadowingAndMasking2(final float outgoingX, final float outgoingY, final float outgoingZ, final float incomingX, final float incomingY, final float incomingZ) {
+		if(doMicrofacetDistributionTrowbridgeReitzIsSeparableModel()) {
+			final float shadowingAndMaskingOutgoing = doMicrofacetDistributionTrowbridgeReitzComputeShadowingAndMasking1(outgoingX, outgoingY, outgoingZ);
+			final float shadowingAndMaskingIncoming = doMicrofacetDistributionTrowbridgeReitzComputeShadowingAndMasking1(incomingX, incomingY, incomingZ);
+			final float shadowingAndMasking = shadowingAndMaskingOutgoing * shadowingAndMaskingIncoming;
+			
+			return shadowingAndMasking;
+		}
+		
+		final float lambdaOutgoing = doMicrofacetDistributionTrowbridgeReitzComputeLambda(outgoingX, outgoingY, outgoingZ);
+		final float lambdaIncoming = doMicrofacetDistributionTrowbridgeReitzComputeLambda(incomingX, incomingY, incomingZ);
+		
+		final float shadowingAndMasking = 1.0F / (1.0F + lambdaOutgoing + lambdaIncoming);
+		
+		return shadowingAndMasking;
+	}
+	
+	private float doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(final float roughness) {
+		final float x = max(roughness, 1.0e-3F);
+		final float y = log(x);
+		final float z = 1.62142F + 0.819955F * y + 0.1734F * y * y + 0.0171201F * y * y * y + 0.000640711F * y * y * y * y;
+		
+		return z;
+	}
+	
+	private float doMicrofacetDistributionTrowbridgeReitzGetAlphaX() {
+		return this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_ALPHA_X];
+	}
+	
+	private float doMicrofacetDistributionTrowbridgeReitzGetAlphaY() {
+		return this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_ALPHA_Y];
+	}
+	
+	private void doMicrofacetDistributionTrowbridgeReitzComputeSlope(final float cosThetaIncoming, final float u, final float v) {
+		if(cosThetaIncoming > 0.9999F) {
+			final float r = sqrt(u / (1.0F - u));
+			final float phi = 2.0F * PI * v;
+			
+			final float cosPhi = cos(phi);
+			final float sinPhi = sin(phi);
+			
+			final float x = r * cosPhi;
+			final float y = r * sinPhi;
+			
+			vector3FSet(x, y, 0.0F);
+		} else {
+			final float sinThetaIncoming = sqrt(max(0.0F, 1.0F - cosThetaIncoming * cosThetaIncoming));
+			final float tanThetaIncoming = sinThetaIncoming / cosThetaIncoming;
+			final float tanThetaIncomingReciprocal = 1.0F / tanThetaIncoming;
+			
+			final float a = 2.0F / (1.0F + sqrt(1.0F + 1.0F / (tanThetaIncomingReciprocal * tanThetaIncomingReciprocal)));
+			final float b = 2.0F * u / a - 1.0F;
+			final float c = min(1.0F / (b * b - 1.0F), 1.0e10F);
+			final float d = tanThetaIncoming;
+			final float e = sqrt(max(d * d * c * c - (b * b - d * d) * c, 0.0F));
+			final float f = d * c - e;
+			final float g = d * c + e;
+			final float h = v > 0.5F ? 1.0F : -1.0F;
+			final float i = v > 0.5F ? 2.0F * (v - 0.5F) : 2.0F * (0.5F - v);
+			final float j = (i * (i * (i * 0.27385F - 0.73369F) + 0.46341F)) / (i * (i * (i * 0.093073F + 0.309420F) - 1.000000F) + 0.597999F);
+			
+			final float x = b < 0.0F || g > 1.0F / tanThetaIncoming ? f : g;
+			final float y = h * j * sqrt(1.0F + x * x);
+			
+			vector3FSet(x, y, 0.0F);
+		}
+	}
+	
+	private void doMicrofacetDistributionTrowbridgeReitzSample(final boolean isNegating, final float incomingX, final float incomingY, final float incomingZ, final float alphaX, final float alphaY, final float u, final float v) {
+		final float incomingCorrectlyOrientedX = isNegating ? -incomingX : incomingX;
+		final float incomingCorrectlyOrientedY = isNegating ? -incomingY : incomingY;
+		final float incomingCorrectlyOrientedZ = isNegating ? -incomingZ : incomingZ;
+		final float incomingStretchedX = incomingCorrectlyOrientedX * alphaX;
+		final float incomingStretchedY = incomingCorrectlyOrientedY * alphaY;
+		final float incomingStretchedZ = incomingCorrectlyOrientedZ;
+		final float incomingStretchedLengthReciprocal = vector3FLengthReciprocal(incomingStretchedX, incomingStretchedY, incomingStretchedZ);
+		final float incomingStretchedNormalizedX = incomingStretchedX * incomingStretchedLengthReciprocal;
+		final float incomingStretchedNormalizedY = incomingStretchedY * incomingStretchedLengthReciprocal;
+		final float incomingStretchedNormalizedZ = incomingStretchedZ * incomingStretchedLengthReciprocal;
+		
+		final float cosPhi = vector3FCosPhi(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
+		final float cosTheta = vector3FCosTheta(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
+		final float sinPhi = vector3FSinPhi(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
+		
+		doMicrofacetDistributionTrowbridgeReitzComputeSlope(cosTheta, u, v);
+		
+		final float slopeX = vector3FGetComponent1();
+		final float slopeY = vector3FGetComponent2();
+		
+		final float sampleX = -((cosPhi * slopeX - sinPhi * slopeY) * alphaX);
+		final float sampleY = -((sinPhi * slopeX + cosPhi * slopeY) * alphaY);
+		final float sampleZ = 1.0F;
+		final float sampleCorrectlyOrientedX = isNegating ? -sampleX : sampleX;
+		final float sampleCorrectlyOrientedY = isNegating ? -sampleY : sampleY;
+		final float sampleCorrectlyOrientedZ = isNegating ? -sampleZ : sampleZ;
+		
+		vector3FSetNormalize(sampleCorrectlyOrientedX, sampleCorrectlyOrientedY, sampleCorrectlyOrientedZ);
+	}
+	
+	private void doMicrofacetDistributionTrowbridgeReitzSampleNormal(final float outgoingX, final float outgoingY, final float outgoingZ, final float u, final float v) {
+		final float alphaX = doMicrofacetDistributionTrowbridgeReitzGetAlphaX();
+		final float alphaY = doMicrofacetDistributionTrowbridgeReitzGetAlphaY();
+		
+		if(doMicrofacetDistributionTrowbridgeReitzIsSamplingVisibleArea()) {
+			doMicrofacetDistributionTrowbridgeReitzSample(outgoingZ < 0.0F, outgoingX, outgoingY, outgoingZ, alphaX, alphaY, u, v);
+		} else if(alphaX == alphaY) {
+			final float phi = v * 2.0F * PI;
+			final float tanThetaSquared = alphaX * alphaX * u / (1.0F - u);
+			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
+			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+			
+			final float normalX = sinTheta * cos(phi);
+			final float normalY = sinTheta * sin(phi);
+			final float normalZ = cosTheta;
+			
+			final boolean isSameHemisphereZ = vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
+			
+			final float normalCorrectlyOrientedX = isSameHemisphereZ ? normalX : -normalX;
+			final float normalCorrectlyOrientedY = isSameHemisphereZ ? normalY : -normalY;
+			final float normalCorrectlyOrientedZ = isSameHemisphereZ ? normalZ : -normalZ;
+			
+			vector3FSet(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+		} else {
+			final float phi = atan(alphaY / alphaX * tan(2.0F * PI * v + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
+			final float cosPhi = cos(phi);
+			final float sinPhi = sin(phi);
+			final float alphaXSquared = alphaX * alphaX;
+			final float alphaYSquared = alphaY * alphaY;
+			final float alphaSquared = 1.0F / (cosPhi * cosPhi / alphaXSquared + sinPhi * sinPhi / alphaYSquared);
+			final float tanThetaSquared = alphaSquared * u / (1.0F - u);
+			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
+			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+			
+			final float normalX = sinTheta * cos(phi);
+			final float normalY = sinTheta * sin(phi);
+			final float normalZ = cosTheta;
+			
+			final boolean isSameHemisphereZ = vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
+			
+			final float normalCorrectlyOrientedX = isSameHemisphereZ ? normalX : -normalX;
+			final float normalCorrectlyOrientedY = isSameHemisphereZ ? normalY : -normalY;
+			final float normalCorrectlyOrientedZ = isSameHemisphereZ ? normalZ : -normalZ;
+			
+			vector3FSet(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+		}
+	}
+	
+	private void doMicrofacetDistributionTrowbridgeReitzSet(final boolean isSamplingVisibleArea, final boolean isSeparableModel, final float alphaX, final float alphaY) {
+		this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_IS_SAMPLING_VISIBLE_AREA] = isSamplingVisibleArea ? 1.0F : 0.0F;
+		this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_IS_SEPARABLE_MODEL] = isSeparableModel ? 1.0F : 0.0F;
+		this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_ALPHA_X] = max(alphaX, 0.001F);
+		this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_ALPHA_Y] = max(alphaY, 0.001F);
 	}
 }

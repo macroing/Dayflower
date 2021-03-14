@@ -1744,7 +1744,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected final float vector3FCosPhi(final float component1, final float component2, final float component3) {
 		final float sinTheta = vector3FSinTheta(component1, component2, component3);
 		
-		if(zero(sinTheta)) {
+		if(checkIsZero(sinTheta)) {
 			return 1.0F;
 		}
 		
@@ -1903,7 +1903,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	protected final float vector3FSinPhi(final float component1, final float component2, final float component3) {
 		final float sinTheta = vector3FSinTheta(component1, component2, component3);
 		
-		if(zero(sinTheta)) {
+		if(checkIsZero(sinTheta)) {
 			return 0.0F;
 		}
 		
@@ -2357,7 +2357,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param radius the radius of the disk
 	 */
 	protected final void point3FSetSampleDiskUniformDistributionByConcentricMapping(final float u, final float v, final float radius) {
-		if(zero(u) && zero(v)) {
+		if(checkIsZero(u) && checkIsZero(v)) {
 			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = 0.0F;
 			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = 0.0F;
 			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = 0.0F;

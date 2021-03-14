@@ -177,13 +177,35 @@ public abstract class AbstractKernel extends Kernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code value} is infinite, {@code false} otherwise.
+	 * 
+	 * @param value the {@code float} value to check
+	 * @return {@code true} if, and only if, {@code value} is infinite, {@code false} otherwise
+	 */
+	@SuppressWarnings("static-method")
+	protected final boolean checkIsInfinite(final float value) {
+		return value == Float.NEGATIVE_INFINITY || value == Float.POSITIVE_INFINITY;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code value} is NaN (Not a Number), {@code false} otherwise.
+	 * 
+	 * @param value the {@code float} value to check
+	 * @return {@code true} if, and only if, {@code value} is NaN (Not a Number), {@code false} otherwise
+	 */
+	@SuppressWarnings("static-method")
+	protected final boolean checkIsNaN(final float value) {
+		return value == Float.NaN;
+	}
+	
+	/**
 	 * Returns {@code true} if, and only if, {@code value} is zero, {@code false} otherwise.
 	 * 
 	 * @param value the {@code float} value to check
 	 * @return {@code true} if, and only if, {@code value} is zero, {@code false} otherwise
 	 */
 	@SuppressWarnings("static-method")
-	protected final boolean zero(final float value) {
+	protected final boolean checkIsZero(final float value) {
 		final boolean isLTZero = value < -0.0F;
 		final boolean isGTZero = value > +0.0F;
 		

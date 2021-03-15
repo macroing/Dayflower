@@ -538,6 +538,50 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return {@code true} if, and only if, the vector was set, {@code false} otherwise
 	 */
 	protected final boolean vector3FSetRefraction(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final float eta) {
+		final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, normalX, normalY, normalZ);
+		final float sinThetaISquared = max(0.0F, 1.0F - cosThetaI * cosThetaI);
+		final float sinThetaTSquared = eta * eta * sinThetaISquared;
+		final float cosThetaT = sqrt(1.0F - sinThetaTSquared);
+		
+		final boolean isTotalInternalReflection = sinThetaTSquared >= 1.0F;
+		
+		if(isTotalInternalReflection) {
+			return false;
+		}
+		
+		final float refractionDirectionX = -directionX * eta + normalX * (eta * cosThetaI - cosThetaT);
+		final float refractionDirectionY = -directionY * eta + normalY * (eta * cosThetaI - cosThetaT);
+		final float refractionDirectionZ = -directionZ * eta + normalZ * (eta * cosThetaI - cosThetaT);
+		final float refractionDirectionLengthReciprocal = vector3FLengthReciprocal(refractionDirectionX, refractionDirectionY, refractionDirectionZ);
+		final float refractionDirectionNormalizedX = refractionDirectionX * refractionDirectionLengthReciprocal;
+		final float refractionDirectionNormalizedY = refractionDirectionY * refractionDirectionLengthReciprocal;
+		final float refractionDirectionNormalizedZ = refractionDirectionZ * refractionDirectionLengthReciprocal;
+		
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = refractionDirectionNormalizedX;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_2] = refractionDirectionNormalizedY;
+		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_3] = refractionDirectionNormalizedZ;
+		
+		return true;
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * Returns {@code true} if, and only if, the vector was set, {@code false} otherwise.
+	 * <p>
+	 * The vector is constructed as the refraction vector of the direction vector represented by {@code directionX}, {@code directionY} and {@code directionZ} with regards to the normal vector represented by {@code normalX}, {@code normalY}
+	 * and {@code normalZ}.
+	 * 
+	 * @param directionX the X-component of the direction vector
+	 * @param directionY the Y-component of the direction vector
+	 * @param directionZ the Z-component of the direction vector
+	 * @param normalX the X-component of the normal vector
+	 * @param normalY the Y-component of the normal vector
+	 * @param normalZ the Z-component of the normal vector
+	 * @param eta the index of refraction (IOR)
+	 * @return {@code true} if, and only if, the vector was set, {@code false} otherwise
+	 */
+	protected final boolean vector3FSetRefraction2(final float directionX, final float directionY, final float directionZ, final float normalX, final float normalY, final float normalZ, final float eta) {
 //		PBRT:
 //		final float cosThetaI = vector3FDotProduct(directionX, directionY, directionZ, normalX, normalY, normalZ);
 //		final float sinThetaISquared = max(0.0F, 1.0F - cosThetaI * cosThetaI);

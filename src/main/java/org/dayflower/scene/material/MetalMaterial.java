@@ -54,6 +54,36 @@ public final class MetalMaterial implements Material {
 	public static final String NAME = "Metal";
 	
 	/**
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
+	 * The offset for the roughness remapping flag in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 5;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ETA = 1;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code K} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_K = 2;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Roughness U} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_U = 3;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Roughness V} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_V = 4;
+	
+	/**
 	 * The ID of this {@code MetalMaterial} class.
 	 */
 	public static final int ID = 109;
@@ -655,5 +685,26 @@ public final class MetalMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureEmission, this.textureEta, this.textureK, this.textureRoughnessU, this.textureRoughnessV, Boolean.valueOf(this.isRemappingRoughness));
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code MetalMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code MetalMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the MetalMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();			//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ETA] = this.textureEta.getID();						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K] = this.textureK.getID();							//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_U] = this.textureRoughnessU.getID();		//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_V] = this.textureRoughnessV.getID();		//Block #1
+		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;	//Block #1
+		array[6] = 0;																	//Block #1
+		array[7] = 0;																	//Block #1
+		
+		return array;
 	}
 }

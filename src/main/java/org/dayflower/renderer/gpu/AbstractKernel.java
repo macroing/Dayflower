@@ -389,6 +389,19 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
+	 * Returns {@code base} raised to the power of {@code 5.0F}.
+	 * <p>
+	 * This method should be faster than {@code pow(float, float)}.
+	 * 
+	 * @param base the base
+	 * @return {@code base} raised to the power of {@code 5.0F}
+	 */
+	@SuppressWarnings("static-method")
+	protected final float pow5(final float base) {
+		return (base * base) * (base * base) * base;
+	}
+	
+	/**
 	 * Returns the normalized representation of {@code value}.
 	 * <p>
 	 * If {@code value} is greater than or equal to {@code min(a, b)} and less than or equal to {@code max(a, b)}, the normalized representation of {@code value} will be between {@code 0.0F} (inclusive) and {@code 1.0F} (inclusive).

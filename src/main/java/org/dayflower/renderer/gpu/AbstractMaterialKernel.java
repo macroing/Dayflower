@@ -1222,7 +1222,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final int textureRoughnessVOffset = textureRoughnessV & 0xFFFF;
 		
 //		Retrieve the roughness remapping flag:
-//		final boolean isRemappingRoughness = this.materialGlassMaterialArray[materialGlassMaterialArrayOffset + GlassMaterial.ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] != 0;
+		final boolean isRemappingRoughness = this.materialGlassMaterialArray[materialGlassMaterialArrayOffset + GlassMaterial.ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] != 0;
 		
 //		Evaluate the KR Texture:
 		textureEvaluate(textureKRID, textureKROffset);
@@ -1254,18 +1254,18 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate(textureRoughnessUID, textureRoughnessUOffset);
 		
 //		Retrieve the average color from the Roughness U Texture:
-//		final float floatRoughnessU = color3FLHSGetAverage();
-//		final float floatRoughnessURemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessU) : floatRoughnessU;
+		final float floatRoughnessU = color3FLHSGetAverage();
+		final float floatRoughnessURemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessU) : floatRoughnessU;
 		
 //		Evaluate the Roughness V Texture:
 		textureEvaluate(textureRoughnessVID, textureRoughnessVOffset);
 		
 //		Retrieve the average color from the Roughness V Texture:
-//		final float floatRoughnessV = color3FLHSGetAverage();
-//		final float floatRoughnessVRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessV) : floatRoughnessV;
+		final float floatRoughnessV = color3FLHSGetAverage();
+		final float floatRoughnessVRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessV) : floatRoughnessV;
 		
 //		final boolean isAllowingMultipleLobes = true;
-//		final boolean isSpecular = checkIsZero(floatRoughnessU) && checkIsZero(floatRoughnessV);
+		final boolean isSpecular = checkIsZero(floatRoughnessU) && checkIsZero(floatRoughnessV);
 		
 		if(!hasKR && !hasKT) {
 			return false;
@@ -1279,7 +1279,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //			
 //		}
 		
-//		if(isSpecular) {
+		if(isSpecular) {
 			final int count = (hasKR ? 1 : 0) + (hasKT ? 1 : 0);
 			
 			final int indexKR = hasKR ?           0 : -1;
@@ -1309,9 +1309,39 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBSDFResultInitialize();
 			
 			return true;
-//		}
+		}
 		
-//		return true;
+		final int count = (hasKR ? 1 : 0) + (hasKT ? 1 : 0);
+		
+		final int indexKR = hasKR ?           0 : -1;
+		final int indexKT = hasKT ? indexKR + 1 : -1;
+		
+//		Initialize the BSDF:
+		doBSDFClear();
+		doBSDFSetBXDFCount(count);
+		doBSDFSetEta(floatEta);
+		doBSDFSetNegatingIncoming(false);
+		
+		if(hasKR) {
+//			Set TorranceSparrowBRDF:
+			doBSDFSetBXDFTorranceSparrowBRDFFresnelDielectric(indexKR);
+			doBXDFTorranceSparrowBRDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
+			doBXDFTorranceSparrowBRDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughnessURemapped, floatRoughnessVRemapped);
+			doBXDFTorranceSparrowBRDFFresnelDielectricSetReflectanceScale(colorKRR, colorKRG, colorKRB);
+		}
+		
+		if(hasKT) {
+//			Set TorranceSparrowBTDF:
+			doBSDFSetBXDFTorranceSparrowBTDFFresnelDielectric(indexKT);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughnessURemapped, floatRoughnessVRemapped);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetTransmittanceScale(colorKTR, colorKTG, colorKTB);
+		}
+		
+//		Initialize the BSDFResult:
+		doBSDFResultInitialize();
+		
+		return true;
 	}
 	
 	private boolean doMaterialGlossyMaterialComputeBSDF(final int materialGlossyMaterialArrayOffset) {
@@ -1714,6 +1744,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFSetBXDF(index, B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ID);
 	}
 	
+	private void doBSDFSetBXDFTorranceSparrowBTDFFresnelDielectric(final int index) {
+		doBSDFSetBXDF(index, B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ID);
+	}
+	
 	private void doBSDFSetEta(final float eta) {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_ETA] = eta;
 	}
@@ -1847,6 +1881,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return true;
 		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
 			return true;
+		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
+			return false;
 		} else {
 			return false;
 		}
@@ -1871,6 +1907,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return false;
 		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
 			return false;
+		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
+			return true;
 		} else {
 			return false;
 		}
@@ -1895,6 +1933,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return doBXDFTorranceSparrowBRDFFresnelConductorIsMatchingBitFlags(bitFlags);
 		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
 			return doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingBitFlags(bitFlags);
+		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
+			return doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingBitFlags(bitFlags);
 		} else {
 			return false;
 		}
@@ -1918,6 +1958,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		} else if(doBXDFTorranceSparrowBRDFFresnelConductorIsMatchingID(id)) {
 			return false;
 		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
+			return false;
+		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
 			return false;
 		} else {
 			return false;
@@ -1943,6 +1985,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return doBXDFTorranceSparrowBRDFFresnelConductorSampleDistributionFunction(u, v);
 		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
 			return doBXDFTorranceSparrowBRDFFresnelDielectricSampleDistributionFunction(u, v);
+		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
+			return doBXDFTorranceSparrowBTDFFresnelDielectricSampleDistributionFunction(u, v);
 		} else {
 			return false;
 		}
@@ -1967,6 +2011,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBXDFTorranceSparrowBRDFFresnelConductorEvaluateDistributionFunction();
 		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
 			doBXDFTorranceSparrowBRDFFresnelDielectricEvaluateDistributionFunction();
+		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
+			doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateDistributionFunction();
 		}
 	}
 	
@@ -1989,6 +2035,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBXDFTorranceSparrowBRDFFresnelConductorEvaluateProbabilityDensityFunction();
 		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
 			doBXDFTorranceSparrowBRDFFresnelDielectricEvaluateProbabilityDensityFunction();
+		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
+			doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateProbabilityDensityFunction();
 		}
 	}
 	
@@ -3281,6 +3329,244 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF Torrance-Sparrow BTDF Fresnel Dielectric ///////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingBitFlags(final int bitFlags) {
+		return (B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS & bitFlags) == B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS;
+	}
+	
+	@SuppressWarnings("static-method")
+	private boolean doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(final int id) {
+		return id == B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ID;
+	}
+	
+	private boolean doBXDFTorranceSparrowBTDFFresnelDielectricIsSamplingVisibleArea() {
+		return !checkIsZero(this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SAMPLING_VISIBLE_AREA]);
+	}
+	
+	private boolean doBXDFTorranceSparrowBTDFFresnelDielectricIsSeparableModel() {
+		return !checkIsZero(this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL]);
+	}
+	
+	private boolean doBXDFTorranceSparrowBTDFFresnelDielectricSampleDistributionFunction(final float u, final float v) {
+		final float outgoingX = doBXDFResultGetOutgoingX();
+		final float outgoingY = doBXDFResultGetOutgoingY();
+		final float outgoingZ = doBXDFResultGetOutgoingZ();
+		
+		if(checkIsZero(outgoingZ)) {
+			return false;
+		}
+		
+		doBXDFTorranceSparrowBTDFFresnelDielectricInitializeMicrofacetDistributionTrowbridgeReitz();
+		
+		doMicrofacetDistributionTrowbridgeReitzSampleNormal(outgoingX, outgoingY, outgoingZ, u, v);
+		
+		final float normalX = vector3FGetComponent1();
+		final float normalY = vector3FGetComponent2();
+		final float normalZ = vector3FGetComponent3();
+		
+		if(vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ) < 0.0F) {
+			return false;
+		}
+		
+		final float etaA = doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaA();
+		final float etaB = doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaB();
+		final float eta = vector3FCosTheta(outgoingX, outgoingY, outgoingZ) > 0.0F ? etaA / etaB : etaB / etaA;
+		
+		if(!vector3FSetRefraction(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ, eta)) {
+			return false;
+		}
+		
+		final float incomingX = vector3FGetComponent1();
+		final float incomingY = vector3FGetComponent2();
+		final float incomingZ = vector3FGetComponent3();
+		
+		doBXDFResultSetIncoming(incomingX, incomingY, incomingZ);
+		doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateDistributionFunction();
+		doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateProbabilityDensityFunction();
+		
+		return true;
+	}
+	
+	private float doBXDFTorranceSparrowBTDFFresnelDielectricGetAlphaX() {
+		return this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ALPHA_X];
+	}
+	
+	private float doBXDFTorranceSparrowBTDFFresnelDielectricGetAlphaY() {
+		return this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ALPHA_Y];
+	}
+	
+	private float doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaA() {
+		return this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ETA_A];
+	}
+	
+	private float doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaB() {
+		return this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ETA_B];
+	}
+	
+	private float doBXDFTorranceSparrowBTDFFresnelDielectricGetTransmittanceScaleB() {
+		return this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 2];
+	}
+	
+	private float doBXDFTorranceSparrowBTDFFresnelDielectricGetTransmittanceScaleG() {
+		return this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 1];
+	}
+	
+	private float doBXDFTorranceSparrowBTDFFresnelDielectricGetTransmittanceScaleR() {
+		return this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 0];
+	}
+	
+	private void doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateDistributionFunction() {
+		final float outgoingX = doBXDFResultGetOutgoingX();
+		final float outgoingY = doBXDFResultGetOutgoingY();
+		final float outgoingZ = doBXDFResultGetOutgoingZ();
+		
+		final float incomingX = doBXDFResultGetIncomingX();
+		final float incomingY = doBXDFResultGetIncomingY();
+		final float incomingZ = doBXDFResultGetIncomingZ();
+		
+		if(vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
+			
+			return;
+		}
+		
+		final float cosThetaOutgoing = vector3FCosTheta(outgoingX, outgoingY, outgoingZ);
+		final float cosThetaIncoming = vector3FCosTheta(incomingX, incomingY, incomingZ);
+		
+		if(checkIsZero(cosThetaOutgoing) || checkIsZero(cosThetaIncoming)) {
+			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
+			
+			return;
+		}
+		
+		final float etaA = doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaA();
+		final float etaB = doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaB();
+		final float eta = cosThetaOutgoing > 0.0F ? etaB / etaA : etaA / etaB;
+		
+		final float normalX = outgoingX + incomingX * eta;
+		final float normalY = outgoingY + incomingY * eta;
+		final float normalZ = outgoingZ + incomingZ * eta;
+		final float normalLengthReciprocal = vector3FLengthReciprocal(normalX, normalY, normalZ);
+		final float normalNormalizedX = normalX * normalLengthReciprocal;
+		final float normalNormalizedY = normalY * normalLengthReciprocal;
+		final float normalNormalizedZ = normalZ * normalLengthReciprocal;
+		final float normalCorrectlyOrientedX = normalNormalizedZ < 0.0F ? -normalNormalizedX : normalNormalizedX;
+		final float normalCorrectlyOrientedY = normalNormalizedZ < 0.0F ? -normalNormalizedY : normalNormalizedY;
+		final float normalCorrectlyOrientedZ = normalNormalizedZ < 0.0F ? -normalNormalizedZ : normalNormalizedZ;
+		
+		final float outgoingDotNormal = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+		final float incomingDotNormal = vector3FDotProduct(incomingX, incomingY, incomingZ, normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+		
+		if(outgoingDotNormal * incomingDotNormal > 0.0F) {
+			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
+			
+			return;
+		}
+		
+		doBXDFTorranceSparrowBTDFFresnelDielectricInitializeMicrofacetDistributionTrowbridgeReitz();
+		doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateFresnel(outgoingDotNormal);
+		
+		final float a = outgoingDotNormal + eta * incomingDotNormal;
+		final float b = 1.0F / eta;
+		final float d = doMicrofacetDistributionTrowbridgeReitzComputeDifferentialArea(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+		final float g = doMicrofacetDistributionTrowbridgeReitzComputeShadowingAndMasking2(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ);
+		final float f = 1.0F - color3FLHSGetComponent1();
+		final float h = abs(d * g * eta * eta * abs(incomingDotNormal) * abs(outgoingDotNormal) * b * b / (cosThetaIncoming * cosThetaOutgoing * a * a));
+		
+		final float transmittanceScaleR = doBXDFTorranceSparrowBTDFFresnelDielectricGetTransmittanceScaleR();
+		final float transmittanceScaleG = doBXDFTorranceSparrowBTDFFresnelDielectricGetTransmittanceScaleG();
+		final float transmittanceScaleB = doBXDFTorranceSparrowBTDFFresnelDielectricGetTransmittanceScaleB();
+		
+		final float resultR = transmittanceScaleR * f * h;
+		final float resultG = transmittanceScaleG * f * h;
+		final float resultB = transmittanceScaleB * f * h;
+		
+		doBXDFResultSetResult(resultR, resultG, resultB);
+	}
+	
+	private void doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateFresnel(final float cosThetaI) {
+		final float etaA = doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaA();
+		final float etaB = doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaB();
+		
+		final float reflectance = fresnelDielectric(cosThetaI, etaA, etaB);
+		
+		color3FLHSSet(reflectance, reflectance, reflectance);
+	}
+	
+	private void doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateProbabilityDensityFunction() {
+		final float outgoingX = doBXDFResultGetOutgoingX();
+		final float outgoingY = doBXDFResultGetOutgoingY();
+		final float outgoingZ = doBXDFResultGetOutgoingZ();
+		
+		final float incomingX = doBXDFResultGetIncomingX();
+		final float incomingY = doBXDFResultGetIncomingY();
+		final float incomingZ = doBXDFResultGetIncomingZ();
+		
+		if(vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
+			
+			return;
+		}
+		
+		final float etaA = doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaA();
+		final float etaB = doBXDFTorranceSparrowBTDFFresnelDielectricGetEtaB();
+		final float eta = vector3FCosTheta(outgoingX, outgoingY, outgoingZ) > 0.0F ? etaB / etaA : etaA / etaB;
+		
+		final float normalX = outgoingX + incomingX * eta;
+		final float normalY = outgoingY + incomingY * eta;
+		final float normalZ = outgoingZ + incomingZ * eta;
+		final float normalLengthReciprocal = vector3FLengthReciprocal(normalX, normalY, normalZ);
+		final float normalNormalizedX = normalX * normalLengthReciprocal;
+		final float normalNormalizedY = normalY * normalLengthReciprocal;
+		final float normalNormalizedZ = normalZ * normalLengthReciprocal;
+		
+		final float outgoingDotNormal = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalNormalizedX, normalNormalizedY, normalNormalizedZ);
+		final float incomingDotNormal = vector3FDotProduct(incomingX, incomingY, incomingZ, normalNormalizedX, normalNormalizedY, normalNormalizedZ);
+		
+		if(outgoingDotNormal * incomingDotNormal > 0.0F) {
+			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
+			
+			return;
+		}
+		
+		doBXDFTorranceSparrowBTDFFresnelDielectricInitializeMicrofacetDistributionTrowbridgeReitz();
+		
+		final float a = outgoingDotNormal + eta * incomingDotNormal;
+		final float b = abs((eta * eta * incomingDotNormal) / (a * a));
+		
+		final float probabilityDensityFunctionValue = doMicrofacetDistributionTrowbridgeReitzComputeProbabilityDensityFunctionValue(outgoingX, outgoingY, outgoingZ, normalNormalizedX, normalNormalizedY, normalNormalizedZ) * b;
+		
+		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+	}
+	
+	private void doBXDFTorranceSparrowBTDFFresnelDielectricInitializeMicrofacetDistributionTrowbridgeReitz() {
+		final boolean isSamplingVisibleArea = doBXDFTorranceSparrowBTDFFresnelDielectricIsSamplingVisibleArea();
+		final boolean isSeparableModel = doBXDFTorranceSparrowBTDFFresnelDielectricIsSeparableModel();
+		
+		final float alphaX = doBXDFTorranceSparrowBTDFFresnelDielectricGetAlphaX();
+		final float alphaY = doBXDFTorranceSparrowBTDFFresnelDielectricGetAlphaY();
+		
+		doMicrofacetDistributionTrowbridgeReitzSet(isSamplingVisibleArea, isSeparableModel, alphaX, alphaY);
+	}
+	
+	private void doBXDFTorranceSparrowBTDFFresnelDielectricSetFresnelDielectric(final float etaA, final float etaB) {
+		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ETA_A] = etaA;
+		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ETA_B] = etaB;
+	}
+	
+	private void doBXDFTorranceSparrowBTDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(final boolean isSamplingVisibleArea, final boolean isSeparableModel, final float alphaX, final float alphaY) {
+		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SAMPLING_VISIBLE_AREA] = isSamplingVisibleArea ? 1.0F : 0.0F;
+		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL] = isSeparableModel ? 1.0F : 0.0F;
+		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ALPHA_X] = max(alphaX, 0.001F);
+		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ALPHA_Y] = max(alphaY, 0.001F);
+	}
+	
+	private void doBXDFTorranceSparrowBTDFFresnelDielectricSetTransmittanceScale(final float transmittanceScaleR, final float transmittanceScaleG, final float transmittanceScaleB) {
+		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 0] = transmittanceScaleR;
+		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 1] = transmittanceScaleG;
+		this.bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9[B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 2] = transmittanceScaleB;
+	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Fresnel Conductor ///////////////////////////////////////////////////////////////////////////////

@@ -2330,6 +2330,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 	}
 	
+	@SuppressWarnings("unused")
 	private void doBXDFLambertianBTDFSetTransmittanceScale(final float transmittanceScaleR, final float transmittanceScaleG, final float transmittanceScaleB) {
 		this.bXDFLambertianBTDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_T_D_F_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 0] = transmittanceScaleR;
 		this.bXDFLambertianBTDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_T_D_F_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 1] = transmittanceScaleG;
@@ -3756,11 +3757,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			final float r = sqrt(u / (1.0F - u));
 			final float phi = 2.0F * PI * v;
 			
-			final float cosPhi = cos(phi);
-			final float sinPhi = sin(phi);
-			
-			final float x = r * cosPhi;
-			final float y = r * sinPhi;
+			final float x = r * cos(phi);
+			final float y = r * sin(phi);
 			
 			vector3FSet(x, y, 0.0F);
 		} else {
@@ -3825,8 +3823,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doMicrofacetDistributionTrowbridgeReitzSample(outgoingZ < 0.0F, outgoingX, outgoingY, outgoingZ, alphaX, alphaY, u, v);
 		} else if(alphaX == alphaY) {
 			final float phi = v * 2.0F * PI;
-			final float tanThetaSquared = alphaX * alphaX * u / (1.0F - u);
-			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
+			final float cosTheta = 1.0F / sqrt(1.0F + (alphaX * alphaX * u / (1.0F - u)));
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
 			final float normalX = sinTheta * cos(phi);
@@ -3844,15 +3841,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			final float phi = atan(alphaY / alphaX * tan(2.0F * PI * v + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
 			final float cosPhi = cos(phi);
 			final float sinPhi = sin(phi);
-			final float alphaXSquared = alphaX * alphaX;
-			final float alphaYSquared = alphaY * alphaY;
-			final float alphaSquared = 1.0F / (cosPhi * cosPhi / alphaXSquared + sinPhi * sinPhi / alphaYSquared);
-			final float tanThetaSquared = alphaSquared * u / (1.0F - u);
-			final float cosTheta = 1.0F / sqrt(1.0F + tanThetaSquared);
+			final float cosTheta = 1.0F / sqrt(1.0F + ((1.0F / (cosPhi * cosPhi / (alphaX * alphaX) + sinPhi * sinPhi / (alphaY * alphaY))) * u / (1.0F - u)));
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
-			final float normalX = sinTheta * cos(phi);
-			final float normalY = sinTheta * sin(phi);
+			final float normalX = sinTheta * cosPhi;
+			final float normalY = sinTheta * sinPhi;
 			final float normalZ = cosTheta;
 			
 			final boolean isSameHemisphereZ = vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);

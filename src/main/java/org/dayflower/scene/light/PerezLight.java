@@ -50,6 +50,8 @@ import org.dayflower.geometry.Point3F;
 import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Ray3F;
 import org.dayflower.geometry.Vector3F;
+import org.dayflower.image.ImageF;
+import org.dayflower.image.PixelImageF;
 import org.dayflower.sampler.Distribution2F;
 import org.dayflower.sampler.Sample2F;
 import org.dayflower.scene.Intersection;
@@ -203,6 +205,37 @@ public final class PerezLight extends Light {
 		final Color3F result = doRadianceSky(incomingObjectSpace);
 		
 		return Color3F.multiply(result, PI * this.radius * this.radius);
+	}
+	
+	/**
+	 * Returns an {@link ImageF} representation of this {@code PerezLight} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return an {@code ImageF} representation of this {@code PerezLight} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	public ImageF toImage(final int resolutionX, final int resolutionY) {
+		final PixelImageF pixelImage = new PixelImageF(resolutionX, resolutionY);
+		
+		final float resolutionXReciprocal = 1.0F / resolutionX;
+		final float resolutionYReciprocal = 1.0F / resolutionY;
+		
+		for(int x = 0; x < resolutionX; x++) {
+			final float sphericalU = (x + 0.5F) * resolutionXReciprocal;
+			
+			for(int y = 0; y < resolutionY; y++) {
+				final float sphericalV = (y + 0.5F) * resolutionYReciprocal;
+				
+				final Color3F colorRGB = Color3F.maximumTo1(Color3F.minimumTo0(doRadianceSky(Vector3F.directionSpherical(sphericalU, sphericalV))));
+				
+				pixelImage.setColorRGB(colorRGB, x, y);
+			}
+		}
+		
+		return pixelImage;
 	}
 	
 	/**

@@ -19,6 +19,7 @@
 package org.dayflower.renderer.gpu;
 
 import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
@@ -4210,7 +4211,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private void doMicrofacetDistributionTrowbridgeReitzComputeSlope(final float cosThetaIncoming, final float u, final float v) {
 		if(cosThetaIncoming > 0.9999F) {
 			final float r = sqrt(u / (1.0F - u));
-			final float phi = 2.0F * PI * v;
+			final float phi = v * PI_MULTIPLIED_BY_2;
 			
 			final float x = r * cos(phi);
 			final float y = r * sin(phi);
@@ -4252,8 +4253,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float incomingStretchedNormalizedZ = incomingStretchedZ * incomingStretchedLengthReciprocal;
 		
 		final float cosPhi = vector3FCosPhi(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
-		final float cosTheta = vector3FCosTheta(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
 		final float sinPhi = vector3FSinPhi(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
+		final float cosTheta = vector3FCosTheta(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
 		
 		doMicrofacetDistributionTrowbridgeReitzComputeSlope(cosTheta, u, v);
 		
@@ -4277,7 +4278,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		if(doMicrofacetDistributionTrowbridgeReitzIsSamplingVisibleArea()) {
 			doMicrofacetDistributionTrowbridgeReitzSample(outgoingZ < 0.0F, outgoingX, outgoingY, outgoingZ, alphaX, alphaY, u, v);
 		} else if(alphaX == alphaY) {
-			final float phi = v * 2.0F * PI;
+			final float phi = v * PI_MULTIPLIED_BY_2;
 			final float cosTheta = 1.0F / sqrt(1.0F + (alphaX * alphaX * u / (1.0F - u)));
 			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
 			
@@ -4293,7 +4294,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			
 			vector3FSet(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
 		} else {
-			final float phi = atan(alphaY / alphaX * tan(2.0F * PI * v + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
+			final float phi = atan(alphaY / alphaX * tan(v * PI_MULTIPLIED_BY_2 + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
 			final float cosPhi = cos(phi);
 			final float sinPhi = sin(phi);
 			final float cosTheta = 1.0F / sqrt(1.0F + ((1.0F / (cosPhi * cosPhi / (alphaX * alphaX) + sinPhi * sinPhi / (alphaY * alphaY))) * u / (1.0F - u)));

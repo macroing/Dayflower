@@ -2,9 +2,9 @@ Texture textureCheckerboardGray = new CheckerboardTexture();
 Texture textureCheckerboardRed = new CheckerboardTexture(new Color3F(1.0F, 0.01F, 0.01F), Color3F.WHITE, AngleF.degrees(0.0F), new Vector2F(4.0F, 4.0F));
 
 Material materialPlane = new MatteMaterial(new CheckerboardTexture());
-Material materialSphereA = new ClearCoatMaterial(textureCheckerboardRed);
+Material materialSphereA = new ClearCoatMaterial(new Color3F(1.0F, 0.01F, 0.01F));
 Material materialSphereB = new GlassMaterial(Color3F.WHITE, new Color3F(1.0F, 1.0F, 0.5F));
-Material materialSphereC = new GlossyMaterial(textureCheckerboardRed, ConstantTexture.BLACK, 0.05F);
+Material materialSphereC = new GlossyMaterial(Color3F.GRAY_0_50, Color3F.BLACK, 0.2F);
 Material materialSphereD = new MatteMaterial(new Color3F(0.1F, 1.0F, 0.1F));
 Material materialSphereE = new MetalMaterial();
 Material materialSphereF = new MirrorMaterial(Color3F.GRAY_0_50);

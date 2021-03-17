@@ -30,7 +30,7 @@ import org.dayflower.scene.texture.Texture;
 import org.dayflower.scene.texture.UVTexture;
 
 /**
- * An {@code AbstractTextureKernel} is an abstract extension of the {@code AbstractGeometryKernel} class that adds additional features.
+ * An {@code AbstractTextureKernel} is an abstract extension of the {@link AbstractGeometryKernel} class that adds additional features.
  * <p>
  * The features added are the following:
  * <ul>

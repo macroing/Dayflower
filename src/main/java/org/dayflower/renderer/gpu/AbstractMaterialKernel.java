@@ -24,7 +24,22 @@ import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
 import java.lang.reflect.Field;
 
+import org.dayflower.scene.BSDF;
+import org.dayflower.scene.BSDFResult;
+import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.Material;
+import org.dayflower.scene.bxdf.AshikhminShirleyBRDF;
+import org.dayflower.scene.bxdf.FresnelBlendBRDF;
+import org.dayflower.scene.bxdf.LambertianBRDF;
+import org.dayflower.scene.bxdf.LambertianBTDF;
+import org.dayflower.scene.bxdf.OrenNayarBRDF;
+import org.dayflower.scene.bxdf.SpecularBRDF;
+import org.dayflower.scene.bxdf.SpecularBTDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBRDF;
+import org.dayflower.scene.bxdf.TorranceSparrowBTDF;
+import org.dayflower.scene.fresnel.ConductorFresnel;
+import org.dayflower.scene.fresnel.ConstantFresnel;
+import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.material.ClearCoatMaterial;
 import org.dayflower.scene.material.GlassMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
@@ -33,25 +48,55 @@ import org.dayflower.scene.material.MetalMaterial;
 import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
+import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
 
-//TODO: Add Javadocs!
+/**
+ * An {@code AbstractMaterialKernel} is an abstract extension of the {@link AbstractTextureKernel} class that adds additional features.
+ * <p>
+ * The features added are the following:
+ * <ul>
+ * <li>{@link ClearCoatMaterial}</li>
+ * <li>{@link GlassMaterial}</li>
+ * <li>{@link GlossyMaterial}</li>
+ * <li>{@link MatteMaterial}</li>
+ * <li>{@link MetalMaterial}</li>
+ * <li>{@link MirrorMaterial}</li>
+ * <li>{@link PlasticMaterial}</li>
+ * <li>{@link SubstrateMaterial}</li>
+ * </ul>
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
-//	TODO: Add Javadocs!
+	/**
+	 * A bit flag that represents {@code BXDFType.ALL}.
+	 */
 	protected static final int B_X_D_F_TYPE_BIT_FLAG_ALL = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4);
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A bit flag that is used for BXDFs with reflection, which are called BRDFs.
+	 */
 	protected static final int B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION = 1 << 0;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A bit flag that is used for BXDFs with transmission, which are called BTDFs.
+	 */
 	protected static final int B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION = 1 << 1;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A bit flag that is used for BXDFs with a diffuse component.
+	 */
 	protected static final int B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE = 1 << 2;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A bit flag that is used for BXDFs with a glossy component.
+	 */
 	protected static final int B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY = 1 << 3;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A bit flag that is used for BXDFs with a specular component.
+	 */
 	protected static final int B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR = 1 << 4;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +124,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
 	private static final int B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_ID = 1;
 	
-//	Constants for BXDF FresnelBlendBRDF:
+//	Constants for BXDF FresnelBlendBRDF using an implicit MicrofacetDistribution of type TrowbridgeReitz:
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_LENGTH = 10;
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_OFFSET_ALPHA_X = 8;
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_OFFSET_ALPHA_Y = 9;
@@ -194,81 +239,131 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link BSDF} instance.
+	 */
 	protected float[] bSDFArray_$private$11;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link BSDFResult} instance.
+	 */
 	protected float[] bSDFResultArray_$private$14;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains an {@link AshikhminShirleyBRDF} instance.
+	 */
 	protected float[] bXDFAshikhminShirleyBRDFArray_$private$4;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link FresnelBlendBRDF} instance that use {@link TrowbridgeReitzMicrofacetDistribution}.
+	 */
 	protected float[] bXDFFresnelBlendBRDFArray_$private$10;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link LambertianBRDF} instance.
+	 */
 	protected float[] bXDFLambertianBRDFArray_$private$3;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link LambertianBTDF} instance.
+	 */
 	protected float[] bXDFLambertianBTDFArray_$private$3;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains an {@link OrenNayarBRDF} instance.
+	 */
 	protected float[] bXDFOrenNayarBRDFArray_$private$6;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link BXDFResult} instance.
+	 */
 	protected float[] bXDFResultArray_$private$13;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link SpecularBRDF} instance that use {@link ConstantFresnel}.
+	 */
 	protected float[] bXDFSpecularBRDFFresnelConstantArray_$private$6;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link SpecularBRDF} instance that use {@link DielectricFresnel}.
+	 */
 	protected float[] bXDFSpecularBRDFFresnelDielectricArray_$private$5;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link SpecularBTDF} instance that use {@link DielectricFresnel}.
+	 */
 	protected float[] bXDFSpecularBTDFFresnelDielectricArray_$private$5;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link TorranceSparrowBRDF} instance that use {@link ConductorFresnel} and {@link TrowbridgeReitzMicrofacetDistribution}.
+	 */
 	protected float[] bXDFTorranceSparrowBRDFFresnelConductorArray_$private$16;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link TorranceSparrowBRDF} instance that use {@link DielectricFresnel} and {@link TrowbridgeReitzMicrofacetDistribution}.
+	 */
 	protected float[] bXDFTorranceSparrowBRDFFresnelDielectricArray_$private$9;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link TorranceSparrowBTDF} instance that use {@link DielectricFresnel} and {@link TrowbridgeReitzMicrofacetDistribution}.
+	 */
 	protected float[] bXDFTorranceSparrowBTDFFresnelDielectricArray_$private$9;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link BXDFResult} instance.
+	 */
 	protected float[] materialBXDFResultArray_$private$16;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link TrowbridgeReitzMicrofacetDistribution} instance.
+	 */
 	protected float[] microfacetDistributionTrowbridgeReitzArray_$private$4;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains {@link ClearCoatMaterial} instances.
+	 */
 	protected int[] materialClearCoatMaterialArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains {@link GlassMaterial} instances.
+	 */
 	protected int[] materialGlassMaterialArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains {@link GlossyMaterial} instances.
+	 */
 	protected int[] materialGlossyMaterialArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains {@link MatteMaterial} instances.
+	 */
 	protected int[] materialMatteMaterialArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains {@link MetalMaterial} instances.
+	 */
 	protected int[] materialMetalMaterialArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains {@link MirrorMaterial} instances.
+	 */
 	protected int[] materialMirrorMaterialArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains {@link PlasticMaterial} instances.
+	 */
 	protected int[] materialPlasticMaterialArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains {@link SubstrateMaterial} instances.
+	 */
 	protected int[] materialSubstrateMaterialArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code AbstractMaterialKernel} instance.
+	 */
 	protected AbstractMaterialKernel() {
 		this.bSDFArray_$private$11 = new float[B_S_D_F_ARRAY_LENGTH];
 		this.bSDFResultArray_$private$14 = new float[B_S_D_F_RESULT_ARRAY_LENGTH];

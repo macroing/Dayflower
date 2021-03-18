@@ -19,7 +19,6 @@
 package org.dayflower.renderer.gpu;
 
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
-import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -41,28 +40,23 @@ import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
-import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.utility.Floats;
 
 /**
- * An {@code AbstractSceneKernel} is an abstract extension of the {@code AbstractMaterialKernel} class that adds additional features.
+ * An {@code AbstractSceneKernel} is an abstract extension of the {@link AbstractLightKernel} class that adds additional features.
  * <p>
  * The features added are the following:
  * <ul>
  * <li>Camera ray generation methods</li>
- * <li>Light evaluation methods</li>
  * <li>Primitive intersection methods</li>
  * </ul>
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
-public abstract class AbstractSceneKernel extends AbstractMaterialKernel {
+public abstract class AbstractSceneKernel extends AbstractLightKernel {
 //	TODO: Add Javadocs!
 	protected float[] cameraArray;
-	
-//	TODO: Add Javadocs!
-	protected float[] lightLDRImageLightArray;
 	
 //	TODO: Add Javadocs!
 	protected float[] matrix44FArray;
@@ -71,13 +65,7 @@ public abstract class AbstractSceneKernel extends AbstractMaterialKernel {
 	protected float[] pixelArray;
 	
 //	TODO: Add Javadocs!
-	protected int lightLDRImageLightCount;
-	
-//	TODO: Add Javadocs!
 	protected int primitiveCount;
-	
-//	TODO: Add Javadocs!
-	protected int[] lightLDRImageLightOffsetArray;
 	
 //	TODO: Add Javadocs!
 	protected int[] primitiveArray;
@@ -93,12 +81,9 @@ public abstract class AbstractSceneKernel extends AbstractMaterialKernel {
 	 */
 	protected AbstractSceneKernel() {
 		this.cameraArray = new float[1];
-		this.lightLDRImageLightArray = new float[1];
 		this.matrix44FArray = new float[1];
 		this.pixelArray = new float[1];
-		this.lightLDRImageLightCount = 0;
 		this.primitiveCount = 0;
-		this.lightLDRImageLightOffsetArray = new int[1];
 		this.primitiveArray = new int[1];
 		this.scene = new Scene();
 	}
@@ -605,87 +590,6 @@ public abstract class AbstractSceneKernel extends AbstractMaterialKernel {
 		intersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void lightEvaluateRadianceEmittedAny() {
-		lightEvaluateRadianceEmittedClear();
-		lightEvaluateRadianceEmittedAnyLDRImageLight();
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void lightEvaluateRadianceEmittedAnyLDRImageLight() {
-		final int lightLDRImageLightCount = this.lightLDRImageLightCount;
-		
-		if(lightLDRImageLightCount > 0) {
-			final int offset = min((int)(random() * lightLDRImageLightCount), lightLDRImageLightCount - 1);
-			
-			final float probabilityDensityFunctionValue = 1.0F / lightLDRImageLightCount;
-			
-			lightEvaluateRadianceEmittedOneLDRImageLight(offset, probabilityDensityFunctionValue);
-		}
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void lightEvaluateRadianceEmittedClear() {
-		color3FLHSSet(0.0F, 0.0F, 0.0F);
-	}
-	
-//	TODO: Add Javadocs!
-	protected final void lightEvaluateRadianceEmittedOneLDRImageLight(final int offset, final float probabilityDensityFunctionValue) {
-		final float rayDirectionX = ray3FGetDirectionComponent1();
-		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
-		
-		final float textureCoordinatesU = 0.5F + atan2(rayDirectionZ, rayDirectionX) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float textureCoordinatesV = 0.5F - asinpi(rayDirectionY);
-//		final float textureCoordinatesU = vector3FSphericalPhi(rayDirectionX, rayDirectionY, rayDirectionZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-//		final float textureCoordinatesV = vector3FSphericalTheta(rayDirectionX, rayDirectionY, rayDirectionZ) * PI_RECIPROCAL;
-		
-		final float angleRadians = this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_ANGLE_RADIANS];
-		final float angleRadiansCos = cos(angleRadians);
-		final float angleRadiansSin = sin(angleRadians);
-		
-		final float scaleU = this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 0];
-		final float scaleV = this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_SCALE + 1];
-		
-		final int resolutionX = (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_X]);
-		final int resolutionY = (int)(this.lightLDRImageLightArray[offset + LDRImageLight.ARRAY_OFFSET_RESOLUTION_Y]);
-		
-		final float textureCoordinatesRotatedU = textureCoordinatesU * angleRadiansCos - textureCoordinatesV * angleRadiansSin;
-		final float textureCoordinatesRotatedV = textureCoordinatesV * angleRadiansCos + textureCoordinatesU * angleRadiansSin;
-		
-		final float textureCoordinatesScaledU = textureCoordinatesRotatedU * scaleU * resolutionX - 0.5F;
-		final float textureCoordinatesScaledV = textureCoordinatesRotatedV * scaleV * resolutionY - 0.5F;
-		
-		final float x = positiveModuloF(textureCoordinatesScaledU, resolutionX);
-		final float y = positiveModuloF(textureCoordinatesScaledV, resolutionY);
-		
-		final int minimumX = (int)(floor(x));
-		final int maximumX = (int)(ceil(x));
-		
-		final int minimumY = (int)(floor(y));
-		final int maximumY = (int)(ceil(y));
-		
-		final int offsetImage = offset + LDRImageLight.ARRAY_OFFSET_IMAGE;
-		final int offsetColor00RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor01RGB = offsetImage + (positiveModuloI(minimumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-		final int offsetColor10RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(minimumX, resolutionX));
-		final int offsetColor11RGB = offsetImage + (positiveModuloI(maximumY, resolutionY) * resolutionX + positiveModuloI(maximumX, resolutionX));
-		
-		final int color00RGB = (int)(this.lightLDRImageLightArray[offsetColor00RGB]);
-		final int color01RGB = (int)(this.lightLDRImageLightArray[offsetColor01RGB]);
-		final int color10RGB = (int)(this.lightLDRImageLightArray[offsetColor10RGB]);
-		final int color11RGB = (int)(this.lightLDRImageLightArray[offsetColor11RGB]);
-		
-		final float tX = x - minimumX;
-		final float tY = y - minimumY;
-		
-		final float component1 = lerp(lerp(colorRGBIntToRFloat(color00RGB), colorRGBIntToRFloat(color01RGB), tX), lerp(colorRGBIntToRFloat(color10RGB), colorRGBIntToRFloat(color11RGB), tX), tY);
-		final float component2 = lerp(lerp(colorRGBIntToGFloat(color00RGB), colorRGBIntToGFloat(color01RGB), tX), lerp(colorRGBIntToGFloat(color10RGB), colorRGBIntToGFloat(color11RGB), tX), tY);
-		final float component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
-		
-		color3FLHSSet(component1 / probabilityDensityFunctionValue, component2 / probabilityDensityFunctionValue, component3 / probabilityDensityFunctionValue);
-	}
-	
 	/**
 	 * Sets a ray in {@link #ray3FArray_$private$8}.
 	 * <p>
@@ -853,13 +757,15 @@ public abstract class AbstractSceneKernel extends AbstractMaterialKernel {
 		put(super.materialPlasticMaterialArray = compiledScene.getMaterialPlasticMaterialArray());
 		put(super.materialSubstrateMaterialArray = compiledScene.getMaterialSubstrateMaterialArray());
 		
+		put(super.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
+		put(super.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());
+		
 		put(this.cameraArray = compiledScene.getCameraArray());
-		put(this.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
-		put(this.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());
 		put(this.matrix44FArray = compiledScene.getMatrix44FArray());
 		put(this.primitiveArray = compiledScene.getPrimitiveArray());
 		
-		this.lightLDRImageLightCount = compiledScene.getLightLDRImageLightCount();
+		super.lightLDRImageLightCount = compiledScene.getLightLDRImageLightCount();
+		
 		this.primitiveCount = compiledScene.getPrimitiveCount();
 	}
 }

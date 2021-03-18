@@ -469,6 +469,27 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	/**
 	 * Sets a color in {@link #color3FLHSArray_$private$3}.
 	 * <p>
+	 * The color is constructed by adding the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} to the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS},
+	 * component-wize.
+	 * 
+	 * @param component1LHS the value of component 1 of the color on the left-hand side
+	 * @param component2LHS the value of component 2 of the color on the left-hand side
+	 * @param component3LHS the value of component 3 of the color on the left-hand side
+	 * @param component1RHS the value of component 1 of the color on the right-hand side
+	 * @param component2RHS the value of component 2 of the color on the right-hand side
+	 * @param component3RHS the value of component 3 of the color on the right-hand side
+	 */
+	protected final void color3FLHSSetAdd(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		final float component1 = component1LHS + component1RHS;
+		final float component2 = component2LHS + component2RHS;
+		final float component3 = component3LHS + component3RHS;
+		
+		color3FLHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FLHSArray_$private$3}.
+	 * <p>
 	 * The color is constructed by blending the color in {@link #color3FLHSArray_$private$3} with the color in {@link #color3FRHSArray_$private$3} using the factors {@code tComponent1}, {@code tComponent2} and {@code tComponent3}, respectively.
 	 * 
 	 * @param tComponent1 the factor to use for component 1 in the blending process
@@ -492,6 +513,69 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	/**
+	 * Sets a color in {@link #color3FLHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by dividing the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} with the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS},
+	 * component-wize.
+	 * 
+	 * @param component1LHS the value of component 1 of the color on the left-hand side
+	 * @param component2LHS the value of component 2 of the color on the left-hand side
+	 * @param component3LHS the value of component 3 of the color on the left-hand side
+	 * @param component1RHS the value of component 1 of the color on the right-hand side
+	 * @param component2RHS the value of component 2 of the color on the right-hand side
+	 * @param component3RHS the value of component 3 of the color on the right-hand side
+	 */
+	protected final void color3FLHSSetDivide(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		final float component1 = component1LHS / component1RHS;
+		final float component2 = component2LHS / component2RHS;
+		final float component3 = component3LHS / component3RHS;
+		
+		color3FLHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FLHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by multiplying the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} with the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS},
+	 * component-wize.
+	 * 
+	 * @param component1LHS the value of component 1 of the color on the left-hand side
+	 * @param component2LHS the value of component 2 of the color on the left-hand side
+	 * @param component3LHS the value of component 3 of the color on the left-hand side
+	 * @param component1RHS the value of component 1 of the color on the right-hand side
+	 * @param component2RHS the value of component 2 of the color on the right-hand side
+	 * @param component3RHS the value of component 3 of the color on the right-hand side
+	 */
+	protected final void color3FLHSSetMultiply(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		final float component1 = component1LHS * component1RHS;
+		final float component2 = component2LHS * component2RHS;
+		final float component3 = component3LHS * component3RHS;
+		
+		color3FLHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FLHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by subtracting the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} from the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS},
+	 * component-wize.
+	 * 
+	 * @param component1LHS the value of component 1 of the color on the left-hand side
+	 * @param component2LHS the value of component 2 of the color on the left-hand side
+	 * @param component3LHS the value of component 3 of the color on the left-hand side
+	 * @param component1RHS the value of component 1 of the color on the right-hand side
+	 * @param component2RHS the value of component 2 of the color on the right-hand side
+	 * @param component3RHS the value of component 3 of the color on the right-hand side
+	 */
+	protected final void color3FLHSSetSubtract(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		final float component1 = component1LHS - component1RHS;
+		final float component2 = component2LHS - component2RHS;
+		final float component3 = component3LHS - component3RHS;
+		
+		color3FLHSSet(component1, component2, component3);
+	}
+	
+	/**
 	 * Sets a color in {@link #color3FRHSArray_$private$3}.
 	 * <p>
 	 * The color is constructed using the color represented by {@code component1}, {@code component2} and {@code component3}.
@@ -504,6 +588,27 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1] = component1;
 		this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2] = component2;
 		this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3] = component3;
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FRHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by adding the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} to the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS},
+	 * component-wize.
+	 * 
+	 * @param component1LHS the value of component 1 of the color on the left-hand side
+	 * @param component2LHS the value of component 2 of the color on the left-hand side
+	 * @param component3LHS the value of component 3 of the color on the left-hand side
+	 * @param component1RHS the value of component 1 of the color on the right-hand side
+	 * @param component2RHS the value of component 2 of the color on the right-hand side
+	 * @param component3RHS the value of component 3 of the color on the right-hand side
+	 */
+	protected final void color3FRHSSetAdd(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		final float component1 = component1LHS + component1RHS;
+		final float component2 = component2LHS + component2RHS;
+		final float component3 = component3LHS + component3RHS;
+		
+		color3FRHSSet(component1, component2, component3);
 	}
 	
 	/**
@@ -529,6 +634,69 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		final float component3 = lerp(colorLHSComponent3, colorRHSComponent3, tComponent3);
 		
 		color3FLHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FRHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by dividing the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} with the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS},
+	 * component-wize.
+	 * 
+	 * @param component1LHS the value of component 1 of the color on the left-hand side
+	 * @param component2LHS the value of component 2 of the color on the left-hand side
+	 * @param component3LHS the value of component 3 of the color on the left-hand side
+	 * @param component1RHS the value of component 1 of the color on the right-hand side
+	 * @param component2RHS the value of component 2 of the color on the right-hand side
+	 * @param component3RHS the value of component 3 of the color on the right-hand side
+	 */
+	protected final void color3FRHSSetDivide(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		final float component1 = component1LHS / component1RHS;
+		final float component2 = component2LHS / component2RHS;
+		final float component3 = component3LHS / component3RHS;
+		
+		color3FRHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FRHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by multiplying the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} with the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS},
+	 * component-wize.
+	 * 
+	 * @param component1LHS the value of component 1 of the color on the left-hand side
+	 * @param component2LHS the value of component 2 of the color on the left-hand side
+	 * @param component3LHS the value of component 3 of the color on the left-hand side
+	 * @param component1RHS the value of component 1 of the color on the right-hand side
+	 * @param component2RHS the value of component 2 of the color on the right-hand side
+	 * @param component3RHS the value of component 3 of the color on the right-hand side
+	 */
+	protected final void color3FRHSSetMultiply(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		final float component1 = component1LHS * component1RHS;
+		final float component2 = component2LHS * component2RHS;
+		final float component3 = component3LHS * component3RHS;
+		
+		color3FRHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FRHSArray_$private$3}.
+	 * <p>
+	 * The color is constructed by subtracting the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} from the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS},
+	 * component-wize.
+	 * 
+	 * @param component1LHS the value of component 1 of the color on the left-hand side
+	 * @param component2LHS the value of component 2 of the color on the left-hand side
+	 * @param component3LHS the value of component 3 of the color on the left-hand side
+	 * @param component1RHS the value of component 1 of the color on the right-hand side
+	 * @param component2RHS the value of component 2 of the color on the right-hand side
+	 * @param component3RHS the value of component 3 of the color on the right-hand side
+	 */
+	protected final void color3FRHSSetSubtract(final float component1LHS, final float component2LHS, final float component3LHS, final float component1RHS, final float component2RHS, final float component3RHS) {
+		final float component1 = component1LHS - component1RHS;
+		final float component2 = component2LHS - component2RHS;
+		final float component3 = component3LHS - component3RHS;
+		
+		color3FRHSSet(component1, component2, component3);
 	}
 	
 	/**

@@ -101,6 +101,25 @@ public final class Point4D implements Node {
 	}
 	
 	/**
+	 * Constructs a new {@code Point4D} instance given the component values {@code vector.getComponent1()}, {@code vector.getComponent2()}, {@code vector.getComponent3()} and {@code vector.getComponent4()}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point4D(vector.getComponent1(), vector.getComponent2(), vector.getComponent3(), vector.getComponent4());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector a {@link Vector4D} instance
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public Point4D(final Vector4D vector) {
+		this(vector.getComponent1(), vector.getComponent2(), vector.getComponent3(), vector.getComponent4());
+	}
+	
+	/**
 	 * Constructs a new {@code Point4D} instance given the component values {@code component}, {@code component}, {@code component} and {@code 1.0D}.
 	 * <p>
 	 * Calling this constructor is equivalent to the following:

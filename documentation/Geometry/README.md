@@ -43,6 +43,8 @@ Below follows a few lists of features available in the Geometry API.
 * `Vector2F`
 * `Vector3D`
 * `Vector3F`
+* `Vector4D`
+* `Vector4F`
 
 #### The Geometry Bounding Volume API
 * `AxisAlignedBoundingBox3D`

@@ -882,46 +882,19 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 2] = outgoingZ;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void materialEmittance(final int materialID, final int materialOffset) {
-		final int materialOffsetTextureEmission = materialOffset + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-		
-		int textureEmission = 0;
-		
-		if(materialID == ClearCoatMaterial.ID) {
-			textureEmission = this.materialClearCoatMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == GlassMaterial.ID) {
-			textureEmission = this.materialGlassMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == GlossyMaterial.ID) {
-			textureEmission = this.materialGlossyMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == MatteMaterial.ID) {
-			textureEmission = this.materialMatteMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == MetalMaterial.ID) {
-			textureEmission = this.materialMetalMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == MirrorMaterial.ID) {
-			textureEmission = this.materialMirrorMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == PlasticMaterial.ID) {
-			textureEmission = this.materialPlasticMaterialArray[materialOffsetTextureEmission];
-		} else if(materialID == SubstrateMaterial.ID) {
-			textureEmission = this.materialSubstrateMaterialArray[materialOffsetTextureEmission];
-		}
-		
-		final int textureEmissionID = (textureEmission >>> 16) & 0xFFFF;
-		final int textureEmissionOffset = textureEmission & 0xFFFF;
-		
-		textureEvaluate(textureEmissionID, textureEmissionOffset);
-	}
-	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/*
 	 * The following is a test implementation of the Material API in the CPU-renderer that is based on PBRT. It is an early work-in-progress. However, it is necessary in order to support most (if not all) Material implementations.
-	 * 
-	 * The method prefix "test" is used to avoid method name collisions with the current implementation. It will be removed when this test implementation is used as the official implementation.
 	 */
 	
 //	TODO: Add Javadocs!
-	protected final boolean testBSDFCompute(final int materialID, final int materialOffset) {
+	protected final boolean materialBSDFBXDFIsSpecular() {
+		return doBXDFIsSpecular((int)(this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_B_X_D_F_ID]));
+	}
+	
+//	TODO: Add Javadocs!
+	protected final boolean materialBSDFCompute(final int materialID, final int materialOffset) {
 		if(materialID == ClearCoatMaterial.ID) {
 			return doMaterialClearCoatMaterialComputeBSDF(materialOffset);
 		} else if(materialID == GlassMaterial.ID) {
@@ -944,7 +917,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final boolean testBSDFSampleDistributionFunction(final int bitFlags) {
+	protected final boolean materialBSDFSampleDistributionFunction(final int bitFlags) {
 		final int countBXDFs = doBSDFGetBXDFCount();
 		
 		int matches = 0;
@@ -986,9 +959,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 				if(doBXDFSampleDistributionFunction(uRemapped, vRemapped, matchingId)) {
 					doBSDFResultSetIncomingFromBXDFResult();
 					
-					final float incomingX = testBSDFResultGetIncomingX();
-					final float incomingY = testBSDFResultGetIncomingY();
-					final float incomingZ = testBSDFResultGetIncomingZ();
+					final float incomingX = materialBSDFResultGetIncomingX();
+					final float incomingY = materialBSDFResultGetIncomingY();
+					final float incomingZ = materialBSDFResultGetIncomingZ();
 					
 					final float outgoingX = doBSDFResultGetOutgoingX();
 					final float outgoingY = doBSDFResultGetOutgoingY();
@@ -1056,52 +1029,47 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final boolean testBXDFIsSpecular() {
-		return doBXDFIsSpecular((int)(this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_B_X_D_F_ID]));
-	}
-	
-//	TODO: Add Javadocs!
-	protected final float testBSDFGetEta() {
+	protected final float materialBSDFGetEta() {
 		return this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_ETA];
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float testBSDFResultGetIncomingX() {
+	protected final float materialBSDFResultGetIncomingX() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0];
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float testBSDFResultGetIncomingY() {
+	protected final float materialBSDFResultGetIncomingY() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1];
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float testBSDFResultGetIncomingZ() {
+	protected final float materialBSDFResultGetIncomingZ() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2];
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float testBSDFResultGetProbabilityDensityFunctionValue() {
+	protected final float materialBSDFResultGetProbabilityDensityFunctionValue() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE];
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float testBSDFResultGetResultB() {
+	protected final float materialBSDFResultGetResultB() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 2];
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float testBSDFResultGetResultG() {
+	protected final float materialBSDFResultGetResultG() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 1];
 	}
 	
 //	TODO: Add Javadocs!
-	protected final float testBSDFResultGetResultR() {
+	protected final float materialBSDFResultGetResultR() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 0];
 	}
 	
 //	TODO: Add Javadocs!
-	protected final int testBSDFCountBXDFsBySpecularType(final boolean isSpecular) {
+	protected final int materialBSDFCountBXDFsBySpecularType(final boolean isSpecular) {
 		int countBySpecular = 0;
 		
 		final int countBXDFs = doBSDFGetBXDFCount();
@@ -1116,10 +1084,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void testBSDFEvaluateDistributionFunction(final int bitFlags) {
-		final float incomingX = testBSDFResultGetIncomingX();
-		final float incomingY = testBSDFResultGetIncomingY();
-		final float incomingZ = testBSDFResultGetIncomingZ();
+	protected final void materialBSDFEvaluateDistributionFunction(final int bitFlags) {
+		final float incomingX = materialBSDFResultGetIncomingX();
+		final float incomingY = materialBSDFResultGetIncomingY();
+		final float incomingZ = materialBSDFResultGetIncomingZ();
 		
 		final float outgoingX = doBSDFResultGetOutgoingX();
 		final float outgoingY = doBSDFResultGetOutgoingY();
@@ -1156,7 +1124,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void testBSDFEvaluateProbabilityDensityFunction(final int bitFlags) {
+	protected final void materialBSDFEvaluateProbabilityDensityFunction(final int bitFlags) {
 		final int countBXDFs = doBSDFGetBXDFCount();
 		
 		float probabilityDensityFunctionValue = 0.0F;
@@ -1182,6 +1150,36 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 		doBSDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void materialEmittance(final int materialID, final int materialOffset) {
+		final int materialOffsetTextureEmission = materialOffset + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
+		
+		int textureEmission = 0;
+		
+		if(materialID == ClearCoatMaterial.ID) {
+			textureEmission = this.materialClearCoatMaterialArray[materialOffsetTextureEmission];
+		} else if(materialID == GlassMaterial.ID) {
+			textureEmission = this.materialGlassMaterialArray[materialOffsetTextureEmission];
+		} else if(materialID == GlossyMaterial.ID) {
+			textureEmission = this.materialGlossyMaterialArray[materialOffsetTextureEmission];
+		} else if(materialID == MatteMaterial.ID) {
+			textureEmission = this.materialMatteMaterialArray[materialOffsetTextureEmission];
+		} else if(materialID == MetalMaterial.ID) {
+			textureEmission = this.materialMetalMaterialArray[materialOffsetTextureEmission];
+		} else if(materialID == MirrorMaterial.ID) {
+			textureEmission = this.materialMirrorMaterialArray[materialOffsetTextureEmission];
+		} else if(materialID == PlasticMaterial.ID) {
+			textureEmission = this.materialPlasticMaterialArray[materialOffsetTextureEmission];
+		} else if(materialID == SubstrateMaterial.ID) {
+			textureEmission = this.materialSubstrateMaterialArray[materialOffsetTextureEmission];
+		}
+		
+		final int textureEmissionID = (textureEmission >>> 16) & 0xFFFF;
+		final int textureEmissionOffset = textureEmission & 0xFFFF;
+		
+		textureEvaluate(textureEmissionID, textureEmissionOffset);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

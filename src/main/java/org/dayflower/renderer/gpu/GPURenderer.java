@@ -275,13 +275,12 @@ public final class GPURenderer extends AbstractGPURenderer {
 		
 		if(ray3FCameraGenerate(pixel1X, pixel1Y)) {
 			int currentBounce = 0;
-//			int currentBounceSpecular = 0;
 			
 			boolean isSpecularBounce = false;
 			
 			while(currentBounce < maximumBounce) {
 				if(primitiveIntersectionCompute()) {
-					if(currentBounce == 0 || isSpecularBounce/*currentBounce == currentBounceSpecular*/) {
+					if(currentBounce == 0 || isSpecularBounce) {
 						materialEmittance(primitiveGetMaterialID(), primitiveGetMaterialOffset());
 						
 						radianceR += throughputR * color3FLHSGetComponent1();
@@ -289,25 +288,16 @@ public final class GPURenderer extends AbstractGPURenderer {
 						radianceB += throughputB * color3FLHSGetComponent3();
 					}
 					
-//					if(materialIsSpecular(primitiveGetMaterialID())) {
-//						currentBounceSpecular++;
-//					} else {
-//						TODO: Add direct light sampling!
-//						radianceR += throughputR * 0.0F;
-//						radianceG += throughputG * 0.0F;
-//						radianceB += throughputB * 0.0F;
-//					}
-					
-					if(testBSDFCompute(primitiveGetMaterialID(), primitiveGetMaterialOffset()) && testBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL)) {
-						final float incomingX = testBSDFResultGetIncomingX();
-						final float incomingY = testBSDFResultGetIncomingY();
-						final float incomingZ = testBSDFResultGetIncomingZ();
+					if(materialBSDFCompute(primitiveGetMaterialID(), primitiveGetMaterialOffset()) && materialBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL)) {
+						final float incomingX = materialBSDFResultGetIncomingX();
+						final float incomingY = materialBSDFResultGetIncomingY();
+						final float incomingZ = materialBSDFResultGetIncomingZ();
 						
-						final float probabilityDensityFunctionValue = testBSDFResultGetProbabilityDensityFunctionValue();
+						final float probabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
 						
-						final float resultR = testBSDFResultGetResultR();
-						final float resultG = testBSDFResultGetResultG();
-						final float resultB = testBSDFResultGetResultB();
+						final float resultR = materialBSDFResultGetResultR();
+						final float resultG = materialBSDFResultGetResultG();
+						final float resultB = materialBSDFResultGetResultB();
 						
 						final float surfaceNormalSX = intersectionGetOrthonormalBasisSWComponent1();
 						final float surfaceNormalSY = intersectionGetOrthonormalBasisSWComponent2();
@@ -322,7 +312,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 							throughputB *= resultB * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
 						}
 						
-						isSpecularBounce = testBXDFIsSpecular();
+						isSpecularBounce = materialBSDFBXDFIsSpecular();
 						
 						vector3FSet(incomingX, incomingY, incomingZ);
 						

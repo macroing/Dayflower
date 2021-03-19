@@ -63,6 +63,8 @@ import org.dayflower.scene.Transform;
  * A {@code PerezLight} is a {@link Light} implementation of the Perez algorithm.
  * <p>
  * This class is mutable and not thread-safe.
+ * <p>
+ * This {@code Light} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

@@ -32,7 +32,7 @@ import org.dayflower.scene.Intersection;
  * <p>
  * This class is immutable and therefore thread-safe if, and only if, both {@code Texture} instances are.
  * <p>
- * This {@code Texture} implementation is not supported on the GPU.
+ * This {@code Texture} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

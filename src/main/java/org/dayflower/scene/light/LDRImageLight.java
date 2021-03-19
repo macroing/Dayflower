@@ -66,6 +66,8 @@ import org.dayflower.utility.ParameterArguments;
  * An {@code LDRImageLight} is a {@link Light} implementation backed by a low-dynamic-range (LDR) image.
  * <p>
  * This class is mutable and not thread-safe.
+ * <p>
+ * This {@code Light} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

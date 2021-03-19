@@ -37,6 +37,8 @@ import org.dayflower.scene.Transform;
  * A {@code DirectionalLight} is an implementation of {@link Light} that represents a directional light.
  * <p>
  * This class is mutable and not thread-safe.
+ * <p>
+ * This {@code Light} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

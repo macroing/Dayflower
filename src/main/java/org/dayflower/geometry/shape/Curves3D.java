@@ -41,6 +41,8 @@ import org.dayflower.utility.ParameterArguments;
  * A {@code Curves3D} is a container of {@link Curve3D} instances.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@link Shape3D} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

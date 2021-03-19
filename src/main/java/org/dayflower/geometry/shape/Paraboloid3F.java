@@ -44,6 +44,8 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
  * A {@code Paraboloid3F} denotes a 3-dimensional paraboloid that uses the data type {@code float}.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@link Shape3F} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

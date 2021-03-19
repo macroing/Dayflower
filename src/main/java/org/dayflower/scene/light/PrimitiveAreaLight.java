@@ -39,6 +39,8 @@ import org.dayflower.scene.Transform;
  * A {@code PrimitiveAreaLight} is an implementation of {@link AreaLight} that contains a {@link Primitive} instance.
  * <p>
  * This class is mutable and not thread-safe.
+ * <p>
+ * This {@code Light} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

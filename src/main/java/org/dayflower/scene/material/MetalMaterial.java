@@ -43,6 +43,8 @@ import org.dayflower.scene.texture.Texture;
  * A {@code MetalMaterial} is an implementation of {@link Material} that represents measured metal.
  * <p>
  * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
+ * <p>
+ * This {@code Material} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

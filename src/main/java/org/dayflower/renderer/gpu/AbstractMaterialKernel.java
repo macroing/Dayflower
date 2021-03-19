@@ -971,6 +971,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 				if(doBXDFIsMatchingBitFlags(id, bitFlags)) {
 					if(j == 0) {
 						matchingId = id;
+						
+						i = countBXDFs;
 					}
 					
 					j--;

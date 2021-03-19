@@ -39,6 +39,8 @@ import org.dayflower.scene.TransportMode;
  * A {@code BullseyeMaterial} is an implementation of {@link Material} that alternates between two other {@code Material} instances in a bullseye pattern.
  * <p>
  * This class is immutable and thread-safe as long as its two associated {@link Material} instances are.
+ * <p>
+ * This {@code Material} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

@@ -43,6 +43,8 @@ import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3D;
  * A {@code Disk3D} denotes a 3-dimensional disk that uses the data type {@code double}.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@link Shape3D} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

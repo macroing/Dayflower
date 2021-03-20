@@ -482,7 +482,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
-				vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+				vector3FSetSpecularReflectionFacingSurface(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 				
 				color3FLHSSet(colorKSR * probabilityRussianRouletteReflection, colorKSG * probabilityRussianRouletteReflection, colorKSB * probabilityRussianRouletteReflection);
 			} else {
@@ -493,7 +493,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 		if(isReflecting) {
-			vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+			vector3FSetSpecularReflectionFacingSurface(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 			
 			color3FLHSSet(colorKSR, colorKSG, colorKSB);
 		}
@@ -575,7 +575,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
 			
 			if(isChoosingSpecularReflection) {
-				vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+				vector3FSetSpecularReflectionFacingSurface(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 				
 				color3FLHSSet(colorKRR * probabilityRussianRouletteReflection, colorKRG * probabilityRussianRouletteReflection, colorKRB * probabilityRussianRouletteReflection);
 			} else {
@@ -584,7 +584,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 		if(isReflecting) {
-			vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+			vector3FSetSpecularReflectionFacingSurface(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 			
 			color3FLHSSet(colorKRR, colorKRG, colorKRB);
 		}
@@ -794,7 +794,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float surfaceNormalY = intersectionGetOrthonormalBasisSWComponent2();
 		final float surfaceNormalZ = intersectionGetOrthonormalBasisSWComponent3();
 		
-		vector3FSetSpecularReflection(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ, true);
+		vector3FSetSpecularReflectionFacingSurface(directionX, directionY, directionZ, surfaceNormalX, surfaceNormalY, surfaceNormalZ);
 		
 		color3FLHSSet(colorKRR, colorKRG, colorKRB);
 		
@@ -2304,7 +2304,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return false;
 		}
 		
-		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, normalTransformedX, normalTransformedY, normalTransformedZ, true);
+		vector3FSetSpecularReflectionFacingSurface(outgoingX, outgoingY, outgoingZ, normalTransformedX, normalTransformedY, normalTransformedZ);
 		
 		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
 		doBXDFAshikhminShirleyBRDFEvaluateDistributionFunction();
@@ -2474,7 +2474,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		doMicrofacetDistributionTrowbridgeReitzSampleNormal(outgoingX, outgoingY, outgoingZ, uRemapped, vRemapped);
 		
-		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), false);
+		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
 		
 		final float incomingX = vector3FGetComponent1();
 		final float incomingY = vector3FGetComponent2();
@@ -3347,7 +3347,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return false;
 		}
 		
-		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ, false);
+		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
 		
 		final float incomingX = vector3FGetComponent1();
 		final float incomingY = vector3FGetComponent2();
@@ -3601,7 +3601,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return false;
 		}
 		
-		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ, false);
+		vector3FSetSpecularReflection(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
 		
 		final float incomingX = vector3FGetComponent1();
 		final float incomingY = vector3FGetComponent2();

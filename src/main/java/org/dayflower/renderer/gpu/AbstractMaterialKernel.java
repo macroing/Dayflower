@@ -48,6 +48,7 @@ import org.dayflower.scene.fresnel.ConstantFresnel;
 import org.dayflower.scene.fresnel.DielectricFresnel;
 import org.dayflower.scene.fresnel.DisneyFresnel;
 import org.dayflower.scene.material.ClearCoatMaterial;
+import org.dayflower.scene.material.DisneyMaterial;
 import org.dayflower.scene.material.GlassMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
 import org.dayflower.scene.material.MatteMaterial;
@@ -408,6 +409,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected int[] materialClearCoatMaterialArray;
 	
 	/**
+	 * An {@code int[]} that contains {@link DisneyMaterial} instances.
+	 */
+	protected int[] materialDisneyMaterialArray;
+	
+	/**
 	 * An {@code int[]} that contains {@link GlassMaterial} instances.
 	 */
 	protected int[] materialGlassMaterialArray;
@@ -471,6 +477,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.materialBXDFResultArray_$private$16 = new float[MATERIAL_B_X_D_F_ARRAY_SIZE];
 		this.microfacetDistributionTrowbridgeReitzArray_$private$4 = new float[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_LENGTH];
 		this.materialClearCoatMaterialArray = new int[1];
+		this.materialDisneyMaterialArray = new int[1];
 		this.materialGlassMaterialArray = new int[1];
 		this.materialGlossyMaterialArray = new int[1];
 		this.materialMatteMaterialArray = new int[1];
@@ -983,6 +990,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	protected final boolean materialBSDFCompute(final int materialID, final int materialOffset) {
 		if(materialID == ClearCoatMaterial.ID) {
 			return doMaterialClearCoatMaterialComputeBSDF(materialOffset);
+		} else if(materialID == DisneyMaterial.ID) {
+			return doMaterialDisneyMaterialComputeBSDF(materialOffset);
 		} else if(materialID == GlassMaterial.ID) {
 			return doMaterialGlassMaterialComputeBSDF(materialOffset);
 		} else if(materialID == GlossyMaterial.ID) {
@@ -1246,6 +1255,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		if(materialID == ClearCoatMaterial.ID) {
 			textureEmission = this.materialClearCoatMaterialArray[materialOffsetTextureEmission];
+		} else if(materialID == DisneyMaterial.ID) {
+			textureEmission = this.materialDisneyMaterialArray[materialOffsetTextureEmission];
 		} else if(materialID == GlassMaterial.ID) {
 			textureEmission = this.materialGlassMaterialArray[materialOffsetTextureEmission];
 		} else if(materialID == GlossyMaterial.ID) {
@@ -1390,6 +1401,233 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFSetBXDFSpecularBRDFFresnelConstant(0);
 		doBXDFSpecularBRDFFresnelConstantSetFresnelConstant(1.0F, 1.0F, 1.0F);
 		doBXDFSpecularBRDFFresnelConstantSetReflectanceScale(colorKSR, colorKSG, colorKSB);
+		
+//		Initialize the BSDFResult:
+		doBSDFResultInitialize();
+		
+		return true;
+	}
+	
+	private boolean doMaterialDisneyMaterialComputeBSDF(final int materialDisneyMaterialArrayOffset) {
+		/*
+		 * Evaluate the Texture instances:
+		 */
+		
+//		Retrieve the ID and offset for the Anisotropic Texture:
+		final int textureAnisotropic = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ANISOTROPIC];
+		final int textureAnisotropicID = (textureAnisotropic >>> 16) & 0xFFFF;
+		final int textureAnisotropicOffset = textureAnisotropic & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Clear Coat Texture:
+		final int textureClearCoat = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_CLEAR_COAT];
+		final int textureClearCoatID = (textureClearCoat >>> 16) & 0xFFFF;
+		final int textureClearCoatOffset = textureClearCoat & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Clear Coat Gloss Texture:
+		final int textureClearCoatGloss = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_CLEAR_COAT_GLOSS];
+		final int textureClearCoatGlossID = (textureClearCoatGloss >>> 16) & 0xFFFF;
+		final int textureClearCoatGlossOffset = textureClearCoatGloss & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Color Texture:
+		final int textureColor = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_COLOR];
+		final int textureColorID = (textureColor >>> 16) & 0xFFFF;
+		final int textureColorOffset = textureColor & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Diffuse Transmission Texture:
+		final int textureDiffuseTransmission = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_DIFFUSE_TRANSMISSION];
+		final int textureDiffuseTransmissionID = (textureDiffuseTransmission >>> 16) & 0xFFFF;
+		final int textureDiffuseTransmissionOffset = textureDiffuseTransmission & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Eta Texture:
+		final int textureEta = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ETA];
+		final int textureEtaID = (textureEta >>> 16) & 0xFFFF;
+		final int textureEtaOffset = textureEta & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Flatness Texture:
+		final int textureFlatness = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_FLATNESS];
+		final int textureFlatnessID = (textureFlatness >>> 16) & 0xFFFF;
+		final int textureFlatnessOffset = textureFlatness & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Metallic Texture:
+		final int textureMetallic = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_METALLIC];
+		final int textureMetallicID = (textureMetallic >>> 16) & 0xFFFF;
+		final int textureMetallicOffset = textureMetallic & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Roughness Texture:
+		final int textureRoughness = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS];
+		final int textureRoughnessID = (textureRoughness >>> 16) & 0xFFFF;
+		final int textureRoughnessOffset = textureRoughness & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Scatter Distance Texture:
+		final int textureScatterDistance = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE];
+		final int textureScatterDistanceID = (textureScatterDistance >>> 16) & 0xFFFF;
+		final int textureScatterDistanceOffset = textureScatterDistance & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Sheen Texture:
+		final int textureSheen = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SHEEN];
+		final int textureSheenID = (textureSheen >>> 16) & 0xFFFF;
+		final int textureSheenOffset = textureSheen & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Sheen Tint Texture:
+		final int textureSheenTint = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SHEEN_TINT];
+		final int textureSheenTintID = (textureSheenTint >>> 16) & 0xFFFF;
+		final int textureSheenTintOffset = textureSheenTint & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Specular Tint Texture:
+		final int textureSpecularTint = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SPECULAR_TINT];
+		final int textureSpecularTintID = (textureSpecularTint >>> 16) & 0xFFFF;
+		final int textureSpecularTintOffset = textureSpecularTint & 0xFFFF;
+		
+//		Retrieve the ID and offset for the Specular Transmission Texture:
+		final int textureSpecularTransmission = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION];
+		final int textureSpecularTransmissionID = (textureSpecularTransmission >>> 16) & 0xFFFF;
+		final int textureSpecularTransmissionOffset = textureSpecularTransmission & 0xFFFF;
+		
+//		Retrieve the thin flag:
+		final boolean isThin = this.materialDisneyMaterialArray[materialDisneyMaterialArrayOffset + DisneyMaterial.ARRAY_OFFSET_IS_THIN] != 0;
+		
+		final float floatAnisotropic = textureEvaluateFloat(textureAnisotropicID, textureAnisotropicOffset);
+		final float floatClearCoat = textureEvaluateFloat(textureClearCoatID, textureClearCoatOffset);
+		final float floatClearCoatGloss = textureEvaluateFloat(textureClearCoatGlossID, textureClearCoatGlossOffset);
+		final float floatDiffuseTransmission = textureEvaluateFloat(textureDiffuseTransmissionID, textureDiffuseTransmissionOffset) / 2.0F;
+		final float floatEta = textureEvaluateFloat(textureEtaID, textureEtaOffset);
+		final float floatMetallic = textureEvaluateFloat(textureMetallicID, textureMetallicOffset);
+		final float floatRoughness = textureEvaluateFloat(textureRoughnessID, textureRoughnessOffset);
+		final float floatSheen = textureEvaluateFloat(textureSheenID, textureSheenOffset);
+		final float floatSheenTint = textureEvaluateFloat(textureSheenTintID, textureSheenTintOffset);
+		final float floatSpecularTint = textureEvaluateFloat(textureSpecularTintID, textureSpecularTintOffset);
+		final float floatSpecularTransmission = textureEvaluateFloat(textureSpecularTransmissionID, textureSpecularTransmissionOffset);
+		
+		textureEvaluate(textureColorID, textureColorOffset);
+		
+		final float colorColorR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
+		final float colorColorG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
+		final float colorColorB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		
+		textureEvaluate(textureScatterDistanceID, textureScatterDistanceOffset);
+		
+		final float colorScatterDistanceR = color3FLHSGetComponent1();
+		final float colorScatterDistanceG = color3FLHSGetComponent2();
+		final float colorScatterDistanceB = color3FLHSGetComponent3();
+		
+		final float luminance = colorColorR * 0.212671F + colorColorG * 0.715160F + colorColorB * 0.072169F;
+		
+		final float colorTintR = luminance > 0.0F ? colorColorR / luminance : 1.0F;
+		final float colorTintG = luminance > 0.0F ? colorColorG / luminance : 1.0F;
+		final float colorTintB = luminance > 0.0F ? colorColorB / luminance : 1.0F;
+		
+		final float colorSheenR = floatSheen > 0.0F ? lerp(1.0F, colorTintR, floatSheenTint) : 0.0F;
+		final float colorSheenG = floatSheen > 0.0F ? lerp(1.0F, colorTintG, floatSheenTint) : 0.0F;
+		final float colorSheenB = floatSheen > 0.0F ? lerp(1.0F, colorTintB, floatSheenTint) : 0.0F;
+		
+		final float diffuseWeight = (1.0F - floatMetallic) * (1.0F - floatSpecularTransmission);
+		
+		/*
+		 * Compute the BSDF:
+		 */
+		
+//		Initialize the BSDF:
+		doBSDFClear();
+		doBSDFSetEta(1.0F);
+		doBSDFSetNegatingIncoming(false);
+		
+		int index = 0;
+		
+		if(diffuseWeight > 0.0F && isThin) {
+			final float floatFlatness = textureEvaluateFloat(textureFlatnessID, textureFlatnessOffset);
+			
+			final float scale0 = diffuseWeight * (1.0F - floatFlatness) * (1.0F - floatDiffuseTransmission);
+			final float scale1 = diffuseWeight * (0.0F + floatFlatness) * (1.0F - floatDiffuseTransmission);
+			
+//			Set DisneyDiffuseBRDF:
+			doBSDFSetBXDFDisneyDiffuseBRDF(index++);
+			doBXDFDisneyDiffuseBRDFSetReflectanceScale(colorColorR * scale0, colorColorG * scale0, colorColorB * scale0);
+			
+//			Set DisneyFakeSSBRDF:
+			doBSDFSetBXDFDisneyFakeSSBRDF(index++);
+			doBXDFDisneyFakeSSBRDFSetReflectanceScale(colorColorR * scale1, colorColorG * scale1, colorColorB * scale1);
+			doBXDFDisneyFakeSSBRDFSetRoughness(floatRoughness);
+		}
+		
+		if(diffuseWeight > 0.0F && !isThin && checkIsZero(colorScatterDistanceR) && checkIsZero(colorScatterDistanceG) && checkIsZero(colorScatterDistanceB)) {
+//			Set DisneyDiffuseBRDF:
+			doBSDFSetBXDFDisneyDiffuseBRDF(index++);
+			doBXDFDisneyDiffuseBRDFSetReflectanceScale(colorColorR * diffuseWeight, colorColorG * diffuseWeight, colorColorB * diffuseWeight);
+		}
+		
+		if(diffuseWeight > 0.0F && !isThin && (!checkIsZero(colorScatterDistanceR) || !checkIsZero(colorScatterDistanceG) || !checkIsZero(colorScatterDistanceB))) {
+//			Set SpecularBTDF:
+			doBSDFSetBXDFSpecularBTDFFresnelDielectric(index++);
+			doBXDFSpecularBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
+			doBXDFSpecularBTDFFresnelDielectricSetTransmittanceScale(1.0F, 1.0F, 1.0F);
+		}
+		
+		if(diffuseWeight > 0.0F) {
+//			Set DisneyRetroBRDF:
+			doBSDFSetBXDFDisneyRetroBRDF(index++);
+			doBXDFDisneyRetroBRDFSetReflectanceScale(colorColorR * diffuseWeight, colorColorG * diffuseWeight, colorColorB * diffuseWeight);
+			doBXDFDisneyRetroBRDFSetRoughness(floatRoughness);
+		}
+		
+		if(diffuseWeight > 0.0F && floatSheen > 0.0F) {
+//			Set DisneySheenBRDF:
+			doBSDFSetBXDFDisneySheenBRDF(index++);
+			doBXDFDisneySheenBRDFSetReflectanceScale(colorSheenR * diffuseWeight * floatSheen, colorSheenG * diffuseWeight * floatSheen, colorSheenB * diffuseWeight * floatSheen);
+		}
+		
+		final float aspect = sqrt(1.0F - floatAnisotropic * 0.9F);
+		
+		final float alphaX = max(0.001F, floatRoughness * floatRoughness / aspect);
+		final float alphaY = max(0.001F, floatRoughness * floatRoughness * aspect);
+		
+		final float floatR0 = ((floatEta - 1.0F) * (floatEta - 1.0F)) / ((floatEta + 1.0F) * (floatEta + 1.0F));
+		
+		final float colorSpecularR0R = lerp(lerp(1.0F, colorTintR, floatSpecularTint) * floatR0, colorColorR, floatMetallic);
+		final float colorSpecularR0G = lerp(lerp(1.0F, colorTintG, floatSpecularTint) * floatR0, colorColorG, floatMetallic);
+		final float colorSpecularR0B = lerp(lerp(1.0F, colorTintB, floatSpecularTint) * floatR0, colorColorB, floatMetallic);
+		
+//		Set TorranceSparrowBRDF:
+		doBSDFSetBXDFTorranceSparrowBRDFFresnelDisney(index++);
+		doBXDFTorranceSparrowBRDFFresnelDisneySetFresnelDisney(colorSpecularR0R, colorSpecularR0G, colorSpecularR0B, floatEta, floatMetallic);
+		doBXDFTorranceSparrowBRDFFresnelDisneySetMicrofacetDistributionTrowbridgeReitz(true, true, alphaX, alphaY);
+		doBXDFTorranceSparrowBRDFFresnelDisneySetReflectanceScale(1.0F, 1.0F, 1.0F);
+		
+		if(floatClearCoat > 0.0F) {
+//			Set DisneyClearCoatBRDF:
+			doBSDFSetBXDFDisneyClearCoatBRDF(index++);
+			doBXDFDisneyClearCoatBRDFSetGloss(lerp(0.1F, 0.001F, floatClearCoatGloss));
+			doBXDFDisneyClearCoatBRDFSetWeight(floatClearCoat);
+		}
+		
+		if(floatSpecularTransmission > 0.0F && isThin) {
+			final float floatRoughnessScaled = (0.65F * floatEta - 0.35F) * floatRoughness;
+			
+			final float alphaXScaled = max(0.001F, floatRoughnessScaled * floatRoughnessScaled / aspect);
+			final float alphaYScaled = max(0.001F, floatRoughnessScaled * floatRoughnessScaled * aspect);
+			
+//			Set TorranceSparrowBTDF:
+			doBSDFSetBXDFTorranceSparrowBTDFFresnelDielectric(index++);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(true, false, alphaXScaled, alphaYScaled);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetTransmittanceScale(sqrt(colorColorR) * floatSpecularTransmission, sqrt(colorColorG) * floatSpecularTransmission, sqrt(colorColorB) * floatSpecularTransmission);
+		}
+		
+		if(floatSpecularTransmission > 0.0F && !isThin) {
+//			Set TorranceSparrowBTDF:
+			doBSDFSetBXDFTorranceSparrowBTDFFresnelDielectric(index++);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(true, true, alphaX, alphaY);
+			doBXDFTorranceSparrowBTDFFresnelDielectricSetTransmittanceScale(sqrt(colorColorR) * floatSpecularTransmission, sqrt(colorColorG) * floatSpecularTransmission, sqrt(colorColorB) * floatSpecularTransmission);
+		}
+		
+		if(isThin) {
+//			Set LambertianBTDF:
+			doBSDFSetBXDFLambertianBTDF(index++);
+			doBXDFLambertianBTDFSetTransmittanceScale(colorColorR * floatDiffuseTransmission, colorColorG * floatDiffuseTransmission, colorColorB * floatDiffuseTransmission);
+		}
+		
+//		Finish the BSDF:
+		doBSDFSetBXDFCount(index);
 		
 //		Initialize the BSDFResult:
 		doBSDFResultInitialize();
@@ -2008,12 +2246,36 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_B_X_D_F_COUNT] = count;
 	}
 	
+	private void doBSDFSetBXDFDisneyClearCoatBRDF(final int index) {
+		doBSDFSetBXDF(index, B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ID);
+	}
+	
+	private void doBSDFSetBXDFDisneyDiffuseBRDF(final int index) {
+		doBSDFSetBXDF(index, B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_ID);
+	}
+	
+	private void doBSDFSetBXDFDisneyFakeSSBRDF(final int index) {
+		doBSDFSetBXDF(index, B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ID);
+	}
+	
+	private void doBSDFSetBXDFDisneyRetroBRDF(final int index) {
+		doBSDFSetBXDF(index, B_X_D_F_DISNEY_RETRO_B_R_D_F_ID);
+	}
+	
+	private void doBSDFSetBXDFDisneySheenBRDF(final int index) {
+		doBSDFSetBXDF(index, B_X_D_F_DISNEY_SHEEN_B_R_D_F_ID);
+	}
+	
 	private void doBSDFSetBXDFFresnelBlendBRDF(final int index) {
 		doBSDFSetBXDF(index, B_X_D_F_FRESNEL_BLEND_B_R_D_F_ID);
 	}
 	
 	private void doBSDFSetBXDFLambertianBRDF(final int index) {
 		doBSDFSetBXDF(index, B_X_D_F_LAMBERTIAN_B_R_D_F_ID);
+	}
+	
+	private void doBSDFSetBXDFLambertianBTDF(final int index) {
+		doBSDFSetBXDF(index, B_X_D_F_LAMBERTIAN_B_T_D_F_ID);
 	}
 	
 	private void doBSDFSetBXDFOrenNayarBRDF(final int index) {
@@ -2038,6 +2300,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private void doBSDFSetBXDFTorranceSparrowBRDFFresnelDielectric(final int index) {
 		doBSDFSetBXDF(index, B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ID);
+	}
+	
+	private void doBSDFSetBXDFTorranceSparrowBRDFFresnelDisney(final int index) {
+		doBSDFSetBXDF(index, B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ID);
 	}
 	
 	private void doBSDFSetBXDFTorranceSparrowBTDFFresnelDielectric(final int index) {

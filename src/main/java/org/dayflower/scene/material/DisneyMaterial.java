@@ -59,7 +59,7 @@ import org.dayflower.scene.texture.Texture;
  * <p>
  * This class is immutable and thread-safe as long as the {@link Modifier} instance and all {@link Texture} instances are.
  * <p>
- * This {@code Material} implementation is not supported on the GPU.
+ * This {@code Material} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -69,6 +69,86 @@ public final class DisneyMaterial implements Material {
 	 * The name of this {@code DisneyMaterial} class.
 	 */
 	public static final String NAME = "Disney";
+	
+	/**
+	 * The length of the {@code int[]}.
+	 */
+	public static final int ARRAY_LENGTH = 16;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Anisotropic} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ANISOTROPIC = 1;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Clear Coat} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_CLEAR_COAT = 2;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Clear Coat Gloss} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_CLEAR_COAT_GLOSS = 3;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Color} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_COLOR = 4;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Diffuse Transmission} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_DIFFUSE_TRANSMISSION = 5;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ETA = 6;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Flatness} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_FLATNESS = 7;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Metallic} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_METALLIC = 8;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Roughness} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS = 9;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Scatter Distance} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE = 10;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Sheen} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_SHEEN = 11;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Sheen Tint} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_SHEEN_TINT = 12;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Specular Tint} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_SPECULAR_TINT = 13;
+	
+	/**
+	 * The offset for the {@link Texture} denoted by {@code Specular Transmission} in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION = 14;
+	
+	/**
+	 * The offset for the thin flag in the {@code int[]}.
+	 */
+	public static final int ARRAY_OFFSET_IS_THIN = 15;
 	
 	/**
 	 * The ID of this {@code DisneyMaterial} class.
@@ -1581,5 +1661,34 @@ public final class DisneyMaterial implements Material {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.modifier, this.textureAnisotropic, this.textureClearCoat, this.textureClearCoatGloss, this.textureColor, this.textureDiffuseTransmission, this.textureEmission, this.textureEta, this.textureFlatness, this.textureMetallic, this.textureRoughness, this.textureScatterDistance, this.textureSheen, this.textureSheenTint, this.textureSpecularTint, this.textureSpecularTransmission, Boolean.valueOf(this.isThin));
+	}
+	
+	/**
+	 * Returns an {@code int[]} representation of this {@code DisneyMaterial} instance.
+	 * 
+	 * @return an {@code int[]} representation of this {@code DisneyMaterial} instance
+	 */
+	public int[] toArray() {
+		final int[] array = new int[ARRAY_LENGTH];
+		
+//		Because the DisneyMaterial occupy 16/16 positions in two blocks, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();							//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ANISOTROPIC] = this.textureAnisotropic.getID();						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_CLEAR_COAT] = this.textureClearCoat.getID();							//Block #1
+		array[ARRAY_OFFSET_TEXTURE_CLEAR_COAT_GLOSS] = this.textureClearCoatGloss.getID();				//Block #1
+		array[ARRAY_OFFSET_TEXTURE_COLOR] = this.textureColor.getID();									//Block #1
+		array[ARRAY_OFFSET_TEXTURE_DIFFUSE_TRANSMISSION] = this.textureDiffuseTransmission.getID();		//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ETA] = this.textureEta.getID();										//Block #1
+		array[ARRAY_OFFSET_TEXTURE_FLATNESS] = this.textureFlatness.getID();							//Block #1
+		array[ARRAY_OFFSET_TEXTURE_METALLIC] = this.textureMetallic.getID();							//Block #2
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS] = this.textureRoughness.getID();							//Block #2
+		array[ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE] = this.textureScatterDistance.getID();				//Block #2
+		array[ARRAY_OFFSET_TEXTURE_SHEEN] = this.textureSheen.getID();									//Block #2
+		array[ARRAY_OFFSET_TEXTURE_SHEEN_TINT] = this.textureSheenTint.getID();							//Block #2
+		array[ARRAY_OFFSET_TEXTURE_SPECULAR_TINT] = this.textureSpecularTint.getID();					//Block #2
+		array[ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION] = this.textureSpecularTransmission.getID();	//Block #2
+		array[ARRAY_OFFSET_IS_THIN] = this.isThin ? 1 : 0;												//Block #2
+		
+		return array;
 	}
 }

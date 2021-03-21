@@ -46,6 +46,7 @@ final class CompiledScene {
 	private float[] textureSimplexFractionalBrownianMotionTextureArray;
 	private int[] lightLDRImageLightOffsetArray;
 	private int[] materialClearCoatMaterialArray;
+	private int[] materialDisneyMaterialArray;
 	private int[] materialGlassMaterialArray;
 	private int[] materialGlossyMaterialArray;
 	private int[] materialMatteMaterialArray;
@@ -65,6 +66,7 @@ final class CompiledScene {
 		setLightLDRImageLightArray(new float[1]);
 		setLightLDRImageLightOffsetArray(new int[1]);
 		setMaterialClearCoatMaterialArray(new int[1]);
+		setMaterialDisneyMaterialArray(new int[1]);
 		setMaterialGlassMaterialArray(new int[1]);
 		setMaterialGlossyMaterialArray(new int[1]);
 		setMaterialMatteMaterialArray(new int[1]);
@@ -195,6 +197,10 @@ final class CompiledScene {
 		return this.materialClearCoatMaterialArray;
 	}
 	
+	public int[] getMaterialDisneyMaterialArray() {
+		return this.materialDisneyMaterialArray;
+	}
+	
 	public int[] getMaterialGlassMaterialArray() {
 		return this.materialGlassMaterialArray;
 	}
@@ -253,6 +259,10 @@ final class CompiledScene {
 	
 	public void setMaterialClearCoatMaterialArray(final int[] materialClearCoatMaterialArray) {
 		this.materialClearCoatMaterialArray = Objects.requireNonNull(materialClearCoatMaterialArray, "materialClearCoatMaterialArray == null");
+	}
+	
+	public void setMaterialDisneyMaterialArray(final int[] materialDisneyMaterialArray) {
+		this.materialDisneyMaterialArray = Objects.requireNonNull(materialDisneyMaterialArray, "materialDisneyMaterialArray == null");
 	}
 	
 	public void setMaterialGlassMaterialArray(final int[] materialGlassMaterialArray) {

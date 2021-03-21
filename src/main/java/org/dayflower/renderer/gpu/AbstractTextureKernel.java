@@ -103,6 +103,21 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 	
 	/**
 	 * Evaluates the current {@link Texture} instance, which may be any of the supported {@code Texture} types.
+	 * <p>
+	 * Returns a {@code float} with the average value of the color.
+	 * 
+	 * @param textureID the ID of the {@code Texture} instance
+	 * @param textureOffset the offset of the {@code Texture} instance
+	 * @return a {@code float} with the average value of the color
+	 */
+	protected final float textureEvaluateFloat(final int textureID, final int textureOffset) {
+		textureEvaluate(textureID, textureOffset);
+		
+		return color3FLHSGetAverage();
+	}
+	
+	/**
+	 * Evaluates the current {@link Texture} instance, which may be any of the supported {@code Texture} types.
 	 * 
 	 * @param textureID the ID of the {@code Texture} instance
 	 * @param textureOffset the offset of the {@code Texture} instance

@@ -49,6 +49,7 @@ import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.material.ClearCoatMaterial;
+import org.dayflower.scene.material.DisneyMaterial;
 import org.dayflower.scene.material.GlassMaterial;
 import org.dayflower.scene.material.GlossyMaterial;
 import org.dayflower.scene.material.MatteMaterial;
@@ -84,6 +85,7 @@ final class SceneCompiler {
 	private final List<ConstantTexture> distinctConstantTextures;
 	private final List<Cylinder3F> distinctCylinders;
 	private final List<Disk3F> distinctDisks;
+	private final List<DisneyMaterial> distinctDisneyMaterials;
 	private final List<FunctionTexture> distinctFunctionTextures;
 	private final List<GlassMaterial> distinctGlassMaterials;
 	private final List<GlossyMaterial> distinctGlossyMaterials;
@@ -119,6 +121,7 @@ final class SceneCompiler {
 	private final Map<ConstantTexture, Integer> distinctToOffsetsConstantTextures;
 	private final Map<Cylinder3F, Integer> distinctToOffsetsCylinders;
 	private final Map<Disk3F, Integer> distinctToOffsetsDisks;
+	private final Map<DisneyMaterial, Integer> distinctToOffsetsDisneyMaterials;
 	private final Map<GlassMaterial, Integer> distinctToOffsetsGlassMaterials;
 	private final Map<GlossyMaterial, Integer> distinctToOffsetsGlossyMaterials;
 	private final Map<LDRImageLight, Integer> distinctToOffsetsLDRImageLights;
@@ -154,6 +157,7 @@ final class SceneCompiler {
 		this.distinctConstantTextures = new ArrayList<>();
 		this.distinctCylinders = new ArrayList<>();
 		this.distinctDisks = new ArrayList<>();
+		this.distinctDisneyMaterials = new ArrayList<>();
 		this.distinctFunctionTextures = new ArrayList<>();
 		this.distinctGlassMaterials = new ArrayList<>();
 		this.distinctGlossyMaterials = new ArrayList<>();
@@ -189,6 +193,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsConstantTextures = new LinkedHashMap<>();
 		this.distinctToOffsetsCylinders = new LinkedHashMap<>();
 		this.distinctToOffsetsDisks = new LinkedHashMap<>();
+		this.distinctToOffsetsDisneyMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsGlassMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsGlossyMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsLDRImageLights = new LinkedHashMap<>();
@@ -294,6 +299,7 @@ final class SceneCompiler {
 		
 //		Retrieve the int[] for all Material instances:
 		final int[] materialClearCoatMaterialArray = Ints.toArray(this.distinctClearCoatMaterials, clearCoatMaterial -> clearCoatMaterial.toArray(), 1);
+		final int[] materialDisneyMaterialArray = Ints.toArray(this.distinctDisneyMaterials, disneyMaterial -> disneyMaterial.toArray(), 1);
 		final int[] materialGlassMaterialArray = Ints.toArray(this.distinctGlassMaterials, glassMaterial -> glassMaterial.toArray(), 1);
 		final int[] materialGlossyMaterialArray = Ints.toArray(this.distinctGlossyMaterials, glossyMaterial -> glossyMaterial.toArray(), 1);
 		final int[] materialMatteMaterialArray = Ints.toArray(this.distinctMatteMaterials, matteMaterial -> matteMaterial.toArray(), 1);
@@ -334,6 +340,7 @@ final class SceneCompiler {
 //		Populate the float[] or int[] with data:
 		doPopulateLightLDRImageLightOffsetArray(lightLDRImageLightOffsetArray);
 		doPopulateMaterialClearCoatMaterialArrayWithTextures(materialClearCoatMaterialArray);
+		doPopulateMaterialDisneyMaterialArrayWithTextures(materialDisneyMaterialArray);
 		doPopulateMaterialGlassMaterialArrayWithTextures(materialGlassMaterialArray);
 		doPopulateMaterialGlossyMaterialArrayWithTextures(materialGlossyMaterialArray);
 		doPopulateMaterialMatteMaterialArrayWithTextures(materialMatteMaterialArray);
@@ -357,6 +364,7 @@ final class SceneCompiler {
 		compiledScene.setLightLDRImageLightArray(lightLDRImageLightArray);
 		compiledScene.setLightLDRImageLightOffsetArray(lightLDRImageLightOffsetArray);
 		compiledScene.setMaterialClearCoatMaterialArray(materialClearCoatMaterialArray);
+		compiledScene.setMaterialDisneyMaterialArray(materialDisneyMaterialArray);
 		compiledScene.setMaterialGlassMaterialArray(materialGlassMaterialArray);
 		compiledScene.setMaterialGlossyMaterialArray(materialGlossyMaterialArray);
 		compiledScene.setMaterialMatteMaterialArray(materialMatteMaterialArray);
@@ -399,6 +407,7 @@ final class SceneCompiler {
 		this.distinctConstantTextures.clear();
 		this.distinctCylinders.clear();
 		this.distinctDisks.clear();
+		this.distinctDisneyMaterials.clear();
 		this.distinctFunctionTextures.clear();
 		this.distinctGlassMaterials.clear();
 		this.distinctGlossyMaterials.clear();
@@ -434,6 +443,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsConstantTextures.clear();
 		this.distinctToOffsetsCylinders.clear();
 		this.distinctToOffsetsDisks.clear();
+		this.distinctToOffsetsDisneyMaterials.clear();
 		this.distinctToOffsetsGlassMaterials.clear();
 		this.distinctToOffsetsGlossyMaterials.clear();
 		this.distinctToOffsetsLDRImageLights.clear();
@@ -469,6 +479,7 @@ final class SceneCompiler {
 	
 	private void doFilterAllDistinctMaterials(final Scene scene) {
 		this.distinctClearCoatMaterials.addAll(NodeFilter.filterAllDistinct(scene, ClearCoatMaterial.class));
+		this.distinctDisneyMaterials.addAll(NodeFilter.filterAllDistinct(scene, DisneyMaterial.class));
 		this.distinctGlassMaterials.addAll(NodeFilter.filterAllDistinct(scene, GlassMaterial.class));
 		this.distinctGlossyMaterials.addAll(NodeFilter.filterAllDistinct(scene, GlossyMaterial.class));
 		this.distinctMatteMaterials.addAll(NodeFilter.filterAllDistinct(scene, MatteMaterial.class));
@@ -477,6 +488,7 @@ final class SceneCompiler {
 		this.distinctPlasticMaterials.addAll(NodeFilter.filterAllDistinct(scene, PlasticMaterial.class));
 		this.distinctSubstrateMaterials.addAll(NodeFilter.filterAllDistinct(scene, SubstrateMaterial.class));
 		this.distinctMaterials.addAll(this.distinctClearCoatMaterials);
+		this.distinctMaterials.addAll(this.distinctDisneyMaterials);
 		this.distinctMaterials.addAll(this.distinctGlassMaterials);
 		this.distinctMaterials.addAll(this.distinctGlossyMaterials);
 		this.distinctMaterials.addAll(this.distinctMatteMaterials);
@@ -537,6 +549,7 @@ final class SceneCompiler {
 	
 	private void doMapAllDistinctMaterials() {
 		this.distinctToOffsetsClearCoatMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctClearCoatMaterials, ClearCoatMaterial.ARRAY_LENGTH));
+		this.distinctToOffsetsDisneyMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDisneyMaterials, DisneyMaterial.ARRAY_LENGTH));
 		this.distinctToOffsetsGlassMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlassMaterials, GlassMaterial.ARRAY_LENGTH));
 		this.distinctToOffsetsGlossyMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctGlossyMaterials, GlossyMaterial.ARRAY_LENGTH));
 		this.distinctToOffsetsMatteMaterials.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMatteMaterials, MatteMaterial.ARRAY_LENGTH));
@@ -594,6 +607,60 @@ final class SceneCompiler {
 			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
 			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureKD] = pack(textureKD.getID(), doFindTextureOffset(textureKD));
 			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureKS] = pack(textureKS.getID(), doFindTextureOffset(textureKS));
+		}
+	}
+	
+	private void doPopulateMaterialDisneyMaterialArrayWithTextures(final int[] materialDisneyMaterialArray) {
+		for(int i = 0; i < this.distinctDisneyMaterials.size(); i++) {
+			final DisneyMaterial disneyMaterial = this.distinctDisneyMaterials.get(i);
+			
+			final Texture textureEmission = disneyMaterial.getTextureEmission();
+			final Texture textureAnisotropic = disneyMaterial.getTextureAnisotropic();
+			final Texture textureClearCoat = disneyMaterial.getTextureClearCoat();
+			final Texture textureClearCoatGloss = disneyMaterial.getTextureClearCoatGloss();
+			final Texture textureColor = disneyMaterial.getTextureColor();
+			final Texture textureDiffuseTransmission = disneyMaterial.getTextureDiffuseTransmission();
+			final Texture textureEta = disneyMaterial.getTextureEta();
+			final Texture textureFlatness = disneyMaterial.getTextureFlatness();
+			final Texture textureMetallic = disneyMaterial.getTextureMetallic();
+			final Texture textureRoughness = disneyMaterial.getTextureRoughness();
+			final Texture textureScatterDistance = disneyMaterial.getTextureScatterDistance();
+			final Texture textureSheen = disneyMaterial.getTextureSheen();
+			final Texture textureSheenTint = disneyMaterial.getTextureSheenTint();
+			final Texture textureSpecularTint = disneyMaterial.getTextureSpecularTint();
+			final Texture textureSpecularTransmission = disneyMaterial.getTextureSpecularTransmission();
+			
+			final int materialDisneyMaterialArrayTextureEmission = i * DisneyMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
+			final int materialDisneyMaterialArrayTextureAnisotropic = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ANISOTROPIC;
+			final int materialDisneyMaterialArrayTextureClearCoat = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_CLEAR_COAT;
+			final int materialDisneyMaterialArrayTextureClearCoatGloss = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_CLEAR_COAT_GLOSS;
+			final int materialDisneyMaterialArrayTextureColor = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_COLOR;
+			final int materialDisneyMaterialArrayTextureDiffuseTransmission = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_DIFFUSE_TRANSMISSION;
+			final int materialDisneyMaterialArrayTextureEta = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ETA;
+			final int materialDisneyMaterialArrayTextureFlatness = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_FLATNESS;
+			final int materialDisneyMaterialArrayTextureMetallic = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_METALLIC;
+			final int materialDisneyMaterialArrayTextureRoughness = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS;
+			final int materialDisneyMaterialArrayTextureScatterDistance = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE;
+			final int materialDisneyMaterialArrayTextureSheen = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SHEEN;
+			final int materialDisneyMaterialArrayTextureSheenTint = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SHEEN_TINT;
+			final int materialDisneyMaterialArrayTextureSpecularTint = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SPECULAR_TINT;
+			final int materialDisneyMaterialArrayTextureSpecularTransmission = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION;
+			
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureAnisotropic] = pack(textureAnisotropic.getID(), doFindTextureOffset(textureAnisotropic));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureClearCoat] = pack(textureClearCoat.getID(), doFindTextureOffset(textureClearCoat));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureClearCoatGloss] = pack(textureClearCoatGloss.getID(), doFindTextureOffset(textureClearCoatGloss));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureColor] = pack(textureColor.getID(), doFindTextureOffset(textureColor));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureDiffuseTransmission] = pack(textureDiffuseTransmission.getID(), doFindTextureOffset(textureDiffuseTransmission));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureEta] = pack(textureEta.getID(), doFindTextureOffset(textureEta));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureFlatness] = pack(textureFlatness.getID(), doFindTextureOffset(textureFlatness));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureMetallic] = pack(textureMetallic.getID(), doFindTextureOffset(textureMetallic));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureRoughness] = pack(textureRoughness.getID(), doFindTextureOffset(textureRoughness));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureScatterDistance] = pack(textureScatterDistance.getID(), doFindTextureOffset(textureScatterDistance));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSheen] = pack(textureSheen.getID(), doFindTextureOffset(textureSheen));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSheenTint] = pack(textureSheenTint.getID(), doFindTextureOffset(textureSheenTint));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSpecularTint] = pack(textureSpecularTint.getID(), doFindTextureOffset(textureSpecularTint));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSpecularTransmission] = pack(textureSpecularTransmission.getID(), doFindTextureOffset(textureSpecularTransmission));
 		}
 	}
 	
@@ -772,6 +839,8 @@ final class SceneCompiler {
 			
 			if(material instanceof ClearCoatMaterial) {
 				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsClearCoatMaterials.get(material).intValue();
+			} else if(material instanceof DisneyMaterial) {
+				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsDisneyMaterials.get(material).intValue();
 			} else if(material instanceof GlassMaterial) {
 				primitiveArray[primitiveArrayMaterialOffset] = this.distinctToOffsetsGlassMaterials.get(material).intValue();
 			} else if(material instanceof GlossyMaterial) {

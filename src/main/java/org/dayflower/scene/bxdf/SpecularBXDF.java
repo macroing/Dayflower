@@ -40,6 +40,8 @@ import org.dayflower.utility.ParameterArguments;
  * <p>
  * This class is immutable and therefore thread-safe.
  * <p>
+ * This {@code BXDF} implementation is not supported on the GPU.
+ * <p>
  * This class implements the BRDF and BTDF of the glass material in SmallPT.
  * 
  * @since 1.0.0

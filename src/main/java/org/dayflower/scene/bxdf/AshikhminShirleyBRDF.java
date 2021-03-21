@@ -43,6 +43,8 @@ import org.dayflower.utility.ParameterArguments;
  * An {@code AshikhminShirleyBRDF} is an implementation of {@link BXDF} that represents an Ashikhmin-Shirley BRDF (Bidirectional Reflectance Distribution Function).
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@code BXDF} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

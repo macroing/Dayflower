@@ -39,6 +39,8 @@ import org.dayflower.utility.ParameterArguments;
  * A {@code DisneySheenBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Disney Sheen reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@code BXDF} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

@@ -278,50 +278,6 @@ public abstract class AbstractKernel extends Kernel {
 	}
 	
 	/**
-	 * Returns a {@code float} with the amount of light reflected by the surface.
-	 * 
-	 * @param cosThetaI the cosine of the angle made by the incoming direction and the surface normal
-	 * @param etaI the index of refraction (IOR) for the incident media
-	 * @param etaT the index of refraction (IOR) for the transmitted media
-	 * @return a {@code float} with the amount of light reflected by the surface
-	 */
-	protected final float fresnelDielectric(final float cosThetaI, final float etaI, final float etaT) {
-		final float saturateCosThetaI = saturateF(cosThetaI, -1.0F, 1.0F);
-		
-		final boolean isEntering = saturateCosThetaI > 0.0F;
-		
-		final float currentCosThetaI = isEntering ? saturateCosThetaI : abs(saturateCosThetaI);
-		final float currentEtaI = isEntering ? etaI : etaT;
-		final float currentEtaT = isEntering ? etaT : etaI;
-		
-		final float currentSinThetaI = sqrt(max(0.0F, 1.0F - currentCosThetaI * currentCosThetaI));
-		final float currentSinThetaT = currentEtaI / currentEtaT * currentSinThetaI;
-		
-		if(currentSinThetaT >= 1.0F) {
-			return 1.0F;
-		}
-		
-		final float currentCosThetaT = sqrt(max(0.0F, 1.0F - currentSinThetaT * currentSinThetaT));
-		
-		final float reflectancePara = ((currentEtaT * currentCosThetaI) - (currentEtaI * currentCosThetaT)) / ((currentEtaT * currentCosThetaI) + (currentEtaI * currentCosThetaT));
-		final float reflectancePerp = ((currentEtaI * currentCosThetaI) - (currentEtaT * currentCosThetaT)) / ((currentEtaI * currentCosThetaI) + (currentEtaT * currentCosThetaT));
-		final float reflectance = (reflectancePara * reflectancePara + reflectancePerp * reflectancePerp) / 2.0F;
-		
-		return reflectance;
-	}
-	
-	/**
-	 * Returns the dielectric Fresnel reflectance based on Schlicks approximation.
-	 * 
-	 * @param cosTheta the cosine of the angle theta
-	 * @param f0 the reflectance at grazing angle
-	 * @return the dielectric Fresnel reflectance based on Schlicks approximation
-	 */
-	protected final float fresnelDielectricSchlick(final float cosTheta, final float f0) {
-		return f0 + (1.0F - f0) * pow(max(1.0F - cosTheta, 0.0F), 5.0F);
-	}
-	
-	/**
 	 * Performs a linear interpolation operation on the supplied values.
 	 * <p>
 	 * Returns the result of the linear interpolation operation.

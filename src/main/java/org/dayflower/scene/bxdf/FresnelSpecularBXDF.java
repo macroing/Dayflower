@@ -41,6 +41,8 @@ import org.dayflower.utility.ParameterArguments;
  * A {@code FresnelSpecularBXDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) and a BTDF (Bidirectional Transmittance Distribution Function) for specular reflection and transmission.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@code BXDF} implementation is not supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

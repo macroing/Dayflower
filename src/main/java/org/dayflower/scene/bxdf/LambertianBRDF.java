@@ -37,6 +37,8 @@ import org.dayflower.utility.ParameterArguments;
  * A {@code LambertianBRDF} is an implementation of {@link BXDF} that represents a BRDF (Bidirectional Reflectance Distribution Function) for Lambertian reflection.
  * <p>
  * This class is immutable and therefore thread-safe.
+ * <p>
+ * This {@code BXDF} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren

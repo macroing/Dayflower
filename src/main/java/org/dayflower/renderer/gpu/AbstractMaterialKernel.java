@@ -30,6 +30,7 @@ import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDFResult;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.bxdf.AshikhminShirleyBRDF;
+import org.dayflower.scene.bxdf.DisneyClearCoatBRDF;
 import org.dayflower.scene.bxdf.FresnelBlendBRDF;
 import org.dayflower.scene.bxdf.LambertianBRDF;
 import org.dayflower.scene.bxdf.LambertianBTDF;
@@ -125,6 +126,13 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
 	private static final int B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_ID = 1;
 	
+//	Constants for BXDF DisneyClearCoatBRDF:
+	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_LENGTH = 2;
+	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_GLOSS = 0;
+	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_WEIGHT = 1;
+	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
+	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ID = 2;
+	
 //	Constants for BXDF FresnelBlendBRDF using an implicit MicrofacetDistribution of type TrowbridgeReitz:
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_LENGTH = 10;
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_OFFSET_ALPHA_X = 8;
@@ -134,19 +142,19 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE_DIFFUSE = 0;
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE_SPECULAR = 3;
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ID = 2;
+	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ID = 3;
 	
 //	Constants for BXDF LambertianBRDF:
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 3;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ID = 3;
+	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ID = 4;
 	
 //	Constants for BXDF LambertianBTDF:
 	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_ARRAY_LENGTH = 3;
 	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_ARRAY_OFFSET_TRANSMITTANCE_SCALE = 0;
 	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_ID = 4;
+	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_ID = 5;
 	
 //	Constants for BXDF OrenNayarBRDF:
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH = 6;
@@ -155,7 +163,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B = 5;
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 1;
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ID = 5;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ID = 6;
 	
 //	Constants for BXDFResult:
 	private static final int B_X_D_F_RESULT_ARRAY_LENGTH = 13;
@@ -170,7 +178,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_ARRAY_OFFSET_LIGHT = 3;
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR;
-	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_ID = 6;
+	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_ID = 7;
 	
 //	Constants for BXDF SpecularBRDF using Fresnel of type Dielectric:
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH = 5;
@@ -178,7 +186,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ETA_T = 4;
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR;
-	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ID = 7;
+	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ID = 8;
 	
 //	Constants for BXDF SpecularBTDF using Fresnel of type Dielectric:
 	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH = 5;
@@ -186,7 +194,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ETA_B = 4;
 	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE = 0;
 	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION | B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR;
-	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ID = 8;
+	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ID = 9;
 	
 //	Constants for BXDF TorranceSparrowBRDF using Fresnel of type Conductor and an implicit MicrofacetDistribution of type TrowbridgeReitz:
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ARRAY_LENGTH = 16;
@@ -199,7 +207,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ARRAY_OFFSET_K = 9;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ID = 9;
+	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ID = 10;
 	
 //	Constants for BXDF TorranceSparrowBRDF using Fresnel of type Dielectric and an implicit MicrofacetDistribution of type TrowbridgeReitz:
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH = 9;
@@ -211,7 +219,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL = 6;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ID = 10;
+	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ID = 11;
 	
 //	Constants for BXDF TorranceSparrowBTDF using Fresnel of type Dielectric and an implicit MicrofacetDistribution of type TrowbridgeReitz:
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH = 9;
@@ -223,7 +231,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL = 6;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE = 0;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ID = 11;
+	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ID = 12;
 	
 //	Constants for the current implementation:
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
@@ -254,6 +262,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * A {@code float[]} that contains an {@link AshikhminShirleyBRDF} instance.
 	 */
 	protected float[] bXDFAshikhminShirleyBRDFArray_$private$4;
+	
+	/**
+	 * A {@code float[]} that contains a {@link DisneyClearCoatBRDF} instance.
+	 */
+	protected float[] bXDFDisneyClearCoatBRDFArray_$private$2;
 	
 	/**
 	 * A {@code float[]} that contains a {@link FresnelBlendBRDF} instance that use {@link TrowbridgeReitzMicrofacetDistribution}.
@@ -369,6 +382,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bSDFArray_$private$11 = new float[B_S_D_F_ARRAY_LENGTH];
 		this.bSDFResultArray_$private$14 = new float[B_S_D_F_RESULT_ARRAY_LENGTH];
 		this.bXDFAshikhminShirleyBRDFArray_$private$4 = new float[B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_ARRAY_LENGTH];
+		this.bXDFDisneyClearCoatBRDFArray_$private$2 = new float[B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_LENGTH];
 		this.bXDFFresnelBlendBRDFArray_$private$10 = new float[B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_LENGTH];
 		this.bXDFLambertianBRDFArray_$private$3 = new float[B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH];
 		this.bXDFLambertianBTDFArray_$private$3 = new float[B_X_D_F_LAMBERTIAN_B_T_D_F_ARRAY_LENGTH];
@@ -1967,7 +1981,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BSDF Result /////////////////////////////////////////////////////////////////////////////////////
+	// BSDFResult //////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private float doBSDFResultGetNormalX() {
@@ -2075,6 +2089,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private boolean doBXDFHasReflection(final int id) {
 		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
 			return true;
+		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
+			return true;
 		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
 			return true;
 		} else if(doBXDFLambertianBRDFIsMatchingID(id)) {
@@ -2102,6 +2118,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFHasTransmission(final int id) {
 		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
+			return false;
+		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
 			return false;
 		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
 			return false;
@@ -2131,6 +2149,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private boolean doBXDFIsMatchingBitFlags(final int id, final int bitFlags) {
 		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
 			return doBXDFAshikhminShirleyBRDFIsMatchingBitFlags(bitFlags);
+		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
+			return doBXDFDisneyClearCoatBRDFIsMatchingBitFlags(bitFlags);
 		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
 			return doBXDFFresnelBlendBRDFIsMatchingBitFlags(bitFlags);
 		} else if(doBXDFLambertianBRDFIsMatchingID(id)) {
@@ -2158,6 +2178,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	private boolean doBXDFIsSpecular(final int id) {
 		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
+			return false;
+		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
 			return false;
 		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
 			return false;
@@ -2187,6 +2209,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private boolean doBXDFSampleDistributionFunction(final float u, final float v, final int id) {
 		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
 			return doBXDFAshikhminShirleyBRDFSampleDistributionFunction(u, v);
+		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
+			return doBXDFDisneyClearCoatBRDFSampleDistributionFunction(u, v);
 		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
 			return doBXDFFresnelBlendBRDFSampleDistributionFunction(u, v);
 		} else if(doBXDFLambertianBRDFIsMatchingID(id)) {
@@ -2215,6 +2239,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private void doBXDFEvaluateDistributionFunction(final int id) {
 		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
 			doBXDFAshikhminShirleyBRDFEvaluateDistributionFunction();
+		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
+			doBXDFDisneyClearCoatBRDFEvaluateDistributionFunction();
 		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
 			doBXDFFresnelBlendBRDFEvaluateDistributionFunction();
 		} else if(doBXDFLambertianBRDFIsMatchingID(id)) {
@@ -2241,6 +2267,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private void doBXDFEvaluateProbabilityDensityFunction(final int id) {
 		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
 			doBXDFAshikhminShirleyBRDFEvaluateProbabilityDensityFunction();
+		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
+			doBXDFDisneyClearCoatBRDFEvaluateProbabilityDensityFunction();
 		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
 			doBXDFFresnelBlendBRDFEvaluateProbabilityDensityFunction();
 		} else if(doBXDFLambertianBRDFIsMatchingID(id)) {
@@ -2265,7 +2293,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Ashikhmin-Shirley BRDF /////////////////////////////////////////////////////////////////////
+	// BXDF - AshikhminShirleyBRDF /////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -2427,7 +2455,176 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Fresnel Blend BRDF /////////////////////////////////////////////////////////////////////////
+	// BXDF - DisneyClearCoatBRDF //////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doBXDFDisneyClearCoatBRDFIsMatchingBitFlags(final int bitFlags) {
+		return (B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_BIT_FLAGS;
+	}
+	
+	@SuppressWarnings("static-method")
+	private boolean doBXDFDisneyClearCoatBRDFIsMatchingID(final int id) {
+		return id == B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ID;
+	}
+	
+	private boolean doBXDFDisneyClearCoatBRDFSampleDistributionFunction(final float u, final float v) {
+		final float outgoingX = doBXDFResultGetOutgoingX();
+		final float outgoingY = doBXDFResultGetOutgoingY();
+		final float outgoingZ = doBXDFResultGetOutgoingZ();
+		
+		if(checkIsZero(outgoingZ)) {
+			return false;
+		}
+		
+		final float gloss = doBXDFDisneyClearCoatBRDFGetGloss();
+		final float glossSquared = gloss * gloss;
+		
+		final float cosTheta = sqrt(max(0.0F, (1.0F - pow(glossSquared, 1.0F - u)) / (1.0F - glossSquared)));
+		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+		final float phi = PI_MULTIPLIED_BY_2 * v;
+		
+		final float normalSampleX = sinTheta * cos(phi);
+		final float normalSampleY = sinTheta * sin(phi);
+		final float normalSampleZ = cosTheta;
+		
+		final boolean isSameHemisphereZ = vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, normalSampleX, normalSampleY, normalSampleZ);
+		
+		final float normalX = isSameHemisphereZ ? normalSampleX : -normalSampleX;
+		final float normalY = isSameHemisphereZ ? normalSampleY : -normalSampleY;
+		final float normalZ = isSameHemisphereZ ? normalSampleZ : -normalSampleZ;
+		
+		final float outgoingDotNormal = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
+		final float outgoingDotNormalMultipliedByTwo = outgoingDotNormal * 2.0F;
+		
+		final float incomingX = normalX * outgoingDotNormalMultipliedByTwo - outgoingX;
+		final float incomingY = normalY * outgoingDotNormalMultipliedByTwo - outgoingY;
+		final float incomingZ = normalZ * outgoingDotNormalMultipliedByTwo - outgoingZ;
+		
+		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+			return false;
+		}
+		
+		doBXDFResultSetIncoming(incomingX, incomingY, incomingZ);
+		doBXDFDisneyClearCoatBRDFEvaluateDistributionFunction();
+		doBXDFDisneyClearCoatBRDFEvaluateProbabilityDensityFunction();
+		
+		return true;
+	}
+	
+	private float doBXDFDisneyClearCoatBRDFGTR1(final float cosTheta, final float alpha) {
+		return (alpha * alpha - 1.0F) / (PI * log(alpha * alpha) * (1.0F + (alpha * alpha - 1.0F) * cosTheta * cosTheta));
+	}
+	
+	private float doBXDFDisneyClearCoatBRDFGetGloss() {
+		return this.bXDFDisneyClearCoatBRDFArray_$private$2[B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_GLOSS];
+	}
+	
+	private float doBXDFDisneyClearCoatBRDFGetWeight() {
+		return this.bXDFDisneyClearCoatBRDFArray_$private$2[B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_WEIGHT];
+	}
+	
+	private float doBXDFDisneyClearCoatBRDFSmithGGGX(final float cosTheta, final float alpha) {
+		return 1.0F / (cosTheta + sqrt(alpha * alpha + cosTheta * cosTheta - alpha * alpha * cosTheta * cosTheta));
+	}
+	
+	private void doBXDFDisneyClearCoatBRDFEvaluateDistributionFunction() {
+		final float outgoingX = doBXDFResultGetOutgoingX();
+		final float outgoingY = doBXDFResultGetOutgoingY();
+		final float outgoingZ = doBXDFResultGetOutgoingZ();
+		
+		final float incomingX = doBXDFResultGetIncomingX();
+		final float incomingY = doBXDFResultGetIncomingY();
+		final float incomingZ = doBXDFResultGetIncomingZ();
+		
+		final float normalX = incomingX + outgoingX;
+		final float normalY = incomingY + outgoingY;
+		final float normalZ = incomingZ + outgoingZ;
+		
+		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
+			
+			return;
+		}
+		
+		final float normalLengthReciprocal = vector3FLengthReciprocal(normalX, normalY, normalZ);
+		final float normalNormalizedX = normalX * normalLengthReciprocal;
+		final float normalNormalizedY = normalY * normalLengthReciprocal;
+		final float normalNormalizedZ = normalZ * normalLengthReciprocal;
+		
+		final float gloss = doBXDFDisneyClearCoatBRDFGetGloss();
+		final float weight = doBXDFDisneyClearCoatBRDFGetWeight();
+		
+		final float cosThetaAbsNormalNormalized = vector3FCosThetaAbs(normalNormalizedX, normalNormalizedY, normalNormalizedZ);
+		final float cosThetaAbsOutgoing = vector3FCosThetaAbs(outgoingX, outgoingY, outgoingZ);
+		final float cosThetaAbsIncoming = vector3FCosThetaAbs(incomingX, incomingY, incomingZ);
+		
+		final float outgoingDotNormalNormalized = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalNormalizedX, normalNormalizedY, normalNormalizedZ);
+		
+		final float d = doBXDFDisneyClearCoatBRDFGTR1(cosThetaAbsNormalNormalized, gloss);
+		final float f = doSchlickFresnelWeightLerp(outgoingDotNormalNormalized, 0.04F);
+		final float g = doBXDFDisneyClearCoatBRDFSmithGGGX(cosThetaAbsOutgoing, 0.25F) * doBXDFDisneyClearCoatBRDFSmithGGGX(cosThetaAbsIncoming, 0.25F);
+		
+		final float result = weight * g * f * d / 4.0F;
+		
+		doBXDFResultSetResult(result, result, result);
+	}
+	
+	private void doBXDFDisneyClearCoatBRDFEvaluateProbabilityDensityFunction() {
+		final float outgoingX = doBXDFResultGetOutgoingX();
+		final float outgoingY = doBXDFResultGetOutgoingY();
+		final float outgoingZ = doBXDFResultGetOutgoingZ();
+		
+		final float incomingX = doBXDFResultGetIncomingX();
+		final float incomingY = doBXDFResultGetIncomingY();
+		final float incomingZ = doBXDFResultGetIncomingZ();
+		
+		if(!vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, incomingX, incomingY, incomingZ)) {
+			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
+			
+			return;
+		}
+		
+		final float normalX = incomingX + outgoingX;
+		final float normalY = incomingY + outgoingY;
+		final float normalZ = incomingZ + outgoingZ;
+		
+		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
+			
+			return;
+		}
+		
+		final float normalLengthReciprocal = vector3FLengthReciprocal(normalX, normalY, normalZ);
+		final float normalNormalizedX = normalX * normalLengthReciprocal;
+		final float normalNormalizedY = normalY * normalLengthReciprocal;
+		final float normalNormalizedZ = normalZ * normalLengthReciprocal;
+		
+		final float gloss = doBXDFDisneyClearCoatBRDFGetGloss();
+		
+		final float cosThetaAbsNormalNormalized = vector3FCosThetaAbs(normalNormalizedX, normalNormalizedY, normalNormalizedZ);
+		
+		final float outgoingDotNormalNormalized = vector3FDotProduct(outgoingX, outgoingY, outgoingZ, normalNormalizedX, normalNormalizedY, normalNormalizedZ);
+		
+		final float d = doBXDFDisneyClearCoatBRDFGTR1(cosThetaAbsNormalNormalized, gloss);
+		
+		final float probabilityDensityFunctionValue = d * cosThetaAbsNormalNormalized / (4.0F * outgoingDotNormalNormalized);
+		
+		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+	}
+	
+	@SuppressWarnings("unused")
+	private void doBXDFDisneyClearCoatBRDFSetGloss(final float gloss) {
+		this.bXDFDisneyClearCoatBRDFArray_$private$2[B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_GLOSS] = gloss;
+	}
+	
+	@SuppressWarnings("unused")
+	private void doBXDFDisneyClearCoatBRDFSetWeight(final float weight) {
+		this.bXDFDisneyClearCoatBRDFArray_$private$2[B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_WEIGHT] = weight;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// BXDF - FresnelBlendBRDF /////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -2569,7 +2766,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float reflectanceScaleSpecularG = doBXDFFresnelBlendBRDFGetReflectanceScaleSpecularG();
 		final float reflectanceScaleSpecularB = doBXDFFresnelBlendBRDFGetReflectanceScaleSpecularB();
 		
-		doFresnelDielectricSchlick(incomingDotNormal, reflectanceScaleSpecularR, reflectanceScaleSpecularG, reflectanceScaleSpecularB);
+		doSchlickFresnelDielectric(incomingDotNormal, reflectanceScaleSpecularR, reflectanceScaleSpecularG, reflectanceScaleSpecularB);
 		
 		final float fresnelR = color3FLHSGetComponent1();
 		final float fresnelG = color3FLHSGetComponent2();
@@ -2645,7 +2842,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Lambertian BRDF ////////////////////////////////////////////////////////////////////////////
+	// BXDF - LambertianBRDF ///////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -2712,7 +2909,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Lambertian BTDF ////////////////////////////////////////////////////////////////////////////
+	// BXDF - LambertianBTDF ///////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -2780,7 +2977,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Oren-Nayar BRDF ////////////////////////////////////////////////////////////////////////////
+	// BXDF - OrenNayarBRDF ////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -2896,119 +3093,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Result /////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private float doBXDFResultGetIncomingX() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0];
-	}
-	
-	private float doBXDFResultGetIncomingY() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1];
-	}
-	
-	private float doBXDFResultGetIncomingZ() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2];
-	}
-	
-	private float doBXDFResultGetNormalX() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 0];
-	}
-	
-	private float doBXDFResultGetNormalY() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 1];
-	}
-	
-	private float doBXDFResultGetNormalZ() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2];
-	}
-	
-	private float doBXDFResultGetOutgoingX() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0];
-	}
-	
-	private float doBXDFResultGetOutgoingY() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1];
-	}
-	
-	private float doBXDFResultGetOutgoingZ() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2];
-	}
-	
-	private float doBXDFResultGetProbabilityDensityFunctionValue() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE];
-	}
-	
-	private float doBXDFResultGetResultB() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 2];
-	}
-	
-	private float doBXDFResultGetResultG() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 1];
-	}
-	
-	private float doBXDFResultGetResultR() {
-		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 0];
-	}
-	
-	private void doBXDFResultSetIncoming(final float x, final float y, final float z) {
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0] = x;
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1] = y;
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2] = z;
-	}
-	
-	private void doBXDFResultSetNormal(final float x, final float y, final float z) {
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 0] = x;
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 1] = y;
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2] = z;
-	}
-	
-	private void doBXDFResultSetNormalTransformedFromBSDFResult() {
-		final float normalX = doBSDFResultGetNormalX();
-		final float normalY = doBSDFResultGetNormalY();
-		final float normalZ = doBSDFResultGetNormalZ();
-		
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(normalX, normalY, normalZ);
-		
-		final float normalTransformedX = vector3FGetComponent1();
-		final float normalTransformedY = vector3FGetComponent2();
-		final float normalTransformedZ = vector3FGetComponent3();
-		
-		doBXDFResultSetNormal(normalTransformedX, normalTransformedY, normalTransformedZ);
-	}
-	
-	private void doBXDFResultSetOutgoing(final float x, final float y, final float z) {
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0] = x;
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1] = y;
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2] = z;
-	}
-	
-	private void doBXDFResultSetOutgoingTransformedFromBSDFResult() {
-		final float outgoingX = doBSDFResultGetOutgoingX();
-		final float outgoingY = doBSDFResultGetOutgoingY();
-		final float outgoingZ = doBSDFResultGetOutgoingZ();
-		
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(outgoingX, outgoingY, outgoingZ);
-		
-		final float outgoingTransformedX = vector3FGetComponent1();
-		final float outgoingTransformedY = vector3FGetComponent2();
-		final float outgoingTransformedZ = vector3FGetComponent3();
-		
-		doBXDFResultSetOutgoing(outgoingTransformedX, outgoingTransformedY, outgoingTransformedZ);
-	}
-	
-	private void doBXDFResultSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
-	}
-	
-	private void doBXDFResultSetResult(final float r, final float g, final float b) {
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 0] = r;
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 1] = g;
-		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 2] = b;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Specular BRDF Fresnel Constant /////////////////////////////////////////////////////////////
+	// BXDF - SpecularBRDF - ConstantFresnel ///////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -3105,7 +3190,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Specular BRDF Fresnel Dielectric ///////////////////////////////////////////////////////////
+	// BXDF - SpecularBRDF - DielectricFresnel /////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -3197,7 +3282,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Specular BTDF Fresnel Dielectric ///////////////////////////////////////////////////////////
+	// BXDF - SpecularBTDF - DielectricFresnel /////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -3305,7 +3390,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Torrance-Sparrow BRDF Fresnel Conductor ////////////////////////////////////////////////////
+	// BXDF - TorranceSparrowBRDF - ConductorFresnel ///////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -3559,7 +3644,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Torrance-Sparrow BRDF Fresnel Dielectric ///////////////////////////////////////////////////
+	// BXDF - TorranceSparrowBRDF - DielectricFresnel //////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -3770,7 +3855,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BXDF Torrance-Sparrow BTDF Fresnel Dielectric ///////////////////////////////////////////////////
+	// BXDF - TorranceSparrowBTDF - DielectricFresnel //////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
@@ -4012,7 +4097,119 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Fresnel Conductor ///////////////////////////////////////////////////////////////////////////////
+	// BXDFResult //////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private float doBXDFResultGetIncomingX() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0];
+	}
+	
+	private float doBXDFResultGetIncomingY() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1];
+	}
+	
+	private float doBXDFResultGetIncomingZ() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2];
+	}
+	
+	private float doBXDFResultGetNormalX() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 0];
+	}
+	
+	private float doBXDFResultGetNormalY() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 1];
+	}
+	
+	private float doBXDFResultGetNormalZ() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2];
+	}
+	
+	private float doBXDFResultGetOutgoingX() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0];
+	}
+	
+	private float doBXDFResultGetOutgoingY() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1];
+	}
+	
+	private float doBXDFResultGetOutgoingZ() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2];
+	}
+	
+	private float doBXDFResultGetProbabilityDensityFunctionValue() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE];
+	}
+	
+	private float doBXDFResultGetResultB() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 2];
+	}
+	
+	private float doBXDFResultGetResultG() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 1];
+	}
+	
+	private float doBXDFResultGetResultR() {
+		return this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 0];
+	}
+	
+	private void doBXDFResultSetIncoming(final float x, final float y, final float z) {
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0] = x;
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1] = y;
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2] = z;
+	}
+	
+	private void doBXDFResultSetNormal(final float x, final float y, final float z) {
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 0] = x;
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 1] = y;
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_NORMAL + 2] = z;
+	}
+	
+	private void doBXDFResultSetNormalTransformedFromBSDFResult() {
+		final float normalX = doBSDFResultGetNormalX();
+		final float normalY = doBSDFResultGetNormalY();
+		final float normalZ = doBSDFResultGetNormalZ();
+		
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(normalX, normalY, normalZ);
+		
+		final float normalTransformedX = vector3FGetComponent1();
+		final float normalTransformedY = vector3FGetComponent2();
+		final float normalTransformedZ = vector3FGetComponent3();
+		
+		doBXDFResultSetNormal(normalTransformedX, normalTransformedY, normalTransformedZ);
+	}
+	
+	private void doBXDFResultSetOutgoing(final float x, final float y, final float z) {
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 0] = x;
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 1] = y;
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_OUTGOING + 2] = z;
+	}
+	
+	private void doBXDFResultSetOutgoingTransformedFromBSDFResult() {
+		final float outgoingX = doBSDFResultGetOutgoingX();
+		final float outgoingY = doBSDFResultGetOutgoingY();
+		final float outgoingZ = doBSDFResultGetOutgoingZ();
+		
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(outgoingX, outgoingY, outgoingZ);
+		
+		final float outgoingTransformedX = vector3FGetComponent1();
+		final float outgoingTransformedY = vector3FGetComponent2();
+		final float outgoingTransformedZ = vector3FGetComponent3();
+		
+		doBXDFResultSetOutgoing(outgoingTransformedX, outgoingTransformedY, outgoingTransformedZ);
+	}
+	
+	private void doBXDFResultSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
+	}
+	
+	private void doBXDFResultSetResult(final float r, final float g, final float b) {
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 0] = r;
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 1] = g;
+		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_RESULT + 2] = b;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Fresnel - ConductorFresnel //////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private void doFresnelConductor(final float cosThetaI, final float etaIR, final float etaIG, final float etaIB, final float etaTR, final float etaTG, final float etaTB, final float kR, final float kG, final float kB) {
@@ -4083,21 +4280,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Fresnel Dielectric ///////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private void doFresnelDielectricSchlick(final float cosTheta, final float r0R, final float r0G, final float r0B) {
-		final float pow5OneMinusCosTheta = pow5(1.0F - cosTheta);
-		
-		final float reflectanceR = r0R + (1.0F - r0R) * pow5OneMinusCosTheta;
-		final float reflectanceG = r0G + (1.0F - r0G) * pow5OneMinusCosTheta;
-		final float reflectanceB = r0B + (1.0F - r0B) * pow5OneMinusCosTheta;
-		
-		color3FLHSSet(reflectanceR, reflectanceG, reflectanceB);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Microfacet Distribution Trowbridge-Reitz ////////////////////////////////////////////////////////
+	// MicrofacetDistribution - TrowbridgeReitzMicrofacetDistribution //////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private boolean doMicrofacetDistributionTrowbridgeReitzIsSamplingVisibleArea() {
@@ -4319,5 +4502,27 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_IS_SEPARABLE_MODEL] = isSeparableModel ? 1.0F : 0.0F;
 		this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_ALPHA_X] = max(alphaX, 0.001F);
 		this.microfacetDistributionTrowbridgeReitzArray_$private$4[MICROFACET_DISTRIBUTION_TROWBRIDGE_REITZ_ARRAY_OFFSET_ALPHA_Y] = max(alphaY, 0.001F);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Schlick /////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private float doSchlickFresnelWeight(final float cosTheta) {
+		return pow5(saturateF(1.0F - cosTheta, 0.0F, 1.0F));
+	}
+	
+	private float doSchlickFresnelWeightLerp(final float cosTheta, final float r0) {
+		return lerp(r0, 1.0F, doSchlickFresnelWeight(cosTheta));
+	}
+	
+	private void doSchlickFresnelDielectric(final float cosTheta, final float r0R, final float r0G, final float r0B) {
+		final float pow5OneMinusCosTheta = pow5(1.0F - cosTheta);
+		
+		final float reflectanceR = r0R + (1.0F - r0R) * pow5OneMinusCosTheta;
+		final float reflectanceG = r0G + (1.0F - r0G) * pow5OneMinusCosTheta;
+		final float reflectanceB = r0B + (1.0F - r0B) * pow5OneMinusCosTheta;
+		
+		color3FLHSSet(reflectanceR, reflectanceG, reflectanceB);
 	}
 }

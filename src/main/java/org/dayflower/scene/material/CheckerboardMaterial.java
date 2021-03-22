@@ -362,6 +362,126 @@ public final class CheckerboardMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * A {@code Builder} is used to build {@link CheckerboardMaterial} instances.
+	 * <p>
+	 * This class is mutable and not thread-safe.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
+	public static final class Builder {
+		private AngleF angle;
+		private Material materialA;
+		private Material materialB;
+		private Vector2F scale;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Constructs a new {@code Builder} instance.
+		 */
+		public Builder() {
+			this(new CheckerboardMaterial());
+		}
+		
+		/**
+		 * Constructs a new {@code Builder} instance given {@code checkerboardMaterial}.
+		 * <p>
+		 * If {@code checkerboardMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param checkerboardMaterial a {@link CheckerboardMaterial} instance
+		 * @throws NullPointerException thrown if, and only if, {@code checkerboardMaterial} is {@code null}
+		 */
+		public Builder(final CheckerboardMaterial checkerboardMaterial) {
+			this.angle = checkerboardMaterial.getAngle();
+			this.materialA = checkerboardMaterial.getMaterialA();
+			this.materialB = checkerboardMaterial.getMaterialB();
+			this.scale = checkerboardMaterial.getScale();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Sets the {@link AngleF} instance that is used to rotate the checkerboard pattern.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param angle the {@code AngleF} instance that is used to rotate the checkerboard pattern
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+		 */
+		public Builder setAngle(final AngleF angle) {
+			this.angle = Objects.requireNonNull(angle, "angle == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Material} instance that is denoted by {@code A} and is used as the first checkerboard pattern component.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code materialA} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param materialA the {@code Material} instance that is denoted by {@code A} and is used as the first checkerboard pattern component
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code materialA} is {@code null}
+		 */
+		public Builder setMaterialA(final Material materialA) {
+			this.materialA = Objects.requireNonNull(materialA, "materialA == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Material} instance that is denoted by {@code B} and is used as the second checkerboard pattern component.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code materialB} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param materialB the {@code Material} instance that is denoted by {@code B} and is used as the second checkerboard pattern component
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code materialB} is {@code null}
+		 */
+		public Builder setMaterialB(final Material materialB) {
+			this.materialB = Objects.requireNonNull(materialB, "materialB == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Vector2F} instance that is used to scale the checkerboard pattern.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code scale} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param scale the {@code Vector2F} instance that is used to scale the checkerboard pattern
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code scale} is {@code null}
+		 */
+		public Builder setScale(final Vector2F scale) {
+			this.scale = Objects.requireNonNull(scale, "scale == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Returns a new {@link CheckerboardMaterial} instance.
+		 * 
+		 * @return a new {@code CheckerboardMaterial} instance
+		 */
+		public CheckerboardMaterial build() {
+			return new CheckerboardMaterial(this.materialA, this.materialB, this.angle, this.scale);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private Material doGetMaterial(final Intersection intersection) {
 		final float cosAngleRadians = cos(this.angle.getRadians());
 		final float sinAngleRadians = sin(this.angle.getRadians());

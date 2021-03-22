@@ -361,6 +361,123 @@ public final class BullseyeMaterial implements Material {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * A {@code Builder} is used to build {@link BullseyeMaterial} instances.
+	 * <p>
+	 * This class is mutable and not thread-safe.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
+	public static final class Builder {
+		private Material materialA;
+		private Material materialB;
+		private Point3F origin;
+		private float scale;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Constructs a new {@code Builder} instance.
+		 */
+		public Builder() {
+			this(new BullseyeMaterial());
+		}
+		
+		/**
+		 * Constructs a new {@code Builder} instance given {@code bullseyeMaterial}.
+		 * <p>
+		 * If {@code bullseyeMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param bullseyeMaterial a {@link BullseyeMaterial} instance
+		 * @throws NullPointerException thrown if, and only if, {@code bullseyeMaterial} is {@code null}
+		 */
+		public Builder(final BullseyeMaterial bullseyeMaterial) {
+			this.materialA = bullseyeMaterial.getMaterialA();
+			this.materialB = bullseyeMaterial.getMaterialB();
+			this.origin = bullseyeMaterial.getOrigin();
+			this.scale = bullseyeMaterial.getScale();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Sets the {@link Material} instance that is denoted by {@code A} and is used as the first bullseye pattern component.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code materialA} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param materialA the {@code Material} instance that is denoted by {@code A} and is used as the first bullseye pattern component
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code materialA} is {@code null}
+		 */
+		public Builder setMaterialA(final Material materialA) {
+			this.materialA = Objects.requireNonNull(materialA, "materialA == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Material} instance that is denoted by {@code B} and is used as the second bullseye pattern component.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code materialB} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param materialB the {@code Material} instance that is denoted by {@code B} and is used as the second bullseye pattern component
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code materialB} is {@code null}
+		 */
+		public Builder setMaterialB(final Material materialB) {
+			this.materialB = Objects.requireNonNull(materialB, "materialB == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Point3F} instance that is used as the origin for the bullseye pattern.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code origin} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param origin the {@code Point3F} instance that is used as the origin for the bullseye pattern
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code origin} is {@code null}
+		 */
+		public Builder setOrigin(final Point3F origin) {
+			this.origin = Objects.requireNonNull(origin, "origin == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@code float} value that is used to scale the bullseye pattern.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param scale the {@code float} value that is used to scale the bullseye pattern
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setScale(final float scale) {
+			this.scale = scale;
+			
+			return this;
+		}
+		
+		/**
+		 * Returns a new {@link BullseyeMaterial} instance.
+		 * 
+		 * @return a new {@code BullseyeMaterial} instance
+		 */
+		public BullseyeMaterial build() {
+			return new BullseyeMaterial(this.materialA, this.materialB, this.origin, this.scale);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private Material doGetMaterial(final Intersection intersection) {
 		final Vector3F direction = Vector3F.direction(this.origin, intersection.getSurfaceIntersectionObjectSpace().getSurfaceIntersectionPoint());
 		

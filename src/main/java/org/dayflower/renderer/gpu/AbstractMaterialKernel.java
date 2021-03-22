@@ -130,40 +130,40 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_ARRAY_OFFSET_EXPONENT = 3;
 	private static final int B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_ID = 1;
+	private static final int B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_ID = (1 << 16) | (B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF DisneyClearCoatBRDF:
 	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_LENGTH = 2;
 	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_GLOSS = 0;
 	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_WEIGHT = 1;
 	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ID = 2;
+	private static final int B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ID = (2 << 16) | (B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF DisneyDiffuseBRDF:
 	private static final int B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_ARRAY_LENGTH = 3;
 	private static final int B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_ID = 3;
+	private static final int B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_ID = (3 << 16) | (B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF DisneyFakeSSBRDF:
 	private static final int B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ARRAY_LENGTH = 4;
 	private static final int B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ARRAY_OFFSET_ROUGHNESS = 3;
 	private static final int B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ID = 4;
+	private static final int B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ID = (4 << 16) | (B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF DisneyRetroBRDF:
 	private static final int B_X_D_F_DISNEY_RETRO_B_R_D_F_ARRAY_LENGTH = 4;
 	private static final int B_X_D_F_DISNEY_RETRO_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_DISNEY_RETRO_B_R_D_F_ARRAY_OFFSET_ROUGHNESS = 3;
 	private static final int B_X_D_F_DISNEY_RETRO_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_DISNEY_RETRO_B_R_D_F_ID = 5;
+	private static final int B_X_D_F_DISNEY_RETRO_B_R_D_F_ID = (5 << 16) | (B_X_D_F_DISNEY_RETRO_B_R_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF DisneySheenBRDF:
 	private static final int B_X_D_F_DISNEY_SHEEN_B_R_D_F_ARRAY_LENGTH = 3;
 	private static final int B_X_D_F_DISNEY_SHEEN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_DISNEY_SHEEN_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_DISNEY_SHEEN_B_R_D_F_ID = 6;
+	private static final int B_X_D_F_DISNEY_SHEEN_B_R_D_F_ID = (6 << 16) | (B_X_D_F_DISNEY_SHEEN_B_R_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF FresnelBlendBRDF using an implicit MicrofacetDistribution of type TrowbridgeReitzMicrofacetDistribution:
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_LENGTH = 10;
@@ -174,19 +174,19 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE_DIFFUSE = 0;
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE_SPECULAR = 3;
 	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ID = 7;
+	private static final int B_X_D_F_FRESNEL_BLEND_B_R_D_F_ID = (7 << 16) | (B_X_D_F_FRESNEL_BLEND_B_R_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF LambertianBRDF:
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_LENGTH = 3;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ID = 8;
+	private static final int B_X_D_F_LAMBERTIAN_B_R_D_F_ID = (8 << 16) | (B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF LambertianBTDF:
 	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_ARRAY_LENGTH = 3;
 	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_ARRAY_OFFSET_TRANSMITTANCE_SCALE = 0;
 	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_ID = 9;
+	private static final int B_X_D_F_LAMBERTIAN_B_T_D_F_ID = (9 << 16) | (B_X_D_F_LAMBERTIAN_B_T_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF OrenNayarBRDF:
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_LENGTH = 6;
@@ -195,7 +195,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_B = 5;
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE = 1;
 	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_DIFFUSE;
-	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ID = 10;
+	private static final int B_X_D_F_OREN_NAYAR_B_R_D_F_ID = (10 << 16) | (B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDFResult:
 	private static final int B_X_D_F_RESULT_ARRAY_LENGTH = 13;
@@ -210,7 +210,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_ARRAY_OFFSET_LIGHT = 3;
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR;
-	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_ID = 11;
+	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_ID = (11 << 16) | (B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF SpecularBRDF using Fresnel of type DielectricFresnel:
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH = 5;
@@ -218,7 +218,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ETA_T = 4;
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR;
-	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ID = 12;
+	private static final int B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ID = (12 << 16) | (B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF SpecularBTDF using Fresnel of type DielectricFresnel:
 	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH = 5;
@@ -226,7 +226,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_ETA_B = 4;
 	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE = 0;
 	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION | B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR;
-	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ID = 13;
+	private static final int B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_ID = (13 << 16) | (B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF TorranceSparrowBRDF using Fresnel of type ConductorFresnel and an implicit MicrofacetDistribution of type TrowbridgeReitzMicrofacetDistribution:
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ARRAY_LENGTH = 16;
@@ -239,7 +239,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ARRAY_OFFSET_K = 9;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ID = 14;
+	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_ID = (14 << 16) | (B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF TorranceSparrowBRDF using Fresnel of type DielectricFresnel and an implicit MicrofacetDistribution of type TrowbridgeReitzMicrofacetDistribution:
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH = 9;
@@ -251,7 +251,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL = 6;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ID = 15;
+	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ID = (15 << 16) | (B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF TorranceSparrowBRDF using Fresnel of type DisneyFresnel and an implicit MicrofacetDistribution of type TrowbridgeReitzMicrofacetDistribution:
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_LENGTH = 12;
@@ -264,7 +264,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_R0 = 3;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_REFLECTANCE_SCALE = 0;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ID = 16;
+	private static final int B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ID = (16 << 16) | (B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for BXDF TorranceSparrowBTDF using Fresnel of type DielectricFresnel and an implicit MicrofacetDistribution of type TrowbridgeReitzMicrofacetDistribution:
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_LENGTH = 9;
@@ -276,7 +276,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_IS_SEPARABLE_MODEL = 6;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ARRAY_OFFSET_TRANSMITTANCE_SCALE = 0;
 	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS = B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION | B_X_D_F_TYPE_BIT_FLAG_IS_GLOSSY;
-	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ID = 17;
+	private static final int B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_ID = (17 << 16) | (B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS & 0xFFFF);
 	
 //	Constants for the current implementation:
 	private static final int MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING = 0;
@@ -1498,6 +1498,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float floatSpecularTint = textureEvaluateFloat(textureSpecularTintID, textureSpecularTintOffset);
 		final float floatSpecularTransmission = textureEvaluateFloat(textureSpecularTransmissionID, textureSpecularTransmissionOffset);
 		
+		final boolean hasClearCoat = floatClearCoat > 0.0F;
+		final boolean hasSheen = floatSheen > 0.0F;
+		final boolean hasSpecularTransmission = floatSpecularTransmission > 0.0F;
+		
 		textureEvaluate(textureColorID, textureColorOffset);
 		
 		final float colorColorR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
@@ -1514,15 +1518,19 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float luminance = colorColorR * 0.212671F + colorColorG * 0.715160F + colorColorB * 0.072169F;
 		
-		final float colorTintR = luminance > 0.0F ? colorColorR / luminance : 1.0F;
-		final float colorTintG = luminance > 0.0F ? colorColorG / luminance : 1.0F;
-		final float colorTintB = luminance > 0.0F ? colorColorB / luminance : 1.0F;
+		final boolean hasLuminance = luminance > 0.0F;
 		
-		final float colorSheenR = floatSheen > 0.0F ? lerp(1.0F, colorTintR, floatSheenTint) : 0.0F;
-		final float colorSheenG = floatSheen > 0.0F ? lerp(1.0F, colorTintG, floatSheenTint) : 0.0F;
-		final float colorSheenB = floatSheen > 0.0F ? lerp(1.0F, colorTintB, floatSheenTint) : 0.0F;
+		final float colorTintR = hasLuminance ? colorColorR / luminance : 1.0F;
+		final float colorTintG = hasLuminance ? colorColorG / luminance : 1.0F;
+		final float colorTintB = hasLuminance ? colorColorB / luminance : 1.0F;
+		
+		final float colorSheenR = hasSheen ? lerp(1.0F, colorTintR, floatSheenTint) : 0.0F;
+		final float colorSheenG = hasSheen ? lerp(1.0F, colorTintG, floatSheenTint) : 0.0F;
+		final float colorSheenB = hasSheen ? lerp(1.0F, colorTintB, floatSheenTint) : 0.0F;
 		
 		final float diffuseWeight = (1.0F - floatMetallic) * (1.0F - floatSpecularTransmission);
+		
+		final boolean hasDiffuseWeight = diffuseWeight > 0.0F;
 		
 		/*
 		 * Compute the BSDF:
@@ -1535,7 +1543,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		int index = 0;
 		
-		if(diffuseWeight > 0.0F && isThin) {
+		if(hasDiffuseWeight && isThin) {
 			final float floatFlatness = textureEvaluateFloat(textureFlatnessID, textureFlatnessOffset);
 			
 			final float scale0 = diffuseWeight * (1.0F - floatFlatness) * (1.0F - floatDiffuseTransmission);
@@ -1551,27 +1559,27 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBXDFDisneyFakeSSBRDFSetRoughness(floatRoughness);
 		}
 		
-		if(diffuseWeight > 0.0F && !isThin && !hasScatterDistance) {
+		if(hasDiffuseWeight && !isThin && !hasScatterDistance) {
 //			Set DisneyDiffuseBRDF:
 			doBSDFSetBXDFDisneyDiffuseBRDF(index++);
 			doBXDFDisneyDiffuseBRDFSetReflectanceScale(colorColorR * diffuseWeight, colorColorG * diffuseWeight, colorColorB * diffuseWeight);
 		}
 		
-		if(diffuseWeight > 0.0F && !isThin && hasScatterDistance) {
+		if(hasDiffuseWeight && !isThin && hasScatterDistance) {
 //			Set SpecularBTDF:
 			doBSDFSetBXDFSpecularBTDFFresnelDielectric(index++);
 			doBXDFSpecularBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
 			doBXDFSpecularBTDFFresnelDielectricSetTransmittanceScale(1.0F, 1.0F, 1.0F);
 		}
 		
-		if(diffuseWeight > 0.0F) {
+		if(hasDiffuseWeight) {
 //			Set DisneyRetroBRDF:
 			doBSDFSetBXDFDisneyRetroBRDF(index++);
 			doBXDFDisneyRetroBRDFSetReflectanceScale(colorColorR * diffuseWeight, colorColorG * diffuseWeight, colorColorB * diffuseWeight);
 			doBXDFDisneyRetroBRDFSetRoughness(floatRoughness);
 		}
 		
-		if(diffuseWeight > 0.0F && floatSheen > 0.0F) {
+		if(hasDiffuseWeight && hasSheen) {
 //			Set DisneySheenBRDF:
 			doBSDFSetBXDFDisneySheenBRDF(index++);
 			doBXDFDisneySheenBRDFSetReflectanceScale(colorSheenR * diffuseWeight * floatSheen, colorSheenG * diffuseWeight * floatSheen, colorSheenB * diffuseWeight * floatSheen);
@@ -1594,14 +1602,14 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFTorranceSparrowBRDFFresnelDisneySetMicrofacetDistributionTrowbridgeReitz(true, true, alphaX, alphaY);
 		doBXDFTorranceSparrowBRDFFresnelDisneySetReflectanceScale(1.0F, 1.0F, 1.0F);
 		
-		if(floatClearCoat > 0.0F) {
+		if(hasClearCoat) {
 //			Set DisneyClearCoatBRDF:
 			doBSDFSetBXDFDisneyClearCoatBRDF(index++);
 			doBXDFDisneyClearCoatBRDFSetGloss(lerp(0.1F, 0.001F, floatClearCoatGloss));
 			doBXDFDisneyClearCoatBRDFSetWeight(floatClearCoat);
 		}
 		
-		if(floatSpecularTransmission > 0.0F && isThin) {
+		if(hasSpecularTransmission && isThin) {
 			final float floatRoughnessScaled = (0.65F * floatEta - 0.35F) * floatRoughness;
 			
 			final float alphaXScaled = max(0.001F, floatRoughnessScaled * floatRoughnessScaled / aspect);
@@ -1614,7 +1622,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBXDFTorranceSparrowBTDFFresnelDielectricSetTransmittanceScale(sqrt(colorColorR) * floatSpecularTransmission, sqrt(colorColorG) * floatSpecularTransmission, sqrt(colorColorB) * floatSpecularTransmission);
 		}
 		
-		if(floatSpecularTransmission > 0.0F && !isThin) {
+		if(hasSpecularTransmission && !isThin) {
 //			Set TorranceSparrowBTDF:
 			doBSDFSetBXDFTorranceSparrowBTDFFresnelDielectric(index++);
 			doBXDFTorranceSparrowBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);
@@ -2426,164 +2434,24 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	// BXDF ////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	@SuppressWarnings("static-method")
 	private boolean doBXDFHasReflection(final int id) {
-		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFDisneyDiffuseBRDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFDisneyFakeSSBRDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFDisneyRetroBRDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFDisneySheenBRDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFLambertianBRDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFLambertianBTDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFOrenNayarBRDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFSpecularBRDFFresnelConstantIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFSpecularBRDFFresnelDielectricIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFSpecularBTDFFresnelDielectricIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFTorranceSparrowBRDFFresnelConductorIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFTorranceSparrowBRDFFresnelDisneyIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
-			return false;
-		} else {
-			return false;
-		}
+		return ((id & 0xFFFF) & B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION) == B_X_D_F_TYPE_BIT_FLAG_HAS_REFLECTION;
 	}
 	
+	@SuppressWarnings("static-method")
 	private boolean doBXDFHasTransmission(final int id) {
-		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneyDiffuseBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneyFakeSSBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneyRetroBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneySheenBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFLambertianBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFLambertianBTDFIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFOrenNayarBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFSpecularBRDFFresnelConstantIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFSpecularBRDFFresnelDielectricIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFSpecularBTDFFresnelDielectricIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFTorranceSparrowBRDFFresnelConductorIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFTorranceSparrowBRDFFresnelDisneyIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
-			return true;
-		} else {
-			return false;
-		}
+		return ((id & 0xFFFF) & B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION) == B_X_D_F_TYPE_BIT_FLAG_HAS_TRANSMISSION;
 	}
 	
+	@SuppressWarnings("static-method")
 	private boolean doBXDFIsMatchingBitFlags(final int id, final int bitFlags) {
-		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
-			return doBXDFAshikhminShirleyBRDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
-			return doBXDFDisneyClearCoatBRDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFDisneyDiffuseBRDFIsMatchingID(id)) {
-			return doBXDFDisneyDiffuseBRDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFDisneyFakeSSBRDFIsMatchingID(id)) {
-			return doBXDFDisneyFakeSSBRDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFDisneyRetroBRDFIsMatchingID(id)) {
-			return doBXDFDisneyRetroBRDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFDisneySheenBRDFIsMatchingID(id)) {
-			return doBXDFDisneySheenBRDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
-			return doBXDFFresnelBlendBRDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFLambertianBRDFIsMatchingID(id)) {
-			return doBXDFLambertianBRDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFLambertianBTDFIsMatchingID(id)) {
-			return doBXDFLambertianBTDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFOrenNayarBRDFIsMatchingID(id)) {
-			return doBXDFOrenNayarBRDFIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFSpecularBRDFFresnelConstantIsMatchingID(id)) {
-			return doBXDFSpecularBRDFFresnelConstantIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFSpecularBRDFFresnelDielectricIsMatchingID(id)) {
-			return doBXDFSpecularBRDFFresnelDielectricIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFSpecularBTDFFresnelDielectricIsMatchingID(id)) {
-			return doBXDFSpecularBTDFFresnelDielectricIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFTorranceSparrowBRDFFresnelConductorIsMatchingID(id)) {
-			return doBXDFTorranceSparrowBRDFFresnelConductorIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
-			return doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFTorranceSparrowBRDFFresnelDisneyIsMatchingID(id)) {
-			return doBXDFTorranceSparrowBRDFFresnelDisneyIsMatchingBitFlags(bitFlags);
-		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
-			return doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingBitFlags(bitFlags);
-		} else {
-			return false;
-		}
+		return ((id & 0xFFFF) & bitFlags) == (id & 0xFFFF);
 	}
 	
+	@SuppressWarnings("static-method")
 	private boolean doBXDFIsSpecular(final int id) {
-		if(doBXDFAshikhminShirleyBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneyClearCoatBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneyDiffuseBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneyFakeSSBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneyRetroBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFDisneySheenBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFFresnelBlendBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFLambertianBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFLambertianBTDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFOrenNayarBRDFIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFSpecularBRDFFresnelConstantIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFSpecularBRDFFresnelDielectricIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFSpecularBTDFFresnelDielectricIsMatchingID(id)) {
-			return true;
-		} else if(doBXDFTorranceSparrowBRDFFresnelConductorIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFTorranceSparrowBRDFFresnelDisneyIsMatchingID(id)) {
-			return false;
-		} else if(doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(id)) {
-			return false;
-		} else {
-			return false;
-		}
+		return ((id & 0xFFFF) & B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR) == B_X_D_F_TYPE_BIT_FLAG_IS_SPECULAR;
 	}
 	
 	private boolean doBXDFSampleDistributionFunction(final float u, final float v, final int id) {
@@ -2705,11 +2573,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - AshikhminShirleyBRDF /////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFAshikhminShirleyBRDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_ASHIKHMIN_SHIRLEY_B_R_D_F_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFAshikhminShirleyBRDFIsMatchingID(final int id) {
@@ -2867,11 +2730,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - DisneyClearCoatBRDF //////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFDisneyClearCoatBRDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFDisneyClearCoatBRDFIsMatchingID(final int id) {
@@ -3038,11 +2896,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
-	private boolean doBXDFDisneyDiffuseBRDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_BIT_FLAGS;
-	}
-	
-	@SuppressWarnings("static-method")
 	private boolean doBXDFDisneyDiffuseBRDFIsMatchingID(final int id) {
 		return id == B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_ID;
 	}
@@ -3111,7 +2964,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFDisneyDiffuseBRDFSetReflectanceScale(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
 		this.bXDFDisneyDiffuseBRDFArray_$private$3[B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
 		this.bXDFDisneyDiffuseBRDFArray_$private$3[B_X_D_F_DISNEY_DIFFUSE_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
@@ -3121,11 +2973,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - DisneyFakeSSBRDF /////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFDisneyFakeSSBRDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFDisneyFakeSSBRDFIsMatchingID(final int id) {
@@ -3219,14 +3066,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFDisneyFakeSSBRDFSetReflectanceScale(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
 		this.bXDFDisneyFakeSSBRDFArray_$private$4[B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
 		this.bXDFDisneyFakeSSBRDFArray_$private$4[B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
 		this.bXDFDisneyFakeSSBRDFArray_$private$4[B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFDisneyFakeSSBRDFSetRoughness(final float roughness) {
 		this.bXDFDisneyFakeSSBRDFArray_$private$4[B_X_D_F_DISNEY_FAKE_S_S_B_R_D_F_ARRAY_OFFSET_ROUGHNESS] = roughness;
 	}
@@ -3234,11 +3079,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - DisneyRetroBRDF //////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFDisneyRetroBRDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_DISNEY_RETRO_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_DISNEY_RETRO_B_R_D_F_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFDisneyRetroBRDFIsMatchingID(final int id) {
@@ -3331,14 +3171,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFDisneyRetroBRDFSetReflectanceScale(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
 		this.bXDFDisneyRetroBRDFArray_$private$4[B_X_D_F_DISNEY_RETRO_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
 		this.bXDFDisneyRetroBRDFArray_$private$4[B_X_D_F_DISNEY_RETRO_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
 		this.bXDFDisneyRetroBRDFArray_$private$4[B_X_D_F_DISNEY_RETRO_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 2] = reflectanceScaleB;
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFDisneyRetroBRDFSetRoughness(final float roughness) {
 		this.bXDFDisneyRetroBRDFArray_$private$4[B_X_D_F_DISNEY_RETRO_B_R_D_F_ARRAY_OFFSET_ROUGHNESS] = roughness;
 	}
@@ -3346,11 +3184,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - DisneySheenBRDF //////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFDisneySheenBRDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_DISNEY_SHEEN_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_DISNEY_SHEEN_B_R_D_F_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFDisneySheenBRDFIsMatchingID(final int id) {
@@ -3431,7 +3264,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFDisneySheenBRDFSetReflectanceScale(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
 		this.bXDFDisneySheenBRDFArray_$private$3[B_X_D_F_DISNEY_SHEEN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
 		this.bXDFDisneySheenBRDFArray_$private$3[B_X_D_F_DISNEY_SHEEN_B_R_D_F_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
@@ -3441,11 +3273,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - FresnelBlendBRDF /////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFFresnelBlendBRDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_FRESNEL_BLEND_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_FRESNEL_BLEND_B_R_D_F_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFFresnelBlendBRDFIsMatchingID(final int id) {
@@ -3661,11 +3488,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
-	private boolean doBXDFLambertianBRDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_LAMBERTIAN_B_R_D_F_BIT_FLAGS;
-	}
-	
-	@SuppressWarnings("static-method")
 	private boolean doBXDFLambertianBRDFIsMatchingID(final int id) {
 		return id == B_X_D_F_LAMBERTIAN_B_R_D_F_ID;
 	}
@@ -3728,11 +3550,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
-	private boolean doBXDFLambertianBTDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_LAMBERTIAN_B_T_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_LAMBERTIAN_B_T_D_F_BIT_FLAGS;
-	}
-	
-	@SuppressWarnings("static-method")
 	private boolean doBXDFLambertianBTDFIsMatchingID(final int id) {
 		return id == B_X_D_F_LAMBERTIAN_B_T_D_F_ID;
 	}
@@ -3784,7 +3601,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFLambertianBTDFSetTransmittanceScale(final float transmittanceScaleR, final float transmittanceScaleG, final float transmittanceScaleB) {
 		this.bXDFLambertianBTDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_T_D_F_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 0] = transmittanceScaleR;
 		this.bXDFLambertianBTDFArray_$private$3[B_X_D_F_LAMBERTIAN_B_T_D_F_ARRAY_OFFSET_TRANSMITTANCE_SCALE + 1] = transmittanceScaleG;
@@ -3794,11 +3610,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - OrenNayarBRDF ////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFOrenNayarBRDFIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS & bitFlags) == B_X_D_F_OREN_NAYAR_B_R_D_F_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFOrenNayarBRDFIsMatchingID(final int id) {
@@ -3912,11 +3723,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
-	private boolean doBXDFSpecularBRDFFresnelConstantIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_BIT_FLAGS & bitFlags) == B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_BIT_FLAGS;
-	}
-	
-	@SuppressWarnings("static-method")
 	private boolean doBXDFSpecularBRDFFresnelConstantIsMatchingID(final int id) {
 		return id == B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_CONSTANT_ID;
 	}
@@ -4009,11 +3815,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
-	private boolean doBXDFSpecularBRDFFresnelDielectricIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS & bitFlags) == B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS;
-	}
-	
-	@SuppressWarnings("static-method")
 	private boolean doBXDFSpecularBRDFFresnelDielectricIsMatchingID(final int id) {
 		return id == B_X_D_F_SPECULAR_B_R_D_F_FRESNEL_DIELECTRIC_ID;
 	}
@@ -4099,11 +3900,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - SpecularBTDF - DielectricFresnel /////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFSpecularBTDFFresnelDielectricIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS & bitFlags) == B_X_D_F_SPECULAR_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFSpecularBTDFFresnelDielectricIsMatchingID(final int id) {
@@ -4207,11 +4003,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - TorranceSparrowBRDF - ConductorFresnel ///////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFTorranceSparrowBRDFFresnelConductorIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_BIT_FLAGS & bitFlags) == B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_CONDUCTOR_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFTorranceSparrowBRDFFresnelConductorIsMatchingID(final int id) {
@@ -4463,11 +4254,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
-	private boolean doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS & bitFlags) == B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS;
-	}
-	
-	@SuppressWarnings("static-method")
 	private boolean doBXDFTorranceSparrowBRDFFresnelDielectricIsMatchingID(final int id) {
 		return id == B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DIELECTRIC_ID;
 	}
@@ -4672,11 +4458,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - TorranceSparrowBRDF - DisneyFresnel //////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFTorranceSparrowBRDFFresnelDisneyIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_BIT_FLAGS & bitFlags) == B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFTorranceSparrowBRDFFresnelDisneyIsMatchingID(final int id) {
@@ -4884,7 +4665,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doMicrofacetDistributionTrowbridgeReitzSet(isSamplingVisibleArea, isSeparableModel, alphaX, alphaY);
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFTorranceSparrowBRDFFresnelDisneySetFresnelDisney(final float r0R, final float r0G, final float r0B, final float eta, final float metallic) {
 		this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$12[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_R0 + 0] = r0R;
 		this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$12[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_R0 + 1] = r0G;
@@ -4893,7 +4673,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$12[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_METALLIC] = metallic;
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFTorranceSparrowBRDFFresnelDisneySetMicrofacetDistributionTrowbridgeReitz(final boolean isSamplingVisibleArea, final boolean isSeparableModel, final float alphaX, final float alphaY) {
 		this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$12[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_IS_SAMPLING_VISIBLE_AREA] = isSamplingVisibleArea ? 1.0F : 0.0F;
 		this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$12[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_IS_SEPARABLE_MODEL] = isSeparableModel ? 1.0F : 0.0F;
@@ -4901,7 +4680,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$12[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_ALPHA_Y] = max(alphaY, 0.001F);
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFTorranceSparrowBRDFFresnelDisneySetReflectanceScale(final float reflectanceScaleR, final float reflectanceScaleG, final float reflectanceScaleB) {
 		this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$12[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_REFLECTANCE_SCALE + 0] = reflectanceScaleR;
 		this.bXDFTorranceSparrowBRDFFresnelDisneyArray_$private$12[B_X_D_F_TORRANCE_SPARROW_B_R_D_F_FRESNEL_DISNEY_ARRAY_OFFSET_REFLECTANCE_SCALE + 1] = reflectanceScaleG;
@@ -4911,11 +4689,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// BXDF - TorranceSparrowBTDF - DielectricFresnel //////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@SuppressWarnings("static-method")
-	private boolean doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingBitFlags(final int bitFlags) {
-		return (B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS & bitFlags) == B_X_D_F_TORRANCE_SPARROW_B_T_D_F_FRESNEL_DIELECTRIC_BIT_FLAGS;
-	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doBXDFTorranceSparrowBTDFFresnelDielectricIsMatchingID(final int id) {

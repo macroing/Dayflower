@@ -1510,6 +1510,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorScatterDistanceG = color3FLHSGetComponent2();
 		final float colorScatterDistanceB = color3FLHSGetComponent3();
 		
+		final boolean hasScatterDistance = !checkIsZero(colorScatterDistanceR) || !checkIsZero(colorScatterDistanceG) || !checkIsZero(colorScatterDistanceB);
+		
 		final float luminance = colorColorR * 0.212671F + colorColorG * 0.715160F + colorColorB * 0.072169F;
 		
 		final float colorTintR = luminance > 0.0F ? colorColorR / luminance : 1.0F;
@@ -1549,13 +1551,13 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBXDFDisneyFakeSSBRDFSetRoughness(floatRoughness);
 		}
 		
-		if(diffuseWeight > 0.0F && !isThin && checkIsZero(colorScatterDistanceR) && checkIsZero(colorScatterDistanceG) && checkIsZero(colorScatterDistanceB)) {
+		if(diffuseWeight > 0.0F && !isThin && !hasScatterDistance) {
 //			Set DisneyDiffuseBRDF:
 			doBSDFSetBXDFDisneyDiffuseBRDF(index++);
 			doBXDFDisneyDiffuseBRDFSetReflectanceScale(colorColorR * diffuseWeight, colorColorG * diffuseWeight, colorColorB * diffuseWeight);
 		}
 		
-		if(diffuseWeight > 0.0F && !isThin && (!checkIsZero(colorScatterDistanceR) || !checkIsZero(colorScatterDistanceG) || !checkIsZero(colorScatterDistanceB))) {
+		if(diffuseWeight > 0.0F && !isThin && hasScatterDistance) {
 //			Set SpecularBTDF:
 			doBSDFSetBXDFSpecularBTDFFresnelDielectric(index++);
 			doBXDFSpecularBTDFFresnelDielectricSetFresnelDielectric(1.0F, floatEta);

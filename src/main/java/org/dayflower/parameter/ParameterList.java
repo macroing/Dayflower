@@ -37,8 +37,64 @@ public final class ParameterList {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
+	public String getString(final String name) {
+		return getString(name, "");
+	}
+	
+//	TODO: Add Javadocs!
+	public String getString(final String name, final String valueDefault) {
+		Objects.requireNonNull(name, "name == null");
+		Objects.requireNonNull(valueDefault, "valueDefault == null");
+		
+		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof StringParameter).map(parameter -> StringParameter.class.cast(parameter)).map(stringParameter -> stringParameter.getValue()).findFirst().orElse(valueDefault);
+	}
+	
+//	TODO: Add Javadocs!
+	public boolean getBoolean(final String name) {
+		return getBoolean(name, false);
+	}
+	
+//	TODO: Add Javadocs!
 	public boolean getBoolean(final String name, final boolean valueDefault) {
-		return this.parameters.stream().filter(parameter -> doFilterBoolean(parameter, name)).map(ParameterList::doMapBoolean).findFirst().orElse(Boolean.valueOf(valueDefault)).booleanValue();
+		Objects.requireNonNull(name, "name == null");
+		
+		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof BooleanParameter).map(parameter -> BooleanParameter.class.cast(parameter)).map(booleanParameter -> Boolean.valueOf(booleanParameter.getValue())).findFirst().orElse(Boolean.valueOf(valueDefault)).booleanValue();
+	}
+	
+//	TODO: Add Javadocs!
+	public double getDouble(final String name) {
+		return getDouble(name, 0.0D);
+	}
+	
+//	TODO: Add Javadocs!
+	public double getDouble(final String name, final double valueDefault) {
+		Objects.requireNonNull(name, "name == null");
+		
+		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof DoubleParameter).map(parameter -> DoubleParameter.class.cast(parameter)).map(doubleParameter -> Double.valueOf(doubleParameter.getValue())).findFirst().orElse(Double.valueOf(valueDefault)).doubleValue();
+	}
+	
+//	TODO: Add Javadocs!
+	public float getFloat(final String name) {
+		return getFloat(name, 0.0F);
+	}
+	
+//	TODO: Add Javadocs!
+	public float getFloat(final String name, final float valueDefault) {
+		Objects.requireNonNull(name, "name == null");
+		
+		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof FloatParameter).map(parameter -> FloatParameter.class.cast(parameter)).map(floatParameter -> Float.valueOf(floatParameter.getValue())).findFirst().orElse(Float.valueOf(valueDefault)).floatValue();
+	}
+	
+//	TODO: Add Javadocs!
+	public int getInt(final String name) {
+		return getInt(name, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public int getInt(final String name, final int valueDefault) {
+		Objects.requireNonNull(name, "name == null");
+		
+		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof IntParameter).map(parameter -> IntParameter.class.cast(parameter)).map(intParameter -> Integer.valueOf(intParameter.getValue())).findFirst().orElse(Integer.valueOf(valueDefault)).intValue();
 	}
 	
 //	TODO: Add Javadocs!
@@ -52,17 +108,47 @@ public final class ParameterList {
 	}
 	
 //	TODO: Add Javadocs!
+	public void addDouble(final String name) {
+		addDouble(name, 0.0D);
+	}
+	
+//	TODO: Add Javadocs!
+	public void addDouble(final String name, final double valueDefault) {
+		this.parameters.add(new DoubleParameter(Objects.requireNonNull(name, "name == null"), valueDefault));
+	}
+	
+//	TODO: Add Javadocs!
+	public void addFloat(final String name) {
+		addFloat(name, 0.0F);
+	}
+	
+//	TODO: Add Javadocs!
+	public void addFloat(final String name, final float valueDefault) {
+		this.parameters.add(new FloatParameter(Objects.requireNonNull(name, "name == null"), valueDefault));
+	}
+	
+//	TODO: Add Javadocs!
+	public void addInt(final String name) {
+		addInt(name, 0);
+	}
+	
+//	TODO: Add Javadocs!
+	public void addInt(final String name, final int valueDefault) {
+		this.parameters.add(new IntParameter(Objects.requireNonNull(name, "name == null"), valueDefault));
+	}
+	
+//	TODO: Add Javadocs!
+	public void addString(final String name) {
+		addString(name, "");
+	}
+	
+//	TODO: Add Javadocs!
+	public void addString(final String name, final String valueDefault) {
+		this.parameters.add(new StringParameter(Objects.requireNonNull(name, "name == null"), Objects.requireNonNull(valueDefault, "valueDefault == null")));
+	}
+	
+//	TODO: Add Javadocs!
 	public void load() {
 		
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	private static Boolean doMapBoolean(final Parameter parameter) {
-		return Boolean.valueOf(BooleanParameter.class.cast(parameter).getValue());
-	}
-	
-	private static boolean doFilterBoolean(final Parameter parameter, final String name) {
-		return parameter instanceof BooleanParameter && BooleanParameter.class.cast(parameter).getName().equals(name);
 	}
 }

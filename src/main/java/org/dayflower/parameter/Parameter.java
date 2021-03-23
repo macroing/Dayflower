@@ -19,8 +19,23 @@
 package org.dayflower.parameter;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 //TODO: Add Javadocs!
-public interface Parameter {
+public abstract class Parameter {
+	private final String name;
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	protected Parameter(final String name) {
+		this.name = Objects.requireNonNull(name, "name == null");
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public final String getName() {
+		return this.name;
+	}
 }

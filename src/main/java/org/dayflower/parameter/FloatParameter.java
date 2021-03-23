@@ -19,35 +19,36 @@
 package org.dayflower.parameter;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.dayflower.utility.AtomicFloat;
 
 //TODO: Add Javadocs!
-public final class BooleanParameter extends Parameter {
-	private final AtomicBoolean value;
+public final class FloatParameter extends Parameter {
+	private final AtomicFloat value;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public BooleanParameter(final String name) {
-		this(name, false);
+	public FloatParameter(final String name) {
+		this(name, 0.0F);
 	}
 	
 //	TODO: Add Javadocs!
-	public BooleanParameter(final String name, final boolean valueDefault) {
+	public FloatParameter(final String name, final float valueDefault) {
 		super(name);
 		
-		this.value = new AtomicBoolean(valueDefault);
+		this.value = new AtomicFloat(valueDefault);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public boolean getValue() {
+	public float getValue() {
 		return this.value.get();
 	}
 	
 //	TODO: Add Javadocs!
-	public void setValue(final boolean value) {
+	public void setValue(final float value) {
 		this.value.set(value);
 	}
 }

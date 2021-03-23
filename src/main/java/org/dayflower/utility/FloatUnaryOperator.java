@@ -16,38 +16,34 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Dayflower. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.dayflower.parameter;
+package org.dayflower.utility;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Objects;
 
 //TODO: Add Javadocs!
-public final class BooleanParameter extends Parameter {
-	private final AtomicBoolean value;
+public interface FloatUnaryOperator {
+//	TODO: Add Javadocs!
+	float applyAsFloat(final float operand);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public BooleanParameter(final String name) {
-		this(name, false);
-	}
-	
-//	TODO: Add Javadocs!
-	public BooleanParameter(final String name, final boolean valueDefault) {
-		super(name);
+	default FloatUnaryOperator andThen(final FloatUnaryOperator after) {
+		Objects.requireNonNull(after, "after == null");
 		
-		this.value = new AtomicBoolean(valueDefault);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-//	TODO: Add Javadocs!
-	public boolean getValue() {
-		return this.value.get();
+		return (float v) -> after.applyAsFloat(applyAsFloat(v));
 	}
 	
 //	TODO: Add Javadocs!
-	public void setValue(final boolean value) {
-		this.value.set(value);
+	default FloatUnaryOperator compose(final FloatUnaryOperator before) {
+		Objects.requireNonNull(before, "before == null");
+		
+		return (float v) -> applyAsFloat(before.applyAsFloat(v));
+	}
+	
+//	TODO: Add Javadocs!
+	default FloatUnaryOperator identity() {
+		return t -> t;
 	}
 }

@@ -19,35 +19,35 @@
 package org.dayflower.parameter;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 //TODO: Add Javadocs!
-public final class BooleanParameter extends Parameter {
-	private final AtomicBoolean value;
+public final class IntParameter extends Parameter {
+	private final AtomicInteger value;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public BooleanParameter(final String name) {
-		this(name, false);
+	public IntParameter(final String name) {
+		this(name, 0);
 	}
 	
 //	TODO: Add Javadocs!
-	public BooleanParameter(final String name, final boolean valueDefault) {
+	public IntParameter(final String name, final int valueDefault) {
 		super(name);
 		
-		this.value = new AtomicBoolean(valueDefault);
+		this.value = new AtomicInteger(valueDefault);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
-	public boolean getValue() {
+	public int getValue() {
 		return this.value.get();
 	}
 	
 //	TODO: Add Javadocs!
-	public void setValue(final boolean value) {
+	public void setValue(final int value) {
 		this.value.set(value);
 	}
 }

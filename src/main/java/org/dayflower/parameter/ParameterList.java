@@ -26,12 +26,19 @@ import java.util.Objects;
 //TODO: Add Javadocs!
 public final class ParameterList {
 	private final List<Parameter> parameters;
+	private final ParameterLoader parameterLoader;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 //	TODO: Add Javadocs!
 	public ParameterList() {
+		this(parameters -> {});
+	}
+	
+//	TODO: Add Javadocs!
+	public ParameterList(final ParameterLoader parameterLoader) {
 		this.parameters = new ArrayList<>();
+		this.parameterLoader = Objects.requireNonNull(parameterLoader, "parameterLoader == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,6 +156,6 @@ public final class ParameterList {
 	
 //	TODO: Add Javadocs!
 	public void load() {
-		
+		this.parameterLoader.load(new ArrayList<>(this.parameters));
 	}
 }

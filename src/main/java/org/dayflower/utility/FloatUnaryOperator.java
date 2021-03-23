@@ -18,31 +18,70 @@
  */
 package org.dayflower.utility;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * Represents an operation on a single {@code float}-valued operand that produces a {@code float}-valued result.
+ * <p>
+ * This is the primitive type specialization of {@code UnaryOperator} for {@code float}.
+ * <p>
+ * This is a functional interface whose functional method is {@link #applyAsFloat(float)}.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface FloatUnaryOperator {
-//	TODO: Add Javadocs!
+	/**
+	 * Applies this operator to the given operand.
+	 * <p>
+	 * Returns the operator result.
+	 * 
+	 * @param operand the operand
+	 * @return the operator result
+	 */
 	float applyAsFloat(final float operand);
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a composed operator that first applies this operator to its input, and then applies the {@code after} operator to the result.
+	 * <p>
+	 * If {@code after} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If evaluation of either operator throws an exception, it is relayed to the caller of the composed operator.
+	 * 
+	 * @param after the operator to apply after this operator is applied
+	 * @return a composed operator that first applies this operator to its input, and then applies the {@code after} operator to the result
+	 * @throws NullPointerException thrown if, and only if, {@code after} is {@code null}
+	 */
 	default FloatUnaryOperator andThen(final FloatUnaryOperator after) {
 		Objects.requireNonNull(after, "after == null");
 		
 		return (float v) -> after.applyAsFloat(applyAsFloat(v));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a composed operator that first applies the {@code before} operator to its input, and then applies this operator to the result.
+	 * <p>
+	 * If {@code before} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If evaluation of either operator throws an exception, it is relayed to the caller of the composed operator.
+	 * 
+	 * @param before the operator to apply before this operator is applied
+	 * @return a composed operator that first applies the {@code before} operator to its input, and then applies this operator to the result
+	 * @throws NullPointerException thrown if, and only if, {@code before} is {@code null}
+	 */
 	default FloatUnaryOperator compose(final FloatUnaryOperator before) {
 		Objects.requireNonNull(before, "before == null");
 		
 		return (float v) -> applyAsFloat(before.applyAsFloat(v));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a unary operator that always returns its input argument.
+	 * 
+	 * @return a unary operator that always returns its input argument
+	 */
 	default FloatUnaryOperator identity() {
 		return t -> t;
 	}

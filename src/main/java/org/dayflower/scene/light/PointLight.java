@@ -43,6 +43,33 @@ import org.dayflower.scene.Transform;
  * @author J&#246;rgen Lundgren
  */
 public final class PointLight extends Light {
+	/**
+	 * The name of this {@code PointLight} class.
+	 */
+	public static final String NAME = "Point Light";
+	
+	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code Intensity} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_INTENSITY = 0;
+	
+	/**
+	 * The offset for the {@link Point3F} denoted by {@code Position} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_POSITION = 3;
+	
+	/**
+	 * The ID of this {@code PointLight} class.
+	 */
+	public static final int ID = 5;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Color3F intensity;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,6 +173,16 @@ public final class PointLight extends Light {
 	}
 	
 	/**
+	 * Returns a {@code String} with the name of this {@code PointLight} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code PointLight} instance
+	 */
+	@SuppressWarnings("static-method")
+	public String getName() {
+		return NAME;
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code PointLight} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code PointLight} instance
@@ -176,6 +213,37 @@ public final class PointLight extends Light {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code PointLight} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code PointLight} instance
+	 */
+	public float[] toArray() {
+		final float[] array = new float[ARRAY_LENGTH];
+		
+//		Because the PointLight occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_INTENSITY + 0] = this.intensity.getR();				//Block #1
+		array[ARRAY_OFFSET_INTENSITY + 1] = this.intensity.getG();				//Block #1
+		array[ARRAY_OFFSET_INTENSITY + 2] = this.intensity.getB();				//Block #1
+		array[ARRAY_OFFSET_POSITION + 0] = getTransform().getPosition().getX();	//Block #1
+		array[ARRAY_OFFSET_POSITION + 1] = getTransform().getPosition().getY();	//Block #1
+		array[ARRAY_OFFSET_POSITION + 2] = getTransform().getPosition().getZ();	//Block #1
+		array[6] = 0.0F;														//Block #1
+		array[7] = 0.0F;														//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code PointLight} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code PointLight} instance
+	 */
+	@SuppressWarnings("static-method")
+	public int getID() {
+		return ID;
 	}
 	
 	/**

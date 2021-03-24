@@ -36,11 +36,28 @@ import org.dayflower.scene.light.LDRImageLight;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractLightKernel extends AbstractMaterialKernel {
+	private static final int LIGHT_SAMPLE_ARRAY_LENGTH = 10;
+	private static final int LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING = 6;
+	private static final int LIGHT_SAMPLE_ARRAY_OFFSET_POINT = 3;
+	private static final int LIGHT_SAMPLE_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE = 9;
+	private static final int LIGHT_SAMPLE_ARRAY_OFFSET_RESULT = 0;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 //	TODO: Add Javadocs!
 	protected float[] lightLDRImageLightArray;
 	
 //	TODO: Add Javadocs!
+	protected float[] lightPointLightArray;
+	
+//	TODO: Add Javadocs!
+	protected float[] lightSampleArray_$private$10;
+	
+//	TODO: Add Javadocs!
 	protected int lightLDRImageLightCount;
+	
+//	TODO: Add Javadocs!
+	protected int lightPointLightCount;
 	
 //	TODO: Add Javadocs!
 	protected int[] lightLDRImageLightOffsetArray;
@@ -54,6 +71,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		this.lightLDRImageLightArray = new float[1];
 		this.lightLDRImageLightCount = 0;
 		this.lightLDRImageLightOffsetArray = new int[1];
+		this.lightPointLightArray = new float[1];
+		this.lightSampleArray_$private$10 = new float[LIGHT_SAMPLE_ARRAY_LENGTH];
+		this.lightPointLightCount = 0;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,5 +156,37 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float component3 = lerp(lerp(colorRGBIntToBFloat(color00RGB), colorRGBIntToBFloat(color01RGB), tX), lerp(colorRGBIntToBFloat(color10RGB), colorRGBIntToBFloat(color11RGB), tX), tY);
 		
 		color3FLHSSet(component1 / probabilityDensityFunctionValue, component2 / probabilityDensityFunctionValue, component3 / probabilityDensityFunctionValue);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/*
+	 * The following is a test implementation of the Light API in the CPU-renderer.
+	 */
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// LightSample /////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doLightSampleSetIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 0] = incomingX;
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 1] = incomingY;
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 2] = incomingZ;
+	}
+	
+	private void doLightSampleSetPoint(final float pointX, final float pointY, final float pointZ) {
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 0] = pointX;
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 1] = pointY;
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 2] = pointZ;
+	}
+	
+	private void doLightSampleSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
+	}
+	
+	private void doLightSampleSetResult(final float resultR, final float resultG, final float resultB) {
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 0] = resultR;
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 1] = resultG;
+		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 2] = resultB;
 	}
 }

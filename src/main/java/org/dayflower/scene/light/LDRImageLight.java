@@ -106,7 +106,7 @@ public final class LDRImageLight extends Light {
 	/**
 	 * The ID of this {@code LDRImageLight} class.
 	 */
-	public static final int ID = 4;
+	public static final int ID = 3;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -504,6 +504,16 @@ public final class LDRImageLight extends Light {
 	 */
 	public int getArrayLength() {
 		return 5 + this.image.length + padding(5 + this.image.length);
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code LDRImageLight} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code LDRImageLight} instance
+	 */
+	@SuppressWarnings("static-method")
+	public int getID() {
+		return ID;
 	}
 	
 	/**

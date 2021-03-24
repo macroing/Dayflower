@@ -21,12 +21,14 @@ package org.dayflower.renderer.gpu;
 import java.util.Objects;
 
 import org.dayflower.scene.Primitive;
+import org.dayflower.scene.light.PointLight;
 
 final class CompiledScene {
 	private float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
 	private float[] boundingVolume3FBoundingSphere3FArray;
 	private float[] cameraArray;
 	private float[] lightLDRImageLightArray;
+	private float[] lightPointLightArray;
 	private float[] matrix44FArray;
 	private float[] shape3FCone3FArray;
 	private float[] shape3FCylinder3FArray;
@@ -65,6 +67,7 @@ final class CompiledScene {
 		setCameraArray(new float[1]);
 		setLightLDRImageLightArray(new float[1]);
 		setLightLDRImageLightOffsetArray(new int[1]);
+		setLightPointLightArray(new float[1]);
 		setMaterialClearCoatMaterialArray(new int[1]);
 		setMaterialDisneyMaterialArray(new int[1]);
 		setMaterialGlassMaterialArray(new int[1]);
@@ -111,6 +114,10 @@ final class CompiledScene {
 	
 	public float[] getLightLDRImageLightArray() {
 		return this.lightLDRImageLightArray;
+	}
+	
+	public float[] getLightPointLightArray() {
+		return this.lightPointLightArray;
 	}
 	
 	public float[] getMatrix44FArray() {
@@ -185,6 +192,10 @@ final class CompiledScene {
 		return this.lightLDRImageLightArray.length % 8 == 0 ? this.lightLDRImageLightOffsetArray.length : 0;
 	}
 	
+	public int getLightPointLightCount() {
+		return this.lightPointLightArray.length % PointLight.ARRAY_LENGTH == 0 ? this.lightPointLightArray.length / PointLight.ARRAY_LENGTH : 0;
+	}
+	
 	public int getPrimitiveCount() {
 		return this.primitiveArray.length / Primitive.ARRAY_LENGTH;
 	}
@@ -255,6 +266,10 @@ final class CompiledScene {
 	
 	public void setLightLDRImageLightOffsetArray(final int[] lightLDRImageLightOffsetArray) {
 		this.lightLDRImageLightOffsetArray = Objects.requireNonNull(lightLDRImageLightOffsetArray, "lightLDRImageLightOffsetArray == null");
+	}
+	
+	public void setLightPointLightArray(final float[] lightPointLightArray) {
+		this.lightPointLightArray = Objects.requireNonNull(lightPointLightArray, "lightPointLightArray == null");
 	}
 	
 	public void setMaterialClearCoatMaterialArray(final int[] materialClearCoatMaterialArray) {

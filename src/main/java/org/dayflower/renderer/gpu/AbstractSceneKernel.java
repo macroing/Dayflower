@@ -729,6 +729,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		put(super.boundingVolume3FAxisAlignedBoundingBox3FArray = compiledScene.getBoundingVolume3FAxisAlignedBoundingBox3FArray());
 		put(super.boundingVolume3FBoundingSphere3FArray = compiledScene.getBoundingVolume3FBoundingSphere3FArray());
+		
 		put(super.shape3FCone3FArray = compiledScene.getShape3FCone3FArray());
 		put(super.shape3FCylinder3FArray = compiledScene.getShape3FCylinder3FArray());
 		put(super.shape3FDisk3FArray = compiledScene.getShape3FDisk3FArray());
@@ -760,12 +761,16 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		put(super.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
 		put(super.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());
+		put(super.lightPointLightArray = compiledScene.getLightPointLightArray());
 		
 		put(this.cameraArray = compiledScene.getCameraArray());
+		
 		put(this.matrix44FArray = compiledScene.getMatrix44FArray());
+		
 		put(this.primitiveArray = compiledScene.getPrimitiveArray());
 		
 		super.lightLDRImageLightCount = compiledScene.getLightLDRImageLightCount();
+		super.lightPointLightCount = compiledScene.getLightPointLightCount();
 		
 		this.primitiveCount = compiledScene.getPrimitiveCount();
 	}

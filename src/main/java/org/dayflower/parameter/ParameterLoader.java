@@ -18,11 +18,22 @@
  */
 package org.dayflower.parameter;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code ParameterLoader} is responsible for loading the values of {@link Parameter} instances.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public interface ParameterLoader {
-//	TODO: Add Javadocs!
+	/**
+	 * Loads the {@link Parameter} instances in the {@code List} {@code parameters}.
+	 * <p>
+	 * If either {@code parameters} or any of its elements are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param parameters a {@code List} of {@code Parameter} instances to load values for
+	 * @throws NullPointerException thrown if, and only if, either {@code parameters} or any of its elements are {@code null}
+	 */
 	void load(final List<Parameter> parameters);
 }

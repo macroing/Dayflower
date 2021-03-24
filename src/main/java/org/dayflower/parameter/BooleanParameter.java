@@ -18,21 +18,50 @@
  */
 package org.dayflower.parameter;
 
-import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code BooleanParameter} is a {@link Parameter} implementation for a {@code boolean} value.
+ * <p>
+ * This class is mutable and not thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class BooleanParameter extends Parameter {
 	private final AtomicBoolean value;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code BooleanParameter} instance with a name of {@code name} and a default value of {@code false}.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new BooleanParameter(name, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public BooleanParameter(final String name) {
 		this(name, false);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code BooleanParameter} instance with a name of {@code name} and a default value of {@code valueDefault}.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public BooleanParameter(final String name, final boolean valueDefault) {
 		super(name);
 		
@@ -41,12 +70,63 @@ public final class BooleanParameter extends Parameter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code BooleanParameter} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code BooleanParameter} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new BooleanParameter(\"%s\", %s)", getName(), Boolean.toString(getValue()));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code BooleanParameter} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code BooleanParameter}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code BooleanParameter} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code BooleanParameter}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof BooleanParameter)) {
+			return false;
+		} else if(!Objects.equals(getName(), BooleanParameter.class.cast(object).getName())) {
+			return false;
+		} else if(getValue() != BooleanParameter.class.cast(object).getValue()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns the value.
+	 * 
+	 * @return the value
+	 */
 	public boolean getValue() {
 		return this.value.get();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code BooleanParameter} instance.
+	 * 
+	 * @return a hash code for this {@code BooleanParameter} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(getName(), Boolean.valueOf(getValue()));
+	}
+	
+	/**
+	 * Sets the value to {@code value}.
+	 * 
+	 * @param value the new value
+	 */
 	public void setValue(final boolean value) {
 		this.value.set(value);
 	}

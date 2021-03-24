@@ -18,21 +18,50 @@
  */
 package org.dayflower.parameter;
 
-import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-//TODO: Add Javadocs!
+/**
+ * An {@code IntParameter} is a {@link Parameter} implementation for an {@code int} value.
+ * <p>
+ * This class is mutable and not thread-safe.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class IntParameter extends Parameter {
 	private final AtomicInteger value;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code IntParameter} instance with a name of {@code name} and a default value of {@code 0}.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new IntParameter(name, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public IntParameter(final String name) {
 		this(name, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code IntParameter} instance with a name of {@code name} and a default value of {@code valueDefault}.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public IntParameter(final String name, final int valueDefault) {
 		super(name);
 		
@@ -41,12 +70,63 @@ public final class IntParameter extends Parameter {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of this {@code IntParameter} instance.
+	 * 
+	 * @return a {@code String} representation of this {@code IntParameter} instance
+	 */
+	@Override
+	public String toString() {
+		return String.format("new IntParameter(\"%s\", %d)", getName(), Integer.valueOf(getValue()));
+	}
+	
+	/**
+	 * Compares {@code object} to this {@code IntParameter} instance for equality.
+	 * <p>
+	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code IntParameter}, and their respective values are equal, {@code false} otherwise.
+	 * 
+	 * @param object the {@code Object} to compare to this {@code IntParameter} instance for equality
+	 * @return {@code true} if, and only if, {@code object} is an instance of {@code IntParameter}, and their respective values are equal, {@code false} otherwise
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		if(object == this) {
+			return true;
+		} else if(!(object instanceof IntParameter)) {
+			return false;
+		} else if(!Objects.equals(getName(), IntParameter.class.cast(object).getName())) {
+			return false;
+		} else if(getValue() != IntParameter.class.cast(object).getValue()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns the value.
+	 * 
+	 * @return the value
+	 */
 	public int getValue() {
 		return this.value.get();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a hash code for this {@code IntParameter} instance.
+	 * 
+	 * @return a hash code for this {@code IntParameter} instance
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(getName(), Integer.valueOf(getValue()));
+	}
+	
+	/**
+	 * Sets the value to {@code value}.
+	 * 
+	 * @param value the new value
+	 */
 	public void setValue(final int value) {
 		this.value.set(value);
 	}

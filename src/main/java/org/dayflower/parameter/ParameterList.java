@@ -18,24 +18,39 @@
  */
 package org.dayflower.parameter;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code ParameterList} represents a list of parameters.
+ * <p>
+ * The parameters are represented as {@link Parameter} instances. But convenience methods for {@code boolean}, {@code double}, {@code float}, {@code int} and {@code String} exists.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class ParameterList {
 	private final List<Parameter> parameters;
 	private final ParameterLoader parameterLoader;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code ParameterList} instance.
+	 */
 	public ParameterList() {
 		this(parameters -> {});
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code ParameterList} instance that is associated with {@code parameterLoader} as its {@link ParameterLoader}.
+	 * <p>
+	 * If {@code parameterLoader} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param parameterLoader a {@code ParameterLoader} instance
+	 * @throws NullPointerException thrown if, and only if, {@code parameterLoader} is {@code null}
+	 */
 	public ParameterList(final ParameterLoader parameterLoader) {
 		this.parameters = new ArrayList<>();
 		this.parameterLoader = Objects.requireNonNull(parameterLoader, "parameterLoader == null");
@@ -43,12 +58,40 @@ public final class ParameterList {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code List} with all {@link Parameter} instances that are currently added to this {@code ParameterList} instance.
+	 * <p>
+	 * A {@code ParameterList} instance will not be affected by modifications to the {@code List} itself. However, it will be affected by modifications to the {@code Parameter} instances in the {@code List}.
+	 * 
+	 * @return a {@code List} with all {@code Parameter} instances that are currently added to this {@code ParameterList} instance
+	 */
+	public List<Parameter> getParameters() {
+		return new ArrayList<>(this.parameters);
+	}
+	
+	/**
+	 * Returns the value of the first {@code String} parameter with a name of {@code name}, or {@code ""} if no such parameter exists.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @return the value of the first {@code String} parameter with a name of {@code name}, or {@code ""} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public String getString(final String name) {
 		return getString(name, "");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the first {@code String} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists.
+	 * <p>
+	 * If either {@code name} or {@code valueDefault} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @return the value of the first {@code String} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, either {@code name} or {@code valueDefault} are {@code null}
+	 */
 	public String getString(final String name, final String valueDefault) {
 		Objects.requireNonNull(name, "name == null");
 		Objects.requireNonNull(valueDefault, "valueDefault == null");
@@ -56,106 +99,335 @@ public final class ParameterList {
 		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof StringParameter).map(parameter -> StringParameter.class.cast(parameter)).map(stringParameter -> stringParameter.getValue()).findFirst().orElse(valueDefault);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the first {@code boolean} parameter with a name of {@code name}, or {@code false} if no such parameter exists.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @return the value of the first {@code boolean} parameter with a name of {@code name}, or {@code false} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public boolean getBoolean(final String name) {
 		return getBoolean(name, false);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the first {@code boolean} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @return the value of the first {@code boolean} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public boolean getBoolean(final String name, final boolean valueDefault) {
 		Objects.requireNonNull(name, "name == null");
 		
 		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof BooleanParameter).map(parameter -> BooleanParameter.class.cast(parameter)).map(booleanParameter -> Boolean.valueOf(booleanParameter.getValue())).findFirst().orElse(Boolean.valueOf(valueDefault)).booleanValue();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the first {@code double} parameter with a name of {@code name}, or {@code 0.0D} if no such parameter exists.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @return the value of the first {@code double} parameter with a name of {@code name}, or {@code 0.0D} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public double getDouble(final String name) {
 		return getDouble(name, 0.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the first {@code double} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @return the value of the first {@code double} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public double getDouble(final String name, final double valueDefault) {
 		Objects.requireNonNull(name, "name == null");
 		
 		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof DoubleParameter).map(parameter -> DoubleParameter.class.cast(parameter)).map(doubleParameter -> Double.valueOf(doubleParameter.getValue())).findFirst().orElse(Double.valueOf(valueDefault)).doubleValue();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the first {@code float} parameter with a name of {@code name}, or {@code 0.0F} if no such parameter exists.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @return the value of the first {@code float} parameter with a name of {@code name}, or {@code 0.0F} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public float getFloat(final String name) {
 		return getFloat(name, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the first {@code float} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @return the value of the first {@code float} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public float getFloat(final String name, final float valueDefault) {
 		Objects.requireNonNull(name, "name == null");
 		
 		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof FloatParameter).map(parameter -> FloatParameter.class.cast(parameter)).map(floatParameter -> Float.valueOf(floatParameter.getValue())).findFirst().orElse(Float.valueOf(valueDefault)).floatValue();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the first {@code int} parameter with a name of {@code name}, or {@code 0} if no such parameter exists.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @return the value of the first {@code int} parameter with a name of {@code name}, or {@code 0} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public int getInt(final String name) {
 		return getInt(name, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the first {@code int} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @return the value of the first {@code int} parameter with a name of {@code name}, or {@code valueDefault} if no such parameter exists
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public int getInt(final String name, final int valueDefault) {
 		Objects.requireNonNull(name, "name == null");
 		
 		return this.parameters.stream().filter(parameter -> parameter.getName().equals(name)).filter(parameter -> parameter instanceof IntParameter).map(parameter -> IntParameter.class.cast(parameter)).map(intParameter -> Integer.valueOf(intParameter.getValue())).findFirst().orElse(Integer.valueOf(valueDefault)).intValue();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds a {@code boolean} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addBoolean(name, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public void addBoolean(final String name) {
 		addBoolean(name, false);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds a {@code boolean} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addParameter(new BooleanParameter(name, valueDefault));
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public void addBoolean(final String name, final boolean valueDefault) {
-		this.parameters.add(new BooleanParameter(Objects.requireNonNull(name, "name == null"), valueDefault));
+		addParameter(new BooleanParameter(name, valueDefault));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds a {@code double} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addDouble(name, 0.0D);
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public void addDouble(final String name) {
 		addDouble(name, 0.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds a {@code double} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addParameter(new DoubleParameter(name, valueDefault));
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public void addDouble(final String name, final double valueDefault) {
-		this.parameters.add(new DoubleParameter(Objects.requireNonNull(name, "name == null"), valueDefault));
+		addParameter(new DoubleParameter(name, valueDefault));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds a {@code float} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addFloat(name, 0.0F);
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public void addFloat(final String name) {
 		addFloat(name, 0.0F);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds a {@code float} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addParameter(new FloatParameter(name, valueDefault));
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public void addFloat(final String name, final float valueDefault) {
-		this.parameters.add(new FloatParameter(Objects.requireNonNull(name, "name == null"), valueDefault));
+		addParameter(new FloatParameter(name, valueDefault));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds an {@code int} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addInt(name, 0);
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public void addInt(final String name) {
 		addInt(name, 0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds an {@code int} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addParameter(new IntParameter(name, valueDefault));
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public void addInt(final String name, final int valueDefault) {
-		this.parameters.add(new IntParameter(Objects.requireNonNull(name, "name == null"), valueDefault));
+		addParameter(new IntParameter(name, valueDefault));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds {@code parameter} to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code parameter} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param parameter the {@link Parameter} instance to add
+	 * @throws NullPointerException thrown if, and only if, {@code parameter} is {@code null}
+	 */
+	public void addParameter(final Parameter parameter) {
+		this.parameters.add(Objects.requireNonNull(parameter, "parameter == null"));
+	}
+	
+	/**
+	 * Adds a {@code String} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addString(name, "");
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	public void addString(final String name) {
 		addString(name, "");
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Adds a {@code String} parameter to this {@code ParameterList} instance.
+	 * <p>
+	 * If either {@code name} or {@code valueDefault} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * parameterList.addParameter(new StringParameter(name, valueDefault));
+	 * }
+	 * </pre>
+	 * 
+	 * @param name the name
+	 * @param valueDefault the default value
+	 * @throws NullPointerException thrown if, and only if, either {@code name} or {@code valueDefault} are {@code null}
+	 */
 	public void addString(final String name, final String valueDefault) {
-		this.parameters.add(new StringParameter(Objects.requireNonNull(name, "name == null"), Objects.requireNonNull(valueDefault, "valueDefault == null")));
+		addParameter(new StringParameter(name, valueDefault));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Loads the parameter values.
+	 * <p>
+	 * The parameters, that are represented as {@link Parameter} instances, are loaded using the {@link ParameterLoader} instance that is associated with this {@code ParameterList} instance.
+	 */
 	public void load() {
-		this.parameterLoader.load(new ArrayList<>(this.parameters));
+		this.parameterLoader.load(getParameters());
 	}
 }

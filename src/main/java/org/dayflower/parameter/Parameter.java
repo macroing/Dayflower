@@ -18,23 +18,38 @@
  */
 package org.dayflower.parameter;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code Parameter} represents a parameter with a value.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public abstract class Parameter {
 	private final String name;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code Parameter} instance with a name of {@code name}.
+	 * <p>
+	 * If {@code name} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name
+	 * @throws NullPointerException thrown if, and only if, {@code name} is {@code null}
+	 */
 	protected Parameter(final String name) {
 		this.name = Objects.requireNonNull(name, "name == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the name.
+	 * 
+	 * @return the name
+	 */
 	public final String getName() {
 		return this.name;
 	}

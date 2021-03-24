@@ -18,12 +18,19 @@
  */
 package org.dayflower.utility;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
-//TODO: Add Javadocs!
+/**
+ * A {@code double} value that may be updated atomically.
+ * <p>
+ * An {@code AtomicDouble} is used in applications such as atomically incremented counters, and cannot be used as a replacement for a {@code Double}. However, this class does extend {@code Number} to allow uniform access by tools and utilities that
+ * deal with numerically-based classes.
+ * 
+ * @since 1.0.0
+ * @author J&#246;rgen Lundgren
+ */
 public final class AtomicDouble extends Number {
 	private static final long serialVersionUID = 1L;
 	
@@ -33,35 +40,76 @@ public final class AtomicDouble extends Number {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code AtomicDouble} with an initial value of {@code 0.0D}.
+	 */
 	public AtomicDouble() {
 		this(0.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Constructs a new {@code AtomicDouble} with an initial value of {@code initialValue}.
+	 * 
+	 * @param initialValue the initial value
+	 */
 	public AtomicDouble(final double initialValue) {
 		this.bits = new AtomicLong(Double.doubleToLongBits(initialValue));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns a {@code String} representation of the current value.
+	 * 
+	 * @return a {@code String} representation of the current value
+	 */
 	@Override
 	public String toString() {
 		return Double.toString(get());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically sets the current value to the given updated value if the current value equals the expected value.
+	 * <p>
+	 * Returns {@code true} if, and only if, the current value was set to {@code update}, {@code false} otherwise.
+	 * 
+	 * @param expect the expected value
+	 * @param update the new value
+	 * @return {@code true} if, and only if, the current value was set to {@code update}, {@code false} otherwise
+	 */
 	public boolean compareAndSet(final double expect, final double update) {
 		return this.bits.compareAndSet(Double.doubleToLongBits(expect), Double.doubleToLongBits(update));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically sets the current value to the given updated value if the current value equals the expected value.
+	 * <p>
+	 * Returns {@code true} if, and only if, the current value was set to {@code update}, {@code false} otherwise.
+	 * <p>
+	 * This method may fail spuriously and does not provide ordering guarantees, so it is only rarely an appropriate alternative to {@code compareAndSet}.
+	 * 
+	 * @param expect the expected value
+	 * @param update the new value
+	 * @return {@code true} if, and only if, the current value was set to {@code update}, {@code false} otherwise
+	 */
 	public boolean weakCompareAndSet(final double expect, final double update) {
 		return this.bits.weakCompareAndSet(Double.doubleToLongBits(expect), Double.doubleToLongBits(update));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically updates the current value with the results of applying the given function to the current and given values.
+	 * <p>
+	 * Returns the updated value.
+	 * <p>
+	 * If {@code accumulatorFunction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The function should be side-effect-free, since it may be re-applied when attempted updates fail due to contention among threads. The function is applied with the current value as its first argument, and the given update as the second argument.
+	 * 
+	 * @param x the update value
+	 * @param accumulatorFunction a side-effect-free function of two arguments
+	 * @return the updated value
+	 * @throws NullPointerException thrown if, and only if, {@code accumulatorFunction} is {@code null}
+	 */
 	public double accumulateAndGet(final double x, final DoubleBinaryOperator accumulatorFunction) {
 		double previous;
 		double next;
@@ -74,28 +122,62 @@ public final class AtomicDouble extends Number {
 		return next;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically adds {@code delta} to the current value.
+	 * <p>
+	 * Returns the updated value.
+	 * 
+	 * @param delta the value to add
+	 * @return the updated value
+	 */
 	public double addAndGet(final double delta) {
-		return Double.longBitsToDouble(this.bits.addAndGet(Double.doubleToLongBits(delta)));
+		return updateAndGet(currentValue -> currentValue + delta);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically decrements the current value by one.
+	 * <p>
+	 * Returns the updated value.
+	 * 
+	 * @return the updated value
+	 */
 	public double decrementAndGet() {
-		return Double.longBitsToDouble(this.bits.decrementAndGet());
+		return updateAndGet(currentValue -> currentValue - 1.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the current value of this {@code AtomicDouble} instance as a {@code double}.
+	 * 
+	 * @return the current value of this {@code AtomicDouble} instance as a {@code double}
+	 */
 	@Override
 	public double doubleValue() {
 		return get();
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the current value.
+	 * 
+	 * @return the current value
+	 */
 	public double get() {
 		return Double.longBitsToDouble(this.bits.get());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically updates the current value with the results of applying the given function to the current and given values.
+	 * <p>
+	 * Returns the previous value.
+	 * <p>
+	 * If {@code accumulatorFunction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The function should be side-effect-free, since it may be re-applied when attempted updates fail due to contention among threads. The function is applied with the current value as its first argument, and the given update as the second argument.
+	 * 
+	 * @param x the update value
+	 * @param accumulatorFunction a side-effect-free function of two arguments
+	 * @return the previous value
+	 * @throws NullPointerException thrown if, and only if, {@code accumulatorFunction} is {@code null}
+	 */
 	public double getAndAccumulate(final double x, final DoubleBinaryOperator accumulatorFunction) {
 		double previous;
 		double next;
@@ -108,27 +190,65 @@ public final class AtomicDouble extends Number {
 		return previous;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically adds {@code delta} to the current value.
+	 * <p>
+	 * Returns the previous value.
+	 * 
+	 * @param delta the value to add
+	 * @return the previous value
+	 */
 	public double getAndAdd(final double delta) {
-		return Double.longBitsToDouble(this.bits.getAndAdd(Double.doubleToLongBits(delta)));
+		return getAndUpdate(currentValue -> currentValue + delta);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically decrements the current value by one.
+	 * <p>
+	 * Returns the previous value.
+	 * 
+	 * @return the previous value
+	 */
 	public double getAndDecrement() {
-		return Double.longBitsToDouble(this.bits.getAndDecrement());
+		return getAndUpdate(currentValue -> currentValue - 1.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically increments the current value by one.
+	 * <p>
+	 * Returns the previous value.
+	 * 
+	 * @return the previous value
+	 */
 	public double getAndIncrement() {
-		return Double.longBitsToDouble(this.bits.getAndIncrement());
+		return getAndUpdate(currentValue -> currentValue + 1.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically sets the current value to {@code newValue}.
+	 * <p>
+	 * Returns the previous value.
+	 * 
+	 * @param newValue the new value
+	 * @return the previous value
+	 */
 	public double getAndSet(final double newValue) {
 		return Double.longBitsToDouble(this.bits.getAndSet(Double.doubleToLongBits(newValue)));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically updates the current value with the results of applying the given function.
+	 * <p>
+	 * Returns the previous value.
+	 * <p>
+	 * If {@code updateFunction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The function should be side-effect-free, since it may be re-applied when attempted updates fail due to contention among threads.
+	 * 
+	 * @param updateFunction a side-effect-free function
+	 * @return the previous value
+	 * @throws NullPointerException thrown if, and only if, {@code updateFunction} is {@code null}
+	 */
 	public double getAndUpdate(final DoubleUnaryOperator updateFunction) {
 		double previous;
 		double next;
@@ -141,12 +261,30 @@ public final class AtomicDouble extends Number {
 		return previous;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically increments the current value by one.
+	 * <p>
+	 * Returns the updated value.
+	 * 
+	 * @return the updated value
+	 */
 	public double incrementAndGet() {
-		return Double.longBitsToDouble(this.bits.incrementAndGet());
+		return updateAndGet(currentValue -> currentValue + 1.0D);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Atomically updates the current value with the results of applying the given function.
+	 * <p>
+	 * Returns the updated value.
+	 * <p>
+	 * If {@code updateFunction} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * The function should be side-effect-free, since it may be re-applied when attempted updates fail due to contention among threads.
+	 * 
+	 * @param updateFunction a side-effect-free function
+	 * @return the updated value
+	 * @throws NullPointerException thrown if, and only if, {@code updateFunction} is {@code null}
+	 */
 	public double updateAndGet(final DoubleUnaryOperator updateFunction) {
 		double previous;
 		double next;
@@ -159,30 +297,50 @@ public final class AtomicDouble extends Number {
 		return next;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the current value of this {@code AtomicDouble} instance as a {@code float} after a widening primitive conversion.
+	 * 
+	 * @return the current value of this {@code AtomicDouble} instance as a {@code float} after a widening primitive conversion
+	 */
 	@Override
 	public float floatValue() {
 		return (float)(get());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the current value of this {@code AtomicDouble} instance as an {@code int} after a widening primitive conversion.
+	 * 
+	 * @return the current value of this {@code AtomicDouble} instance as an {@code int} after a widening primitive conversion
+	 */
 	@Override
 	public int intValue() {
 		return (int)(get());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the current value of this {@code AtomicDouble} instance as a {@code long} after a widening primitive conversion.
+	 * 
+	 * @return the current value of this {@code AtomicDouble} instance as a {@code long} after a widening primitive conversion
+	 */
 	@Override
 	public long longValue() {
 		return (long)(get());
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Eventually sets the current value to {@code newValue}.
+	 * 
+	 * @param newValue the new value
+	 */
 	public void lazySet(final double newValue) {
 		this.bits.lazySet(Double.doubleToLongBits(newValue));
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the current value to {@code newValue}.
+	 * 
+	 * @param newValue the new value
+	 */
 	public void set(final double newValue) {
 		this.bits.set(Double.doubleToLongBits(newValue));
 	}

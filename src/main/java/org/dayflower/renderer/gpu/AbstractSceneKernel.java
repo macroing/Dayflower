@@ -291,36 +291,36 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			if(isIntersectingBoundingVolume) {
 				ray3FSetMatrix44FTransformWorldToObject(index);
 				
-				float tObjectSpace = 0.0F;
+				boolean isIntersectingShape = false;
 				
 				final float tMinimumObjectSpace = ray3FGetTMinimum();
 				final float tMaximumObjectSpace = ray3FGetTMaximum();
 				
 				if(shapeID == Cone3F.ID) {
-					tObjectSpace = shape3FCone3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FCone3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Cylinder3F.ID) {
-					tObjectSpace = shape3FCylinder3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FCylinder3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Disk3F.ID) {
-					tObjectSpace = shape3FDisk3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FDisk3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Paraboloid3F.ID) {
-					tObjectSpace = shape3FParaboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FParaboloid3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Plane3F.ID) {
-					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FPlane3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == RectangularCuboid3F.ID) {
-					tObjectSpace = shape3FRectangularCuboid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FRectangularCuboid3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Sphere3F.ID) {
-					tObjectSpace = shape3FSphere3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FSphere3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Torus3F.ID) {
-					tObjectSpace = shape3FTorus3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FTorus3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == Triangle3F.ID) {
-					tObjectSpace = shape3FTriangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FTriangle3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				} else if(shapeID == TriangleMesh3F.ID) {
-					tObjectSpace = shape3FTriangleMesh3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					isIntersectingShape = shape3FTriangleMesh3FIntersects(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
 				}
 				
 				ray3FSetMatrix44FTransformObjectToWorld(index);
 				
-				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
+				if(isIntersectingShape) {
 					return true;
 				}
 			}
@@ -707,12 +707,13 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					final float directionX = lightPointX - surfaceIntersectionPointX;
 					final float directionY = lightPointY - surfaceIntersectionPointY;
 					final float directionZ = lightPointZ - surfaceIntersectionPointZ;
-					final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
+					final float directionLength = vector3FLength(directionX, directionY, directionZ);
+					final float directionLengthReciprocal = 1.0F / directionLength;
 					final float directionNormalizedX = directionX * directionLengthReciprocal;
 					final float directionNormalizedY = directionY * directionLengthReciprocal;
 					final float directionNormalizedZ = directionZ * directionLengthReciprocal;
 					
-					final float tMaximum = abs(point3FDistance(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ, lightPointX, lightPointY, lightPointZ)) + 0.001F;
+					final float tMaximum = abs(directionLength) + 0.001F;
 					final float tMinimum = DEFAULT_T_MINIMUM;
 					
 					ray3FSetOrigin(surfaceIntersectionPointX + directionNormalizedX * 0.001F, surfaceIntersectionPointY + directionNormalizedY * 0.001F, surfaceIntersectionPointZ + directionNormalizedZ * 0.001F);

@@ -7,7 +7,7 @@ Material material03 = new MatteMaterial();
 Material material04 = new MatteMaterial();
 Material material05 = new MatteMaterial(new Color3F(0.25F, 0.25F, 0.75F));
 Material material06 = new MatteMaterial(new Color3F(0.75F, 0.25F, 0.25F));
-Material material07 = new MirrorMaterial();
+Material material07 = new MirrorMaterial(Color3F.GRAY_0_50);
 Material material08 = new GlassMaterial();
 Material material09 = new MatteMaterial(Color3F.WHITE, new Color3F(12.0F));
 

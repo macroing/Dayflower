@@ -2850,7 +2850,60 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @return {@code true} if, and only if, the current ray intersects a given triangle mesh in object space, {@code false} otherwise
 	 */
 	protected final boolean shape3FTriangleMesh3FIntersects(final int shape3FTriangleMesh3FArrayOffset, final float rayTMinimum, final float rayTMaximum) {
-		return shape3FTriangleMesh3FIntersectionT(shape3FTriangleMesh3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+//		return shape3FTriangleMesh3FIntersectionT(shape3FTriangleMesh3FArrayOffset, rayTMinimum, rayTMaximum) > 0.0F;
+		
+		/*
+		 * T0 (Next = NO, Left = T1)
+		 *     T1 (Next = T4, Left = T2)
+		 *         T2 (Next = T3, Left = L0)
+		 *             L0 (Next = L1)
+		 *             L1 (Next = L2)
+		 *             L2 (Next = T3)
+		 *         T3 (Next = T4, Left = L3)
+		 *             L3 (Next = L4)
+		 *             L4 (Next = L5)
+		 *             L5 (Next = T4)
+		 *     T4 (Next = NO, Left = L6)
+		 *         L6 (Next = L7)
+		 *         L7 (Next = L8)
+		 *         L8 (Next = NO)
+		 */
+		
+		float tMinimumObjectSpace = rayTMinimum;
+		float tMaximumObjectSpace = rayTMaximum;
+		
+		int absoluteOffset = shape3FTriangleMesh3FArrayOffset;
+		int relativeOffset = 0;
+		
+		while(relativeOffset != -1) {
+			final int offset = absoluteOffset + relativeOffset;
+			final int id = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_ID];
+			final int boundingVolumeOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET];
+			final int nextOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_NEXT_OFFSET];
+			final int leftOffsetOrTriangleCount = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT];
+			
+			final boolean isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+			
+			if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_LEAF_B_V_H_NODE) {
+				for(int i = 0; i < leftOffsetOrTriangleCount; i++) {
+					final int triangleOffset = this.shape3FTriangleMesh3FArray[offset + TriangleMesh3F.ARRAY_OFFSET_LEFT_OFFSET_OR_TRIANGLE_COUNT + 1 + i];
+					
+					final float tObjectSpace = this.shape3FTriangle3FIntersectionT(triangleOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+					
+					if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
+						return true;
+					}
+				}
+				
+				relativeOffset = nextOffset;
+			} else if(isIntersectingBoundingVolume && id == TriangleMesh3F.ID_TREE_B_V_H_NODE) {
+				relativeOffset = leftOffsetOrTriangleCount;
+			} else {
+				relativeOffset = nextOffset;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**

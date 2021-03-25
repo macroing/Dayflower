@@ -346,55 +346,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 					} else {
 						currentBounce = maximumBounce;
 					}
-					
-					/*
-					if(materialBSDFCompute(primitiveGetMaterialID(), primitiveGetMaterialOffset()) && materialBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL)) {
-						final float incomingX = materialBSDFResultGetIncomingX();
-						final float incomingY = materialBSDFResultGetIncomingY();
-						final float incomingZ = materialBSDFResultGetIncomingZ();
-						
-						final float probabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
-						
-						final float resultR = materialBSDFResultGetResultR();
-						final float resultG = materialBSDFResultGetResultG();
-						final float resultB = materialBSDFResultGetResultB();
-						
-						final float surfaceNormalSX = intersectionGetOrthonormalBasisSWComponent1();
-						final float surfaceNormalSY = intersectionGetOrthonormalBasisSWComponent2();
-						final float surfaceNormalSZ = intersectionGetOrthonormalBasisSWComponent3();
-						
-						final float incomingDotSurfaceNormalS = vector3FDotProduct(incomingX, incomingY, incomingZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
-						final float incomingDotSurfaceNormalSAbs = abs(incomingDotSurfaceNormalS);
-						
-						if(probabilityDensityFunctionValue > 0.0F) {
-							throughputR *= resultR * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
-							throughputG *= resultG * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
-							throughputB *= resultB * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
-						}
-						
-						isSpecularBounce = materialBSDFBXDFIsSpecular();
-						
-						vector3FSet(incomingX, incomingY, incomingZ);
-						
-						ray3FSetFromSurfaceIntersectionPointAndVector3F();
-						
-						if(currentBounce >= minimumBounceRussianRoulette) {
-							final float probability = max(throughputR, throughputG, throughputB);
-							
-							if(random() > probability) {
-								currentBounce = maximumBounce;
-							} else {
-								throughputR /= probability;
-								throughputG /= probability;
-								throughputB /= probability;
-							}
-						}
-						
-						currentBounce = probabilityDensityFunctionValue > 0.0F ? currentBounce + 1 : maximumBounce;
-					} else {
-						currentBounce = maximumBounce;
-					}
-					*/
 				} else {
 					lightEvaluateRadianceEmittedAny();
 					

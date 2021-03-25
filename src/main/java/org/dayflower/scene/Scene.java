@@ -475,7 +475,7 @@ public final class Scene implements Node {
 				
 				final Sample2F sample = sampler.sample2();
 				
-				final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, /*outgoing, surfaceNormalS, */new Point2F(sample.getU(), sample.getV()));
+				final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, new Point2F(sample.getU(), sample.getV()));
 				
 				if(!optionalBSDFResult.isPresent()) {
 					break;

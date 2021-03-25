@@ -40,6 +40,7 @@ import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.light.PointLight;
 import org.dayflower.utility.Floats;
 
 /**
@@ -588,6 +589,85 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 //	TODO: Add Javadocs!
 	protected final void intersectionTransformWorldToObject(final int primitiveIndex) {
 		intersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void lightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
+		float lightDirectR = 0.0F;
+		float lightDirectG = 0.0F;
+		float lightDirectB = 0.0F;
+		
+		if(lightIsUsingDeltaDistribution()) {
+			final int bitFlags = isSpecular ? B_X_D_F_TYPE_BIT_FLAG_ALL : B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR;
+			
+			if(lightSampleRadianceIncoming(sampleAU, sampleAV)) {
+				final float lightResultR = lightSampleGetResultR();
+				final float lightResultG = lightSampleGetResultG();
+				final float lightResultB = lightSampleGetResultB();
+				
+				final float lightIncomingX = lightSampleGetIncomingX();
+				final float lightIncomingY = lightSampleGetIncomingY();
+				final float lightIncomingZ = lightSampleGetIncomingZ();
+				
+				final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
+				
+				final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
+				
+				if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
+					materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
+					
+					final float materialBSDFResultR = materialBSDFResultGetResultR();
+					final float materialBSDFResultG = materialBSDFResultGetResultG();
+					final float materialBSDFResultB = materialBSDFResultGetResultB();
+					
+					final float normalX = intersectionGetOrthonormalBasisSWComponent1();
+					final float normalY = intersectionGetOrthonormalBasisSWComponent2();
+					final float normalZ = intersectionGetOrthonormalBasisSWComponent3();
+					
+					final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
+					
+					final float scatteringResultR = materialBSDFResultR * lightIncomingDotNormalAbs;
+					final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
+					final float scatteringResultB = materialBSDFResultB * lightIncomingDotNormalAbs;
+					
+					final boolean hasScatteringResult = !checkIsZero(scatteringResultR) || !checkIsZero(scatteringResultG) || !checkIsZero(scatteringResultB);
+					
+					if(hasScatteringResult/* && checkLightVisibility()*/) {
+						lightDirectR += scatteringResultR * lightResultR / lightProbabilityDensityFunctionValue;
+						lightDirectG += scatteringResultG * lightResultG / lightProbabilityDensityFunctionValue;
+						lightDirectB += scatteringResultB * lightResultB / lightProbabilityDensityFunctionValue;
+					}
+				}
+			}
+		}
+		
+		color3FLHSSet(lightDirectR, lightDirectG, lightDirectB);
+	}
+	
+//	TODO: Add Javadocs!
+	protected final void lightSampleOneLightUniformDistribution() {
+		final int lightCount = super.lightPointLightCount;
+		
+		if(lightCount == 0) {
+			color3FLHSSet(0.0F, 0.0F, 0.0F);
+			
+			return;
+		}
+		
+		final float probabilityDensityFunctionValue = 1.0F / lightCount;
+		
+		final int id = PointLight.ID;
+		final int offset = min((int)(random() * lightCount), lightCount - 1) * PointLight.ARRAY_LENGTH;
+		
+		lightSet(id, offset);
+		
+		lightEstimateDirectLight(random(), random(), random(), random(), false);
+		
+		final float lightR = color3FLHSGetComponent1() / probabilityDensityFunctionValue;
+		final float lightG = color3FLHSGetComponent2() / probabilityDensityFunctionValue;
+		final float lightB = color3FLHSGetComponent3() / probabilityDensityFunctionValue;
+		
+		color3FLHSSet(lightR, lightG, lightB);
 	}
 	
 	/**

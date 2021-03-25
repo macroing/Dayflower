@@ -19,10 +19,12 @@
 package org.dayflower.renderer.gpu;
 
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
 
 import java.lang.reflect.Field;
 
 import org.dayflower.scene.light.LDRImageLight;
+import org.dayflower.scene.light.PointLight;
 
 /**
  * An {@code AbstractLightKernel} is an abstract extension of the {@link AbstractMaterialKernel} class that adds additional features.
@@ -36,6 +38,10 @@ import org.dayflower.scene.light.LDRImageLight;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractLightKernel extends AbstractMaterialKernel {
+	private static final int LIGHT_ARRAY_LENGTH = 2;
+	private static final int LIGHT_ARRAY_OFFSET_ID = 0;
+	private static final int LIGHT_ARRAY_OFFSET_OFFSET = 1;
+	
 	private static final int LIGHT_SAMPLE_ARRAY_LENGTH = 10;
 	private static final int LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING = 6;
 	private static final int LIGHT_SAMPLE_ARRAY_OFFSET_POINT = 3;
@@ -60,6 +66,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected int lightPointLightCount;
 	
 //	TODO: Add Javadocs!
+	protected int[] lightArray_$private$2;
+	
+//	TODO: Add Javadocs!
 	protected int[] lightLDRImageLightOffsetArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,12 +77,13 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	 * Constructs a new {@code AbstractLightKernel} instance.
 	 */
 	protected AbstractLightKernel() {
+		this.lightArray_$private$2 = new int[LIGHT_ARRAY_LENGTH];
 		this.lightLDRImageLightArray = new float[1];
 		this.lightLDRImageLightCount = 0;
 		this.lightLDRImageLightOffsetArray = new int[1];
 		this.lightPointLightArray = new float[1];
-		this.lightSampleArray_$private$10 = new float[LIGHT_SAMPLE_ARRAY_LENGTH];
 		this.lightPointLightCount = 0;
+		this.lightSampleArray_$private$10 = new float[LIGHT_SAMPLE_ARRAY_LENGTH];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,28 +175,223 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	 */
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Light ///////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	protected final boolean lightIsUsingDeltaDistribution() {
+		final int id = lightGetID();
+		
+		if(id == PointLight.ID) {
+			return doLightPointLightIsUsingDeltaDistribution();
+		}
+		
+		return false;
+	}
+	
+	protected final boolean lightSampleRadianceIncoming(final float u, final float v) {
+		final int id = lightGetID();
+		
+		if(id == PointLight.ID) {
+			return doLightPointLightSampleRadianceIncoming(u, v);
+		}
+		
+		return false;
+	}
+	
+	protected final float lightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+		final int id = lightGetID();
+		
+		if(id == PointLight.ID) {
+			return doLightPointLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
+		}
+		
+		return 0.0F;
+	}
+	
+	protected final int lightGetID() {
+		return this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_ID];
+	}
+	
+	protected final int lightGetOffset() {
+		return this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_OFFSET];
+	}
+	
+	protected final void lightEvaluateRadianceEmitted() {
+		final int id = lightGetID();
+		
+		if(id == PointLight.ID) {
+			doLightPointLightEvaluateRadianceEmitted();
+		}
+	}
+	
+	protected final void lightPower() {
+		final int id = lightGetID();
+		
+		if(id == PointLight.ID) {
+			doLightPointLightPower();
+		}
+	}
+	
+	protected final void lightSet(final int id, final int offset) {
+		this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_ID] = id;
+		this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_OFFSET] = offset;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// LightSample /////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private void doLightSampleSetIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+	protected final float lightSampleGetIncomingX() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 0];
+	}
+	
+	protected final float lightSampleGetIncomingY() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 1];
+	}
+	
+	protected final float lightSampleGetIncomingZ() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 2];
+	}
+	
+	protected final float lightSampleGetPointX() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 0];
+	}
+	
+	protected final float lightSampleGetPointY() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 1];
+	}
+	
+	protected final float lightSampleGetPointZ() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 2];
+	}
+	
+	protected final float lightSampleGetProbabilityDensityFunctionValue() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE];
+	}
+	
+	protected final float lightSampleGetResultB() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 2];
+	}
+	
+	protected final float lightSampleGetResultG() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 1];
+	}
+	
+	protected final float lightSampleGetResultR() {
+		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 0];
+	}
+	
+	protected final void lightSampleSetIncoming(final float incomingX, final float incomingY, final float incomingZ) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 0] = incomingX;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 1] = incomingY;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 2] = incomingZ;
 	}
 	
-	private void doLightSampleSetPoint(final float pointX, final float pointY, final float pointZ) {
+	protected final void lightSampleSetPoint(final float pointX, final float pointY, final float pointZ) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 0] = pointX;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 1] = pointY;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 2] = pointZ;
 	}
 	
-	private void doLightSampleSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
+	protected final void lightSampleSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
 	}
 	
-	private void doLightSampleSetResult(final float resultR, final float resultG, final float resultB) {
+	protected final void lightSampleSetResult(final float resultR, final float resultG, final float resultB) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 0] = resultR;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 1] = resultG;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 2] = resultB;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Light - PointLight //////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightPointLightIsUsingDeltaDistribution() {
+		return true;
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean doLightPointLightSampleRadianceIncoming(final float u, final float v) {
+		final float intensityR = doLightPointLightGetIntensityR();
+		final float intensityG = doLightPointLightGetIntensityG();
+		final float intensityB = doLightPointLightGetIntensityB();
+		
+		final float positionX = doLightPointLightGetPositionX();
+		final float positionY = doLightPointLightGetPositionY();
+		final float positionZ = doLightPointLightGetPositionZ();
+		
+		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		
+		final float distanceSquared = point3FDistanceSquared(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ, positionX, positionY, positionZ);
+		
+		final float incomingX = positionX - surfaceIntersectionPointX;
+		final float incomingY = positionY - surfaceIntersectionPointY;
+		final float incomingZ = positionZ - surfaceIntersectionPointZ;
+		final float incomingLengthReciprocal = vector3FLengthReciprocal(incomingX, incomingY, incomingZ);
+		final float incomingNormalizedX = incomingX * incomingLengthReciprocal;
+		final float incomingNormalizedY = incomingY * incomingLengthReciprocal;
+		final float incomingNormalizedZ = incomingZ * incomingLengthReciprocal;
+		
+		final float probabilityDensityFunctionValue = 1.0F;
+		
+		final float resultR = intensityR / distanceSquared;
+		final float resultG = intensityG / distanceSquared;
+		final float resultB = intensityB / distanceSquared;
+		
+		lightSampleSetIncoming(incomingNormalizedX, incomingNormalizedY, incomingNormalizedZ);
+		lightSampleSetPoint(positionX, positionY, positionZ);
+		lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+		lightSampleSetResult(resultR, resultG, resultB);
+		
+		return true;
+	}
+	
+	@SuppressWarnings({"static-method", "unused"})
+	private float doLightPointLightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+		return 0.0F;
+	}
+	
+	private float doLightPointLightGetIntensityB() {
+		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_INTENSITY + 2];
+	}
+	
+	private float doLightPointLightGetIntensityG() {
+		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_INTENSITY + 1];
+	}
+	
+	private float doLightPointLightGetIntensityR() {
+		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_INTENSITY + 0];
+	}
+	
+	private float doLightPointLightGetPositionX() {
+		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_POSITION + 0];
+	}
+	
+	private float doLightPointLightGetPositionY() {
+		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_POSITION + 1];
+	}
+	
+	private float doLightPointLightGetPositionZ() {
+		return this.lightPointLightArray[lightGetOffset() + PointLight.ARRAY_OFFSET_POSITION + 2];
+	}
+	
+	private void doLightPointLightEvaluateRadianceEmitted() {
+		color3FLHSSet(0.0F, 0.0F, 0.0F);
+	}
+	
+	private void doLightPointLightPower() {
+		final float intensityR = doLightPointLightGetIntensityR();
+		final float intensityG = doLightPointLightGetIntensityG();
+		final float intensityB = doLightPointLightGetIntensityB();
+		
+		final float powerR = intensityR * PI_MULTIPLIED_BY_4;
+		final float powerG = intensityG * PI_MULTIPLIED_BY_4;
+		final float powerB = intensityB * PI_MULTIPLIED_BY_4;
+		
+		color3FLHSSet(powerR, powerG, powerB);
 	}
 }

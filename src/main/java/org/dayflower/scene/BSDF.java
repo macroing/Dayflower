@@ -44,6 +44,10 @@ import org.dayflower.utility.ParameterArguments;
 public final class BSDF {
 	private final Intersection intersection;
 	private final List<BXDF> bXDFs;
+	private final Vector3F normalLocalSpace;
+	private final Vector3F normalWorldSpace;
+	private final Vector3F outgoingLocalSpace;
+	private final Vector3F outgoingWorldSpace;
 	private final boolean isNegatingIncoming;
 	private final float eta;
 	
@@ -104,6 +108,10 @@ public final class BSDF {
 	public BSDF(final Intersection intersection, final BXDF bXDF, final boolean isNegatingIncoming, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.bXDFs = Arrays.asList(Objects.requireNonNull(bXDF, "bXDF == null"));
+		this.normalWorldSpace = intersection.getSurfaceNormalS();
+		this.normalLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.normalWorldSpace, intersection.getOrthonormalBasisS()));
+		this.outgoingWorldSpace = Vector3F.negate(intersection.getRay().getDirection());
+		this.outgoingLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.outgoingWorldSpace, intersection.getOrthonormalBasisS()));
 		this.isNegatingIncoming = isNegatingIncoming;
 		this.eta = eta;
 	}
@@ -169,6 +177,10 @@ public final class BSDF {
 	public BSDF(final Intersection intersection, final List<BXDF> bXDFs, final boolean isNegatingIncoming, final float eta) {
 		this.intersection = Objects.requireNonNull(intersection, "intersection == null");
 		this.bXDFs = new ArrayList<>(ParameterArguments.requireNonNullList(bXDFs, "bXDFs"));
+		this.normalWorldSpace = intersection.getSurfaceNormalS();
+		this.normalLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.normalWorldSpace, intersection.getOrthonormalBasisS()));
+		this.outgoingWorldSpace = Vector3F.negate(intersection.getRay().getDirection());
+		this.outgoingLocalSpace = Vector3F.normalize(Vector3F.transformReverse(this.outgoingWorldSpace, intersection.getOrthonormalBasisS()));
 		this.isNegatingIncoming = isNegatingIncoming;
 		this.eta = eta;
 	}
@@ -180,26 +192,23 @@ public final class BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code bXDFType}, {@code samplesA}, {@code samplesB}, {@code normalWorldSpace} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
 	 * @param samplesB a {@code List} of {@code Point2F} instances that represents samples
-	 * @param normalWorldSpace the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA}, {@code samplesB}, {@code normalWorldSpace} or an element in {@code samplesA} or {@code samplesB} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA}, {@code samplesB} or an element in {@code samplesA} or {@code samplesB} are {@code null}
 	 */
-	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final List<Point2F> samplesB, final Vector3F normalWorldSpace) {
+	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final List<Point2F> samplesB) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		ParameterArguments.requireNonNullList(samplesB, "samplesB");
 		
-		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
-		
 		Color3F reflectance = Color3F.BLACK;
 		
-		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+		final Vector3F normal = this.normalLocalSpace;
 		
 		for(final BXDF bXDF : this.bXDFs) {
 			if(bXDF.getBXDFType().matches(bXDFType)) {
@@ -215,27 +224,22 @@ public final class BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} instance with the result of the computation.
 	 * <p>
-	 * If either {@code bXDFType}, {@code samplesA}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType}, {@code samplesA} or an element in {@code samplesA} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
 	 * @param samplesA a {@code List} of {@link Point2F} instances that represents samples
-	 * @param outgoingWorldSpace the outgoing direction
-	 * @param normalWorldSpace the normal
 	 * @return a {@code Color3F} instance with the result of the computation
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or an element in {@code samplesA} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code samplesA} or an element in {@code samplesA} are {@code null}
 	 */
-	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace) {
+	public Color3F computeReflectanceFunction(final BXDFType bXDFType, final List<Point2F> samplesA) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
 		
 		ParameterArguments.requireNonNullList(samplesA, "samplesA");
 		
-		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
-		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
-		
 		Color3F reflectance = Color3F.BLACK;
 		
-		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
-		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+		final Vector3F outgoing = this.outgoingLocalSpace;
+		final Vector3F normal = this.normalLocalSpace;
 		
 		for(final BXDF bXDF : this.bXDFs) {
 			if(bXDF.getBXDFType().matches(bXDFType)) {
@@ -251,30 +255,26 @@ public final class BSDF {
 	 * <p>
 	 * Returns a {@link Color3F} with the result of the evaluation.
 	 * <p>
-	 * If either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
-	 * @param outgoingWorldSpace the outgoing direction
-	 * @param normalWorldSpace the normal
 	 * @param incomingWorldSpace the incoming direction
 	 * @return a {@code Color3F} with the result of the evaluation
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType} or {@code incomingWorldSpace} are {@code null}
 	 */
-	public Color3F evaluateDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Vector3F incomingWorldSpace) {
+	public Color3F evaluateDistributionFunction(final BXDFType bXDFType, final Vector3F incomingWorldSpace) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
-		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
-		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
 		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
 		final Vector3F incomingWorldSpaceCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace;
-		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
-		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+		final Vector3F outgoing = this.outgoingLocalSpace;
+		final Vector3F normal = this.normalLocalSpace;
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpaceCorrectlyOriented);
 		
 		final Vector3F surfaceNormalG = this.intersection.getSurfaceNormalG();
 		
 		final float iDotN = Vector3F.dotProduct(incomingWorldSpace, surfaceNormalG);
-		final float oDotN = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG);
+		final float oDotN = Vector3F.dotProduct(this.outgoingWorldSpace, surfaceNormalG);
 		
 		final boolean isReflecting = iDotN * oDotN > 0.0F;
 		
@@ -294,19 +294,15 @@ public final class BSDF {
 	 * <p>
 	 * Returns an optional {@link BSDFResult} with the result of the sampling.
 	 * <p>
-	 * If either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
-	 * @param outgoingWorldSpace the outgoing direction
-	 * @param normalWorldSpace the normal
 	 * @param sample the sample point
 	 * @return an optional {@code BSDFResult} with the result of the sampling
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code sample} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType} or {@code sample} are {@code null}
 	 */
-	public Optional<BSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Point2F sample) {
+	public Optional<BSDFResult> sampleDistributionFunction(final BXDFType bXDFType, final Point2F sample) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
-		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
-		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
 		Objects.requireNonNull(sample, "sample == null");
 		
 		final int matches = doComputeMatches(bXDFType);
@@ -325,8 +321,8 @@ public final class BSDF {
 		
 		final Point2F sampleRemapped = new Point2F(min(sample.getU() * matches - match, 0.99999994F), sample.getV());
 		
-		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
-		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+		final Vector3F outgoing = this.outgoingLocalSpace;
+		final Vector3F normal = this.normalLocalSpace;
 		
 		if(isZero(outgoing.getZ())) {
 			return Optional.empty();
@@ -363,7 +359,7 @@ public final class BSDF {
 		
 		if(!matchingBXDF.getBXDFType().isSpecular()) {
 			final float iDotN = Vector3F.dotProduct(incomingWorldSpaceCorrectlyOriented, surfaceNormalG);
-			final float oDotN = Vector3F.dotProduct(outgoingWorldSpace, surfaceNormalG);
+			final float oDotN = Vector3F.dotProduct(this.outgoingWorldSpace, surfaceNormalG);
 			
 			final boolean isReflecting = iDotN * oDotN > 0.0F;
 			
@@ -376,7 +372,7 @@ public final class BSDF {
 			}
 		}
 		
-		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpaceCorrectlyOriented, outgoingWorldSpace, probabilityDensityFunctionValue));
+		return Optional.of(new BSDFResult(bXDFResult.getBXDFType(), result, incomingWorldSpaceCorrectlyOriented, this.outgoingWorldSpace, probabilityDensityFunctionValue));
 	}
 	
 	/**
@@ -407,6 +403,14 @@ public final class BSDF {
 			return false;
 		} else if(!Objects.equals(this.bXDFs, BSDF.class.cast(object).bXDFs)) {
 			return false;
+		} else if(!Objects.equals(this.normalLocalSpace, BSDF.class.cast(object).normalLocalSpace)) {
+			return false;
+		} else if(!Objects.equals(this.normalWorldSpace, BSDF.class.cast(object).normalWorldSpace)) {
+			return false;
+		} else if(!Objects.equals(this.outgoingLocalSpace, BSDF.class.cast(object).outgoingLocalSpace)) {
+			return false;
+		} else if(!Objects.equals(this.outgoingWorldSpace, BSDF.class.cast(object).outgoingWorldSpace)) {
+			return false;
 		} else if(this.isNegatingIncoming != BSDF.class.cast(object).isNegatingIncoming) {
 			return false;
 		} else if(!equal(this.eta, BSDF.class.cast(object).eta)) {
@@ -421,19 +425,15 @@ public final class BSDF {
 	 * <p>
 	 * Returns a {@code float} with the probability density function (PDF) value.
 	 * <p>
-	 * If either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * If either {@code bXDFType} or {@code incomingWorldSpace} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param bXDFType a {@link BXDFType} instance to match against
-	 * @param outgoingWorldSpace the outgoing direction
-	 * @param normalWorldSpace the normal
 	 * @param incomingWorldSpace the incoming direction
 	 * @return a {@code float} with the probability density function (PDF) value
-	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType}, {@code outgoingWorldSpace}, {@code normalWorldSpace} or {@code incomingWorldSpace} are {@code null}
+	 * @throws NullPointerException thrown if, and only if, either {@code bXDFType} or {@code incomingWorldSpace} are {@code null}
 	 */
-	public float evaluateProbabilityDensityFunction(final BXDFType bXDFType, final Vector3F outgoingWorldSpace, final Vector3F normalWorldSpace, final Vector3F incomingWorldSpace) {
+	public float evaluateProbabilityDensityFunction(final BXDFType bXDFType, final Vector3F incomingWorldSpace) {
 		Objects.requireNonNull(bXDFType, "bXDFType == null");
-		Objects.requireNonNull(outgoingWorldSpace, "outgoingWorldSpace == null");
-		Objects.requireNonNull(normalWorldSpace, "normalWorldSpace == null");
 		Objects.requireNonNull(incomingWorldSpace, "incomingWorldSpace == null");
 		
 		if(this.bXDFs.size() == 0) {
@@ -441,8 +441,8 @@ public final class BSDF {
 		}
 		
 		final Vector3F incomingWorldSpaceCorrectlyOriented = this.isNegatingIncoming ? Vector3F.negate(incomingWorldSpace) : incomingWorldSpace;
-		final Vector3F outgoing = doTransformToLocalSpace(outgoingWorldSpace);
-		final Vector3F normal = doTransformToLocalSpace(normalWorldSpace);
+		final Vector3F outgoing = this.outgoingLocalSpace;
+		final Vector3F normal = this.normalLocalSpace;
 		final Vector3F incoming = doTransformToLocalSpace(incomingWorldSpaceCorrectlyOriented);
 		
 		if(isZero(outgoing.getZ())) {
@@ -502,7 +502,7 @@ public final class BSDF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.intersection, this.bXDFs, Boolean.valueOf(this.isNegatingIncoming), Float.valueOf(this.eta));
+		return Objects.hash(this.intersection, this.bXDFs, this.normalLocalSpace, this.normalWorldSpace, this.outgoingLocalSpace, this.outgoingWorldSpace, Boolean.valueOf(this.isNegatingIncoming), Float.valueOf(this.eta));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

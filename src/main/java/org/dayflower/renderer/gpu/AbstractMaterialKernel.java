@@ -57,6 +57,7 @@ import org.dayflower.scene.material.MirrorMaterial;
 import org.dayflower.scene.material.PlasticMaterial;
 import org.dayflower.scene.material.SubstrateMaterial;
 import org.dayflower.scene.microfacet.TrowbridgeReitzMicrofacetDistribution;
+import org.dayflower.scene.texture.Texture;
 
 /**
  * An {@code AbstractMaterialKernel} is an abstract extension of the {@link AbstractTextureKernel} class that adds additional features.
@@ -81,6 +82,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * A bit flag that represents {@code BXDFType.ALL}.
 	 */
 	protected static final int B_X_D_F_TYPE_BIT_FLAG_ALL = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4);
+	
+	/**
+	 * A bit flag that represents {@code BXDFType.ALL_EXCEPT_SPECULAR}.
+	 */
+	protected static final int B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3);
 	
 	/**
 	 * A bit flag that is used for BXDFs with reflection, which are called BRDFs.
@@ -1179,10 +1185,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void materialBSDFEvaluateDistributionFunction(final int bitFlags) {
-		final float incomingX = materialBSDFResultGetIncomingX();
-		final float incomingY = materialBSDFResultGetIncomingY();
-		final float incomingZ = materialBSDFResultGetIncomingZ();
+	protected final void materialBSDFEvaluateDistributionFunction(final int bitFlags, final float incomingX, final float incomingY, final float incomingZ) {
+		doBSDFResultSetIncoming(incomingX, incomingY, incomingZ);
+		doBXDFResultSetIncomingTransformedFromBSDFResult();
 		
 		final float outgoingX = doBSDFResultGetOutgoingX();
 		final float outgoingY = doBSDFResultGetOutgoingY();
@@ -1219,7 +1224,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 //	TODO: Add Javadocs!
-	protected final void materialBSDFEvaluateProbabilityDensityFunction(final int bitFlags) {
+	protected final void materialBSDFEvaluateProbabilityDensityFunction(final int bitFlags, final float incomingX, final float incomingY, final float incomingZ) {
+		doBSDFResultSetIncoming(incomingX, incomingY, incomingZ);
+		doBXDFResultSetIncomingTransformedFromBSDFResult();
+		
 		final int countBXDFs = doBSDFGetBXDFCount();
 		
 		float probabilityDensityFunctionValue = 0.0F;
@@ -1247,7 +1255,16 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the Emission {@link Texture} instance that is associated with the {@link Material} instance that is represented by {@code materialID} and {@code materialOffset}.
+	 * <p>
+	 * The result of the evaluation will be set using {@link #color3FLHSSet(float, float, float)}.
+	 * <p>
+	 * To retrieve the color components of the result, the methods {@link #color3FLHSGetComponent1()}, {@link #color3FLHSGetComponent2()} or {@link #color3FLHSGetComponent3()} may be used.
+	 * 
+	 * @param materialID the ID of the current {@code Material}
+	 * @param materialOffset the offset for the current {@code Material}
+	 */
 	protected final void materialEmittance(final int materialID, final int materialOffset) {
 		final int materialOffsetTextureEmission = materialOffset + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
 		
@@ -2881,12 +2898,10 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBXDFResultSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFDisneyClearCoatBRDFSetGloss(final float gloss) {
 		this.bXDFDisneyClearCoatBRDFArray_$private$2[B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_GLOSS] = gloss;
 	}
 	
-	@SuppressWarnings("unused")
 	private void doBXDFDisneyClearCoatBRDFSetWeight(final float weight) {
 		this.bXDFDisneyClearCoatBRDFArray_$private$2[B_X_D_F_DISNEY_CLEAR_COAT_B_R_D_F_ARRAY_OFFSET_WEIGHT] = weight;
 	}
@@ -4983,6 +4998,20 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0] = x;
 		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1] = y;
 		this.bXDFResultArray_$private$13[B_X_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2] = z;
+	}
+	
+	private void doBXDFResultSetIncomingTransformedFromBSDFResult() {
+		final float incomingX = materialBSDFResultGetIncomingX();
+		final float incomingY = materialBSDFResultGetIncomingY();
+		final float incomingZ = materialBSDFResultGetIncomingZ();
+		
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(incomingX, incomingY, incomingZ);
+		
+		final float incomingTransformedX = vector3FGetComponent1();
+		final float incomingTransformedY = vector3FGetComponent2();
+		final float incomingTransformedZ = vector3FGetComponent3();
+		
+		doBXDFResultSetIncoming(incomingTransformedX, incomingTransformedY, incomingTransformedZ);
 	}
 	
 	private void doBXDFResultSetNormal(final float x, final float y, final float z) {

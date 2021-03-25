@@ -475,7 +475,7 @@ public final class Scene implements Node {
 				
 				final Sample2F sample = sampler.sample2();
 				
-				final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, outgoing, surfaceNormalS, new Point2F(sample.getU(), sample.getV()));
+				final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.ALL, /*outgoing, surfaceNormalS, */new Point2F(sample.getU(), sample.getV()));
 				
 				if(!optionalBSDFResult.isPresent()) {
 					break;
@@ -1327,13 +1327,12 @@ public final class Scene implements Node {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private Color3F doComputeSpecularReflection(final Ray3F ray, final float tMinimum, final float tMaximum, final Sampler sampler, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
+	private Color3F doComputeSpecularReflection(final float tMinimum, final float tMaximum, final Sampler sampler, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
 		final Vector3F normal = intersection.getSurfaceNormalS();
-		final Vector3F outgoing = Vector3F.negate(ray.getDirection());
 		
 		final Sample2F sample = sampler.sample2();
 		
-		final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.SPECULAR_REFLECTION, outgoing, normal, new Point2F(sample.getU(), sample.getV()));
+		final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.SPECULAR_REFLECTION, new Point2F(sample.getU(), sample.getV()));
 		
 		if(optionalBSDFResult.isPresent()) {
 			final BSDFResult bSDFResult = optionalBSDFResult.get();
@@ -1355,13 +1354,12 @@ public final class Scene implements Node {
 		return Color3F.BLACK;
 	}
 	
-	private Color3F doComputeSpecularTransmission(final Ray3F ray, final float tMinimum, final float tMaximum, final Sampler sampler, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
+	private Color3F doComputeSpecularTransmission(final float tMinimum, final float tMaximum, final Sampler sampler, final boolean isPreviewMode, final int maximumBounce, final int currentBounce, final BSDF bSDF, final Intersection intersection) {
 		final Vector3F normal = intersection.getSurfaceNormalS();
-		final Vector3F outgoing = Vector3F.negate(ray.getDirection());
 		
 		final Sample2F sample = sampler.sample2();
 		
-		final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.SPECULAR_TRANSMISSION, outgoing, normal, new Point2F(sample.getU(), sample.getV()));
+		final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(BXDFType.SPECULAR_TRANSMISSION, new Point2F(sample.getU(), sample.getV()));
 		
 		if(optionalBSDFResult.isPresent()) {
 			final BSDFResult bSDFResult = optionalBSDFResult.get();
@@ -1392,7 +1390,6 @@ public final class Scene implements Node {
 			final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
 			
 			final Vector3F normal = intersection.getSurfaceNormalS();
-			final Vector3F outgoing = Vector3F.negate(intersection.getRay().getDirection());
 			
 			if(optionalLightSample.isPresent()) {
 				final LightSample lightSample = optionalLightSample.get();
@@ -1404,7 +1401,7 @@ public final class Scene implements Node {
 				final float lightPDFValue = lightSample.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), abs(Vector3F.dotProduct(incoming, normal)));
+					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, incoming), abs(Vector3F.dotProduct(incoming, normal)));
 					
 					if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
 						lightDirect = Color3F.addMultiplyAndDivide(lightDirect, scatteringResult, lightIncoming, lightPDFValue);
@@ -1417,7 +1414,6 @@ public final class Scene implements Node {
 			final Optional<LightSample> optionalLightSample = light.sampleRadianceIncoming(intersection, sampleA);
 			
 			final Vector3F normal = intersection.getSurfaceNormalS();
-			final Vector3F outgoing = Vector3F.negate(intersection.getRay().getDirection());
 			
 			if(optionalLightSample.isPresent()) {
 				final LightSample lightSample = optionalLightSample.get();
@@ -1429,9 +1425,9 @@ public final class Scene implements Node {
 				final float lightPDFValue = lightSample.getProbabilityDensityFunctionValue();
 				
 				if(!lightIncoming.isBlack() && lightPDFValue > 0.0F) {
-					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, outgoing, normal, incoming), abs(Vector3F.dotProduct(incoming, normal)));
+					final Color3F scatteringResult = Color3F.multiply(bSDF.evaluateDistributionFunction(bXDFType, incoming), abs(Vector3F.dotProduct(incoming, normal)));
 					
-					final float scatteringPDFValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, outgoing, normal, incoming);
+					final float scatteringPDFValue = bSDF.evaluateProbabilityDensityFunction(bXDFType, incoming);
 					
 					if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
 						final float weight = SampleGeneratorF.multipleImportanceSamplingPowerHeuristic(lightPDFValue, scatteringPDFValue, 1, 1);
@@ -1441,7 +1437,7 @@ public final class Scene implements Node {
 				}
 			}
 			
-			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(bXDFType, outgoing, normal, sampleB);
+			final Optional<BSDFResult> optionalBSDFResult = bSDF.sampleDistributionFunction(bXDFType, sampleB);
 			
 			if(optionalBSDFResult.isPresent()) {
 				final BSDFResult bSDFResult = optionalBSDFResult.get();
@@ -1539,7 +1535,7 @@ public final class Scene implements Node {
 					final float probabilityDensityFunctionValue = lightSample.getProbabilityDensityFunctionValue();
 					
 					if(!result.isBlack() && probabilityDensityFunctionValue > 0.0F) {
-						final Color3F scatteringResult = bSDF.evaluateDistributionFunction(BXDFType.ALL, outgoing, normal, incoming);
+						final Color3F scatteringResult = bSDF.evaluateDistributionFunction(BXDFType.ALL, incoming);
 						
 						if(!scatteringResult.isBlack() && checkLightVisibility(intersection, light, lightSample)) {
 							radiance = Color3F.addMultiplyAndDivide(radiance, scatteringResult, result, abs(Vector3F.dotProduct(incoming, normal)), probabilityDensityFunctionValue);
@@ -1549,8 +1545,8 @@ public final class Scene implements Node {
 			}
 			
 			if(currentBounce + 1 < maximumBounce) {
-				radiance = Color3F.add(radiance, doComputeSpecularReflection(ray, tMinimum, tMaximum, sampler, isPreviewMode, maximumBounce, currentBounce, bSDF, intersection));
-				radiance = Color3F.add(radiance, doComputeSpecularTransmission(ray, tMinimum, tMaximum, sampler, isPreviewMode, maximumBounce, currentBounce, bSDF, intersection));
+				radiance = Color3F.add(radiance, doComputeSpecularReflection(tMinimum, tMaximum, sampler, isPreviewMode, maximumBounce, currentBounce, bSDF, intersection));
+				radiance = Color3F.add(radiance, doComputeSpecularTransmission(tMinimum, tMaximum, sampler, isPreviewMode, maximumBounce, currentBounce, bSDF, intersection));
 			}
 		} else {
 			for(final Light light : this.lights) {

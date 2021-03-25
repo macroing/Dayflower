@@ -118,6 +118,10 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 	
 	/**
 	 * Evaluates the current {@link Texture} instance, which may be any of the supported {@code Texture} types.
+	 * <p>
+	 * The result of the evaluation will be set using {@link #color3FLHSSet(float, float, float)}.
+	 * <p>
+	 * To retrieve the color components of the result, the methods {@link #color3FLHSGetComponent1()}, {@link #color3FLHSGetComponent2()} or {@link #color3FLHSGetComponent3()} may be used.
 	 * 
 	 * @param textureID the ID of the {@code Texture} instance
 	 * @param textureOffset the offset of the {@code Texture} instance

@@ -262,7 +262,71 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 * @return {@code true} if, and only if, the current ray intersects a given primitive in world space, {@code false} otherwise
 	 */
 	protected final boolean primitiveIntersects() {
-		return primitiveIntersectionT() > 0.0F;
+		for(int index = 0; index < this.primitiveCount; index++) {
+			final int primitiveArrayOffset = index * Primitive.ARRAY_LENGTH;
+			final int primitiveArrayOffsetBoundingVolumeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_ID;
+			final int primitiveArrayOffsetBoundingVolumeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_BOUNDING_VOLUME_OFFSET;
+			final int primitiveArrayOffsetShapeID = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_ID;
+			final int primitiveArrayOffsetShapeOffset = primitiveArrayOffset + Primitive.ARRAY_OFFSET_SHAPE_OFFSET;
+			
+			final int boundingVolumeID = this.primitiveArray[primitiveArrayOffsetBoundingVolumeID];
+			final int boundingVolumeOffset = this.primitiveArray[primitiveArrayOffsetBoundingVolumeOffset];
+			final int shapeID = this.primitiveArray[primitiveArrayOffsetShapeID];
+			final int shapeOffset = this.primitiveArray[primitiveArrayOffsetShapeOffset];
+			
+			final float tMinimumWorldSpace = ray3FGetTMinimum();
+			final float tMaximumWorldSpace = ray3FGetTMaximum();
+			
+			boolean isIntersectingBoundingVolume = false;
+			
+//			TODO: Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
+			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
+				isIntersectingBoundingVolume = true;
+			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
+				isIntersectingBoundingVolume = boundingVolume3FAxisAlignedBoundingBox3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+			} else if(boundingVolumeID == BoundingSphere3F.ID) {
+				isIntersectingBoundingVolume = boundingVolume3FBoundingSphere3FContainsOrIntersects(boundingVolumeOffset, tMinimumWorldSpace, tMaximumWorldSpace);
+			}
+			
+			if(isIntersectingBoundingVolume) {
+				ray3FSetMatrix44FTransformWorldToObject(index);
+				
+				float tObjectSpace = 0.0F;
+				
+				final float tMinimumObjectSpace = ray3FGetTMinimum();
+				final float tMaximumObjectSpace = ray3FGetTMaximum();
+				
+				if(shapeID == Cone3F.ID) {
+					tObjectSpace = shape3FCone3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Cylinder3F.ID) {
+					tObjectSpace = shape3FCylinder3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Disk3F.ID) {
+					tObjectSpace = shape3FDisk3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Paraboloid3F.ID) {
+					tObjectSpace = shape3FParaboloid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Plane3F.ID) {
+					tObjectSpace = shape3FPlane3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == RectangularCuboid3F.ID) {
+					tObjectSpace = shape3FRectangularCuboid3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Sphere3F.ID) {
+					tObjectSpace = shape3FSphere3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Torus3F.ID) {
+					tObjectSpace = shape3FTorus3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == Triangle3F.ID) {
+					tObjectSpace = shape3FTriangle3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				} else if(shapeID == TriangleMesh3F.ID) {
+					tObjectSpace = shape3FTriangleMesh3FIntersectionT(shapeOffset, tMinimumObjectSpace, tMaximumObjectSpace);
+				}
+				
+				ray3FSetMatrix44FTransformObjectToWorld(index);
+				
+				if(tObjectSpace > tMinimumObjectSpace && tObjectSpace < tMaximumObjectSpace) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -609,6 +673,10 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 				final float lightIncomingY = lightSampleGetIncomingY();
 				final float lightIncomingZ = lightSampleGetIncomingZ();
 				
+				final float lightPointX = lightSampleGetPointX();
+				final float lightPointY = lightSampleGetPointY();
+				final float lightPointZ = lightSampleGetPointZ();
+				
 				final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
 				
 				final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
@@ -624,6 +692,10 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					final float normalY = intersectionGetOrthonormalBasisSWComponent2();
 					final float normalZ = intersectionGetOrthonormalBasisSWComponent3();
 					
+					final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+					final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+					final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+					
 					final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
 					
 					final float scatteringResultR = materialBSDFResultR * lightIncomingDotNormalAbs;
@@ -632,7 +704,23 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					
 					final boolean hasScatteringResult = !checkIsZero(scatteringResultR) || !checkIsZero(scatteringResultG) || !checkIsZero(scatteringResultB);
 					
-					if(hasScatteringResult/* && checkLightVisibility()*/) {
+					final float directionX = lightPointX - surfaceIntersectionPointX;
+					final float directionY = lightPointY - surfaceIntersectionPointY;
+					final float directionZ = lightPointZ - surfaceIntersectionPointZ;
+					final float directionLengthReciprocal = vector3FLengthReciprocal(directionX, directionY, directionZ);
+					final float directionNormalizedX = directionX * directionLengthReciprocal;
+					final float directionNormalizedY = directionY * directionLengthReciprocal;
+					final float directionNormalizedZ = directionZ * directionLengthReciprocal;
+					
+					final float tMaximum = abs(point3FDistance(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ, lightPointX, lightPointY, lightPointZ)) + 0.001F;
+					final float tMinimum = DEFAULT_T_MINIMUM;
+					
+					ray3FSetOrigin(surfaceIntersectionPointX + directionNormalizedX * 0.001F, surfaceIntersectionPointY + directionNormalizedY * 0.001F, surfaceIntersectionPointZ + directionNormalizedZ * 0.001F);
+					ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+					ray3FSetTMaximum(tMaximum);
+					ray3FSetTMinimum(tMinimum);
+					
+					if(hasScatteringResult && !primitiveIntersects()) {
 						lightDirectR += scatteringResultR * lightResultR / lightProbabilityDensityFunctionValue;
 						lightDirectG += scatteringResultG * lightResultG / lightProbabilityDensityFunctionValue;
 						lightDirectB += scatteringResultB * lightResultB / lightProbabilityDensityFunctionValue;
@@ -663,9 +751,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		lightEstimateDirectLight(random(), random(), random(), random(), false);
 		
-		final float lightR = color3FLHSGetComponent1() / probabilityDensityFunctionValue;
-		final float lightG = color3FLHSGetComponent2() / probabilityDensityFunctionValue;
-		final float lightB = color3FLHSGetComponent3() / probabilityDensityFunctionValue;
+		final float lightR = finiteOrZero(color3FLHSGetComponent1() / probabilityDensityFunctionValue);
+		final float lightG = finiteOrZero(color3FLHSGetComponent2() / probabilityDensityFunctionValue);
+		final float lightB = finiteOrZero(color3FLHSGetComponent3() / probabilityDensityFunctionValue);
 		
 		color3FLHSSet(lightR, lightG, lightB);
 	}

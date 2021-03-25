@@ -27,7 +27,9 @@ import java.lang.reflect.Field;
 
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSDFResult;
+import org.dayflower.scene.BXDF;
 import org.dayflower.scene.BXDFResult;
+import org.dayflower.scene.BXDFType;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.bxdf.AshikhminShirleyBRDF;
 import org.dayflower.scene.bxdf.DisneyClearCoatBRDF;
@@ -987,12 +989,17 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * The following is a test implementation of the Material API in the CPU-renderer that is based on PBRT. It is an early work-in-progress. However, it is necessary in order to support most (if not all) Material implementations.
 	 */
 	
-//	TODO: Add Javadocs!
-	protected final boolean materialBSDFBXDFIsSpecular() {
-		return doBXDFIsSpecular((int)(this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_B_X_D_F_ID]));
-	}
-	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes a {@link BSDF} at the current intersection.
+	 * <p>
+	 * Returns {@code true} if, and only if, the {@code BSDF} was computed, {@code false} otherwise.
+	 * <p>
+	 * This method assumes the {@link AbstractGeometryKernel#intersectionArray_$private$24 intersectionArray_$private$24} array has been filled in with intersection data.
+	 * 
+	 * @param materialID the ID of the {@link Material} instance
+	 * @param materialOffset the offset for the {@code Material} instance
+	 * @return {@code true} if, and only if, the {@code BSDF} was computed, {@code false} otherwise
+	 */
 	protected final boolean materialBSDFCompute(final int materialID, final int materialOffset) {
 		if(materialID == ClearCoatMaterial.ID) {
 			return doMaterialClearCoatMaterialComputeBSDF(materialOffset);
@@ -1017,7 +1024,33 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the {@link BXDF} instance that is associated with the current {@link BSDFResult} instance is specular, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the {@code BXDF} instance that is associated with the current {@code BSDFResult} instance is specular, {@code false} otherwise
+	 */
+	protected final boolean materialBSDFResultBXDFIsSpecular() {
+		return doBXDFIsSpecular(materialBSDFResultGetBXDFID());
+	}
+	
+	/**
+	 * Samples the distribution function using the current {@link BSDF} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, a sample was created, {@code false} otherwise.
+	 * <p>
+	 * This method assumes the {@link #materialBSDFCompute(int, int)} method was called with a return value of {@code true}.
+	 * <p>
+	 * The result of the sampling will be set in {@link #bSDFResultArray_$private$14}.
+	 * <p>
+	 * To retrieve the incoming direction in world space, the methods {@link #materialBSDFResultGetIncomingX()}, {@link #materialBSDFResultGetIncomingY()} and {@link #materialBSDFResultGetIncomingZ()} may be used.
+	 * <p>
+	 * To retrieve the color components of the result, the methods {@link #materialBSDFResultGetResultR()}, {@link #materialBSDFResultGetResultG()} and {@link #materialBSDFResultGetResultB()} may be used.
+	 * <p>
+	 * To retrieve the probability density function (PDF) value, the method {@link #materialBSDFResultGetProbabilityDensityFunctionValue()} may be used.
+	 * 
+	 * @param bitFlags the {@link BXDFType} bit flags to match against
+	 * @return {@code true} if, and only if, a sample was created, {@code false} otherwise
+	 */
 	protected final boolean materialBSDFSampleDistributionFunction(final int bitFlags) {
 		final int countBXDFs = doBSDFGetBXDFCount();
 		
@@ -1129,47 +1162,84 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return false;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the index of refraction (IOR) that is associated with the current {@link BSDF} instance.
+	 * 
+	 * @return the index of refraction (IOR) that is associated with the current {@code BSDF} instance
+	 */
 	protected final float materialBSDFGetEta() {
 		return this.bSDFArray_$private$11[B_S_D_F_ARRAY_OFFSET_ETA];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the X-component of the incoming direction in world space that is associated with the current {@link BSDFResult} instance.
+	 * 
+	 * @return the X-component of the incoming direction in world space that is associated with the current {@code BSDFResult} instance
+	 */
 	protected final float materialBSDFResultGetIncomingX() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the Y-component of the incoming direction in world space that is associated with the current {@link BSDFResult} instance.
+	 * 
+	 * @return the Y-component of the incoming direction in world space that is associated with the current {@code BSDFResult} instance
+	 */
 	protected final float materialBSDFResultGetIncomingY() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the Z-component of the incoming direction in world space that is associated with the current {@link BSDFResult} instance.
+	 * 
+	 * @return the Z-component of the incoming direction in world space that is associated with the current {@code BSDFResult} instance
+	 */
 	protected final float materialBSDFResultGetIncomingZ() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_INCOMING + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the probability density function (PDF) value that is associated with the current {@link BSDFResult} instance.
+	 * 
+	 * @return the probability density function (PDF) value that is associated with the current {@code BSDFResult} instance
+	 */
 	protected final float materialBSDFResultGetProbabilityDensityFunctionValue() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the B-component of the result that is associated with the current {@link BSDFResult} instance.
+	 * 
+	 * @return the B-component of the result that is associated with the current {@code BSDFResult} instance
+	 */
 	protected final float materialBSDFResultGetResultB() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the G-component of the result that is associated with the current {@link BSDFResult} instance.
+	 * 
+	 * @return the G-component of the result that is associated with the current {@code BSDFResult} instance
+	 */
 	protected final float materialBSDFResultGetResultG() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the R-component of the result that is associated with the current {@link BSDFResult} instance.
+	 * 
+	 * @return the R-component of the result that is associated with the current {@code BSDFResult} instance
+	 */
 	protected final float materialBSDFResultGetResultR() {
 		return this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_RESULT + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the {@link BXDF} count by specular or non-specular type.
+	 * 
+	 * @param isSpecular {@code true} if, and only if, specular types should be counted, {@code false} otherwise
+	 * @return the {@code BXDF} count by specular or non-specular type
+	 */
 	protected final int materialBSDFCountBXDFsBySpecularType(final boolean isSpecular) {
 		int countBySpecular = 0;
 		
@@ -1184,7 +1254,29 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return countBySpecular;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the ID of the {@link BXDF} instance that is associated with the current {@link BSDFResult} instance.
+	 * 
+	 * @return the ID of the {@code BXDF} instance that is associated with the current {@code BSDFResult} instance
+	 */
+	protected final int materialBSDFResultGetBXDFID() {
+		return (int)(this.bSDFResultArray_$private$14[B_S_D_F_RESULT_ARRAY_OFFSET_B_X_D_F_ID]);
+	}
+	
+	/**
+	 * Evaluates the distribution function using the current {@link BSDF} instance.
+	 * <p>
+	 * This method assumes the {@link #materialBSDFCompute(int, int)} method was called with a return value of {@code true}.
+	 * <p>
+	 * The result of the evaluation will be set in {@link #bSDFResultArray_$private$14}.
+	 * <p>
+	 * To retrieve the color components of the result, the methods {@link #materialBSDFResultGetResultR()}, {@link #materialBSDFResultGetResultG()} and {@link #materialBSDFResultGetResultB()} may be used.
+	 * 
+	 * @param bitFlags the {@link BXDFType} bit flags to match against
+	 * @param incomingX the X-component of the incoming direction in world space
+	 * @param incomingY the Y-component of the incoming direction in world space
+	 * @param incomingZ the Z-component of the incoming direction in world space
+	 */
 	protected final void materialBSDFEvaluateDistributionFunction(final int bitFlags, final float incomingX, final float incomingY, final float incomingZ) {
 		doBSDFResultSetIncoming(incomingX, incomingY, incomingZ);
 		doBXDFResultSetIncomingTransformedFromBSDFResult();
@@ -1223,7 +1315,20 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFResultSetResult(resultR, resultG, resultB);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density function (PDF) using the current {@link BSDF} instance.
+	 * <p>
+	 * This method assumes the {@link #materialBSDFCompute(int, int)} method was called with a return value of {@code true}.
+	 * <p>
+	 * The result of the evaluation will be set in {@link #bSDFResultArray_$private$14}.
+	 * <p>
+	 * To retrieve the probability density function (PDF) value, the method {@link #materialBSDFResultGetProbabilityDensityFunctionValue()} may be used.
+	 * 
+	 * @param bitFlags the {@link BXDFType} bit flags to match against
+	 * @param incomingX the X-component of the incoming direction in world space
+	 * @param incomingY the Y-component of the incoming direction in world space
+	 * @param incomingZ the Z-component of the incoming direction in world space
+	 */
 	protected final void materialBSDFEvaluateProbabilityDensityFunction(final int bitFlags, final float incomingX, final float incomingY, final float incomingZ) {
 		doBSDFResultSetIncoming(incomingX, incomingY, incomingZ);
 		doBXDFResultSetIncomingTransformedFromBSDFResult();

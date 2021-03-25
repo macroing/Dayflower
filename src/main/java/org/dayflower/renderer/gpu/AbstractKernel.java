@@ -177,6 +177,16 @@ public abstract class AbstractKernel extends Kernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code value} is finite, {@code false} otherwise.
+	 * 
+	 * @param value the {@code float} value to check
+	 * @return {@code true} if, and only if, {@code value} is finite, {@code false} otherwise
+	 */
+	protected final boolean checkIsFinite(final float value) {
+		return !checkIsInfinite(value) && !checkIsNaN(value);
+	}
+	
+	/**
 	 * Returns {@code true} if, and only if, {@code value} is infinite, {@code false} otherwise.
 	 * 
 	 * @param value the {@code float} value to check
@@ -257,6 +267,16 @@ public abstract class AbstractKernel extends Kernel {
 	@SuppressWarnings("static-method")
 	protected final float addIfLessThanThreshold(final float value, final float threshold, final float valueAdd) {
 		return value < threshold ? value + valueAdd : value;
+	}
+	
+	/**
+	 * Returns {@code value} if, and only if, it is finite, {@code 0.0F} otherwise.
+	 * 
+	 * @param value the value to check and maybe return
+	 * @return {@code value} if, and only if, it is finite, {@code 0.0F} otherwise
+	 */
+	protected final float finiteOrZero(final float value) {
+		return checkIsFinite(value) ? value : 0.0F;
 	}
 	
 	/**

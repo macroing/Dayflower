@@ -321,7 +321,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 								throughputB *= resultB * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
 							}
 							
-							isSpecularBounce = materialBSDFBXDFIsSpecular();
+							isSpecularBounce = materialBSDFResultBXDFIsSpecular();
 							
 							vector3FSet(incomingX, incomingY, incomingZ);
 							

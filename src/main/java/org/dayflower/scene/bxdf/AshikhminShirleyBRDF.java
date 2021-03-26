@@ -140,6 +140,23 @@ public final class AshikhminShirleyBRDF extends BXDF {
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
 		
+		/*
+		 * final float nDotI = Vector3F.dotProduct(incoming, normal);
+		 * final float nDotO = Vector3F.dotProduct(outgoing, normal);
+		 * 
+		 * if((nDotI > 0.0F && nDotO > 0.0F) || (nDotI < 0.0F && nDotO < 0.0F)) {
+		 * 	return Color3F.BLACK;
+		 * }
+		 * 
+		 * final Vector3F half = Vector3F.dotProduct(outgoing, incoming) > 0.999F ? normal : Vector3F.normalize(Vector3F.subtract(outgoing, incoming));
+		 * 
+		 * final float fresnel = 1.0F;
+		 * final float d = (this.exponent + 1.0F) * pow(Vector3F.dotProductAbs(normal, half), this.exponent) / (2.0F * PI);
+		 * final float result = fresnel * d / (4.0F * abs(nDotO + -nDotI - nDotO * -nDotI));
+		 * 
+		 * return Color3F.multiply(this.reflectanceScale, result);
+		 */
+		
 		final float cosThetaAbsOutgoing = outgoing.cosThetaAbs();
 		final float cosThetaAbsIncoming = incoming.cosThetaAbs();
 		
@@ -147,14 +164,16 @@ public final class AshikhminShirleyBRDF extends BXDF {
 			return Color3F.BLACK;
 		}
 		
-		final Vector3F n = Vector3F.normalize(Vector3F.subtract(outgoing, incoming));
+		final Vector3F n = Vector3F.subtract(outgoing, incoming);
 		
 		if(isZero(n.getX()) && isZero(n.getY()) && isZero(n.getZ())) {
 			return Color3F.BLACK;
 		}
 		
-		final float d = (this.exponent + 1.0F) * pow(abs(n.cosTheta()), this.exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
-		final float f = Schlick.fresnelDielectric(Vector3F.dotProduct(outgoing, n), 1.0F);
+		final Vector3F nNormalized = Vector3F.normalize(n);
+		
+		final float d = (this.exponent + 1.0F) * pow(abs(nNormalized.cosTheta()), this.exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float f = Schlick.fresnelDielectric(Vector3F.dotProduct(outgoing, nNormalized), 1.0F);
 		
 		return Color3F.divide(Color3F.multiply(Color3F.multiply(this.reflectanceScale, d), f), 4.0F * abs(outgoing.cosTheta() + -incoming.cosTheta() - outgoing.cosTheta() * -incoming.cosTheta()));
 	}
@@ -177,6 +196,26 @@ public final class AshikhminShirleyBRDF extends BXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(sample, "sample == null");
+		
+		/*
+		 * final float phi = 2.0F * PI * sample.getU();
+		 * final float cosTheta = pow(1.0F - sample.getV(), 1.0F / (this.exponent + 1.0F));
+		 * final float sinThetaSquared = max(0.0F, 1.0F - cosTheta * cosTheta);
+		 * final float sinTheta = sqrt(sinThetaSquared);
+		 * 
+		 * final Vector3F halfLocal = new Vector3F(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta);
+		 * final Vector3F half = Vector3F.transformReverse(halfLocal, new OrthonormalBasis33F(normal));
+		 * final Vector3F halfCorrectlyOriented = Vector3F.dotProduct(outgoing, normal) < 0.0F ? Vector3F.negate(half) : half;
+		 * final Vector3F incoming = Vector3F.subtract(outgoing, Vector3F.multiply(halfCorrectlyOriented, 2.0F * Vector3F.dotProduct(outgoing, halfCorrectlyOriented)));
+		 * 
+		 * final BXDFType bXDFType = getBXDFType();
+		 * 
+		 * final Color3F result = evaluateDistributionFunction(outgoing, normal, incoming);
+		 * 
+		 * final float probabilityDensityFunctionValue = evaluateProbabilityDensityFunction(outgoing, normal, incoming);
+		 * 
+		 * return Optional.of(new BXDFResult(bXDFType, result, incoming, outgoing, probabilityDensityFunctionValue));
+		 */
 		
 		if(isZero(outgoing.getZ())) {
 			return Optional.empty();
@@ -253,6 +292,19 @@ public final class AshikhminShirleyBRDF extends BXDF {
 		Objects.requireNonNull(outgoing, "outgoing == null");
 		Objects.requireNonNull(normal, "normal == null");
 		Objects.requireNonNull(incoming, "incoming == null");
+		
+		/*
+		 * final float nDotI = Vector3F.dotProduct(incoming, normal);
+		 * final float nDotO = Vector3F.dotProduct(outgoing, normal);
+		 * 
+		 * if((nDotI > 0.0F && nDotO > 0.0F) || (nDotI < 0.0F && nDotO < 0.0F)) {
+		 * 	return 0.0F;
+		 * }
+		 * 
+		 * final Vector3F half = Vector3F.dotProduct(outgoing, incoming) > 0.999F ? normal : Vector3F.normalize(Vector3F.subtract(outgoing, incoming));
+		 * 
+		 * return (this.exponent + 1.0F) * pow(Vector3F.dotProductAbs(normal, half), this.exponent) / (8.0F * PI * Vector3F.dotProductAbs(outgoing, half));
+		 */
 		
 		if(Vector3F.sameHemisphereZ(outgoing, incoming)) {
 			return 0.0F;

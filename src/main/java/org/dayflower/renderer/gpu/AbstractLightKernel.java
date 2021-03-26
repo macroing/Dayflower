@@ -19,6 +19,7 @@
 package org.dayflower.renderer.gpu;
 
 import static org.dayflower.utility.Floats.PI;
+import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
 
@@ -27,6 +28,7 @@ import java.lang.reflect.Field;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.light.PointLight;
+import org.dayflower.scene.light.SpotLight;
 
 /**
  * An {@code AbstractLightKernel} is an abstract extension of the {@link AbstractMaterialKernel} class that adds additional features.
@@ -65,6 +67,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected float[] lightSampleArray_$private$10;
 	
 //	TODO: Add Javadocs!
+	protected float[] lightSpotLightArray;
+	
+//	TODO: Add Javadocs!
 	protected int lightDirectionalLightCount;
 	
 //	TODO: Add Javadocs!
@@ -72,6 +77,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	
 //	TODO: Add Javadocs!
 	protected int lightPointLightCount;
+	
+//	TODO: Add Javadocs!
+	protected int lightSpotLightCount;
 	
 //	TODO: Add Javadocs!
 	protected int[] lightArray_$private$2;
@@ -94,6 +102,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		this.lightPointLightArray = new float[1];
 		this.lightPointLightCount = 0;
 		this.lightSampleArray_$private$10 = new float[LIGHT_SAMPLE_ARRAY_LENGTH];
+		this.lightSpotLightArray = new float[1];
+		this.lightSpotLightCount = 0;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,70 +198,88 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	// Light ///////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	protected final boolean lightIsUsingDeltaDistribution() {
 		final int id = lightGetID();
 		
-		if(id == DirectionalLight.ID) {
+		if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightIsUsingDeltaDistribution();
-		} else if(id == PointLight.ID) {
+		} else if(doLightPointLightIsMatchingID(id)) {
 			return doLightPointLightIsUsingDeltaDistribution();
+		} else if(doLightSpotLightIsMatchingID(id)) {
+			return doLightSpotLightIsUsingDeltaDistribution();
 		} else {
 			return false;
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	protected final boolean lightSampleRadianceIncoming(final float u, final float v) {
 		final int id = lightGetID();
 		
-		if(id == DirectionalLight.ID) {
+		if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightSampleRadianceIncoming(u, v);
-		} else if(id == PointLight.ID) {
+		} else if(doLightPointLightIsMatchingID(id)) {
 			return doLightPointLightSampleRadianceIncoming(u, v);
+		} else if(doLightSpotLightIsMatchingID(id)) {
+			return doLightSpotLightSampleRadianceIncoming(u, v);
+		} else {
+			return false;
 		}
-		
-		return false;
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
 		final int id = lightGetID();
 		
-		if(id == DirectionalLight.ID) {
+		if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
-		} else if(id == PointLight.ID) {
+		} else if(doLightPointLightIsMatchingID(id)) {
 			return doLightPointLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
+		} else if(doLightSpotLightIsMatchingID(id)) {
+			return doLightSpotLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
+		} else {
+			return 0.0F;
 		}
-		
-		return 0.0F;
 	}
 	
+//	TODO: Add Javadocs!
 	protected final int lightGetID() {
 		return this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_ID];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final int lightGetOffset() {
 		return this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_OFFSET];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void lightEvaluateRadianceEmitted() {
 		final int id = lightGetID();
 		
-		if(id == DirectionalLight.ID) {
+		if(doLightDirectionalLightIsMatchingID(id)) {
 			doLightDirectionalLightEvaluateRadianceEmitted();
-		} else if(id == PointLight.ID) {
+		} else if(doLightPointLightIsMatchingID(id)) {
 			doLightPointLightEvaluateRadianceEmitted();
+		} else if(doLightSpotLightIsMatchingID(id)) {
+			doLightSpotLightEvaluateRadianceEmitted();
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void lightPower() {
 		final int id = lightGetID();
 		
-		if(id == DirectionalLight.ID) {
+		if(doLightDirectionalLightIsMatchingID(id)) {
 			doLightDirectionalLightPower();
-		} else if(id == PointLight.ID) {
+		} else if(doLightPointLightIsMatchingID(id)) {
 			doLightPointLightPower();
+		} else if(doLightSpotLightIsMatchingID(id)) {
+			doLightSpotLightPower();
 		}
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void lightSet(final int id, final int offset) {
 		this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_ID] = id;
 		this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_OFFSET] = offset;
@@ -261,62 +289,76 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	// LightSample /////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetIncomingX() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 0];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetIncomingY() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 1];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetIncomingZ() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 2];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetPointX() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 0];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetPointY() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 1];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetPointZ() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 2];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetProbabilityDensityFunctionValue() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetResultB() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 2];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetResultG() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 1];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final float lightSampleGetResultR() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 0];
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void lightSampleSetIncoming(final float incomingX, final float incomingY, final float incomingZ) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 0] = incomingX;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 1] = incomingY;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 2] = incomingZ;
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void lightSampleSetPoint(final float pointX, final float pointY, final float pointZ) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 0] = pointX;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 1] = pointY;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 2] = pointZ;
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void lightSampleSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
 	}
 	
+//	TODO: Add Javadocs!
 	protected final void lightSampleSetResult(final float resultR, final float resultG, final float resultB) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 0] = resultR;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 1] = resultG;
@@ -326,6 +368,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Light - DirectionalLight ////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightDirectionalLightIsMatchingID(final int id) {
+		return id == DirectionalLight.ID;
+	}
 	
 	@SuppressWarnings("static-method")
 	private boolean doLightDirectionalLightIsUsingDeltaDistribution() {
@@ -420,6 +467,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("static-method")
+	private boolean doLightPointLightIsMatchingID(final int id) {
+		return id == PointLight.ID;
+	}
+	
+	@SuppressWarnings("static-method")
 	private boolean doLightPointLightIsUsingDeltaDistribution() {
 		return true;
 	}
@@ -503,6 +555,157 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float powerR = intensityR * PI_MULTIPLIED_BY_4;
 		final float powerG = intensityG * PI_MULTIPLIED_BY_4;
 		final float powerB = intensityB * PI_MULTIPLIED_BY_4;
+		
+		color3FLHSSet(powerR, powerG, powerB);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Light - SpotLight ///////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightSpotLightIsMatchingID(final int id) {
+		return id == SpotLight.ID;
+	}
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightSpotLightIsUsingDeltaDistribution() {
+		return true;
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean doLightSpotLightSampleRadianceIncoming(final float u, final float v) {
+		final float intensityR = doLightSpotLightGetIntensityR();
+		final float intensityG = doLightSpotLightGetIntensityG();
+		final float intensityB = doLightSpotLightGetIntensityB();
+		
+		final float positionX = doLightSpotLightGetPositionX();
+		final float positionY = doLightSpotLightGetPositionY();
+		final float positionZ = doLightSpotLightGetPositionZ();
+		
+		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		
+		final float incomingX = positionX - surfaceIntersectionPointX;
+		final float incomingY = positionY - surfaceIntersectionPointY;
+		final float incomingZ = positionZ - surfaceIntersectionPointZ;
+		final float incomingLengthReciprocal = vector3FLengthReciprocal(incomingX, incomingY, incomingZ);
+		final float incomingNormalizedX = incomingX * incomingLengthReciprocal;
+		final float incomingNormalizedY = incomingY * incomingLengthReciprocal;
+		final float incomingNormalizedZ = incomingZ * incomingLengthReciprocal;
+		
+		final float falloff = doLightSpotLightComputeFalloff(-incomingNormalizedX, -incomingNormalizedY, -incomingNormalizedZ);
+		
+		final float distanceSquared = point3FDistanceSquared(surfaceIntersectionPointX, surfaceIntersectionPointY, surfaceIntersectionPointZ, positionX, positionY, positionZ);
+		
+		final float probabilityDensityFunctionValue = 1.0F;
+		
+		final float resultR = intensityR * falloff / distanceSquared;
+		final float resultG = intensityG * falloff / distanceSquared;
+		final float resultB = intensityB * falloff / distanceSquared;
+		
+		lightSampleSetIncoming(incomingNormalizedX, incomingNormalizedY, incomingNormalizedZ);
+		lightSampleSetPoint(positionX, positionY, positionZ);
+		lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+		lightSampleSetResult(resultR, resultG, resultB);
+		
+		return true;
+	}
+	
+	private float doLightSpotLightComputeFalloff(final float directionX, final float directionY, final float directionZ) {
+		final int offset = lightGetOffset() + SpotLight.ARRAY_OFFSET_WORLD_TO_OBJECT;
+		
+		final float element11 = this.lightSpotLightArray[offset +  0];
+		final float element12 = this.lightSpotLightArray[offset +  1];
+		final float element13 = this.lightSpotLightArray[offset +  2];
+		final float element21 = this.lightSpotLightArray[offset +  4];
+		final float element22 = this.lightSpotLightArray[offset +  5];
+		final float element23 = this.lightSpotLightArray[offset +  6];
+		final float element31 = this.lightSpotLightArray[offset +  8];
+		final float element32 = this.lightSpotLightArray[offset +  9];
+		final float element33 = this.lightSpotLightArray[offset + 10];
+		
+		final float cosConeAngle = doLightSpotLightGetCosConeAngle();
+		final float cosConeAngleMinusConeAngleDelta = doLightSpotLightGetCosConeAngleMinusConeAngleDelta();
+		
+		final float directionObjectSpaceX = element11 * directionX + element12 * directionY + element13 * directionZ;
+		final float directionObjectSpaceY = element21 * directionX + element22 * directionY + element23 * directionZ;
+		final float directionObjectSpaceZ = element31 * directionX + element32 * directionY + element33 * directionZ;
+		final float directionObjectSpaceLengthReciprocal = vector3FLengthReciprocal(directionObjectSpaceX, directionObjectSpaceY, directionObjectSpaceZ);
+		final float directionObjectSpaceNormalizedX = directionObjectSpaceX * directionObjectSpaceLengthReciprocal;
+		final float directionObjectSpaceNormalizedY = directionObjectSpaceY * directionObjectSpaceLengthReciprocal;
+		final float directionObjectSpaceNormalizedZ = directionObjectSpaceZ * directionObjectSpaceLengthReciprocal;
+		
+		final float cosTheta = vector3FCosTheta(directionObjectSpaceNormalizedX, directionObjectSpaceNormalizedY, directionObjectSpaceNormalizedZ);
+		
+		if(cosTheta < cosConeAngle) {
+			return 0.0F;
+		}
+		
+		if(cosTheta >= cosConeAngleMinusConeAngleDelta) {
+			return 1.0F;
+		}
+		
+		final float delta = (cosTheta - cosConeAngle) / (cosConeAngleMinusConeAngleDelta - cosConeAngle);
+		
+		return (delta * delta) * (delta * delta);
+	}
+	
+	@SuppressWarnings({"static-method", "unused"})
+	private float doLightSpotLightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+		return 0.0F;
+	}
+	
+	private float doLightSpotLightGetCosConeAngle() {
+		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_COS_CONE_ANGLE];
+	}
+	
+	private float doLightSpotLightGetCosConeAngleMinusConeAngleDelta() {
+		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_COS_CONE_ANGLE_MINUS_CONE_ANGLE_DELTA];
+	}
+	
+	private float doLightSpotLightGetIntensityB() {
+		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_INTENSITY + 2];
+	}
+	
+	private float doLightSpotLightGetIntensityG() {
+		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_INTENSITY + 1];
+	}
+	
+	private float doLightSpotLightGetIntensityR() {
+		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_INTENSITY + 0];
+	}
+	
+	private float doLightSpotLightGetPositionX() {
+		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_POSITION + 0];
+	}
+	
+	private float doLightSpotLightGetPositionY() {
+		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_POSITION + 1];
+	}
+	
+	private float doLightSpotLightGetPositionZ() {
+		return this.lightSpotLightArray[lightGetOffset() + SpotLight.ARRAY_OFFSET_POSITION + 2];
+	}
+	
+	private void doLightSpotLightEvaluateRadianceEmitted() {
+		color3FLHSSet(0.0F, 0.0F, 0.0F);
+	}
+	
+	private void doLightSpotLightPower() {
+		final float intensityR = doLightSpotLightGetIntensityR();
+		final float intensityG = doLightSpotLightGetIntensityG();
+		final float intensityB = doLightSpotLightGetIntensityB();
+		
+		final float cosConeAngle = doLightSpotLightGetCosConeAngle();
+		final float cosConeAngleMinusConeAngleDelta = doLightSpotLightGetCosConeAngleMinusConeAngleDelta();
+		
+		final float scale = PI_MULTIPLIED_BY_2 * (1.0F - 0.5F * (cosConeAngleMinusConeAngleDelta + cosConeAngle));
+		
+		final float powerR = intensityR * scale;
+		final float powerG = intensityG * scale;
+		final float powerB = intensityB * scale;
 		
 		color3FLHSSet(powerR, powerG, powerB);
 	}

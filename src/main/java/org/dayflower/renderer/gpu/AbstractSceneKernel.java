@@ -42,6 +42,7 @@ import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.PointLight;
+import org.dayflower.scene.light.SpotLight;
 import org.dayflower.utility.Floats;
 
 /**
@@ -738,7 +739,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	protected final void lightSampleOneLightUniformDistribution() {
 		final int lightCountDirectionalLight = super.lightDirectionalLightCount;
 		final int lightCountPointLight = super.lightPointLightCount;
-		final int lightCount = lightCountDirectionalLight + lightCountPointLight;
+		final int lightCountSpotLight = super.lightSpotLightCount;
+		final int lightCount = lightCountDirectionalLight + lightCountPointLight + lightCountSpotLight;
 		
 		if(lightCount == 0) {
 			color3FLHSSet(0.0F, 0.0F, 0.0F);
@@ -750,8 +752,16 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		final int index = min((int)(random() * lightCount), lightCount - 1);
 		
-		final int id = index < lightCountDirectionalLight ? DirectionalLight.ID : PointLight.ID;
-		final int offset = index < lightCountDirectionalLight ? index * DirectionalLight.ARRAY_LENGTH : (index - lightCountDirectionalLight) * PointLight.ARRAY_LENGTH;
+		final boolean isDirectionalLight = index < lightCountDirectionalLight;
+		final boolean isPointLight = index >= lightCountDirectionalLight && index < lightCountDirectionalLight + lightCountPointLight;
+//		final boolean isSpotLight = index >= lightCountDirectionalLight + lightCountPointLight;
+		
+		final int offsetDirectionalLight = index * DirectionalLight.ARRAY_LENGTH;
+		final int offsetPointLight = (index - lightCountDirectionalLight) * PointLight.ARRAY_LENGTH;
+		final int offsetSpotLight = (index - lightCountDirectionalLight - lightCountPointLight) * SpotLight.ARRAY_LENGTH;
+		
+		final int id = isDirectionalLight ? DirectionalLight.ID : isPointLight ? PointLight.ID : SpotLight.ID;
+		final int offset = isDirectionalLight ? offsetDirectionalLight : isPointLight ? offsetPointLight : offsetSpotLight;
 		
 		lightSet(id, offset);
 		
@@ -937,6 +947,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
 		put(super.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());
 		put(super.lightPointLightArray = compiledScene.getLightPointLightArray());
+		put(super.lightSpotLightArray = compiledScene.getLightSpotLightArray());
 		
 		put(this.cameraArray = compiledScene.getCameraArray());
 		
@@ -947,6 +958,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		super.lightDirectionalLightCount = compiledScene.getLightDirectionalLightCount();
 		super.lightLDRImageLightCount = compiledScene.getLightLDRImageLightCount();
 		super.lightPointLightCount = compiledScene.getLightPointLightCount();
+		super.lightSpotLightCount = compiledScene.getLightSpotLightCount();
 		
 		this.primitiveCount = compiledScene.getPrimitiveCount();
 	}

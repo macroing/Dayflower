@@ -23,6 +23,7 @@ import java.util.Objects;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.PointLight;
+import org.dayflower.scene.light.SpotLight;
 
 final class CompiledScene {
 	private float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
@@ -31,6 +32,7 @@ final class CompiledScene {
 	private float[] lightDirectionalLightArray;
 	private float[] lightLDRImageLightArray;
 	private float[] lightPointLightArray;
+	private float[] lightSpotLightArray;
 	private float[] matrix44FArray;
 	private float[] shape3FCone3FArray;
 	private float[] shape3FCylinder3FArray;
@@ -71,6 +73,7 @@ final class CompiledScene {
 		setLightLDRImageLightArray(new float[1]);
 		setLightLDRImageLightOffsetArray(new int[1]);
 		setLightPointLightArray(new float[1]);
+		setLightSpotLightArray(new float[1]);
 		setMaterialClearCoatMaterialArray(new int[1]);
 		setMaterialDisneyMaterialArray(new int[1]);
 		setMaterialGlassMaterialArray(new int[1]);
@@ -125,6 +128,10 @@ final class CompiledScene {
 	
 	public float[] getLightPointLightArray() {
 		return this.lightPointLightArray;
+	}
+	
+	public float[] getLightSpotLightArray() {
+		return this.lightSpotLightArray;
 	}
 	
 	public float[] getMatrix44FArray() {
@@ -207,6 +214,10 @@ final class CompiledScene {
 		return this.lightPointLightArray.length % PointLight.ARRAY_LENGTH == 0 ? this.lightPointLightArray.length / PointLight.ARRAY_LENGTH : 0;
 	}
 	
+	public int getLightSpotLightCount() {
+		return this.lightSpotLightArray.length % SpotLight.ARRAY_LENGTH == 0 ? this.lightSpotLightArray.length / SpotLight.ARRAY_LENGTH : 0;
+	}
+	
 	public int getPrimitiveCount() {
 		return this.primitiveArray.length / Primitive.ARRAY_LENGTH;
 	}
@@ -285,6 +296,10 @@ final class CompiledScene {
 	
 	public void setLightPointLightArray(final float[] lightPointLightArray) {
 		this.lightPointLightArray = Objects.requireNonNull(lightPointLightArray, "lightPointLightArray == null");
+	}
+	
+	public void setLightSpotLightArray(final float[] lightSpotLightArray) {
+		this.lightSpotLightArray = Objects.requireNonNull(lightSpotLightArray, "lightSpotLightArray == null");
 	}
 	
 	public void setMaterialClearCoatMaterialArray(final int[] materialClearCoatMaterialArray) {

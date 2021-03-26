@@ -40,6 +40,7 @@ import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
+import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.utility.Floats;
 
@@ -735,7 +736,9 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	
 //	TODO: Add Javadocs!
 	protected final void lightSampleOneLightUniformDistribution() {
-		final int lightCount = super.lightPointLightCount;
+		final int lightCountDirectionalLight = super.lightDirectionalLightCount;
+		final int lightCountPointLight = super.lightPointLightCount;
+		final int lightCount = lightCountDirectionalLight + lightCountPointLight;
 		
 		if(lightCount == 0) {
 			color3FLHSSet(0.0F, 0.0F, 0.0F);
@@ -745,8 +748,10 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		final float probabilityDensityFunctionValue = 1.0F / lightCount;
 		
-		final int id = PointLight.ID;
-		final int offset = min((int)(random() * lightCount), lightCount - 1) * PointLight.ARRAY_LENGTH;
+		final int index = min((int)(random() * lightCount), lightCount - 1);
+		
+		final int id = index < lightCountDirectionalLight ? DirectionalLight.ID : PointLight.ID;
+		final int offset = index < lightCountDirectionalLight ? index * DirectionalLight.ARRAY_LENGTH : (index - lightCountDirectionalLight) * PointLight.ARRAY_LENGTH;
 		
 		lightSet(id, offset);
 		
@@ -928,6 +933,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.materialPlasticMaterialArray = compiledScene.getMaterialPlasticMaterialArray());
 		put(super.materialSubstrateMaterialArray = compiledScene.getMaterialSubstrateMaterialArray());
 		
+		put(super.lightDirectionalLightArray = compiledScene.getLightDirectionalLightArray());
 		put(super.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
 		put(super.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());
 		put(super.lightPointLightArray = compiledScene.getLightPointLightArray());
@@ -938,6 +944,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		put(this.primitiveArray = compiledScene.getPrimitiveArray());
 		
+		super.lightDirectionalLightCount = compiledScene.getLightDirectionalLightCount();
 		super.lightLDRImageLightCount = compiledScene.getLightLDRImageLightCount();
 		super.lightPointLightCount = compiledScene.getLightPointLightCount();
 		

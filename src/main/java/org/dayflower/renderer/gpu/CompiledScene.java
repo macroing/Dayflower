@@ -21,12 +21,14 @@ package org.dayflower.renderer.gpu;
 import java.util.Objects;
 
 import org.dayflower.scene.Primitive;
+import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.PointLight;
 
 final class CompiledScene {
 	private float[] boundingVolume3FAxisAlignedBoundingBox3FArray;
 	private float[] boundingVolume3FBoundingSphere3FArray;
 	private float[] cameraArray;
+	private float[] lightDirectionalLightArray;
 	private float[] lightLDRImageLightArray;
 	private float[] lightPointLightArray;
 	private float[] matrix44FArray;
@@ -65,6 +67,7 @@ final class CompiledScene {
 		setBoundingVolume3FAxisAlignedBoundingBox3FArray(new float[1]);
 		setBoundingVolume3FBoundingSphere3FArray(new float[1]);
 		setCameraArray(new float[1]);
+		setLightDirectionalLightArray(new float[1]);
 		setLightLDRImageLightArray(new float[1]);
 		setLightLDRImageLightOffsetArray(new int[1]);
 		setLightPointLightArray(new float[1]);
@@ -110,6 +113,10 @@ final class CompiledScene {
 	
 	public float[] getCameraArray() {
 		return this.cameraArray;
+	}
+	
+	public float[] getLightDirectionalLightArray() {
+		return this.lightDirectionalLightArray;
 	}
 	
 	public float[] getLightLDRImageLightArray() {
@@ -188,6 +195,10 @@ final class CompiledScene {
 		return this.textureSimplexFractionalBrownianMotionTextureArray;
 	}
 	
+	public int getLightDirectionalLightCount() {
+		return this.lightDirectionalLightArray.length % DirectionalLight.ARRAY_LENGTH == 0 ? this.lightDirectionalLightArray.length / DirectionalLight.ARRAY_LENGTH : 0;
+	}
+	
 	public int getLightLDRImageLightCount() {
 		return this.lightLDRImageLightArray.length % 8 == 0 ? this.lightLDRImageLightOffsetArray.length : 0;
 	}
@@ -258,6 +269,10 @@ final class CompiledScene {
 	
 	public void setCameraArray(final float[] cameraArray) {
 		this.cameraArray = Objects.requireNonNull(cameraArray, "cameraArray == null");
+	}
+	
+	public void setLightDirectionalLightArray(final float[] lightDirectionalLightArray) {
+		this.lightDirectionalLightArray = Objects.requireNonNull(lightDirectionalLightArray, "lightDirectionalLightArray == null");
 	}
 	
 	public void setLightLDRImageLightArray(final float[] lightLDRImageLightArray) {

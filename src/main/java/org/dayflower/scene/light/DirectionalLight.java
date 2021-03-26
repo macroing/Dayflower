@@ -38,12 +38,44 @@ import org.dayflower.scene.Transform;
  * <p>
  * This class is mutable and not thread-safe.
  * <p>
- * This {@code Light} implementation is not supported on the GPU.
+ * This {@code Light} implementation is supported on the GPU.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
  */
 public final class DirectionalLight extends Light {
+	/**
+	 * The name of this {@code DirectionalLight} class.
+	 */
+	public static final String NAME = "Directional Light";
+	
+	/**
+	 * The length of the {@code float[]}.
+	 */
+	public static final int ARRAY_LENGTH = 8;
+	
+	/**
+	 * The offset for the {@link Vector3F} denoted by {@code Direction} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_DIRECTION = 3;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code Radiance} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RADIANCE = 0;
+	
+	/**
+	 * The offset for the radius in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RADIUS = 6;
+	
+	/**
+	 * The ID of this {@code DirectionalLight} class.
+	 */
+	public static final int ID = 2;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Color3F radiance;
 	private final Vector3F direction;
 	private final float radius;
@@ -187,6 +219,16 @@ public final class DirectionalLight extends Light {
 	}
 	
 	/**
+	 * Returns a {@code String} with the name of this {@code DirectionalLight} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code DirectionalLight} instance
+	 */
+	@SuppressWarnings("static-method")
+	public String getName() {
+		return NAME;
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code DirectionalLight} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code DirectionalLight} instance
@@ -230,6 +272,39 @@ public final class DirectionalLight extends Light {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code DirectionalLight} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code DirectionalLight} instance
+	 */
+	public float[] toArray() {
+		final float[] array = new float[ARRAY_LENGTH];
+		
+		final Vector3F direction = Vector3F.transform(getTransform().getObjectToWorld(), this.direction);
+		
+//		Because the DirectionalLight occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_RADIANCE + 0] = this.radiance.getR();//Block #1
+		array[ARRAY_OFFSET_RADIANCE + 1] = this.radiance.getG();//Block #1
+		array[ARRAY_OFFSET_RADIANCE + 2] = this.radiance.getB();//Block #1
+		array[ARRAY_OFFSET_DIRECTION + 0] = direction.getX();	//Block #1
+		array[ARRAY_OFFSET_DIRECTION + 1] = direction.getY();	//Block #1
+		array[ARRAY_OFFSET_DIRECTION + 2] = direction.getZ();	//Block #1
+		array[ARRAY_OFFSET_RADIUS] = this.radius;				//Block #1
+		array[7] = 0.0F;										//Block #1
+		
+		return array;
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code DirectionalLight} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code DirectionalLight} instance
+	 */
+	@SuppressWarnings("static-method")
+	public int getID() {
+		return ID;
 	}
 	
 	/**

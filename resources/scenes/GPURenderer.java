@@ -35,9 +35,9 @@ Transform transformSphereH = new Transform(new Point3F(+10.0F,  1.00F, 5.0F), Qu
 Transform transformSphereI = new Transform(new Point3F(+12.5F,  1.00F, 5.0F), Quaternion4F.from(Matrix44F.rotateX(AngleF.degrees(270.0F))));
 
 scene.addLight(new DirectionalLight());
-//scene.addLight(new LDRImageLight(new PerezLight().toImage(800, 800)));
+scene.addLight(new LDRImageLight(new PerezLight().toImage(800, 800)));
 scene.addLight(new PointLight(new Color3F(50.0F), new Point3F(0.0F, 5.0F, 5.0F)));
-scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(200.0F), new Point3F(0.0F, 2.0F, -5.0F), Vector3F.z()));
+scene.addLight(new SpotLight(AngleF.degrees(50.0F), AngleF.degrees(10.0F), new Color3F(50.0F), new Point3F(0.0F, 2.0F, -5.0F), Vector3F.z()));
 scene.addPrimitive(new Primitive(materialPlane, shapePlane, transformPlane));
 scene.addPrimitive(new Primitive(materialSphereA, shapeSphereA, transformSphereA));
 scene.addPrimitive(new Primitive(materialSphereB, shapeSphereB, transformSphereB));

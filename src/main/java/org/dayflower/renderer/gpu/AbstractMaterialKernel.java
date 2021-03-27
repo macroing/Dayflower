@@ -741,16 +741,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float roughness = (colorRoughnessR + colorRoughnessG + colorRoughnessB) / 3.0F;
 		final float exponent = 1.0F / (roughness * roughness);
 		
-		
-		
 		/*
 		 * BSDF:
 		 */
 		
 //		Perform world space to shade space transformations:
 		doMaterialBXDFBegin();
-		
-		
 		
 		/*
 		 * BXDF:
@@ -823,8 +819,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float resultG = colorKRG * d * f / g;
 		final float resultB = colorKRB * d * f / g;
 		
-		
-		
 		/*
 		 * BSDF:
 		 */
@@ -832,8 +826,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 //		Set the incoming direction in shade space and perform shade space to world space transformations:
 		doMaterialBXDFSetIncoming(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
 		doMaterialBXDFEnd();
-		
-		
 		
 		/*
 		 * Material:
@@ -855,8 +847,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorB = resultB * (incomingWorldSpaceDotNormalWorldSpaceAbs / probabilityDensityFunctionValue);
 		
 		color3FLHSSet(colorR, colorG, colorB);
-		
-		
 		
 		return true;
 	}

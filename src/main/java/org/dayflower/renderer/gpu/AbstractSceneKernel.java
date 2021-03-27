@@ -20,7 +20,6 @@ package org.dayflower.renderer.gpu;
 
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.geometry.Matrix44F;
@@ -38,6 +37,7 @@ import org.dayflower.geometry.shape.Torus3F;
 import org.dayflower.geometry.shape.Triangle3F;
 import org.dayflower.geometry.shape.TriangleMesh3F;
 import org.dayflower.scene.Camera;
+import org.dayflower.scene.Light;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.DirectionalLight;
@@ -58,19 +58,29 @@ import org.dayflower.utility.Floats;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractSceneKernel extends AbstractLightKernel {
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link Camera} instance.
+	 */
 	protected float[] cameraArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link Matrix44F} instances used by the {@link Primitive} instances.
+	 */
 	protected float[] matrix44FArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains X- and Y-components for the pixels.
+	 */
 	protected float[] pixelArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The {@link Primitive} count.
+	 */
 	protected int primitiveCount;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains {@link Primitive} instances.
+	 */
 	protected int[] primitiveArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +175,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			
 			boolean isIntersectingBoundingVolume = false;
 			
-//			TODO: Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
+//			Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
 			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
@@ -250,7 +260,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			
 			ray3FSetMatrix44FTransformObjectToWorld(primitiveIndex);
 			
-			intersectionTransformObjectToWorld(primitiveIndex);
+			doIntersectionTransformObjectToWorld(primitiveIndex);
 			
 			return true;
 		}
@@ -281,7 +291,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			
 			boolean isIntersectingBoundingVolume = false;
 			
-//			TODO: Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
+//			Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
 			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
@@ -460,7 +470,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			
 			boolean isIntersectingBoundingVolume = false;
 			
-//			TODO: Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
+//			Find out what causes the order of the if-statements to fail. If InfiniteBoundingVolume3F.ID is checked in the last if-statement, the plane will disappear.
 			if(boundingVolumeID == InfiniteBoundingVolume3F.ID) {
 				isIntersectingBoundingVolume = true;
 			} else if(boundingVolumeID == AxisAlignedBoundingBox3F.ID) {
@@ -521,18 +531,94 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		return getAndReturn(this.pixelArray);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the ID of the {@link Material} instance that is used by the intersected {@link Primitive} instance.
+	 * 
+	 * @return the ID of the {@code Material} instance that is used by the intersected {@code Primitive} instance
+	 */
 	protected final int primitiveGetMaterialID() {
 		return this.primitiveArray[intersectionGetPrimitiveIndex() * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_MATERIAL_ID];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the offset for the {@link Material} instance that is used by the intersected {@link Primitive} instance.
+	 * 
+	 * @return the offset for the {@code Material} instance that is used by the intersected {@code Primitive} instance
+	 */
 	protected final int primitiveGetMaterialOffset() {
 		return this.primitiveArray[intersectionGetPrimitiveIndex() * Primitive.ARRAY_LENGTH + Primitive.ARRAY_OFFSET_MATERIAL_OFFSET];
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void intersectionTransform(final int matrix44FArrayOffsetMatrix, final int matrix44FArrayOffsetMatrixInverse) {
+	/**
+	 * Samples one {@link Light} instance using a uniform distribution.
+	 * <p>
+	 * The result will be set using {@link #color3FLHSSet(float, float, float)}.
+	 * <p>
+	 * To retrieve the color components of the result, the methods {@link #color3FLHSGetComponent1()}, {@link #color3FLHSGetComponent2()} or {@link #color3FLHSGetComponent3()} may be used.
+	 */
+	protected final void lightSampleOneLightUniformDistribution() {
+		final int lightCountDirectionalLight = super.lightDirectionalLightCount;
+		final int lightCountPointLight = super.lightPointLightCount;
+		final int lightCountSpotLight = super.lightSpotLightCount;
+		final int lightCount = lightCountDirectionalLight + lightCountPointLight + lightCountSpotLight;
+		
+		if(lightCount == 0) {
+			color3FLHSSet(0.0F, 0.0F, 0.0F);
+			
+			return;
+		}
+		
+		final float probabilityDensityFunctionValue = 1.0F / lightCount;
+		
+		final int index = min((int)(random() * lightCount), lightCount - 1);
+		
+		final boolean isDirectionalLight = index < lightCountDirectionalLight;
+		final boolean isPointLight = index >= lightCountDirectionalLight && index < lightCountDirectionalLight + lightCountPointLight;
+//		final boolean isSpotLight = index >= lightCountDirectionalLight + lightCountPointLight;
+		
+		final int offsetDirectionalLight = index * DirectionalLight.ARRAY_LENGTH;
+		final int offsetPointLight = (index - lightCountDirectionalLight) * PointLight.ARRAY_LENGTH;
+		final int offsetSpotLight = (index - lightCountDirectionalLight - lightCountPointLight) * SpotLight.ARRAY_LENGTH;
+		
+		final int id = isDirectionalLight ? DirectionalLight.ID : isPointLight ? PointLight.ID : SpotLight.ID;
+		final int offset = isDirectionalLight ? offsetDirectionalLight : isPointLight ? offsetPointLight : offsetSpotLight;
+		
+		lightSet(id, offset);
+		
+		doLightEstimateDirectLight(random(), random(), random(), random(), false);
+		
+		final float lightR = finiteOrZero(color3FLHSGetComponent1() / probabilityDensityFunctionValue);
+		final float lightG = finiteOrZero(color3FLHSGetComponent2() / probabilityDensityFunctionValue);
+		final float lightB = finiteOrZero(color3FLHSGetComponent3() / probabilityDensityFunctionValue);
+		
+		color3FLHSSet(lightR, lightG, lightB);
+	}
+	
+	/**
+	 * Sets a ray in {@link #ray3FArray_$private$8}.
+	 * <p>
+	 * The ray is constructed by transforming the current ray in {@code ray3FArray_$private$8} with the object-to-world matrix of the primitive at index {@code primitiveIndex}.
+	 * 
+	 * @param primitiveIndex the index of the primitive
+	 */
+	protected final void ray3FSetMatrix44FTransformObjectToWorld(final int primitiveIndex) {
+		doRay3FSetMatrix44FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
+	}
+	
+	/**
+	 * Sets a ray in {@link #ray3FArray_$private$8}.
+	 * <p>
+	 * The ray is constructed by transforming the current ray in {@code ray3FArray_$private$8} with the world-to-object matrix of the primitive at index {@code primitiveIndex}.
+	 * 
+	 * @param primitiveIndex the index of the primitive
+	 */
+	protected final void ray3FSetMatrix44FTransformWorldToObject(final int primitiveIndex) {
+		doRay3FSetMatrix44FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void doIntersectionTransform(final int matrix44FArrayOffsetMatrix, final int matrix44FArrayOffsetMatrixInverse) {
 //		Retrieve the matrix elements:
 		final float matrixElement11 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_1];
 		final float matrixElement12 = this.matrix44FArray[matrix44FArrayOffsetMatrix + Matrix44F.ARRAY_OFFSET_ELEMENT_1_2];
@@ -647,18 +733,17 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		intersectionSetSurfaceIntersectionPoint(newSurfaceIntersectionPointX, newSurfaceIntersectionPointY, newSurfaceIntersectionPointZ);
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void intersectionTransformObjectToWorld(final int primitiveIndex) {
-		intersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2, primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
+	private void doIntersectionTransformObjectToWorld(final int primitiveIndex) {
+		doIntersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2, primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void intersectionTransformWorldToObject(final int primitiveIndex) {
-		intersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
+	@SuppressWarnings("unused")
+	private void doIntersectionTransformWorldToObject(final int primitiveIndex) {
+		doIntersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void lightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
+	@SuppressWarnings("unused")
+	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
 		float lightDirectR = 0.0F;
 		float lightDirectG = 0.0F;
 		float lightDirectB = 0.0F;
@@ -734,69 +819,6 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		color3FLHSSet(lightDirectR, lightDirectG, lightDirectB);
 	}
-	
-//	TODO: Add Javadocs!
-	protected final void lightSampleOneLightUniformDistribution() {
-		final int lightCountDirectionalLight = super.lightDirectionalLightCount;
-		final int lightCountPointLight = super.lightPointLightCount;
-		final int lightCountSpotLight = super.lightSpotLightCount;
-		final int lightCount = lightCountDirectionalLight + lightCountPointLight + lightCountSpotLight;
-		
-		if(lightCount == 0) {
-			color3FLHSSet(0.0F, 0.0F, 0.0F);
-			
-			return;
-		}
-		
-		final float probabilityDensityFunctionValue = 1.0F / lightCount;
-		
-		final int index = min((int)(random() * lightCount), lightCount - 1);
-		
-		final boolean isDirectionalLight = index < lightCountDirectionalLight;
-		final boolean isPointLight = index >= lightCountDirectionalLight && index < lightCountDirectionalLight + lightCountPointLight;
-//		final boolean isSpotLight = index >= lightCountDirectionalLight + lightCountPointLight;
-		
-		final int offsetDirectionalLight = index * DirectionalLight.ARRAY_LENGTH;
-		final int offsetPointLight = (index - lightCountDirectionalLight) * PointLight.ARRAY_LENGTH;
-		final int offsetSpotLight = (index - lightCountDirectionalLight - lightCountPointLight) * SpotLight.ARRAY_LENGTH;
-		
-		final int id = isDirectionalLight ? DirectionalLight.ID : isPointLight ? PointLight.ID : SpotLight.ID;
-		final int offset = isDirectionalLight ? offsetDirectionalLight : isPointLight ? offsetPointLight : offsetSpotLight;
-		
-		lightSet(id, offset);
-		
-		lightEstimateDirectLight(random(), random(), random(), random(), false);
-		
-		final float lightR = finiteOrZero(color3FLHSGetComponent1() / probabilityDensityFunctionValue);
-		final float lightG = finiteOrZero(color3FLHSGetComponent2() / probabilityDensityFunctionValue);
-		final float lightB = finiteOrZero(color3FLHSGetComponent3() / probabilityDensityFunctionValue);
-		
-		color3FLHSSet(lightR, lightG, lightB);
-	}
-	
-	/**
-	 * Sets a ray in {@link #ray3FArray_$private$8}.
-	 * <p>
-	 * The ray is constructed by transforming the current ray in {@code ray3FArray_$private$8} with the object-to-world matrix of the primitive at index {@code primitiveIndex}.
-	 * 
-	 * @param primitiveIndex the index of the primitive
-	 */
-	protected final void ray3FSetMatrix44FTransformObjectToWorld(final int primitiveIndex) {
-		doRay3FSetMatrix44FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
-	}
-	
-	/**
-	 * Sets a ray in {@link #ray3FArray_$private$8}.
-	 * <p>
-	 * The ray is constructed by transforming the current ray in {@code ray3FArray_$private$8} with the world-to-object matrix of the primitive at index {@code primitiveIndex}.
-	 * 
-	 * @param primitiveIndex the index of the primitive
-	 */
-	protected final void ray3FSetMatrix44FTransformWorldToObject(final int primitiveIndex) {
-		doRay3FSetMatrix44FTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private void doRay3FSetMatrix44FTransform(final int matrix44FArrayOffset) {
 //		Retrieve the matrix elements:

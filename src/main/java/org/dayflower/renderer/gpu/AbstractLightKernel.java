@@ -23,8 +23,8 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
 
-import java.lang.reflect.Field;
-
+import org.dayflower.scene.Light;
+import org.dayflower.scene.LightSample;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.LDRImageLight;
 import org.dayflower.scene.light.PointLight;
@@ -54,37 +54,59 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link DirectionalLight} instances.
+	 */
 	protected float[] lightDirectionalLightArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link LDRImageLight} instances.
+	 */
 	protected float[] lightLDRImageLightArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link PointLight} instances.
+	 */
 	protected float[] lightPointLightArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains a {@link LightSample} instance.
+	 */
 	protected float[] lightSampleArray_$private$10;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * A {@code float[]} that contains {@link SpotLight} instances.
+	 */
 	protected float[] lightSpotLightArray;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The {@link DirectionalLight} count.
+	 */
 	protected int lightDirectionalLightCount;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The {@link LDRImageLight} count.
+	 */
 	protected int lightLDRImageLightCount;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The {@link PointLight} count.
+	 */
 	protected int lightPointLightCount;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * The {@link SpotLight} count.
+	 */
 	protected int lightSpotLightCount;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains the ID and offset for the current {@link Light} instance.
+	 */
 	protected int[] lightArray_$private$2;
 	
-//	TODO: Add Javadocs!
+	/**
+	 * An {@code int[]} that contains an offset lookup table for {@link LDRImageLight} instances in {@link #lightLDRImageLightArray}.
+	 */
 	protected int[] lightLDRImageLightOffsetArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +130,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the radiance emitted for a random {@link LDRImageLight} instance.
+	 * <p>
+	 * This method is used by the old lighting system and may be removed in the future.
+	 */
 	protected final void lightEvaluateRadianceEmittedAny() {
 		doLightEvaluateRadianceEmittedClear();
 		doLightEvaluateRadianceEmittedAnyLDRImageLight();
@@ -198,7 +224,13 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	// Light ///////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the current {@link Light} instance is using a delta distribution, {@code false} otherwise.
+	 * <p>
+	 * This method assumes the method {@link #lightSet(int, int)} has been called.
+	 * 
+	 * @return {@code true} if, and only if, the current {@code Light} instance is using a delta distribution, {@code false} otherwise
+	 */
 	protected final boolean lightIsUsingDeltaDistribution() {
 		final int id = lightGetID();
 		
@@ -213,7 +245,27 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples the incoming radiance using the current {@link Light} instance.
+	 * <p>
+	 * Returns {@code true} if, and only if, a sample was created, {@code false} otherwise.
+	 * <p>
+	 * This method assumes the method {@link #lightSet(int, int)} has been called.
+	 * <p>
+	 * If this method returns {@code true}, a sample will be filled in {@link #lightSampleArray_$private$10}.
+	 * <p>
+	 * To retrieve the incoming direction of the sample, the methods {@link #lightSampleGetIncomingX()}, {@link #lightSampleGetIncomingY()} and {@link #lightSampleGetIncomingZ()} may be used.
+	 * <p>
+	 * To retrieve the point of the sample, the methods {@link #lightSampleGetPointX()}, {@link #lightSampleGetPointY()} and {@link #lightSampleGetPointZ()} may be used.
+	 * <p>
+	 * To retrieve the probability density function (PDF) value, the method {@link #lightSampleGetProbabilityDensityFunctionValue()} may be used.
+	 * <p>
+	 * To retrieve the result of the sample, the methods {@link #lightSampleGetResultR()}, {@link #lightSampleGetResultG()} and {@link #lightSampleGetResultB()} may be used.
+	 * 
+	 * @param u the U-component of the sample
+	 * @param v the V-component of the sample
+	 * @return {@code true} if, and only if, a sample was created, {@code false} otherwise
+	 */
 	protected final boolean lightSampleRadianceIncoming(final float u, final float v) {
 		final int id = lightGetID();
 		
@@ -228,7 +280,18 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the probability density function (PDF) for the incoming radiance using the current {@link Light} instance.
+	 * <p>
+	 * Returns the probability density function (PDF) value.
+	 * <p>
+	 * This method assumes the method {@link #lightSet(int, int)} has been called.
+	 * 
+	 * @param incomingX the X-component of the incoming direction in world space
+	 * @param incomingY the Y-component of the incoming direction in world space
+	 * @param incomingZ the Z-component of the incoming direction in world space
+	 * @return the probability density function (PDF) value
+	 */
 	protected final float lightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
 		final int id = lightGetID();
 		
@@ -243,17 +306,37 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the ID of the current {@link Light} instance.
+	 * <p>
+	 * This method assumes the method {@link #lightSet(int, int)} has been called.
+	 * 
+	 * @return the ID of the current {@code Light} instance
+	 */
 	protected final int lightGetID() {
 		return this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_ID];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the offset for the current {@link Light} instance.
+	 * <p>
+	 * This method assumes the method {@link #lightSet(int, int)} has been called.
+	 * 
+	 * @return the offset for the current {@code Light} instance
+	 */
 	protected final int lightGetOffset() {
 		return this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_OFFSET];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Evaluates the radiance emitted along the current ray using the current {@link Light} instance.
+	 * <p>
+	 * This method assumes the method {@link #lightSet(int, int)} has been called and that the array {@link AbstractGeometryKernel#ray3FArray_$private$8 ray3FArray_$private$8} contains a ray.
+	 * <p>
+	 * The result will be set using {@link #color3FLHSSet(float, float, float)}.
+	 * <p>
+	 * To retrieve the color components of the result, the methods {@link #color3FLHSGetComponent1()}, {@link #color3FLHSGetComponent2()} or {@link #color3FLHSGetComponent3()} may be used.
+	 */
 	protected final void lightEvaluateRadianceEmitted() {
 		final int id = lightGetID();
 		
@@ -266,7 +349,15 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Computes the power of the current {@link Light} instance.
+	 * <p>
+	 * This method assumes the method {@link #lightSet(int, int)} has been called.
+	 * <p>
+	 * The result will be set using {@link #color3FLHSSet(float, float, float)}.
+	 * <p>
+	 * To retrieve the color components of the result, the methods {@link #color3FLHSGetComponent1()}, {@link #color3FLHSGetComponent2()} or {@link #color3FLHSGetComponent3()} may be used.
+	 */
 	protected final void lightPower() {
 		final int id = lightGetID();
 		
@@ -279,7 +370,12 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		}
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the current {@link Light} instance.
+	 * 
+	 * @param id the ID of the current {@code Light} instance
+	 * @param offset the offset for the current {@code Light} instance
+	 */
 	protected final void lightSet(final int id, final int offset) {
 		this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_ID] = id;
 		this.lightArray_$private$2[LIGHT_ARRAY_OFFSET_OFFSET] = offset;
@@ -289,76 +385,138 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	// LightSample /////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the X-component of the incoming direction in the current {@link LightSample} instance.
+	 * 
+	 * @return the X-component of the incoming direction in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetIncomingX() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the Y-component of the incoming direction in the current {@link LightSample} instance.
+	 * 
+	 * @return the Y-component of the incoming direction in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetIncomingY() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the Z-component of the incoming direction in the current {@link LightSample} instance.
+	 * 
+	 * @return the Z-component of the incoming direction in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetIncomingZ() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the X-component of the point in the current {@link LightSample} instance.
+	 * 
+	 * @return the X-component of the point in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetPointX() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the Y-component of the point in the current {@link LightSample} instance.
+	 * 
+	 * @return the Y-component of the point in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetPointY() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the Z-component of the point in the current {@link LightSample} instance.
+	 * 
+	 * @return the Z-component of the point in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetPointZ() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the probability density function (PDF) value in the current {@link LightSample} instance.
+	 * 
+	 * @return the probability density function (PDF) value in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetProbabilityDensityFunctionValue() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the B-component of the color result in the current {@link LightSample} instance.
+	 * 
+	 * @return the B-component of the color result in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetResultB() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 2];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the G-component of the color result in the current {@link LightSample} instance.
+	 * 
+	 * @return the G-component of the color result in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetResultG() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 1];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the R-component of the color result in the current {@link LightSample} instance.
+	 * 
+	 * @return the R-component of the color result in the current {@code LightSample} instance
+	 */
 	protected final float lightSampleGetResultR() {
 		return this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 0];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the incoming direction in the current {@link LightSample} instance.
+	 * 
+	 * @param incomingX the X-component of the incoming direction in world space
+	 * @param incomingY the Y-component of the incoming direction in world space
+	 * @param incomingZ the Z-component of the incoming direction in world space
+	 */
 	protected final void lightSampleSetIncoming(final float incomingX, final float incomingY, final float incomingZ) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 0] = incomingX;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 1] = incomingY;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_INCOMING + 2] = incomingZ;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the point in the current {@link LightSample} instance.
+	 * 
+	 * @param pointX the X-component of the point
+	 * @param pointY the Y-component of the point
+	 * @param pointZ the Z-component of the point
+	 */
 	protected final void lightSampleSetPoint(final float pointX, final float pointY, final float pointZ) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 0] = pointX;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 1] = pointY;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_POINT + 2] = pointZ;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the probability density function (PDF) value in the current {@link LightSample} instance.
+	 * 
+	 * @param probabilityDensityFunctionValue the probability density function (PDF) value
+	 */
 	protected final void lightSampleSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_PROBABILITY_DENSITY_FUNCTION_VALUE] = probabilityDensityFunctionValue;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Sets the color result in the current {@link LightSample} instance.
+	 * 
+	 * @param resultR the R-component of the color result
+	 * @param resultG the G-component of the color result
+	 * @param resultB the B-component of the color result
+	 */
 	protected final void lightSampleSetResult(final float resultR, final float resultG, final float resultB) {
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 0] = resultR;
 		this.lightSampleArray_$private$10[LIGHT_SAMPLE_ARRAY_OFFSET_RESULT + 1] = resultG;

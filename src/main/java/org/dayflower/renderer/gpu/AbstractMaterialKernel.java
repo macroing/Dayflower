@@ -23,8 +23,6 @@ import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
-import java.lang.reflect.Field;
-
 import org.dayflower.scene.BSDF;
 import org.dayflower.scene.BSDFResult;
 import org.dayflower.scene.BXDF;
@@ -497,31 +495,49 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns {@code true} if, and only if, the {@link Material} instance represented by {@code materialID} is specular, {@code false} otherwise.
+	 * <p>
+	 * This method is used by the old material system and may be removed in the future.
+	 * 
+	 * @param materialID the ID of the {@code Material} instance
+	 * @return {@code true} if, and only if, the {@code Material} instance represented by {@code materialID} is specular, {@code false} otherwise
+	 */
 	@SuppressWarnings("static-method")
 	protected final boolean materialIsSpecular(final int materialID) {
 		return materialID == GlassMaterial.ID || materialID == MirrorMaterial.ID;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Samples the distribution function.
+	 * <p>
+	 * Returns {@code true} if, and only if, a sample was created, {@code false} otherwise.
+	 * <p>
+	 * This method is used by the old material system and may be removed in the future.
+	 * 
+	 * @param materialID the ID of the {@link Material} instance
+	 * @param materialOffset the offset for the {@code Material} instance
+	 * @return {@code true} if, and only if, a sample was created, {@code false} otherwise
+	 */
 	protected final boolean materialSampleDistributionFunction(final int materialID, final int materialOffset) {
 		if(materialID == ClearCoatMaterial.ID) {
-			return materialSampleDistributionFunctionClearCoatMaterial(materialOffset);
+			return doMaterialSampleDistributionFunctionClearCoatMaterial(materialOffset);
 		} else if(materialID == GlassMaterial.ID) {
-			return materialSampleDistributionFunctionGlassMaterial(materialOffset);
+			return doMaterialSampleDistributionFunctionGlassMaterial(materialOffset);
 		} else if(materialID == GlossyMaterial.ID) {
-			return materialSampleDistributionFunctionGlossyMaterial(materialOffset);
+			return doMaterialSampleDistributionFunctionGlossyMaterial(materialOffset);
 		} else if(materialID == MatteMaterial.ID) {
-			return materialSampleDistributionFunctionMatteMaterial(materialOffset);
+			return doMaterialSampleDistributionFunctionMatteMaterial(materialOffset);
 		} else if(materialID == MirrorMaterial.ID) {
-			return materialSampleDistributionFunctionMirrorMaterial(materialOffset);
+			return doMaterialSampleDistributionFunctionMirrorMaterial(materialOffset);
 		} else {
 			return false;
 		}
 	}
 	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionClearCoatMaterial(final int materialClearCoatMaterialArrayOffset) {
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean doMaterialSampleDistributionFunctionClearCoatMaterial(final int materialClearCoatMaterialArrayOffset) {
 		final int textureKD = this.materialClearCoatMaterialArray[materialClearCoatMaterialArrayOffset + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_D];
 		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
 		final int textureKDOffset = textureKD & 0xFFFF;
@@ -603,8 +619,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return true;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionGlassMaterial(final int materialGlassMaterialArrayOffset) {
+	private boolean doMaterialSampleDistributionFunctionGlassMaterial(final int materialGlassMaterialArrayOffset) {
 		final int textureEta = this.materialGlassMaterialArray[materialGlassMaterialArrayOffset + GlassMaterial.ARRAY_OFFSET_TEXTURE_ETA];
 		final int textureEtaID = (textureEta >>> 16) & 0xFFFF;
 		final int textureEtaOffset = textureEta & 0xFFFF;
@@ -693,8 +708,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return true;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionGlossyMaterial(final int materialGlossyMaterialArrayOffset) {
+	private boolean doMaterialSampleDistributionFunctionGlossyMaterial(final int materialGlossyMaterialArrayOffset) {
 		/*
 		 * Material:
 		 */
@@ -734,7 +748,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Perform world space to shade space transformations:
-		materialBXDFBegin();
+		doMaterialBXDFBegin();
 		
 		
 		
@@ -816,8 +830,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		 */
 		
 //		Set the incoming direction in shade space and perform shade space to world space transformations:
-		materialBXDFSetIncoming(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
-		materialBXDFEnd();
+		doMaterialBXDFSetIncoming(incomingShadeSpaceX, incomingShadeSpaceY, incomingShadeSpaceZ);
+		doMaterialBXDFEnd();
 		
 		
 		
@@ -847,8 +861,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return true;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionMatteMaterial(final int materialMatteMaterialArrayOffset) {
+	private boolean doMaterialSampleDistributionFunctionMatteMaterial(final int materialMatteMaterialArrayOffset) {
 		final int textureKD = this.materialMatteMaterialArray[materialMatteMaterialArrayOffset + MatteMaterial.ARRAY_OFFSET_TEXTURE_K_D];
 		final int textureKDID = (textureKD >>> 16) & 0xFFFF;
 		final int textureKDOffset = textureKD & 0xFFFF;
@@ -875,8 +888,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return true;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final boolean materialSampleDistributionFunctionMirrorMaterial(final int materialMirrorMaterialArrayOffset) {
+	private boolean doMaterialSampleDistributionFunctionMirrorMaterial(final int materialMirrorMaterialArrayOffset) {
 		final int textureKR = this.materialMirrorMaterialArray[materialMirrorMaterialArrayOffset + MirrorMaterial.ARRAY_OFFSET_TEXTURE_K_R];
 		final int textureKRID = (textureKR >>> 16) & 0xFFFF;
 		final int textureKROffset = textureKR & 0xFFFF;
@@ -902,8 +914,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		return true;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFBegin() {
+	private void doMaterialBXDFBegin() {
 //		Initialize the orthonormal basis:
 		orthonormalBasis33FSetIntersectionOrthonormalBasisS();
 		
@@ -939,12 +950,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalShadeSpaceZ = vector3FGetComponent3();
 		
 //		Set the values:
-		materialBXDFSetNormal(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ);
-		materialBXDFSetOutgoing(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ);
+		doMaterialBXDFSetNormal(normalShadeSpaceX, normalShadeSpaceY, normalShadeSpaceZ);
+		doMaterialBXDFSetOutgoing(outgoingShadeSpaceX, outgoingShadeSpaceY, outgoingShadeSpaceZ);
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFEnd() {
+	private void doMaterialBXDFEnd() {
 //		Retrieve the incoming direction in shade space:
 		final float incomingShadeSpaceX = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0];
 		final float incomingShadeSpaceY = this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1];
@@ -962,22 +972,19 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		vector3FSet(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFSetIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+	private void doMaterialBXDFSetIncoming(final float incomingX, final float incomingY, final float incomingZ) {
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 0] = incomingX;
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 1] = incomingY;
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_INCOMING + 2] = incomingZ;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFSetNormal(final float normalX, final float normalY, final float normalZ) {
+	private void doMaterialBXDFSetNormal(final float normalX, final float normalY, final float normalZ) {
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 0] = normalX;
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 1] = normalY;
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_NORMAL + 2] = normalZ;
 	}
 	
-//	TODO: Add Javadocs!
-	protected final void materialBXDFSetOutgoing(final float outgoingX, final float outgoingY, final float outgoingZ) {
+	private void doMaterialBXDFSetOutgoing(final float outgoingX, final float outgoingY, final float outgoingZ) {
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 0] = outgoingX;
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 1] = outgoingY;
 		this.materialBXDFResultArray_$private$16[MATERIAL_B_X_D_F_ARRAY_OFFSET_OUTGOING + 2] = outgoingZ;

@@ -126,6 +126,24 @@ public final class GPUApplication extends Application {
 					abstractGPURenderer.clear();
 				}
 				
+				if(concurrentImageCanvas.isKeyPressed(KeyCode.E)) {
+					camera.moveDown(0.3F);
+					
+					final
+					AbstractGPURenderer abstractGPURenderer = AbstractGPURenderer.class.cast(renderer);
+					abstractGPURenderer.updateCamera();
+					abstractGPURenderer.clear();
+				}
+				
+				if(concurrentImageCanvas.isKeyPressed(KeyCode.Q)) {
+					camera.moveUp(0.3F);
+					
+					final
+					AbstractGPURenderer abstractGPURenderer = AbstractGPURenderer.class.cast(renderer);
+					abstractGPURenderer.updateCamera();
+					abstractGPURenderer.clear();
+				}
+				
 				if(concurrentImageCanvas.isKeyPressed(KeyCode.S)) {
 					camera.moveBackward(0.3F);
 					

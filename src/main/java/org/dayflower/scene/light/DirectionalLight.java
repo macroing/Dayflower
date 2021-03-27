@@ -223,7 +223,7 @@ public final class DirectionalLight extends Light {
 	 * 
 	 * @return a {@code String} with the name of this {@code DirectionalLight} instance
 	 */
-	@SuppressWarnings("static-method")
+	@Override
 	public String getName() {
 		return NAME;
 	}
@@ -302,7 +302,7 @@ public final class DirectionalLight extends Light {
 	 * 
 	 * @return an {@code int} with the ID of this {@code DirectionalLight} instance
 	 */
-	@SuppressWarnings("static-method")
+	@Override
 	public int getID() {
 		return ID;
 	}

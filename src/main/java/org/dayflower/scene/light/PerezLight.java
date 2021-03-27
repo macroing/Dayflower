@@ -70,6 +70,18 @@ import org.dayflower.scene.Transform;
  * @author J&#246;rgen Lundgren
  */
 public final class PerezLight extends Light {
+	/**
+	 * The name of this {@code PerezLight} class.
+	 */
+	public static final String NAME = "Perez Light";
+	
+	/**
+	 * The ID of this {@code PerezLight} class.
+	 */
+	public static final int ID = 4;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static final SpectralCurveF K_GAS_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
 	private static final SpectralCurveF K_OZONE_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
 	private static final SpectralCurveF K_WATER_VAPOR_ABSORPTION_ATTENUATION_SPECTRAL_CURVE;
@@ -318,6 +330,16 @@ public final class PerezLight extends Light {
 	}
 	
 	/**
+	 * Returns a {@code String} with the name of this {@code PerezLight} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code PerezLight} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code PerezLight} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code PerezLight} instance
@@ -413,6 +435,16 @@ public final class PerezLight extends Light {
 		final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample, true) / (2.0F * PI * PI * sinTheta);
 		
 		return probabilityDensityFunctionValue;
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code PerezLight} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code PerezLight} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

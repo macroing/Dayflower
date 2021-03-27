@@ -48,6 +48,18 @@ import org.dayflower.scene.Transform;
  * @author J&#246;rgen Lundgren
  */
 public final class DiffuseAreaLight extends AreaLight {
+	/**
+	 * The name of this {@code DiffuseAreaLight} class.
+	 */
+	public static final String NAME = "Diffuse Area Light";
+	
+	/**
+	 * The ID of this {@code DiffuseAreaLight} class.
+	 */
+	public static final int ID = 1;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Color3F radianceEmitted;
 	private final Shape3F shape;
 	private final boolean isTwoSided;
@@ -258,6 +270,16 @@ public final class DiffuseAreaLight extends AreaLight {
 	}
 	
 	/**
+	 * Returns a {@code String} with the name of this {@code DiffuseAreaLight} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code DiffuseAreaLight} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code DiffuseAreaLight} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code DiffuseAreaLight} instance
@@ -324,6 +346,16 @@ public final class DiffuseAreaLight extends AreaLight {
 		final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
 		
 		return this.shape.evaluateProbabilityDensityFunction(surfaceIntersectionObjectSpace, incomingObjectSpace);
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code DiffuseAreaLight} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code DiffuseAreaLight} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

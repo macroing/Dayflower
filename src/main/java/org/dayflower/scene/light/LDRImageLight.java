@@ -339,7 +339,7 @@ public final class LDRImageLight extends Light {
 	 * 
 	 * @return a {@code String} with the name of this {@code LDRImageLight} instance
 	 */
-	@SuppressWarnings("static-method")
+	@Override
 	public String getName() {
 		return NAME;
 	}
@@ -511,7 +511,7 @@ public final class LDRImageLight extends Light {
 	 * 
 	 * @return an {@code int} with the ID of this {@code LDRImageLight} instance
 	 */
-	@SuppressWarnings("static-method")
+	@Override
 	public int getID() {
 		return ID;
 	}

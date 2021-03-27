@@ -109,6 +109,13 @@ public abstract class Light implements Node {
 	}
 	
 	/**
+	 * Returns a {@code String} with the name of this {@code Light} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code Light} instance
+	 */
+	public abstract String getName();
+	
+	/**
 	 * Returns the {@link Transform} instance associated with this {@code Light} instance.
 	 * 
 	 * @return the {@code Transform} instance associated with this {@code Light} instance
@@ -145,6 +152,13 @@ public abstract class Light implements Node {
 		
 		return 0.0F;
 	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code Light} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code Light} instance
+	 */
+	public abstract int getID();
 	
 	/**
 	 * Returns the sample count associated with this {@code Light} instance.

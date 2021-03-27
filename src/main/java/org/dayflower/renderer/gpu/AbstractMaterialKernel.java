@@ -1828,23 +1828,14 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final boolean hasKT = !checkIsZero(colorKTR) || !checkIsZero(colorKTG) || !checkIsZero(colorKTB);
 		
 //		Evaluate the Eta Texture:
-		textureEvaluate(textureEtaID, textureEtaOffset);
-		
-//		Retrieve the average color from the Eta Texture:
-		final float floatEta = color3FLHSGetAverage();
+		final float floatEta = textureEvaluateFloat(textureEtaID, textureEtaOffset);
 		
 //		Evaluate the Roughness U Texture:
-		textureEvaluate(textureRoughnessUID, textureRoughnessUOffset);
-		
-//		Retrieve the average color from the Roughness U Texture:
-		final float floatRoughnessU = color3FLHSGetAverage();
+		final float floatRoughnessU = textureEvaluateFloat(textureRoughnessUID, textureRoughnessUOffset);
 		final float floatRoughnessURemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessU) : floatRoughnessU;
 		
 //		Evaluate the Roughness V Texture:
-		textureEvaluate(textureRoughnessVID, textureRoughnessVOffset);
-		
-//		Retrieve the average color from the Roughness V Texture:
-		final float floatRoughnessV = color3FLHSGetAverage();
+		final float floatRoughnessV = textureEvaluateFloat(textureRoughnessVID, textureRoughnessVOffset);
 		final float floatRoughnessVRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessV) : floatRoughnessV;
 		
 //		final boolean isAllowingMultipleLobes = true;
@@ -1951,10 +1942,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKRB = color3FLHSGetComponent3();
 		
 //		Evaluate the Roughness Texture:
-		textureEvaluate(textureRoughnessID, textureRoughnessOffset);
-		
-//		Retrieve the average color from the Roughness Texture:
-		final float floatRoughness = color3FLHSGetAverage();
+		final float floatRoughness = textureEvaluateFloat(textureRoughnessID, textureRoughnessOffset);
 		
 		/*
 		 * Compute the BSDF:
@@ -2001,10 +1989,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKDB = color3FLHSGetComponent3();
 		
 //		Evaluate the Angle Texture:
-		textureEvaluate(textureAngleID, textureAngleOffset);
-		
-//		Retrieve the average color from the Angle Texture:
-		final float floatAngle = color3FLHSGetAverage();
+		final float floatAngle = textureEvaluateFloat(textureAngleID, textureAngleOffset);
 		
 		if(checkIsZero(colorKDR) && checkIsZero(colorKDG) && checkIsZero(colorKDB)) {
 			return false;
@@ -2093,16 +2078,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float colorKB = color3FLHSGetComponent3();
 		
 //		Evaluate the Roughness U Texture:
-		textureEvaluate(textureRoughnessUID, textureRoughnessUOffset);
-		
-//		Retrieve the average color from the Roughness U Texture and remap it if necessary:
-		final float floatRoughnessU = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(color3FLHSGetAverage()) : color3FLHSGetAverage();
+		final float floatRoughnessU = textureEvaluateFloat(textureRoughnessUID, textureRoughnessUOffset);
+		final float floatRoughnessURemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessU) : floatRoughnessU;
 		
 //		Evaluate the Roughness V Texture:
-		textureEvaluate(textureRoughnessVID, textureRoughnessVOffset);
-		
-//		Retrieve the average color from the Roughness V Texture and remap it if necessary:
-		final float floatRoughnessV = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(color3FLHSGetAverage()) : color3FLHSGetAverage();
+		final float floatRoughnessV = textureEvaluateFloat(textureRoughnessVID, textureRoughnessVOffset);
+		final float floatRoughnessVRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessV) : floatRoughnessV;
 		
 		/*
 		 * Compute the BSDF:
@@ -2118,7 +2099,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		doBSDFSetBXDFTorranceSparrowBRDFFresnelConductor(0);
 		doBXDFTorranceSparrowBRDFFresnelConductorSetReflectanceScale(1.0F, 1.0F, 1.0F);
 		doBXDFTorranceSparrowBRDFFresnelConductorSetFresnelConductor(1.0F, 1.0F, 1.0F, colorEtaR, colorEtaG, colorEtaB, colorKR, colorKG, colorKB);
-		doBXDFTorranceSparrowBRDFFresnelConductorSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughnessU, floatRoughnessV);
+		doBXDFTorranceSparrowBRDFFresnelConductorSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughnessURemapped, floatRoughnessVRemapped);
 		
 //		Initialize the BSDFResult:
 		doBSDFResultInitialize();
@@ -2217,10 +2198,8 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 //		Evaluate the Roughness Texture:
-		textureEvaluate(textureRoughnessID, textureRoughnessOffset);
-		
-//		Retrieve the average color from the Roughness Texture and remap it if necessary:
-		final float floatRoughness = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(color3FLHSGetAverage()) : color3FLHSGetAverage();
+		final float floatRoughness = textureEvaluateFloat(textureRoughnessID, textureRoughnessOffset);
+		final float floatRoughnessRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughness) : floatRoughness;
 		
 		/*
 		 * Compute the BSDF:
@@ -2248,7 +2227,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			doBSDFSetBXDFTorranceSparrowBRDFFresnelDielectric(indexKS);
 			doBXDFTorranceSparrowBRDFFresnelDielectricSetReflectanceScale(colorKSR, colorKSG, colorKSB);
 			doBXDFTorranceSparrowBRDFFresnelDielectricSetFresnelDielectric(1.5F, 1.0F);
-			doBXDFTorranceSparrowBRDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughness, floatRoughness);
+			doBXDFTorranceSparrowBRDFFresnelDielectricSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughnessRemapped, floatRoughnessRemapped);
 		}
 		
 //		Initialize the BSDFResult:
@@ -2310,16 +2289,12 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 //		Evaluate the Roughness U Texture:
-		textureEvaluate(textureRoughnessUID, textureRoughnessUOffset);
-		
-//		Retrieve the average color from the Roughness U Texture and remap it if necessary:
-		final float floatRoughnessU = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(color3FLHSGetAverage()) : color3FLHSGetAverage();
+		final float floatRoughnessU = textureEvaluateFloat(textureRoughnessUID, textureRoughnessUOffset);
+		final float floatRoughnessURemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessU) : floatRoughnessU;
 		
 //		Evaluate the Roughness V Texture:
-		textureEvaluate(textureRoughnessVID, textureRoughnessVOffset);
-		
-//		Retrieve the average color from the Roughness V Texture and remap it if necessary:
-		final float floatRoughnessV = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(color3FLHSGetAverage()) : color3FLHSGetAverage();
+		final float floatRoughnessV = textureEvaluateFloat(textureRoughnessVID, textureRoughnessVOffset);
+		final float floatRoughnessVRemapped = isRemappingRoughness ? doMicrofacetDistributionTrowbridgeReitzConvertRoughnessToAlpha(floatRoughnessV) : floatRoughnessV;
 		
 		/*
 		 * Compute the BSDF:
@@ -2333,7 +2308,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 //		Set FresnelBlendBRDF:
 		doBSDFSetBXDFFresnelBlendBRDF(0);
-		doBXDFFresnelBlendBRDFSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughnessU, floatRoughnessV);
+		doBXDFFresnelBlendBRDFSetMicrofacetDistributionTrowbridgeReitz(true, false, floatRoughnessURemapped, floatRoughnessVRemapped);
 		doBXDFFresnelBlendBRDFSetReflectanceScaleDiffuse(colorKDR, colorKDG, colorKDB);
 		doBXDFFresnelBlendBRDFSetReflectanceScaleSpecular(colorKSR, colorKSG, colorKSB);
 		

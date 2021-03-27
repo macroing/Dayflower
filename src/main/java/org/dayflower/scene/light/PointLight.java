@@ -177,7 +177,7 @@ public final class PointLight extends Light {
 	 * 
 	 * @return a {@code String} with the name of this {@code PointLight} instance
 	 */
-	@SuppressWarnings("static-method")
+	@Override
 	public String getName() {
 		return NAME;
 	}
@@ -241,7 +241,7 @@ public final class PointLight extends Light {
 	 * 
 	 * @return an {@code int} with the ID of this {@code PointLight} instance
 	 */
-	@SuppressWarnings("static-method")
+	@Override
 	public int getID() {
 		return ID;
 	}

@@ -113,7 +113,7 @@ public abstract class AbstractTextureKernel extends AbstractGeometryKernel {
 	protected final float textureEvaluateFloat(final int textureID, final int textureOffset) {
 		textureEvaluate(textureID, textureOffset);
 		
-		return color3FLHSGetAverage();
+		return color3FAverage(color3FLHSGetComponent1(), color3FLHSGetComponent2(), color3FLHSGetComponent3());
 	}
 	
 	/**

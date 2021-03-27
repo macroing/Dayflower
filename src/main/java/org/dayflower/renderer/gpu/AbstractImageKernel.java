@@ -106,6 +106,24 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns the {@code byte[]} with image colors.
+	 * 
+	 * @return the {@code byte[]} with image colors
+	 */
+	public final byte[] getImageColorByteArray() {
+		return getAndReturn(this.imageColorByteArray);//TODO: Find out why this method crashes the JVM sometimes.
+	}
+	
+	/**
+	 * Returns the {@code float[]} with image colors.
+	 * 
+	 * @return the {@code float[]} with image colors
+	 */
+	public final float[] getImageColorFloatArray() {
+		return getAndReturn(this.imageColorFloatArray);
+	}
+	
+	/**
 	 * Call this method to hint to this {@code AbstractImageKernel} instance that it should clear the film before rendering to it in the next render pass.
 	 */
 	public final void filmClear() {
@@ -133,27 +151,58 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Color3F /////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Returns the {@code byte[]} with image colors.
+	 * Returns the average component value.
 	 * 
-	 * @return the {@code byte[]} with image colors
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 * @return the average component value
 	 */
-	protected final byte[] getImageColorByteArray() {
-		return getAndReturn(this.imageColorByteArray);//TODO: Find out why this method crashes the JVM sometimes.
+	@SuppressWarnings("static-method")
+	protected final float color3FAverage(final float component1, final float component2, final float component3) {
+		return (component1 + component2 + component3) / 3.0F;
 	}
 	
 	/**
-	 * Returns the average value in {@link #color3FLHSArray_$private$3}.
+	 * Returns the lightness of the color.
 	 * 
-	 * @return the average value in {@link #color3FLHSArray_$private$3}
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 * @return the lightness of the color
 	 */
-	protected final float color3FLHSGetAverage() {
-		final float component1 = color3FLHSGetComponent1();
-		final float component2 = color3FLHSGetComponent2();
-		final float component3 = color3FLHSGetComponent3();
-		
-		return (component1 + component2 + component3) / 3.0F;
+	protected final float color3FLightness(final float component1, final float component2, final float component3) {
+		return (max(component1, component2, component3) + min(component1, component2, component3)) / 2.0F;
+	}
+	
+	/**
+	 * Returns the relative luminance of the color.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 * @return the relative luminance of the color
+	 */
+	@SuppressWarnings("static-method")
+	protected final float color3FLuminance(final float component1, final float component2, final float component3) {
+		return component1 * 0.212671F + component2 * 0.715160F + component3 * 0.072169F;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Color3F - LHS ///////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the value of the B-component in {@link #color3FLHSArray_$private$3}.
+	 * 
+	 * @return the value of the B-component in {@link #color3FLHSArray_$private$3}
+	 */
+	protected final float color3FLHSGetB() {
+		return this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_3];
 	}
 	
 	/**
@@ -184,271 +233,48 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	}
 	
 	/**
-	 * Returns the value of component 1 in {@link #color3FRHSArray_$private$3}.
+	 * Returns the value of the G-component in {@link #color3FLHSArray_$private$3}.
 	 * 
-	 * @return the value of component 1 in {@link #color3FRHSArray_$private$3}
+	 * @return the value of the G-component in {@link #color3FLHSArray_$private$3}
 	 */
-	protected final float color3FRHSGetComponent1() {
-		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1];
+	protected final float color3FLHSGetG() {
+		return this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_2];
 	}
 	
 	/**
-	 * Returns the value of component 2 in {@link #color3FRHSArray_$private$3}.
+	 * Returns the value of the R-component in {@link #color3FLHSArray_$private$3}.
 	 * 
-	 * @return the value of component 2 in {@link #color3FRHSArray_$private$3}
+	 * @return the value of the R-component in {@link #color3FLHSArray_$private$3}
 	 */
-	protected final float color3FRHSGetComponent2() {
-		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2];
+	protected final float color3FLHSGetR() {
+		return this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_1];
 	}
 	
 	/**
-	 * Returns the value of component 3 in {@link #color3FRHSArray_$private$3}.
+	 * Returns the value of the X-component in {@link #color3FLHSArray_$private$3}.
 	 * 
-	 * @return the value of component 3 in {@link #color3FRHSArray_$private$3}
+	 * @return the value of the X-component in {@link #color3FLHSArray_$private$3}
 	 */
-	protected final float color3FRHSGetComponent3() {
-		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3];
+	protected final float color3FLHSGetX() {
+		return this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_1];
 	}
 	
 	/**
-	 * Returns the B-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0].
+	 * Returns the value of the Y-component in {@link #color3FLHSArray_$private$3}.
 	 * 
-	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
-	 * @return the B-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0]
+	 * @return the value of the Y-component in {@link #color3FLHSArray_$private$3}
 	 */
-	protected final float colorRGBIntToBFloat(final int colorRGB) {
-		return colorRGBIntToBInt(colorRGB) / 255.0F;
+	protected final float color3FLHSGetY() {
+		return this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_2];
 	}
 	
 	/**
-	 * Returns the G-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0].
+	 * Returns the value of the Z-component in {@link #color3FLHSArray_$private$3}.
 	 * 
-	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
-	 * @return the G-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0]
+	 * @return the value of the Z-component in {@link #color3FLHSArray_$private$3}
 	 */
-	protected final float colorRGBIntToGFloat(final int colorRGB) {
-		return colorRGBIntToGInt(colorRGB) / 255.0F;
-	}
-	
-	/**
-	 * Returns the R-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0].
-	 * 
-	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
-	 * @return the R-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0]
-	 */
-	protected final float colorRGBIntToRFloat(final int colorRGB) {
-		return colorRGBIntToRInt(colorRGB) / 255.0F;
-	}
-	
-	/**
-	 * Returns a {@code float} with the B-component of the image at the current pixel.
-	 * 
-	 * @return a {@code float} with the B-component of the image at the current pixel
-	 */
-	protected final float imageGetColorB() {
-		return this.imageColorFloatArray[getGlobalId() * 3 + 2];
-	}
-	
-	/**
-	 * Returns a {@code float} with the G-component of the image at the current pixel.
-	 * 
-	 * @return a {@code float} with the G-component of the image at the current pixel
-	 */
-	protected final float imageGetColorG() {
-		return this.imageColorFloatArray[getGlobalId() * 3 + 1];
-	}
-	
-	/**
-	 * Returns a {@code float} with the R-component of the image at the current pixel.
-	 * 
-	 * @return a {@code float} with the R-component of the image at the current pixel
-	 */
-	protected final float imageGetColorR() {
-		return this.imageColorFloatArray[getGlobalId() * 3 + 0];
-	}
-	
-	/**
-	 * Returns the {@code float[]} with image colors.
-	 * 
-	 * @return the {@code float[]} with image colors
-	 */
-	protected final float[] getImageColorFloatArray() {
-		return getAndReturn(this.imageColorFloatArray);
-	}
-	
-	/**
-	 * Returns an {@code int} representation of {@code colorB}.
-	 * <p>
-	 * If {@code colorB} is outside the interval [0.0, 1.0], it will be saturated.
-	 * 
-	 * @param colorB a {@code float} with the B-component
-	 * @return an {@code int} representation of {@code colorB}
-	 */
-	protected final int colorBFloatToBInt(final float colorB) {
-		return (int)(saturateF(colorB, 0.0F, 1.0F) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns an {@code int} representation of {@code colorG}.
-	 * <p>
-	 * If {@code colorG} is outside the interval [0.0, 1.0], it will be saturated.
-	 * 
-	 * @param colorG a {@code float} with the G-component
-	 * @return an {@code int} representation of {@code colorG}
-	 */
-	protected final int colorGFloatToGInt(final float colorG) {
-		return (int)(saturateF(colorG, 0.0F, 1.0F) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns an {@code int} representation of {@code colorR}.
-	 * <p>
-	 * If {@code colorR} is outside the interval [0.0, 1.0], it will be saturated.
-	 * 
-	 * @param colorR a {@code float} with the R-component
-	 * @return an {@code int} representation of {@code colorR}
-	 */
-	protected final int colorRFloatToRInt(final float colorR) {
-		return (int)(saturateF(colorR, 0.0F, 1.0F) * 255.0F + 0.5F);
-	}
-	
-	/**
-	 * Returns an {@code int} with the color represented by {@code colorR}, {@code colorG} and {@code colorB} in packed form using either RGB or ARGB as its order.
-	 * <p>
-	 * If either {@code colorR}, {@code colorG} or {@code colorB} are outside the interval [0.0, 1.0], they will be saturated.
-	 * 
-	 * @param colorR a {@code float} with the R-component
-	 * @param colorG a {@code float} with the G-component
-	 * @param colorB a {@code float} with the B-component
-	 * @return an {@code int} with the color represented by {@code colorR}, {@code colorG} and {@code colorB} in packed form using either RGB or ARGB as its order
-	 */
-	protected final int colorRGBFloatToRGBInt(final float colorR, final float colorG, final float colorB) {
-		return colorRGBIntToRGBInt(colorRFloatToRInt(colorR), colorGFloatToGInt(colorG), colorBFloatToBInt(colorB));
-	}
-	
-	/**
-	 * Returns an {@code int} with the color represented by {@code colorR}, {@code colorG} and {@code colorB} in packed form using either RGB or ARGB as its order.
-	 * <p>
-	 * If either {@code colorR}, {@code colorG} or {@code colorB} are outside the interval [0, 255], they will be saturated.
-	 * 
-	 * @param colorR an {@code int} with the R-component
-	 * @param colorG an {@code int} with the G-component
-	 * @param colorB an {@code int} with the B-component
-	 * @return an {@code int} with the color represented by {@code colorR}, {@code colorG} and {@code colorB} in packed form using either RGB or ARGB as its order
-	 */
-	protected final int colorRGBIntToRGBInt(final int colorR, final int colorG, final int colorB) {
-		final int colorRSaturated = saturateI(colorR, 0, 255);
-		final int colorGSaturated = saturateI(colorG, 0, 255);
-		final int colorBSaturated = saturateI(colorB, 0, 255);
-		
-		final int colorRGB = (colorRSaturated << 16) | (colorGSaturated << 8) | (colorBSaturated << 0);
-		
-		return colorRGB;
-	}
-	
-	/**
-	 * Returns the B-component of {@code colorRGB} as an {@code int} in the interval [0, 255].
-	 * 
-	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
-	 * @return the B-component of {@code colorRGB} as an {@code int} in the interval [0, 255]
-	 */
-	@SuppressWarnings("static-method")
-	protected final int colorRGBIntToBInt(final int colorRGB) {
-		return (colorRGB >>  0) & 0xFF;
-	}
-	
-	/**
-	 * Returns the G-component of {@code colorRGB} as an {@code int} in the interval [0, 255].
-	 * 
-	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
-	 * @return the G-component of {@code colorRGB} as an {@code int} in the interval [0, 255]
-	 */
-	@SuppressWarnings("static-method")
-	protected final int colorRGBIntToGInt(final int colorRGB) {
-		return (colorRGB >>  8) & 0xFF;
-	}
-	
-	/**
-	 * Returns the R-component of {@code colorRGB} as an {@code int} in the interval [0, 255].
-	 * 
-	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
-	 * @return the R-component of {@code colorRGB} as an {@code int} in the interval [0, 255]
-	 */
-	@SuppressWarnings("static-method")
-	protected final int colorRGBIntToRInt(final int colorRGB) {
-		return (colorRGB >> 16) & 0xFF;
-	}
-	
-	/**
-	 * Returns the resolution along the X-axis of the film.
-	 * 
-	 * @return the resolution along the X-axis of the film
-	 */
-	protected final int filmGetResolutionX() {
-		return super.resolutionX;
-	}
-	
-	/**
-	 * Returns the resolution along the Y-axis of the film.
-	 * 
-	 * @return the resolution along the Y-axis of the film
-	 */
-	protected final int filmGetResolutionY() {
-		return super.resolutionY;
-	}
-	
-	/**
-	 * Returns the X-coordinate of the film.
-	 * 
-	 * @return the X-coordinate of the film
-	 */
-	protected final int filmGetX() {
-		return getGlobalId() % super.resolutionX;
-	}
-	
-	/**
-	 * Returns the Y-coordinate of the film.
-	 * 
-	 * @return the Y-coordinate of the film
-	 */
-	protected final int filmGetY() {
-		return getGlobalId() / super.resolutionX;
-	}
-	
-	/**
-	 * Returns the resolution along the X-axis of the image.
-	 * 
-	 * @return the resolution along the X-axis of the image
-	 */
-	protected final int imageGetResolutionX() {
-		return super.resolutionX;
-	}
-	
-	/**
-	 * Returns the resolution along the Y-axis of the image.
-	 * 
-	 * @return the resolution along the Y-axis of the image
-	 */
-	protected final int imageGetResolutionY() {
-		return super.resolutionY;
-	}
-	
-	/**
-	 * Returns the X-coordinate of the image.
-	 * 
-	 * @return the X-coordinate of the image
-	 */
-	protected final int imageGetX() {
-		return getGlobalId() % super.resolutionX;
-	}
-	
-	/**
-	 * Returns the Y-coordinate of the image.
-	 * 
-	 * @return the Y-coordinate of the image
-	 */
-	protected final int imageGetY() {
-		return getGlobalId() / super.resolutionX;
+	protected final float color3FLHSGetZ() {
+		return this.color3FLHSArray_$private$3[COLOR_3_F_L_H_S_ARRAY_OFFSET_COMPONENT_3];
 	}
 	
 	/**
@@ -575,6 +401,91 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		color3FLHSSet(component1, component2, component3);
 	}
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Color3F - RHS ///////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the value of the B-component in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of the B-component in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetB() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3];
+	}
+	
+	/**
+	 * Returns the value of component 1 in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of component 1 in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetComponent1() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1];
+	}
+	
+	/**
+	 * Returns the value of component 2 in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of component 2 in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetComponent2() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2];
+	}
+	
+	/**
+	 * Returns the value of component 3 in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of component 3 in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetComponent3() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3];
+	}
+	
+	/**
+	 * Returns the value of the G-component in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of the G-component in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetG() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2];
+	}
+	
+	/**
+	 * Returns the value of the R-component in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of the R-component in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetR() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1];
+	}
+	
+	/**
+	 * Returns the value of the X-component in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of the X-component in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetX() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_1];
+	}
+	
+	/**
+	 * Returns the value of the Y-component in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of the Y-component in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetY() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_2];
+	}
+	
+	/**
+	 * Returns the value of the Z-component in {@link #color3FRHSArray_$private$3}.
+	 * 
+	 * @return the value of the Z-component in {@link #color3FRHSArray_$private$3}
+	 */
+	protected final float color3FRHSGetZ() {
+		return this.color3FRHSArray_$private$3[COLOR_3_F_R_H_S_ARRAY_OFFSET_COMPONENT_3];
+	}
+	
 	/**
 	 * Sets a color in {@link #color3FRHSArray_$private$3}.
 	 * <p>
@@ -699,6 +610,183 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		color3FRHSSet(component1, component2, component3);
 	}
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Color3F - Utility ///////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the B-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0].
+	 * 
+	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
+	 * @return the B-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0]
+	 */
+	protected final float colorRGBIntToBFloat(final int colorRGB) {
+		return colorRGBIntToBInt(colorRGB) / 255.0F;
+	}
+	
+	/**
+	 * Returns the G-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0].
+	 * 
+	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
+	 * @return the G-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0]
+	 */
+	protected final float colorRGBIntToGFloat(final int colorRGB) {
+		return colorRGBIntToGInt(colorRGB) / 255.0F;
+	}
+	
+	/**
+	 * Returns the R-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0].
+	 * 
+	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
+	 * @return the R-component of {@code colorRGB} as a {@code float} in the interval [0.0, 1.0]
+	 */
+	protected final float colorRGBIntToRFloat(final int colorRGB) {
+		return colorRGBIntToRInt(colorRGB) / 255.0F;
+	}
+	
+	/**
+	 * Returns an {@code int} representation of {@code colorB}.
+	 * <p>
+	 * If {@code colorB} is outside the interval [0.0, 1.0], it will be saturated.
+	 * 
+	 * @param colorB a {@code float} with the B-component
+	 * @return an {@code int} representation of {@code colorB}
+	 */
+	protected final int colorBFloatToBInt(final float colorB) {
+		return (int)(saturateF(colorB, 0.0F, 1.0F) * 255.0F + 0.5F);
+	}
+	
+	/**
+	 * Returns an {@code int} representation of {@code colorG}.
+	 * <p>
+	 * If {@code colorG} is outside the interval [0.0, 1.0], it will be saturated.
+	 * 
+	 * @param colorG a {@code float} with the G-component
+	 * @return an {@code int} representation of {@code colorG}
+	 */
+	protected final int colorGFloatToGInt(final float colorG) {
+		return (int)(saturateF(colorG, 0.0F, 1.0F) * 255.0F + 0.5F);
+	}
+	
+	/**
+	 * Returns an {@code int} representation of {@code colorR}.
+	 * <p>
+	 * If {@code colorR} is outside the interval [0.0, 1.0], it will be saturated.
+	 * 
+	 * @param colorR a {@code float} with the R-component
+	 * @return an {@code int} representation of {@code colorR}
+	 */
+	protected final int colorRFloatToRInt(final float colorR) {
+		return (int)(saturateF(colorR, 0.0F, 1.0F) * 255.0F + 0.5F);
+	}
+	
+	/**
+	 * Returns an {@code int} with the color represented by {@code colorR}, {@code colorG} and {@code colorB} in packed form using either RGB or ARGB as its order.
+	 * <p>
+	 * If either {@code colorR}, {@code colorG} or {@code colorB} are outside the interval [0.0, 1.0], they will be saturated.
+	 * 
+	 * @param colorR a {@code float} with the R-component
+	 * @param colorG a {@code float} with the G-component
+	 * @param colorB a {@code float} with the B-component
+	 * @return an {@code int} with the color represented by {@code colorR}, {@code colorG} and {@code colorB} in packed form using either RGB or ARGB as its order
+	 */
+	protected final int colorRGBFloatToRGBInt(final float colorR, final float colorG, final float colorB) {
+		return colorRGBIntToRGBInt(colorRFloatToRInt(colorR), colorGFloatToGInt(colorG), colorBFloatToBInt(colorB));
+	}
+	
+	/**
+	 * Returns an {@code int} with the color represented by {@code colorR}, {@code colorG} and {@code colorB} in packed form using either RGB or ARGB as its order.
+	 * <p>
+	 * If either {@code colorR}, {@code colorG} or {@code colorB} are outside the interval [0, 255], they will be saturated.
+	 * 
+	 * @param colorR an {@code int} with the R-component
+	 * @param colorG an {@code int} with the G-component
+	 * @param colorB an {@code int} with the B-component
+	 * @return an {@code int} with the color represented by {@code colorR}, {@code colorG} and {@code colorB} in packed form using either RGB or ARGB as its order
+	 */
+	protected final int colorRGBIntToRGBInt(final int colorR, final int colorG, final int colorB) {
+		final int colorRSaturated = saturateI(colorR, 0, 255);
+		final int colorGSaturated = saturateI(colorG, 0, 255);
+		final int colorBSaturated = saturateI(colorB, 0, 255);
+		
+		final int colorRGB = (colorRSaturated << 16) | (colorGSaturated << 8) | (colorBSaturated << 0);
+		
+		return colorRGB;
+	}
+	
+	/**
+	 * Returns the B-component of {@code colorRGB} as an {@code int} in the interval [0, 255].
+	 * 
+	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
+	 * @return the B-component of {@code colorRGB} as an {@code int} in the interval [0, 255]
+	 */
+	@SuppressWarnings("static-method")
+	protected final int colorRGBIntToBInt(final int colorRGB) {
+		return (colorRGB >>  0) & 0xFF;
+	}
+	
+	/**
+	 * Returns the G-component of {@code colorRGB} as an {@code int} in the interval [0, 255].
+	 * 
+	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
+	 * @return the G-component of {@code colorRGB} as an {@code int} in the interval [0, 255]
+	 */
+	@SuppressWarnings("static-method")
+	protected final int colorRGBIntToGInt(final int colorRGB) {
+		return (colorRGB >>  8) & 0xFF;
+	}
+	
+	/**
+	 * Returns the R-component of {@code colorRGB} as an {@code int} in the interval [0, 255].
+	 * 
+	 * @param colorRGB an {@code int} with a color in packed form using either RGB or ARGB as its order
+	 * @return the R-component of {@code colorRGB} as an {@code int} in the interval [0, 255]
+	 */
+	@SuppressWarnings("static-method")
+	protected final int colorRGBIntToRInt(final int colorRGB) {
+		return (colorRGB >> 16) & 0xFF;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Film ////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the resolution along the X-axis of the film.
+	 * 
+	 * @return the resolution along the X-axis of the film
+	 */
+	protected final int filmGetResolutionX() {
+		return super.resolutionX;
+	}
+	
+	/**
+	 * Returns the resolution along the Y-axis of the film.
+	 * 
+	 * @return the resolution along the Y-axis of the film
+	 */
+	protected final int filmGetResolutionY() {
+		return super.resolutionY;
+	}
+	
+	/**
+	 * Returns the X-coordinate of the film.
+	 * 
+	 * @return the X-coordinate of the film
+	 */
+	protected final int filmGetX() {
+		return getGlobalId() % super.resolutionX;
+	}
+	
+	/**
+	 * Returns the Y-coordinate of the film.
+	 * 
+	 * @return the Y-coordinate of the film
+	 */
+	protected final int filmGetY() {
+		return getGlobalId() / super.resolutionX;
+	}
+	
 	/**
 	 * Adds the sample RGB component values {@code colorR}, {@code colorG} and {@code colorB} to the current pixel of the film.
 	 * <p>
@@ -755,6 +843,73 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		this.filmColorFloatArray[filmColorFloatArrayOffset + 1] = colorG;
 		this.filmColorFloatArray[filmColorFloatArrayOffset + 2] = colorB;
 		this.filmSampleIntArray[filmSampleIntArrayOffset] = 1;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// ImageF //////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a {@code float} with the B-component of the image at the current pixel.
+	 * 
+	 * @return a {@code float} with the B-component of the image at the current pixel
+	 */
+	protected final float imageGetColorB() {
+		return this.imageColorFloatArray[getGlobalId() * 3 + 2];
+	}
+	
+	/**
+	 * Returns a {@code float} with the G-component of the image at the current pixel.
+	 * 
+	 * @return a {@code float} with the G-component of the image at the current pixel
+	 */
+	protected final float imageGetColorG() {
+		return this.imageColorFloatArray[getGlobalId() * 3 + 1];
+	}
+	
+	/**
+	 * Returns a {@code float} with the R-component of the image at the current pixel.
+	 * 
+	 * @return a {@code float} with the R-component of the image at the current pixel
+	 */
+	protected final float imageGetColorR() {
+		return this.imageColorFloatArray[getGlobalId() * 3 + 0];
+	}
+	
+	/**
+	 * Returns the resolution along the X-axis of the image.
+	 * 
+	 * @return the resolution along the X-axis of the image
+	 */
+	protected final int imageGetResolutionX() {
+		return super.resolutionX;
+	}
+	
+	/**
+	 * Returns the resolution along the Y-axis of the image.
+	 * 
+	 * @return the resolution along the Y-axis of the image
+	 */
+	protected final int imageGetResolutionY() {
+		return super.resolutionY;
+	}
+	
+	/**
+	 * Returns the X-coordinate of the image.
+	 * 
+	 * @return the X-coordinate of the image
+	 */
+	protected final int imageGetX() {
+		return getGlobalId() % super.resolutionX;
+	}
+	
+	/**
+	 * Returns the Y-coordinate of the image.
+	 * 
+	 * @return the Y-coordinate of the image
+	 */
+	protected final int imageGetY() {
+		return getGlobalId() / super.resolutionX;
 	}
 	
 	/**

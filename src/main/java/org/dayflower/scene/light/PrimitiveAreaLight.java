@@ -46,6 +46,18 @@ import org.dayflower.scene.Transform;
  * @author J&#246;rgen Lundgren
  */
 public final class PrimitiveAreaLight extends AreaLight {
+	/**
+	 * The name of this {@code PrimitiveAreaLight} class.
+	 */
+	public static final String NAME = "Primitive Area Light";
+	
+	/**
+	 * The ID of this {@code PrimitiveAreaLight} class.
+	 */
+	public static final int ID = 6;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final Primitive primitive;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,6 +161,16 @@ public final class PrimitiveAreaLight extends AreaLight {
 	}
 	
 	/**
+	 * Returns a {@code String} with the name of this {@code PrimitiveAreaLight} instance.
+	 * 
+	 * @return a {@code String} with the name of this {@code PrimitiveAreaLight} instance
+	 */
+	@Override
+	public String getName() {
+		return NAME;
+	}
+	
+	/**
 	 * Returns a {@code String} representation of this {@code PrimitiveAreaLight} instance.
 	 * 
 	 * @return a {@code String} representation of this {@code PrimitiveAreaLight} instance
@@ -209,6 +231,16 @@ public final class PrimitiveAreaLight extends AreaLight {
 		final SurfaceIntersection3F surfaceIntersectionObjectSpace = SurfaceIntersection3F.transform(surfaceIntersectionWorldSpace, worldToObject, objectToWorld);
 		
 		return this.primitive.getShape().evaluateProbabilityDensityFunction(surfaceIntersectionObjectSpace, incomingObjectSpace);
+	}
+	
+	/**
+	 * Returns an {@code int} with the ID of this {@code PrimitiveAreaLight} instance.
+	 * 
+	 * @return an {@code int} with the ID of this {@code PrimitiveAreaLight} instance
+	 */
+	@Override
+	public int getID() {
+		return ID;
 	}
 	
 	/**

@@ -284,7 +284,7 @@ public final class SpotLight extends Light {
 	 * 
 	 * @return a {@code String} with the name of this {@code SpotLight} instance
 	 */
-	@SuppressWarnings("static-method")
+	@Override
 	public String getName() {
 		return NAME;
 	}
@@ -377,7 +377,7 @@ public final class SpotLight extends Light {
 	 * 
 	 * @return an {@code int} with the ID of this {@code SpotLight} instance
 	 */
-	@SuppressWarnings("static-method")
+	@Override
 	public int getID() {
 		return ID;
 	}

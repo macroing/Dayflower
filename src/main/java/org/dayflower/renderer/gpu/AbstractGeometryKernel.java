@@ -288,11 +288,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 			return false;
 		}
 		
-		if(intersectionTMinimum > rayTMinimum && intersectionTMinimum < rayTMaximum) {
-			return true;
-		}
-		
-		if(intersectionTMaximum > rayTMinimum && intersectionTMaximum < rayTMaximum) {
+		if(intersectionTMinimum > rayTMinimum && intersectionTMinimum < rayTMaximum || intersectionTMaximum > rayTMinimum && intersectionTMaximum < rayTMaximum) {
 			return true;
 		}
 		
@@ -1199,21 +1195,14 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 			final float a = u * 2.0F - 1.0F;
 			final float b = v * 2.0F - 1.0F;
 			
-			if(a * a > b * b) {
-				final float phi = PI_DIVIDED_BY_4 * (b / a);
-				final float r = radius * a;
-				
-				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = r * cos(phi);
-				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = r * sin(phi);
-				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = 0.0F;
-			} else {
-				final float phi = PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
-				final float r = radius * b;
-				
-				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = r * cos(phi);
-				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = r * sin(phi);
-				this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = 0.0F;
-			}
+			final boolean isCaseA = a * a > b * b;
+			
+			final float phi = isCaseA ? PI_DIVIDED_BY_4 * (b / a) : PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
+			final float r = isCaseA ? radius * a : radius * b;
+			
+			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = r * cos(phi);
+			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = r * sin(phi);
+			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = 0.0F;
 		}
 	}
 	

@@ -240,18 +240,8 @@ public abstract class AbstractKernel extends Kernel {
 		final double r0Squared = r0 * r0;
 		final double d = q0Cubed - r0Squared;
 		final double e = p / 3.0D;
-		
-		if(d >= 0.0D) {
-			final double d0 = r0 / sqrt(q0Cubed);
-			final double theta = acos(d0) / 3.0D;
-			final double q1 = -2.0D * sqrt(q0);
-			final double q2 = q1 * cos(theta) - e;
-			
-			return q2;
-		}
-		
-		final double q1 = pow(sqrt(r0Squared - q0Cubed) + abs(r0), 1.0D / 3.0D);
-		final double q2 = r0 < 0.0D ? (q1 + q0 / q1) - e : -(q1 + q0 / q1) - e;
+		final double q1 = d >= 0.0D ? -2.0D * sqrt(q0) : pow(sqrt(r0Squared - q0Cubed) + abs(r0), 1.0D / 3.0D);
+		final double q2 = d >= 0.0D ? q1 * cos(acos(r0 / sqrt(q0Cubed)) / 3.0D) - e : r0 < 0.0D ? (q1 + q0 / q1) - e : -(q1 + q0 / q1) - e;
 		
 		return q2;
 	}
@@ -629,16 +619,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
 	protected final float saturateF(final float value, final float edgeA, final float edgeB) {
-		final float minimum = min(edgeA, edgeB);
-		final float maximum = max(edgeA, edgeB);
-		
-		if(value < minimum) {
-			return minimum;
-		} else if(value > maximum) {
-			return maximum;
-		} else {
-			return value;
-		}
+		return max(min(value, max(edgeA, edgeB)), min(edgeA, edgeB));
 	}
 	
 	/**
@@ -1345,18 +1326,8 @@ public abstract class AbstractKernel extends Kernel {
 		final float r0Squared = r0 * r0;
 		final float d = q0Cubed - r0Squared;
 		final float e = p / 3.0F;
-		
-		if(d >= 0.0F) {
-			final float d0 = r0 / sqrt(q0Cubed);
-			final float theta = acos(d0) / 3.0F;
-			final float q1 = -2.0F * sqrt(q0);
-			final float q2 = q1 * cos(theta) - e;
-			
-			return q2;
-		}
-		
-		final float q1 = pow(sqrt(r0Squared - q0Cubed) + abs(r0), 1.0F / 3.0F);
-		final float q2 = r0 < 0.0F ? (q1 + q0 / q1) - e : -(q1 + q0 / q1) - e;
+		final float q1 = d >= 0.0F ? -2.0F * sqrt(q0) : pow(sqrt(r0Squared - q0Cubed) + abs(r0), 1.0F / 3.0F);
+		final float q2 = d >= 0.0F ? q1 * cos(acos(r0 / sqrt(q0Cubed)) / 3.0F) - e : r0 < 0.0F ? (q1 + q0 / q1) - e : -(q1 + q0 / q1) - e;
 		
 		return q2;
 	}
@@ -1440,25 +1411,14 @@ public abstract class AbstractKernel extends Kernel {
 		final double q = 0.125D * bASquared * bA - 0.5D * bA * cA + dA;
 		final double r = -0.01171875D * bASquared * bASquared + 0.0625D * bASquared * cA - 0.25D * bA * dA + eA;
 		final double z = solveCubicForQuarticSystemD(-0.5D * p, -r, 0.5D * r * p - 0.125D * q * q);
+		final double v = 2.0D * z - p;
 		
-		double d1 = 2.0D * z - p;
-		double d2 = 0.0D;
-		
-		if(d1 < 0.0D) {
+		if(v < 0.0D || v < 1.0e-10D && z * z - r < 0.0D) {
 			return 0.0F;
-		} else if(d1 < 1.0e-10D) {
-			d2 = z * z - r;
-			
-			if(d2 < 0.0D) {
-				return 0.0F;
-			}
-			
-			d2 = sqrt(d2);
-		} else {
-			d1 = sqrt(d1);
-			d2 = 0.5D * q / d1;
 		}
 		
+		final double d1 = v < 1.0e-10D ? v : sqrt(v);
+		final double d2 = v < 1.0e-10D ? sqrt(z * z - r) : 0.5D * q / d1;
 		final double q1 = d1 * d1;
 		final double q2 = -0.25D * bA;
 		final double pm = q1 - 4.0D * (z - d2);
@@ -1577,27 +1537,15 @@ public abstract class AbstractKernel extends Kernel {
 		final float q = 0.125F * bASquared * bA - 0.5F * bA * cA + dA;
 		final float r = -0.01171875F * bASquared * bASquared + 0.0625F * bASquared * cA - 0.25F * bA * dA + eA;
 		final float z = solveCubicForQuarticSystemF(-0.5F * p, -r, 0.5F * r * p - 0.125F * q * q);
+		final float v = 2.0F * z - p;
 		
-		float d1 = 2.0F * z - p;
-		float d2 = 0.0F;
-		
-		if(d1 < 0.0F) {
+		if(v < 0.0F || v < 1.0e-4F && z * z - r < 0.0F) {
 			return 0.0F;
-		} else if(d1 < 1.0e-4F) {
-//			The expression in the if-statement was changed from 'd1 < 1.0e-10F' to 'd1 < 1.0e-4F' because of artifacts on the torus.
-			
-			d2 = z * z - r;
-			
-			if(d2 < 0.0F) {
-				return 0.0F;
-			}
-			
-			d2 = sqrt(d2);
-		} else {
-			d1 = sqrt(d1);
-			d2 = 0.5F * q / d1;
 		}
 		
+//		The expression was changed from 'v < 1.0e-10F' to 'v < 1.0e-4F' because of artifacts on the torus.
+		final float d1 = v < 1.0e-4F ? v : sqrt(v);
+		final float d2 = v < 1.0e-4F ? sqrt(z * z - r) : 0.5F * q / d1;
 		final float q1 = d1 * d1;
 		final float q2 = -0.25F * bA;
 		final float pm = q1 - 4.0F * (z - d2);
@@ -1761,16 +1709,7 @@ public abstract class AbstractKernel extends Kernel {
 	 * @return a saturated (or clamped) value based on {@code value}
 	 */
 	protected final int saturateI(final int value, final int edgeA, final int edgeB) {
-		final int minimum = min(edgeA, edgeB);
-		final int maximum = max(edgeA, edgeB);
-		
-		if(value < minimum) {
-			return minimum;
-		} else if(value > maximum) {
-			return maximum;
-		} else {
-			return value;
-		}
+		return max(min(value, max(edgeA, edgeB)), min(edgeA, edgeB));
 	}
 	
 	/**

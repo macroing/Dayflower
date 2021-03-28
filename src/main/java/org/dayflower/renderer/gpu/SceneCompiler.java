@@ -49,6 +49,7 @@ import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.LDRImageLight;
+import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
 import org.dayflower.scene.material.ClearCoatMaterial;
@@ -102,6 +103,7 @@ final class SceneCompiler {
 	private final List<MetalMaterial> distinctMetalMaterials;
 	private final List<MirrorMaterial> distinctMirrorMaterials;
 	private final List<Paraboloid3F> distinctParaboloids;
+	private final List<PerezLight> distinctPerezLights;
 	private final List<Plane3F> distinctPlanes;
 	private final List<PlasticMaterial> distinctPlasticMaterials;
 	private final List<PointLight> distinctPointLights;
@@ -138,6 +140,7 @@ final class SceneCompiler {
 	private final Map<MetalMaterial, Integer> distinctToOffsetsMetalMaterials;
 	private final Map<MirrorMaterial, Integer> distinctToOffsetsMirrorMaterials;
 	private final Map<Paraboloid3F, Integer> distinctToOffsetsParaboloids;
+	private final Map<PerezLight, Integer> distinctToOffsetsPerezLights;
 	private final Map<Plane3F, Integer> distinctToOffsetsPlanes;
 	private final Map<PlasticMaterial, Integer> distinctToOffsetsPlasticMaterials;
 //	private final Map<PointLight, Integer> distinctToOffsetsPointLights;
@@ -180,6 +183,7 @@ final class SceneCompiler {
 		this.distinctMetalMaterials = new ArrayList<>();
 		this.distinctMirrorMaterials = new ArrayList<>();
 		this.distinctParaboloids = new ArrayList<>();
+		this.distinctPerezLights = new ArrayList<>();
 		this.distinctPlanes = new ArrayList<>();
 		this.distinctPlasticMaterials = new ArrayList<>();
 		this.distinctPointLights = new ArrayList<>();
@@ -216,6 +220,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsMetalMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsMirrorMaterials = new LinkedHashMap<>();
 		this.distinctToOffsetsParaboloids = new LinkedHashMap<>();
+		this.distinctToOffsetsPerezLights = new LinkedHashMap<>();
 		this.distinctToOffsetsPlanes = new LinkedHashMap<>();
 		this.distinctToOffsetsPlasticMaterials = new LinkedHashMap<>();
 //		this.distinctToOffsetsPointLights = new LinkedHashMap<>();
@@ -309,11 +314,13 @@ final class SceneCompiler {
 //		Retrieve the float[] for all Light instances:
 		final float[] lightDirectionalLightArray = Floats.toArray(this.distinctDirectionalLights, directionalLight -> directionalLight.toArray(), 1);
 		final float[] lightLDRImageLightArray = Floats.toArray(this.distinctLDRImageLights, lDRImageLight -> lDRImageLight.toArray(), 1);
+		final float[] lightPerezLightArray = Floats.toArray(this.distinctPerezLights, perezLight -> perezLight.toArray(), 1);
 		final float[] lightPointLightArray = Floats.toArray(this.distinctPointLights, pointLight -> pointLight.toArray(), 1);
 		final float[] lightSpotLightArray = Floats.toArray(this.distinctSpotLights, spotLight -> spotLight.toArray(), 1);
 		
 //		Retrieve the int[] for all Light instances:
 		final int[] lightLDRImageLightOffsetArray = new int[this.distinctLDRImageLights.size()];
+		final int[] lightPerezLightOffsetArray = new int[this.distinctPerezLights.size()];
 		
 //		Retrieve the int[] for all Material instances:
 		final int[] materialClearCoatMaterialArray = Ints.toArray(this.distinctClearCoatMaterials, clearCoatMaterial -> clearCoatMaterial.toArray(), 1);
@@ -357,6 +364,7 @@ final class SceneCompiler {
 		
 //		Populate the float[] or int[] with data:
 		doPopulateLightLDRImageLightOffsetArray(lightLDRImageLightOffsetArray);
+		doPopulateLightPerezLightOffsetArray(lightPerezLightOffsetArray);
 		doPopulateMaterialClearCoatMaterialArrayWithTextures(materialClearCoatMaterialArray);
 		doPopulateMaterialDisneyMaterialArrayWithTextures(materialDisneyMaterialArray);
 		doPopulateMaterialGlassMaterialArrayWithTextures(materialGlassMaterialArray);
@@ -382,6 +390,8 @@ final class SceneCompiler {
 		compiledScene.setLightDirectionalLightArray(lightDirectionalLightArray);
 		compiledScene.setLightLDRImageLightArray(lightLDRImageLightArray);
 		compiledScene.setLightLDRImageLightOffsetArray(lightLDRImageLightOffsetArray);
+		compiledScene.setLightPerezLightArray(lightPerezLightArray);
+		compiledScene.setLightPerezLightOffsetArray(lightPerezLightOffsetArray);
 		compiledScene.setLightPointLightArray(lightPointLightArray);
 		compiledScene.setLightSpotLightArray(lightSpotLightArray);
 		compiledScene.setMaterialClearCoatMaterialArray(materialClearCoatMaterialArray);
@@ -442,6 +452,7 @@ final class SceneCompiler {
 		this.distinctMetalMaterials.clear();
 		this.distinctMirrorMaterials.clear();
 		this.distinctParaboloids.clear();
+		this.distinctPerezLights.clear();
 		this.distinctPlanes.clear();
 		this.distinctPlasticMaterials.clear();
 		this.distinctPointLights.clear();
@@ -478,6 +489,7 @@ final class SceneCompiler {
 		this.distinctToOffsetsMetalMaterials.clear();
 		this.distinctToOffsetsMirrorMaterials.clear();
 		this.distinctToOffsetsParaboloids.clear();
+		this.distinctToOffsetsPerezLights.clear();
 		this.distinctToOffsetsPlanes.clear();
 		this.distinctToOffsetsPlasticMaterials.clear();
 //		this.distinctToOffsetsPointLights.clear();
@@ -503,6 +515,7 @@ final class SceneCompiler {
 	private void doFilterAllDistinctLights(final Scene scene) {
 		this.distinctDirectionalLights.addAll(NodeFilter.filterAllDistinct(scene, DirectionalLight.class));
 		this.distinctLDRImageLights.addAll(NodeFilter.filterAllDistinct(scene, LDRImageLight.class));
+		this.distinctPerezLights.addAll(NodeFilter.filterAllDistinct(scene, PerezLight.class));
 		this.distinctPointLights.addAll(NodeFilter.filterAllDistinct(scene, PointLight.class));
 		this.distinctSpotLights.addAll(NodeFilter.filterAllDistinct(scene, SpotLight.class));
 	}
@@ -576,6 +589,7 @@ final class SceneCompiler {
 	private void doMapAllDistinctLights() {
 //		this.distinctToOffsetsDirectionalLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctDirectionalLights, DirectionalLight.ARRAY_LENGTH));
 		this.distinctToOffsetsLDRImageLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageLights, lDRImageLight -> lDRImageLight.getArrayLength()));
+		this.distinctToOffsetsPerezLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPerezLights, perezLight -> perezLight.getArrayLength()));
 //		this.distinctToOffsetsPointLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctPointLights, PointLight.ARRAY_LENGTH));
 //		this.distinctToOffsetsSpotLights.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSpotLights, SpotLight.ARRAY_LENGTH));
 	}
@@ -622,6 +636,16 @@ final class SceneCompiler {
 			final int offset = this.distinctToOffsetsLDRImageLights.get(lDRImageLight).intValue();
 			
 			lightLDRImageLightOffsetArray[i] = offset;
+		}
+	}
+	
+	private void doPopulateLightPerezLightOffsetArray(final int[] lightPerezLightOffsetArray) {
+		for(int i = 0; i < this.distinctPerezLights.size(); i++) {
+			final PerezLight perezLight = this.distinctPerezLights.get(i);
+			
+			final int offset = this.distinctToOffsetsPerezLights.get(perezLight).intValue();
+			
+			lightPerezLightOffsetArray[i] = offset;
 		}
 	}
 	

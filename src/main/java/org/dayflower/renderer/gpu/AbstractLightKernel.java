@@ -22,11 +22,13 @@ import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
+import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 
 import org.dayflower.scene.Light;
 import org.dayflower.scene.LightSample;
 import org.dayflower.scene.light.DirectionalLight;
 import org.dayflower.scene.light.LDRImageLight;
+import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
 
@@ -65,6 +67,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected float[] lightLDRImageLightArray;
 	
 	/**
+	 * A {@code float[]} that contains {@link PerezLight} instances.
+	 */
+	protected float[] lightPerezLightArray;
+	
+	/**
 	 * A {@code float[]} that contains {@link PointLight} instances.
 	 */
 	protected float[] lightPointLightArray;
@@ -90,6 +97,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected int lightLDRImageLightCount;
 	
 	/**
+	 * The {@link PerezLight} count.
+	 */
+	protected int lightPerezLightCount;
+	
+	/**
 	 * The {@link PointLight} count.
 	 */
 	protected int lightPointLightCount;
@@ -109,6 +121,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	 */
 	protected int[] lightLDRImageLightOffsetArray;
 	
+	/**
+	 * An {@code int[]} that contains an offset lookup table for {@link PerezLight} instances in {@link #lightPerezLightArray}.
+	 */
+	protected int[] lightPerezLightOffsetArray;
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -121,6 +138,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		this.lightLDRImageLightArray = new float[1];
 		this.lightLDRImageLightCount = 0;
 		this.lightLDRImageLightOffsetArray = new int[1];
+		this.lightPerezLightArray = new float[1];
+		this.lightPerezLightCount = 0;
+		this.lightPerezLightOffsetArray = new int[1];
 		this.lightPointLightArray = new float[1];
 		this.lightPointLightCount = 0;
 		this.lightSampleArray_$private$10 = new float[LIGHT_SAMPLE_ARRAY_LENGTH];
@@ -236,6 +256,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightIsUsingDeltaDistribution();
+		} else if(doLightPerezLightIsMatchingID(id)) {
+			return doLightPerezLightIsUsingDeltaDistribution();
 		} else if(doLightPointLightIsMatchingID(id)) {
 			return doLightPointLightIsUsingDeltaDistribution();
 		} else if(doLightSpotLightIsMatchingID(id)) {
@@ -271,6 +293,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightSampleRadianceIncoming(u, v);
+		} else if(doLightPerezLightIsMatchingID(id)) {
+			return doLightPerezLightSampleRadianceIncoming(u, v);
 		} else if(doLightPointLightIsMatchingID(id)) {
 			return doLightPointLightSampleRadianceIncoming(u, v);
 		} else if(doLightSpotLightIsMatchingID(id)) {
@@ -297,6 +321,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			return doLightDirectionalLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
+		} else if(doLightPerezLightIsMatchingID(id)) {
+			return doLightPerezLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
 		} else if(doLightPointLightIsMatchingID(id)) {
 			return doLightPointLightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
 		} else if(doLightSpotLightIsMatchingID(id)) {
@@ -342,6 +368,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			doLightDirectionalLightEvaluateRadianceEmitted();
+		} else if(doLightPerezLightIsMatchingID(id)) {
+			doLightPerezLightEvaluateRadianceEmitted();
 		} else if(doLightPointLightIsMatchingID(id)) {
 			doLightPointLightEvaluateRadianceEmitted();
 		} else if(doLightSpotLightIsMatchingID(id)) {
@@ -363,6 +391,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		if(doLightDirectionalLightIsMatchingID(id)) {
 			doLightDirectionalLightPower();
+		} else if(doLightPerezLightIsMatchingID(id)) {
+			doLightPerezLightPower();
 		} else if(doLightPointLightIsMatchingID(id)) {
 			doLightPointLightPower();
 		} else if(doLightSpotLightIsMatchingID(id)) {
@@ -618,6 +648,541 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float powerB = radianceB * scale;
 		
 		color3FLHSSet(powerR, powerG, powerB);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Light - PerezLight //////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightPerezLightIsMatchingID(final int id) {
+		return id == PerezLight.ID;
+	}
+	
+	@SuppressWarnings("static-method")
+	private boolean doLightPerezLightIsUsingDeltaDistribution() {
+		return false;
+	}
+	
+	private boolean doLightPerezLightSampleRadianceIncoming(final float u, final float v) {
+		final float sunDirectionX = doLightPerezLightGetSunDirectionX();
+		final float sunDirectionY = doLightPerezLightGetSunDirectionY();
+		final float sunDirectionZ = doLightPerezLightGetSunDirectionZ();
+		
+		final float sunDirectionWorldSpaceX = doLightPerezLightGetSunDirectionWorldSpaceX();
+		final float sunDirectionWorldSpaceY = doLightPerezLightGetSunDirectionWorldSpaceY();
+		final float sunDirectionWorldSpaceZ = doLightPerezLightGetSunDirectionWorldSpaceZ();
+		
+		final float radius = doLightPerezLightGetRadius();
+		
+		final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+		final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+		final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+		
+		final float surfaceNormalGX = intersectionGetOrthonormalBasisGWComponent1();
+		final float surfaceNormalGY = intersectionGetOrthonormalBasisGWComponent2();
+		final float surfaceNormalGZ = intersectionGetOrthonormalBasisGWComponent3();
+		
+		final float surfaceNormalSX = intersectionGetOrthonormalBasisSWComponent1();
+		final float surfaceNormalSY = intersectionGetOrthonormalBasisSWComponent2();
+		final float surfaceNormalSZ = intersectionGetOrthonormalBasisSWComponent3();
+		
+		final float sunDirectionWorldSpaceDotSurfaceNormalG = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
+		final float sunDirectionWorldSpaceDotSurfaceNormalS = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
+		
+		final boolean isOrientedTowardsSun = sunDirectionWorldSpaceDotSurfaceNormalG > 0.0F && sunDirectionWorldSpaceDotSurfaceNormalS > 0.0F;
+		final boolean isSamplingSun = random() < 0.5F;
+		
+		final int offsetDistribution = lightGetOffset() + PerezLight.ARRAY_OFFSET_DISTRIBUTION;
+		
+		if(isOrientedTowardsSun && isSamplingSun) {
+			final float incomingObjectSpaceX = sunDirectionX;
+			final float incomingObjectSpaceY = sunDirectionY;
+			final float incomingObjectSpaceZ = sunDirectionZ;
+			
+			final float incomingWorldSpaceX = sunDirectionWorldSpaceX;
+			final float incomingWorldSpaceY = sunDirectionWorldSpaceY;
+			final float incomingWorldSpaceZ = sunDirectionWorldSpaceZ;
+			
+			final float sinTheta = vector3FSinTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+			
+			if(!checkIsZero(sinTheta)) {
+				final float resultR = doLightPerezLightGetSunColorR();
+				final float resultG = doLightPerezLightGetSunColorG();
+				final float resultB = doLightPerezLightGetSunColorB();
+				
+				final float pointX = surfaceIntersectionPointX + incomingWorldSpaceX * 2.0F * radius;
+				final float pointY = surfaceIntersectionPointY + incomingWorldSpaceY * 2.0F * radius;
+				final float pointZ = surfaceIntersectionPointZ + incomingWorldSpaceZ * 2.0F * radius;
+				
+				final float sampleRemappedU = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+				final float sampleRemappedV = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
+				
+				final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(offsetDistribution, sampleRemappedU, sampleRemappedV, true) / (2.0F * PI * PI * sinTheta);
+				
+				lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
+				lightSampleSetPoint(pointX, pointY, pointZ);
+				lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+				lightSampleSetResult(resultR, resultG, resultB);
+				
+				return true;
+			}
+		}
+		
+		doLightPerezLightDistribution2FContinuousRemap(lightGetOffset() + PerezLight.ARRAY_OFFSET_DISTRIBUTION, u, v);
+		
+		final float sampleRemappedU = point2FGetComponent1();
+		final float sampleRemappedV = point2FGetComponent2();
+		
+		final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(offsetDistribution, sampleRemappedU, sampleRemappedV, true);
+		
+		if(checkIsZero(probabilityDensityFunctionValueRemapped)) {
+			return false;
+		}
+		
+		vector3FSetDirectionSpherical2(sampleRemappedU, sampleRemappedV);
+		
+		final float incomingObjectSpaceX = vector3FGetComponent1();
+		final float incomingObjectSpaceY = vector3FGetComponent2();
+		final float incomingObjectSpaceZ = vector3FGetComponent3();
+		
+		doLightPerezLightTransformToWorldSpace(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		
+		final float incomingWorldSpaceX = vector3FGetComponent1();
+		final float incomingWorldSpaceY = vector3FGetComponent2();
+		final float incomingWorldSpaceZ = vector3FGetComponent3();
+		
+		final float sinTheta = vector3FSinTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		
+		if(checkIsZero(sinTheta)) {
+			return false;
+		}
+		
+		doLightPerezLightRadianceSky(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		
+		final float resultR = color3FLHSGetR();
+		final float resultG = color3FLHSGetG();
+		final float resultB = color3FLHSGetB();
+		
+		final float pointX = surfaceIntersectionPointX + incomingWorldSpaceX * 2.0F * radius;
+		final float pointY = surfaceIntersectionPointY + incomingWorldSpaceY * 2.0F * radius;
+		final float pointZ = surfaceIntersectionPointZ + incomingWorldSpaceZ * 2.0F * radius;
+		
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * PI * PI * sinTheta);
+		
+		lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
+		lightSampleSetPoint(pointX, pointY, pointZ);
+		lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+		lightSampleSetResult(resultR, resultG, resultB);
+		
+		return true;
+	}
+	
+	private float doLightPerezLightCalculatePerezFunction(final float theta, final float gamma, final float lam0, final float lam1, final float lam2, final float lam3, final float lam4, final float lvz) {
+		final float thetaConstant = this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_THETA];
+		
+		final float cosTheta = cos(theta);
+		final float cosThetaConstant = cos(thetaConstant);
+		final float cosGamma = cos(gamma);
+		
+		final float den = (1.0F + lam0 * exp(lam1)) * (1.0F + lam2 * exp(lam3 * thetaConstant) + lam4 * cosThetaConstant * cosThetaConstant);
+		final float num = (1.0F + lam0 * exp(lam1 / cosTheta)) * (1.0F + lam2 * exp(lam3 * gamma) + lam4 * cosGamma * cosGamma);
+		
+		return lvz * num / den;
+	}
+	
+	private float doLightPerezLightCalculatePerezFunctionRelativeLuminance(final float theta, final float gamma) {
+		final int offset = lightGetOffset();
+		
+		final float lam0 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 0];
+		final float lam1 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 1];
+		final float lam2 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 2];
+		final float lam3 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 3];
+		final float lam4 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 4];
+		
+		final float lvz = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_ZENITH + 0];
+		
+		return doLightPerezLightCalculatePerezFunction(theta, gamma, lam0, lam1, lam2, lam3, lam4, lvz);
+	}
+	
+	private float doLightPerezLightCalculatePerezFunctionX(final float theta, final float gamma) {
+		final int offset = lightGetOffset();
+		
+		final float lam0 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 0];
+		final float lam1 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 1];
+		final float lam2 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 2];
+		final float lam3 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 3];
+		final float lam4 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_X + 4];
+		
+		final float lvz = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_ZENITH + 1];
+		
+		return doLightPerezLightCalculatePerezFunction(theta, gamma, lam0, lam1, lam2, lam3, lam4, lvz);
+	}
+	
+	private float doLightPerezLightCalculatePerezFunctionY(final float theta, final float gamma) {
+		final int offset = lightGetOffset();
+		
+		final float lam0 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 0];
+		final float lam1 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 1];
+		final float lam2 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 2];
+		final float lam3 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 3];
+		final float lam4 = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_PEREZ_Y + 4];
+		
+		final float lvz = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_ZENITH + 2];
+		
+		return doLightPerezLightCalculatePerezFunction(theta, gamma, lam0, lam1, lam2, lam3, lam4, lvz);
+	}
+	
+	private float doLightPerezLightDistribution1FContinuousProbabilityDensityFunction(final int offset, final int index) {
+		final int count = doLightPerezLightDistribution1FCount(offset);
+		
+		if(index >= 0 && index <= count - 1) {
+			final float functionIntegral = doLightPerezLightDistribution1FFunctionIntegral(offset);
+			final float function = doLightPerezLightDistribution1FFunction(offset, index);
+			
+			return functionIntegral > 0.0F ? function / functionIntegral : 0.0F;
+		}
+		
+		return 0.0F;
+	}
+	
+	private float doLightPerezLightDistribution1FContinuousRemap(final int offset, final float value, final int index) {
+		final int count = doLightPerezLightDistribution1FCount(offset);
+		
+		if(index >= 0 && index <= count - 1) {
+			final float cumulativeDistributionFunction0 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 0);
+			final float cumulativeDistributionFunction1 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 1);
+			
+			if(cumulativeDistributionFunction1 - cumulativeDistributionFunction0 > 0.0F) {
+				return (index + ((value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0))) / count;
+			}
+			
+			return (index + (value - cumulativeDistributionFunction0)) / count;
+		}
+		
+		return 0.0F;
+	}
+	
+	private float doLightPerezLightDistribution1FCumulativeDistributionFunction(final int offset, final int index) {
+		final int count = doLightPerezLightDistribution1FCount(offset);
+		final int offsetCumulativeDistributionFunction = offset + 1 + 1 + 1 + 1;
+		
+		if(index >= 0 && index <= count - 1) {
+			return this.lightPerezLightArray[offsetCumulativeDistributionFunction + index];
+		}
+		
+		return 0.0F;
+	}
+	
+	private float doLightPerezLightDistribution1FDiscreteProbabilityDensityFunction(final int offset, final int index) {
+		final int count = doLightPerezLightDistribution1FCount(offset);
+		
+		if(index >= 0 && index <= count - 1) {
+			final float functionIntegral = doLightPerezLightDistribution1FFunctionIntegral(offset);
+			final float function = doLightPerezLightDistribution1FFunction(offset, index);
+			
+			return functionIntegral > 0.0F ? function / (functionIntegral * count) : 0.0F;
+		}
+		
+		return 0.0F;
+	}
+	
+	private float doLightPerezLightDistribution1FDiscreteRemap(final int offset, final float value, final int index) {
+		final int count = doLightPerezLightDistribution1FCount(offset);
+		
+		if(index >= 0 && index <= count - 1) {
+			final float cumulativeDistributionFunction0 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 0);
+			final float cumulativeDistributionFunction1 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 1);
+			
+			return (value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0);
+		}
+		
+		return 0.0F;
+	}
+	
+	private float doLightPerezLightDistribution1FFunction(final int offset, final int index) {
+		final int count = doLightPerezLightDistribution1FCount(offset);
+		final int offsetFunction = offset + 1 + 1 + 1 + (int)(this.lightPerezLightArray[offset + 1]) + 1;
+		
+		if(index >= 0 && index <= count - 1) {
+			return this.lightPerezLightArray[offsetFunction + index];
+		}
+		
+		return 0.0F;
+	}
+	
+	private float doLightPerezLightDistribution1FFunctionIntegral(final int offset) {
+		return this.lightPerezLightArray[offset + 3];
+	}
+	
+	private float doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(final int offset, final float u, final float v, final boolean isRemapped) {
+		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+		
+		final float m = isUV ? u : v;
+		final float c = isUV ? v : u;
+		
+		if(isRemapped) {
+			final int offsetM = offset + (int)(this.lightPerezLightArray[offset + 2]);
+			final int countM = doLightPerezLightDistribution1FCount(offsetM);
+			final int indexM = saturateI((int)(m * countM), 0, countM - 1);
+			final int offsetC = offset + (int)(this.lightPerezLightArray[offset + 3 + indexM]);
+			final int countC = doLightPerezLightDistribution1FCount(offsetC);
+			final int indexC = saturateI((int)(c * countC), 0, countC - 1);
+			
+			final float probabilityDensityFunctionValue = doLightPerezLightDistribution1FFunction(offsetC, indexC) / doLightPerezLightDistribution1FFunctionIntegral(offsetM);
+			
+			return probabilityDensityFunctionValue;
+		}
+		
+		final int offsetM = offset + (int)(this.lightPerezLightArray[offset + 2]);
+		final int indexM = doLightPerezLightDistribution1FIndex(offsetM, m);
+		final int offsetC = offset + (int)(this.lightPerezLightArray[offset + 3 + indexM]);
+		final int indexC = doLightPerezLightDistribution1FIndex(offsetC, c);
+		
+		final float probabilityDensityFunctionValueM = doLightPerezLightDistribution1FContinuousProbabilityDensityFunction(offsetM, indexM);
+		final float probabilityDensityFunctionValueC = doLightPerezLightDistribution1FContinuousProbabilityDensityFunction(offsetC, indexC);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueM * probabilityDensityFunctionValueC;
+		
+		return probabilityDensityFunctionValue;
+	}
+	
+	@SuppressWarnings("unused")
+	private float doLightPerezLightDistribution2FDiscreteProbabilityDensityFunction(final int offset, final float u, final float v) {
+		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+		
+		final float m = isUV ? u : v;
+		final float c = isUV ? v : u;
+		
+		final int offsetM = offset + (int)(this.lightPerezLightArray[offset + 2]);
+		final int indexM = doLightPerezLightDistribution1FIndex(offsetM, m);
+		final int offsetC = offset + (int)(this.lightPerezLightArray[offset + 3 + indexM]);
+		final int indexC = doLightPerezLightDistribution1FIndex(offsetC, c);
+		
+		final float probabilityDensityFunctionValueM = doLightPerezLightDistribution1FDiscreteProbabilityDensityFunction(offsetM, indexM);
+		final float probabilityDensityFunctionValueC = doLightPerezLightDistribution1FDiscreteProbabilityDensityFunction(offsetC, indexC);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueM * probabilityDensityFunctionValueC;
+		
+		return probabilityDensityFunctionValue;
+	}
+	
+	private float doLightPerezLightEvaluateProbabilityDensityFunctionRadianceIncoming(final float incomingX, final float incomingY, final float incomingZ) {
+		doLightPerezLightTransformToObjectSpace(incomingX, incomingY, incomingZ);
+		
+		final float incomingObjectSpaceX = vector3FGetComponent1();
+		final float incomingObjectSpaceY = vector3FGetComponent2();
+		final float incomingObjectSpaceZ = vector3FGetComponent3();
+		
+		final float sinTheta = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		
+		if(checkIsZero(sinTheta)) {
+			return 0.0F;
+		}
+		
+		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
+		final float v = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
+		
+		final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(lightGetOffset() + PerezLight.ARRAY_OFFSET_DISTRIBUTION, u, v, true) / (2.0F * PI * PI * sinTheta);
+		
+		return probabilityDensityFunctionValue;
+	}
+	
+	private float doLightPerezLightGetRadius() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_RADIUS];
+	}
+	
+	private float doLightPerezLightGetSunColorB() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_SUN_COLOR + 2];
+	}
+	
+	private float doLightPerezLightGetSunColorG() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_SUN_COLOR + 1];
+	}
+	
+	private float doLightPerezLightGetSunColorR() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_SUN_COLOR + 0];
+	}
+	
+	private float doLightPerezLightGetSunDirectionWorldSpaceX() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 0];
+	}
+	
+	private float doLightPerezLightGetSunDirectionWorldSpaceY() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 1];
+	}
+	
+	private float doLightPerezLightGetSunDirectionWorldSpaceZ() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2];
+	}
+	
+	private float doLightPerezLightGetSunDirectionX() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_SUN_DIRECTION + 0];
+	}
+	
+	private float doLightPerezLightGetSunDirectionY() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_SUN_DIRECTION + 1];
+	}
+	
+	private float doLightPerezLightGetSunDirectionZ() {
+		return this.lightPerezLightArray[lightGetOffset() + PerezLight.ARRAY_OFFSET_SUN_DIRECTION + 2];
+	}
+	
+	private int doLightPerezLightDistribution1FCount(final int offset) {
+		return (int)(this.lightPerezLightArray[offset + 2]);
+	}
+	
+	private int doLightPerezLightDistribution1FIndex(final int offset, final float value) {
+		final int length = (int)(this.lightPerezLightArray[offset + 1]);
+		
+		int currentMinimum = 0;
+		int currentLength = length;
+		
+		while(currentLength > 0) {
+			int currentHalf = currentLength >> 1;
+			int currentMiddle = currentMinimum + currentHalf;
+			
+			if(doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, currentMiddle) <= value) {
+				currentMinimum = currentMiddle + 1;
+				currentLength -= currentHalf + 1;
+			} else {
+				currentLength = currentHalf;
+			}
+		}
+		
+		return saturateI(currentMinimum - 1, 0, length - 2);
+	}
+	
+	private void doLightPerezLightDistribution2FContinuousRemap(final int offset, final float u, final float v) {
+		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+		
+		final float m = isUV ? u : v;
+		final float c = isUV ? v : u;
+		
+		final int offsetM = offset + (int)(this.lightPerezLightArray[offset + 2]);
+		final int indexM = doLightPerezLightDistribution1FIndex(offsetM, m);
+		final int offsetC = offset + (int)(this.lightPerezLightArray[offset + 3 + indexM]);
+		final int indexC = doLightPerezLightDistribution1FIndex(offsetC, c);
+		
+		final float mRemapped = doLightPerezLightDistribution1FContinuousRemap(offsetM, m, indexM);
+		final float cRemapped = doLightPerezLightDistribution1FContinuousRemap(offsetC, c, indexC);
+		
+		point2FSet(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
+	}
+	
+	@SuppressWarnings("unused")
+	private void doLightPerezLightDistribution2FDiscreteRemap(final int offset, final float u, final float v) {
+		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+		
+		final float m = isUV ? u : v;
+		final float c = isUV ? v : u;
+		
+		final int offsetM = offset + (int)(this.lightPerezLightArray[offset + 2]);
+		final int indexM = doLightPerezLightDistribution1FIndex(offsetM, m);
+		final int offsetC = offset + (int)(this.lightPerezLightArray[offset + 3 + indexM]);
+		final int indexC = doLightPerezLightDistribution1FIndex(offsetC, c);
+		
+		final float mRemapped = doLightPerezLightDistribution1FDiscreteRemap(offsetM, m, indexM);
+		final float cRemapped = doLightPerezLightDistribution1FDiscreteRemap(offsetC, c, indexC);
+		
+		point2FSet(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
+	}
+	
+	private void doLightPerezLightEvaluateRadianceEmitted() {
+		doLightPerezLightTransformToObjectSpace(ray3FGetDirectionComponent1(), ray3FGetDirectionComponent2(), ray3FGetDirectionComponent3());
+		doLightPerezLightRadianceSky(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		
+		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());
+	}
+	
+	private void doLightPerezLightPower() {
+		final float radius = doLightPerezLightGetRadius();
+		
+		final float resultFactor = PI * radius * radius;
+		
+		vector3FSetDirectionSpherical2(0.5F, 0.5F);
+		
+		doLightPerezLightRadianceSky(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		
+		color3FLHSSet(color3FLHSGetR() * resultFactor, color3FLHSGetG() * resultFactor, color3FLHSGetB() * resultFactor);
+	}
+	
+	private void doLightPerezLightRadianceSky(final float directionX, final float directionY, final float directionZ) {
+		if(directionZ < 0.0F) {
+			color3FLHSSet(0.0F, 0.0F, 0.0F);
+			
+			return;
+		}
+		
+		vector3FSetNormalize(directionX, directionY, max(directionZ, 0.001F));
+		
+		final float directionSaturatedX = vector3FGetComponent1();
+		final float directionSaturatedY = vector3FGetComponent2();
+		final float directionSaturatedZ = vector3FGetComponent3();
+		
+		final int offset = lightGetOffset();
+		
+		final float sunDirectionX = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_DIRECTION + 0];
+		final float sunDirectionY = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_DIRECTION + 1];
+		final float sunDirectionZ = this.lightPerezLightArray[offset + PerezLight.ARRAY_OFFSET_SUN_DIRECTION + 2];
+		
+		final float theta = acos(saturateF(directionSaturatedZ, -1.0F, 1.0F));
+		final float gamma = acos(saturateF(vector3FDotProduct(directionSaturatedX, directionSaturatedY, directionSaturatedZ, sunDirectionX, sunDirectionY, sunDirectionZ), -1.0F, 1.0F));
+		final float relativeLuminance = doLightPerezLightCalculatePerezFunctionRelativeLuminance(theta, gamma);
+		final float x = doLightPerezLightCalculatePerezFunctionX(theta, gamma);
+		final float y = doLightPerezLightCalculatePerezFunctionY(theta, gamma);
+		
+//		ChromaticSpectralCurveF.getColorXYZ(float, float):
+		final float m1 = (-1.3515F - 1.7703F  * x +  5.9114F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
+		final float m2 = (+0.03F   - 31.4424F * x + 30.0717F * y) / (0.0241F + 0.2562F * x - 0.7341F * y);
+		
+		final float colorX0 =  95.6824722290F + m1 *  1.7548348904F + m2 * +1.9917192459F;
+		final float colorY0 =  99.7036819458F + m1 *  1.8025954962F + m2 * +0.7136800885F;
+		final float colorZ0 = 115.5248031616F + m1 * 32.5218048096F + m2 * -2.1984319687F;
+		
+//		Multiply by the relative luminance and divide by Y:
+		final float colorX1 = colorX0 * relativeLuminance / colorY0;
+		final float colorY1 = relativeLuminance;
+		final float colorZ1 = colorZ0 * relativeLuminance / colorY0;
+		
+//		Color3F.convertXYZToRGBUsingPBRT(Color3F):
+		final float r = +3.240479F * colorX1 - 1.537150F * colorY1 - 0.498535F * colorZ1;
+		final float g = -0.969256F * colorX1 + 1.875991F * colorY1 + 0.041556F * colorZ1;
+		final float b = +0.055648F * colorX1 - 0.204043F * colorY1 + 1.057311F * colorZ1;
+		
+		color3FLHSSet(r, g, b);
+	}
+	
+	private void doLightPerezLightTransformToObjectSpace(final float directionX, final float directionY, final float directionZ) {
+		final int offset = lightGetOffset();
+		final int offsetWorldToObject = offset + PerezLight.ARRAY_OFFSET_WORLD_TO_OBJECT;
+		
+		final float element11 = this.lightPerezLightArray[offsetWorldToObject +  0];
+		final float element12 = this.lightPerezLightArray[offsetWorldToObject +  1];
+		final float element13 = this.lightPerezLightArray[offsetWorldToObject +  2];
+		final float element21 = this.lightPerezLightArray[offsetWorldToObject +  4];
+		final float element22 = this.lightPerezLightArray[offsetWorldToObject +  5];
+		final float element23 = this.lightPerezLightArray[offsetWorldToObject +  6];
+		final float element31 = this.lightPerezLightArray[offsetWorldToObject +  8];
+		final float element32 = this.lightPerezLightArray[offsetWorldToObject +  9];
+		final float element33 = this.lightPerezLightArray[offsetWorldToObject + 10];
+		
+		vector3FSetMatrix44FTransformNormalize(element11, element12, element13, element21, element22, element23, element31, element32, element33, directionX, directionY, directionZ);
+	}
+	
+	private void doLightPerezLightTransformToWorldSpace(final float directionX, final float directionY, final float directionZ) {
+		final int offset = lightGetOffset();
+		final int offsetObjectToWorld = offset + PerezLight.ARRAY_OFFSET_OBJECT_TO_WORLD;
+		
+		final float element11 = this.lightPerezLightArray[offsetObjectToWorld +  0];
+		final float element12 = this.lightPerezLightArray[offsetObjectToWorld +  1];
+		final float element13 = this.lightPerezLightArray[offsetObjectToWorld +  2];
+		final float element21 = this.lightPerezLightArray[offsetObjectToWorld +  4];
+		final float element22 = this.lightPerezLightArray[offsetObjectToWorld +  5];
+		final float element23 = this.lightPerezLightArray[offsetObjectToWorld +  6];
+		final float element31 = this.lightPerezLightArray[offsetObjectToWorld +  8];
+		final float element32 = this.lightPerezLightArray[offsetObjectToWorld +  9];
+		final float element33 = this.lightPerezLightArray[offsetObjectToWorld + 10];
+		
+		vector3FSetMatrix44FTransformNormalize(element11, element12, element13, element21, element22, element23, element31, element32, element33, directionX, directionY, directionZ);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

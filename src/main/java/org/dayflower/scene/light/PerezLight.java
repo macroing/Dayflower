@@ -32,6 +32,7 @@ import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.random;
 import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Floats.sin;
+import static org.dayflower.utility.Ints.padding;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -74,6 +75,66 @@ public final class PerezLight extends Light {
 	 * The name of this {@code PerezLight} class.
 	 */
 	public static final String NAME = "Perez Light";
+	
+	/**
+	 * The offset for the {@link Distribution2F} denoted by {@code Distribution} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_DISTRIBUTION = 61;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code Object to World} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_OBJECT_TO_WORLD = 3;
+	
+	/**
+	 * The offset for the Perez relative luminance in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE = 41;
+	
+	/**
+	 * The offset for the Perez X in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_PEREZ_X = 46;
+	
+	/**
+	 * The offset for the Perez Y in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_PEREZ_Y = 51;
+	
+	/**
+	 * The offset for the radius in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_RADIUS = 59;
+	
+	/**
+	 * The offset for the {@link Color3F} denoted by {@code Sun Color} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SUN_COLOR = 0;
+	
+	/**
+	 * The offset for the {@link Vector3F} denoted by {@code Sun Direction} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SUN_DIRECTION = 35;
+	
+	/**
+	 * The offset for the {@link Vector3F} denoted by {@code Sun Direction World Space} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE = 38;
+	
+	/**
+	 * The offset for the theta in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_THETA = 60;
+	
+	/**
+	 * The offset for the {@link Matrix44F} denoted by {@code World to Object} in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_WORLD_TO_OBJECT = 19;
+	
+	/**
+	 * The offset for the zenith in the {@code float[]}.
+	 */
+	public static final int ARRAY_OFFSET_ZENITH = 56;
 	
 	/**
 	 * The ID of this {@code PerezLight} class.
@@ -219,6 +280,15 @@ public final class PerezLight extends Light {
 		final Color3F result = doRadianceSky(incomingObjectSpace);
 		
 		return Color3F.multiply(result, PI * this.radius * this.radius);
+	}
+	
+	/**
+	 * Returns a {@link Distribution2F} instance that represents the distribution used by this {@code PerezLight} instance.
+	 * 
+	 * @return a {@code Distribution2F} instance that represents the distribution used by this {@code PerezLight} instance
+	 */
+	public Distribution2F getDistribution() {
+		return this.distribution;
 	}
 	
 	/**
@@ -435,6 +505,112 @@ public final class PerezLight extends Light {
 		final float probabilityDensityFunctionValue = this.distribution.continuousProbabilityDensityFunction(sample, true) / (2.0F * PI * PI * sinTheta);
 		
 		return probabilityDensityFunctionValue;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code PerezLight} instance.
+	 * 
+	 * @return a {@code float[]} representation of this {@code PerezLight} instance
+	 */
+	public float[] toArray() {
+		final float[] array = new float[getArrayLength()];
+		
+		final float[] distribution = this.distribution.toArray();
+		
+		final Matrix44F objectToWorld = getTransform().getObjectToWorld();
+		final Matrix44F worldToObject = getTransform().getWorldToObject();
+		
+		array[ARRAY_OFFSET_SUN_COLOR + 0] = this.sunColor.getR();
+		array[ARRAY_OFFSET_SUN_COLOR + 1] = this.sunColor.getG();
+		array[ARRAY_OFFSET_SUN_COLOR + 2] = this.sunColor.getB();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  0] = objectToWorld.getElement11();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  1] = objectToWorld.getElement12();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  2] = objectToWorld.getElement13();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  3] = objectToWorld.getElement14();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  4] = objectToWorld.getElement21();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  5] = objectToWorld.getElement22();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  6] = objectToWorld.getElement23();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  7] = objectToWorld.getElement24();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  8] = objectToWorld.getElement31();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD +  9] = objectToWorld.getElement32();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 10] = objectToWorld.getElement33();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 11] = objectToWorld.getElement34();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 12] = objectToWorld.getElement41();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 13] = objectToWorld.getElement42();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 14] = objectToWorld.getElement43();
+		array[ARRAY_OFFSET_OBJECT_TO_WORLD + 15] = objectToWorld.getElement44();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  0] = worldToObject.getElement11();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  1] = worldToObject.getElement12();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  2] = worldToObject.getElement13();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  3] = worldToObject.getElement14();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  4] = worldToObject.getElement21();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  5] = worldToObject.getElement22();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  6] = worldToObject.getElement23();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  7] = worldToObject.getElement24();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  8] = worldToObject.getElement31();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT +  9] = worldToObject.getElement32();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 10] = worldToObject.getElement33();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 11] = worldToObject.getElement34();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 12] = worldToObject.getElement41();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 13] = worldToObject.getElement42();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 14] = worldToObject.getElement43();
+		array[ARRAY_OFFSET_WORLD_TO_OBJECT + 15] = worldToObject.getElement44();
+		array[ARRAY_OFFSET_SUN_DIRECTION + 0] = this.sunDirection.getX();
+		array[ARRAY_OFFSET_SUN_DIRECTION + 1] = this.sunDirection.getY();
+		array[ARRAY_OFFSET_SUN_DIRECTION + 2] = this.sunDirection.getZ();
+		array[ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 0] = this.sunDirectionWorldSpace.getX();
+		array[ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 1] = this.sunDirectionWorldSpace.getY();
+		array[ARRAY_OFFSET_SUN_DIRECTION_WORLD_SPACE + 2] = this.sunDirectionWorldSpace.getZ();
+		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 0] = (float)(this.perezRelativeLuminance[0]);
+		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 1] = (float)(this.perezRelativeLuminance[1]);
+		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 2] = (float)(this.perezRelativeLuminance[2]);
+		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 3] = (float)(this.perezRelativeLuminance[3]);
+		array[ARRAY_OFFSET_PEREZ_RELATIVE_LUMINANCE + 4] = (float)(this.perezRelativeLuminance[4]);
+		array[ARRAY_OFFSET_PEREZ_X + 0] = (float)(this.perezX[0]);
+		array[ARRAY_OFFSET_PEREZ_X + 1] = (float)(this.perezX[1]);
+		array[ARRAY_OFFSET_PEREZ_X + 2] = (float)(this.perezX[2]);
+		array[ARRAY_OFFSET_PEREZ_X + 3] = (float)(this.perezX[3]);
+		array[ARRAY_OFFSET_PEREZ_X + 4] = (float)(this.perezX[4]);
+		array[ARRAY_OFFSET_PEREZ_Y + 0] = (float)(this.perezY[0]);
+		array[ARRAY_OFFSET_PEREZ_Y + 1] = (float)(this.perezY[1]);
+		array[ARRAY_OFFSET_PEREZ_Y + 2] = (float)(this.perezY[2]);
+		array[ARRAY_OFFSET_PEREZ_Y + 3] = (float)(this.perezY[3]);
+		array[ARRAY_OFFSET_PEREZ_Y + 4] = (float)(this.perezY[4]);
+		array[ARRAY_OFFSET_ZENITH + 0] = (float)(this.zenith[0]);
+		array[ARRAY_OFFSET_ZENITH + 1] = (float)(this.zenith[1]);
+		array[ARRAY_OFFSET_ZENITH + 2] = (float)(this.zenith[2]);
+		array[ARRAY_OFFSET_RADIUS] = this.radius;
+		array[ARRAY_OFFSET_THETA] = this.theta;
+		
+		for(int i = 0; i < distribution.length; i++) {
+			array[ARRAY_OFFSET_DISTRIBUTION + i] = distribution[i];
+		}
+		
+		return array;
+	}
+	
+	/**
+	 * Returns the length of the {@code float[]}.
+	 * 
+	 * @return the length of the {@code float[]}
+	 */
+	public int getArrayLength() {
+		final int lengthSunColor = 3;
+		final int lengthObjectToWorld = 16;
+		final int lengthWorldToObject = 16;
+		final int lengthSunDirection = 3;
+		final int lengthSunDirectionWorldSpace = 3;
+		final int lengthPerezRelativeLuminance = 5;
+		final int lengthPerezX = 5;
+		final int lengthPerezY = 5;
+		final int lengthZenith = 3;
+		final int lengthRadius = 1;
+		final int lengthTheta = 1;
+		final int lengthDistribution = this.distribution.toArray().length;
+		final int length = lengthSunColor + lengthObjectToWorld + lengthWorldToObject + lengthSunDirection + lengthSunDirectionWorldSpace + lengthPerezRelativeLuminance + lengthPerezX + lengthPerezY + lengthZenith + lengthRadius + lengthTheta + lengthDistribution;
+		final int lengthWithPadding = length + padding(length);
+		
+		return lengthWithPadding;
 	}
 	
 	/**

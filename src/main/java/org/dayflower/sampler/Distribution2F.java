@@ -21,6 +21,7 @@ package org.dayflower.sampler;
 import static org.dayflower.utility.Ints.saturate;
 import static org.dayflower.utility.Ints.toInt;
 
+import org.dayflower.utility.FloatArrayOutputStream;
 import org.dayflower.utility.ParameterArguments;
 
 /**
@@ -247,6 +248,49 @@ public final class Distribution2F {
 		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueM * probabilityDensityFunctionValueC;
 		
 		return probabilityDensityFunctionValue;
+	}
+	
+	/**
+	 * Returns a {@code float[]} representation of this {@code Distribution2F} instance.
+	 * <p>
+	 * The {@code float[]} will contain the following data:
+	 * <ol>
+	 * <li>The UV flag.</li>
+	 * <li>The offset table length.</li>
+	 * <li>The offset table.</li>
+	 * <li>The marginal.</li>
+	 * <li>The conditional.</li>
+	 * </ol>
+	 * 
+	 * @return a {@code float[]} representation of this {@code Distribution2F} instance
+	 */
+	public float[] toArray() {
+		final float[] marginal = this.marginal.toArray();
+		final float[] offsetTable = new float[1 + this.conditional.length];
+		final float[][] conditional = new float[this.conditional.length][];
+		
+		for(int i = 0; i < this.conditional.length; i++) {
+			conditional[i] = this.conditional[i].toArray();
+		}
+		
+		offsetTable[0] = offsetTable.length + 1 + 1;
+		
+		for(int i = 0; i < conditional.length; i++) {
+			offsetTable[i + 1] = (int)(offsetTable[i]) + (i == 0 ? marginal.length : conditional[i - 1].length);
+		}
+		
+		try(final FloatArrayOutputStream floatArrayOutputStream = new FloatArrayOutputStream()) {
+			floatArrayOutputStream.write(this.isUV ? 1.0F : 0.0F);
+			floatArrayOutputStream.write(offsetTable.length);
+			floatArrayOutputStream.write(offsetTable);
+			floatArrayOutputStream.write(marginal);
+			
+			for(final float[] conditionalEntry : conditional) {
+				floatArrayOutputStream.write(conditionalEntry);
+			}
+			
+			return floatArrayOutputStream.toFloatArray();
+		}
 	}
 	
 	/**

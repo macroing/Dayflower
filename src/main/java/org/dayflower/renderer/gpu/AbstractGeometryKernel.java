@@ -18,6 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
 import static org.dayflower.utility.Floats.PI_DIVIDED_BY_4;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
@@ -81,6 +82,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_V = 3;
 	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_OFFSET_W = 6;
 	private static final int ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE = 9;
+	private static final int POINT_2_F_ARRAY_OFFSET_COMPONENT_1 = 0;
+	private static final int POINT_2_F_ARRAY_OFFSET_COMPONENT_2 = 1;
+	private static final int POINT_2_F_ARRAY_SIZE = 2;
 	private static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_1 = 0;
 	private static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_2 = 1;
 	private static final int POINT_3_F_ARRAY_OFFSET_COMPONENT_3 = 2;
@@ -116,6 +120,11 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * A {@code float[]} that contains an orthonormal basis that consists of three 3-dimensional vectors.
 	 */
 	protected float[] orthonormalBasis33FArray_$private$9;
+	
+	/**
+	 * A {@code float[]} that contains a point that consists of two components.
+	 */
+	protected float[] point2FArray_$private$2;
 	
 	/**
 	 * A {@code float[]} that contains a point that consists of three components.
@@ -197,6 +206,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.boundingVolume3FBoundingSphere3FArray = new float[1];
 		this.intersectionArray_$private$24 = new float[INTERSECTION_ARRAY_SIZE];
 		this.orthonormalBasis33FArray_$private$9 = new float[ORTHONORMAL_BASIS_3_3_F_ARRAY_SIZE];
+		this.point2FArray_$private$2 = new float[POINT_2_F_ARRAY_SIZE];
 		this.point3FArray_$private$3 = new float[POINT_3_F_ARRAY_SIZE];
 		this.ray3FArray_$private$8 = new float[RAY_3_F_ARRAY_SIZE];
 		this.shape3FCone3FArray = new float[1];
@@ -1044,6 +1054,66 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Point2F /////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns the value of component 1 in {@link #point2FArray_$private$2}.
+	 * 
+	 * @return the value of component 1 in {@link #point2FArray_$private$2}
+	 */
+	protected final float point2FGetComponent1() {
+		return this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_1];
+	}
+	
+	/**
+	 * Returns the value of component 2 in {@link #point2FArray_$private$2}.
+	 * 
+	 * @return the value of component 2 in {@link #point2FArray_$private$2}
+	 */
+	protected final float point2FGetComponent2() {
+		return this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_2];
+	}
+	
+	/**
+	 * Sets a point in {@link #point2FArray_$private$2}.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 */
+	protected final void point2FSet(final float component1, final float component2) {
+		this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_1] = component1;
+		this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_2] = component2;
+	}
+	
+	/**
+	 * Sets a point in {@link #point2FArray_$private$2}.
+	 * <p>
+	 * The point is constructed by sampling a point on a disk with a uniform distribution using concentric mapping.
+	 * 
+	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
+	 * @param radius the radius of the disk
+	 */
+	protected final void point2FSetSampleDiskUniformDistributionByConcentricMapping(final float u, final float v, final float radius) {
+		if(checkIsZero(u) && checkIsZero(v)) {
+			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_1] = 0.0F;
+			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_2] = 0.0F;
+		} else {
+			final float a = u * 2.0F - 1.0F;
+			final float b = v * 2.0F - 1.0F;
+			
+			final boolean isCaseA = a * a > b * b;
+			
+			final float phi = isCaseA ? PI_DIVIDED_BY_4 * (b / a) : PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
+			final float r = isCaseA ? radius * a : radius * b;
+			
+			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_1] = r * cos(phi);
+			this.point2FArray_$private$2[POINT_2_F_ARRAY_OFFSET_COMPONENT_2] = r * sin(phi);
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Point3F /////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -1173,37 +1243,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = isDividing ? newComponent1 / newComponent4 : newComponent1;
 		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = isDividing ? newComponent2 / newComponent4 : newComponent2;
 		this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = isDividing ? newComponent3 / newComponent4 : newComponent3;
-	}
-	
-	/**
-	 * Sets a point in {@link #point3FArray_$private$3}.
-	 * <p>
-	 * The point is constructed by sampling a point on a disk with a uniform distribution using concentric mapping.
-	 * <p>
-	 * The point is 2-dimensional and not 3-dimensional as the name of this method may suggest. However, adding a new {@code point2FArray_$private$2} array just for this purpose seems unnecessary, at least for now.
-	 * 
-	 * @param u a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
-	 * @param radius the radius of the disk
-	 */
-	protected final void point3FSetSampleDiskUniformDistributionByConcentricMapping(final float u, final float v, final float radius) {
-		if(checkIsZero(u) && checkIsZero(v)) {
-			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = 0.0F;
-			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = 0.0F;
-			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = 0.0F;
-		} else {
-			final float a = u * 2.0F - 1.0F;
-			final float b = v * 2.0F - 1.0F;
-			
-			final boolean isCaseA = a * a > b * b;
-			
-			final float phi = isCaseA ? PI_DIVIDED_BY_4 * (b / a) : PI_DIVIDED_BY_2 - PI_DIVIDED_BY_4 * (a / b);
-			final float r = isCaseA ? radius * a : radius * b;
-			
-			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_1] = r * cos(phi);
-			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_2] = r * sin(phi);
-			this.point3FArray_$private$3[POINT_3_F_ARRAY_OFFSET_COMPONENT_3] = 0.0F;
-		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3403,6 +3442,31 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * Sets a vector in {@link #vector3FArray_$private$3}.
 	 * <p>
+	 * The vector is constructed to point in the direction of the spherical coordinates {@code u} and {@code v}.
+	 * 
+	 * @param u the spherical U-coordinate
+	 * @param v the spherical V-coordinate
+	 */
+	protected final void vector3FSetDirectionSpherical2(final float u, final float v) {
+		vector3FSetDirectionSpherical3(sin(v * PI), cos(v * PI), u * PI_MULTIPLIED_BY_2);
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
+	 * The vector is constructed to point in the direction of the spherical coordinates given by {@code sinTheta}, {@code cosTheta} and {@code phi}.
+	 * 
+	 * @param sinTheta the sine of the angle theta
+	 * @param cosTheta the cosine of the angle theta
+	 * @param phi the angle phi
+	 */
+	protected final void vector3FSetDirectionSpherical3(final float sinTheta, final float cosTheta, final float phi) {
+		vector3FSet(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta);
+	}
+	
+	/**
+	 * Sets a vector in {@link #vector3FArray_$private$3}.
+	 * <p>
 	 * The vector is constructed by negating the vector represented by {@code component1Direction}, {@code component2Direction} and {@code component3Direction} if, and only if, the dot product between the vector represented by {@code component1LHS},
 	 * {@code component2LHS} and {@code component3LHS} and the vector represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS} is less than {@code 0.0F}. Otherwise, its current values will be used.
 	 * 
@@ -3820,10 +3884,10 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	 * @param v a random {@code float} with a uniform distribution between {@code 0.0F} and {@code 1.0F}
 	 */
 	protected final void vector3FSetSampleHemisphereCosineDistribution(final float u, final float v) {
-		point3FSetSampleDiskUniformDistributionByConcentricMapping(u, v, 1.0F);
+		point2FSetSampleDiskUniformDistributionByConcentricMapping(u, v, 1.0F);
 		
-		final float component1 = point3FGetComponent1();
-		final float component2 = point3FGetComponent2();
+		final float component1 = point2FGetComponent1();
+		final float component2 = point2FGetComponent2();
 		final float component3 = sqrt(max(0.0F, 1.0F - component1 * component1 - component2 * component2));
 		
 		this.vector3FArray_$private$3[VECTOR_3_F_ARRAY_OFFSET_COMPONENT_1] = component1;

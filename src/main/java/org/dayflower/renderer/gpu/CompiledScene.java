@@ -31,6 +31,7 @@ final class CompiledScene {
 	private float[] cameraArray;
 	private float[] lightDirectionalLightArray;
 	private float[] lightLDRImageLightArray;
+	private float[] lightPerezLightArray;
 	private float[] lightPointLightArray;
 	private float[] lightSpotLightArray;
 	private float[] matrix44FArray;
@@ -51,6 +52,7 @@ final class CompiledScene {
 	private float[] textureMarbleTextureArray;
 	private float[] textureSimplexFractionalBrownianMotionTextureArray;
 	private int[] lightLDRImageLightOffsetArray;
+	private int[] lightPerezLightOffsetArray;
 	private int[] materialClearCoatMaterialArray;
 	private int[] materialDisneyMaterialArray;
 	private int[] materialGlassMaterialArray;
@@ -72,6 +74,8 @@ final class CompiledScene {
 		setLightDirectionalLightArray(new float[1]);
 		setLightLDRImageLightArray(new float[1]);
 		setLightLDRImageLightOffsetArray(new int[1]);
+		setLightPerezLightArray(new float[1]);
+		setLightPerezLightOffsetArray(new int[1]);
 		setLightPointLightArray(new float[1]);
 		setLightSpotLightArray(new float[1]);
 		setMaterialClearCoatMaterialArray(new int[1]);
@@ -124,6 +128,10 @@ final class CompiledScene {
 	
 	public float[] getLightLDRImageLightArray() {
 		return this.lightLDRImageLightArray;
+	}
+	
+	public float[] getLightPerezLightArray() {
+		return this.lightPerezLightArray;
 	}
 	
 	public float[] getLightPointLightArray() {
@@ -207,7 +215,21 @@ final class CompiledScene {
 	}
 	
 	public int getLightLDRImageLightCount() {
+		/*
+		 * The float[] of an LDRImageLight contains padding, such that its length is evenly divisible by 8. If no LDRImageLight has been added, the length of the float[] is 1, which is not evenly divisible by 8.
+		 * Aparapi requires all arrays to have a length of at least 1. So the length of 'lightLDRImageLightOffsetArray' cannot be 0, which could have been used to determine the count in all cases.
+		 */
+		
 		return this.lightLDRImageLightArray.length % 8 == 0 ? this.lightLDRImageLightOffsetArray.length : 0;
+	}
+	
+	public int getLightPerezLightCount() {
+		/*
+		 * The float[] of a PerezLight contains padding, such that its length is evenly divisible by 8. If no PerezLight has been added, the length of the float[] is 1, which is not evenly divisible by 8.
+		 * Aparapi requires all arrays to have a length of at least 1. So the length of 'lightPerezLightOffsetArray' cannot be 0, which could have been used to determine the count in all cases.
+		 */
+		
+		return this.lightPerezLightArray.length % 8 == 0 ? this.lightPerezLightOffsetArray.length : 0;
 	}
 	
 	public int getLightPointLightCount() {
@@ -224,6 +246,10 @@ final class CompiledScene {
 	
 	public int[] getLightLDRImageLightOffsetArray() {
 		return this.lightLDRImageLightOffsetArray;
+	}
+	
+	public int[] getLightPerezLightOffsetArray() {
+		return this.lightPerezLightOffsetArray;
 	}
 	
 	public int[] getMaterialClearCoatMaterialArray() {
@@ -292,6 +318,14 @@ final class CompiledScene {
 	
 	public void setLightLDRImageLightOffsetArray(final int[] lightLDRImageLightOffsetArray) {
 		this.lightLDRImageLightOffsetArray = Objects.requireNonNull(lightLDRImageLightOffsetArray, "lightLDRImageLightOffsetArray == null");
+	}
+	
+	public void setLightPerezLightArray(final float[] lightPerezLightArray) {
+		this.lightPerezLightArray = Objects.requireNonNull(lightPerezLightArray, "lightPerezLightArray == null");
+	}
+	
+	public void setLightPerezLightOffsetArray(final int[] lightPerezLightOffsetArray) {
+		this.lightPerezLightOffsetArray = Objects.requireNonNull(lightPerezLightOffsetArray, "lightPerezLightOffsetArray == null");
 	}
 	
 	public void setLightPointLightArray(final float[] lightPointLightArray) {

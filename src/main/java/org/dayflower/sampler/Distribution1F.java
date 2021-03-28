@@ -197,6 +197,47 @@ public final class Distribution1F {
 	}
 	
 	/**
+	 * Returns a {@code float[]} representation of this {@code Distribution1F} instance.
+	 * <p>
+	 * The {@code float[]} will contain the following data:
+	 * <ol>
+	 * <li>The length of the array itself.</li>
+	 * <li>The length of the cumulative distribution function (CDF).</li>
+	 * <li>The length of the function.</li>
+	 * <li>The function integral.</li>
+	 * <li>The cumulative distribution function (CDF) itself.</li>
+	 * <li>The function itself.</li>
+	 * </ol>
+	 * 
+	 * @return a {@code float[]} representation of this {@code Distribution1F} instance
+	 */
+	public float[] toArray() {
+		final float[] cumulativeDistributionFunction = this.cumulativeDistributionFunction;
+		final float[] function = this.function;
+		
+		final float functionIntegral = this.functionIntegral;
+		
+		final float[] array = new float[1 + 1 + cumulativeDistributionFunction.length + 1 + function.length + 1];
+		
+		int index = 0;
+		
+		array[index++] = array.length;
+		array[index++] = cumulativeDistributionFunction.length;
+		array[index++] = function.length;
+		array[index++] = functionIntegral;
+		
+		for(int i = 0; i < cumulativeDistributionFunction.length; i++) {
+			array[index++] = cumulativeDistributionFunction[i];
+		}
+		
+		for(int i = 0; i < function.length; i++) {
+			array[index++] = function[i];
+		}
+		
+		return array;
+	}
+	
+	/**
 	 * Returns the value count of the function.
 	 * 
 	 * @return the value count of the function

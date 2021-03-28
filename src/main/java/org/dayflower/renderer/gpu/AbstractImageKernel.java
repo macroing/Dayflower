@@ -18,6 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.utility.Bytes;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.Ints;
@@ -364,6 +365,25 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 	/**
 	 * Sets a color in {@link #color3FLHSArray_$private$3}.
 	 * <p>
+	 * This method works like {@link Color3F#minimumTo0(Color3F)}.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
+	protected final void color3FLHSSetMinimumTo0(final float component1, final float component2, final float component3) {
+		final float minimum = min(component1, component2, component3);
+		
+		if(minimum < 0.0F) {
+			color3FLHSSet(component1 + -minimum, component2 + -minimum, component3 + -minimum);
+		} else {
+			color3FLHSSet(component1, component2, component3);
+		}
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FLHSArray_$private$3}.
+	 * <p>
 	 * The color is constructed by multiplying the color represented by {@code component1LHS}, {@code component2LHS} and {@code component3LHS} with the color represented by {@code component1RHS}, {@code component2RHS} and {@code component3RHS},
 	 * component-wize.
 	 * 
@@ -568,6 +588,25 @@ public abstract class AbstractImageKernel extends AbstractKernel {
 		final float component3 = component3LHS / component3RHS;
 		
 		color3FRHSSet(component1, component2, component3);
+	}
+	
+	/**
+	 * Sets a color in {@link #color3FRHSArray_$private$3}.
+	 * <p>
+	 * This method works like {@link Color3F#minimumTo0(Color3F)}.
+	 * 
+	 * @param component1 the value of component 1
+	 * @param component2 the value of component 2
+	 * @param component3 the value of component 3
+	 */
+	protected final void color3FRHSSetMinimumTo0(final float component1, final float component2, final float component3) {
+		final float minimum = min(component1, component2, component3);
+		
+		if(minimum < 0.0F) {
+			color3FRHSSet(component1 + -minimum, component2 + -minimum, component3 + -minimum);
+		} else {
+			color3FRHSSet(component1, component2, component3);
+		}
 	}
 	
 	/**

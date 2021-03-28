@@ -41,6 +41,7 @@ import org.dayflower.scene.Light;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.light.DirectionalLight;
+import org.dayflower.scene.light.PerezLight;
 import org.dayflower.scene.light.PointLight;
 import org.dayflower.scene.light.SpotLight;
 import org.dayflower.utility.Floats;
@@ -558,9 +559,10 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	 */
 	protected final void lightSampleOneLightUniformDistribution() {
 		final int lightCountDirectionalLight = super.lightDirectionalLightCount;
+		final int lightCountPerezLight = super.lightPerezLightCount;
 		final int lightCountPointLight = super.lightPointLightCount;
 		final int lightCountSpotLight = super.lightSpotLightCount;
-		final int lightCount = lightCountDirectionalLight + lightCountPointLight + lightCountSpotLight;
+		final int lightCount = lightCountDirectionalLight + lightCountPerezLight + lightCountPointLight + lightCountSpotLight;
 		
 		if(lightCount == 0) {
 			color3FLHSSet(0.0F, 0.0F, 0.0F);
@@ -573,15 +575,17 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		final int index = min((int)(random() * lightCount), lightCount - 1);
 		
 		final boolean isDirectionalLight = index < lightCountDirectionalLight;
-		final boolean isPointLight = index >= lightCountDirectionalLight && index < lightCountDirectionalLight + lightCountPointLight;
-//		final boolean isSpotLight = index >= lightCountDirectionalLight + lightCountPointLight;
+		final boolean isPerezLight = index >= lightCountDirectionalLight && index < lightCountDirectionalLight + lightCountPerezLight;
+		final boolean isPointLight = index >= lightCountDirectionalLight + lightCountPerezLight && index < lightCountDirectionalLight + lightCountPerezLight + lightCountPointLight;
+//		final boolean isSpotLight = index >= lightCountDirectionalLight + lightCountPerezLight + lightCountPointLight;
 		
 		final int offsetDirectionalLight = index * DirectionalLight.ARRAY_LENGTH;
-		final int offsetPointLight = (index - lightCountDirectionalLight) * PointLight.ARRAY_LENGTH;
-		final int offsetSpotLight = (index - lightCountDirectionalLight - lightCountPointLight) * SpotLight.ARRAY_LENGTH;
+		final int offsetPerezLight = 0;
+		final int offsetPointLight = (index - lightCountDirectionalLight - lightCountPerezLight) * PointLight.ARRAY_LENGTH;
+		final int offsetSpotLight = (index - lightCountDirectionalLight - lightCountPerezLight - lightCountPointLight) * SpotLight.ARRAY_LENGTH;
 		
-		final int id = isDirectionalLight ? DirectionalLight.ID : isPointLight ? PointLight.ID : SpotLight.ID;
-		final int offset = isDirectionalLight ? offsetDirectionalLight : isPointLight ? offsetPointLight : offsetSpotLight;
+		final int id = isDirectionalLight ? DirectionalLight.ID : isPerezLight ? PerezLight.ID : isPointLight ? PointLight.ID : SpotLight.ID;
+		final int offset = isDirectionalLight ? offsetDirectionalLight : isPerezLight ? offsetPerezLight : isPointLight ? offsetPointLight : offsetSpotLight;
 		
 		lightSet(id, offset);
 		
@@ -744,75 +748,143 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	
 	@SuppressWarnings("unused")
 	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
+		final int bitFlags = isSpecular ? B_X_D_F_TYPE_BIT_FLAG_ALL : B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR;
+		
 		float lightDirectR = 0.0F;
 		float lightDirectG = 0.0F;
 		float lightDirectB = 0.0F;
 		
-		if(lightIsUsingDeltaDistribution()) {
-			final int bitFlags = isSpecular ? B_X_D_F_TYPE_BIT_FLAG_ALL : B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR;
+		if(lightIsUsingDeltaDistribution() && lightSampleRadianceIncoming(sampleAU, sampleAV)) {
+			final float lightResultR = lightSampleGetResultR();
+			final float lightResultG = lightSampleGetResultG();
+			final float lightResultB = lightSampleGetResultB();
 			
-			if(lightSampleRadianceIncoming(sampleAU, sampleAV)) {
-				final float lightResultR = lightSampleGetResultR();
-				final float lightResultG = lightSampleGetResultG();
-				final float lightResultB = lightSampleGetResultB();
+			final float lightIncomingX = lightSampleGetIncomingX();
+			final float lightIncomingY = lightSampleGetIncomingY();
+			final float lightIncomingZ = lightSampleGetIncomingZ();
+			
+			final float lightPointX = lightSampleGetPointX();
+			final float lightPointY = lightSampleGetPointY();
+			final float lightPointZ = lightSampleGetPointZ();
+			
+			final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
+			
+			final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
+			
+			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
+				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
 				
-				final float lightIncomingX = lightSampleGetIncomingX();
-				final float lightIncomingY = lightSampleGetIncomingY();
-				final float lightIncomingZ = lightSampleGetIncomingZ();
+				final float materialBSDFResultR = materialBSDFResultGetResultR();
+				final float materialBSDFResultG = materialBSDFResultGetResultG();
+				final float materialBSDFResultB = materialBSDFResultGetResultB();
 				
-				final float lightPointX = lightSampleGetPointX();
-				final float lightPointY = lightSampleGetPointY();
-				final float lightPointZ = lightSampleGetPointZ();
+				final float normalX = intersectionGetOrthonormalBasisSWComponent1();
+				final float normalY = intersectionGetOrthonormalBasisSWComponent2();
+				final float normalZ = intersectionGetOrthonormalBasisSWComponent3();
 				
-				final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
+				final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+				final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+				final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
 				
-				final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
+				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
 				
-				if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
-					materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
+				final float scatteringResultR = materialBSDFResultR * lightIncomingDotNormalAbs;
+				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
+				final float scatteringResultB = materialBSDFResultB * lightIncomingDotNormalAbs;
+				
+				final boolean hasScatteringResult = !checkIsZero(scatteringResultR) || !checkIsZero(scatteringResultG) || !checkIsZero(scatteringResultB);
+				
+				final float directionX = lightPointX - surfaceIntersectionPointX;
+				final float directionY = lightPointY - surfaceIntersectionPointY;
+				final float directionZ = lightPointZ - surfaceIntersectionPointZ;
+				final float directionLength = vector3FLength(directionX, directionY, directionZ);
+				final float directionLengthReciprocal = 1.0F / directionLength;
+				final float directionNormalizedX = directionX * directionLengthReciprocal;
+				final float directionNormalizedY = directionY * directionLengthReciprocal;
+				final float directionNormalizedZ = directionZ * directionLengthReciprocal;
+				
+				final float tMaximum = abs(directionLength) + 0.001F;
+				final float tMinimum = DEFAULT_T_MINIMUM;
+				
+				ray3FSetOrigin(surfaceIntersectionPointX + directionNormalizedX * 0.001F, surfaceIntersectionPointY + directionNormalizedY * 0.001F, surfaceIntersectionPointZ + directionNormalizedZ * 0.001F);
+				ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+				ray3FSetTMaximum(tMaximum);
+				ray3FSetTMinimum(tMinimum);
+				
+				if(hasScatteringResult && !primitiveIntersects()) {
+					lightDirectR += scatteringResultR * lightResultR / lightProbabilityDensityFunctionValue;
+					lightDirectG += scatteringResultG * lightResultG / lightProbabilityDensityFunctionValue;
+					lightDirectB += scatteringResultB * lightResultB / lightProbabilityDensityFunctionValue;
+				}
+			}
+		}
+		
+		if(!lightIsUsingDeltaDistribution() && lightSampleRadianceIncoming(sampleAU, sampleAV)) {
+			final float lightResultR = lightSampleGetResultR();
+			final float lightResultG = lightSampleGetResultG();
+			final float lightResultB = lightSampleGetResultB();
+			
+			final float lightIncomingX = lightSampleGetIncomingX();
+			final float lightIncomingY = lightSampleGetIncomingY();
+			final float lightIncomingZ = lightSampleGetIncomingZ();
+			
+			final float lightPointX = lightSampleGetPointX();
+			final float lightPointY = lightSampleGetPointY();
+			final float lightPointZ = lightSampleGetPointZ();
+			
+			final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
+			
+			final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
+			
+			if(hasLightResult && lightProbabilityDensityFunctionValue > 0.0F) {
+				materialBSDFEvaluateDistributionFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
+				
+				final float materialBSDFResultR = materialBSDFResultGetResultR();
+				final float materialBSDFResultG = materialBSDFResultGetResultG();
+				final float materialBSDFResultB = materialBSDFResultGetResultB();
+				
+				final float normalX = intersectionGetOrthonormalBasisSWComponent1();
+				final float normalY = intersectionGetOrthonormalBasisSWComponent2();
+				final float normalZ = intersectionGetOrthonormalBasisSWComponent3();
+				
+				final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+				final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+				final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+				
+				final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
+				
+				final float scatteringResultR = materialBSDFResultR * lightIncomingDotNormalAbs;
+				final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
+				final float scatteringResultB = materialBSDFResultB * lightIncomingDotNormalAbs;
+				
+				final boolean hasScatteringResult = !checkIsZero(scatteringResultR) || !checkIsZero(scatteringResultG) || !checkIsZero(scatteringResultB);
+				
+				final float directionX = lightPointX - surfaceIntersectionPointX;
+				final float directionY = lightPointY - surfaceIntersectionPointY;
+				final float directionZ = lightPointZ - surfaceIntersectionPointZ;
+				final float directionLength = vector3FLength(directionX, directionY, directionZ);
+				final float directionLengthReciprocal = 1.0F / directionLength;
+				final float directionNormalizedX = directionX * directionLengthReciprocal;
+				final float directionNormalizedY = directionY * directionLengthReciprocal;
+				final float directionNormalizedZ = directionZ * directionLengthReciprocal;
+				
+				final float tMaximum = abs(directionLength) + 0.001F;
+				final float tMinimum = DEFAULT_T_MINIMUM;
+				
+				ray3FSetOrigin(surfaceIntersectionPointX + directionNormalizedX * 0.001F, surfaceIntersectionPointY + directionNormalizedY * 0.001F, surfaceIntersectionPointZ + directionNormalizedZ * 0.001F);
+				ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+				ray3FSetTMaximum(tMaximum);
+				ray3FSetTMinimum(tMinimum);
+				
+				if(hasScatteringResult && !primitiveIntersects()) {
+					materialBSDFEvaluateProbabilityDensityFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
 					
-					final float materialBSDFResultR = materialBSDFResultGetResultR();
-					final float materialBSDFResultG = materialBSDFResultGetResultG();
-					final float materialBSDFResultB = materialBSDFResultGetResultB();
+					final float scatteringProbabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
+					final float weight = lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue / (lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue + scatteringProbabilityDensityFunctionValue * scatteringProbabilityDensityFunctionValue);
 					
-					final float normalX = intersectionGetOrthonormalBasisSWComponent1();
-					final float normalY = intersectionGetOrthonormalBasisSWComponent2();
-					final float normalZ = intersectionGetOrthonormalBasisSWComponent3();
-					
-					final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
-					final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
-					final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
-					
-					final float lightIncomingDotNormalAbs = abs(vector3FDotProduct(lightIncomingX, lightIncomingY, lightIncomingZ, normalX, normalY, normalZ));
-					
-					final float scatteringResultR = materialBSDFResultR * lightIncomingDotNormalAbs;
-					final float scatteringResultG = materialBSDFResultG * lightIncomingDotNormalAbs;
-					final float scatteringResultB = materialBSDFResultB * lightIncomingDotNormalAbs;
-					
-					final boolean hasScatteringResult = !checkIsZero(scatteringResultR) || !checkIsZero(scatteringResultG) || !checkIsZero(scatteringResultB);
-					
-					final float directionX = lightPointX - surfaceIntersectionPointX;
-					final float directionY = lightPointY - surfaceIntersectionPointY;
-					final float directionZ = lightPointZ - surfaceIntersectionPointZ;
-					final float directionLength = vector3FLength(directionX, directionY, directionZ);
-					final float directionLengthReciprocal = 1.0F / directionLength;
-					final float directionNormalizedX = directionX * directionLengthReciprocal;
-					final float directionNormalizedY = directionY * directionLengthReciprocal;
-					final float directionNormalizedZ = directionZ * directionLengthReciprocal;
-					
-					final float tMaximum = abs(directionLength) + 0.001F;
-					final float tMinimum = DEFAULT_T_MINIMUM;
-					
-					ray3FSetOrigin(surfaceIntersectionPointX + directionNormalizedX * 0.001F, surfaceIntersectionPointY + directionNormalizedY * 0.001F, surfaceIntersectionPointZ + directionNormalizedZ * 0.001F);
-					ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
-					ray3FSetTMaximum(tMaximum);
-					ray3FSetTMinimum(tMinimum);
-					
-					if(hasScatteringResult && !primitiveIntersects()) {
-						lightDirectR += scatteringResultR * lightResultR / lightProbabilityDensityFunctionValue;
-						lightDirectG += scatteringResultG * lightResultG / lightProbabilityDensityFunctionValue;
-						lightDirectB += scatteringResultB * lightResultB / lightProbabilityDensityFunctionValue;
-					}
+					lightDirectR += scatteringResultR * lightResultR * weight / lightProbabilityDensityFunctionValue;
+					lightDirectG += scatteringResultG * lightResultG * weight / lightProbabilityDensityFunctionValue;
+					lightDirectB += scatteringResultB * lightResultB * weight / lightProbabilityDensityFunctionValue;
 				}
 			}
 		}
@@ -968,6 +1040,8 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		put(super.lightDirectionalLightArray = compiledScene.getLightDirectionalLightArray());
 		put(super.lightLDRImageLightArray = compiledScene.getLightLDRImageLightArray());
 		put(super.lightLDRImageLightOffsetArray = compiledScene.getLightLDRImageLightOffsetArray());
+		put(super.lightPerezLightArray = compiledScene.getLightPerezLightArray());
+		put(super.lightPerezLightOffsetArray = compiledScene.getLightPerezLightOffsetArray());
 		put(super.lightPointLightArray = compiledScene.getLightPointLightArray());
 		put(super.lightSpotLightArray = compiledScene.getLightSpotLightArray());
 		
@@ -979,6 +1053,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		
 		super.lightDirectionalLightCount = compiledScene.getLightDirectionalLightCount();
 		super.lightLDRImageLightCount = compiledScene.getLightLDRImageLightCount();
+		super.lightPerezLightCount = compiledScene.getLightPerezLightCount();
 		super.lightPointLightCount = compiledScene.getLightPointLightCount();
 		super.lightSpotLightCount = compiledScene.getLightSpotLightCount();
 		

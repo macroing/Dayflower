@@ -67,7 +67,7 @@ public final class ByteImageF extends ImageF {
 	public ByteImageF(final ByteImageF byteImage) {
 		super(byteImage.getResolutionX(), byteImage.getResolutionY());
 		
-		this.data = byteImage.data.clone();
+		this.data = byteImage.getData();
 	}
 	
 	/**
@@ -163,12 +163,14 @@ public final class ByteImageF extends ImageF {
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
 		
 		if(indexTransformed >= 0 && indexTransformed < resolution) {
-			final int r = this.data[indexTransformed * 4 + 0] & 0xFF;
-			final int g = this.data[indexTransformed * 4 + 1] & 0xFF;
-			final int b = this.data[indexTransformed * 4 + 2] & 0xFF;
-			final int a = this.data[indexTransformed * 4 + 3] & 0xFF;
-			
-			return new Color4F(r, g, b, a);
+			synchronized(this.data) {
+				final int r = this.data[indexTransformed * 4 + 0] & 0xFF;
+				final int g = this.data[indexTransformed * 4 + 1] & 0xFF;
+				final int b = this.data[indexTransformed * 4 + 2] & 0xFF;
+				final int a = this.data[indexTransformed * 4 + 3] & 0xFF;
+				
+				return new Color4F(r, g, b, a);
+			}
 		}
 		
 		return Color4F.BLACK;
@@ -198,12 +200,14 @@ public final class ByteImageF extends ImageF {
 		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
 			final int index = yTransformed * resolutionX + xTransformed;
 			
-			final int r = this.data[index * 4 + 0] & 0xFF;
-			final int g = this.data[index * 4 + 1] & 0xFF;
-			final int b = this.data[index * 4 + 2] & 0xFF;
-			final int a = this.data[index * 4 + 3] & 0xFF;
-			
-			return new Color4F(r, g, b, a);
+			synchronized(this.data) {
+				final int r = this.data[index * 4 + 0] & 0xFF;
+				final int g = this.data[index * 4 + 1] & 0xFF;
+				final int b = this.data[index * 4 + 2] & 0xFF;
+				final int a = this.data[index * 4 + 3] & 0xFF;
+				
+				return new Color4F(r, g, b, a);
+			}
 		}
 		
 		return Color4F.BLACK;
@@ -229,20 +233,22 @@ public final class ByteImageF extends ImageF {
 	 */
 	@Override
 	public boolean equals(final Object object) {
-		if(object == this) {
-			return true;
-		} else if(!(object instanceof ByteImageF)) {
-			return false;
-		} else if(getResolution() != ByteImageF.class.cast(object).getResolution()) {
-			return false;
-		} else if(getResolutionX() != ByteImageF.class.cast(object).getResolutionX()) {
-			return false;
-		} else if(getResolutionY() != ByteImageF.class.cast(object).getResolutionY()) {
-			return false;
-		} else if(!Arrays.equals(this.data, ByteImageF.class.cast(object).data)) {
-			return false;
-		} else {
-			return true;
+		synchronized(this.data) {
+			if(object == this) {
+				return true;
+			} else if(!(object instanceof ByteImageF)) {
+				return false;
+			} else if(getResolution() != ByteImageF.class.cast(object).getResolution()) {
+				return false;
+			} else if(getResolutionX() != ByteImageF.class.cast(object).getResolutionX()) {
+				return false;
+			} else if(getResolutionY() != ByteImageF.class.cast(object).getResolutionY()) {
+				return false;
+			} else if(!Arrays.equals(this.data, ByteImageF.class.cast(object).data)) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 	}
 	
@@ -269,7 +275,9 @@ public final class ByteImageF extends ImageF {
 	 * @return a copy of the associated {@code byte[]}, or the associated {@code byte[]} itself if {@code isWrapping} is {@code true}
 	 */
 	public byte[] getData(final boolean isWrapping) {
-		return isWrapping ? this.data : this.data.clone();
+		synchronized(this.data) {
+			return isWrapping ? this.data : this.data.clone();
+		}
 	}
 	
 	/**
@@ -283,7 +291,9 @@ public final class ByteImageF extends ImageF {
 	 */
 	@Override
 	public byte[] toByteArray(final ArrayComponentOrder arrayComponentOrder) {
-		return ArrayComponentOrder.convert(ArrayComponentOrder.RGBA, Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null"), this.data);
+		synchronized(this.data) {
+			return ArrayComponentOrder.convert(ArrayComponentOrder.RGBA, Objects.requireNonNull(arrayComponentOrder, "arrayComponentOrder == null"), this.data);
+		}
 	}
 	
 	/**
@@ -293,7 +303,9 @@ public final class ByteImageF extends ImageF {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.valueOf(getResolution()), Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), Integer.valueOf(Arrays.hashCode(this.data)));
+		synchronized(this.data) {
+			return Objects.hash(Integer.valueOf(getResolution()), Integer.valueOf(getResolutionX()), Integer.valueOf(getResolutionY()), Integer.valueOf(Arrays.hashCode(this.data)));
+		}
 	}
 	
 	/**
@@ -307,7 +319,9 @@ public final class ByteImageF extends ImageF {
 	 */
 	@Override
 	public int[] toIntArrayPackedForm(final PackedIntComponentOrder packedIntComponentOrder) {
-		return Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null").pack(ArrayComponentOrder.RGBA, this.data);
+		synchronized(this.data) {
+			return Objects.requireNonNull(packedIntComponentOrder, "packedIntComponentOrder == null").pack(ArrayComponentOrder.RGBA, this.data);
+		}
 	}
 	
 	/**
@@ -332,10 +346,12 @@ public final class ByteImageF extends ImageF {
 		final int indexTransformed = pixelOperation.getIndex(index, resolution);
 		
 		if(indexTransformed >= 0 && indexTransformed < resolution) {
-			this.data[indexTransformed * 4 + 0] = colorRGBA.getAsByteR();
-			this.data[indexTransformed * 4 + 1] = colorRGBA.getAsByteG();
-			this.data[indexTransformed * 4 + 2] = colorRGBA.getAsByteB();
-			this.data[indexTransformed * 4 + 3] = colorRGBA.getAsByteA();
+			synchronized(this.data) {
+				this.data[indexTransformed * 4 + 0] = colorRGBA.getAsByteR();
+				this.data[indexTransformed * 4 + 1] = colorRGBA.getAsByteG();
+				this.data[indexTransformed * 4 + 2] = colorRGBA.getAsByteB();
+				this.data[indexTransformed * 4 + 3] = colorRGBA.getAsByteA();
+			}
 		}
 	}
 	
@@ -366,10 +382,12 @@ public final class ByteImageF extends ImageF {
 		if(xTransformed >= 0 && xTransformed < resolutionX && yTransformed >= 0 && yTransformed < resolutionY) {
 			final int index = yTransformed * resolutionX + xTransformed;
 			
-			this.data[index * 4 + 0] = colorRGBA.getAsByteR();
-			this.data[index * 4 + 1] = colorRGBA.getAsByteG();
-			this.data[index * 4 + 2] = colorRGBA.getAsByteB();
-			this.data[index * 4 + 3] = colorRGBA.getAsByteA();
+			synchronized(this.data) {
+				this.data[index * 4 + 0] = colorRGBA.getAsByteR();
+				this.data[index * 4 + 1] = colorRGBA.getAsByteG();
+				this.data[index * 4 + 2] = colorRGBA.getAsByteB();
+				this.data[index * 4 + 3] = colorRGBA.getAsByteA();
+			}
 		}
 	}
 	
@@ -387,24 +405,26 @@ public final class ByteImageF extends ImageF {
 		ParameterArguments.requireRange(indexA, 0, getResolution() - 1, "indexA");
 		ParameterArguments.requireRange(indexB, 0, getResolution() - 1, "indexB");
 		
-		final byte rA = this.data[indexA * 4 + 0];
-		final byte gA = this.data[indexA * 4 + 1];
-		final byte bA = this.data[indexA * 4 + 2];
-		final byte aA = this.data[indexA * 4 + 3];
-		
-		final byte rB = this.data[indexB * 4 + 0];
-		final byte gB = this.data[indexB * 4 + 1];
-		final byte bB = this.data[indexB * 4 + 2];
-		final byte aB = this.data[indexB * 4 + 3];
-		
-		this.data[indexA + 0] = rB;
-		this.data[indexA + 1] = gB;
-		this.data[indexA + 2] = bB;
-		this.data[indexA + 3] = aB;
-		
-		this.data[indexB + 0] = rA;
-		this.data[indexB + 1] = gA;
-		this.data[indexB + 2] = bA;
-		this.data[indexB + 3] = aA;
+		synchronized(this.data) {
+			final byte rA = this.data[indexA * 4 + 0];
+			final byte gA = this.data[indexA * 4 + 1];
+			final byte bA = this.data[indexA * 4 + 2];
+			final byte aA = this.data[indexA * 4 + 3];
+			
+			final byte rB = this.data[indexB * 4 + 0];
+			final byte gB = this.data[indexB * 4 + 1];
+			final byte bB = this.data[indexB * 4 + 2];
+			final byte aB = this.data[indexB * 4 + 3];
+			
+			this.data[indexA + 0] = rB;
+			this.data[indexA + 1] = gB;
+			this.data[indexA + 2] = bB;
+			this.data[indexA + 3] = aB;
+			
+			this.data[indexB + 0] = rA;
+			this.data[indexB + 1] = gA;
+			this.data[indexB + 2] = bA;
+			this.data[indexB + 3] = aA;
+		}
 	}
 }

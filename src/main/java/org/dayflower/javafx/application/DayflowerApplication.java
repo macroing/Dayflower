@@ -24,13 +24,16 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.dayflower.image.ByteImageF;
 import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.scene.control.NodeSelectionTabPane;
 import org.dayflower.javafx.scene.control.PathMenuBar;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.cpu.CPURenderer;
+import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
@@ -45,6 +48,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -64,11 +68,15 @@ public final class DayflowerApplication extends Application {
 	private static final File INITIAL_DIRECTORY_IMAGES = new File(".");
 	private static final File INITIAL_DIRECTORY_SCENES = new File("./resources/scenes");
 	private static final String PATH_ELEMENT_FILE = "File";
+	private static final String PATH_ELEMENT_RENDERER = "Renderer";
 	private static final String PATH_FILE = "File";
+	private static final String PATH_RENDERER = "Renderer";
 	private static final String TEXT_EXIT = "Exit";
 	private static final String TEXT_FILE = "File";
+	private static final String TEXT_G_P_U = "GPU";
 	private static final String TEXT_NEW = "New";
 	private static final String TEXT_OPEN = "Open";
+	private static final String TEXT_RENDERER = "Renderer";
 	private static final String TEXT_SAVE = "Save";
 	private static final String TEXT_SAVE_AS = "Save As...";
 	private static final String TITLE = "Dayflower";
@@ -79,6 +87,7 @@ public final class DayflowerApplication extends Application {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	private final AtomicBoolean isUsingGPU;
 	private final AtomicReference<Stage> stage;
 	private final BorderPane borderPane;
 	private final ExecutorService executorService;
@@ -91,6 +100,7 @@ public final class DayflowerApplication extends Application {
 	 * Constructs a new {@code DayflowerApplication} instance.
 	 */
 	public DayflowerApplication() {
+		this.isUsingGPU = new AtomicBoolean();
 		this.stage = new AtomicReference<>();
 		this.borderPane = new BorderPane();
 		this.executorService = Executors.newFixedThreadPool(4);
@@ -152,11 +162,11 @@ public final class DayflowerApplication extends Application {
 			final int resolutionX = (int)(camera.getResolutionX());
 			final int resolutionY = (int)(camera.getResolutionY());
 			
+			final boolean isUsingGPU = this.isUsingGPU.get();
+			
 			final
-			CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
-//			CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new GPURenderer(new NoOpRendererObserver());
-			combinedProgressiveImageOrderRenderer.setImage(new PixelImageF(resolutionX, resolutionY));
-//			combinedProgressiveImageOrderRenderer.setImage(new ByteImageF(resolutionX, resolutionY));
+			CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = isUsingGPU ? new GPURenderer(new NoOpRendererObserver()) : new CPURenderer(new NoOpRendererObserver());
+			combinedProgressiveImageOrderRenderer.setImage(isUsingGPU ? new ByteImageF(resolutionX, resolutionY) : new PixelImageF(resolutionX, resolutionY));
 			combinedProgressiveImageOrderRenderer.setRenderPasses(1);
 			combinedProgressiveImageOrderRenderer.setRenderPassesPerDisplayUpdate(1);
 			combinedProgressiveImageOrderRenderer.setSamples(1);
@@ -200,6 +210,7 @@ public final class DayflowerApplication extends Application {
 	
 	private void doConfigurePathMenuBar() {
 		this.pathMenuBar.setPathElementText(PATH_ELEMENT_FILE, TEXT_FILE);
+		this.pathMenuBar.setPathElementText(PATH_ELEMENT_RENDERER, TEXT_RENDERER);
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_NEW, this::doHandleEventFileNew, new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), true);
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_OPEN, this::doHandleEventFileOpen, new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN), true);
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
@@ -207,6 +218,7 @@ public final class DayflowerApplication extends Application {
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_SAVE_AS, this::doHandleEventFileSaveAs, null, false);
 		this.pathMenuBar.addSeparatorMenuItem(PATH_FILE);
 		this.pathMenuBar.addMenuItem(PATH_FILE, TEXT_EXIT, this::doHandleEventFileExit, null, true);
+		this.pathMenuBar.addCheckMenuItem(PATH_RENDERER, TEXT_G_P_U, this::doHandleEventRendererGPU, true, false);
 	}
 	
 	private void doCreateAndStartAnimationTimer() {
@@ -316,6 +328,14 @@ public final class DayflowerApplication extends Application {
 				rendererViewPane.setFile(file);
 				rendererViewPane.save();
 			}
+		}
+	}
+	
+	private void doHandleEventRendererGPU(final ActionEvent actionEvent) {
+		final Object source = actionEvent.getSource();
+		
+		if(source instanceof CheckMenuItem) {
+			this.isUsingGPU.set(CheckMenuItem.class.cast(source).isSelected());
 		}
 	}
 	

@@ -153,7 +153,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	 * @return {@code true} if, and only if, rendering was performed, {@code false} otherwise
 	 */
 	@Override
-	public final boolean render() {
+	public final synchronized boolean render() {
 		this.isRendering.set(true);
 		
 		final RendererObserver rendererObserver = getRendererObserver();

@@ -143,7 +143,7 @@ public final class GPURenderer extends AbstractGPURenderer {
 							radianceB += throughputB * color3FLHSGetComponent3();
 						}
 						
-						if(materialBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL)) {
+						if(materialBSDFSampleDistributionFunction(B_X_D_F_TYPE_BIT_FLAG_ALL, random(), random())) {
 							final float incomingX = materialBSDFResultGetIncomingX();
 							final float incomingY = materialBSDFResultGetIncomingY();
 							final float incomingZ = materialBSDFResultGetIncomingZ();
@@ -161,7 +161,9 @@ public final class GPURenderer extends AbstractGPURenderer {
 							final float incomingDotSurfaceNormalS = vector3FDotProduct(incomingX, incomingY, incomingZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
 							final float incomingDotSurfaceNormalSAbs = abs(incomingDotSurfaceNormalS);
 							
-							if(probabilityDensityFunctionValue > 0.0F) {
+							final boolean isProbabilityDensityFunctionValueValue = checkIsFinite(probabilityDensityFunctionValue) && probabilityDensityFunctionValue > 0.0F;
+							
+							if(isProbabilityDensityFunctionValueValue) {
 								throughputR *= resultR * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
 								throughputG *= resultG * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
 								throughputB *= resultB * incomingDotSurfaceNormalSAbs / probabilityDensityFunctionValue;
@@ -185,20 +187,23 @@ public final class GPURenderer extends AbstractGPURenderer {
 								}
 							}
 							
-							currentBounce = probabilityDensityFunctionValue > 0.0F ? currentBounce + 1 : maximumBounce;
+							currentBounce = isProbabilityDensityFunctionValueValue ? currentBounce + 1 : maximumBounce;
 						} else {
 							currentBounce = maximumBounce;
 						}
 					} else {
 						currentBounce = maximumBounce;
 					}
-				} else {
-					lightEvaluateRadianceEmittedAny();
+				} else if(currentBounce == 0 || isSpecularBounce) {
+//					lightEvaluateRadianceEmittedAny();
+					lightEvaluateRadianceEmittedAll();
 					
 					radianceR += throughputR * color3FLHSGetComponent1();
 					radianceG += throughputG * color3FLHSGetComponent2();
 					radianceB += throughputB * color3FLHSGetComponent3();
 					
+					currentBounce = maximumBounce;
+				} else {
 					currentBounce = maximumBounce;
 				}
 			}

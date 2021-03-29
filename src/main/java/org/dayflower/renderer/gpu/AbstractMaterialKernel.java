@@ -1046,9 +1046,11 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	 * To retrieve the probability density function (PDF) value, the method {@link #materialBSDFResultGetProbabilityDensityFunctionValue()} may be used.
 	 * 
 	 * @param bitFlags the {@link BXDFType} bit flags to match against
+	 * @param u the U-component of the sample
+	 * @param v the V-component of the sample
 	 * @return {@code true} if, and only if, a sample was created, {@code false} otherwise
 	 */
-	protected final boolean materialBSDFSampleDistributionFunction(final int bitFlags) {
+	protected final boolean materialBSDFSampleDistributionFunction(final int bitFlags, final float u, final float v) {
 		final int countBXDFs = doBSDFGetBXDFCount();
 		
 		int matches = 0;
@@ -1062,9 +1064,6 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 		
 		if(matches > 0 && !checkIsZero(doBXDFResultGetOutgoingZ())) {
-			final float u = random();
-			final float v = random();
-			
 			final int match = min((int)(floor(u * matches)), matches - 1);
 			
 			int matchingId = -1;
@@ -2747,17 +2746,18 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalX = outgoingX - incomingX;
 		final float normalY = outgoingY - incomingY;
 		final float normalZ = outgoingZ - incomingZ;
+		
+		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
+			
+			return;
+		}
+		
 		final float normalLengthReciprocal = vector3FLengthReciprocal(normalX, normalY, normalZ);
 		final float normalNormalizedX = normalX * normalLengthReciprocal;
 		final float normalNormalizedY = normalY * normalLengthReciprocal;
 		final float normalNormalizedZ = normalZ * normalLengthReciprocal;
 		final float normalNormalizedCosThetaAbs = vector3FCosThetaAbs(normalNormalizedX, normalNormalizedY, normalNormalizedZ);
-		
-		if(checkIsZero(normalNormalizedX) && checkIsZero(normalNormalizedY) && checkIsZero(normalNormalizedZ)) {
-			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
-			
-			return;
-		}
 		
 		final float exponent = doBXDFAshikhminShirleyBRDFGetExponent();
 		
@@ -2765,17 +2765,22 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float d = (exponent + 1.0F) * pow(normalNormalizedCosThetaAbs, exponent) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float f = doSchlickFresnelDielectric1(outgoingDotNormalNormalized, 1.0F);
-		final float g = 4.0F * abs(cosThetaOutgoing + -cosThetaIncoming - cosThetaOutgoing * -cosThetaIncoming);
+//		final float h = 1.0F / (4.0F * abs(cosThetaOutgoing + -cosThetaIncoming - cosThetaOutgoing * -cosThetaIncoming));
+		final float h = 1.0F / (4.0F * cosThetaIncomingAbs * cosThetaOutgoingAbs);
 		
 		final float reflectanceScaleR = doBXDFAshikhminShirleyBRDFGetReflectanceScaleR();
 		final float reflectanceScaleG = doBXDFAshikhminShirleyBRDFGetReflectanceScaleG();
 		final float reflectanceScaleB = doBXDFAshikhminShirleyBRDFGetReflectanceScaleB();
 		
-		final float resultR = reflectanceScaleR * d * f / g;
-		final float resultG = reflectanceScaleG * d * f / g;
-		final float resultB = reflectanceScaleB * d * f / g;
+		final float resultR = reflectanceScaleR * d * f * h;
+		final float resultG = reflectanceScaleG * d * f * h;
+		final float resultB = reflectanceScaleB * d * f * h;
 		
-		doBXDFResultSetResult(resultR, resultG, resultB);
+		if(!checkIsFinite(resultR) || !checkIsFinite(resultG) || !checkIsFinite(resultB)) {
+			doBXDFResultSetResult(0.0F, 0.0F, 0.0F);
+		} else {
+			doBXDFResultSetResult(resultR, resultG, resultB);
+		}
 	}
 	
 	private void doBXDFAshikhminShirleyBRDFEvaluateProbabilityDensityFunction() {
@@ -2796,6 +2801,13 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		final float normalX = outgoingX - incomingX;
 		final float normalY = outgoingY - incomingY;
 		final float normalZ = outgoingZ - incomingZ;
+		
+		if(checkIsZero(normalX) && checkIsZero(normalY) && checkIsZero(normalZ)) {
+			doBXDFResultSetProbabilityDensityFunctionValue(0.0F);
+			
+			return;
+		}
+		
 		final float normalLengthReciprocal = vector3FLengthReciprocal(normalX, normalY, normalZ);
 		final float normalNormalizedX = normalX * normalLengthReciprocal;
 		final float normalNormalizedY = normalY * normalLengthReciprocal;

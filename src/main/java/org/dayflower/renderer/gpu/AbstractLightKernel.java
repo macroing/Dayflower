@@ -378,6 +378,30 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	/**
+	 * Evaluates the radiance emitted along the current ray using all {@link Light} instances for which this is supported.
+	 */
+	protected final void lightEvaluateRadianceEmittedAll() {
+		final int lightPerezLightCount = this.lightPerezLightCount;
+		
+		float radianceR = 0.0F;
+		float radianceG = 0.0F;
+		float radianceB = 0.0F;
+		
+		for(int i = 0; i < lightPerezLightCount; i++) {
+			final int lightPerezLightArrayOffset = this.lightPerezLightOffsetArray[i];
+			
+			lightSet(PerezLight.ID, lightPerezLightArrayOffset);
+			lightEvaluateRadianceEmitted();
+			
+			radianceR += color3FLHSGetR();
+			radianceG += color3FLHSGetG();
+			radianceB += color3FLHSGetB();
+		}
+		
+		color3FLHSSet(radianceR, radianceG, radianceB);
+	}
+	
+	/**
 	 * Computes the power of the current {@link Light} instance.
 	 * <p>
 	 * This method assumes the method {@link #lightSet(int, int)} has been called.
@@ -690,8 +714,10 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float sunDirectionWorldSpaceDotSurfaceNormalG = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalGX, surfaceNormalGY, surfaceNormalGZ);
 		final float sunDirectionWorldSpaceDotSurfaceNormalS = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
 		
-		final boolean isOrientedTowardsSun = sunDirectionWorldSpaceDotSurfaceNormalG > 0.0F && sunDirectionWorldSpaceDotSurfaceNormalS > 0.0F;
-		final boolean isSamplingSun = random() < 0.5F;
+		final float probability = 0.5F;
+		
+		final boolean isOrientedTowardsSun = sunDirectionWorldSpaceDotSurfaceNormalG > 0.5F && sunDirectionWorldSpaceDotSurfaceNormalS > 0.5F;
+		final boolean isSamplingSun = random() < probability;
 		
 		final int offsetDistribution = lightGetOffset() + PerezLight.ARRAY_OFFSET_DISTRIBUTION;
 		
@@ -718,14 +744,18 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 				final float sampleRemappedU = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 				final float sampleRemappedV = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
 				
-				final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(offsetDistribution, sampleRemappedU, sampleRemappedV, true) / (2.0F * PI * PI * sinTheta);
+				final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(offsetDistribution, sampleRemappedU, sampleRemappedV, true);
 				
-				lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
-				lightSampleSetPoint(pointX, pointY, pointZ);
-				lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
-				lightSampleSetResult(resultR, resultG, resultB);
-				
-				return true;
+				if(!checkIsZero(probabilityDensityFunctionValueRemapped)) {
+					final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * PI * PI * sinTheta);
+					
+					lightSampleSetIncoming(incomingWorldSpaceX, incomingWorldSpaceY, incomingWorldSpaceZ);
+					lightSampleSetPoint(pointX, pointY, pointZ);
+					lightSampleSetProbabilityDensityFunctionValue(probabilityDensityFunctionValue);
+					lightSampleSetResult(resultR, resultG, resultB);
+					
+					return true;
+				}
 			}
 		}
 		
@@ -1126,7 +1156,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float theta = acos(saturateF(directionSaturatedZ, -1.0F, 1.0F));
 		final float gamma = acos(saturateF(vector3FDotProduct(directionSaturatedX, directionSaturatedY, directionSaturatedZ, sunDirectionX, sunDirectionY, sunDirectionZ), -1.0F, 1.0F));
-		final float relativeLuminance = doLightPerezLightCalculatePerezFunctionRelativeLuminance(theta, gamma);
+		final float relativeLuminance = doLightPerezLightCalculatePerezFunctionRelativeLuminance(theta, gamma) * 1.0e-4F;
 		final float x = doLightPerezLightCalculatePerezFunctionX(theta, gamma);
 		final float y = doLightPerezLightCalculatePerezFunctionY(theta, gamma);
 		

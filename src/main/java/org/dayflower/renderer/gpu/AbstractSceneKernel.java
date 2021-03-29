@@ -746,7 +746,6 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 		doIntersectionTransform(primitiveIndex * Matrix44F.ARRAY_SIZE * 2 + Matrix44F.ARRAY_SIZE, primitiveIndex * Matrix44F.ARRAY_SIZE * 2);
 	}
 	
-	@SuppressWarnings("unused")
 	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
 		final int bitFlags = isSpecular ? B_X_D_F_TYPE_BIT_FLAG_ALL : B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR;
 		
@@ -833,6 +832,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			final float lightPointZ = lightSampleGetPointZ();
 			
 			final float lightProbabilityDensityFunctionValue = lightSampleGetProbabilityDensityFunctionValue();
+			final float lightProbabilityDensityFunctionValueSquared = lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue;
 			
 			final boolean hasLightResult = !checkIsZero(lightResultR) || !checkIsZero(lightResultG) || !checkIsZero(lightResultB);
 			
@@ -880,11 +880,94 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 					materialBSDFEvaluateProbabilityDensityFunction(bitFlags, lightIncomingX, lightIncomingY, lightIncomingZ);
 					
 					final float scatteringProbabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
-					final float weight = lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue / (lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue + scatteringProbabilityDensityFunctionValue * scatteringProbabilityDensityFunctionValue);
+					final float scatteringProbabilityDensityFunctionValueSquared = scatteringProbabilityDensityFunctionValue * scatteringProbabilityDensityFunctionValue;
+					
+					final float weight = lightProbabilityDensityFunctionValueSquared / (lightProbabilityDensityFunctionValueSquared + scatteringProbabilityDensityFunctionValueSquared);
 					
 					lightDirectR += scatteringResultR * lightResultR * weight / lightProbabilityDensityFunctionValue;
 					lightDirectG += scatteringResultG * lightResultG * weight / lightProbabilityDensityFunctionValue;
 					lightDirectB += scatteringResultB * lightResultB * weight / lightProbabilityDensityFunctionValue;
+				}
+			}
+		}
+		
+		if(!lightIsUsingDeltaDistribution() && materialBSDFSampleDistributionFunction(bitFlags, sampleBU, sampleBV)) {
+			final float normalX = intersectionGetOrthonormalBasisSWComponent1();
+			final float normalY = intersectionGetOrthonormalBasisSWComponent2();
+			final float normalZ = intersectionGetOrthonormalBasisSWComponent3();
+			
+			final float surfaceIntersectionPointX = intersectionGetSurfaceIntersectionPointComponent1();
+			final float surfaceIntersectionPointY = intersectionGetSurfaceIntersectionPointComponent2();
+			final float surfaceIntersectionPointZ = intersectionGetSurfaceIntersectionPointComponent3();
+			
+			final boolean hasSampledSpecular = materialBSDFResultBXDFIsSpecular();
+			
+			final float incomingX = materialBSDFResultGetIncomingX();
+			final float incomingY = materialBSDFResultGetIncomingY();
+			final float incomingZ = materialBSDFResultGetIncomingZ();
+			
+			final float scatteringProbabilityDensityFunctionValue = materialBSDFResultGetProbabilityDensityFunctionValue();
+			final float scatteringProbabilityDensityFunctionValueSquared = scatteringProbabilityDensityFunctionValue * scatteringProbabilityDensityFunctionValue;
+			
+			final float resultR = materialBSDFResultGetResultR();
+			final float resultG = materialBSDFResultGetResultG();
+			final float resultB = materialBSDFResultGetResultB();
+			
+			final float incomingDotNormalAbs = abs(vector3FDotProduct(incomingX, incomingY, incomingZ, normalX, normalY, normalZ));
+			
+			final float scatteringResultR = resultR * incomingDotNormalAbs;
+			final float scatteringResultG = resultG * incomingDotNormalAbs;
+			final float scatteringResultB = resultB * incomingDotNormalAbs;
+			
+			final boolean hasScatteringResult = !checkIsZero(scatteringResultR) || !checkIsZero(scatteringResultG) || !checkIsZero(scatteringResultB);
+			
+			if(hasScatteringResult && scatteringProbabilityDensityFunctionValue > 0.0F) {
+				float weight = 1.0F;
+				
+				if(!hasSampledSpecular) {
+					final float lightProbabilityDensityFunctionValue = lightEvaluateProbabilityDensityFunctionRadianceIncoming(incomingX, incomingY, incomingZ);
+					final float lightProbabilityDensityFunctionValueSquared = lightProbabilityDensityFunctionValue * lightProbabilityDensityFunctionValue;
+					
+					if(checkIsZero(lightProbabilityDensityFunctionValue)) {
+						color3FLHSSet(lightDirectR, lightDirectG, lightDirectB);
+						
+						return;
+					}
+					
+					weight = scatteringProbabilityDensityFunctionValueSquared / (scatteringProbabilityDensityFunctionValueSquared + lightProbabilityDensityFunctionValueSquared);
+				}
+				
+				final float directionX = incomingX;
+				final float directionY = incomingY;
+				final float directionZ = incomingZ;
+				final float directionLength = vector3FLength(directionX, directionY, directionZ);
+				final float directionLengthReciprocal = 1.0F / directionLength;
+				final float directionNormalizedX = directionX * directionLengthReciprocal;
+				final float directionNormalizedY = directionY * directionLengthReciprocal;
+				final float directionNormalizedZ = directionZ * directionLengthReciprocal;
+				
+				final float tMaximum = DEFAULT_T_MAXIMUM;
+				final float tMinimum = DEFAULT_T_MINIMUM;
+				
+				ray3FSetOrigin(surfaceIntersectionPointX + directionNormalizedX * 0.001F, surfaceIntersectionPointY + directionNormalizedY * 0.001F, surfaceIntersectionPointZ + directionNormalizedZ * 0.001F);
+				ray3FSetDirection(directionNormalizedX, directionNormalizedY, directionNormalizedZ);
+				ray3FSetTMaximum(tMaximum);
+				ray3FSetTMinimum(tMinimum);
+				
+				if(!primitiveIntersects()) {
+					lightEvaluateRadianceEmitted();
+					
+					final float lightIncomingR = color3FLHSGetR();
+					final float lightIncomingG = color3FLHSGetG();
+					final float lightIncomingB = color3FLHSGetB();
+					
+					final boolean hasLightIncoming = !checkIsZero(lightIncomingR) || !checkIsZero(lightIncomingG) || !checkIsZero(lightIncomingB);
+					
+					if(hasLightIncoming) {
+						lightDirectR += scatteringResultR * lightIncomingR * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectG += scatteringResultG * lightIncomingG * weight / scatteringProbabilityDensityFunctionValue;
+						lightDirectB += scatteringResultB * lightIncomingB * weight / scatteringProbabilityDensityFunctionValue;
+					}
 				}
 			}
 		}

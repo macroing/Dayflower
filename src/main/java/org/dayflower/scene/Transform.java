@@ -244,11 +244,11 @@ public final class Transform implements Node {
 		
 		try {
 			if(nodeHierarchicalVisitor.visitEnter(this)) {
-				if(this.objectToWorld != null && !this.objectToWorld.accept(nodeHierarchicalVisitor)) {
+				if(!getObjectToWorld().accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
-				if(this.worldToObject != null && !this.worldToObject.accept(nodeHierarchicalVisitor)) {
+				if(!getWorldToObject().accept(nodeHierarchicalVisitor)) {
 					return nodeHierarchicalVisitor.visitLeave(this);
 				}
 				
@@ -302,9 +302,9 @@ public final class Transform implements Node {
 			return false;
 		} else if(!Objects.equals(this.transformObservers, Transform.class.cast(object).transformObservers)) {
 			return false;
-		} else if(!Objects.equals(this.objectToWorld, Transform.class.cast(object).objectToWorld)) {
+		} else if(!Objects.equals(getObjectToWorld(), Transform.class.cast(object).getObjectToWorld())) {
 			return false;
-		} else if(!Objects.equals(this.worldToObject, Transform.class.cast(object).worldToObject)) {
+		} else if(!Objects.equals(getWorldToObject(), Transform.class.cast(object).getWorldToObject())) {
 			return false;
 		} else if(!Objects.equals(this.position, Transform.class.cast(object).position)) {
 			return false;
@@ -355,7 +355,7 @@ public final class Transform implements Node {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.transformObservers, this.objectToWorld, this.worldToObject, this.position, this.rotation, this.scale);
+		return Objects.hash(this.transformObservers, getObjectToWorld(), getWorldToObject(), this.position, this.rotation, this.scale);
 	}
 	
 	/**

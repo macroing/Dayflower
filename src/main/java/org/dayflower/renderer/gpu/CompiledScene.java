@@ -51,6 +51,7 @@ final class CompiledScene {
 	private float[] textureLDRImageTextureArray;
 	private float[] textureMarbleTextureArray;
 	private float[] textureSimplexFractionalBrownianMotionTextureArray;
+	private int[] lightIDAndOffsetArray;
 	private int[] lightLDRImageLightOffsetArray;
 	private int[] lightPerezLightOffsetArray;
 	private int[] materialClearCoatMaterialArray;
@@ -72,6 +73,7 @@ final class CompiledScene {
 		setBoundingVolume3FBoundingSphere3FArray(new float[1]);
 		setCameraArray(new float[1]);
 		setLightDirectionalLightArray(new float[1]);
+		setLightIDAndOffsetArray(new int[1]);
 		setLightLDRImageLightArray(new float[1]);
 		setLightLDRImageLightOffsetArray(new int[1]);
 		setLightPerezLightArray(new float[1]);
@@ -210,6 +212,15 @@ final class CompiledScene {
 		return this.textureSimplexFractionalBrownianMotionTextureArray;
 	}
 	
+	public int getLightCount() {
+		/*
+		 * LDRImageLight is currently not supported by the new lighting system.
+		 * This method is used in combination with 'lightIDAndOffsetArray'.
+		 */
+		
+		return getLightDirectionalLightCount() + /*getLightLDRImageLightCount() +*/ getLightPerezLightCount() + getLightPointLightCount() + getLightSpotLightCount();
+	}
+	
 	public int getLightDirectionalLightCount() {
 		return this.lightDirectionalLightArray.length % DirectionalLight.ARRAY_LENGTH == 0 ? this.lightDirectionalLightArray.length / DirectionalLight.ARRAY_LENGTH : 0;
 	}
@@ -242,6 +253,10 @@ final class CompiledScene {
 	
 	public int getPrimitiveCount() {
 		return this.primitiveArray.length / Primitive.ARRAY_LENGTH;
+	}
+	
+	public int[] getLightIDAndOffsetArray() {
+		return this.lightIDAndOffsetArray;
 	}
 	
 	public int[] getLightLDRImageLightOffsetArray() {
@@ -310,6 +325,10 @@ final class CompiledScene {
 	
 	public void setLightDirectionalLightArray(final float[] lightDirectionalLightArray) {
 		this.lightDirectionalLightArray = Objects.requireNonNull(lightDirectionalLightArray, "lightDirectionalLightArray == null");
+	}
+	
+	public void setLightIDAndOffsetArray(final int[] lightIDAndOffsetArray) {
+		this.lightIDAndOffsetArray = Objects.requireNonNull(lightIDAndOffsetArray, "lightIDAndOffsetArray == null");
 	}
 	
 	public void setLightLDRImageLightArray(final float[] lightLDRImageLightArray) {

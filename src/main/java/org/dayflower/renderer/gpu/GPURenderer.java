@@ -195,7 +195,6 @@ public final class GPURenderer extends AbstractGPURenderer {
 						currentBounce = maximumBounce;
 					}
 				} else if(currentBounce == 0 || isSpecularBounce) {
-//					lightEvaluateRadianceEmittedAny();
 					lightEvaluateRadianceEmittedAll();
 					
 					radianceR += throughputR * color3FLHSGetComponent1();

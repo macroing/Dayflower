@@ -87,6 +87,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected float[] lightSpotLightArray;
 	
 	/**
+	 * The {@link Light} count.
+	 */
+	protected int lightCount;
+	
+	/**
 	 * The {@link DirectionalLight} count.
 	 */
 	protected int lightDirectionalLightCount;
@@ -117,6 +122,11 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	protected int[] lightArray_$private$2;
 	
 	/**
+	 * An {@code int[]} that contains an ID and offset lookup table for {@link Light} instances.
+	 */
+	protected int[] lightIDAndOffsetArray;
+	
+	/**
 	 * An {@code int[]} that contains an offset lookup table for {@link LDRImageLight} instances in {@link #lightLDRImageLightArray}.
 	 */
 	protected int[] lightLDRImageLightOffsetArray;
@@ -133,6 +143,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	 */
 	protected AbstractLightKernel() {
 		this.lightArray_$private$2 = new int[LIGHT_ARRAY_LENGTH];
+		this.lightCount = 0;
+		this.lightIDAndOffsetArray = new int[1];
 		this.lightDirectionalLightArray = new float[1];
 		this.lightDirectionalLightCount = 0;
 		this.lightLDRImageLightArray = new float[1];

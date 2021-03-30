@@ -21,6 +21,9 @@ package org.dayflower.sampler;
 import static org.dayflower.utility.Ints.saturate;
 import static org.dayflower.utility.Ints.toInt;
 
+import java.lang.reflect.Field;
+import java.util.Objects;
+
 import org.dayflower.utility.FloatArrayOutputStream;
 import org.dayflower.utility.ParameterArguments;
 
@@ -300,5 +303,115 @@ public final class Distribution2F {
 	 */
 	public int count() {
 		return this.conditional.length;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static Sample2F continuousRemap(final float[] array, final int offset, final Sample2F sample) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		
+		final boolean isUV = (int)(array[offset]) != 0;
+		
+		final float m = isUV ? sample.getU() : sample.getV();
+		final float c = isUV ? sample.getV() : sample.getU();
+		
+		final int offsetM = offset + (int)(array[offset + 2]);
+		final int indexM = Distribution1F.index(array, offsetM, m);
+		final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+		final int indexC = Distribution1F.index(array, offsetC, c);
+		
+		final float mRemapped = Distribution1F.continuousRemap(array, offsetM, m, indexM);
+		final float cRemapped = Distribution1F.continuousRemap(array, offsetC, c, indexC);
+		
+		return new Sample2F(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
+	}
+	
+//	TODO: Add Javadocs!
+	public static Sample2F discreteRemap(final float[] array, final int offset, final Sample2F sample) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		
+		final boolean isUV = (int)(array[offset]) != 0;
+		
+		final float m = isUV ? sample.getU() : sample.getV();
+		final float c = isUV ? sample.getV() : sample.getU();
+		
+		final int offsetM = offset + (int)(array[offset + 2]);
+		final int indexM = Distribution1F.index(array, offsetM, m);
+		final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+		final int indexC = Distribution1F.index(array, offsetC, c);
+		
+		final float mRemapped = Distribution1F.discreteRemap(array, offsetM, m, indexM);
+		final float cRemapped = Distribution1F.discreteRemap(array, offsetC, c, indexC);
+		
+		return new Sample2F(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
+	}
+	
+//	TODO: Add Javadocs!
+	public static float continuousProbabilityDensityFunction(final float[] array, final int offset, final Sample2F sample) {
+		return continuousProbabilityDensityFunction(array, offset, sample, false);
+	}
+	
+//	TODO: Add Javadocs!
+	public static float continuousProbabilityDensityFunction(final float[] array, final int offset, final Sample2F sample, final boolean isRemapped) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		
+		final boolean isUV = (int)(array[offset]) != 0;
+		
+		final float m = isUV ? sample.getU() : sample.getV();
+		final float c = isUV ? sample.getV() : sample.getU();
+		
+		if(isRemapped) {
+			final int offsetM = offset + (int)(array[offset + 2]);
+			final int countM = Distribution1F.count(array, offsetM);
+			final int indexM = saturate((int)(m * countM), 0, countM - 1);
+			final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+			final int countC = Distribution1F.count(array, offsetC);
+			final int indexC = saturate((int)(c * countC), 0, countC - 1);
+			
+			final float probabilityDensityFunctionValue = Distribution1F.function(array, offsetC, indexC) / Distribution1F.functionIntegral(array, offsetM);
+			
+			return probabilityDensityFunctionValue;
+		}
+		
+		final int offsetM = offset + (int)(array[offset + 2]);
+		final int indexM = Distribution1F.index(array, offsetM, m);
+		final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+		final int indexC = Distribution1F.index(array, offsetC, c);
+		
+		final float probabilityDensityFunctionValueM = Distribution1F.continuousProbabilityDensityFunction(array, offsetM, indexM);
+		final float probabilityDensityFunctionValueC = Distribution1F.continuousProbabilityDensityFunction(array, offsetC, indexC);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueM * probabilityDensityFunctionValueC;
+		
+		return probabilityDensityFunctionValue;
+	}
+	
+//	TODO: Add Javadocs!
+	public static float discreteProbabilityDensityFunction(final float[] array, final int offset, final Sample2F sample) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		
+		final boolean isUV = (int)(array[offset]) != 0;
+		
+		final float m = isUV ? sample.getU() : sample.getV();
+		final float c = isUV ? sample.getV() : sample.getU();
+		
+		final int offsetM = offset + (int)(array[offset + 2]);
+		final int indexM = Distribution1F.index(array, offsetM, m);
+		final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+		final int indexC = Distribution1F.index(array, offsetC, c);
+		
+		final float probabilityDensityFunctionValueM = Distribution1F.discreteProbabilityDensityFunction(array, offsetM, indexM);
+		final float probabilityDensityFunctionValueC = Distribution1F.discreteProbabilityDensityFunction(array, offsetC, indexC);
+		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueM * probabilityDensityFunctionValueC;
+		
+		return probabilityDensityFunctionValue;
 	}
 }

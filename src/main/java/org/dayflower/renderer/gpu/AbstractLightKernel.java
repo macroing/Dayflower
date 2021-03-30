@@ -757,7 +757,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 				final float sampleRemappedU = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 				final float sampleRemappedV = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
 				
-				final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(offsetDistribution, sampleRemappedU, sampleRemappedV, true);
+				final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(offsetDistribution, sampleRemappedU, sampleRemappedV);
 				
 				if(!checkIsZero(probabilityDensityFunctionValueRemapped)) {
 					final float probabilityDensityFunctionValue = probabilityDensityFunctionValueRemapped / (2.0F * PI * PI * sinTheta);
@@ -777,7 +777,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float sampleRemappedU = point2FGetComponent1();
 		final float sampleRemappedV = point2FGetComponent2();
 		
-		final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(offsetDistribution, sampleRemappedU, sampleRemappedV, true);
+		final float probabilityDensityFunctionValueRemapped = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(offsetDistribution, sampleRemappedU, sampleRemappedV);
 		
 		if(checkIsZero(probabilityDensityFunctionValueRemapped)) {
 			return false;
@@ -877,105 +877,44 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private float doLightPerezLightDistribution1FContinuousProbabilityDensityFunction(final int offset, final int index) {
-		final int count = doLightPerezLightDistribution1FCount(offset);
+		final float functionIntegral = doLightPerezLightDistribution1FFunctionIntegral(offset);
+		final float function = doLightPerezLightDistribution1FFunction(offset, index);
 		
-		if(index >= 0 && index <= count - 1) {
-			final float functionIntegral = doLightPerezLightDistribution1FFunctionIntegral(offset);
-			final float function = doLightPerezLightDistribution1FFunction(offset, index);
-			
-			return functionIntegral > 0.0F ? function / functionIntegral : 0.0F;
-		}
-		
-		return 0.0F;
+		return functionIntegral > 0.0F ? function / functionIntegral : 0.0F;
 	}
 	
 	private float doLightPerezLightDistribution1FContinuousRemap(final int offset, final float value, final int index) {
 		final int count = doLightPerezLightDistribution1FCount(offset);
 		
-		if(index >= 0 && index <= count - 1) {
-			final float cumulativeDistributionFunction0 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 0);
-			final float cumulativeDistributionFunction1 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 1);
-			
-			if(cumulativeDistributionFunction1 - cumulativeDistributionFunction0 > 0.0F) {
-				return (index + ((value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0))) / count;
-			}
-			
-			return (index + (value - cumulativeDistributionFunction0)) / count;
+		final float cumulativeDistributionFunction0 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 0);
+		final float cumulativeDistributionFunction1 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 1);
+		
+		if(cumulativeDistributionFunction1 - cumulativeDistributionFunction0 > 0.0F) {
+			return (index + ((value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0))) / count;
 		}
 		
-		return 0.0F;
+		return (index + (value - cumulativeDistributionFunction0)) / count;
 	}
 	
 	private float doLightPerezLightDistribution1FCumulativeDistributionFunction(final int offset, final int index) {
-		final int count = doLightPerezLightDistribution1FCount(offset);
-		final int offsetCumulativeDistributionFunction = offset + 1 + 1 + 1 + 1;
-		
-		if(index >= 0 && index <= count - 1) {
-			return this.lightPerezLightArray[offsetCumulativeDistributionFunction + index];
-		}
-		
-		return 0.0F;
-	}
-	
-	private float doLightPerezLightDistribution1FDiscreteProbabilityDensityFunction(final int offset, final int index) {
-		final int count = doLightPerezLightDistribution1FCount(offset);
-		
-		if(index >= 0 && index <= count - 1) {
-			final float functionIntegral = doLightPerezLightDistribution1FFunctionIntegral(offset);
-			final float function = doLightPerezLightDistribution1FFunction(offset, index);
-			
-			return functionIntegral > 0.0F ? function / (functionIntegral * count) : 0.0F;
-		}
-		
-		return 0.0F;
-	}
-	
-	private float doLightPerezLightDistribution1FDiscreteRemap(final int offset, final float value, final int index) {
-		final int count = doLightPerezLightDistribution1FCount(offset);
-		
-		if(index >= 0 && index <= count - 1) {
-			final float cumulativeDistributionFunction0 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 0);
-			final float cumulativeDistributionFunction1 = doLightPerezLightDistribution1FCumulativeDistributionFunction(offset, index + 1);
-			
-			return (value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0);
-		}
-		
-		return 0.0F;
+		return this.lightPerezLightArray[offset + 4 + index];
 	}
 	
 	private float doLightPerezLightDistribution1FFunction(final int offset, final int index) {
-		final int count = doLightPerezLightDistribution1FCount(offset);
-		final int offsetFunction = offset + 1 + 1 + 1 + (int)(this.lightPerezLightArray[offset + 1]) + 1;
-		
-		if(index >= 0 && index <= count - 1) {
-			return this.lightPerezLightArray[offsetFunction + index];
-		}
-		
-		return 0.0F;
+		return this.lightPerezLightArray[offset + 4 + index + (int)(this.lightPerezLightArray[offset + 1])];
 	}
 	
 	private float doLightPerezLightDistribution1FFunctionIntegral(final int offset) {
 		return this.lightPerezLightArray[offset + 3];
 	}
 	
-	private float doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(final int offset, final float u, final float v, final boolean isRemapped) {
-		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+	@SuppressWarnings("unused")
+	private float doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(final int offset, final float u, final float v) {
+//		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+		final boolean isUV = true;
 		
 		final float m = isUV ? u : v;
 		final float c = isUV ? v : u;
-		
-		if(isRemapped) {
-			final int offsetM = offset + (int)(this.lightPerezLightArray[offset + 2]);
-			final int countM = doLightPerezLightDistribution1FCount(offsetM);
-			final int indexM = saturateI((int)(m * countM), 0, countM - 1);
-			final int offsetC = offset + (int)(this.lightPerezLightArray[offset + 3 + indexM]);
-			final int countC = doLightPerezLightDistribution1FCount(offsetC);
-			final int indexC = saturateI((int)(c * countC), 0, countC - 1);
-			
-			final float probabilityDensityFunctionValue = doLightPerezLightDistribution1FFunction(offsetC, indexC) / doLightPerezLightDistribution1FFunctionIntegral(offsetM);
-			
-			return probabilityDensityFunctionValue;
-		}
 		
 		final int offsetM = offset + (int)(this.lightPerezLightArray[offset + 2]);
 		final int indexM = doLightPerezLightDistribution1FIndex(offsetM, m);
@@ -989,21 +928,21 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		return probabilityDensityFunctionValue;
 	}
 	
-	@SuppressWarnings("unused")
-	private float doLightPerezLightDistribution2FDiscreteProbabilityDensityFunction(final int offset, final float u, final float v) {
-		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+	private float doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(final int offset, final float u, final float v) {
+//		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+		final boolean isUV = true;
 		
 		final float m = isUV ? u : v;
 		final float c = isUV ? v : u;
 		
 		final int offsetM = offset + (int)(this.lightPerezLightArray[offset + 2]);
-		final int indexM = doLightPerezLightDistribution1FIndex(offsetM, m);
+		final int countM = doLightPerezLightDistribution1FCount(offsetM);
+		final int indexM = saturateI((int)(m * countM), 0, countM - 1);
 		final int offsetC = offset + (int)(this.lightPerezLightArray[offset + 3 + indexM]);
-		final int indexC = doLightPerezLightDistribution1FIndex(offsetC, c);
+		final int countC = doLightPerezLightDistribution1FCount(offsetC);
+		final int indexC = saturateI((int)(c * countC), 0, countC - 1);
 		
-		final float probabilityDensityFunctionValueM = doLightPerezLightDistribution1FDiscreteProbabilityDensityFunction(offsetM, indexM);
-		final float probabilityDensityFunctionValueC = doLightPerezLightDistribution1FDiscreteProbabilityDensityFunction(offsetC, indexC);
-		final float probabilityDensityFunctionValue = probabilityDensityFunctionValueM * probabilityDensityFunctionValueC;
+		final float probabilityDensityFunctionValue = doLightPerezLightDistribution1FFunction(offsetC, indexC) / doLightPerezLightDistribution1FFunctionIntegral(offsetM);
 		
 		return probabilityDensityFunctionValue;
 	}
@@ -1024,7 +963,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float u = vector3FSphericalPhi(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_MULTIPLIED_BY_2_RECIPROCAL;
 		final float v = vector3FSphericalTheta(incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ) * PI_RECIPROCAL;
 		
-		final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunction(lightGetOffset() + PerezLight.ARRAY_OFFSET_DISTRIBUTION, u, v, true) / (2.0F * PI * PI * sinTheta);
+		final float probabilityDensityFunctionValue = doLightPerezLightDistribution2FContinuousProbabilityDensityFunctionRemapped(lightGetOffset() + PerezLight.ARRAY_OFFSET_DISTRIBUTION, u, v) / (2.0F * PI * PI * sinTheta);
 		
 		return probabilityDensityFunctionValue;
 	}
@@ -1095,7 +1034,8 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 	}
 	
 	private void doLightPerezLightDistribution2FContinuousRemap(final int offset, final float u, final float v) {
-		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+//		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
+		final boolean isUV = true;
 		
 		final float m = isUV ? u : v;
 		final float c = isUV ? v : u;
@@ -1107,24 +1047,6 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		final float mRemapped = doLightPerezLightDistribution1FContinuousRemap(offsetM, m, indexM);
 		final float cRemapped = doLightPerezLightDistribution1FContinuousRemap(offsetC, c, indexC);
-		
-		point2FSet(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
-	}
-	
-	@SuppressWarnings("unused")
-	private void doLightPerezLightDistribution2FDiscreteRemap(final int offset, final float u, final float v) {
-		final boolean isUV = (int)(this.lightPerezLightArray[offset]) != 0;
-		
-		final float m = isUV ? u : v;
-		final float c = isUV ? v : u;
-		
-		final int offsetM = offset + (int)(this.lightPerezLightArray[offset + 2]);
-		final int indexM = doLightPerezLightDistribution1FIndex(offsetM, m);
-		final int offsetC = offset + (int)(this.lightPerezLightArray[offset + 3 + indexM]);
-		final int indexC = doLightPerezLightDistribution1FIndex(offsetC, c);
-		
-		final float mRemapped = doLightPerezLightDistribution1FDiscreteRemap(offsetM, m, indexM);
-		final float cRemapped = doLightPerezLightDistribution1FDiscreteRemap(offsetC, c, indexC);
 		
 		point2FSet(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
 	}

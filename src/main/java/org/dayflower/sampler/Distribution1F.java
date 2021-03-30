@@ -21,7 +21,10 @@ package org.dayflower.sampler;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.findInterval;
+import static org.dayflower.utility.Ints.saturate;
+import static org.dayflower.utility.Ints.toInt;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.utility.ParameterArguments;
@@ -254,5 +257,131 @@ public final class Distribution1F {
 	 */
 	public int index(final float value) {
 		return findInterval(this.cumulativeDistributionFunction.length, currentIndex -> cumulativeDistributionFunction(currentIndex) <= value);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+//	TODO: Add Javadocs!
+	public static float continuousProbabilityDensityFunction(final float[] array, final int offset, final int index) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		ParameterArguments.requireRange(index, 0, count(array, offset) - 1, "index");
+		
+		final float functionIntegral = functionIntegral(array, offset);
+		final float function = function(array, offset, index);
+		
+		return functionIntegral > 0.0F ? function / functionIntegral : 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	public static float continuousRemap(final float[] array, final int offset, final float value, final int index) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		ParameterArguments.requireRange(index, 0, count(array, offset) - 1, "index");
+		
+		final int count = count(array, offset);
+		
+		final float cumulativeDistributionFunction0 = cumulativeDistributionFunction(array, offset, index + 0);
+		final float cumulativeDistributionFunction1 = cumulativeDistributionFunction(array, offset, index + 1);
+		
+		if(cumulativeDistributionFunction1 - cumulativeDistributionFunction0 > 0.0F) {
+			return (index + ((value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0))) / count;
+		}
+		
+		return (index + (value - cumulativeDistributionFunction0)) / count;
+	}
+	
+//	TODO: Add Javadocs!
+	public static float cumulativeDistributionFunction(final float[] array, final int offset, final int index) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		ParameterArguments.requireRange(index, 0, count(array, offset), "index");
+		
+		return array[offset + 1 + 1 + 1 + 1 + index];
+	}
+	
+//	TODO: Add Javadocs!
+	public static float discreteProbabilityDensityFunction(final float[] array, final int offset, final int index) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		ParameterArguments.requireRange(index, 0, count(array, offset) - 1, "index");
+		
+		final int count = count(array, offset);
+		
+		final float functionIntegral = functionIntegral(array, offset);
+		final float function = function(array, offset, index);
+		
+		return functionIntegral > 0.0F ? function / (functionIntegral * count) : 0.0F;
+	}
+	
+//	TODO: Add Javadocs!
+	public static float discreteRemap(final float[] array, final int offset, final float value, final int index) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		ParameterArguments.requireRange(index, 0, count(array, offset) - 1, "index");
+		
+		final float cumulativeDistributionFunction0 = cumulativeDistributionFunction(array, offset, index + 0);
+		final float cumulativeDistributionFunction1 = cumulativeDistributionFunction(array, offset, index + 1);
+		
+		return (value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0);
+	}
+	
+//	TODO: Add Javadocs!
+	public static float function(final float[] array, final int offset, final int index) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		ParameterArguments.requireRange(index, 0, count(array, offset) - 1, "index");
+		
+		return array[offset + 1 + 1 + 1 + toInt(array[offset + 1]) + 1 + index];
+	}
+	
+//	TODO: Add Javadocs!
+	public static float functionIntegral(final float[] array, final int offset) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		
+		return array[offset + 3];
+	}
+	
+//	TODO: Add Javadocs!
+	public static int count(final float[] array, final int offset) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		
+		return toInt(array[offset + 2]);
+	}
+	
+//	TODO: Add Javadocs!
+	public static int index(final float[] array, final int offset, final float value) {
+		Objects.requireNonNull(array, "array == null");
+		
+		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		
+		final int length = toInt(array[offset + 1]);
+		
+		int currentMinimum = 0;
+		int currentLength = length;
+		
+		while(currentLength > 0) {
+			int currentHalf = currentLength >> 1;
+			int currentMiddle = currentMinimum + currentHalf;
+			
+			if(cumulativeDistributionFunction(array, offset, currentMiddle) <= value) {
+				currentMinimum = currentMiddle + 1;
+				currentLength -= currentHalf + 1;
+			} else {
+				currentLength = currentHalf;
+			}
+		}
+		
+		return saturate(currentMinimum - 1, 0, length - 2);
 	}
 }

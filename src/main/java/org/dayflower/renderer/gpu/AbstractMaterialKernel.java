@@ -3779,7 +3779,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		final float a = doBXDFOrenNayarBRDFGetA();
 		final float b = doBXDFOrenNayarBRDFGetB();
-		final float c = (a + b * maxCos * sinA * tanB);
+		final float c = a + b * maxCos * sinA * tanB;
 		
 		final float reflectanceScaleR = doBXDFOrenNayarBRDFGetReflectanceScaleR();
 		final float reflectanceScaleG = doBXDFOrenNayarBRDFGetReflectanceScaleG();
@@ -4836,11 +4836,7 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 			return false;
 		}
 		
-		final float incomingX = vector3FGetComponent1();
-		final float incomingY = vector3FGetComponent2();
-		final float incomingZ = vector3FGetComponent3();
-		
-		doBXDFResultSetIncoming(incomingX, incomingY, incomingZ);
+		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
 		doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateDistributionFunction();
 		doBXDFTorranceSparrowBTDFFresnelDielectricEvaluateProbabilityDensityFunction();
 		
@@ -5090,17 +5086,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private void doBXDFResultSetIncomingTransformedFromBSDFResult() {
-		final float incomingX = materialBSDFResultGetIncomingX();
-		final float incomingY = materialBSDFResultGetIncomingY();
-		final float incomingZ = materialBSDFResultGetIncomingZ();
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(materialBSDFResultGetIncomingX(), materialBSDFResultGetIncomingY(), materialBSDFResultGetIncomingZ());
 		
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(incomingX, incomingY, incomingZ);
-		
-		final float incomingTransformedX = vector3FGetComponent1();
-		final float incomingTransformedY = vector3FGetComponent2();
-		final float incomingTransformedZ = vector3FGetComponent3();
-		
-		doBXDFResultSetIncoming(incomingTransformedX, incomingTransformedY, incomingTransformedZ);
+		doBXDFResultSetIncoming(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
 	}
 	
 	private void doBXDFResultSetNormal(final float x, final float y, final float z) {
@@ -5110,17 +5098,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private void doBXDFResultSetNormalTransformedFromBSDFResult() {
-		final float normalX = doBSDFResultGetNormalX();
-		final float normalY = doBSDFResultGetNormalY();
-		final float normalZ = doBSDFResultGetNormalZ();
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(doBSDFResultGetNormalX(), doBSDFResultGetNormalY(), doBSDFResultGetNormalZ());
 		
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(normalX, normalY, normalZ);
-		
-		final float normalTransformedX = vector3FGetComponent1();
-		final float normalTransformedY = vector3FGetComponent2();
-		final float normalTransformedZ = vector3FGetComponent3();
-		
-		doBXDFResultSetNormal(normalTransformedX, normalTransformedY, normalTransformedZ);
+		doBXDFResultSetNormal(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
 	}
 	
 	private void doBXDFResultSetOutgoing(final float x, final float y, final float z) {
@@ -5130,17 +5110,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 	}
 	
 	private void doBXDFResultSetOutgoingTransformedFromBSDFResult() {
-		final float outgoingX = doBSDFResultGetOutgoingX();
-		final float outgoingY = doBSDFResultGetOutgoingY();
-		final float outgoingZ = doBSDFResultGetOutgoingZ();
+		vector3FSetOrthonormalBasis33FTransformReverseNormalize(doBSDFResultGetOutgoingX(), doBSDFResultGetOutgoingY(), doBSDFResultGetOutgoingZ());
 		
-		vector3FSetOrthonormalBasis33FTransformReverseNormalize(outgoingX, outgoingY, outgoingZ);
-		
-		final float outgoingTransformedX = vector3FGetComponent1();
-		final float outgoingTransformedY = vector3FGetComponent2();
-		final float outgoingTransformedZ = vector3FGetComponent3();
-		
-		doBXDFResultSetOutgoing(outgoingTransformedX, outgoingTransformedY, outgoingTransformedZ);
+		doBXDFResultSetOutgoing(vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
 	}
 	
 	private void doBXDFResultSetProbabilityDensityFunctionValue(final float probabilityDensityFunctionValue) {

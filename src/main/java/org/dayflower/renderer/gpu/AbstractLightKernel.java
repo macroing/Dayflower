@@ -727,8 +727,9 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float sunDirectionWorldSpaceDotSurfaceNormalS = vector3FDotProduct(sunDirectionWorldSpaceX, sunDirectionWorldSpaceY, sunDirectionWorldSpaceZ, surfaceNormalSX, surfaceNormalSY, surfaceNormalSZ);
 		
 		final float probability = 0.5F;
+		final float probabilityDotProduct = random();
 		
-		final boolean isOrientedTowardsSun = sunDirectionWorldSpaceDotSurfaceNormalG > 0.5F && sunDirectionWorldSpaceDotSurfaceNormalS > 0.5F;
+		final boolean isOrientedTowardsSun = sunDirectionWorldSpaceDotSurfaceNormalG > probabilityDotProduct && sunDirectionWorldSpaceDotSurfaceNormalS > probabilityDotProduct;
 		final boolean isSamplingSun = random() < probability;
 		
 		final int offsetDistribution = lightGetOffset() + PerezLight.ARRAY_OFFSET_DISTRIBUTION;

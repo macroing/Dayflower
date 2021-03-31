@@ -65,6 +65,7 @@ final class CompiledScene {
 	private int[] materialSubstrateMaterialArray;
 	private int[] primitiveArray;
 	private int[] shape3FTriangleMesh3FArray;
+	private int[] textureLDRImageTextureOffsetArray;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -106,6 +107,7 @@ final class CompiledScene {
 		setTextureCheckerboardTextureArray(new float[1]);
 		setTextureConstantTextureArray(new float[1]);
 		setTextureLDRImageTextureArray(new float[1]);
+		setTextureLDRImageTextureOffsetArray(new int[1]);
 		setTextureMarbleTextureArray(new float[1]);
 		setTextureSimplexFractionalBrownianMotionTextureArray(new float[1]);
 	}
@@ -311,6 +313,10 @@ final class CompiledScene {
 		return this.shape3FTriangleMesh3FArray;
 	}
 	
+	public int[] getTextureLDRImageTextureOffsetArray() {
+		return this.textureLDRImageTextureOffsetArray;
+	}
+	
 	public void setBoundingVolume3FAxisAlignedBoundingBox3FArray(final float[] boundingVolume3FAxisAlignedBoundingBox3FArray) {
 		this.boundingVolume3FAxisAlignedBoundingBox3FArray = Objects.requireNonNull(boundingVolume3FAxisAlignedBoundingBox3FArray, "boundingVolume3FAxisAlignedBoundingBox3FArray == null");
 	}
@@ -457,6 +463,10 @@ final class CompiledScene {
 	
 	public void setTextureLDRImageTextureArray(final float[] textureLDRImageTextureArray) {
 		this.textureLDRImageTextureArray = Objects.requireNonNull(textureLDRImageTextureArray, "textureLDRImageTextureArray == null");
+	}
+	
+	public void setTextureLDRImageTextureOffsetArray(final int[] textureLDRImageTextureOffsetArray) {
+		this.textureLDRImageTextureOffsetArray = Objects.requireNonNull(textureLDRImageTextureOffsetArray, "textureLDRImageTextureOffsetArray == null");
 	}
 	
 	public void setTextureMarbleTextureArray(final float[] textureMarbleTextureArray) {

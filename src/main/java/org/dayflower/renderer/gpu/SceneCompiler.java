@@ -364,6 +364,9 @@ final class SceneCompiler {
 		final float[] textureMarbleTextureArray = Floats.toArray(this.distinctMarbleTextures, marbleTexture -> marbleTexture.toArray(), 1);
 		final float[] textureSimplexFractionalBrownianMotionTextureArray = Floats.toArray(this.distinctSimplexFractionalBrownianMotionTextures, simplexFractionalBrownianMotionTexture -> simplexFractionalBrownianMotionTexture.toArray(), 1);
 		
+//		Retrieve the int[] for all Texture instances:
+		final int[] textureLDRImageTextureOffsetArray = new int[max(this.distinctLDRImageTextures.size(), 1)];
+		
 //		Retrieve the int[] for all primitives:
 		final int[] primitiveArray = Ints.toArray(this.filteredPrimitives, primitive -> primitive.toArray(), 1);
 		
@@ -387,6 +390,7 @@ final class SceneCompiler {
 		doPopulateTextureBlendTextureArrayWithTextures(textureBlendTextureArray);
 		doPopulateTextureBullseyeTextureArrayWithTextures(textureBullseyeTextureArray);
 		doPopulateTextureCheckerboardTextureArrayWithTextures(textureCheckerboardTextureArray);
+		doPopulateTextureLDRImageTextureOffsetArray(textureLDRImageTextureOffsetArray);
 		
 		final
 		CompiledScene compiledScene = new CompiledScene();
@@ -427,6 +431,7 @@ final class SceneCompiler {
 		compiledScene.setTextureCheckerboardTextureArray(textureCheckerboardTextureArray);
 		compiledScene.setTextureConstantTextureArray(textureConstantTextureArray);
 		compiledScene.setTextureLDRImageTextureArray(textureLDRImageTextureArray);
+		compiledScene.setTextureLDRImageTextureOffsetArray(textureLDRImageTextureOffsetArray);
 		compiledScene.setTextureMarbleTextureArray(textureMarbleTextureArray);
 		compiledScene.setTextureSimplexFractionalBrownianMotionTextureArray(textureSimplexFractionalBrownianMotionTextureArray);
 		
@@ -633,13 +638,13 @@ final class SceneCompiler {
 	}
 	
 	private void doMapAllDistinctTextures() {
-		this.distinctToOffsetsBlendTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBlendTextures, BlendTexture.ARRAY_LENGTH));
-		this.distinctToOffsetsBullseyeTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBullseyeTextures, BullseyeTexture.ARRAY_LENGTH));
-		this.distinctToOffsetsCheckerboardTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCheckerboardTextures, CheckerboardTexture.ARRAY_LENGTH));
-		this.distinctToOffsetsConstantTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctConstantTextures, ConstantTexture.ARRAY_LENGTH));
-		this.distinctToOffsetsLDRImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageTextures, lDRImageTexture -> lDRImageTexture.getArrayLength()));
-		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures, MarbleTexture.ARRAY_LENGTH));
-		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSimplexFractionalBrownianMotionTextures, SimplexFractionalBrownianMotionTexture.ARRAY_LENGTH));
+		this.distinctToOffsetsBlendTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBlendTextures, 1));
+		this.distinctToOffsetsBullseyeTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctBullseyeTextures, 1));
+		this.distinctToOffsetsCheckerboardTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctCheckerboardTextures, 1));
+		this.distinctToOffsetsConstantTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctConstantTextures, 1));
+		this.distinctToOffsetsLDRImageTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctLDRImageTextures, 1));
+		this.distinctToOffsetsMarbleTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctMarbleTextures, 1));
+		this.distinctToOffsetsSimplexFractionalBrownianMotionTextures.putAll(NodeFilter.mapDistinctToOffsets(this.distinctSimplexFractionalBrownianMotionTextures, 1));
 	}
 	
 	private void doPopulateLightIDAndOffsetArray(final int[] lightIDAndOffsetArray) {
@@ -1059,6 +1064,16 @@ final class SceneCompiler {
 			
 			textureCheckerboardTextureArray[textureCheckerboardTextureArrayTextureAOffset] = pack(textureA.getID(), doFindTextureOffset(textureA));
 			textureCheckerboardTextureArray[textureCheckerboardTextureArrayTextureBOffset] = pack(textureB.getID(), doFindTextureOffset(textureB));
+		}
+	}
+	
+	private void doPopulateTextureLDRImageTextureOffsetArray(final int[] textureLDRImageTextureOffsetArray) {
+		for(int i = 0, j = 0; i < this.distinctLDRImageTextures.size(); i++) {
+			final LDRImageTexture lDRImageTexture = this.distinctLDRImageTextures.get(i);
+			
+			textureLDRImageTextureOffsetArray[i] = j;
+			
+			j += lDRImageTexture.getArrayLength();
 		}
 	}
 	

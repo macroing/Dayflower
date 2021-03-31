@@ -7,6 +7,10 @@ Scene Loader Parameter Selection:
 		It should also support options, where a list of options are supplied and only one can be selected.
 		An API like this would be useful in combination with a SceneLoader, such that parameters could be retrieved when generating a Scene.
 
+	Status:
+
+		An early version of the API now exists.
+
 GPU Memory Optimization:
 
 	Description:
@@ -31,3 +35,4 @@ GPU Memory Optimization:
 
 		The Material Structure Change is now complete.
 		All *RayitoMaterial and *SmallPTMaterial types have also been removed from the GPU renderer. The default *Material types are used instead.
+		The Texture Structure Change is now complete.

@@ -801,7 +801,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 			return false;
 		}
 		
-		doLightPerezLightRadianceSky(offset, incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ);
+		doLightPerezLightRadianceSky(offset, incomingObjectSpaceX, incomingObjectSpaceY, incomingObjectSpaceZ, sunDirectionX, sunDirectionY, sunDirectionZ);
 		
 		final float resultR = color3FLHSGetR();
 		final float resultG = color3FLHSGetG();
@@ -1002,7 +1002,7 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final int offset = lightGetOffset();
 		
 		doLightPerezLightTransformToObjectSpace(offset, ray3FGetDirectionComponent1(), ray3FGetDirectionComponent2(), ray3FGetDirectionComponent3());
-		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionX(offset), doLightPerezLightGetSunDirectionY(offset), doLightPerezLightGetSunDirectionZ(offset));
 		
 		color3FLHSSetMinimumTo0(color3FLHSGetR(), color3FLHSGetG(), color3FLHSGetB());
 	}
@@ -1016,12 +1016,12 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		
 		vector3FSetDirectionSpherical2(0.5F, 0.5F);
 		
-		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3());
+		doLightPerezLightRadianceSky(offset, vector3FGetComponent1(), vector3FGetComponent2(), vector3FGetComponent3(), doLightPerezLightGetSunDirectionX(offset), doLightPerezLightGetSunDirectionY(offset), doLightPerezLightGetSunDirectionZ(offset));
 		
 		color3FLHSSet(color3FLHSGetR() * resultFactor, color3FLHSGetG() * resultFactor, color3FLHSGetB() * resultFactor);
 	}
 	
-	private void doLightPerezLightRadianceSky(final int offset, final float directionX, final float directionY, final float directionZ) {
+	private void doLightPerezLightRadianceSky(final int offset, final float directionX, final float directionY, final float directionZ, final float sunDirectionX, final float sunDirectionY, final float sunDirectionZ) {
 		if(directionZ < 0.0F) {
 			color3FLHSSet(0.0F, 0.0F, 0.0F);
 			
@@ -1033,10 +1033,6 @@ public abstract class AbstractLightKernel extends AbstractMaterialKernel {
 		final float directionSaturatedX = vector3FGetComponent1();
 		final float directionSaturatedY = vector3FGetComponent2();
 		final float directionSaturatedZ = vector3FGetComponent3();
-		
-		final float sunDirectionX = doLightPerezLightGetSunDirectionX(offset);
-		final float sunDirectionY = doLightPerezLightGetSunDirectionY(offset);
-		final float sunDirectionZ = doLightPerezLightGetSunDirectionZ(offset);
 		
 		final float thetaA = acos(saturateF(directionSaturatedZ, -1.0F, 1.0F));
 		final float thetaACos = cos(thetaA);

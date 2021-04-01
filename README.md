@@ -10,10 +10,18 @@ Its primary focus is photorealistic 3D-rendering, preferably in realtime. Howeve
 
 Getting Started
 ---------------
-To clone this repository, you can type the following in Git Bash.
+To clone this repository and build the project using Apache Ant, you can type the following in Git Bash.
 
 ```bash
 git clone https://github.com/macroing/Dayflower.git
+cd Dayflower
+ant
+```
+
+To run the project using its GUI, you can type the following in Git Bash. This assumes your current directory is the project directory.
+```bash
+cd distribution/Dayflower
+java -Djava.library.path=lib -jar Dayflower.jar
 ```
 
 Supported Features

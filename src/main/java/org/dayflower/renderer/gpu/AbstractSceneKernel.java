@@ -733,11 +733,14 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 	private void doLightEstimateDirectLight(final float sampleAU, final float sampleAV, final float sampleBU, final float sampleBV, final boolean isSpecular) {
 		final int bitFlags = isSpecular ? B_X_D_F_TYPE_BIT_FLAG_ALL : B_X_D_F_TYPE_BIT_FLAG_ALL_EXCEPT_SPECULAR;
 		
+		final boolean isUsingDeltaDistribution = lightIsUsingDeltaDistribution();
+		final boolean isSampling = lightSampleRadianceIncoming(sampleAU, sampleAV);
+		
 		float lightDirectR = 0.0F;
 		float lightDirectG = 0.0F;
 		float lightDirectB = 0.0F;
 		
-		if(lightIsUsingDeltaDistribution() && lightSampleRadianceIncoming(sampleAU, sampleAV)) {
+		if(isUsingDeltaDistribution && isSampling) {
 			final float lightResultR = lightSampleGetResultR();
 			final float lightResultG = lightSampleGetResultG();
 			final float lightResultB = lightSampleGetResultB();
@@ -802,7 +805,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			}
 		}
 		
-		if(!lightIsUsingDeltaDistribution() && lightSampleRadianceIncoming(sampleAU, sampleAV)) {
+		if(!isUsingDeltaDistribution && isSampling) {
 			final float lightResultR = lightSampleGetResultR();
 			final float lightResultG = lightSampleGetResultG();
 			final float lightResultB = lightSampleGetResultB();
@@ -875,7 +878,7 @@ public abstract class AbstractSceneKernel extends AbstractLightKernel {
 			}
 		}
 		
-		if(!lightIsUsingDeltaDistribution() && materialBSDFSampleDistributionFunction(bitFlags, sampleBU, sampleBV)) {
+		if(!isUsingDeltaDistribution && materialBSDFSampleDistributionFunction(bitFlags, sampleBU, sampleBV)) {
 			final float normalX = intersectionGetOrthonormalBasisSWComponent1();
 			final float normalY = intersectionGetOrthonormalBasisSWComponent2();
 			final float normalZ = intersectionGetOrthonormalBasisSWComponent3();

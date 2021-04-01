@@ -55,8 +55,8 @@ import org.dayflower.node.Node;
 import org.dayflower.node.NodeFilter;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
-import org.dayflower.utility.IntArrayOutputStream;
 import org.dayflower.utility.ParameterArguments;
+import org.macroing.java.io.IntArrayOutputStream;
 
 /**
  * A {@code TriangleMesh3D} denotes a 3-dimensional triangle mesh that uses the data type {@code double}.
@@ -513,19 +513,19 @@ public final class TriangleMesh3D implements Shape3D {
 						final int nextOffset = doFindNextOffset(bVHNodes, leafBVHNode.getDepth(), i + 1, offsets);
 						final int triangleCount = leafBVHNode.getTriangleCount();
 						
-						intArrayOutputStream.write(id);
-						intArrayOutputStream.write(boundingVolumeOffset);
-						intArrayOutputStream.write(nextOffset);
-						intArrayOutputStream.write(triangleCount);
+						intArrayOutputStream.writeInt(id);
+						intArrayOutputStream.writeInt(boundingVolumeOffset);
+						intArrayOutputStream.writeInt(nextOffset);
+						intArrayOutputStream.writeInt(triangleCount);
 						
 						for(final Triangle3D triangle : leafBVHNode.getTriangles()) {
-							intArrayOutputStream.write(triangles.indexOf(triangle));
+							intArrayOutputStream.writeInt(triangles.indexOf(triangle));
 						}
 						
 						final int padding = padding(4 + triangleCount);
 						
 						for(int j = 0; j < padding; j++) {
-							intArrayOutputStream.write(0);
+							intArrayOutputStream.writeInt(0);
 						}
 					} else if(bVHNode instanceof TreeBVHNode) {
 						final TreeBVHNode treeBVHNode = TreeBVHNode.class.cast(bVHNode);
@@ -535,14 +535,14 @@ public final class TriangleMesh3D implements Shape3D {
 						final int nextOffset = doFindNextOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
 						final int leftOffset = doFindLeftOffset(bVHNodes, treeBVHNode.getDepth(), i + 1, offsets);
 						
-						intArrayOutputStream.write(id);
-						intArrayOutputStream.write(boundingVolumeOffset);
-						intArrayOutputStream.write(nextOffset);
-						intArrayOutputStream.write(leftOffset);
-						intArrayOutputStream.write(0);
-						intArrayOutputStream.write(0);
-						intArrayOutputStream.write(0);
-						intArrayOutputStream.write(0);
+						intArrayOutputStream.writeInt(id);
+						intArrayOutputStream.writeInt(boundingVolumeOffset);
+						intArrayOutputStream.writeInt(nextOffset);
+						intArrayOutputStream.writeInt(leftOffset);
+						intArrayOutputStream.writeInt(0);
+						intArrayOutputStream.writeInt(0);
+						intArrayOutputStream.writeInt(0);
+						intArrayOutputStream.writeInt(0);
 					}
 				}
 				

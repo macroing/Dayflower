@@ -22,7 +22,7 @@ import static org.dayflower.utility.Doubles.equal;
 
 import java.util.Objects;
 
-import org.dayflower.utility.AtomicDouble;
+import org.macroing.java.util.concurrent.atomic.AtomicDouble;
 
 /**
  * A {@code DoubleParameter} is a {@link Parameter} implementation for a {@code double} value.

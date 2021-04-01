@@ -25,6 +25,8 @@ import java.util.Random;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 
+import org.macroing.java.io.DoubleArrayOutputStream;
+
 /**
  * The class {@code Doubles} contains methods for performing basic numeric operations such as the elementary exponential, logarithm, square root and trigonometric functions.
  * <p>

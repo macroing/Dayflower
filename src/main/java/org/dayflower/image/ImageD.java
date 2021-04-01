@@ -35,7 +35,7 @@ import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
-import org.dayflower.utility.TriFunction;
+import org.macroing.java.util.function.TriFunction;
 
 /**
  * An {@code ImageD} is an {@link Image} implementation that operates using the data type {@code double}.

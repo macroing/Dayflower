@@ -32,9 +32,9 @@ import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.SurfaceIntersection3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.boundingvolume.AxisAlignedBoundingBox3F;
-import org.dayflower.utility.FloatBinaryOperator;
 import org.dayflower.utility.Floats;
 import org.dayflower.utility.NoiseF;
+import org.macroing.java.util.function.FloatBinaryOperator;
 
 /**
  * A {@code ProceduralTerrain3F} denotes a 3-dimensional procedural terrain that uses the data type {@code float}.

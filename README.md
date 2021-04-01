@@ -18,7 +18,7 @@ cd Dayflower
 ant
 ```
 
-To run the project using its GUI, you can type the following in Git Bash. This assumes your current directory is the project directory.
+If you have cloned this repository and built the project using Apache Ant as presented above, you can run the project using its GUI in the following way.
 ```bash
 cd distribution/Dayflower
 java -Djava.library.path=lib -jar Dayflower.jar

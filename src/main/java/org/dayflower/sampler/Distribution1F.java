@@ -202,6 +202,8 @@ public final class Distribution1F {
 	/**
 	 * Returns a {@code float[]} representation of this {@code Distribution1F} instance.
 	 * <p>
+	 * This class contains static methods to perform operations on the {@code float[]}. These methods take an offset as a parameter argument, which makes it possible to combine the {@code float[]} with another and still use them.
+	 * <p>
 	 * The {@code float[]} will contain the following data:
 	 * <ol>
 	 * <li>The length of the array itself.</li>
@@ -293,14 +295,36 @@ public final class Distribution1F {
 		return (index + (value - cumulativeDistributionFunction0)) / count;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the cumulative distribution function (CDF) at index {@code index} in {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code offset}, any offsets derived from it or {@code index} are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * For {@code offset}, its derived offsets and {@code index} to be valid, the following conditions have to be met:
+	 * <ul>
+	 * <li>{@code offset >= 0 && offset < array.length}</li>
+	 * <li>{@code offset + 2 >= 0 && offset + 2 < array.length}</li>
+	 * <li>{@code index >= 0 && index < count(array, offset)}</li>
+	 * <li>{@code offset + 4 + index >= 0 && offset + 4 + index < array.length}</li>
+	 * </ul>
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution1F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution1F} instance
+	 * @param index the index
+	 * @return the value of the cumulative distribution function (CDF) at index {@code index} in {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code offset}, any offsets derived from it or {@code index} are invalid
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
 	public static float cumulativeDistributionFunction(final float[] array, final int offset, final int index) {
 		Objects.requireNonNull(array, "array == null");
 		
 		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
 		ParameterArguments.requireRange(index, 0, count(array, offset), "index");
+		ParameterArguments.requireRange(offset + 4 + index, 0, array.length - 1, "(offset + 4 + index)");
 		
-		return array[offset + 1 + 1 + 1 + 1 + index];
+		return array[offset + 4 + index];
 	}
 	
 //	TODO: Add Javadocs!
@@ -331,30 +355,92 @@ public final class Distribution1F {
 		return (value - cumulativeDistributionFunction0) / (cumulativeDistributionFunction1 - cumulativeDistributionFunction0);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value of the function at index {@code index} in {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If either {@code offset}, any offsets derived from it or {@code index} are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * For {@code offset}, its derived offsets and {@code index} to be valid, the following conditions have to be met:
+	 * <ul>
+	 * <li>{@code offset >= 0 && offset < array.length}</li>
+	 * <li>{@code offset + 2 >= 0 && offset + 2 < array.length}</li>
+	 * <li>{@code index >= 0 && index < count(array, offset)}</li>
+	 * <li>{@code toInt(array[offset + 1]) >= 0 && toInt(array[offset + 1]) < array.length}</li>
+	 * <li>{@code offset + 4 + index + toInt(array[offset + 1]) >= 0 && offset + 4 + index + toInt(array[offset + 1]) < array.length}</li>
+	 * </ul>
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution1F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution1F} instance
+	 * @param index the index
+	 * @return the value of the function at index {@code index} in {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code offset}, any offsets derived from it or {@code index} are invalid
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
 	public static float function(final float[] array, final int offset, final int index) {
 		Objects.requireNonNull(array, "array == null");
 		
 		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
 		ParameterArguments.requireRange(index, 0, count(array, offset) - 1, "index");
+		ParameterArguments.requireRange(toInt(array[offset + 1]), 0, array.length - 1, "toInt(array[offset + 1])");
+		ParameterArguments.requireRange(offset + 4 + index + toInt(array[offset + 1]), 0, array.length - 1, "(offset + 4 + index + toInt(array[offset + 1]))");
 		
-		return array[offset + 1 + 1 + 1 + toInt(array[offset + 1]) + 1 + index];
+		return array[offset + 4 + index + toInt(array[offset + 1])];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the function integral in {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset} or any offsets derived from it are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * For {@code offset} and its derived offset to be valid, the following conditions have to be met:
+	 * <ul>
+	 * <li>{@code offset >= 0 && offset < array.length}</li>
+	 * <li>{@code offset + 3 >= 0 && offset + 3 < array.length}</li>
+	 * </ul>
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution1F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution1F} instance
+	 * @return the function integral in {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code offset} or any offsets derived from it are invalid
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
 	public static float functionIntegral(final float[] array, final int offset) {
 		Objects.requireNonNull(array, "array == null");
 		
 		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		ParameterArguments.requireRange(offset + 3, 0, array.length - 1, "(offset + 3)");
 		
 		return array[offset + 3];
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the value count of the function in {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset} or any offsets derived from it are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * For {@code offset} and its derived offset to be valid, the following conditions have to be met:
+	 * <ul>
+	 * <li>{@code offset >= 0 && offset < array.length}</li>
+	 * <li>{@code offset + 2 >= 0 && offset + 2 < array.length}</li>
+	 * </ul>
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution1F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution1F} instance
+	 * @return the value count of the function in {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code offset} or any offsets derived from it are invalid
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
 	public static int count(final float[] array, final int offset) {
 		Objects.requireNonNull(array, "array == null");
 		
 		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		ParameterArguments.requireRange(offset + 2, 0, array.length - 1, "(offset + 2)");
 		
 		return toInt(array[offset + 2]);
 	}
@@ -364,6 +450,7 @@ public final class Distribution1F {
 		Objects.requireNonNull(array, "array == null");
 		
 		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
+		ParameterArguments.requireRange(offset + 1, 0, array.length - 1, "(offset + 1)");
 		
 		final int length = toInt(array[offset + 1]);
 		

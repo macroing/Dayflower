@@ -313,14 +313,14 @@ public final class Distribution2F {
 		
 		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
 		
-		final boolean isUV = (int)(array[offset]) != 0;
+		final boolean isUV = toInt(array[offset]) != 0;
 		
 		final float m = isUV ? sample.getU() : sample.getV();
 		final float c = isUV ? sample.getV() : sample.getU();
 		
-		final int offsetM = offset + (int)(array[offset + 2]);
+		final int offsetM = offset + toInt(array[offset + 2]);
 		final int indexM = Distribution1F.index(array, offsetM, m);
-		final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+		final int offsetC = offset + toInt(array[offset + 3 + indexM]);
 		final int indexC = Distribution1F.index(array, offsetC, c);
 		
 		final float mRemapped = Distribution1F.continuousRemap(array, offsetM, m, indexM);
@@ -335,14 +335,14 @@ public final class Distribution2F {
 		
 		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
 		
-		final boolean isUV = (int)(array[offset]) != 0;
+		final boolean isUV = toInt(array[offset]) != 0;
 		
 		final float m = isUV ? sample.getU() : sample.getV();
 		final float c = isUV ? sample.getV() : sample.getU();
 		
-		final int offsetM = offset + (int)(array[offset + 2]);
+		final int offsetM = offset + toInt(array[offset + 2]);
 		final int indexM = Distribution1F.index(array, offsetM, m);
-		final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+		final int offsetC = offset + toInt(array[offset + 3 + indexM]);
 		final int indexC = Distribution1F.index(array, offsetC, c);
 		
 		final float mRemapped = Distribution1F.discreteRemap(array, offsetM, m, indexM);
@@ -362,27 +362,27 @@ public final class Distribution2F {
 		
 		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
 		
-		final boolean isUV = (int)(array[offset]) != 0;
+		final boolean isUV = toInt(array[offset]) != 0;
 		
 		final float m = isUV ? sample.getU() : sample.getV();
 		final float c = isUV ? sample.getV() : sample.getU();
 		
 		if(isRemapped) {
-			final int offsetM = offset + (int)(array[offset + 2]);
+			final int offsetM = offset + toInt(array[offset + 2]);
 			final int countM = Distribution1F.count(array, offsetM);
-			final int indexM = saturate((int)(m * countM), 0, countM - 1);
-			final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+			final int indexM = saturate(toInt(m * countM), 0, countM - 1);
+			final int offsetC = offset + toInt(array[offset + 3 + indexM]);
 			final int countC = Distribution1F.count(array, offsetC);
-			final int indexC = saturate((int)(c * countC), 0, countC - 1);
+			final int indexC = saturate(toInt(c * countC), 0, countC - 1);
 			
 			final float probabilityDensityFunctionValue = Distribution1F.function(array, offsetC, indexC) / Distribution1F.functionIntegral(array, offsetM);
 			
 			return probabilityDensityFunctionValue;
 		}
 		
-		final int offsetM = offset + (int)(array[offset + 2]);
+		final int offsetM = offset + toInt(array[offset + 2]);
 		final int indexM = Distribution1F.index(array, offsetM, m);
-		final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+		final int offsetC = offset + toInt(array[offset + 3 + indexM]);
 		final int indexC = Distribution1F.index(array, offsetC, c);
 		
 		final float probabilityDensityFunctionValueM = Distribution1F.continuousProbabilityDensityFunction(array, offsetM, indexM);
@@ -398,14 +398,14 @@ public final class Distribution2F {
 		
 		ParameterArguments.requireRange(offset, 0, array.length - 1, "offset");
 		
-		final boolean isUV = (int)(array[offset]) != 0;
+		final boolean isUV = toInt(array[offset]) != 0;
 		
 		final float m = isUV ? sample.getU() : sample.getV();
 		final float c = isUV ? sample.getV() : sample.getU();
 		
-		final int offsetM = offset + (int)(array[offset + 2]);
+		final int offsetM = offset + toInt(array[offset + 2]);
 		final int indexM = Distribution1F.index(array, offsetM, m);
-		final int offsetC = offset + (int)(array[offset + 3 + indexM]);
+		final int offsetC = offset + toInt(array[offset + 3 + indexM]);
 		final int indexC = Distribution1F.index(array, offsetC, c);
 		
 		final float probabilityDensityFunctionValueM = Distribution1F.discreteProbabilityDensityFunction(array, offsetM, indexM);

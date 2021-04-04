@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Ints.pack;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -55,12 +57,12 @@ public final class MirrorMaterial implements Material {
 	/**
 	 * The length of the {@code int[]}.
 	 */
-	public static final int ARRAY_LENGTH = 2;
+	public static final int ARRAY_LENGTH = 1;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code KR} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code KR} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_R = 1;
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_K_R = 0;
 	
 	/**
 	 * The ID of this {@code MirrorMaterial} class.
@@ -413,9 +415,8 @@ public final class MirrorMaterial implements Material {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-//		Because the MirrorMaterial occupy 2/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_R] = this.textureKR.getID();			//Block #1
+//		Because the MirrorMaterial occupy 1/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_K_R] = pack(this.textureEmission.getID(), 0, this.textureKR.getID(), 0);//Block #1
 		
 		return array;
 	}

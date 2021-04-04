@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Ints.pack;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -62,27 +64,22 @@ public final class PlasticMaterial implements Material {
 	/**
 	 * The length of the {@code int[]}.
 	 */
-	public static final int ARRAY_LENGTH = 8;
+	public static final int ARRAY_LENGTH = 4;
 	
 	/**
 	 * The offset for the roughness remapping flag in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 4;
+	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code KD} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KD} and {@code KS} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_D = 1;
+	public static final int ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S = 1;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code KS} in the {@code int[]}.
+	 * The ID and offset for the {@link Texture} instance denoted by {@code Roughness} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_S = 2;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Roughness} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS = 3;
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS = 2;
 	
 	/**
 	 * The ID of this {@code PlasticMaterial} class.
@@ -640,15 +637,11 @@ public final class PlasticMaterial implements Material {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-//		Because the PlasticMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();			//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_D] = this.textureKD.getID();						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_S] = this.textureKS.getID();						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS] = this.textureRoughness.getID();			//Block #1
-		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;	//Block #1
-		array[5] = 0;																	//Block #1
-		array[6] = 0;																	//Block #1
-		array[7] = 0;																	//Block #1
+//		Because the PlasticMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = pack(this.textureEmission.getID(), 0, 0, 0);								//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(this.textureKD.getID(), 0, this.textureKS.getID(), 0);	//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS] = pack(this.textureRoughness.getID(), 0, 0, 0);							//Block #1
+		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;									//Block #1
 		
 		return array;
 	}

@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Ints.pack;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -58,32 +60,22 @@ public final class MetalMaterial implements Material {
 	/**
 	 * The length of the {@code int[]}.
 	 */
-	public static final int ARRAY_LENGTH = 8;
+	public static final int ARRAY_LENGTH = 4;
 	
 	/**
 	 * The offset for the roughness remapping flag in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 5;
+	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Eta} and {@code K} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ETA = 1;
+	public static final int ARRAY_OFFSET_TEXTURE_ETA_AND_TEXTURE_K = 1;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code K} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Roughness U} and {@code Roughness V} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K = 2;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Roughness U} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_U = 3;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Roughness V} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_V = 4;
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
 	
 	/**
 	 * The ID of this {@code MetalMaterial} class.
@@ -697,15 +689,11 @@ public final class MetalMaterial implements Material {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-//		Because the MetalMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();			//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ETA] = this.textureEta.getID();						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K] = this.textureK.getID();							//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_U] = this.textureRoughnessU.getID();		//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_V] = this.textureRoughnessV.getID();		//Block #1
-		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;	//Block #1
-		array[6] = 0;																	//Block #1
-		array[7] = 0;																	//Block #1
+//		Because the MetalMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = pack(this.textureEmission.getID(), 0, 0, 0);																//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ETA_AND_TEXTURE_K] = pack(this.textureEta.getID(), 0, this.textureK.getID(), 0);										//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(this.textureRoughnessU.getID(), 0, this.textureRoughnessV.getID(), 0);	//Block #1
+		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;																	//Block #1
 		
 		return array;
 	}

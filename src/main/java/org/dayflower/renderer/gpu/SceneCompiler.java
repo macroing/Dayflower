@@ -773,12 +773,10 @@ final class SceneCompiler {
 			final Texture textureRoughness = glossyMaterial.getTextureRoughness();
 			
 			final int materialGlossyMaterialArrayTextureEmission = i * GlossyMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-			final int materialGlossyMaterialArrayTextureKR = i * GlossyMaterial.ARRAY_LENGTH + GlossyMaterial.ARRAY_OFFSET_TEXTURE_K_R;
-			final int materialGlossyMaterialArrayTextureRoughness = i * GlossyMaterial.ARRAY_LENGTH + GlossyMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS;
+			final int materialGlossyMaterialArrayTextureKRAndTextureRoughness = i * GlossyMaterial.ARRAY_LENGTH + GlossyMaterial.ARRAY_OFFSET_TEXTURE_K_R_AND_TEXTURE_ROUGHNESS;
 			
-			materialGlossyMaterialArray[materialGlossyMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
-			materialGlossyMaterialArray[materialGlossyMaterialArrayTextureKR] = pack(textureKR.getID(), doFindTextureOffset(textureKR));
-			materialGlossyMaterialArray[materialGlossyMaterialArrayTextureRoughness] = pack(textureRoughness.getID(), doFindTextureOffset(textureRoughness));
+			materialGlossyMaterialArray[materialGlossyMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission), 0, 0);
+			materialGlossyMaterialArray[materialGlossyMaterialArrayTextureKRAndTextureRoughness] = pack(textureKR.getID(), doFindTextureOffset(textureKR), textureRoughness.getID(), doFindTextureOffset(textureRoughness));
 		}
 	}
 	
@@ -791,12 +789,10 @@ final class SceneCompiler {
 			final Texture textureKD = matteMaterial.getTextureKD();
 			
 			final int materialMatteMaterialArrayTextureEmission = i * MatteMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-			final int materialMatteMaterialArrayTextureAngle = i * MatteMaterial.ARRAY_LENGTH + MatteMaterial.ARRAY_OFFSET_TEXTURE_ANGLE;
-			final int materialMatteMaterialArrayTextureKD = i * MatteMaterial.ARRAY_LENGTH + MatteMaterial.ARRAY_OFFSET_TEXTURE_K_D;
+			final int materialMatteMaterialArrayTextureAngleAndTextureKD = i * MatteMaterial.ARRAY_LENGTH + MatteMaterial.ARRAY_OFFSET_TEXTURE_ANGLE_AND_TEXTURE_K_D;
 			
-			materialMatteMaterialArray[materialMatteMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
-			materialMatteMaterialArray[materialMatteMaterialArrayTextureAngle] = pack(textureAngle.getID(), doFindTextureOffset(textureAngle));
-			materialMatteMaterialArray[materialMatteMaterialArrayTextureKD] = pack(textureKD.getID(), doFindTextureOffset(textureKD));
+			materialMatteMaterialArray[materialMatteMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission), 0, 0);
+			materialMatteMaterialArray[materialMatteMaterialArrayTextureAngleAndTextureKD] = pack(textureAngle.getID(), doFindTextureOffset(textureAngle), textureKD.getID(), doFindTextureOffset(textureKD));
 		}
 	}
 	
@@ -811,16 +807,12 @@ final class SceneCompiler {
 			final Texture textureRoughnessV = metalMaterial.getTextureRoughnessV();
 			
 			final int materialMetalMaterialArrayTextureEmission = i * MetalMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-			final int materialMetalMaterialArrayTextureEta = i * MetalMaterial.ARRAY_LENGTH + MetalMaterial.ARRAY_OFFSET_TEXTURE_ETA;
-			final int materialMetalMaterialArrayTextureK = i * MetalMaterial.ARRAY_LENGTH + MetalMaterial.ARRAY_OFFSET_TEXTURE_K;
-			final int materialMetalMaterialArrayTextureRoughnessU = i * MetalMaterial.ARRAY_LENGTH + MetalMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_U;
-			final int materialMetalMaterialArrayTextureRoughnessV = i * MetalMaterial.ARRAY_LENGTH + MetalMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_V;
+			final int materialMetalMaterialArrayTextureEtaAndTextureK = i * MetalMaterial.ARRAY_LENGTH + MetalMaterial.ARRAY_OFFSET_TEXTURE_ETA_AND_TEXTURE_K;
+			final int materialMetalMaterialArrayTextureRoughnessUAndTextureRoughnessV = i * MetalMaterial.ARRAY_LENGTH + MetalMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V;
 			
-			materialMetalaterialArray[materialMetalMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
-			materialMetalaterialArray[materialMetalMaterialArrayTextureEta] = pack(textureEta.getID(), doFindTextureOffset(textureEta));
-			materialMetalaterialArray[materialMetalMaterialArrayTextureK] = pack(textureK.getID(), doFindTextureOffset(textureK));
-			materialMetalaterialArray[materialMetalMaterialArrayTextureRoughnessU] = pack(textureRoughnessU.getID(), doFindTextureOffset(textureRoughnessU));
-			materialMetalaterialArray[materialMetalMaterialArrayTextureRoughnessV] = pack(textureRoughnessV.getID(), doFindTextureOffset(textureRoughnessV));
+			materialMetalaterialArray[materialMetalMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission), 0, 0);
+			materialMetalaterialArray[materialMetalMaterialArrayTextureEtaAndTextureK] = pack(textureEta.getID(), doFindTextureOffset(textureEta), textureK.getID(), doFindTextureOffset(textureK));
+			materialMetalaterialArray[materialMetalMaterialArrayTextureRoughnessUAndTextureRoughnessV] = pack(textureRoughnessU.getID(), doFindTextureOffset(textureRoughnessU), textureRoughnessV.getID(), doFindTextureOffset(textureRoughnessV));
 		}
 	}
 	
@@ -831,11 +823,9 @@ final class SceneCompiler {
 			final Texture textureEmission = mirrorMaterial.getTextureEmission();
 			final Texture textureKR = mirrorMaterial.getTextureKR();
 			
-			final int materialMirrorMaterialArrayTextureEmission = i * MirrorMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-			final int materialMirrorMaterialArrayTextureKR = i * MirrorMaterial.ARRAY_LENGTH + MirrorMaterial.ARRAY_OFFSET_TEXTURE_K_R;
+			final int materialMirrorMaterialArrayTextureEmissionAndTextureKR = i * MirrorMaterial.ARRAY_LENGTH + MirrorMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_K_R;
 			
-			materialMirrorMaterialArray[materialMirrorMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
-			materialMirrorMaterialArray[materialMirrorMaterialArrayTextureKR] = pack(textureKR.getID(), doFindTextureOffset(textureKR));
+			materialMirrorMaterialArray[materialMirrorMaterialArrayTextureEmissionAndTextureKR] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission), textureKR.getID(), doFindTextureOffset(textureKR));
 		}
 	}
 	
@@ -849,14 +839,12 @@ final class SceneCompiler {
 			final Texture textureRoughness = plasticMaterial.getTextureRoughness();
 			
 			final int materialPlasticMaterialArrayTextureEmission = i * PlasticMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-			final int materialPlasticMaterialArrayTextureKD = i * PlasticMaterial.ARRAY_LENGTH + PlasticMaterial.ARRAY_OFFSET_TEXTURE_K_D;
-			final int materialPlasticMaterialArrayTextureKS = i * PlasticMaterial.ARRAY_LENGTH + PlasticMaterial.ARRAY_OFFSET_TEXTURE_K_S;
+			final int materialPlasticMaterialArrayTextureKDAndTextureKS = i * PlasticMaterial.ARRAY_LENGTH + PlasticMaterial.ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S;
 			final int materialPlasticMaterialArrayTextureRoughness = i * PlasticMaterial.ARRAY_LENGTH + PlasticMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS;
 			
-			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
-			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureKD] = pack(textureKD.getID(), doFindTextureOffset(textureKD));
-			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureKS] = pack(textureKS.getID(), doFindTextureOffset(textureKS));
-			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureRoughness] = pack(textureRoughness.getID(), doFindTextureOffset(textureRoughness));
+			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission), 0, 0);
+			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureKDAndTextureKS] = pack(textureKD.getID(), doFindTextureOffset(textureKD), textureKS.getID(), doFindTextureOffset(textureKS));
+			materialPlasticMaterialArray[materialPlasticMaterialArrayTextureRoughness] = pack(textureRoughness.getID(), doFindTextureOffset(textureRoughness), 0, 0);
 		}
 	}
 	
@@ -871,16 +859,12 @@ final class SceneCompiler {
 			final Texture textureRoughnessV = substrateMaterial.getTextureRoughnessV();
 			
 			final int materialSubstrateMaterialArrayTextureEmission = i * SubstrateMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-			final int materialSubstrateMaterialArrayTextureKD = i * SubstrateMaterial.ARRAY_LENGTH + SubstrateMaterial.ARRAY_OFFSET_TEXTURE_K_D;
-			final int materialSubstrateMaterialArrayTextureKS = i * SubstrateMaterial.ARRAY_LENGTH + SubstrateMaterial.ARRAY_OFFSET_TEXTURE_K_S;
-			final int materialSubstrateMaterialArrayTextureRoughnessU = i * SubstrateMaterial.ARRAY_LENGTH + SubstrateMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_U;
-			final int materialSubstrateMaterialArrayTextureRoughnessV = i * SubstrateMaterial.ARRAY_LENGTH + SubstrateMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_V;
+			final int materialSubstrateMaterialArrayTextureKDAndTextureKS = i * SubstrateMaterial.ARRAY_LENGTH + SubstrateMaterial.ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S;
+			final int materialSubstrateMaterialArrayTextureRoughnessUAndTextureRoughnessV = i * SubstrateMaterial.ARRAY_LENGTH + SubstrateMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V;
 			
-			materialSubstrateMaterialArray[materialSubstrateMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
-			materialSubstrateMaterialArray[materialSubstrateMaterialArrayTextureKD] = pack(textureKD.getID(), doFindTextureOffset(textureKD));
-			materialSubstrateMaterialArray[materialSubstrateMaterialArrayTextureKS] = pack(textureKS.getID(), doFindTextureOffset(textureKS));
-			materialSubstrateMaterialArray[materialSubstrateMaterialArrayTextureRoughnessU] = pack(textureRoughnessU.getID(), doFindTextureOffset(textureRoughnessU));
-			materialSubstrateMaterialArray[materialSubstrateMaterialArrayTextureRoughnessV] = pack(textureRoughnessV.getID(), doFindTextureOffset(textureRoughnessV));
+			materialSubstrateMaterialArray[materialSubstrateMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission), 0, 0);
+			materialSubstrateMaterialArray[materialSubstrateMaterialArrayTextureKDAndTextureKS] = pack(textureKD.getID(), doFindTextureOffset(textureKD), textureKS.getID(), doFindTextureOffset(textureKS));
+			materialSubstrateMaterialArray[materialSubstrateMaterialArrayTextureRoughnessUAndTextureRoughnessV] = pack(textureRoughnessU.getID(), doFindTextureOffset(textureRoughnessU), textureRoughnessV.getID(), doFindTextureOffset(textureRoughnessV));
 		}
 	}
 	

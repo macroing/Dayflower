@@ -179,6 +179,29 @@ public final class Ints {
 	}
 	
 	/**
+	 * Packs the {@code int} values {@code a}, {@code b}, {@code c} and {@code d} into a single {@code int} value.
+	 * <p>
+	 * Returns the packed {@code int} value.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are less than {@code 0} or greater than {@code 255}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param a an {@code int} in the interval {@code [0, 255]}
+	 * @param b an {@code int} in the interval {@code [0, 255]}
+	 * @param c an {@code int} in the interval {@code [0, 255]}
+	 * @param d an {@code int} in the interval {@code [0, 255]}
+	 * @return the packed {@code int} value
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are less than {@code 0} or greater than {@code 255}
+	 */
+	public static int pack(final int a, final int b, final int c, final int d) {
+		ParameterArguments.requireRange(a, 0, 255, "a");
+		ParameterArguments.requireRange(b, 0, 255, "b");
+		ParameterArguments.requireRange(c, 0, 255, "c");
+		ParameterArguments.requireRange(d, 0, 255, "d");
+		
+		return (a << 0) | (b << 8) | (c << 16) | (d << 24);
+	}
+	
+	/**
 	 * Returns the padding for {@code contentSize} given a block size of {@code 8}.
 	 * <p>
 	 * Calling this method is equivalent to the following:

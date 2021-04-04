@@ -694,12 +694,10 @@ final class SceneCompiler {
 			final Texture textureKS = clearCoatMaterial.getTextureKS();
 			
 			final int materialClearCoatMaterialArrayTextureEmission = i * ClearCoatMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-			final int materialClearCoatMaterialArrayTextureKD = i * ClearCoatMaterial.ARRAY_LENGTH + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_D;
-			final int materialClearCoatMaterialArrayTextureKS = i * ClearCoatMaterial.ARRAY_LENGTH + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_S;
+			final int materialClearCoatMaterialArrayTextureKDAndTextureKS = i * ClearCoatMaterial.ARRAY_LENGTH + ClearCoatMaterial.ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S;
 			
-			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
-			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureKD] = pack(textureKD.getID(), doFindTextureOffset(textureKD));
-			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureKS] = pack(textureKS.getID(), doFindTextureOffset(textureKS));
+			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission), 0, 0);
+			materialClearCoatMaterialArray[materialClearCoatMaterialArrayTextureKDAndTextureKS] = pack(textureKD.getID(), doFindTextureOffset(textureKD), textureKS.getID(), doFindTextureOffset(textureKS));
 		}
 	}
 	
@@ -723,37 +721,25 @@ final class SceneCompiler {
 			final Texture textureSpecularTint = disneyMaterial.getTextureSpecularTint();
 			final Texture textureSpecularTransmission = disneyMaterial.getTextureSpecularTransmission();
 			
-			final int materialDisneyMaterialArrayTextureEmission = i * DisneyMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-			final int materialDisneyMaterialArrayTextureAnisotropic = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ANISOTROPIC;
-			final int materialDisneyMaterialArrayTextureClearCoat = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_CLEAR_COAT;
-			final int materialDisneyMaterialArrayTextureClearCoatGloss = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_CLEAR_COAT_GLOSS;
-			final int materialDisneyMaterialArrayTextureColor = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_COLOR;
-			final int materialDisneyMaterialArrayTextureDiffuseTransmission = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_DIFFUSE_TRANSMISSION;
-			final int materialDisneyMaterialArrayTextureEta = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ETA;
-			final int materialDisneyMaterialArrayTextureFlatness = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_FLATNESS;
-			final int materialDisneyMaterialArrayTextureMetallic = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_METALLIC;
-			final int materialDisneyMaterialArrayTextureRoughness = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS;
-			final int materialDisneyMaterialArrayTextureScatterDistance = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE;
-			final int materialDisneyMaterialArrayTextureSheen = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SHEEN;
-			final int materialDisneyMaterialArrayTextureSheenTint = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SHEEN_TINT;
-			final int materialDisneyMaterialArrayTextureSpecularTint = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SPECULAR_TINT;
-			final int materialDisneyMaterialArrayTextureSpecularTransmission = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION;
+			final boolean isThin = disneyMaterial.isThin();
 			
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureAnisotropic] = pack(textureAnisotropic.getID(), doFindTextureOffset(textureAnisotropic));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureClearCoat] = pack(textureClearCoat.getID(), doFindTextureOffset(textureClearCoat));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureClearCoatGloss] = pack(textureClearCoatGloss.getID(), doFindTextureOffset(textureClearCoatGloss));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureColor] = pack(textureColor.getID(), doFindTextureOffset(textureColor));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureDiffuseTransmission] = pack(textureDiffuseTransmission.getID(), doFindTextureOffset(textureDiffuseTransmission));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureEta] = pack(textureEta.getID(), doFindTextureOffset(textureEta));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureFlatness] = pack(textureFlatness.getID(), doFindTextureOffset(textureFlatness));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureMetallic] = pack(textureMetallic.getID(), doFindTextureOffset(textureMetallic));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureRoughness] = pack(textureRoughness.getID(), doFindTextureOffset(textureRoughness));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureScatterDistance] = pack(textureScatterDistance.getID(), doFindTextureOffset(textureScatterDistance));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSheen] = pack(textureSheen.getID(), doFindTextureOffset(textureSheen));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSheenTint] = pack(textureSheenTint.getID(), doFindTextureOffset(textureSheenTint));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSpecularTint] = pack(textureSpecularTint.getID(), doFindTextureOffset(textureSpecularTint));
-			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSpecularTransmission] = pack(textureSpecularTransmission.getID(), doFindTextureOffset(textureSpecularTransmission));
+			final int materialDisneyMaterialArrayTextureEmissionAndTextureAnisotropic = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC;
+			final int materialDisneyMaterialArrayTextureClearCoatAndTextureClearCoatGloss = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS;
+			final int materialDisneyMaterialArrayTextureColorAndTextureDiffuseTransmission = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION;
+			final int materialDisneyMaterialArrayTextureEtaAndTextureFlatness = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS;
+			final int materialDisneyMaterialArrayTextureMetallicAndTextureRoughness = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS;
+			final int materialDisneyMaterialArrayTextureScatterDistanceAndTextureSheen = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN;
+			final int materialDisneyMaterialArrayTextureSheenTintAndTextureSpecularTint = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT;
+			final int materialDisneyMaterialArrayTextureSpecularTransmissionAndIsThin = i * DisneyMaterial.ARRAY_LENGTH + DisneyMaterial.ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN;
+			
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureEmissionAndTextureAnisotropic] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission), textureAnisotropic.getID(), doFindTextureOffset(textureAnisotropic));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureClearCoatAndTextureClearCoatGloss] = pack(textureClearCoat.getID(), doFindTextureOffset(textureClearCoat), textureClearCoatGloss.getID(), doFindTextureOffset(textureClearCoatGloss));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureColorAndTextureDiffuseTransmission] = pack(textureColor.getID(), doFindTextureOffset(textureColor), textureDiffuseTransmission.getID(), doFindTextureOffset(textureDiffuseTransmission));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureEtaAndTextureFlatness] = pack(textureEta.getID(), doFindTextureOffset(textureEta), textureFlatness.getID(), doFindTextureOffset(textureFlatness));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureMetallicAndTextureRoughness] = pack(textureMetallic.getID(), doFindTextureOffset(textureMetallic), textureRoughness.getID(), doFindTextureOffset(textureRoughness));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureScatterDistanceAndTextureSheen] = pack(textureScatterDistance.getID(), doFindTextureOffset(textureScatterDistance), textureSheen.getID(), doFindTextureOffset(textureSheen));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSheenTintAndTextureSpecularTint] = pack(textureSheenTint.getID(), doFindTextureOffset(textureSheenTint), textureSpecularTint.getID(), doFindTextureOffset(textureSpecularTint));
+			materialDisneyMaterialArray[materialDisneyMaterialArrayTextureSpecularTransmissionAndIsThin] = pack(textureSpecularTransmission.getID(), doFindTextureOffset(textureSpecularTransmission), isThin ? 1 : 0, 0);
 		}
 	}
 	
@@ -768,19 +754,13 @@ final class SceneCompiler {
 			final Texture textureRoughnessU = glassMaterial.getTextureRoughnessU();
 			final Texture textureRoughnessV = glassMaterial.getTextureRoughnessV();
 			
-			final int materialGlassMaterialArrayTextureEmission = i * GlassMaterial.ARRAY_LENGTH + Material.ARRAY_OFFSET_TEXTURE_EMISSION;
-			final int materialGlassMaterialArrayTextureEta = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_ETA;
-			final int materialGlassMaterialArrayTextureKR = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_K_R;
-			final int materialGlassMaterialArrayTextureKT = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_K_T;
-			final int materialGlassMaterialArrayTextureRoughnessU = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_U;
-			final int materialGlassMaterialArrayTextureRoughnessV = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_V;
+			final int materialGlassMaterialArrayTextureEmissionAndTextureEta = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA;
+			final int materialGlassMaterialArrayTextureKRAndTextureKT = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T;
+			final int materialGlassMaterialArrayTextureRoughnessUAndTextureRoughnessV = i * GlassMaterial.ARRAY_LENGTH + GlassMaterial.ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V;
 			
-			materialGlassMaterialArray[materialGlassMaterialArrayTextureEmission] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission));
-			materialGlassMaterialArray[materialGlassMaterialArrayTextureEta] = pack(textureEta.getID(), doFindTextureOffset(textureEta));
-			materialGlassMaterialArray[materialGlassMaterialArrayTextureKR] = pack(textureKR.getID(), doFindTextureOffset(textureKR));
-			materialGlassMaterialArray[materialGlassMaterialArrayTextureKT] = pack(textureKT.getID(), doFindTextureOffset(textureKT));
-			materialGlassMaterialArray[materialGlassMaterialArrayTextureRoughnessU] = pack(textureRoughnessU.getID(), doFindTextureOffset(textureRoughnessU));
-			materialGlassMaterialArray[materialGlassMaterialArrayTextureRoughnessV] = pack(textureRoughnessV.getID(), doFindTextureOffset(textureRoughnessV));
+			materialGlassMaterialArray[materialGlassMaterialArrayTextureEmissionAndTextureEta] = pack(textureEmission.getID(), doFindTextureOffset(textureEmission), textureEta.getID(), doFindTextureOffset(textureEta));
+			materialGlassMaterialArray[materialGlassMaterialArrayTextureKRAndTextureKT] = pack(textureKR.getID(), doFindTextureOffset(textureKR), textureKT.getID(), doFindTextureOffset(textureKT));
+			materialGlassMaterialArray[materialGlassMaterialArrayTextureRoughnessUAndTextureRoughnessV] = pack(textureRoughnessU.getID(), doFindTextureOffset(textureRoughnessU), textureRoughnessV.getID(), doFindTextureOffset(textureRoughnessV));
 		}
 	}
 	

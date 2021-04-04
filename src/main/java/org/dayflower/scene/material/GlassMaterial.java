@@ -19,6 +19,7 @@
 package org.dayflower.scene.material;
 
 import static org.dayflower.utility.Floats.isZero;
+import static org.dayflower.utility.Ints.pack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,37 +68,27 @@ public final class GlassMaterial implements Material {
 	/**
 	 * The length of the {@code int[]}.
 	 */
-	public static final int ARRAY_LENGTH = 8;
+	public static final int ARRAY_LENGTH = 4;
 	
 	/**
 	 * The offset for the roughness remapping flag in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 6;
+	public static final int ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS = 3;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code Eta} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ETA = 1;
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA = 0;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code KR} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KR} and {@code KT} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_R = 2;
+	public static final int ARRAY_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T = 1;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code KT} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Roughness U} and {@code Roughness V} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_T = 3;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Roughness U} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_U = 4;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Roughness V} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_V = 5;
+	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V = 2;
 	
 	/**
 	 * The ID of this {@code GlassMaterial} class.
@@ -820,15 +811,11 @@ public final class GlassMaterial implements Material {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-//		Because the GlassMaterial occupy 8/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();			//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ETA] = this.textureEta.getID();						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_R] = this.textureKR.getID();						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_T] = this.textureKT.getID();						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_U] = this.textureRoughnessU.getID();		//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_V] = this.textureRoughnessV.getID();		//Block #1
-		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;	//Block #1
-		array[7] = 0;																	//Block #1
+//		Because the GlassMaterial occupy 4/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ETA] = pack(this.textureEmission.getID(), 0, this.textureEta.getID(), 0);						//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_R_AND_TEXTURE_K_T] = pack(this.textureKR.getID(), 0, this.textureKT.getID(), 0);									//Block #1
+		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS_U_AND_TEXTURE_ROUGHNESS_V] = pack(this.textureRoughnessU.getID(), 0, this.textureRoughnessV.getID(), 0);	//Block #1
+		array[ARRAY_OFFSET_IS_REMAPPING_ROUGHNESS] = this.isRemappingRoughness ? 1 : 0;																	//Block #1
 		
 		return array;
 	}

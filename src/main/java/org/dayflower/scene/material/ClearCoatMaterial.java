@@ -19,6 +19,7 @@
 package org.dayflower.scene.material;
 
 import static org.dayflower.utility.Floats.random;
+import static org.dayflower.utility.Ints.pack;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -60,17 +61,12 @@ public final class ClearCoatMaterial implements Material {
 	/**
 	 * The length of the {@code int[]}.
 	 */
-	public static final int ARRAY_LENGTH = 4;
+	public static final int ARRAY_LENGTH = 2;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code KD} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code KD} and {@code KS} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_D = 1;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code KS} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_K_S = 2;
+	public static final int ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S = 1;
 	
 	/**
 	 * The ID of this {@code ClearCoatMaterial} class.
@@ -521,11 +517,9 @@ public final class ClearCoatMaterial implements Material {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-//		Because the ClearCoatMaterial occupy 4/8 positions in a block, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_D] = this.textureKD.getID();			//Block #1
-		array[ARRAY_OFFSET_TEXTURE_K_S] = this.textureKS.getID();			//Block #1
-		array[3] = 0;														//Block #1
+//		Because the ClearCoatMaterial occupy 2/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION] = pack(this.textureEmission.getID(), 0, 0, 0);								//Block #1
+		array[ARRAY_OFFSET_TEXTURE_K_D_AND_TEXTURE_K_S] = pack(this.textureKD.getID(), 0, this.textureKS.getID(), 0);	//Block #1
 		
 		return array;
 	}

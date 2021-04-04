@@ -21,6 +21,7 @@ package org.dayflower.scene.material;
 import static org.dayflower.utility.Floats.lerp;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.sqrt;
+import static org.dayflower.utility.Ints.pack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,82 +74,47 @@ public final class DisneyMaterial implements Material {
 	/**
 	 * The length of the {@code int[]}.
 	 */
-	public static final int ARRAY_LENGTH = 16;
+	public static final int ARRAY_LENGTH = 8;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Anisotropic} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Clear Coat} and {@code Clear Coat Gloss} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ANISOTROPIC = 1;
+	public static final int ARRAY_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS = 1;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Clear Coat} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Color} and {@code Diffuse Transmission} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_CLEAR_COAT = 2;
+	public static final int ARRAY_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION = 2;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Clear Coat Gloss} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Emission} and {@code Anisotropic} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_CLEAR_COAT_GLOSS = 3;
+	public static final int ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC = 0;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Color} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Eta} and {@code Flatness} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_COLOR = 4;
+	public static final int ARRAY_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS = 3;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Diffuse Transmission} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Metallic} and {@code Roughness} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_DIFFUSE_TRANSMISSION = 5;
+	public static final int ARRAY_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS = 4;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Eta} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Scatter Distance} and {@code Sheen} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ETA = 6;
+	public static final int ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN = 5;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Flatness} in the {@code int[]}.
+	 * The IDs and offsets for the {@link Texture} instances denoted by {@code Sheen Tint} and {@code Specular Tint} in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_FLATNESS = 7;
+	public static final int ARRAY_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT = 6;
 	
 	/**
-	 * The offset for the {@link Texture} denoted by {@code Metallic} in the {@code int[]}.
+	 * The ID and offset for the {@link Texture} instance denoted by {@code Specular Transmission} and the thin flag in the {@code int[]}.
 	 */
-	public static final int ARRAY_OFFSET_TEXTURE_METALLIC = 8;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Roughness} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_ROUGHNESS = 9;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Scatter Distance} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE = 10;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Sheen} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_SHEEN = 11;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Sheen Tint} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_SHEEN_TINT = 12;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Specular Tint} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_SPECULAR_TINT = 13;
-	
-	/**
-	 * The offset for the {@link Texture} denoted by {@code Specular Transmission} in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION = 14;
-	
-	/**
-	 * The offset for the thin flag in the {@code int[]}.
-	 */
-	public static final int ARRAY_OFFSET_IS_THIN = 15;
+	public static final int ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN = 7;
 	
 	/**
 	 * The ID of this {@code DisneyMaterial} class.
@@ -1671,23 +1637,15 @@ public final class DisneyMaterial implements Material {
 	public int[] toArray() {
 		final int[] array = new int[ARRAY_LENGTH];
 		
-//		Because the DisneyMaterial occupy 16/16 positions in two blocks, it should be aligned.
-		array[ARRAY_OFFSET_TEXTURE_EMISSION] = this.textureEmission.getID();							//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ANISOTROPIC] = this.textureAnisotropic.getID();						//Block #1
-		array[ARRAY_OFFSET_TEXTURE_CLEAR_COAT] = this.textureClearCoat.getID();							//Block #1
-		array[ARRAY_OFFSET_TEXTURE_CLEAR_COAT_GLOSS] = this.textureClearCoatGloss.getID();				//Block #1
-		array[ARRAY_OFFSET_TEXTURE_COLOR] = this.textureColor.getID();									//Block #1
-		array[ARRAY_OFFSET_TEXTURE_DIFFUSE_TRANSMISSION] = this.textureDiffuseTransmission.getID();		//Block #1
-		array[ARRAY_OFFSET_TEXTURE_ETA] = this.textureEta.getID();										//Block #1
-		array[ARRAY_OFFSET_TEXTURE_FLATNESS] = this.textureFlatness.getID();							//Block #1
-		array[ARRAY_OFFSET_TEXTURE_METALLIC] = this.textureMetallic.getID();							//Block #2
-		array[ARRAY_OFFSET_TEXTURE_ROUGHNESS] = this.textureRoughness.getID();							//Block #2
-		array[ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE] = this.textureScatterDistance.getID();				//Block #2
-		array[ARRAY_OFFSET_TEXTURE_SHEEN] = this.textureSheen.getID();									//Block #2
-		array[ARRAY_OFFSET_TEXTURE_SHEEN_TINT] = this.textureSheenTint.getID();							//Block #2
-		array[ARRAY_OFFSET_TEXTURE_SPECULAR_TINT] = this.textureSpecularTint.getID();					//Block #2
-		array[ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION] = this.textureSpecularTransmission.getID();	//Block #2
-		array[ARRAY_OFFSET_IS_THIN] = this.isThin ? 1 : 0;												//Block #2
+//		Because the DisneyMaterial occupy 8/8 positions in a block, it should be aligned.
+		array[ARRAY_OFFSET_TEXTURE_EMISSION_AND_TEXTURE_ANISOTROPIC] = pack(this.textureEmission.getID(), 0, this.textureAnisotropic.getID(), 0);			//Block #1.
+		array[ARRAY_OFFSET_TEXTURE_CLEAR_COAT_AND_TEXTURE_CLEAR_COAT_GLOSS] = pack(this.textureClearCoat.getID(), 0, this.textureClearCoatGloss.getID(), 0);//Block #1.
+		array[ARRAY_OFFSET_TEXTURE_COLOR_AND_TEXTURE_DIFFUSE_TRANSMISSION] = pack(this.textureColor.getID(), 0, this.textureDiffuseTransmission.getID(), 0);//Block #1.
+		array[ARRAY_OFFSET_TEXTURE_ETA_AND_TEXTURE_FLATNESS] = pack(this.textureEta.getID(), 0, this.textureFlatness.getID(), 0);							//Block #1.
+		array[ARRAY_OFFSET_TEXTURE_METALLIC_AND_TEXTURE_ROUGHNESS] = pack(this.textureMetallic.getID(), 0, this.textureRoughness.getID(), 0);				//Block #1.
+		array[ARRAY_OFFSET_TEXTURE_SCATTER_DISTANCE_AND_TEXTURE_SHEEN] = pack(this.textureScatterDistance.getID(), 0, this.textureSheen.getID(), 0);		//Block #1.
+		array[ARRAY_OFFSET_TEXTURE_SHEEN_TINT_AND_TEXTURE_SPECULAR_TINT] = pack(this.textureSheenTint.getID(), 0, this.textureSpecularTint.getID(), 0);		//Block #1.
+		array[ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN] = pack(this.textureSpecularTransmission.getID(), 0, this.isThin ? 1 : 0, 0);			//Block #1.
 		
 		return array;
 	}

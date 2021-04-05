@@ -1,7 +1,7 @@
 Material material1 = new MatteMaterial(new CheckerboardTexture());
-Material material2 = new PlasticMaterial(new Color3F(0.2F, 0.2F, 1.0F), Color3F.GRAY_0_50, Color3F.BLACK, 0.01F);
-Material material3 = new PlasticMaterial(new Color3F(0.2F, 0.2F, 1.0F), Color3F.GRAY_0_50, Color3F.BLACK, 0.01F);
-Material material4 = new PlasticMaterial(new Color3F(0.2F, 0.2F, 1.0F), Color3F.GRAY_0_50, Color3F.BLACK, 0.01F);
+Material material2 = new PlasticMaterial(new Color3F(0.05F, 0.05F, 1.0F), Color3F.GRAY_0_50);
+Material material3 = new PlasticMaterial(new Color3F(0.05F, 0.05F, 1.0F), Color3F.GRAY_0_50);
+Material material4 = new PlasticMaterial(new Color3F(0.05F, 0.05F, 1.0F), Color3F.GRAY_0_50);
 
 Shape3F shape1 = new Plane3F();
 Shape3F shape2 = new Torus3F();

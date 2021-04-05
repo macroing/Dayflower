@@ -174,7 +174,7 @@ new MirrorMaterial(Color3F.GRAY_0_50);
 #### Plastic Material Example
 The following example demonstrates how the `PlasticMaterial` can be created and looks visually.
 ```java
-new PlasticMaterial(new Color3F(0.2F, 0.2F, 1.0F), Color3F.GRAY_0_50, Color3F.BLACK, 0.01F);
+new PlasticMaterial(new Color3F(0.05F, 0.05F, 1.0F), Color3F.GRAY_0_50);
 ```
 ![alt text](https://github.com/macroing/Dayflower/blob/master/documentation/Scene/PlasticMaterial.png "PlasticMaterial")
 

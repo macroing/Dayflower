@@ -445,7 +445,20 @@ public final class Distribution1F {
 		return toInt(array[offset + 2]);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the index of the closest value to {@code value} in the cumulative distribution function (CDF) in {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset} or any offsets derived from it are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution1F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution1F} instance
+	 * @param value a {@code float} value
+	 * @return the index of the closest value to {@code value} in the cumulative distribution function (CDF) in {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code offset} or any offsets derived from it are invalid
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
 	public static int index(final float[] array, final int offset, final float value) {
 		Objects.requireNonNull(array, "array == null");
 		

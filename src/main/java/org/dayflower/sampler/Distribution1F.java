@@ -263,7 +263,20 @@ public final class Distribution1F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the continuous probability density function (PDF) value at index {@code index} in {@code array}.
+	 * <p>
+	 * If {@code array} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset} or any offsets derived from it are invalid or {@code index} is less than {@code 0} or greater than {@code count(array, offset) - 1}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution1F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution1F} instance
+	 * @param index the index
+	 * @return the continuous probability density function (PDF) value at index {@code index} in {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code offset} or any offsets derived from it are invalid or {@code index} is less than {@code 0} or greater than {@code count(array, offset) - 1}
+	 * @throws NullPointerException thrown if, and only if, {@code array} is {@code null}
+	 */
 	public static float continuousProbabilityDensityFunction(final float[] array, final int offset, final int index) {
 		Objects.requireNonNull(array, "array == null");
 		

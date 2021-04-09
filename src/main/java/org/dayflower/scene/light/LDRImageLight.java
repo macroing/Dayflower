@@ -807,8 +807,8 @@ public final class LDRImageLight extends Light {
 	}
 	
 	private Distribution2F doCreateDistribution() {
-		final int resolutionU = this.resolutionX;
-		final int resolutionV = this.resolutionY;
+		final int resolutionU = 32;
+		final int resolutionV = 32;
 		
 		final float resolutionUReciprocal = 1.0F / resolutionU;
 		final float resolutionVReciprocal = 1.0F / resolutionV;

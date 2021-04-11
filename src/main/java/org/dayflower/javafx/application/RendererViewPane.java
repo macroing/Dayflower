@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
 import org.dayflower.filter.BoxFilter2F;
 import org.dayflower.geometry.Point2I;
@@ -36,6 +37,7 @@ import org.dayflower.geometry.Quaternion4F;
 import org.dayflower.geometry.Shape3F;
 import org.dayflower.geometry.Vector3F;
 import org.dayflower.geometry.shape.Rectangle2I;
+import org.dayflower.geometry.shape.Sphere3F;
 import org.dayflower.image.ImageF;
 import org.dayflower.image.PixelImageF;
 import org.dayflower.javafx.canvas.ConcurrentImageCanvas;
@@ -47,12 +49,14 @@ import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.cpu.CPURenderer;
 import org.dayflower.renderer.gpu.AbstractGPURenderer;
 import org.dayflower.renderer.observer.NoOpRendererObserver;
+import org.dayflower.scene.AreaLight;
 import org.dayflower.scene.Camera;
 import org.dayflower.scene.Material;
 import org.dayflower.scene.Primitive;
 import org.dayflower.scene.Scene;
 import org.dayflower.scene.Transform;
-import org.dayflower.scene.preview.Previews;
+import org.dayflower.scene.light.DiffuseAreaLight;
+import org.dayflower.scene.material.MatteMaterial;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -405,6 +409,40 @@ final class RendererViewPane extends BorderPane {
 		};
 	}
 	
+	private static Scene doCreateMaterialPreviewScene(final Material material) {
+		Objects.requireNonNull(material, "material == null");
+		
+		final
+		Camera camera = new Camera();
+		camera.setResolution(32.0F, 32.0F);
+		camera.setFieldOfViewY();
+		camera.setOrthonormalBasis();
+		
+		final Material material0 = material;
+		final Material material1 = new MatteMaterial();
+		
+		final Shape3F shape0 = new Sphere3F();
+		final Shape3F shape1 = new Sphere3F(2.0F);
+		
+		final Transform transform0 = new Transform(camera.getPointInfrontOfEye(4.0F));
+		final Transform transform1 = new Transform(camera.getPointBehindEye(4.0F));
+		
+		final AreaLight areaLight1 = new DiffuseAreaLight(transform1, 1, new Color3F(12.0F), shape1, true);
+		
+		final Primitive primitive0 = new Primitive(material0, shape0, transform0);
+		final Primitive primitive1 = new Primitive(material1, shape1, transform1, areaLight1);
+		
+		final
+		Scene scene = new Scene();
+		scene.addLight(areaLight1);
+		scene.addPrimitive(primitive0);
+		scene.addPrimitive(primitive1);
+		scene.setCamera(camera);
+		scene.setName("Preview");
+		
+		return scene;
+	}
+	
 	private static WritableImage doCreateWritableImageMaterial(final Material material) {
 		final
 		CombinedProgressiveImageOrderRenderer combinedProgressiveImageOrderRenderer = new CPURenderer(new NoOpRendererObserver());
@@ -412,7 +450,7 @@ final class RendererViewPane extends BorderPane {
 		combinedProgressiveImageOrderRenderer.setPreviewMode(true);
 		combinedProgressiveImageOrderRenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
 		combinedProgressiveImageOrderRenderer.setRenderPasses(10);
-		combinedProgressiveImageOrderRenderer.setScene(Previews.createMaterialPreviewScene(material));
+		combinedProgressiveImageOrderRenderer.setScene(doCreateMaterialPreviewScene(material));
 		combinedProgressiveImageOrderRenderer.render();
 		
 		final

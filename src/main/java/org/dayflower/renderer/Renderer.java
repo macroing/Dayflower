@@ -80,6 +80,11 @@ public interface Renderer {
 	void dispose();
 	
 	/**
+	 * Sets the {@link ImageF} instance associated with this {@code Renderer} instance based on the current setup.
+	 */
+	void setImage();
+	
+	/**
 	 * Sets the {@link ImageF} instance associated with this {@code Renderer} instance to {@code image}.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.

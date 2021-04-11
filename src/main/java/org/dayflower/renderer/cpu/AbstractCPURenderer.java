@@ -359,6 +359,21 @@ public abstract class AbstractCPURenderer implements CombinedProgressiveImageOrd
 	}
 	
 	/**
+	 * Sets the {@link ImageF} instance associated with this {@code AbstractCPURenderer} instance based on the current setup.
+	 */
+	@Override
+	public final void setImage() {
+		final Scene scene = this.scene;
+		
+		final Camera camera = scene.getCamera();
+		
+		final int resolutionX = (int)(camera.getResolutionX());
+		final int resolutionY = (int)(camera.getResolutionY());
+		
+		this.image = new PixelImageF(resolutionX, resolutionY);
+	}
+	
+	/**
 	 * Sets the {@link ImageF} instance associated with this {@code AbstractCPURenderer} instance to {@code image}.
 	 * <p>
 	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.

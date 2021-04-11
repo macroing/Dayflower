@@ -29,6 +29,7 @@ import org.dayflower.image.PixelImageF;
 import org.dayflower.renderer.CombinedProgressiveImageOrderRenderer;
 import org.dayflower.renderer.RendererObserver;
 import org.dayflower.renderer.RenderingAlgorithm;
+import org.dayflower.scene.Camera;
 import org.dayflower.scene.Scene;
 import org.dayflower.utility.Timer;
 
@@ -350,6 +351,21 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	@Override
 	public final void clear() {
 		this.isClearing.set(true);
+	}
+	
+	/**
+	 * Sets the {@link ImageF} instance associated with this {@code AbstractGPURenderer} instance based on the current setup.
+	 */
+	@Override
+	public final void setImage() {
+		final Scene scene = getScene();
+		
+		final Camera camera = scene.getCamera();
+		
+		final int resolutionX = (int)(camera.getResolutionX());
+		final int resolutionY = (int)(camera.getResolutionY());
+		
+		this.image = new ByteImageF(resolutionX, resolutionY);
 	}
 	
 	/**

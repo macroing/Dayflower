@@ -18,10 +18,22 @@
  */
 package org.dayflower.color;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.Objects;
+
+import org.dayflower.utility.Strings;
+import org.macroing.java.io.FloatArrayOutputStream;
+
 /**
  * An {@code IrregularSpectralCurveF} is an implementation of {@link SpectralCurveF} that contains irregular spectral data.
  * <p>
  * This class is immutable and therefore suitable for concurrent use without external synchronization.
+ * <p>
+ * To read SPD files from PBRT, the method {@link #parseSPD(File)} may be used.
  * 
  * @since 1.0.0
  * @author J&#246;rgen Lundgren
@@ -148,5 +160,85 @@ public final class IrregularSpectralCurveF extends SpectralCurveF {
 			
 			return this.amplitudes[this.wavelengths.length - 1];
 		}
+	}
+	
+	/**
+	 * Returns a {@code float[]} with the amplitudes of this {@code IrregularSpectralCurveF} instance.
+	 * <p>
+	 * Modifications to the {@code float[]} will not affect this {@code IrregularSpectralCurveF} instance.
+	 * 
+	 * @return a {@code float[]} with the amplitudes of this {@code IrregularSpectralCurveF} instance
+	 */
+	public float[] getAmplitudes() {
+		return this.amplitudes.clone();
+	}
+	
+	/**
+	 * Returns a {@code float[]} with the wavelengths of this {@code IrregularSpectralCurveF} instance.
+	 * <p>
+	 * Modifications to the {@code float[]} will not affect this {@code IrregularSpectralCurveF} instance.
+	 * 
+	 * @return a {@code float[]} with the wavelengths of this {@code IrregularSpectralCurveF} instance
+	 */
+	public float[] getWavelengths() {
+		return this.wavelengths.clone();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Parses an SPD file in the PBRT format.
+	 * <p>
+	 * Returns an {@code IrregularSpectralCurveF} instance.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} that represents the file to parse
+	 * @return an {@code IrregularSpectralCurveF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static IrregularSpectralCurveF parseSPD(final File file) {
+		try(final BufferedReader bufferedReader = new BufferedReader(new FileReader(Objects.requireNonNull(file, "file == null"))); final FloatArrayOutputStream floatArrayOutputStreamAmplitudes = new FloatArrayOutputStream(); final FloatArrayOutputStream floatArrayOutputStreamWavelengths = new FloatArrayOutputStream()) {
+			for(String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
+				final String[] elements = line.split("\\s+");
+				
+				final float amplitude = Float.parseFloat(elements[1]);
+				final float wavelength = Float.parseFloat(elements[0]);
+				
+				floatArrayOutputStreamAmplitudes.write(amplitude);
+				floatArrayOutputStreamWavelengths.write(wavelength);
+			}
+			
+			final float[] amplitudes = floatArrayOutputStreamAmplitudes.toFloatArray();
+			final float[] wavelengths = floatArrayOutputStreamWavelengths.toFloatArray();
+			
+			return new IrregularSpectralCurveF(amplitudes, wavelengths);
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
+	 * Prints the {@code IrregularSpectralCurveF} representations of the SPD files in the PBRT format to standard output in Java source code format.
+	 * <p>
+	 * If either {@code fileEta} or {@code fileK} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param fileEta a {@code File} that represents the file to parse for Eta
+	 * @param fileK a {@code File} that represents the file to parse for K
+	 * @throws NullPointerException thrown if, and only if, either {@code fileEta} or {@code fileK} are {@code null}
+	 */
+	public static void printSPDToJava(final File fileEta, final File fileK) {
+		Objects.requireNonNull(fileEta, "fileEta == null");
+		Objects.requireNonNull(fileK, "fileK == null");
+		
+		final IrregularSpectralCurveF irregularSpectralCurveEta = parseSPD(fileEta);
+		final IrregularSpectralCurveF irregularSpectralCurveK = parseSPD(fileK);
+		
+		System.out.println(Strings.toConstantJavaField("ETA", irregularSpectralCurveEta.getAmplitudes()));
+		System.out.println(Strings.toConstantJavaField("K", irregularSpectralCurveK.getAmplitudes()));
+		System.out.println(Strings.toConstantJavaField("WAVELENGTH", irregularSpectralCurveEta.getWavelengths()));
 	}
 }

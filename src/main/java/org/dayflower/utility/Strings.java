@@ -39,6 +39,58 @@ public final class Strings {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Returns a {@code String} with a constant Java field representation of {@code array} and a name of {@code name}.
+	 * <p>
+	 * If either {@code name} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name of the constant field
+	 * @param array the array
+	 * @return a {@code String} with a constant Java field representation of {@code array} and a name of {@code name}
+	 * @throws NullPointerException thrown if, and only if, either {@code name} or {@code array} are {@code null}
+	 */
+	public static String toConstantJavaField(final String name, final double[] array) {
+		Objects.requireNonNull(name, "name == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		final StringBuilder stringBuilder = new StringBuilder(String.format("public static final double[] %s = {", name));
+		
+		for(int i = 0; i < array.length; i++) {
+			stringBuilder.append(i > 0 ? ", " : "");
+			stringBuilder.append(String.format("%.6fD", Double.valueOf(array[i])).replace(',', '.').replace(" ", ""));
+		}
+		
+		stringBuilder.append("};");
+		
+		return stringBuilder.toString();
+	}
+	
+	/**
+	 * Returns a {@code String} with a constant Java field representation of {@code array} and a name of {@code name}.
+	 * <p>
+	 * If either {@code name} or {@code array} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param name the name of the constant field
+	 * @param array the array
+	 * @return a {@code String} with a constant Java field representation of {@code array} and a name of {@code name}
+	 * @throws NullPointerException thrown if, and only if, either {@code name} or {@code array} are {@code null}
+	 */
+	public static String toConstantJavaField(final String name, final float[] array) {
+		Objects.requireNonNull(name, "name == null");
+		Objects.requireNonNull(array, "array == null");
+		
+		final StringBuilder stringBuilder = new StringBuilder(String.format("public static final float[] %s = {", name));
+		
+		for(int i = 0; i < array.length; i++) {
+			stringBuilder.append(i > 0 ? ", " : "");
+			stringBuilder.append(String.format("%.6fF", Float.valueOf(array[i])).replace(',', '.').replace(" ", ""));
+		}
+		
+		stringBuilder.append("};");
+		
+		return stringBuilder.toString();
+	}
+	
+	/**
 	 * Returns a {@code String} representation of {@code value} without scientific notation.
 	 * 
 	 * @param value a {@code float} value

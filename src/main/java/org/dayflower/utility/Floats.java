@@ -844,6 +844,43 @@ public final class Floats {
 	}
 	
 	/**
+	 * Returns the radical inverse given {@code baseIndex} and {@code value}.
+	 * 
+	 * @param baseIndex the base index
+	 * @param value the value
+	 * @return the radical inverse given {@code baseIndex} and {@code value}
+	 */
+	public static float radicalInverse(final int baseIndex, final long value) {
+		if(baseIndex == 0) {
+			return Longs.reverseBits(value) * 5.4210108624275222e-20F;
+		} else if(baseIndex > 0 && baseIndex < Ints.getPrimeNumberCount()) {
+			final int base = Ints.getPrimeNumberAt(baseIndex);
+			
+			final float baseReciprocal = 1.0F / base;
+			
+			float baseReciprocalN = 1.0F;
+			
+			long currentValue = value;
+			long reversedDigits = 0L;
+			
+			while(currentValue != 0L) {
+				final long next = currentValue / base;
+				final long digit = currentValue - next * base;
+				
+				reversedDigits = reversedDigits * base + digit;
+				
+				baseReciprocalN *= baseReciprocal;
+				
+				currentValue = next;
+			}
+			
+			return min(reversedDigits * baseReciprocalN, 0.99999994F);
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	/**
 	 * Returns a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive).
 	 * 
 	 * @return a pseudorandom {@code float} value between {@code 0.0F} (inclusive) and {@code 1.0F} (exclusive)
@@ -1003,6 +1040,19 @@ public final class Floats {
 	 * @see Math#sqrt(double)
 	 */
 	public static float sqrt(final float value) {
+		/*
+		 * float x = value;
+		 * float y = 1.0F;
+		 * float e = 0.0000001F;
+		 * 
+		 * while(x - y > e) {
+		 *     x = (x + y) * 0.5F;
+		 *     y = value / x;
+		 * }
+		 * 
+		 * return x;
+		 */
+		
 		return toFloat(Math.sqrt(value));
 	}
 	

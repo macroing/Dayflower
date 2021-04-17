@@ -574,7 +574,7 @@ public final class DisneyMaterial implements Material {
 	 * @param floatSheenTint a {@code float} for the sheen tint value
 	 * @param floatSpecularTint a {@code float} for the specular tint
 	 * @param floatSpecularTransmission a {@code float} for the specular transmission
-	 * @param isThin {@code true} if, and only if, this {@code DisneyPBRTMaterial} instance is thin, {@code false} otherwise
+	 * @param isThin {@code true} if, and only if, this {@code DisneyMaterial} instance is thin, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission} or {@code colorScatterDistance} are {@code null}
 	 */
 	public DisneyMaterial(final Color3F colorColor, final Color3F colorEmission, final Color3F colorScatterDistance, final float floatAnisotropic, final float floatClearCoat, final float floatClearCoatGloss, final float floatDiffuseTransmission, final float floatEta, final float floatFlatness, final float floatMetallic, final float floatRoughness, final float floatSheen, final float floatSheenTint, final float floatSpecularTint, final float floatSpecularTransmission, final boolean isThin) {
@@ -601,7 +601,7 @@ public final class DisneyMaterial implements Material {
 	 * @param floatSheenTint a {@code float} for the sheen tint value
 	 * @param floatSpecularTint a {@code float} for the specular tint
 	 * @param floatSpecularTransmission a {@code float} for the specular transmission
-	 * @param isThin {@code true} if, and only if, this {@code DisneyPBRTMaterial} instance is thin, {@code false} otherwise
+	 * @param isThin {@code true} if, and only if, this {@code DisneyMaterial} instance is thin, {@code false} otherwise
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code colorColor}, {@code colorEmission}, {@code colorScatterDistance} or {@code modifier} are {@code null}
 	 */
@@ -1065,7 +1065,7 @@ public final class DisneyMaterial implements Material {
 	 * @param textureSheenTint a {@code Texture} instance for the sheen tint value
 	 * @param textureSpecularTint a {@code Texture} instance for the specular tint
 	 * @param textureSpecularTransmission a {@code Texture} instance for the specular transmission
-	 * @param isThin {@code true} if, and only if, this {@code DisneyPBRTMaterial} instance is thin, {@code false} otherwise
+	 * @param isThin {@code true} if, and only if, this {@code DisneyMaterial} instance is thin, {@code false} otherwise
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss},
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint} or
 	 *                              {@code textureSpecularTransmission} are {@code null}
@@ -1096,7 +1096,7 @@ public final class DisneyMaterial implements Material {
 	 * @param textureSheenTint a {@code Texture} instance for the sheen tint value
 	 * @param textureSpecularTint a {@code Texture} instance for the specular tint
 	 * @param textureSpecularTransmission a {@code Texture} instance for the specular transmission
-	 * @param isThin {@code true} if, and only if, this {@code DisneyPBRTMaterial} instance is thin, {@code false} otherwise
+	 * @param isThin {@code true} if, and only if, this {@code DisneyMaterial} instance is thin, {@code false} otherwise
 	 * @param modifier a {@link Modifier} instance
 	 * @throws NullPointerException thrown if, and only if, either {@code textureColor}, {@code textureEmission}, {@code textureScatterDistance}, {@code textureAnisotropic}, {@code textureClearCoat}, {@code textureClearCoatGloss},
 	 *                              {@code textureDiffuseTransmission}, {@code textureEta}, {@code textureFlatness}, {@code textureMetallic}, {@code textureRoughness}, {@code textureSheen}, {@code textureSheenTint}, {@code textureSpecularTint},
@@ -1648,5 +1648,556 @@ public final class DisneyMaterial implements Material {
 		array[ARRAY_OFFSET_TEXTURE_SPECULAR_TRANSMISSION_AND_IS_THIN] = pack(this.textureSpecularTransmission.getID(), 0, this.isThin ? 1 : 0, 0);			//Block #1.
 		
 		return array;
+	}
+	
+	/**
+	 * A {@code Builder} is used to build {@link DisneyMaterial} instances.
+	 * <p>
+	 * This class is mutable and not thread-safe.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
+	public static final class Builder {
+		private Modifier modifier;
+		private Texture textureAnisotropic;
+		private Texture textureClearCoat;
+		private Texture textureClearCoatGloss;
+		private Texture textureColor;
+		private Texture textureDiffuseTransmission;
+		private Texture textureEmission;
+		private Texture textureEta;
+		private Texture textureFlatness;
+		private Texture textureMetallic;
+		private Texture textureRoughness;
+		private Texture textureScatterDistance;
+		private Texture textureSheen;
+		private Texture textureSheenTint;
+		private Texture textureSpecularTint;
+		private Texture textureSpecularTransmission;
+		private boolean isThin;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Constructs a new {@code Builder} instance.
+		 */
+		public Builder() {
+			this(new DisneyMaterial());
+		}
+		
+		/**
+		 * Constructs a new {@code Builder} instance given {@code disneyMaterial}.
+		 * <p>
+		 * If {@code disneyMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param disneyMaterial a {@link DisneyMaterial} instance
+		 * @throws NullPointerException thrown if, and only if, {@code disneyMaterial} is {@code null}
+		 */
+		public Builder(final DisneyMaterial disneyMaterial) {
+			this.modifier = disneyMaterial.getModifier();
+			this.textureAnisotropic = disneyMaterial.getTextureAnisotropic();
+			this.textureClearCoat = disneyMaterial.getTextureClearCoat();
+			this.textureClearCoatGloss = disneyMaterial.getTextureClearCoatGloss();
+			this.textureColor = disneyMaterial.getTextureColor();
+			this.textureDiffuseTransmission = disneyMaterial.getTextureDiffuseTransmission();
+			this.textureEmission = disneyMaterial.getTextureEmission();
+			this.textureEta = disneyMaterial.getTextureEta();
+			this.textureFlatness = disneyMaterial.getTextureFlatness();
+			this.textureMetallic = disneyMaterial.getTextureMetallic();
+			this.textureRoughness = disneyMaterial.getTextureRoughness();
+			this.textureScatterDistance = disneyMaterial.getTextureScatterDistance();
+			this.textureSheen = disneyMaterial.getTextureSheen();
+			this.textureSheenTint = disneyMaterial.getTextureSheenTint();
+			this.textureSpecularTint = disneyMaterial.getTextureSpecularTint();
+			this.textureSpecularTransmission = disneyMaterial.getTextureSpecularTransmission();
+			this.isThin = disneyMaterial.isThin();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Sets the {@link Modifier} instance.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code modifier} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param modifier the {@code Modifier} instance
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code modifier} is {@code null}
+		 */
+		public Builder setModifier(final Modifier modifier) {
+			this.modifier = Objects.requireNonNull(modifier, "modifier == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the anisotropic value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureAnisotropic} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureAnisotropic the {@code Texture} instance for the anisotropic value
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureAnisotropic} is {@code null}
+		 */
+		public Builder setTextureAnisotropic(final Texture textureAnisotropic) {
+			this.textureAnisotropic = Objects.requireNonNull(textureAnisotropic, "textureAnisotropic == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the anisotropic value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatAnisotropic a {@code float} for the anisotropic value
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureAnisotropic(final float floatAnisotropic) {
+			return setTextureAnisotropic(new ConstantTexture(floatAnisotropic));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the clear coat value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureClearCoat} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureClearCoat the {@code Texture} instance for the clear coat value
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureClearCoat} is {@code null}
+		 */
+		public Builder setTextureClearCoat(final Texture textureClearCoat) {
+			this.textureClearCoat = Objects.requireNonNull(textureClearCoat, "textureClearCoat == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the clear coat value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatClearCoat a {@code float} for the clear coat value
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureClearCoat(final float floatClearCoat) {
+			return setTextureClearCoat(new ConstantTexture(floatClearCoat));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the clear coat gloss value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureClearCoatGloss} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureClearCoatGloss the {@code Texture} instance for the clear coat gloss value
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureClearCoatGloss} is {@code null}
+		 */
+		public Builder setTextureClearCoatGloss(final Texture textureClearCoatGloss) {
+			this.textureClearCoatGloss = Objects.requireNonNull(textureClearCoatGloss, "textureClearCoatGloss == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the clear coat gloss value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatClearCoatGloss a {@code float} for the clear coat gloss value
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureClearCoatGloss(final float floatClearCoatGloss) {
+			return setTextureClearCoatGloss(new ConstantTexture(floatClearCoatGloss));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the color.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorColor} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorColor a {@link Color3F} instance for the color
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorColor} is {@code null}
+		 */
+		public Builder setTextureColor(final Color3F colorColor) {
+			return setTextureColor(new ConstantTexture(Objects.requireNonNull(colorColor, "colorColor == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the color.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureColor} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureColor the {@code Texture} instance for the color
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureColor} is {@code null}
+		 */
+		public Builder setTextureColor(final Texture textureColor) {
+			this.textureColor = Objects.requireNonNull(textureColor, "textureColor == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the diffuse transmission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureDiffuseTransmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureDiffuseTransmission the {@code Texture} instance for the diffuse transmission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureDiffuseTransmission} is {@code null}
+		 */
+		public Builder setTextureDiffuseTransmission(final Texture textureDiffuseTransmission) {
+			this.textureDiffuseTransmission = Objects.requireNonNull(textureDiffuseTransmission, "textureDiffuseTransmission == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the diffuse transmission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatDiffuseTransmission a {@code float} for the diffuse transmission
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureDiffuseTransmission(final float floatDiffuseTransmission) {
+			return setTextureDiffuseTransmission(new ConstantTexture(floatDiffuseTransmission));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorEmission a {@link Color3F} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Color3F colorEmission) {
+			return setTextureEmission(new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureEmission the {@code Texture} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Texture textureEmission) {
+			this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the index of refraction (IOR).
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureEta} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureEta the {@code Texture} instance for the index of refraction (IOR)
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureEta} is {@code null}
+		 */
+		public Builder setTextureEta(final Texture textureEta) {
+			this.textureEta = Objects.requireNonNull(textureEta, "textureEta == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the index of refraction (IOR).
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatEta a {@code float} for the index of refraction (IOR)
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureEta(final float floatEta) {
+			return setTextureEta(new ConstantTexture(floatEta));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the flatness.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureFlatness} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureFlatness the {@code Texture} instance for the flatness
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureFlatness} is {@code null}
+		 */
+		public Builder setTextureFlatness(final Texture textureFlatness) {
+			this.textureFlatness = Objects.requireNonNull(textureFlatness, "textureFlatness == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the flatness.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatFlatness a {@code float} for the flatness
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureFlatness(final float floatFlatness) {
+			return setTextureFlatness(new ConstantTexture(floatFlatness));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the metallic value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureMetallic} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureMetallic the {@code Texture} instance for the metallic value
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureMetallic} is {@code null}
+		 */
+		public Builder setTextureMetallic(final Texture textureMetallic) {
+			this.textureMetallic = Objects.requireNonNull(textureMetallic, "textureMetallic == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the metallic value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatMetallic a {@code float} for the metallic value
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureMetallic(final float floatMetallic) {
+			return setTextureMetallic(new ConstantTexture(floatMetallic));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the roughness.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureRoughness} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureRoughness the {@code Texture} instance for the roughness
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureRoughness} is {@code null}
+		 */
+		public Builder setTextureRoughness(final Texture textureRoughness) {
+			this.textureRoughness = Objects.requireNonNull(textureRoughness, "textureRoughness == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the roughness.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatRoughness a {@code float} for the roughness
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureRoughness(final float floatRoughness) {
+			return setTextureRoughness(new ConstantTexture(floatRoughness));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the scatter distance.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorScatterDistance} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorScatterDistance a {@link Color3F} instance for the scatter distance
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorScatterDistance} is {@code null}
+		 */
+		public Builder setTextureScatterDistance(final Color3F colorScatterDistance) {
+			return setTextureScatterDistance(new ConstantTexture(Objects.requireNonNull(colorScatterDistance, "colorScatterDistance == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the scatter distance.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureScatterDistance} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureScatterDistance the {@code Texture} instance for the scatter distance
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureScatterDistance} is {@code null}
+		 */
+		public Builder setTextureScatterDistance(final Texture textureScatterDistance) {
+			this.textureScatterDistance = Objects.requireNonNull(textureScatterDistance, "textureScatterDistance == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the sheen value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureSheen} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureSheen the {@code Texture} instance for the sheen value
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureSheen} is {@code null}
+		 */
+		public Builder setTextureSheen(final Texture textureSheen) {
+			this.textureSheen = Objects.requireNonNull(textureSheen, "textureSheen == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the sheen value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatSheen a {@code float} for the sheen value
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureSheen(final float floatSheen) {
+			return setTextureSheen(new ConstantTexture(floatSheen));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the sheen tint value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureSheenTint} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureSheenTint the {@code Texture} instance for the sheen tint value
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureSheenTint} is {@code null}
+		 */
+		public Builder setTextureSheenTint(final Texture textureSheenTint) {
+			this.textureSheenTint = Objects.requireNonNull(textureSheenTint, "textureSheenTint == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the sheen tint value.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatSheenTint a {@code float} for the sheen tint value
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureSheenTint(final float floatSheenTint) {
+			return setTextureSheenTint(new ConstantTexture(floatSheenTint));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the specular tint.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureSpecularTint} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureSpecularTint the {@code Texture} instance for the specular tint
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureSpecularTint} is {@code null}
+		 */
+		public Builder setTextureSpecularTint(final Texture textureSpecularTint) {
+			this.textureSpecularTint = Objects.requireNonNull(textureSpecularTint, "textureSpecularTint == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the specular tint.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatSpecularTint a {@code float} for the specular tint
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureSpecularTint(final float floatSpecularTint) {
+			return setTextureSpecularTint(new ConstantTexture(floatSpecularTint));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the specular transmission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureSpecularTransmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureSpecularTransmission the {@code Texture} instance for the specular transmission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureSpecularTransmission} is {@code null}
+		 */
+		public Builder setTextureSpecularTransmission(final Texture textureSpecularTransmission) {
+			this.textureSpecularTransmission = Objects.requireNonNull(textureSpecularTransmission, "textureSpecularTransmission == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the specular transmission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param floatSpecularTransmission a {@code float} for the specular transmission
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setTextureSpecularTransmission(final float floatSpecularTransmission) {
+			return setTextureSpecularTransmission(new ConstantTexture(floatSpecularTransmission));
+		}
+		
+		/**
+		 * Sets the thin state.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * 
+		 * @param isThin {@code true} if, and only if, the {@link DisneyMaterial} instance should be thin, {@code false} otherwise
+		 * @return this {@code Builder} instance
+		 */
+		public Builder setThis(final boolean isThin) {
+			this.isThin = isThin;
+			
+			return this;
+		}
+		
+		/**
+		 * Returns a new {@link DisneyMaterial} instance.
+		 * 
+		 * @return a new {@code DisneyMaterial} instance
+		 */
+		public DisneyMaterial build() {
+			return new DisneyMaterial(this.textureColor, this.textureEmission, this.textureScatterDistance, this.textureAnisotropic, this.textureClearCoat, this.textureClearCoatGloss, this.textureDiffuseTransmission, this.textureEta, this.textureFlatness, this.textureMetallic, this.textureRoughness, this.textureSheen, this.textureSheenTint, this.textureSpecularTint, this.textureSpecularTransmission, this.isThin, this.modifier);
+		}
 	}
 }

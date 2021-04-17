@@ -21,7 +21,6 @@ package org.dayflower.sampler;
 import static org.dayflower.utility.Ints.saturate;
 import static org.dayflower.utility.Ints.toInt;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.dayflower.utility.ParameterArguments;
@@ -236,7 +235,7 @@ public final class Distribution2F {
 	 * If {@code sample} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * 
 	 * @param sample the {@code Sample2F} instance
-	 * @return the continuous probability density function (PDF) value for {@code sample}
+	 * @return the discrete probability density function (PDF) value for {@code sample}
 	 * @throws NullPointerException thrown if, and only if, {@code sample} is {@code null}
 	 */
 	public float discreteProbabilityDensityFunction(final Sample2F sample) {
@@ -255,6 +254,8 @@ public final class Distribution2F {
 	
 	/**
 	 * Returns a {@code float[]} representation of this {@code Distribution2F} instance.
+	 * <p>
+	 * This class contains static methods to perform operations on the {@code float[]}. These methods take an offset as a parameter argument, which makes it possible to combine the {@code float[]} with another and still use them.
 	 * <p>
 	 * The {@code float[]} will contain the following data:
 	 * <ol>
@@ -307,7 +308,22 @@ public final class Distribution2F {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a continuous remapping of {@code sample} in {@code array}.
+	 * <p>
+	 * Returns the remapped {@link Sample2F} instance.
+	 * <p>
+	 * If either {@code array} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset} or any offsets derived from it are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution2F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution2F} instance
+	 * @param sample the {@code Sample2F} instance
+	 * @return the remapped {@code Sample2F} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code offset} or any offsets derived from it are invalid
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code sample} are {@code null}
+	 */
 	public static Sample2F continuousRemap(final float[] array, final int offset, final Sample2F sample) {
 		Objects.requireNonNull(array, "array == null");
 		
@@ -329,7 +345,22 @@ public final class Distribution2F {
 		return new Sample2F(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Performs a discrete remapping of {@code sample} in {@code array}.
+	 * <p>
+	 * Returns the remapped {@link Sample2F} instance.
+	 * <p>
+	 * If either {@code array} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset} or any offsets derived from it are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution2F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution2F} instance
+	 * @param sample the {@code Sample2F} instance
+	 * @return the remapped {@code Sample2F} instance
+	 * @throws IllegalArgumentException thrown if, and only if, {@code offset} or any offsets derived from it are invalid
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code sample} are {@code null}
+	 */
 	public static Sample2F discreteRemap(final float[] array, final int offset, final Sample2F sample) {
 		Objects.requireNonNull(array, "array == null");
 		
@@ -351,12 +382,46 @@ public final class Distribution2F {
 		return new Sample2F(isUV ? mRemapped : cRemapped, isUV ? cRemapped : mRemapped);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the continuous probability density function (PDF) value for {@code sample} in {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset} or any offsets derived from it are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * Distribution2F.continuousProbabilityDensityFunction(array, offset, sample, false);
+	 * }
+	 * </pre>
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution2F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution2F} instance
+	 * @param sample the {@code Sample2F} instance
+	 * @return the continuous probability density function (PDF) value for {@code sample} in {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code offset} or any offsets derived from it are invalid
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code sample} are {@code null}
+	 */
 	public static float continuousProbabilityDensityFunction(final float[] array, final int offset, final Sample2F sample) {
 		return continuousProbabilityDensityFunction(array, offset, sample, false);
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the continuous probability density function (PDF) value for {@code sample} in {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset} or any offsets derived from it are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution2F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution2F} instance
+	 * @param sample the {@code Sample2F} instance
+	 * @param isRemapped {@code true} if, and only if, {@code sample} is remapped, {@code false} otherwise
+	 * @return the continuous probability density function (PDF) value for {@code sample} in {@code array}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code offset} or any offsets derived from it are invalid
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code sample} are {@code null}
+	 */
 	public static float continuousProbabilityDensityFunction(final float[] array, final int offset, final Sample2F sample, final boolean isRemapped) {
 		Objects.requireNonNull(array, "array == null");
 		
@@ -392,7 +457,19 @@ public final class Distribution2F {
 		return probabilityDensityFunctionValue;
 	}
 	
-//	TODO: Add Javadocs!
+	/**
+	 * Returns the discrete probability density function (PDF) value for {@code sample} in {@code array}.
+	 * <p>
+	 * If either {@code array} or {@code sample} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If {@code offset} or any offsets derived from it are invalid, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param array a {@code float[]} that contains the data for a {@code Distribution2F} instance
+	 * @param offset the offset in {@code array} that points to the start of the data for a {@code Distribution2F} instance
+	 * @param sample the {@code Sample2F} instance
+	 * @return the discrete probability density function (PDF) value for {@code sample} in {@code array}
+	 * @throws NullPointerException thrown if, and only if, either {@code array} or {@code sample} are {@code null}
+	 */
 	public static float discreteProbabilityDensityFunction(final float[] array, final int offset, final Sample2F sample) {
 		Objects.requireNonNull(array, "array == null");
 		

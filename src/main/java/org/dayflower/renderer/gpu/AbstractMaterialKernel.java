@@ -65,6 +65,7 @@ import org.dayflower.scene.texture.Texture;
  * The features added are the following:
  * <ul>
  * <li>{@link ClearCoatMaterial}</li>
+ * <li>{@link DisneyMaterial}</li>
  * <li>{@link GlassMaterial}</li>
  * <li>{@link GlossyMaterial}</li>
  * <li>{@link MatteMaterial}</li>
@@ -5360,78 +5361,64 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		}
 	}
 	
-	private void doMicrofacetDistributionTrowbridgeReitzSample(final boolean isNegating, final float incomingX, final float incomingY, final float incomingZ, final float alphaX, final float alphaY, final float u, final float v) {
-		final float incomingCorrectlyOrientedX = isNegating ? -incomingX : incomingX;
-		final float incomingCorrectlyOrientedY = isNegating ? -incomingY : incomingY;
-		final float incomingCorrectlyOrientedZ = isNegating ? -incomingZ : incomingZ;
-		final float incomingStretchedX = incomingCorrectlyOrientedX * alphaX;
-		final float incomingStretchedY = incomingCorrectlyOrientedY * alphaY;
-		final float incomingStretchedZ = incomingCorrectlyOrientedZ;
-		final float incomingStretchedLengthReciprocal = vector3FLengthReciprocal(incomingStretchedX, incomingStretchedY, incomingStretchedZ);
-		final float incomingStretchedNormalizedX = incomingStretchedX * incomingStretchedLengthReciprocal;
-		final float incomingStretchedNormalizedY = incomingStretchedY * incomingStretchedLengthReciprocal;
-		final float incomingStretchedNormalizedZ = incomingStretchedZ * incomingStretchedLengthReciprocal;
-		
-		final float cosPhi = vector3FCosPhi(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
-		final float sinPhi = vector3FSinPhi(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
-		final float cosTheta = vector3FCosTheta(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
-		
-		doMicrofacetDistributionTrowbridgeReitzComputeSlope(cosTheta, u, v);
-		
-		final float slopeX = vector3FGetComponent1();
-		final float slopeY = vector3FGetComponent2();
-		
-		final float sampleX = -((cosPhi * slopeX - sinPhi * slopeY) * alphaX);
-		final float sampleY = -((sinPhi * slopeX + cosPhi * slopeY) * alphaY);
-		final float sampleZ = 1.0F;
-		final float sampleCorrectlyOrientedX = isNegating ? -sampleX : sampleX;
-		final float sampleCorrectlyOrientedY = isNegating ? -sampleY : sampleY;
-		final float sampleCorrectlyOrientedZ = isNegating ? -sampleZ : sampleZ;
-		
-		vector3FSetNormalize(sampleCorrectlyOrientedX, sampleCorrectlyOrientedY, sampleCorrectlyOrientedZ);
-	}
-	
 	private void doMicrofacetDistributionTrowbridgeReitzSampleNormal(final float outgoingX, final float outgoingY, final float outgoingZ, final float u, final float v) {
 		final float alphaX = doMicrofacetDistributionTrowbridgeReitzGetAlphaX();
 		final float alphaY = doMicrofacetDistributionTrowbridgeReitzGetAlphaY();
 		
 		if(doMicrofacetDistributionTrowbridgeReitzIsSamplingVisibleArea()) {
-			doMicrofacetDistributionTrowbridgeReitzSample(outgoingZ < 0.0F, outgoingX, outgoingY, outgoingZ, alphaX, alphaY, u, v);
-		} else if(alphaX == alphaY) {
-			final float phi = v * PI_MULTIPLIED_BY_2;
-			final float cosTheta = 1.0F / sqrt(1.0F + (alphaX * alphaX * u / (1.0F - u)));
-			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+			final boolean isNegating = outgoingZ < 0.0F;
 			
-			final float normalX = sinTheta * cos(phi);
-			final float normalY = sinTheta * sin(phi);
-			final float normalZ = cosTheta;
+			final float incomingCorrectlyOrientedX = isNegating ? -outgoingX : outgoingX;
+			final float incomingCorrectlyOrientedY = isNegating ? -outgoingY : outgoingY;
+			final float incomingCorrectlyOrientedZ = isNegating ? -outgoingZ : outgoingZ;
+			final float incomingStretchedX = incomingCorrectlyOrientedX * alphaX;
+			final float incomingStretchedY = incomingCorrectlyOrientedY * alphaY;
+			final float incomingStretchedZ = incomingCorrectlyOrientedZ;
+			final float incomingStretchedLengthReciprocal = vector3FLengthReciprocal(incomingStretchedX, incomingStretchedY, incomingStretchedZ);
+			final float incomingStretchedNormalizedX = incomingStretchedX * incomingStretchedLengthReciprocal;
+			final float incomingStretchedNormalizedY = incomingStretchedY * incomingStretchedLengthReciprocal;
+			final float incomingStretchedNormalizedZ = incomingStretchedZ * incomingStretchedLengthReciprocal;
 			
-			final boolean isSameHemisphereZ = vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
+			final float cosPhi = vector3FCosPhi(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
+			final float sinPhi = vector3FSinPhi(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
+			final float cosTheta = vector3FCosTheta(incomingStretchedNormalizedX, incomingStretchedNormalizedY, incomingStretchedNormalizedZ);
 			
-			final float normalCorrectlyOrientedX = isSameHemisphereZ ? normalX : -normalX;
-			final float normalCorrectlyOrientedY = isSameHemisphereZ ? normalY : -normalY;
-			final float normalCorrectlyOrientedZ = isSameHemisphereZ ? normalZ : -normalZ;
+			doMicrofacetDistributionTrowbridgeReitzComputeSlope(cosTheta, u, v);
 			
-			vector3FSet(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
-		} else {
-			final float phi = atan(alphaY / alphaX * tan(v * PI_MULTIPLIED_BY_2 + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
-			final float cosPhi = cos(phi);
-			final float sinPhi = sin(phi);
-			final float cosTheta = 1.0F / sqrt(1.0F + ((1.0F / (cosPhi * cosPhi / (alphaX * alphaX) + sinPhi * sinPhi / (alphaY * alphaY))) * u / (1.0F - u)));
-			final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+			final float slopeX = vector3FGetComponent1();
+			final float slopeY = vector3FGetComponent2();
 			
-			final float normalX = sinTheta * cosPhi;
-			final float normalY = sinTheta * sinPhi;
-			final float normalZ = cosTheta;
+			final float sampleX = -((cosPhi * slopeX - sinPhi * slopeY) * alphaX);
+			final float sampleY = -((sinPhi * slopeX + cosPhi * slopeY) * alphaY);
+			final float sampleZ = 1.0F;
+			final float sampleCorrectlyOrientedX = isNegating ? -sampleX : sampleX;
+			final float sampleCorrectlyOrientedY = isNegating ? -sampleY : sampleY;
+			final float sampleCorrectlyOrientedZ = isNegating ? -sampleZ : sampleZ;
 			
-			final boolean isSameHemisphereZ = vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
+			vector3FSetNormalize(sampleCorrectlyOrientedX, sampleCorrectlyOrientedY, sampleCorrectlyOrientedZ);
 			
-			final float normalCorrectlyOrientedX = isSameHemisphereZ ? normalX : -normalX;
-			final float normalCorrectlyOrientedY = isSameHemisphereZ ? normalY : -normalY;
-			final float normalCorrectlyOrientedZ = isSameHemisphereZ ? normalZ : -normalZ;
-			
-			vector3FSet(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
+			return;
 		}
+		
+		final boolean hasSameAlpha = alphaX == alphaY;
+		
+		final float phi = hasSameAlpha ? v * PI_MULTIPLIED_BY_2 : atan(alphaY / alphaX * tan(v * PI_MULTIPLIED_BY_2 + 0.5F * PI)) + (v > 0.5F ? PI : 0.0F);
+		final float cosPhi = cos(phi);
+		final float sinPhi = sin(phi);
+		final float cosTheta = hasSameAlpha ? rsqrt(1.0F + (alphaX * alphaX * u / (1.0F - u))) : rsqrt(1.0F + ((1.0F / (cosPhi * cosPhi / (alphaX * alphaX) + sinPhi * sinPhi / (alphaY * alphaY))) * u / (1.0F - u)));
+		final float sinTheta = sqrt(max(0.0F, 1.0F - cosTheta * cosTheta));
+		
+		final float normalX = sinTheta * cosPhi;
+		final float normalY = sinTheta * sinPhi;
+		final float normalZ = cosTheta;
+		
+		final boolean isSameHemisphereZ = vector3FSameHemisphereZ(outgoingX, outgoingY, outgoingZ, normalX, normalY, normalZ);
+		
+		final float normalCorrectlyOrientedX = isSameHemisphereZ ? normalX : -normalX;
+		final float normalCorrectlyOrientedY = isSameHemisphereZ ? normalY : -normalY;
+		final float normalCorrectlyOrientedZ = isSameHemisphereZ ? normalZ : -normalZ;
+		
+		vector3FSet(normalCorrectlyOrientedX, normalCorrectlyOrientedY, normalCorrectlyOrientedZ);
 	}
 	
 	private void doMicrofacetDistributionTrowbridgeReitzSet(final boolean isSamplingVisibleArea, final boolean isSeparableModel, final float alphaX, final float alphaY) {

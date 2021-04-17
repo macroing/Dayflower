@@ -1650,6 +1650,8 @@ public final class DisneyMaterial implements Material {
 		return array;
 	}
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * A {@code Builder} is used to build {@link DisneyMaterial} instances.
 	 * <p>

@@ -523,4 +523,169 @@ public final class ClearCoatMaterial implements Material {
 		
 		return array;
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * A {@code Builder} is used to build {@link ClearCoatMaterial} instances.
+	 * <p>
+	 * This class is mutable and not thread-safe.
+	 * 
+	 * @since 1.0.0
+	 * @author J&#246;rgen Lundgren
+	 */
+	public static final class Builder {
+		private Modifier modifier;
+		private Texture textureEmission;
+		private Texture textureKD;
+		private Texture textureKS;
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Constructs a new {@code Builder} instance.
+		 */
+		public Builder() {
+			this(new ClearCoatMaterial());
+		}
+		
+		/**
+		 * Constructs a new {@code Builder} instance given {@code clearCoatMaterial}.
+		 * <p>
+		 * If {@code clearCoatMaterial} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param clearCoatMaterial a {@link ClearCoatMaterial} instance
+		 * @throws NullPointerException thrown if, and only if, {@code clearCoatMaterial} is {@code null}
+		 */
+		public Builder(final ClearCoatMaterial clearCoatMaterial) {
+			this.modifier = clearCoatMaterial.getModifier();
+			this.textureEmission = clearCoatMaterial.getTextureEmission();
+			this.textureKD = clearCoatMaterial.getTextureKD();
+			this.textureKS = clearCoatMaterial.getTextureKS();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * Sets the {@link Modifier} instance.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code modifier} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param modifier the {@code Modifier} instance
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code modifier} is {@code null}
+		 */
+		public Builder setModifier(final Modifier modifier) {
+			this.modifier = Objects.requireNonNull(modifier, "modifier == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorEmission a {@link Color3F} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Color3F colorEmission) {
+			return setTextureEmission(new ConstantTexture(Objects.requireNonNull(colorEmission, "colorEmission == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for emission.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureEmission} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureEmission the {@code Texture} instance for emission
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureEmission} is {@code null}
+		 */
+		public Builder setTextureEmission(final Texture textureEmission) {
+			this.textureEmission = Objects.requireNonNull(textureEmission, "textureEmission == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the diffuse coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorKD} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorKD a {@link Color3F} instance for the diffuse coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorKD} is {@code null}
+		 */
+		public Builder setTextureKD(final Color3F colorKD) {
+			return setTextureKD(new ConstantTexture(Objects.requireNonNull(colorKD, "colorKD == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the diffuse coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureKD} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureKD the {@code Texture} instance for the diffuse coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureKD} is {@code null}
+		 */
+		public Builder setTextureKD(final Texture textureKD) {
+			this.textureKD = Objects.requireNonNull(textureKD, "textureKD == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the specular coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code colorKS} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param colorKS a {@link Color3F} instance for the specular coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code colorKS} is {@code null}
+		 */
+		public Builder setTextureKS(final Color3F colorKS) {
+			return setTextureKS(new ConstantTexture(Objects.requireNonNull(colorKS, "colorKS == null")));
+		}
+		
+		/**
+		 * Sets the {@link Texture} instance for the specular coefficient.
+		 * <p>
+		 * Returns this {@code Builder} instance.
+		 * <p>
+		 * If {@code textureKS} is {@code null}, a {@code NullPointerException} will be thrown.
+		 * 
+		 * @param textureKS the {@code Texture} instance for the specular coefficient
+		 * @return this {@code Builder} instance
+		 * @throws NullPointerException thrown if, and only if, {@code textureKS} is {@code null}
+		 */
+		public Builder setTextureKS(final Texture textureKS) {
+			this.textureKS = Objects.requireNonNull(textureKS, "textureKS == null");
+			
+			return this;
+		}
+		
+		/**
+		 * Returns a new {@link ClearCoatMaterial} instance.
+		 * 
+		 * @return a new {@code ClearCoatMaterial} instance
+		 */
+		public ClearCoatMaterial build() {
+			return new ClearCoatMaterial(this.textureKD, this.textureKS, this.textureEmission, this.modifier);
+		}
+	}
 }

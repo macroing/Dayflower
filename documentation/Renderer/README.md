@@ -50,7 +50,7 @@ import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.FileRendererObserver;
 import org.dayflower.scene.demo.Demo;
 
-public class CPURendererExample {
+public class GPURendererExample {
     public static void main(String[] args) {
         GPURenderer gPURenderer = new GPURenderer(new FileRendererObserver("Image.png", true, false));
         gPURenderer.setScene(Demo.createCornellBoxScene());

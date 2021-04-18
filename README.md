@@ -24,7 +24,7 @@ cd distribution/Dayflower
 java -Djava.library.path=lib -jar Dayflower.jar
 ```
 
-If you prefer to use Dayflower as a library and not as an application, the following Java source code demonstrates how you can use the CPU renderer.
+If you prefer to use Dayflower as a library and not as an application, the following Java source code demonstrates how you can use the CPU- and GPU renderers.
 ```java
 import org.dayflower.renderer.RenderingAlgorithm;
 import org.dayflower.renderer.cpu.CPURenderer;
@@ -44,6 +44,28 @@ public class CPURendererExample {
         cPURenderer.setup();
         cPURenderer.render();
         cPURenderer.dispose();
+    }
+}
+```
+```java
+import org.dayflower.renderer.RenderingAlgorithm;
+import org.dayflower.renderer.gpu.GPURenderer;
+import org.dayflower.renderer.observer.FileRendererObserver;
+import org.dayflower.scene.demo.Demo;
+
+public class GPURendererExample {
+    public static void main(String[] args) {
+        GPURenderer gPURenderer = new GPURenderer(new FileRendererObserver("Image.png", true, false));
+        gPURenderer.setScene(Demo.createCornellBoxScene());
+        gPURenderer.setImage();
+        gPURenderer.setMaximumBounce(20);
+        gPURenderer.setMinimumBounceRussianRoulette(5);
+        gPURenderer.setRenderPasses(100);
+        gPURenderer.setRenderPassesPerDisplayUpdate(10);
+        gPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
+        gPURenderer.setup();
+        gPURenderer.render();
+        gPURenderer.dispose();
     }
 }
 ```

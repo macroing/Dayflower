@@ -42,6 +42,40 @@ import com.amd.aparapi.Range;
  * @author J&#246;rgen Lundgren
  */
 public abstract class AbstractGPURenderer extends AbstractSceneKernel implements CombinedProgressiveImageOrderRenderer {
+	private static final int RENDERING_ALGORITHM_ORDINAL_AMBIENT_OCCLUSION = 0;//RenderingAlgorithm.AMBIENT_OCCLUSION.ordinal();
+	private static final int RENDERING_ALGORITHM_ORDINAL_PATH_TRACING = 1;//RenderingAlgorithm.PATH_TRACING.ordinal();
+	private static final int RENDERING_ALGORITHM_ORDINAL_RAY_CASTING = 2;//RenderingAlgorithm.RAY_CASTING.ordinal();
+	private static final int RENDERING_ALGORITHM_ORDINAL_RAY_TRACING = 3;//RenderingAlgorithm.RAY_TRACING.ordinal();
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * The maximum distance.
+	 */
+	protected float maximumDistance;
+	
+	/**
+	 * The maximum bounce.
+	 */
+	protected int maximumBounce;
+	
+	/**
+	 * The minimum bounce before Russian roulette termination occurs.
+	 */
+	protected int minimumBounceRussianRoulette;
+	
+	/**
+	 * The ordinal of the current {@link RenderingAlgorithm} instance.
+	 */
+	protected int renderingAlgorithmOrdinal;
+	
+	/**
+	 * The samples to use per render pass.
+	 */
+	protected int samples;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private final AtomicBoolean isClearing;
 	private final AtomicBoolean isRendering;
 	private final AtomicReference<RendererObserver> rendererObserver;
@@ -49,13 +83,9 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	private RenderingAlgorithm renderingAlgorithm;
 	private Timer timer;
 	private boolean isPreviewMode;
-	private float maximumDistance;
-	private int maximumBounce;
-	private int minimumBounceRussianRoulette;
 	private int renderPass;
 	private int renderPasses;
 	private int renderPassesPerDisplayUpdate;
-	private int samples;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -73,6 +103,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		this.rendererObserver = new AtomicReference<>(Objects.requireNonNull(rendererObserver, "rendererObserver == null"));
 		this.image = new PixelImageF(800, 800);
 		this.renderingAlgorithm = RenderingAlgorithm.PATH_TRACING;
+		this.renderingAlgorithmOrdinal = this.renderingAlgorithm.ordinal();
 		this.timer = new Timer();
 		this.isPreviewMode = false;
 		this.maximumDistance = 20.0F;
@@ -475,6 +506,7 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 	@Override
 	public final void setRenderingAlgorithm(final RenderingAlgorithm renderingAlgorithm) {
 		this.renderingAlgorithm = Objects.requireNonNull(renderingAlgorithm, "renderingAlgorithm == null");
+		this.renderingAlgorithmOrdinal = this.renderingAlgorithm.ordinal();
 	}
 	
 	/**
@@ -516,5 +548,43 @@ public abstract class AbstractGPURenderer extends AbstractSceneKernel implements
 		setScene(scene);
 		
 		super.setup();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns {@code true} if, and only if, the current {@link RenderingAlgorithm} is set to {@link RenderingAlgorithm#AMBIENT_OCCLUSION}, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the current {@code RenderingAlgorithm} is set to {@code RenderingAlgorithm.AMBIENT_OCCLUSION}, {@code false} otherwise
+	 */
+	protected final boolean renderingAlgorithmIsAmbientOcclusion() {
+		return this.renderingAlgorithmOrdinal == RENDERING_ALGORITHM_ORDINAL_AMBIENT_OCCLUSION;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current {@link RenderingAlgorithm} is set to {@link RenderingAlgorithm#PATH_TRACING}, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the current {@code RenderingAlgorithm} is set to {@code RenderingAlgorithm.PATH_TRACING}, {@code false} otherwise
+	 */
+	protected final boolean renderingAlgorithmIsPathTracing() {
+		return this.renderingAlgorithmOrdinal == RENDERING_ALGORITHM_ORDINAL_PATH_TRACING;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current {@link RenderingAlgorithm} is set to {@link RenderingAlgorithm#RAY_CASTING}, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the current {@code RenderingAlgorithm} is set to {@code RenderingAlgorithm.RAY_CASTING}, {@code false} otherwise
+	 */
+	protected final boolean renderingAlgorithmIsRayCasting() {
+		return this.renderingAlgorithmOrdinal == RENDERING_ALGORITHM_ORDINAL_RAY_CASTING;
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, the current {@link RenderingAlgorithm} is set to {@link RenderingAlgorithm#RAY_TRACING}, {@code false} otherwise.
+	 * 
+	 * @return {@code true} if, and only if, the current {@code RenderingAlgorithm} is set to {@code RenderingAlgorithm.RAY_TRACING}, {@code false} otherwise
+	 */
+	protected final boolean renderingAlgorithmIsRayTracing() {
+		return this.renderingAlgorithmOrdinal == RENDERING_ALGORITHM_ORDINAL_RAY_TRACING;
 	}
 }

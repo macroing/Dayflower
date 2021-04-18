@@ -35,8 +35,34 @@ public class CPURendererExample {
         cPURenderer.setRenderPasses(1000);
         cPURenderer.setRenderPassesPerDisplayUpdate(1);
         cPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
+        cPURenderer.setup();
         cPURenderer.render();
         cPURenderer.dispose();
+    }
+}
+```
+
+#### GPU Renderer Example
+The following example demonstrates how the `GPURenderer` class can be used to render a `Scene` to an image on your hard drive.
+```java
+import org.dayflower.renderer.RenderingAlgorithm;
+import org.dayflower.renderer.gpu.GPURenderer;
+import org.dayflower.renderer.observer.FileRendererObserver;
+import org.dayflower.scene.demo.Demo;
+
+public class CPURendererExample {
+    public static void main(String[] args) {
+        GPURenderer gPURenderer = new GPURenderer(new FileRendererObserver("Image.png", true, false));
+        gPURenderer.setScene(Demo.createCornellBoxScene());
+        gPURenderer.setImage();
+        gPURenderer.setMaximumBounce(20);
+        gPURenderer.setMinimumBounceRussianRoulette(5);
+        gPURenderer.setRenderPasses(100);
+        gPURenderer.setRenderPassesPerDisplayUpdate(10);
+        gPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
+        gPURenderer.setup();
+        gPURenderer.render();
+        gPURenderer.dispose();
     }
 }
 ```

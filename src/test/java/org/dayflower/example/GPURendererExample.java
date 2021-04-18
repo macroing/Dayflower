@@ -19,22 +19,22 @@
 package org.dayflower.example;
 
 import org.dayflower.renderer.RenderingAlgorithm;
-import org.dayflower.renderer.cpu.CPURenderer;
+import org.dayflower.renderer.gpu.GPURenderer;
 import org.dayflower.renderer.observer.FileRendererObserver;
 import org.dayflower.scene.demo.Demo;
 
-public class CPURendererExample {
+public class GPURendererExample {
 	public static void main(String[] args) {
-		CPURenderer cPURenderer = new CPURenderer(new FileRendererObserver("Image.png", true, false));
-		cPURenderer.setScene(Demo.createCornellBoxScene());
-		cPURenderer.setImage();
-		cPURenderer.setMaximumBounce(20);
-		cPURenderer.setMinimumBounceRussianRoulette(5);
-		cPURenderer.setRenderPasses(1000);
-		cPURenderer.setRenderPassesPerDisplayUpdate(1);
-		cPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
-		cPURenderer.setup();
-		cPURenderer.render();
-		cPURenderer.dispose();
+		GPURenderer gPURenderer = new GPURenderer(new FileRendererObserver("Image.png", true, false));
+		gPURenderer.setScene(Demo.createCornellBoxScene());
+		gPURenderer.setImage();
+		gPURenderer.setMaximumBounce(20);
+		gPURenderer.setMinimumBounceRussianRoulette(5);
+		gPURenderer.setRenderPasses(100);
+		gPURenderer.setRenderPassesPerDisplayUpdate(10);
+		gPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
+		gPURenderer.setup();
+		gPURenderer.render();
+		gPURenderer.dispose();
 	}
 }

@@ -41,6 +41,7 @@ public class CPURendererExample {
         cPURenderer.setRenderPasses(1000);
         cPURenderer.setRenderPassesPerDisplayUpdate(1);
         cPURenderer.setRenderingAlgorithm(RenderingAlgorithm.PATH_TRACING);
+        cPURenderer.setup();
         cPURenderer.render();
         cPURenderer.dispose();
     }

@@ -64,11 +64,17 @@ public final class GPURenderer extends AbstractGPURenderer {
 	 */
 	@Override
 	public void run() {
-//		doRunAmbientOcclusion(0.0F, 1);
-		doRunPathTracingPBRT(20, 5);
-//		doRunPathTracingRayito(20, 5);
-//		doRunPathTracingSmallPT(20, 5);
-//		doRunRayCasting();
+		if(renderingAlgorithmIsAmbientOcclusion()) {
+			doRunAmbientOcclusion(getMaximumDistance(), getSamples());
+		} else if(renderingAlgorithmIsPathTracing()) {
+			doRunPathTracingPBRT(getMaximumBounce(), getMinimumBounceRussianRoulette());
+//			doRunPathTracingRayito(getMaximumBounce(), getMinimumBounceRussianRoulette());
+//			doRunPathTracingSmallPT(getMaximumBounce(), getMinimumBounceRussianRoulette());
+		} else if(renderingAlgorithmIsRayCasting()) {
+			doRunRayCasting();
+		} else if(renderingAlgorithmIsRayTracing()) {
+			doRunRayTracing();
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -398,6 +404,14 @@ public final class GPURenderer extends AbstractGPURenderer {
 		} else {
 			filmAddColor(1.0F, 1.0F, 1.0F);
 		}
+		
+		imageBegin();
+		imageRedoGammaCorrectionPBRT();
+		imageEnd();
+	}
+	
+	void doRunRayTracing() {
+		filmAddColor(0.0F, 0.0F, 0.0F);
 		
 		imageBegin();
 		imageRedoGammaCorrectionPBRT();

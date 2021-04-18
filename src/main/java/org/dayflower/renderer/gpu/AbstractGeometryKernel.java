@@ -1794,11 +1794,6 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float rayOriginY = ray3FGetOriginComponent2();
 		final float rayDirectionX = ray3FGetDirectionComponent1();
 		final float rayDirectionY = ray3FGetDirectionComponent2();
-		final float rayDirectionZ = ray3FGetDirectionComponent3();
-		
-		if(rayDirectionZ == 0.0F) {
-			return;
-		}
 		
 //		Retrieve the disk variables that will be referred to by 'diskPhiMax', 'diskRadiusInner', 'diskRadiusOuter' and 'diskZMax' in the comments:
 		final float diskPhiMax = this.shape3FDisk3FArray[shape3FDisk3FArrayOffset + Disk3F.ARRAY_OFFSET_PHI_MAX];
@@ -1811,18 +1806,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float surfaceIntersectionPointZ = diskZMax;
 		
 		final float distanceSquared = surfaceIntersectionPointX * surfaceIntersectionPointX + surfaceIntersectionPointY * surfaceIntersectionPointY;
-		
-		if(distanceSquared > diskRadiusOuter * diskRadiusOuter || distanceSquared < diskRadiusInner * diskRadiusInner) {
-			return;
-		}
+		final float distance = sqrt(distanceSquared);
 		
 		final float phi = addIfLessThanThreshold(atan2(surfaceIntersectionPointY, surfaceIntersectionPointX), 0.0F, PI_MULTIPLIED_BY_2);
-		
-		if(phi > diskPhiMax) {
-			return;
-		}
-		
-		final float distance = sqrt(distanceSquared);
 		
 		final float orthonormalBasisGUX = -diskPhiMax * surfaceIntersectionPointY;
 		final float orthonormalBasisGUY = +diskPhiMax * surfaceIntersectionPointX;
@@ -2771,17 +2757,9 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 		final float uScaled = direction2X * edgeCAX + direction2Y * edgeCAY + direction2Z * edgeCAZ;
 		final float u = uScaled * determinantReciprocal;
 		
-		if(u < 0.0F) {
-			return;
-		}
-		
 //		Compute the Barycentric V-coordinate:
 		final float vScaled = direction2X * edgeABX + direction2Y * edgeABY + direction2Z * edgeABZ;
 		final float v = vScaled * determinantReciprocal;
-		
-		if(v < 0.0F || (uScaled + vScaled) * determinant > determinant * determinant) {
-			return;
-		}
 		
 //		Compute the Barycentric W-coordinate:
 		final float w = 1.0F - u - v;

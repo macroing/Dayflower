@@ -22,9 +22,9 @@ import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.random;
 import static org.dayflower.utility.Doubles.solveQuadraticSystem;
-import static org.dayflower.utility.Doubles.sqrt;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.color.Color3D;
 import org.dayflower.color.Color3F;
@@ -50,107 +50,144 @@ public final class SmallPTD {
 			return Color3D.BLACK;
 		}
 		
-		final Vector3D direction = ray.getDirection();
-		
 		final Sphere3D sphere = intersection.getSphere();
-		
-		final Point3D surfaceIntersectionPoint = intersection.getSurfaceIntersectionPoint();
-		
-		final Vector3D surfaceNormal = intersection.getSurfaceNormal();
-		final Vector3D surfaceNormalCorrectlyOriented = Vector3D.dotProduct(surfaceNormal, direction) < 0.0D ? surfaceNormal : Vector3D.negate(surfaceNormal);
-		
-		Color3D albedo = sphere.getAlbedo();
 		
 		final Color3D emission = sphere.getEmission();
 		
 		final int currentDepth = depth + 1;
 		
+		if(currentDepth > 20) {
+			return emission;
+		}
+		
+		Color3D albedo = sphere.getAlbedo();
+		
 		if(currentDepth > 5) {
 			final double probability = albedo.maximum();
 			
-			if(random() < probability) {
-				albedo = Color3D.divide(albedo, probability);
-			} else {
+			if(random() >= probability) {
 				return emission;
 			}
+			
+			albedo = Color3D.divide(albedo, probability);
 		}
 		
 		switch(sphere.getMaterial()) {
-			case GLASS: {
-				final Vector3D reflectionDirection = Vector3D.reflection(direction, surfaceNormal, true);
-				
-				final Ray3D reflectionRay = new Ray3D(surfaceIntersectionPoint, reflectionDirection);
-				
-				final boolean into = Vector3D.dotProduct(surfaceNormal, surfaceNormalCorrectlyOriented) > 0.0D;
-				
-				final double etaA = 1.0D;
-				final double etaB = 1.5D;
-				final double eta = into ? etaA / etaB : etaB / etaA;
-				
-				final double cosTheta = Vector3D.dotProduct(direction, surfaceNormalCorrectlyOriented);
-				final double cosTheta2Squared = 1.0D - eta * eta * (1.0D - cosTheta * cosTheta);
-				
-				if(cosTheta2Squared < 0.0D) {
-					return Color3D.add(emission, Color3D.multiply(albedo, radiance(reflectionRay, scene, currentDepth)));
-				}
-				
-				final Vector3D transmissionDirection = Vector3D.normalize(Vector3D.subtract(Vector3D.multiply(direction, eta), Vector3D.multiply(surfaceNormal, (into ? 1.0D : -1.0D) * (cosTheta * eta + sqrt(cosTheta2Squared)))));
-				
-				final Ray3D transmissionRay = new Ray3D(surfaceIntersectionPoint, transmissionDirection);
-				
-				final double a = etaB - etaA;
-				final double b = etaB + etaA;
-				
-				final double reflectance = Schlick.fresnelDielectric(into ? -cosTheta : Vector3D.dotProduct(transmissionDirection, surfaceNormal), a * a / (b * b));
-				final double transmittance = 1.0D - reflectance;
-				
-				final double probabilityRussianRoulette = 0.25D + 0.5D * reflectance;
-				final double probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
-				final double probabilityRussianRouletteTransmission = transmittance / (1.0D - probabilityRussianRoulette);
-				
-				final int type = currentDepth > 2 && random() < probabilityRussianRoulette ? 1 : currentDepth > 2 ? 2 : 3;
-				
-				switch(type) {
-					case 1:
-						return Color3D.add(emission, Color3D.multiply(albedo, radiance(reflectionRay, scene, currentDepth), probabilityRussianRouletteReflection));
-					case 2:
-						return Color3D.add(emission, Color3D.multiply(albedo, radiance(transmissionRay, scene, currentDepth), probabilityRussianRouletteTransmission));
-					case 3:
-						final Color3D radianceReflection = Color3D.multiply(radiance(reflectionRay, scene, currentDepth), reflectance);
-						final Color3D radianceTransmission = Color3D.multiply(radiance(transmissionRay, scene, currentDepth), transmittance);
-						
-						return Color3D.add(emission, Color3D.multiply(albedo, Color3D.add(radianceReflection, radianceTransmission)));
-					default:
-						return Color3D.BLACK;
-				}
-			}
-			case MATTE: {
-				final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution2();
-				final Vector3D w = surfaceNormalCorrectlyOriented;
-				final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.getX()) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
-				final Vector3D v = Vector3D.crossProduct(w, u);
-				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
-				
-				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
-			}
-			case METAL: {
-				final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(random(), random(), 20.0D);
-				final Vector3D w = Vector3D.normalize(Vector3D.reflection(direction, surfaceNormal, true));
-				final Vector3D v = Vector3D.computeV(w);
-				final Vector3D u = Vector3D.crossProduct(v, w);
-				final Vector3D d = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
-				
-				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
-			}
-			case MIRROR: {
-				final Vector3D d = Vector3D.reflection(direction, surfaceNormal, true);
-				
-				return Color3D.add(emission, Color3D.multiply(albedo, radiance(new Ray3D(surfaceIntersectionPoint, d), scene, currentDepth)));
-			}
-			default: {
+			case GLASS:
+				return radianceGlass(ray, scene, currentDepth, albedo, emission, intersection);
+			case MATTE:
+				return radianceMatte(ray, scene, currentDepth, albedo, emission, intersection);
+			case METAL:
+				return radianceMetal(ray, scene, currentDepth, albedo, emission, intersection);
+			case MIRROR:
+				return radianceMirror(ray, scene, currentDepth, albedo, emission, intersection);
+			default:
 				return Color3D.BLACK;
-			}
 		}
+	}
+	
+	public static Color3D radianceGlass(final Ray3D ray, final Scene scene, final int depth, final Color3D albedo, final Color3D emission, final Intersection intersection) {
+		final Vector3D direction = ray.getDirection();
+		
+		final Vector3D surfaceNormal = intersection.getSurfaceNormal();
+		final Vector3D surfaceNormalCorrectlyOriented = Vector3D.dotProduct(surfaceNormal, direction) < 0.0D ? surfaceNormal : Vector3D.negate(surfaceNormal);
+		
+		final boolean isEntering = Vector3D.dotProduct(surfaceNormal, surfaceNormalCorrectlyOriented) > 0.0D;
+		
+		final double etaA = 1.0D;
+		final double etaB = 1.5D;
+		final double etaI = isEntering ? etaA : etaB;
+		final double etaT = isEntering ? etaB : etaA;
+		final double eta = etaI / etaT;
+		
+		final Point3D reflectionOrigin = intersection.getSurfaceIntersectionPoint();
+		
+		final Vector3D reflectionDirection = Vector3D.reflection(direction, surfaceNormal, true);
+		
+		final Ray3D reflectionRay = new Ray3D(reflectionOrigin, reflectionDirection);
+		
+		final Optional<Vector3D> optionalTransmissionDirection = Vector3D.refraction2(direction, surfaceNormalCorrectlyOriented, eta);
+		
+		if(optionalTransmissionDirection.isPresent()) {
+			final Point3D transmissionOrigin = intersection.getSurfaceIntersectionPoint();
+			
+			final Vector3D transmissionDirection = optionalTransmissionDirection.get();
+			
+			final Ray3D transmissionRay = new Ray3D(transmissionOrigin, transmissionDirection);
+			
+			final double cosThetaI = Vector3D.dotProduct(direction, surfaceNormalCorrectlyOriented);
+			final double cosThetaICorrectlyOriented = isEntering ? -cosThetaI : Vector3D.dotProduct(transmissionDirection, surfaceNormal);
+			
+			final double r0 = (etaB - etaA) * (etaB - etaA) / ((etaB + etaA) * (etaB + etaA));
+			
+			final double reflectance = Schlick.fresnelDielectric(cosThetaICorrectlyOriented, r0);
+			final double transmittance = 1.0D - reflectance;
+			
+			final double probabilityRussianRoulette = 0.25D + 0.5D * reflectance;
+			final double probabilityRussianRouletteReflection = reflectance / probabilityRussianRoulette;
+			final double probabilityRussianRouletteTransmission = transmittance / (1.0D - probabilityRussianRoulette);
+			
+			final boolean isChoosingSpecularReflection = random() < probabilityRussianRoulette;
+			
+			if(isChoosingSpecularReflection) {
+				return Color3D.addAndMultiply(emission, albedo, radiance(reflectionRay, scene, depth), probabilityRussianRouletteReflection);
+			}
+			
+			return Color3D.addAndMultiply(emission, albedo, radiance(transmissionRay, scene, depth), probabilityRussianRouletteTransmission);
+		}
+		
+		return Color3D.addAndMultiply(emission, albedo, radiance(reflectionRay, scene, depth));
+	}
+	
+	public static Color3D radianceMatte(final Ray3D ray, final Scene scene, final int depth, final Color3D albedo, final Color3D emission, final Intersection intersection) {
+		final Vector3D surfaceNormal = intersection.getSurfaceNormal();
+		final Vector3D surfaceNormalCorrectlyOriented = Vector3D.dotProduct(surfaceNormal, ray.getDirection()) < 0.0D ? surfaceNormal : Vector3D.negate(surfaceNormal);
+		
+		final Vector3D s = SampleGeneratorD.sampleHemisphereCosineDistribution2();
+		
+		final Vector3D w = surfaceNormalCorrectlyOriented;
+		final Vector3D u = Vector3D.normalize(Vector3D.crossProduct(abs(w.getX()) > 0.1D ? Vector3D.y() : Vector3D.x(), w));
+		final Vector3D v = Vector3D.crossProduct(w, u);
+		
+		final Point3D newOrigin = intersection.getSurfaceIntersectionPoint();
+		
+		final Vector3D newDirection = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
+		
+		final Ray3D newRay = new Ray3D(newOrigin, newDirection);
+		
+		final Color3D radiance = radiance(newRay, scene, depth);
+		
+		return Color3D.addAndMultiply(emission, albedo, radiance);
+	}
+	
+	public static Color3D radianceMetal(final Ray3D ray, final Scene scene, final int depth, final Color3D albedo, final Color3D emission, final Intersection intersection) {
+		final Vector3D s = SampleGeneratorD.sampleHemispherePowerCosineDistribution(random(), random(), 20.0D);
+		
+		final Vector3D w = Vector3D.normalize(Vector3D.reflection(ray.getDirection(), intersection.getSurfaceNormal(), true));
+		final Vector3D v = Vector3D.computeV(w);
+		final Vector3D u = Vector3D.crossProduct(v, w);
+		
+		final Point3D newOrigin = intersection.getSurfaceIntersectionPoint();
+		
+		final Vector3D newDirection = Vector3D.normalize(Vector3D.add(Vector3D.multiply(u, s.getX()), Vector3D.multiply(v, s.getY()), Vector3D.multiply(w, s.getZ())));
+		
+		final Ray3D newRay = new Ray3D(newOrigin, newDirection);
+		
+		final Color3D radiance = radiance(newRay, scene, depth);
+		
+		return Color3D.addAndMultiply(emission, albedo, radiance);
+	}
+	
+	public static Color3D radianceMirror(final Ray3D ray, final Scene scene, final int depth, final Color3D albedo, final Color3D emission, final Intersection intersection) {
+		final Point3D newOrigin = intersection.getSurfaceIntersectionPoint();
+		
+		final Vector3D newDirection = Vector3D.reflection(ray.getDirection(), intersection.getSurfaceNormal(), true);
+		
+		final Ray3D newRay = new Ray3D(newOrigin, newDirection);
+		
+		final Color3D radiance = radiance(newRay, scene, depth);
+		
+		return Color3D.addAndMultiply(emission, albedo, radiance);
 	}
 	
 	public static void main(final String[] args) {
@@ -211,7 +248,7 @@ public final class SmallPTD {
 		}
 		
 		public Camera(final double resolutionX, final double resolutionY, final double fieldOfView) {
-			this.eye = new Point3D(50.0D, 52.0D, 295.6D);
+			this.eye = new Point3D(50.0D, 50.0D, 295.6D);
 			this.w = Vector3D.normalize(new Vector3D(0.0D, -0.042612D, -1.0D));
 			this.u = new Vector3D(fieldOfView * resolutionX / resolutionY, 0.0D, 0.0D);
 			this.v = Vector3D.multiply(Vector3D.normalize(Vector3D.crossProduct(this.u, this.w)), fieldOfView);

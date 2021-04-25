@@ -949,6 +949,49 @@ public final class Color3F {
 	}
 	
 	/**
+	 * Adds the result of one multiplication to the component values of {@code colorAdd}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result.
+	 * <p>
+	 * If either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorAdd the {@code Color3F} instance to add
+	 * @param colorMultiplyA the {@code Color3F} instance used on the left-hand side of the multiplication
+	 * @param colorMultiplyB the {@code Color3F} instance used on the right-hand side of the multiplication
+	 * @return a new {@code Color3F} instance with the result
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
+	 */
+	public static Color3F addAndMultiply(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB) {
+		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1;
+		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2;
+		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+	/**
+	 * Adds the result of two multiplications to the component values of {@code colorAdd}.
+	 * <p>
+	 * Returns a new {@code Color3F} instance with the result.
+	 * <p>
+	 * If either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorAdd the {@code Color3F} instance to add
+	 * @param colorMultiplyA the {@code Color3F} instance used on the left-hand side of the first multiplication
+	 * @param colorMultiplyB the {@code Color3F} instance used on the right-hand side of the first multiplication
+	 * @param scalarMultiply the scalar value used on the right-hand side of the second multiplication
+	 * @return a new {@code Color3F} instance with the result
+	 * @throws NullPointerException thrown if, and only if, either {@code colorAdd}, {@code colorMultiplyA} or {@code colorMultiplyB} are {@code null}
+	 */
+	public static Color3F addAndMultiply(final Color3F colorAdd, final Color3F colorMultiplyA, final Color3F colorMultiplyB, final float scalarMultiply) {
+		final float component1 = colorAdd.component1 + colorMultiplyA.component1 * colorMultiplyB.component1 * scalarMultiply;
+		final float component2 = colorAdd.component2 + colorMultiplyA.component2 * colorMultiplyB.component2 * scalarMultiply;
+		final float component3 = colorAdd.component3 + colorMultiplyA.component3 * colorMultiplyB.component3 * scalarMultiply;
+		
+		return new Color3F(component1, component2, component3);
+	}
+	
+	/**
 	 * Adds the result of three multiplications followed by one division to the component values of {@code colorAdd}.
 	 * <p>
 	 * Returns a new {@code Color3F} instance with the result.

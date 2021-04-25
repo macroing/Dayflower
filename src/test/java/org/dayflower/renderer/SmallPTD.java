@@ -241,23 +241,29 @@ public final class SmallPTD {
 		
 		private Point2D doSample(final double pixelX, final double pixelY, final double gridSampleU, final double gridSampleV) {
 			/*
-			 * The list below shows some possible values assigned to either sampleU1 or sampleV1, both of which are in the range [-0.25D, +1.75D]:
+			 * The list below shows some possible values assigned to either sampleU1 or sampleV1, both of which are in the range [-0.25D, +1.25D]:
 			 * 
 			 * sampleN1 #1: (0.0D + 0.5D + -1.0D) / 2.0D = -0.25D
 			 * sampleN1 #2: (1.0D + 0.5D + -1.0D) / 2.0D = +0.25D
-			 * sampleN1 #3: (2.0D + 0.5D + -1.0D) / 2.0D = +0.75D
-			 * sampleN1 #4: (0.0D + 0.5D + +1.0D) / 2.0D = +0.75D
-			 * sampleN1 #5: (1.0D + 0.5D + +1.0D) / 2.0D = +1.25D
-			 * sampleN1 #6: (2.0D + 0.5D + +1.0D) / 2.0D = +1.75D
+			 * sampleN1 #3: (0.0D + 0.5D + +1.0D) / 2.0D = +0.75D
+			 * sampleN1 #4: (1.0D + 0.5D + +1.0D) / 2.0D = +1.25D
+			 * 
+			 * The list below shows some possible values assigned to either sampleU2 or sampleV2, given a pixel coordinate of 100.0D and a resolution of 200.0D:
+			 * 
+			 * sampleN2 #1: (-0.25D + 100.0D) / 200.0D - 0.5D = 0.00125D
+			 * sampleN2 #2: (+0.25D + 100.0D) / 200.0D - 0.5D = 0.00125D
+			 * sampleN2 #3: (+0.75D + 100.0D) / 200.0D - 0.5D = 0.00375D
+			 * sampleN2 #4: (+1.25D + 100.0D) / 200.0D - 0.5D = 0.00625D
 			 */
 			
 //			Generate a Point2D instance whose getU() and getV() methods returns a double in the range [-1.0D, +1.0D]:
 			final Point2D sample = SampleGeneratorD.sampleExactInverseTentFilter();
 			
-//			The variables gridSampleU and gridSampleV are in the range [0.0D, 2.0D]:
+//			The variables gridSampleU and gridSampleV are in the range [0.0D, 1.0D]:
 			final double sampleU1 = (gridSampleU + 0.5D + sample.getU()) / 2.0D;
 			final double sampleV1 = (gridSampleV + 0.5D + sample.getV()) / 2.0D;
 			
+//			The variables sampleU1 and sampleV1 are in the range [-0.25D, +1.25D]:
 			final double sampleU2 = (sampleU1 + pixelX) / this.resolutionX - 0.5D;
 			final double sampleV2 = (sampleV1 + pixelY) / this.resolutionY - 0.5D;
 			

@@ -20,6 +20,8 @@ package org.dayflower.image;
 
 import static org.dayflower.utility.Floats.ceil;
 import static org.dayflower.utility.Floats.floor;
+import static org.dayflower.utility.Ints.max;
+import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
 
 import java.util.ArrayList;
@@ -1371,6 +1373,53 @@ public abstract class ImageF extends Image {
 		
 		for(int i = 0; i < resolution; i++) {
 			setColorRGBA(Color4F.undoGammaCorrectionSRGB(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
+	 * Updates this {@code ImageF} instance by applying {@code biFunction} to all pixels.
+	 * <p>
+	 * If either {@code biFunction} or the result returned by {@code biFunction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * imageF.update(biFunction, imageF.getBounds());
+	 * }
+	 * </pre>
+	 * 
+	 * @param biFunction a {@code BiFunction} that returns {@link Color4F} instances
+	 * @throws NullPointerException thrown if, and only if, either {@code biFunction} or the result returned by {@code biFunction} are {@code null}
+	 */
+	public final void update(final BiFunction<Color4F, Point2I, Color4F> biFunction) {
+		update(biFunction, getBounds());
+	}
+	
+	/**
+	 * Updates this {@code ImageF} instance by applying {@code biFunction} to all pixels within {@code bounds}.
+	 * <p>
+	 * If either {@code biFunction}, the result returned by {@code biFunction} or {@code bounds} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param biFunction a {@code BiFunction} that returns {@link Color4F} instances
+	 * @param bounds a {@link Rectangle2I} instance used as the bounds for the update
+	 * @throws NullPointerException thrown if, and only if, either {@code biFunction}, the result returned by {@code biFunction} or {@code bounds} are {@code null}
+	 */
+	public final void update(final BiFunction<Color4F, Point2I, Color4F> biFunction, final Rectangle2I bounds) {
+		Objects.requireNonNull(biFunction, "biFunction == null");
+		Objects.requireNonNull(bounds, "bounds == null");
+		
+		final Point2I minimum = bounds.getA();
+		final Point2I maximum = bounds.getC();
+		
+		final int minimumX = max(minimum.getX(), 0);
+		final int minimumY = max(minimum.getY(), 0);
+		final int maximumX = min(maximum.getX(), getResolutionX());
+		final int maximumY = min(maximum.getY(), getResolutionY());
+		
+		for(int y = minimumY; y < maximumY; y++) {
+			for(int x = minimumX; x < maximumX; x++) {
+				setColorRGBA(biFunction.apply(getColorRGBA(x, y), new Point2I(x, y)), x, y);
+			}
 		}
 	}
 }

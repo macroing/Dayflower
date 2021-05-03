@@ -18,12 +18,20 @@
  */
 package org.dayflower.image;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.Objects;
+
+import javax.imageio.ImageIO;
 
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
+import org.dayflower.utility.BufferedImages;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
 
@@ -52,6 +60,20 @@ public final class IntImageF extends ImageF {
 	 */
 	public IntImageF() {
 		this(800, 800);
+	}
+	
+	/**
+	 * Constructs a new {@code IntImageF} instance from {@code bufferedImage}.
+	 * <p>
+	 * If {@code bufferedImage} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bufferedImage a {@code BufferedImage} instance
+	 * @throws NullPointerException thrown if, and only if, {@code bufferedImage} is {@code null}
+	 */
+	public IntImageF(final BufferedImage bufferedImage) {
+		super(bufferedImage.getWidth(), bufferedImage.getHeight());
+		
+		this.data = DataBufferInt.class.cast(BufferedImages.getCompatibleBufferedImage(bufferedImage).getRaster().getDataBuffer()).getData().clone();
 	}
 	
 	/**
@@ -388,5 +410,54 @@ public final class IntImageF extends ImageF {
 		
 		this.data[indexA] = colorARGBB;
 		this.data[indexB] = colorARGBA;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Loads an {@code IntImageF} from the file represented by {@code file}.
+	 * <p>
+	 * Returns a new {@code IntImageF} instance.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * 
+	 * @param file a {@code File} that represents the file to load from
+	 * @return a new {@code IntImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static IntImageF load(final File file) {
+		try {
+			return new IntImageF(BufferedImages.getCompatibleBufferedImage(ImageIO.read(Objects.requireNonNull(file, "file == null"))));
+		} catch(final IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	/**
+	 * Loads an {@code IntImageF} from the file represented by the pathname {@code pathname}.
+	 * <p>
+	 * Returns a new {@code IntImageF} instance.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If an I/O error occurs, an {@code UncheckedIOException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * IntImageF.load(new File(pathname));
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} that represents the pathname of the file to load from
+	 * @return a new {@code IntImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 * @throws UncheckedIOException thrown if, and only if, an I/O error occurs
+	 */
+	public static IntImageF load(final String pathname) {
+		return load(new File(pathname));
 	}
 }

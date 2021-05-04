@@ -37,6 +37,7 @@ import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
+
 import org.macroing.java.util.function.TriFunction;
 
 /**
@@ -340,10 +341,10 @@ public abstract class ImageD extends Image {
 				Rectangle2I rectangle = new Rectangle2I(new Point2I(x, y), new Point2I(x, y));
 				
 				labelImage:
-				if(getColorRGB(x, y).equals(image.getColorRGB(0, 0))) {
+				if(getColorRGBA(x, y).equals(image.getColorRGBA(0, 0))) {
 					for(int imageY = 0; imageY < image.getResolutionY(); imageY++) {
 						for(int imageX = 0; imageX < image.getResolutionX(); imageX++) {
-							if(!getColorRGB(x + imageX, y + imageY).equals(image.getColorRGB(imageX, imageY))) {
+							if(!getColorRGBA(x + imageX, y + imageY).equals(image.getColorRGBA(imageX, imageY))) {
 								break labelImage;
 							}
 							
@@ -368,14 +369,7 @@ public abstract class ImageD extends Image {
 	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
 	 */
 	public final void blendOver(final ImageD image) {
-		final int resolutionX = min(getResolutionX(), image.getResolutionX());
-		final int resolutionY = min(getResolutionY(), image.getResolutionY());
-		
-		for(int y = 0; y < resolutionY; y++) {
-			for(int x = 0; x < resolutionX; x++) {
-				setColorRGBA(Color4D.blendOver(getColorRGBA(x, y), image.getColorRGBA(x, y)), x, y);
-			}
-		}
+		fillImage(image, image.getBounds(), getBounds(), (sourceColorRGBA, targetColorRGBA, targetPoint) -> Color4D.blendOver(targetColorRGBA, sourceColorRGBA));
 	}
 	
 	/**
@@ -1080,99 +1074,63 @@ public abstract class ImageD extends Image {
 	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleAverage(Color4D)}.
 	 */
 	public final void grayscaleAverage() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.grayscaleAverage(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.grayscaleAverage(color));
 	}
 	
 	/**
 	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleComponent1(Color4D)}.
 	 */
 	public final void grayscaleComponent1() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.grayscaleComponent1(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.grayscaleComponent1(color));
 	}
 	
 	/**
 	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleComponent2(Color4D)}.
 	 */
 	public final void grayscaleComponent2() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.grayscaleComponent2(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.grayscaleComponent2(color));
 	}
 	
 	/**
 	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleComponent3(Color4D)}.
 	 */
 	public final void grayscaleComponent3() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.grayscaleComponent3(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.grayscaleComponent3(color));
 	}
 	
 	/**
 	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleLightness(Color4D)}.
 	 */
 	public final void grayscaleLightness() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.grayscaleLightness(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.grayscaleLightness(color));
 	}
 	
 	/**
 	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleLuminance(Color4D)}.
 	 */
 	public final void grayscaleLuminance() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.grayscaleLuminance(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.grayscaleLuminance(color));
 	}
 	
 	/**
 	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleMaximum(Color4D)}.
 	 */
 	public final void grayscaleMaximum() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.grayscaleMaximum(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.grayscaleMaximum(color));
 	}
 	
 	/**
 	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleMinimum(Color4D)}.
 	 */
 	public final void grayscaleMinimum() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.grayscaleMinimum(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.grayscaleMinimum(color));
 	}
 	
 	/**
 	 * Inverts this {@code ImageD} instance.
 	 */
 	public final void invert() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.invert(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.invert(color));
 	}
 	
 	/**
@@ -1299,33 +1257,21 @@ public abstract class ImageD extends Image {
 	 * Redoes gamma correction on this {@code ImageD} instance using PBRT.
 	 */
 	public final void redoGammaCorrectionPBRT() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.redoGammaCorrectionPBRT(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.redoGammaCorrectionPBRT(color));
 	}
 	
 	/**
 	 * Redoes gamma correction on this {@code ImageD} instance using sRGB.
 	 */
 	public final void redoGammaCorrectionSRGB() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.redoGammaCorrectionSRGB(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.redoGammaCorrectionSRGB(color));
 	}
 	
 	/**
 	 * Converts this {@code ImageD} instance into its sepia-representation.
 	 */
 	public final void sepia() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.sepia(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.sepia(color));
 	}
 	
 	/**
@@ -1478,36 +1424,21 @@ public abstract class ImageD extends Image {
 	 * @param transparency the transparency
 	 */
 	public final void transparency(final double transparency) {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			final Color4D oldColorRGBA = getColorRGBA(i);
-			final Color4D newColorRGBA = new Color4D(oldColorRGBA.getComponent1(), oldColorRGBA.getComponent2(), oldColorRGBA.getComponent3(), transparency);
-			
-			setColorRGBA(newColorRGBA, i);
-		}
+		update((color, point) -> new Color4D(color.getComponent1(), color.getComponent2(), color.getComponent3(), transparency));
 	}
 	
 	/**
 	 * Undoes gamma correction on this {@code ImageD} instance using PBRT.
 	 */
 	public final void undoGammaCorrectionPBRT() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.undoGammaCorrectionPBRT(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.undoGammaCorrectionPBRT(color));
 	}
 	
 	/**
 	 * Undoes gamma correction on this {@code ImageD} instance using sRGB.
 	 */
 	public final void undoGammaCorrectionSRGB() {
-		final int resolution = getResolution();
-		
-		for(int i = 0; i < resolution; i++) {
-			setColorRGBA(Color4D.undoGammaCorrectionSRGB(getColorRGBA(i)), i);
-		}
+		update((color, point) -> Color4D.undoGammaCorrectionSRGB(color));
 	}
 	
 	/**

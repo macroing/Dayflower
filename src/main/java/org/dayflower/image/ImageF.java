@@ -795,7 +795,7 @@ public abstract class ImageF extends Image {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * imageF.fillGradient(Color3F.BLACK, Color3F.RED, Color3F.GREEN, Color3F.YELLOW);
+	 * image.fillGradient(Color3F.BLACK, Color3F.RED, Color3F.GREEN, Color3F.YELLOW);
 	 * }
 	 * </pre>
 	 */

@@ -360,6 +360,25 @@ public abstract class ImageD extends Image {
 	}
 	
 	/**
+	 * Blends this {@code ImageD} instance over {@code image}.
+	 * <p>
+	 * If {@code image} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param image an {@code ImageD} instance that acts as a background
+	 * @throws NullPointerException thrown if, and only if, {@code image} is {@code null}
+	 */
+	public final void blendOver(final ImageD image) {
+		final int resolutionX = min(getResolutionX(), image.getResolutionX());
+		final int resolutionY = min(getResolutionY(), image.getResolutionY());
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				setColorRGBA(Color4D.blendOver(getColorRGBA(x, y), image.getColorRGBA(x, y)), x, y);
+			}
+		}
+	}
+	
+	/**
 	 * Clears this {@code ImageD} instance with a {@link Color4D} of {@code Color4D.BLACK}.
 	 * <p>
 	 * Calling this method is equivalent to the following:
@@ -1058,6 +1077,94 @@ public abstract class ImageD extends Image {
 	}
 	
 	/**
+	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleAverage(Color4D)}.
+	 */
+	public final void grayscaleAverage() {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			setColorRGBA(Color4D.grayscaleAverage(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
+	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleComponent1(Color4D)}.
+	 */
+	public final void grayscaleComponent1() {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			setColorRGBA(Color4D.grayscaleComponent1(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
+	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleComponent2(Color4D)}.
+	 */
+	public final void grayscaleComponent2() {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			setColorRGBA(Color4D.grayscaleComponent2(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
+	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleComponent3(Color4D)}.
+	 */
+	public final void grayscaleComponent3() {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			setColorRGBA(Color4D.grayscaleComponent3(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
+	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleLightness(Color4D)}.
+	 */
+	public final void grayscaleLightness() {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			setColorRGBA(Color4D.grayscaleLightness(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
+	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleLuminance(Color4D)}.
+	 */
+	public final void grayscaleLuminance() {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			setColorRGBA(Color4D.grayscaleLuminance(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
+	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleMaximum(Color4D)}.
+	 */
+	public final void grayscaleMaximum() {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			setColorRGBA(Color4D.grayscaleMaximum(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
+	 * Converts this {@code ImageD} instance into grayscale using {@link Color4D#grayscaleMinimum(Color4D)}.
+	 */
+	public final void grayscaleMinimum() {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			setColorRGBA(Color4D.grayscaleMinimum(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
 	 * Inverts this {@code ImageD} instance.
 	 */
 	public final void invert() {
@@ -1211,6 +1318,17 @@ public abstract class ImageD extends Image {
 	}
 	
 	/**
+	 * Converts this {@code ImageD} instance into its sepia-representation.
+	 */
+	public final void sepia() {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			setColorRGBA(Color4D.sepia(getColorRGBA(i)), i);
+		}
+	}
+	
+	/**
 	 * Sets the {@link Color3D} of the pixel represented by {@code index} to {@code colorRGB}.
 	 * <p>
 	 * If {@code colorRGB} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -1353,6 +1471,22 @@ public abstract class ImageD extends Image {
 	 * @throws NullPointerException thrown if, and only if, either {@code colorRGBA} or {@code pixelOperation} are {@code null}
 	 */
 	public abstract void setColorRGBA(final Color4D colorRGBA, final int x, final int y, final PixelOperation pixelOperation);
+	
+	/**
+	 * Sets the transparency for this {@code ImageD} instance to {@code transparency}.
+	 * 
+	 * @param transparency the transparency
+	 */
+	public final void transparency(final double transparency) {
+		final int resolution = getResolution();
+		
+		for(int i = 0; i < resolution; i++) {
+			final Color4D oldColorRGBA = getColorRGBA(i);
+			final Color4D newColorRGBA = new Color4D(oldColorRGBA.getComponent1(), oldColorRGBA.getComponent2(), oldColorRGBA.getComponent3(), transparency);
+			
+			setColorRGBA(newColorRGBA, i);
+		}
+	}
 	
 	/**
 	 * Undoes gamma correction on this {@code ImageD} instance using PBRT.

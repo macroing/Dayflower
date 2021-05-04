@@ -126,6 +126,19 @@ public final class Color4F {
 	}
 	
 	/**
+	 * Constructs a new {@code Color4F} instance from {@code color} and {@code component4}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color3D} instance
+	 * @param component4 the value of component 4
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Color4F(final Color3D color, final float component4) {
+		this(toFloat(color.getComponent1()), toFloat(color.getComponent2()), toFloat(color.getComponent3()), component4);
+	}
+	
+	/**
 	 * Constructs a new {@code Color4F} instance from {@code color}.
 	 * <p>
 	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -135,6 +148,19 @@ public final class Color4F {
 	 */
 	public Color4F(final Color3F color) {
 		this(color.getComponent1(), color.getComponent2(), color.getComponent3());
+	}
+	
+	/**
+	 * Constructs a new {@code Color4F} instance from {@code color} and {@code component4}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color3F} instance
+	 * @param component4 the value of component 4
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Color4F(final Color3F color, final float component4) {
+		this(color.getComponent1(), color.getComponent2(), color.getComponent3(), component4);
 	}
 	
 	/**
@@ -151,6 +177,23 @@ public final class Color4F {
 	 */
 	public Color4F(final float component) {
 		this(component, component, component);
+	}
+	
+	/**
+	 * Constructs a new {@code Color4F} instance denoting a grayscale color.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color4F(component, component, component, component4);
+	 * }
+	 * </pre>
+	 * 
+	 * @param component the value of component 1, component 2 and component 3
+	 * @param component4 the value of component 4
+	 */
+	public Color4F(final float component, final float component4) {
+		this(component, component, component, component4);
 	}
 	
 	/**
@@ -991,6 +1034,27 @@ public final class Color4F {
 	}
 	
 	/**
+	 * Blends the component values of {@code colorA} over the component values of {@code colorB}.
+	 * <p>
+	 * Returns a new {@code Color4F} instance with the result of the blend.
+	 * <p>
+	 * If either {@code colorA} or {@code colorB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorA a {@code Color4F} instance
+	 * @param colorB a {@code Color4F} instance
+	 * @return a new {@code Color4F} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
+	 */
+	public static Color4F blendOver(final Color4F colorA, final Color4F colorB) {
+		final float component4 = colorA.component4 + colorB.component4 * (1.0F - colorA.component4);
+		final float component1 = (colorA.component1 * colorA.component4 + colorB.component1 * colorB.component4 * (1.0F - colorA.component4)) / component4;
+		final float component2 = (colorA.component2 * colorA.component4 + colorB.component2 * colorB.component4 * (1.0F - colorA.component4)) / component4;
+		final float component3 = (colorA.component3 * colorA.component4 + colorB.component3 * colorB.component4 * (1.0F - colorA.component4)) / component4;
+		
+		return new Color4F(component1, component2, component3, component4);
+	}
+	
+	/**
 	 * Converts {@code color} from the RGB-color space to the XYZ-color space using the algorithm provided by PBRT.
 	 * <p>
 	 * Returns a new {@code Color4F} instance with the result of the conversion.
@@ -1058,6 +1122,110 @@ public final class Color4F {
 	 */
 	public static Color4F convertXYZAToRGBAUsingSRGB(final Color4F color) {
 		return ColorSpaceF.S_R_G_B.convertXYZAToRGBA(color);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4F} instance based on {@code color.average()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a grayscale {@code Color4F} instance based on {@code color.average()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4F grayscaleAverage(final Color4F color) {
+		return new Color4F(color.average(), color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4F} instance based on {@code color.getComponent1()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a grayscale {@code Color4F} instance based on {@code color.getComponent1()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4F grayscaleComponent1(final Color4F color) {
+		return new Color4F(color.component1, color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4F} instance based on {@code color.getComponent2()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a grayscale {@code Color4F} instance based on {@code color.getComponent2()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4F grayscaleComponent2(final Color4F color) {
+		return new Color4F(color.component2, color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4F} instance based on {@code color.getComponent3()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a grayscale {@code Color4F} instance based on {@code color.getComponent3()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4F grayscaleComponent3(final Color4F color) {
+		return new Color4F(color.component3, color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4F} instance based on {@code color.lightness()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a grayscale {@code Color4F} instance based on {@code color.lightness()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4F grayscaleLightness(final Color4F color) {
+		return new Color4F(color.lightness(), color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4F} instance based on {@code color.luminance()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a grayscale {@code Color4F} instance based on {@code color.luminance()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4F grayscaleLuminance(final Color4F color) {
+		return new Color4F(color.luminance(), color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4F} instance based on {@code color.maximum()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a grayscale {@code Color4F} instance based on {@code color.maximum()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4F grayscaleMaximum(final Color4F color) {
+		return new Color4F(color.maximum(), color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4F} instance based on {@code color.minimum()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a grayscale {@code Color4F} instance based on {@code color.minimum()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4F grayscaleMinimum(final Color4F color) {
+		return new Color4F(color.minimum(), color.component4);
 	}
 	
 	/**
@@ -1193,6 +1361,26 @@ public final class Color4F {
 	 */
 	public static Color4F redoGammaCorrectionSRGB(final Color4F color) {
 		return ColorSpaceF.S_R_G_B.redoGammaCorrection(color);
+	}
+	
+	/**
+	 * Converts {@code color} to its sepia-representation.
+	 * <p>
+	 * Returns a new {@code Color4F} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4F} instance
+	 * @return a new {@code Color4F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4F sepia(final Color4F color) {
+		final float component1 = color.component1 * 0.393F + color.component2 * 0.769F + color.component3 * 0.189F;
+		final float component2 = color.component1 * 0.349F + color.component2 * 0.686F + color.component3 * 0.168F;
+		final float component3 = color.component1 * 0.272F + color.component2 * 0.534F + color.component3 * 0.131F;
+		final float component4 = color.component4;
+		
+		return new Color4F(component1, component2, component3, component4);
 	}
 	
 	/**

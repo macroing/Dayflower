@@ -126,6 +126,19 @@ public final class Color4D {
 	}
 	
 	/**
+	 * Constructs a new {@code Color4D} instance from {@code color} and {@code component4}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color3D} instance
+	 * @param component4 the value of component 4
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Color4D(final Color3D color, final double component4) {
+		this(color.getComponent1(), color.getComponent2(), color.getComponent3(), component4);
+	}
+	
+	/**
 	 * Constructs a new {@code Color4D} instance from {@code color}.
 	 * <p>
 	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
@@ -135,6 +148,19 @@ public final class Color4D {
 	 */
 	public Color4D(final Color3F color) {
 		this(toDouble(color.getComponent1()), toDouble(color.getComponent2()), toDouble(color.getComponent3()));
+	}
+	
+	/**
+	 * Constructs a new {@code Color4D} instance from {@code color} and {@code component4}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@link Color3F} instance
+	 * @param component4 the value of component 4
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public Color4D(final Color3F color, final double component4) {
+		this(toDouble(color.getComponent1()), toDouble(color.getComponent2()), toDouble(color.getComponent3()), component4);
 	}
 	
 	/**
@@ -151,6 +177,23 @@ public final class Color4D {
 	 */
 	public Color4D(final double component) {
 		this(component, component, component);
+	}
+	
+	/**
+	 * Constructs a new {@code Color4D} instance denoting a grayscale color.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Color4D(component, component, component, component4);
+	 * }
+	 * </pre>
+	 * 
+	 * @param component the value of component 1, component 2 and component 3
+	 * @param component4 the value of component 4
+	 */
+	public Color4D(final double component, final double component4) {
+		this(component, component, component, component4);
 	}
 	
 	/**
@@ -991,6 +1034,27 @@ public final class Color4D {
 	}
 	
 	/**
+	 * Blends the component values of {@code colorA} over the component values of {@code colorB}.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the blend.
+	 * <p>
+	 * If either {@code colorA} or {@code colorB} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param colorA a {@code Color4D} instance
+	 * @param colorB a {@code Color4D} instance
+	 * @return a new {@code Color4D} instance with the result of the blend
+	 * @throws NullPointerException thrown if, and only if, either {@code colorA} or {@code colorB} are {@code null}
+	 */
+	public static Color4D blendOver(final Color4D colorA, final Color4D colorB) {
+		final double component4 = colorA.component4 + colorB.component4 * (1.0D - colorA.component4);
+		final double component1 = (colorA.component1 * colorA.component4 + colorB.component1 * colorB.component4 * (1.0D - colorA.component4)) / component4;
+		final double component2 = (colorA.component2 * colorA.component4 + colorB.component2 * colorB.component4 * (1.0D - colorA.component4)) / component4;
+		final double component3 = (colorA.component3 * colorA.component4 + colorB.component3 * colorB.component4 * (1.0D - colorA.component4)) / component4;
+		
+		return new Color4D(component1, component2, component3, component4);
+	}
+	
+	/**
 	 * Converts {@code color} from the RGB-color space to the XYZ-color space using the algorithm provided by PBRT.
 	 * <p>
 	 * Returns a new {@code Color4D} instance with the result of the conversion.
@@ -1058,6 +1122,110 @@ public final class Color4D {
 	 */
 	public static Color4D convertXYZAToRGBAUsingSRGB(final Color4D color) {
 		return ColorSpaceD.S_R_G_B.convertXYZAToRGBA(color);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4D} instance based on {@code color.average()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a grayscale {@code Color4D} instance based on {@code color.average()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D grayscaleAverage(final Color4D color) {
+		return new Color4D(color.average(), color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4D} instance based on {@code color.getComponent1()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a grayscale {@code Color4D} instance based on {@code color.getComponent1()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D grayscaleComponent1(final Color4D color) {
+		return new Color4D(color.component1, color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4D} instance based on {@code color.getComponent2()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a grayscale {@code Color4D} instance based on {@code color.getComponent2()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D grayscaleComponent2(final Color4D color) {
+		return new Color4D(color.component2, color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4D} instance based on {@code color.getComponent3()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a grayscale {@code Color4D} instance based on {@code color.getComponent3()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D grayscaleComponent3(final Color4D color) {
+		return new Color4D(color.component3, color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4D} instance based on {@code color.lightness()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a grayscale {@code Color4D} instance based on {@code color.lightness()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D grayscaleLightness(final Color4D color) {
+		return new Color4D(color.lightness(), color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4D} instance based on {@code color.luminance()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a grayscale {@code Color4D} instance based on {@code color.luminance()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D grayscaleLuminance(final Color4D color) {
+		return new Color4D(color.luminance(), color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4D} instance based on {@code color.maximum()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a grayscale {@code Color4D} instance based on {@code color.maximum()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D grayscaleMaximum(final Color4D color) {
+		return new Color4D(color.maximum(), color.component4);
+	}
+	
+	/**
+	 * Returns a grayscale {@code Color4D} instance based on {@code color.minimum()}.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a grayscale {@code Color4D} instance based on {@code color.minimum()}
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D grayscaleMinimum(final Color4D color) {
+		return new Color4D(color.minimum(), color.component4);
 	}
 	
 	/**
@@ -1193,6 +1361,26 @@ public final class Color4D {
 	 */
 	public static Color4D redoGammaCorrectionSRGB(final Color4D color) {
 		return ColorSpaceD.S_R_G_B.redoGammaCorrection(color);
+	}
+	
+	/**
+	 * Converts {@code color} to its sepia-representation.
+	 * <p>
+	 * Returns a new {@code Color4D} instance with the result of the operation.
+	 * <p>
+	 * If {@code color} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param color a {@code Color4D} instance
+	 * @return a new {@code Color4D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
+	 */
+	public static Color4D sepia(final Color4D color) {
+		final double component1 = color.component1 * 0.393D + color.component2 * 0.769D + color.component3 * 0.189D;
+		final double component2 = color.component1 * 0.349D + color.component2 * 0.686D + color.component3 * 0.168D;
+		final double component3 = color.component1 * 0.272D + color.component2 * 0.534D + color.component3 * 0.131D;
+		final double component4 = color.component4;
+		
+		return new Color4D(component1, component2, component3, component4);
 	}
 	
 	/**

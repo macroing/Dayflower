@@ -790,6 +790,48 @@ public abstract class ImageF extends Image {
 	}
 	
 	/**
+	 * Fills a gradient in this {@code ImageF} instance.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * imageF.fillGradient(Color3F.BLACK, Color3F.RED, Color3F.GREEN, Color3F.YELLOW);
+	 * }
+	 * </pre>
+	 */
+	public final void fillGradient() {
+		fillGradient(Color3F.BLACK, Color3F.RED, Color3F.GREEN, Color3F.YELLOW);
+	}
+	
+	/**
+	 * Fills a gradient in this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a the {@link Color3F} instance in the top left corner
+	 * @param b the {@code Color3F} instance in the top right corner
+	 * @param c the {@code Color3F} instance in the bottom left corner
+	 * @param d the {@code Color3F} instance in the bottom right corner
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public final void fillGradient(final Color3F a, final Color3F b, final Color3F c, final Color3F d) {
+		Objects.requireNonNull(a, "a == null");
+		Objects.requireNonNull(b, "b == null");
+		Objects.requireNonNull(c, "c == null");
+		Objects.requireNonNull(d, "d == null");
+		
+		final float resolutionX = getResolutionX();
+		final float resolutionY = getResolutionY();
+		
+		update((color, point) -> {
+			final float tX = 1.0F / resolutionX * point.getX();
+			final float tY = 1.0F / resolutionY * point.getY();
+			
+			return new Color4F(Color3F.blend(Color3F.blend(a, b, tX), Color3F.blend(c, d, tX), tY));
+		});
+	}
+	
+	/**
 	 * Fills {@code sourceImage} in this {@code ImageF} instance.
 	 * <p>
 	 * If {@code sourceImage} is {@code null}, a {@code NullPointerException} will be thrown.

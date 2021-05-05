@@ -321,6 +321,18 @@ public abstract class ImageD extends Image {
 	public abstract ImageD copy();
 	
 	/**
+	 * Returns a copy of this {@code ImageD} instance within {@code bounds}.
+	 * <p>
+	 * If {@code bounds} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bounds a {@link Rectangle2I} instance that represents the bounds within this {@code ImageD} instance to copy
+	 * @return a copy of this {@code ImageD} instance within {@code bounds}
+	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
+	 */
+	@Override
+	public abstract ImageD copy(final Rectangle2I bounds);
+	
+	/**
 	 * Finds the bounds for {@code image} in this {@code ImageD} instance.
 	 * <p>
 	 * Returns a {@code List} with all {@link Rectangle2I} bounds found for {@code image} in this {@code ImageD} instance.

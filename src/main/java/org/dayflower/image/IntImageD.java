@@ -25,12 +25,15 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color4D;
 import org.dayflower.color.PackedIntComponentOrder;
+import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.BufferedImages;
 import org.dayflower.utility.Ints;
 import org.dayflower.utility.ParameterArguments;
@@ -231,6 +234,52 @@ public final class IntImageD extends ImageD {
 	@Override
 	public IntImageD copy() {
 		return new IntImageD(this);
+	}
+	
+	/**
+	 * Returns a copy of this {@code IntImageD} instance within {@code bounds}.
+	 * <p>
+	 * If {@code bounds} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bounds a {@link Rectangle2I} instance that represents the bounds within this {@code IntImageD} instance to copy
+	 * @return a copy of this {@code IntImageD} instance within {@code bounds}
+	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
+	 */
+	@Override
+	public IntImageD copy(final Rectangle2I bounds) {
+		Objects.requireNonNull(bounds, "bounds == null");
+		
+		final IntImageD intImageSource = this;
+		
+		final Rectangle2I boundsSource = intImageSource.getBounds();
+		
+		final Optional<Rectangle2I> optionalBoundsTarget = Rectangle2I.intersection(boundsSource, bounds);
+		
+		if(optionalBoundsTarget.isPresent()) {
+			final Rectangle2I boundsTarget = optionalBoundsTarget.get();
+			
+			final Point2I originTarget = boundsTarget.getA();
+			
+			final int originTargetX = originTarget.getX();
+			final int originTargetY = originTarget.getY();
+			
+			final int sourceResolutionX = boundsSource.getWidth();
+			
+			final int targetResolutionX = boundsTarget.getWidth();
+			final int targetResolutionY = boundsTarget.getHeight();
+			
+			final IntImageD intImageTarget = new IntImageD(targetResolutionX, targetResolutionY);
+			
+			for(int y = 0; y < targetResolutionY; y++) {
+				for(int x = 0; x < targetResolutionX; x++) {
+					intImageTarget.data[y * targetResolutionX + x] = intImageSource.data[(y + originTargetY) * sourceResolutionX + (x + originTargetX)];
+				}
+			}
+			
+			return intImageTarget;
+		}
+		
+		return new IntImageD(0, 0);
 	}
 	
 	/**

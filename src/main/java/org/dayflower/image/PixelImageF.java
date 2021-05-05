@@ -46,6 +46,7 @@ import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
 import org.dayflower.filter.Filter2F;
 import org.dayflower.filter.MitchellFilter2F;
+import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.BufferedImages;
 import org.dayflower.utility.ParameterArguments;
@@ -397,6 +398,61 @@ public final class PixelImageF extends ImageF {
 	@Override
 	public PixelImageF copy() {
 		return new PixelImageF(this);
+	}
+	
+	/**
+	 * Returns a copy of this {@code PixelImageF} instance within {@code bounds}.
+	 * <p>
+	 * If {@code bounds} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bounds a {@link Rectangle2I} instance that represents the bounds within this {@code PixelImageF} instance to copy
+	 * @return a copy of this {@code PixelImageF} instance within {@code bounds}
+	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
+	 */
+	@Override
+	public PixelImageF copy(final Rectangle2I bounds) {
+		Objects.requireNonNull(bounds, "bounds == null");
+		
+		final PixelImageF pixelImageSource = this;
+		
+		final Rectangle2I boundsSource = pixelImageSource.getBounds();
+		
+		final Optional<Rectangle2I> optionalBoundsTarget = Rectangle2I.intersection(boundsSource, bounds);
+		
+		if(optionalBoundsTarget.isPresent()) {
+			final Rectangle2I boundsTarget = optionalBoundsTarget.get();
+			
+			final Point2I originTarget = boundsTarget.getA();
+			
+			final int originTargetX = originTarget.getX();
+			final int originTargetY = originTarget.getY();
+			
+			final int resolutionX = boundsTarget.getWidth();
+			final int resolutionY = boundsTarget.getHeight();
+			
+			final PixelImageF pixelImageTarget = new PixelImageF(resolutionX, resolutionY, Color4F.BLACK, this.filter);
+			
+			for(int y = 0; y < resolutionY; y++) {
+				for(int x = 0; x < resolutionX; x++) {
+					final Optional<PixelF> optionalPixelSource = pixelImageSource.getPixel(x + originTargetX, y + originTargetY);
+					final Optional<PixelF> optionalPixelTarget = pixelImageTarget.getPixel(x,                 y);
+					
+					if(optionalPixelSource.isPresent() && optionalPixelTarget.isPresent()) {
+						final PixelF pixelSource = optionalPixelSource.get();
+						final PixelF pixelTarget = optionalPixelTarget.get();
+						
+						pixelTarget.setColorRGBA(pixelSource.getColorRGBA());
+						pixelTarget.setColorXYZ(pixelSource.getColorXYZ());
+						pixelTarget.setFilterWeightSum(pixelSource.getFilterWeightSum());
+						pixelTarget.setSplatXYZ(pixelSource.getSplatXYZ());
+					}
+				}
+			}
+			
+			return pixelImageTarget;
+		}
+		
+		return new PixelImageF(0, 0);
 	}
 	
 	/**

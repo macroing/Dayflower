@@ -20,10 +20,13 @@ package org.dayflower.image;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color4F;
 import org.dayflower.color.PackedIntComponentOrder;
+import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.utility.Bytes;
 import org.dayflower.utility.ParameterArguments;
 
@@ -142,6 +145,58 @@ public final class ByteImageF extends ImageF {
 	@Override
 	public ByteImageF copy() {
 		return new ByteImageF(this);
+	}
+	
+	/**
+	 * Returns a copy of this {@code ByteImageF} instance within {@code bounds}.
+	 * <p>
+	 * If {@code bounds} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bounds a {@link Rectangle2I} instance that represents the bounds within this {@code ByteImageF} instance to copy
+	 * @return a copy of this {@code ByteImageF} instance within {@code bounds}
+	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
+	 */
+	@Override
+	public ByteImageF copy(final Rectangle2I bounds) {
+		Objects.requireNonNull(bounds, "bounds == null");
+		
+		final ByteImageF byteImageSource = this;
+		
+		final Rectangle2I boundsSource = byteImageSource.getBounds();
+		
+		final Optional<Rectangle2I> optionalBoundsTarget = Rectangle2I.intersection(boundsSource, bounds);
+		
+		if(optionalBoundsTarget.isPresent()) {
+			final Rectangle2I boundsTarget = optionalBoundsTarget.get();
+			
+			final Point2I originTarget = boundsTarget.getA();
+			
+			final int originTargetX = originTarget.getX();
+			final int originTargetY = originTarget.getY();
+			
+			final int sourceResolutionX = boundsSource.getWidth();
+			
+			final int targetResolutionX = boundsTarget.getWidth();
+			final int targetResolutionY = boundsTarget.getHeight();
+			
+			final ByteImageF byteImageTarget = new ByteImageF(targetResolutionX, targetResolutionY);
+			
+			for(int y = 0; y < targetResolutionY; y++) {
+				for(int x = 0; x < targetResolutionX; x++) {
+					final int sourceIndex = ((y + originTargetY) * sourceResolutionX + (x + originTargetX)) * 4;
+					final int targetIndex = (y * targetResolutionX + x) * 4;
+					
+					byteImageTarget.data[targetIndex + 0] = byteImageSource.data[sourceIndex + 0];
+					byteImageTarget.data[targetIndex + 1] = byteImageSource.data[sourceIndex + 1];
+					byteImageTarget.data[targetIndex + 2] = byteImageSource.data[sourceIndex + 2];
+					byteImageTarget.data[targetIndex + 3] = byteImageSource.data[sourceIndex + 3];
+				}
+			}
+			
+			return byteImageTarget;
+		}
+		
+		return new ByteImageF(0, 0);
 	}
 	
 	/**

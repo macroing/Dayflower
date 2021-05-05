@@ -22,6 +22,7 @@ import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.geometry.Point2I;
 import org.dayflower.geometry.Shape2I;
@@ -191,7 +192,7 @@ public final class Rectangle2I implements Shape2I {
 	 * @return the height of this {@code Rectangle2I} instance
 	 */
 	public int getHeight() {
-		return min(this.c.getX() - this.a.getX(), this.c.getY() - this.a.getY());
+		return this.c.getY() - this.a.getY();
 	}
 	
 	/**
@@ -200,7 +201,7 @@ public final class Rectangle2I implements Shape2I {
 	 * @return the width of this {@code Rectangle2I} instance
 	 */
 	public int getWidth() {
-		return max(this.c.getX() - this.a.getX(), this.c.getY() - this.a.getY());
+		return this.c.getX() - this.a.getX();
 	}
 	
 	/**
@@ -211,5 +212,34 @@ public final class Rectangle2I implements Shape2I {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.a, this.b, this.c, this.d);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Computes the intersection between {@code a} and {@code b}.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@code Rectangle2I} instance.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Rectangle2I} instance
+	 * @param b a {@code Rectangle2I} instance
+	 * @return an {@code Optional} with an optional {@code Rectangle2I} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Optional<Rectangle2I> intersection(final Rectangle2I a, final Rectangle2I b) {
+		final Point2I minimumA = a.getA();
+		final Point2I minimumB = b.getA();
+		final Point2I maximumA = a.getC();
+		final Point2I maximumB = b.getC();
+		final Point2I minimumC = Point2I.maximum(minimumA, minimumB);
+		final Point2I maximumC = Point2I.minimum(maximumA, maximumB);
+		
+		if(minimumC.getX() > maximumC.getX() || minimumC.getY() > maximumC.getY()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(new Rectangle2I(minimumC, maximumC));
 	}
 }

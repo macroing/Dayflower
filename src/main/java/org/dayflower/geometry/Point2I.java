@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Ints.max;
+import static org.dayflower.utility.Ints.min;
+
 import java.util.Objects;
 
 import org.dayflower.node.Node;
@@ -170,5 +173,41 @@ public final class Point2I implements Node {
 			this.component1,
 			this.component2
 		};
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code Point2I} instance with the largest component values of {@code a} and {@code b}.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2I} instance
+	 * @param b a {@code Point2I} instance
+	 * @return a new {@code Point2I} instance with the largest component values of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point2I maximum(final Point2I a, final Point2I b) {
+		final int component1 = max(a.component1, b.component1);
+		final int component2 = max(a.component2, b.component2);
+		
+		return new Point2I(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2I} instance with the smallest component values of {@code a} and {@code b}.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2I} instance
+	 * @param b a {@code Point2I} instance
+	 * @return a new {@code Point2I} instance with the smallest component values of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Point2I minimum(final Point2I a, final Point2I b) {
+		final int component1 = min(a.component1, b.component1);
+		final int component2 = min(a.component2, b.component2);
+		
+		return new Point2I(component1, component2);
 	}
 }

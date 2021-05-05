@@ -191,7 +191,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @return the height of this {@code Rectangle2F} instance
 	 */
 	public float getHeight() {
-		return min(this.c.getX() - this.a.getX(), this.c.getY() - this.a.getY());
+		return this.c.getY() - this.a.getY();
 	}
 	
 	/**
@@ -200,7 +200,7 @@ public final class Rectangle2F implements Shape2F {
 	 * @return the width of this {@code Rectangle2F} instance
 	 */
 	public float getWidth() {
-		return max(this.c.getX() - this.a.getX(), this.c.getY() - this.a.getY());
+		return this.c.getX() - this.a.getX();
 	}
 	
 	/**

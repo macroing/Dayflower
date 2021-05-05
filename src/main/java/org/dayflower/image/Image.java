@@ -69,8 +69,11 @@ public abstract class Image {
 	
 	/**
 	 * Returns a {@code BufferedImage} representation of this {@code Image} instance.
+	 * <p>
+	 * If either {@code image.getResolutionX()} or {@code image.getResolutionY()} are less than or equal to {@code 0}, an {@code IllegalArgumentException} will be thrown.
 	 * 
 	 * @return a {@code BufferedImage} representation of this {@code Image} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code image.getResolutionX()} or {@code image.getResolutionY()} are less than or equal to {@code 0}
 	 */
 	public final BufferedImage toBufferedImage() {
 		final BufferedImage bufferedImage = new BufferedImage(this.resolutionX, this.resolutionY, BufferedImage.TYPE_INT_ARGB);
@@ -89,6 +92,17 @@ public abstract class Image {
 	 * @return a copy of this {@code Image} instance
 	 */
 	public abstract Image copy();
+	
+	/**
+	 * Returns a copy of this {@code Image} instance within {@code bounds}.
+	 * <p>
+	 * If {@code bounds} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param bounds a {@link Rectangle2I} instance that represents the bounds within this {@code Image} instance to copy
+	 * @return a copy of this {@code Image} instance within {@code bounds}
+	 * @throws NullPointerException thrown if, and only if, {@code bounds} is {@code null}
+	 */
+	public abstract Image copy(final Rectangle2I bounds);
 	
 	/**
 	 * Returns a {@link Rectangle2I} with the bounds of this {@code Image} instance.

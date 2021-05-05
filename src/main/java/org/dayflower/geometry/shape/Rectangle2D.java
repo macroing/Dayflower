@@ -191,7 +191,7 @@ public final class Rectangle2D implements Shape2D {
 	 * @return the height of this {@code Rectangle2D} instance
 	 */
 	public double getHeight() {
-		return min(this.c.getX() - this.a.getX(), this.c.getY() - this.a.getY());
+		return this.c.getY() - this.a.getY();
 	}
 	
 	/**
@@ -200,7 +200,7 @@ public final class Rectangle2D implements Shape2D {
 	 * @return the width of this {@code Rectangle2D} instance
 	 */
 	public double getWidth() {
-		return max(this.c.getX() - this.a.getX(), this.c.getY() - this.a.getY());
+		return this.c.getX() - this.a.getX();
 	}
 	
 	/**

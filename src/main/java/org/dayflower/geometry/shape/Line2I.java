@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Ints.abs;
+
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2I;
@@ -122,6 +124,39 @@ public final class Line2I implements Shape2I {
 			return nodeHierarchicalVisitor.visitLeave(this);
 		} catch(final RuntimeException e) {
 			throw new NodeTraversalException(e);
+		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Line2I} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2I} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Line2I} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point2I point) {
+		final int aX = this.a.getX();
+		final int aY = this.a.getY();
+		final int bX = this.b.getX();
+		final int bY = this.b.getY();
+		final int pX = point.getX();
+		final int pY = point.getY();
+		
+		final int dAPX = pX - aX;
+		final int dAPY = pY - aY;
+		final int dABX = bX - aX;
+		final int dABY = bY - aY;
+		
+		final int crossProduct = dAPX * dABY - dAPY * dABX;
+		
+		if(crossProduct != 0) {
+			return false;
+		} else if(abs(dABX) >= abs(dABY)) {
+			return dABX > 0 ? aX <= pX && pX <= bX : bX <= pX && pX <= aX;
+		} else {
+			return dABY > 0 ? aY <= pY && pY <= bY : bY <= pY && pY <= aY;
 		}
 	}
 	

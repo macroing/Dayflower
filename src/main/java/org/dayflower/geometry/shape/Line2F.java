@@ -18,6 +18,9 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Floats.abs;
+import static org.dayflower.utility.Floats.isZero;
+
 import java.util.Objects;
 
 import org.dayflower.geometry.Point2F;
@@ -122,6 +125,39 @@ public final class Line2F implements Shape2F {
 			return nodeHierarchicalVisitor.visitLeave(this);
 		} catch(final RuntimeException e) {
 			throw new NodeTraversalException(e);
+		}
+	}
+	
+	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Line2F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Line2F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point2F point) {
+		final float aX = this.a.getX();
+		final float aY = this.a.getY();
+		final float bX = this.b.getX();
+		final float bY = this.b.getY();
+		final float pX = point.getX();
+		final float pY = point.getY();
+		
+		final float dAPX = pX - aX;
+		final float dAPY = pY - aY;
+		final float dABX = bX - aX;
+		final float dABY = bY - aY;
+		
+		final float crossProduct = dAPX * dABY - dAPY * dABX;
+		
+		if(!isZero(crossProduct)) {
+			return false;
+		} else if(abs(dABX) >= abs(dABY)) {
+			return dABX > 0.0F ? aX <= pX && pX <= bX : bX <= pX && pX <= aX;
+		} else {
+			return dABY > 0.0F ? aY <= pY && pY <= bY : bY <= pY && pY <= aY;
 		}
 	}
 	

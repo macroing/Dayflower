@@ -22,6 +22,7 @@ import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.min;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Shape2F;
@@ -211,5 +212,34 @@ public final class Rectangle2F implements Shape2F {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.a, this.b, this.c, this.d);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Computes the intersection between {@code a} and {@code b}.
+	 * <p>
+	 * Returns an {@code Optional} with an optional {@code Rectangle2F} instance.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Rectangle2F} instance
+	 * @param b a {@code Rectangle2F} instance
+	 * @return an {@code Optional} with an optional {@code Rectangle2F} instance
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Optional<Rectangle2F> intersection(final Rectangle2F a, final Rectangle2F b) {
+		final Point2F minimumA = a.getA();
+		final Point2F minimumB = b.getA();
+		final Point2F maximumA = a.getC();
+		final Point2F maximumB = b.getC();
+		final Point2F minimumC = Point2F.maximum(minimumA, minimumB);
+		final Point2F maximumC = Point2F.minimum(maximumA, maximumB);
+		
+		if(minimumC.getX() > maximumC.getX() || minimumC.getY() > maximumC.getY()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(new Rectangle2F(minimumC, maximumC));
 	}
 }

@@ -160,6 +160,19 @@ public final class Rectangle2F implements Shape2F {
 	}
 	
 	/**
+	 * Returns {@code true} if, and only if, {@code point} is contained in this {@code Rectangle2F} instance, {@code false} otherwise.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param point a {@link Point2F} instance
+	 * @return {@code true} if, and only if, {@code point} is contained in this {@code Rectangle2F} instance, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public boolean contains(final Point2F point) {
+		return point.getX() >= this.a.getX() && point.getX() <= this.c.getX() && point.getY() >= this.a.getY() && point.getY() <= this.c.getY();
+	}
+	
+	/**
 	 * Compares {@code object} to this {@code Rectangle2F} instance for equality.
 	 * <p>
 	 * Returns {@code true} if, and only if, {@code object} is an instance of {@code Rectangle2F}, and their respective values are equal, {@code false} otherwise.
@@ -241,5 +254,22 @@ public final class Rectangle2F implements Shape2F {
 		}
 		
 		return Optional.of(new Rectangle2F(minimumC, maximumC));
+	}
+	
+	/**
+	 * Returns a {@code Rectangle2F} instance that is the union of {@code a} and {@code b}.
+	 * <p>
+	 * If either {@code a} or {@code b} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Rectangle2F} instance
+	 * @param b a {@code Rectangle2F} instance
+	 * @return a {@code Rectangle2F} instance that is the union of {@code a} and {@code b}
+	 * @throws NullPointerException thrown if, and only if, either {@code a} or {@code b} are {@code null}
+	 */
+	public static Rectangle2F union(final Rectangle2F a, final Rectangle2F b) {
+		final Point2F minimum = Point2F.minimum(a.getA(), b.getA());
+		final Point2F maximum = Point2F.maximum(a.getC(), b.getC());
+		
+		return new Rectangle2F(minimum, maximum);
 	}
 }

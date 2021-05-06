@@ -23,6 +23,7 @@ import static org.dayflower.utility.Doubles.floor;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
+import static org.dayflower.utility.NoiseD.simplexFractionalBrownianMotionXY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1045,6 +1046,68 @@ public abstract class ImageD extends Image {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Fills this {@code ImageD} instance with {@link Color4D} instances that are generated using a Simplex-based fractional Brownian motion (fBm) algorithm.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillSimplexFractionalBrownianMotion(new Color3D(0.75D, 0.5D, 0.75D));
+	 * }
+	 * </pre>
+	 */
+	public final void fillSimplexFractionalBrownianMotion() {
+		fillSimplexFractionalBrownianMotion(new Color3D(0.75D, 0.5D, 0.75D));
+	}
+	
+	/**
+	 * Fills this {@code ImageD} instance with {@link Color4D} instances that are generated using a Simplex-based fractional Brownian motion (fBm) algorithm.
+	 * <p>
+	 * If {@code baseColor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.fillSimplexFractionalBrownianMotion(baseColor, 5.0D, 0.5D, 16);
+	 * }
+	 * </pre>
+	 * 
+	 * @param baseColor a {@link Color3D} instance that is used as the base color
+	 * @throws NullPointerException thrown if, and only if, {@code baseColor} is {@code null}
+	 */
+	public final void fillSimplexFractionalBrownianMotion(final Color3D baseColor) {
+		fillSimplexFractionalBrownianMotion(baseColor, 5.0D, 0.5D, 16);
+	}
+	
+	/**
+	 * Fills this {@code ImageD} instance with {@link Color4D} instances that are generated using a Simplex-based fractional Brownian motion (fBm) algorithm.
+	 * <p>
+	 * If {@code baseColor} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param baseColor a {@link Color3D} instance that is used as the base color
+	 * @param frequency the frequency to start at
+	 * @param gain the amplitude multiplier
+	 * @param octaves the number of iterations to perform
+	 * @throws NullPointerException thrown if, and only if, {@code baseColor} is {@code null}
+	 */
+	public final void fillSimplexFractionalBrownianMotion(final Color3D baseColor, final double frequency, final double gain, final int octaves) {
+		Objects.requireNonNull(baseColor, "baseColor == null");
+		
+		final double minimumX = 0.0D;
+		final double minimumY = 0.0D;
+		final double maximumX = getResolutionX();
+		final double maximumY = getResolutionY();
+		
+		update((color, point) -> {
+			final double x = (point.getX() - minimumX) / (maximumX - minimumX);
+			final double y = (point.getY() - minimumY) / (maximumY - minimumY);
+			
+			final double noise = simplexFractionalBrownianMotionXY(x, y, frequency, gain, 0.0D, 1.0D, octaves);
+			
+			return new Color4D(Color3D.multiply(baseColor, noise));
+		});
 	}
 	
 	/**

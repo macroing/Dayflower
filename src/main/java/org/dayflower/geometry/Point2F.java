@@ -205,6 +205,25 @@ public final class Point2F implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * Adds the component values of {@code vectorRHS} to the component values of {@code pointLHS}.
+	 * <p>
+	 * Returns a new {@code Point2F} instance with the result of the addition.
+	 * <p>
+	 * If either {@code pointLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param pointLHS the {@code Point2F} instance on the left-hand side
+	 * @param vectorRHS the {@link Vector2F} instance on the right-hand side
+	 * @return a new {@code Point2F} instance with the result of the addition
+	 * @throws NullPointerException thrown if, and only if, either {@code pointLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static Point2F add(final Point2F pointLHS, final Vector2F vectorRHS) {
+		final float component1 = pointLHS.component1 + vectorRHS.getComponent1();
+		final float component2 = pointLHS.component2 + vectorRHS.getComponent2();
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
 	 * Computes texture coordinates from three other texture coordinates via Barycentric interpolation.
 	 * <p>
 	 * Returns a new {@code Point2F} instance with the interpolated texture coordinates.
@@ -319,6 +338,25 @@ public final class Point2F implements Node {
 	}
 	
 	/**
+	 * Returns a new {@code Point2F} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2F} instance
+	 * @param b a {@code Point2F} instance
+	 * @param c a {@code Point2F} instance
+	 * @param d a {@code Point2F} instance
+	 * @return a new {@code Point2F} instance with the largest component values of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public static Point2F maximum(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
+		final float component1 = max(a.component1, b.component1, c.component1, d.component1);
+		final float component2 = max(a.component2, b.component2, c.component2, d.component2);
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
 	 * Returns a new {@code Point2F} instance with the smallest component values.
 	 * 
 	 * @return a new {@code Point2F} instance with the smallest component values
@@ -361,6 +399,25 @@ public final class Point2F implements Node {
 	public static Point2F minimum(final Point2F a, final Point2F b, final Point2F c) {
 		final float component1 = min(a.component1, b.component1, c.component1);
 		final float component2 = min(a.component2, b.component2, c.component2);
+		
+		return new Point2F(component1, component2);
+	}
+	
+	/**
+	 * Returns a new {@code Point2F} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}.
+	 * <p>
+	 * If either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param a a {@code Point2F} instance
+	 * @param b a {@code Point2F} instance
+	 * @param c a {@code Point2F} instance
+	 * @param d a {@code Point2F} instance
+	 * @return a new {@code Point2F} instance with the smallest component values of {@code a}, {@code b}, {@code c} and {@code d}
+	 * @throws NullPointerException thrown if, and only if, either {@code a}, {@code b}, {@code c} or {@code d} are {@code null}
+	 */
+	public static Point2F minimum(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
+		final float component1 = min(a.component1, b.component1, c.component1, d.component1);
+		final float component2 = min(a.component2, b.component2, c.component2, d.component2);
 		
 		return new Point2F(component1, component2);
 	}

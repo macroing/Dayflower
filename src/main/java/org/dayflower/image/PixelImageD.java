@@ -1038,4 +1038,21 @@ public final class PixelImageD extends ImageD {
 	public static PixelImageD random(final int resolutionX, final int resolutionY) {
 		return new PixelImageD(resolutionX, resolutionY, Color4D.arrayRandom(resolutionX * resolutionY));
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code PixelImageD} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new {@code PixelImageD} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	@Override
+	protected PixelImageD newImage(final int resolutionX, final int resolutionY) {
+		return new PixelImageD(resolutionX, resolutionY, Color4D.BLACK, this.filter);
+	}
 }

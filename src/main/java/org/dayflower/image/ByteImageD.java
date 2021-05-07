@@ -482,4 +482,21 @@ public final class ByteImageD extends ImageD {
 			this.data[indexB + 3] = aA;
 		}
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code ByteImageD} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new {@code ByteImageD} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	@Override
+	protected ByteImageD newImage(final int resolutionX, final int resolutionY) {
+		return new ByteImageD(resolutionX, resolutionY);
+	}
 }

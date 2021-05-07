@@ -24,8 +24,10 @@ import static org.dayflower.utility.Doubles.min;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.AngleD;
 import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Shape2D;
+import org.dayflower.geometry.Vector2D;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
@@ -59,6 +61,15 @@ public final class Rectangle2D implements Shape2D {
 		this.b = new Point2D(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.c = new Point2D(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.d = new Point2D(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Rectangle2D(final Point2D a, final Point2D b, final Point2D c, final Point2D d) {
+		this.a = Objects.requireNonNull(a, "a == null");
+		this.b = Objects.requireNonNull(b, "b == null");
+		this.c = Objects.requireNonNull(c, "c == null");
+		this.d = Objects.requireNonNull(d, "d == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,6 +265,48 @@ public final class Rectangle2D implements Shape2D {
 		}
 		
 		return Optional.of(new Rectangle2D(minimumC, maximumC));
+	}
+	
+	/**
+	 * Rotates {@code rectangle} using {@code angle}.
+	 * <p>
+	 * Returns a new {@code Rectangle2D} instance with the result of the operation.
+	 * <p>
+	 * If either {@code rectangle} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle the {@code Rectangle2D} instance to rotate
+	 * @param angle the {@link AngleD} instance to rotate with
+	 * @return a new {@code Rectangle2D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code angle} are {@code null}
+	 */
+	public static Rectangle2D rotate(final Rectangle2D rectangle, final AngleD angle) {
+		final Point2D a = Point2D.rotate(rectangle.a, angle);
+		final Point2D b = Point2D.rotate(rectangle.b, angle);
+		final Point2D c = Point2D.rotate(rectangle.c, angle);
+		final Point2D d = Point2D.rotate(rectangle.d, angle);
+		
+		return new Rectangle2D(a, b, c, d);
+	}
+	
+	/**
+	 * Translates {@code rectangle} in the direction of {@code direction}.
+	 * <p>
+	 * Returns a new {@code Rectangle2D} instance with the result of the operation.
+	 * <p>
+	 * If either {@code rectangle} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle the {@code Rectangle2D} instance to translate
+	 * @param direction the {@link Vector2D} instance to translate with
+	 * @return a new {@code Rectangle2D} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code direction} are {@code null}
+	 */
+	public static Rectangle2D translate(final Rectangle2D rectangle, final Vector2D direction) {
+		final Point2D a = Point2D.add(rectangle.a, direction);
+		final Point2D b = Point2D.add(rectangle.b, direction);
+		final Point2D c = Point2D.add(rectangle.c, direction);
+		final Point2D d = Point2D.add(rectangle.d, direction);
+		
+		return new Rectangle2D(a, b, c, d);
 	}
 	
 	/**

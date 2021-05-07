@@ -18,8 +18,11 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.ceil;
 import static org.dayflower.utility.Doubles.floor;
+import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Doubles.toDouble;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
@@ -32,13 +35,16 @@ import java.util.function.BiFunction;
 
 import org.dayflower.color.Color3D;
 import org.dayflower.color.Color4D;
+import org.dayflower.geometry.AngleD;
+import org.dayflower.geometry.Point2D;
 import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.Vector2D;
 import org.dayflower.geometry.rasterizer.Rasterizer2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Line2I;
+import org.dayflower.geometry.shape.Rectangle2D;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
-
 import org.macroing.java.util.function.TriFunction;
 
 /**
@@ -332,6 +338,115 @@ public abstract class ImageD extends Image {
 	 */
 	@Override
 	public abstract ImageD copy(final Rectangle2I bounds);
+	
+	/**
+	 * Rotates this {@code ImageD} instance with an angle of {@code angle}.
+	 * <p>
+	 * Returns a new rotated version of this {@code ImageD} instance.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@link AngleD} instance
+	 * @return a new rotated version of this {@code ImageD} instance
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 */
+	public final ImageD rotate(final AngleD angle) {
+		Objects.requireNonNull(angle, "angle == null");
+		
+//		Retrieve the resolution for the old ImageD instance:
+		final double oldResolutionX = getResolutionX();
+		final double oldResolutionY = getResolutionY();
+		
+//		Compute the first translation directions from the old to the new ImageD instance and from the new to the old ImageD instance:
+		final Vector2D directionAToNewImage = new Vector2D(-oldResolutionX * 0.5D, -oldResolutionY * 0.5D);
+		final Vector2D directionAToOldImage = Vector2D.negate(directionAToNewImage);
+		
+//		Retrieve the AngleD instances to rotate from the old to the new ImageD instance and from the new to the old ImageD instance:
+		final AngleD angleToNewImage = angle;
+		final AngleD angleToOldImage = AngleD.negate(angleToNewImage);
+		
+//		Compute the original, translated and rotated Rectangle2D instances for the new ImageD instance:
+		final Rectangle2D rectangleA = new Rectangle2D(new Point2D(), new Point2D(oldResolutionX, oldResolutionY));
+		final Rectangle2D rectangleB = Rectangle2D.translate(rectangleA, directionAToNewImage);
+		final Rectangle2D rectangleC = Rectangle2D.rotate(rectangleB, angleToNewImage);
+		
+//		Compute the minimum and maximum Point2D instances from the translated and rotated Rectangle2D instance:
+		final Point2D minimum = Point2D.minimum(rectangleC.getA(), rectangleC.getB(), rectangleC.getC(), rectangleC.getD());
+		final Point2D maximum = Point2D.maximum(rectangleC.getA(), rectangleC.getB(), rectangleC.getC(), rectangleC.getD());
+		
+//		Compute the second translation direction for the new and old ImageD instances:
+		final Vector2D directionBToNewImage = new Vector2D(abs(min(minimum.getX(), 0.0D)), abs(min(minimum.getY(), 0.0D)));
+		final Vector2D directionBToOldImage = Vector2D.negate(directionBToNewImage);
+		
+//		Compute the resolution for the new ImageD instance:
+		final int newResolutionX = toInt(ceil(maximum.getX() - minimum.getX()));
+		final int newResolutionY = toInt(ceil(maximum.getY() - minimum.getY()));
+		
+//		Initialize the old and new ImageD instances:
+		final ImageD oldImage = this;
+		final ImageD newImage = oldImage.newImage(newResolutionX, newResolutionY);
+		
+		for(int y = 0; y < newResolutionY; y++) {
+			for(int x = 0; x < newResolutionX; x++) {
+//				Compute the current Point2D instance for the new ImageD instance and reverse the operations to get the equivalent Point2D instance for the old ImageD instance:
+				final Point2D a = new Point2D(x, y);
+				final Point2D b = Point2D.add(a, directionBToOldImage);
+				final Point2D c = Point2D.rotate(b, angleToOldImage);
+				final Point2D d = Point2D.add(c, directionAToOldImage);
+				
+//				Set the Color4D instance in the new ImageD instance:
+				newImage.setColorRGBA(oldImage.getColorRGBA(d.getX(), d.getY()), x, y);
+			}
+		}
+		
+		return newImage;
+	}
+	
+	/**
+	 * Scales this {@code ImageD} instance with a scale of {@code scale}.
+	 * <p>
+	 * Returns a new scaled version of this {@code ImageD} instance.
+	 * <p>
+	 * If {@code scale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If the scaled resolution is invalid, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param scale a {@link Vector2D} instance
+	 * @return a new scaled version of this {@code ImageD} instance
+	 * @throws IllegalArgumentException thrown if, and only if, the scaled resolution is invalid
+	 * @throws NullPointerException thrown if, and only if, {@code scale} is {@code null}
+	 */
+	public final ImageD scale(final Vector2D scale) {
+		return scale(toInt(ceil(getResolutionX() * scale.getX())), toInt(ceil(getResolutionY() * scale.getY())));
+	}
+	
+	/**
+	 * Scales this {@code ImageD} instance to the resolution given by {@code resolutionX} and {@code resolutionY}.
+	 * <p>
+	 * Returns a new scaled version of this {@code ImageD} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new scaled version of this {@code ImageD} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	public final ImageD scale(final int resolutionX, final int resolutionY) {
+		final ImageD oldImage = this;
+		final ImageD newImage = oldImage.newImage(resolutionX, resolutionY);
+		
+		final double scaleX = resolutionX == 0 ? 0.0D : toDouble(getResolutionX()) / toDouble(resolutionX);
+		final double scaleY = resolutionY == 0 ? 0.0D : toDouble(getResolutionY()) / toDouble(resolutionY);
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				newImage.setColorRGBA(oldImage.getColorRGBA(x * scaleX, y * scaleY), x, y);
+			}
+		}
+		
+		return newImage;
+	}
 	
 	/**
 	 * Finds the bounds for {@code image} in this {@code ImageD} instance.
@@ -1604,4 +1719,18 @@ public abstract class ImageD extends Image {
 			}
 		}
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code ImageD} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new {@code ImageD} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	protected abstract ImageD newImage(final int resolutionX, final int resolutionY);
 }

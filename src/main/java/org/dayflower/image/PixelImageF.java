@@ -1038,4 +1038,21 @@ public final class PixelImageF extends ImageF {
 	public static PixelImageF random(final int resolutionX, final int resolutionY) {
 		return new PixelImageF(resolutionX, resolutionY, Color4F.arrayRandom(resolutionX * resolutionY));
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code PixelImageF} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new {@code PixelImageF} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	@Override
+	protected PixelImageF newImage(final int resolutionX, final int resolutionY) {
+		return new PixelImageF(resolutionX, resolutionY, Color4F.BLACK, this.filter);
+	}
 }

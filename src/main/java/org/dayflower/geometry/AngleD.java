@@ -295,6 +295,23 @@ public final class AngleD {
 	}
 	
 	/**
+	 * Returns an {@code AngleD} instance that is a negated version of {@code angle}.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@code AngleD} instance
+	 * @return an {@code AngleD} instance that is a negated version of {@code angle}
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 */
+	public static AngleD negate(final AngleD angle) {
+		final double degreesMinimum = -angle.degreesMinimum;
+		final double degreesMaximum = -angle.degreesMaximum;
+		final double degrees = wrapAround(-angle.degrees, degreesMinimum, degreesMaximum);
+		
+		return degrees(degrees, degreesMinimum, degreesMaximum);
+	}
+	
+	/**
 	 * Returns a new pitch {@code AngleD} instance based on {@code eye} and {@code lookAt}.
 	 * <p>
 	 * If either {@code eye} or {@code lookAt} are {@code null}, a {@code NullPointerException} will be thrown.

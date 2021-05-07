@@ -509,4 +509,21 @@ public final class IntImageD extends ImageD {
 	public static IntImageD load(final String pathname) {
 		return load(new File(pathname));
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code IntImageD} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new {@code IntImageD} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	@Override
+	protected IntImageD newImage(final int resolutionX, final int resolutionY) {
+		return new IntImageD(resolutionX, resolutionY);
+	}
 }

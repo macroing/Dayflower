@@ -18,6 +18,10 @@
  */
 package org.dayflower.utility;
 
+import static org.dayflower.utility.Doubles.max;
+import static org.dayflower.utility.Doubles.min;
+import static org.dayflower.utility.Floats.max;
+import static org.dayflower.utility.Floats.min;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 
@@ -132,6 +136,33 @@ public final class ParameterArguments {
 	}
 	
 	/**
+	 * Checks that {@code value} is in the range {@code [Doubles.min(edgeA, edgeB), Doubles.max(edgeA, edgeB)]}.
+	 * <p>
+	 * Returns {@code value}.
+	 * <p>
+	 * If {@code value} is less than {@code Doubles.min(edgeA, edgeB)} or greater than {@code Doubles.max(edgeA, edgeB)}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param value the value to check
+	 * @param edgeA the minimum or maximum value allowed
+	 * @param edgeB the maximum or minimum value allowed
+	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
+	 * @return {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is less than {@code Doubles.min(edgeA, edgeB)} or greater than {@code Doubles.max(edgeA, edgeB)}
+	 */
+	public static double requireRange(final double value, final double edgeA, final double edgeB, final String name) {
+		final double minimum = min(edgeA, edgeB);
+		final double maximum = max(edgeA, edgeB);
+		
+		if(value < minimum) {
+			throw new IllegalArgumentException(String.format("%s < %f: %s == %f", name, Double.valueOf(minimum), name, Double.valueOf(value)));
+		} else if(value > maximum) {
+			throw new IllegalArgumentException(String.format("%s > %f: %s == %f", name, Double.valueOf(maximum), name, Double.valueOf(value)));
+		} else {
+			return value;
+		}
+	}
+	
+	/**
 	 * Checks that {@code value} is finite.
 	 * <p>
 	 * Returns {@code value}.
@@ -148,6 +179,33 @@ public final class ParameterArguments {
 			throw new IllegalArgumentException(String.format("Float.isInfinite(%s) == true", name));
 		} else if(Float.isNaN(value)) {
 			throw new IllegalArgumentException(String.format("Float.isNaN(%s) == true", name));
+		} else {
+			return value;
+		}
+	}
+	
+	/**
+	 * Checks that {@code value} is in the range {@code [Floats.min(edgeA, edgeB), Floats.max(edgeA, edgeB)]}.
+	 * <p>
+	 * Returns {@code value}.
+	 * <p>
+	 * If {@code value} is less than {@code Floats.min(edgeA, edgeB)} or greater than {@code Floats.max(edgeA, edgeB)}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param value the value to check
+	 * @param edgeA the minimum or maximum value allowed
+	 * @param edgeB the maximum or minimum value allowed
+	 * @param name the name of the variable that will be part of the message of the {@code IllegalArgumentException}
+	 * @return {@code value}
+	 * @throws IllegalArgumentException thrown if, and only if, {@code value} is less than {@code Floats.min(edgeA, edgeB)} or greater than {@code Floats.max(edgeA, edgeB)}
+	 */
+	public static float requireRange(final float value, final float edgeA, final float edgeB, final String name) {
+		final float minimum = min(edgeA, edgeB);
+		final float maximum = max(edgeA, edgeB);
+		
+		if(value < minimum) {
+			throw new IllegalArgumentException(String.format("%s < %f: %s == %f", name, Float.valueOf(minimum), name, Float.valueOf(value)));
+		} else if(value > maximum) {
+			throw new IllegalArgumentException(String.format("%s > %f: %s == %f", name, Float.valueOf(maximum), name, Float.valueOf(value)));
 		} else {
 			return value;
 		}

@@ -18,8 +18,11 @@
  */
 package org.dayflower.image;
 
+import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.ceil;
 import static org.dayflower.utility.Floats.floor;
+import static org.dayflower.utility.Floats.min;
+import static org.dayflower.utility.Floats.toFloat;
 import static org.dayflower.utility.Ints.max;
 import static org.dayflower.utility.Ints.min;
 import static org.dayflower.utility.Ints.toInt;
@@ -32,13 +35,16 @@ import java.util.function.BiFunction;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
+import org.dayflower.geometry.AngleF;
+import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Point2I;
+import org.dayflower.geometry.Vector2F;
 import org.dayflower.geometry.rasterizer.Rasterizer2I;
 import org.dayflower.geometry.shape.Circle2I;
 import org.dayflower.geometry.shape.Line2I;
+import org.dayflower.geometry.shape.Rectangle2F;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
-
 import org.macroing.java.util.function.TriFunction;
 
 /**
@@ -332,6 +338,115 @@ public abstract class ImageF extends Image {
 	 */
 	@Override
 	public abstract ImageF copy(final Rectangle2I bounds);
+	
+	/**
+	 * Rotates this {@code ImageF} instance with an angle of {@code angle}.
+	 * <p>
+	 * Returns a new rotated version of this {@code ImageF} instance.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @return a new rotated version of this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 */
+	public final ImageF rotate(final AngleF angle) {
+		Objects.requireNonNull(angle, "angle == null");
+		
+//		Retrieve the resolution for the old ImageF instance:
+		final float oldResolutionX = getResolutionX();
+		final float oldResolutionY = getResolutionY();
+		
+//		Compute the first translation directions from the old to the new ImageF instance and from the new to the old ImageF instance:
+		final Vector2F directionAToNewImage = new Vector2F(-oldResolutionX * 0.5F, -oldResolutionY * 0.5F);
+		final Vector2F directionAToOldImage = Vector2F.negate(directionAToNewImage);
+		
+//		Retrieve the AngleF instances to rotate from the old to the new ImageF instance and from the new to the old ImageF instance:
+		final AngleF angleToNewImage = angle;
+		final AngleF angleToOldImage = AngleF.negate(angleToNewImage);
+		
+//		Compute the original, translated and rotated Rectangle2F instances for the new ImageF instance:
+		final Rectangle2F rectangleA = new Rectangle2F(new Point2F(), new Point2F(oldResolutionX, oldResolutionY));
+		final Rectangle2F rectangleB = Rectangle2F.translate(rectangleA, directionAToNewImage);
+		final Rectangle2F rectangleC = Rectangle2F.rotate(rectangleB, angleToNewImage);
+		
+//		Compute the minimum and maximum Point2F instances from the translated and rotated Rectangle2F instance:
+		final Point2F minimum = Point2F.minimum(rectangleC.getA(), rectangleC.getB(), rectangleC.getC(), rectangleC.getD());
+		final Point2F maximum = Point2F.maximum(rectangleC.getA(), rectangleC.getB(), rectangleC.getC(), rectangleC.getD());
+		
+//		Compute the second translation direction for the new and old ImageF instances:
+		final Vector2F directionBToNewImage = new Vector2F(abs(min(minimum.getX(), 0.0F)), abs(min(minimum.getY(), 0.0F)));
+		final Vector2F directionBToOldImage = Vector2F.negate(directionBToNewImage);
+		
+//		Compute the resolution for the new ImageF instance:
+		final int newResolutionX = toInt(ceil(maximum.getX() - minimum.getX()));
+		final int newResolutionY = toInt(ceil(maximum.getY() - minimum.getY()));
+		
+//		Initialize the old and new ImageF instances:
+		final ImageF oldImage = this;
+		final ImageF newImage = oldImage.newImage(newResolutionX, newResolutionY);
+		
+		for(int y = 0; y < newResolutionY; y++) {
+			for(int x = 0; x < newResolutionX; x++) {
+//				Compute the current Point2F instance for the new ImageF instance and reverse the operations to get the equivalent Point2F instance for the old ImageF instance:
+				final Point2F a = new Point2F(x, y);
+				final Point2F b = Point2F.add(a, directionBToOldImage);
+				final Point2F c = Point2F.rotate(b, angleToOldImage);
+				final Point2F d = Point2F.add(c, directionAToOldImage);
+				
+//				Set the Color4F instance in the new ImageF instance:
+				newImage.setColorRGBA(oldImage.getColorRGBA(d.getX(), d.getY()), x, y);
+			}
+		}
+		
+		return newImage;
+	}
+	
+	/**
+	 * Scales this {@code ImageF} instance with a scale of {@code scale}.
+	 * <p>
+	 * Returns a new scaled version of this {@code ImageF} instance.
+	 * <p>
+	 * If {@code scale} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * If the scaled resolution is invalid, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param scale a {@link Vector2F} instance
+	 * @return a new scaled version of this {@code ImageF} instance
+	 * @throws IllegalArgumentException thrown if, and only if, the scaled resolution is invalid
+	 * @throws NullPointerException thrown if, and only if, {@code scale} is {@code null}
+	 */
+	public final ImageF scale(final Vector2F scale) {
+		return scale(toInt(ceil(getResolutionX() * scale.getX())), toInt(ceil(getResolutionY() * scale.getY())));
+	}
+	
+	/**
+	 * Scales this {@code ImageF} instance to the resolution given by {@code resolutionX} and {@code resolutionY}.
+	 * <p>
+	 * Returns a new scaled version of this {@code ImageF} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new scaled version of this {@code ImageF} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	public final ImageF scale(final int resolutionX, final int resolutionY) {
+		final ImageF oldImage = this;
+		final ImageF newImage = oldImage.newImage(resolutionX, resolutionY);
+		
+		final float scaleX = resolutionX == 0 ? 0.0F : toFloat(getResolutionX()) / toFloat(resolutionX);
+		final float scaleY = resolutionY == 0 ? 0.0F : toFloat(getResolutionY()) / toFloat(resolutionY);
+		
+		for(int y = 0; y < resolutionY; y++) {
+			for(int x = 0; x < resolutionX; x++) {
+				newImage.setColorRGBA(oldImage.getColorRGBA(x * scaleX, y * scaleY), x, y);
+			}
+		}
+		
+		return newImage;
+	}
 	
 	/**
 	 * Finds the bounds for {@code image} in this {@code ImageF} instance.
@@ -1604,4 +1719,18 @@ public abstract class ImageF extends Image {
 			}
 		}
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Returns a new {@code ImageF} instance.
+	 * <p>
+	 * If either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}, an {@code IllegalArgumentException} will be thrown.
+	 * 
+	 * @param resolutionX the resolution of the X-axis
+	 * @param resolutionY the resolution of the Y-axis
+	 * @return a new {@code ImageF} instance
+	 * @throws IllegalArgumentException thrown if, and only if, either {@code resolutionX}, {@code resolutionY} or {@code resolutionX * resolutionY} are less than {@code 0}
+	 */
+	protected abstract ImageF newImage(final int resolutionX, final int resolutionY);
 }

@@ -24,8 +24,10 @@ import static org.dayflower.utility.Floats.min;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.dayflower.geometry.AngleF;
 import org.dayflower.geometry.Point2F;
 import org.dayflower.geometry.Shape2F;
+import org.dayflower.geometry.Vector2F;
 import org.dayflower.node.NodeHierarchicalVisitor;
 import org.dayflower.node.NodeTraversalException;
 
@@ -59,6 +61,15 @@ public final class Rectangle2F implements Shape2F {
 		this.b = new Point2F(min(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.c = new Point2F(max(x.getX(), y.getX()), max(x.getY(), y.getY()));
 		this.d = new Point2F(max(x.getX(), y.getX()), min(x.getY(), y.getY()));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private Rectangle2F(final Point2F a, final Point2F b, final Point2F c, final Point2F d) {
+		this.a = Objects.requireNonNull(a, "a == null");
+		this.b = Objects.requireNonNull(b, "b == null");
+		this.c = Objects.requireNonNull(c, "c == null");
+		this.d = Objects.requireNonNull(d, "d == null");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,6 +265,48 @@ public final class Rectangle2F implements Shape2F {
 		}
 		
 		return Optional.of(new Rectangle2F(minimumC, maximumC));
+	}
+	
+	/**
+	 * Rotates {@code rectangle} using {@code angle}.
+	 * <p>
+	 * Returns a new {@code Rectangle2F} instance with the result of the operation.
+	 * <p>
+	 * If either {@code rectangle} or {@code angle} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle the {@code Rectangle2F} instance to rotate
+	 * @param angle the {@link AngleF} instance to rotate with
+	 * @return a new {@code Rectangle2F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code angle} are {@code null}
+	 */
+	public static Rectangle2F rotate(final Rectangle2F rectangle, final AngleF angle) {
+		final Point2F a = Point2F.rotate(rectangle.a, angle);
+		final Point2F b = Point2F.rotate(rectangle.b, angle);
+		final Point2F c = Point2F.rotate(rectangle.c, angle);
+		final Point2F d = Point2F.rotate(rectangle.d, angle);
+		
+		return new Rectangle2F(a, b, c, d);
+	}
+	
+	/**
+	 * Translates {@code rectangle} in the direction of {@code direction}.
+	 * <p>
+	 * Returns a new {@code Rectangle2F} instance with the result of the operation.
+	 * <p>
+	 * If either {@code rectangle} or {@code direction} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param rectangle the {@code Rectangle2F} instance to translate
+	 * @param direction the {@link Vector2F} instance to translate with
+	 * @return a new {@code Rectangle2F} instance with the result of the operation
+	 * @throws NullPointerException thrown if, and only if, either {@code rectangle} or {@code direction} are {@code null}
+	 */
+	public static Rectangle2F translate(final Rectangle2F rectangle, final Vector2F direction) {
+		final Point2F a = Point2F.add(rectangle.a, direction);
+		final Point2F b = Point2F.add(rectangle.b, direction);
+		final Point2F c = Point2F.add(rectangle.c, direction);
+		final Point2F d = Point2F.add(rectangle.d, direction);
+		
+		return new Rectangle2F(a, b, c, d);
 	}
 	
 	/**

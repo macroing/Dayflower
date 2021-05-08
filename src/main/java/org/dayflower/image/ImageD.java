@@ -45,6 +45,7 @@ import org.dayflower.geometry.shape.Line2I;
 import org.dayflower.geometry.shape.Rectangle2D;
 import org.dayflower.geometry.shape.Rectangle2I;
 import org.dayflower.geometry.shape.Triangle2I;
+
 import org.macroing.java.util.function.TriFunction;
 
 /**
@@ -194,6 +195,53 @@ public abstract class ImageD extends Image {
 	 */
 	public final Color3D getColorRGB(final int x, final int y, final PixelOperation pixelOperation) {
 		return new Color3D(getColorRGBA(x, y, pixelOperation));
+	}
+	
+	/**
+	 * Returns the {@link Color4D} of the pixel represented by {@code point}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color4D} instances.
+	 * <p>
+	 * If {@code point} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGBA(point, PixelOperation.NO_CHANGE);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2D} instance with the coordinates of the pixel
+	 * @return the {@code Color4D} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, {@code point} is {@code null}
+	 */
+	public final Color4D getColorRGBA(final Point2D point) {
+		return getColorRGBA(point, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color4D} of the pixel represented by {@code point}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color4D} instances.
+	 * <p>
+	 * If either {@code point} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGBA(point.getX(), point.getY(), pixelOperation);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2D} instance with the coordinates of the pixel
+	 * @param pixelOperation the {@code PixelOperation} to use
+	 * @return the {@code Color4D} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code pixelOperation} are {@code null}
+	 */
+	public final Color4D getColorRGBA(final Point2D point, final PixelOperation pixelOperation) {
+		return getColorRGBA(point.getX(), point.getY(), pixelOperation);
 	}
 	
 	/**
@@ -395,7 +443,7 @@ public abstract class ImageD extends Image {
 				final Point2D d = Point2D.add(c, directionAToOldImage);
 				
 //				Set the Color4D instance in the new ImageD instance:
-				newImage.setColorRGBA(oldImage.getColorRGBA(d.getX(), d.getY()), x, y);
+				newImage.setColorRGBA(oldImage.getColorRGBA(d), x, y);
 			}
 		}
 		

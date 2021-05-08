@@ -349,6 +349,44 @@ public final class Vector2D implements Node {
 	}
 	
 	/**
+	 * Transforms the {@code Vector2D} {@code vectorRHS} with the {@link Matrix33D} {@code matrixLHS}.
+	 * <p>
+	 * Returns a new {@code Vector2D} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code matrixLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param matrixLHS a {@code Matrix33D} instance
+	 * @param vectorRHS a {@code Vector2D} instance
+	 * @return a new {@code Vector2D} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static Vector2D transform(final Matrix33D matrixLHS, final Vector2D vectorRHS) {
+		final double component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement12() * vectorRHS.component2;
+		final double component2 = matrixLHS.getElement21() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2;
+		
+		return new Vector2D(component1, component2);
+	}
+	
+	/**
+	 * Transforms the {@code Vector2D} {@code vectorRHS} with the {@link Matrix33D} {@code matrixLHS} in transpose order.
+	 * <p>
+	 * Returns a new {@code Vector2D} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code matrixLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param matrixLHS a {@code Matrix33D} instance
+	 * @param vectorRHS a {@code Vector2D} instance
+	 * @return a new {@code Vector2D} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code vectorRHS} are {@code null}
+	 */
+	public static Vector2D transformTranspose(final Matrix33D matrixLHS, final Vector2D vectorRHS) {
+		final double component1 = matrixLHS.getElement11() * vectorRHS.component1 + matrixLHS.getElement21() * vectorRHS.component2;
+		final double component2 = matrixLHS.getElement12() * vectorRHS.component1 + matrixLHS.getElement22() * vectorRHS.component2;
+		
+		return new Vector2D(component1, component2);
+	}
+	
+	/**
 	 * Returns the dot product of {@code vectorLHS} and {@code vectorRHS}.
 	 * <p>
 	 * If either {@code vectorLHS} or {@code vectorRHS} are {@code null}, a {@code NullPointerException} will be thrown.

@@ -81,6 +81,11 @@ public final class Color4F {
 	public static final Color4F RED = new Color4F(1.0F, 0.0F, 0.0F);
 	
 	/**
+	 * A {@code Color4F} denoting a transparent color.
+	 */
+	public static final Color4F TRANSPARENT = new Color4F(0.0F, 0.0F, 0.0F, 0.0F);
+	
+	/**
 	 * A {@code Color4F} denoting the color white.
 	 */
 	public static final Color4F WHITE = new Color4F(1.0F, 1.0F, 1.0F);

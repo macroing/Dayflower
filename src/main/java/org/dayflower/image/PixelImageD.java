@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
@@ -273,6 +274,24 @@ public final class PixelImageD extends ImageD {
 	@Override
 	public Color4D getColorRGBA(final int index, final PixelOperation pixelOperation) {
 		return getPixel(index, pixelOperation).map(pixel -> pixel.getColorRGBA()).orElse(Color4D.BLACK);
+	}
+	
+	/**
+	 * Returns the {@link Color4D} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * If {@code function} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param function a {@code Function} that returns a {@code Color4D} instance if {@code x} or {@code y} are outside the bounds
+	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null}
+	 */
+	@Override
+	public Color4D getColorRGBA(final int x, final int y, final Function<Point2I, Color4D> function) {
+		Objects.requireNonNull(function, "function == null");
+		
+		return getPixel(x, y).map(pixel -> pixel.getColorRGBA()).orElseGet(() -> Objects.requireNonNull(function.apply(new Point2I(x, y))));
 	}
 	
 	/**

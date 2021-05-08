@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.dayflower.color.Color3F;
 import org.dayflower.color.Color4F;
@@ -224,6 +225,29 @@ public abstract class ImageF extends Image {
 	 * <p>
 	 * This method performs bilinear interpolation on the four closest {@code Color4F} instances.
 	 * <p>
+	 * If either {@code point} or {@code function} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.getColorRGBA(point.getX(), point.getY(), function);
+	 * }
+	 * </pre>
+	 * 
+	 * @param point a {@link Point2F} instance with the coordinates of the pixel
+	 * @param function a {@code Function} that returns a {@code Color4F} instance if any of the points are outside the bounds
+	 * @return the {@code Color4F} of the pixel represented by {@code point}
+	 * @throws NullPointerException thrown if, and only if, either {@code point} or {@code function} are {@code null}
+	 */
+	public final Color4F getColorRGBA(final Point2F point, final Function<Point2I, Color4F> function) {
+		return getColorRGBA(point.getX(), point.getY(), function);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} of the pixel represented by {@code point}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color4F} instances.
+	 * <p>
 	 * If either {@code point} or {@code pixelOperation} are {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
@@ -262,6 +286,45 @@ public abstract class ImageF extends Image {
 	 */
 	public final Color4F getColorRGBA(final float x, final float y) {
 		return getColorRGBA(x, y, PixelOperation.NO_CHANGE);
+	}
+	
+	/**
+	 * Returns the {@link Color4F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * This method performs bilinear interpolation on the four closest {@code Color4F} instances.
+	 * <p>
+	 * If {@code function} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param function a {@code Function} that returns a {@code Color4F} instance if {@code x} or {@code y} are outside the bounds
+	 * @return the {@code Color4F} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null}
+	 */
+	public final Color4F getColorRGBA(final float x, final float y, final Function<Point2I, Color4F> function) {
+		Objects.requireNonNull(function, "function == null");
+		
+		final int minimumX = toInt(floor(x));
+		final int maximumX = toInt(ceil(x));
+		
+		final int minimumY = toInt(floor(y));
+		final int maximumY = toInt(ceil(y));
+		
+		if(minimumX == maximumX && minimumY == maximumY) {
+			return getColorRGBA(minimumX, minimumY, function);
+		}
+		
+		final Color4F color00 = getColorRGBA(minimumX, minimumY, function);
+		final Color4F color01 = getColorRGBA(maximumX, minimumY, function);
+		final Color4F color10 = getColorRGBA(minimumX, maximumY, function);
+		final Color4F color11 = getColorRGBA(maximumX, maximumY, function);
+		
+		final float xFactor = x - minimumX;
+		final float yFactor = y - minimumY;
+		
+		final Color4F color = Color4F.blend(Color4F.blend(color00, color01, xFactor), Color4F.blend(color10, color11, xFactor), yFactor);
+		
+		return color;
 	}
 	
 	/**
@@ -355,6 +418,19 @@ public abstract class ImageF extends Image {
 	/**
 	 * Returns the {@link Color4F} of the pixel represented by {@code x} and {@code y}.
 	 * <p>
+	 * If {@code function} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param function a {@code Function} that returns a {@code Color4F} instance if {@code x} or {@code y} are outside the bounds
+	 * @return the {@code Color4F} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null}
+	 */
+	public abstract Color4F getColorRGBA(final int x, final int y, final Function<Point2I, Color4F> function);
+	
+	/**
+	 * Returns the {@link Color4F} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
 	 * If {@code pixelOperation} is {@code null}, a {@code NullPointerException} will be thrown.
 	 * <p>
 	 * See the documentation for {@link PixelOperation} to get a more detailed explanation for different pixel operations.
@@ -393,12 +469,35 @@ public abstract class ImageF extends Image {
 	 * Returns a new rotated version of this {@code ImageF} instance.
 	 * <p>
 	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this method is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * image.rotate(angle, false);
+	 * }
+	 * </pre>
 	 * 
 	 * @param angle an {@link AngleF} instance
 	 * @return a new rotated version of this {@code ImageF} instance
 	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
 	 */
 	public final ImageF rotate(final AngleF angle) {
+		return rotate(angle, false);
+	}
+	
+	/**
+	 * Rotates this {@code ImageF} instance with an angle of {@code angle}.
+	 * <p>
+	 * Returns a new rotated version of this {@code ImageF} instance.
+	 * <p>
+	 * If {@code angle} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param angle an {@link AngleF} instance
+	 * @param isWrappingAround {@code true} if, and only if, a wrap-around operation should be used, {@code false} otherwise
+	 * @return a new rotated version of this {@code ImageF} instance
+	 * @throws NullPointerException thrown if, and only if, {@code angle} is {@code null}
+	 */
+	public final ImageF rotate(final AngleF angle, final boolean isWrappingAround) {
 		Objects.requireNonNull(angle, "angle == null");
 		
 //		Retrieve the resolution for the old ImageF instance:
@@ -427,8 +526,8 @@ public abstract class ImageF extends Image {
 		final Vector2F directionBToOldImage = Vector2F.negate(directionBToNewImage);
 		
 //		Compute the resolution for the new ImageF instance:
-		final int newResolutionX = toInt(ceil(maximum.getX() - minimum.getX()));
-		final int newResolutionY = toInt(ceil(maximum.getY() - minimum.getY()));
+		final int newResolutionX = toInt(maximum.getX() - minimum.getX());
+		final int newResolutionY = toInt(maximum.getY() - minimum.getY());
 		
 //		Initialize the old and new ImageF instances:
 		final ImageF oldImage = this;
@@ -443,7 +542,7 @@ public abstract class ImageF extends Image {
 				final Point2F d = Point2F.add(c, directionAToOldImage);
 				
 //				Set the Color4F instance in the new ImageF instance:
-				newImage.setColorRGBA(oldImage.getColorRGBA(d), x, y);
+				newImage.setColorRGBA(isWrappingAround ? oldImage.getColorRGBA(d, PixelOperation.WRAP_AROUND) : oldImage.getColorRGBA(d, point -> Color4F.TRANSPARENT), x, y);
 			}
 		}
 		

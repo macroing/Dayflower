@@ -81,6 +81,11 @@ public final class Color4D {
 	public static final Color4D RED = new Color4D(1.0D, 0.0D, 0.0D);
 	
 	/**
+	 * A {@code Color4D} denoting a transparent color.
+	 */
+	public static final Color4D TRANSPARENT = new Color4D(0.0D, 0.0D, 0.0D, 0.0D);
+	
+	/**
 	 * A {@code Color4D} denoting the color white.
 	 */
 	public static final Color4D WHITE = new Color4D(1.0D, 1.0D, 1.0D);

@@ -22,6 +22,7 @@ import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
 import static org.dayflower.utility.Doubles.cos;
 import static org.dayflower.utility.Doubles.equal;
+import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.max;
 import static org.dayflower.utility.Doubles.min;
 import static org.dayflower.utility.Doubles.positiveModulo;
@@ -493,6 +494,45 @@ public final class Point2D implements Node {
 		final double component2 = positiveModulo(point.component2 * resolutionY - 0.5D, resolutionY);
 		
 		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Transforms the {@code Point2D} {@code pointRHS} with the {@link Matrix33D} {@code matrixLHS}.
+	 * <p>
+	 * Returns a new {@code Point2D} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code matrixLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param matrixLHS a {@code Matrix33D} instance
+	 * @param pointRHS a {@code Point2D} instance
+	 * @return a new {@code Point2D} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
+	 */
+	public static Point2D transform(final Matrix33D matrixLHS, final Point2D pointRHS) {
+		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13();
+		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23();
+		
+		return new Point2D(component1, component2);
+	}
+	
+	/**
+	 * Transforms the {@code Point2D} {@code pointRHS} with the {@link Matrix33D} {@code matrixLHS} and divides the result.
+	 * <p>
+	 * Returns a new {@code Point2D} instance with the result of the transformation.
+	 * <p>
+	 * If either {@code matrixLHS} or {@code pointRHS} are {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param matrixLHS a {@code Matrix33D} instance
+	 * @param pointRHS a {@code Point2D} instance
+	 * @return a new {@code Point2D} instance with the result of the transformation
+	 * @throws NullPointerException thrown if, and only if, either {@code matrixLHS} or {@code pointRHS} are {@code null}
+	 */
+	public static Point2D transformAndDivide(final Matrix33D matrixLHS, final Point2D pointRHS) {
+		final double component1 = matrixLHS.getElement11() * pointRHS.component1 + matrixLHS.getElement12() * pointRHS.component2 + matrixLHS.getElement13();
+		final double component2 = matrixLHS.getElement21() * pointRHS.component1 + matrixLHS.getElement22() * pointRHS.component2 + matrixLHS.getElement23();
+		final double component3 = matrixLHS.getElement31() * pointRHS.component1 + matrixLHS.getElement32() * pointRHS.component2 + matrixLHS.getElement33();
+		
+		return equal(component3, 1.0D) || isZero(component3) ? new Point2D(component1, component2) : new Point2D(component1 / component3, component2 / component3);
 	}
 	
 	/**

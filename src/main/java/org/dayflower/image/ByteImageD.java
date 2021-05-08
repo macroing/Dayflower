@@ -21,6 +21,7 @@ package org.dayflower.image;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.dayflower.color.ArrayComponentOrder;
 import org.dayflower.color.Color4D;
@@ -229,6 +230,40 @@ public final class ByteImageD extends ImageD {
 		}
 		
 		return Color4D.BLACK;
+	}
+	
+	/**
+	 * Returns the {@link Color4D} of the pixel represented by {@code x} and {@code y}.
+	 * <p>
+	 * If {@code function} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param x the X-coordinate of the pixel
+	 * @param y the Y-coordinate of the pixel
+	 * @param function a {@code Function} that returns a {@code Color4D} instance if {@code x} or {@code y} are outside the bounds
+	 * @return the {@code Color4D} of the pixel represented by {@code x} and {@code y}
+	 * @throws NullPointerException thrown if, and only if, {@code function} is {@code null}
+	 */
+	@Override
+	public Color4D getColorRGBA(final int x, final int y, final Function<Point2I, Color4D> function) {
+		Objects.requireNonNull(function, "function == null");
+		
+		final int resolutionX = getResolutionX();
+		final int resolutionY = getResolutionY();
+		
+		if(x >= 0 && x < resolutionX && y >= 0 && y < resolutionY) {
+			final int index = y * resolutionX + x;
+			
+			synchronized(this.data) {
+				final int r = this.data[index * 4 + 0] & 0xFF;
+				final int g = this.data[index * 4 + 1] & 0xFF;
+				final int b = this.data[index * 4 + 2] & 0xFF;
+				final int a = this.data[index * 4 + 3] & 0xFF;
+				
+				return new Color4D(r, g, b, a);
+			}
+		}
+		
+		return Objects.requireNonNull(function.apply(new Point2I(x, y)));
 	}
 	
 	/**

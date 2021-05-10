@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
+import static org.dayflower.utility.Floats.MIN_VALUE;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Floats.PI_RECIPROCAL;
 import static org.dayflower.utility.Floats.cos;
@@ -297,8 +299,8 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the largest component values
 	 */
 	public static Point2F maximum() {
-		final float component1 = Float.MAX_VALUE;
-		final float component2 = Float.MAX_VALUE;
+		final float component1 = MAX_VALUE;
+		final float component2 = MAX_VALUE;
 		
 		return new Point2F(component1, component2);
 	}
@@ -363,8 +365,8 @@ public final class Point2F implements Node {
 	 * @return a new {@code Point2F} instance with the smallest component values
 	 */
 	public static Point2F minimum() {
-		final float component1 = Float.MIN_VALUE;
-		final float component2 = Float.MIN_VALUE;
+		final float component1 = MIN_VALUE;
+		final float component2 = MIN_VALUE;
 		
 		return new Point2F(component1, component2);
 	}

@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.saturate;
 import static org.dayflower.utility.Ints.pack;
@@ -298,7 +299,7 @@ public final class MatteMaterial implements Material {
 		
 		this.modifier.modify(intersection);
 		
-		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, MAX_VALUE);
 		
 		final float floatAngle = this.textureAngle.getFloat(intersection);
 		

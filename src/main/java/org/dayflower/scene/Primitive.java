@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.isNaN;
 import static org.dayflower.utility.Floats.isZero;
@@ -725,7 +726,7 @@ public final class Primitive implements Node {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float doTransformT(final Matrix44F matrix, final Ray3F rayOldSpace, final Ray3F rayNewSpace, final float t) {
-		return !isNaN(t) && !isZero(t) && t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+		return !isNaN(t) && !isZero(t) && t < MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////

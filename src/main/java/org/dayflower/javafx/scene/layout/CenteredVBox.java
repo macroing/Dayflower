@@ -18,6 +18,8 @@
  */
 package org.dayflower.javafx.scene.layout;
 
+import static org.dayflower.utility.Doubles.MAX_VALUE;
+
 import java.util.Collection;
 
 import org.dayflower.javafx.scene.control.Labels;
@@ -63,7 +65,7 @@ public final class CenteredVBox extends VBox {
 	public Button addButton(final String text, final EventHandler<ActionEvent> eventHandler) {
 		final
 		Button button = new Button();
-		button.setMaxWidth(Double.MAX_VALUE);
+		button.setMaxWidth(MAX_VALUE);
 		button.setOnAction(eventHandler);
 		button.setText(text);
 		
@@ -86,7 +88,7 @@ public final class CenteredVBox extends VBox {
 		final
 		ComboBox<T> comboBox = new ComboBox<>();
 		comboBox.getItems().addAll(items);
-		comboBox.setMaxWidth(Double.MAX_VALUE);
+		comboBox.setMaxWidth(MAX_VALUE);
 		comboBox.setValue(value);
 		
 		getChildren().add(comboBox);

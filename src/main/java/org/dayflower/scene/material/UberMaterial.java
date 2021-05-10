@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -684,12 +686,12 @@ public final class UberMaterial implements Material {
 		
 		this.modifier.modify(intersection);
 		
-		final Color3F colorOpacity = Color3F.saturate(this.textureOpacity.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKD = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorKR = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorKS = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorKT = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKT.getColor(intersection), 0.0F, Float.MAX_VALUE));
-		final Color3F colorTransmittanceScale = Color3F.saturate(Color3F.subtract(Color3F.WHITE, colorOpacity), 0.0F, Float.MAX_VALUE);
+		final Color3F colorOpacity = Color3F.saturate(this.textureOpacity.getColor(intersection), 0.0F, MAX_VALUE);
+		final Color3F colorKD = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, MAX_VALUE));
+		final Color3F colorKR = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, MAX_VALUE));
+		final Color3F colorKS = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, MAX_VALUE));
+		final Color3F colorKT = Color3F.multiply(colorOpacity, Color3F.saturate(this.textureKT.getColor(intersection), 0.0F, MAX_VALUE));
+		final Color3F colorTransmittanceScale = Color3F.saturate(Color3F.subtract(Color3F.WHITE, colorOpacity), 0.0F, MAX_VALUE);
 		
 		final float eta = this.textureEta.getFloat(intersection);
 		final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessU.getFloat(intersection)) : this.textureRoughnessU.getFloat(intersection);

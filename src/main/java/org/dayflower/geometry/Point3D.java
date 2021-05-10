@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.MAX_VALUE;
+import static org.dayflower.utility.Doubles.MIN_VALUE;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isZero;
 import static org.dayflower.utility.Doubles.max;
@@ -493,9 +495,9 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the largest component values
 	 */
 	public static Point3D maximum() {
-		final double component1 = Double.MAX_VALUE;
-		final double component2 = Double.MAX_VALUE;
-		final double component3 = Double.MAX_VALUE;
+		final double component1 = MAX_VALUE;
+		final double component2 = MAX_VALUE;
+		final double component3 = MAX_VALUE;
 		
 		return new Point3D(component1, component2, component3);
 	}
@@ -561,9 +563,9 @@ public final class Point3D implements Node {
 	 * @return a new {@code Point3D} instance with the smallest component values
 	 */
 	public static Point3D minimum() {
-		final double component1 = Double.MIN_VALUE;
-		final double component2 = Double.MIN_VALUE;
-		final double component3 = Double.MIN_VALUE;
+		final double component1 = MIN_VALUE;
+		final double component2 = MIN_VALUE;
+		final double component3 = MIN_VALUE;
 		
 		return new Point3D(component1, component2, component3);
 	}

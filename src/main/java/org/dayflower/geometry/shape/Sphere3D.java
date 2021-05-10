@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.PI;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_4;
@@ -431,7 +432,7 @@ public final class Sphere3D implements Shape3D {
 		
 		final Ray3D ray = surfaceIntersection.createRay(incoming);
 		
-		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, Double.MAX_VALUE);
+		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, MAX_VALUE);
 		
 		if(optionalSurfaceIntersectionShape.isPresent()) {
 			final SurfaceIntersection3D surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();

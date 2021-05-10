@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -40,7 +42,7 @@ public final class Intersector {
 	/**
 	 * The default minimum parametric {@code t} value.
 	 */
-	public static final float T_MAXIMUM = Float.MAX_VALUE;
+	public static final float T_MAXIMUM = MAX_VALUE;
 	
 	/**
 	 * The default maximum parametric {@code t} value.

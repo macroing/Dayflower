@@ -18,6 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2_RECIPROCAL;
@@ -1616,9 +1617,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		
 		textureEvaluate(textureColorID, textureColorOffset);
 		
-		final float colorColorR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
-		final float colorColorG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
-		final float colorColorB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		final float colorColorR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
+		final float colorColorG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
+		final float colorColorB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
 		textureEvaluate(textureScatterDistanceID, textureScatterDistanceOffset);
 		
@@ -1793,9 +1794,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate(textureKRID, textureKROffset);
 		
 //		Retrieve the color from the KR Texture:
-		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
-		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
-		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
+		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
+		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
 		final boolean hasKR = !checkIsZero(colorKRR) || !checkIsZero(colorKRG) || !checkIsZero(colorKRB);
 		
@@ -1803,9 +1804,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate(textureKTID, textureKTOffset);
 		
 //		Retrieve the color from the KT Texture:
-		final float colorKTR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
-		final float colorKTG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
-		final float colorKTB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		final float colorKTR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
+		final float colorKTG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
+		final float colorKTB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
 		final boolean hasKT = !checkIsZero(colorKTR) || !checkIsZero(colorKTG) || !checkIsZero(colorKTB);
 		
@@ -2103,9 +2104,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate(textureKRID, textureKROffset);
 		
 //		Retrieve the color from the KR Texture:
-		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
-		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
-		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		final float colorKRR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
+		final float colorKRG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
+		final float colorKRB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
 		if(checkIsZero(colorKRR) && checkIsZero(colorKRG) && checkIsZero(colorKRB)) {
 			return false;
@@ -2159,9 +2160,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate(textureKDID, textureKDOffset);
 		
 //		Retrieve the color from the KD Texture:
-		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
-		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
-		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
+		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
+		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
 		final boolean hasKD = !checkIsZero(colorKDR) || !checkIsZero(colorKDG) || !checkIsZero(colorKDB);
 		
@@ -2169,9 +2170,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate(textureKSID, textureKSOffset);
 		
 //		Retrieve the color from the KS Texture:
-		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
-		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
-		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
+		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
+		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
 		final boolean hasKS = !checkIsZero(colorKSR) || !checkIsZero(colorKSG) || !checkIsZero(colorKSB);
 		
@@ -2249,9 +2250,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate(textureKDID, textureKDOffset);
 		
 //		Retrieve the color from the KD Texture:
-		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
-		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
-		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		final float colorKDR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
+		final float colorKDG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
+		final float colorKDB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
 		final boolean hasKD = !checkIsZero(colorKDR) || !checkIsZero(colorKDG) || !checkIsZero(colorKDB);
 		
@@ -2259,9 +2260,9 @@ public abstract class AbstractMaterialKernel extends AbstractTextureKernel {
 		textureEvaluate(textureKSID, textureKSOffset);
 		
 //		Retrieve the color from the KS Texture:
-		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, Float.MAX_VALUE);
-		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, Float.MAX_VALUE);
-		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, Float.MAX_VALUE);
+		final float colorKSR = saturateF(color3FLHSGetComponent1(), 0.0F, MAX_VALUE);
+		final float colorKSG = saturateF(color3FLHSGetComponent2(), 0.0F, MAX_VALUE);
+		final float colorKSB = saturateF(color3FLHSGetComponent3(), 0.0F, MAX_VALUE);
 		
 		final boolean hasKS = !checkIsZero(colorKSR) || !checkIsZero(colorKSG) || !checkIsZero(colorKSB);
 		

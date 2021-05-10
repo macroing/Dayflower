@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.isInfinite;
 import static org.dayflower.utility.Floats.isNaN;
@@ -209,7 +210,7 @@ public interface Shape3F extends Node {
 		
 		final Ray3F ray = surfaceIntersection.createRay(incoming);
 		
-		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionShape = intersection(ray, 0.001F, Float.MAX_VALUE);
+		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionShape = intersection(ray, 0.001F, MAX_VALUE);
 		
 		if(optionalSurfaceIntersectionShape.isPresent()) {
 			final SurfaceIntersection3F surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();

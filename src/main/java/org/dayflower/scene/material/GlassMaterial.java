@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Ints.pack;
 
@@ -529,8 +530,8 @@ public final class GlassMaterial implements Material {
 		
 		this.modifier.modify(intersection);
 		
-		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKT = Color3F.saturate(this.textureKT.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, MAX_VALUE);
+		final Color3F colorKT = Color3F.saturate(this.textureKT.getColor(intersection), 0.0F, MAX_VALUE);
 		
 		final float eta = this.textureEta.getFloat(intersection);
 		final float roughnessU = this.textureRoughnessU.getFloat(intersection);

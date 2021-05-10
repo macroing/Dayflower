@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isNaN;
@@ -38,7 +39,7 @@ public final class SurfaceIntersector3F {
 	/**
 	 * The default minimum parametric {@code t} value.
 	 */
-	public static final float T_MAXIMUM = Float.MAX_VALUE;
+	public static final float T_MAXIMUM = MAX_VALUE;
 	
 	/**
 	 * The default maximum parametric {@code t} value.
@@ -315,6 +316,6 @@ public final class SurfaceIntersector3F {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static float doTransformT(final Matrix44F matrix, final Ray3F rayOldSpace, final Ray3F rayNewSpace, final float t) {
-		return !isNaN(t) && !isZero(t) && t < Float.MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+		return !isNaN(t) && !isZero(t) && t < MAX_VALUE ? abs(Point3F.distance(rayNewSpace.getOrigin(), Point3F.transformAndDivide(matrix, Point3F.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 }

@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_2;
 import static org.dayflower.utility.Floats.PI_MULTIPLIED_BY_4;
@@ -431,7 +432,7 @@ public final class Sphere3F implements Shape3F {
 		
 		final Ray3F ray = surfaceIntersection.createRay(incoming);
 		
-		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionShape = intersection(ray, 0.001F, Float.MAX_VALUE);
+		final Optional<SurfaceIntersection3F> optionalSurfaceIntersectionShape = intersection(ray, 0.001F, MAX_VALUE);
 		
 		if(optionalSurfaceIntersectionShape.isPresent()) {
 			final SurfaceIntersection3F surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();

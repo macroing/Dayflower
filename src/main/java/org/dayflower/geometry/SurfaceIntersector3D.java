@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isNaN;
@@ -38,7 +39,7 @@ public final class SurfaceIntersector3D {
 	/**
 	 * The default minimum parametric {@code t} value.
 	 */
-	public static final double T_MAXIMUM = Double.MAX_VALUE;
+	public static final double T_MAXIMUM = MAX_VALUE;
 	
 	/**
 	 * The default maximum parametric {@code t} value.
@@ -315,6 +316,6 @@ public final class SurfaceIntersector3D {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static double doTransformT(final Matrix44D matrix, final Ray3D rayOldSpace, final Ray3D rayNewSpace, final double t) {
-		return !isNaN(t) && !isZero(t) && t < Double.MAX_VALUE ? abs(Point3D.distance(rayNewSpace.getOrigin(), Point3D.transformAndDivide(matrix, Point3D.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
+		return !isNaN(t) && !isZero(t) && t < MAX_VALUE ? abs(Point3D.distance(rayNewSpace.getOrigin(), Point3D.transformAndDivide(matrix, Point3D.add(rayOldSpace.getOrigin(), rayOldSpace.getDirection(), t)))) : t;
 	}
 }

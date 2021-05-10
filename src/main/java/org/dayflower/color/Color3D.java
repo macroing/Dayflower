@@ -18,6 +18,7 @@
  */
 package org.dayflower.color;
 
+import static org.dayflower.utility.Doubles.MIN_VALUE;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.exp;
 import static org.dayflower.utility.Doubles.finiteOrDefault;
@@ -1998,7 +1999,7 @@ public final class Color3D {
 	 * Calling this method is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * Color3D.toneMapFilmicCurve(color, exposure, a, b, c, d, e, 0.0D, Double.MIN_VALUE);
+	 * Color3D.toneMapFilmicCurve(color, exposure, a, b, c, d, e, 0.0D, Doubles.MIN_VALUE);
 	 * }
 	 * </pre>
 	 * 
@@ -2013,7 +2014,7 @@ public final class Color3D {
 	 * @throws NullPointerException thrown if, and only if, {@code color} is {@code null}
 	 */
 	public static Color3D toneMapFilmicCurve(final Color3D color, final double exposure, final double a, final double b, final double c, final double d, final double e) {
-		return toneMapFilmicCurve(color, exposure, a, b, c, d, e, 0.0D, Double.MIN_VALUE);
+		return toneMapFilmicCurve(color, exposure, a, b, c, d, e, 0.0D, MIN_VALUE);
 	}
 	
 	/**

@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry.shape;
 
+import static org.dayflower.utility.Doubles.MAX_VALUE;
+import static org.dayflower.utility.Doubles.MIN_VALUE;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.equal;
 import static org.dayflower.utility.Doubles.isNaN;
@@ -881,7 +883,7 @@ public final class TriangleMesh3D implements Shape3D {
 		final double sideZ = maximum.getZ() - minimum.getZ();
 		
 		double minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
-		double bestSplit = Double.MAX_VALUE;
+		double bestSplit = MAX_VALUE;
 		
 		int bestAxis = -1;
 		
@@ -901,18 +903,18 @@ public final class TriangleMesh3D implements Shape3D {
 					break;
 				}
 				
-				double maximumLX = Double.MIN_VALUE;
-				double maximumLY = Double.MIN_VALUE;
-				double maximumLZ = Double.MIN_VALUE;
-				double minimumLX = Double.MAX_VALUE;
-				double minimumLY = Double.MAX_VALUE;
-				double minimumLZ = Double.MAX_VALUE;
-				double maximumRX = Double.MIN_VALUE;
-				double maximumRY = Double.MIN_VALUE;
-				double maximumRZ = Double.MIN_VALUE;
-				double minimumRX = Double.MAX_VALUE;
-				double minimumRY = Double.MAX_VALUE;
-				double minimumRZ = Double.MAX_VALUE;
+				double maximumLX = MIN_VALUE;
+				double maximumLY = MIN_VALUE;
+				double maximumLZ = MIN_VALUE;
+				double minimumLX = MAX_VALUE;
+				double minimumLY = MAX_VALUE;
+				double minimumLZ = MAX_VALUE;
+				double maximumRX = MIN_VALUE;
+				double maximumRY = MIN_VALUE;
+				double maximumRZ = MIN_VALUE;
+				double minimumRX = MAX_VALUE;
+				double minimumRY = MAX_VALUE;
+				double minimumRZ = MAX_VALUE;
 				
 				int countL = 0;
 				int countR = 0;
@@ -986,18 +988,18 @@ public final class TriangleMesh3D implements Shape3D {
 		final List<LeafBVHNode> leafBVHNodesL = new ArrayList<>(sizeHalf);
 		final List<LeafBVHNode> leafBVHNodesR = new ArrayList<>(sizeHalf);
 		
-		double maximumLX = Double.MIN_VALUE;
-		double maximumLY = Double.MIN_VALUE;
-		double maximumLZ = Double.MIN_VALUE;
-		double minimumLX = Double.MAX_VALUE;
-		double minimumLY = Double.MAX_VALUE;
-		double minimumLZ = Double.MAX_VALUE;
-		double maximumRX = Double.MIN_VALUE;
-		double maximumRY = Double.MIN_VALUE;
-		double maximumRZ = Double.MIN_VALUE;
-		double minimumRX = Double.MAX_VALUE;
-		double minimumRY = Double.MAX_VALUE;
-		double minimumRZ = Double.MAX_VALUE;
+		double maximumLX = MIN_VALUE;
+		double maximumLY = MIN_VALUE;
+		double maximumLZ = MIN_VALUE;
+		double minimumLX = MAX_VALUE;
+		double minimumLY = MAX_VALUE;
+		double minimumLZ = MAX_VALUE;
+		double maximumRX = MIN_VALUE;
+		double maximumRY = MIN_VALUE;
+		double maximumRZ = MIN_VALUE;
+		double minimumRX = MAX_VALUE;
+		double minimumRY = MAX_VALUE;
+		double minimumRZ = MAX_VALUE;
 		
 		for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
 			final BoundingVolume3D boundingVolume = processableLeafBVHNode.getBoundingVolume();
@@ -1043,12 +1045,12 @@ public final class TriangleMesh3D implements Shape3D {
 	private static BVHNode doCreateBVHNode(final List<Triangle3D> triangles) {
 		final List<LeafBVHNode> processableLeafBVHNodes = new ArrayList<>(triangles.size());
 		
-		double maximumX = Double.MIN_VALUE;
-		double maximumY = Double.MIN_VALUE;
-		double maximumZ = Double.MIN_VALUE;
-		double minimumX = Double.MAX_VALUE;
-		double minimumY = Double.MAX_VALUE;
-		double minimumZ = Double.MAX_VALUE;
+		double maximumX = MIN_VALUE;
+		double maximumY = MIN_VALUE;
+		double maximumZ = MIN_VALUE;
+		double minimumX = MAX_VALUE;
+		double minimumY = MAX_VALUE;
+		double minimumZ = MAX_VALUE;
 		
 		for(final Triangle3D triangle : triangles) {
 			final Point3D a = new Point3D(triangle.getA().getPosition());

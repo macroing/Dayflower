@@ -50,6 +50,16 @@ public class Doubles {
 	public static final double MACHINE_EPSILON = Math.ulp(1.0D) * 0.5D;
 	
 	/**
+	 * The maximum {@code double} value that is equal to {@code +Double.MAX_VALUE}.
+	 */
+	public static final double MAX_VALUE = +Double.MAX_VALUE;
+	
+	/**
+	 * The minimum {@code double} value that is equal to {@code -Double.MAX_VALUE}.
+	 */
+	public static final double MIN_VALUE = -Double.MAX_VALUE;
+	
+	/**
 	 * The {@code double} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter.
 	 */
 	public static final double PI = Math.PI;

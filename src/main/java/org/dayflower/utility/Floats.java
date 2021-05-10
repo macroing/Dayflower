@@ -50,6 +50,16 @@ public final class Floats {
 	public static final float MACHINE_EPSILON = Math.ulp(1.0F) * 0.5F;
 	
 	/**
+	 * The maximum {@code float} value that is equal to {@code +Float.MAX_VALUE}.
+	 */
+	public static final float MAX_VALUE = +Float.MAX_VALUE;
+	
+	/**
+	 * The minimum {@code float} value that is equal to {@code -Float.MAX_VALUE}.
+	 */
+	public static final float MIN_VALUE = -Float.MAX_VALUE;
+	
+	/**
 	 * The {@code float} value that is closer than any other to pi, the ratio of the circumference of a circle to its diameter.
 	 */
 	public static final float PI = (float)(Math.PI);

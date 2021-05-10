@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
+import static org.dayflower.utility.Floats.MIN_VALUE;
 import static org.dayflower.utility.Floats.equal;
 import static org.dayflower.utility.Floats.isZero;
 import static org.dayflower.utility.Floats.max;
@@ -493,9 +495,9 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the largest component values
 	 */
 	public static Point3F maximum() {
-		final float component1 = Float.MAX_VALUE;
-		final float component2 = Float.MAX_VALUE;
-		final float component3 = Float.MAX_VALUE;
+		final float component1 = MAX_VALUE;
+		final float component2 = MAX_VALUE;
+		final float component3 = MAX_VALUE;
 		
 		return new Point3F(component1, component2, component3);
 	}
@@ -561,9 +563,9 @@ public final class Point3F implements Node {
 	 * @return a new {@code Point3F} instance with the smallest component values
 	 */
 	public static Point3F minimum() {
-		final float component1 = Float.MIN_VALUE;
-		final float component2 = Float.MIN_VALUE;
-		final float component3 = Float.MIN_VALUE;
+		final float component1 = MIN_VALUE;
+		final float component2 = MIN_VALUE;
+		final float component3 = MIN_VALUE;
 		
 		return new Point3F(component1, component2, component3);
 	}

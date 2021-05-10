@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Ints.pack;
 
 import java.util.Objects;
@@ -248,7 +249,7 @@ public final class MirrorMaterial implements Material {
 		
 		this.modifier.modify(intersection);
 		
-		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKR = Color3F.saturate(this.textureKR.getColor(intersection), 0.0F, MAX_VALUE);
 		
 		if(!colorKR.isBlack()) {
 			return Optional.of(new BSDF(intersection, new SpecularBRDF(colorKR, new ConstantFresnel())));

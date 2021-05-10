@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Ints.pack;
 
 import java.util.Objects;
@@ -459,8 +460,8 @@ public final class SubstrateMaterial implements Material {
 		
 		this.modifier.modify(intersection);
 		
-		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, MAX_VALUE);
+		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, MAX_VALUE);
 		
 		if(!colorKD.isBlack() || !colorKS.isBlack()) {
 			final float roughnessU = this.isRemappingRoughness ? MicrofacetDistribution.convertRoughnessToAlpha(this.textureRoughnessU.getFloat(intersection)) : this.textureRoughnessU.getFloat(intersection);

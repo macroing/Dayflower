@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.max;
 
 import java.util.Objects;
@@ -884,13 +885,13 @@ public final class HairMaterial implements Material {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private Color3F doComputeSigmaA(final Intersection intersection, final float betaN) {
-		final Color3F colorSigmaA = Color3F.saturate(this.textureSigmaA.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorSigmaA = Color3F.saturate(this.textureSigmaA.getColor(intersection), 0.0F, MAX_VALUE);
 		
 		if(!colorSigmaA.isBlack()) {
 			return colorSigmaA;
 		}
 		
-		final Color3F color = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F color = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, MAX_VALUE);
 		
 		if(!color.isBlack()) {
 			return HairBXDF.computeSigmaAFromReflectance(color, betaN);

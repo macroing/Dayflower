@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.lerp;
 import static org.dayflower.utility.Floats.max;
 import static org.dayflower.utility.Floats.sqrt;
@@ -1181,7 +1182,7 @@ public final class DisneyMaterial implements Material {
 		final float floatSpecularTint = this.textureSpecularTint.getFloat(intersection);
 		final float floatSpecularTransmission = this.textureSpecularTransmission.getFloat(intersection);
 		
-		final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, MAX_VALUE);
 		final Color3F colorTint = Color3F.normalizeLuminance(colorColor);
 		final Color3F colorSheen = floatSheen > 0.0F ? Color3F.blend(Color3F.WHITE, colorTint, this.textureSheenTint.getFloat(intersection)) : Color3F.BLACK;
 		
@@ -1283,7 +1284,7 @@ public final class DisneyMaterial implements Material {
 			final Color3F colorScatterDistance = this.textureScatterDistance.getColor(intersection);
 			
 			if(!colorScatterDistance.isBlack()) {
-//				final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, Float.MAX_VALUE);
+//				final Color3F colorColor = Color3F.saturate(this.textureColor.getColor(intersection), 0.0F, MAX_VALUE);
 				
 //				final float floatEta = this.textureEta.getFloat(intersection);
 				

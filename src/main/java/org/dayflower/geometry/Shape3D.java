@@ -18,6 +18,7 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.isInfinite;
@@ -209,7 +210,7 @@ public interface Shape3D extends Node {
 		
 		final Ray3D ray = surfaceIntersection.createRay(incoming);
 		
-		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, Double.MAX_VALUE);
+		final Optional<SurfaceIntersection3D> optionalSurfaceIntersectionShape = intersection(ray, 0.001D, MAX_VALUE);
 		
 		if(optionalSurfaceIntersectionShape.isPresent()) {
 			final SurfaceIntersection3D surfaceIntersectionShape = optionalSurfaceIntersectionShape.get();

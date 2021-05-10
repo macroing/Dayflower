@@ -18,6 +18,7 @@
  */
 package org.dayflower.renderer.gpu;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.PI_DIVIDED_BY_2;
 import static org.dayflower.utility.Floats.PI_DIVIDED_BY_4;
@@ -59,7 +60,7 @@ public abstract class AbstractGeometryKernel extends AbstractImageKernel {
 	/**
 	 * The default maximum parametric distance value.
 	 */
-	protected static final float DEFAULT_T_MAXIMUM = Float.MAX_VALUE;
+	protected static final float DEFAULT_T_MAXIMUM = MAX_VALUE;
 	
 	/**
 	 * The default minimum parametric distance value.

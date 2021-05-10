@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene.light;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -136,7 +138,7 @@ public final class PrimitiveAreaLight extends AreaLight {
 			if(probabilityDensityFunctionValue > 0.0F && Vector3F.dotProduct(surfaceSampleWorldSpace.getSurfaceNormal(), Vector3F.negate(incomingWorldSpace)) > 0.0F) {
 				final Ray3F ray = intersection.createRay(incomingWorldSpace);
 				
-				final Optional<Intersection> optionalIntersection = this.primitive.intersection(ray, 0.001F, Float.MAX_VALUE);
+				final Optional<Intersection> optionalIntersection = this.primitive.intersection(ray, 0.001F, MAX_VALUE);
 				
 				if(optionalIntersection.isPresent()) {
 					final Color3F radianceEmitted = this.primitive.getMaterial().emittance(optionalIntersection.get());

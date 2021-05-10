@@ -18,6 +18,7 @@
  */
 package org.dayflower.renderer;
 
+import static org.dayflower.utility.Doubles.MAX_VALUE;
 import static org.dayflower.utility.Doubles.abs;
 import static org.dayflower.utility.Doubles.isNaN;
 import static org.dayflower.utility.Doubles.random;
@@ -444,7 +445,7 @@ public final class SmallPTD {
 		}
 		
 		public double intersection(final Ray3D ray) {
-			return intersection(ray, EPSILON, Double.MAX_VALUE);
+			return intersection(ray, EPSILON, MAX_VALUE);
 		}
 		
 		public double intersection(final Ray3D ray, final double tMinimum, final double tMaximum) {

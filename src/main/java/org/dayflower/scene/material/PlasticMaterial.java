@@ -18,6 +18,7 @@
  */
 package org.dayflower.scene.material;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
 import static org.dayflower.utility.Ints.pack;
 
 import java.util.ArrayList;
@@ -414,8 +415,8 @@ public final class PlasticMaterial implements Material {
 		
 		final List<BXDF> bXDFs = new ArrayList<>();
 		
-		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, Float.MAX_VALUE);
-		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, Float.MAX_VALUE);
+		final Color3F colorKD = Color3F.saturate(this.textureKD.getColor(intersection), 0.0F, MAX_VALUE);
+		final Color3F colorKS = Color3F.saturate(this.textureKS.getColor(intersection), 0.0F, MAX_VALUE);
 		
 		if(!colorKD.isBlack()) {
 			bXDFs.add(new LambertianBRDF(colorKD));

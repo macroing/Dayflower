@@ -18,6 +18,8 @@
  */
 package org.dayflower.geometry;
 
+import static org.dayflower.utility.Doubles.MAX_VALUE;
+import static org.dayflower.utility.Doubles.MIN_VALUE;
 import static org.dayflower.utility.Doubles.PI_MULTIPLIED_BY_2_RECIPROCAL;
 import static org.dayflower.utility.Doubles.PI_RECIPROCAL;
 import static org.dayflower.utility.Doubles.cos;
@@ -297,8 +299,8 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the largest component values
 	 */
 	public static Point2D maximum() {
-		final double component1 = Double.MAX_VALUE;
-		final double component2 = Double.MAX_VALUE;
+		final double component1 = MAX_VALUE;
+		final double component2 = MAX_VALUE;
 		
 		return new Point2D(component1, component2);
 	}
@@ -363,8 +365,8 @@ public final class Point2D implements Node {
 	 * @return a new {@code Point2D} instance with the smallest component values
 	 */
 	public static Point2D minimum() {
-		final double component1 = Double.MIN_VALUE;
-		final double component2 = Double.MIN_VALUE;
+		final double component1 = MIN_VALUE;
+		final double component2 = MIN_VALUE;
 		
 		return new Point2D(component1, component2);
 	}

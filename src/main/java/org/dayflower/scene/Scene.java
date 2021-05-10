@@ -18,6 +18,8 @@
  */
 package org.dayflower.scene;
 
+import static org.dayflower.utility.Floats.MAX_VALUE;
+import static org.dayflower.utility.Floats.MIN_VALUE;
 import static org.dayflower.utility.Floats.PI;
 import static org.dayflower.utility.Floats.abs;
 import static org.dayflower.utility.Floats.equal;
@@ -69,9 +71,9 @@ import org.dayflower.utility.ParameterArguments;
  */
 public final class Scene implements Node {
 	/**
-	 * The default maximum parametric distance value that is equal to {@code Float.MAX_VALUE}.
+	 * The default maximum parametric distance value that is equal to {@code Floats.MAX_VALUE}.
 	 */
-	public static final float T_MAXIMUM = Float.MAX_VALUE;
+	public static final float T_MAXIMUM = MAX_VALUE;
 	
 	/**
 	 * The default minimum parametric distance value that is equal to {@code 0.001F}.
@@ -1467,7 +1469,7 @@ public final class Scene implements Node {
 					
 					final Color3F transmittance = Color3F.WHITE;
 					
-					final Optional<Intersection> optionalIntersectionLight = intersection(ray, 0.001F, Float.MAX_VALUE);
+					final Optional<Intersection> optionalIntersectionLight = intersection(ray, 0.001F, MAX_VALUE);
 					
 					if(optionalIntersectionLight.isPresent()) {
 						final Intersection intersectionLight = optionalIntersectionLight.get();
@@ -1580,7 +1582,7 @@ public final class Scene implements Node {
 		final float sideZ = maximum.getZ() - minimum.getZ();
 		
 		float minimumCost = size * (sideX * sideY + sideY * sideZ + sideZ * sideX);
-		float bestSplit = Float.MAX_VALUE;
+		float bestSplit = MAX_VALUE;
 		
 		int bestAxis = -1;
 		
@@ -1600,18 +1602,18 @@ public final class Scene implements Node {
 					break;
 				}
 				
-				float maximumLX = Float.MIN_VALUE;
-				float maximumLY = Float.MIN_VALUE;
-				float maximumLZ = Float.MIN_VALUE;
-				float minimumLX = Float.MAX_VALUE;
-				float minimumLY = Float.MAX_VALUE;
-				float minimumLZ = Float.MAX_VALUE;
-				float maximumRX = Float.MIN_VALUE;
-				float maximumRY = Float.MIN_VALUE;
-				float maximumRZ = Float.MIN_VALUE;
-				float minimumRX = Float.MAX_VALUE;
-				float minimumRY = Float.MAX_VALUE;
-				float minimumRZ = Float.MAX_VALUE;
+				float maximumLX = MIN_VALUE;
+				float maximumLY = MIN_VALUE;
+				float maximumLZ = MIN_VALUE;
+				float minimumLX = MAX_VALUE;
+				float minimumLY = MAX_VALUE;
+				float minimumLZ = MAX_VALUE;
+				float maximumRX = MIN_VALUE;
+				float maximumRY = MIN_VALUE;
+				float maximumRZ = MIN_VALUE;
+				float minimumRX = MAX_VALUE;
+				float minimumRY = MAX_VALUE;
+				float minimumRZ = MAX_VALUE;
 				
 				int countL = 0;
 				int countR = 0;
@@ -1685,18 +1687,18 @@ public final class Scene implements Node {
 		final List<LeafBVHNode> leafBVHNodesL = new ArrayList<>(sizeHalf);
 		final List<LeafBVHNode> leafBVHNodesR = new ArrayList<>(sizeHalf);
 		
-		float maximumLX = Float.MIN_VALUE;
-		float maximumLY = Float.MIN_VALUE;
-		float maximumLZ = Float.MIN_VALUE;
-		float minimumLX = Float.MAX_VALUE;
-		float minimumLY = Float.MAX_VALUE;
-		float minimumLZ = Float.MAX_VALUE;
-		float maximumRX = Float.MIN_VALUE;
-		float maximumRY = Float.MIN_VALUE;
-		float maximumRZ = Float.MIN_VALUE;
-		float minimumRX = Float.MAX_VALUE;
-		float minimumRY = Float.MAX_VALUE;
-		float minimumRZ = Float.MAX_VALUE;
+		float maximumLX = MIN_VALUE;
+		float maximumLY = MIN_VALUE;
+		float maximumLZ = MIN_VALUE;
+		float minimumLX = MAX_VALUE;
+		float minimumLY = MAX_VALUE;
+		float minimumLZ = MAX_VALUE;
+		float maximumRX = MIN_VALUE;
+		float maximumRY = MIN_VALUE;
+		float maximumRZ = MIN_VALUE;
+		float minimumRX = MAX_VALUE;
+		float minimumRY = MAX_VALUE;
+		float minimumRZ = MAX_VALUE;
 		
 		for(final LeafBVHNode processableLeafBVHNode : processableLeafBVHNodes) {
 			final BoundingVolume3F boundingVolume = processableLeafBVHNode.getBoundingVolume();
@@ -1744,12 +1746,12 @@ public final class Scene implements Node {
 		
 		final List<LeafBVHNode> processableLeafBVHNodes = new ArrayList<>(primitives.size());
 		
-		float maximumX = Float.MIN_VALUE;
-		float maximumY = Float.MIN_VALUE;
-		float maximumZ = Float.MIN_VALUE;
-		float minimumX = Float.MAX_VALUE;
-		float minimumY = Float.MAX_VALUE;
-		float minimumZ = Float.MAX_VALUE;
+		float maximumX = MIN_VALUE;
+		float maximumY = MIN_VALUE;
+		float maximumZ = MIN_VALUE;
+		float minimumX = MAX_VALUE;
+		float minimumY = MAX_VALUE;
+		float minimumZ = MAX_VALUE;
 		
 		for(final Primitive primitive : primitives) {
 			final BoundingVolume3F boundingVolume = primitive.getBoundingVolume();

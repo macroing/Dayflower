@@ -54,6 +54,25 @@ public final class Point2I implements Node {
 	}
 	
 	/**
+	 * Constructs a new {@code Point2I} instance given the component values {@code vector.getComponent1()} and {@code vector.getComponent2()}.
+	 * <p>
+	 * If {@code vector} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new Point2I(vector.getComponent1(), vector.getComponent2());
+	 * }
+	 * </pre>
+	 * 
+	 * @param vector a {@link Vector2I} instance
+	 * @throws NullPointerException thrown if, and only if, {@code vector} is {@code null}
+	 */
+	public Point2I(final Vector2I vector) {
+		this(vector.getComponent1(), vector.getComponent2());
+	}
+	
+	/**
 	 * Constructs a new {@code Point2I} instance given the component values {@code component1} and {@code component2}.
 	 * 
 	 * @param component1 the value of component 1

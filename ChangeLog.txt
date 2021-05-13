@@ -1,0 +1,19 @@
+2021-05-13	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a class called Ray2D.
+	* ADD:		Add a class called Ray2F.
+	* ADD:		Add new constructors to FileRendererObserver that accepts a parameter argument called isPrintingOnDisplay. If it is set to true, a message will be printed to standard output when the onRenderDisplay(Renderer, ImageF) method is called.
+
+2021-05-11	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* ADD:		Add a class called Vector2I.
+	* ADD:		Add a constructor that accepts a Vector2I instance as a parameter argument to the Point2I class.
+
+2021-05-10	Jörgen Lundgren  <joergen.lundgren@macroing.org>
+
+	* CHANGE:	Change the use of Double.MAX_VALUE to Doubles.MAX_VALUE.
+	* CHANGE:	Change the use of Double.MIN_VALUE to Doubles.MIN_VALUE.
+	* CHANGE:	Change the use of Float.MAX_VALUE to Floats.MAX_VALUE.
+	* CHANGE:	Change the use of Float.MIN_VALUE to Floats.MIN_VALUE.
+	* CHANGE:	Change Doubles.MIN_VALUE from Double.MIN_VALUE to -Double.MAX_VALUE.
+	* CHANGE:	Change Floats.MIN_VALUE from Float.MIN_VALUE to -Float.MAX_VALUE.

@@ -34,6 +34,7 @@ import org.dayflower.renderer.RendererObserver;
 public final class FileRendererObserver implements RendererObserver {
 	private final File file;
 	private final boolean isPrintingOnComplete;
+	private final boolean isPrintingOnDisplay;
 	private final boolean isPrintingOnProgress;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +96,13 @@ public final class FileRendererObserver implements RendererObserver {
 	 * Constructs a new {@code FileRendererObserver} instance.
 	 * <p>
 	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new FileRendererObserver(file, isPrintingOnComplete, isPrintingOnProgress, false);
+	 * }
+	 * </pre>
 	 * 
 	 * @param file a {@code File} instance
 	 * @param isPrintingOnComplete {@code true} if, and only if, printing to standard output on complete should be enabled, {@code false} otherwise
@@ -102,9 +110,25 @@ public final class FileRendererObserver implements RendererObserver {
 	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
 	 */
 	public FileRendererObserver(final File file, final boolean isPrintingOnComplete, final boolean isPrintingOnProgress) {
+		this(file, isPrintingOnComplete, isPrintingOnProgress, false);
+	}
+	
+	/**
+	 * Constructs a new {@code FileRendererObserver} instance.
+	 * <p>
+	 * If {@code file} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * 
+	 * @param file a {@code File} instance
+	 * @param isPrintingOnComplete {@code true} if, and only if, printing to standard output on complete should be enabled, {@code false} otherwise
+	 * @param isPrintingOnProgress {@code true} if, and only if, printing to standard output on progress should be enabled, {@code false} otherwise
+	 * @param isPrintingOnDisplay {@code true} if, and only if, printing to standard output on display should be enabled, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code file} is {@code null}
+	 */
+	public FileRendererObserver(final File file, final boolean isPrintingOnComplete, final boolean isPrintingOnProgress, final boolean isPrintingOnDisplay) {
 		this.file = Objects.requireNonNull(file, "file == null");
 		this.isPrintingOnComplete = isPrintingOnComplete;
 		this.isPrintingOnProgress = isPrintingOnProgress;
+		this.isPrintingOnDisplay = isPrintingOnDisplay;
 	}
 	
 	/**
@@ -154,7 +178,7 @@ public final class FileRendererObserver implements RendererObserver {
 	 * Calling this constructor is equivalent to the following:
 	 * <pre>
 	 * {@code
-	 * new FileRendererObserver(new File(pathname), isPrintingOnComplete, isPrintingOnProgress);
+	 * new FileRendererObserver(pathname, isPrintingOnComplete, isPrintingOnProgress, false);
 	 * }
 	 * </pre>
 	 * 
@@ -164,7 +188,29 @@ public final class FileRendererObserver implements RendererObserver {
 	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
 	 */
 	public FileRendererObserver(final String pathname, final boolean isPrintingOnComplete, final boolean isPrintingOnProgress) {
-		this(new File(pathname), isPrintingOnComplete, isPrintingOnProgress);
+		this(pathname, isPrintingOnComplete, isPrintingOnProgress, false);
+	}
+	
+	/**
+	 * Constructs a new {@code FileRendererObserver} instance.
+	 * <p>
+	 * If {@code pathname} is {@code null}, a {@code NullPointerException} will be thrown.
+	 * <p>
+	 * Calling this constructor is equivalent to the following:
+	 * <pre>
+	 * {@code
+	 * new FileRendererObserver(new File(pathname), isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay);
+	 * }
+	 * </pre>
+	 * 
+	 * @param pathname a {@code String} instance with the pathname to a {@code File} instance
+	 * @param isPrintingOnComplete {@code true} if, and only if, printing to standard output on complete should be enabled, {@code false} otherwise
+	 * @param isPrintingOnProgress {@code true} if, and only if, printing to standard output on progress should be enabled, {@code false} otherwise
+	 * @param isPrintingOnDisplay {@code true} if, and only if, printing to standard output on display should be enabled, {@code false} otherwise
+	 * @throws NullPointerException thrown if, and only if, {@code pathname} is {@code null}
+	 */
+	public FileRendererObserver(final String pathname, final boolean isPrintingOnComplete, final boolean isPrintingOnProgress, final boolean isPrintingOnDisplay) {
+		this(new File(pathname), isPrintingOnComplete, isPrintingOnProgress, isPrintingOnDisplay);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,6 +228,10 @@ public final class FileRendererObserver implements RendererObserver {
 	public void onRenderDisplay(final Renderer renderer, final ImageF image) {
 		Objects.requireNonNull(renderer, "renderer == null");
 		Objects.requireNonNull(image, "image == null");
+		
+		if(this.isPrintingOnDisplay) {
+			System.out.printf("Saving image to \"%s\"...%n", this.file.getPath());
+		}
 		
 		image.save(this.file);
 	}

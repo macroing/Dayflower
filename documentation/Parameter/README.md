@@ -4,7 +4,14 @@ The Parameter API provides parameter management functionality.
 
 Supported Features
 ------------------
-Coming soon...
+* `BooleanParameter`
+* `DoubleParameter`
+* `FloatParameter`
+* `IntParameter`
+* `Parameter`
+* `ParameterList`
+* `ParameterLoader`
+* `StringParameter`
 
 Packages
 --------

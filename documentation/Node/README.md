@@ -4,7 +4,12 @@ The Node API provides functionality for modeling data types that can be filtered
 
 Supported Features
 ------------------
-Coming soon...
+* `AbstractReflectiveNodeHierarchicalVisitor`
+* `Node`
+* `NodeFilter`
+* `NodeHierarchicalVisitor`
+* `NodeTraversalException`
+* `NodeVisitor`
 
 Packages
 --------

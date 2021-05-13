@@ -11,6 +11,8 @@ Below follows a few lists of features available in the Geometry API.
 * `AngleF`
 * `BoundingVolume3D`
 * `BoundingVolume3F`
+* `Matrix33D`
+* `Matrix33F`
 * `Matrix44D`
 * `Matrix44F`
 * `OrthonormalBasis33D`
@@ -24,6 +26,8 @@ Below follows a few lists of features available in the Geometry API.
 * `Point4F`
 * `Quaternion4D`
 * `Quaternion4F`
+* `Ray2D`
+* `Ray2F`
 * `Ray3D`
 * `Ray3F`
 * `SampleGeneratorD`
@@ -41,6 +45,7 @@ Below follows a few lists of features available in the Geometry API.
 * `SurfaceSample3F`
 * `Vector2D`
 * `Vector2F`
+* `Vector2I`
 * `Vector3D`
 * `Vector3F`
 * `Vector4D`
